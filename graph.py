@@ -1,88 +1,49 @@
 #!/usr/bin/env python
-# PYTHON_ARGCOMPLETE_OK
-#pylint: disable=no-member
 
-import json
-import os
-import sys
-import argparse
+import time
+from selenium import webdriver
+from pyvirtualdisplay import Display
 import plotly.offline as py
 import plotly.graph_objs as go
-import pandas as pd
-import numpy as np
-import binance
-import talib
-import argcomplete
-
-HOME_DIR = os.path.expanduser('~')
-CONFIG = json.load(open(HOME_DIR + '/.binance'))
-API_KEY = CONFIG['api_key']
-API_SECRET = CONFIG['api_secret']
-
-py.init_notebook_mode()
-binance.set(API_KEY, API_SECRET)
 
 
-def get_details(pair, args):
-    """ Get details from binance API """
+from PIL import Image
+from resizeimage import resizeimage
 
-    red = "\033[31m"
-    white = "\033[0m"
-    raw = binance.klines(pair, "1m")
+def get_screenshot(filename=None):
+    display = Display(visible=0, size=(640, 480))
+    display.start()
 
-    df = pd.DataFrame.from_dict(raw)
+    profile = webdriver.FirefoxProfile()
+    profile.set_preference('browser.download.folderList', 2)  # custom location
+    profile.set_preference('browser.download.manager.showWhenStarting', False)
+    profile.set_preference('browser.download.dir', '/tmp')
+    profile.set_preference('browser.helperApps.neverAsk.saveToDisk', 'image/png')
 
+    driver = webdriver.Firefox(firefox_profile=profile)
+    driver.get("file://{0}.html".format(filename))
+    #driver.get("file:////home/temp-plot.html")
+    #export_button = driver.find_element_by_xpath("//a[@data-title='Download plot as a png']")
+    #export_button.click()
+    driver.save_screenshot('{0}.png'.format(filename))
+    time.sleep(10)
+    driver.quit()
+    display.stop()
+
+def resize_screenshot(filename=None):
+    with open('{0}.png'.format(filename), 'r+b') as f:
+        with Image.open(f) as image:
+            cover = resizeimage.resize_width(image, 100)
+            cover.save('{0}_resized.png'.format(filename), image.format)
+
+def create_graph(df, pair):
+    py.init_notebook_mode()
     trace = go.Candlestick(x=df.index,
                            open=df.open,
                            high=df.high,
                            low=df.low,
                            close=df.close)
-    float_open = np.array([float(x) for x in df.open.values])
-
-    def make_float(arr):
-        """Convert dataframe array into float array"""
-        return np.array([float(x) for x in arr.values])
-
-    OHLC = (make_float(df.open), make_float(df.high), make_float(df.low), make_float(df.close))
-
-    # LAST 10 items
-    HAMMER = talib.CDLHAMMER(*OHLC)[-10:]
-    INVHAMMER = talib.CDLINVERTEDHAMMER(*OHLC)[-10:]
-    ENGULF = talib.CDLENGULFING(*OHLC)[-10:]
-    DOJI = talib.CDLDOJI(*OHLC)[-10:]
-    print "HAMMER", HAMMER
-    print "INVHAMMER", INVHAMMER
-    print "ENGULF", ENGULF
-    print "DOJI", DOJI
-    sys.stdout.write(red)
-    if HAMMER[-1] == 100:
-        print "BUY ", pair
-    elif INVHAMMER[-1] == 100:
-        print "SELL ", pair
-    else:
-        print "HOLD ", pair
-    sys.stdout.write(white)
-
-    if args.graph:
-        #unhash to see graph
-        py.plot([trace], filename='simple_candlestick.html')
-
-
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-g', '--graph', action='store_true', default=False)
-    argcomplete.autocomplete(parser)
-    args = parser.parse_args()
-
-    pairs = ["XRPBTC", "XRPETH", "MANABTC", "PPTBTC", "MTHBTC", "BNBBTC", "BNBETH", "ETHBTC" ]
-    #pairs =  [x for x in binance.prices().keys() if 'BTC' in x]
-
-    for pair in pairs:
-        #PAIR = "XRPBTC"
-        #PAIR = "XRPETH"
-        #PAIR = "MANABTC"
-        get_details(pair, args)
-        print
-
-if __name__ == '__main__':
-    main()
+    filename = "simple_candlestick_{0}".format(pair)
+    py.plot([trace], filename='{}.html'.format(filename), auto_open=False)
+    get_screenshot(filename)
+    resize_screenshot(filename)

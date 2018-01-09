@@ -1,4 +1,9 @@
 *.swp
+*.html
+*.png
+ta-lib*
+geckodriver*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
