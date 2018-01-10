@@ -14,8 +14,11 @@ HOME_DIR = os.path.expanduser('~')
 CONFIG = json.load(open(HOME_DIR + '/.binance'))
 API_KEY = CONFIG['api_key']
 API_SECRET = CONFIG['api_secret']
-STORAGE = HOME_DIR + '/.bitcoin'
-BITCOIN = pickle.load(open(STORAGE, 'rb'))
+try:
+    STORAGE = HOME_DIR + '/.bitcoin'
+    BITCOIN = pickle.load(open(STORAGE, 'rb'))
+except IOError, EOFError:
+    BITCOIN={}
 
 def add_value(key, value):
     try:
