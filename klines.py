@@ -35,7 +35,8 @@ def make_float(arr):
 
 def get_details(pair, args):
     """ Get details from binance API """
-
+    event = {}
+    event['data'] = {}
     red = "\033[31m"
     white = "\033[0m"
     raw = binance.klines(pair, "1m")
@@ -52,29 +53,50 @@ def get_details(pair, args):
     invhammer = talib.CDLINVERTEDHAMMER(*ohlc)[-10:]
     engulf = talib.CDLENGULFING(*ohlc)[-10:]
     doji = talib.CDLDOJI(*ohlc)[-10:]
-    yield "HAMMER", hammer
-    yield "INVHAMMER", invhammer
-    yield "ENGULF", engulf
-    yield "DOJI", doji
-    yield "https://uk.tradingview.com/symbols/{0}/".format(pair)
-    sys.stdout.write(red)
-    if hammer[-1] == 100:
-        yield "BUY ", pair, epoch
-    elif invhammer[-1] == 100:
-        yield "SELL ", pair, epoch
-    elif engulf[-1] == 100:
-        yield "BUY ", pair, epoch
-    elif engulf[-1] == -100:
-        yield "SELL", pair, epoch
-    elif doji[-1] == 100:
-        yield "INVESTIGATE", pair, epoch
-    else:
-        yield "HOLD ", pair, epoch
-    sys.stdout.write(white)
+    #yield "HAMMER", hammer
+    #yield "INVHAMMER", invhammer
+    #yield "ENGULF", engulf
+    #yield "DOJI", doji
+    event["data"]["DOJI"] = doji.tolist()
+    event["data"]["HAMMER"] = hammer.tolist()
+    event["data"]["INVHAMMER"] = invhammer.tolist()
+    event["data"]["ENGULF"] = engulf.tolist()
+    event["URL"] = "https://uk.tradingview.com/symbols/{0}/".format(pair)
+    event["time"] = epoch
+    #yield ("", "https://uk.tradingview.com/symbols/{0}/".format(pair))
+    #sys.stdout.write(red)
 
+    if hammer[-1] == 100:
+        event["event"] = "HAMMER"
+        event["direction"] = "BULLISH"
+        #yield "BUY ", pair, epoch
+    elif invhammer[-1] == 100:
+        event["event"] = "INVHAMMER"
+        event["direction"] = "BEARISH"
+        #yield "SELL ", pair, epoch
+    elif engulf[-1] == 100:
+        event["direction"] = "BULLISH"
+        event["event"] = "ENGULF"
+        #yield "BUY ", pair, epoch
+    elif engulf[-1] == -100:
+        event["direction"] = "BEARISH"
+        event["event"] = "ENGULF"
+        #yield "SELL", pair, epoch
+    elif doji[-1] == 100:
+        event["direction"] = "UNKNOWN"
+        event["event"] = "DOJI"
+        #yield "INVESTIGATE", pair, epoch
+    else:
+        #yield "HOLD ", pair, epoch
+        pass
+
+    #sys.stdout.write(white)
+    #print(json.dumps(event))
     if args.graph:
         #unhash to see graph
         create_graph(dataframe, pair)
+
+    return event
 
 def main():
     """ main function """
@@ -85,13 +107,22 @@ def main():
 
     pairs = ["XRPBTC", "XRPETH", "MANABTC", "PPTBTC", "MTHBTC", "BNBBTC", "BNBETH", "ETHBTC"]
     #pairs =  [x for x in binance.prices().keys() if 'BTC' in x]
-
+    agg_data = {}
+    agg_data["stories"] = {}
+    agg_data["events"] = {}
+    agg_data["stories"]["time"] = calendar.timegm(time.gmtime())
+    agg_data["stories"]["events"] = []
     for pair in pairs:
         #PAIR = "XRPBTC"
         #PAIR = "XRPETH"
         #PAIR = "MANABTC"
-        for data in get_details(pair, args):
-            print(*data)
+        event_data = get_details(pair, args)
+        agg_data["stories"]["events"].append(event_data["time"])
+        agg_data["events"][event_data["time"]] = event_data
+
+
+        print()
+    print(json.dumps(agg_data))
 
 if __name__ == '__main__':
     main()
