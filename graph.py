@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+"""Create candlestick graphs from OHLC data"""
+
 import os
 import time
 from selenium import webdriver
@@ -13,6 +15,7 @@ from resizeimage import resizeimage
 PATH = os.getcwd() + "/tmp/"
 
 def get_screenshot(filename=None):
+    """Capture screenshot using selenium/firefox in Xvfb """
     display = Display(visible=0, size=(640, 480))
     display.start()
 
@@ -30,18 +33,20 @@ def get_screenshot(filename=None):
     display.stop()
 
 def resize_screenshot(filename=None):
-    with open('{0}/{1}.png'.format(PATH, filename), 'r+b') as f:
-        with Image.open(f) as image:
+    """Resize screenshot to thumbnail - for use in API"""
+    with open('{0}/{1}.png'.format(PATH, filename), 'r+b') as png_file:
+        with Image.open(png_file) as image:
             cover = resizeimage.resize_width(image, 100)
-            cover.save('{0}_resized.png'.format(filename), image.format)
+            cover.save('{0}/{1}_resized.png'.format(PATH, filename), image.format)
 
-def create_graph(df, pair):
+def create_graph(dataframe, pair):
+    """Create graph html file using plotly offline-mode from dataframe object"""
     py.init_notebook_mode()
-    trace = go.Candlestick(x=df.index,
-                           open=df.open,
-                           high=df.high,
-                           low=df.low,
-                           close=df.close)
+    trace = go.Candlestick(x=dataframe.index,
+                           open=dataframe.open,
+                           high=dataframe.high,
+                           low=dataframe.low,
+                           close=dataframe.close)
     filename = "simple_candlestick_{0}".format(pair)
     py.plot([trace], filename='{0}/{1}.html'.format(PATH, filename), auto_open=False)
     get_screenshot(filename)
