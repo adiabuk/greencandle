@@ -65,7 +65,6 @@ class Events(dict):
 
     def get_json(self):
         """return serialized JSON of dict """
-        sys.stderr.write(json.dumps(self))
         return json.dumps(self)
 
     def get_data(self, pairs):
@@ -102,6 +101,7 @@ class Events(dict):
                 a["event"] = check
             except KeyError as ke:
                 continue
+            sys.stderr.write("END")
             self[id(a)] = a
 
 def get_details(pairs, args):
@@ -146,6 +146,9 @@ def gen_dict(args):
     event_data = get_details(pairs, args)
     events = Events(event_data)
     data = events.get_data(pairs)
+    if not events:
+        sys.stderr.write("ERROR\n")
+        sys.exit(2)
     events.print_text()
     agg_data.update(data)
     return agg_data

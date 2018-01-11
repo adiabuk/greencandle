@@ -1,6 +1,6 @@
 *.swp
 *.html
-*.png
+tmp/*
 ta-lib*
 geckodriver*
 

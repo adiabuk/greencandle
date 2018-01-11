@@ -41,8 +41,7 @@ def get_data():
     event_data = klines.get_details(pairs, args)
     events = klines.Events(event_data)
     data = events.get_data(pairs)
-    #sys.stderr.write(data)
-    return data
+    #return data
     return events.get_json()
 
 def schedule_data(scheduler):
