@@ -14,7 +14,7 @@ import klines
 
 DATA = None
 SCHED = sched.scheduler(time.time, time.sleep)
-TIMER = 1
+TIMER = 60
 
 class Namespace:
     def __init__(self, **kwargs):
@@ -22,13 +22,14 @@ class Namespace:
 
 APP = Flask(__name__)
 @APP.route('/data', methods=['GET'])
-def hello_world():
+def get_analysis():
     """return html data"""
-    global DATA
-    sys.stderr.write('Hello world! ')
-    sys.stderr.write(str(type(DATA)))
-
     return str(DATA)
+
+def get_balance():
+    """return balances"""
+    pass
+
 
 def get_data():
     """Fetch data - called by scheduler periodically """
@@ -71,7 +72,7 @@ def main():
         background_thread.start()
     except (KeyboardInterrupt, SystemExit):
         sys.exit(1)
-    APP.run(debug=True, threaded=True)
+    APP.run(debug=True, threaded=True, port=5001)
 
 if __name__ == '__main__':
     main()
