@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 
 """
-Get Balance from Binance
+Get/Convert Balances from Binance
 """
 
 import os
 import json
 import pickle
+from collections import defaultdict
 import binance
 import conversion
 
@@ -17,42 +18,71 @@ API_SECRET = CONFIG['api_secret']
 try:
     STORAGE = HOME_DIR + '/.bitcoin'
     BITCOIN = pickle.load(open(STORAGE, 'rb'))
-except IOError, EOFError:
-    BITCOIN={}
+except (IOError, EOFError):
+    BITCOIN = {}
+
+def default_to_regular(ddict):
+    """
+    convert defaultdict of defaultdict to regualr nested dict using recursion
+    """
+
+    if isinstance(ddict, defaultdict):
+        ddict = {k: default_to_regular(v) for k, v in ddict.iteritems()}
+    return ddict
 
 def add_value(key, value):
+    """Add value to dict to save offline """
     try:
         BITCOIN[key].append(value)
     except KeyError:
         BITCOIN[key] = []
         BITCOIN[key].append(value)
 
+def get_binance_values():
+    """Get totals for each crypto from binance and convert to USD/GBP"""
 
-binance.set(API_KEY, API_SECRET)
-all = binance.balances()
-PRICES = binance.prices()
-TOTALS = 0
+    mydict = lambda: defaultdict(mydict)
+    result = mydict()
 
-for key in all:
-    if float(all[key]['free']) > 0:
-        print key, all[key]['free']
-        if key != 'BTC':
-            bc = float(all[key]['free']) * float(PRICES[key+'BTC'])
-            print bc, "BTC"
-            add_value(key, bc)
-            TOTALS += float(all[key]['free']) * float(PRICES[key+'BTC'])
+    binance.set(API_KEY, API_SECRET)
+    all_balances = binance.balances()
+    prices = binance.prices()
+    bitcoin_totals = 0
 
-        else:
-            add_value(key, all[key]['free'])
-            TOTALS += float(all[key]['free'])
-            print float(all[key]['free']) * float(PRICES['BTCUSDT']), "USD"
-print 'TOTAL: ', TOTALS, "BTC"
-USD = TOTALS * float(PRICES['BTCUSDT'])
-print "TOTAL USD: ", USD
+    for key in all_balances:
+        if float(all_balances[key]['free']) > 0:  # available currency
+            result["binance"][key]["count"] = all_balances[key]["free"]
 
-GBP = conversion.get_exchange_rate('USD', 'GBP') * USD
-add_value('USD', USD)
-add_value('GBP', GBP)
-pickle.dump(BITCOIN, open(STORAGE, 'wb'))
+            if key != 'BTC':  # currencies that need converting to BTC
+                bcoin = float(all_balances[key]['free']) * float(prices[key+'BTC'])  # value in BTC
+                bitcoin_totals += float(all_balances[key]['free']) * float(prices[key+'BTC'])
+            else:   #btc
+                bcoin = float(all_balances[key]['free'])
+                bitcoin_totals += float(bcoin)
 
-print "GBP TOTAL: ", GBP
+            add_value(key, bcoin)
+            usd = bcoin *float(prices["BTCUSDT"])
+            gbp = conversion.get_exchange_rate('USD', 'GBP') * usd
+            result["binance"][key]['BTC'] = bcoin
+            result["binance"][key]['USD'] = usd
+            result["binance"][key]["GBP"] = gbp
+
+    result["binance"]["TOTALS"]["BTC"] = bitcoin_totals
+    usd_total = bitcoin_totals * float(prices['BTCUSDT'])
+    result["binance"]["TOTALS"]["USD"] = usd_total
+
+    gbp_total = conversion.get_exchange_rate('USD', 'GBP') * usd_total
+    result["binance"]["TOTALS"]["GBP"] = gbp_total
+    add_value('USD', usd_total)
+    add_value('GBP', gbp_total)
+    pickle.dump(BITCOIN, open(STORAGE, 'wb'))
+
+    return default_to_regular(result)
+
+def main():
+    """print DICT of values when called directly """
+
+    print json.dumps(get_binance_values(), indent=4)
+
+if __name__ == "__main__":
+    main()
