@@ -77,10 +77,10 @@ class Events(dict):
 
     def set_data(self, pair, dat):
         #print("top of set", pair)
-        trends = {"HAMMER": {100: "bullish"},
-                  "INVERTEDHAMMER": {100: "bearish"},
-                  "ENGULFING": {-100:"bearish", 100:"bullish"},
-                  "DOJI": {100: "unknown"}}
+        trends = {"HAMMER": {100: "bullish", 0:"keep"},
+                "INVERTEDHAMMER": {100: "bearish", 0:"keep"},
+                "ENGULFING": {-100:"bearish", 100:"bullish", 0:"keep"},
+                "DOJI": {100: "unknown",0:"keep"}}
         x = {}
         for check in trends.keys():
             j = getattr(talib, "CDL" + check)(*dat).tolist()[-10:]
@@ -101,7 +101,6 @@ class Events(dict):
                 a["event"] = check
             except KeyError as ke:
                 continue
-            sys.stderr.write("END")
             self[id(a)] = a
 
 def get_details(pairs, args):
@@ -111,6 +110,7 @@ def get_details(pairs, args):
         event = {}
         event["symbol"] = pair
         event['data'] = {}
+        print("Getting", pair)
         raw = binance.klines(pair, "1m")
         if not raw:
             sys.stderr.write("Unable to extract data")
@@ -133,6 +133,7 @@ def main():
     white = "\033[0m"
     parser = argparse.ArgumentParser()
     parser.add_argument('-g', '--graph', action='store_true', default=False)
+    parser.add_argument('-p', '--pair')
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
 
@@ -142,13 +143,16 @@ def gen_dict(args):
     pairs = ["XRPBTC", "XRPETH", "MANABTC", "PPTBTC", "MTHBTC", "BNBBTC", "BNBETH", "ETHBTC"]
     #pairs =  [x for x in binance.prices().keys() if 'BTC' in x]
     agg_data = {}
-
+    if args.pair:
+        pairs=[args.pair]
+        print(args.pair)
     event_data = get_details(pairs, args)
     events = Events(event_data)
     data = events.get_data(pairs)
-    if not events:
-        sys.stderr.write("ERROR\n")
-        sys.exit(2)
+    while not events:
+        sys.stderr.write("ERROR"+ str(event_data)+ "\n")
+        events = Events(event_data)
+        events.get_data(pairs)
     events.print_text()
     agg_data.update(data)
     return agg_data
