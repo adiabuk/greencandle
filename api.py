@@ -39,7 +39,7 @@ def fetch_balance():
 
 def get_balance():
     """fetch balances and store in global variable"""
-    balances = balance.get_binance_values()
+    balances = balance.get_balance()
     return json.dumps(balances)
 
 
