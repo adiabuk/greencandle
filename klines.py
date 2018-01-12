@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 # PYTHON_ARGCOMPLETE_OK
-#pylint: disable=no-member
+#pylint: disable=no-member,consider-iterating-dictionary
 
 """
 Get ohlc (Open, High, Low, Close) values from given cryptos
 and detect trends using candlestick patterns
-
 """
 
 from __future__ import print_function
@@ -34,6 +33,8 @@ def make_float(arr):
     return numpy.array([float(x) for x in arr.values])
 
 class Events(dict):
+    """ Represent events created from data & indicators """
+
     def __init__(self, data):
         self.data = data
         super(Events, self).__init__()
@@ -42,6 +43,7 @@ class Events(dict):
         """
         Print text output to stdout
         """
+
         red = "\033[31m"
         white = "\033[0m"
         if not self.values:
@@ -52,14 +54,17 @@ class Events(dict):
                 continue
             try:
                 print("Symbol:", value['symbol'])
-                print("URL:", value["URL"])
-                print("direction:", value["direction"])
+                print("URL:", value["url"])
+                if value["direction"] != "keep":
+                    print("direction: {0}{1}{2}".format, red, value["direction"], white)
+                else:
+                    print("direction:", value["direction"])
                 print("event:", red, value["event"], white)
                 print("time:", value["time"])
                 for key2, value2 in value["data"].items():
                     print(key2, value2)
-            except KeyError:
-                print("KEYERROR", value)
+            except KeyError as key_error:
+                print("KEYERROR", value, key_error)
                 continue
             print("\n")
 
@@ -76,36 +81,36 @@ class Events(dict):
             return self
 
     def set_data(self, pair, dat):
+        """ Cross Reference data against trend indicators """
         #print("top of set", pair)
         trends = {"HAMMER": {100: "bullish", 0:"keep"},
-                "INVERTEDHAMMER": {100: "bearish", 0:"keep"},
-                "ENGULFING": {-100:"bearish", 100:"bullish", 0:"keep"},
-                "DOJI": {100: "unknown",0:"keep"}}
-        x = {}
+                  "INVERTEDHAMMER": {100: "bearish", 0:"keep"},
+                  "ENGULFING": {-100:"bearish", 100:"bullish", 0:"keep"},
+                  "DOJI": {100: "unknown", 0:"keep"}}
+        results = {}
         for check in trends.keys():
             j = getattr(talib, "CDL" + check)(*dat).tolist()[-10:]
-            x.update({check: j})
+            results.update({check: j})
 
         for check in trends.keys():
-            a={}
-            values = x[check]
+            scheme = {}
             try:
-                result = trends[check][x[check][-1]]
-                if not "data" in a:
-                    a['data'] = {}
-                a["data"]= x   # convert from array to list
-                a["url"] = "https://uk.tradingview.com/symbols/{0}/".format(pair)
-                a["time"] = calendar.timegm(time.gmtime())
-                a["symbol"] = pair
-                a["direction"] = result
-                a["event"] = check
-            except KeyError as ke:
+                result = trends[check][results[check][-1]]
+                if "data" not in scheme:
+                    scheme['data'] = {}
+                scheme["data"] = results   # convert from array to list
+                scheme["url"] = "https://uk.tradingview.com/symbols/{0}/".format(pair)
+                scheme["time"] = calendar.timegm(time.gmtime())
+                scheme["symbol"] = pair
+                scheme["direction"] = result
+                scheme["event"] = check
+            except KeyError:
                 continue
-            self[id(a)] = a
+            self[id(scheme)] = scheme
 
 def get_details(pairs, args):
     """ Get details from binance API """
-    ohlcs=[]
+    ohlcs = []
     for pair in pairs:
         event = {}
         event["symbol"] = pair
@@ -129,22 +134,21 @@ def get_details(pairs, args):
 
 def main():
     """ main function """
-    red = "\033[31m"
-    white = "\033[0m"
     parser = argparse.ArgumentParser()
     parser.add_argument('-g', '--graph', action='store_true', default=False)
+    parser.add_argument('-j', '--json', action='store_true', default=False)
     parser.add_argument('-p', '--pair')
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
-
-    data = gen_dict(args)
+    gen_dict(args)
 
 def gen_dict(args):
+    """ Create dict of data for all pairs """
     pairs = ["XRPBTC", "XRPETH", "MANABTC", "PPTBTC", "MTHBTC", "BNBBTC", "BNBETH", "ETHBTC"]
     #pairs =  [x for x in binance.prices().keys() if 'BTC' in x]
     agg_data = {}
     if args.pair:
-        pairs=[args.pair]
+        pairs = [args.pair]
         print(args.pair)
     event_data = get_details(pairs, args)
     events = Events(event_data)
@@ -153,7 +157,11 @@ def gen_dict(args):
         sys.stderr.write("ERROR"+ str(event_data)+ "\n")
         events = Events(event_data)
         events.get_data(pairs)
-    events.print_text()
+    if args.json:
+        print(json.dumps(events, indent=4))
+    else:
+        events.print_text()
+
     agg_data.update(data)
     return agg_data
 
