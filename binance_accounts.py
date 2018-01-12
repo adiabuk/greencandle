@@ -30,6 +30,8 @@ def get_binance_values():
     all_balances = binance.balances()
     prices = binance.prices()
     bitcoin_totals = 0
+    gbp_total = 0
+    usd_total = 0
     currency = CurrencyRates()
 
     for key in all_balances:
@@ -44,14 +46,18 @@ def get_binance_values():
                 bitcoin_totals += float(bcoin)
 
             add_value(key, bcoin)
+            usd2gbp = lambda: currency.get_rate("USD", "GBP")
+
             usd = bcoin *float(prices["BTCUSDT"])
-            gbp = currency.get_rate('USD', 'GBP') * usd
+            gbp = usd2gbp() * usd
+            usd_total += usd
+            gbp_total += gbp
             result["binance"][key]['BTC'] = bcoin
             result["binance"][key]['USD'] = usd
             result["binance"][key]["GBP"] = gbp
 
-    result["binance"]["TOTALS"]["BTC"] = bitcoin_totals
     usd_total = bitcoin_totals * float(prices['BTCUSDT'])
+    result["binance"]["TOTALS"]["BTC"] = bitcoin_totals
     result["binance"]["TOTALS"]["USD"] = usd_total
 
     gbp_total = currency.get_rate("USD", "GBP") * usd_total
