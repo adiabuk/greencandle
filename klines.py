@@ -94,7 +94,7 @@ class Events(dict):
                 if not "data" in a:
                     a['data'] = {}
                 a["data"]= x   # convert from array to list
-                a["URL"] = "https://uk.tradingview.com/symbols/{0}/".format(pair)
+                a["url"] = "https://uk.tradingview.com/symbols/{0}/".format(pair)
                 a["time"] = calendar.timegm(time.gmtime())
                 a["symbol"] = pair
                 a["direction"] = result

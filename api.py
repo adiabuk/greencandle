@@ -5,7 +5,7 @@
 API for binance/coinbase crypto data
 """
 
-
+import calendar
 import sched
 import sys
 import json
@@ -19,7 +19,7 @@ DATA = None
 BALANCE = None
 SCHED = sched.scheduler(time.time, time.sleep)
 DATA_TIMER = 60
-BALANCE_TIMER = 6
+BALANCE_TIMER = 300
 
 class Namespace(object):
     """Namespace object for passing args(argparse) options"""
@@ -50,9 +50,16 @@ def get_data():
     args = Namespace(graph=False)
 
     event_data = klines.get_details(pairs, args)
-    events = klines.Events(event_data)
-    events.get_data(pairs)
-    return events.get_json()
+    eventsObj = klines.Events(event_data)
+    eventsObj.get_data(pairs)
+    events = eventsObj
+    js = {}
+    js["stories"] = {}
+    js["events"] = events
+    js["stories"]["time"] = calendar.timegm(time.gmtime())
+    js["stories"]["type"] = "finish"
+    js["stories"]["events"] = events.keys()
+    return json.dumps(js)
 
 def schedule_data(scheduler):
     """
