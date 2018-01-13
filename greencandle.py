@@ -1062,6 +1062,7 @@ class WorkerThread(QtCore.QThread):
             current_time = time.time()
             self.my_logging("current_time = " + str(current_time))
 
+        self.tracker.tracking_list_new.append(rebuild_question)
         set1 = set((x.id, x.name) for x in self.tracker.tracking_list)
         difference = [x for x in self.tracker.tracking_list_new
                       if (x.id, x.name) not in set1]
