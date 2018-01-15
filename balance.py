@@ -18,7 +18,7 @@ def get_balance():
 
 def main():
     """print formated json of dict when called directly """
-    print json.dumps(get_balance(), indent=4)
+    print(json.dumps(get_balance(), indent=4))
 
 if __name__ == "__main__":
     main()

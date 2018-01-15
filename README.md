@@ -7,3 +7,5 @@ $ cd ta-lib-0.4.0
 $ ./configure
 $ make
 $ make install
+
+pip install quandl
