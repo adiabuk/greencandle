@@ -60,4 +60,4 @@ def get_coinbase_values():
 
 
 if __name__ == "__main__":
-    print get_coinbase_values()
+    print(get_coinbase_values())

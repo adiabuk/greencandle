@@ -108,6 +108,10 @@ class Events(dict):
                 continue
             self[id(scheme)] = scheme
 
+def make_dataframe():
+    """ Create pandas dataframe from ...."""
+    pass
+
 def get_details(pairs, args):
     """ Get details from binance API """
     ohlcs = []
@@ -121,6 +125,11 @@ def get_details(pairs, args):
             sys.stderr.write("Unable to extract data")
             sys.exit(2)
         dataframe = pandas.DataFrame.from_dict(raw)
+        if args.print_data:
+            # print datafram and return
+            # Will not print out indicators!
+            print(dataframe)
+            return {}
 
         ohlc = (make_float(dataframe.open),
                 make_float(dataframe.high),
@@ -138,6 +147,7 @@ def main():
     parser.add_argument('-g', '--graph', action='store_true', default=False)
     parser.add_argument('-j', '--json', action='store_true', default=False)
     parser.add_argument('-p', '--pair')
+    parser.add_argument('-d', '--print_data', action='store_true', default=False)
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
     gen_dict(args)
