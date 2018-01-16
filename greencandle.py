@@ -27,8 +27,8 @@ from Queue import Queue
 
 import oauth as ops
 
-logger = logging.getLogger("Elephant log")
-loggerW = logging.getLogger("Elephant log2")
+LOGGER = logging.getLogger("Elephant log")
+LOGGERW = logging.getLogger("Elephant log2")
 
 
 class QLineEditWithPlaceholder(QtGui.QLineEdit):
@@ -518,7 +518,7 @@ class Elephant(QtGui.QDialog):
         calframe = inspect.getouterframes(curframe, 2)
         message = "%s - %s" %(calframe[1][3], text)
         if singleton.logging:
-            logger.info(message)
+            LOGGER.info(message)
 
     def __call__(self, Parent=None):
         self.my_logging("called")
@@ -526,14 +526,14 @@ class Elephant(QtGui.QDialog):
     def __init__(self, parent=None):
         singleton = Singleton()
         singleton.notify = False
-        logger = logging.getLogger("Elephant log")
+        LOGGER = logging.getLogger("Elephant log")
         filename = "%s/elephant.log" % os.environ['HOME']
-        logger.setLevel(logging.DEBUG)
+        LOGGER.setLevel(logging.DEBUG)
         formatter = logging.Formatter("%(asctime)s;%(levelname)s;%(message)s",
                               "%Y-%m-%d %H:%M:%S")
         fh = logging.FileHandler(filename)
         fh.setFormatter(formatter)
-        logger.addHandler(fh)
+        LOGGER.addHandler(fh)
 
         singleton = Singleton()
         singleton.state = 4 #random number
@@ -960,7 +960,7 @@ class APIHelper(object):
         calframe = inspect.getouterframes(curframe, 2)
         message = "%s - %s" %(calframe[1][3], text)
         if singleton.logging:
-            loggerW.info(message)
+            LOGGERW.info(message)
 
 class ChangeIcon(QtCore.QThread):
     procDone = QtCore.pyqtSignal(bool)
@@ -984,12 +984,12 @@ class WorkerThread(QtCore.QThread):
         self.interval = 300000
         self.settings = {}
         filename = "%s/elephant.log" % os.environ['HOME']
-        loggerW.setLevel(logging.DEBUG)
+        LOGGERW.setLevel(logging.DEBUG)
         formatter = logging.Formatter("%(asctime)s;%(levelname)s;%(message)s",
                               "%Y-%m-%d %H:%M:%S")
         file_handle = logging.FileHandler(filename)
         file_handle.setFormatter(formatter)
-        loggerW.addHandler(file_handle)
+        LOGGERW.addHandler(file_handle)
 
     def my_logging(self, text):
         singleton = Singleton()
@@ -997,7 +997,7 @@ class WorkerThread(QtCore.QThread):
         calframe = inspect.getouterframes(curframe, 2)
         message = "%s - %s" %(calframe[1][3], text)
         if singleton.logging:
-            loggerW.info(message)
+            LOGGERW.info(message)
 
     def run(self):
         self.timer = QtCore.QTimer()
@@ -1047,7 +1047,7 @@ class WorkerThread(QtCore.QThread):
             profile = event['event']
             self.my_logging(event)
             self.my_logging("Failed to get user details for %s" % name)
-            profile = "www.google.com"
+            profile = event['url']
 
             unixname = 'adiab'
             email = 'adiab@hotmail.co.uk'
@@ -1062,6 +1062,7 @@ class WorkerThread(QtCore.QThread):
             current_time = time.time()
             self.my_logging("current_time = " + str(current_time))
 
+        self.tracker.tracking_list_new.append(rebuild_question)
         set1 = set((x.id, x.name) for x in self.tracker.tracking_list)
         difference = [x for x in self.tracker.tracking_list_new
                       if (x.id, x.name) not in set1]
