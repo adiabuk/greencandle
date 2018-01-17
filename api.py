@@ -11,7 +11,7 @@ import sys
 import json
 import threading
 import time
-from flask import Flask
+from flask import Flask, abort
 import balance
 import klines
 
@@ -27,9 +27,13 @@ class Namespace(object):
         self.__dict__.update(kwargs)
 
 APP = Flask(__name__)
+
 @APP.route('/data', methods=['GET'])
 def get_analysis():
     """return html data"""
+    if not DATA:
+        abort(500, json.dumps({'response': 'Data not yet populated, try again later'}))
+
     return str(DATA)
 
 @APP.route('/balance', methods=['GET'])
@@ -50,16 +54,15 @@ def get_data():
     args = Namespace(graph=False)
 
     event_data = klines.get_details(pairs, args)
-    eventsObj = klines.Events(event_data)
-    eventsObj.get_data(pairs)
-    events = eventsObj
-    js = {}
-    js["stories"] = {}
-    js["events"] = events
-    js["stories"]["time"] = calendar.timegm(time.gmtime())
-    js["stories"]["type"] = "finish"
-    js["stories"]["events"] = events.keys()
-    return json.dumps(js)
+    events = klines.Events(event_data)
+    events.get_data(pairs)
+    all_data = {}
+    all_data["stories"] = {}
+    all_data["events"] = events
+    all_data["stories"]["time"] = calendar.timegm(time.gmtime())
+    all_data["stories"]["type"] = "finish"
+    all_data["stories"]["events"] = events.keys()
+    return json.dumps(all_data)
 
 def schedule_data(scheduler):
     """

@@ -119,7 +119,7 @@ def get_details(pairs, args):
         event = {}
         event["symbol"] = pair
         event['data'] = {}
-        print("Getting", pair)
+        #print("Getting", pair)
         raw = binance.klines(pair, "1m")
         if not raw:
             sys.stderr.write("Unable to extract data")
