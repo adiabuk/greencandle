@@ -56,7 +56,7 @@ def get_data():
     all_data["events"] = events
     all_data["stories"]["time"] = calendar.timegm(time.gmtime())
     all_data["stories"]["type"] = "finish"
-    all_data["stories"]["events"] = events.keys()
+    all_data["stories"]["events"] = list(events.keys())
     return json.dumps(all_data)
 
 def schedule_data(scheduler):
@@ -71,7 +71,7 @@ def schedule_data(scheduler):
         sys.stdout.write("Successfully fetched data\n")
 
     except Exception as error:
-        sys.stderr.write("Error opening URL\n" + str(error))
+        sys.stderr.write("Error opening URL: " + str(error) + "\n")
 
     SCHED.enter(DATA_TIMER, 1, schedule_data, (scheduler,))
 
