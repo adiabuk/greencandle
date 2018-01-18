@@ -2,9 +2,10 @@
 
 """Get account value from binance and coinbase """
 
+from __future__ import print_function
 import json
-from binance_accounts import get_binance_values
-from coinbase_accounts import get_coinbase_values
+from lib.binance_accounts import get_binance_values
+from lib.coinbase_accounts import get_coinbase_values
 
 def get_balance():
     """get dict of all balances """

@@ -1,5 +1,9 @@
 #!/usr/bin/env python
+"""
+Calculate potential profits from historical data
+"""
 
+from __future__ import print_function
 from forex_python.converter import CurrencyRates
 import binance
 
@@ -12,7 +16,7 @@ def get_profit(pair, buy_price, sell_price):
     QUOTE/HOME = ETH/GBP
     """
 
-    base = pair[:-3]
+    #base = pair[:-3]
     quote = pair[-3:]
     home = "GBP"
     intermed = "USD"
@@ -20,7 +24,6 @@ def get_profit(pair, buy_price, sell_price):
     formula = float(sell_price) - float(buy_price) * quotehome
     #number_of_units = 50gbp => base
     print(formula)
-
 
 def gbp_to_base(gbp, symbol):
     """

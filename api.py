@@ -5,6 +5,7 @@
 API for binance/coinbase crypto data
 """
 
+from __future__ import print_function
 import calendar
 import sched
 import sys
@@ -20,11 +21,6 @@ BALANCE = None
 SCHED = sched.scheduler(time.time, time.sleep)
 DATA_TIMER = 60
 BALANCE_TIMER = 300
-
-class Namespace(object):
-    """Namespace object for passing args(argparse) options"""
-    def __init__(self, **kwargs):
-        self.__dict__.update(kwargs)
 
 APP = Flask(__name__)
 
@@ -51,9 +47,8 @@ def get_data():
     """Fetch data - called by scheduler periodically """
 
     pairs = ["XRPBTC", "XRPETH", "MANABTC", "PPTBTC", "MTHBTC", "BNBBTC", "BNBETH", "ETHBTC"]
-    args = Namespace(graph=False)
 
-    event_data = klines.get_details(pairs, args)
+    event_data = klines.get_details(pairs)
     events = klines.Events(event_data)
     events.get_data(pairs)
     all_data = {}
@@ -100,7 +95,7 @@ def main():
     background_thread = threading.Thread(target=SCHED.run, args=())
     background_thread.daemon = True
     try:
-        print "Loading scheduler"
+        print("Loading scheduler")
         background_thread.start()
     except (KeyboardInterrupt, SystemExit):
         sys.exit(1)

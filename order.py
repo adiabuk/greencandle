@@ -4,17 +4,11 @@
 Test Buy/Sell orders
 """
 
-import os
-import json
+from __future__ import print_function
 import binance
+from lib.auth import binance_auth
 
-HOME_DIR = os.path.expanduser('~')
-CONFIG = json.load(open(HOME_DIR + '/.binance'))
-API_KEY = CONFIG['api_key']
-API_SECRET = CONFIG['api_secret']
-
-
-binance.set(API_KEY, API_SECRET)
+binance_auth()
 
 def get_buy_price(pair="XZCETH"):
     """ return lowest buying request """

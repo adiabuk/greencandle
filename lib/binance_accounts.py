@@ -2,31 +2,20 @@
 Get/Convert Balances from Binance
 """
 
-import os
-import json
-import pickle
 from collections import defaultdict
-import binance
 from forex_python.converter import CurrencyRates
-from balance_common import default_to_regular
+import binance
+from lib.balance_common import default_to_regular
+from lib.auth import binance_auth
 
-HOME_DIR = os.path.expanduser('~')
-CONFIG = json.load(open(HOME_DIR + '/.binance'))
-API_KEY = CONFIG['api_key']
-API_SECRET = CONFIG['api_secret']
-try:
-    STORAGE = HOME_DIR + '/.bitcoin'
-    BITCOIN = pickle.load(open(STORAGE, 'rb'))
-except (IOError, EOFError):
-    BITCOIN = {}
+BITCOIN = {}
 
 def get_binance_values():
     """Get totals for each crypto from binance and convert to USD/GBP"""
 
     mydict = lambda: defaultdict(mydict)
     result = mydict()
-
-    binance.set(API_KEY, API_SECRET)
+    binance_auth()
     all_balances = binance.balances()
     prices = binance.prices()
     bitcoin_totals = 0
@@ -64,7 +53,6 @@ def get_binance_values():
     result["binance"]["TOTALS"]["GBP"] = gbp_total
     add_value('USD', usd_total)
     add_value('GBP', gbp_total)
-    pickle.dump(BITCOIN, open(STORAGE, 'wb'))
 
     return default_to_regular(result)
 

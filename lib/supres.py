@@ -2,15 +2,12 @@
 
 """
 find support/resistance levels
-Taken from:
+Adapted from:
 https://kite.trade/forum/discussion/1047/a-simple-python-function-to-detect-support-resistance-levels
 """
 
 import numpy as np
-import pandas
 from scipy.signal import savgol_filter as smooth
-import binance
-from klines import make_float
 
 def supres(ltp, n):
     """
@@ -55,17 +52,3 @@ def supres(ltp, n):
             support.append(ltp[int(i+((n/2)-1))])
 
     return support, resistance
-
-
-def main():
-    raw = binance.klines("XRPETH", "5m")
-    print(len(raw))
-    dataframe = pandas.DataFrame.from_dict(raw)
-    close_values = make_float(dataframe.close)
-    support, resistance = supres(close_values, 10)
-    print("resistance:",resistance)
-    print("current:", binance.prices()["XRPETH"])
-    print("support:", support)
-
-if __name__ == '__main__':
-    main()

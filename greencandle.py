@@ -7,6 +7,7 @@ Many of the UI components have been taken/adapted from https://github.com/swanso
 which is a notification system for stackoverflow.com
 """
 
+from __future__ import print_function
 from datetime import timedelta, datetime
 try:
     import json
@@ -309,9 +310,7 @@ class SettingsDialog(QtGui.QDialog):
             if (widget != 0) and (type(widget) is QtGui.QRadioButton):
                 if widget.isChecked():
                     if i == 0:
-                        #self.run="true"
-			self.parent.notify_bad()
-                        #self.parent.constant()
+                        self.parent.notify_bad()
                     elif i == 1:
                         self.parent.notify_good()
                     else:
@@ -946,8 +945,8 @@ class APIHelper(object):
             return json.load(file_handle)
 
         except:
-            print "req:%s" % fullurl
-            print "Unable to fetch live data"
+            print("req:%s" % fullurl)
+            print("Unable to fetch live data")
             json_data = open('./unknown.json')
             singleton.new_state = 3
             Singleton.update_color = 'black'
@@ -1007,7 +1006,7 @@ class WorkerThread(QtCore.QThread):
         try:
             self.fetch()
         except:
-            print
+            print()
         self.exec_()
 
     def __del__(self):

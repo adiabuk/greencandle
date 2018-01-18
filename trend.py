@@ -9,38 +9,21 @@ Get Supertrend values and trigger points for traing pair
 from __future__ import print_function
 import argparse
 import os
-import sys
-import json
 import csv
 import time
 import pandas
 import argcomplete
 import binance
 from indicator import SuperTrend, RSI
-from morris import KnuthMorrisPratt
+from lib.morris import KnuthMorrisPratt
+from lib.binance_common import get_binance_klines
 import order
 
 HOME_DIR = os.path.expanduser('~')
-CONFIG = json.load(open(HOME_DIR + '/.binance'))
-API_KEY = CONFIG['api_key']
-API_SECRET = CONFIG['api_secret']
-
-def get_binance_dataframe(pair, interval):
-    """
-    Get pandas dataframe from binance data
-    """
-    try:
-        raw = binance.klines(pair, interval)
-    except IndexError:
-        sys.stderr.write("Unable to fetch data for " + pair + "\n")
-        sys.exit(2)
-    dataframe = pandas.DataFrame(raw, columns=['openTime', 'open', 'high', 'low',
-                                               'close', 'volume'])
-    return dataframe
 
 def get_rsi(pair="XRPETH"):
     """ get RSI oscillator values """
-    dataframe = get_binance_dataframe(pair, "3m")
+    dataframe = get_binance_klines(pair, interval="3m")
     columns = ["date", "Open", "High", "Low", "Close", "Volume"]  # rename columns
     for index, item in enumerate(columns):
         dataframe.columns.values[index] = item
@@ -53,7 +36,7 @@ def get_rsi(pair="XRPETH"):
 
 def get_supertrend(pair="XRPETH"):
     """ get the super trend values """
-    dataframe = get_binance_dataframe(pair, "3m")
+    dataframe = get_binance_klines(pair, interval="3m")
     columns = ["date", "Open", "High", "Low", "Close", "Volume"]  # rename columns
     for index, item in enumerate(columns):
         dataframe.columns.values[index] = item

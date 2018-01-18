@@ -2,19 +2,14 @@
 
 """Get account details from coinbase"""
 
+from __future__ import print_function
 import json
-import os
 from collections import defaultdict
-from coinbase.wallet.client import Client
 from forex_python.converter import CurrencyRates
-from balance_common import default_to_regular
+from lib.balance_common import default_to_regular
+from lib.auth import coinbase_auth
 
-HOME_DIR = os.path.expanduser('~')
-CONFIG = json.load(open(HOME_DIR + '/.coinbase'))
-API_KEY = CONFIG['api_key']
-API_SECRET = CONFIG['api_secret']
-
-CLIENT = Client(API_KEY, API_SECRET)
+CLIENT = coinbase_auth()
 
 def get_coinbase_values():
     """Get totals for each crypto from binance and convert to USD/GBP"""

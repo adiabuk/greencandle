@@ -9,24 +9,15 @@ and detect trends using candlestick patterns
 
 from __future__ import print_function
 import json
-import os
 import sys
 import argparse
 import time
 import calendar
-import pandas
 import numpy
 import talib
 import argcomplete
-import binance
-from graph import create_graph
-
-HOME_DIR = os.path.expanduser('~')
-CONFIG = json.load(open(HOME_DIR + '/.binance'))
-API_KEY = CONFIG['api_key']
-API_SECRET = CONFIG['api_secret']
-
-binance.set(API_KEY, API_SECRET)
+from lib.binance_common import get_binance_klines
+from lib.graph import create_graph
 
 def make_float(arr):
     """Convert dataframe array into float array"""
@@ -108,24 +99,17 @@ class Events(dict):
                 continue
             self[id(scheme)] = scheme
 
-def make_dataframe():
-    """ Create pandas dataframe from ...."""
-    pass
-
-def get_details(pairs, args):
+def get_details(pairs, print_data=False, graph=False, interval="1m"):
     """ Get details from binance API """
     ohlcs = []
     for pair in pairs:
         event = {}
         event["symbol"] = pair
         event['data'] = {}
-        #print("Getting", pair)
-        raw = binance.klines(pair, "1m")
-        if not raw:
-            sys.stderr.write("Unable to extract data")
-            sys.exit(2)
-        dataframe = pandas.DataFrame.from_dict(raw)
-        if args.print_data:
+
+        dataframe = get_binance_klines(pair, interval=interval)
+        if print_data:
+            # FIXME: this is in the wrong place
             # print datafram and return
             # Will not print out indicators!
             print(dataframe)
@@ -136,7 +120,7 @@ def get_details(pairs, args):
                 make_float(dataframe.low),
                 make_float(dataframe.close))
 
-        if args.graph:
+        if graph:
             create_graph(dataframe, pair)
         ohlcs.append(ohlc)
     return ohlcs
@@ -160,7 +144,7 @@ def gen_dict(args):
     if args.pair:
         pairs = [args.pair]
         print(args.pair)
-    event_data = get_details(pairs, args)
+    event_data = get_details(pairs, print_data=False, graph=False)
     events = Events(event_data)
     data = events.get_data(pairs)
     while not events:
@@ -174,7 +158,6 @@ def gen_dict(args):
 
     agg_data.update(data)
     return agg_data
-
 
 if __name__ == '__main__':
     main()
