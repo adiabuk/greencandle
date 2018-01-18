@@ -16,9 +16,9 @@ import time
 import calendar
 import pandas
 import numpy
-import binance
 import talib
 import argcomplete
+import binance
 from graph import create_graph
 
 HOME_DIR = os.path.expanduser('~')
