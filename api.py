@@ -48,9 +48,8 @@ def get_data():
 
     pairs = ["XRPBTC", "XRPETH", "MANABTC", "PPTBTC", "MTHBTC", "BNBBTC", "BNBETH", "ETHBTC"]
 
-    event_data = klines.get_details(pairs)
-    events = klines.Events(event_data)
-    events.get_data(pairs)
+    events = klines.Events(pairs)
+    events.get_data()
     all_data = {}
     all_data["stories"] = {}
     all_data["events"] = events

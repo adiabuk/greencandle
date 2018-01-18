@@ -9,7 +9,6 @@ and detect trends using candlestick patterns
 
 from __future__ import print_function
 import json
-import sys
 import argparse
 import time
 import calendar
@@ -25,10 +24,37 @@ def make_float(arr):
 
 class Events(dict):
     """ Represent events created from data & indicators """
+    def __init__(self, pairs):
 
-    def __init__(self, data):
-        self.data = data
+        self.pairs = pairs
+        self.data = self.get_details()
         super(Events, self).__init__()
+
+    def get_details(self, print_data=False, graph=False, interval="1m"):
+        """ Get details from binance API """
+        ohlcs = []
+        for pair in self.pairs:
+            event = {}
+            event["symbol"] = pair
+            event['data'] = {}
+
+            dataframe = get_binance_klines(pair, interval=interval)
+            if print_data:
+                # FIXME: this is in the wrong place
+                # print datafram and return
+                # Will not print out indicators!
+                print(dataframe)
+                return {}
+
+            ohlc = (make_float(dataframe.open),
+                    make_float(dataframe.high),
+                    make_float(dataframe.low),
+                    make_float(dataframe.close))
+
+            if graph:
+                create_graph(dataframe, pair)
+            ohlcs.append(ohlc)
+        return ohlcs
 
     def print_text(self):
         """
@@ -63,11 +89,11 @@ class Events(dict):
         """return serialized JSON of dict """
         return json.dumps(self)
 
-    def get_data(self, pairs):
+    def get_data(self):
         """Iterate through data and trading pairs to extract data"""
-
+        print("get data method")
         for dat in self.data:
-            for pair in pairs:
+            for pair in self.pairs:
                 self.set_data(pair, dat)
             return self
 
@@ -99,31 +125,6 @@ class Events(dict):
                 continue
             self[id(scheme)] = scheme
 
-def get_details(pairs, print_data=False, graph=False, interval="1m"):
-    """ Get details from binance API """
-    ohlcs = []
-    for pair in pairs:
-        event = {}
-        event["symbol"] = pair
-        event['data'] = {}
-
-        dataframe = get_binance_klines(pair, interval=interval)
-        if print_data:
-            # FIXME: this is in the wrong place
-            # print datafram and return
-            # Will not print out indicators!
-            print(dataframe)
-            return {}
-
-        ohlc = (make_float(dataframe.open),
-                make_float(dataframe.high),
-                make_float(dataframe.low),
-                make_float(dataframe.close))
-
-        if graph:
-            create_graph(dataframe, pair)
-        ohlcs.append(ohlc)
-    return ohlcs
 
 def main():
     """ main function """
@@ -144,13 +145,13 @@ def gen_dict(args):
     if args.pair:
         pairs = [args.pair]
         print(args.pair)
-    event_data = get_details(pairs, print_data=False, graph=False)
-    events = Events(event_data)
-    data = events.get_data(pairs)
-    while not events:
-        sys.stderr.write("ERROR"+ str(event_data)+ "\n")
-        events = Events(event_data)
-        events.get_data(pairs)
+    #event_data = get_details(pairs, print_data=False, graph=False)
+    events = Events(pairs)
+    data = events.get_data()
+    #while not data:
+    #    sys.stderr.write("ERROR"+ str(pairs)+ "\n")
+    #    events = Events(pairs)
+    #    data = events.get_data()
     if args.json:
         print(json.dumps(events, indent=4))
     else:
