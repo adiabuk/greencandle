@@ -14,7 +14,7 @@ import threading
 import time
 from flask import Flask, abort
 import balance
-import klines
+import backend
 
 DATA = None
 BALANCE = None
@@ -48,7 +48,7 @@ def get_data():
 
     pairs = ["XRPBTC", "XRPETH", "MANABTC", "PPTBTC", "MTHBTC", "BNBBTC", "BNBETH", "ETHBTC"]
 
-    events = klines.Events(pairs)
+    events = backend.Events(pairs)
     events.get_data()
     all_data = {}
     all_data["stories"] = {}

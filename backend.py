@@ -12,6 +12,7 @@ import json
 import argparse
 import time
 import calendar
+from multiprocessing.pool import ThreadPool
 import numpy
 import talib
 import argcomplete
@@ -23,6 +24,8 @@ from lib.morris import KnuthMorrisPratt
 from indicator import SuperTrend, RSI
 import order
 
+POOL = ThreadPool(processes=29)
+
 def make_float(arr):
     """Convert dataframe array into float array"""
     return numpy.array([float(x) for x in arr.values])
@@ -31,10 +34,21 @@ class Events(dict):
     """ Represent events created from data & indicators """
     def __init__(self, pairs):
         self.pairs = pairs
-        self.data = self.get_details()
+        self.dataframe = None
+        self.data = self.get_ohlcs()
         super(Events, self).__init__()
 
-    def get_details(self, graph=False, interval="1m"):
+    def get_ohlc(self, pair, interval):
+        """ get ohlc for single pair """
+        self.dataframe = get_binance_klines(pair, interval=interval)
+        ohlc = (make_float(self.dataframe.open),
+                make_float(self.dataframe.high),
+                make_float(self.dataframe.low),
+                make_float(self.dataframe.close))
+        return ohlc
+
+
+    def get_ohlcs(self, graph=False, interval="1m"):
         """ Get details from binance API """
         ohlcs = []
         for pair in self.pairs:
@@ -42,16 +56,10 @@ class Events(dict):
             event["symbol"] = pair
             event['data'] = {}
 
-            self.dataframe = get_binance_klines(pair, interval=interval)
-            ohlc = (make_float(self.dataframe.open),
-                    make_float(self.dataframe.high),
-                    make_float(self.dataframe.low),
-                    make_float(self.dataframe.close))
-
+            ohlcs.append(POOL.apply_async(self.get_ohlc, (pair, interval)))
             if graph:
                 create_graph(self.ataframe, pair)
-            ohlcs.append(ohlc)
-        return ohlcs
+        return [ohlc.get() for ohlc in ohlcs]
 
     def print_text(self):
         """
@@ -63,7 +71,7 @@ class Events(dict):
         if not self.values:
             print("ERROR")
         for value in self.values():
-            if not "direction" in value:
+            if not "direction" in value or "HOLD" in value["direction"]:
             #no_change.append(value["symbol"])
                 continue
             try:
@@ -112,11 +120,10 @@ class Events(dict):
         elif float(df_list[-1]) < 30:
             direction = "oversold"
         else:
-            direction = "none"
+            direction = "HOLD"
         scheme["direction"] = direction
         scheme["event"] = "RSI"
         self[id(scheme)] = scheme
-
 
     def renamed_dataframe_columns(self):
         """Return dataframe with ordered/renamed coulumns"""
@@ -126,8 +133,6 @@ class Events(dict):
         for index, item in enumerate(columns):
             dataframe.columns.values[index] = item
         return dataframe
-
-
 
     def get_supertrend(self, pair="XRPETH"):
         """ get the super trend values """
@@ -146,7 +151,7 @@ class Events(dict):
         scheme["url"] = self.get_url(pair)
         scheme["time"] = calendar.timegm(time.gmtime())
         scheme["symbol"] = pair
-        scheme["direction"] = self.get_supertrend_direction(pair, df_list)
+        scheme["direction"] = self.get_supertrend_direction(pair, df_list[-10:])
         scheme["event"] = "Supertrend"
         self[id(scheme)] = scheme
 
@@ -164,8 +169,8 @@ class Events(dict):
         elif 8 in [s for s in KnuthMorrisPratt(supertrend, ["up", "down"])]:
             action = "SELL"
             price = order.get_sell_price(pair)
-        elif 0 in [s for s in KnuthMorrisPratt(supertrend, ["nan", "nan", "nan", "nan"])]:
-            action = "UNKNOWN"
+        elif 3 in [s for s in KnuthMorrisPratt(supertrend, ["nan", "nan", "nan", "nan"])]:
+            action = "UNKNOWN!"
             price = "irreverent"
         else:
             action = "HOLD"
@@ -217,7 +222,6 @@ def main():
     if args.pair:
         pairs = [args.pair]
         print(args.pair)
-    #event_data = get_details(pairs, print_data=False, graph=False)
     events = Events(pairs)
     data = events.get_data()
     if args.json:

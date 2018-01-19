@@ -4,7 +4,7 @@ Print Support and resistance for given traiding pair
 """
 
 import binance
-from klines import make_float
+from backend import make_float
 from lib.supres import supres
 from lib.binance_common import get_binance_klines
 
