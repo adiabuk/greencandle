@@ -24,7 +24,7 @@ from lib.morris import KnuthMorrisPratt
 from indicator import SuperTrend, RSI
 import order
 
-POOL = ThreadPool(processes=29)
+POOL = ThreadPool(processes=50)
 
 def make_float(arr):
     """Convert dataframe array into float array"""
@@ -32,9 +32,12 @@ def make_float(arr):
 
 class Events(dict):
     """ Represent events created from data & indicators """
+
     def __init__(self, pairs):
         self.pairs = pairs
         self.dataframe = None
+        self["hold"] = {}
+        self["event"] = {}
         self.data = self.get_ohlcs()
         super(Events, self).__init__()
 
@@ -46,7 +49,6 @@ class Events(dict):
                 make_float(self.dataframe.low),
                 make_float(self.dataframe.close))
         return ohlc
-
 
     def get_ohlcs(self, graph=False, interval="1m"):
         """ Get details from binance API """
@@ -72,7 +74,7 @@ class Events(dict):
             print("ERROR")
         for value in self.values():
             if not "direction" in value or "HOLD" in value["direction"]:
-            #no_change.append(value["symbol"])
+                #no_change.append(value["symbol"])
                 continue
             try:
                 print("Symbol:", value['symbol'])
@@ -123,7 +125,10 @@ class Events(dict):
             direction = "HOLD"
         scheme["direction"] = direction
         scheme["event"] = "RSI"
-        self[id(scheme)] = scheme
+        if scheme["direction"] == "HOLD":
+            self["hold"][id(scheme)] = scheme
+        else:
+            self["event"][id(scheme)] = scheme
 
     def renamed_dataframe_columns(self):
         """Return dataframe with ordered/renamed coulumns"""
@@ -153,7 +158,10 @@ class Events(dict):
         scheme["symbol"] = pair
         scheme["direction"] = self.get_supertrend_direction(pair, df_list[-10:])
         scheme["event"] = "Supertrend"
-        self[id(scheme)] = scheme
+        if scheme["direction"] == "HOLD":
+            self["hold"][id(scheme)] = scheme
+        else:
+            self["event"][id(scheme)] = scheme
 
     @staticmethod
     def get_url(pair):
@@ -205,7 +213,10 @@ class Events(dict):
                 scheme["event"] = check
             except KeyError:
                 continue
-            self[id(scheme)] = scheme
+        if scheme["direction"] == "HOLD":
+            self["hold"][id(scheme)] = scheme
+        else:
+            self["event"][id(scheme)] = scheme
 
 def main():
     """ main function """
@@ -218,6 +229,7 @@ def main():
 
     pairs = ["XRPBTC", "XRPETH", "MANABTC", "PPTBTC", "MTHBTC", "BNBBTC", "BNBETH", "ETHBTC"]
     #pairs =  [x for x in binance.prices().keys() if 'BTC' in x]
+    pairs = binance.prices()
     agg_data = {}
     if args.pair:
         pairs = [args.pair]
