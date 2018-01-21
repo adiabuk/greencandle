@@ -12,7 +12,7 @@ import json
 import argparse
 import time
 import calendar
-from multiprocessing.pool import ThreadPool
+from concurrent.futures import ThreadPoolExecutor
 import numpy
 import talib
 import argcomplete
@@ -24,8 +24,8 @@ from lib.morris import KnuthMorrisPratt
 from indicator import SuperTrend, RSI
 import order
 
-POOL = ThreadPool(processes=50)
-
+#POOL = ThreadPool(processes=1000)
+POOL = ThreadPoolExecutor(max_workers=200)
 def make_float(arr):
     """Convert dataframe array into float array"""
     return numpy.array([float(x) for x in arr.values])
@@ -50,7 +50,7 @@ class Events(dict):
                 make_float(self.dataframe.close))
         return ohlc
 
-    def get_ohlcs(self, graph=False, interval="1m"):
+    def get_ohlcs(self, graph=False, interval="5m"):
         """ Get details from binance API """
         ohlcs = []
         for pair in self.pairs:
@@ -58,10 +58,11 @@ class Events(dict):
             event["symbol"] = pair
             event['data'] = {}
 
-            ohlcs.append(POOL.apply_async(self.get_ohlc, (pair, interval)))
+            ohlcs.append(POOL.submit(self.get_ohlc, pair=pair, interval=interval))
+
             if graph:
                 create_graph(self.ataframe, pair)
-        return [ohlc.get() for ohlc in ohlcs]
+        return [ohlc.result() for ohlc in ohlcs]
 
     def print_text(self):
         """
@@ -152,7 +153,7 @@ class Events(dict):
         mine = dataframe.apply(pandas.to_numeric)
         supertrend = SuperTrend(mine, 10, 3)
         df_list = supertrend['STX_10_3'].tolist()
-        scheme["data"] = {"data": {"SUPERTREND": df_list[-10:]}}
+        scheme["data"] = {"SUPERTREND": df_list[-10:]}
         scheme["url"] = self.get_url(pair)
         scheme["time"] = calendar.timegm(time.gmtime())
         scheme["symbol"] = pair
@@ -189,7 +190,6 @@ class Events(dict):
 
     def get_indicators(self, pair, dat):
         """ Cross Reference data against trend indicators """
-        #print("top of set", pair)
         trends = {"HAMMER": {100: "bullish", 0:"HOLD"},
                   "INVERTEDHAMMER": {100: "bearish", 0:"HOLD"},
                   "ENGULFING": {-100:"bearish", 100:"bullish", 0:"HOLD"},
@@ -212,6 +212,7 @@ class Events(dict):
                 scheme["direction"] = result
                 scheme["event"] = check
             except KeyError:
+                print("KEYERROR")
                 continue
         if scheme["direction"] == "HOLD":
             self["hold"][id(scheme)] = scheme

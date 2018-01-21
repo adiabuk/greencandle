@@ -26,6 +26,10 @@ BALANCE_TIMER = 300
 
 APP = Flask(__name__)
 
+@APP.route('/all', methods=['GET'])
+def get_all_data():
+    return str(ALL_DATA)
+
 @APP.route('/data', methods=['GET'])
 def get_events():
     """return event data"""
@@ -37,10 +41,10 @@ def get_events():
 @APP.route('/hold', methods=['GET'])
 def get_hold():
     """get hold events"""
-    if not DATA:
+    if not HOLD:
         abort(500, json.dumps({'response': 'Data not yet populated, try again later'}))
 
-    return str(DATA)
+    return str(HOLD)
 
 @APP.route('/balance', methods=['GET'])
 def fetch_balance():
@@ -71,6 +75,10 @@ def get_data():
     hold["stories"]["type"] = "finish"
     data["stories"]["events"] = list(events["event"].keys())
     hold["stories"]["events"] = list(events["hold"].keys())
+    if not hold["stories"]["events"]:
+        print("FAILED to fetch data")
+    print(json.dumps(events['event']), "AMROX2")
+    print(json.dumps(data), "AMROX:")
     return json.dumps(data), json.dumps(hold)
 
 def schedule_data(scheduler):
@@ -81,8 +89,9 @@ def schedule_data(scheduler):
 
     global DATA, HOLD
     try:
+        print(strftime("%Y-%m-%d %H:%M:%S", gmtime()), "Fetching data\n")
         DATA, HOLD = get_data()
-        sys.stdout.write(strftime("%Y-%m-%d %H:%M:%S", gmtime()), "Successfully fetched data\n")
+        print(strftime("%Y-%m-%d %H:%M:%S", gmtime()), "Successfully fetched data\n")
 
     except TypeError as error:
         sys.stderr.write("Error opening URL: " + str(error) + "\n")
@@ -93,8 +102,10 @@ def schedule_balance(scheduler):
     """get balance"""
     global BALANCE
     try:
+        sys.stdout.write('hello')
+        print(strftime("%Y-%m-%d %H:%M:%S", gmtime()), "Fetching balance\n")
         BALANCE = get_balance()
-        sys.stdout.write(strftime("%Y-%m-%d %H:%M:%S", gmtime()), "Successfully fetched balance\n")
+        print(strftime("%Y-%m-%d %H:%M:%S", gmtime()), "Successfully fetched balance\n")
     except Exception as error:
         sys.stderr.write("Error opening URL\n" + str(error))
 
