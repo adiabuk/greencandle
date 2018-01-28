@@ -23,9 +23,10 @@ from lib.graph import create_graph
 from lib.morris import KnuthMorrisPratt
 from indicator import SuperTrend, RSI
 import order
+import pickle
 
-#POOL = ThreadPool(processes=1000)
 POOL = ThreadPoolExecutor(max_workers=200)
+
 def make_float(arr):
     """Convert dataframe array into float array"""
     return numpy.array([float(x) for x in arr.values])
@@ -34,35 +35,54 @@ class Events(dict):
     """ Represent events created from data & indicators """
 
     def __init__(self, pairs):
+        """
+        Initialize class
+        Create hold and event dicts
+        Fetch initial data from binance and store within object
+        """
+
         self.pairs = pairs
         self.dataframe = None
         self["hold"] = {}
         self["event"] = {}
-        self.data = self.get_ohlcs()
+        self.data, self.dataframes = self.get_ohlcs()
+        pickle.dump(self.data, open("data.p", "wb" ))
         super(Events, self).__init__()
 
-    def get_ohlc(self, pair, interval):
-        """ get ohlc for single pair """
-        self.dataframe = get_binance_klines(pair, interval=interval)
-        ohlc = (make_float(self.dataframe.open),
-                make_float(self.dataframe.high),
-                make_float(self.dataframe.low),
-                make_float(self.dataframe.close))
-        return ohlc
+    @staticmethod
+    def get_ohlc(pair, interval):
+        """
+        get ohlc for single pair
+        Return both a full pandas dataframe and a tuple of float values
+        """
+        dataframe = get_binance_klines(pair, interval=interval)
+        ohlc = (make_float(dataframe.open),
+                make_float(dataframe.high),
+                make_float(dataframe.low),
+                make_float(dataframe.close))
+        return ohlc, dataframe
 
     def get_ohlcs(self, graph=False, interval="5m"):
         """ Get details from binance API """
-        ohlcs = []
+        ohlcs = {}
+        dataframe = {}
+        results = {}
         for pair in self.pairs:
             event = {}
             event["symbol"] = pair
             event['data'] = {}
+            #ohlcs.append(POOL.submit(self.get_ohlc, pair=pair, interval=interval))
+            results[pair] = POOL.submit(self.get_ohlc, pair=pair, interval=interval)
 
-            ohlcs.append(POOL.submit(self.get_ohlc, pair=pair, interval=interval))
+            #ohlcs[pair], dataframe[pair] = x.result()
 
             if graph:
                 create_graph(self.ataframe, pair)
-        return [ohlc.result() for ohlc in ohlcs]
+        #return [ohlc.result() for ohlc in ohlcs]
+        for key, value in results.items():
+            ohlcs[key] = value.result()[0]
+            dataframe[key] = value.result()[1]
+        return ohlcs, dataframe
 
     def print_text(self):
         """
@@ -98,17 +118,22 @@ class Events(dict):
         return json.dumps(self)
 
     def get_data(self):
-        """Iterate through data and trading pairs to extract data"""
-        for dat in self.data:
-            for pair in self.pairs:
-                self.get_indicators(pair, dat)
-                self.get_supertrend(pair)
-                self.get_rsi(pair)
-            return self
+        """
+        Iterate through data and trading pairs to extract data
+        Return dict containing alert data and hold data
+        """
 
-    def get_rsi(self, pair="PPTBTC"):
-        """ get RSI oscillator values """
-        dataframe = self.renamed_dataframe_columns()
+        for pair in self.pairs:
+        #for pair, klines in self.data.items():
+            # get indicators supertrend, and API for each trading pair
+            self.get_indicators(pair, self.data[pair])
+            self.get_supertrend(pair, self.dataframes[pair])
+            self.get_rsi(pair, self.dataframes[pair])
+        return self
+
+    def get_rsi(self, pair="PPTBTC", klines=None):
+        """ get RSI oscillator values for given pair"""
+        dataframe = self.renamed_dataframe_columns(klines)
         scheme = {}
         mine = dataframe.apply(pandas.to_numeric)
         rsi = RSI(mine)
@@ -126,29 +151,23 @@ class Events(dict):
             direction = "HOLD"
         scheme["direction"] = direction
         scheme["event"] = "RSI"
-        if scheme["direction"] == "HOLD":
-            self["hold"][id(scheme)] = scheme
-        else:
-            self["event"][id(scheme)] = scheme
+        self.add_scheme(scheme)
 
-    def renamed_dataframe_columns(self):
+    @staticmethod
+    def renamed_dataframe_columns(klines=None):
         """Return dataframe with ordered/renamed coulumns"""
-        dataframe = pandas.DataFrame(self.dataframe, columns=['openTime', 'open', 'high',
-                                                              'low', 'close', 'volume'])
+        dataframe = pandas.DataFrame(klines, columns=['openTime', 'open', 'high',
+                                                      'low', 'close', 'volume'])
         columns = ["date", "Open", "High", "Low", "Close", "Volume"]  # rename columns
         for index, item in enumerate(columns):
             dataframe.columns.values[index] = item
         return dataframe
 
-    def get_supertrend(self, pair="XRPETH"):
+    def get_supertrend(self, pair="XRPETH", klines=None):
         """ get the super trend values """
         scheme = {}
 
-        dataframe = pandas.DataFrame(self.dataframe, columns=['openTime', 'open', 'high',
-                                                              'low', 'close', 'volume'])
-        columns = ["date", "Open", "High", "Low", "Close", "Volume"]  # rename columns
-        for index, item in enumerate(columns):
-            dataframe.columns.values[index] = item
+        dataframe = self.renamed_dataframe_columns(klines)
 
         mine = dataframe.apply(pandas.to_numeric)
         supertrend = SuperTrend(mine, 10, 3)
@@ -159,10 +178,7 @@ class Events(dict):
         scheme["symbol"] = pair
         scheme["direction"] = self.get_supertrend_direction(pair, df_list[-10:])
         scheme["event"] = "Supertrend"
-        if scheme["direction"] == "HOLD":
-            self["hold"][id(scheme)] = scheme
-        else:
-            self["event"][id(scheme)] = scheme
+        self.add_scheme(scheme)
 
     @staticmethod
     def get_url(pair):
@@ -184,11 +200,9 @@ class Events(dict):
         else:
             action = "HOLD"
             price = binance.prices()[pair]
-        #x = (str(pair), str(supertrend), str(action),
-        #     str(time.time()), str(price))
         return action
 
-    def get_indicators(self, pair, dat):
+    def get_indicators(self, pair, klines):
         """ Cross Reference data against trend indicators """
         trends = {"HAMMER": {100: "bullish", 0:"HOLD"},
                   "INVERTEDHAMMER": {100: "bearish", 0:"HOLD"},
@@ -196,7 +210,7 @@ class Events(dict):
                   "DOJI": {100: "unknown", 0:"HOLD"}}
         results = {}
         for check in trends.keys():
-            j = getattr(talib, "CDL" + check)(*dat).tolist()[-10:]
+            j = getattr(talib, "CDL" + check)(*klines).tolist()[-10:]
             results.update({check: j})
 
         for check in trends.keys():
@@ -214,16 +228,22 @@ class Events(dict):
             except KeyError:
                 print("KEYERROR")
                 continue
+        self.add_scheme(scheme)
+
+    def add_scheme(self, scheme):
+        """ add scheme to correct structure """
         if scheme["direction"] == "HOLD":
             self["hold"][id(scheme)] = scheme
         else:
             self["event"][id(scheme)] = scheme
+
 
 def main():
     """ main function """
     parser = argparse.ArgumentParser()
     parser.add_argument('-g', '--graph', action='store_true', default=False)
     parser.add_argument('-j', '--json', action='store_true', default=False)
+    parser.add_argument('-t', '--test', action='store_true', default=False)
     parser.add_argument('-p', '--pair')
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
@@ -232,6 +252,7 @@ def main():
     #pairs =  [x for x in binance.prices().keys() if 'BTC' in x]
     pairs = binance.prices()
     agg_data = {}
+
     if args.pair:
         pairs = [args.pair]
         print(args.pair)

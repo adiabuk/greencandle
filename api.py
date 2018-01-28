@@ -17,6 +17,7 @@ import balance
 import backend
 import binance
 
+PAIRS = binance.prices().keys()
 DATA = None
 HOLD = None
 BALANCE = None
@@ -60,8 +61,7 @@ def get_data():
     """Fetch data - called by scheduler periodically """
 
     #pairs = ["XRPBTC", "XRPETH", "MANABTC", "PPTBTC", "MTHBTC", "BNBBTC", "BNBETH", "ETHBTC"]
-    pairs = binance.prices()
-    events = backend.Events(pairs)
+    events = backend.Events(PAIRS)
     events.get_data()
     data = {}
     hold = {}
@@ -77,8 +77,6 @@ def get_data():
     hold["stories"]["events"] = list(events["hold"].keys())
     if not hold["stories"]["events"]:
         print("FAILED to fetch data")
-    print(json.dumps(events['event']), "AMROX2")
-    print(json.dumps(data), "AMROX:")
     return json.dumps(data), json.dumps(hold)
 
 def schedule_data(scheduler):
