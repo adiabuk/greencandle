@@ -9,3 +9,7 @@ $ make
 $ make install
 
 pip install quandl
+
+PyQT4:
+apt-get install qt4-qmake libqt4-dev
+https://gist.github.com/0x414A/8b64178e69d9f8331938

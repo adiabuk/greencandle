@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/env python
 # pylint: disable=no-member
 
 """
@@ -7,7 +7,7 @@ Many of the UI components have been taken/adapted from https://github.com/swanso
 which is a notification system for stackoverflow.com
 """
 
-from __future__ import print_function
+
 from datetime import timedelta, datetime
 try:
     import json
@@ -21,10 +21,10 @@ import logging
 import os
 import re
 import time
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 
 from PyQt4 import QtCore, QtGui
-from Queue import Queue
+from queue import Queue
 
 import oauth as ops
 
@@ -937,8 +937,8 @@ class APIHelper(object):
         # Make an API call, decompress the gzipped response
         # return json object
 
-        req = urllib2.Request(fullurl, None, {'user-agent':'syncstream/vimeo'})
-        opener = urllib2.build_opener()
+        req = urllib.request.Request(fullurl, None, {'user-agent':'syncstream/vimeo'})
+        opener = urllib.request.build_opener()
         try:
             file_handle = opener.open(req, timeout=10)
             Singleton.update_color = 'green'
