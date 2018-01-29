@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-# pylint: disable=no-member
+# pylint: disable=no-member,import-error, no-name-in-module
 
 """
-Elephant - a System Tray Notification system built with Python2 and pyQT4
+GreenCandle - a System Tray Notification system built with Python2 and pyQT4
 Many of the UI components have been taken/adapted from https://github.com/swanson/stacktracker
 which is a notification system for stackoverflow.com
 """
@@ -21,15 +21,15 @@ import logging
 import os
 import re
 import time
-import urllib.request, urllib.error, urllib.parse
+import urllib.request
+import urllib.error
+import urllib.parse
 
-from PyQt4 import QtCore, QtGui
 from queue import Queue
+from PyQt4 import QtCore, QtGui
 
-import oauth as ops
-
-LOGGER = logging.getLogger("Elephant log")
-LOGGERW = logging.getLogger("Elephant log2")
+LOGGER = logging.getLogger("GreenCandle log")
+LOGGERW = logging.getLogger("GreenCandle log2")
 
 
 class QLineEditWithPlaceholder(QtGui.QLineEdit):
@@ -42,14 +42,14 @@ class QLineEditWithPlaceholder(QtGui.QLineEdit):
         QtGui.QLineEdit.__init__(self, parent)
         self.placeholder = None
 
-    def setPlaceholderText(self, text):
+    def set_placeholder_text(self, text):
         self.placeholder = text
         self.update()
 
-    def paintEvent(self, event):
-        """Overload paintEvent to draw placeholder text under certain conditions"""
+    def paint_event(self, event):
+        """Overload paint_event to draw placeholder text under certain conditions"""
 
-        QtGui.QLineEdit.paintEvent(self, event)
+        QtGui.QLineEdit.paint_event(self, event)
         if self.placeholder and not self.hasFocus() and not self.text():
             painter = QtGui.QPainter(self)
             painter.setPen(QtGui.QPen(QtCore.Qt.darkGray))
@@ -92,7 +92,7 @@ class QuestionDisplayWidget(QtGui.QWidget):
                                           "text-decoration:underline} "
                                           "#question_label:hover{color: "
                                           "#b9eafc;}")
-        self.question_label.mousePressEvent = self.launchUrl
+        self.question_label.mousePressEvent = self.launch_url
 
         self.remove_button = QtGui.QPushButton(self.frame)
         self.remove_button.setGeometry(QtCore.QRect(295, 7, 25, 25))
@@ -109,7 +109,7 @@ class QuestionDisplayWidget(QtGui.QWidget):
             tags = question.tags[0] + ", " + question.tags[1]
         except:
             tags = question.tags[0]  # If doesn't have more than one tag
-        self.answers_label.setText('tags: %s' % tags)  # FIXME: with some value
+        self.answers_label.setText(' tags: %s' % tags)
         self.answers_label.setGeometry(QtCore.QRect(40, 65, 100, 20))
         if question.name is not None:
             self.submitted_label = QtGui.QLabel(self.frame)
@@ -119,7 +119,7 @@ class QuestionDisplayWidget(QtGui.QWidget):
                                                "#ffffff;text-decoration:"
                                                "underline} #question_label:"
                                                "hover{color: #ffffff;}")
-            self.submitted_label.mousePressEvent = self.launchProfile
+            self.submitted_label.mousePressEvent = self.launch_profile
             self.submitted_label.setAlignment(QtCore.Qt.AlignRight)
             self.submitted_label.setGeometry(QtCore.QRect(120, 65, 200, 20))
 
@@ -131,18 +131,17 @@ class QuestionDisplayWidget(QtGui.QWidget):
 
             if i in icons:
                 set = True
-                self.site_icon.setStyleSheet("image: url(img/" +
-                                             icons[i] +
+                self.site_icon.setStyleSheet("image: url(img/" + icons[i] +
                                              "); background-repeat:no-repeat;")
                 break
-        if set == False:
+        if set is False:
             self.site_icon.setStyleSheet("image: url(img/default.png); "
                                          "background-repeat:no-repeat;")
 
     def remove(self):
         self.emit(QtCore.SIGNAL('removeQuestion'), self.question)
 
-    def launchUrl(self, event):
+    def launch_url(self, event):
         if "https" in self.question.url:
             url_to_open = self.question.url
         else:
@@ -150,7 +149,7 @@ class QuestionDisplayWidget(QtGui.QWidget):
 
         QtGui.QDesktopServices.openUrl(QtCore.QUrl(url_to_open))
 
-    def launchProfile(self, event):
+    def launch_profile(self, event):
         QtGui.QDesktopServices.openUrl(QtCore.QUrl(self.question.profile))
 
 class QSpinBoxRadioButton(QtGui.QRadioButton):
@@ -161,9 +160,9 @@ class QSpinBoxRadioButton(QtGui.QRadioButton):
     def __init__(self, prefix='', suffix='', parent=None):
         QtGui.QRadioButton.__init__(self, parent)
         self.prefix = QtGui.QLabel(prefix)
-        self.prefix.mousePressEvent = self.labelClicked
+        self.prefix.mousePressEvent = self.label_clicked
         self.suffix = QtGui.QLabel(suffix)
-        self.suffix.mousePressEvent = self.labelClicked
+        self.suffix.mousePressEvent = self.label_clicked
 
         self.spinbox = QtGui.QSpinBox()
         self.spinbox.setEnabled(self.isDown())
@@ -177,7 +176,7 @@ class QSpinBoxRadioButton(QtGui.QRadioButton):
         self.layout.setContentsMargins(25, 0, 0, 0)
         self.setLayout(self.layout)
 
-    def labelClicked(self, event):
+    def label_clicked(self):
         self.toggle()
 
     def setPrefix(self, p):
@@ -298,7 +297,7 @@ class SettingsDialog(QtGui.QDialog):
 
     def showDialog(self):
         text, ok_status = QtGui.QInputDialog.getText(self, 'Input Dialog',
-                                              'Paste Full Web Address here:')
+                                                     'Paste Full Web Address here:')
 
         if ok_status:
             self.authTokenString.setText(str(text))
@@ -351,7 +350,7 @@ class SettingsDialog(QtGui.QDialog):
 
     def loadSettings(self):
         try:
-            with open(os.environ['HOME'] + '/.elephantrc', 'r') as file_handle:
+            with open(os.environ['HOME'] + '/.greencandlerc', 'r') as file_handle:
                 data = file_handle.read()
                 file_handle.close()
         except EnvironmentError:
@@ -498,14 +497,14 @@ class Question(object):
         return "%s: %s" % (self.id, self.title)
 
     def __eq__(self, other):
-        return ((self.site == other.site) and (self.id == other.id))
+        return (self.site == other.site) and (self.id == other.id)
 
 class Notification(object):
     def __init__(self, msg, url=None):
         self.msg = msg
         self.url = url
 
-class Elephant(QtGui.QDialog):
+class GreenCandle(QtGui.QDialog):
     """
         The 'main' dialog window for the application.  Displays
         the list of tracked questions and has the input controls for
@@ -525,11 +524,11 @@ class Elephant(QtGui.QDialog):
     def __init__(self, parent=None):
         singleton = Singleton()
         singleton.notify = False
-        LOGGER = logging.getLogger("Elephant log")
-        filename = "%s/elephant.log" % os.environ['HOME']
+        LOGGER = logging.getLogger("GreenCandle log")
+        filename = "%s/greencandle.log" % os.environ['HOME']
         LOGGER.setLevel(logging.DEBUG)
         formatter = logging.Formatter("%(asctime)s;%(levelname)s;%(message)s",
-                              "%Y-%m-%d %H:%M:%S")
+                                      "%Y-%m-%d %H:%M:%S")
         fh = logging.FileHandler(filename)
         fh.setFormatter(formatter)
         LOGGER.addHandler(fh)
@@ -545,7 +544,7 @@ class Elephant(QtGui.QDialog):
         self.iconIterations = 0
         QtGui.QDialog.__init__(self)
         self.parent = parent
-        self.setWindowTitle("Elephant - Status")
+        self.setWindowTitle("GreenCandle - Status")
         self.closeEvent = self.cleanUp
         self.setStyleSheet("QDialog{background: #f0ebe2;}")
 
@@ -555,11 +554,11 @@ class Elephant(QtGui.QDialog):
         self.settings_dialog.rejected.connect(self.deserializeSettings)
         self.deserializeSettings()
 
-        self.setGeometry(QtCore.QRect(0, 0, 350, 350))   #height, length,
-        self.setFixedSize(QtCore.QSize(350, 400))
+        self.setGeometry(QtCore.QRect(0, 0, 350, 900))   #height, length,
+        self.setFixedSize(QtCore.QSize(350, 900))
 
         self.display_list = QtGui.QListWidget(self)
-        self.display_list.resize(QtCore.QSize(350, 400))
+        self.display_list.resize(QtCore.QSize(350, 1000))
         self.display_list.setStyleSheet("QListWidget{show-decoration-selected:"
                                         " 0; background: black;}")
         self.display_list.setSelectionMode(QtGui.QAbstractItemView.NoSelection)
@@ -567,11 +566,12 @@ class Elephant(QtGui.QDialog):
         self.display_list.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
         self.display_list.clear()
 
+        # location of status at bottom
         self.updated = QtGui.QLabel(self)
         self.updated.setText(str('Last Successful Update: ' +
-                             Singleton.lastSuccessfull))
-        self.updated.setGeometry(QtCore.QRect(15, 360, 240, 30))
-        self.updated.setStyleSheet("QLabel {font-size : 12px; color : green; }");
+                                 Singleton.lastSuccessfull))
+        self.updated.setGeometry(QtCore.QRect(15, 860, 240, 30))
+        self.updated.setStyleSheet("QLabel {font-size : 12px; color : green; }")
 
         path = os.getcwd()
         icon = QtGui.QIcon(path + '/img/elephant.png')
@@ -590,7 +590,7 @@ class Elephant(QtGui.QDialog):
         self.notifier = QtGui.QSystemTrayIcon(icon2, self)
         self.notifier.messageClicked.connect(self.popupClicked)
         self.notifier.activated.connect(self.trayClicked)
-        self.notifier.setToolTip('Elephant')
+        self.notifier.setToolTip('GreenCandle')
 
         self.tray_menu = QtGui.QMenu()
         self.show_action = QtGui.QAction('Show', None)
@@ -631,7 +631,6 @@ class Elephant(QtGui.QDialog):
         self.worker.apply_settings(settings)
         singleton.logging = settings['logging']
         singleton.notif = settings['notifications']
-
 
     def trayClicked(self, event):
         """Shortcut to show list of question, not supported in Mac OS X"""
@@ -695,7 +694,7 @@ class Elephant(QtGui.QDialog):
         self.notifier.setIcon(icon2)
         self.displayQuestions()
         my_msg = "Alert: Bad State Test"
-        self.notifier.showMessage("Elephant-Test", my_msg, 2000)
+        self.notifier.showMessage("GreenCandle-Test", my_msg, 2000)
 
     def notify_unknown(self):
         path = os.getcwd()
@@ -703,16 +702,18 @@ class Elephant(QtGui.QDialog):
         icon2 = QtGui.QIcon(path + '/img/elephant.png')
         self.notifier.setIcon(icon2)
         my_msg = "Alert: Unable to Extract JSON"
-        self.notifier.showMessage("Elephant-Test", my_msg, 2000)
+        self.notifier.showMessage("GreenCandle-Test", my_msg, 2000)
 
-    def clear_list(self):
+    @staticmethod
+    def clear_list():
         singleton = Singleton()
         singleton.remove_list[:] = []
 
-    def show_about(self):
+    @staticmethod
+    def show_about():
         """Show About Page, as if anyone actually cares about who made this..."""
 
-        text = """<h3>Elephant</h3>
+        text = """<h3>GreenCandle</h3>
                   <p>A desktop notifier for large systems build
                   with PyQt4</p>
                   <p>Get customized alerts on what your team is monitoring
@@ -721,7 +722,8 @@ class Elephant(QtGui.QDialog):
                """
         QtGui.QMessageBox(QtGui.QMessageBox.Information, "About", text).exec_()
 
-    def show_error(self, text):
+    @staticmethod
+    def show_error(text):
         """
             Pop-up an error box with a message
 
@@ -743,8 +745,9 @@ class Elephant(QtGui.QDialog):
     def serializeSettings(self):
         """Persist application settings in external JSON file"""
         settings = self.settings_dialog.getSettings()
-        with open(os.environ['HOME'] + '/.elephantrc', 'w') as file_handle:
-            json.dump(settings, file_handle, indent = 4)
+
+        with open(os.environ['HOME'] + '/.greencandlerc', 'w') as file_handle:
+            json.dump(settings, file_handle, indent=4)
 
     def deserializeSettings(self):
         """Restore saved application settings from external JSON file"""
@@ -780,12 +783,12 @@ class Elephant(QtGui.QDialog):
 
     def popupClicked(self):
         """Open the question in user's default browser"""
-        if self.popupUrl:
-            QtGui.QDesktopServices.openUrl(QtCore.QUrl(self.popupUrl))
+        if self.url:
+            QtGui.QDesktopServices.openUrl(QtCore.QUrl(self.url))
 
     def displayQuestions(self):
         self.updated.setText(str('Last Successful Update:\n ' +
-                             Singleton.lastSuccessfull))
+                                 Singleton.lastSuccessfull))
         sscolor = ("QLabel {font-size : 12px; color : %s; }" %
                    Singleton.update_color)
         self.updated.setStyleSheet(sscolor)
@@ -914,11 +917,11 @@ class Elephant(QtGui.QDialog):
     def notify(self, notification):
 
         self.my_logging("calling notify.....")
-        self.notifier.showMessage("Elephant", notification.msg, 20000)
+        self.notifier.showMessage("GreenCandle", notification.msg, 20000)
 
     def flash_icon(self):
         self.my_logging("called flashicon")
-        self.run="true"
+        self.run = "true"
         self.constant()
 
 class APIHelper(object):
@@ -937,12 +940,10 @@ class APIHelper(object):
         # Make an API call, decompress the gzipped response
         # return json object
 
-        req = urllib.request.Request(fullurl, None, {'user-agent':'syncstream/vimeo'})
-        opener = urllib.request.build_opener()
+        req = urllib.request.urlopen(fullurl).read().decode("utf-8")
         try:
-            file_handle = opener.open(req, timeout=10)
             Singleton.update_color = 'green'
-            return json.load(file_handle)
+            return json.loads(req)
 
         except:
             print("req:%s" % fullurl)
@@ -954,27 +955,12 @@ class APIHelper(object):
 
 
     def my_logging(self, text):
-        singleton=Singleton()
+        singleton = Singleton()
         curframe = inspect.currentframe()
         calframe = inspect.getouterframes(curframe, 2)
         message = "%s - %s" %(calframe[1][3], text)
         if singleton.logging:
             LOGGERW.info(message)
-
-class ChangeIcon(QtCore.QThread):
-    procDone = QtCore.pyqtSignal(bool)
-    procPartDone = QtCore.pyqtSignal(int)
-
-
-    def __init__(self, parent, state):
-        from time import sleep
-        path = os.getcwd()
-        icon2 = QtGui.QIcon(path + '/img/elephant-bad.png')
-        icon = QtGui.QIcon(path + '/img/elephant-bad.png')
-        for _ in range(1, 10):
-            parent.notifier.setIcon(icon)
-            sleep(0.5)
-            parent.notifier.setIcon(icon2)
 
 class WorkerThread(QtCore.QThread):
     def __init__(self, tracker, parent=None):
@@ -982,10 +968,10 @@ class WorkerThread(QtCore.QThread):
         self.tracker = tracker
         self.interval = 300000
         self.settings = {}
-        filename = "%s/elephant.log" % os.environ['HOME']
+        filename = "%s/greencandle.log" % os.environ['HOME']
         LOGGERW.setLevel(logging.DEBUG)
         formatter = logging.Formatter("%(asctime)s;%(levelname)s;%(message)s",
-                              "%Y-%m-%d %H:%M:%S")
+                                      "%Y-%m-%d %H:%M:%S")
         file_handle = logging.FileHandler(filename)
         file_handle.setFormatter(formatter)
         LOGGERW.addHandler(file_handle)
@@ -1024,7 +1010,7 @@ class WorkerThread(QtCore.QThread):
         settings = self.settings
         singleton = Singleton()
 
-        self.tracker.tracking_list_new=[]
+        self.tracker.tracking_list_new = []
         address = settings['address']
         auth = settings['auth']
 
@@ -1061,7 +1047,7 @@ class WorkerThread(QtCore.QThread):
             current_time = time.time()
             self.my_logging("current_time = " + str(current_time))
 
-        self.tracker.tracking_list_new.append(rebuild_question)
+            self.tracker.tracking_list_new.append(rebuild_question)
         set1 = set((x.id, x.name) for x in self.tracker.tracking_list)
         difference = [x for x in self.tracker.tracking_list_new
                       if (x.id, x.name) not in set1]
@@ -1087,7 +1073,7 @@ class WorkerThread(QtCore.QThread):
             self.my_logging("no new items")
             self.emit(QtCore.SIGNAL('notify_good'))
             singleton.new_state = 0
-            self.my_logging( "this should be 0 %s" % singleton.new_state)
+            self.my_logging("this should be 0 %s" % singleton.new_state)
             self.emit(QtCore.SIGNAL('updateQuestion'), 1, 0, 0)
 
         self.emit(QtCore.SIGNAL('done'))
@@ -1097,12 +1083,12 @@ class WorkerThread(QtCore.QThread):
     def auto_remove_questions(self):
         if self.settings['auto_remove']:
             if self.settings['on_inactivity']:
-                threshold = timedelta(hours = self.settings['on_inactivity'])
+                threshold = timedelta(hours=self.settings['on_inactivity'])
                 for question in self.tracker.tracking_list[:]:
                     if datetime.utcnow() - question.last_queried > threshold:
                         self.emit(QtCore.SIGNAL('autoRemove'), question, True)
             elif self.settings['on_time']:
-                threshold = timedelta(hours = self.settings['on_time'])
+                threshold = timedelta(hours=self.settings['on_time'])
                 for question in self.tracker.tracking_list[:]:
                     if datetime.utcnow() - question.created > threshold:
                         self.emit(QtCore.SIGNAL('autoRemove'), question, True)
@@ -1111,11 +1097,11 @@ if __name__ == "__main__":
     try:
 
         signal.signal(signal.SIGINT, signal.SIG_DFL)
-        app = QtGui.QApplication(sys.argv)
-        app.setQuitOnLastWindowClosed(False)
-        st = Elephant(app)
-        app.exec_()
-        del st
+        APP = QtGui.QApplication(sys.argv)
+        APP.setQuitOnLastWindowClosed(False)
+        ST = GreenCandle(APP)
+        APP.exec_()
+        del ST
         sys.exit()
     except KeyboardInterrupt:
         sys.exit(3)
