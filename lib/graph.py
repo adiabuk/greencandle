@@ -12,7 +12,7 @@ import plotly.graph_objs as go
 
 from PIL import Image
 from resizeimage import resizeimage
-PATH = os.getcwd() + "/tmp/"
+PATH = os.getcwd() + "/graphs/"
 
 def get_screenshot(filename=None):
     """Capture screenshot using selenium/firefox in Xvfb """
@@ -36,7 +36,7 @@ def resize_screenshot(filename=None):
     """Resize screenshot to thumbnail - for use in API"""
     with open('{0}/{1}.png'.format(PATH, filename), 'r+b') as png_file:
         with Image.open(png_file) as image:
-            cover = resizeimage.resize_width(image, 100)
+            cover = resizeimage.resize_width(image, 120)
             cover.save('{0}/{1}_resized.png'.format(PATH, filename), image.format)
 
 def create_graph(dataframe, pair):

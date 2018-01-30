@@ -112,7 +112,7 @@ class QuestionDisplayWidget(QtGui.QWidget):
         except:
             tags = question.tags[0]  # If doesn't have more than one tag
         self.answers_label.setText(' tags: %s' % tags)
-        self.answers_label.setGeometry(QtCore.QRect(30, 75, 100, 20))
+        self.answers_label.setGeometry(QtCore.QRect(30, 75, 120, 20))
         if question.name is not None:
             self.submitted_label = QtGui.QLabel(self.frame)
             self.submitted_label.setText('open')
@@ -127,9 +127,16 @@ class QuestionDisplayWidget(QtGui.QWidget):
 
         # graph thumbnail
         self.graph = QtGui.QLabel(self.frame)
-        self.graph.setGeometry(QtCore.QRect(120, 0, 150, 80))  # left, top, width, height
-        self.graph.setStyleSheet("image: url(img/graph.png); "
-                                     "background-repeat:no-repeat;")
+        graph_url="http://127.1:5001/graphs/simple_candlestick_{0}_resized.png".format(question.symbol)
+        graph_filename="graphs/simgple_candlestick_{0}_resized.png".format(question.symbol)
+        try:
+            urllib.request.urlretrieve(graph_url, graph_filename)
+        except:
+            print("ERROR:", graph_url)
+            graph_filename="img/graph.png"
+        self.graph.setGeometry(QtCore.QRect(150, 10, 120, 74))  # left, top, width, height
+        self.graph.setStyleSheet("image: url({0}); "
+                                 "background-repeat:no-repeat;".format(graph_filename))
 
 
 
