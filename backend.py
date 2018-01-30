@@ -13,6 +13,7 @@ import argparse
 import time
 import calendar
 from concurrent.futures import ThreadPoolExecutor
+import pickle
 import numpy
 import talib
 import argcomplete
@@ -23,7 +24,6 @@ from lib.graph import create_graph
 from lib.morris import KnuthMorrisPratt
 from indicator import SuperTrend, RSI
 import order
-import pickle
 
 POOL = ThreadPoolExecutor(max_workers=200)
 
@@ -46,7 +46,9 @@ class Events(dict):
         self["hold"] = {}
         self["event"] = {}
         self.data, self.dataframes = self.get_ohlcs()
-        pickle.dump(self.data, open("data.p", "wb" ))
+        pickle.dump(self.data, open("data.p", "wb"))
+        pickle.dump(self.dataframes, open("dataframes.p", "wb"))
+
         super(Events, self).__init__()
 
     @staticmethod
@@ -82,6 +84,7 @@ class Events(dict):
         for key, value in results.items():
             ohlcs[key] = value.result()[0]
             dataframe[key] = value.result()[1]
+            #create_graph(value.result()[1], key)
         return ohlcs, dataframe
 
     def print_text(self):
@@ -247,15 +250,14 @@ def main():
     parser.add_argument('-p', '--pair')
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
-
-    pairs = ["XRPBTC", "XRPETH", "MANABTC", "PPTBTC", "MTHBTC", "BNBBTC", "BNBETH", "ETHBTC"]
-    #pairs =  [x for x in binance.prices().keys() if 'BTC' in x]
-    pairs = binance.prices()
     agg_data = {}
 
     if args.pair:
         pairs = [args.pair]
-        print(args.pair)
+    else:
+        pairs = [price for price in binance.prices().keys() if price != '123456']
+
+
     events = Events(pairs)
     data = events.get_data()
     if args.json:

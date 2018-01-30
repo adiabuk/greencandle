@@ -10,8 +10,10 @@ requests==2.18.4
 selenium==3.8.1
 binance==0.2
 pandas==0.21.1
-TA_Lib==0.4.14
+ta-lib==0.4.14
 numpy==1.13.3
 Pillow==5.0.0
 PyQt4==4.11.4
 oauth==1.0.1
+git+git://github.com:adiabuk/Technical-Indicators.git#egg=indicators
+git+git://github.com:toshima/binance.git#egg=binance

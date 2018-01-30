@@ -17,10 +17,13 @@ import balance
 import backend
 import binance
 
-PAIRS = binance.prices().keys()
+PAIRS = [price for price in binance.prices().keys() if price != '123456']
+
 DATA = None
 HOLD = None
+ALL_DATA = None
 BALANCE = None
+
 SCHED = sched.scheduler(time, sleep)
 DATA_TIMER = 60
 BALANCE_TIMER = 300
@@ -29,6 +32,7 @@ APP = Flask(__name__)
 
 @APP.route('/all', methods=['GET'])
 def get_all_data():
+    """ Return all data: HOLD, and EVENT """
     return str(ALL_DATA)
 
 @APP.route('/data', methods=['GET'])
@@ -60,7 +64,6 @@ def get_balance():
 def get_data():
     """Fetch data - called by scheduler periodically """
 
-    #pairs = ["XRPBTC", "XRPETH", "MANABTC", "PPTBTC", "MTHBTC", "BNBBTC", "BNBETH", "ETHBTC"]
     events = backend.Events(PAIRS)
     events.get_data()
     data = {}
