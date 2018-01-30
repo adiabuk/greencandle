@@ -112,7 +112,7 @@ class QuestionDisplayWidget(QtGui.QWidget):
         except:
             tags = question.tags[0]  # If doesn't have more than one tag
         self.answers_label.setText(' tags: %s' % tags)
-        self.answers_label.setGeometry(QtCore.QRect(30, 75, 120, 20))
+        self.answers_label.setGeometry(QtCore.QRect(20, 75, 120, 20))
         if question.name is not None:
             self.submitted_label = QtGui.QLabel(self.frame)
             self.submitted_label.setText('open')
@@ -127,12 +127,16 @@ class QuestionDisplayWidget(QtGui.QWidget):
 
         # graph thumbnail
         self.graph = QtGui.QLabel(self.frame)
-        graph_url="http://127.1:5001/graphs/simple_candlestick_{0}_resized.png".format(question.symbol)
-        graph_filename="graphs/simgple_candlestick_{0}_resized.png".format(question.symbol)
+        settings_dialog = SettingsDialog()
+        settings = settings_dialog.getSettings()
+
+        path = "/graphs/simple_candlestick_{0}_resized.png".format(question.symbol)
+        graph_url = settings['address'] + path
+        graph_filename = '.' + path
         try:
             urllib.request.urlretrieve(graph_url, graph_filename)
-        except:
-            print("ERROR:", graph_url)
+        except Exception as e:
+            print("ERROR:", graph_url, e)
             graph_filename="img/graph.png"
         self.graph.setGeometry(QtCore.QRect(150, 10, 120, 74))  # left, top, width, height
         self.graph.setStyleSheet("image: url({0}); "
@@ -144,7 +148,7 @@ class QuestionDisplayWidget(QtGui.QWidget):
         for i in question.direction:
 
             self.site_icon = QtGui.QLabel(self.frame)
-            self.site_icon.setGeometry(QtCore.QRect(10, 60, 30, 30))
+            self.site_icon.setGeometry(QtCore.QRect(-5, 60, 30, 30))
 
             if i in icons:
                 set = True
@@ -263,10 +267,12 @@ class SettingsDialog(QtGui.QDialog):
 
         self.update_interval.setLayout(self.update_layout)
 
-        self.address_group = QtGui.QGroupBox("Source Address", self)
-        self.address = QtGui.QLineEdit("http://127.1:80/sample.json", self)
+        self.address_group = QtGui.QGroupBox("API Address", self)
+        self.address = QtGui.QLineEdit("http://127.1:5001", self)
+        self.path = QtGui.QLineEdit("/data.json", self)
         vbox = QtGui.QVBoxLayout()
         vbox.addWidget(self.address)
+        vbox.addWidget(self.path)
         vbox.addStretch(1)
         self.address_group.setLayout(vbox)
         self.layout.addWidget(self.address_group)
@@ -354,6 +360,7 @@ class SettingsDialog(QtGui.QDialog):
 
         try:
             self.address.setText(settings['address'])
+            self.path.setText(settings['path'])
         except:
             return
         try:
@@ -395,6 +402,7 @@ class SettingsDialog(QtGui.QDialog):
         settings = {}
         settings['update_interval'] = self.update_input.value()
         settings['address'] = str(self.address.text())
+        settings['path'] = str(self.path.text())
         settings['auth'] = str(self.authTokenString.text())
         settings['notifications'] = self.notifications.isChecked()
         settings['logging'] = self.logging.isChecked()
@@ -1050,9 +1058,10 @@ class WorkerThread(QtCore.QThread):
 
         self.tracker.tracking_list_new = []
         address = settings['address']
+        path = settings['path']
         auth = settings['auth']
 
-        so_data = APIHelper.callAPI(address, auth)
+        so_data = APIHelper.callAPI(address + path, auth)
         self.my_logging("address:%s, auth:%s" %(address, auth))
         event_list = []
 

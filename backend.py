@@ -133,9 +133,6 @@ class Events(dict):
             POOL.submit(self.get_indicators, pair, self.data[pair])
             POOL.submit(self.get_supertrend, pair, self.dataframes[pair])
             POOL.submit(self.get_rsi, pair, self.dataframes[pair])
-            #self.get_indicators(pair, self.data[pair])
-            #self.get_supertrend(pair, self.dataframes[pair])
-            #self.get_rsi(pair, self.dataframes[pair])
         POOL.shutdown(wait=True)
         return self
 
@@ -160,6 +157,7 @@ class Events(dict):
         scheme["direction"] = direction
         scheme["event"] = "RSI"
         self.add_scheme(scheme)
+
 
     @staticmethod
     def renamed_dataframe_columns(klines=None):
@@ -244,7 +242,9 @@ class Events(dict):
             self["hold"][id(scheme)] = scheme
         else:
             self["event"][id(scheme)] = scheme
-
+            # Only creating graphs for event's that we are interested in due to the time and
+            # resources that it takes
+            create_graph(self.dataframes[scheme['symbol']], scheme['symbol'])
 
 def main():
     """ main function """

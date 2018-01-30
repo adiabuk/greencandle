@@ -9,10 +9,11 @@ from __future__ import print_function
 import calendar
 import sched
 import sys
+import os
 import json
 import threading
 from time import time, strftime, gmtime, sleep
-from flask import Flask, abort
+from flask import Flask, abort, send_file
 import balance
 import backend
 import binance
@@ -29,6 +30,15 @@ DATA_TIMER = 60
 BALANCE_TIMER = 300
 
 APP = Flask(__name__)
+
+
+@APP.route('/<path:path>', methods=['GET'])
+def return_file(path):
+    """Fetch generated PNG thumbnails """
+    if path.startswith('graphs/') and path.endswith('.png') and os.path.isfile(path):
+        return send_file(path, as_attachment=True)
+    abort(404)
+    return False
 
 @APP.route('/all', methods=['GET'])
 def get_all_data():
