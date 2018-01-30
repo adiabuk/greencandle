@@ -25,7 +25,7 @@ from lib.morris import KnuthMorrisPratt
 from indicator import SuperTrend, RSI
 import order
 
-POOL = ThreadPoolExecutor(max_workers=200)
+POOL = ThreadPoolExecutor(max_workers=500)
 
 def make_float(arr):
     """Convert dataframe array into float array"""
@@ -125,7 +125,6 @@ class Events(dict):
         Iterate through data and trading pairs to extract data
         Return dict containing alert data and hold data
         """
-        print("Starting get_data method")
 
         for pair in self.pairs:
         #for pair, klines in self.data.items():
