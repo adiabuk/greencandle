@@ -125,13 +125,19 @@ class Events(dict):
         Iterate through data and trading pairs to extract data
         Return dict containing alert data and hold data
         """
+        print("Starting get_data method")
 
         for pair in self.pairs:
         #for pair, klines in self.data.items():
             # get indicators supertrend, and API for each trading pair
-            self.get_indicators(pair, self.data[pair])
-            self.get_supertrend(pair, self.dataframes[pair])
-            self.get_rsi(pair, self.dataframes[pair])
+
+            POOL.submit(self.get_indicators, pair, self.data[pair])
+            POOL.submit(self.get_supertrend, pair, self.dataframes[pair])
+            POOL.submit(self.get_rsi, pair, self.dataframes[pair])
+            #self.get_indicators(pair, self.data[pair])
+            #self.get_supertrend(pair, self.dataframes[pair])
+            #self.get_rsi(pair, self.dataframes[pair])
+        POOL.shutdown(wait=True)
         return self
 
     def get_rsi(self, pair="PPTBTC", klines=None):
