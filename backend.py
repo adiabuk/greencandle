@@ -3,7 +3,7 @@
 #pylint: disable=no-member,consider-iterating-dictionary
 
 """
-Get ohlc (Open, High, Low, Close) values from given cryptos
+Get ohlc (Opunknownen, High, Low, Close) values from given cryptos
 and detect trends using candlestick patterns
 """
 
@@ -47,7 +47,7 @@ class Events(dict):
         self["event"] = {}
         self.data, self.dataframes = self.get_ohlcs()
         pickle.dump(self.data, open("data.p", "wb"))
-        pickle.dump(self.data, open("dataframes.p", "wb"))
+        pickle.dump(self.dataframes, open("dataframes.p", "wb"))
 
         super(Events, self).__init__()
 
@@ -84,7 +84,7 @@ class Events(dict):
         for key, value in results.items():
             ohlcs[key] = value.result()[0]
             dataframe[key] = value.result()[1]
-            create_graph(value.result()[1], key)
+            #create_graph(value.result()[1], key)
         return ohlcs, dataframe
 
     def print_text(self):
