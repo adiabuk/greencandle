@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# pylint: disable=no-member,import-error, no-name-in-module
+# pylint: disable=no-member, invalid-name
 
 """
 GreenCandle - a System Tray Notification system built with Python2 and pyQT4
@@ -63,10 +63,11 @@ class QuestionDisplayWidget(QtGui.QWidget):
         QtGui.QWidget.__init__(self, parent)
 
         icons = {
-            'ISS':'issue.png',
-            'ALM': 'alarms.png',
-            'REF': 'unknown.png',
-            'Push': 'push.png'
+            'BUY':'candle-green.png',
+            'SELL': 'candle-red.png',
+            'unknown': 'candle.png',
+            'overbought': 'candle-red.png',
+            'oversold': 'candle-green.png'
         }
 
         self.setGeometry(QtCore.QRect(0, 0, 320, 80))
@@ -92,7 +93,8 @@ class QuestionDisplayWidget(QtGui.QWidget):
                                           "text-decoration:underline} "
                                           "#question_label:hover{color: "
                                           "#b9eafc;}")
-        self.question_label.mousePressEvent = self.launch_url
+        self.question_label.mousePressEvent = self.show_details
+        #self.question_label.clicked.connect(self.show_details)
 
         self.remove_button = QtGui.QPushButton(self.frame)
         self.remove_button.setGeometry(QtCore.QRect(295, 7, 25, 25))
@@ -110,36 +112,63 @@ class QuestionDisplayWidget(QtGui.QWidget):
         except:
             tags = question.tags[0]  # If doesn't have more than one tag
         self.answers_label.setText(' tags: %s' % tags)
-        self.answers_label.setGeometry(QtCore.QRect(40, 65, 100, 20))
+        self.answers_label.setGeometry(QtCore.QRect(30, 75, 100, 20))
         if question.name is not None:
             self.submitted_label = QtGui.QLabel(self.frame)
-            self.submitted_label.setText('Owner: ' + question.name)
+            self.submitted_label.setText('open')
             self.submitted_label.setObjectName('submitted_label')
             self.submitted_label.setStyleSheet("#submitted_label{color: "
                                                "#ffffff;text-decoration:"
                                                "underline} #question_label:"
                                                "hover{color: #ffffff;}")
-            self.submitted_label.mousePressEvent = self.launch_profile
+            self.submitted_label.mousePressEvent = self.launch_url
             self.submitted_label.setAlignment(QtCore.Qt.AlignRight)
             self.submitted_label.setGeometry(QtCore.QRect(120, 65, 200, 20))
 
+        # graph thumbnail
+        self.graph = QtGui.QLabel(self.frame)
+        self.graph.setGeometry(QtCore.QRect(120, 0, 150, 80))  # left, top, width, height
+        self.graph.setStyleSheet("image: url(img/graph.png); "
+                                     "background-repeat:no-repeat;")
+
+
+
         set = False
-        for i in question.tags:
+        for i in question.direction:
 
             self.site_icon = QtGui.QLabel(self.frame)
             self.site_icon.setGeometry(QtCore.QRect(10, 60, 30, 30))
 
             if i in icons:
                 set = True
+                print("SETTING ICON TO", i)
                 self.site_icon.setStyleSheet("image: url(img/" + icons[i] +
                                              "); background-repeat:no-repeat;")
                 break
+
         if set is False:
-            self.site_icon.setStyleSheet("image: url(img/default.png); "
+            # default icon
+            self.site_icon.setStyleSheet("image: url(img/candle.png); "
                                          "background-repeat:no-repeat;")
 
     def remove(self):
         self.emit(QtCore.SIGNAL('removeQuestion'), self.question)
+
+    def show_details(self, *args):
+        """Show all details of chosen item"""
+
+        text = """<h3>Pair: {0}</h3>
+                  <p>Data:<br>{1}</p>
+                  <p>URL: {2}</p>
+                  <p>Direction: {3}</p>
+                  <p>Trigger: {4}</p>
+               """.format(self.question.symbol,
+                          str(self.question.data).replace("],", "],<br>").strip('{}'),
+                          self.question.url, str(self.question.direction).strip('[]'),
+                          str(self.question.tags).strip('[]'))
+        QtGui.QMessageBox(QtGui.QMessageBox.Information, "Details", text).exec_()
+        return True
+
 
     def launch_url(self, event):
         if "https" in self.question.url:
@@ -149,14 +178,11 @@ class QuestionDisplayWidget(QtGui.QWidget):
 
         QtGui.QDesktopServices.openUrl(QtCore.QUrl(url_to_open))
 
-    def launch_profile(self, event):
-        QtGui.QDesktopServices.openUrl(QtCore.QUrl(self.question.profile))
-
 class QSpinBoxRadioButton(QtGui.QRadioButton):
     """
-        Custom Qt Widget that allows for a spinbox to be used in
-        conjunction with a radio button
-        """
+    Custom Qt Widget that allows for a spinbox to be used in
+    conjunction with a radio button
+    """
     def __init__(self, prefix='', suffix='', parent=None):
         QtGui.QRadioButton.__init__(self, parent)
         self.prefix = QtGui.QLabel(prefix)
@@ -221,7 +247,7 @@ class SettingsDialog(QtGui.QDialog):
         self.update_input = QtGui.QSpinBox()
         self.update_input.setMinimum(15)
         self.update_input.setMaximum(86400)
-        self.update_input.setSingleStep(15)
+        self.update_input.setSingleStep(1)
         self.update_input.setSuffix(" seconds")
         self.update_input.setPrefix("Check for updates every ")
 
@@ -403,23 +429,25 @@ class Singleton:
 
 class Events(object):
     """Application specific representation of an event"""
-    def __init__(self, id, name, unixname, email, title, creation_time, url,
-                 types, profile):
-        self.id = id
-        self.unixname = unixname
-        self.url = url
-        self.title = title
-        self.profile = profile
-        self.name = name
+    def __init__(self, **kwargs):
+        self.id = kwargs['id']
+        self.unixname = kwargs['unixname']
+        self.url = kwargs['url']
+        self.title = kwargs['title']
+        self.symbol = kwargs['symbol']
+        self.direction = [kwargs['direction']]
+        self.data = kwargs['data']
+        self.profile = kwargs['profile']
+        self.name = kwargs['name']
         self.tags = []
-        self.tags.append(types)
+        self.tags.append(kwargs['types'])
 
         if len(self.title) > 69:
             self.title = self.title[:69] + '...'
-        if creation_time is None:
+        if kwargs['creation_time'] is None:
             self.creation_time = datetime.utcnow()
         else:
-            self.creation_time = datetime.utcfromtimestamp(creation_time)
+            self.creation_time = datetime.utcfromtimestamp(kwargs['creation_time'])
 
     def __repr__(self):
         return "%s: %s" % (self.id, self.title)
@@ -515,6 +543,8 @@ class GreenCandle(QtGui.QDialog):
         curframe = inspect.currentframe()
         calframe = inspect.getouterframes(curframe, 2)
         message = "%s - %s" %(calframe[1][3], text)
+
+        # only log if enabled in settings
         if singleton.logging:
             LOGGER.info(message)
 
@@ -554,11 +584,11 @@ class GreenCandle(QtGui.QDialog):
         self.settings_dialog.rejected.connect(self.deserializeSettings)
         self.deserializeSettings()
 
-        self.setGeometry(QtCore.QRect(0, 0, 350, 900))   #height, length,
-        self.setFixedSize(QtCore.QSize(350, 900))
+        self.setGeometry(QtCore.QRect(0, 0, 950, 1900))   # _, _, width, height
+        self.setFixedSize(QtCore.QSize(350, 900))  # size of entire window
 
         self.display_list = QtGui.QListWidget(self)
-        self.display_list.resize(QtCore.QSize(350, 1000))
+        self.display_list.resize(QtCore.QSize(1350,15000))  # size of list
         self.display_list.setStyleSheet("QListWidget{show-decoration-selected:"
                                         " 0; background: black;}")
         self.display_list.setSelectionMode(QtGui.QAbstractItemView.NoSelection)
@@ -570,11 +600,12 @@ class GreenCandle(QtGui.QDialog):
         self.updated = QtGui.QLabel(self)
         self.updated.setText(str('Last Successful Update: ' +
                                  Singleton.lastSuccessfull))
-        self.updated.setGeometry(QtCore.QRect(15, 860, 240, 30))
+        # underneath display_list which is at 350, 850  # width, height
+        self.updated.setGeometry(QtCore.QRect(25, 860, 240, 30))  # (left, top, width, height)
         self.updated.setStyleSheet("QLabel {font-size : 12px; color : green; }")
 
         path = os.getcwd()
-        icon = QtGui.QIcon(path + '/img/elephant.png')
+        icon = QtGui.QIcon(path + '/img/candle.png')
         self.setWindowIcon(icon)
 
         self.tracking_list = []
@@ -586,7 +617,7 @@ class GreenCandle(QtGui.QDialog):
         self.queue_timer.timeout.connect(self.process_queue)
         self.notify_queue = Queue()
 
-        icon2 = QtGui.QIcon(path + '/img/elephant.png')
+        icon2 = QtGui.QIcon(path + '/img/candle.png')
         self.notifier = QtGui.QSystemTrayIcon(icon2, self)
         self.notifier.messageClicked.connect(self.popupClicked)
         self.notifier.activated.connect(self.trayClicked)
@@ -620,7 +651,9 @@ class GreenCandle(QtGui.QDialog):
         self.connect(self.worker, QtCore.SIGNAL('autoRemove'), self.removeQuestion)
         self.connect(self.worker, QtCore.SIGNAL('done'), self.start_queue_process)
         self.apply_settings()
+
         self.worker.start()
+        self.show()
 
     def apply_settings(self):
         """Send new settings to worker thread"""
@@ -648,7 +681,7 @@ class GreenCandle(QtGui.QDialog):
 
         self.settings_dialog.show()
     def constant(self):
-        self.run = "true"
+        self.run = True
         self.ctimer.start(600)
 
     def constant_update(self):
@@ -656,7 +689,7 @@ class GreenCandle(QtGui.QDialog):
         singleton = Singleton()
 
         self.my_logging("-" * 30 + "%s " % singleton.state_color[singleton.new_state])
-        if self.iconIterations < max_iterations and self.run == "true":
+        if self.iconIterations < max_iterations and self.run is True:
             self.iconIterations = self.iconIterations + 1
 
             if self.status == singleton.state_color[singleton.new_state]:
@@ -667,7 +700,7 @@ class GreenCandle(QtGui.QDialog):
                 self.status = "blank"
 
             path = os.getcwd()
-            iconvar = '%s/img/elephant-%s.png' % (path, self.status)
+            iconvar = '%s/img/candle-%s.png' % (path, self.status)
             self.my_logging(iconvar)
             self.notifier.setIcon(QtGui.QIcon(iconvar))
         else:
@@ -676,21 +709,21 @@ class GreenCandle(QtGui.QDialog):
             self.run = "false"
             path = os.getcwd()
             self.status = singleton.state_color[singleton.new_state]
-            iconvar = '%s/img/elephant-%s.png' % (path, self.status)
+            iconvar = '%s/img/candle-%s.png' % (path, self.status)
             self.notifier.setIcon(QtGui.QIcon(iconvar))
 
     def notify_good(self):
         self.ctimer.stop()
         path = os.getcwd()
         self.my_logging("notify good")
-        icon2 = QtGui.QIcon(path + '/img/elephant-green.png')
+        icon2 = QtGui.QIcon(path + '/img/candle-green.png')
         self.notifier.setIcon(icon2)
         self.displayQuestions()
 
     def notify_bad(self):
         path = os.getcwd()
         self.my_logging("notify bad")
-        icon2 = QtGui.QIcon(path + '/img/elephant-red.png')
+        icon2 = QtGui.QIcon(path + '/img/candle-red.png')
         self.notifier.setIcon(icon2)
         self.displayQuestions()
         my_msg = "Alert: Bad State Test"
@@ -699,7 +732,7 @@ class GreenCandle(QtGui.QDialog):
     def notify_unknown(self):
         path = os.getcwd()
         self.my_logging("notify unknown")
-        icon2 = QtGui.QIcon(path + '/img/elephant.png')
+        icon2 = QtGui.QIcon(path + '/img/candle.png')
         self.notifier.setIcon(icon2)
         my_msg = "Alert: Unable to Extract JSON"
         self.notifier.showMessage("GreenCandle-Test", my_msg, 2000)
@@ -770,7 +803,6 @@ class GreenCandle(QtGui.QDialog):
         self.my_logging(len(self.tracking_list))
         self.my_logging("new item: "+ str(new_item))
         if new_item != 0:
-            sys.stderr.write("AMROX HERE!")
             if len(question.title) > 40:
                 question.title = question.title[:40] + '...'
             self.add_to_notification_queue(Notification("New event: %s" \
@@ -783,8 +815,8 @@ class GreenCandle(QtGui.QDialog):
 
     def popupClicked(self):
         """Open the question in user's default browser"""
-        if self.url:
-            QtGui.QDesktopServices.openUrl(QtCore.QUrl(self.url))
+        if self.question.url:
+            QtGui.QDesktopServices.openUrl(QtCore.QUrl(self.question.url))
 
     def displayQuestions(self):
         self.updated.setText(str('Last Successful Update:\n ' +
@@ -797,7 +829,7 @@ class GreenCandle(QtGui.QDialog):
 
         #hack to fix random disappearing questions
         self.display_list = QtGui.QListWidget(self)
-        self.display_list.resize(QtCore.QSize(350, 350))
+        self.display_list.resize(QtCore.QSize(350, 850))  # width, height
         self.display_list.setStyleSheet("QListWidget{show-decoration-selected:"
                                         " 0; background: black;}")
         self.display_list.setSelectionMode(QtGui.QAbstractItemView.NoSelection)
@@ -946,7 +978,6 @@ class APIHelper(object):
             return json.loads(req)
 
         except:
-            print("req:%s" % fullurl)
             print("Unable to fetch live data")
             json_data = open('./unknown.json')
             singleton.new_state = 3
@@ -1031,7 +1062,6 @@ class WorkerThread(QtCore.QThread):
             name = 'amro diab'
             profile = event['event']
             self.my_logging(event)
-            self.my_logging("Failed to get user details for %s" % name)
             profile = event['url']
 
             unixname = 'adiab'
@@ -1039,15 +1069,32 @@ class WorkerThread(QtCore.QThread):
             title = event['symbol']
             creation_time = event['time']
             url = event['url']
+            symbol = event['symbol']
+            data = event['data']
+            direction = event['direction']
             id = e
             types = event['event']
-            rebuild_question = Events(id, name, unixname, email, title,
-                                      creation_time, url, types, profile)
-            self.my_logging("Finish time in epoch: xxx -%s- " % event['time'])
-            current_time = time.time()
-            self.my_logging("current_time = " + str(current_time))
 
-            self.tracker.tracking_list_new.append(rebuild_question)
+            rebuild_question = Events(id=id, name=name, unixname=unixname, title=title,
+                                      creation_time=creation_time, url=url, types=types,
+                                      profile=profile, symbol=symbol, data=data,
+                                      direction=direction)
+
+            self.my_logging("Finish time in epoch: xxx -%s- " % event['time'])
+            self.my_logging("current_time = " + str(time.time()))
+
+            skip = False
+            # current item already exists in list - so append details
+            for item in self.tracker.tracking_list_new:
+                if item.title == title:
+                    item.data.update(data)
+                    item.tags.append(types)
+                    item.direction.append(direction)
+                    skip = True
+
+            if skip is False:
+                self.tracker.tracking_list_new.append(rebuild_question)
+
         set1 = set((x.id, x.name) for x in self.tracker.tracking_list)
         difference = [x for x in self.tracker.tracking_list_new
                       if (x.id, x.name) not in set1]
@@ -1069,7 +1116,8 @@ class WorkerThread(QtCore.QThread):
 
         if len(self.tracker.tracking_list) == 0:
             sys.stderr.write("zero items\n")
-            """ If no new questions """
+
+            # If no new questions
             self.my_logging("no new items")
             self.emit(QtCore.SIGNAL('notify_good'))
             singleton.new_state = 0
