@@ -14,22 +14,18 @@ import time
 import calendar
 from concurrent.futures import ThreadPoolExecutor
 import pickle
-import numpy
 import talib
 import argcomplete
 import pandas
 import binance
 from lib.binance_common import get_binance_klines
 from lib.graph import create_graph
+from lib.support_resistance import make_float, get_values
 from lib.morris import KnuthMorrisPratt
 from indicator import SuperTrend, RSI
 import order
 
 POOL = ThreadPoolExecutor(max_workers=500)
-
-def make_float(arr):
-    """Convert dataframe array into float array"""
-    return numpy.array([float(x) for x in arr.values])
 
 class Events(dict):
     """ Represent events created from data & indicators """
@@ -241,10 +237,16 @@ class Events(dict):
         if scheme["direction"] == "HOLD":
             self["hold"][id(scheme)] = scheme
         else:
+            # Fetch resistance/support/PIP Value
+            values = get_values(scheme['symbol'], self.dataframes[scheme['symbol']])
+            scheme.update(values)
             self["event"][id(scheme)] = scheme
+
             # Only creating graphs for event's that we are interested in due to the time and
             # resources that it takes
             create_graph(self.dataframes[scheme['symbol']], scheme['symbol'])
+
+
 
 def main():
     """ main function """

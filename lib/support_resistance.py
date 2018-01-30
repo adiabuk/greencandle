@@ -4,8 +4,8 @@ Get Support and resistance and PIP for given traiding pair
 """
 
 import json
+import numpy
 import binance
-from backend import make_float
 from lib.supres import supres
 from lib.binance_common import get_binance_klines
 
@@ -18,6 +18,9 @@ def pip_calc(open, close):
     pips = round((close - open) / multiplier)
     return int(pips)
 
+def make_float(arr):
+    """Convert dataframe array into float array"""
+    return numpy.array([float(x) for x in arr.values])
 
 def get_values(pair, dataframe):
     close_values = make_float(dataframe.close)
