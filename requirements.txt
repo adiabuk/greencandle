@@ -9,6 +9,7 @@ PyVirtualDisplay==0.2.1
 requests==2.18.4
 selenium==3.8.1
 binance==0.2
+scipy==1.0.0
 pandas==0.21.1
 ta-lib==0.4.14
 numpy==1.13.3
