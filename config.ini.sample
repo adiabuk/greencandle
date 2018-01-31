@@ -1,0 +1,15 @@
+[frontend]
+notifications = True
+auth = Token
+logging = True
+address = http://127.1:5001
+path = /data.json
+update_interval = 15
+
+[backend]
+binance_api_key =
+binance_api_secret =
+coinbase_api_key =
+coinbase_api_secret =
+klines_interval =
+pairs = XRPETH
