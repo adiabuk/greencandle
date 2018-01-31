@@ -5,8 +5,10 @@
 tmp/*
 ta-lib*
 geckodriver*
-graphs/*.html
-graphs/*.png
+graphs/in/*.html
+graphs/out/*.html
+graphs/in/*.png
+graphs/out/*.png
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -18,3 +18,4 @@ PyQt4==4.11.4
 oauth==1.0.1
 git+git://github.com:adiabuk/Technical-Indicators.git#egg=indicators
 git+git://github.com:toshima/binance.git#egg=binance
+configparser==3.5.0

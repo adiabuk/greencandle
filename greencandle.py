@@ -130,9 +130,9 @@ class QuestionDisplayWidget(QtGui.QWidget):
         settings_dialog = SettingsDialog()
         settings = settings_dialog.getSettings()
 
-        path = "/graphs/simple_candlestick_{0}_resized.png".format(question.symbol)
+        path = "/graphs/in/simple_candlestick_{0}_resized.png".format(question.symbol)
         graph_url = settings['address'] + path
-        graph_filename = '.' + path
+        graph_filename = '.' + path.replace('in', 'out')
         try:
             urllib.request.urlretrieve(graph_url, graph_filename)
         except Exception as e:

@@ -35,7 +35,7 @@ APP = Flask(__name__)
 @APP.route('/<path:path>', methods=['GET'])
 def return_file(path):
     """Fetch generated PNG thumbnails """
-    if path.startswith('graphs/') and path.endswith('.png') and os.path.isfile(path):
+    if path.startswith('graphs/in/') and path.endswith('.png') and os.path.isfile(path):
         return send_file(path, as_attachment=True)
     abort(404)
     return False
