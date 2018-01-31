@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # PYTHON_ARGCOMPLETE_OK
-#pylint: disable=no-member,consider-iterating-dictionary
+#pylint: disable=no-member,consider-iterating-dictionary,global-statement
 
 """
 Get ohlc (Opunknownen, High, Low, Close) values from given cryptos
@@ -25,18 +25,18 @@ from lib.morris import KnuthMorrisPratt
 from indicator import SuperTrend, RSI
 import order
 
-POOL = ThreadPoolExecutor(max_workers=500)
+POOL = ThreadPoolExecutor(max_workers=200)
 
 class Events(dict):
     """ Represent events created from data & indicators """
 
-    def __init__(self, pairs):
+    def __init__(self, pairs, interval=None):
         """
         Initialize class
         Create hold and event dicts
         Fetch initial data from binance and store within object
         """
-
+        self.interval = interval
         self.pairs = pairs
         self.dataframe = None
         self["hold"] = {}
@@ -121,7 +121,7 @@ class Events(dict):
         Iterate through data and trading pairs to extract data
         Return dict containing alert data and hold data
         """
-
+        global POOL
         for pair in self.pairs:
         #for pair, klines in self.data.items():
             # get indicators supertrend, and API for each trading pair
@@ -130,6 +130,7 @@ class Events(dict):
             POOL.submit(self.get_supertrend, pair, self.dataframes[pair])
             POOL.submit(self.get_rsi, pair, self.dataframes[pair])
         POOL.shutdown(wait=True)
+        POOL = ThreadPoolExecutor(max_workers=500)
         return self
 
     def get_rsi(self, pair="PPTBTC", klines=None):

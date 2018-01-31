@@ -16,9 +16,11 @@ from time import time, strftime, gmtime, sleep
 from flask import Flask, abort, send_file
 import balance
 import backend
-import binance
+from lib.config import get_config
 
-PAIRS = [price for price in binance.prices().keys() if price != '123456']
+PAIRS = get_config('api')['pairs'].split()
+INTERVAL = get_config('api')['interval']
+PORT = int(get_config('api')['port'])
 
 DATA = None
 HOLD = None
@@ -74,7 +76,7 @@ def get_balance():
 def get_data():
     """Fetch data - called by scheduler periodically """
 
-    events = backend.Events(PAIRS)
+    events = backend.Events(PAIRS, INTERVAL)
     events.get_data()
     data = {}
     hold = {}
@@ -113,7 +115,6 @@ def schedule_balance(scheduler):
     """get balance"""
     global BALANCE
     try:
-        sys.stdout.write('hello')
         print(strftime("%Y-%m-%d %H:%M:%S", gmtime()), "Fetching balance\n")
         BALANCE = get_balance()
         print(strftime("%Y-%m-%d %H:%M:%S", gmtime()), "Successfully fetched balance\n")
@@ -134,7 +135,7 @@ def main():
         background_thread.start()
     except (KeyboardInterrupt, SystemExit):
         sys.exit(1)
-    APP.run(debug=True, threaded=True, port=5001, use_reloader=False)
+    APP.run(debug=True, threaded=True, port=PORT, use_reloader=False)
 
 if __name__ == '__main__':
     main()
