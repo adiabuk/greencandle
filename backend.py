@@ -212,6 +212,8 @@ class Events(dict):
         trends = {"HAMMER": {100: "bullish", 0:"HOLD"},
                   "INVERTEDHAMMER": {100: "bearish", 0:"HOLD"},
                   "ENGULFING": {-100:"bearish", 100:"bullish", 0:"HOLD"},
+                  "MORNINGSTAR": {-100:"bearish", 100:"bullish", 0:"HOLD"},
+                  "SHOOTINGSTAR": {-100:"bearish", 100:"bullish", 0:"HOLD"},
                   "DOJI": {100: "unknown", 0:"HOLD"}}
         results = {}
         for check in trends.keys():

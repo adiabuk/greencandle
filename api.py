@@ -9,6 +9,7 @@ from __future__ import print_function
 import calendar
 import sched
 import sys
+import traceback
 import os
 import json
 import threading
@@ -107,7 +108,7 @@ def schedule_data(scheduler):
         print(strftime("%Y-%m-%d %H:%M:%S", gmtime()), "Successfully fetched data\n")
 
     except TypeError as error:
-        sys.stderr.write("Error opening URL: " + str(error) + "\n")
+        sys.stderr.write("Error opening URL\n" + str(error))
 
     SCHED.enter(DATA_TIMER, 1, schedule_data, (scheduler,))
 
@@ -119,7 +120,9 @@ def schedule_balance(scheduler):
         BALANCE = get_balance()
         print(strftime("%Y-%m-%d %H:%M:%S", gmtime()), "Successfully fetched balance\n")
     except Exception as error:
-        sys.stderr.write("Error opening URL\n" + str(error))
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        sys.stderr.write("Error opening URL: " + str(error) + "\n")
+        traceback.print_tb(exc_traceback, limit=1, file=sys.stderr)
 
     SCHED.enter(BALANCE_TIMER, 1, schedule_balance, (scheduler,))
 
