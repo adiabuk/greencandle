@@ -1,10 +1,18 @@
 #!/usr/bin/env python
+#pylint: disable=wrong-import-position,import-error
 
 """
 Test Buy/Sell orders
 """
 
 from __future__ import print_function
+import os
+import sys
+
+BASE_DIR = os.getcwd().split('greencandle', 1)[0] + 'greencandle'
+sys.path.append(BASE_DIR)
+
+
 import binance
 from lib.auth import binance_auth
 

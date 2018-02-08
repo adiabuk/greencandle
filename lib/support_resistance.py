@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-position
+#pylint: disable=wrong-import-position,import-error
 
 """
 Get Support and resistance and PIP for given traiding pair

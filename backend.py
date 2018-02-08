@@ -23,8 +23,8 @@ from lib.graph import create_graph
 from lib.support_resistance import make_float, get_values
 from lib.morris import KnuthMorrisPratt
 from indicator import SuperTrend, RSI
-import order
-import mysql
+import lib.order
+import lib.mysql
 
 POOL = ThreadPoolExecutor(max_workers=200)
 
