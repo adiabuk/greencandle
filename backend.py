@@ -24,6 +24,7 @@ from lib.support_resistance import make_float, get_values
 from lib.morris import KnuthMorrisPratt
 from indicator import SuperTrend, RSI
 import order
+import mysql
 
 POOL = ThreadPoolExecutor(max_workers=200)
 
@@ -41,7 +42,7 @@ class Events(dict):
         self.dataframe = None
         self["hold"] = {}
         self["event"] = {}
-        self.data, self.dataframes = self.get_ohlcs()
+        self.data, self.dataframes = self.get_ohlcs(interval="15m")
         pickle.dump(self.data, open("data.p", "wb"))
         pickle.dump(self.dataframes, open("dataframes.p", "wb"))
 
@@ -60,7 +61,7 @@ class Events(dict):
                 make_float(dataframe.close))
         return ohlc, dataframe
 
-    def get_ohlcs(self, graph=False, interval="5m"):
+    def get_ohlcs(self, graph=False, interval=None):
         """ Get details from binance API """
         ohlcs = {}
         dataframe = {}
@@ -80,7 +81,7 @@ class Events(dict):
         for key, value in results.items():
             ohlcs[key] = value.result()[0]
             dataframe[key] = value.result()[1]
-            #create_graph(value.result()[1], key)
+
         return ohlcs, dataframe
 
     def print_text(self):
@@ -122,6 +123,7 @@ class Events(dict):
         Return dict containing alert data and hold data
         """
         global POOL
+        POOL = ThreadPoolExecutor(max_workers=100)
         for pair in self.pairs:
         #for pair, klines in self.data.items():
             # get indicators supertrend, and API for each trading pair
@@ -235,17 +237,28 @@ class Events(dict):
 
     def add_scheme(self, scheme):
         """ add scheme to correct structure """
+
+        # add support/resistannce data to scheme
+        values = get_values(scheme['symbol'], self.dataframes[scheme['symbol']])
+        scheme.update(values)
+        try:
+            # Add scheme to DB
+            mysql.insert_data(self.interval, scheme['symbol'], scheme['event'],
+                              scheme['direction'], scheme['data'], str(scheme['difference']),
+                              str(scheme['resistance']), str(scheme['support']))
+
+        except Exception as excp:
+            print(excp)
+
         if scheme["direction"] == "HOLD":
             self["hold"][id(scheme)] = scheme
         else:
             # Fetch resistance/support/PIP Value
-            values = get_values(scheme['symbol'], self.dataframes[scheme['symbol']])
-            scheme.update(values)
             self["event"][id(scheme)] = scheme
 
             # Only creating graphs for event's that we are interested in due to the time and
             # resources that it takes
-            create_graph(self.dataframes[scheme['symbol']], scheme['symbol'])
+            #create_graph(self.dataframes[scheme['symbol']], scheme['symbol'])
 
 
 

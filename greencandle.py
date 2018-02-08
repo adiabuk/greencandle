@@ -152,7 +152,7 @@ class QuestionDisplayWidget(QtGui.QWidget):
 
             if i in icons:
                 set = True
-                print("SETTING ICON TO", i)
+                print("SETTING ICON TO", i, question.symbol)
                 self.site_icon.setStyleSheet("image: url(img/" + icons[i] +
                                              "); background-repeat:no-repeat;")
                 break
