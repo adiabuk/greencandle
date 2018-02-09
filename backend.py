@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # PYTHON_ARGCOMPLETE_OK
-#pylint: disable=no-member,consider-iterating-dictionary,global-statement
+#pylint: disable=no-member,consider-iterating-dictionary,global-statement,broad-except
 
 """
 Get ohlc (Opunknownen, High, Low, Close) values from given cryptos
@@ -22,9 +22,9 @@ from lib.binance_common import get_binance_klines
 from lib.graph import create_graph
 from lib.support_resistance import make_float, get_values
 from lib.morris import KnuthMorrisPratt
+from lib.order import get_buy_price, get_sell_price
+from lib.mysql import insert_data
 from indicator import SuperTrend, RSI
-import lib.order
-import lib.mysql
 
 POOL = ThreadPoolExecutor(max_workers=200)
 
@@ -181,7 +181,7 @@ class Events(dict):
         scheme["url"] = self.get_url(pair)
         scheme["time"] = calendar.timegm(time.gmtime())
         scheme["symbol"] = pair
-        scheme["direction"] = self.get_supertrend_direction(pair, df_list[-10:])
+        scheme["direction"] = self.get_supertrend_direction(df_list[-10:])
         scheme["event"] = "Supertrend"
         self.add_scheme(scheme)
 
@@ -191,20 +191,16 @@ class Events(dict):
         return "https://uk.tradingview.com/symbols/{0}/".format(pair)
 
     @staticmethod
-    def get_supertrend_direction(pair, supertrend):
+    def get_supertrend_direction(supertrend):
         """Get new direction of supertrend from pattern"""
         if 7 in [s for s in KnuthMorrisPratt(supertrend, ["down", "up", "up"])]:
             action = "BUY"
-            price = order.get_buy_price(pair)
         elif 8 in [s for s in KnuthMorrisPratt(supertrend, ["up", "down"])]:
             action = "SELL"
-            price = order.get_sell_price(pair)
         elif 3 in [s for s in KnuthMorrisPratt(supertrend, ["nan", "nan", "nan", "nan"])]:
             action = "UNKNOWN!"
-            price = "irreverent"
         else:
             action = "HOLD"
-            price = binance.prices()[pair]
         return action
 
     def get_indicators(self, pair, klines):
@@ -239,17 +235,27 @@ class Events(dict):
 
     def add_scheme(self, scheme):
         """ add scheme to correct structure """
+        pair = scheme['symbol']
 
         # add support/resistannce data to scheme
-        values = get_values(scheme['symbol'], self.dataframes[scheme['symbol']])
+
+        values = get_values(pair, self.dataframes[pair])
         scheme.update(values)
+
+        #  Add prices for current symbol to scheme
+        prices = {"buy": get_buy_price(pair), "sell": get_sell_price(pair),
+                  "market": binance.prices()[pair]}
+        scheme.update(prices)
+
         try:
             # Add scheme to DB
-            mysql.insert_data(self.interval, scheme['symbol'], scheme['event'],
-                              scheme['direction'], scheme['data'], str(scheme['difference']),
-                              str(scheme['resistance']), str(scheme['support']))
-
+            insert_data(interval=self.interval, symbol=scheme['symbol'], event=scheme['event'],
+                        direction=scheme['direction'], data=scheme['data'],
+                        difference=str(scheme['difference']), resistance=str(scheme['resistance']),
+                        support=str(scheme['support']), buy=str(scheme['buy']),
+                        sell=str(scheme['sell']), market=str(scheme['market']))
         except Exception as excp:
+
             print(excp)
 
         if scheme["direction"] == "HOLD":
