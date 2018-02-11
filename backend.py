@@ -14,6 +14,7 @@ import time
 import calendar
 from concurrent.futures import ThreadPoolExecutor
 import pickle
+import balance
 import talib
 import argcomplete
 import pandas
@@ -40,6 +41,7 @@ class Events(dict):
         self.interval = interval
         self.pairs = pairs
         self.dataframe = None
+        self.balance = balance.get_balance()
         self["hold"] = {}
         self["event"] = {}
         self.data, self.dataframes = self.get_ohlcs(interval="15m")
@@ -157,7 +159,6 @@ class Events(dict):
         scheme["event"] = "RSI"
         self.add_scheme(scheme)
 
-
     @staticmethod
     def renamed_dataframe_columns(klines=None):
         """Return dataframe with ordered/renamed coulumns"""
@@ -210,6 +211,7 @@ class Events(dict):
                   "ENGULFING": {-100:"bearish", 100:"bullish", 0:"HOLD"},
                   "MORNINGSTAR": {-100:"bearish", 100:"bullish", 0:"HOLD"},
                   "SHOOTINGSTAR": {-100:"bearish", 100:"bullish", 0:"HOLD"},
+                  "MARUBOZU": {-100:"bearish", 100:"bullish", 0:"HOLD"},
                   "DOJI": {100: "unknown", 0:"HOLD"}}
         results = {}
         for check in trends.keys():
@@ -247,13 +249,15 @@ class Events(dict):
                   "market": binance.prices()[pair]}
         scheme.update(prices)
 
+        balance = self.balance['binance']['TOTALS']['GBP']
         try:
             # Add scheme to DB
             insert_data(interval=self.interval, symbol=scheme['symbol'], event=scheme['event'],
                         direction=scheme['direction'], data=scheme['data'],
                         difference=str(scheme['difference']), resistance=str(scheme['resistance']),
                         support=str(scheme['support']), buy=str(scheme['buy']),
-                        sell=str(scheme['sell']), market=str(scheme['market']))
+                        sell=str(scheme['sell']), market=str(scheme['market']),
+                        balance=str(balance))
         except Exception as excp:
 
             print(excp)

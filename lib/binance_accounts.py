@@ -24,14 +24,16 @@ def get_binance_values():
     currency = CurrencyRates()
 
     for key in all_balances:
-        if float(all_balances[key]['free']) > 0:  # available currency
-            result["binance"][key]["count"] = all_balances[key]["free"]
+        current_value = float(all_balances[key]['free']) + float(all_balances[key]['locked'])
+
+        if float(current_value) > 0:  # available currency
+            result["binance"][key]["count"] = current_value
 
             if key != 'BTC':  # currencies that need converting to BTC
-                bcoin = float(all_balances[key]['free']) * float(prices[key+'BTC'])  # value in BTC
-                bitcoin_totals += float(all_balances[key]['free']) * float(prices[key+'BTC'])
+                bcoin = float(current_value) * float(prices[key+'BTC'])  # value in BTC
+                bitcoin_totals += float(current_value) * float(prices[key+'BTC'])
             else:   #btc
-                bcoin = float(all_balances[key]['free'])
+                bcoin = float(current_value)
                 bitcoin_totals += float(bcoin)
 
             add_value(key, bcoin)
@@ -48,6 +50,7 @@ def get_binance_values():
     usd_total = bitcoin_totals * float(prices['BTCUSDT'])
     result["binance"]["TOTALS"]["BTC"] = bitcoin_totals
     result["binance"]["TOTALS"]["USD"] = usd_total
+    result["binance"]["TOTALS"]["count"] = ""
 
     gbp_total = currency.get_rate("USD", "GBP") * usd_total
     result["binance"]["TOTALS"]["GBP"] = gbp_total
