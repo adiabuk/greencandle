@@ -8,29 +8,31 @@ from forex_python.converter import CurrencyRates
 import binance
 
 CURRENCY = CurrencyRates()
-def get_profit(pair, buy_price, sell_price):
+
+def guess_profit(buy_price, sell_price, investment_gbp):
     """
-    eg.  pair=OMGETH
-    base = OMG
-    QUOTE=ETH
-    QUOTE/HOME = ETH/GBP
+    Get profit prediction based on initial GBP investment and buy/sell values of currency pair
     """
 
-    #base = pair[:-3]
-    quote = pair[-3:]
-    home = "GBP"
-    intermed = "USD"
-    quotehome = binance.prices()[quote + 'USDT'] * CURRENCY.get_rate(intermed, home)
-    formula = float(sell_price) - float(buy_price) * quotehome
-    #number_of_units = 50gbp => base
-    print(formula)
+    buy_price=float(buy_price)
+    sell_price = float(sell_price)
+
+    rate = 0.00014   #gbp to btc
+    total_buy_btc = investment_gbp * rate
+    amount = total_buy_btc / buy_price
+
+    total_sell_btc = sell_price * amount
+    difference = total_sell_btc - total_buy_btc
+    profit = difference *(1/rate)
+    perc = ((sell_price - buy_price)/buy_price)*100
+    return profit, amount,difference,perc
 
 def gbp_to_base(gbp, symbol):
     """
     50GBP => OMG
-      50GBP => USD
-      USD => BTC
-      BTC => OMG
+    50GBP => USD
+    USD => BTC
+    BTC => OMG
     """
 
     usd = gbp * CURRENCY.get_rate('GBP', 'USD')

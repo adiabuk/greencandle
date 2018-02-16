@@ -2,10 +2,13 @@
 *.swo
 *.swn
 *.html
+.~*
+
 tmp/*
 ta-lib*
 geckodriver*
 graphs/in/*.html
+
 graphs/out/*.html
 graphs/in/*.png
 graphs/out/*.png
