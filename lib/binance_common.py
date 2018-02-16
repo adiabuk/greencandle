@@ -1,6 +1,7 @@
 import sys
 import pandas
 import binance
+import csv
 
 def get_binance_klines(pair, interval="1m"):
     """
@@ -40,5 +41,13 @@ def get_all_klines(symbol, interval=None):
 
     return result
 
+def to_csv(pair, data):
+    """
+    Create csv from klines data
+    """
 
-
+    keys = data[0].keys()
+    with open('{0}.csv'.format(pair), 'w') as output_file:
+        dict_writer = csv.DictWriter(output_file, keys)
+        dict_writer.writeheader()
+        dict_writer.writerows(data)
