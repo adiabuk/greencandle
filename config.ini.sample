@@ -11,5 +11,15 @@ binance_api_key =
 binance_api_secret =
 coinbase_api_key =
 coinbase_api_secret =
-klines_interval =
-pairs = XRPETH
+base = ETH BTC BCC
+
+[api]
+port = 5001
+interval = 15m
+pairs = XRPETH ETHBTC BCCETH DASHETH ZECETH DGDETH XMRETH BNBETH BNBBTC TRXBTC STRATBTC
+
+[database]
+host = 127.1
+user = greencandle
+password = password
+db = greencandle
