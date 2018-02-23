@@ -12,6 +12,7 @@ import json
 import argparse
 import time
 import calendar
+import operator
 from concurrent.futures import ThreadPoolExecutor
 import pickle
 import balance
@@ -131,6 +132,7 @@ class Events(dict):
             # get indicators supertrend, and API for each trading pair
 
             POOL.submit(self.get_indicators, pair, self.data[pair])
+            POOL.submit(self.get_oscillators, pair, self.data[pair])
             POOL.submit(self.get_supertrend, pair, self.dataframes[pair])
             POOL.submit(self.get_rsi, pair, self.dataframes[pair])
         POOL.shutdown(wait=True)
@@ -145,7 +147,7 @@ class Events(dict):
         rsi = RSI(mine)
         df_list = rsi['RSI_21'].tolist()
         df_list = ["%.1f" % float(x) for x in df_list]
-        scheme["data"] = {"RSI": df_list[-10:]}
+        scheme["data"] = {"RSI": df_list[-1]}
         scheme["url"] = self.get_url(pair)
         scheme["time"] = calendar.timegm(time.gmtime())
         scheme["symbol"] = pair
@@ -178,11 +180,11 @@ class Events(dict):
         mine = dataframe.apply(pandas.to_numeric)
         supertrend = SuperTrend(mine, 10, 3)
         df_list = supertrend['STX_10_3'].tolist()
-        scheme["data"] = {"SUPERTREND": df_list[-10:]}
+        scheme["data"] = {"SUPERTREND": df_list[-1]}
         scheme["url"] = self.get_url(pair)
         scheme["time"] = calendar.timegm(time.gmtime())
         scheme["symbol"] = pair
-        scheme["direction"] = self.get_supertrend_direction(df_list[-10:])
+        scheme["direction"] = self.get_supertrend_direction(df_list[-1])
         scheme["event"] = "Supertrend"
         self.add_scheme(scheme)
 
@@ -204,6 +206,49 @@ class Events(dict):
             action = "HOLD"
         return action
 
+    @staticmethod
+    def get_operator_fn(op):
+         return {
+             '<' : operator.lt,
+             '>' : operator.gt,
+             }[op]
+
+
+    def eval_binary_expr(self, op1, oper, op2):
+        op1,op2 = float(op1), float(op2)
+        return self.get_operator_fn(oper)(op1, op2)
+
+
+    def get_oscillators(self, pair, klines):
+        """bla bla bla"""
+        trends = {#"STOCHF": {"BUY": "< 25", "SELL": ">75", "args":[20]},
+                "CCI": {"BUY": "< -100", "SELL": "> 100", "klines": ("high", "low", "close"),"args": [14]},
+                #"ADX": {"BUY": ???
+                "ULTOSC": {"BUY": "< 30", "SELL": "> 70", "klines": ("high", "low", "close"). "args":[]},
+                "WILLR": {"BUY": "> 80", "SELL": "< 20", "klines": ("high", "low", "close"), "args": [14]}
+
+                }
+
+        for check, attrs in trends.items():
+            try:
+                j = getattr(talib, check)(*(klines[1], klines[2], klines[3], *attrs["args"]))[-1]
+                #trigger = "HOLD"
+
+                trigger = "HOLD"
+                for item in "BUY", "SELL":
+                    s = str(j) + " " + attrs[item]   # From numpy.float64 to str
+                    if self.eval_binary_expr(*(s.split())):
+                        trigger = item
+                        break
+
+            except Exception as e:
+                print("failed here", e)
+            print(pair, "oscillator", check, j, trigger)
+
+        #talib.STOCHF(a[0][1],a[0][2],a[0][3],20)[0]
+
+
+
     def get_indicators(self, pair, klines):
         """ Cross Reference data against trend indicators """
         trends = {"HAMMER": {100: "bullish", 0:"HOLD"},
@@ -215,13 +260,13 @@ class Events(dict):
                   "DOJI": {100: "unknown", 0:"HOLD"}}
         results = {}
         for check in trends.keys():
-            j = getattr(talib, "CDL" + check)(*klines).tolist()[-10:]
+            j = getattr(talib, "CDL" + check)(*klines).tolist()[-1]
             results.update({check: j})
 
         for check in trends.keys():
             scheme = {}
             try:
-                result = trends[check][results[check][-1]]
+                result =  trends[check][results[check][-1]]
                 if "data" not in scheme:
                     scheme['data'] = {}
                 scheme["data"] = results   # convert from array to list
