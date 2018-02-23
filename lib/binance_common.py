@@ -18,15 +18,15 @@ def get_binance_klines(pair, interval="1m"):
     dataframe = pandas.DataFrame.from_dict(raw)
     return dataframe
 
-def get_all_klines(symbol, interval=None):
+def get_all_klines(symbol, interval=None, start_time=0):
     """
     Get all available data for a trading pair
     We are limited to 500 entries per request, so we will loop over until we have fetched all
     entries
+    initial start time is 0, as far bask as data is available
     """
 
     result = []
-    start_time = 0  # Initial start time - as far back as data is available
 
     while True:
         current_section = binance.klines(symbol, interval, startTime=start_time)
@@ -47,7 +47,9 @@ def to_csv(pair, data):
     """
 
     keys = data[0].keys()
+    keys = ["closeTime", "low", "high", "open", "close", "volume",
+            "openTime", "numTrades", "quoteVolume"]
     with open('{0}.csv'.format(pair), 'w') as output_file:
         dict_writer = csv.DictWriter(output_file, keys)
         dict_writer.writeheader()
-        dict_writer.writerows(data)
+        dict_writer.writerows(reversed(data))
