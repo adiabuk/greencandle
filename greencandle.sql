@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.21, for Linux (x86_64)
+-- MySQL dump 10.16  Distrib 10.1.31-MariaDB, for Linux (x86_64)
 --
 -- Host: localhost    Database: greencandle
 -- ------------------------------------------------------
--- Server version	5.7.21-1ubuntu1
+-- Server version	10.1.31-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -14,6 +14,40 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `action_totals`
+--
+
+DROP TABLE IF EXISTS `action_totals`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `action_totals` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `ctime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `pair` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `total` int(3) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=75942 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `actions`
+--
+
+DROP TABLE IF EXISTS `actions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `actions` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `ctime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `pair` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `indicator` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `action` int(3) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MEMORY AUTO_INCREMENT=153455 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `balance`
@@ -34,8 +68,24 @@ CREATE TABLE `balance` (
   PRIMARY KEY (`id`),
   KEY `exchange_id` (`exchange_id`),
   CONSTRAINT `balance_ibfk_2` FOREIGN KEY (`exchange_id`) REFERENCES `exchange` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=489 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Temporary table structure for view `changes`
+--
+
+DROP TABLE IF EXISTS `changes`;
+/*!50001 DROP VIEW IF EXISTS `changes`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `changes` (
+  `ctime` tinyint NOT NULL,
+  `pair` tinyint NOT NULL,
+  `gt` tinyint NOT NULL,
+  `lt` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
 
 --
 -- Table structure for table `coin`
@@ -49,7 +99,7 @@ CREATE TABLE `coin` (
   `symbol` varchar(10) DEFAULT NULL,
   `name` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -74,7 +124,7 @@ CREATE TABLE `data` (
   `market` varchar(20) DEFAULT NULL,
   `balance` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25600 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=147829 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -88,7 +138,7 @@ CREATE TABLE `exchange` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -123,18 +173,37 @@ DROP TABLE IF EXISTS `hour_balance`;
 /*!50001 DROP VIEW IF EXISTS `hour_balance`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `hour_balance` AS SELECT 
- 1 AS `exchange_id`,
- 1 AS `usd1`,
- 1 AS `coin`,
- 1 AS `ctime1`,
- 1 AS `ctime2`,
- 1 AS `usd2`,
- 1 AS `USD_diff`,
- 1 AS `GBP_diff`,
- 1 AS `COUNT_diff`,
- 1 AS `perc_change`,
- 1 AS `BTC_diff`*/;
+/*!50001 CREATE TABLE `hour_balance` (
+  `exchange_id` tinyint NOT NULL,
+  `usd1` tinyint NOT NULL,
+  `coin` tinyint NOT NULL,
+  `ctime1` tinyint NOT NULL,
+  `ctime2` tinyint NOT NULL,
+  `usd2` tinyint NOT NULL,
+  `USD_diff` tinyint NOT NULL,
+  `GBP_diff` tinyint NOT NULL,
+  `COUNT_diff` tinyint NOT NULL,
+  `perc_change` tinyint NOT NULL,
+  `BTC_diff` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `recent_actions`
+--
+
+DROP TABLE IF EXISTS `recent_actions`;
+/*!50001 DROP VIEW IF EXISTS `recent_actions`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `recent_actions` (
+  `id` tinyint NOT NULL,
+  `ctime` tinyint NOT NULL,
+  `pair` tinyint NOT NULL,
+  `indicator` tinyint NOT NULL,
+  `value` tinyint NOT NULL,
+  `action` tinyint NOT NULL
+) ENGINE=MyISAM */;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -168,9 +237,43 @@ CREATE TABLE `symbols` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `trades`
+--
+
+DROP TABLE IF EXISTS `trades`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `trades` (
+  `ctime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `pair` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `price` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Final view structure for view `changes`
+--
+
+/*!50001 DROP TABLE IF EXISTS `changes`*/;
+/*!50001 DROP VIEW IF EXISTS `changes`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`greencandle`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `changes` AS select `s1`.`ctime` AS `ctime`,`s1`.`pair` AS `pair`,((`s1`.`total` <= 0) and (`s2`.`total` >= 0)) AS `gt`,((`s1`.`total` >= 0) and (`s2`.`total` <= 0)) AS `lt` from (`action_totals` `s1` left join `action_totals` `s2` on((`s1`.`pair` = `s2`.`pair`))) where ((`s1`.`total` <> `s2`.`total`) and ((`s1`.`total` < 0) or (`s2`.`total` < 0)) and ((`s1`.`total` > 0) or (`s2`.`total` > 0))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
 -- Final view structure for view `hour_balance`
 --
 
+/*!50001 DROP TABLE IF EXISTS `hour_balance`*/;
 /*!50001 DROP VIEW IF EXISTS `hour_balance`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -184,6 +287,25 @@ CREATE TABLE `symbols` (
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `recent_actions`
+--
+
+/*!50001 DROP TABLE IF EXISTS `recent_actions`*/;
+/*!50001 DROP VIEW IF EXISTS `recent_actions`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`greencandle`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `recent_actions` AS select `t1`.`id` AS `id`,`t1`.`ctime` AS `ctime`,`t1`.`pair` AS `pair`,`t1`.`indicator` AS `indicator`,`t1`.`value` AS `value`,`t1`.`action` AS `action` from `actions` `t1` where (`t1`.`ctime` = (select max(`t2`.`ctime`) from `actions` `t2` where ((`t2`.`pair` = `t1`.`pair`) and (`t2`.`indicator` = `t2`.`indicator`)))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -194,4 +316,4 @@ CREATE TABLE `symbols` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-02-26 23:06:47
+-- Dump completed on 2018-02-27 13:03:23

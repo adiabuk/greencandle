@@ -11,6 +11,7 @@ from __future__ import print_function
 import json
 import argparse
 import time
+import traceback
 import calendar
 import operator
 from concurrent.futures import ThreadPoolExecutor
@@ -25,7 +26,7 @@ from lib.graph import create_graph
 from lib.support_resistance import make_float, get_values
 from lib.morris import KnuthMorrisPratt
 from lib.order import get_buy_price, get_sell_price
-from lib.mysql import insert_data
+from lib.mysql import insert_data, insert_actions, insert_action_totals, get_changes, clean_stale, get_buy
 from indicator import SuperTrend, RSI
 
 POOL = ThreadPoolExecutor(max_workers=200)
@@ -39,6 +40,7 @@ class Events(dict):
         Create hold and event dicts
         Fetch initial data from binance and store within object
         """
+        print("Fetching raw data")
         self.interval = interval
         self.pairs = pairs
         self.dataframe = None
@@ -125,14 +127,16 @@ class Events(dict):
         Iterate through data and trading pairs to extract data
         Return dict containing alert data and hold data
         """
+        print("Getting data")
         global POOL
-        POOL = ThreadPoolExecutor(max_workers=100)
+        POOL = ThreadPoolExecutor(max_workers=400)
         for pair in self.pairs:
         #for pair, klines in self.data.items():
             # get indicators supertrend, and API for each trading pair
 
             POOL.submit(self.get_indicators, pair, self.data[pair])
             POOL.submit(self.get_oscillators, pair, self.data[pair])
+            POOL.submit(self.get_moving_averages, pair, self.data[pair])
             POOL.submit(self.get_supertrend, pair, self.dataframes[pair])
             POOL.submit(self.get_rsi, pair, self.dataframes[pair])
         POOL.shutdown(wait=True)
@@ -141,6 +145,7 @@ class Events(dict):
 
     def get_rsi(self, pair="PPTBTC", klines=None):
         """ get RSI oscillator values for given pair"""
+
         dataframe = self.renamed_dataframe_columns(klines)
         scheme = {}
         mine = dataframe.apply(pandas.to_numeric)
@@ -213,25 +218,70 @@ class Events(dict):
              '>' : operator.gt,
              }[op]
 
-
     def eval_binary_expr(self, op1, oper, op2):
-        op1,op2 = float(op1), float(op2)
+        op1, op2 = float(op1), float(op2)
         return self.get_operator_fn(oper)(op1, op2)
 
+    @staticmethod
+    def get_action(trigger):
+        return {"BUY": 1,
+                "SELL": -1,
+                "HOLD": 0}[trigger]
+
+    def get_moving_averages(self, pair, klines):
+        """bla bla bla"""
+        close = klines[-1]
+        trends = (
+            ("EMA", 10),
+            ("EMA", 20),
+            ("EMA", 30),
+            ("EMA", 50),
+            ("EMA", 100),
+            ("SMA", 200),
+            ("SMA", 20),
+            ("SMA", 30),
+            ("SMA", 50),
+            ("SMA", 100),
+            ("SMA", 200))
+        for func, timeperiod in trends:
+            try:
+                result = getattr(talib, func)(close, timeperiod)[-1]
+            except:
+                print("EXC")
+            if result > close[-1]:
+                trigger = 'SELL'
+            else:
+                trigger = 'BUY'
+
+            try:
+                insert_actions(pair=pair, indicator=func+'-'+str(timeperiod), value=result, action=self.get_action(trigger))
+            except:
+                traceback.print_exc()
+                print("DB FUBAR")
 
     def get_oscillators(self, pair, klines):
         """bla bla bla"""
+        open, high, low, close = klines
         trends = {#"STOCHF": {"BUY": "< 25", "SELL": ">75", "args":[20]},
                 "CCI": {"BUY": "< -100", "SELL": "> 100", "klines": ("high", "low", "close"),"args": [14]},
                 #"ADX": {"BUY": ???
-                "ULTOSC": {"BUY": "< 30", "SELL": "> 70", "klines": ("high", "low", "close"). "args":[]},
-                "WILLR": {"BUY": "> 80", "SELL": "< 20", "klines": ("high", "low", "close"), "args": [14]}
+                "RSI": {"BUY": "< 30", "SELL": "> 70", "klines": tuple(("close",)), "args": [14]},
+                "MOM": {"BUY": "< 0", "SELL": "> 0", "klines": tuple(("close",)), "args": [10]},
+                "APO": {"BUY": "> 0", "SELL": "< 0", "klines": tuple(("close",)), "args": []},
+                "ULTOSC": {"BUY": "< 30", "SELL": "> 70", "klines": ("high", "low", "close"), "args":[7,14,28]},
+                "WILLR": {"BUY": "> 80", "SELL": "< 20", "klines": ("high", "low", "close"), "args": [14]},
+                "AROONOSC": {"BUY": "> 50", "SELL": "< -50", "klines": ("high", "low"), "args": []}
 
                 }
 
         for check, attrs in trends.items():
             try:
-                j = getattr(talib, check)(*(klines[1], klines[2], klines[3], *attrs["args"]))[-1]
+                a = attrs['klines'][0]
+                li = []
+                for i in attrs['klines']:
+                    li.append(locals()[i])
+
+                j = getattr(talib, check)(*(*li, *attrs["args"]))[-1]
                 #trigger = "HOLD"
 
                 trigger = "HOLD"
@@ -242,12 +292,9 @@ class Events(dict):
                         break
 
             except Exception as e:
+                traceback.print_exc()
                 print("failed here", e)
-            print(pair, "oscillator", check, j, trigger)
-
-        #talib.STOCHF(a[0][1],a[0][2],a[0][3],20)[0]
-
-
+            insert_actions(pair=pair, indicator=check, value=j, action=self.get_action(trigger))
 
     def get_indicators(self, pair, klines):
         """ Cross Reference data against trend indicators """
@@ -336,15 +383,25 @@ def main():
         pairs = [price for price in binance.prices().keys() if price != '123456']
 
 
-    events = Events(pairs)
+    events = Events(pairs, interval='1m')
     data = events.get_data()
-    if args.json:
-        print(json.dumps(events, indent=4))
-    else:
-        events.print_text()
+    print("Inserting Totals")
+    insert_action_totals()
+    print("Cleaning stale data")
+    clean_stale()
+    print(get_buy())
+
+    try:
+        if args.json:
+            print(json.dumps(events, indent=4))
+        else:
+            events.print_text()
+    except Exception:
+        print("Overall exception")
 
     agg_data.update(data)
     return agg_data
 
 if __name__ == '__main__':
     main()
+    print("COMPLETE")
