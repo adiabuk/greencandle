@@ -48,6 +48,7 @@ def get_coinbase_values():
             result["coinbase"]["TOTALS"]["BTC"] = btc_totals
             result["coinbase"]["TOTALS"]["USD"] = usd_totals
             result["coinbase"]["TOTALS"]["GBP"] = gbp_totals
+            result["coinbase"]["TOTALS"]["count"] = ""
 
     #print json.dumps(json_accounts["data"][3])
 

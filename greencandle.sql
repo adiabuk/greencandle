@@ -1,8 +1,8 @@
--- MySQL dump 10.16  Distrib 10.1.31-MariaDB, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.21, for Linux (x86_64)
 --
 -- Host: localhost    Database: greencandle
 -- ------------------------------------------------------
--- Server version	10.1.31-MariaDB
+-- Server version	5.7.21-1ubuntu1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -74,7 +74,7 @@ CREATE TABLE `data` (
   `market` varchar(20) DEFAULT NULL,
   `balance` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=35494 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=25600 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -123,19 +123,18 @@ DROP TABLE IF EXISTS `hour_balance`;
 /*!50001 DROP VIEW IF EXISTS `hour_balance`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE TABLE `hour_balance` (
-  `exchange_id` tinyint NOT NULL,
-  `usd1` tinyint NOT NULL,
-  `coin` tinyint NOT NULL,
-  `ctime1` tinyint NOT NULL,
-  `ctime2` tinyint NOT NULL,
-  `usd2` tinyint NOT NULL,
-  `USD_diff` tinyint NOT NULL,
-  `GBP_diff` tinyint NOT NULL,
-  `COUNT_diff` tinyint NOT NULL,
-  `perc_change` tinyint NOT NULL,
-  `BTC_diff` tinyint NOT NULL
-) ENGINE=MyISAM */;
+/*!50001 CREATE VIEW `hour_balance` AS SELECT 
+ 1 AS `exchange_id`,
+ 1 AS `usd1`,
+ 1 AS `coin`,
+ 1 AS `ctime1`,
+ 1 AS `ctime2`,
+ 1 AS `usd2`,
+ 1 AS `USD_diff`,
+ 1 AS `GBP_diff`,
+ 1 AS `COUNT_diff`,
+ 1 AS `perc_change`,
+ 1 AS `BTC_diff`*/;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -172,7 +171,6 @@ CREATE TABLE `symbols` (
 -- Final view structure for view `hour_balance`
 --
 
-/*!50001 DROP TABLE IF EXISTS `hour_balance`*/;
 /*!50001 DROP VIEW IF EXISTS `hour_balance`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -196,4 +194,4 @@ CREATE TABLE `symbols` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-02-23 17:23:13
+-- Dump completed on 2018-02-26 23:06:47

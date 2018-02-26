@@ -6,6 +6,7 @@ from __future__ import print_function
 import json
 from lib.binance_accounts import get_binance_values
 from lib.coinbase_accounts import get_coinbase_values
+from lib.mysql import insert_balance
 
 def get_balance():
     """get dict of all balances """
@@ -15,6 +16,7 @@ def get_balance():
     combined_dict = binance.copy()   # start with x's keys and values
     combined_dict.update(coinbase)    # modifies z with y's keys and values & returns None
 
+    insert_balance(combined_dict)
     return combined_dict
 
 def main():
