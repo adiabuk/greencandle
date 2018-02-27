@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 # PYTHON_ARGCOMPLETE_OK
-#pylint: disable=no-member,consider-iterating-dictionary,global-statement,broad-except
+#pylint: disable=no-member,consider-iterating-dictionary,global-statement,broad-except,
+#pylint: disable=unused-variable,invalid-name
 
 """
-Get ohlc (Opunknownen, High, Low, Close) values from given cryptos
+Get ohlc (Open, High, Low, Close) values from given cryptos
 and detect trends using candlestick patterns
 """
 
@@ -16,17 +17,18 @@ import calendar
 import operator
 from concurrent.futures import ThreadPoolExecutor
 import pickle
-import balance
-import talib
 import argcomplete
 import pandas
+import talib
 import binance
+import balance
+
 from lib.binance_common import get_binance_klines
 from lib.graph import create_graph
 from lib.support_resistance import make_float, get_values
 from lib.morris import KnuthMorrisPratt
 from lib.order import get_buy_price, get_sell_price
-from lib.mysql import insert_data, insert_actions, insert_action_totals, get_changes, clean_stale, get_buy
+from lib.mysql import insert_data, insert_actions, insert_action_totals, clean_stale, get_buy
 from indicator import SuperTrend, RSI
 
 POOL = ThreadPoolExecutor(max_workers=200)
@@ -56,8 +58,15 @@ class Events(dict):
     @staticmethod
     def get_ohlc(pair, interval):
         """
-        get ohlc for single pair
-        Return both a full pandas dataframe and a tuple of float values
+        Extract and return ohlc (open, high, low close) data
+        for single pair from available data
+
+        Args:
+            pair: trading pair (eg. XRPBTC)
+            interval: Interval of each candlestick (eg. 1m, 3m, 15m, 1d etc)
+
+        Returns:
+            A truple containing full pandas dataframe and a tuple of float values
         """
         dataframe = get_binance_klines(pair, interval=interval)
         ohlc = (make_float(dataframe.open),
@@ -67,7 +76,18 @@ class Events(dict):
         return ohlc, dataframe
 
     def get_ohlcs(self, graph=False, interval=None):
-        """ Get details from binance API """
+        """
+        Get details from binance API
+
+        Args:
+            graph: boolean value, create graphs or not
+            interval: Interval used for candlesticks (eg. 1m, 3m, 15m, 1d etc)
+
+        Returns:
+            #TODO: fix order of return value, which is opposite of above function
+            A truple containing full pandas dataframes and a tuple of float values for all pairs
+        """
+
         ohlcs = {}
         dataframe = {}
         results = {}
@@ -75,14 +95,11 @@ class Events(dict):
             event = {}
             event["symbol"] = pair
             event['data'] = {}
-            #ohlcs.append(POOL.submit(self.get_ohlc, pair=pair, interval=interval))
             results[pair] = POOL.submit(self.get_ohlc, pair=pair, interval=interval)
-
-            #ohlcs[pair], dataframe[pair] = x.result()
 
             if graph:
                 create_graph(self.ataframe, pair)
-        #return [ohlc.result() for ohlc in ohlcs]
+
         for key, value in results.items():
             ohlcs[key] = value.result()[0]
             dataframe[key] = value.result()[1]
@@ -125,8 +142,15 @@ class Events(dict):
     def get_data(self):
         """
         Iterate through data and trading pairs to extract data
+        Run data through indicator, oscillators, moving average
         Return dict containing alert data and hold data
+
+        Args: None
+
+        Returns:
+            dict containing all collected data
         """
+
         print("Getting data")
         global POOL
         POOL = ThreadPoolExecutor(max_workers=400)
@@ -143,8 +167,18 @@ class Events(dict):
         POOL = ThreadPoolExecutor(max_workers=500)
         return self
 
-    def get_rsi(self, pair="PPTBTC", klines=None):
-        """ get RSI oscillator values for given pair"""
+    def get_rsi(self, pair=None, klines=None):
+        """
+        get RSI oscillator values for given pair
+        Append current RSI data to instance variable
+
+        Args:
+              pair: trading pair (eg. XRPBTC)
+              klines: pandas dataframe containing data for specified pair
+        Returns:
+            None
+
+        """
 
         dataframe = self.renamed_dataframe_columns(klines)
         scheme = {}
@@ -168,7 +202,16 @@ class Events(dict):
 
     @staticmethod
     def renamed_dataframe_columns(klines=None):
-        """Return dataframe with ordered/renamed coulumns"""
+        """
+        Return dataframe with ordered/renamed coulumns
+        Rename dataframe columns and reorder, only fetch columns that we care about
+        Args:
+              klines: pandas dataframe containing data for specified pair
+        Returns:
+              klines: pandas dataframe with modified column names and ordering
+        """
+
+
         dataframe = pandas.DataFrame(klines, columns=['openTime', 'open', 'high',
                                                       'low', 'close', 'volume'])
         columns = ["date", "Open", "High", "Low", "Close", "Volume"]  # rename columns
@@ -176,8 +219,20 @@ class Events(dict):
             dataframe.columns.values[index] = item
         return dataframe
 
-    def get_supertrend(self, pair="XRPETH", klines=None):
-        """ get the super trend values """
+    def get_supertrend(self, pair=None, klines=None):
+        """
+        Get the super trend oscillator values for a given pair
+        append current supertrend data to instance variable
+
+        Args:
+              pair: trading pair (eg. XRPBTC)
+              klines: pandas dataframe containing data for specified pair
+        Returns:
+            None
+
+        """
+
+
         scheme = {}
 
         dataframe = self.renamed_dataframe_columns(klines)
@@ -195,12 +250,30 @@ class Events(dict):
 
     @staticmethod
     def get_url(pair):
-        """return graph URL for given pair"""
+        """
+        Get tradingview graph URL for given pair
+
+        Args:
+            pair: trading pair (eg. XRPBTC)
+        Returns:
+            String URL for given pair
+
+        """
+
         return "https://uk.tradingview.com/symbols/{0}/".format(pair)
 
     @staticmethod
     def get_supertrend_direction(supertrend):
-        """Get new direction of supertrend from pattern"""
+        """
+        Get new direction of supertrend from pattern
+
+        Args:
+            supertrend: list of trend directions (up/down)
+        Returns:
+            String action based on patten (BUY/SELL/HOLD/UNKNOWN)
+
+        """
+
         if 7 in [s for s in KnuthMorrisPratt(supertrend, ["down", "up", "up"])]:
             action = "BUY"
         elif 8 in [s for s in KnuthMorrisPratt(supertrend, ["up", "down"])]:
@@ -213,23 +286,66 @@ class Events(dict):
 
     @staticmethod
     def get_operator_fn(op):
-         return {
-             '<' : operator.lt,
-             '>' : operator.gt,
-             }[op]
+        """
+        Get operator function from string
+        Args:
+            op: string operator "<" or ">"
+        Returns:
+            operator.lt or operator.gt function
+        """
+
+        return {
+            '<' : operator.lt,
+            '>' : operator.gt,
+            }[op]
 
     def eval_binary_expr(self, op1, oper, op2):
+        """
+        Evaluate a binary expression
+        eg 2 > 5, 0.12123 < 0.121
+        Args:
+            op1: value #1
+            oper: string operator "<" or ">"
+            op2: value #2
+        Returns:
+            Boolean result of binary expression (True/False)
+        """
+
         op1, op2 = float(op1), float(op2)
         return self.get_operator_fn(oper)(op1, op2)
 
     @staticmethod
     def get_action(trigger):
+        """
+        Transform action into an integer so that overall sentiment for a pair can be easily
+        calculated
+
+        Args:
+            trigger: BUY/SELL/HOLD
+
+        Returns:
+            integer representation of given trigger.  BUY=1, SELL=-1, HOLD=0
+
+        """
+
+
         return {"BUY": 1,
                 "SELL": -1,
                 "HOLD": 0}[trigger]
 
     def get_moving_averages(self, pair, klines):
-        """bla bla bla"""
+        """
+        Apply moving averages to klines and get BUY/SELL triggers
+        Add data to DB
+
+        Args:
+            pair: trading pair (eg. XRPBTC)
+            klines: tuple of ohlc float values
+
+        Returns:
+            None
+        """
+
         close = klines[-1]
         trends = (
             ("EMA", 10),
@@ -246,7 +362,7 @@ class Events(dict):
         for func, timeperiod in trends:
             try:
                 result = getattr(talib, func)(close, timeperiod)[-1]
-            except:
+            except Exception:
                 print("EXC")
             if result > close[-1]:
                 trigger = 'SELL'
@@ -254,25 +370,41 @@ class Events(dict):
                 trigger = 'BUY'
 
             try:
-                insert_actions(pair=pair, indicator=func+'-'+str(timeperiod), value=result, action=self.get_action(trigger))
-            except:
+                insert_actions(pair=pair, indicator=func+'-'+str(timeperiod),
+                               value=result, action=self.get_action(trigger))
+            except Exception:
                 traceback.print_exc()
                 print("DB FUBAR")
 
     def get_oscillators(self, pair, klines):
-        """bla bla bla"""
-        open, high, low, close = klines
-        trends = {#"STOCHF": {"BUY": "< 25", "SELL": ">75", "args":[20]},
-                "CCI": {"BUY": "< -100", "SELL": "> 100", "klines": ("high", "low", "close"),"args": [14]},
-                #"ADX": {"BUY": ???
-                "RSI": {"BUY": "< 30", "SELL": "> 70", "klines": tuple(("close",)), "args": [14]},
-                "MOM": {"BUY": "< 0", "SELL": "> 0", "klines": tuple(("close",)), "args": [10]},
-                "APO": {"BUY": "> 0", "SELL": "< 0", "klines": tuple(("close",)), "args": []},
-                "ULTOSC": {"BUY": "< 30", "SELL": "> 70", "klines": ("high", "low", "close"), "args":[7,14,28]},
-                "WILLR": {"BUY": "> 80", "SELL": "< 20", "klines": ("high", "low", "close"), "args": [14]},
-                "AROONOSC": {"BUY": "> 50", "SELL": "< -50", "klines": ("high", "low"), "args": []}
+        """
 
-                }
+        Apply osscilators to klines and get BUY/SELL triggers
+        Add data to DB
+
+        Args:
+            pair: trading pair (eg. XRPBTC)
+            klines: tuple of ohlc float values
+
+        Returns:
+            None
+        """
+
+        open, high, low, close = klines
+        trends = {
+            #"STOCHF": {"BUY": "< 25", "SELL": ">75", "args":[20]},
+            "CCI": {"BUY": "< -100", "SELL": "> 100",
+                    "klines": ("high", "low", "close"), "args": [14]},
+            #"ADX": {"BUY": ???
+            "RSI": {"BUY": "< 30", "SELL": "> 70", "klines": tuple(("close",)), "args": [14]},
+            "MOM": {"BUY": "< 0", "SELL": "> 0", "klines": tuple(("close",)), "args": [10]},
+            "APO": {"BUY": "> 0", "SELL": "< 0", "klines": tuple(("close",)), "args": []},
+            "ULTOSC": {"BUY": "< 30", "SELL": "> 70",
+                       "klines": ("high", "low", "close"), "args":[7, 14, 28]},
+            "WILLR": {"BUY": "> 80", "SELL": "< 20",
+                      "klines": ("high", "low", "close"), "args": [14]},
+            "AROONOSC": {"BUY": "> 50", "SELL": "< -50", "klines": ("high", "low"), "args": []}
+            }
 
         for check, attrs in trends.items():
             try:
@@ -291,13 +423,26 @@ class Events(dict):
                         trigger = item
                         break
 
-            except Exception as e:
+            except Exception as error:
                 traceback.print_exc()
-                print("failed here", e)
+                print("failed here", error)
             insert_actions(pair=pair, indicator=check, value=j, action=self.get_action(trigger))
 
     def get_indicators(self, pair, klines):
-        """ Cross Reference data against trend indicators """
+        """
+
+        Cross Reference data against trend indicators
+        Apply osscilators to klines and get BUY/SELL triggers
+
+        Args:
+            pair: trading pair (eg. XRPBTC)
+            klines: tuple of ohlc float values
+
+        Returns:
+            None
+        """
+        #TODO: Add data to DB
+
         trends = {"HAMMER": {100: "bullish", 0:"HOLD"},
                   "INVERTEDHAMMER": {100: "bearish", 0:"HOLD"},
                   "ENGULFING": {-100:"bearish", 100:"bullish", 0:"HOLD"},
@@ -313,7 +458,7 @@ class Events(dict):
         for check in trends.keys():
             scheme = {}
             try:
-                result =  trends[check][results[check][-1]]
+                result = trends[check][results[check][-1]]
                 if "data" not in scheme:
                     scheme['data'] = {}
                 scheme["data"] = results   # convert from array to list
@@ -341,7 +486,7 @@ class Events(dict):
                   "market": binance.prices()[pair]}
         scheme.update(prices)
 
-        balance = self.balance['binance']['TOTALS']['GBP']
+        bal = self.balance['binance']['TOTALS']['GBP']
         try:
             # Add scheme to DB
             insert_data(interval=self.interval, symbol=scheme['symbol'], event=scheme['event'],
@@ -349,7 +494,7 @@ class Events(dict):
                         difference=str(scheme['difference']), resistance=str(scheme['resistance']),
                         support=str(scheme['support']), buy=str(scheme['buy']),
                         sell=str(scheme['sell']), market=str(scheme['market']),
-                        balance=str(balance))
+                        bal=str(balance))
         except Exception as excp:
 
             print(excp)
