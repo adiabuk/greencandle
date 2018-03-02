@@ -1,4 +1,4 @@
-#pylint: disable=wrong-import-position,import-error,undefined-variable,unused-argument
+#pylint: disable=wrong-import-position,import-error,undefined-variable,unused-argument,invalid-name
 
 """
 Push/Pull crypto signals and data to mysql
@@ -6,9 +6,10 @@ Push/Pull crypto signals and data to mysql
 
 import os
 import sys
+import operator
 import MySQLdb
-import binance
 import MySQLdb.cursors
+import binance
 
 BASE_DIR = os.getcwd().split('greencandle', 1)[0] + 'greencandle'
 sys.path.append(BASE_DIR)
@@ -21,29 +22,72 @@ PASSWORD = get_config('database')['password']
 DB = get_config('database')['db']
 
 def get_buy():
+    """
+    Get list of pairs which have just changed from SELL, to BUY and order by strength, return
+    ordered tuple.  We look at pairs which have just switched from SELL to BUY to catch it at the
+    beginning of an upward trend.  If the state is already BUY then we have likely missed the train,
+    so we pass.
+    Args:
+          None
+    Returns:
+          sorted tuple each containing pair, score, current price
+    """
     potential_buys = get_changes()
+    sorted_buys = sorted(potential_buys.items(), key=operator.itemgetter(1))[::-1]
+    print(sorted_buys)
 
-    for x in potential_buys.keys():
+    for x in sorted_buys:
         # get count: cursor.execute("SELECT COUNT(*) FROM trades")
         # if count < max: buy, else return
         # order by buy strength - from action_totals
-        print(" About to buy {0} at {1}".format(x, potential_buys[x][-1]))
-
+        print(" About to buy {0} at {1}".format(x, x[-1][-1]))
+        print()
+        return sorted_buys
 
 def get_sell():
-    #
-    pass
+    """
+    From list of current pair holdings list all which are currently in SELL regardless of score.  We
+    are not just looking for pairs that have just switched, incase we miss the trigger
+    ordered tuple
+    Args:
+          None
+    Returns:
+          None
+    """
 
-def trade():
     pass
+    # current_holdings = select pair from trades;
+    #for pair in current_holdings:
+        #status = select total from action_totals where pair=pair and total < 0
+        #if not status:
+            #selling....
 
 def get_changes():
+    """
+    Get changes of status from BUY to SELL by running a query that compares current value to
+    previous value
+    Args:
+          None
+    Returns:
+          dict of values.  Keys: pair, ctime, total, gt
+          where gt indicates the strength of the BUY signal
+    """
+
     command = """
-    select s1.pair AS pair, s1.ctime AS ctime, ((s1.total <= 0) and (s2.total >= 0)) AS gt from (action_totals s1 left join action_totals s2 on  ((s1.pair = s2.pair))) where   ((s1.total <> s2.total) and  ((s1.total < 0) and (s2.total >0)))  limit 20;
+    select s1.pair AS pair, s1.ctime AS ctime, s2.total, ((s1.total <= 0) and (s2.total >= 0)) AS gt from
+    (action_totals s1 left join action_totals s2 on  ((s1.pair = s2.pair))) where   ((s1.total <> s2.total) and  ((s1.total < 0) and (s2.total >0)));
     """
     return fetch_sql_data(command)
 
 def fetch_sql_data(query):
+    """"
+    Fetch SQL data for totals and return dict
+    Args:
+          String SQL select query
+    Returns:
+          dict of tuples.  where key is pair name containing a tuple of total and current price)
+    """
+
     di = {}
     db = MySQLdb.connect(host=HOST,
                          user=USER,
@@ -56,19 +100,26 @@ def fetch_sql_data(query):
             cursor.execute(query)
             data = cursor.fetchall()
             for record in data:
-                di[record['pair']] = record['ctime'], prices[record['pair']]
+                di[record['pair']] = record['total'], prices[record['pair']]
 
     finally:
         db.close()
     return di
 
 def run_sql_query(query):
+    """
+    Run a given mysql query (INSERT)
+    Args:
+          string query
+    Returns:
+          True/False success
+    """
+
+
     db = MySQLdb.connect(host=HOST,
                          user=USER,
                          passwd=PASSWORD,
                          db=DB)
-
-
 
     cur = db.cursor()
     try:
@@ -79,6 +130,16 @@ def run_sql_query(query):
     db.commit()
 
 def clean_stale():
+    """
+    Delete stale records from actions and action_totals db tables - any records older than 15
+    minutes
+    Args:
+          None
+    Returns:
+          None
+    """
+
+
     command1 = "delete from action_totals where ctime < NOW() - INTERVAL 15 MINUTE;"
     command2 = "delete from actions where ctime < NOW() - INTERVAL 15 MINUTE;"
     run_sql_query(command1)
@@ -86,42 +147,47 @@ def clean_stale():
 
 def insert_data(**kwargs):
     """
-    id, symbol, time, event, direction, data
+    Insert Data into DB
+    Args:
+          symbol
+          event
+          direction
+          data
+          difference
+          resistance
+          support
+          buy
+          sell
+          market
+          balance
+    Returns:
+          None
     """
-    globals().update(kwargs)
-    db_instance = MySQLdb.connect(host=HOST,
-                                  user=USER,
-                                  passwd=PASSWORD,
-                                  db=DB)
 
-    cur = db_instance.cursor()
+    globals().update(kwargs)
     command = """INSERT INTO data (symbol, event, direction, data, difference, resistance, support,
     buy, sell, market, balance)
     VALUES ("{0}","{1}","{2}","{3}","{4}","{5}","{6}","{7}","{8}","{9}","{10}");""".format(
         symbol, event, direction, data, difference, resistance, support, buy, sell, market, balance)
-    try:
-        cur.execute(command)
-    except NameError:
-        print("One or more expected variables not passed to insert into DB")
-
-    db_instance.commit()
-
+    run_sql_query(command)
 
 def insert_balance(d):
+    """
+    Insert balance in GBP/BTC/USD into balance table for coinbase & binance
+    Args:
+          dict of balances
+    Returns:
+          None
+    """
 
-    db_instance = MySQLdb.connect(host=HOST,
-                                  user=USER,
-                                  passwd=PASSWORD,
-                                  db=DB)
 
-    cur = db_instance.cursor()
     for exchange, values in d.items():
         for coin, data in values.items():
             try:
                 command = """insert into balance (gbp, btc, usd, count, coin, exchange_id) values
                 ("{0}", "{1}", "{2}", "{3}", "{4}", (select id from exchange where
                 name="{5}"))""".format(data['GBP'], data['BTC'], data['USD'], data['count'], coin,
-                exchange)
+                                       exchange)
             except KeyError:
                 print("XXX", coin, exchange, "KEYERROR")
                 continue
@@ -130,26 +196,36 @@ def insert_balance(d):
                 raise
 
             try:
-                cur.execute(command)
+                run_sql_query(command)
             except NameError:
                 print("One or more expected variables not passed to insert into DB")
 
-    db_instance.commit()
-
-
-
-def insert_alert(**kwargs):
-    """
-    date, symbol, event, direction, direction, hold, data_id
-    """
-    pass
-
 def insert_action_totals():
+    """
+    Get recent coin actions from actions table, sum totals and insert into action_totals table
+    Args:
+          None
+    Returns:
+          None
+    """
+
+
     command = """ INSERT INTO action_totals (pair, total) select pair, SUM(action) as total from
     recent_actions group by pair order by total;"""
     run_sql_query(command)
 
 def insert_actions(**kwargs):
+    """
+    Insert actions into actions table
+    Args:
+          pair (string pairname)
+          indicator (eg. RSI, Supertrend)
+          value: value of indicator/oscilator
+          action: 0/1/-1 for HOLD, BUY,SELL (used to sum totals later)
+    Returns:
+          None
+    """
+
     globals().update(kwargs)
 
     command = """INSERT INTO actions (pair, indicator, value, action)

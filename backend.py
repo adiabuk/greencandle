@@ -494,10 +494,10 @@ class Events(dict):
                         difference=str(scheme['difference']), resistance=str(scheme['resistance']),
                         support=str(scheme['support']), buy=str(scheme['buy']),
                         sell=str(scheme['sell']), market=str(scheme['market']),
-                        bal=str(balance))
+                        balance=str(bal))
         except Exception as excp:
 
-            print(excp)
+            print("Error:", excp)
 
         if scheme["direction"] == "HOLD":
             self["hold"][id(scheme)] = scheme
