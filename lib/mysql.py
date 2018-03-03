@@ -145,7 +145,9 @@ def clean_stale():
     logger.debug("Cleaning stale data")
     command1 = "delete from action_totals where ctime < NOW() - INTERVAL 15 MINUTE;"
     command2 = "delete from actions where ctime < NOW() - INTERVAL 15 MINUTE;"
-    run_sql_query(command1+command2)
+    run_sql_query(command1)
+    run_sql_query(command2)
+
 
 def insert_data(**kwargs):
     """
