@@ -8,6 +8,7 @@ from collections import defaultdict
 from forex_python.converter import CurrencyRates
 from lib.balance_common import default_to_regular
 from lib.auth import coinbase_auth
+from lib.timeout import restrict_timeout
 
 CLIENT = coinbase_auth()
 
@@ -17,7 +18,9 @@ def get_coinbase_values():
     mydict = lambda: defaultdict(mydict)
     result = mydict()
     currency = CurrencyRates()
-    all_accounts = CLIENT.get_accounts(timeout=2)  # 2-second timeout
+    with restrict_timeout(5, name="coinbase accounts"):  # allow to run for only 5 seconds
+        all_accounts = CLIENT.get_accounts()
+
     json_accounts = json.loads(str(all_accounts))
     gbp_totals = 0
     usd_totals = 0
