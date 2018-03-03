@@ -29,9 +29,11 @@ from lib.support_resistance import make_float, get_values
 from lib.morris import KnuthMorrisPratt
 from lib.order import get_buy_price, get_sell_price
 from lib.mysql import insert_data, insert_actions, insert_action_totals, clean_stale, get_buy
+from lib.logger import getLogger
 from indicator import SuperTrend, RSI
 
 POOL = ThreadPoolExecutor(max_workers=50)
+logger = getLogger(__name__)
 
 class Events(dict):
     """ Represent events created from data & indicators """
@@ -42,7 +44,7 @@ class Events(dict):
         Create hold and event dicts
         Fetch initial data from binance and store within object
         """
-        print("Fetching raw data")
+        logger.debug("Fetching raw data")
         self.interval = interval
         self.pairs = pairs
         self.dataframe = None
@@ -50,11 +52,12 @@ class Events(dict):
         self["hold"] = {}
         self["event"] = {}
         self.supres = {}
-        self.data, self.dataframes = self.get_ohlcs(interval="15m")
+        self.data, self.dataframes = self.get_ohlcs(interval=interval)
         #pickle.dump(self.data, open("data.p", "wb"))
         #pickle.dump(self.dataframes, open("dataframes.p", "wb"))
 
         super(Events, self).__init__()
+        logger.debug("Finished fetching raw data")
 
     @staticmethod
     def get_ohlc(pair, interval):
@@ -115,7 +118,7 @@ class Events(dict):
         red = "\033[31m"
         white = "\033[0m"
         if not self.values:
-            print("ERROR")
+            logger.critical("ERROR")
         for value in self.values():
             if not "direction" in value or "HOLD" in value["direction"]:
                 #no_change.append(value["symbol"])
@@ -152,7 +155,7 @@ class Events(dict):
             dict containing all collected data
         """
 
-        print("Getting data")
+        logger.debug("Getting data")
         global POOL
         POOL = ThreadPoolExecutor(max_workers=400)
         for pair in self.pairs:
@@ -382,7 +385,7 @@ class Events(dict):
             try:
                 result = getattr(talib, func)(close, timeperiod)[-1]
             except Exception:
-                print("EXC")
+                logger.critical("EXC")
             if result > close[-1]:
                 trigger = 'SELL'
             else:
@@ -393,7 +396,7 @@ class Events(dict):
                                value=result, action=self.get_action(trigger))
             except Exception:
                 traceback.print_exc()
-                print("DB FUBAR")
+                logger.critical("DB FUBAR")
 
     def get_oscillators(self, pair, klines):
         """
@@ -444,7 +447,7 @@ class Events(dict):
 
             except Exception as error:
                 traceback.print_exc()
-                print("failed here", error)
+                logger.critical("failed here:" + str(error))
             insert_actions(pair=pair, indicator=check, value=j, action=self.get_action(trigger))
 
     def get_indicators(self, pair, klines):
@@ -488,7 +491,7 @@ class Events(dict):
                 scheme["event"] = check
                 scheme["difference"] = "None"
             except KeyError:
-                print("KEYERROR")
+                logger.critical("KEYERROR")
                 continue
         self.add_scheme(scheme)
 
@@ -512,7 +515,7 @@ class Events(dict):
                         balance=str(bal))
         except Exception as excp:
 
-            print("Error:", excp)
+            logger.critical("Error: " + str(excp))
 
         if scheme["direction"] == "HOLD":
             self["hold"][id(scheme)] = scheme
@@ -543,10 +546,10 @@ def main():
         try:
             loop(args)
         except KeyboardInterrupt:
-            print("\nExiting on user command...")
+            logger.info("\nExiting on user command...")
             sys.exit(1)
         remaining_time = (minutes * 60.0) - ((time.time() - starttime) % 60.0)
-        print("Sleeping for", remaining_time, "seconds")
+        logger.debug("Sleeping for " + str(int(remaining_time)) + "seconds")
         time.sleep(remaining_time)
 
 def loop(args):
@@ -564,13 +567,11 @@ def loop(args):
 
 
     events = Events(pairs, interval='15m')
+    logger.debug("Starting new cycle")
     data = events.get_data()
-    print("Inserting Totals")
     insert_action_totals()
-    print("Cleaning stale data")
     clean_stale()
-    print("Finding symbols to buy")
-    print(get_buy())
+    logger.info(get_buy())
 
     try:
         if args.json:
@@ -578,11 +579,11 @@ def loop(args):
         else:
             events.print_text()
     except Exception:
-        print("Overall exception")
+        logger.critical("Overall exception")
 
     agg_data.update(data)
     return agg_data
 
 if __name__ == '__main__':
     main()
-    print("COMPLETE")
+    logger.debug("COMPLETE")

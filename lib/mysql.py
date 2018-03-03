@@ -1,4 +1,5 @@
-#pylint: disable=wrong-import-position,import-error,undefined-variable,unused-argument,invalid-name
+#pylint: disable=wrong-import-position,import-error,undefined-variable,unused-argument
+#pylint: disable=invalid-name,logging-format-interpolation
 
 """
 Push/Pull crypto signals and data to mysql
@@ -15,11 +16,13 @@ BASE_DIR = os.getcwd().split('greencandle', 1)[0] + 'greencandle'
 sys.path.append(BASE_DIR)
 
 from lib.config import get_config
+from lib.logger import getLogger
 
 HOST = get_config('database')['host']
 USER = get_config('database')['user']
 PASSWORD = get_config('database')['password']
 DB = get_config('database')['db']
+logger = getLogger(__name__)
 
 def get_buy():
     """
@@ -32,6 +35,7 @@ def get_buy():
     Returns:
           sorted tuple each containing pair, score, current price
     """
+    logger.debug("Finding symbols to buy")
     potential_buys = get_changes()
     sorted_buys = sorted(potential_buys.items(), key=operator.itemgetter(1))[::-1]
 
@@ -39,8 +43,7 @@ def get_buy():
         # get count: cursor.execute("SELECT COUNT(*) FROM trades")
         # if count < max: buy, else return
         # order by buy strength - from action_totals
-        print("About to buy {0} at {1}".format(x[0], x[-1][-1]))
-        print()
+        logger.info("About to buy {0} at {1}".format(x[0], x[-1][-1]))
     return sorted_buys
 
 def get_sell():
@@ -124,7 +127,7 @@ def run_sql_query(query):
     try:
         cur.execute(query)
     except NameError:
-        print("One or more expected variables not passed to DB")
+        logger.critical("One or more expected variables not passed to DB")
 
     db.commit()
     db.close()
@@ -139,11 +142,10 @@ def clean_stale():
           None
     """
 
-
+    logger.debug("Cleaning stale data")
     command1 = "delete from action_totals where ctime < NOW() - INTERVAL 15 MINUTE;"
     command2 = "delete from actions where ctime < NOW() - INTERVAL 15 MINUTE;"
-    run_sql_query(command1)
-    run_sql_query(command2)
+    run_sql_query(command1+command2)
 
 def insert_data(**kwargs):
     """
@@ -189,16 +191,16 @@ def insert_balance(d):
                 name="{5}"))""".format(data['GBP'], data['BTC'], data['USD'], data['count'], coin,
                                        exchange)
             except KeyError:
-                print("XXX", coin, exchange, "KEYERROR")
+                logger.critical(" ".join(["XXX", coin, exchange, "KEYERROR"]))
                 continue
             except IndexError:
-                print(exchange)
+                logger.info(exchange)
                 raise
 
             try:
                 run_sql_query(command)
             except NameError:
-                print("One or more expected variables not passed to insert into DB")
+                logger.info("One or more expected variables not passed to insert into DB")
 
 def insert_action_totals():
     """
@@ -209,7 +211,7 @@ def insert_action_totals():
           None
     """
 
-
+    logger.debug("Inserting Totals")
     command = """ INSERT INTO action_totals (pair, total) select pair, SUM(action) as total from
     recent_actions group by pair order by total;"""
     run_sql_query(command)

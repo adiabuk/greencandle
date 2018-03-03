@@ -17,7 +17,7 @@ def get_coinbase_values():
     mydict = lambda: defaultdict(mydict)
     result = mydict()
     currency = CurrencyRates()
-    all_accounts = CLIENT.get_accounts()
+    all_accounts = CLIENT.get_accounts(timeout=2)  # 2-second timeout
     json_accounts = json.loads(str(all_accounts))
     gbp_totals = 0
     usd_totals = 0
