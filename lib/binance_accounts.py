@@ -30,8 +30,12 @@ def get_binance_values():
             result["binance"][key]["count"] = current_value
 
             if key != 'BTC':  # currencies that need converting to BTC
-                bcoin = float(current_value) * float(prices[key+'BTC'])  # value in BTC
-                bitcoin_totals += float(current_value) * float(prices[key+'BTC'])
+                try:
+                    bcoin = float(current_value) * float(prices[key+'BTC'])  # value in BTC
+                    bitcoin_totals += float(current_value) * float(prices[key+'BTC'])
+                except KeyError as key_error:
+                    print("Error: Unable to quantify currency:", key)
+                    continue
             else:   #btc
                 bcoin = float(current_value)
                 bitcoin_totals += float(bcoin)

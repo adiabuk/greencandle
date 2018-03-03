@@ -12,11 +12,11 @@ from __future__ import print_function
 import json
 import argparse
 import time
+import sys
 import traceback
 import calendar
 import operator
 from concurrent.futures import ThreadPoolExecutor
-import pickle
 import argcomplete
 import pandas
 import talib
@@ -31,7 +31,7 @@ from lib.order import get_buy_price, get_sell_price
 from lib.mysql import insert_data, insert_actions, insert_action_totals, clean_stale, get_buy
 from indicator import SuperTrend, RSI
 
-POOL = ThreadPoolExecutor(max_workers=200)
+POOL = ThreadPoolExecutor(max_workers=50)
 
 class Events(dict):
     """ Represent events created from data & indicators """
@@ -49,9 +49,10 @@ class Events(dict):
         self.balance = balance.get_balance()
         self["hold"] = {}
         self["event"] = {}
+        self.supres = {}
         self.data, self.dataframes = self.get_ohlcs(interval="15m")
-        pickle.dump(self.data, open("data.p", "wb"))
-        pickle.dump(self.dataframes, open("dataframes.p", "wb"))
+        #pickle.dump(self.data, open("data.p", "wb"))
+        #pickle.dump(self.dataframes, open("dataframes.p", "wb"))
 
         super(Events, self).__init__()
 
@@ -155,17 +156,35 @@ class Events(dict):
         global POOL
         POOL = ThreadPoolExecutor(max_workers=400)
         for pair in self.pairs:
-        #for pair, klines in self.data.items():
-            # get indicators supertrend, and API for each trading pair
 
+            # get indicators supertrend, and API for each trading pair
+            POOL.submit(self.get_sup_res, pair, self.dataframes[pair])
             POOL.submit(self.get_indicators, pair, self.data[pair])
             POOL.submit(self.get_oscillators, pair, self.data[pair])
             POOL.submit(self.get_moving_averages, pair, self.data[pair])
             POOL.submit(self.get_supertrend, pair, self.dataframes[pair])
             POOL.submit(self.get_rsi, pair, self.dataframes[pair])
+
         POOL.shutdown(wait=True)
-        POOL = ThreadPoolExecutor(max_workers=500)
+        POOL = ThreadPoolExecutor(max_workers=50)
         return self
+
+
+    def get_sup_res(self, pair, klines):
+        """
+        get support & resistance values for current pair
+        Append data to supres instance variable (dict)
+
+        Args:
+              pair: trading pair (eg. XRPBTC)
+              klines: pandas dataframe containing data for specified pair
+        Returns:
+            None
+        """
+
+        values = get_values(pair, klines)
+        self.supres[pair] = values
+
 
     def get_rsi(self, pair=None, klines=None):
         """
@@ -467,6 +486,7 @@ class Events(dict):
                 scheme["symbol"] = pair
                 scheme["direction"] = result
                 scheme["event"] = check
+                scheme["difference"] = "None"
             except KeyError:
                 print("KEYERROR")
                 continue
@@ -475,12 +495,7 @@ class Events(dict):
     def add_scheme(self, scheme):
         """ add scheme to correct structure """
         pair = scheme['symbol']
-
-        # add support/resistannce data to scheme
-
-        values = get_values(pair, self.dataframes[pair])
-        scheme.update(values)
-
+        scheme.update(self.supres[pair])
         #  Add prices for current symbol to scheme
         prices = {"buy": get_buy_price(pair), "sell": get_sell_price(pair),
                   "market": binance.prices()[pair]}
@@ -520,20 +535,41 @@ def main():
     parser.add_argument('-p', '--pair')
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
+
+    starttime = time.time()
+    minutes = 5
+
+    while True:
+        try:
+            loop(args)
+        except KeyboardInterrupt:
+            print("\nExiting on user command...")
+            sys.exit(1)
+        remaining_time = (minutes * 60.0) - ((time.time() - starttime) % 60.0)
+        print("Sleeping for", remaining_time, "seconds")
+        time.sleep(remaining_time)
+
+def loop(args):
+    """
+    Loop through collection cycle
+    """
+
     agg_data = {}
 
     if args.pair:
         pairs = [args.pair]
     else:
-        pairs = [price for price in binance.prices().keys() if price != '123456']
+        pairs = [price for price in binance.prices().keys() if price != '123456' and
+                 price.endswith("BTC")]
 
 
-    events = Events(pairs, interval='1m')
+    events = Events(pairs, interval='15m')
     data = events.get_data()
     print("Inserting Totals")
     insert_action_totals()
     print("Cleaning stale data")
     clean_stale()
+    print("Finding symbols to buy")
     print(get_buy())
 
     try:

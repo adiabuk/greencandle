@@ -34,15 +34,14 @@ def get_buy():
     """
     potential_buys = get_changes()
     sorted_buys = sorted(potential_buys.items(), key=operator.itemgetter(1))[::-1]
-    print(sorted_buys)
 
     for x in sorted_buys:
         # get count: cursor.execute("SELECT COUNT(*) FROM trades")
         # if count < max: buy, else return
         # order by buy strength - from action_totals
-        print(" About to buy {0} at {1}".format(x, x[-1][-1]))
+        print("About to buy {0} at {1}".format(x[0], x[-1][-1]))
         print()
-        return sorted_buys
+    return sorted_buys
 
 def get_sell():
     """
@@ -128,6 +127,7 @@ def run_sql_query(query):
         print("One or more expected variables not passed to DB")
 
     db.commit()
+    db.close()
 
 def clean_stale():
     """

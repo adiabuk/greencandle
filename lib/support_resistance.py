@@ -20,7 +20,7 @@ from lib.binance_common import get_binance_klines
 def pip_calc(open_val, close_val):
     open_val = Decimal(open_val)
     close_val = Decimal(close_val)
-    if not ('.') in str(open_val):
+    if '.' not in str(open_val):
         multiplier = Decimal(0.0001)
     elif str(open_val).index('.') >= 3:  # JPY pair
         multiplier = Decimal(0.01)
