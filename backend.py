@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # PYTHON_ARGCOMPLETE_OK
 #pylint: disable=no-member,consider-iterating-dictionary,global-statement,broad-except,
-#pylint: disable=unused-variable,invalid-name
+#pylint: disable=unused-variable,invalid-name,logging-not-lazy
 
 """
 Get ohlc (Open, High, Low, Close) values from given cryptos
@@ -28,9 +28,11 @@ from lib.graph import create_graph
 from lib.support_resistance import make_float, get_values
 from lib.morris import KnuthMorrisPratt
 from lib.order import get_buy_price, get_sell_price
-from lib.mysql import insert_data, insert_actions, insert_action_totals, clean_stale, get_buy
+from lib.mysql import (insert_data, insert_actions, insert_action_totals,
+                       clean_stale, get_buy, insert_trade, get_trades)
 from lib.logger import getLogger
 from indicator import SuperTrend, RSI
+from profit import RATE
 
 POOL = ThreadPoolExecutor(max_workers=50)
 logger = getLogger(__name__)
@@ -38,7 +40,7 @@ logger = getLogger(__name__)
 class Events(dict):
     """ Represent events created from data & indicators """
 
-    def __init__(self, pairs, interval=None):
+    def __init__(self, prices, interval=None):
         """
         Initialize class
         Create hold and event dicts
@@ -46,7 +48,7 @@ class Events(dict):
         """
         logger.debug("Fetching raw data")
         self.interval = interval
-        self.pairs = pairs
+        self.pairs = prices.keys()
         self.dataframe = None
         self.balance = balance.get_balance()
         self["hold"] = {}
@@ -540,7 +542,7 @@ def main():
     args = parser.parse_args()
 
     starttime = time.time()
-    minutes = 5
+    minutes = 7
 
     while True:
         try:
@@ -549,7 +551,7 @@ def main():
             logger.info("\nExiting on user command...")
             sys.exit(1)
         remaining_time = (minutes * 60.0) - ((time.time() - starttime) % 60.0)
-        logger.debug("Sleeping for " + str(int(remaining_time)) + "seconds")
+        logger.debug("Sleeping for " + str(int(remaining_time)) + " seconds")
         time.sleep(remaining_time)
 
 def loop(args):
@@ -558,20 +560,48 @@ def loop(args):
     """
 
     agg_data = {}
-
+    price_per_trade = 30    #£30 /per trade
+    max_trades = 5
+    logger.debug("Starting new cycle")
     if args.pair:
         pairs = [args.pair]
     else:
         pairs = [price for price in binance.prices().keys() if price != '123456' and
                  price.endswith("BTC")]
-
-
-    events = Events(pairs, interval='15m')
-    logger.debug("Starting new cycle")
+    prices = binance.prices()
+    prices_trunk = {}
+    for k, v in prices.items():
+        if k.endswith("BTC"):
+            prices_trunk[k] = v
+    events = Events(prices_trunk, interval='15m')
     data = events.get_data()
     insert_action_totals()
     clean_stale()
-    logger.info(get_buy())
+    to_buy = get_buy()
+    if to_buy:
+        logger.debug("first item to buy" + to_buy[0][0])
+        logger.debug("xxx")
+        logger.debug("last item to buy" + to_buy[-1][0])
+        current_btc_bal = events.balance['binance']['BTC']['count']
+        amount_to_buy_btc = price_per_trade * RATE
+
+        for item in to_buy:
+
+            current_trades = get_trades()
+            if amount_to_buy_btc > current_btc_bal:
+                logger.warning("Unable to purchase, insufficient funds")
+                break
+            elif len(current_trades) > max_trades:
+                logger.warning("Too many trades, skipping")
+                break
+            elif item[0] in current_trades:
+                logger.warning("We already have a trade of {0}, skipping...".format(item[0]))
+                continue
+            else:
+                insert_trade(item[0], prices_trunk[item[0]], price_per_trade, amount_to_buy_btc)
+                #TODO: buy item
+    else:
+        logger.info("Nothing to buy")
 
     try:
         if args.json:

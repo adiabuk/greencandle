@@ -56,6 +56,7 @@ def get_values(pair, dataframe):
     data['value'] = value
     data['support'] = support
     data['resistance'] = resistance
+
     try:
         data['difference'] = pipify(resistance[-1]) - pipify(support[-1])
     except TypeError as type_error:
@@ -83,7 +84,7 @@ def main():
     pairs = binance.prices().keys()
 
     for pair in pairs:
-        dataframe = get_binance_klines(pair, interval="5m")
+        dataframe = get_binance_klines(pair, interval="15m")
 
         values = get_values(pair, dataframe)
         if values is not None:

@@ -43,7 +43,7 @@ def get_buy():
         # get count: cursor.execute("SELECT COUNT(*) FROM trades")
         # if count < max: buy, else return
         # order by buy strength - from action_totals
-        logger.info("About to buy {0} at {1}".format(x[0], x[-1][-1]))
+        logger.info("About to buy {0} at {1}, score:{2}".format(x[0], x[-1][-1], x[-1][0]))
     return sorted_buys
 
 def get_sell():
@@ -147,6 +147,37 @@ def clean_stale():
     command2 = "delete from actions where ctime < NOW() - INTERVAL 15 MINUTE;"
     run_sql_query(command1)
     run_sql_query(command2)
+
+def insert_trade(pair, price, investment, total):
+    """
+    Insert new trade into DB
+    Args:
+          pair: traiding pair
+          price: current price of pair
+          investment: amount invested in gbp
+          total:
+    Returns:
+          None
+    """
+
+    logger.info("Updating trades table")
+    command = """insert into trades (pair, buy_price, investment, total) VALUES ("{0}", "{1}", "{2}",
+    "{3}");""".format(pair, price, investment, total)
+    run_sql_query(command)
+
+def get_trades():
+    command = """ select pair from trades where sell_price is NULL """
+    db = MySQLdb.connect(host=HOST,
+                         user=USER,
+                         passwd=PASSWORD,
+                         db=DB)
+
+    cur = db.cursor()
+    cur.execute(command)
+
+    row = [item[0] for item in cur.fetchall()]
+    db.close()
+    return row
 
 
 def insert_data(**kwargs):
