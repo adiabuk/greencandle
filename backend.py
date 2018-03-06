@@ -28,8 +28,8 @@ from lib.graph import create_graph
 from lib.support_resistance import make_float, get_values
 from lib.morris import KnuthMorrisPratt
 from lib.order import get_buy_price, get_sell_price
-from lib.mysql import (insert_data, insert_actions, insert_action_totals,
-                       clean_stale, get_buy, insert_trade, get_trades)
+from lib.mysql import (insert_data, insert_actions, insert_action_totals, update_trades,
+                       clean_stale, get_buy, get_sell, insert_trade, get_trades)
 from lib.logger import getLogger
 from indicator import SuperTrend, RSI
 from profit import RATE
@@ -542,7 +542,7 @@ def main():
     args = parser.parse_args()
 
     starttime = time.time()
-    minutes = 7
+    minutes = 8
 
     while True:
         try:
@@ -560,8 +560,8 @@ def loop(args):
     """
 
     agg_data = {}
-    price_per_trade = 30    #£30 /per trade
-    max_trades = 5
+    price_per_trade = 20    #£20 /per trade
+    max_trades = 10
     logger.debug("Starting new cycle")
     if args.pair:
         pairs = [args.pair]
@@ -579,9 +579,6 @@ def loop(args):
     clean_stale()
     to_buy = get_buy()
     if to_buy:
-        logger.debug("first item to buy" + to_buy[0][0])
-        logger.debug("xxx")
-        logger.debug("last item to buy" + to_buy[-1][0])
         current_btc_bal = events.balance['binance']['BTC']['count']
         amount_to_buy_btc = price_per_trade * RATE
 
@@ -591,7 +588,7 @@ def loop(args):
             if amount_to_buy_btc > current_btc_bal:
                 logger.warning("Unable to purchase, insufficient funds")
                 break
-            elif len(current_trades) > max_trades:
+            elif len(current_trades) >= max_trades:
                 logger.warning("Too many trades, skipping")
                 break
             elif item[0] in current_trades:
@@ -599,10 +596,15 @@ def loop(args):
                 continue
             else:
                 insert_trade(item[0], prices_trunk[item[0]], price_per_trade, amount_to_buy_btc)
+                #binance.order(symbol=?, side=?, quantity, orderType='MARKET, price=?, test=True
                 #TODO: buy item
     else:
         logger.info("Nothing to buy")
-
+    to_sell = get_sell()
+    if to_sell:
+        logger.info("We need to sell {0}".format(to_sell))
+        for item in to_sell:
+            update_trades(item, prices_trunk[item])
     try:
         if args.json:
             print(json.dumps(events, indent=4))

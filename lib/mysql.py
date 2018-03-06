@@ -39,11 +39,11 @@ def get_buy():
     potential_buys = get_changes()
     sorted_buys = sorted(potential_buys.items(), key=operator.itemgetter(1))[::-1]
 
-    for x in sorted_buys:
+    #for x in sorted_buys:
         # get count: cursor.execute("SELECT COUNT(*) FROM trades")
         # if count < max: buy, else return
         # order by buy strength - from action_totals
-        logger.info("About to buy {0} at {1}, score:{2}".format(x[0], x[-1][-1], x[-1][0]))
+        #logger.info("About to buy {0} at {1}, score:{2}".format(x[0], x[-1][-1], x[-1][0]))
     return sorted_buys
 
 def get_sell():
@@ -57,12 +57,23 @@ def get_sell():
           None
     """
 
-    pass
-    # current_holdings = select pair from trades;
-    #for pair in current_holdings:
-        #status = select total from action_totals where pair=pair and total < 0
-        #if not status:
-            #selling....
+    current_holdings = get_trades()
+    command = """select t1.pair from (select pair, total, max(ctime) AS MaxCreated
+from action_totals group by pair) t2 join action_totals t1 on t2.pair = t1.pair
+and t2.MaxCreated = t1.ctime and t1.total < 1 and t1.total = t2.total ;"""
+    db = MySQLdb.connect(host=HOST,
+                         user=USER,
+                         passwd=PASSWORD,
+                         db=DB)
+
+    cur = db.cursor()
+    cur.execute(command)
+
+    all_sell = [item[0] for item in cur.fetchall()]
+    db.close()
+
+    current_sell = [item for item in current_holdings if item in all_sell]
+    return current_sell
 
 def get_changes():
     """
@@ -160,12 +171,21 @@ def insert_trade(pair, price, investment, total):
           None
     """
 
-    logger.info("Updating trades table")
+    logger.info("Buying {0}".format(pair))
     command = """insert into trades (pair, buy_price, investment, total) VALUES ("{0}", "{1}", "{2}",
     "{3}");""".format(pair, price, investment, total)
     run_sql_query(command)
 
 def get_trades():
+    """
+    Get a list of current open trades.  This is identified by a db record
+    which has a buy price, but no sell price - ie. we haven't sold it yet
+
+    Args:
+    Returns:
+          a single list of pairs that we currently hold
+    """
+
     command = """ select pair from trades where sell_price is NULL """
     db = MySQLdb.connect(host=HOST,
                          user=USER,
@@ -179,6 +199,11 @@ def get_trades():
     db.close()
     return row
 
+def update_trades(pair, sell_price):
+    logger.info("Selling, {0}".format(pair))
+    command = """update trades set sell_price="{0}",sell_time=current_timestamp where sell_price is NULL and pair="{1}"
+    """.format(sell_price, pair)
+    run_sql_query(command)
 
 def insert_data(**kwargs):
     """
