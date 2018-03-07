@@ -22,6 +22,7 @@ def binance_auth():
 def coinbase_auth():
     """
     Authenticatate with coinbase API using credentials in $HOME/.coinbase
+    Returns: Coinbase authenticated client object
     """
 
     config = json.load(open(HOME_DIR + '/.coinbase'))

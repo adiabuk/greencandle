@@ -1,16 +1,19 @@
-# Knuth-Morris-Pratt string matching
-# David Eppstein, UC Irvine, 1 Mar 2002
+"""
+Knuth-Morris-Pratt string matching
+David Eppstein, UC Irvine, 1 Mar 2002
+"""
 
 from __future__ import generators
 
 def KnuthMorrisPratt(text, pattern):
-
-    '''Yields all starting positions of copies of the pattern in the text.
-Calling conventions are similar to string.find, but its arguments can be
-lists or iterators, not just strings, it returns all matches, not just
-the first one, and it does not need the whole text in memory at once.
-Whenever it yields, it will have read the text exactly up to and including
-the match that caused the yield.'''
+    """
+    Yields all starting positions of copies of the pattern in the text.
+    Calling conventions are similar to string.find, but its arguments can be
+    lists or iterators, not just strings, it returns all matches, not just
+    the first one, and it does not need the whole text in memory at once.
+    Whenever it yields, it will have read the text exactly up to and including
+    the match that caused the yield.
+    """
 
     # allow indexing into pattern and protect against change during yield
     pattern = list(pattern)
@@ -34,4 +37,3 @@ the match that caused the yield.'''
         matchLen += 1
         if matchLen == len(pattern):
             yield startPos
-
