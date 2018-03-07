@@ -15,8 +15,8 @@ import json
 import threading
 from time import time, strftime, gmtime, sleep
 from flask import Flask, abort, send_file
-import lib.balance
 import backend
+from lib import balance
 from lib.config import get_config
 
 PAIRS = get_config('api')['pairs'].split()

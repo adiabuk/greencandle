@@ -22,8 +22,8 @@ import pandas
 import talib
 import setproctitle
 import binance
-import lib.balance
 
+from lib import balance
 from lib.binance_common import get_binance_klines
 from lib.graph import create_graph
 from lib.support_resistance import make_float, get_values
