@@ -31,12 +31,16 @@ from lib.morris import KnuthMorrisPratt
 from lib.order import get_buy_price, get_sell_price
 from lib.mysql import (insert_data, insert_actions, insert_action_totals, update_trades,
                        clean_stale, get_buy, get_sell, insert_trade, get_trades)
+
+from lib.config import get_config
 from lib.logger import getLogger
 from indicator import SuperTrend, RSI
 from profit import RATE
 
 POOL = ThreadPoolExecutor(max_workers=50)
 logger = getLogger(__name__)
+
+
 
 class Events(dict):
     """ Represent events created from data & indicators """
@@ -602,8 +606,11 @@ def loop(args):
             logger.info("No items to sell")
 
     agg_data = {}
-    price_per_trade = 20    #£20 /per trade
-    max_trades = 10
+    price_per_trade = int(get_config('backend')['price_per_trade'])
+    max_trades = int(get_config('backend')['max_trades'])
+    logger.debug("Price per trade: {0}".format(price_per_trade))
+    logger.debug("max trades: {0}".format(max_trades))
+
     logger.debug("Starting new cycle")
     if args.pair:
         pairs = [args.pair]

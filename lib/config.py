@@ -1,13 +1,25 @@
 #!/usr/bin/env python
+#pylint: disable=protected-access
+
+"""
+Get values from config file
+"""
 
 import sys
 
 from configparser import ConfigParser
 
-parser = ConfigParser()
-parser.read('config.ini')
 
 def get_config(section):
+    """
+    Read config file and return required config
+    Args:
+        section: string section of configfile
+    Return
+        dict of config parameters/values in given section
+    """
+    parser = ConfigParser()
+    parser.read('config.ini')
     return parser._sections[section]
 
 

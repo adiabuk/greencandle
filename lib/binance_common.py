@@ -87,6 +87,6 @@ def to_csv(pair, data):
     keys = ["closeTime", "low", "high", "open", "close", "volume",
             "openTime", "numTrades", "quoteVolume"]
     with open('{0}.csv'.format(pair), 'w') as output_file:
-        dict_writer = csv.DictWriter(output_ file, keys)
+        dict_writer = csv.DictWriter(output_file, keys)
         dict_writer.writeheader()
         dict_writer.writerows(reversed(data))
