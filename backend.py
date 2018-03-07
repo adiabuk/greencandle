@@ -22,7 +22,7 @@ import pandas
 import talib
 import setproctitle
 import binance
-import balance
+import lib.balance
 
 from lib.binance_common import get_binance_klines
 from lib.graph import create_graph
