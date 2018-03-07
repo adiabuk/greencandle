@@ -20,6 +20,7 @@ from concurrent.futures import ThreadPoolExecutor
 import argcomplete
 import pandas
 import talib
+import setproctitle
 import binance
 import balance
 
@@ -530,9 +531,9 @@ class Events(dict):
             #create_graph(self.dataframes[scheme['symbol']], scheme['symbol'])
 
 
-
 def main():
     """ main function """
+    setproctitle.setproctitle("greencandle-backend")
     parser = argparse.ArgumentParser()
     parser.add_argument('-g', '--graph', action='store_true', default=False)
     parser.add_argument('-j', '--json', action='store_true', default=False)
@@ -559,6 +560,47 @@ def loop(args):
     Loop through collection cycle
     """
 
+    def buy(buy_list):
+        """
+        Buy as many items as we can from buy_list depending on max amount of trades, and current
+        balance in BTC
+        """
+        logger.debug("We have {0} potential items to buy".format(len(buy_list)))
+        if buy_list:
+            current_btc_bal = events.balance['binance']['BTC']['count']
+            amount_to_buy_btc = price_per_trade * RATE
+
+
+            for item in buy_list:
+
+                current_trades = get_trades()
+                if amount_to_buy_btc > current_btc_bal:
+                    logger.warning("Unable to purchase, insufficient funds")
+                    break
+                elif len(current_trades) >= max_trades:
+                    logger.warning("Too many trades, skipping")
+                    break
+                elif item[0] in current_trades:
+                    logger.warning("We already have a trade of {0}, skipping...".format(item[0]))
+                    continue
+                else:
+                    insert_trade(item[0], prices_trunk[item[0]], price_per_trade, amount_to_buy_btc)
+                    #binance.order(symbol=?, side=?, quantity, orderType='MARKET, price=?, test=True
+                    #TODO: buy item
+        else:
+            logger.info("Nothing to buy")
+
+    def sell(sell_list):
+        """
+        Sell items in sell_list
+        """
+        if sell_list:
+            logger.info("We need to sell {0}".format(sell_list))
+            for item in sell_list:
+                update_trades(item, prices_trunk[item])
+        else:
+            logger.info("No items to sell")
+
     agg_data = {}
     price_per_trade = 20    #£20 /per trade
     max_trades = 10
@@ -577,34 +619,9 @@ def loop(args):
     data = events.get_data()
     insert_action_totals()
     clean_stale()
-    to_buy = get_buy()
-    if to_buy:
-        current_btc_bal = events.balance['binance']['BTC']['count']
-        amount_to_buy_btc = price_per_trade * RATE
+    sell(get_sell())
+    buy(get_buy())
 
-        for item in to_buy:
-
-            current_trades = get_trades()
-            if amount_to_buy_btc > current_btc_bal:
-                logger.warning("Unable to purchase, insufficient funds")
-                break
-            elif len(current_trades) >= max_trades:
-                logger.warning("Too many trades, skipping")
-                break
-            elif item[0] in current_trades:
-                logger.warning("We already have a trade of {0}, skipping...".format(item[0]))
-                continue
-            else:
-                insert_trade(item[0], prices_trunk[item[0]], price_per_trade, amount_to_buy_btc)
-                #binance.order(symbol=?, side=?, quantity, orderType='MARKET, price=?, test=True
-                #TODO: buy item
-    else:
-        logger.info("Nothing to buy")
-    to_sell = get_sell()
-    if to_sell:
-        logger.info("We need to sell {0}".format(to_sell))
-        for item in to_sell:
-            update_trades(item, prices_trunk[item])
     try:
         if args.json:
             print(json.dumps(events, indent=4))
