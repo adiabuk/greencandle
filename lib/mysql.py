@@ -39,11 +39,6 @@ def get_buy():
     potential_buys = get_changes()
     sorted_buys = sorted(potential_buys.items(), key=operator.itemgetter(1))[::-1]
 
-    #for x in sorted_buys:
-        # get count: cursor.execute("SELECT COUNT(*) FROM trades")
-        # if count < max: buy, else return
-        # order by buy strength - from action_totals
-        #logger.info("About to buy {0} at {1}, score:{2}".format(x[0], x[-1][-1], x[-1][0]))
     return sorted_buys
 
 def get_sell():
@@ -85,10 +80,22 @@ def get_changes():
           dict of values.  Keys: pair, ctime, total, gt
           where gt indicates the strength of the BUY signal
     """
-
+    # FIXME: make select match docstring returns
     command = """
-    select s1.pair AS pair, s1.ctime AS ctime, s2.total, ((s1.total <= 0) and (s2.total >= 0)) AS gt from
-    (action_totals s1 left join action_totals s2 on  ((s1.pair = s2.pair))) where   ((s1.total <> s2.total) and  ((s1.total < 0) and (s2.total >0)));
+    select
+s1.pair as pair,
+s1.ctime AS ctime1,
+s2.ctime as ctime2,
+s1.total AS total1,
+s2.total as total2,
+((s1.total >= 0) and (s2.total <= 0)) AS gt
+from (action_totals s1 left join action_totals s2 on ((s1.pair = s2.pair)))
+
+where (
+(s1.total <> s2.total) and
+((s1.total > 0) and (s2.total <0)) and
+(s1.ctime > (now() - interval 5 minute)) and
+(s2.ctime < now() - interval 15 minute));
     """
     return fetch_sql_data(command)
 
@@ -113,7 +120,7 @@ def fetch_sql_data(query):
             cursor.execute(query)
             data = cursor.fetchall()
             for record in data:
-                di[record['pair']] = record['total'], prices[record['pair']]
+                di[record['pair']] = record['total1'], prices[record['pair']]
 
     finally:
         db.close()
@@ -145,7 +152,7 @@ def run_sql_query(query):
 
 def clean_stale():
     """
-    Delete stale records from actions and action_totals db tables - any records older than 15
+    Delete stale records from actions and action_totals db tables - any records older than 30
     minutes
     Args:
           None
@@ -154,8 +161,8 @@ def clean_stale():
     """
 
     logger.debug("Cleaning stale data")
-    command1 = "delete from action_totals where ctime < NOW() - INTERVAL 15 MINUTE;"
-    command2 = "delete from actions where ctime < NOW() - INTERVAL 15 MINUTE;"
+    command1 = "delete from action_totals where ctime < NOW() - INTERVAL 30 MINUTE;"
+    command2 = "delete from actions where ctime < NOW() - INTERVAL 30 MINUTE;"
     run_sql_query(command1)
     run_sql_query(command2)
 
