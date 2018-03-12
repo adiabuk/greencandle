@@ -12,9 +12,9 @@ sys.path.append(BASE_DIR)
 
 import json
 from decimal import Decimal
-import numpy
 import binance
 from lib.supres import supres
+from lib.common import make_float
 from lib.binance_common import get_binance_klines
 
 def pip_calc(open_val, close_val):
@@ -29,10 +29,6 @@ def pip_calc(open_val, close_val):
 
     pips = round((close_val - open_val) / multiplier)
     return int(pips)
-
-def make_float(arr):
-    """Convert dataframe array into float array"""
-    return numpy.array([float(x) for x in arr.values])
 
 def get_values(pair, dataframe):
     """

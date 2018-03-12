@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # PYTHON_ARGCOMPLETE_OK
 #pylint: disable=no-member,consider-iterating-dictionary,global-statement,broad-except,
-#pylint: disable=unused-variable,invalid-name,logging-not-lazy
+#pylint: disable=unused-variable,invalid-name,logging-not-lazy,logging-format-interpolation
 
 """
 Get ohlc (Open, High, Low, Close) values from given cryptos
@@ -24,9 +24,8 @@ import setproctitle
 import binance
 
 from lib import balance
-from lib.binance_common import get_binance_klines
-from lib.graph import create_graph
-from lib.support_resistance import make_float, get_values
+from lib.binance_common import get_ohlcs
+from lib.support_resistance import get_values
 from lib.morris import KnuthMorrisPratt
 from lib.order import get_buy_price, get_sell_price
 from lib.mysql import (insert_data, insert_actions, insert_action_totals, update_trades,
@@ -45,7 +44,7 @@ logger = getLogger(__name__)
 class Events(dict):
     """ Represent events created from data & indicators """
 
-    def __init__(self, prices, interval=None):
+    def __init__(self, data, prices, interval=None, test=False):
         """
         Initialize class
         Create hold and event dicts
@@ -59,64 +58,18 @@ class Events(dict):
         self["hold"] = {}
         self["event"] = {}
         self.supres = {}
-        self.data, self.dataframes = self.get_ohlcs(interval=interval)
-        #pickle.dump(self.data, open("data.p", "wb"))
-        #pickle.dump(self.dataframes, open("dataframes.p", "wb"))
+        if test:
+            pass
+            #self.data, self.dataframes = self.get_test_data(interval=interval)
+        else:
+            self.data, self.dataframes = data
 
         super(Events, self).__init__()
         logger.debug("Finished fetching raw data")
 
-    @staticmethod
-    def get_ohlc(pair, interval):
-        """
-        Extract and return ohlc (open, high, low close) data
-        for single pair from available data
-
-        Args:
-            pair: trading pair (eg. XRPBTC)
-            interval: Interval of each candlestick (eg. 1m, 3m, 15m, 1d etc)
-
-        Returns:
-            A truple containing full pandas dataframe and a tuple of float values
-        """
-        dataframe = get_binance_klines(pair, interval=interval)
-        ohlc = (make_float(dataframe.open),
-                make_float(dataframe.high),
-                make_float(dataframe.low),
-                make_float(dataframe.close))
-        return ohlc, dataframe
-
-    def get_ohlcs(self, graph=False, interval=None):
-        """
-        Get details from binance API
-
-        Args:
-            graph: boolean value, create graphs or not
-            interval: Interval used for candlesticks (eg. 1m, 3m, 15m, 1d etc)
-
-        Returns:
-            #TODO: fix order of return value, which is opposite of above function
-            A truple containing full pandas dataframes and a tuple of float values for all pairs
-        """
-
-        ohlcs = {}
-        dataframe = {}
-        results = {}
-        for pair in self.pairs:
-            event = {}
-            event["symbol"] = pair
-            event['data'] = {}
-            results[pair] = POOL.submit(self.get_ohlc, pair=pair, interval=interval)
-
-            if graph:
-                create_graph(self.ataframe, pair)
-
-        for key, value in results.items():
-            ohlcs[key] = value.result()[0]
-            dataframe[key] = value.result()[1]
-
-        return ohlcs, dataframe
-
+    def get_test_data(self, data):
+        """Get test data"""
+        pass
     def print_text(self):
         """
         Print text output to stdout
@@ -622,7 +575,11 @@ def loop(args):
     for k, v in prices.items():
         if k.endswith("BTC"):
             prices_trunk[k] = v
-    events = Events(prices_trunk, interval='15m')
+    #self.data, self.dataframes = get_ohlcs(self.pairs, interval=interval)
+    pairs = prices.keys()
+    data = get_ohlcs(pairs, interval='15m')
+
+    events = Events(prices=prices_trunk, data=data, interval='15m')
     data = events.get_data()
     insert_action_totals()
     clean_stale()

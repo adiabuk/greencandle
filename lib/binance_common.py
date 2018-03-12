@@ -1,14 +1,28 @@
+#pylint: disable=logging-not-lazy,wrong-import-position
+
 """
 Functions to fetch data from binance
 """
 
 import sys
+import csv
+import os
+
+
+from concurrent.futures import ThreadPoolExecutor
 import pandas
 import binance
-import csv
+
+BASE_DIR = os.getcwd().split('greencandle', 1)[0] + 'greencandle'
+sys.path.append(BASE_DIR)
+
 
 from lib.logger import getLogger
+from lib.common import make_float
+from lib.graph import create_graph
+
 logger = getLogger(__name__)
+POOL = ThreadPoolExecutor(max_workers=50)
 
 def get_binance_klines(pair, interval=None):
     """
@@ -19,7 +33,7 @@ def get_binance_klines(pair, interval=None):
         interval: Interval of each candlestick (eg. 1m, 3m, 15m, 1d etc)
 
     Returns:
-        pandas datafram contiaing klines for given pair
+        pandas dataframe containing klines for given pair
     """
 
     try:
@@ -47,7 +61,7 @@ def get_all_klines(pair, interval=None, start_time=0):
         start_time: epochtime we want to start collecting data.
 
     Returns:
-        pandas datafram contiaing klines for given pair
+        list of dicts contiaing klines for given pair
     """
 
     result = []
@@ -90,3 +104,53 @@ def to_csv(pair, data):
         dict_writer = csv.DictWriter(output_file, keys)
         dict_writer.writeheader()
         dict_writer.writerows(reversed(data))
+
+def get_ohlc(pair, interval):
+    """
+    Extract and return ohlc (open, high, low close) data
+    for single pair from available data
+
+    Args:
+        pair: trading pair (eg. XRPBTC)
+        interval: Interval of each candlestick (eg. 1m, 3m, 15m, 1d etc)
+
+    Returns:
+        A truple containing full pandas dataframe and a tuple of float values
+    """
+    dataframe = get_binance_klines(pair, interval=interval)
+    ohlc = (make_float(dataframe.open),
+            make_float(dataframe.high),
+            make_float(dataframe.low),
+            make_float(dataframe.close))
+    return ohlc, dataframe
+
+def get_ohlcs(pairs, graph=False, interval=None):
+    """
+    Get details from binance API
+
+    Args:
+        graph: boolean value, create graphs or not
+        interval: Interval used for candlesticks (eg. 1m, 3m, 15m, 1d etc)
+
+    Returns:
+        #TODO: fix order of return value, which is opposite of above function
+        A truple containing full pandas dataframes and a tuple of float values for all pairs
+    """
+
+    ohlcs = {}
+    dataframe = {}
+    results = {}
+    for pair in pairs:
+        event = {}
+        event["symbol"] = pair
+        event['data'] = {}
+        results[pair] = POOL.submit(get_ohlc, pair=pair, interval=interval)
+
+        if graph:
+            create_graph(dataframe, pair)
+
+    for key, value in results.items():
+        ohlcs[key] = value.result()[0]
+        dataframe[key] = value.result()[1]
+
+    return ohlcs, dataframe
