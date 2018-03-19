@@ -166,7 +166,7 @@ def clean_stale():
     run_sql_query(command1)
     run_sql_query(command2)
 
-def insert_trade(pair, price, investment, total):
+def insert_trade(pair, date, price, investment, total):
     """
     Insert new trade into DB
     Args:
@@ -179,9 +179,29 @@ def insert_trade(pair, price, investment, total):
     """
 
     logger.info("Buying {0}".format(pair))
-    command = """insert into trades (pair, buy_price, investment, total) VALUES ("{0}", "{1}", "{2}",
-    "{3}");""".format(pair, price, investment, total)
+    command = """insert into trades (pair, buy_time, buy_price, investment, total) VALUES ("{0}",
+    "{1}", "{2}", "{3}", "{4}");""".format(pair, date, float(price), investment, total)
     run_sql_query(command)
+
+def get_trade_value(pair):
+    """
+    Return the value of an open trade for a given trading pair
+    """
+
+    command = """ select buy_price from trades where sell_price is NULL and pair = "{0}"
+    """.format(pair)
+    db = MySQLdb.connect(host=HOST,
+                         user=USER,
+                         passwd=PASSWORD,
+                         db=DB)
+
+    cur = db.cursor()
+    cur.execute(command)
+
+    row = [item[0] for item in cur.fetchall()]
+    db.close()
+    return row
+
 
 def get_trades():
     """
@@ -206,10 +226,10 @@ def get_trades():
     db.close()
     return row
 
-def update_trades(pair, sell_price):
+def update_trades(pair, sell_time, sell_price):
     logger.info("Selling, {0}".format(pair))
-    command = """update trades set sell_price="{0}",sell_time=current_timestamp where sell_price is NULL and pair="{1}"
-    """.format(sell_price, pair)
+    command = """update trades set sell_price={0},sell_time="{1}" where sell_price is NULL and
+    pair="{2}" """.format(float(sell_price), sell_time, pair)
     run_sql_query(command)
 
 def insert_data(**kwargs):
