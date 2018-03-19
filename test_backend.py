@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import pickle
-from backend import Events
+from lib.engine import Engine
 from lib.common import make_float
 from lib.logger import getLogger
 from lib.redis_conn import Redis
@@ -43,7 +43,7 @@ def main():
                 ohlc = make_data_tupple(dataframe)
                 data = ({pair:ohlc}, {pair:dataframe})
 
-                events = Events(prices=prices_trunk, data=data, interval=interval, test=True)
+                events = Engine(prices=prices_trunk, data=data, interval=interval, test=True)
                 data = events.get_data()
                 redis.get_change(pair=pair, interval=interval)
 
