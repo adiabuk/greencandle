@@ -10,6 +10,7 @@ and detect trends using candlestick patterns
 
 from __future__ import print_function
 import json
+import math
 import argparse
 import time
 import sys
@@ -17,16 +18,16 @@ import traceback
 import calendar
 import operator
 from concurrent.futures import ThreadPoolExecutor
+from decimal import Decimal
 import argcomplete
 import pandas
 import talib
 import setproctitle
 import binance
-
+from lib.redis_conn import Redis
 from lib import balance
 from lib.binance_common import get_ohlcs
 from lib.support_resistance import get_values
-from lib.morris import KnuthMorrisPratt
 from lib.order import get_buy_price, get_sell_price
 from lib.mysql import (insert_data, insert_actions, insert_action_totals, update_trades,
                        clean_stale, get_buy, get_sell, insert_trade, get_trades)
@@ -38,7 +39,6 @@ from profit import RATE
 
 POOL = ThreadPoolExecutor(max_workers=50)
 logger = getLogger(__name__)
-
 
 
 class Events(dict):
@@ -54,22 +54,21 @@ class Events(dict):
         self.interval = interval
         self.pairs = prices.keys()
         self.dataframe = None
-        self.balance = balance.get_balance()
+        self.redis = Redis()
+        if not test:
+            self.balance = balance.get_balance()
+        self.test = test
         self["hold"] = {}
         self["event"] = {}
         self.supres = {}
-        if test:
-            pass
-            #self.data, self.dataframes = self.get_test_data(interval=interval)
-        else:
-            self.data, self.dataframes = data
-
+        self.data, self.dataframes = data
         super(Events, self).__init__()
         logger.debug("Finished fetching raw data")
 
     def get_test_data(self, data):
         """Get test data"""
         pass
+
     def print_text(self):
         """
         Print text output to stdout
@@ -95,7 +94,7 @@ class Events(dict):
                 for key2, value2 in value["data"].items():
                     print(key2, value2)
             except KeyError as key_error:
-                print("KEYERROR", value, key_error)
+                print("AMROX25 KEYERROR", value, key_error)
                 continue
             print("\n")
 
@@ -114,7 +113,6 @@ class Events(dict):
         Returns:
             dict containing all collected data
         """
-
         logger.debug("Getting data")
         global POOL
         POOL = ThreadPoolExecutor(max_workers=400)
@@ -132,7 +130,6 @@ class Events(dict):
         POOL = ThreadPoolExecutor(max_workers=50)
         return self
 
-
     def get_sup_res(self, pair, klines):
         """
         get support & resistance values for current pair
@@ -147,7 +144,6 @@ class Events(dict):
 
         values = get_values(pair, klines)
         self.supres[pair] = values
-
 
     def get_rsi(self, pair=None, klines=None):
         """
@@ -168,14 +164,14 @@ class Events(dict):
         rsi = RSI(mine)
         df_list = rsi['RSI_21'].tolist()
         df_list = ["%.1f" % float(x) for x in df_list]
-        scheme["data"] = {"RSI": df_list[-1]}
+        scheme["data"] = df_list[-1]
         scheme["url"] = self.get_url(pair)
         scheme["time"] = calendar.timegm(time.gmtime())
         scheme["symbol"] = pair
         if float(df_list[-1]) > 70:
-            direction = "overbought"
+            direction = "SELL"
         elif float(df_list[-1]) < 30:
-            direction = "oversold"
+            direction = "BUY"
         else:
             direction = "HOLD"
         scheme["direction"] = direction
@@ -214,15 +210,14 @@ class Events(dict):
 
         """
 
-
         scheme = {}
-
+        logger.info("getting supertrend")
         dataframe = self.renamed_dataframe_columns(klines)
 
         mine = dataframe.apply(pandas.to_numeric)
         supertrend = SuperTrend(mine, 10, 3)
         df_list = supertrend['STX_10_3'].tolist()
-        scheme["data"] = {"SUPERTREND": df_list[-1]}
+        scheme["data"] = df_list[-1]
         scheme["url"] = self.get_url(pair)
         scheme["time"] = calendar.timegm(time.gmtime())
         scheme["symbol"] = pair
@@ -255,16 +250,13 @@ class Events(dict):
             String action based on patten (BUY/SELL/HOLD/UNKNOWN)
 
         """
-
-        if 7 in [s for s in KnuthMorrisPratt(supertrend, ["down", "up", "up"])]:
-            action = "BUY"
-        elif 8 in [s for s in KnuthMorrisPratt(supertrend, ["up", "down"])]:
-            action = "SELL"
-        elif 3 in [s for s in KnuthMorrisPratt(supertrend, ["nan", "nan", "nan", "nan"])]:
-            action = "UNKNOWN!"
+        if supertrend == "up":
+            result = "BUY"
+        elif supertrend == "down":
+            result = "SELL"
         else:
-            action = "HOLD"
-        return action
+            result = "HOLD"
+        return result
 
     @staticmethod
     def get_operator_fn(op):
@@ -327,8 +319,11 @@ class Events(dict):
         Returns:
             None
         """
-
-        close = klines[-1]
+        logger.debug("getting moving averages")
+        try:
+            close = klines[-1]
+        except Exception as e:
+            logger.critical("AMROX25 FAILING!!! " + str(e))
         trends = (
             ("EMA", 10),
             ("EMA", 20),
@@ -345,18 +340,31 @@ class Events(dict):
             try:
                 result = getattr(talib, func)(close, timeperiod)[-1]
             except Exception:
-                logger.critical("EXC")
+                logger.critical("AMROX25 EXC")
             if result > close[-1]:
                 trigger = 'SELL'
             else:
                 trigger = 'BUY'
 
+            result = 0.0 if math.isnan(result) else result
+            try:
+                current_price = str(Decimal(self.dataframes[pair].iloc[-1]['close']))
+                close_time = str(self.dataframes[pair].iloc[-1]['closeTime'])
+                data = {func+'-'+str(timeperiod):{"result": result,
+                                                  "current_price":current_price,
+                                                  "date":close_time,
+                                                  "action":self.get_action(trigger)}}
+
+                self.redis.redis_conn(pair, self.interval, data, close_time)
+
+            except Exception as e:
+                logger.critical("AMROX25 REDIS FAILURE " + str(e))
             try:
                 insert_actions(pair=pair, indicator=func+'-'+str(timeperiod),
                                value=result, action=self.get_action(trigger))
             except Exception:
                 traceback.print_exc()
-                logger.critical("DB FUBAR")
+                logger.critical("AMROX25 DB FUBAR")
 
     def get_oscillators(self, pair, klines):
         """
@@ -407,8 +415,23 @@ class Events(dict):
 
             except Exception as error:
                 traceback.print_exc()
-                logger.critical("failed here:" + str(error))
+                logger.critical("AMROX 25 failed here:" + str(error))
             insert_actions(pair=pair, indicator=check, value=j, action=self.get_action(trigger))
+            current_price = str(Decimal(self.dataframes[pair].iloc[-1]['close']))
+            close_time = str(self.dataframes[pair].iloc[-1]['closeTime'])
+            result = 0.0 if math.isnan(j) else j
+            try:
+                data = {check:{"result": result,
+                               "date": close_time,
+                               "current_price":current_price,
+                               "action":self.get_action(trigger)}}
+
+                self.redis.redis_conn(pair, self.interval, data, close_time)
+
+
+
+            except Exception as e:
+                logger.critical("AMROX25 Redis failure1 " + str(e))
 
     def get_indicators(self, pair, klines):
         """
@@ -423,70 +446,82 @@ class Events(dict):
         Returns:
             None
         """
-        #TODO: Add data to DB
-
-        trends = {"HAMMER": {100: "bullish", 0:"HOLD"},
-                  "INVERTEDHAMMER": {100: "bearish", 0:"HOLD"},
-                  "ENGULFING": {-100:"bearish", 100:"bullish", 0:"HOLD"},
-                  "MORNINGSTAR": {-100:"bearish", 100:"bullish", 0:"HOLD"},
-                  "SHOOTINGSTAR": {-100:"bearish", 100:"bullish", 0:"HOLD"},
-                  "MARUBOZU": {-100:"bearish", 100:"bullish", 0:"HOLD"},
+        trends = {"HAMMER": {100: "BUY", 0:"HOLD"},
+                  "INVERTEDHAMMER": {100: "SELL", 0:"HOLD"},
+                  "ENGULFING": {-100:"SELL", 100:"BUY", 0:"HOLD"},
+                  "MORNINGSTAR": {-100:"SELL", 100:"BUY", 0:"HOLD"},
+                  "SHOOTINGSTAR": {-100:"SELL", 100:"BUY", 0:"HOLD"},
+                  "MARUBOZU": {-100:"SELL", 100:"BUY", 0:"HOLD"},
                   "DOJI": {100: "unknown", 0:"HOLD"}}
-        results = {}
-        for check in trends.keys():
-            j = getattr(talib, "CDL" + check)(*klines).tolist()[-1]
-            results.update({check: j})
 
         for check in trends.keys():
             scheme = {}
             try:
-                result = trends[check][results[check][-1]]
-                if "data" not in scheme:
-                    scheme['data'] = {}
-                scheme["data"] = results   # convert from array to list
+
+                result = getattr(talib, "CDL" + check)(*klines).tolist()[-1]
+                scheme["data"] = result   # convert from array to list
                 scheme["url"] = self.get_url(pair)
                 scheme["time"] = calendar.timegm(time.gmtime())
                 scheme["symbol"] = pair
-                scheme["direction"] = result
+                scheme["direction"] = trends[check][result]
                 scheme["event"] = check
                 scheme["difference"] = "None"
-            except KeyError:
-                logger.critical("KEYERROR")
+
+                self.add_scheme(scheme)
+            except KeyError as ke:
+                logger.critical("AMROX25 KEYERROR "  + str(sys.exc_info()))
                 continue
-        self.add_scheme(scheme)
+            except Exception as poo:
+                logger.info("AMROX25 " + str(sys.exc_info()))
 
     def add_scheme(self, scheme):
         """ add scheme to correct structure """
         pair = scheme['symbol']
-        scheme.update(self.supres[pair])
-        #  Add prices for current symbol to scheme
-        prices = {"buy": get_buy_price(pair), "sell": get_sell_price(pair),
-                  "market": binance.prices()[pair]}
-        scheme.update(prices)
+        #scheme.update(self.supres[pair])  #FIXME
 
-        bal = self.balance['binance']['TOTALS']['GBP']
+        # add to redis
+        current_price = str(Decimal(self.dataframes[pair].iloc[-1]['close']))
+        close_time = str(self.dataframes[pair].iloc[-1]['closeTime'])
+        result = 0.0 if (type(scheme['data']) == float and
+                         math.isnan(scheme['data']))  else scheme['data']
         try:
-            # Add scheme to DB
-            insert_data(interval=self.interval, symbol=scheme['symbol'], event=scheme['event'],
-                        direction=scheme['direction'], data=scheme['data'],
-                        difference=str(scheme['difference']), resistance=str(scheme['resistance']),
-                        support=str(scheme['support']), buy=str(scheme['buy']),
-                        sell=str(scheme['sell']), market=str(scheme['market']),
-                        balance=str(bal))
-        except Exception as excp:
+            data = {scheme['event']:{"result": str(result),
+                                     "current_price": float(current_price),
+                                     "date": close_time,
+                                     "action":self.get_action(scheme['direction'])}}
 
-            logger.critical("Error: " + str(excp))
+            self.redis.redis_conn(pair, self.interval, data, close_time)
+
+        except Exception as e:
+            logger.critical("AMROX25 Redis failure22 " +str(e))
+
+
+        if not self.test:
+            #  Add prices for current symbol to scheme
+            prices = {"buy": get_buy_price(pair), "sell": get_sell_price(pair),
+                      "market": binance.prices()[pair]}
+            scheme.update(prices)
+
+            bal = self.balance['binance']['TOTALS']['GBP']
+
+            # Add scheme to DB
+            try:
+                insert_data(interval=self.interval,
+                            symbol=scheme['symbol'], event=scheme['event'],
+                            direction=scheme['direction'], data=scheme['data'],
+                            difference=str(scheme['difference']),
+                            resistance=str(scheme['resistance']),
+                            support=str(scheme['support']), buy=str(scheme['buy']),
+                            sell=str(scheme['sell']), market=str(scheme['market']),
+                            balance=str(bal))
+            except Exception as excp:
+                logger.critical("AMROX25 Error: " + str(excp))
 
         if scheme["direction"] == "HOLD":
             self["hold"][id(scheme)] = scheme
         else:
             # Fetch resistance/support/PIP Value
             self["event"][id(scheme)] = scheme
-
-            # Only creating graphs for event's that we are interested in due to the time and
-            # resources that it takes
-            #create_graph(self.dataframes[scheme['symbol']], scheme['symbol'])
-
 
 def main():
     """ main function """
@@ -575,7 +610,6 @@ def loop(args):
     for k, v in prices.items():
         if k.endswith("BTC"):
             prices_trunk[k] = v
-    #self.data, self.dataframes = get_ohlcs(self.pairs, interval=interval)
     pairs = prices.keys()
     data = get_ohlcs(pairs, interval='15m')
 
@@ -592,7 +626,7 @@ def loop(args):
         else:
             events.print_text()
     except Exception:
-        logger.critical("Overall exception")
+        logger.critical("AMROX25 Overall exception")
 
     agg_data.update(data)
     return agg_data
