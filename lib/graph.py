@@ -4,6 +4,7 @@
 
 import os
 import time
+import pandas
 from selenium import webdriver
 from pyvirtualdisplay import Display
 import plotly.offline as py
@@ -16,7 +17,7 @@ PATH = os.getcwd() + "/graphs/in/"
 
 def get_screenshot(filename=None):
     """Capture screenshot using selenium/firefox in Xvfb """
-    display = Display(visible=0, size=(640, 480))
+    display = Display(visible=0, size=(1366, 768))
     display.start()
 
     profile = webdriver.FirefoxProfile()
@@ -42,7 +43,8 @@ def resize_screenshot(filename=None):
 def create_graph(dataframe, pair):
     """Create graph html file using plotly offline-mode from dataframe object"""
     py.init_notebook_mode()
-    trace = go.Candlestick(x=dataframe.index,
+    dataframe['time'] = pandas.to_datetime(dataframe['closeTime'], unit='ms')
+    trace = go.Candlestick(x=dataframe.time,
                            open=dataframe.open,
                            high=dataframe.high,
                            low=dataframe.low,
