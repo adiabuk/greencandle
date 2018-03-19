@@ -12,6 +12,8 @@ binance_api_secret =
 coinbase_api_key =
 coinbase_api_secret =
 base = ETH BTC BCC
+price_per_trade = 20
+max_trades = 10
 
 [api]
 port = 5001
@@ -23,3 +25,11 @@ host = 127.1
 user = greencandle
 password = password
 db = greencandle
+
+[test]
+pairs = XRPBTC ETHBTC
+intervals = 15m 5m 3m 1m
+starttime = 1519978500000
+no_of_klines = 1000
+
+

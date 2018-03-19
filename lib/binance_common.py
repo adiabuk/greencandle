@@ -48,7 +48,7 @@ def get_binance_klines(pair, interval=None):
     dataframe = pandas.DataFrame.from_dict(raw)
     return dataframe
 
-def get_all_klines(pair, interval=None, start_time=0):
+def get_all_klines(pair, interval=None, start_time=0, no_of_klines=1E1000):
     """
     Get all available data for a trading pair
     We are limited to 500 entries per request, so we will loop over until we have fetched all
@@ -58,7 +58,8 @@ def get_all_klines(pair, interval=None, start_time=0):
     Args:
         pair: trading pair (eg. XRPBTC)
         interval: Interval of each candlestick (eg. 1m, 3m, 15m, 1d etc)
-        start_time: epochtime we want to start collecting data.
+        start_time: epochtime we want to start collecting data (milliseconds)
+        no_of_klines: number of klines we want to collect
 
     Returns:
         list of dicts contiaing klines for given pair
@@ -69,15 +70,22 @@ def get_all_klines(pair, interval=None, start_time=0):
     while True:
         current_section = binance.klines(pair, interval, startTime=start_time)
         result += current_section
+        if len(result) >= no_of_klines:
+            # reached maximum
+            break
 
         # Start time becomes 1 more than start time of last entry, +1, so that we don't duplicate
         # entries
-        start_time = current_section[-1]['openTime'] + 1
+        try:
+            start_time = current_section[-1]['openTime'] + 1
+        except IndexError:
+            print("AMROX ERROR: " + str(len(current_section)))
+            break
         if len(current_section) < 500:
             # Break out of while true loop as we have exhausted possible entries
             break
 
-    return result
+    return result[:no_of_klines] if no_of_klines != float('inf') else result
 
 def to_csv(pair, data):
     """
