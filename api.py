@@ -19,9 +19,9 @@ import backend
 from lib import balance
 from lib.config import get_config
 
-PAIRS = get_config('api')['pairs'].split()
-INTERVAL = get_config('api')['interval']
-PORT = int(get_config('api')['port'])
+PAIRS = get_config("api")["pairs"].split()
+INTERVAL = get_config("api")["interval"]
+PORT = int(get_config("api")["port"])
 
 DATA = None
 HOLD = None
@@ -35,36 +35,36 @@ BALANCE_TIMER = 300
 APP = Flask(__name__)
 
 
-@APP.route('/<path:path>', methods=['GET'])
+@APP.route("/<path:path>", methods=["GET"])
 def return_file(path):
     """Fetch generated PNG thumbnails """
-    if path.startswith('graphs/in/') and path.endswith('.png') and os.path.isfile(path):
+    if path.startswith("graphs/in/") and path.endswith(".png") and os.path.isfile(path):
         return send_file(path, as_attachment=True)
     abort(404)
     return False
 
-@APP.route('/all', methods=['GET'])
+@APP.route("/all", methods=["GET"])
 def get_all_data():
     """ Return all data: HOLD, and EVENT """
     return str(ALL_DATA)
 
-@APP.route('/data', methods=['GET'])
+@APP.route("/data", methods=["GET"])
 def get_events():
     """return event data"""
     if not DATA:
-        abort(500, json.dumps({'response': 'Data not yet populated, try again later'}))
+        abort(500, json.dumps({"response": "Data not yet populated, try again later"}))
 
     return str(DATA)
 
-@APP.route('/hold', methods=['GET'])
+@APP.route("/hold", methods=["GET"])
 def get_hold():
     """get hold events"""
     if not HOLD:
-        abort(500, json.dumps({'response': 'Data not yet populated, try again later'}))
+        abort(500, json.dumps({"response": "Data not yet populated, try again later"}))
 
     return str(HOLD)
 
-@APP.route('/balance', methods=['GET'])
+@APP.route("/balance", methods=["GET"])
 def fetch_balance():
     """return balance JSON"""
     return str(BALANCE)
@@ -83,8 +83,8 @@ def get_data():
     hold = {}
     data["stories"] = {}
     hold["stories"] = {}
-    data["events"] = events['event']
-    hold["events"] = events['hold']
+    data["events"] = events["event"]
+    hold["events"] = events["hold"]
     data["stories"]["time"] = calendar.timegm(gmtime())
     hold["stories"]["time"] = calendar.timegm(gmtime())
     data["stories"]["type"] = "finish"
@@ -140,5 +140,5 @@ def main():
         sys.exit(1)
     APP.run(debug=True, threaded=True, port=PORT, use_reloader=False)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

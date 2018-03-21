@@ -67,8 +67,8 @@ def get_balance():
     except ReadTimeout:
         logger.critical("Unable to get coinbase balance")
         coinbase = {}
-    combined_dict = binance.copy()   # start with binance's keys and values
-    combined_dict.update(coinbase)    # modifies z with y's keys and values & returns None
+    combined_dict = binance.copy()   # start with binance"s keys and values
+    combined_dict.update(coinbase)    # modifies z with y"s keys and values & returns None
 
     DB.insert_balance(combined_dict)
     return combined_dict

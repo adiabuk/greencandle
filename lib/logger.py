@@ -29,7 +29,7 @@ def getLogger(logger_name=None):
 
 logger = getLogger(__name__)
 
-def get_decorator(errors=(Exception, ), default_value=''):
+def get_decorator(errors=(Exception, ), default_value=""):
 
     def decorator(func):
 

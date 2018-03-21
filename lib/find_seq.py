@@ -27,6 +27,6 @@ def get_sequences(li):
         loc = (sequence[0][0],sequence[-1][0])
         print("start:",start,"end:",end,"diff:",diff,"loc:", loc)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     get_sequences([1,2,9,8,9,10,11,12])

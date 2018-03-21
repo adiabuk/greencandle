@@ -10,11 +10,11 @@ import argcomplete
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-s', '--start', required=True,
+    parser.add_argument("-s", "--start", required=True,
                         help="Initial investment")
-    parser.add_argument('-m', '--months', required=True,
+    parser.add_argument("-m", "--months", required=True,
                         help="monber of months to calculate")
-    parser.add_argument('-p', '--percent', required=True,
+    parser.add_argument("-p", "--percent", required=True,
                         help="average percent profit per day")
 
     argcomplete.autocomplete(parser)

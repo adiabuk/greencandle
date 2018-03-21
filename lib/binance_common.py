@@ -13,7 +13,7 @@ from concurrent.futures import ThreadPoolExecutor
 import pandas
 import binance
 
-BASE_DIR = os.getcwd().split('greencandle', 1)[0] + 'greencandle'
+BASE_DIR = os.getcwd().split("greencandle", 1)[0] + "greencandle"
 sys.path.append(BASE_DIR)
 
 
@@ -74,10 +74,10 @@ def get_all_klines(pair, interval=None, start_time=0, no_of_klines=1E1000):
             # reached maximum
             break
 
-        # Start time becomes 1 more than start time of last entry, +1, so that we don't duplicate
+        # Start time becomes 1 more than start time of last entry, +1, so that we don"t duplicate
         # entries
         try:
-            start_time = current_section[-1]['openTime'] + 1
+            start_time = current_section[-1]["openTime"] + 1
         except IndexError:
             print("AMROX ERROR: " + str(len(current_section)))
             break
@@ -85,7 +85,7 @@ def get_all_klines(pair, interval=None, start_time=0, no_of_klines=1E1000):
             # Break out of while true loop as we have exhausted possible entries
             break
 
-    return result[:no_of_klines] if no_of_klines != float('inf') else result
+    return result[:no_of_klines] if no_of_klines != float("inf") else result
 
 def to_csv(pair, data):
     """
@@ -108,7 +108,7 @@ def to_csv(pair, data):
     keys = data[0].keys()
     keys = ["closeTime", "low", "high", "open", "close", "volume",
             "openTime", "numTrades", "quoteVolume"]
-    with open('{0}.csv'.format(pair), 'w') as output_file:
+    with open("{0}.csv".format(pair), "w") as output_file:
         dict_writer = csv.DictWriter(output_file, keys)
         dict_writer.writeheader()
         dict_writer.writerows(reversed(data))
@@ -151,7 +151,7 @@ def get_ohlcs(pairs, graph=False, interval=None):
     for pair in pairs:
         event = {}
         event["symbol"] = pair
-        event['data'] = {}
+        event["data"] = {}
         results[pair] = POOL.submit(get_ohlc, pair=pair, interval=interval)
 
         if graph:

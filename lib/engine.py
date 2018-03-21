@@ -30,7 +30,7 @@ logger = getLogger(__name__)
 class Engine(dict):
     """ Represent events created from data & indicators """
 
-    get_exceptions = get_decorator((Exception), default_value='default')
+    get_exceptions = get_decorator((Exception), default_value="default")
     def __init__(self, data, prices, interval=None, test=False):
         """
         Initialize class
@@ -75,7 +75,7 @@ class Engine(dict):
                 #no_change.append(value["symbol"])
                 continue
             try:
-                print("Symbol:", value['symbol'])
+                print("Symbol:", value["symbol"])
                 print("URL:", value["url"])
                 if value["direction"] != "HOLD":
                     print("direction:", red, value["direction"], white)
@@ -156,7 +156,7 @@ class Engine(dict):
         scheme = {}
         mine = dataframe.apply(pandas.to_numeric)
         rsi = RSI(mine)
-        df_list = rsi['RSI_21'].tolist()
+        df_list = rsi["RSI_21"].tolist()
         df_list = ["%.1f" % float(x) for x in df_list]
         scheme["data"] = df_list[-1]
         scheme["url"] = self.get_url(pair)
@@ -185,8 +185,8 @@ class Engine(dict):
         """
 
 
-        dataframe = pandas.DataFrame(klines, columns=['openTime', 'open', 'high',
-                                                      'low', 'close', 'volume'])
+        dataframe = pandas.DataFrame(klines, columns=["openTime", "open", "high",
+                                                      "low", "close", "volume"])
         columns = ["date", "Open", "High", "Low", "Close", "Volume"]  # rename columns
         for index, item in enumerate(columns):
             dataframe.columns.values[index] = item
@@ -211,7 +211,7 @@ class Engine(dict):
 
         mine = dataframe.apply(pandas.to_numeric)
         supertrend = SuperTrend(mine, 10, 3)
-        df_list = supertrend['STX_10_3'].tolist()
+        df_list = supertrend["STX_10_3"].tolist()
         scheme["data"] = df_list[-1]
         scheme["url"] = self.get_url(pair)
         scheme["time"] = calendar.timegm(time.gmtime())
@@ -265,8 +265,8 @@ class Engine(dict):
         """
 
         return {
-            '<' : operator.lt,
-            '>' : operator.gt,
+            "<" : operator.lt,
+            ">" : operator.gt,
             }[op]
 
     @get_exceptions
@@ -340,15 +340,15 @@ class Engine(dict):
             except Exception:
                 logger.critical("AMROX25 EXC")
             if result > close[-1]:
-                trigger = 'SELL'
+                trigger = "SELL"
             else:
-                trigger = 'BUY'
+                trigger = "BUY"
 
             result = 0.0 if math.isnan(result) else result
             try:
-                current_price = str(Decimal(self.dataframes[pair].iloc[-1]['close']))
-                close_time = str(self.dataframes[pair].iloc[-1]['closeTime'])
-                data = {func+'-'+str(timeperiod):{"result": result,
+                current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
+                close_time = str(self.dataframes[pair].iloc[-1]["closeTime"])
+                data = {func+"-"+str(timeperiod):{"result": result,
                                                   "current_price":current_price,
                                                   "date":close_time,
                                                   "action":self.get_action(trigger)}}
@@ -358,7 +358,7 @@ class Engine(dict):
             except Exception as e:
                 logger.critical("AMROX25 REDIS FAILURE " + str(e))
             try:
-                #self.db.insert_actions(pair=pair, indicator=func+'-'+str(timeperiod),
+                #self.db.insert_actions(pair=pair, indicator=func+"-"+str(timeperiod),
                 #                       value=result, action=self.get_action(trigger))
                 pass
             except Exception:
@@ -399,9 +399,9 @@ class Engine(dict):
 
         for check, attrs in trends.items():
             try:
-                a = attrs['klines'][0]
+                a = attrs["klines"][0]
                 li = []
-                for i in attrs['klines']:
+                for i in attrs["klines"]:
                     li.append(locals()[i])
 
                 j = getattr(talib, check)(*(*li, *attrs["args"]))[-1]
@@ -419,8 +419,8 @@ class Engine(dict):
             except Exception as error:
                 traceback.print_exc()
                 logger.critical("AMROX 25 failed here:" + str(error))
-            current_price = str(Decimal(self.dataframes[pair].iloc[-1]['close']))
-            close_time = str(self.dataframes[pair].iloc[-1]['closeTime'])
+            current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
+            close_time = str(self.dataframes[pair].iloc[-1]["closeTime"])
             result = 0.0 if math.isnan(j) else j
             try:
                 data = {check:{"result": result,
@@ -484,24 +484,24 @@ class Engine(dict):
     @get_exceptions
     def add_scheme(self, scheme):
         """ add scheme to correct structure """
-        pair = scheme['symbol']
+        pair = scheme["symbol"]
         #scheme.update(self.supres[pair])  #FIXME
 
         # add to redis
-        current_price = str(Decimal(self.dataframes[pair].iloc[-1]['close']))
-        close_time = str(self.dataframes[pair].iloc[-1]['closeTime'])
-        result = 0.0 if (isinstance(scheme['data'], float) and
-                         math.isnan(scheme['data']))  else scheme['data']
+        current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
+        close_time = str(self.dataframes[pair].iloc[-1]["closeTime"])
+        result = 0.0 if (isinstance(scheme["data"], float) and
+                         math.isnan(scheme["data"]))  else scheme["data"]
         try:
-            data = {scheme['event']:{"result": str(result),
+            data = {scheme["event"]:{"result": str(result),
                                      "current_price": float(current_price),
                                      "date": close_time,
-                                     "action":self.get_action(scheme['direction'])}}
+                                     "action":self.get_action(scheme["direction"])}}
 
             self.redis.redis_conn(pair, self.interval, data, close_time)
 
         except Exception as e:
-            logger.critical("AMROX25 Redis failure22 " +str(e) + ' ' + repr(sys.exc_info()))
+            logger.critical("AMROX25 Redis failure22 " +str(e) + " " + repr(sys.exc_info()))
 
 
         if not self.test:
@@ -510,17 +510,17 @@ class Engine(dict):
                       "market": binance.prices()[pair]}
             scheme.update(prices)
 
-            bal = self.balance['binance']['TOTALS']['GBP']
+            bal = self.balance["binance"]["TOTALS"]["GBP"]
 
             # Add scheme to DB
             try:
                 self.db.insert_data(interval=self.interval,
-                                    symbol=scheme['symbol'], event=scheme['event'],
-                                    direction=scheme['direction'], data=scheme['data'],
-                                    difference=str(scheme['difference']),
-                                    resistance=str(scheme['resistance']),
-                                    support=str(scheme['support']), buy=str(scheme['buy']),
-                                    sell=str(scheme['sell']), market=str(scheme['market']),
+                                    symbol=scheme["symbol"], event=scheme["event"],
+                                    direction=scheme["direction"], data=scheme["data"],
+                                    difference=str(scheme["difference"]),
+                                    resistance=str(scheme["resistance"]),
+                                    support=str(scheme["support"]), buy=str(scheme["buy"]),
+                                    sell=str(scheme["sell"]), market=str(scheme["market"]),
                                     balance=str(bal))
             except Exception as excp:
                 logger.critical("AMROX25 Error: " + str(excp))

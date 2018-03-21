@@ -30,10 +30,10 @@ def main():
     """ main function """
     setproctitle.setproctitle("greencandle-backend")
     parser = argparse.ArgumentParser()
-    parser.add_argument('-g', '--graph', action='store_true', default=False)
-    parser.add_argument('-j', '--json', action='store_true', default=False)
-    parser.add_argument('-t', '--test', action='store_true', default=False)
-    parser.add_argument('-p', '--pair')
+    parser.add_argument("-g", "--graph", action="store_true", default=False)
+    parser.add_argument("-j", "--json", action="store_true", default=False)
+    parser.add_argument("-t", "--test", action="store_true", default=False)
+    parser.add_argument("-p", "--pair")
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
 
@@ -62,7 +62,7 @@ def loop(args):
         """
         logger.debug("We have {0} potential items to buy".format(len(buy_list)))
         if buy_list:
-            current_btc_bal = events.balance['binance']['BTC']['count']
+            current_btc_bal = events.balance["binance"]["BTC"]["count"]
             amount_to_buy_btc = price_per_trade * RATE
 
 
@@ -81,7 +81,7 @@ def loop(args):
                 else:
                     DB.insert_trade(item[0], prices_trunk[item[0]],
                                     price_per_trade, amount_to_buy_btc)
-                    #binance.order(symbol=?, side=?, quantity, orderType='MARKET, price=?, test=True
+                    #binance.order(symbol=?, side=?, quantity, orderType="MARKET, price=?, test=True
                     #TODO: buy item
         else:
             logger.info("Nothing to buy")
@@ -98,8 +98,8 @@ def loop(args):
             logger.info("No items to sell")
 
     agg_data = {}
-    price_per_trade = int(get_config('backend')['price_per_trade'])
-    max_trades = int(get_config('backend')['max_trades'])
+    price_per_trade = int(get_config("backend")["price_per_trade"])
+    max_trades = int(get_config("backend")["max_trades"])
     logger.debug("Price per trade: {0}".format(price_per_trade))
     logger.debug("max trades: {0}".format(max_trades))
 
@@ -107,7 +107,7 @@ def loop(args):
     if args.pair:
         pairs = [args.pair]
     else:
-        pairs = [price for price in binance.prices().keys() if price != '123456' and
+        pairs = [price for price in binance.prices().keys() if price != "123456" and
                  price.endswith("BTC")]
     prices = binance.prices()
     prices_trunk = {}
@@ -115,9 +115,9 @@ def loop(args):
         if k.endswith("BTC"):
             prices_trunk[k] = v
     pairs = prices.keys()
-    data = get_ohlcs(pairs, interval='15m')
+    data = get_ohlcs(pairs, interval="15m")
 
-    events = Engine(prices=prices_trunk, data=data, interval='15m')
+    events = Engine(prices=prices_trunk, data=data, interval="15m")
     data = events.get_data()
     DB.insert_action_totals()
     DB.clean_stale()
@@ -135,6 +135,6 @@ def loop(args):
     agg_data.update(data)
     return agg_data
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
     logger.debug("COMPLETE")

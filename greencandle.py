@@ -63,20 +63,20 @@ class QuestionDisplayWidget(QtGui.QWidget):
         QtGui.QWidget.__init__(self, parent)
 
         icons = {
-            'BUY':'candle-green.png',
-            'SELL': 'candle-red.png',
-            'unknown': 'candle.png',
-            'overbought': 'candle-red.png',
-            'oversold': 'candle-green.png'
+            "BUY":"candle-green.png",
+            "SELL": "candle-red.png",
+            "unknown": "candle.png",
+            "overbought": "candle-red.png",
+            "oversold": "candle-green.png"
         }
 
         self.setGeometry(QtCore.QRect(0, 0, 320, 80))
-        self.setStyleSheet('QLabel {color: #cccccc;}')
+        self.setStyleSheet("QLabel {color: #cccccc;}")
         self.frame = QtGui.QFrame(self)
-        self.frame.setObjectName('mainFrame')
-        self.frame.setStyleSheet('#mainFrame {background-color: '
-                                 'qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, '
-                                 'stop: 0 #333333, stop: 1 #4d4d4d);}')
+        self.frame.setObjectName("mainFrame")
+        self.frame.setStyleSheet("#mainFrame {background-color: "
+                                 "qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, "
+                                 "stop: 0 #333333, stop: 1 #4d4d4d);}")
 
         self.question = question
 
@@ -88,7 +88,7 @@ class QuestionDisplayWidget(QtGui.QWidget):
         self.question_label.setWordWrap(True)
         self.question_label.setFont(font)
         self.question_label.setText(question.title)
-        self.question_label.setObjectName('question_label')
+        self.question_label.setObjectName("question_label")
         self.question_label.setStyleSheet("#question_label{color: #83ceea;"
                                           "text-decoration:underline} "
                                           "#question_label:hover{color: "
@@ -98,7 +98,7 @@ class QuestionDisplayWidget(QtGui.QWidget):
 
         self.remove_button = QtGui.QPushButton(self.frame)
         self.remove_button.setGeometry(QtCore.QRect(295, 7, 25, 25))
-        self.remove_button.setText('X')
+        self.remove_button.setText("X")
         self.remove_button.setFont(font)
         self.remove_button.setStyleSheet("QPushButton{background: "
                                          "#818185; border: 3px solid black; "
@@ -110,13 +110,13 @@ class QuestionDisplayWidget(QtGui.QWidget):
         try:
             tags = question.tags[0] + ", " + question.tags[1]
         except:
-            tags = question.tags[0]  # If doesn't have more than one tag
-        self.answers_label.setText(' tags: %s' % tags)
+            tags = question.tags[0]  # If doesn"t have more than one tag
+        self.answers_label.setText(" tags: %s" % tags)
         self.answers_label.setGeometry(QtCore.QRect(20, 75, 120, 20))
         if question.name is not None:
             self.submitted_label = QtGui.QLabel(self.frame)
-            self.submitted_label.setText('open')
-            self.submitted_label.setObjectName('submitted_label')
+            self.submitted_label.setText("open")
+            self.submitted_label.setObjectName("submitted_label")
             self.submitted_label.setStyleSheet("#submitted_label{color: "
                                                "#ffffff;text-decoration:"
                                                "underline} #question_label:"
@@ -131,8 +131,8 @@ class QuestionDisplayWidget(QtGui.QWidget):
         settings = settings_dialog.getSettings()
 
         path = "/graphs/in/simple_candlestick_{0}_resized.png".format(question.symbol)
-        graph_url = settings['address'] + path
-        graph_filename = '.' + path.replace('in', 'out')
+        graph_url = settings["address"] + path
+        graph_filename = "." + path.replace("in", "out")
         try:
             urllib.request.urlretrieve(graph_url, graph_filename)
         except Exception as e:
@@ -163,7 +163,7 @@ class QuestionDisplayWidget(QtGui.QWidget):
                                          "background-repeat:no-repeat;")
 
     def remove(self):
-        self.emit(QtCore.SIGNAL('removeQuestion'), self.question)
+        self.emit(QtCore.SIGNAL("removeQuestion"), self.question)
 
     def show_details(self, *args):
         """Show all details of chosen item"""
@@ -174,9 +174,9 @@ class QuestionDisplayWidget(QtGui.QWidget):
                   <p>Direction: {3}</p>
                   <p>Trigger: {4}</p>
                """.format(self.question.symbol,
-                          str(self.question.data).replace("],", "],<br>").strip('{}'),
-                          self.question.url, str(self.question.direction).strip('[]'),
-                          str(self.question.tags).strip('[]'))
+                          str(self.question.data).replace("],", "],<br>").strip("{}"),
+                          self.question.url, str(self.question.direction).strip("[]"),
+                          str(self.question.tags).strip("[]"))
         QtGui.QMessageBox(QtGui.QMessageBox.Information, "Details", text).exec_()
         return True
 
@@ -194,7 +194,7 @@ class QSpinBoxRadioButton(QtGui.QRadioButton):
     Custom Qt Widget that allows for a spinbox to be used in
     conjunction with a radio button
     """
-    def __init__(self, prefix='', suffix='', parent=None):
+    def __init__(self, prefix="", suffix="", parent=None):
         QtGui.QRadioButton.__init__(self, parent)
         self.prefix = QtGui.QLabel(prefix)
         self.prefix.mousePressEvent = self.label_clicked
@@ -250,7 +250,7 @@ class SettingsDialog(QtGui.QDialog):
         self.parent = parent
         QtGui.QDialog.__init__(self, parent)
         self.setFixedSize(QtCore.QSize(400, 450))
-        self.setWindowTitle('Settings')
+        self.setWindowTitle("Settings")
         self.layout = QtGui.QVBoxLayout()
         self.auto_layout = QtGui.QVBoxLayout()
 
@@ -335,8 +335,8 @@ class SettingsDialog(QtGui.QDialog):
         self.authTokenString.setText(token)
 
     def showDialog(self):
-        text, ok_status = QtGui.QInputDialog.getText(self, 'Input Dialog',
-                                                     'Paste Full Web Address here:')
+        text, ok_status = QtGui.QInputDialog.getText(self, "Input Dialog",
+                                                     "Paste Full Web Address here:")
 
         if ok_status:
             self.authTokenString.setText(str(text))
@@ -359,12 +359,12 @@ class SettingsDialog(QtGui.QDialog):
         singleton = Singleton()
 
         try:
-            self.address.setText(settings['address'])
-            self.path.setText(settings['path'])
+            self.address.setText(settings["address"])
+            self.path.setText(settings["path"])
         except:
             return
         try:
-            if settings['notifications']:
+            if settings["notifications"]:
                 self.notifications.setChecked(True)
                 singleton.notify = True
             else:
@@ -374,11 +374,11 @@ class SettingsDialog(QtGui.QDialog):
             self.notifications.setChecked(True)
             singleton.notify = True
         try:
-            self.authTokenString.setText(settings['auth'])
+            self.authTokenString.setText(settings["auth"])
         except:
             return
         try:
-            if settings['logging']:
+            if settings["logging"]:
                 self.logging.setChecked(True)
                 singleton.logging = True
             else:
@@ -390,7 +390,7 @@ class SettingsDialog(QtGui.QDialog):
 
     def loadSettings(self):
         try:
-            with open(os.environ['HOME'] + '/.greencandlerc', 'r') as file_handle:
+            with open(os.environ["HOME"] + "/.greencandlerc", "r") as file_handle:
                 data = file_handle.read()
                 file_handle.close()
         except EnvironmentError:
@@ -400,19 +400,19 @@ class SettingsDialog(QtGui.QDialog):
     def getSettings(self):
         """Returns a dictionary of currently selected settings"""
         settings = {}
-        settings['update_interval'] = self.update_input.value()
-        settings['address'] = str(self.address.text())
-        settings['path'] = str(self.path.text())
-        settings['auth'] = str(self.authTokenString.text())
-        settings['notifications'] = self.notifications.isChecked()
-        settings['logging'] = self.logging.isChecked()
+        settings["update_interval"] = self.update_input.value()
+        settings["address"] = str(self.address.text())
+        settings["path"] = str(self.path.text())
+        settings["auth"] = str(self.authTokenString.text())
+        settings["notifications"] = self.notifications.isChecked()
+        settings["logging"] = self.logging.isChecked()
         return settings
 
 class Singleton:
     """ A python singleton """
-    lastSuccessfull = 'None'
-    update_color = 'red'
-    state_color = ['green', 'yellow', 'red', 'black'] # 0, 1, 2, 3
+    lastSuccessfull = "None"
+    update_color = "red"
+    state_color = ["green", "yellow", "red", "black"] # 0, 1, 2, 3
     remove_list = []
     class __impl:
         """ Implementation of the singleton interface """
@@ -432,7 +432,7 @@ class Singleton:
             Singleton.__instance = Singleton.__impl()
 
         # Store instance reference as the only member in the handle
-        self.__dict__['_Singleton__instance'] = Singleton.__instance
+        self.__dict__["_Singleton__instance"] = Singleton.__instance
 
     def __getattr__(self, attr):
         """ Delegate access to implementation """
@@ -445,24 +445,24 @@ class Singleton:
 class Events(object):
     """Application specific representation of an event"""
     def __init__(self, **kwargs):
-        self.id = kwargs['id']
-        self.unixname = kwargs['unixname']
-        self.url = kwargs['url']
-        self.title = kwargs['title']
-        self.symbol = kwargs['symbol']
-        self.direction = [kwargs['direction']]
-        self.data = kwargs['data']
-        self.profile = kwargs['profile']
-        self.name = kwargs['name']
+        self.id = kwargs["id"]
+        self.unixname = kwargs["unixname"]
+        self.url = kwargs["url"]
+        self.title = kwargs["title"]
+        self.symbol = kwargs["symbol"]
+        self.direction = [kwargs["direction"]]
+        self.data = kwargs["data"]
+        self.profile = kwargs["profile"]
+        self.name = kwargs["name"]
         self.tags = []
-        self.tags.append(kwargs['types'])
+        self.tags.append(kwargs["types"])
 
         if len(self.title) > 69:
-            self.title = self.title[:69] + '...'
-        if kwargs['creation_time'] is None:
+            self.title = self.title[:69] + "..."
+        if kwargs["creation_time"] is None:
             self.creation_time = datetime.utcnow()
         else:
-            self.creation_time = datetime.utcfromtimestamp(kwargs['creation_time'])
+            self.creation_time = datetime.utcfromtimestamp(kwargs["creation_time"])
 
     def __repr__(self):
         return "%s: %s" % (self.id, self.title)
@@ -481,42 +481,42 @@ class Question(object):
         self.id = question_id
         self.site = site
 
-        api_base = 'http://api.%s/%s' \
+        api_base = "http://api.%s/%s" \
             % (self.site, APIHelper.API_VER)
-        base = 'http://%s/questions/' % (self.site)
+        base = "http://%s/questions/" % (self.site)
         self.url = base + self.id
 
-        self.json_url = '%s/questions/%s/%s' \
+        self.json_url = "%s/questions/%s/%s" \
             % (api_base, self.id, APIHelper.API_KEY)
 
         if title is None or answer_count is None or submitter is None or already_answered is None:
             so_data = APIHelper.callAPI(self.json_url, self.auth)
 
         if title is None:
-            self.title = so_data['questions'][0]['title']
+            self.title = so_data["questions"][0]["title"]
         else:
             self.title = title
 
         if already_answered is None:
-            self.already_answered = 'accepted_answer_id' in so_data['questions'][0]
+            self.already_answered = "accepted_answer_id" in so_data["questions"][0]
         else:
             self.already_answered = already_answered
 
         if answer_count is None:
-            self.answer_count = so_data['questions'][0]['answer_count']
+            self.answer_count = so_data["questions"][0]["answer_count"]
         else:
             self.answer_count = answer_count
 
         if submitter is None:
             try:
-                self.submitter = so_data['questions'][0]['owner']['display_name']
+                self.submitter = so_data["questions"][0]["owner"]["display_name"]
             except KeyError:
                 self.submitter = None
         else:
             self.submitter = submitter
 
         if len(self.title) > 45:
-            self.title = self.title[:43] + '...'
+            self.title = self.title[:43] + "..."
 
         if last_queried is None:
             self.last_queried = datetime.utcnow()
@@ -528,11 +528,11 @@ class Question(object):
         else:
             self.created = datetime.utcfromtimestamp(created)
 
-        self.answers_url = '%s/questions/%s/answers%s&min=%s' \
+        self.answers_url = "%s/questions/%s/answers%s&min=%s" \
             % (api_base, self.id, APIHelper.API_KEY,
                int(calendar.timegm(self.created.timetuple())))
 
-        self.comments_url = '%s/questions/%s/comments%s&min=%s' \
+        self.comments_url = "%s/questions/%s/comments%s&min=%s" \
             % (api_base, self.id, APIHelper.API_KEY,
                int(calendar.timegm(self.created.timetuple())))
 
@@ -549,7 +549,7 @@ class Notification(object):
 
 class GreenCandle(QtGui.QDialog):
     """
-        The 'main' dialog window for the application.  Displays
+        The "main" dialog window for the application.  Displays
         the list of tracked questions and has the input controls for
         adding new questions.
         """
@@ -570,7 +570,7 @@ class GreenCandle(QtGui.QDialog):
         singleton = Singleton()
         singleton.notify = False
         LOGGER = logging.getLogger("GreenCandle log")
-        filename = "%s/greencandle.log" % os.environ['HOME']
+        filename = "%s/greencandle.log" % os.environ["HOME"]
         LOGGER.setLevel(logging.DEBUG)
         formatter = logging.Formatter("%(asctime)s;%(levelname)s;%(message)s",
                                       "%Y-%m-%d %H:%M:%S")
@@ -613,14 +613,14 @@ class GreenCandle(QtGui.QDialog):
 
         # location of status at bottom
         self.updated = QtGui.QLabel(self)
-        self.updated.setText(str('Last Successful Update: ' +
+        self.updated.setText(str("Last Successful Update: " +
                                  Singleton.lastSuccessfull))
         # underneath display_list which is at 350, 850  # width, height
         self.updated.setGeometry(QtCore.QRect(25, 860, 240, 30))  # (left, top, width, height)
         self.updated.setStyleSheet("QLabel {font-size : 12px; color : green; }")
 
         path = os.getcwd()
-        icon = QtGui.QIcon(path + '/img/candle.png')
+        icon = QtGui.QIcon(path + "/img/candle.png")
         self.setWindowIcon(icon)
 
         self.tracking_list = []
@@ -632,25 +632,25 @@ class GreenCandle(QtGui.QDialog):
         self.queue_timer.timeout.connect(self.process_queue)
         self.notify_queue = Queue()
 
-        icon2 = QtGui.QIcon(path + '/img/candle.png')
+        icon2 = QtGui.QIcon(path + "/img/candle.png")
         self.notifier = QtGui.QSystemTrayIcon(icon2, self)
         self.notifier.messageClicked.connect(self.popupClicked)
         self.notifier.activated.connect(self.trayClicked)
-        self.notifier.setToolTip('GreenCandle')
+        self.notifier.setToolTip("GreenCandle")
 
         self.tray_menu = QtGui.QMenu()
-        self.show_action = QtGui.QAction('Show', None)
+        self.show_action = QtGui.QAction("Show", None)
         self.show_action.triggered.connect(self.showWindow)
-        self.settings_action = QtGui.QAction('Settings', None)
+        self.settings_action = QtGui.QAction("Settings", None)
         self.settings_action.triggered.connect(self.showSettings)
 
-        self.clear_action = QtGui.QAction('Clear Ignore List', None)
+        self.clear_action = QtGui.QAction("Clear Ignore List", None)
         self.clear_action.triggered.connect(self.clear_list)
 
-        self.about_action = QtGui.QAction('About', None)
+        self.about_action = QtGui.QAction("About", None)
         self.about_action.triggered.connect(self.show_about)
 
-        self.exit_action = QtGui.QAction('Exit', None)
+        self.exit_action = QtGui.QAction("Exit", None)
         self.exit_action.triggered.connect(self.exitFromTray)
 
         self.tray_menu.addAction(self.show_action)
@@ -662,9 +662,9 @@ class GreenCandle(QtGui.QDialog):
         self.notifier.setContextMenu(self.tray_menu)
         self.notifier.show()
         self.worker = WorkerThread(self)
-        self.connect(self.worker, QtCore.SIGNAL('updateQuestion'), self.updateQuestion)
-        self.connect(self.worker, QtCore.SIGNAL('autoRemove'), self.removeQuestion)
-        self.connect(self.worker, QtCore.SIGNAL('done'), self.start_queue_process)
+        self.connect(self.worker, QtCore.SIGNAL("updateQuestion"), self.updateQuestion)
+        self.connect(self.worker, QtCore.SIGNAL("autoRemove"), self.removeQuestion)
+        self.connect(self.worker, QtCore.SIGNAL("done"), self.start_queue_process)
         self.apply_settings()
 
         self.worker.start()
@@ -674,11 +674,11 @@ class GreenCandle(QtGui.QDialog):
         """Send new settings to worker thread"""
         singleton = Singleton()
         settings = self.settings_dialog.getSettings()
-        interval = settings['update_interval'] * 1000 #convert to milliseconds
+        interval = settings["update_interval"] * 1000 #convert to milliseconds
         self.worker.set_interval(interval)
         self.worker.apply_settings(settings)
-        singleton.logging = settings['logging']
-        singleton.notif = settings['notifications']
+        singleton.logging = settings["logging"]
+        singleton.notif = settings["notifications"]
 
     def trayClicked(self, event):
         """Shortcut to show list of question, not supported in Mac OS X"""
@@ -715,7 +715,7 @@ class GreenCandle(QtGui.QDialog):
                 self.status = "blank"
 
             path = os.getcwd()
-            iconvar = '%s/img/candle-%s.png' % (path, self.status)
+            iconvar = "%s/img/candle-%s.png" % (path, self.status)
             self.my_logging(iconvar)
             self.notifier.setIcon(QtGui.QIcon(iconvar))
         else:
@@ -724,21 +724,21 @@ class GreenCandle(QtGui.QDialog):
             self.run = "false"
             path = os.getcwd()
             self.status = singleton.state_color[singleton.new_state]
-            iconvar = '%s/img/candle-%s.png' % (path, self.status)
+            iconvar = "%s/img/candle-%s.png" % (path, self.status)
             self.notifier.setIcon(QtGui.QIcon(iconvar))
 
     def notify_good(self):
         self.ctimer.stop()
         path = os.getcwd()
         self.my_logging("notify good")
-        icon2 = QtGui.QIcon(path + '/img/candle-green.png')
+        icon2 = QtGui.QIcon(path + "/img/candle-green.png")
         self.notifier.setIcon(icon2)
         self.displayQuestions()
 
     def notify_bad(self):
         path = os.getcwd()
         self.my_logging("notify bad")
-        icon2 = QtGui.QIcon(path + '/img/candle-red.png')
+        icon2 = QtGui.QIcon(path + "/img/candle-red.png")
         self.notifier.setIcon(icon2)
         self.displayQuestions()
         my_msg = "Alert: Bad State Test"
@@ -747,7 +747,7 @@ class GreenCandle(QtGui.QDialog):
     def notify_unknown(self):
         path = os.getcwd()
         self.my_logging("notify unknown")
-        icon2 = QtGui.QIcon(path + '/img/candle.png')
+        icon2 = QtGui.QIcon(path + "/img/candle.png")
         self.notifier.setIcon(icon2)
         my_msg = "Alert: Unable to Extract JSON"
         self.notifier.showMessage("GreenCandle-Test", my_msg, 2000)
@@ -781,7 +781,7 @@ class GreenCandle(QtGui.QDialog):
         QtGui.QMessageBox(QtGui.QMessageBox.Critical, "Error!", text).exec_()
 
     def exitFromTray(self):
-        """Event handler for 'Exit' menu option"""
+        """Event handler for "Exit" menu option"""
         self.serializeSettings()
         self.parent.exit()
 
@@ -794,13 +794,13 @@ class GreenCandle(QtGui.QDialog):
         """Persist application settings in external JSON file"""
         settings = self.settings_dialog.getSettings()
 
-        with open(os.environ['HOME'] + '/.greencandlerc', 'w') as file_handle:
+        with open(os.environ["HOME"] + "/.greencandlerc", "w") as file_handle:
             json.dump(settings, file_handle, indent=4)
 
     def deserializeSettings(self):
         """Restore saved application settings from external JSON file"""
         try:
-            with open('settings.json', 'r') as file_handle:
+            with open("settings.json", "r") as file_handle:
                 data = file_handle.read()
         except EnvironmentError:
             #no saved settings, return silently
@@ -819,7 +819,7 @@ class GreenCandle(QtGui.QDialog):
         self.my_logging("new item: "+ str(new_item))
         if new_item != 0:
             if len(question.title) > 40:
-                question.title = question.title[:40] + '...'
+                question.title = question.title[:40] + "..."
             self.add_to_notification_queue(Notification("New event: %s" \
                                                     % question.title))
             self.my_logging("new_answer so adding to queue %s" % question.title)
@@ -829,12 +829,12 @@ class GreenCandle(QtGui.QDialog):
         self.displayQuestions()
 
     def popupClicked(self):
-        """Open the question in user's default browser"""
+        """Open the question in user"s default browser"""
         if self.question.url:
             QtGui.QDesktopServices.openUrl(QtCore.QUrl(self.question.url))
 
     def displayQuestions(self):
-        self.updated.setText(str('Last Successful Update:\n ' +
+        self.updated.setText(str("Last Successful Update:\n " +
                                  Singleton.lastSuccessfull))
         sscolor = ("QLabel {font-size : 12px; color : %s; }" %
                    Singleton.update_color)
@@ -858,7 +858,7 @@ class GreenCandle(QtGui.QDialog):
             item.setSizeHint(QtCore.QSize(320, 95))
             self.display_list.addItem(item)
             qitem = QuestionDisplayWidget(question)
-            self.connect(qitem, QtCore.SIGNAL('removeQuestion'),
+            self.connect(qitem, QtCore.SIGNAL("removeQuestion"),
                          self.removeQuestion)
             self.display_list.setItemWidget(item, qitem)
             del item
@@ -898,8 +898,8 @@ class GreenCandle(QtGui.QDialog):
         if match is None:
             return None
         try:
-            site = match.group('site')
-            id = match.group('id')
+            site = match.group("site")
+            id = match.group("id")
         except IndexError:
             return None
         return id, site
@@ -974,8 +974,8 @@ class GreenCandle(QtGui.QDialog):
 class APIHelper(object):
     """Helper class for API related functionality"""
 
-    API_KEY = '?key=Jv8tIPTrRUOqRe-5lk4myw'
-    API_VER = '1.0'
+    API_KEY = "?key=Jv8tIPTrRUOqRe-5lk4myw"
+    API_VER = "1.0"
 
     @staticmethod
     def callAPI(url, auth):
@@ -989,14 +989,14 @@ class APIHelper(object):
 
         req = urllib.request.urlopen(fullurl).read().decode("utf-8")
         try:
-            Singleton.update_color = 'green'
+            Singleton.update_color = "green"
             return json.loads(req)
 
         except:
             print("Unable to fetch live data")
-            json_data = open('./unknown.json')
+            json_data = open("./unknown.json")
             singleton.new_state = 3
-            Singleton.update_color = 'black'
+            Singleton.update_color = "black"
             return json.load(json_data)
 
 
@@ -1014,7 +1014,7 @@ class WorkerThread(QtCore.QThread):
         self.tracker = tracker
         self.interval = 300000
         self.settings = {}
-        filename = "%s/greencandle.log" % os.environ['HOME']
+        filename = "%s/greencandle.log" % os.environ["HOME"]
         LOGGERW.setLevel(logging.DEBUG)
         formatter = logging.Formatter("%(asctime)s;%(levelname)s;%(message)s",
                                       "%Y-%m-%d %H:%M:%S")
@@ -1032,7 +1032,7 @@ class WorkerThread(QtCore.QThread):
 
     def run(self):
         self.timer = QtCore.QTimer()
-        self.connect(self.timer, QtCore.SIGNAL('timeout()'), self.fetch,
+        self.connect(self.timer, QtCore.SIGNAL("timeout()"), self.fetch,
                      QtCore.Qt.DirectConnection)
         self.timer.start(self.interval)
         try:
@@ -1057,9 +1057,9 @@ class WorkerThread(QtCore.QThread):
         singleton = Singleton()
 
         self.tracker.tracking_list_new = []
-        address = settings['address']
-        path = settings['path']
-        auth = settings['auth']
+        address = settings["address"]
+        path = settings["path"]
+        auth = settings["auth"]
 
         so_data = APIHelper.callAPI(address + path, auth)
         self.my_logging("address:%s, auth:%s" %(address, auth))
@@ -1075,28 +1075,28 @@ class WorkerThread(QtCore.QThread):
             """ Go through events and extract relevent details """
             event = events_data[str(e)]
             id = e
-            name = 'amro diab'
-            profile = event['event']
+            name = "amro diab"
+            profile = event["event"]
             self.my_logging(event)
-            profile = event['url']
+            profile = event["url"]
 
-            unixname = 'adiab'
-            email = 'adiab@hotmail.co.uk'
-            title = event['symbol']
-            creation_time = event['time']
-            url = event['url']
-            symbol = event['symbol']
-            data = event['data']
-            direction = event['direction']
+            unixname = "adiab"
+            email = "adiab@hotmail.co.uk"
+            title = event["symbol"]
+            creation_time = event["time"]
+            url = event["url"]
+            symbol = event["symbol"]
+            data = event["data"]
+            direction = event["direction"]
             id = e
-            types = event['event']
+            types = event["event"]
 
             rebuild_question = Events(id=id, name=name, unixname=unixname, title=title,
                                       creation_time=creation_time, url=url, types=types,
                                       profile=profile, symbol=symbol, data=data,
                                       direction=direction)
 
-            self.my_logging("Finish time in epoch: xxx -%s- " % event['time'])
+            self.my_logging("Finish time in epoch: xxx -%s- " % event["time"])
             self.my_logging("current_time = " + str(time.time()))
 
             skip = False
@@ -1125,7 +1125,7 @@ class WorkerThread(QtCore.QThread):
             self.my_logging("%s %s" % (line.id, line.name))
             self.my_logging("%s %s" % (len(self.tracker.tracking_list),
                                        len(difference)))
-            self.emit(QtCore.SIGNAL('updateQuestion'), line, status, new_item)
+            self.emit(QtCore.SIGNAL("updateQuestion"), line, status, new_item)
 
         self.tracker.tracking_list = self.tracker.tracking_list_new
         self.tracker.tracking_list_new = []
@@ -1135,27 +1135,27 @@ class WorkerThread(QtCore.QThread):
 
             # If no new questions
             self.my_logging("no new items")
-            self.emit(QtCore.SIGNAL('notify_good'))
+            self.emit(QtCore.SIGNAL("notify_good"))
             singleton.new_state = 0
             self.my_logging("this should be 0 %s" % singleton.new_state)
-            self.emit(QtCore.SIGNAL('updateQuestion'), 1, 0, 0)
+            self.emit(QtCore.SIGNAL("updateQuestion"), 1, 0, 0)
 
-        self.emit(QtCore.SIGNAL('done'))
+        self.emit(QtCore.SIGNAL("done"))
         self.my_logging("%s %s" %(len(self.tracker.tracking_list),
                                   len(difference)))
 
     def auto_remove_questions(self):
-        if self.settings['auto_remove']:
-            if self.settings['on_inactivity']:
-                threshold = timedelta(hours=self.settings['on_inactivity'])
+        if self.settings["auto_remove"]:
+            if self.settings["on_inactivity"]:
+                threshold = timedelta(hours=self.settings["on_inactivity"])
                 for question in self.tracker.tracking_list[:]:
                     if datetime.utcnow() - question.last_queried > threshold:
-                        self.emit(QtCore.SIGNAL('autoRemove'), question, True)
-            elif self.settings['on_time']:
-                threshold = timedelta(hours=self.settings['on_time'])
+                        self.emit(QtCore.SIGNAL("autoRemove"), question, True)
+            elif self.settings["on_time"]:
+                threshold = timedelta(hours=self.settings["on_time"])
                 for question in self.tracker.tracking_list[:]:
                     if datetime.utcnow() - question.created > threshold:
-                        self.emit(QtCore.SIGNAL('autoRemove'), question, True)
+                        self.emit(QtCore.SIGNAL("autoRemove"), question, True)
 
 if __name__ == "__main__":
     try:

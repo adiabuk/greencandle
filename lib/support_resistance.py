@@ -7,7 +7,7 @@ Get Support and resistance and PIP for given traiding pair
 import os
 import sys
 
-BASE_DIR = os.getcwd().split('greencandle', 1)[0] + 'greencandle'
+BASE_DIR = os.getcwd().split("greencandle", 1)[0] + "greencandle"
 sys.path.append(BASE_DIR)
 
 import json
@@ -20,9 +20,9 @@ from lib.binance_common import get_binance_klines
 def pip_calc(open_val, close_val):
     open_val = Decimal(open_val)
     close_val = Decimal(close_val)
-    if '.' not in str(open_val):
+    if "." not in str(open_val):
         multiplier = Decimal(0.0001)
-    elif str(open_val).index('.') >= 3:  # JPY pair
+    elif str(open_val).index(".") >= 3:  # JPY pair
         multiplier = Decimal(0.01)
     else:
         multiplier = Decimal(0.0001)
@@ -49,12 +49,12 @@ def get_values(pair, dataframe):
         print("Skipping", pair)
         return None
     data = {}
-    data['value'] = value
-    data['support'] = support
-    data['resistance'] = resistance
+    data["value"] = value
+    data["support"] = support
+    data["resistance"] = resistance
 
     try:
-        data['difference'] = pipify(resistance[-1]) - pipify(support[-1])
+        data["difference"] = pipify(resistance[-1]) - pipify(support[-1])
     except TypeError as type_error:
         print("Type error", support[-1], resistance[-1], type_error)
         return None
@@ -68,7 +68,7 @@ def pipify(value):
     """
     value = Decimal(value)
     try:
-        pip_value = int((str(value) + "000").split('.')[-1][:4])
+        pip_value = int((str(value) + "000").split(".")[-1][:4])
         return pip_value
     except ValueError:
         print("Value Error", value)
@@ -87,9 +87,9 @@ def main():
             data[pair] = values
 
     # sort by pip then by difference
-    sorted_prices = sorted(data.keys(), key=lambda x: (data[x]['value'], data[x]['difference']))
+    sorted_prices = sorted(data.keys(), key=lambda x: (data[x]["value"], data[x]["difference"]))
     print(json.dumps(sorted_prices))
     #print(json.dumps(data))
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

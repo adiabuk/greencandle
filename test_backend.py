@@ -23,8 +23,8 @@ def main():
     """
     Run test for all pairs and intervals defined in config
     """
-    pairs = get_config('test')['pairs'].split()
-    intervals = get_config('test')['intervals'].split()
+    pairs = get_config("test")["pairs"].split()
+    intervals = get_config("test")["intervals"].split()
 
     redis = Redis()
     for pair in pairs:
@@ -33,7 +33,7 @@ def main():
             with open(filename, "rb") as handle:
                 df = pickle.load(handle)
 
-            prices_trunk = {pair: '0'}
+            prices_trunk = {pair: "0"}
             start = 50
             redis.clear_all()
             for i in range(1000):
@@ -53,5 +53,5 @@ def main():
                 #buy(get_buy())
                 del data
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

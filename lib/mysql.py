@@ -13,23 +13,23 @@ import MySQLdb.cursors
 from MySQLdb import OperationalError
 import binance
 
-BASE_DIR = os.getcwd().split('greencandle', 1)[0] + 'greencandle'
+BASE_DIR = os.getcwd().split("greencandle", 1)[0] + "greencandle"
 sys.path.append(BASE_DIR)
 
 from lib.config import get_config
 from lib.logger import getLogger, get_decorator
 
-HOST = get_config('database')['host']
-USER = get_config('database')['user']
-PASSWORD = get_config('database')['password']
-DB = get_config('database')['db']
+HOST = get_config("database")["host"]
+USER = get_config("database")["user"]
+PASSWORD = get_config("database")["password"]
+DB = get_config("database")["db"]
 logger = getLogger(__name__)
 
 class mysql(object):
     """
     Custom mysql object with methods to store and retrive given data
     """
-    get_exceptions = get_decorator((Exception), default_value='default')
+    get_exceptions = get_decorator((Exception), default_value="default")
 
     def __init__(self):
         self.connect()
@@ -138,7 +138,7 @@ class mysql(object):
             self.execute(cur, command)
             data = cursor.fetchall()
             for record in data:
-                di[record['pair']] = record['total1'], prices[record['pair']]
+                di[record["pair"]] = record["total1"], prices[record["pair"]]
 
 
         return di
@@ -219,7 +219,7 @@ class mysql(object):
     def get_trades(self,):
         """
         Get a list of current open trades.  This is identified by a db record
-        which has a buy price, but no sell price - ie. we haven't sold it yet
+        which has a buy price, but no sell price - ie. we haven"t sold it yet
 
         Args:
         Returns:
@@ -285,8 +285,8 @@ class mysql(object):
                 try:
                     command = """insert into balance (gbp, btc, usd, count, coin, exchange_id)
                                  values ("{0}", "{1}", "{2}", "{3}", "{4}", (select id from
-                                 exchange where name="{5}"))""".format(data['GBP'], data['BTC'],
-                                                                       data['USD'], data['count'],
+                                 exchange where name="{5}"))""".format(data["GBP"], data["BTC"],
+                                                                       data["USD"], data["count"],
                                                                        coin, exchange)
                 except KeyError:
                     logger.critical(" ".join(["XXX", coin, exchange, "KEYERROR"]))

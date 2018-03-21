@@ -29,7 +29,7 @@ class Redis(object):
         """
         Wipe all data from redis - used for testing only
         """
-        self.conn.execute_command('flushall')
+        self.conn.execute_command("flushall")
 
     def redis_conn(self, pair, interval, data, now):
         """
@@ -50,10 +50,10 @@ class Redis(object):
         """
         Get sorted list of keys for a trading pair/interval
         eg.
-         b'XRPBTC:15m:1520869499999',
-         b'XRPBTC:15m:1520870399999',
-         b'XRPBTC:15m:1520871299999',
-         b'XRPBTC:15m:1520872199999',
+         b"XRPBTC:15m:1520869499999",
+         b"XRPBTC:15m:1520870399999",
+         b"XRPBTC:15m:1520871299999",
+         b"XRPBTC:15m:1520872199999",
          ...
 
          each item in the list contains PAIR:interval:epoch (in milliseconds)
@@ -66,7 +66,7 @@ class Redis(object):
 
         Args:
               address
-              eg.  b'XRPBTC:15m:1520869499999',
+              eg.  b"XRPBTC:15m:1520869499999",
         Returns:
               integer value representing total score for this pair/interval/timeframe where the
               score can be negative (indicating overall bearish) - the lower the number, the more
@@ -83,17 +83,17 @@ class Redis(object):
     def get_current(self, item):
         """
         Get the current price and date for given item where item is an address:
-        eg.  b'XRPBTC:15m:1520871299999'
+        eg.  b"XRPBTC:15m:1520871299999"
         All items within a group should have the same date and price, as they relate to the same
         data - so we pick an indicator at random (RSI) to reference in the JSON that is stored.
         Returns:
             a tuple of current_price and current_date
         """
 
-        byte = self.conn.hget(item, 'RSI')
+        byte = self.conn.hget(item, "RSI")
         data = ast.literal_eval(byte.decode("UTF-8"))
 
-        return data['current_price'], data['date']
+        return data["current_price"], data["date"]
 
     def get_change(self, pair, interval):
         """
@@ -115,7 +115,7 @@ class Redis(object):
         current = self.get_current(items[-1])
         current_price = current[0]
         current_mepoch = float(current[1])/1000
-        current_time = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(current_mepoch))
+        current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_mepoch))
         value = self.db.get_trade_value(pair)
 
         if not value and (-2 <= totals[-1] <= 5 and

@@ -9,7 +9,7 @@ from __future__ import print_function
 import os
 import sys
 
-BASE_DIR = os.getcwd().split('greencandle', 1)[0] + 'greencandle'
+BASE_DIR = os.getcwd().split("greencandle", 1)[0] + "greencandle"
 sys.path.append(BASE_DIR)
 
 
@@ -20,11 +20,11 @@ binance_auth()
 
 def get_buy_price(pair="XZCETH"):
     """ return lowest buying request """
-    return sorted([float(i) for i in binance.depth(pair)['asks'].keys()])[0]
+    return sorted([float(i) for i in binance.depth(pair)["asks"].keys()])[0]
 
 def get_sell_price(pair="XZCETH"):
     """ return highest selling price """
-    return sorted([float(i) for i in binance.depth(pair)['bids'].keys()])[-1]
+    return sorted([float(i) for i in binance.depth(pair)["bids"].keys()])[-1]
 
 def main():
     """ Main function """

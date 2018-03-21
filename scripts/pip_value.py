@@ -7,15 +7,15 @@ from coinbase.wallet.client import Client
 from forex_python.converter import CurrencyRates
 import binance
 
-HOME_DIR = os.path.expanduser('~')
-CONFIG = json.load(open(HOME_DIR + '/.coinbase'))
-API_KEY = CONFIG['api_key']
-API_SECRET = CONFIG['api_secret']
+HOME_DIR = os.path.expanduser("~")
+CONFIG = json.load(open(HOME_DIR + "/.coinbase"))
+API_KEY = CONFIG["api_key"]
+API_SECRET = CONFIG["api_secret"]
 
 CURRENCY = CurrencyRates()
-RATE = CURRENCY.get_rate('USD', 'GBP')
+RATE = CURRENCY.get_rate("USD", "GBP")
 CLIENT = Client(API_KEY, API_SECRET)
-RATES = CLIENT.get_exchange_rates()['rates']
+RATES = CLIENT.get_exchange_rates()["rates"]
 PIPS = []
 
 for key, value in binance.prices().items():

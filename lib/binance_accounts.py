@@ -26,15 +26,15 @@ def get_binance_values():
     currency = CurrencyRates()
 
     for key in all_balances:
-        current_value = float(all_balances[key]['free']) + float(all_balances[key]['locked'])
+        current_value = float(all_balances[key]["free"]) + float(all_balances[key]["locked"])
 
         if float(current_value) > 0:  # available currency
             result["binance"][key]["count"] = current_value
 
-            if key != 'BTC':  # currencies that need converting to BTC
+            if key != "BTC":  # currencies that need converting to BTC
                 try:
-                    bcoin = float(current_value) * float(prices[key+'BTC'])  # value in BTC
-                    bitcoin_totals += float(current_value) * float(prices[key+'BTC'])
+                    bcoin = float(current_value) * float(prices[key+"BTC"])  # value in BTC
+                    bitcoin_totals += float(current_value) * float(prices[key+"BTC"])
                 except KeyError as key_error:
                     logger.critical("Error: Unable to quantify currency: " + key)
                     continue
@@ -49,19 +49,19 @@ def get_binance_values():
             gbp = usd2gbp() * usd
             usd_total += usd
             gbp_total += gbp
-            result["binance"][key]['BTC'] = bcoin
-            result["binance"][key]['USD'] = usd
+            result["binance"][key]["BTC"] = bcoin
+            result["binance"][key]["USD"] = usd
             result["binance"][key]["GBP"] = gbp
 
-    usd_total = bitcoin_totals * float(prices['BTCUSDT'])
+    usd_total = bitcoin_totals * float(prices["BTCUSDT"])
     result["binance"]["TOTALS"]["BTC"] = bitcoin_totals
     result["binance"]["TOTALS"]["USD"] = usd_total
     result["binance"]["TOTALS"]["count"] = ""
 
     gbp_total = currency.get_rate("USD", "GBP") * usd_total
     result["binance"]["TOTALS"]["GBP"] = gbp_total
-    add_value('USD', usd_total)
-    add_value('GBP', gbp_total)
+    add_value("USD", usd_total)
+    add_value("GBP", gbp_total)
 
     return default_to_regular(result)
 

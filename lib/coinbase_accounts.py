@@ -43,7 +43,7 @@ def get_coinbase_values():
             # amount in USD
             current_usd = float(currency.get_rate("GBP", "USD")) * float(current_gbp)
             usd_totals += float(current_usd)
-            result['coinbase'][account["currency"]]["USD"] = current_usd
+            result["coinbase"][account["currency"]]["USD"] = current_usd
 
             # amount in BTC
             current_btc = current_count if account["currency"] == "BTC" else \

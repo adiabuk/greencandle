@@ -46,8 +46,8 @@ def gbp_to_base(gbp, symbol):
     BTC => OMG
     """
 
-    usd = gbp * CURRENCY.get_rate('GBP', 'USD')
-    btc = usd * float(binance.prices()['BTCUSDT'])
+    usd = gbp * CURRENCY.get_rate("GBP", "USD")
+    btc = usd * float(binance.prices()["BTCUSDT"])
     omg = btc * float(binance.prices()[symbol + "BTC"])
     return "{0:.10f}".format(omg)
 
