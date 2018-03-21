@@ -42,10 +42,10 @@ def main():
                 dataframe = df.copy()[beg: end]
                 ohlc = make_data_tupple(dataframe)
                 data = ({pair:ohlc}, {pair:dataframe})
-
                 events = Engine(prices=prices_trunk, data=data, interval=interval, test=True)
                 data = events.get_data()
                 redis.get_change(pair=pair, interval=interval)
+                del events
 
                 #insert_action_totals()
                 #clean_stale()

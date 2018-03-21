@@ -14,13 +14,13 @@ from decimal import Decimal
 import pandas
 import talib
 import binance
-from lib.mysql import insert_actions, insert_data
+from lib.mysql import mysql
 from lib.redis_conn import Redis
 from lib import balance
 from lib.support_resistance import get_values
 from lib.order import get_buy_price, get_sell_price
 
-from lib.logger import getLogger
+from lib.logger import getLogger, get_decorator
 from indicator import SuperTrend, RSI
 
 
@@ -30,6 +30,7 @@ logger = getLogger(__name__)
 class Engine(dict):
     """ Represent events created from data & indicators """
 
+    get_exceptions = get_decorator((Exception), default_value='default')
     def __init__(self, data, prices, interval=None, test=False):
         """
         Initialize class
@@ -41,6 +42,7 @@ class Engine(dict):
         self.pairs = prices.keys()
         self.dataframe = None
         self.redis = Redis()
+        self.db = mysql()
         if not test:
             self.balance = balance.get_balance()
         self.test = test
@@ -50,6 +52,10 @@ class Engine(dict):
         self.data, self.dataframes = data
         super(Engine, self).__init__()
         logger.debug("Finished fetching raw data")
+
+    def __del__(self):
+        del  self.db
+        del self.redis
 
     def get_test_data(self, data):
         """Get test data"""
@@ -88,6 +94,7 @@ class Engine(dict):
         """return serialized JSON of dict """
         return json.dumps(self)
 
+    @get_exceptions
     def get_data(self):
         """
         Iterate through data and trading pairs to extract data
@@ -114,6 +121,7 @@ class Engine(dict):
 
         POOL.shutdown(wait=True)
         POOL = ThreadPoolExecutor(max_workers=50)
+        logger.debug("Done getting data")
         return self
 
     def get_sup_res(self, pair, klines):
@@ -143,7 +151,7 @@ class Engine(dict):
             None
 
         """
-
+        logger.info("Getting RSI")
         dataframe = self.renamed_dataframe_columns(klines)
         scheme = {}
         mine = dataframe.apply(pandas.to_numeric)
@@ -163,6 +171,7 @@ class Engine(dict):
         scheme["direction"] = direction
         scheme["event"] = "RSI"
         self.add_scheme(scheme)
+        logger.info("Done getting RSI")
 
     @staticmethod
     def renamed_dataframe_columns(klines=None):
@@ -210,6 +219,7 @@ class Engine(dict):
         scheme["direction"] = self.get_supertrend_direction(df_list[-1])
         scheme["event"] = "Supertrend"
         self.add_scheme(scheme)
+        logger.info("done getting supertrend")
 
     @staticmethod
     def get_url(pair):
@@ -259,6 +269,7 @@ class Engine(dict):
             '>' : operator.gt,
             }[op]
 
+    @get_exceptions
     def eval_binary_expr(self, op1, oper, op2):
         """
         Evaluate a binary expression
@@ -293,6 +304,7 @@ class Engine(dict):
                 "SELL": -1,
                 "HOLD": 0}[trigger]
 
+    @get_exceptions
     def get_moving_averages(self, pair, klines):
         """
         Apply moving averages to klines and get BUY/SELL triggers
@@ -346,12 +358,15 @@ class Engine(dict):
             except Exception as e:
                 logger.critical("AMROX25 REDIS FAILURE " + str(e))
             try:
-                insert_actions(pair=pair, indicator=func+'-'+str(timeperiod),
-                               value=result, action=self.get_action(trigger))
+                #self.db.insert_actions(pair=pair, indicator=func+'-'+str(timeperiod),
+                #                       value=result, action=self.get_action(trigger))
+                pass
             except Exception:
                 traceback.print_exc()
                 logger.critical("AMROX25 DB FUBAR")
+        logger.debug("done getting moving averages")
 
+    @get_exceptions
     def get_oscillators(self, pair, klines):
         """
 
@@ -365,7 +380,7 @@ class Engine(dict):
         Returns:
             None
         """
-
+        logger.info("Getting Oscillators")
         open, high, low, close = klines
         trends = {
             #"STOCHF": {"BUY": "< 25", "SELL": ">75", "args":[20]},
@@ -397,12 +412,13 @@ class Engine(dict):
                     s = str(j) + " " + attrs[item]   # From numpy.float64 to str
                     if self.eval_binary_expr(*(s.split())):
                         trigger = item
+                        self.db.insert_actions(pair=pair, indicator=check, value=j,
+                                               action=self.get_action(trigger))
                         break
 
             except Exception as error:
                 traceback.print_exc()
                 logger.critical("AMROX 25 failed here:" + str(error))
-            insert_actions(pair=pair, indicator=check, value=j, action=self.get_action(trigger))
             current_price = str(Decimal(self.dataframes[pair].iloc[-1]['close']))
             close_time = str(self.dataframes[pair].iloc[-1]['closeTime'])
             result = 0.0 if math.isnan(j) else j
@@ -418,7 +434,9 @@ class Engine(dict):
 
             except Exception as e:
                 logger.critical("AMROX25 Redis failure1 " + str(e))
+        logger.info("Done getting Oscillators")
 
+    @get_exceptions
     def get_indicators(self, pair, klines):
         """
 
@@ -432,6 +450,7 @@ class Engine(dict):
         Returns:
             None
         """
+        logger.info("Getting Indicators")
         trends = {"HAMMER": {100: "BUY", 0:"HOLD"},
                   "INVERTEDHAMMER": {100: "SELL", 0:"HOLD"},
                   "ENGULFING": {-100:"SELL", 100:"BUY", 0:"HOLD"},
@@ -458,8 +477,11 @@ class Engine(dict):
                 logger.critical("AMROX25 KEYERROR "  + str(sys.exc_info()))
                 continue
             except Exception as poo:
-                logger.info("AMROX25 " + str(sys.exc_info()))
+                logger.info("AMROX25 " + repr(sys.exc_info()))
+                raise
+        logger.info("Done getting Indicators")
 
+    @get_exceptions
     def add_scheme(self, scheme):
         """ add scheme to correct structure """
         pair = scheme['symbol']
@@ -468,7 +490,7 @@ class Engine(dict):
         # add to redis
         current_price = str(Decimal(self.dataframes[pair].iloc[-1]['close']))
         close_time = str(self.dataframes[pair].iloc[-1]['closeTime'])
-        result = 0.0 if (type(scheme['data']) == float and
+        result = 0.0 if (isinstance(scheme['data'], float) and
                          math.isnan(scheme['data']))  else scheme['data']
         try:
             data = {scheme['event']:{"result": str(result),
@@ -479,7 +501,7 @@ class Engine(dict):
             self.redis.redis_conn(pair, self.interval, data, close_time)
 
         except Exception as e:
-            logger.critical("AMROX25 Redis failure22 " +str(e))
+            logger.critical("AMROX25 Redis failure22 " +str(e) + ' ' + repr(sys.exc_info()))
 
 
         if not self.test:
@@ -492,14 +514,14 @@ class Engine(dict):
 
             # Add scheme to DB
             try:
-                insert_data(interval=self.interval,
-                            symbol=scheme['symbol'], event=scheme['event'],
-                            direction=scheme['direction'], data=scheme['data'],
-                            difference=str(scheme['difference']),
-                            resistance=str(scheme['resistance']),
-                            support=str(scheme['support']), buy=str(scheme['buy']),
-                            sell=str(scheme['sell']), market=str(scheme['market']),
-                            balance=str(bal))
+                self.db.insert_data(interval=self.interval,
+                                    symbol=scheme['symbol'], event=scheme['event'],
+                                    direction=scheme['direction'], data=scheme['data'],
+                                    difference=str(scheme['difference']),
+                                    resistance=str(scheme['resistance']),
+                                    support=str(scheme['support']), buy=str(scheme['buy']),
+                                    sell=str(scheme['sell']), market=str(scheme['market']),
+                                    balance=str(bal))
             except Exception as excp:
                 logger.critical("AMROX25 Error: " + str(excp))
 

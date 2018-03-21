@@ -16,8 +16,7 @@ from concurrent.futures import ThreadPoolExecutor
 import argcomplete
 import setproctitle
 import binance
-from lib.mysql import (get_trades, insert_trade, update_trades, insert_action_totals,
-                       clean_stale, get_sell, get_buy)
+from lib.mysql import mysql
 from lib.binance_common import get_ohlcs
 from lib.engine import Engine
 from lib.config import get_config
@@ -25,6 +24,7 @@ from lib.logger import getLogger
 from profit import RATE
 
 logger = getLogger(__name__)
+DB = mysql()
 
 def main():
     """ main function """
@@ -68,7 +68,7 @@ def loop(args):
 
             for item in buy_list:
 
-                current_trades = get_trades()
+                current_trades = DB.get_trades()
                 if amount_to_buy_btc > current_btc_bal:
                     logger.warning("Unable to purchase, insufficient funds")
                     break
@@ -79,7 +79,8 @@ def loop(args):
                     logger.warning("We already have a trade of {0}, skipping...".format(item[0]))
                     continue
                 else:
-                    insert_trade(item[0], prices_trunk[item[0]], price_per_trade, amount_to_buy_btc)
+                    DB.insert_trade(item[0], prices_trunk[item[0]],
+                                    price_per_trade, amount_to_buy_btc)
                     #binance.order(symbol=?, side=?, quantity, orderType='MARKET, price=?, test=True
                     #TODO: buy item
         else:
@@ -92,7 +93,7 @@ def loop(args):
         if sell_list:
             logger.info("We need to sell {0}".format(sell_list))
             for item in sell_list:
-                update_trades(item, prices_trunk[item])
+                DB.update_trades(item, prices_trunk[item])
         else:
             logger.info("No items to sell")
 
@@ -118,10 +119,10 @@ def loop(args):
 
     events = Engine(prices=prices_trunk, data=data, interval='15m')
     data = events.get_data()
-    insert_action_totals()
-    clean_stale()
-    sell(get_sell())
-    buy(get_buy())
+    DB.insert_action_totals()
+    DB.clean_stale()
+    sell(DB.get_sell())
+    buy(DB.get_buy())
 
     try:
         if args.json:

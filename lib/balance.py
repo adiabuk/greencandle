@@ -8,10 +8,11 @@ import json
 from requests.exceptions import ReadTimeout
 from lib.binance_accounts import get_binance_values
 from lib.coinbase_accounts import get_coinbase_values
-from lib.mysql import insert_balance
+from lib.mysql import mysql
 from lib.logger import getLogger
 
 logger = getLogger(__name__)
+DB = mysql()
 
 def get_balance():
     """
@@ -69,7 +70,7 @@ def get_balance():
     combined_dict = binance.copy()   # start with binance's keys and values
     combined_dict.update(coinbase)    # modifies z with y's keys and values & returns None
 
-    insert_balance(combined_dict)
+    DB.insert_balance(combined_dict)
     return combined_dict
 
 def main():

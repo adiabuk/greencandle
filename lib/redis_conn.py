@@ -7,7 +7,7 @@ Store and retrieve items from redis
 import ast
 import time
 import redis
-from lib.mysql import insert_trade, update_trades, get_trade_value
+from lib.mysql import mysql #insert_trade, update_trades, get_trade_value
 from lib.logger import getLogger
 
 logger = getLogger(__name__)
@@ -23,6 +23,7 @@ class Redis(object):
         """
         pool = redis.ConnectionPool(host=host, port=port, db=db)
         self.conn = redis.StrictRedis(connection_pool=pool)
+        self.db = mysql()
 
     def clear_all(self):
         """
@@ -115,14 +116,14 @@ class Redis(object):
         current_price = current[0]
         current_mepoch = float(current[1])/1000
         current_time = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(current_mepoch))
-        value = get_trade_value(pair)
+        value = self.db.get_trade_value(pair)
 
         if not value and (-2 <= totals[-1] <= 5 and
                           float(sum(totals[:3])) / max(len(totals[:3]), 1) < totals[-1]):
             logger.critical("AMROX8: BUY!!!!!! {0} {1} {2} {3}".format(totals, current_time,
                                                                        current_price, items[-1]))
 
-            insert_trade(pair, current_time, current_price, "20", "0")
+            self.db.insert_trade(pair, current_time, current_price, "20", "0")
 
         elif value and ((-20 <= totals[-1] <= 5 and
                          float(sum(totals[:3])) / max(len(totals[:3]), 1) > totals[-1]) and
@@ -130,5 +131,5 @@ class Redis(object):
                         float(current_price) > float(value[0]) * (3/100)+1):
             logger.critical("AMROX8: SELL!!!! {0} {1} {2} {3}".format(totals, current_time,
                                                                       current_price, items[-1]))
-            update_trades("XRPBTC", current_time, current_price)
+            self.db.update_trades("XRPBTC", current_time, current_price)
         return totals
