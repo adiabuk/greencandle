@@ -1,5 +1,5 @@
 #pylint: disable=wrong-import-position,import-error,undefined-variable,unused-argument
-#pylint: disable=invalid-name,logging-format-interpolation
+#pylint: disable=invalid-name,logging-format-interpolation, broad-except
 
 """
 Push/Pull crypto signals and data to mysql
@@ -10,7 +10,6 @@ import sys
 import operator
 import MySQLdb
 import MySQLdb.cursors
-from MySQLdb import OperationalError
 import binance
 
 BASE_DIR = os.getcwd().split("greencandle", 1)[0] + "greencandle"
@@ -89,8 +88,9 @@ class mysql(object):
 
         current_holdings = self.get_trades()
         command = """select t1.pair from (select pair, total, max(ctime) AS MaxCreated
-    from action_totals group by pair) t2 join action_totals t1 on t2.pair = t1.pair
-    and t2.MaxCreated = t1.ctime and t1.total < 1 and t1.total = t2.total ;"""
+                     from action_totals group by pair) t2 join action_totals t1 on
+                     t2.pair = t1.pair and t2.MaxCreated = t1.ctime and
+                     t1.total < 1 and t1.total = t2.total ;"""
 
         cur = self.db.cursor()
         self.execute(cur, command)
@@ -157,11 +157,8 @@ class mysql(object):
             self.execute(cur, query)
         except NameError:
             logger.critical("One or more expected variables not passed to DB")
-        except:
+        except Exception:
             logger.crititcal("AMROX6 - unable to execute query")
-
-
-        #self.db.commit()
 
     @get_exceptions
     def clean_stale(self):
@@ -214,6 +211,19 @@ class mysql(object):
 
         row = [item[0] for item in cur.fetchall()]
         return row
+
+    @get_exceptions
+    def get_last_trades(self):
+        """
+        Get list of buy_price, sell_price, and investments
+        for each complete trade logged
+        """
+        cur = self.db.cursor()
+        command = """ select buy_price, sell_price, investment from trades where
+                      sell_price is NOT NULL; """
+
+        self.execute(cur, command)
+        return cur.fetchall()
 
     @get_exceptions
     def get_trades(self,):
