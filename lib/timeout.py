@@ -4,7 +4,7 @@ import signal
 from contextlib import contextmanager
 from lib.logger import getLogger
 
-logger = getLogger(__name__)
+LOGGER = getLogger(__name__)
 
 
 def timeout_handler(signum, frame):
@@ -39,6 +39,6 @@ def restrict_timeout(time, name):
     try:
         yield None
     except TimeoutException:
-        logger.critical("Timed out waiting {0} seconds for {1}".format(time, name))
+        LOGGER.critical("Timed out waiting {0} seconds for {1}".format(time, name))
     finally:
         signal.alarm(0)

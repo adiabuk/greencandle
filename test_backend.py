@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+"""
+Run module with test data
+"""
+
 import pickle
 from lib.engine import Engine
 from lib.common import make_float
@@ -7,7 +11,7 @@ from lib.logger import getLogger
 from lib.redis_conn import Redis
 from lib.config import get_config
 
-logger = getLogger(__name__)
+LOGGER = getLogger(__name__)
 
 def make_data_tupple(dataframe):
     """
@@ -32,14 +36,14 @@ def main():
             redis = Redis(interval=interval)
             filename = "test_data/{0}_{1}.p".format(pair, interval)
             with open(filename, "rb") as handle:
-                df = pickle.load(handle)
+                dframe = pickle.load(handle)
 
             prices_trunk = {pair: "0"}
             chunk_size = 50
             redis.clear_all()
-            for beg in range(len(df) - chunk_size * 2):
+            for beg in range(len(dframe) - chunk_size * 2):
                 end = beg + chunk_size
-                dataframe = df.copy()[beg: end]
+                dataframe = dframe.copy()[beg: end]
                 if len(dataframe) < 50:
                     break
                 ohlc = make_data_tupple(dataframe)

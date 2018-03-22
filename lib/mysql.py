@@ -22,7 +22,7 @@ HOST = get_config("database")["host"]
 USER = get_config("database")["user"]
 PASSWORD = get_config("database")["password"]
 DB = get_config("database")["db"]
-logger = getLogger(__name__)
+LOGGER = getLogger(__name__)
 
 class mysql(object):
     """
@@ -68,7 +68,7 @@ class mysql(object):
         Returns:
               sorted tuple each containing pair, score, current price
         """
-        logger.debug("Finding symbols to buy")
+        LOGGER.debug("Finding symbols to buy")
         potential_buys = self.get_changes()
         sorted_buys = sorted(potential_buys.items(), key=operator.itemgetter(1))[::-1]
 
@@ -156,9 +156,9 @@ class mysql(object):
         try:
             self.execute(cur, query)
         except NameError:
-            logger.critical("One or more expected variables not passed to DB")
+            LOGGER.critical("One or more expected variables not passed to DB")
         except Exception:
-            logger.crititcal("AMROX6 - unable to execute query")
+            LOGGER.crititcal("AMROX6 - unable to execute query")
 
     @get_exceptions
     def clean_stale(self):
@@ -171,7 +171,7 @@ class mysql(object):
               None
         """
 
-        logger.debug("Cleaning stale data")
+        LOGGER.debug("Cleaning stale data")
         command1 = "delete from action_totals where ctime < NOW() - INTERVAL 30 MINUTE;"
         command2 = "delete from actions where ctime < NOW() - INTERVAL 30 MINUTE;"
         self.run_sql_query(command1)
@@ -190,7 +190,7 @@ class mysql(object):
               None
         """
 
-        logger.info("AMROX5 Buying {0}".format(pair))
+        LOGGER.info("AMROX5 Buying {0}".format(pair))
         command = """insert into trades (pair, buy_time, buy_price, investment,
                      total) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}");""".format(pair, date,
                                                                                   float(price),
@@ -247,7 +247,7 @@ class mysql(object):
         """
         Update an existing trade with sell price
         """
-        logger.info("Selling, {0}".format(pair))
+        LOGGER.info("Selling, {0}".format(pair))
         command = """update trades set sell_price={0},sell_time="{1}" where sell_price is NULL and
         pair="{2}" """.format(float(sell_price), sell_time, pair)
         self.run_sql_query(command)
@@ -299,16 +299,16 @@ class mysql(object):
                                                                        data["USD"], data["count"],
                                                                        coin, exchange)
                 except KeyError:
-                    logger.critical(" ".join(["XXX", coin, exchange, "KEYERROR"]))
+                    LOGGER.critical(" ".join(["XXX", coin, exchange, "KEYERROR"]))
                     continue
                 except IndexError:
-                    logger.info(exchange)
+                    LOGGER.info(exchange)
                     raise
 
                 try:
                     self.run_sql_query(command)
                 except NameError:
-                    logger.info("One or more expected variables not passed to insert into DB")
+                    LOGGER.info("One or more expected variables not passed to insert into DB")
 
     @get_exceptions
     def insert_action_totals(self):
@@ -320,7 +320,7 @@ class mysql(object):
               None
         """
 
-        logger.debug("Inserting Totals")
+        LOGGER.debug("Inserting Totals")
         command = """ INSERT INTO action_totals (pair, total) select pair, SUM(action) as total from
         recent_actions group by pair order by total;"""
         self.run_sql_query(command)

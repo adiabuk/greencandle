@@ -22,7 +22,7 @@ from lib.config import get_config
 from lib.logger import getLogger
 from profit import RATE
 
-logger = getLogger(__name__)
+LOGGER = getLogger(__name__)
 DB = mysql()
 
 def main():
@@ -43,10 +43,10 @@ def main():
         try:
             loop(args)
         except KeyboardInterrupt:
-            logger.info("\nExiting on user command...")
+            LOGGER.info("\nExiting on user command...")
             sys.exit(1)
         remaining_time = (minutes * 60.0) - ((time.time() - starttime) % 60.0)
-        logger.debug("Sleeping for " + str(int(remaining_time)) + " seconds")
+        LOGGER.debug("Sleeping for " + str(int(remaining_time)) + " seconds")
         time.sleep(remaining_time)
 
 def loop(args):
@@ -59,7 +59,7 @@ def loop(args):
         Buy as many items as we can from buy_list depending on max amount of trades, and current
         balance in BTC
         """
-        logger.debug("We have {0} potential items to buy".format(len(buy_list)))
+        LOGGER.debug("We have {0} potential items to buy".format(len(buy_list)))
         if buy_list:
             current_btc_bal = events.balance["binance"]["BTC"]["count"]
             amount_to_buy_btc = price_per_trade * RATE
@@ -69,13 +69,13 @@ def loop(args):
 
                 current_trades = DB.get_trades()
                 if amount_to_buy_btc > current_btc_bal:
-                    logger.warning("Unable to purchase, insufficient funds")
+                    LOGGER.warning("Unable to purchase, insufficient funds")
                     break
                 elif len(current_trades) >= max_trades:
-                    logger.warning("Too many trades, skipping")
+                    LOGGER.warning("Too many trades, skipping")
                     break
                 elif item[0] in current_trades:
-                    logger.warning("We already have a trade of {0}, skipping...".format(item[0]))
+                    LOGGER.warning("We already have a trade of {0}, skipping...".format(item[0]))
                     continue
                 else:
                     DB.insert_trade(item[0], prices_trunk[item[0]],
@@ -83,27 +83,27 @@ def loop(args):
                     #binance.order(symbol=?, side=?, quantity, orderType="MARKET, price=?, test=True
                     #TODO: buy item
         else:
-            logger.info("Nothing to buy")
+            LOGGER.info("Nothing to buy")
 
     def sell(sell_list):
         """
         Sell items in sell_list
         """
         if sell_list:
-            logger.info("We need to sell {0}".format(sell_list))
+            LOGGER.info("We need to sell {0}".format(sell_list))
             for item in sell_list:
                 DB.update_trades(item, prices_trunk[item])
         else:
-            logger.info("No items to sell")
+            LOGGER.info("No items to sell")
 
     agg_data = {}
     price_per_trade = int(get_config("backend")["price_per_trade"])
     max_trades = int(get_config("backend")["max_trades"])
     interval = int(get_config("backend")["interval"])
-    logger.debug("Price per trade: {0}".format(price_per_trade))
-    logger.debug("max trades: {0}".format(max_trades))
+    LOGGER.debug("Price per trade: {0}".format(price_per_trade))
+    LOGGER.debug("max trades: {0}".format(max_trades))
 
-    logger.debug("Starting new cycle")
+    LOGGER.debug("Starting new cycle")
     if args.pair:
         pairs = [args.pair]
     else:
@@ -129,11 +129,11 @@ def loop(args):
         else:
             events.print_text()
     except Exception:
-        logger.critical("AMROX25 Overall exception")
+        LOGGER.critical("AMROX25 Overall exception")
 
     agg_data.update(data)
     return agg_data
 
 if __name__ == "__main__":
     main()
-    logger.debug("COMPLETE")
+    LOGGER.debug("COMPLETE")

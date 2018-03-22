@@ -25,7 +25,7 @@ from indicator import SuperTrend, RSI
 
 
 POOL = ThreadPoolExecutor(max_workers=50)
-logger = getLogger(__name__)
+LOGGER = getLogger(__name__)
 
 class Engine(dict):
     """ Represent events created from data & indicators """
@@ -37,7 +37,7 @@ class Engine(dict):
         Create hold and event dicts
         Fetch initial data from binance and store within object
         """
-        logger.debug("Fetching raw data")
+        LOGGER.debug("Fetching raw data")
         self.interval = interval
         self.pairs = prices.keys()
         self.dataframe = None
@@ -51,7 +51,7 @@ class Engine(dict):
         self.supres = {}
         self.data, self.dataframes = data
         super(Engine, self).__init__()
-        logger.debug("Finished fetching raw data")
+        LOGGER.debug("Finished fetching raw data")
 
     def __del__(self):
         del  self.db
@@ -69,7 +69,7 @@ class Engine(dict):
         red = "\033[31m"
         white = "\033[0m"
         if not self.values:
-            logger.critical("ERROR")
+            LOGGER.critical("ERROR")
         for value in self.values():
             if not "direction" in value or "HOLD" in value["direction"]:
                 #no_change.append(value["symbol"])
@@ -106,7 +106,7 @@ class Engine(dict):
         Returns:
             dict containing all collected data
         """
-        logger.debug("Getting data")
+        LOGGER.debug("Getting data")
         global POOL
         POOL = ThreadPoolExecutor(max_workers=400)
         for pair in self.pairs:
@@ -121,7 +121,7 @@ class Engine(dict):
 
         POOL.shutdown(wait=True)
         POOL = ThreadPoolExecutor(max_workers=50)
-        logger.debug("Done getting data")
+        LOGGER.debug("Done getting data")
         return self
 
     def get_sup_res(self, pair, klines):
@@ -151,7 +151,7 @@ class Engine(dict):
             None
 
         """
-        logger.info("Getting RSI")
+        LOGGER.info("Getting RSI")
         dataframe = self.renamed_dataframe_columns(klines)
         scheme = {}
         mine = dataframe.apply(pandas.to_numeric)
@@ -171,7 +171,7 @@ class Engine(dict):
         scheme["direction"] = direction
         scheme["event"] = "RSI"
         self.add_scheme(scheme)
-        logger.info("Done getting RSI")
+        LOGGER.info("Done getting RSI")
 
     @staticmethod
     def renamed_dataframe_columns(klines=None):
@@ -206,7 +206,7 @@ class Engine(dict):
         """
 
         scheme = {}
-        logger.info("getting supertrend")
+        LOGGER.info("getting supertrend")
         dataframe = self.renamed_dataframe_columns(klines)
 
         mine = dataframe.apply(pandas.to_numeric)
@@ -219,7 +219,7 @@ class Engine(dict):
         scheme["direction"] = self.get_supertrend_direction(df_list[-1])
         scheme["event"] = "Supertrend"
         self.add_scheme(scheme)
-        logger.info("done getting supertrend")
+        LOGGER.info("done getting supertrend")
 
     @staticmethod
     def get_url(pair):
@@ -317,11 +317,11 @@ class Engine(dict):
         Returns:
             None
         """
-        logger.debug("getting moving averages")
+        LOGGER.debug("getting moving averages")
         try:
             close = klines[-1]
         except Exception as e:
-            logger.critical("AMROX25 FAILING!!! " + str(e))
+            LOGGER.critical("AMROX25 FAILING!!! " + str(e))
         trends = (
             ("EMA", 10),
             ("EMA", 20),
@@ -338,7 +338,7 @@ class Engine(dict):
             try:
                 result = getattr(talib, func)(close, timeperiod)[-1]
             except Exception:
-                logger.critical("AMROX25 EXC")
+                LOGGER.critical("AMROX25 EXC")
             if result > close[-1]:
                 trigger = "SELL"
             else:
@@ -363,9 +363,9 @@ class Engine(dict):
                 self.add_scheme(scheme)
 
             except KeyError as e:
-                logger.critical("AMROX25 KEY FAILURE " + str(e))
+                LOGGER.critical("AMROX25 KEY FAILURE " + str(e))
 
-        logger.debug("done getting moving averages")
+        LOGGER.debug("done getting moving averages")
 
     @get_exceptions
     def get_oscillators(self, pair, klines):
@@ -381,7 +381,7 @@ class Engine(dict):
         Returns:
             None
         """
-        logger.info("Getting Oscillators")
+        LOGGER.info("Getting Oscillators")
         open, high, low, close = klines
         scheme = {}
         trends = {
@@ -418,7 +418,7 @@ class Engine(dict):
 
             except Exception as error:
                 traceback.print_exc()
-                logger.critical("AMROX 25 failed here:" + str(error))
+                LOGGER.critical("AMROX 25 failed here:" + str(error))
 
             current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
             close_time = str(self.dataframes[pair].iloc[-1]["closeTime"])
@@ -439,8 +439,8 @@ class Engine(dict):
                 self.add_scheme(scheme)
 
             except KeyError as e:
-                logger.critical("AMROX25 Key failure " + str(e))
-        logger.info("Done getting Oscillators")
+                LOGGER.critical("AMROX25 Key failure " + str(e))
+        LOGGER.info("Done getting Oscillators")
 
     @get_exceptions
     def get_indicators(self, pair, klines):
@@ -456,7 +456,7 @@ class Engine(dict):
         Returns:
             None
         """
-        logger.info("Getting Indicators")
+        LOGGER.info("Getting Indicators")
         trends = {"HAMMER": {100: "BUY", 0:"HOLD"},
                   "INVERTEDHAMMER": {100: "SELL", 0:"HOLD"},
                   "ENGULFING": {-100:"SELL", 100:"BUY", 0:"HOLD"},
@@ -480,10 +480,10 @@ class Engine(dict):
 
                 self.add_scheme(scheme)
             except KeyError as ke:
-                logger.critical("AMROX25 KEYERROR "  + str(sys.exc_info()))
+                LOGGER.critical("AMROX25 KEYERROR "  + str(sys.exc_info()))
                 continue
 
-        logger.info("Done getting Indicators")
+        LOGGER.info("Done getting Indicators")
 
     @get_exceptions
     def add_scheme(self, scheme):
@@ -505,7 +505,7 @@ class Engine(dict):
             self.redis.redis_conn(pair, self.interval, data, close_time)
 
         except Exception as e:
-            logger.critical("AMROX25 Redis failure22 " +str(e) + " " + repr(sys.exc_info()))
+            LOGGER.critical("AMROX25 Redis failure22 " +str(e) + " " + repr(sys.exc_info()))
 
 
         if not self.test:
@@ -527,7 +527,7 @@ class Engine(dict):
                                     sell=str(scheme["sell"]), market=str(scheme["market"]),
                                     balance=str(bal))
             except Exception as excp:
-                logger.critical("AMROX25 Error: " + str(excp))
+                LOGGER.critical("AMROX25 Error: " + str(excp))
 
         if scheme["direction"] == "HOLD":
             self["hold"][id(scheme)] = scheme

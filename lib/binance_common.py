@@ -21,7 +21,7 @@ from lib.logger import getLogger
 from lib.common import make_float
 from lib.graph import create_graph
 
-logger = getLogger(__name__)
+LOGGER = getLogger(__name__)
 POOL = ThreadPoolExecutor(max_workers=50)
 
 def get_binance_klines(pair, interval=None):
@@ -39,11 +39,11 @@ def get_binance_klines(pair, interval=None):
     try:
         raw = binance.klines(pair, interval)
     except IndexError:
-        logger.critical("Unable to fetch data for " + pair)
+        LOGGER.critical("Unable to fetch data for " + pair)
         sys.exit(2)
 
     if not raw:
-        logger.critical("Unable to extract data")
+        LOGGER.critical("Unable to extract data")
         sys.exit(2)
     dataframe = pandas.DataFrame.from_dict(raw)
     return dataframe

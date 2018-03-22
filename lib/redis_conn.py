@@ -10,7 +10,7 @@ import redis
 from lib.mysql import mysql #insert_trade, update_trades, get_trade_value
 from lib.logger import getLogger
 
-logger = getLogger(__name__)
+LOGGER = getLogger(__name__)
 
 class Redis(object):
     """
@@ -114,7 +114,7 @@ class Redis(object):
         totals = []
         items = self.get_items(pair, interval)
         if len(items) < 3:
-            logger.info("insufficient items, skipping")
+            LOGGER.info("insufficient items, skipping")
             return None
         for item in items[-4:]:
             totals.append(self.get_total(item))
@@ -127,7 +127,7 @@ class Redis(object):
 
         if not value and (-2 <= totals[-1] <= 5 and
                           float(sum(totals[:3])) / max(len(totals[:3]), 1) < totals[-1]):
-            logger.critical("AMROX8: BUY!!!!!! {0} {1} {2} {3}".format(totals, current_time,
+            LOGGER.critical("AMROX8: BUY!!!!!! {0} {1} {2} {3}".format(totals, current_time,
                                                                        current_price, items[-1]))
 
             self.db.insert_trade(pair, current_time, current_price, interval, "0")
@@ -136,7 +136,7 @@ class Redis(object):
                          float(sum(totals[:3])) / max(len(totals[:3]), 1) > totals[-1]) and
                         float(current_price) > float(value[0]) or
                         float(current_price) > float(value[0]) * (3/100)+1):
-            logger.critical("AMROX8: SELL!!!! {0} {1} {2} {3}".format(totals, current_time,
+            LOGGER.critical("AMROX8: SELL!!!! {0} {1} {2} {3}".format(totals, current_time,
                                                                       current_price, items[-1]))
             self.db.update_trades(pair, current_time, current_price)
         return totals

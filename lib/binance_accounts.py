@@ -10,7 +10,7 @@ from lib.auth import binance_auth
 from lib.logger import getLogger
 
 BITCOIN = {}
-logger = getLogger(__name__)
+LOGGER = getLogger(__name__)
 
 def get_binance_values():
     """Get totals for each crypto from binance and convert to USD/GBP"""
@@ -35,8 +35,8 @@ def get_binance_values():
                 try:
                     bcoin = float(current_value) * float(prices[key+"BTC"])  # value in BTC
                     bitcoin_totals += float(current_value) * float(prices[key+"BTC"])
-                except KeyError as key_error:
-                    logger.critical("Error: Unable to quantify currency: " + key)
+                except KeyError:
+                    LOGGER.critical("Error: Unable to quantify currency: " + key)
                     continue
             else:   #btc
                 bcoin = float(current_value)

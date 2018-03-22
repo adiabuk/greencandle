@@ -11,7 +11,7 @@ from lib.coinbase_accounts import get_coinbase_values
 from lib.mysql import mysql
 from lib.logger import getLogger
 
-logger = getLogger(__name__)
+LOGGER = getLogger(__name__)
 DB = mysql()
 
 def get_balance():
@@ -65,7 +65,7 @@ def get_balance():
     try:
         coinbase = get_coinbase_values()
     except ReadTimeout:
-        logger.critical("Unable to get coinbase balance")
+        LOGGER.critical("Unable to get coinbase balance")
         coinbase = {}
     combined_dict = binance.copy()   # start with binance"s keys and values
     combined_dict.update(coinbase)    # modifies z with y"s keys and values & returns None
