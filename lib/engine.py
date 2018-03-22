@@ -343,7 +343,7 @@ class Engine(dict):
                 trigger = "SELL"
             else:
                 trigger = "BUY"
-
+            scheme = {}
             result = 0.0 if math.isnan(result) else result
             try:
                 current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
@@ -352,18 +352,19 @@ class Engine(dict):
                                                   "current_price":current_price,
                                                   "date":close_time,
                                                   "action":self.get_action(trigger)}}
+                scheme["data"] = result
+                scheme["url"] = "google.com"
+                scheme["time"] = calendar.timegm(time.gmtime())
+                scheme["symbol"] = pair
+                scheme["direction"] = trigger
+                scheme["event"] = func+"-"+str(timeperiod)
+                scheme["difference"] = None
 
-                self.redis.redis_conn(pair, self.interval, data, close_time)
+                self.add_scheme(scheme)
 
-            except Exception as e:
-                logger.critical("AMROX25 REDIS FAILURE " + str(e))
-            try:
-                #self.db.insert_actions(pair=pair, indicator=func+"-"+str(timeperiod),
-                #                       value=result, action=self.get_action(trigger))
-                pass
-            except Exception:
-                traceback.print_exc()
-                logger.critical("AMROX25 DB FUBAR")
+            except KeyError as e:
+                logger.critical("AMROX25 KEY FAILURE " + str(e))
+
         logger.debug("done getting moving averages")
 
     @get_exceptions
@@ -382,6 +383,7 @@ class Engine(dict):
         """
         logger.info("Getting Oscillators")
         open, high, low, close = klines
+        scheme = {}
         trends = {
             #"STOCHF": {"BUY": "< 25", "SELL": ">75", "args":[20]},
             "CCI": {"BUY": "< -100", "SELL": "> 100",
@@ -405,8 +407,6 @@ class Engine(dict):
                     li.append(locals()[i])
 
                 j = getattr(talib, check)(*(*li, *attrs["args"]))[-1]
-                #trigger = "HOLD"
-
                 trigger = "HOLD"
                 for item in "BUY", "SELL":
                     s = str(j) + " " + attrs[item]   # From numpy.float64 to str
@@ -419,6 +419,7 @@ class Engine(dict):
             except Exception as error:
                 traceback.print_exc()
                 logger.critical("AMROX 25 failed here:" + str(error))
+
             current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
             close_time = str(self.dataframes[pair].iloc[-1]["closeTime"])
             result = 0.0 if math.isnan(j) else j
@@ -427,13 +428,18 @@ class Engine(dict):
                                "date": close_time,
                                "current_price":current_price,
                                "action":self.get_action(trigger)}}
+                scheme["data"] = result
+                scheme["url"] = "google.com"
+                scheme["time"] = calendar.timegm(time.gmtime())
+                scheme["symbol"] = pair
+                scheme["direction"] = trigger
+                scheme["event"] = check
+                scheme["difference"] = None
 
-                self.redis.redis_conn(pair, self.interval, data, close_time)
+                self.add_scheme(scheme)
 
-
-
-            except Exception as e:
-                logger.critical("AMROX25 Redis failure1 " + str(e))
+            except KeyError as e:
+                logger.critical("AMROX25 Key failure " + str(e))
         logger.info("Done getting Oscillators")
 
     @get_exceptions
@@ -457,7 +463,7 @@ class Engine(dict):
                   "MORNINGSTAR": {-100:"SELL", 100:"BUY", 0:"HOLD"},
                   "SHOOTINGSTAR": {-100:"SELL", 100:"BUY", 0:"HOLD"},
                   "MARUBOZU": {-100:"SELL", 100:"BUY", 0:"HOLD"},
-                  "DOJI": {100: "unknown", 0:"HOLD"}}
+                  "DOJI": {100: "HOLD", 0:"HOLD"}}
 
         for check in trends.keys():
             scheme = {}
@@ -476,9 +482,7 @@ class Engine(dict):
             except KeyError as ke:
                 logger.critical("AMROX25 KEYERROR "  + str(sys.exc_info()))
                 continue
-            except Exception as poo:
-                logger.info("AMROX25 " + repr(sys.exc_info()))
-                raise
+
         logger.info("Done getting Indicators")
 
     @get_exceptions
