@@ -35,23 +35,20 @@ def main():
                 df = pickle.load(handle)
 
             prices_trunk = {pair: "0"}
-            start = 50
+            chunk_size = 50
             redis.clear_all()
-            for i in range(1000):
-                beg = i + start
-                end = i  + start + start
+            for beg in range(len(df) - chunk_size * 2):
+                end = beg + chunk_size
                 dataframe = df.copy()[beg: end]
+                if len(dataframe) < 50:
+                    break
                 ohlc = make_data_tupple(dataframe)
                 data = ({pair:ohlc}, {pair:dataframe})
                 events = Engine(prices=prices_trunk, data=data, interval=interval, test=True)
                 data = events.get_data()
                 redis.get_change(pair=pair, interval=interval)
-                del events
 
-                #insert_action_totals()
-                #clean_stale()
-                #sell(get_sell())
-                #buy(get_buy())
+                del events
                 del data
 
 if __name__ == "__main__":
