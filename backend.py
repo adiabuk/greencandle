@@ -12,7 +12,6 @@ import json
 import argparse
 import time
 import sys
-from concurrent.futures import ThreadPoolExecutor
 import argcomplete
 import setproctitle
 import binance
@@ -100,6 +99,7 @@ def loop(args):
     agg_data = {}
     price_per_trade = int(get_config("backend")["price_per_trade"])
     max_trades = int(get_config("backend")["max_trades"])
+    interval = int(get_config("backend")["interval"])
     logger.debug("Price per trade: {0}".format(price_per_trade))
     logger.debug("max trades: {0}".format(max_trades))
 
@@ -107,17 +107,16 @@ def loop(args):
     if args.pair:
         pairs = [args.pair]
     else:
-        pairs = [price for price in binance.prices().keys() if price != "123456" and
-                 price.endswith("BTC")]
+        pairs = int(get_config("backend")["paris"])
     prices = binance.prices()
     prices_trunk = {}
     for k, v in prices.items():
         if k.endswith("BTC"):
             prices_trunk[k] = v
     pairs = prices.keys()
-    data = get_ohlcs(pairs, interval="15m")
+    data = get_ohlcs(pairs, interval=interval)
 
-    events = Engine(prices=prices_trunk, data=data, interval="15m")
+    events = Engine(prices=prices_trunk, data=data, interval=interval)
     data = events.get_data()
     DB.insert_action_totals()
     DB.clean_stale()

@@ -17,10 +17,17 @@ class Redis(object):
     Redis object
     """
 
-    def __init__(self, host="localhost", port=6379, db=0):
+    def __init__(self, interval=None, host="localhost", port=6379, db=0):
         """
-        returns initialized redis connection
+        Args:
+            interval
+            host
+            port
+            db
+        returns:
+            initialized redis connection
         """
+        self.interval = interval
         pool = redis.ConnectionPool(host=host, port=port, db=db)
         self.conn = redis.StrictRedis(connection_pool=pool)
         self.db = mysql()
@@ -123,7 +130,7 @@ class Redis(object):
             logger.critical("AMROX8: BUY!!!!!! {0} {1} {2} {3}".format(totals, current_time,
                                                                        current_price, items[-1]))
 
-            self.db.insert_trade(pair, current_time, current_price, "20", "0")
+            self.db.insert_trade(pair, current_time, current_price, interval, "0")
 
         elif value and ((-20 <= totals[-1] <= 5 and
                          float(sum(totals[:3])) / max(len(totals[:3]), 1) > totals[-1]) and
@@ -131,5 +138,5 @@ class Redis(object):
                         float(current_price) > float(value[0]) * (3/100)+1):
             logger.critical("AMROX8: SELL!!!! {0} {1} {2} {3}".format(totals, current_time,
                                                                       current_price, items[-1]))
-            self.db.update_trades("XRPBTC", current_time, current_price)
+            self.db.update_trades(pair, current_time, current_price)
         return totals

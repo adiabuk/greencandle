@@ -89,7 +89,6 @@ def main():
     # sort by pip then by difference
     sorted_prices = sorted(data.keys(), key=lambda x: (data[x]["value"], data[x]["difference"]))
     print(json.dumps(sorted_prices))
-    #print(json.dumps(data))
 
 if __name__ == "__main__":
     main()

@@ -26,9 +26,10 @@ def main():
     pairs = get_config("test")["pairs"].split()
     intervals = get_config("test")["intervals"].split()
 
-    redis = Redis()
     for pair in pairs:
         for interval in intervals:
+
+            redis = Redis(interval=interval)
             filename = "test_data/{0}_{1}.p".format(pair, interval)
             with open(filename, "rb") as handle:
                 df = pickle.load(handle)
