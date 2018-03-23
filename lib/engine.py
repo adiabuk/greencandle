@@ -17,9 +17,9 @@ import binance
 from lib.mysql import mysql
 from lib.redis_conn import Redis
 from lib import balance
-from lib.support_resistance import get_values
 from lib.order import get_buy_price, get_sell_price
-
+from lib.supres import supres
+from lib.common import make_float, pipify, pip_calc
 from lib.logger import getLogger, get_decorator
 from indicator import SuperTrend, RSI
 
@@ -136,8 +136,47 @@ class Engine(dict):
             None
         """
 
-        values = get_values(pair, klines)
-        self.supres[pair] = values
+        LOGGER.info("Getting Support & resistance")
+
+        close_values = make_float(klines.close)
+        support, resistance = supres(close_values, 10)
+
+        scheme = {}
+        try:
+            value = (pip_calc(support[-1], resistance[-1]))
+        except IndexError:
+            LOGGER.warning("Skipping {0} {1} {2} ".format(pair, str(support), str(resistance)))
+            return None
+
+        cur_to_res = resistance[-1] - close_values[-1]
+        cur_to_sup = close_values[-1] - support[-1]
+        data = {}
+        scheme["value"] = value
+        scheme["support"] = support
+        scheme["resistance"] = resistance
+
+        if cur_to_res > cur_to_sup:
+            scheme["direction"] = "BUY"
+        elif cur_to_res < cur_to_sup:
+            scheme["direction"] = "SELL"
+        else:
+            scheme["direction"] = "HOLD"
+
+        try:
+            scheme["difference"] = pipify(resistance[-1]) - pipify(support[-1])
+        except TypeError as type_error:
+            print("Type error", support [-1], resistance[-1], type_error)
+            return None
+
+        scheme["data"] = scheme['support'], scheme['resistance']
+        scheme["url"] = self.get_url(pair)
+        scheme["time"] = calendar.timegm(time.gmtime())
+        scheme["symbol"] = pair
+        scheme["direction"] = scheme['direction']
+        scheme["event"] = "Support/Resistance"
+        self.add_scheme(scheme)
+        LOGGER.info("Done getting Support & resistance")
+
 
     def get_rsi(self, pair=None, klines=None):
         """

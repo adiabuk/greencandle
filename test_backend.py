@@ -29,6 +29,7 @@ def main():
     """
     pairs = get_config("test")["pairs"].split()
     intervals = get_config("test")["intervals"].split()
+    investment = 20
 
     for pair in pairs:
         for interval in intervals:
@@ -50,7 +51,7 @@ def main():
                 data = ({pair:ohlc}, {pair:dataframe})
                 engine = Engine(prices=prices_trunk, data=data, interval=interval, test=True)
                 data = engine.get_data()
-                redis.get_change(pair=pair, interval=interval)
+                redis.get_change(pair=pair, investment=investment)
 
                 del engine
                 del data

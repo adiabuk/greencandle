@@ -7,7 +7,7 @@ Store and retrieve items from redis
 import ast
 import time
 import redis
-from lib.mysql import mysql #insert_trade, update_trades, get_trade_value
+from lib.mysql import mysql
 from lib.logger import getLogger
 
 LOGGER = getLogger(__name__)
@@ -106,7 +106,7 @@ class Redis(object):
 
         return data["current_price"], data["date"]
 
-    def get_change(self, pair, interval):
+    def get_change(self, pair, investment):
         """
         get recent change in pattern based on last 4 iterations for a given pair and interval
         Compute if we are in and overall BUY/SELL/HOLD scenario based on change in score over
@@ -116,7 +116,7 @@ class Redis(object):
         """
 
         totals = []
-        items = self.get_items(pair, interval)
+        items = self.get_items(pair, self.interval)
         if len(items) < 3:
             LOGGER.info("insufficient items, skipping")
             return None
@@ -134,7 +134,7 @@ class Redis(object):
             LOGGER.critical("AMROX8: BUY!!!!!! {0} {1} {2} {3}".format(totals, current_time,
                                                                        current_price, items[-1]))
 
-            self.dbase.insert_trade(pair, current_time, current_price, interval, "0")
+            self.dbase.insert_trade(pair, current_time, current_price, investment, "0")
 
         elif value and ((-20 <= totals[-1] <= 5 and
                          float(sum(totals[:3])) / max(len(totals[:3]), 1) > totals[-1]) and
