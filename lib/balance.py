@@ -12,9 +12,8 @@ from lib.mysql import mysql
 from lib.logger import getLogger
 
 LOGGER = getLogger(__name__)
-DB = mysql()
 
-def get_balance():
+def get_balance(test=False):
     """
     get dict of all balances
 
@@ -61,6 +60,7 @@ def get_balance():
 
     """
 
+    dbase = mysql(test=test)
     binance = get_binance_values()
     try:
         coinbase = get_coinbase_values()
@@ -70,7 +70,7 @@ def get_balance():
     combined_dict = binance.copy()   # start with binance"s keys and values
     combined_dict.update(coinbase)    # modifies z with y"s keys and values & returns None
 
-    DB.insert_balance(combined_dict)
+    dbase.insert_balance(combined_dict)
     return combined_dict
 
 def main():

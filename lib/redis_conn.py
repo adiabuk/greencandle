@@ -17,7 +17,7 @@ class Redis(object):
     Redis object
     """
 
-    def __init__(self, interval=None, host="localhost", port=6379, db=0):
+    def __init__(self, interval=None, host="localhost", port=6379, test=False):
         """
         Args:
             interval
@@ -27,10 +27,14 @@ class Redis(object):
         returns:
             initialized redis connection
         """
+        if test:
+            redis_db = 1
+        else:
+            redis_db = 0
         self.interval = interval
-        pool = redis.ConnectionPool(host=host, port=port, db=db)
+        pool = redis.ConnectionPool(host=host, port=port, db=redis_db)
         self.conn = redis.StrictRedis(connection_pool=pool)
-        self.db = mysql()
+        self.dbase = mysql(test=test)
 
     def clear_all(self):
         """
@@ -123,14 +127,14 @@ class Redis(object):
         current_price = current[0]
         current_mepoch = float(current[1])/1000
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_mepoch))
-        value = self.db.get_trade_value(pair)
+        value = self.dbase.get_trade_value(pair)
 
         if not value and (-2 <= totals[-1] <= 5 and
                           float(sum(totals[:3])) / max(len(totals[:3]), 1) < totals[-1]):
             LOGGER.critical("AMROX8: BUY!!!!!! {0} {1} {2} {3}".format(totals, current_time,
                                                                        current_price, items[-1]))
 
-            self.db.insert_trade(pair, current_time, current_price, interval, "0")
+            self.dbase.insert_trade(pair, current_time, current_price, interval, "0")
 
         elif value and ((-20 <= totals[-1] <= 5 and
                          float(sum(totals[:3])) / max(len(totals[:3]), 1) > totals[-1]) and
@@ -138,5 +142,5 @@ class Redis(object):
                         float(current_price) > float(value[0]) * (3/100)+1):
             LOGGER.critical("AMROX8: SELL!!!! {0} {1} {2} {3}".format(totals, current_time,
                                                                       current_price, items[-1]))
-            self.db.update_trades(pair, current_time, current_price)
+            self.dbase.update_trades(pair, current_time, current_price)
         return totals

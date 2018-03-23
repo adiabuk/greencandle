@@ -4,7 +4,6 @@
 """
 Push/Pull crypto signals and data to mysql
 """
-
 import os
 import sys
 import operator
@@ -22,6 +21,7 @@ HOST = get_config("database")["host"]
 USER = get_config("database")["user"]
 PASSWORD = get_config("database")["password"]
 DB = get_config("database")["db"]
+DB_TEST = get_config("database")["db_test"]
 LOGGER = getLogger(__name__)
 
 class mysql(object):
@@ -30,23 +30,27 @@ class mysql(object):
     """
     get_exceptions = get_decorator((Exception), default_value="default")
 
-    def __init__(self):
-        self.connect()
+    def __init__(self, test=False):
+        self.connect(test=test)
 
     @get_exceptions
-    def connect(self):
+    def connect(self, test=False):
         """
         Connect to Mysql DB
         """
-        self.db = MySQLdb.connect(host=HOST,
-                                  user=USER,
-                                  passwd=PASSWORD,
-                                  db=DB)
-        self.cursor = self.db.cursor()
+        if test:
+            db = DB_TEST
+        else:
+            db = DB
+        self.dbase = MySQLdb.connect(host=HOST,
+                                     user=USER,
+                                     passwd=PASSWORD,
+                                     db=db)
+        self.cursor = self.dbase.cursor()
 
     @get_exceptions
     def __del__(self):
-        self.db.close()
+        self.dbase.close()
 
     @get_exceptions
     def execute(self, cur, command):
@@ -54,7 +58,7 @@ class mysql(object):
         Execute query on MYSQL DB - if fail, then try reconnecting and retry the operation
         """
         cur.execute(command)
-        self.db.commit()
+        self.dbase.commit()
 
     @get_exceptions
     def get_buy(self):
@@ -92,7 +96,7 @@ class mysql(object):
                      t2.pair = t1.pair and t2.MaxCreated = t1.ctime and
                      t1.total < 1 and t1.total = t2.total ;"""
 
-        cur = self.db.cursor()
+        cur = self.dbase.cursor()
         self.execute(cur, command)
         all_sell = [item[0] for item in cur.fetchall()]
 
@@ -152,7 +156,7 @@ class mysql(object):
         Returns:
               True/False success
         """
-        cur = self.db.cursor()
+        cur = self.dbase.cursor()
         try:
             self.execute(cur, query)
         except NameError:
@@ -206,7 +210,7 @@ class mysql(object):
 
         command = """ select buy_price from trades where sell_price is NULL and pair = "{0}"
         """.format(pair)
-        cur = self.db.cursor()
+        cur = self.dbase.cursor()
         self.execute(cur, command)
 
         row = [item[0] for item in cur.fetchall()]
@@ -218,7 +222,7 @@ class mysql(object):
         Get list of buy_price, sell_price, and investments
         for each complete trade logged
         """
-        cur = self.db.cursor()
+        cur = self.dbase.cursor()
         command = """ select buy_price, sell_price, investment from trades where
                       sell_price is NOT NULL; """
 
@@ -235,7 +239,7 @@ class mysql(object):
         Returns:
               a single list of pairs that we currently hold
         """
-        cur = self.db.cursor()
+        cur = self.dbase.cursor()
         command = """ select pair from trades where sell_price is NULL """
 
         self.execute(cur, command)

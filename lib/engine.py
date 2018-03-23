@@ -41,10 +41,10 @@ class Engine(dict):
         self.interval = interval
         self.pairs = prices.keys()
         self.dataframe = None
-        self.redis = Redis()
-        self.db = mysql()
+        self.redis = Redis(test=test)
+        self.db = mysql(test=test)
         if not test:
-            self.balance = balance.get_balance()
+            self.balance = balance.get_balance(test=test)
         self.test = test
         self["hold"] = {}
         self["event"] = {}

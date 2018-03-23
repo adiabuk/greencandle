@@ -33,7 +33,7 @@ def main():
     for pair in pairs:
         for interval in intervals:
 
-            redis = Redis(interval=interval)
+            redis = Redis(interval=interval, test=True)
             filename = "test_data/{0}_{1}.p".format(pair, interval)
             with open(filename, "rb") as handle:
                 dframe = pickle.load(handle)
@@ -48,11 +48,11 @@ def main():
                     break
                 ohlc = make_data_tupple(dataframe)
                 data = ({pair:ohlc}, {pair:dataframe})
-                events = Engine(prices=prices_trunk, data=data, interval=interval, test=True)
-                data = events.get_data()
+                engine = Engine(prices=prices_trunk, data=data, interval=interval, test=True)
+                data = engine.get_data()
                 redis.get_change(pair=pair, interval=interval)
 
-                del events
+                del engine
                 del data
 
 if __name__ == "__main__":

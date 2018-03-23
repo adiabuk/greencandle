@@ -39,13 +39,13 @@ def guess_profit(buy_price, sell_price, investment_gbp):
     perc = ((sell_price - buy_price)/buy_price)*100
     return profit, amount, difference, perc
 
-def get_recent_profit():
+def get_recent_profit(test=False):
     """
     calulate profit from aggregrate of recent transaction profits
     """
     profits = []
-    db = mysql()
-    trades = db.get_last_trades()  # contains tuple db results
+    dbase = mysql(test=test)
+    trades = dbase.get_last_trades()  # contains tuple db results
     for trade in trades:  # each individual trade contains buy_price, sell_price, and inventment
         profits.append(guess_profit(float(trade[0]),
                                     float(trade[1]),
