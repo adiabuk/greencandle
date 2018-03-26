@@ -24,8 +24,7 @@ def main():
     pairs = get_config("test")["pairs"].split()
     intervals = get_config("test")["intervals"].split()
     start_time = get_config("test")["start_time"].split()
-    no_of_klines = get_config("test")["no_of_klines"].split()
-
+    no_of_klines = int(get_config("test")["no_of_klines"].split()[0])
     for pair in pairs:
         for interval in intervals:
 

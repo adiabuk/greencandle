@@ -99,12 +99,7 @@ def to_csv(pair, data):
     Args:
         pair: trading pair (eg. XRPBTC)
         data: pandas dataframe containing klines data
-
-    Returns:
-        pandas datafram contiaing klines for given pair
     """
-
-
     keys = data[0].keys()
     keys = ["closeTime", "low", "high", "open", "close", "volume",
             "openTime", "numTrades", "quoteVolume"]
