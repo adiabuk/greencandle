@@ -63,7 +63,7 @@ def gbp_to_base(gbp, symbol):
     usd = gbp * CURRENCY.get_rate("GBP", "USD")
     btc = usd * float(binance.prices()["BTCUSDT"])
     omg = btc * float(binance.prices()[symbol + "BTC"])
-    return "{0:.10f}".format(omg)
+    return format(omg, ".20f")
 
 if __name__ == "__main__":
     print(gbp_to_base(50, "OMG"))

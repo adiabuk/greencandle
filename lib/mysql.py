@@ -165,6 +165,16 @@ class mysql(object):
             LOGGER.crititcal("AMROX6 - unable to execute query")
 
     @get_exceptions
+    def delete_data(self):
+        """
+        Delete all data from trades table
+        """
+        LOGGER.debug("Clearing Old Data")
+        command = "delete from trades"
+        logger.info("Deleting all trades from mysql")
+        self.run_sql_query(command)
+
+    @get_exceptions
     def clean_stale(self):
         """
         Delete stale records from actions and action_totals db tables - any records older than 30

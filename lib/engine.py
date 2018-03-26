@@ -177,7 +177,7 @@ class Engine(dict):
         self.add_scheme(scheme)
         LOGGER.info("Done getting Support & resistance")
 
-
+    @get_exceptions
     def get_rsi(self, pair=None, klines=None):
         """
         get RSI oscillator values for given pair
@@ -190,7 +190,7 @@ class Engine(dict):
             None
 
         """
-        LOGGER.info("Getting RSI")
+        LOGGER.info("Getting RSI_21")
         dataframe = self.renamed_dataframe_columns(klines)
         scheme = {}
         mine = dataframe.apply(pandas.to_numeric)
@@ -207,10 +207,11 @@ class Engine(dict):
             direction = "BUY"
         else:
             direction = "HOLD"
+        LOGGER.debug("AMROX9 " + "RSI_21" + " " + str(df_list[-1]) + " " + direction)
         scheme["direction"] = direction
-        scheme["event"] = "RSI"
+        scheme["event"] = "RSI_21"
         self.add_scheme(scheme)
-        LOGGER.info("Done getting RSI")
+        LOGGER.info("Done getting RSI_21")
 
     @staticmethod
     def renamed_dataframe_columns(klines=None):
@@ -362,14 +363,14 @@ class Engine(dict):
         except Exception as e:
             LOGGER.critical("AMROX25 FAILING!!! " + str(e))
         trends = (
-            ("EMA", 10),
+            #("EMA", 10),
             ("EMA", 20),
-            ("EMA", 30),
+            #("EMA", 30),
             ("EMA", 50),
             ("EMA", 100),
             ("SMA", 200),
             ("SMA", 20),
-            ("SMA", 30),
+            #("SMA", 30),
             ("SMA", 50),
             ("SMA", 100),
             ("SMA", 200))
@@ -383,11 +384,11 @@ class Engine(dict):
             else:
                 trigger = "BUY"
             scheme = {}
-            result = 0.0 if math.isnan(result) else result
+            result = 0.0 if math.isnan(result) else format(float(result), ".20f")
             try:
                 current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
                 close_time = str(self.dataframes[pair].iloc[-1]["closeTime"])
-                data = {func+"-"+str(timeperiod):{"result": result,
+                data = {func+"-"+str(timeperiod):{"result": format(float(result), ".20f"),
                                                   "current_price":current_price,
                                                   "date":close_time,
                                                   "action":self.get_action(trigger)}}
@@ -430,10 +431,11 @@ class Engine(dict):
             #"ADX": {"BUY": ???
             "RSI": {"BUY": "< 30", "SELL": "> 70", "klines": tuple(("close",)), "args": [14]},
             "MOM": {"BUY": "< 0", "SELL": "> 0", "klines": tuple(("close",)), "args": [10]},
-            "APO": {"BUY": "> 0", "SELL": "< 0", "klines": tuple(("close",)), "args": []},
+            "APO": {"BUY": "> 0000001677", "SELL": "< 0", "klines": tuple(("close",)), "args": []},
             "ULTOSC": {"BUY": "< 30", "SELL": "> 70",
                        "klines": ("high", "low", "close"), "args":[7, 14, 28]},
-            "WILLR": {"BUY": "> 80", "SELL": "< 20",
+            #"WILLR": {"BUY": "> 80", "SELL": "< 20",  #bad
+            "WILLR": {"BUY": "< -80", "SELL": "> 20",  #good
                       "klines": ("high", "low", "close"), "args": [14]},
             "AROONOSC": {"BUY": "> 50", "SELL": "< -50", "klines": ("high", "low"), "args": []}
             }
@@ -461,7 +463,7 @@ class Engine(dict):
 
             current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
             close_time = str(self.dataframes[pair].iloc[-1]["closeTime"])
-            result = 0.0 if math.isnan(j) else j
+            result = 0.0 if math.isnan(j) else format(float(j), ".20f")
             try:
                 data = {check:{"result": result,
                                "date": close_time,
@@ -474,7 +476,7 @@ class Engine(dict):
                 scheme["direction"] = trigger
                 scheme["event"] = check
                 scheme["difference"] = None
-
+                LOGGER.debug("AMROX9 " + check + " " + result + " " + scheme["direction"])
                 self.add_scheme(scheme)
 
             except KeyError as e:
@@ -536,8 +538,9 @@ class Engine(dict):
         result = 0.0 if (isinstance(scheme["data"], float) and
                          math.isnan(scheme["data"]))  else scheme["data"]
         try:
-            data = {scheme["event"]:{"result": str(result),
-                                     "current_price": float(current_price),
+
+            data = {scheme["event"]:{"result": result,
+                                     "current_price": format(float(current_price), ".20f"),
                                      "date": close_time,
                                      "action":self.get_action(scheme["direction"])}}
 

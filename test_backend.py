@@ -1,15 +1,20 @@
 #!/usr/bin/env python
+# PYTHON_ARGCOMPLETE_OK
 
 """
 Run module with test data
 """
 
+import argparse
 import pickle
+import argcomplete
+import setproctitle
 from lib.engine import Engine
 from lib.common import make_float
 from lib.logger import getLogger
 from lib.redis_conn import Redis
 from lib.config import get_config
+from lib.mysql import mysql
 
 LOGGER = getLogger(__name__)
 
@@ -27,9 +32,16 @@ def main():
     """
     Run test for all pairs and intervals defined in config
     """
-    pairs = get_config("test")["pairs"].split()
+    setproctitle.setproctitle("greencandle-test")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-p", "--pairs", nargs='+', required=False, default=[])
+    argcomplete.autocomplete(parser)
+    args = parser.parse_args()
+    pairs = args.pairs if args.pairs else get_config("test")["pairs"].split()
     intervals = get_config("test")["intervals"].split()
     investment = 20
+    dbase = mysql(test=True)
+    dbase.delete_data()
 
     for pair in pairs:
         for interval in intervals:

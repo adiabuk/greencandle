@@ -71,6 +71,16 @@ class Redis(object):
         """
         return sorted(list(self.conn.scan_iter("{0}:{1}:*".format(pair, interval))))
 
+    def get_details(self, address):
+        """
+        Get totals of results in each group
+
+        Args:
+              address
+              eg.  b"XRPBTC:15m:1520869499999",
+        """
+        return self.conn.hgetall(address).items()
+
     def get_total(self, address):
         """
         Get totals of results in each group
@@ -83,8 +93,6 @@ class Redis(object):
               score can be negative (indicating overall bearish) - the lower the number, the more
               bearish.  Positive figures indicate bullish - the higher the number the more bullish.
               Results close to zero are considered to be HOLD (if persistent)
-
-
         """
         val = 0
         for _, value in self.conn.hgetall(address).items():
@@ -122,25 +130,34 @@ class Redis(object):
             return None
         for item in items[-4:]:
             totals.append(self.get_total(item))
-
         current = self.get_current(items[-1])
         current_price = current[0]
         current_mepoch = float(current[1])/1000
+        LOGGER.debug("AMROX10 " + str(current[-1]) + " " + str(totals[-1]))
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_mepoch))
         value = self.dbase.get_trade_value(pair)
 
-        if not value and (-2 <= totals[-1] <= 5 and
+        if not value and (1 <= totals[-1] <= 50 and   # was -2 and 5
+                          1 <= totals[-2] <= 50 and
                           float(sum(totals[:3])) / max(len(totals[:3]), 1) < totals[-1]):
-            LOGGER.critical("AMROX8: BUY!!!!!! {0} {1} {2} {3}".format(totals, current_time,
-                                                                       current_price, items[-1]))
+            LOGGER.critical("AMROX8: BUY {0} {1} {2} {3}".format(totals, current_time,
+                                                                 format(float(current_price), ".20f"),
+                                                                 items[-1]))
 
-            self.dbase.insert_trade(pair, current_time, current_price, investment, "0")
+            self.dbase.insert_trade(pair, current_time, format(float(current_price), ".20f"), investment, "0")
 
-        elif value and ((-20 <= totals[-1] <= 5 and
+        elif value and float(current_price) > (float(value[0]) *( (8/100)+1)):
+            LOGGER.critical("AMROX8: SELL {0} {1} {2} {3}".format(totals, current_time,
+                                                                  format(float(current_price), ".20f"),
+                                                                  items[-1]))
+            self.dbase.update_trades(pair, current_time, format(float(current_price), ".20f"))
+        elif value and ((-20 <= totals[-1] <= -1 and
                          float(sum(totals[:3])) / max(len(totals[:3]), 1) > totals[-1]) and
-                        float(current_price) > float(value[0]) or
-                        float(current_price) > float(value[0]) * (3/100)+1):
-            LOGGER.critical("AMROX8: SELL!!!! {0} {1} {2} {3}".format(totals, current_time,
-                                                                      current_price, items[-1]))
-            self.dbase.update_trades(pair, current_time, current_price)
+                         float(current_price) > float(value[0]) or
+                         float(current_price) > float(value[0]) * (2/100)+1):
+
+            LOGGER.critical("AMROX8: SELL {0} {1} {2} {3}".format(totals, current_time,
+                                                                  format(float(current_price), ".20f"),
+                                                                  items[-1]))
+            self.dbase.update_trades(pair, current_time, format(float(current_price), ".20f"))
         return totals
