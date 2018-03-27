@@ -13,7 +13,6 @@ from concurrent.futures import ThreadPoolExecutor
 from decimal import Decimal
 import pandas
 import talib
-import binance
 from lib.mysql import mysql
 from lib.redis_conn import Redis
 from lib import balance
@@ -31,7 +30,7 @@ class Engine(dict):
     """ Represent events created from data & indicators """
 
     get_exceptions = get_decorator((Exception), default_value="default")
-    def __init__(self, data, prices, interval=None, test=False):
+    def __init__(self, dataframes, prices, interval=None, test=False):
         """
         Initialize class
         Create hold and event dicts
@@ -40,7 +39,6 @@ class Engine(dict):
         LOGGER.debug("Fetching raw data")
         self.interval = interval
         self.pairs = prices.keys()
-        self.dataframe = None
         self.redis = Redis(test=test)
         self.db = mysql(test=test)
         if not test:
@@ -49,9 +47,26 @@ class Engine(dict):
         self["hold"] = {}
         self["event"] = {}
         self.supres = {}
-        self.data, self.dataframes = data
+        #self.data, self.dataframes = data
+        self.dataframes = dataframes
+        self.ohlcs = self.make_data_tupple(dataframes)
         super(Engine, self).__init__()
         LOGGER.debug("Finished fetching raw data")
+
+    @staticmethod
+    def make_data_tupple(dataframes):
+        """
+        Transform dataframe to tupple of of floats
+        """
+        ohlcs = {}
+        for key, value in dataframes.items():
+            ohlc = (make_float(value.open),
+                    make_float(value.high),
+                    make_float(value.low),
+                    make_float(value.close))
+
+            ohlcs[key] = ohlc
+        return ohlcs
 
     def __del__(self):
         del  self.db
@@ -113,9 +128,9 @@ class Engine(dict):
 
             # get indicators supertrend, and API for each trading pair
             POOL.submit(self.get_sup_res, pair, self.dataframes[pair])
-            POOL.submit(self.get_indicators, pair, self.data[pair])
-            POOL.submit(self.get_oscillators, pair, self.data[pair])
-            POOL.submit(self.get_moving_averages, pair, self.data[pair])
+            POOL.submit(self.get_indicators, pair, self.ohlcs[pair])
+            POOL.submit(self.get_oscillators, pair, self.ohlcs[pair])
+            POOL.submit(self.get_moving_averages, pair, self.ohlcs[pair])
             POOL.submit(self.get_supertrend, pair, self.dataframes[pair])
             POOL.submit(self.get_rsi, pair, self.dataframes[pair])
 
@@ -165,7 +180,7 @@ class Engine(dict):
         try:
             scheme["difference"] = pipify(resistance[-1]) - pipify(support[-1])
         except TypeError as type_error:
-            print("Type error", support [-1], resistance[-1], type_error)
+            print("Type error", support[-1], resistance[-1], type_error)
             return None
 
         scheme["data"] = scheme['support'], scheme['resistance']
@@ -549,7 +564,7 @@ class Engine(dict):
         except Exception as e:
             LOGGER.critical("AMROX25 Redis failure22 " +str(e) + " " + repr(sys.exc_info()))
 
-
+        """
         if not self.test:
             #  Add prices for current symbol to scheme
             prices = {"buy": get_buy_price(pair), "sell": get_sell_price(pair),
@@ -570,7 +585,7 @@ class Engine(dict):
                                     balance=str(bal))
             except Exception as excp:
                 LOGGER.critical("AMROX25 Error: " + str(excp))
-
+        """
         if scheme["direction"] == "HOLD":
             self["hold"][id(scheme)] = scheme
         else:

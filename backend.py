@@ -16,7 +16,7 @@ import argcomplete
 import setproctitle
 import binance
 from lib.mysql import mysql
-from lib.binance_common import get_ohlcs
+from lib.binance_common import get_dataframes
 from lib.engine import Engine
 from lib.config import get_config
 from lib.logger import getLogger
@@ -99,7 +99,7 @@ def loop(args):
     agg_data = {}
     price_per_trade = int(get_config("backend")["price_per_trade"])
     max_trades = int(get_config("backend")["max_trades"])
-    interval = int(get_config("backend")["interval"])
+    interval = str(get_config("backend")["interval"])
     LOGGER.debug("Price per trade: {0}".format(price_per_trade))
     LOGGER.debug("max trades: {0}".format(max_trades))
 
@@ -107,16 +107,15 @@ def loop(args):
     if args.pair:
         pairs = [args.pair]
     else:
-        pairs = int(get_config("backend")["paris"])
+        pairs = get_config("backend")["pairs"].split()
     prices = binance.prices()
     prices_trunk = {}
     for k, v in prices.items():
-        if k.endswith("BTC"):
+        if k in pairs:
             prices_trunk[k] = v
-    pairs = prices.keys()
-    data = get_ohlcs(pairs, interval=interval)
+    dataframes = get_dataframes(pairs, interval=interval)
 
-    events = Engine(prices=prices_trunk, data=data, interval=interval)
+    events = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval)
     data = events.get_data()
     DB.insert_action_totals()
     DB.clean_stale()

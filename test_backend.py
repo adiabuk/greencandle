@@ -60,8 +60,8 @@ def main():
                 if len(dataframe) < 50:
                     break
                 ohlc = make_data_tupple(dataframe)
-                data = ({pair:ohlc}, {pair:dataframe})
-                engine = Engine(prices=prices_trunk, data=data, interval=interval, test=True)
+                dataframes =  {pair:dataframe}
+                engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, test=True)
                 data = engine.get_data()
                 redis.get_change(pair=pair, investment=investment)
 

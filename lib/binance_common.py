@@ -43,7 +43,7 @@ def get_binance_klines(pair, interval=None):
         sys.exit(2)
 
     if not raw:
-        LOGGER.critical("Unable to extract data")
+        LOGGER.critical("Empty data for " + pair)
         sys.exit(2)
     dataframe = pandas.DataFrame.from_dict(raw)
     return dataframe
@@ -108,7 +108,7 @@ def to_csv(pair, data):
         dict_writer.writeheader()
         dict_writer.writerows(reversed(data))
 
-def get_ohlc(pair, interval):
+def get_dataframe(pair, interval):
     """
     Extract and return ohlc (open, high, low close) data
     for single pair from available data
@@ -121,13 +121,9 @@ def get_ohlc(pair, interval):
         A truple containing full pandas dataframe and a tuple of float values
     """
     dataframe = get_binance_klines(pair, interval=interval)
-    ohlc = (make_float(dataframe.open),
-            make_float(dataframe.high),
-            make_float(dataframe.low),
-            make_float(dataframe.close))
-    return ohlc, dataframe
+    return dataframe
 
-def get_ohlcs(pairs, graph=False, interval=None):
+def get_dataframes(pairs, interval=None):
     """
     Get details from binance API
 
@@ -140,20 +136,16 @@ def get_ohlcs(pairs, graph=False, interval=None):
         A truple containing full pandas dataframes and a tuple of float values for all pairs
     """
 
-    ohlcs = {}
     dataframe = {}
     results = {}
     for pair in pairs:
         event = {}
         event["symbol"] = pair
         event["data"] = {}
-        results[pair] = POOL.submit(get_ohlc, pair=pair, interval=interval)
+        results[pair] = POOL.submit(get_dataframe, pair=pair, interval=interval)
 
-        if graph:
-            create_graph(dataframe, pair)
-
+    # extract results
     for key, value in results.items():
-        ohlcs[key] = value.result()[0]
-        dataframe[key] = value.result()[1]
-
-    return ohlcs, dataframe
+        dataframe[key] = value.result()
+    POOL.shutdown(wait=True)
+    return dataframe

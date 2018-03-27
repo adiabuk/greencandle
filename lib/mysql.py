@@ -171,7 +171,7 @@ class mysql(object):
         """
         LOGGER.debug("Clearing Old Data")
         command = "delete from trades"
-        logger.info("Deleting all trades from mysql")
+        LOGGER.info("Deleting all trades from mysql")
         self.run_sql_query(command)
 
     @get_exceptions
