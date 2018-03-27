@@ -21,7 +21,7 @@ from lib.config import get_config
 def main():
     """ Main function """
 
-    pairs = get_config("test")["pairs"].split()
+    pairs = get_config("test")["serial_pairs"].split()
     intervals = get_config("test")["intervals"].split()
     start_time = get_config("test")["start_time"].split()
     no_of_klines = int(get_config("test")["no_of_klines"].split()[0])

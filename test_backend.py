@@ -35,14 +35,35 @@ def main():
     setproctitle.setproctitle("greencandle-test")
     parser = argparse.ArgumentParser()
     parser.add_argument("-p", "--pairs", nargs='+', required=False, default=[])
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("-s", "--serial", default=False, action="store_true")
+    group.add_argument("-a", "--parallel", default=True, action="store_true")
+
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
-    pairs = args.pairs if args.pairs else get_config("test")["pairs"].split()
-    intervals = get_config("test")["intervals"].split()
+    if args.serial:
+        pair_string = "serial_pairs"
+    else:
+        pair_string = "parallel_pairs"
+    pairs = args.pairs if args.pairs else get_config("test")[pair_string].split()
+    parallel_interval = get_config("test")["parallel_interval"].split()[0]
+    serial_intervals = get_config("test")["serial_intervals"].split()
+
     investment = 20
     dbase = mysql(test=True)
     dbase.delete_data()
+    if args.serial:
+        do_serial(pairs, serial_intervals, investment)
+    else:
+        do_parallel(pairs, parallel_interval, investment)
 
+
+
+def do_serial(pairs, intervals, investment):
+    """
+    Do test with serial data
+    """
+    LOGGER.info("Performaing serial run")
     for pair in pairs:
         for interval in intervals:
 
@@ -59,14 +80,48 @@ def main():
                 dataframe = dframe.copy()[beg: end]
                 if len(dataframe) < 50:
                     break
-                ohlc = make_data_tupple(dataframe)
-                dataframes =  {pair:dataframe}
-                engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, test=True)
+                dataframes = {pair:dataframe}
+                engine = Engine(prices=prices_trunk, dataframes=dataframes,
+                                interval=interval, test=True)
                 data = engine.get_data()
                 redis.get_change(pair=pair, investment=investment)
 
                 del engine
                 del data
+
+def do_parallel(pairs, interval, investment):
+    """
+    Do test with parallel data
+    """
+    LOGGER.info("Performaing parallel run")
+    redis = Redis(interval=interval, test=True)
+    size = 1000
+    chunk_size = 50
+
+    redis.clear_all()
+    dframes = {}
+    for pair in pairs:
+        filename = "test_data/{0}_{1}.p".format(pair, interval)
+        with open(filename, "rb") as handle:
+            dframes[pair] = pickle.load(handle)
+
+    for beg in range(size - chunk_size * 2):
+        dataframes = {}
+        for pair in pairs:
+            end = beg + chunk_size
+            dataframe = dframes[pair][beg: end]
+            prices_trunk = {pair: "0"}
+            if len(dataframe) < 50:
+                break
+            dataframes.update({pair:dataframe})
+            engine = Engine(prices=prices_trunk, dataframes=dataframes,
+                            interval=interval, test=True)
+            data = engine.get_data()
+            redis.get_change(pair=pair, investment=investment)
+
+            del engine
+            del data
+
 
 if __name__ == "__main__":
     main()
