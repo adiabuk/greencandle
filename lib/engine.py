@@ -222,7 +222,6 @@ class Engine(dict):
             direction = "BUY"
         else:
             direction = "HOLD"
-        LOGGER.debug("AMROX9 " + "RSI_21" + " " + str(df_list[-1]) + " " + direction)
         scheme["direction"] = direction
         scheme["event"] = "RSI_21"
         self.add_scheme(scheme)
@@ -491,7 +490,6 @@ class Engine(dict):
                 scheme["direction"] = trigger
                 scheme["event"] = check
                 scheme["difference"] = None
-                LOGGER.debug("AMROX9 " + check + " " + result + " " + scheme["direction"])
                 self.add_scheme(scheme)
 
             except KeyError as e:
