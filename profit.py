@@ -4,6 +4,7 @@ Calculate potential profits from historical data
 """
 
 from __future__ import print_function
+from collections import defaultdict
 from forex_python.converter import CurrencyRates
 import binance
 from lib.mysql import mysql
@@ -42,15 +43,36 @@ def guess_profit(buy_price, sell_price, investment_gbp):
 def get_recent_profit(test=False):
     """
     calulate profit from aggregrate of recent transaction profits
+    Args:
+        test boolean (optional) - use test db if True, otherwise use live
+    Returns:
+        * total profit for all completed trades recorded (float)
+        * sum of profit for each day (or partial day) recorded (dict)
+            - where key is a string contiaining a date in the following format: yyyy-mm-dd
+            - and value is a float containing th profit for given day
+
     """
     profits = []
+    profit_dict = defaultdict(float)  #will allow us to increment unitilaized value (start at 0)
     dbase = mysql(test=test)
-    trades = dbase.get_last_trades()  # contains tuple db results
+    trades = dbase.get_last_trades()# contains tuple db results
+
     for trade in trades:  # each individual trade contains buy_price, sell_price, and inventment
-        profits.append(guess_profit(float(trade[0]),
-                                    float(trade[1]),
-                                    float(trade[2]))[0])  # get first item
-    return sum(profits)
+        # items contained in tupple are as follows:
+        # sell_time, buy_price, sell_price, and investment
+
+        # Remove the time from the datetime stamp
+        # format is 'yyyy-mm-dd hh-mm-ss'
+        # split on whitespace and replace with first portion only
+        # This is done so that we can group by day and sum up profits
+        day = str(trade[0]).split()[0]
+        profit_per_trade = guess_profit(float(trade[1]),
+                                        float(trade[2]),
+                                        float(trade[3]))[0]  # get first item from function (profit)
+        profits.append(profit_per_trade)
+        profit_dict[day] += float(profit_per_trade)  # trade[0] is a date: yyyy-mm-dd
+
+    return sum(profits), dict(profit_dict)
 
 def gbp_to_base(gbp, symbol):
     """

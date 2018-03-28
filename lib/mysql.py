@@ -229,11 +229,11 @@ class mysql(object):
     @get_exceptions
     def get_last_trades(self):
         """
-        Get list of buy_price, sell_price, and investments
+        Get list of sell_time, buy_price, sell_price, and investment
         for each complete trade logged
         """
         cur = self.dbase.cursor()
-        command = """ select buy_price, sell_price, investment from trades where
+        command = """ select sell_time, buy_price, sell_price, investment from trades where
                       sell_price is NOT NULL; """
 
         self.execute(cur, command)
