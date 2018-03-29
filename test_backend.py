@@ -15,6 +15,7 @@ from lib.logger import getLogger
 from lib.redis_conn import Redis
 from lib.config import get_config
 from lib.mysql import mysql
+from profit import get_recent_profit
 
 LOGGER = getLogger(__name__)
 
@@ -34,6 +35,7 @@ def main():
     """
     setproctitle.setproctitle("greencandle-test")
     parser = argparse.ArgumentParser()
+    parser.add_argument("-i", "--interval")
     parser.add_argument("-p", "--pairs", nargs='+', required=False, default=[])
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("-s", "--serial", default=False, action="store_true")
@@ -47,6 +49,7 @@ def main():
         pair_string = "parallel_pairs"
     pairs = args.pairs if args.pairs else get_config("test")[pair_string].split()
     parallel_interval = get_config("test")["parallel_interval"].split()[0]
+    parallel_interval = args.interval if args.interval else parallel_interval
     serial_intervals = get_config("test")["serial_intervals"].split()
 
     investment = 20
@@ -56,8 +59,6 @@ def main():
         do_serial(pairs, serial_intervals, investment)
     else:
         do_parallel(pairs, parallel_interval, investment)
-
-
 
 def do_serial(pairs, intervals, investment):
     """
@@ -125,3 +126,4 @@ def do_parallel(pairs, interval, investment):
 
 if __name__ == "__main__":
     main()
+    get_recent_profit(True)

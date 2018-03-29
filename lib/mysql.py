@@ -170,9 +170,11 @@ class mysql(object):
         Delete all data from trades table
         """
         LOGGER.debug("Clearing Old Data")
-        command = "delete from trades"
+        command = "delete from trades;"
+        command2 = "delete from actions;"
         LOGGER.info("Deleting all trades from mysql")
         self.run_sql_query(command)
+        self.run_sql_query(command2)
 
     @get_exceptions
     def clean_stale(self):
