@@ -9,6 +9,7 @@ import argparse
 import pickle
 import argcomplete
 import setproctitle
+import os
 from lib.engine import Engine
 from lib.common import make_float
 from lib.logger import getLogger
@@ -70,6 +71,8 @@ def do_serial(pairs, intervals, investment):
 
             redis = Redis(interval=interval, test=True)
             filename = "test_data/{0}_{1}.p".format(pair, interval)
+            if not os.path.exists(filename):
+                continue
             with open(filename, "rb") as handle:
                 dframe = pickle.load(handle)
 
@@ -103,6 +106,8 @@ def do_parallel(pairs, interval, investment):
     dframes = {}
     for pair in pairs:
         filename = "test_data/{0}_{1}.p".format(pair, interval)
+        if not os.path.exists(filename):
+            continue
         with open(filename, "rb") as handle:
             dframes[pair] = pickle.load(handle)
 
@@ -123,7 +128,6 @@ def do_parallel(pairs, interval, investment):
             del engine
             del data
 
-
 if __name__ == "__main__":
     main()
-    get_recent_profit(True)
+    print(get_recent_profit(True))

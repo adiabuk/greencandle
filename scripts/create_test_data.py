@@ -21,19 +21,23 @@ from lib.config import get_config
 def main():
     """ Main function """
 
+    klines_multiplier = {"15m": 1, "5m": 3, "3m": 5, "1m": 15}
     pairs = get_config("test")["serial_pairs"].split()
     intervals = get_config("test")["serial_intervals"].split()
     start_time = get_config("test")["start_time"].split()
     no_of_klines = int(get_config("test")["no_of_klines"].split()[0])
     for pair in pairs:
         for interval in intervals:
-            klines_multiplier = {"15m": 1, "5m": 3, "3m": 5, "1m": 15}
             no_of_klines *= int(klines_multiplier[interval])
+
+            filename = BASE_DIR + "/test_data/" + pair + "_" + interval + ".p"
+            if os.path.exists(filename):
+                continue
 
             current = pandas.DataFrame.from_dict(get_all_klines(pair=pair, interval=interval,
                                                                 start_time=start_time,
                                                                 no_of_klines=no_of_klines))
-            pickle.dump(current, open(BASE_DIR+"/test_data/" + pair + "_" + interval + ".p", "wb"))
+            pickle.dump(current, open(filename, "wb"))
 
 
 if __name__ == "__main__":
