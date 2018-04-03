@@ -35,3 +35,25 @@ def pipify(value):
     except ValueError:
         print("Value Error", value)
         return None
+
+def add_perc(perc, num):
+    """
+    Add a percentage to a number
+    Args:
+        perc: Percent num to add
+        num: number to add to
+    Returns:
+        total: num + perc%
+    """
+    return num * (1 + perc/100)
+
+def sub_perc(perc, num):
+    """
+    Subtractsa percentage to a number
+    Args:
+        perc: Percent num to subtract
+        num: number to subtract from
+    Returns:
+        total: num - perc%
+    """
+    return num * (1 - perc/100)
