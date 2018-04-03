@@ -57,3 +57,9 @@ def sub_perc(perc, num):
         total: num - perc%
     """
     return num * (1 - perc/100)
+
+def perc_diff(num1, num2):
+    """
+    Get percentage difference between 2 numbers
+    """
+    return ((float(num2) - float(num1))/float(num1)) * 100

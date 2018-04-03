@@ -8,9 +8,11 @@ from collections import defaultdict
 from forex_python.converter import CurrencyRates
 import binance
 from lib.mysql import mysql
+from lib.common import add_perc, sub_perc, perc_diff
 
 CURRENCY = CurrencyRates()
 RATE = 0.00014 # GBP to BTC
+FEES = 0.05
 
 def guess_profit(buy_price, sell_price, investment_gbp):
     """
@@ -27,17 +29,19 @@ def guess_profit(buy_price, sell_price, investment_gbp):
         difference
         perc
     """
-
     buy_price = float(buy_price)
     sell_price = float(sell_price)
 
     total_buy_btc = investment_gbp * RATE
+    total_buy_btc = sub_perc(FEES, total_buy_btc)   # Subtract trading fees
     amount = total_buy_btc / buy_price
 
     total_sell_btc = sell_price * amount
+    total_sell_btc = sub_perc(FEES, total_sell_btc)  # Subtract trading fees
+
     difference = total_sell_btc - total_buy_btc
-    profit = difference *(1/RATE)
-    perc = ((sell_price - buy_price)/buy_price)*100
+    profit = difference * (1 / RATE)
+    perc = perc_diff(buy_price, sell_price)
     return profit, amount, difference, perc
 
 def get_recent_profit(test=False):
