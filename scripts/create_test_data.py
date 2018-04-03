@@ -27,6 +27,8 @@ def main():
     no_of_klines = int(get_config("test")["no_of_klines"].split()[0])
     for pair in pairs:
         for interval in intervals:
+            klines_multiplier = {"15m": 1, "5m": 3, "3m": 5, "1m": 15}
+            no_of_klines *= int(klines_multiplier[interval])
 
             current = pandas.DataFrame.from_dict(get_all_klines(pair=pair, interval=interval,
                                                                 start_time=start_time,
