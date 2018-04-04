@@ -7,7 +7,7 @@ Store and retrieve items from redis
 import ast
 import time
 import redis
-from lib.mysql import mysql
+from lib.mysql import Mysql
 from lib.logger import getLogger
 
 LOGGER = getLogger(__name__)
@@ -34,7 +34,7 @@ class Redis(object):
         self.interval = interval
         pool = redis.ConnectionPool(host=host, port=port, db=redis_db)
         self.conn = redis.StrictRedis(connection_pool=pool)
-        self.dbase = mysql(test=test)
+        self.dbase = Mysql(test=test)
 
     def clear_all(self):
         """
@@ -141,23 +141,27 @@ class Redis(object):
                           1 <= totals[-2] <= 50 and
                           float(sum(totals[:3])) / max(len(totals[:3]), 1) < totals[-1]):
             LOGGER.critical("AMROX8: BUY {0} {1} {2} {3}".format(totals, current_time,
-                                                                 format(float(current_price), ".20f"),
+                                                                 format(float(current_price),
+                                                                        ".20f"),
                                                                  items[-1]))
 
-            self.dbase.insert_trade(pair, current_time, format(float(current_price), ".20f"), investment, "0")
+            self.dbase.insert_trade(pair, current_time, format(float(current_price), ".20f"),
+                                    investment, "0")
 
-        elif value and float(current_price) > (float(value[0]) *( (8/100)+1)):
+        elif value and float(current_price) > (float(value[0]) *((8/100)+1)):
             LOGGER.critical("AMROX8: SELL {0} {1} {2} {3}".format(totals, current_time,
-                                                                  format(float(current_price), ".20f"),
+                                                                  format(float(current_price),
+                                                                         ".20f"),
                                                                   items[-1]))
             self.dbase.update_trades(pair, current_time, format(float(current_price), ".20f"))
         elif value and ((-20 <= totals[-1] <= -1 and
                          float(sum(totals[:3])) / max(len(totals[:3]), 1) > totals[-1]) and
-                         float(current_price) > float(value[0]) or
-                         float(current_price) > float(value[0]) * (2/100)+1):
+                        float(current_price) > float(value[0]) or
+                        float(current_price) > float(value[0]) * (2/100)+1):
 
             LOGGER.critical("AMROX8: SELL {0} {1} {2} {3}".format(totals, current_time,
-                                                                  format(float(current_price), ".20f"),
+                                                                  format(float(current_price),
+                                                                         ".20f"),
                                                                   items[-1]))
             self.dbase.update_trades(pair, current_time, format(float(current_price), ".20f"))
         return totals

@@ -1,5 +1,4 @@
-#pylint: disable=wrong-import-position,import-error,undefined-variable,unused-argument
-#pylint: disable=invalid-name,logging-format-interpolation, broad-except
+#pylint: disable=undefined-variable, wrong-import-position, broad-except
 
 """
 Push/Pull crypto signals and data to mysql
@@ -24,7 +23,7 @@ DB = get_config("database")["db"]
 DB_TEST = get_config("database")["db_test"]
 LOGGER = getLogger(__name__)
 
-class mysql(object):
+class Mysql(object):
     """
     Custom mysql object with methods to store and retrive given data
     """
@@ -39,13 +38,13 @@ class mysql(object):
         Connect to Mysql DB
         """
         if test:
-            db = DB_TEST
+            dbase_name = DB_TEST
         else:
-            db = DB
+            dbase_name = DB
         self.dbase = MySQLdb.connect(host=HOST,
                                      user=USER,
                                      passwd=PASSWORD,
-                                     db=db)
+                                     db=dbase_name)
         self.cursor = self.dbase.cursor()
 
     @get_exceptions
@@ -139,11 +138,10 @@ class mysql(object):
         di = {}
         prices = binance.prices()
         with self.cursor(MySQLdb.cursors.DictCursor) as cursor:
-            self.execute(cur, command)
+            self.execute(cur, query)
             data = cursor.fetchall()
             for record in data:
                 di[record["pair"]] = record["total1"], prices[record["pair"]]
-
 
         return di
 
@@ -206,7 +204,7 @@ class mysql(object):
               None
         """
 
-        LOGGER.info("AMROX5 Buying {0}".format(pair))
+        LOGGER.info("AMROX5 Buying %s", pair)
         command = """insert into trades (pair, buy_time, buy_price, investment,
                      total) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}");""".format(pair, date,
                                                                                   float(price),
@@ -263,7 +261,7 @@ class mysql(object):
         """
         Update an existing trade with sell price
         """
-        LOGGER.info("Selling, {0}".format(pair))
+        LOGGER.info("Selling %s", pair)
         command = """update trades set sell_price={0},sell_time="{1}" where sell_price is NULL and
         pair="{2}" """.format(float(sell_price), sell_time, pair)
         self.run_sql_query(command)
@@ -297,7 +295,7 @@ class mysql(object):
         self.run_sql_query(command)
 
     @get_exceptions
-    def insert_balance(self, d):
+    def insert_balance(self, balances):
         """
         Insert balance in GBP/BTC/USD into balance table for coinbase & binance
         Args:
@@ -306,7 +304,7 @@ class mysql(object):
               None
         """
 
-        for exchange, values in d.items():
+        for exchange, values in balances.items():
             for coin, data in values.items():
                 try:
                     command = """insert into balance (gbp, btc, usd, count, coin, exchange_id)

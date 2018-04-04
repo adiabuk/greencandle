@@ -7,7 +7,7 @@ from __future__ import print_function
 from collections import defaultdict
 from forex_python.converter import CurrencyRates
 import binance
-from lib.mysql import mysql
+from lib.mysql import Mysql
 from lib.common import add_perc, sub_perc, perc_diff
 
 CURRENCY = CurrencyRates()
@@ -58,7 +58,7 @@ def get_recent_profit(test=False):
     """
     profits = []
     profit_dict = defaultdict(float)  #will allow us to increment unitilaized value (start at 0)
-    dbase = mysql(test=test)
+    dbase = Mysql(test=test)
     trades = dbase.get_last_trades()# contains tuple db results
 
     for trade in trades:  # each individual trade contains buy_price, sell_price, and inventment

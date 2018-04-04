@@ -8,7 +8,7 @@ import json
 from requests.exceptions import ReadTimeout
 from lib.binance_accounts import get_binance_values
 from lib.coinbase_accounts import get_coinbase_values
-from lib.mysql import mysql
+from lib.mysql import Mysql
 from lib.logger import getLogger
 
 LOGGER = getLogger(__name__)
@@ -60,7 +60,7 @@ def get_balance(test=False):
 
     """
 
-    dbase = mysql(test=test)
+    dbase = Mysql(test=test)
     binance = get_binance_values()
     try:
         coinbase = get_coinbase_values()

@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # PYTHON_ARGCOMPLETE_OK
-#pylint: disable=no-member,consider-iterating-dictionary,global-statement,broad-except,
-#pylint: disable=unused-variable,invalid-name,logging-not-lazy,logging-format-interpolation
+# pylint: disable=broad-except,c-extension-no-member
 
 """
 Get ohlc (Open, High, Low, Close) values from given cryptos
@@ -15,7 +14,7 @@ import sys
 import argcomplete
 import setproctitle
 import binance
-from lib.mysql import mysql
+from lib.mysql import Mysql
 from lib.binance_common import get_dataframes
 from lib.engine import Engine
 from lib.config import get_config
@@ -23,7 +22,7 @@ from lib.logger import getLogger
 from lib.profit import RATE
 
 LOGGER = getLogger(__name__)
-DB = mysql()
+DB = Mysql()
 
 def main():
     """ main function """
@@ -46,7 +45,7 @@ def main():
             LOGGER.info("\nExiting on user command...")
             sys.exit(1)
         remaining_time = (minutes * 60.0) - ((time.time() - starttime) % 60.0)
-        LOGGER.debug("Sleeping for " + str(int(remaining_time)) + " seconds")
+        LOGGER.debug("Sleeping for %s seconds", remaining_time)
         time.sleep(remaining_time)
 
 def loop(args):
@@ -59,7 +58,7 @@ def loop(args):
         Buy as many items as we can from buy_list depending on max amount of trades, and current
         balance in BTC
         """
-        LOGGER.debug("We have {0} potential items to buy".format(len(buy_list)))
+        LOGGER.debug("We have %s potential items to buy", len(buy_list))
         if buy_list:
             current_btc_bal = events.balance["binance"]["BTC"]["count"]
             amount_to_buy_btc = price_per_trade * RATE
@@ -75,11 +74,11 @@ def loop(args):
                     LOGGER.warning("Too many trades, skipping")
                     break
                 elif item[0] in current_trades:
-                    LOGGER.warning("We already have a trade of {0}, skipping...".format(item[0]))
+                    LOGGER.warning("We already have a trade of %s, skipping...", item[0])
                     continue
                 else:
                     DB.insert_trade(item[0], prices_trunk[item[0]],
-                                    price_per_trade, amount_to_buy_btc)
+                                    price_per_trade, amount_to_buy_btc, total=0)
                     #binance.order(symbol=?, side=?, quantity, orderType="MARKET, price=?, test=True
                     #TODO: buy item
         else:
@@ -90,9 +89,10 @@ def loop(args):
         Sell items in sell_list
         """
         if sell_list:
-            LOGGER.info("We need to sell {0}".format(sell_list))
+            LOGGER.info("We need to sell %s", sell_list)
             for item in sell_list:
-                DB.update_trades(item, prices_trunk[item])
+                current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
+                DB.update_trades(pair=item, sell_time=current_time, sell_price=prices_trunk[item])
         else:
             LOGGER.info("No items to sell")
 
@@ -100,8 +100,8 @@ def loop(args):
     price_per_trade = int(get_config("backend")["price_per_trade"])
     max_trades = int(get_config("backend")["max_trades"])
     interval = str(get_config("backend")["interval"])
-    LOGGER.debug("Price per trade: {0}".format(price_per_trade))
-    LOGGER.debug("max trades: {0}".format(max_trades))
+    LOGGER.debug("Price per trade: %s", price_per_trade)
+    LOGGER.debug("max trades: %s", max_trades)
 
     LOGGER.debug("Starting new cycle")
     if args.pair:
@@ -110,9 +110,9 @@ def loop(args):
         pairs = get_config("backend")["pairs"].split()
     prices = binance.prices()
     prices_trunk = {}
-    for k, v in prices.items():
-        if k in pairs:
-            prices_trunk[k] = v
+    for key, val in prices.items():
+        if key in pairs:
+            prices_trunk[key] = val
     dataframes = get_dataframes(pairs, interval=interval)
 
     events = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval)

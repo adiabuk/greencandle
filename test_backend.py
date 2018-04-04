@@ -1,24 +1,24 @@
 #!/usr/bin/env python
 # PYTHON_ARGCOMPLETE_OK
-
 """
 Run module with test data
 """
 
 import argparse
+import os
 import pickle
 import argcomplete
 import setproctitle
-import os
 from lib.engine import Engine
 from lib.common import make_float
 from lib.logger import getLogger
 from lib.redis_conn import Redis
 from lib.config import get_config
-from lib.mysql import mysql
+from lib.mysql import Mysql
 from lib.profit import get_recent_profit
 
 LOGGER = getLogger(__name__)
+CHUNK_SIZE = 50
 
 def make_data_tupple(dataframe):
     """
@@ -54,7 +54,7 @@ def main():
     serial_intervals = get_config("test")["serial_intervals"].split()
 
     investment = 20
-    dbase = mysql(test=True)
+    dbase = Mysql(test=True)
     dbase.delete_data()
     if args.serial:
         do_serial(pairs, serial_intervals, investment)
@@ -77,21 +77,19 @@ def do_serial(pairs, intervals, investment):
                 dframe = pickle.load(handle)
 
             prices_trunk = {pair: "0"}
-            chunk_size = 50
             redis.clear_all()
-            for beg in range(len(dframe) - chunk_size * 2):
-                end = beg + chunk_size
+            for beg in range(len(dframe) - CHUNK_SIZE * 2):
+                end = beg + CHUNK_SIZE
                 dataframe = dframe.copy()[beg: end]
                 if len(dataframe) < 50:
                     break
                 dataframes = {pair:dataframe}
                 engine = Engine(prices=prices_trunk, dataframes=dataframes,
                                 interval=interval, test=True)
-                data = engine.get_data()
+                engine.get_data()
                 redis.get_change(pair=pair, investment=investment)
 
                 del engine
-                del data
 
 def do_parallel(pairs, interval, investment):
     """
@@ -100,7 +98,6 @@ def do_parallel(pairs, interval, investment):
     LOGGER.info("Performaing parallel run")
     redis = Redis(interval=interval, test=True)
     size = 1000
-    chunk_size = 50
 
     redis.clear_all()
     dframes = {}
@@ -111,10 +108,10 @@ def do_parallel(pairs, interval, investment):
         with open(filename, "rb") as handle:
             dframes[pair] = pickle.load(handle)
 
-    for beg in range(size - chunk_size * 2):
+    for beg in range(size - CHUNK_SIZE * 2):
         dataframes = {}
         for pair in pairs:
-            end = beg + chunk_size
+            end = beg + CHUNK_SIZE
             dataframe = dframes[pair][beg: end]
             prices_trunk = {pair: "0"}
             if len(dataframe) < 50:
@@ -122,11 +119,10 @@ def do_parallel(pairs, interval, investment):
             dataframes.update({pair:dataframe})
             engine = Engine(prices=prices_trunk, dataframes=dataframes,
                             interval=interval, test=True)
-            data = engine.get_data()
+            engine.get_data()
             redis.get_change(pair=pair, investment=investment)
 
             del engine
-            del data
 
 if __name__ == "__main__":
     main()

@@ -13,7 +13,7 @@ from concurrent.futures import ThreadPoolExecutor
 from decimal import Decimal
 import pandas
 import talib
-from lib.mysql import mysql
+from lib.mysql import Mysql
 from lib.redis_conn import Redis
 from lib import balance
 from lib.order import get_buy_price, get_sell_price
@@ -40,7 +40,7 @@ class Engine(dict):
         self.interval = interval
         self.pairs = prices.keys()
         self.redis = Redis(test=test)
-        self.db = mysql(test=test)
+        self.db = Mysql(test=test)
         if not test:
             self.balance = balance.get_balance(test=test)
         self.test = test
