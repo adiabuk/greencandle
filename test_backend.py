@@ -16,7 +16,7 @@ from lib.logger import getLogger
 from lib.redis_conn import Redis
 from lib.config import get_config
 from lib.mysql import mysql
-from profit import get_recent_profit
+from lib.profit import get_recent_profit
 
 LOGGER = getLogger(__name__)
 

@@ -20,7 +20,7 @@ from lib.binance_common import get_dataframes
 from lib.engine import Engine
 from lib.config import get_config
 from lib.logger import getLogger
-from profit import RATE
+from lib.profit import RATE
 
 LOGGER = getLogger(__name__)
 DB = mysql()
