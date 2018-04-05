@@ -68,7 +68,7 @@ CREATE TABLE `balance` (
   PRIMARY KEY (`id`),
   KEY `exchange_id` (`exchange_id`),
   CONSTRAINT `balance_ibfk_2` FOREIGN KEY (`exchange_id`) REFERENCES `exchange` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8941 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -255,6 +255,24 @@ CREATE TABLE `trades` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `trades_back`
+--
+
+DROP TABLE IF EXISTS `trades_back`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `trades_back` (
+  `buy_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `sell_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `pair` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `buy_price` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sell_price` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `investment` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `total` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Final view structure for view `changes`
 --
 
@@ -320,7 +338,7 @@ CREATE TABLE `trades` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-23 21:46:07
+-- Dump completed on 2018-04-04 18:39:42
 -- MySQL dump 10.16  Distrib 10.1.31-MariaDB, for Linux (x86_64)
 --
 -- Host: localhost    Database: greencandle
@@ -371,4 +389,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-23 21:46:09
+-- Dump completed on 2018-04-04 18:39:44

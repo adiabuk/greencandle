@@ -44,11 +44,12 @@ def guess_profit(buy_price, sell_price, investment_gbp):
     perc = perc_diff(buy_price, sell_price)
     return profit, amount, difference, perc
 
-def get_recent_profit(test=False):
+def get_recent_profit(test=False, interval="15m"):
     """
     calulate profit from aggregrate of recent transaction profits
     Args:
         test boolean (optional) - use test db if True, otherwise use live
+        interval: (string, eg. 15m, 5m, 3m, 1m
     Returns:
         * total profit for all completed trades recorded (float)
         * sum of profit for each day (or partial day) recorded (dict)
@@ -58,7 +59,7 @@ def get_recent_profit(test=False):
     """
     profits = []
     profit_dict = defaultdict(float)  #will allow us to increment unitilaized value (start at 0)
-    dbase = Mysql(test=test)
+    dbase = Mysql(test=test, interval=interval)
     trades = dbase.get_last_trades()# contains tuple db results
 
     for trade in trades:  # each individual trade contains buy_price, sell_price, and inventment

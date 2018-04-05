@@ -52,14 +52,15 @@ def main():
     parallel_interval = get_config("test")["parallel_interval"].split()[0]
     parallel_interval = args.interval if args.interval else parallel_interval
     serial_intervals = get_config("test")["serial_intervals"].split()
+    redis_db = {"15m":1, "5m":2, "3m":3, "1m":4}[parallel_interval]
 
     investment = 20
-    dbase = Mysql(test=True)
+    dbase = Mysql(test=True, interval=parallel_interval)  # FIXME: for serial
     dbase.delete_data()
     if args.serial:
         do_serial(pairs, serial_intervals, investment)
     else:
-        do_parallel(pairs, parallel_interval, investment)
+        do_parallel(pairs, parallel_interval, investment, redis_db)
 
 def do_serial(pairs, intervals, investment):
     """
@@ -91,13 +92,13 @@ def do_serial(pairs, intervals, investment):
 
                 del engine
 
-def do_parallel(pairs, interval, investment):
+def do_parallel(pairs, interval, investment, redis_db=1):
     """
     Do test with parallel data
     """
-    LOGGER.info("Performaing parallel run")
-    redis = Redis(interval=interval, test=True)
-    size = 1000
+    LOGGER.info("Performaing parallel run %s", interval)
+    redis = Redis(interval=interval, test=True, db=redis_db)
+    size = 1000 * {"15m": 1, "5m": 3, "3m": 5, "1m": 15}[interval]
 
     redis.clear_all()
     dframes = {}
@@ -118,12 +119,13 @@ def do_parallel(pairs, interval, investment):
                 break
             dataframes.update({pair:dataframe})
             engine = Engine(prices=prices_trunk, dataframes=dataframes,
-                            interval=interval, test=True)
+                            interval=interval, test=True, db=redis_db)
             engine.get_data()
             redis.get_change(pair=pair, investment=investment)
 
             del engine
 
+    print(get_recent_profit(True, interval=interval))
+
 if __name__ == "__main__":
     main()
-    print(get_recent_profit(True))

@@ -17,7 +17,7 @@ class Redis(object):
     Redis object
     """
 
-    def __init__(self, interval=None, host="localhost", port=6379, test=False):
+    def __init__(self, interval=None, host="localhost", port=6379, test=False, db=1):
         """
         Args:
             interval
@@ -28,13 +28,14 @@ class Redis(object):
             initialized redis connection
         """
         if test:
-            redis_db = 1
+            redis_db = db
         else:
             redis_db = 0
         self.interval = interval
+        LOGGER.debug("Starting Redis with interval %s", interval)
         pool = redis.ConnectionPool(host=host, port=port, db=redis_db)
         self.conn = redis.StrictRedis(connection_pool=pool)
-        self.dbase = Mysql(test=test)
+        self.dbase = Mysql(test=test, interval=interval)
 
     def clear_all(self):
         """
@@ -164,4 +165,5 @@ class Redis(object):
                                                                          ".20f"),
                                                                   items[-1]))
             self.dbase.update_trades(pair, current_time, format(float(current_price), ".20f"))
+
         return totals

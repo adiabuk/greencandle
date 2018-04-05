@@ -30,7 +30,7 @@ class Engine(dict):
     """ Represent events created from data & indicators """
 
     get_exceptions = get_decorator((Exception), default_value="default")
-    def __init__(self, dataframes, prices, interval=None, test=False):
+    def __init__(self, dataframes, prices, interval=None, test=False, db=None):
         """
         Initialize class
         Create hold and event dicts
@@ -39,8 +39,8 @@ class Engine(dict):
         LOGGER.debug("Fetching raw data")
         self.interval = interval
         self.pairs = prices.keys()
-        self.redis = Redis(test=test)
-        self.db = Mysql(test=test)
+        self.redis = Redis(interval=interval, test=test, db=db)
+        self.db = Mysql(test=test, interval=interval)
         if not test:
             self.balance = balance.get_balance(test=test)
         self.test = test
