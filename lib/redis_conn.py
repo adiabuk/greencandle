@@ -27,12 +27,16 @@ class Redis(object):
         returns:
             initialized redis connection
         """
+        LOGGER.debug("AMROX77 {0}".format(db))
         if test:
             redis_db = db
+            test_str = "Test"
         else:
             redis_db = 0
+            test_str = "Live"
         self.interval = interval
-        LOGGER.debug("Starting Redis with interval %s", interval)
+
+        LOGGER.debug("Starting Redis with interval %s %s, db=%s", interval, test_str, str(redis_db))
         pool = redis.ConnectionPool(host=host, port=port, db=redis_db)
         self.conn = redis.StrictRedis(connection_pool=pool)
         self.dbase = Mysql(test=test, interval=interval)
