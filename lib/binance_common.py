@@ -22,7 +22,6 @@ from lib.common import make_float
 from lib.graph import create_graph
 
 LOGGER = getLogger(__name__)
-POOL = ThreadPoolExecutor(max_workers=50)
 
 def get_binance_klines(pair, interval=None):
     """
@@ -136,16 +135,17 @@ def get_dataframes(pairs, interval=None):
         A truple containing full pandas dataframes and a tuple of float values for all pairs
     """
 
+    pool = ThreadPoolExecutor(max_workers=50)
     dataframe = {}
     results = {}
     for pair in pairs:
         event = {}
         event["symbol"] = pair
         event["data"] = {}
-        results[pair] = POOL.submit(get_dataframe, pair=pair, interval=interval)
+        results[pair] = pool.submit(get_dataframe, pair=pair, interval=interval)
 
     # extract results
     for key, value in results.items():
         dataframe[key] = value.result()
-    POOL.shutdown(wait=True)
+    pool.shutdown(wait=True)
     return dataframe

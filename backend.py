@@ -7,7 +7,6 @@ Get ohlc (Open, High, Low, Close) values from given cryptos
 and detect trends using candlestick patterns
 """
 
-import json
 import argparse
 import time
 import sys
@@ -19,10 +18,13 @@ from lib.binance_common import get_dataframes
 from lib.engine import Engine
 from lib.config import get_config
 from lib.logger import getLogger
-from lib.profit import RATE
+from lib.profit import RATE, get_quantity
+from lib.redis_conn import Redis
 
 LOGGER = getLogger(__name__)
-DB = Mysql()
+PRICE_PER_TRADE = int(get_config("backend")["price_per_trade"])
+MAX_TRADES = int(get_config("backend")["max_trades"])
+INTERVAL = str(get_config("backend")["interval"])
 
 def main():
     """ main function """
@@ -36,7 +38,7 @@ def main():
     args = parser.parse_args()
 
     starttime = time.time()
-    minutes = 8
+    minutes = 4
 
     while True:
         try:
@@ -53,6 +55,8 @@ def loop(args):
     Loop through collection cycle
     """
 
+    dbase = Mysql(test=False, interval=INTERVAL)
+
     def buy(buy_list):
         """
         Buy as many items as we can from buy_list depending on max amount of trades, and current
@@ -61,26 +65,30 @@ def loop(args):
         LOGGER.debug("We have %s potential items to buy", len(buy_list))
         if buy_list:
             current_btc_bal = events.balance["binance"]["BTC"]["count"]
-            amount_to_buy_btc = price_per_trade * RATE
+            current_btc_bal = 5000   #FIXME
+
+            amount_to_buy_btc = PRICE_PER_TRADE * RATE
 
 
             for item in buy_list:
 
-                current_trades = DB.get_trades()
+                current_trades = dbase.get_trades()
                 if amount_to_buy_btc > current_btc_bal:
-                    LOGGER.warning("Unable to purchase, insufficient funds")
+                    LOGGER.warning("Unable to purchase %s, insufficient funds", item)
                     break
-                elif len(current_trades) >= max_trades:
+                elif len(current_trades) >= MAX_TRADES:
                     LOGGER.warning("Too many trades, skipping")
                     break
-                elif item[0] in current_trades:
+                elif item in current_trades:
                     LOGGER.warning("We already have a trade of %s, skipping...", item[0])
                     continue
                 else:
-                    DB.insert_trade(item[0], prices_trunk[item[0]],
-                                    price_per_trade, amount_to_buy_btc, total=0)
-                    #binance.order(symbol=?, side=?, quantity, orderType="MARKET, price=?, test=True
-                    #TODO: buy item
+                    LOGGER.info("Buying item %s", item)
+                    price = prices_trunk[item]
+                    dbase.insert_trade(item, price, amount_to_buy_btc, investment, total=0)
+                    quantity = get_quantity(price, investment)
+                    binance.order(symbol=item, side=binance.BUY, quantity=quantity,
+                                  orderType="MARKET", price=price, test=True)
         else:
             LOGGER.info("Nothing to buy")
 
@@ -92,16 +100,13 @@ def loop(args):
             LOGGER.info("We need to sell %s", sell_list)
             for item in sell_list:
                 current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
-                DB.update_trades(pair=item, sell_time=current_time, sell_price=prices_trunk[item])
+                dbase.update_trades(pair=item, sell_time=current_time,
+                                    sell_price=prices_trunk[item])
         else:
             LOGGER.info("No items to sell")
 
-    agg_data = {}
-    price_per_trade = int(get_config("backend")["price_per_trade"])
-    max_trades = int(get_config("backend")["max_trades"])
-    interval = str(get_config("backend")["interval"])
-    LOGGER.debug("Price per trade: %s", price_per_trade)
-    LOGGER.debug("max trades: %s", max_trades)
+    LOGGER.debug("Price per trade: %s", PRICE_PER_TRADE)
+    LOGGER.debug("max trades: %s", MAX_TRADES)
 
     LOGGER.debug("Starting new cycle")
     if args.pair:
@@ -113,25 +118,28 @@ def loop(args):
     for key, val in prices.items():
         if key in pairs:
             prices_trunk[key] = val
-    dataframes = get_dataframes(pairs, interval=interval)
+    dataframes = get_dataframes(pairs, interval=INTERVAL)
 
-    events = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval)
-    data = events.get_data()
-    DB.insert_action_totals()
-    DB.clean_stale()
-    sell(DB.get_sell())
-    buy(DB.get_buy())
-
-    try:
-        if args.json:
-            print(json.dumps(events, indent=4))
-        else:
-            events.print_text()
-    except Exception:
-        LOGGER.critical("AMROX25 Overall exception")
-
-    agg_data.update(data)
-    return agg_data
+    events = Engine(prices=prices_trunk, dataframes=dataframes, interval=INTERVAL)
+    events.get_data()
+    dbase.insert_action_totals()
+    dbase.clean_stale()
+    redis = Redis(interval=INTERVAL, test=False, db=0)
+    buys = []
+    sells = []
+    for pair in pairs:
+        investment = 20   #FIXME
+        buy_item, sell_item = redis.get_change(pair=pair, investment=investment)
+        LOGGER.debug("Changed items: %s %s", buy_item, sell_item)
+        if buy_item:
+            LOGGER.info("Items to buy")
+            buys.append(buy_item)
+        if sell_item:
+            LOGGER.info("Items to sell")
+            sells.append(sell_item)
+    sell(sells)
+    buy(buys)
+    del dbase
 
 if __name__ == "__main__":
     main()

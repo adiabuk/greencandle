@@ -128,7 +128,7 @@ class Redis(object):
         items = self.get_items(pair, self.interval)
         if len(items) < 3:
             LOGGER.info("insufficient items, skipping")
-            return None
+            return None, None
         for item in items[-4:]:
             totals.append(self.get_total(item))
         current = self.get_current(items[-1])
@@ -148,6 +148,7 @@ class Redis(object):
 
             self.dbase.insert_trade(pair, current_time, format(float(current_price), ".20f"),
                                     investment, "0")
+            return pair, None
 
         elif value and float(current_price) > (float(value[0]) *((8/100)+1)):
             LOGGER.critical("AMROX8: SELL {0} {1} {2} {3}".format(totals, current_time,
@@ -155,6 +156,7 @@ class Redis(object):
                                                                          ".20f"),
                                                                   items[-1]))
             self.dbase.update_trades(pair, current_time, format(float(current_price), ".20f"))
+            return None, pair
         elif value and ((-20 <= totals[-1] <= -1 and
                          float(sum(totals[:3])) / max(len(totals[:3]), 1) > totals[-1]) and
                         float(current_price) > float(value[0]) or
@@ -165,5 +167,6 @@ class Redis(object):
                                                                          ".20f"),
                                                                   items[-1]))
             self.dbase.update_trades(pair, current_time, format(float(current_price), ".20f"))
-
+            return "", ""
+        return "", ""
         return totals

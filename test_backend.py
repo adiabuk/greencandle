@@ -16,6 +16,7 @@ from lib.redis_conn import Redis
 from lib.config import get_config
 from lib.mysql import Mysql
 from lib.profit import get_recent_profit
+from lib.order import buy, sell
 
 LOGGER = getLogger(__name__)
 CHUNK_SIZE = 50
@@ -66,6 +67,7 @@ def do_serial(pairs, intervals, investment):
     """
     Do test with serial data
     """
+
     LOGGER.info("Performaing serial run")
     for pair in pairs:
         for interval in intervals:
@@ -80,6 +82,8 @@ def do_serial(pairs, intervals, investment):
             prices_trunk = {pair: "0"}
             redis.clear_all()
             for beg in range(len(dframe) - CHUNK_SIZE * 2):
+                sells = []
+                buys = []
                 end = beg + CHUNK_SIZE
                 dataframe = dframe.copy()[beg: end]
                 if len(dataframe) < 50:
@@ -88,7 +92,16 @@ def do_serial(pairs, intervals, investment):
                 engine = Engine(prices=prices_trunk, dataframes=dataframes,
                                 interval=interval, test=True)
                 engine.get_data()
-                redis.get_change(pair=pair, investment=investment)
+                buy_item, sell_item = redis.get_change(pair=pair, investment=investment)
+                LOGGER.debug("Changed items: %s %s", buy_item, sell_item)
+                if buy_item:
+                    LOGGER.info("Items to buy")
+                    buys.append(buy_item)
+                if sell_item:
+                    LOGGER.info("Items to sell")
+                    sells.append(sell_item)
+                sell(sells)
+                buy(buys)
 
                 del engine
 

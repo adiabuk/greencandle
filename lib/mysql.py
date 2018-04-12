@@ -159,10 +159,10 @@ class Mysql(object):
         cur = self.dbase.cursor()
         try:
             self.execute(cur, query)
-        except NameError:
-            LOGGER.critical("One or more expected variables not passed to DB")
+        except NameError as e:
+            LOGGER.critical("One or more expected variables not passed to DB %s", e)
         except Exception:
-            LOGGER.crititcal("AMROX6 - unable to execute query")
+            LOGGER.critical("AMROX6 - unable to execute query")
 
     @get_exceptions
     def delete_data(self):
