@@ -14,6 +14,12 @@ CURRENCY = CurrencyRates()
 RATE = 0.00014 # GBP to BTC
 FEES = 0.05
 
+def get_quantity(buy_price, investment_gbp):
+    total_buy_btc = investment_gbp * RATE
+    total_buy_btc = sub_perc(FEES, total_buy_btc)   # Subtract trading fees
+    amount = total_buy_btc / buy_price
+    return amount
+
 def guess_profit(buy_price, sell_price, investment_gbp):
     """
     Get profit prediction based on initial GBP investment and buy/sell values of currency pair
@@ -44,7 +50,7 @@ def guess_profit(buy_price, sell_price, investment_gbp):
     perc = perc_diff(buy_price, sell_price)
     return profit, amount, difference, perc
 
-def get_recent_profit(test=False, interval="15m"):
+def get_recent_profit(test=False, interval=None):
     """
     calulate profit from aggregrate of recent transaction profits
     Args:

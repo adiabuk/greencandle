@@ -26,6 +26,36 @@ from indicator import SuperTrend, RSI
 POOL = ThreadPoolExecutor(max_workers=50)
 LOGGER = getLogger(__name__)
 
+class Balance(dict):
+    def __init__(self, interval, test=False):
+        self.db = Mysql(test=test, interval=interval)
+        self.interval = interval
+        self = get_balance(test=test)
+
+
+    def save_balance(self):
+        if not self.test:
+            #  Add prices for current symbol to scheme
+            prices = {"buy": get_buy_price(pair), "sell": get_sell_price(pair),
+                      "market": binance.prices()[pair]}
+            scheme.update(prices)
+
+            bal = self.balance["binance"]["TOTALS"]["GBP"]
+
+            # Add scheme to DB
+            try:
+                self.db.insert_data(interval=self.interval,
+                                    symbol=scheme["symbol"], event=scheme["event"],
+                                    direction=scheme["direction"], data=scheme["data"],
+                                    difference=str(scheme["difference"]),
+                                    resistance=str(scheme["resistance"]),
+                                    support=str(scheme["support"]), buy=str(scheme["buy"]),
+                                    sell=str(scheme["sell"]), market=str(scheme["market"]),
+                                    balance=str(bal))
+            except Exception as excp:
+                LOGGER.critical("AMROX25 Error: " + str(excp))
+
+
 class Engine(dict):
     """ Represent events created from data & indicators """
 
@@ -139,6 +169,7 @@ class Engine(dict):
         LOGGER.debug("Done getting data")
         return self
 
+    @get_exceptions
     def get_sup_res(self, pair, klines):
         """
         get support & resistance values for current pair
@@ -151,7 +182,7 @@ class Engine(dict):
             None
         """
 
-        LOGGER.info("Getting Support & resistance")
+        LOGGER.info("Getting Support & resistance for %s", pair)
 
         close_values = make_float(klines.close)
         support, resistance = supres(close_values, 10)
@@ -205,7 +236,7 @@ class Engine(dict):
             None
 
         """
-        LOGGER.info("Getting RSI_21")
+        LOGGER.info("Getting RSI_21 for %s", pair)
         dataframe = self.renamed_dataframe_columns(klines)
         scheme = {}
         mine = dataframe.apply(pandas.to_numeric)
@@ -246,6 +277,7 @@ class Engine(dict):
             dataframe.columns.values[index] = item
         return dataframe
 
+    @get_exceptions
     def get_supertrend(self, pair=None, klines=None):
         """
         Get the super trend oscillator values for a given pair
@@ -260,7 +292,7 @@ class Engine(dict):
         """
 
         scheme = {}
-        LOGGER.info("getting supertrend")
+        LOGGER.info("Getting supertrend for %s", pair)
         dataframe = self.renamed_dataframe_columns(klines)
 
         mine = dataframe.apply(pandas.to_numeric)
@@ -371,7 +403,7 @@ class Engine(dict):
         Returns:
             None
         """
-        LOGGER.debug("getting moving averages")
+        LOGGER.debug("Getting moving averages for %s", pair)
         try:
             close = klines[-1]
         except Exception as e:
@@ -435,7 +467,7 @@ class Engine(dict):
         Returns:
             None
         """
-        LOGGER.info("Getting Oscillators")
+        LOGGER.info("Getting Oscillators for %s", pair)
         open, high, low, close = klines
         scheme = {}
         trends = {
@@ -467,8 +499,8 @@ class Engine(dict):
                     s = str(j) + " " + attrs[item]   # From numpy.float64 to str
                     if self.eval_binary_expr(*(s.split())):
                         trigger = item
-                        self.db.insert_actions(pair=pair, indicator=check, value=j,
-                                               action=self.get_action(trigger))
+                        #self.db.insert_actions(pair=pair, indicator=check, value=j,
+                        #                       action=self.get_action(trigger))
                         break
 
             except Exception as error:
@@ -510,7 +542,7 @@ class Engine(dict):
         Returns:
             None
         """
-        LOGGER.info("Getting Indicators")
+        LOGGER.info("Getting Indicators for %s", pair)
         trends = {"HAMMER": {100: "BUY", 0:"HOLD"},
                   "INVERTEDHAMMER": {100: "SELL", 0:"HOLD"},
                   "ENGULFING": {-100:"SELL", 100:"BUY", 0:"HOLD"},
@@ -562,28 +594,6 @@ class Engine(dict):
         except Exception as e:
             LOGGER.critical("AMROX25 Redis failure22 " +str(e) + " " + repr(sys.exc_info()))
 
-        """
-        if not self.test:
-            #  Add prices for current symbol to scheme
-            prices = {"buy": get_buy_price(pair), "sell": get_sell_price(pair),
-                      "market": binance.prices()[pair]}
-            scheme.update(prices)
-
-            bal = self.balance["binance"]["TOTALS"]["GBP"]
-
-            # Add scheme to DB
-            try:
-                self.db.insert_data(interval=self.interval,
-                                    symbol=scheme["symbol"], event=scheme["event"],
-                                    direction=scheme["direction"], data=scheme["data"],
-                                    difference=str(scheme["difference"]),
-                                    resistance=str(scheme["resistance"]),
-                                    support=str(scheme["support"]), buy=str(scheme["buy"]),
-                                    sell=str(scheme["sell"]), market=str(scheme["market"]),
-                                    balance=str(bal))
-            except Exception as excp:
-                LOGGER.critical("AMROX25 Error: " + str(excp))
-        """
         if scheme["direction"] == "HOLD":
             self["hold"][id(scheme)] = scheme
         else:

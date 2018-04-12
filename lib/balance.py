@@ -13,7 +13,7 @@ from lib.logger import getLogger
 
 LOGGER = getLogger(__name__)
 
-def get_balance(test=False):
+def get_balance(test=False, interval="5m"):
     """
     get dict of all balances
 
@@ -60,7 +60,7 @@ def get_balance(test=False):
 
     """
 
-    dbase = Mysql(test=test)
+    dbase = Mysql(test=test, interval="5m")
     binance = get_binance_values()
     try:
         coinbase = get_coinbase_values()
