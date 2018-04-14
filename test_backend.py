@@ -71,8 +71,12 @@ def do_serial(pairs, intervals, investment):
     LOGGER.info("Performaing serial run")
     for pair in pairs:
         for interval in intervals:
-
-            redis = Redis(interval=interval, test=True)
+            redis_db = {"15m":1, "5m":2, "3m":3, "1m":4}[interval]
+            LOGGER.debug("Serial run %s %s %s", pair, interval, redis_db)
+            dbase = Mysql(test=True, interval=interval)
+            dbase.delete_data()
+            redis = Redis(interval=interval, test=True, db=redis_db)
+            redis.clear_all()
             filename = "test_data/{0}_{1}.p".format(pair, interval)
             if not os.path.exists(filename):
                 continue
@@ -80,7 +84,6 @@ def do_serial(pairs, intervals, investment):
                 dframe = pickle.load(handle)
 
             prices_trunk = {pair: "0"}
-            redis.clear_all()
             for beg in range(len(dframe) - CHUNK_SIZE * 2):
                 sells = []
                 buys = []
@@ -90,7 +93,7 @@ def do_serial(pairs, intervals, investment):
                     break
                 dataframes = {pair:dataframe}
                 engine = Engine(prices=prices_trunk, dataframes=dataframes,
-                                interval=interval, test=True)
+                                interval=interval, test=True, db=redis_db)
                 engine.get_data()
                 buy_item, sell_item = redis.get_change(pair=pair, investment=investment)
                 LOGGER.debug("Changed items: %s %s", buy_item, sell_item)
@@ -104,6 +107,8 @@ def do_serial(pairs, intervals, investment):
                 buy(buys)
 
                 del engine
+            profit = get_recent_profit(True, interval=interval)
+            LOGGER.debug("AMROX4 %s %s %s", pair, interval, profit)
 
 def do_parallel(pairs, interval, investment, redis_db=1):
     """

@@ -498,8 +498,8 @@ class Engine(dict):
                     s = str(j) + " " + attrs[item]   # From numpy.float64 to str
                     if self.eval_binary_expr(*(s.split())):
                         trigger = item
-                        self.db.insert_actions(pair=pair, indicator=check, value=j,
-                                               action=self.get_action(trigger))
+                        #self.db.insert_actions(pair=pair, indicator=check, value=j,
+                        #                       action=self.get_action(trigger))
                         break
 
             except Exception as error:
