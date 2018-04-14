@@ -129,6 +129,8 @@ def do_parallel(pairs, interval, investment, redis_db=1):
 
     for beg in range(size - CHUNK_SIZE * 2):
         dataframes = {}
+        buys = []
+        sells = []
         for pair in pairs:
             end = beg + CHUNK_SIZE
             dataframe = dframes[pair][beg: end]
@@ -139,9 +141,19 @@ def do_parallel(pairs, interval, investment, redis_db=1):
             engine = Engine(prices=prices_trunk, dataframes=dataframes,
                             interval=interval, test=True, db=redis_db)
             engine.get_data()
-            redis.get_change(pair=pair, investment=investment)
-
             del engine
+            buy_item, sell_item = redis.get_change(pair=pair, investment=investment)
+            LOGGER.debug("Changed items: %s %s", buy_item, sell_item)
+            if buy_item:
+                LOGGER.info("Items to buy")
+                buys.append(buy_item)
+            if sell_item:
+                LOGGER.info("Items to sell")
+                sells.append(sell_item)
+        sell(sells)
+        buy(buys)
+
+
 
     print(get_recent_profit(True, interval=interval))
 

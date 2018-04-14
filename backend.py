@@ -20,6 +20,7 @@ from lib.config import get_config
 from lib.logger import getLogger
 from lib.profit import RATE, get_quantity
 from lib.redis_conn import Redis
+from lib.order import buy, sell
 
 LOGGER = getLogger(__name__)
 PRICE_PER_TRADE = int(get_config("backend")["price_per_trade"])
@@ -55,65 +56,10 @@ def loop(args):
     Loop through collection cycle
     """
 
-    def buy(buy_list):
-        """
-        Buy as many items as we can from buy_list depending on max amount of trades, and current
-        balance in BTC
-        """
-        LOGGER.debug("We have %s potential items to buy", len(buy_list))
-        if buy_list:
-            current_btc_bal = events.balance["binance"]["BTC"]["count"]
-            current_btc_bal = 5000   #FIXME
-
-            amount_to_buy_btc = PRICE_PER_TRADE * RATE
-
-
-            for item in buy_list:
-
-                dbase = Mysql(test=False, interval=INTERVAL)
-                current_trades = dbase.get_trades()
-                if amount_to_buy_btc > current_btc_bal:
-                    LOGGER.warning("Unable to purchase %s, insufficient funds", item)
-                    break
-                elif len(current_trades) >= MAX_TRADES:
-                    LOGGER.warning("Too many trades, skipping")
-                    break
-                elif item in current_trades:
-                    LOGGER.warning("We already have a trade of %s, skipping...", item[0])
-                    continue
-                else:
-                    LOGGER.info("Buying item %s", item)
-                    price = prices_trunk[item]
-                    dbase = Mysql(test=False, interval=INTERVAL)
-                    dbase.insert_trade(item, price, amount_to_buy_btc, investment, total=0)
-                    quantity = get_quantity(price, investment)
-                    binance.order(symbol=item, side=binance.BUY, quantity=quantity,
-                                  orderType="MARKET", price=price, test=True)
-                del dbase
-        else:
-            LOGGER.info("Nothing to buy")
-
-    def sell(sell_list):
-        """
-        Sell items in sell_list
-        """
-
-        if sell_list:
-            LOGGER.info("We need to sell %s", sell_list)
-            for item in sell_list:
-                current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
-                dbase = Mysql(test=False, interval=INTERVAL)
-                dbase.update_trades(pair=item, sell_time=current_time,
-                                    sell_price=prices_trunk[item])
-                del dbase
-        else:
-            LOGGER.info("No items to sell")
-
-
+    LOGGER.debug("Starting new cycle")
     LOGGER.debug("Price per trade: %s", PRICE_PER_TRADE)
     LOGGER.debug("max trades: %s", MAX_TRADES)
 
-    LOGGER.debug("Starting new cycle")
     if args.pair:
         pairs = [args.pair]
     else:
