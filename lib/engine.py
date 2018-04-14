@@ -169,6 +169,7 @@ class Engine(dict):
         LOGGER.debug("Done getting data")
         return self
 
+    @get_exceptions
     def get_sup_res(self, pair, klines):
         """
         get support & resistance values for current pair

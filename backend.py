@@ -55,8 +55,6 @@ def loop(args):
     Loop through collection cycle
     """
 
-    dbase = Mysql(test=False, interval=INTERVAL)
-
     def buy(buy_list):
         """
         Buy as many items as we can from buy_list depending on max amount of trades, and current
@@ -72,6 +70,7 @@ def loop(args):
 
             for item in buy_list:
 
+                dbase = Mysql(test=False, interval=INTERVAL)
                 current_trades = dbase.get_trades()
                 if amount_to_buy_btc > current_btc_bal:
                     LOGGER.warning("Unable to purchase %s, insufficient funds", item)
@@ -85,10 +84,12 @@ def loop(args):
                 else:
                     LOGGER.info("Buying item %s", item)
                     price = prices_trunk[item]
+                    dbase = Mysql(test=False, interval=INTERVAL)
                     dbase.insert_trade(item, price, amount_to_buy_btc, investment, total=0)
                     quantity = get_quantity(price, investment)
                     binance.order(symbol=item, side=binance.BUY, quantity=quantity,
                                   orderType="MARKET", price=price, test=True)
+                del dbase
         else:
             LOGGER.info("Nothing to buy")
 
@@ -96,14 +97,18 @@ def loop(args):
         """
         Sell items in sell_list
         """
+
         if sell_list:
             LOGGER.info("We need to sell %s", sell_list)
             for item in sell_list:
                 current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
+                dbase = Mysql(test=False, interval=INTERVAL)
                 dbase.update_trades(pair=item, sell_time=current_time,
                                     sell_price=prices_trunk[item])
+                del dbase
         else:
             LOGGER.info("No items to sell")
+
 
     LOGGER.debug("Price per trade: %s", PRICE_PER_TRADE)
     LOGGER.debug("max trades: %s", MAX_TRADES)
@@ -122,8 +127,9 @@ def loop(args):
 
     events = Engine(prices=prices_trunk, dataframes=dataframes, interval=INTERVAL)
     events.get_data()
-    dbase.insert_action_totals()
+    dbase = Mysql(test=False, interval=INTERVAL)
     dbase.clean_stale()
+    del dbase
     redis = Redis(interval=INTERVAL, test=False, db=0)
     buys = []
     sells = []
@@ -139,7 +145,7 @@ def loop(args):
             sells.append(sell_item)
     sell(sells)
     buy(buys)
-    del dbase
+    del redis
 
 if __name__ == "__main__":
     main()

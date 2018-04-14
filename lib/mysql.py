@@ -162,7 +162,7 @@ class Mysql(object):
         except NameError as e:
             LOGGER.critical("One or more expected variables not passed to DB %s", e)
         except Exception:
-            LOGGER.critical("AMROX6 - unable to execute query")
+            LOGGER.critical("AMROX6 - unable to execute query %s", query)
 
     @get_exceptions
     def delete_data(self):
