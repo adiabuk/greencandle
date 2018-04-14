@@ -61,7 +61,7 @@ def buy(buy_list, test_data=False, test_trade=True):
             current_trades = dbase.get_trades()
             avail_slots = MAX_TRADES - len(current_trades)
             btc_amount = current_btc_bal / avail_slots
-            cost = float(binance.princes()[item])
+            cost = float(binance.prices()[item])
             amount = btc_amount / cost
 
             if float(amount_to_buy_btc) > float(current_btc_bal):
