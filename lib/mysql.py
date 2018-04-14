@@ -217,6 +217,18 @@ class Mysql(object):
         self.run_sql_query(command)
 
     @get_exceptions
+    def get_quantity(self, pair):
+        """
+        Return quantity for a current open trade
+        """
+        command = """ select total from trades_{0} where sell_price is NULL and pair = "{1}" """.format(self.interval, pair)
+        cur = self.dbase.cursor()
+        self.execute(cur, command)
+
+        row = [item[0] for item in cur.fetchall()]
+        return row
+
+    @get_exceptions
     def get_trade_value(self, pair):
         """
         Return the value of an open trade for a given trading pair

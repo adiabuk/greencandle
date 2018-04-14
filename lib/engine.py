@@ -26,7 +26,7 @@ from indicator import SuperTrend, RSI
 POOL = ThreadPoolExecutor(max_workers=50)
 LOGGER = getLogger(__name__)
 
-class Balance(dict):
+class Balance(dict):  #FIXME
     def __init__(self, interval, test=False):
         self.db = Mysql(test=test, interval=interval)
         self.interval = interval

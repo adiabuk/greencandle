@@ -103,8 +103,8 @@ def do_serial(pairs, intervals, investment):
                 if sell_item:
                     LOGGER.info("Items to sell")
                     sells.append(sell_item)
-                sell(sells)
-                buy(buys)
+                sell(sells, test_data=False, test_trade=True)
+                buy(buys, test_data=False, test_trade=True)
 
                 del engine
             profit = get_recent_profit(True, interval=interval)

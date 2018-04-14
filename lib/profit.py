@@ -14,8 +14,7 @@ CURRENCY = CurrencyRates()
 RATE = 0.00014 # GBP to BTC
 FEES = 0.05
 
-def get_quantity(buy_price, investment_gbp):
-    total_buy_btc = investment_gbp * RATE
+def get_quantity(buy_price, total_buy_btc):
     total_buy_btc = sub_perc(FEES, total_buy_btc)   # Subtract trading fees
     amount = total_buy_btc / buy_price
     return amount

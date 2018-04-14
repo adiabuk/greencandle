@@ -89,8 +89,8 @@ def loop(args):
         if sell_item:
             LOGGER.info("Items to sell")
             sells.append(sell_item)
-    sell(sells)
-    buy(buys)
+    sell(sells, test_data=True)
+    buy(buys, test_data=True)
     del redis
 
 if __name__ == "__main__":
