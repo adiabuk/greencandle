@@ -75,7 +75,7 @@ def buy(buy_list, test_data=False, test_trade=True, interval=None):
                 LOGGER.info("Buying item %s", item)
                 if not test_data:
                     result = binance.order(symbol=item, side=binance.BUY, quantity=amount,
-                                                 orderType="MARKET", test=test_trade)
+                                           orderType="MARKET", test=test_trade)
                 if test_data or (test_trade and not result) or \
                         (not test_trade and 'transactTime' in result):
                     # only insert into db, if:
@@ -84,6 +84,8 @@ def buy(buy_list, test_data=False, test_trade=True, interval=None):
                     # 3. we proformed a real trade which was successful - (transactTime in dict)
                     dbase.insert_trade(pair=item, price=cost, date=current_time,
                                        investment=INVESTMENT, total=amount)
+                else:
+                    LOGGER.critical("Buy Failed")
     else:
         LOGGER.info("Nothing to buy")
 
@@ -98,10 +100,14 @@ def sell(sell_list, test_data=False, test_trade=True, interval=None):
         for item, current_time, current_price in sell_list:
             quantity = dbase.get_quantity(item)
             price = current_price
-            dbase.update_trades(pair=item, sell_time=current_time, sell_price=price)
             if not test_data:
-                binance.order(symbol=item, side=binance.SELL, quantity=quantity,
-                              orderType="MARKET", test=test_trade)
+                result = binance.order(symbol=item, side=binance.SELL, quantity=quantity,
+                                       orderType="MARKET", test=test_trade)
+            if test_data or (test_trade and not result) or \
+                    (not test_trade and 'transactTime' in result):
+                dbase.update_trades(pair=item, sell_time=current_time, sell_price=price)
+            else:
+                LOGGER.critical("Sell Failed")
     else:
         LOGGER.info("No items to sell")
 
