@@ -88,8 +88,8 @@ def loop(args):
         elif result == "sell":
             LOGGER.info("Items to sell")
             sells.append((pair, current_time, current_price))
-    sell(sells, test_data=False, test_trade=True, interval=INTERVAL)
-    buy(buys, test_data=False, test_trade=True, interval=INTERVAL)
+    sell(sells, test_data=False, test_trade=False, interval=INTERVAL)
+    buy(buys, test_data=False, test_trade=False, interval=INTERVAL)
     del redis
 
 if __name__ == "__main__":
