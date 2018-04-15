@@ -18,7 +18,6 @@ from lib.binance_common import get_dataframes
 from lib.engine import Engine
 from lib.config import get_config
 from lib.logger import getLogger
-from lib.profit import RATE, get_quantity
 from lib.redis_conn import Redis
 from lib.order import buy, sell
 
@@ -71,8 +70,8 @@ def loop(args):
             prices_trunk[key] = val
     dataframes = get_dataframes(pairs, interval=INTERVAL)
 
-    events = Engine(prices=prices_trunk, dataframes=dataframes, interval=INTERVAL)
-    events.get_data()
+    engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=INTERVAL)
+    engine.get_data()
     dbase = Mysql(test=False, interval=INTERVAL)
     dbase.clean_stale()
     del dbase
@@ -81,16 +80,16 @@ def loop(args):
     sells = []
     for pair in pairs:
         investment = 20   #FIXME
-        buy_item, sell_item = redis.get_change(pair=pair, investment=investment)
-        LOGGER.debug("Changed items: %s %s", buy_item, sell_item)
-        if buy_item:
+        result, current_time, current_price = redis.get_change(pair=pair)
+        LOGGER.debug("Changed items: %s %s %s", pair, result, current_time)
+        if result == "buy":
             LOGGER.info("Items to buy")
-            buys.append(buy_item)
-        if sell_item:
+            buys.append((pair, current_time, current_price))
+        elif result == "sell":
             LOGGER.info("Items to sell")
-            sells.append(sell_item)
-    sell(sells, test_data=True)
-    buy(buys, test_data=True)
+            sells.append((pair, current_time, current_price))
+    sell(sells, test_data=False, test_trade=True, interval=INTERVAL)
+    buy(buys, test_data=False, test_trade=True, interval=INTERVAL)
     del redis
 
 if __name__ == "__main__":

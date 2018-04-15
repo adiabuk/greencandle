@@ -53,17 +53,17 @@ def main():
     parallel_interval = get_config("test")["parallel_interval"].split()[0]
     parallel_interval = args.interval if args.interval else parallel_interval
     serial_intervals = get_config("test")["serial_intervals"].split()
+    serial_intervals = [args.interval] if args.interval else serial_intervals
     redis_db = {"15m":1, "5m":2, "3m":3, "1m":4}[parallel_interval]
 
-    investment = 20
-    dbase = Mysql(test=True, interval=parallel_interval)  # FIXME: for serial
+    dbase = Mysql(test=True, interval=parallel_interval)
     dbase.delete_data()
     if args.serial:
-        do_serial(pairs, serial_intervals, investment)
+        do_serial(pairs, serial_intervals)
     else:
-        do_parallel(pairs, parallel_interval, investment, redis_db)
+        do_parallel(pairs, parallel_interval, redis_db)
 
-def do_serial(pairs, intervals, investment):
+def do_serial(pairs, intervals):
     """
     Do test with serial data
     """
@@ -95,22 +95,22 @@ def do_serial(pairs, intervals, investment):
                 engine = Engine(prices=prices_trunk, dataframes=dataframes,
                                 interval=interval, test=True, db=redis_db)
                 engine.get_data()
-                buy_item, sell_item = redis.get_change(pair=pair, investment=investment)
-                LOGGER.debug("Changed items: %s %s", buy_item, sell_item)
-                if buy_item:
+                result, current_time, current_price = redis.get_change(pair=pair)
+                LOGGER.debug("Changed items: %s %s %s", pair, result, current_time)
+                if result == "buy":
                     LOGGER.info("Items to buy")
-                    buys.append(buy_item)
-                if sell_item:
+                    buys.append((pair, current_time, current_price))
+                elif result == "sell":
                     LOGGER.info("Items to sell")
-                    sells.append(sell_item)
-                sell(sells, test_data=False, test_trade=True)
-                buy(buys, test_data=False, test_trade=True)
+                    sells.append((pair, current_time, current_price))
+                sell(sells, test_data=True, test_trade=True, interval=interval)
+                buy(buys, test_data=True, test_trade=True, interval=interval)
 
                 del engine
             profit = get_recent_profit(True, interval=interval)
             LOGGER.debug("AMROX4 %s %s %s", pair, interval, profit)
 
-def do_parallel(pairs, interval, investment, redis_db=1):
+def do_parallel(pairs, interval, redis_db):
     """
     Do test with parallel data
     """
@@ -142,7 +142,7 @@ def do_parallel(pairs, interval, investment, redis_db=1):
                             interval=interval, test=True, db=redis_db)
             engine.get_data()
             del engine
-            buy_item, sell_item = redis.get_change(pair=pair, investment=investment)
+            buy_item, sell_item = redis.get_change(pair=pair)
             LOGGER.debug("Changed items: %s %s", buy_item, sell_item)
             if buy_item:
                 LOGGER.info("Items to buy")
@@ -150,8 +150,8 @@ def do_parallel(pairs, interval, investment, redis_db=1):
             if sell_item:
                 LOGGER.info("Items to sell")
                 sells.append(sell_item)
-        sell(sells)
-        buy(buys)
+        sell(sells, test_data=True, test_trade=True, interval=interval)
+        buy(buys, test_data=True, test_trade=True, interval=interval)
 
 
 

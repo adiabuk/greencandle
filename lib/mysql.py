@@ -32,7 +32,7 @@ class Mysql(object):
     def __init__(self, test=False, interval="15m"):
         self.connect(test=test)
         self.interval = interval
-        LOGGER.debug("Starting Mysql with interval %s", interval)
+        LOGGER.debug("Starting Mysql with interval %s, test=%s", interval, test)
 
     @get_exceptions
     def connect(self, test=False):
@@ -199,6 +199,7 @@ class Mysql(object):
         Insert new trade into DB
         Args:
               pair: traiding pair
+              date: date/time of trade
               price: current price of pair
               investment: amount invested in gbp
               total:

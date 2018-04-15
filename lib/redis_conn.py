@@ -115,11 +115,15 @@ class Redis(object):
         """
 
         byte = self.conn.hget(item, "RSI")
-        data = ast.literal_eval(byte.decode("UTF-8"))
+        try:
+            data = ast.literal_eval(byte.decode("UTF-8"))
+        except AttributeError:
+            LOGGER.error("No Data")
+            return None, None
 
         return data["current_price"], data["date"]
 
-    def get_change(self, pair, investment):
+    def get_change(self, pair):
         """
         get recent change in pattern based on last 4 iterations for a given pair and interval
         Compute if we are in and overall BUY/SELL/HOLD scenario based on change in score over
@@ -131,8 +135,8 @@ class Redis(object):
         totals = []
         items = self.get_items(pair, self.interval)
         if len(items) < 3:
-            LOGGER.info("insufficient items, skipping")
-            return None, None
+            LOGGER.info("insufficient history for %s, skipping", pair)
+            return None, None, None
         for item in items[-4:]:
             totals.append(self.get_total(item))
         current = self.get_current(items[-1])
@@ -150,17 +154,18 @@ class Redis(object):
                                                                         ".20f"),
                                                                  items[-1]))
 
-            self.dbase.insert_trade(pair, current_time, format(float(current_price), ".20f"),
-                                    investment, "0")
-            return pair, None
+            #self.dbase.insert_trade(pair, current_time, format(float(current_price), ".20f"),
+            #                        investment, "0")
+            return "buy", current_time, format(float(current_price), ".20f")
 
         elif value and float(current_price) > (float(value[0]) *((8/100)+1)):
             LOGGER.critical("AMROX8: SELL {0} {1} {2} {3}".format(totals, current_time,
                                                                   format(float(current_price),
                                                                          ".20f"),
                                                                   items[-1]))
-            self.dbase.update_trades(pair, current_time, format(float(current_price), ".20f"))
-            return None, pair
+            #self.dbase.update_trades(pair, current_time, format(float(current_price), ".20f"))
+            return "sell", current_time, format(float(current_price), ".20f")
+
         elif value and ((-20 <= totals[-1] <= -1 and
                          float(sum(totals[:3])) / max(len(totals[:3]), 1) > totals[-1]) and
                         float(current_price) > float(value[0]) or
@@ -171,6 +176,5 @@ class Redis(object):
                                                                          ".20f"),
                                                                   items[-1]))
             self.dbase.update_trades(pair, current_time, format(float(current_price), ".20f"))
-            return "", ""
-        return "", ""
-
+            return "sell", current_time, format(float(current_price), ".20f")
+        return "", "", ""

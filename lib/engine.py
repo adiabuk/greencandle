@@ -55,7 +55,6 @@ class Balance(dict):  #FIXME
             except Exception as excp:
                 LOGGER.critical("AMROX25 Error: " + str(excp))
 
-
 class Engine(dict):
     """ Represent events created from data & indicators """
 
@@ -71,13 +70,12 @@ class Engine(dict):
         self.pairs = prices.keys()
         self.redis = Redis(interval=interval, test=test, db=db)
         self.db = Mysql(test=test, interval=interval)
-        if not test:
+        if not test:  #FIXME
             self.balance = balance.get_balance(test=test)
         self.test = test
         self["hold"] = {}
         self["event"] = {}
         self.supres = {}
-        #self.data, self.dataframes = data
         self.dataframes = dataframes
         self.ohlcs = self.make_data_tupple(dataframes)
         super(Engine, self).__init__()
@@ -575,7 +573,6 @@ class Engine(dict):
     def add_scheme(self, scheme):
         """ add scheme to correct structure """
         pair = scheme["symbol"]
-        #scheme.update(self.supres[pair])  #FIXME
 
         # add to redis
         current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
