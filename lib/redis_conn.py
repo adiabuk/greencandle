@@ -163,7 +163,6 @@ class Redis(object):
                                                                   format(float(current_price),
                                                                          ".20f"),
                                                                   items[-1]))
-            #self.dbase.update_trades(pair, current_time, format(float(current_price), ".20f"))
             return "sell", current_time, format(float(current_price), ".20f")
 
         elif value and ((-20 <= totals[-1] <= -1 and
@@ -175,6 +174,5 @@ class Redis(object):
                                                                   format(float(current_price),
                                                                          ".20f"),
                                                                   items[-1]))
-            self.dbase.update_trades(pair, current_time, format(float(current_price), ".20f"))
             return "sell", current_time, format(float(current_price), ".20f")
         return "", "", ""

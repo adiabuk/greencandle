@@ -227,7 +227,8 @@ class Mysql(object):
         self.execute(cur, command)
 
         row = [item[0] for item in cur.fetchall()]
-        return row
+        LOGGER.critical("%s %s", command, row)
+        return row[0] if row else None # There should only be one open trade, so return first item
 
     @get_exceptions
     def get_trade_value(self, pair):

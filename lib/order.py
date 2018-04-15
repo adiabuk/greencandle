@@ -99,6 +99,9 @@ def sell(sell_list, test_data=False, test_trade=True, interval=None):
         dbase = Mysql(test=test_data, interval=interval)
         for item, current_time, current_price in sell_list:
             quantity = dbase.get_quantity(item)
+            if not quantity:
+                LOGGER.critical("Unable to find quantity for %s", item)
+                return
             price = current_price
             if not test_data:
                 result = binance.order(symbol=item, side=binance.SELL, quantity=quantity,
