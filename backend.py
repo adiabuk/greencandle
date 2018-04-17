@@ -79,15 +79,15 @@ def loop(args):
     buys = []
     sells = []
     for pair in pairs:
-        investment = 20   #FIXME
         result, current_time, current_price = redis.get_change(pair=pair)
-        LOGGER.debug("Changed items: %s %s %s", pair, result, current_time)
         if result == "buy":
             LOGGER.info("Items to buy")
             buys.append((pair, current_time, current_price))
         elif result == "sell":
             LOGGER.info("Items to sell")
             sells.append((pair, current_time, current_price))
+    LOGGER.info("Items to sell: %s", sells)
+    LOGGER.info("Items to buy: %s", buys)
     sell(sells, test_data=False, test_trade=False, interval=INTERVAL)
     buy(buys, test_data=False, test_trade=False, interval=INTERVAL)
     del redis

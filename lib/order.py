@@ -66,13 +66,14 @@ def buy(buy_list, test_data=False, test_trade=True, interval=None):
             amount = int(btc_amount / float(cost))
 
             if float(amount_to_buy_btc) > float(current_btc_bal):
-                LOGGER.warning("Unable to purchase %s, insufficient funds", item)
+                LOGGER.warning("Unable to purchase %s, insufficient funds:%s/%s",
+                               item, amount_to_buy_btc, current_btc_bal)
                 break
             elif item in current_trades:
                 LOGGER.warning("We already have a trade of %s, skipping...", item)
                 continue
             else:
-                LOGGER.info("Buying item %s", item)
+                LOGGER.info("Buying item %s with %s", item, amount_to_buy_btc)
                 if not test_data:
                     result = binance.order(symbol=item, side=binance.BUY, quantity=amount,
                                            orderType="MARKET", test=test_trade)
