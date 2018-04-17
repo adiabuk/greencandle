@@ -23,8 +23,6 @@ from lib.balance import get_balance
 LOGGER = getLogger(__name__)
 PRICE_PER_TRADE = int(get_config("backend")["price_per_trade"])
 MAX_TRADES = int(get_config("backend")["max_trades"])
-INVESTMENT = float(get_config("backend")["investment"])
-RATE = float(get_config("backend")["rate"])
 
 binance_auth()
 
@@ -50,30 +48,28 @@ def buy(buy_list, test_data=False, test_trade=True, interval=None):
         else:
             current_btc_bal = get_balance()['binance']['BTC']['BTC']
 
-        amount_to_buy_btc = INVESTMENT * RATE
-
-        #current_btc_bal = events.balance["binance"]["BTC"]["count"]
-
         for item, current_time, current_price in buy_list:
 
             current_trades = dbase.get_trades()
             avail_slots = MAX_TRADES - len(current_trades)
+            LOGGER.info("%s buy slots available", avail_slots)
             if avail_slots == 0:
                 LOGGER.warning("Too many trades, skipping")
                 break
             btc_amount = current_btc_bal / avail_slots
+            LOGGER.debug("btc_amount: %s", btc_amount)
             cost = current_price
             amount = int(btc_amount / float(cost))
 
-            if float(amount_to_buy_btc) > float(current_btc_bal):
+            if float(btc_amount) > float(current_btc_bal):
                 LOGGER.warning("Unable to purchase %s, insufficient funds:%s/%s",
-                               item, amount_to_buy_btc, current_btc_bal)
+                               item, btc_amount, current_btc_bal)
                 break
             elif item in current_trades:
                 LOGGER.warning("We already have a trade of %s, skipping...", item)
                 continue
             else:
-                LOGGER.info("Buying item %s with %s", item, amount_to_buy_btc)
+                LOGGER.info("Buying %s of %s with %s BTC", amount, item, btc_amount)
                 if not test_data:
                     result = binance.order(symbol=item, side=binance.BUY, quantity=amount,
                                            orderType="MARKET", test=test_trade)
@@ -84,7 +80,7 @@ def buy(buy_list, test_data=False, test_trade=True, interval=None):
                     # 2. we we performed a test trade which was successful - (empty dict)
                     # 3. we proformed a real trade which was successful - (transactTime in dict)
                     dbase.insert_trade(pair=item, price=cost, date=current_time,
-                                       investment=INVESTMENT, total=amount)
+                                       investment=20, total=amount)
                 else:
                     LOGGER.critical("Buy Failed")
     else:

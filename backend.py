@@ -22,7 +22,6 @@ from lib.redis_conn import Redis
 from lib.order import buy, sell
 
 LOGGER = getLogger(__name__)
-PRICE_PER_TRADE = int(get_config("backend")["price_per_trade"])
 MAX_TRADES = int(get_config("backend")["max_trades"])
 INTERVAL = str(get_config("backend")["interval"])
 
@@ -56,7 +55,6 @@ def loop(args):
     """
 
     LOGGER.debug("Starting new cycle")
-    LOGGER.debug("Price per trade: %s", PRICE_PER_TRADE)
     LOGGER.debug("max trades: %s", MAX_TRADES)
 
     if args.pair:
