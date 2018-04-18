@@ -21,7 +21,6 @@ from lib.mysql import Mysql
 from lib.balance import get_balance
 
 LOGGER = getLogger(__name__)
-PRICE_PER_TRADE = int(get_config("backend")["price_per_trade"])
 MAX_TRADES = int(get_config("backend")["max_trades"])
 
 binance_auth()
@@ -57,6 +56,10 @@ def buy(buy_list, test_data=False, test_trade=True, interval=None):
                 LOGGER.warning("Too many trades, skipping")
                 break
             btc_amount = current_btc_bal / avail_slots
+            if btc_amount > (current_btc_bal / MAX_TRADES):
+                LOGGER.info("Reducing trade value by half")
+                btc_amount /= 2
+
             LOGGER.debug("btc_amount: %s", btc_amount)
             cost = current_price
             amount = int(btc_amount / float(cost))
