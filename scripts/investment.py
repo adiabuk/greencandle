@@ -24,11 +24,9 @@ def main():
     months = int(args.months)
     percent = float(args.percent)/100
 
-    for i in range(0, 31 * months):
+    for i in range(0, 30 * months):
         print(i, '{0:,}'.format(int(total)))
         total = total+(total * percent)
-
-    print(total)
 
 if __name__ == "__main__":
     main()
