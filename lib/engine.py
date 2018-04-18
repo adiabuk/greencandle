@@ -58,7 +58,7 @@ class Balance(dict):  #FIXME
 class Engine(dict):
     """ Represent events created from data & indicators """
 
-    get_exceptions = get_decorator((Exception), default_value="default")
+    get_exceptions = get_decorator((Exception))
     def __init__(self, dataframes, prices, interval=None, test=False, db=None):
         """
         Initialize class

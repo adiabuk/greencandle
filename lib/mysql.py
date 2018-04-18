@@ -27,7 +27,7 @@ class Mysql(object):
     """
     Custom mysql object with methods to store and retrive given data
     """
-    get_exceptions = get_decorator((Exception), default_value="default")
+    get_exceptions = get_decorator((Exception))
 
     def __init__(self, test=False, interval="15m"):
         self.connect(test=test)
@@ -222,7 +222,8 @@ class Mysql(object):
         """
         Return quantity for a current open trade
         """
-        command = """ select total from trades_{0} where sell_price is NULL and pair = "{1}" """.format(self.interval, pair)
+        command = """ select total from trades_{0} where sell_price
+                      is NULL and pair = "{1}" """.format(self.interval, pair)
         cur = self.dbase.cursor()
         self.execute(cur, command)
 
@@ -236,7 +237,8 @@ class Mysql(object):
         Return the value of an open trade for a given trading pair
         """
 
-        command = """ select buy_price from trades_{0} where sell_price is NULL and pair = "{1}" """.format(self.interval, pair)
+        command = """ select buy_price from trades_{0} where sell_price
+                      is NULL and pair = "{1}" """.format(self.interval, pair)
         cur = self.dbase.cursor()
         self.execute(cur, command)
 

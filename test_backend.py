@@ -142,14 +142,14 @@ def do_parallel(pairs, interval, redis_db):
                             interval=interval, test=True, db=redis_db)
             engine.get_data()
             del engine
-            buy_item, sell_item = redis.get_change(pair=pair)
-            LOGGER.debug("Changed items: %s %s", buy_item, sell_item)
-            if buy_item:
+            result, current_time, current_price = redis.get_change(pair=pair)
+            LOGGER.debug("Changed items: %s %s", result, pair)
+            if result == "BUY":
                 LOGGER.info("Items to buy")
-                buys.append(buy_item)
-            if sell_item:
+                buys.append(pair)
+            if result == "SELL":
                 LOGGER.info("Items to sell")
-                sells.append(sell_item)
+                sells.append(pair)
         sell(sells, test_data=True, test_trade=True, interval=interval)
         buy(buys, test_data=True, test_trade=True, interval=interval)
 

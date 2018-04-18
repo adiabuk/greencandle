@@ -27,10 +27,10 @@ def getLogger(logger_name=None):
         logger.addHandler(ch)
     return logger
 
-logger = getLogger(__name__)
 
-def get_decorator(errors=(Exception, ), default_value=""):
+def get_decorator(errors=(Exception,)):
 
+    logger = getLogger(__name__)
     def decorator(func):
 
         def new_func(*args, **kwargs):
@@ -38,12 +38,8 @@ def get_decorator(errors=(Exception, ), default_value=""):
                 return func(*args, **kwargs)
             except errors as e:
                 logger.critical("Got Error " + str(sys.exc_info()))
-                #traceback.print_stack()
                 raise
-                #return 1 #default_value
-                return ""
 
         return new_func
 
     return decorator
-
