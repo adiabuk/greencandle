@@ -68,7 +68,7 @@ CREATE TABLE `balance` (
   PRIMARY KEY (`id`),
   KEY `exchange_id` (`exchange_id`),
   CONSTRAINT `balance_ibfk_2` FOREIGN KEY (`exchange_id`) REFERENCES `exchange` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=90447 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -101,6 +101,62 @@ CREATE TABLE `coin` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Temporary table structure for view `daily_growth_15m`
+--
+
+DROP TABLE IF EXISTS `daily_growth_15m`;
+/*!50001 DROP VIEW IF EXISTS `daily_growth_15m`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `daily_growth_15m` (
+  `cdate` tinyint NOT NULL,
+  `Growth` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `daily_growth_1m`
+--
+
+DROP TABLE IF EXISTS `daily_growth_1m`;
+/*!50001 DROP VIEW IF EXISTS `daily_growth_1m`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `daily_growth_1m` (
+  `cdate` tinyint NOT NULL,
+  `Growth` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `daily_growth_3m`
+--
+
+DROP TABLE IF EXISTS `daily_growth_3m`;
+/*!50001 DROP VIEW IF EXISTS `daily_growth_3m`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `daily_growth_3m` (
+  `cdate` tinyint NOT NULL,
+  `Growth` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `daily_growth_5m`
+--
+
+DROP TABLE IF EXISTS `daily_growth_5m`;
+/*!50001 DROP VIEW IF EXISTS `daily_growth_5m`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `daily_growth_5m` (
+  `cdate` tinyint NOT NULL,
+  `Growth` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
 
 --
 -- Table structure for table `data`
@@ -140,6 +196,86 @@ CREATE TABLE `exchange` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Temporary table structure for view `growth_15m`
+--
+
+DROP TABLE IF EXISTS `growth_15m`;
+/*!50001 DROP VIEW IF EXISTS `growth_15m`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `growth_15m` (
+  `buy_time` tinyint NOT NULL,
+  `sell_time` tinyint NOT NULL,
+  `pair` tinyint NOT NULL,
+  `buy_price` tinyint NOT NULL,
+  `sell_price` tinyint NOT NULL,
+  `Growth` tinyint NOT NULL,
+  `total` tinyint NOT NULL,
+  `total_btc` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `growth_1m`
+--
+
+DROP TABLE IF EXISTS `growth_1m`;
+/*!50001 DROP VIEW IF EXISTS `growth_1m`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `growth_1m` (
+  `buy_time` tinyint NOT NULL,
+  `sell_time` tinyint NOT NULL,
+  `pair` tinyint NOT NULL,
+  `buy_price` tinyint NOT NULL,
+  `sell_price` tinyint NOT NULL,
+  `Growth` tinyint NOT NULL,
+  `total` tinyint NOT NULL,
+  `total_btc` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `growth_3m`
+--
+
+DROP TABLE IF EXISTS `growth_3m`;
+/*!50001 DROP VIEW IF EXISTS `growth_3m`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `growth_3m` (
+  `buy_time` tinyint NOT NULL,
+  `sell_time` tinyint NOT NULL,
+  `pair` tinyint NOT NULL,
+  `buy_price` tinyint NOT NULL,
+  `sell_price` tinyint NOT NULL,
+  `Growth` tinyint NOT NULL,
+  `total` tinyint NOT NULL,
+  `total_btc` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `growth_5m`
+--
+
+DROP TABLE IF EXISTS `growth_5m`;
+/*!50001 DROP VIEW IF EXISTS `growth_5m`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `growth_5m` (
+  `buy_time` tinyint NOT NULL,
+  `sell_time` tinyint NOT NULL,
+  `pair` tinyint NOT NULL,
+  `buy_price` tinyint NOT NULL,
+  `sell_price` tinyint NOT NULL,
+  `Growth` tinyint NOT NULL,
+  `total` tinyint NOT NULL,
+  `total_btc` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
 
 --
 -- Table structure for table `historical`
@@ -185,6 +321,90 @@ SET character_set_client = utf8;
   `COUNT_diff` tinyint NOT NULL,
   `perc_change` tinyint NOT NULL,
   `BTC_diff` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `profit_15m`
+--
+
+DROP TABLE IF EXISTS `profit_15m`;
+/*!50001 DROP VIEW IF EXISTS `profit_15m`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `profit_15m` (
+  `buy_time` tinyint NOT NULL,
+  `sell_time` tinyint NOT NULL,
+  `pair` tinyint NOT NULL,
+  `Growth` tinyint NOT NULL,
+  `total` tinyint NOT NULL,
+  `total_btc` tinyint NOT NULL,
+  `gbp_buy` tinyint NOT NULL,
+  `gbp_sell` tinyint NOT NULL,
+  `gbp_profit` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `profit_1m`
+--
+
+DROP TABLE IF EXISTS `profit_1m`;
+/*!50001 DROP VIEW IF EXISTS `profit_1m`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `profit_1m` (
+  `buy_time` tinyint NOT NULL,
+  `sell_time` tinyint NOT NULL,
+  `pair` tinyint NOT NULL,
+  `Growth` tinyint NOT NULL,
+  `total` tinyint NOT NULL,
+  `total_btc` tinyint NOT NULL,
+  `gbp_buy` tinyint NOT NULL,
+  `gbp_sell` tinyint NOT NULL,
+  `gbp_profit` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `profit_3m`
+--
+
+DROP TABLE IF EXISTS `profit_3m`;
+/*!50001 DROP VIEW IF EXISTS `profit_3m`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `profit_3m` (
+  `buy_time` tinyint NOT NULL,
+  `sell_time` tinyint NOT NULL,
+  `pair` tinyint NOT NULL,
+  `Growth` tinyint NOT NULL,
+  `total` tinyint NOT NULL,
+  `total_btc` tinyint NOT NULL,
+  `gbp_buy` tinyint NOT NULL,
+  `gbp_sell` tinyint NOT NULL,
+  `gbp_profit` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `profit_5m`
+--
+
+DROP TABLE IF EXISTS `profit_5m`;
+/*!50001 DROP VIEW IF EXISTS `profit_5m`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `profit_5m` (
+  `buy_time` tinyint NOT NULL,
+  `sell_time` tinyint NOT NULL,
+  `pair` tinyint NOT NULL,
+  `Growth` tinyint NOT NULL,
+  `total` tinyint NOT NULL,
+  `total_btc` tinyint NOT NULL,
+  `gbp_buy` tinyint NOT NULL,
+  `gbp_sell` tinyint NOT NULL,
+  `gbp_profit` tinyint NOT NULL
 ) ENGINE=MyISAM */;
 SET character_set_client = @saved_cs_client;
 
@@ -255,6 +475,78 @@ CREATE TABLE `trades` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `trades_15m`
+--
+
+DROP TABLE IF EXISTS `trades_15m`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `trades_15m` (
+  `buy_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `sell_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `pair` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `buy_price` decimal(10,10) DEFAULT NULL,
+  `sell_price` decimal(10,10) DEFAULT NULL,
+  `investment` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `total` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `trades_1m`
+--
+
+DROP TABLE IF EXISTS `trades_1m`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `trades_1m` (
+  `buy_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `sell_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `pair` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `buy_price` decimal(10,10) DEFAULT NULL,
+  `sell_price` decimal(10,10) DEFAULT NULL,
+  `investment` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `total` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `trades_3m`
+--
+
+DROP TABLE IF EXISTS `trades_3m`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `trades_3m` (
+  `buy_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `sell_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `pair` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `buy_price` decimal(10,10) DEFAULT NULL,
+  `sell_price` decimal(10,10) DEFAULT NULL,
+  `investment` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `total` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `trades_5m`
+--
+
+DROP TABLE IF EXISTS `trades_5m`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `trades_5m` (
+  `buy_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `sell_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `pair` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `buy_price` decimal(10,10) DEFAULT NULL,
+  `sell_price` decimal(10,10) DEFAULT NULL,
+  `investment` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `total` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `trades_back`
 --
 
@@ -292,6 +584,158 @@ CREATE TABLE `trades_back` (
 /*!50001 SET collation_connection      = @saved_col_connection */;
 
 --
+-- Final view structure for view `daily_growth_15m`
+--
+
+/*!50001 DROP TABLE IF EXISTS `daily_growth_15m`*/;
+/*!50001 DROP VIEW IF EXISTS `daily_growth_15m`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`greencandle`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `daily_growth_15m` AS select left(`trades_15m`.`sell_time`,10) AS `cdate`,avg((((`trades_15m`.`sell_price` - `trades_15m`.`buy_price`) / `trades_15m`.`sell_price`) * 100)) AS `Growth` from `trades_15m` where (`trades_15m`.`sell_price` is not null) group by left(`trades_15m`.`sell_time`,10) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `daily_growth_1m`
+--
+
+/*!50001 DROP TABLE IF EXISTS `daily_growth_1m`*/;
+/*!50001 DROP VIEW IF EXISTS `daily_growth_1m`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`greencandle`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `daily_growth_1m` AS select left(`trades_1m`.`sell_time`,10) AS `cdate`,avg((((`trades_1m`.`sell_price` - `trades_1m`.`buy_price`) / `trades_1m`.`sell_price`) * 100)) AS `Growth` from `trades_1m` where (`trades_1m`.`sell_price` is not null) group by left(`trades_1m`.`sell_time`,10) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `daily_growth_3m`
+--
+
+/*!50001 DROP TABLE IF EXISTS `daily_growth_3m`*/;
+/*!50001 DROP VIEW IF EXISTS `daily_growth_3m`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`greencandle`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `daily_growth_3m` AS select left(`trades_3m`.`sell_time`,10) AS `cdate`,avg((((`trades_3m`.`sell_price` - `trades_3m`.`buy_price`) / `trades_3m`.`sell_price`) * 100)) AS `Growth` from `trades_3m` where (`trades_3m`.`sell_price` is not null) group by left(`trades_3m`.`sell_time`,10) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `daily_growth_5m`
+--
+
+/*!50001 DROP TABLE IF EXISTS `daily_growth_5m`*/;
+/*!50001 DROP VIEW IF EXISTS `daily_growth_5m`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`greencandle`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `daily_growth_5m` AS select left(`trades_5m`.`sell_time`,10) AS `cdate`,avg((((`trades_5m`.`sell_price` - `trades_5m`.`buy_price`) / `trades_5m`.`sell_price`) * 100)) AS `Growth` from `trades_5m` where (`trades_5m`.`sell_price` is not null) group by left(`trades_5m`.`sell_time`,10) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `growth_15m`
+--
+
+/*!50001 DROP TABLE IF EXISTS `growth_15m`*/;
+/*!50001 DROP VIEW IF EXISTS `growth_15m`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`greencandle`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `growth_15m` AS select `trades_15m`.`buy_time` AS `buy_time`,`trades_15m`.`sell_time` AS `sell_time`,`trades_15m`.`pair` AS `pair`,`trades_15m`.`buy_price` AS `buy_price`,`trades_15m`.`sell_price` AS `sell_price`,(((`trades_15m`.`sell_price` - `trades_15m`.`buy_price`) / `trades_15m`.`sell_price`) * 100) AS `Growth`,`trades_15m`.`total` AS `total`,(`trades_15m`.`buy_price` * `trades_15m`.`total`) AS `total_btc` from `trades_15m` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `growth_1m`
+--
+
+/*!50001 DROP TABLE IF EXISTS `growth_1m`*/;
+/*!50001 DROP VIEW IF EXISTS `growth_1m`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`greencandle`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `growth_1m` AS select `trades_1m`.`buy_time` AS `buy_time`,`trades_1m`.`sell_time` AS `sell_time`,`trades_1m`.`pair` AS `pair`,`trades_1m`.`buy_price` AS `buy_price`,`trades_1m`.`sell_price` AS `sell_price`,(((`trades_1m`.`sell_price` - `trades_1m`.`buy_price`) / `trades_1m`.`sell_price`) * 100) AS `Growth`,`trades_1m`.`total` AS `total`,(`trades_1m`.`buy_price` * `trades_1m`.`total`) AS `total_btc` from `trades_1m` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `growth_3m`
+--
+
+/*!50001 DROP TABLE IF EXISTS `growth_3m`*/;
+/*!50001 DROP VIEW IF EXISTS `growth_3m`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`greencandle`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `growth_3m` AS select `trades_3m`.`buy_time` AS `buy_time`,`trades_3m`.`sell_time` AS `sell_time`,`trades_3m`.`pair` AS `pair`,`trades_3m`.`buy_price` AS `buy_price`,`trades_3m`.`sell_price` AS `sell_price`,(((`trades_3m`.`sell_price` - `trades_3m`.`buy_price`) / `trades_3m`.`sell_price`) * 100) AS `Growth`,`trades_3m`.`total` AS `total`,(`trades_3m`.`buy_price` * `trades_3m`.`total`) AS `total_btc` from `trades_3m` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `growth_5m`
+--
+
+/*!50001 DROP TABLE IF EXISTS `growth_5m`*/;
+/*!50001 DROP VIEW IF EXISTS `growth_5m`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`greencandle`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `growth_5m` AS select `trades_5m`.`buy_time` AS `buy_time`,`trades_5m`.`sell_time` AS `sell_time`,`trades_5m`.`pair` AS `pair`,`trades_5m`.`buy_price` AS `buy_price`,`trades_5m`.`sell_price` AS `sell_price`,(((`trades_5m`.`sell_price` - `trades_5m`.`buy_price`) / `trades_5m`.`sell_price`) * 100) AS `Growth`,`trades_5m`.`total` AS `total`,(`trades_5m`.`buy_price` * `trades_5m`.`total`) AS `total_btc` from `trades_5m` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
 -- Final view structure for view `hour_balance`
 --
 
@@ -306,6 +750,82 @@ CREATE TABLE `trades_back` (
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `hour_balance` AS select `tt1`.`exchange_id` AS `exchange_id`,`tt1`.`usd` AS `usd1`,`tt1`.`coin` AS `coin`,`tt1`.`ctime` AS `ctime1`,`tt2`.`ctime` AS `ctime2`,`tt2`.`usd` AS `usd2`,(`tt1`.`usd` - `tt2`.`usd`) AS `USD_diff`,(`tt1`.`gbp` - `tt2`.`gbp`) AS `GBP_diff`,(`tt1`.`count` - `tt2`.`count`) AS `COUNT_diff`,(((`tt1`.`btc` - `tt2`.`btc`) / `tt1`.`btc`) * 100) AS `perc_change`,(`tt1`.`btc` - `tt2`.`btc`) AS `BTC_diff` from (`balance` `tt1` left join `balance` `tt2` on(((`tt1`.`coin` = `tt2`.`coin`) and (`tt1`.`exchange_id` = `tt2`.`exchange_id`)))) where ((`tt1`.`ctime` > (now() - interval 20 minute)) and (`tt2`.`ctime` < (now() - interval 45 minute)) and (`tt2`.`ctime` > (now() - interval 90 minute))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `profit_15m`
+--
+
+/*!50001 DROP TABLE IF EXISTS `profit_15m`*/;
+/*!50001 DROP VIEW IF EXISTS `profit_15m`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`greencandle`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `profit_15m` AS select `trades_15m`.`buy_time` AS `buy_time`,`trades_15m`.`sell_time` AS `sell_time`,`trades_15m`.`pair` AS `pair`,(((`trades_15m`.`sell_price` - `trades_15m`.`buy_price`) / `trades_15m`.`sell_price`) * 100) AS `Growth`,`trades_15m`.`total` AS `total`,(`trades_15m`.`buy_price` * `trades_15m`.`total`) AS `total_btc`,((`trades_15m`.`buy_price` * `trades_15m`.`total`) * 5780.38) AS `gbp_buy`,((`trades_15m`.`sell_price` * `trades_15m`.`total`) * 5780.38) AS `gbp_sell`,(((`trades_15m`.`sell_price` * `trades_15m`.`total`) * 5780.38) - ((`trades_15m`.`buy_price` * `trades_15m`.`total`) * 5780.38)) AS `gbp_profit` from `trades_15m` where (`trades_15m`.`sell_price` is not null) order by (((`trades_15m`.`sell_price` * `trades_15m`.`total`) * 5780.38) - ((`trades_15m`.`buy_price` * `trades_15m`.`total`) * 5780.38)) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `profit_1m`
+--
+
+/*!50001 DROP TABLE IF EXISTS `profit_1m`*/;
+/*!50001 DROP VIEW IF EXISTS `profit_1m`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`greencandle`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `profit_1m` AS select `trades_1m`.`buy_time` AS `buy_time`,`trades_1m`.`sell_time` AS `sell_time`,`trades_1m`.`pair` AS `pair`,(((`trades_1m`.`sell_price` - `trades_1m`.`buy_price`) / `trades_1m`.`sell_price`) * 100) AS `Growth`,`trades_1m`.`total` AS `total`,(`trades_1m`.`buy_price` * `trades_1m`.`total`) AS `total_btc`,((`trades_1m`.`buy_price` * `trades_1m`.`total`) * 5780.38) AS `gbp_buy`,((`trades_1m`.`sell_price` * `trades_1m`.`total`) * 5780.38) AS `gbp_sell`,(((`trades_1m`.`sell_price` * `trades_1m`.`total`) * 5780.38) - ((`trades_1m`.`buy_price` * `trades_1m`.`total`) * 5780.38)) AS `gbp_profit` from `trades_1m` where (`trades_1m`.`sell_price` is not null) order by (((`trades_1m`.`sell_price` * `trades_1m`.`total`) * 5780.38) - ((`trades_1m`.`buy_price` * `trades_1m`.`total`) * 5780.38)) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `profit_3m`
+--
+
+/*!50001 DROP TABLE IF EXISTS `profit_3m`*/;
+/*!50001 DROP VIEW IF EXISTS `profit_3m`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`greencandle`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `profit_3m` AS select `trades_3m`.`buy_time` AS `buy_time`,`trades_3m`.`sell_time` AS `sell_time`,`trades_3m`.`pair` AS `pair`,(((`trades_3m`.`sell_price` - `trades_3m`.`buy_price`) / `trades_3m`.`sell_price`) * 100) AS `Growth`,`trades_3m`.`total` AS `total`,(`trades_3m`.`buy_price` * `trades_3m`.`total`) AS `total_btc`,((`trades_3m`.`buy_price` * `trades_3m`.`total`) * 5780.38) AS `gbp_buy`,((`trades_3m`.`sell_price` * `trades_3m`.`total`) * 5780.38) AS `gbp_sell`,(((`trades_3m`.`sell_price` * `trades_3m`.`total`) * 5780.38) - ((`trades_3m`.`buy_price` * `trades_3m`.`total`) * 5780.38)) AS `gbp_profit` from `trades_3m` where (`trades_3m`.`sell_price` is not null) order by (((`trades_3m`.`sell_price` * `trades_3m`.`total`) * 5780.38) - ((`trades_3m`.`buy_price` * `trades_3m`.`total`) * 5780.38)) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `profit_5m`
+--
+
+/*!50001 DROP TABLE IF EXISTS `profit_5m`*/;
+/*!50001 DROP VIEW IF EXISTS `profit_5m`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`greencandle`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `profit_5m` AS select `trades_5m`.`buy_time` AS `buy_time`,`trades_5m`.`sell_time` AS `sell_time`,`trades_5m`.`pair` AS `pair`,(((`trades_5m`.`sell_price` - `trades_5m`.`buy_price`) / `trades_5m`.`sell_price`) * 100) AS `Growth`,`trades_5m`.`total` AS `total`,(`trades_5m`.`buy_price` * `trades_5m`.`total`) AS `total_btc`,((`trades_5m`.`buy_price` * `trades_5m`.`total`) * 5780.38) AS `gbp_buy`,((`trades_5m`.`sell_price` * `trades_5m`.`total`) * 5780.38) AS `gbp_sell`,(((`trades_5m`.`sell_price` * `trades_5m`.`total`) * 5780.38) - ((`trades_5m`.`buy_price` * `trades_5m`.`total`) * 5780.38)) AS `gbp_profit` from `trades_5m` where (`trades_5m`.`sell_price` is not null) order by (((`trades_5m`.`sell_price` * `trades_5m`.`total`) * 5780.38) - ((`trades_5m`.`buy_price` * `trades_5m`.`total`) * 5780.38)) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -338,7 +858,7 @@ CREATE TABLE `trades_back` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-04-04 18:39:42
+-- Dump completed on 2018-04-20 13:53:07
 -- MySQL dump 10.16  Distrib 10.1.31-MariaDB, for Linux (x86_64)
 --
 -- Host: localhost    Database: greencandle
@@ -389,4 +909,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-04-04 18:39:44
+-- Dump completed on 2018-04-20 13:53:09
