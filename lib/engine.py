@@ -112,7 +112,7 @@ class Engine(dict):
         red = "\033[31m"
         white = "\033[0m"
         if not self.values:
-            LOGGER.critical("ERROR")
+            LOGGER.critical("ERROR: no values available")
         for value in self.values():
             if not "direction" in value or "HOLD" in value["direction"]:
                 #no_change.append(value["symbol"])
@@ -180,7 +180,7 @@ class Engine(dict):
             None
         """
 
-        LOGGER.info("Getting Support & resistance for %s", pair)
+        LOGGER.debug("Getting Support & resistance for %s", pair)
 
         close_values = make_float(klines.close)
         support, resistance = supres(close_values, 10)
@@ -189,7 +189,9 @@ class Engine(dict):
         try:
             value = (pip_calc(support[-1], resistance[-1]))
         except IndexError:
-            LOGGER.warning("Skipping {0} {1} {2} ".format(pair, str(support), str(resistance)))
+            LOGGER.warning("Skipping {0} {1} {2} for support/resistance ".format(pair,
+                                                                                 str(support),
+                                                                                 str(resistance)))
             return None
 
         cur_to_res = resistance[-1] - close_values[-1]
@@ -219,7 +221,7 @@ class Engine(dict):
         scheme["direction"] = scheme['direction']
         scheme["event"] = "Support/Resistance"
         self.add_scheme(scheme)
-        LOGGER.info("Done getting Support & resistance")
+        LOGGER.debug("Done getting Support & resistance")
 
     @get_exceptions
     def get_rsi(self, pair=None, klines=None):
@@ -234,7 +236,7 @@ class Engine(dict):
             None
 
         """
-        LOGGER.info("Getting RSI_21 for %s", pair)
+        LOGGER.debug("Getting RSI_21 for %s", pair)
         dataframe = self.renamed_dataframe_columns(klines)
         scheme = {}
         mine = dataframe.apply(pandas.to_numeric)
@@ -254,7 +256,7 @@ class Engine(dict):
         scheme["direction"] = direction
         scheme["event"] = "RSI_21"
         self.add_scheme(scheme)
-        LOGGER.info("Done getting RSI_21")
+        LOGGER.debug("Done getting RSI_21")
 
     @staticmethod
     def renamed_dataframe_columns(klines=None):
@@ -290,7 +292,7 @@ class Engine(dict):
         """
 
         scheme = {}
-        LOGGER.info("Getting supertrend for %s", pair)
+        LOGGER.debug("Getting supertrend for %s", pair)
         dataframe = self.renamed_dataframe_columns(klines)
 
         mine = dataframe.apply(pandas.to_numeric)
@@ -303,7 +305,7 @@ class Engine(dict):
         scheme["direction"] = self.get_supertrend_direction(df_list[-1])
         scheme["event"] = "Supertrend"
         self.add_scheme(scheme)
-        LOGGER.info("done getting supertrend")
+        LOGGER.debug("done getting supertrend")
 
     @staticmethod
     def get_url(pair):
@@ -405,7 +407,7 @@ class Engine(dict):
         try:
             close = klines[-1]
         except Exception as e:
-            LOGGER.critical("AMROX25 FAILING!!! " + str(e))
+            LOGGER.critical("FAILED moving averages " + str(e))
         trends = (
             #("EMA", 10),
             ("EMA", 20),
@@ -422,7 +424,7 @@ class Engine(dict):
             try:
                 result = getattr(talib, func)(close, timeperiod)[-1]
             except Exception:
-                LOGGER.critical("AMROX25 EXC")
+                LOGGER.critical("Overall Exception getting moving averages")
             if result > close[-1]:
                 trigger = "SELL"
             else:
@@ -447,7 +449,7 @@ class Engine(dict):
                 self.add_scheme(scheme)
 
             except KeyError as e:
-                LOGGER.critical("AMROX25 KEY FAILURE " + str(e))
+                LOGGER.critical("KEY FAILURE in moving averages " + str(e))
 
         LOGGER.debug("done getting moving averages")
 
@@ -465,7 +467,7 @@ class Engine(dict):
         Returns:
             None
         """
-        LOGGER.info("Getting Oscillators for %s", pair)
+        LOGGER.debug("Getting Oscillators for %s", pair)
         open, high, low, close = klines
         scheme = {}
         trends = {
@@ -503,7 +505,7 @@ class Engine(dict):
 
             except Exception as error:
                 traceback.print_exc()
-                LOGGER.critical("AMROX 25 failed here:" + str(error))
+                LOGGER.critical("failed getting oscillators" + str(error))
 
             current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
             close_time = str(self.dataframes[pair].iloc[-1]["closeTime"])
@@ -523,8 +525,8 @@ class Engine(dict):
                 self.add_scheme(scheme)
 
             except KeyError as e:
-                LOGGER.critical("AMROX25 Key failure " + str(e))
-        LOGGER.info("Done getting Oscillators")
+                LOGGER.critical("Key failure while getting oscillators " + str(e))
+        LOGGER.debug("Done getting Oscillators")
 
     @get_exceptions
     def get_indicators(self, pair, klines):
@@ -540,7 +542,7 @@ class Engine(dict):
         Returns:
             None
         """
-        LOGGER.info("Getting Indicators for %s", pair)
+        LOGGER.debug("Getting Indicators for %s", pair)
         trends = {"HAMMER": {100: "BUY", 0:"HOLD"},
                   "INVERTEDHAMMER": {100: "SELL", 0:"HOLD"},
                   "ENGULFING": {-100:"SELL", 100:"BUY", 0:"HOLD"},
@@ -564,10 +566,10 @@ class Engine(dict):
 
                 self.add_scheme(scheme)
             except KeyError as ke:
-                LOGGER.critical("AMROX25 KEYERROR "  + str(sys.exc_info()))
+                LOGGER.critical("KEYERROR while getting indicators "  + str(sys.exc_info()))
                 continue
 
-        LOGGER.info("Done getting Indicators")
+        LOGGER.debug("Done getting Indicators")
 
     @get_exceptions
     def add_scheme(self, scheme):
@@ -589,7 +591,7 @@ class Engine(dict):
             self.redis.redis_conn(pair, self.interval, data, close_time)
 
         except Exception as e:
-            LOGGER.critical("AMROX25 Redis failure22 " +str(e) + " " + repr(sys.exc_info()))
+            LOGGER.critical("Redis failure %s %s", str(e), repr(sys.exc_info()))
 
         if scheme["direction"] == "HOLD":
             self["hold"][id(scheme)] = scheme

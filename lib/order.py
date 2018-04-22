@@ -39,7 +39,7 @@ def buy(buy_list, test_data=False, test_trade=True, interval=None):
     Buy as many items as we can from buy_list depending on max amount of trades, and current
     balance in BTC
     """
-    LOGGER.debug("We have %s potential items to buy", len(buy_list))
+    LOGGER.info("We have %s potential items to buy", len(buy_list))
     if buy_list:
         dbase = Mysql(test=test_data, interval=interval)
         if test_data:
@@ -58,7 +58,7 @@ def buy(buy_list, test_data=False, test_trade=True, interval=None):
                 break
             btc_amount = current_btc_bal / avail_slots
 
-            LOGGER.debug("btc_amount: %s", btc_amount)
+            LOGGER.info("btc_amount: %s", btc_amount)
             cost = current_price
             amount = round(btc_amount / float(cost))
 
