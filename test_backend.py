@@ -72,7 +72,7 @@ def do_serial(pairs, intervals):
     for pair in pairs:
         for interval in intervals:
             redis_db = {"15m":1, "5m":2, "3m":3, "1m":4}[interval]
-            LOGGER.debug("Serial run %s %s %s", pair, interval, redis_db)
+            LOGGER.info("Serial run %s %s %s", pair, interval, redis_db)
             dbase = Mysql(test=True, interval=interval)
             dbase.delete_data()
             redis = Redis(interval=interval, test=True, db=redis_db)
@@ -96,19 +96,19 @@ def do_serial(pairs, intervals):
                                 interval=interval, test=True, db=redis_db)
                 engine.get_data()
                 result, current_time, current_price = redis.get_change(pair=pair)
-                LOGGER.debug("Changed items: %s %s %s", pair, result, current_time)
+                LOGGER.info("Changed items: %s %s %s", pair, result, current_time)
                 if result == "buy":
-                    LOGGER.info("Items to buy")
+                    LOGGER.debug("Items to buy")
                     buys.append((pair, current_time, current_price))
                 elif result == "sell":
-                    LOGGER.info("Items to sell")
+                    LOGGER.debug("Items to sell")
                     sells.append((pair, current_time, current_price))
                 sell(sells, test_data=True, test_trade=True, interval=interval)
                 buy(buys, test_data=True, test_trade=True, interval=interval)
 
                 del engine
             profit = get_recent_profit(True, interval=interval)
-            LOGGER.debug("AMROX4 %s %s %s", pair, interval, profit)
+            LOGGER.info("AMROX4 %s %s %s", pair, interval, profit)
 
 def do_parallel(pairs, interval, redis_db):
     """
@@ -143,12 +143,12 @@ def do_parallel(pairs, interval, redis_db):
             engine.get_data()
             del engine
             result, current_time, current_price = redis.get_change(pair=pair)
-            LOGGER.debug("Changed items: %s %s", result, pair)
+            LOGGER.info("Changed items: %s %s", result, pair)
             if result == "BUY":
-                LOGGER.info("Items to buy")
+                LOGGER.debug("Items to buy")
                 buys.append(pair)
             if result == "SELL":
-                LOGGER.info("Items to sell")
+                LOGGER.debug("Items to sell")
                 sells.append(pair)
         sell(sells, test_data=True, test_trade=True, interval=interval)
         buy(buys, test_data=True, test_trade=True, interval=interval)

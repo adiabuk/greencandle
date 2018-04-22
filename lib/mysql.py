@@ -169,10 +169,9 @@ class Mysql(object):
         """
         Delete all data from trades table
         """
-        LOGGER.debug("Clearing Old Data")
+        LOGGER.info("Deleting all trades from mysql")
         command = "delete from trades_{0};".format(self.interval)
         command2 = "delete from actions;"
-        LOGGER.info("Deleting all trades from mysql")
         self.run_sql_query(command)
         self.run_sql_query(command2)
 
@@ -187,7 +186,7 @@ class Mysql(object):
               None
         """
 
-        LOGGER.debug("Cleaning stale data")
+        LOGGER.info("Cleaning stale data from mysql")
         command1 = "delete from action_totals where ctime < NOW() - INTERVAL 30 MINUTE;"
         command2 = "delete from actions where ctime < NOW() - INTERVAL 30 MINUTE;"
         self.run_sql_query(command1)
@@ -228,7 +227,7 @@ class Mysql(object):
         self.execute(cur, command)
 
         row = [item[0] for item in cur.fetchall()]
-        LOGGER.critical("%s %s", command, row)
+        LOGGER.debug("%s %s", command, row)
         return row[0] if row else None # There should only be one open trade, so return first item
 
     @get_exceptions
@@ -336,13 +335,13 @@ class Mysql(object):
                     LOGGER.critical(" ".join(["XXX", coin, exchange, "KEYERROR"]))
                     continue
                 except IndexError:
-                    LOGGER.info(exchange)
+                    LOGGER.critical("Index error %s", exchange)
                     raise
 
                 try:
                     self.run_sql_query(command)
                 except NameError:
-                    LOGGER.info("One or more expected variables not passed to insert into DB")
+                    LOGGER.error("One or more expected variables not passed to insert into DB")
 
     @get_exceptions
     def insert_action_totals(self):

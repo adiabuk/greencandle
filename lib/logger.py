@@ -7,6 +7,7 @@ Generic logging class for greencandle modules
 import sys
 import logging
 import traceback
+from lib.config import get_config
 
 def getLogger(logger_name=None):
     """
@@ -17,9 +18,10 @@ def getLogger(logger_name=None):
             logging instance with formatted handler
         """
 
+    logging_level = int(get_config("logging")["level"])
     logger = logging.getLogger(logger_name)
     if not logger.handlers:
-        logger.setLevel(logging.DEBUG)
+        logger.setLevel(logging_level)
         ch = logging.StreamHandler()
         formatter = logging.Formatter("%(asctime)s;%(levelname)s;%(name)s;%(message)s",
                                       "%Y-%m-%d %H:%M:%S")

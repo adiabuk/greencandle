@@ -43,10 +43,10 @@ def main():
         try:
             loop(args)
         except KeyboardInterrupt:
-            LOGGER.info("\nExiting on user command...")
+            LOGGER.critical("\nExiting on user command...")
             sys.exit(1)
         remaining_time = (minutes * 60.0) - ((time.time() - starttime) % 60.0)
-        LOGGER.debug("Sleeping for %s seconds", remaining_time)
+        LOGGER.info("Sleeping for %s seconds", remaining_time)
         time.sleep(remaining_time)
 
 def loop(args):
@@ -54,7 +54,7 @@ def loop(args):
     Loop through collection cycle
     """
 
-    LOGGER.debug("Starting new cycle")
+    LOGGER.info("Starting new cycle")
     LOGGER.debug("max trades: %s", MAX_TRADES)
 
     if args.pair:
@@ -79,7 +79,7 @@ def loop(args):
     for pair in pairs:
         result, current_time, current_price = redis.get_change(pair=pair)
         if result == "buy":
-            LOGGER.info("Items to buy")
+            LOGGER.debug("Items to buy")
             buys.append((pair, current_time, current_price))
         elif result == "sell":
             LOGGER.info("Items to sell")
