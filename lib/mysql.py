@@ -51,7 +51,10 @@ class Mysql(object):
 
     @get_exceptions
     def __del__(self):
-        self.dbase.close()
+        try:
+            self.dbase.close()
+        except AttributeError:
+            pass
 
     @get_exceptions
     def execute(self, cur, command):

@@ -3,7 +3,7 @@ Get/Convert Balances from Binance
 """
 
 from collections import defaultdict
-from forex_python.converter import CurrencyRates
+from forex_python.converter import CurrencyRates, RatesNotAvailableError
 import binance
 from lib.balance_common import default_to_regular
 from lib.auth import binance_auth
@@ -36,7 +36,7 @@ def get_binance_values():
                     bcoin = float(current_value) * float(prices[key+"BTC"])  # value in BTC
                     bitcoin_totals += float(current_value) * float(prices[key+"BTC"])
                 except KeyError:
-                    LOGGER.critical("Error: Unable to quantify currency: " + key)
+                    LOGGER.critical("Error: Unable to quantify currency: %s ", key)
                     continue
             else:   #btc
                 bcoin = float(current_value)
@@ -57,8 +57,13 @@ def get_binance_values():
     result["binance"]["TOTALS"]["BTC"] = bitcoin_totals
     result["binance"]["TOTALS"]["USD"] = usd_total
     result["binance"]["TOTALS"]["count"] = ""
-
-    gbp_total = currency.get_rate("USD", "GBP") * usd_total
+    for _ in range(3):
+        # Try to get exchange rate 3 times before giving up
+        try:
+            gbp_total = currency.get_rate("USD", "GBP") * usd_total
+        except RatesNotAvailableError:
+            continue
+        break
     result["binance"]["TOTALS"]["GBP"] = gbp_total
     add_value("USD", usd_total)
     add_value("GBP", gbp_total)

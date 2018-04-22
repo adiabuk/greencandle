@@ -32,6 +32,9 @@ class Balance(dict):  #FIXME
         self.interval = interval
         self = get_balance(test=test)
 
+    def __del__(self):
+        del self.db
+
 
     def save_balance(self):
         if not self.test:
@@ -68,11 +71,11 @@ class Engine(dict):
         LOGGER.debug("Fetching raw data")
         self.interval = interval
         self.pairs = prices.keys()
-        self.redis = Redis(interval=interval, test=test, db=db)
         self.db = Mysql(test=test, interval=interval)
         if not test:  #FIXME
             self.balance = balance.get_balance(test=test)
         self.test = test
+        self.redis_db = db
         self["hold"] = {}
         self["event"] = {}
         self.supres = {}
@@ -96,9 +99,12 @@ class Engine(dict):
             ohlcs[key] = ohlc
         return ohlcs
 
+    @get_exceptions
     def __del__(self):
-        del  self.db
-        del self.redis
+        try:
+            del self.db
+        except NameError:
+            pass
 
     def get_test_data(self, data):
         """Get test data"""
@@ -151,7 +157,7 @@ class Engine(dict):
         """
         LOGGER.debug("Getting data")
         global POOL
-        POOL = ThreadPoolExecutor(max_workers=400)
+        POOL = ThreadPoolExecutor(max_workers=1000)
         for pair in self.pairs:
 
             # get indicators supertrend, and API for each trading pair
@@ -163,7 +169,7 @@ class Engine(dict):
             POOL.submit(self.get_rsi, pair, self.dataframes[pair])
 
         POOL.shutdown(wait=True)
-        POOL = ThreadPoolExecutor(max_workers=50)
+        POOL = ThreadPoolExecutor(max_workers=100)
         LOGGER.debug("Done getting data")
         return self
 
@@ -588,7 +594,10 @@ class Engine(dict):
                                      "date": close_time,
                                      "action":self.get_action(scheme["direction"])}}
 
-            self.redis.redis_conn(pair, self.interval, data, close_time)
+            redis = Redis(interval=self.interval, test=self.test,
+                          db=self.redis_db)
+            redis.redis_conn(pair, self.interval, data, close_time)
+            del redis
 
         except Exception as e:
             LOGGER.critical("Redis failure %s %s", str(e), repr(sys.exc_info()))

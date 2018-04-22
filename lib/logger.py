@@ -31,14 +31,13 @@ def getLogger(logger_name=None):
 
 
 def get_decorator(errors=(Exception,)):
-
     logger = getLogger(__name__)
     def decorator(func):
 
         def new_func(*args, **kwargs):
             try:
                 return func(*args, **kwargs)
-            except errors as e:
+            except errors:
                 logger.critical("Got Error " + str(sys.exc_info()))
                 raise
 

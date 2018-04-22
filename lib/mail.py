@@ -13,9 +13,12 @@ from email.mime.text import MIMEText
 BASE_DIR = os.getcwd().split("greencandle", 1)[0] + "greencandle"
 sys.path.append(BASE_DIR)
 from lib.config import get_config
-from lib.logger import getLogger
+from lib.timeout import restrict_timeout
+from lib.logger import getLogger, get_decorator
 
+GET_EXCEPTIONS = get_decorator((Exception))
 
+@GET_EXCEPTIONS
 def send_gmail_alert(action, pair, price):
     """
     Send email alert using gmail
@@ -41,5 +44,6 @@ def send_gmail_alert(action, pair, price):
     server.login(email_from, email_password)
     text = msg.as_string()
     logger.info("Sending Email")
-    server.sendmail(fromaddr, toaddr, text)
+    with restrict_timeout(3, name="email alert"):
+        server.sendmail(fromaddr, toaddr, text)
     server.quit()
