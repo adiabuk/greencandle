@@ -25,6 +25,7 @@ def main():
     pairs = get_config("test")["serial_pairs"].split()
     intervals = get_config("test")["serial_intervals"].split()
     start_time = get_config("test")["start_time"].split()
+    start_time = sys.argv[1]
     no_of_klines = int(get_config("test")["no_of_klines"].split()[0])
     for pair in pairs:
         for interval in intervals:

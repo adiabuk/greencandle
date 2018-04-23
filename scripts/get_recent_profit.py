@@ -15,7 +15,11 @@ from lib.profit import get_recent_profit
 def main():
     """ Get profits """
 
-    profits = get_recent_profit(interval='5m')
+    try:
+        profits = get_recent_profit(interval=sys.argv[1])
+    except IndexError:
+        print("Usage {0} <interval>".format(sys.argv[0]))
+        sys.exit(2)
 
     print("total = {0}".format(profits[0]))
     for key in sorted(profits[1].keys()):
