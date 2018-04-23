@@ -19,6 +19,7 @@ from lib.logger import getLogger
 from lib.config import get_config
 from lib.mysql import Mysql
 from lib.balance import get_balance
+from lib.mail import send_gmail_alert
 
 LOGGER = getLogger(__name__)
 MAX_TRADES = int(get_config("backend")["max_trades"])
@@ -59,12 +60,11 @@ def buy(buy_list, test_data=False, test_trade=True, interval=None):
 
             LOGGER.debug("btc_amount: %s", btc_amount)
             cost = current_price
-            amount = int(btc_amount / float(cost))
+            amount = round(btc_amount / float(cost))
 
-            if (btc_amount > (current_btc_bal / MAX_TRADES)
-                    and (int(amount / 1.5)) > 0):
+            if btc_amount > (current_btc_bal / MAX_TRADES):
                 LOGGER.info("Reducing trade value by a third")
-                amount /= 1.5
+                amount = round(amount / 1.5)
             if float(btc_amount) > float(current_btc_bal):
                 LOGGER.warning("Unable to purchase %s, insufficient funds:%s/%s",
                                item, btc_amount, current_btc_bal)
@@ -85,6 +85,7 @@ def buy(buy_list, test_data=False, test_trade=True, interval=None):
                     # 3. we proformed a real trade which was successful - (transactTime in dict)
                     dbase.insert_trade(pair=item, price=cost, date=current_time,
                                        investment=20, total=amount)
+                    send_gmail_alert("BUY", item, cost)
                 else:
                     LOGGER.critical("Buy Failed")
     else:
@@ -110,6 +111,7 @@ def sell(sell_list, test_data=False, test_trade=True, interval=None):
             if test_data or (test_trade and not result) or \
                     (not test_trade and 'transactTime' in result):
                 dbase.update_trades(pair=item, sell_time=current_time, sell_price=price)
+                send_gmail_alert("SELL", item, price)
             else:
                 LOGGER.critical("Sell Failed")
     else:

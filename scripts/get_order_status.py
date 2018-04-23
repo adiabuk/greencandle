@@ -21,6 +21,7 @@ for key, value in balances.items():
     if float(value['free']) > 0 or float(value['locked']) > 0 and "BTC" not in key:
         holdings.append(key + "BTC")
 
+print("item transaction_price current_price amount bought in_db up")
 for item in holdings:
     try:
         x = binance.myTrades(item)[-1]
