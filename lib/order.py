@@ -8,12 +8,13 @@ Test Buy/Sell orders
 from __future__ import print_function
 import os
 import sys
+import math
+import binance
 
 BASE_DIR = os.getcwd().split("greencandle", 1)[0] + "greencandle"
 sys.path.append(BASE_DIR)
 
 
-import binance
 from lib.auth import binance_auth
 from lib.logger import getLogger, get_decorator
 from lib.config import get_config
@@ -64,11 +65,12 @@ def buy(buy_list, test_data=False, test_trade=True, interval=None):
 
             LOGGER.info("btc_amount: %s", btc_amount)
             cost = current_price
-            amount = round(btc_amount / float(cost))
 
             if (btc_amount > (current_btc_bal / MAX_TRADES) and avail_slots < 5):
                 LOGGER.info("Reducing trade value by a third")
-                amount = round(amount / 1.5)
+                btc_amount /= 1.5
+
+            amount = math.ceil(btc_amount / float(cost))
             if float(btc_amount) > float(current_btc_bal):
                 LOGGER.warning("Unable to purchase %s, insufficient funds:%s/%s",
                                item, btc_amount, current_btc_bal)
