@@ -71,6 +71,7 @@ def get_balance(test=False, interval="5m"):
     combined_dict.update(coinbase)    # modifies z with y"s keys and values & returns None
 
     dbase.insert_balance(combined_dict)
+    del dbase
     return combined_dict
 
 def main():

@@ -66,6 +66,7 @@ def get_recent_profit(test=False, interval=None):
     profit_dict = defaultdict(float)  #will allow us to increment unitilaized value (start at 0)
     dbase = Mysql(test=test, interval=interval)
     trades = dbase.get_last_trades()# contains tuple db results
+    del dbase
 
     for trade in trades:  # each individual trade contains buy_price, sell_price, and inventment
         # items contained in tupple are as follows:

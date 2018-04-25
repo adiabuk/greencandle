@@ -41,11 +41,14 @@ class Redis(object):
         self.conn = redis.StrictRedis(connection_pool=pool)
         self.dbase = Mysql(test=test, interval=interval)
 
+    def __del__(self):
+        del self.dbase
+
     def clear_all(self):
         """
-        Wipe all data from redis - used for testing only
+        Wipe all data current redis db - used for testing only
         """
-        self.conn.execute_command("flushall")
+        self.conn.execute_command("flushdb")
 
     def redis_conn(self, pair, interval, data, now):
         """
@@ -150,9 +153,9 @@ class Redis(object):
                           1 <= totals[-2] <= 50 and
                           float(sum(totals[:3])) / max(len(totals[:3]), 1) < totals[-1]):
             LOGGER.info("AMROX8: BUY {0} {1} {2} {3}".format(totals, current_time,
-                                                                 format(float(current_price),
-                                                                        ".20f"),
-                                                                 items[-1]))
+                                                             format(float(current_price),
+                                                                    ".20f"),
+                                                             items[-1]))
 
             #self.dbase.insert_trade(pair, current_time, format(float(current_price), ".20f"),
             #                        investment, "0")
@@ -160,9 +163,9 @@ class Redis(object):
 
         elif value and float(current_price) > (float(value[0]) *((8/100)+1)):
             LOGGER.info("AMROX8: SELL {0} {1} {2} {3}".format(totals, current_time,
-                                                                  format(float(current_price),
-                                                                         ".20f"),
-                                                                  items[-1]))
+                                                              format(float(current_price),
+                                                                     ".20f"),
+                                                              items[-1]))
             return "sell", current_time, format(float(current_price), ".20f")
 
         elif value and ((-20 <= totals[-1] <= -1 and
@@ -171,8 +174,8 @@ class Redis(object):
                         float(current_price) > float(value[0]) * (2/100)+1):
 
             LOGGER.info("AMROX8: SELL {0} {1} {2} {3}".format(totals, current_time,
-                                                                  format(float(current_price),
-                                                                         ".20f"),
-                                                                  items[-1]))
+                                                              format(float(current_price),
+                                                                     ".20f"),
+                                                              items[-1]))
             return "sell", current_time, format(float(current_price), ".20f")
         return "", "", ""

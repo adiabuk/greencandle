@@ -61,6 +61,5 @@ def get_coinbase_values():
 
     return default_to_regular(result)
 
-
 if __name__ == "__main__":
     print(get_coinbase_values())

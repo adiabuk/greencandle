@@ -3,6 +3,8 @@
 *.swn
 *.html
 .~*
+*.old
+*.new
 
 tmp/*
 ta-lib*

@@ -15,7 +15,7 @@ sys.path.append(BASE_DIR)
 
 import binance
 from lib.auth import binance_auth
-from lib.logger import getLogger
+from lib.logger import getLogger, get_decorator
 from lib.config import get_config
 from lib.mysql import Mysql
 from lib.balance import get_balance
@@ -25,15 +25,19 @@ LOGGER = getLogger(__name__)
 MAX_TRADES = int(get_config("backend")["max_trades"])
 
 binance_auth()
+GET_EXCEPTIONS = get_decorator((Exception))
 
+@GET_EXCEPTIONS
 def get_buy_price(pair=None):
     """ return lowest buying request """
     return sorted([float(i) for i in binance.depth(pair)["asks"].keys()])[0]
 
+@GET_EXCEPTIONS
 def get_sell_price(pair=None):
     """ return highest selling price """
     return sorted([float(i) for i in binance.depth(pair)["bids"].keys()])[-1]
 
+@GET_EXCEPTIONS
 def buy(buy_list, test_data=False, test_trade=True, interval=None):
     """
     Buy as many items as we can from buy_list depending on max amount of trades, and current
@@ -85,12 +89,15 @@ def buy(buy_list, test_data=False, test_trade=True, interval=None):
                     # 3. we proformed a real trade which was successful - (transactTime in dict)
                     dbase.insert_trade(pair=item, price=cost, date=current_time,
                                        investment=20, total=amount)
+                    del dbase
+                if not test_data:
                     send_gmail_alert("BUY", item, cost)
                 else:
                     LOGGER.critical("Buy Failed")
     else:
         LOGGER.info("Nothing to buy")
 
+@GET_EXCEPTIONS
 def sell(sell_list, test_data=False, test_trade=True, interval=None):
     """
     Sell items in sell_list
@@ -111,12 +118,16 @@ def sell(sell_list, test_data=False, test_trade=True, interval=None):
             if test_data or (test_trade and not result) or \
                     (not test_trade and 'transactTime' in result):
                 dbase.update_trades(pair=item, sell_time=current_time, sell_price=price)
+                del dbase
+            if not test_data:
                 send_gmail_alert("SELL", item, price)
+
             else:
                 LOGGER.critical("Sell Failed")
     else:
         LOGGER.info("No items to sell")
 
+@GET_EXCEPTIONS
 def main():
     """ Main function """
     print("ask (buying price from):", get_buy_price())
