@@ -24,3 +24,4 @@ setproctitle==1.1.10
 simplejson==3.13.2
 ta-lib==0.4.14
 TA_Lib==0.4.16
+str2bool==1.1

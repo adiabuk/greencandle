@@ -9,6 +9,7 @@ from __future__ import print_function
 import os
 import sys
 import math
+from str2bool import str2bool
 import binance
 
 BASE_DIR = os.getcwd().split("greencandle", 1)[0] + "greencandle"
@@ -45,6 +46,12 @@ def buy(buy_list, test_data=False, test_trade=True, interval=None):
     balance in BTC
     """
     LOGGER.info("We have %s potential items to buy", len(buy_list))
+
+    drain = str2bool(get_config("backend")["drain_" + interval])
+    if drain:
+        LOGGER.warning("Skipping Buy as %s is in drain")
+        return
+
     if buy_list:
         dbase = Mysql(test=test_data, interval=interval)
         if test_data:
@@ -71,7 +78,7 @@ def buy(buy_list, test_data=False, test_trade=True, interval=None):
                 btc_amount /= 1.5
 
             amount = math.ceil(btc_amount / float(cost))
-            if float(btc_amount) > float(current_btc_bal):
+            if float(btc_amount) > float(current_btc_bal) or float(current_btc_bal) < 0.0031:
                 LOGGER.warning("Unable to purchase %s, insufficient funds:%s/%s",
                                item, btc_amount, current_btc_bal)
                 break
@@ -91,13 +98,14 @@ def buy(buy_list, test_data=False, test_trade=True, interval=None):
                     # 3. we proformed a real trade which was successful - (transactTime in dict)
                     dbase.insert_trade(pair=item, price=cost, date=current_time,
                                        investment=20, total=amount)
-                    del dbase
                 if not test_data:
                     send_gmail_alert("BUY", item, cost)
                 else:
                     LOGGER.critical("Buy Failed")
+        del dbase
     else:
         LOGGER.info("Nothing to buy")
+
 
 @GET_EXCEPTIONS
 def sell(sell_list, test_data=False, test_trade=True, interval=None):
@@ -120,12 +128,12 @@ def sell(sell_list, test_data=False, test_trade=True, interval=None):
             if test_data or (test_trade and not result) or \
                     (not test_trade and 'transactTime' in result):
                 dbase.update_trades(pair=item, sell_time=current_time, sell_price=price)
-                del dbase
             if not test_data:
                 send_gmail_alert("SELL", item, price)
 
             else:
                 LOGGER.critical("Sell Failed")
+        del dbase
     else:
         LOGGER.info("No items to sell")
 
