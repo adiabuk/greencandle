@@ -66,7 +66,7 @@ def buy(buy_list, test_data=False, test_trade=True, interval=None):
             cost = current_price
             amount = round(btc_amount / float(cost))
 
-            if btc_amount > (current_btc_bal / MAX_TRADES):
+            if (btc_amount > (current_btc_bal / MAX_TRADES) and avail_slots < 5):
                 LOGGER.info("Reducing trade value by a third")
                 amount = round(amount / 1.5)
             if float(btc_amount) > float(current_btc_bal):
