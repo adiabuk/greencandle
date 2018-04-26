@@ -49,7 +49,7 @@ def buy(buy_list, test_data=False, test_trade=True, interval=None):
 
     drain = str2bool(get_config("backend")["drain_" + interval])
     if drain:
-        LOGGER.warning("Skipping Buy as %s is in drain")
+        LOGGER.warning("Skipping Buy as %s is in drain", interval)
         return
 
     if buy_list:
