@@ -59,12 +59,15 @@ def loop(interval):
     Loop through collection cycle
     """
     dbase = Mysql(test=False, interval=interval)
-    main_pairs = get_config("backend")["pairs"].split()
+    main_pairs = get_config("backend")["pairs_{0}".format(interval)].split()
     additional_pairs = dbase.get_trades()
     del dbase
     # get unique list of pairs in config,
     #and those currently in an active trade
     pairs = list(set(main_pairs + additional_pairs))
+    LOGGER.info("Pairs DB: %s", additional_pairs)
+    LOGGER.info("Pairs in config: %s", main_pairs)
+    LOGGER.info("Total unique pairs: %s", len(pairs))
 
     max_trades = int(get_config("backend")["max_trades"])
     test_trade = str2bool(get_config("backend")["test_trade"])
