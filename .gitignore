@@ -10,7 +10,8 @@ tmp/*
 ta-lib*
 geckodriver*
 graphs/in/*.html
-test_data/*.p
+test_data/*
+log/*
 
 graphs/out/*.html
 graphs/in/*.png

@@ -48,7 +48,7 @@ def buy(buy_list, test_data=False, test_trade=True, interval=None):
     LOGGER.info("We have %s potential items to buy", len(buy_list))
 
     drain = str2bool(get_config("backend")["drain_" + interval])
-    if drain:
+    if drain and not test_data:
         LOGGER.warning("Skipping Buy as %s is in drain", interval)
         return
 

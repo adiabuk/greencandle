@@ -45,6 +45,7 @@ def main():
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("-s", "--serial", default=False, action="store_true")
     group.add_argument("-a", "--parallel", default=True, action="store_true")
+    parser.add_argument("-d", "--data_dir", required=True)
 
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
@@ -63,11 +64,11 @@ def main():
     dbase.delete_data()
     del dbase
     if args.serial:
-        do_serial(pairs, serial_intervals)
+        do_serial(pairs, serial_intervals, args.data_dir)
     else:
-        do_parallel(pairs, parallel_interval, redis_db)
+        do_parallel(pairs, parallel_interval, redis_db, args.data_dir)
 
-def do_serial(pairs, intervals):
+def do_serial(pairs, intervals, data_dir):
     """
     Do test with serial data
     """
@@ -88,15 +89,15 @@ def do_serial(pairs, intervals):
 
         for interval in intervals:
             with ThreadPoolExecutor(max_workers=len(intervals)) as pool:
-                pool.submit(perform_data, pair, interval)
+                pool.submit(perform_data, pair, interval, data_dir)
     #filename = "./results.p"   #FIXME
     #pickle.dump(results, open(filename, "wb"))
 
-def perform_data(pair, interval):
+def perform_data(pair, interval, data_dir):
     redis_db = {"15m":1, "5m":2, "3m":3, "1m":4}[interval]
     LOGGER.info("Serial run %s %s %s", pair, interval, redis_db)
     redis = Redis(interval=interval, test=True, db=redis_db)
-    filename = "test_data/{0}_{1}.p".format(pair, interval)
+    filename = "test_data/{0}/{1}_{2}.p".format(data_dir, pair, interval)
     if not os.path.exists(filename):
         LOGGER.critical("Data not found for %s %s", pair, interval)
         return
@@ -134,7 +135,7 @@ def perform_data(pair, interval):
     del redis
     LOGGER.info("AMROX4 %s %s %s", pair, interval, profit)
 
-def do_parallel(pairs, interval, redis_db):
+def do_parallel(pairs, interval, redis_db, data_dir):
     """
     Do test with parallel data
     """
@@ -145,7 +146,7 @@ def do_parallel(pairs, interval, redis_db):
     redis.clear_all()
     dframes = {}
     for pair in pairs:
-        filename = "test_data/{0}_{1}.p".format(pair, interval)
+        filename = "test_data/{0}/{1}_{2}.p".format(data_dir, pair, interval)
         if not os.path.exists(filename):
             continue
         with open(filename, "rb") as handle:

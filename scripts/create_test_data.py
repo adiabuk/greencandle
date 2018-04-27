@@ -31,7 +31,7 @@ def main():
         for interval in intervals:
             no_of_klines *= int(klines_multiplier[interval])
 
-            filename = BASE_DIR + "/test_data/" + pair + "_" + interval + ".p"
+            filename = BASE_DIR + "/test_data/{0}/{1}_{2}.p".format(sys.argv[2], pair, interval)
             if os.path.exists(filename):
                 continue
 
