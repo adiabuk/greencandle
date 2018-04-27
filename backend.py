@@ -22,6 +22,7 @@ from lib.config import get_config
 from lib.logger import getLogger
 from lib.redis_conn import Redis
 from lib.order import buy, sell
+from lib.mysql import Mysql
 
 LOGGER = getLogger(__name__)
 
@@ -33,13 +34,11 @@ def main():
     parser.add_argument("-j", "--json", action="store_true", default=False)
     parser.add_argument("-t", "--test", action="store_true", default=False)
     parser.add_argument("-i", "--interval")
-    parser.add_argument("-p", "--pair")
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
 
     starttime = time.time()
     interval = args.interval if args.interval else str(get_config("backend")["interval"])
-    pairs = [args.pair] if args.pair else get_config("backend")["pairs"].split()
     minutes = [int(s) for s in re.findall(r'(\d+)m', interval)][0]
     drain = str2bool(get_config("backend")["drain_" + interval])
     drain_string = "(draining)" if drain else "(active)"
@@ -47,7 +46,7 @@ def main():
 
     while True:
         try:
-            loop(pairs, interval)
+            loop(interval)
         except KeyboardInterrupt:
             LOGGER.critical("\nExiting on user command...")
             sys.exit(1)
@@ -55,10 +54,17 @@ def main():
         LOGGER.info("Sleeping for %s seconds", remaining_time)
         time.sleep(remaining_time)
 
-def loop(pairs, interval):
+def loop(interval):
     """
     Loop through collection cycle
     """
+    dbase = Mysql(test=False, interval=interval)
+    main_pairs = get_config("backend")["pairs"].split()
+    additional_pairs = dbase.get_trades()
+    del dbase
+    # get unique list of pairs in config,
+    #and those currently in an active trade
+    pairs = list(set(main_pairs + additional_pairs))
 
     max_trades = int(get_config("backend")["max_trades"])
     test_trade = str2bool(get_config("backend")["test_trade"])
