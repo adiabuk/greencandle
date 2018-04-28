@@ -46,7 +46,7 @@ def main():
 
     while True:
         try:
-            loop(interval)
+            loop(interval, args.test)
         except KeyboardInterrupt:
             LOGGER.critical("\nExiting on user command...")
             sys.exit(1)
@@ -54,7 +54,7 @@ def main():
         LOGGER.info("Sleeping for %s seconds", remaining_time)
         time.sleep(remaining_time)
 
-def loop(interval):
+def loop(interval, test):
     """
     Loop through collection cycle
     """
@@ -70,7 +70,7 @@ def loop(interval):
     LOGGER.info("Total unique pairs: %s", len(pairs))
 
     max_trades = int(get_config("backend")["max_trades"])
-    test_trade = str2bool(get_config("backend")["test_trade"])
+    test_trade = test if test else str2bool(get_config("backend")["test_trade"])
     LOGGER.info("Starting new cycle")
     LOGGER.debug("max trades: %s", max_trades)
 
