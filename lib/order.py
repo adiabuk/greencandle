@@ -65,7 +65,7 @@ def buy(buy_list, test_data=False, test_trade=True, interval=None):
             current_trades = dbase.get_trades()
             avail_slots = MAX_TRADES - len(current_trades)
             LOGGER.info("%s buy slots available", avail_slots)
-            if avail_slots == 0:
+            if avail_slots <= 0:
                 LOGGER.warning("Too many trades, skipping")
                 break
             btc_amount = current_btc_bal / avail_slots
@@ -77,12 +77,12 @@ def buy(buy_list, test_data=False, test_trade=True, interval=None):
             if item not in main_pairs:
                 LOGGER.warning("%s not in buy_list, but active trade exists, skipping...", item)
                 continue
-            if (btc_amount > (current_btc_bal / MAX_TRADES) and avail_slots < 5):
+            if (btc_amount >= (current_btc_bal / MAX_TRADES) and avail_slots <= 5):
                 LOGGER.info("Reducing trade value by a third")
                 btc_amount /= 1.5
 
             amount = math.ceil(btc_amount / float(cost))
-            if float(btc_amount) > float(current_btc_bal) or float(current_btc_bal) < 0.0031:
+            if float(cost)*float(amount) >= float(current_btc_bal) or float(current_btc_bal) <= 0.0031:
                 LOGGER.warning("Unable to purchase %s, insufficient funds:%s/%s",
                                item, btc_amount, current_btc_bal)
                 break
@@ -102,7 +102,7 @@ def buy(buy_list, test_data=False, test_trade=True, interval=None):
                     # 3. we proformed a real trade which was successful - (transactTime in dict)
                     dbase.insert_trade(pair=item, price=cost, date=current_time,
                                        investment=20, total=amount)
-                if not test_data:
+                if not test_data and not result:
                     send_gmail_alert("BUY", item, cost)
                 else:
                     LOGGER.critical("Buy Failed")

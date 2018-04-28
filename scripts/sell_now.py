@@ -21,7 +21,7 @@ def main():
     print(current_time, current_price)
     sells = []
     sells.append((pair, current_time, current_price))
-    sell(sells, test_data=False, test_trade=False, interval="5m")
+    sell(sells, test_data=False, test_trade=False, interval=sys.argv[2])
 
 
 if __name__ == "__main__":
