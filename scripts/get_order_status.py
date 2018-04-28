@@ -44,6 +44,6 @@ for item in holdings:
         current_price = binance.prices()[item]
     except (IndexError, KeyError):
         current_price = "Unknown"
-
-    print(item, price, current_price, quantity, buyer, item in mysql_holdings, current_price > price)
+    if is_buyer:
+        print(item, price, current_price, quantity, buyer, item in mysql_holdings, current_price > price)
 
