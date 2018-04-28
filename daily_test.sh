@@ -1,8 +1,8 @@
+#!/usr/bin/env bash
+echo "Starting daily tests"
 day_mepoch=$(($(date --date="1 day ago" +%s%N)/1000000))
 day_stamp=$(date --date="1 day ago" +%d%m%y)
-
-echo $day_mepoch
-echo $day_stamp
+cd "$(dirname "$0")"
 
 
 if  [[ ! -d test_data/$day_stamp ]]; then
