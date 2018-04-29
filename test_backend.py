@@ -13,16 +13,16 @@ import setproctitle
 
 from lib.engine import Engine
 from lib.common import make_float
-from lib.logger import getLogger
 from lib.redis_conn import Redis
 from lib.config import get_config
 from lib.mysql import Mysql
 from lib.profit import get_recent_profit
 from lib.order import buy, sell
-
+from lib.logger import getLogger, get_decorator
 
 LOGGER = getLogger(__name__)
 CHUNK_SIZE = 50
+get_exceptions = get_decorator((Exception))
 
 def make_data_tupple(dataframe):
     """
@@ -49,11 +49,7 @@ def main():
 
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
-    if args.serial:
-        pair_string = "serial_pairs"
-    else:
-        pair_string = "parallel_pairs"
-    pairs = args.pairs if args.pairs else get_config("test")[pair_string].split()
+    pairs = args.pairs if args.pairs else get_config("test")["pairs"].split()
     parallel_interval = get_config("test")["parallel_interval"].split()[0]
     parallel_interval = args.interval if args.interval else parallel_interval
     serial_intervals = get_config("test")["serial_intervals"].split()
@@ -68,6 +64,7 @@ def main():
     else:
         do_parallel(pairs, parallel_interval, redis_db, args.data_dir)
 
+@get_exceptions
 def do_serial(pairs, intervals, data_dir):
     """
     Do test with serial data
@@ -93,6 +90,7 @@ def do_serial(pairs, intervals, data_dir):
     #filename = "./results.p"   #FIXME
     #pickle.dump(results, open(filename, "wb"))
 
+@get_exceptions
 def perform_data(pair, interval, data_dir):
     redis_db = {"15m":1, "5m":2, "3m":3, "1m":4}[interval]
     LOGGER.info("Serial run %s %s %s", pair, interval, redis_db)
@@ -105,13 +103,13 @@ def perform_data(pair, interval, data_dir):
         dframe = pickle.load(handle)
 
     prices_trunk = {pair: "0"}
-    for beg in range(len(dframe) - CHUNK_SIZE * 2):
-        print("IN LOOP", interval, pair, beg, len(dframe), CHUNK_SIZE)
+    for beg in range(len(dframe) - CHUNK_SIZE):
+        LOGGER.info("IN LOOP %s ", beg)
         sells = []
         buys = []
         end = beg + CHUNK_SIZE
         dataframe = dframe.copy()[beg: end]
-        if len(dataframe) < 50:
+        if len(dataframe) < CHUNK_SIZE:
             LOGGER.info("End of dataframe")
             break
         dataframes = {pair:dataframe}
