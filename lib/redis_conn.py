@@ -149,33 +149,32 @@ class Redis(object):
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_mepoch))
         value = self.dbase.get_trade_value(pair)
 
-        if not value and (1 <= totals[-1] <= 50 and
-                          1 <= totals[-2] <= 50 and
+        if not value and (3 <= totals[-1] <= 50 and
+                          2 <= totals[-2] <= 50 and
                           float(sum(totals[:3])) / max(len(totals[:3]), 1) < totals[-1]):
-            LOGGER.info("AMROX8: BUY {0} {1} {2} {3}".format(totals, current_time,
-                                                             format(float(current_price),
-                                                                    ".20f"),
-                                                             items[-1]))
+            LOGGER.info("BUY {0} {1} {2} {3}".format(totals, current_time,
+                                                     format(float(current_price), ".20f"),
+                                                     items[-1]))
 
-            #self.dbase.insert_trade(pair, current_time, format(float(current_price), ".20f"),
-            #                        investment, "0")
             return "buy", current_time, format(float(current_price), ".20f")
 
         elif value and float(current_price) > (float(value[0]) *((8/100)+1)):
-            LOGGER.info("AMROX8: SELL {0} {1} {2} {3}".format(totals, current_time,
-                                                              format(float(current_price),
-                                                                     ".20f"),
-                                                              items[-1]))
+            # More than 8% over
+            LOGGER.info("SELL 8% {0} {1} {2} {3}".format(totals, current_time,
+                                                         format(float(current_price),
+                                                                ".20f"),
+                                                         items[-1]))
             return "sell", current_time, format(float(current_price), ".20f")
 
-        elif value and ((-20 <= totals[-1] <= -1 and
+        elif value and ((-50 <= totals[-1] <= -1 and
                          float(sum(totals[:3])) / max(len(totals[:3]), 1) > totals[-1]) and
-                        float(current_price) > float(value[0]) or
                         float(current_price) > float(value[0]) * (2/100)+1):
+            # total is between -1 and -20 and
+            # current_price is 2% more than buy price
 
-            LOGGER.info("AMROX8: SELL {0} {1} {2} {3}".format(totals, current_time,
-                                                              format(float(current_price),
-                                                                     ".20f"),
-                                                              items[-1]))
+
+            LOGGER.info("SELL 2% {0} {1} {2} {3}".format(totals, current_time,
+                                                         format(float(current_price), ".20f"),
+                                                         items[-1]))
             return "sell", current_time, format(float(current_price), ".20f")
         return "", "", ""
