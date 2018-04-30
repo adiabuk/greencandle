@@ -36,7 +36,7 @@ def get_binance_klines(pair, interval=None):
     """
 
     try:
-        raw = binance.klines(pair, interval)
+        raw = binance.klines(pair, interval, limit=50)
     except IndexError:
         LOGGER.critical("Unable to fetch data for " + pair)
         sys.exit(2)
@@ -71,6 +71,7 @@ def get_all_klines(pair, interval=None, start_time=0, no_of_klines=1E1000):
         result += current_section
         if len(result) >= no_of_klines:
             # reached maximum
+            print("Reached maximum")
             break
 
         # Start time becomes 1 more than start time of last entry, +1, so that we don"t duplicate

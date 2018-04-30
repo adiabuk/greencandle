@@ -72,9 +72,11 @@ def buy(buy_list, test_data=False, test_trade=True, interval=None):
 
             LOGGER.info("btc_amount: %s", btc_amount)
             cost = current_price
-
-            main_pairs = get_config("backend")["pairs_{0}".format(interval)].split()
-            if item not in main_pairs and not test_data:
+            if test_data:
+                main_pairs = get_config("test")["pairs"].split()
+            else:
+                main_pairs = get_config("backend")["pairs_{0}".format(interval)].split()
+            if item not in main_pairs:
                 LOGGER.warning("%s not in buy_list, but active trade exists, skipping...", item)
                 continue
             if (btc_amount >= (current_btc_bal / MAX_TRADES) and avail_slots <= 5):
@@ -82,7 +84,8 @@ def buy(buy_list, test_data=False, test_trade=True, interval=None):
                 btc_amount /= 1.5
 
             amount = math.ceil(btc_amount / float(cost))
-            if float(cost)*float(amount) >= float(current_btc_bal) or float(current_btc_bal) <= 0.0031:
+            if (float(cost)*float(amount) >= float(current_btc_bal) or
+                    float(current_btc_bal) <= 0.0031):
                 LOGGER.warning("Unable to purchase %s, insufficient funds:%s/%s",
                                item, btc_amount, current_btc_bal)
                 break
