@@ -254,7 +254,7 @@ class Mysql(object):
         for each complete trade logged
         """
         cur = self.dbase.cursor()
-        command = """ select sell_time, buy_price, sell_price, investment from trades_{0} where
+        command = """ select sell_time, buy_price, sell_price, total from trades_{0} where
                       sell_price is NOT NULL; """.format(self.interval)
 
         self.execute(cur, command)

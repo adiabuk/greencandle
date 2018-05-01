@@ -77,9 +77,10 @@ def get_recent_profit(test=False, interval=None):
         # split on whitespace and replace with first portion only
         # This is done so that we can group by day and sum up profits
         day = str(trade[0]).split()[0]
+        amount = float(trade[1]) * float(trade[3])/RATE
         profit_per_trade = guess_profit(float(trade[1]),
                                         float(trade[2]),
-                                        float(trade[3]))[0]  # get first item from function (profit)
+                                        amount)[0]  # get first item from function (profit)
         profits.append(profit_per_trade)
         profit_dict[day] += float(profit_per_trade)  # trade[0] is a date: yyyy-mm-dd
 
