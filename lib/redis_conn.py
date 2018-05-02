@@ -161,7 +161,7 @@ class Redis(object):
             #                        investment, "0")
             return "buy", current_time, format(float(current_price), ".20f")
 
-        elif value and float(current_price) > (float(value[0]) *((8/100)+1)):
+        elif value and float(current_price) > (float(value[0][0]) *((8/100)+1)):
             LOGGER.info("AMROX8: SELL {0} {1} {2} {3}".format(totals, current_time,
                                                               format(float(current_price),
                                                                      ".20f"),
@@ -170,8 +170,8 @@ class Redis(object):
 
         elif value and ((-20 <= totals[-1] <= -1 and
                          float(sum(totals[:3])) / max(len(totals[:3]), 1) > totals[-1]) and
-                        float(current_price) > float(value[0]) or
-                        float(current_price) > float(value[0]) * (2/100)+1):
+                        float(current_price) > float(value[0][0]) or
+                        float(current_price) > float(value[0][0]) * (2/100)+1):
 
             LOGGER.info("AMROX8: SELL {0} {1} {2} {3}".format(totals, current_time,
                                                               format(float(current_price),

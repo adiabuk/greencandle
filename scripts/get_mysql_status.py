@@ -18,10 +18,19 @@ binance_auth()
 a = Mysql(test=False, interval=sys.argv[1])
 
 trades = a.get_trades()
-
+profits = []
+percs = []
 for trade in trades:
   current_price = float(prices[trade])
-  buy_price = float(a.get_trade_value(trade)[0])
+  trade_details = a.get_trade_value(trade)
+  buy_price = float(trade_details[0][0])
+  amount = float(trade_details[0][1])
+  profit = (current_price/0.00014*amount) - (buy_price/0.00014*amount)
   perc = 100 * (current_price - buy_price) / buy_price
-  print(trade, buy_price, current_price, float(current_price) > (buy_price), perc)
+  profits.append(profit)
+  percs.append(perc)
+  print(trade, buy_price, current_price, current_price > buy_price, perc, profit)
+print("Total profit: {0}, Avg Profit:{1}, Avg Perc: {2}".format(sum(profits),
+    sum(profits)/len(profits),
+    sum(percs)/len(percs)))
 

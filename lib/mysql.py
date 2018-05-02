@@ -239,12 +239,12 @@ class Mysql(object):
         Return the value of an open trade for a given trading pair
         """
 
-        command = """ select buy_price from trades_{0} where sell_price
+        command = """ select buy_price, total from trades_{0} where sell_price
                       is NULL and pair = "{1}" """.format(self.interval, pair)
         cur = self.dbase.cursor()
         self.execute(cur, command)
 
-        row = [item[0] for item in cur.fetchall()]
+        row = [(item[0], item[1]) for item in cur.fetchall()]
         return row
 
     @get_exceptions
