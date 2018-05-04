@@ -23,7 +23,7 @@ def main():
     """ Main function """
 
     klines_multiplier = {"15m": 1, "5m": 3, "3m": 5, "1m": 15}
-    pairs = get_config("test")["serial_pairs"].split()
+    pairs = get_config("test")["pairs"].split()
     intervals = get_config("test")["serial_intervals"].split()
     start_time = get_config("test")["start_time"].split()
     start_time = sys.argv[1]
