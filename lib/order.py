@@ -54,7 +54,7 @@ def buy(buy_list, test_data=False, test_trade=True, interval=None):
 
     if buy_list:
         dbase = Mysql(test=test_data, interval=interval)
-        if test_data:
+        if test_data or test_trade:
             current_btc_bal = 0.36 # 2000GBP
 
         else:

@@ -195,7 +195,7 @@ class Engine(dict):
         try:
             value = (pip_calc(support[-1], resistance[-1]))
         except IndexError:
-            LOGGER.warning("Skipping {0} {1} {2} for support/resistance ".format(pair,
+            LOGGER.debug("Skipping {0} {1} {2} for support/resistance ".format(pair,
                                                                                  str(support),
                                                                                  str(resistance)))
             return None

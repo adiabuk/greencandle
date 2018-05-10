@@ -118,7 +118,7 @@ def perform_data(pair, interval, data_dir):
         engine.get_data()
         del engine
         result, current_time, current_price = redis.get_change(pair=pair)
-        LOGGER.info("Changed items: %s %s %s", pair, result, current_time)
+        LOGGER.debug("Changed items: %s %s %s", pair, result, current_time)
         if result == "buy":
             LOGGER.debug("Items to buy")
             buys.append((pair, current_time, current_price))
@@ -128,9 +128,13 @@ def perform_data(pair, interval, data_dir):
         sell(sells, test_data=True, test_trade=True, interval=interval)
         buy(buys, test_data=True, test_trade=True, interval=interval)
 
-    profit = get_recent_profit(True, interval=interval)
     #results[pair][interval] = profit[0]  #FIXME
     del redis
+    LOGGER.info("Selling remaining items")
+    sells = []
+    sells.append((pair, current_time, current_price))
+    sell(sells, test_data=True, test_trade=True, interval=interval)
+    profit = get_recent_profit(True, interval=interval)
     LOGGER.info("AMROX4 %s %s %s", pair, interval, profit)
 
 def do_parallel(pairs, interval, redis_db, data_dir):
