@@ -88,7 +88,7 @@ def buy(buy_list, test_data=False, test_trade=True, interval=None):
                     float(current_btc_bal) <= 0.0031):
                 LOGGER.warning("Unable to purchase %s, insufficient funds:%s/%s",
                                item, btc_amount, current_btc_bal)
-                break
+                continue
             elif item in current_trades:
                 LOGGER.warning("We already have a trade of %s, skipping...", item)
                 continue

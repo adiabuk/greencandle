@@ -82,7 +82,6 @@ def get_recent_profit(test=False, interval=None):
                                         float(trade[2]),
                                         amount)[0]  # get first item from function (profit)
         profits.append(profit_per_trade)
-        print(trade)
         profit_dict[day] += float(profit_per_trade)  # trade[0] is a date: yyyy-mm-dd
 
     return sum(profits), dict(profit_dict)

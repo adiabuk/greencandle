@@ -6,6 +6,7 @@ Get details of current trades using mysql and current value from binance
 
 import os
 import sys
+from operator import itemgetter
 import binance
 
 BASE_DIR = os.getcwd().split("greencandle", 1)[0] + "greencandle"
@@ -20,6 +21,10 @@ dbase = Mysql(test=False, interval=sys.argv[1])
 trades = dbase.get_trades()
 profits = []
 percs = []
+print("\033[1m") # BOLD
+print("pair buy_price current_price amount in_profit percentage, profit")
+print("\033[0m") # END
+details = []
 for trade in trades:
     current_price = float(prices[trade])
     trade_details = dbase.get_trade_value(trade)
@@ -29,9 +34,13 @@ for trade in trades:
     perc = 100 * (current_price - buy_price) / buy_price
     profits.append(profit)
     percs.append(perc)
-    #print(trade, buy_price, current_price, current_price > buy_price, perc, profit)
-    print("  pair:{0}, buy:{1}, current:{2}, amount:{3}, in_profit:{4}, perc:{5}, profit:{6}"
-          .format(trade, buy_price, current_price, amount, current_price > buy_price, perc, profit))
+    details.append((trade, format(float(buy_price), ".20f"), format(float(current_price), ".20f"),
+                    amount, current_price > buy_price, perc, profit))
+details = sorted(details, key=itemgetter(-1))
+for item in details:
+    print(*item)
+"""
 print("Total profit: {0}, Avg Profit:{1}, Avg Perc: {2}".format(sum(profits),
                                                                 sum(profits)/len(profits),
                                                                 sum(percs)/len(percs)))
+"""
