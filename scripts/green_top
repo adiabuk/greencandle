@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+#cd "$(dirname "$0")"
+
+watch -cpd "scripts/get_mysql_status.py 5m|column --table;
+            echo;
+            scripts/get_recent_profit.py 5m|tail -1"
+
