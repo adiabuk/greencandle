@@ -9,6 +9,7 @@ import json
 import sys
 
 from urllib.request import urlopen
+from urllib.error import HTTPError
 from operator import itemgetter
 import binance
 
@@ -33,7 +34,12 @@ def main():
 
     details = []
     url = "http://127.1:5001/data"
-    data = urlopen(url).read().decode("utf-8")
+    try:
+        data = urlopen(url).read().decode("utf-8")
+    except HTTPError:
+        data = []
+        trades = []
+        print("Waiting for API...")
     json_data = json.loads(str(data))
     for trade in trades:
         current_price = float(prices[trade])

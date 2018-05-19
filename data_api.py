@@ -8,11 +8,10 @@ API for binance crypto data
 from __future__ import print_function
 import sched
 import sys
-import os
 import json
 import threading
 from time import time, strftime, sleep, gmtime
-from flask import Flask, abort, send_file
+from flask import Flask, abort
 from lib.config import get_config
 from lib.scrape import scrape_data
 
@@ -20,21 +19,13 @@ PAIRS = get_config("api")["pairs"].split()
 INTERVAL = get_config("api")["interval"]
 PORT = int(get_config("api")["port"])
 
-DATA = None
+DATA = {}
 
 SCHED = sched.scheduler(time, sleep)
 DATA_TIMER = 240  # Every 4 mins
 BALANCE_TIMER = 300
 
 APP = Flask(__name__)
-
-@APP.route("/<path:path>", methods=["GET"])
-def return_file(path):
-    """Fetch generated PNG thumbnails """
-    if path.startswith("graphs/in/") and path.endswith(".png") and os.path.isfile(path):
-        return send_file(path, as_attachment=True)
-    abort(404)
-    return False
 
 def schedule_data(scheduler):
     """
@@ -45,7 +36,9 @@ def schedule_data(scheduler):
     global DATA
     try:
         print(strftime("%Y-%m-%d %H:%M:%S", gmtime()), "Fetching data\n")
-        DATA = get_data()
+        data = get_data()
+        for key, value in json.loads(data.replace("\'", "\"")).items():
+            DATA[key] = value  # append items only as some may be missing on current run
         print(strftime("%Y-%m-%d %H:%M:%S", gmtime()), "Successfully fetched data\n")
 
     except TypeError as error:
@@ -59,7 +52,7 @@ def get_events():
     if not DATA:
         abort(500, json.dumps({"response": "Data not yet populated, try again later"}))
 
-    return str(DATA)
+    return json.dumps(DATA)
 
 def get_data():
     """Fetch data - called by scheduler periodically """
