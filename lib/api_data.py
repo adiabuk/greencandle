@@ -4,11 +4,16 @@
 Get buy/sell triggers from local API
 """
 
+import datetime
 import json
 import time
 from urllib.request import urlopen
-from lib.mysql import Mysql
 import binance
+from lib.mysql import Mysql
+from lib.logger import getLogger
+
+
+LOGGER = getLogger(__name__)
 
 def get_change(pair, interval="5m"):
     """
@@ -28,13 +33,28 @@ def get_change(pair, interval="5m"):
     except KeyError:  # FIXME
         return "hold", current_time, current_price
 
+    if pair in trades:
+        trade_value = dbase.get_trade_value(pair)[0]
+        buy_price = trade_value[0]
+        buy_time = trade_value[2]
 
-    if "Sell" in value and pair in trades:
-        # sell item
-        buy_price = dbase.get_trade_value(pair)[0][0]
-        if current_price > buy_price:
+        if float(current_price) > (float(buy_price) * ((1/100)+1)) and \
+                buy_time < datetime.datetime.now() - datetime.timedelta(hours=5):
+            LOGGER.info("SELL 5hrs %s %s", format(current_price, ".20f"), pair)
             return "sell", current_time, current_price
+        elif float(current_price) > (float(buy_price) * ((4/100)+1)):
+            LOGGER.info("SELL 4 %s %s", format(current_price, ".20f"), pair)
+            return "sell", current_time, current_price
+        elif "Sell" in value and pair in trades:
+            if float(current_price) > (float(buy_price)):
+                LOGGER.info("SELL direction change %s %s", format(current_price, ".20f"), pair)
+                return "sell", current_time, current_price
 
-    elif "Buy" in value and pair not in trades:
+            elif float(current_price) < float(buy_price) * (1- (2/100)):  # 2% stop loss
+                LOGGER.info("SELL stoploss %s %s", format(current_price, ".20f"), pair)
+                return "sell", current_time, current_price
+
+    elif "Buy" in value and pair not in trades and not dbase.is_recent_sell(pair):
+        LOGGER.info("BUY %s %s", format(current_price, ".20f"), pair)
         return "buy", current_time, current_price
     return "hold", current_time, current_price
