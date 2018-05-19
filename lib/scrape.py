@@ -16,7 +16,6 @@ from selenium.webdriver.firefox.options import Options
 
 def scrape_data(binary="firefox"):
 
-
     if binary == "chrome":
         path_to_chromedriver = "/usr/bin/chromedriver"
         options = webdriver.ChromeOptions()

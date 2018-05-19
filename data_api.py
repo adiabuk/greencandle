@@ -23,7 +23,7 @@ PORT = int(get_config("api")["port"])
 DATA = None
 
 SCHED = sched.scheduler(time, sleep)
-DATA_TIMER = 420  # Every 7 mins
+DATA_TIMER = 240  # Every 4 mins
 BALANCE_TIMER = 300
 
 APP = Flask(__name__)
