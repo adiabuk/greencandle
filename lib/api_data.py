@@ -40,13 +40,15 @@ def get_change(pair, interval="5m"):
 
         if float(current_price) > (float(buy_price) * ((1/100)+1)) and \
                 buy_time < datetime.datetime.now() - datetime.timedelta(hours=5):
+            # 1% sell (> 5 hours)
             LOGGER.info("SELL 5hrs %s %s", format(current_price, ".20f"), pair)
             return "sell", current_time, current_price
         elif float(current_price) > (float(buy_price) * ((4/100)+1)):
+            # 4% sell
             LOGGER.info("SELL 4 %s %s", format(current_price, ".20f"), pair)
             return "sell", current_time, current_price
         elif "Sell" in value and pair in trades:
-            if float(current_price) > (float(buy_price)):
+            if float(current_price) > (float(buy_price)): # direction change sell
                 LOGGER.info("SELL direction change %s %s", format(current_price, ".20f"), pair)
                 return "sell", current_time, current_price
 
@@ -55,6 +57,7 @@ def get_change(pair, interval="5m"):
                 return "sell", current_time, current_price
 
     elif "Buy" in value and pair not in trades and not dbase.is_recent_sell(pair):
+        # normal buy - hasn't been sold recently
         LOGGER.info("BUY %s %s", format(current_price, ".20f"), pair)
         return "buy", current_time, current_price
     return "hold", current_time, current_price

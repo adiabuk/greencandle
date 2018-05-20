@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#
+#pylint: disable=wrong-import-position
 """
 Get details of current trades using mysql and current value from binance
 """
@@ -54,13 +54,22 @@ def main():
             direction = "Unknown"
         profits.append(profit)
         percs.append(perc)
-        details.append((trade, format(float(buy_price), ".20f"), format(float(current_price), ".20f"),
+        perc = float(format(perc, ".4f"))
+        profit = float(format(profit, ".4f"))
+
+        details.append((trade, format(float(buy_price), ".20f"),
+                        format(float(current_price), ".20f"),
                         amount, current_price > buy_price, perc, profit, direction))
 
     details = sorted(details, key=itemgetter(-2))
     for item in details:
         #sys.stdout.write(*item)
         print("{0} {1} {2} {3} {4} {5} {6} {7}".format(*item))
-
+    print("\nxxx\n")
+    count = len(profits)
+    print("Total_profit: {0} Avg_Profit: {1} Avg_Percs: {2} count: {3}".format(sum(profits),
+                                                                               sum(profits)/count,
+                                                                               sum(percs)/count,
+                                                                               count))
 if __name__ == "__main__":
     main()

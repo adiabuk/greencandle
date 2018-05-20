@@ -2,7 +2,7 @@
 
 #cd "$(dirname "$0")"
 
-watch -cpd "scripts/get_mysql_status.py 5m|column --table;
+watch -cpd "scripts/get_mysql_status.py 5m|column --table -c20;
             echo;
             scripts/get_recent_profit.py 5m|tail -1"
 
