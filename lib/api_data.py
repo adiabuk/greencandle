@@ -29,9 +29,10 @@ def get_change(pair, interval="5m"):
     current_price = float(prices[pair])
     current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
     try:
-        value = json_data[pair]
+        current_status = json_data[pair]["curent"]
+        previous_status = json_data[pair]["previous"]
     except KeyError:  # FIXME
-        return "hold", current_time, current_price
+        result = "hold", current_time, current_price
 
     if pair in trades:
         trade_value = dbase.get_trade_value(pair)[0]
@@ -42,22 +43,25 @@ def get_change(pair, interval="5m"):
                 buy_time < datetime.datetime.now() - datetime.timedelta(hours=5):
             # 1% sell (> 5 hours)
             LOGGER.info("SELL 5hrs %s %s", format(current_price, ".20f"), pair)
-            return "sell", current_time, current_price
+            result = "sell", current_time, current_price
         elif float(current_price) > (float(buy_price) * ((4/100)+1)):
             # 4% sell
             LOGGER.info("SELL 4 %s %s", format(current_price, ".20f"), pair)
-            return "sell", current_time, current_price
-        elif "Sell" in value and pair in trades:
+            result = "sell", current_time, current_price
+        elif "Sell" in current_status and pair in trades:
             if float(current_price) > (float(buy_price)): # direction change sell
                 LOGGER.info("SELL direction change %s %s", format(current_price, ".20f"), pair)
-                return "sell", current_time, current_price
+                result = "sell", current_time, current_price
 
             elif float(current_price) < float(buy_price) * (1- (2/100)):  # 2% stop loss
                 LOGGER.info("SELL stoploss %s %s", format(current_price, ".20f"), pair)
-                return "sell", current_time, current_price
+                result = "sell", current_time, current_price
 
-    elif "Buy" in value and pair not in trades and not dbase.is_recent_sell(pair):
+    elif "Buy" in current_status and  "sell" in previous_status and \
+            pair not in trades and not dbase.is_recent_sell(pair):
         # normal buy - hasn't been sold recently
         LOGGER.info("BUY %s %s", format(current_price, ".20f"), pair)
-        return "buy", current_time, current_price
-    return "hold", current_time, current_price
+        result = "buy", current_time, current_price
+    else:
+        result = "hold", current_time, current_price
+    return result
