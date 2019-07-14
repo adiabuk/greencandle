@@ -13,7 +13,7 @@ from lib.logger import getLogger
 
 LOGGER = getLogger(__name__)
 
-def get_balance(test=False, interval="5m"):
+def get_balance(test=False, interval="5m", coinbase=False):
     """
     get dict of all balances
 
@@ -62,13 +62,16 @@ def get_balance(test=False, interval="5m"):
 
     dbase = Mysql(test=test, interval="5m")
     binance = get_binance_values()
-    try:
-        coinbase = get_coinbase_values()
-    except ReadTimeout:
-        LOGGER.critical("Unable to get coinbase balance")
-        coinbase = {}
-    combined_dict = binance.copy()   # start with binance"s keys and values
-    combined_dict.update(coinbase)    # modifies z with y"s keys and values & returns None
+    if coinbase:
+        try:
+            coinbase = get_coinbase_values()
+        except ReadTimeout:
+            LOGGER.critical("Unable to get coinbase balance")
+            coinbase = {}
+        combined_dict = binance.copy()   # start with binance"s keys and values
+        combined_dict.update(coinbase)    # modifies z with y"s keys and values & returns None
+    else:
+        combined_dict = binance
 
     dbase.insert_balance(combined_dict)
     del dbase

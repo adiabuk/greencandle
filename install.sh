@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-apt-get -y install python3 python3-pip mysql-server libmysqlclient-dev
+apt-get -y install python3 python3-pip mysql-server libmysqlclient-dev redis
 
 update-alternatives --install /usr/bin/python python /usr/bin/python3 1
 update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1

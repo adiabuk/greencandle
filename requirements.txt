@@ -3,8 +3,8 @@ coinbase==2.0.6
 configparser==3.5.0
 -e git://github.com/adiabuk/Technical-Indicators.git#egg=indicators
 -e git://github.com/toshima/binance.git#egg=binance
+-e git://github.com/MicroPyramid/forex-python.git#egg=forex_python
 Flask>=0.12.3
-forex_python==0.3.3
 lib==3.0.0
 mysqlclient==1.3.12
 oauth==1.0.1
