@@ -239,13 +239,25 @@ class Mysql(object):
         Return the value of an open trade for a given trading pair
         """
 
-        command = """ select buy_price, total from trades_{0} where sell_price
+        command = """ select buy_price, total, buy_time from trades_{0} where sell_price
                       is NULL and pair = "{1}" """.format(self.interval, pair)
         cur = self.dbase.cursor()
         self.execute(cur, command)
 
-        row = [(item[0], item[1]) for item in cur.fetchall()]
+        row = [(item[0], item[1], item[2]) for item in cur.fetchall()]
         return row
+
+    @get_exceptions
+    def is_recent_sell(self, pair):
+        """
+        check if pair was sold recently
+        """
+        command = """select pair from trades_{0} where pair="{1}" and sell_price is not null and
+        sell_time > (NOW() - 600);""".format(self.interval, pair)
+        cur = self.dbase.cursor()
+        self.execute(cur, command)
+        row = [item for item in cur.fetchall()]
+        return True if row else False
 
     @get_exceptions
     def get_last_trades(self):

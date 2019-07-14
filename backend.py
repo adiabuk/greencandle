@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # PYTHON_ARGCOMPLETE_OK
-# pylint: disable=broad-except,c-extension-no-member
+# pylint: disable=broad-except,c-extension-no-member,too-many-locals
 
 """
 Get ohlc (Open, High, Low, Close) values from given cryptos
@@ -23,6 +23,7 @@ from lib.logger import getLogger
 from lib.redis_conn import Redis
 from lib.order import buy, sell
 from lib.mysql import Mysql
+from lib.api_data import get_change
 
 LOGGER = getLogger(__name__)
 
@@ -33,20 +34,23 @@ def main():
     parser.add_argument("-g", "--graph", action="store_true", default=False)
     parser.add_argument("-j", "--json", action="store_true", default=False)
     parser.add_argument("-t", "--test", action="store_true", default=False)
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("--use-api", action="store_true")
+    group.add_argument("--use-redis", action="store_true")
     parser.add_argument("-i", "--interval")
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
 
     starttime = time.time()
     interval = args.interval if args.interval else str(get_config("backend")["interval"])
+    system = "api" if args.use_api else "redis"
     minutes = [int(s) for s in re.findall(r'(\d+)m', interval)][0]
     drain = str2bool(get_config("backend")["drain_" + interval])
     drain_string = "(draining)" if drain else "(active)"
     setproctitle.setproctitle("greencandle-backend_{0}{1}".format(interval, drain_string))
-
     while True:
         try:
-            loop(interval, args.test)
+            loop(interval, args.test, system)
         except KeyboardInterrupt:
             LOGGER.critical("\nExiting on user command...")
             sys.exit(1)
@@ -54,7 +58,7 @@ def main():
         LOGGER.info("Sleeping for %s seconds", remaining_time)
         time.sleep(remaining_time)
 
-def loop(interval, test):
+def loop(interval, test, system):
     """
     Loop through collection cycle
     """
@@ -82,12 +86,18 @@ def loop(interval, test):
     dataframes = get_dataframes(pairs, interval=interval)
 
     engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval)
-    engine.get_data()
-    redis = Redis(interval=interval, test=False, db=0)
+    if system == "redis":
+        engine.get_data()
+        redis = Redis(interval=interval, test=False, db=0)
+    else:
+        pass
     buys = []
     sells = []
     for pair in pairs:
-        result, current_time, current_price = redis.get_change(pair=pair)
+        if system == "redis":
+            result, current_time, current_price = redis.get_change(pair=pair)
+        else:
+            result, current_time, current_price = get_change(pair=pair)
         if result == "buy":
             LOGGER.debug("Items to buy")
             buys.append((pair, current_time, current_price))
@@ -98,7 +108,8 @@ def loop(interval, test):
     LOGGER.info("Items to buy: %s", buys)
     sell(sells, test_data=False, test_trade=test_trade, interval=interval)
     buy(buys, test_data=False, test_trade=test_trade, interval=interval)
-    del redis
+    if system == "redis":
+        del redis
 
 if __name__ == "__main__":
     main()
