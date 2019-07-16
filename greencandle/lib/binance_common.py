@@ -17,9 +17,9 @@ BASE_DIR = os.getcwd().split("greencandle", 1)[0] + "greencandle"
 sys.path.append(BASE_DIR)
 
 
-from lib.logger import getLogger
-from lib.common import make_float
-from lib.graph import create_graph
+from .logger import getLogger
+from .common import make_float
+from .graph import create_graph
 
 LOGGER = getLogger(__name__)
 

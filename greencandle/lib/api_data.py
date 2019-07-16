@@ -9,8 +9,8 @@ import json
 import time
 from urllib.request import urlopen
 import binance
-from lib.mysql import Mysql
-from lib.logger import getLogger
+from .mysql import Mysql
+from .logger import getLogger
 
 
 LOGGER = getLogger(__name__)

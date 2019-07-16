@@ -16,12 +16,12 @@ BASE_DIR = os.getcwd().split("greencandle", 1)[0] + "greencandle"
 sys.path.append(BASE_DIR)
 
 
-from lib.auth import binance_auth
-from lib.logger import getLogger, get_decorator
-from lib.config import get_config
-from lib.mysql import Mysql
-from lib.balance import get_balance
-from lib.mail import send_gmail_alert
+from .auth import binance_auth
+from .logger import getLogger, get_decorator
+from .config import get_config
+from .mysql import Mysql
+from .balance import get_balance
+from .mail import send_gmail_alert
 
 LOGGER = getLogger(__name__)
 MAX_TRADES = int(get_config("backend")["max_trades"])
@@ -96,7 +96,7 @@ def buy(buy_list, test_data=False, test_trade=True, interval=None):
                 LOGGER.info("Buying %s of %s with %s BTC", amount, item, btc_amount)
                 if not test_data:
                     result = binance.order(symbol=item, side=binance.BUY, quantity=amount,
-                                           orderType="MARKET", test=test_trade)
+                                           price=btc_amount, orderType="MARKET", test=test_trade)
                 if test_data or (test_trade and not result) or \
                         (not test_trade and 'transactTime' in result):
                     # only insert into db, if:
@@ -131,7 +131,7 @@ def sell(sell_list, test_data=False, test_trade=True, interval=None):
             price = current_price
             if not test_data:
                 result = binance.order(symbol=item, side=binance.SELL, quantity=quantity,
-                                       orderType="MARKET", test=test_trade)
+                                       price='', orderType="MARKET", test=test_trade)
             if test_data or (test_trade and not result) or \
                     (not test_trade and 'transactTime' in result):
                 dbase.update_trades(pair=item, sell_time=current_time, sell_price=price)

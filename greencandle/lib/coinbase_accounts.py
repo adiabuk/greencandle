@@ -7,9 +7,9 @@ import json
 from collections import defaultdict
 from forex_python.converter import CurrencyRates
 from requests.exceptions import ReadTimeout
-from lib.balance_common import default_to_regular
-from lib.auth import coinbase_auth
-from lib.timeout import restrict_timeout
+from .balance_common import default_to_regular
+from .auth import coinbase_auth
+from .timeout import restrict_timeout
 
 CLIENT = coinbase_auth()
 

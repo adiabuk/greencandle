@@ -5,9 +5,9 @@ Get/Convert Balances from Binance
 from collections import defaultdict
 from forex_python.converter import CurrencyRates, RatesNotAvailableError
 import binance
-from lib.balance_common import default_to_regular
-from lib.auth import binance_auth
-from lib.logger import getLogger
+from .balance_common import default_to_regular
+from .auth import binance_auth
+from .logger import getLogger
 
 BITCOIN = {}
 LOGGER = getLogger(__name__)

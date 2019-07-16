@@ -12,9 +12,9 @@ from email.mime.text import MIMEText
 
 BASE_DIR = os.getcwd().split("greencandle", 1)[0] + "greencandle"
 sys.path.append(BASE_DIR)
-from lib.config import get_config
-from lib.timeout import restrict_timeout
-from lib.logger import getLogger, get_decorator
+from config import get_config
+from timeout import restrict_timeout
+from logger import getLogger, get_decorator
 
 GET_EXCEPTIONS = get_decorator((Exception))
 

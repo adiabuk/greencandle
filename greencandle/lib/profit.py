@@ -7,8 +7,8 @@ from __future__ import print_function
 from collections import defaultdict
 from forex_python.converter import CurrencyRates
 import binance
-from lib.mysql import Mysql
-from lib.common import add_perc, sub_perc, perc_diff
+from .mysql import Mysql
+from .common import add_perc, sub_perc, perc_diff
 
 CURRENCY = CurrencyRates()
 RATE = 0.00014 # GBP to BTC

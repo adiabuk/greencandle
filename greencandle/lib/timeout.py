@@ -2,7 +2,7 @@
 
 import signal
 from contextlib import contextmanager
-from lib.logger import getLogger
+from .logger import getLogger
 
 LOGGER = getLogger(__name__)
 

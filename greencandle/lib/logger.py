@@ -6,7 +6,7 @@ Generic logging class for greencandle modules
 
 import sys
 import logging
-from lib.config import get_config
+from .config import get_config
 
 def getLogger(logger_name=None):
     """

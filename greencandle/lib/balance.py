@@ -6,10 +6,10 @@ from __future__ import print_function
 import json
 
 from requests.exceptions import ReadTimeout
-from lib.binance_accounts import get_binance_values
-from lib.coinbase_accounts import get_coinbase_values
-from lib.mysql import Mysql
-from lib.logger import getLogger
+from .binance_accounts import get_binance_values
+from .coinbase_accounts import get_coinbase_values
+from .mysql import Mysql
+from .logger import getLogger
 
 LOGGER = getLogger(__name__)
 

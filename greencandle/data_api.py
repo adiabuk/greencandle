@@ -13,8 +13,8 @@ import threading
 from time import time, strftime, sleep, gmtime
 from collections import defaultdict
 from flask import Flask, abort
-from lib.config import get_config
-from lib.scrape import scrape_data
+from .lib.config import get_config
+from .lib.scrape import scrape_data
 
 PAIRS = get_config("api")["pairs"].split()
 INTERVAL = get_config("api")["interval"]

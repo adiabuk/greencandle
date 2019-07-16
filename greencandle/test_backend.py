@@ -11,14 +11,14 @@ from concurrent.futures import ThreadPoolExecutor
 import argcomplete
 import setproctitle
 
-from lib.engine import Engine
-from lib.common import make_float
-from lib.redis_conn import Redis
-from lib.config import get_config
-from lib.mysql import Mysql
-from lib.profit import get_recent_profit
-from lib.order import buy, sell
-from lib.logger import getLogger, get_decorator
+from .lib.engine import Engine
+from .lib.common import make_float
+from .lib.redis_conn import Redis
+from .lib.config import get_config
+from .lib.mysql import Mysql
+from .lib.profit import get_recent_profit
+from .lib.order import buy, sell
+from .lib.logger import getLogger, get_decorator
 
 LOGGER = getLogger(__name__)
 CHUNK_SIZE = 50

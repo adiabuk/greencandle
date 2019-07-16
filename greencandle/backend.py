@@ -16,14 +16,14 @@ from str2bool import str2bool
 import setproctitle
 
 import binance
-from lib.binance_common import get_dataframes
-from lib.engine import Engine
-from lib.config import get_config
-from lib.logger import getLogger
-from lib.redis_conn import Redis
-from lib.order import buy, sell
-from lib.mysql import Mysql
-from lib.api_data import get_change
+from .lib.binance_common import get_dataframes
+from .lib.engine import Engine
+from .lib.config import get_config
+from .lib.logger import getLogger
+from .lib.redis_conn import Redis
+from .lib.order import buy, sell
+from .lib.mysql import Mysql
+from .lib.api_data import get_change
 
 LOGGER = getLogger(__name__)
 

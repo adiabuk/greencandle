@@ -7,8 +7,8 @@ Store and retrieve items from redis
 import ast
 import time
 import redis
-from lib.mysql import Mysql
-from lib.logger import getLogger
+from .mysql import Mysql
+from .logger import getLogger
 
 LOGGER = getLogger(__name__)
 

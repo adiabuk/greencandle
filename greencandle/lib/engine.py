@@ -13,14 +13,14 @@ from concurrent.futures import ThreadPoolExecutor
 from decimal import Decimal
 import pandas
 import talib
-from lib.mysql import Mysql
-from lib.redis_conn import Redis
-from lib import balance
-from lib.order import get_buy_price, get_sell_price
-from lib.supres import supres
-from lib.common import make_float, pipify, pip_calc
-from lib.logger import getLogger, get_decorator
-from indicator import SuperTrend, RSI
+from .mysql import Mysql
+from .redis_conn import Redis
+from . import balance
+from .order import get_buy_price, get_sell_price
+from .supres import supres
+from .common import make_float, pipify, pip_calc
+from .logger import getLogger, get_decorator
+from .indicator import SuperTrend, RSI
 
 
 POOL = ThreadPoolExecutor(max_workers=50)

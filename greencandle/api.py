@@ -16,8 +16,8 @@ import threading
 from time import time, strftime, gmtime, sleep
 from flask import Flask, abort, send_file
 import backend
-from lib import balance
-from lib.config import get_config
+from .lib import balance
+from .lib.config import get_config
 
 PAIRS = get_config("api")["pairs"].split()
 INTERVAL = get_config("api")["interval"]
