@@ -1,0 +1,12 @@
+FROM ubuntu:18.04
+
+WORKDIR /
+COPY * /vagrant/
+
+RUN chmod +x /vagrant/install.sh
+RUN /vagrant/install.sh
+
+CMD ["backend", "--test", "--use-redis"]
+#RUN tail -f /dev/null
+
+

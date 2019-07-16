@@ -1,0 +1,9 @@
+FROM mysql:8.0.16
+
+
+ENV MYSQL_ROOT_PASSWORD=my-secret-pw
+COPY greencandle.sql /tmp/greencandle.sql
+
+RUN mysql -uroot -pmy-secret-pw < /tmp/greencandle.sql
+EXPOSE 3306/tcp
+CMD ["mysqld"]
