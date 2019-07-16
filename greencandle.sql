@@ -18,6 +18,8 @@
 --
 -- Table structure for table `action_totals`
 --
+CREATE DATABASE greencandle;
+USE greencandle;
 
 DROP TABLE IF EXISTS `action_totals`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
