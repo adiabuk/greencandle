@@ -5,5 +5,5 @@ ENV MYSQL_ROOT_PASSWORD=my-secret-pw
 COPY greencandle.sql /tmp/greencandle.sql
 
 RUN mysql -uroot -pmy-secret-pw < /tmp/greencandle.sql
-EXPOSE 3306/tcp
+EXPOSE 3306
 CMD ["mysqld"]

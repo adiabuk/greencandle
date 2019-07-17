@@ -1,12 +1,6 @@
-FROM ubuntu:18.04
+#FROM ubuntu:18.04
+FROM python:3.6.9
 
-WORKDIR /
-COPY * /vagrant/
-
-RUN chmod +x /vagrant/install.sh
-RUN /vagrant/install.sh
-
-CMD ["backend", "--test", "--use-redis"]
-#RUN tail -f /dev/null
-
-
+COPY install.sh /tmp
+RUN bash /tmp/install.sh
+COPY config.ini /etc/greencandle.ini

@@ -17,7 +17,7 @@ class Redis(object):
     Redis object
     """
 
-    def __init__(self, interval=None, host="localhost", port=6379, test=False, db=1):
+    def __init__(self, interval=None, host="redis", port=6379, test=False, db=1):
         """
         Args:
             interval
