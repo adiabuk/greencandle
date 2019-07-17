@@ -19,7 +19,7 @@ def get_config(section):
         dict of config parameters/values in given section
     """
     parser = ConfigParser()
-    parser.read("config.ini")
+    parser.read("/etc/greencandle.ini")
     return parser._sections[section]
 
 
