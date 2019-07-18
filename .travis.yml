@@ -30,4 +30,5 @@ script:
   make
   make install
   cd -
+  pip install pip==9.0.1 numpy==1.16.0
   ./setup.py test
