@@ -15,7 +15,7 @@ import json
 import threading
 from time import time, strftime, gmtime, sleep
 from flask import Flask, abort, send_file
-import backend
+from . import backend
 from .lib import balance
 from .lib.config import get_config
 
