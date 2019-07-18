@@ -10,4 +10,6 @@ make
 make install
 pip install pip==9.0.1 numpy==1.16.0
 pip install -e git+https://github.com/adiabuk/greencandle.git#egg=greencandle
+pip install -e git+https://github.com/adiabuk/Technical-Indicators.git#egg=indicator
+pip install -e git+https://github.com/adiabuk/binance#egg=binance
 echo "Installation Complete"

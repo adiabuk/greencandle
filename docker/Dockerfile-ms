@@ -1,0 +1,7 @@
+FROM mysql:5.7.26
+
+ENV MYSQL_ROOT_PASSWORD=password
+COPY greencandle.sql /tmp
+RUN mysql --protocol tcp -h localhost -uroot -ppassword < /tmp/greencandle.sql
+EXPOSE 3306
+CMD ["mysqld"]

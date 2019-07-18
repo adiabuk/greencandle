@@ -1,0 +1,35 @@
+version: "3.1"
+services:
+
+  redis:
+    image: gc-redis
+    ports:
+      - 6379:6379
+    restart: on-failure
+    links:
+      - mysql
+
+  mysql:
+    image: gc-mysql
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+    restart: on-failure
+
+  greencandle-test:
+    image: greencandle
+    entrypoint: backend --use-redis --test
+    links:
+      - mysql
+    depends_on:
+      - mysql
+      - redis
+  greencandle-test2:
+    image: greencandle
+    entrypoint: backend --use-redis --test
+    links:
+      - mysql
+    depends_on:
+      - mysql
+      - redis

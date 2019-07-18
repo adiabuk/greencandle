@@ -1,4 +1,4 @@
-FROM redis:5.05
+FROM redis:5.0.5
 
 EXPOSE 6379
 CMD [ "redis-server" ]
