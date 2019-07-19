@@ -35,6 +35,6 @@ setup(
     install_requires=REQUIRES,
     dependency_links=LINKS,
     entry_points={'console_scripts':['backend=greencandle.backend:main',
-                                     'pdfcheck=pdfgrep.pdfcheck:main']},
+                                     'test_backend=greencandle.test_backend:main']},
     classifiers=[],
 )
