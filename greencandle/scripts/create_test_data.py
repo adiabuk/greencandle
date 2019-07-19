@@ -16,7 +16,7 @@ import pandas
 BASE_DIR = os.getcwd().split("greencandle", 1)[0] + "greencandle"
 sys.path.append(BASE_DIR)
 
-from lib.binance_common import get_all_klines
+from ..lib.binance_common import get_all_klines
 from lib.config import get_config
 
 def main():

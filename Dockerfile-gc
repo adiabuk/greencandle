@@ -1,6 +1,5 @@
 #FROM ubuntu:18.04
 FROM python:3.6.9
-
-COPY install.sh /tmp
-RUN bash /tmp/install.sh
+ADD . /install
+RUN bash /install/gc-install.sh
 COPY config.ini /etc/greencandle.ini

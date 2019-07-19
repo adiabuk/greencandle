@@ -161,10 +161,10 @@ class Engine(dict):
         for pair in self.pairs:
 
             # get indicators supertrend, and API for each trading pair
-            POOL.submit(self.get_sup_res, pair, self.dataframes[pair])
             POOL.submit(self.get_indicators, pair, self.ohlcs[pair])
             POOL.submit(self.get_oscillators, pair, self.ohlcs[pair])
             POOL.submit(self.get_moving_averages, pair, self.ohlcs[pair])
+            POOL.submit(self.get_sup_res, pair, self.dataframes[pair])
             POOL.submit(self.get_supertrend, pair, self.dataframes[pair])
             POOL.submit(self.get_rsi, pair, self.dataframes[pair])
 
