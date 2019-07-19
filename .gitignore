@@ -7,7 +7,6 @@
 *.new
 *.log
 .vagrant
-src
 tmp/*
 ta-lib*
 geckodriver*
