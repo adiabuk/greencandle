@@ -9,15 +9,18 @@ import time
 import redis
 from .mysql import Mysql
 from .logger import getLogger
+from .config import get_config
 
 LOGGER = getLogger(__name__)
+HOST = get_config("redis")["host"]
+PORT = get_config("redis")["port"]
 
 class Redis(object):
     """
     Redis object
     """
 
-    def __init__(self, interval=None, host="redis", port=6379, test=False, db=1):
+    def __init__(self, interval=None, test=False, db=1):
         """
         Args:
             interval
@@ -37,7 +40,7 @@ class Redis(object):
         self.interval = interval
 
         LOGGER.debug("Starting Redis with interval %s %s, db=%s", interval, test_str, str(redis_db))
-        pool = redis.ConnectionPool(host=host, port=port, db=redis_db)
+        pool = redis.ConnectionPool(host=HOST, port=PORT, db=redis_db)
         self.conn = redis.StrictRedis(connection_pool=pool)
         self.dbase = Mysql(test=test, interval=interval)
 
