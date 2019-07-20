@@ -22,7 +22,7 @@ for item in REQUIREMENTS:
     if item.req:
         REQUIRES.append(str(item.req))
 
-VER = '0.02'
+VER = '0.03'
 
 setup(
     name='greencandle',
@@ -35,6 +35,20 @@ setup(
     install_requires=REQUIRES,
     dependency_links=LINKS,
     entry_points={'console_scripts':['backend=greencandle.backend:main',
-                                     'test_backend=greencandle.test_backend:main']},
+                                     'test_backend=greencandle.test_backend:main',
+                                     'average_down=greencandle.scripts.average_down:main',
+                                     'balances=greencandle.scripts.balances:main',
+                                     'get_details=greencandle.scripts.get_details:main',
+                                     'get_file=greencandle.scripts.get_file:main',
+                                     'get_mysql_status=greencandle.scripts.get_mysql_status:main',
+                                     'get_order_status=greencandle.scripts.get_order_status:main',
+                                     'get_recent_profit=greencandle.scripts.get_recent_profit:main',
+                                     'get_totals_csv=greencandle.scripts.get_totals_csv:main',
+                                     'green_top=greencandle.scripts.green_top:main',
+                                     'investment=greencandle.scripts.investment:main',
+                                     'pip_value=greencandle.scripts.pip_value:main',
+                                     'sell_1p=greencandle.scripts.sell_1p:main',
+                                     'sell_now=greencandle.scripts.sell_now:main',
+                                     'create_test_data=greencandle.scripts.create_test_data:main']},
     classifiers=[],
 )

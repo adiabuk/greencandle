@@ -15,8 +15,8 @@ import binance
 
 BASE_DIR = os.getcwd().split("greencandle", 1)[0] + "greencandle"
 sys.path.append(BASE_DIR)
-from lib.mysql import Mysql
-from lib.auth import binance_auth
+from ..lib.mysql import Mysql
+from ..lib.auth import binance_auth
 
 
 def main():

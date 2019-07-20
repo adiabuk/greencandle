@@ -10,7 +10,7 @@ import sys
 
 BASE_DIR = os.getcwd().split("greencandle", 1)[0] + "greencandle"
 sys.path.append(BASE_DIR)
-from lib.redis_conn import Redis
+from ..lib.redis_conn import Redis
 
 def get_all_details(address):
     """

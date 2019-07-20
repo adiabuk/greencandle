@@ -9,8 +9,8 @@ import binance
 BASE_DIR = os.getcwd().split("greencandle", 1)[0] + "greencandle"
 sys.path.append(BASE_DIR)
 
-from lib.order import sell
-from lib.auth import binance_auth
+from ..lib.order import sell
+from ..lib.auth import binance_auth
 
 def main():
     binance_auth()

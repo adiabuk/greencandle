@@ -17,13 +17,13 @@ BASE_DIR = os.getcwd().split("greencandle", 1)[0] + "greencandle"
 sys.path.append(BASE_DIR)
 
 from ..lib.binance_common import get_all_klines
-from lib.config import get_config
+from ..lib.config import get_config
 
 def main():
     """ Main function """
 
     klines_multiplier = {"15m": 1, "5m": 3, "3m": 5, "1m": 15}
-    pairs = get_config("test")["pairs"].split()
+    pairs = get_config("test")["serial_pairs"].split()
     intervals = get_config("test")["serial_intervals"].split()
     start_time = get_config("test")["start_time"].split()
     start_time = sys.argv[1]
@@ -32,8 +32,10 @@ def main():
     for pair in pairs:
          for interval in intervals:
             klines = no_of_klines * int(klines_multiplier[interval]) +50
-
-            filename = BASE_DIR + "/test_data/{0}/{1}_{2}.p".format(sys.argv[2], pair, interval)
+            if not os.path.isdir('/tmp/test_data'):
+                os.mkdir('/tmp/test_data')
+            filename = "/tmp/test_data/{0}_{1}.p".format(pair, interval)
+            print("Using filename:", filename)
             if os.path.exists(filename):
                 continue
             adiitional_klines = 50
@@ -43,7 +45,7 @@ def main():
             print("Getting {0} klines for {1} {2}".format(klines, pair, interval))
             current = pandas.DataFrame.from_dict(get_all_klines(pair=pair, interval=interval,
                                                                 start_time=real_start_time,
-                                                                 no_of_klines=klines))
+                                                                no_of_klines=klines))
             pickle.dump(current, open(filename, "wb"))
 
 

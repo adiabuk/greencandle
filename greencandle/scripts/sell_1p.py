@@ -13,9 +13,9 @@ import binance
 BASE_DIR = os.getcwd().split("greencandle", 1)[0] + "greencandle"
 sys.path.append(BASE_DIR)
 
-from lib.mysql import Mysql
-from lib.order import sell
-from lib.profit import guess_profit
+from ..lib.mysql import Mysql
+from ..lib.order import sell
+from ..lib.profit import guess_profit
 
 def main():
     interval = sys.argv[1]
