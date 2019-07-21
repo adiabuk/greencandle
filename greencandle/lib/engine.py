@@ -417,51 +417,39 @@ class Engine(dict):
         LOGGER.debug("Getting moving averages for %s", pair)
         klines = self.ohlcs[pair]
         try:
-            close = klines[-1]
+            close = klines[-1]  # numpy.ndarray
         except Exception as e:
             LOGGER.critical("FAILED moving averages " + str(e))
-        trends = (
-            #("EMA", 10),
-            ("EMA", 20),
-            #("EMA", 30),
-            ("EMA", 50),
-            ("EMA", 100),
-            ("SMA", 200),
-            ("SMA", 20),
-            #("SMA", 30),
-            ("SMA", 50),
-            ("SMA", 100),
-            ("SMA", 200))
-        for func, timeperiod in trends:
-            try:
-                result = getattr(talib, func)(close, timeperiod)[-1]
-            except Exception:
-                LOGGER.critical("Overall Exception getting moving averages")
-            if result > close[-1]:
-                trigger = "SELL"
-            else:
-                trigger = "BUY"
-            scheme = {}
-            result = 0.0 if math.isnan(result) else format(float(result), ".20f")
-            try:
-                current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
-                close_time = str(self.dataframes[pair].iloc[-1]["closeTime"])
-                data = {func+"-"+str(timeperiod):{"result": format(float(result), ".20f"),
-                                                  "current_price":current_price,
-                                                  "date":close_time,
-                                                  "action":self.get_action(trigger)}}
-                scheme["data"] = result
-                scheme["url"] = "google.com"
-                scheme["time"] = calendar.timegm(time.gmtime())
-                scheme["symbol"] = pair
-                scheme["direction"] = trigger
-                scheme["event"] = func+"-"+str(timeperiod)
-                scheme["difference"] = None
+        func, timeperiod = config  # split tuple
+        try:
+            result = getattr(talib, func)(close, int(timeperiod))[-1]
+        except Exception as e:
+            LOGGER.critical("Overall Exception getting moving averages", e)
+        if result > close[-1]:
+            trigger = "SELL"
+        else:
+            trigger = "BUY"
+        scheme = {}
+        result = 0.0 if math.isnan(result) else format(float(result), ".20f")
+        try:
+            current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
+            close_time = str(self.dataframes[pair].iloc[-1]["closeTime"])
+            data = {func+"-"+str(timeperiod):{"result": format(float(result), ".20f"),
+                                              "current_price":current_price,
+                                              "date":close_time,
+                                              "action":self.get_action(trigger)}}
+            scheme["data"] = result
+            scheme["url"] = "google.com"
+            scheme["time"] = calendar.timegm(time.gmtime())
+            scheme["symbol"] = pair
+            scheme["direction"] = trigger
+            scheme["event"] = func+"-"+str(timeperiod)
+            scheme["difference"] = None
 
-                self.add_scheme(scheme)
+            self.add_scheme(scheme)
 
-            except KeyError as e:
-                LOGGER.critical("KEY FAILURE in moving averages " + str(e))
+        except KeyError as e:
+            LOGGER.critical("KEY FAILURE in moving averages " + str(e))
 
         LOGGER.debug("done getting moving averages")
 
