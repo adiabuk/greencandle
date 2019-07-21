@@ -13,12 +13,16 @@ if [ -f /.dockerenv ]; then
 else
     echo "I'm living in real world!";
     apt-get update
-    apt-get -y install python3 python3-pip wget make git mysql-client libmysqlclient-dev python3-dev
+    apt-get -y install python3 python3-pip wget make git mysql-client libmysqlclient-dev \
+      python3-dev xvfb firefox
     update-alternatives --install /usr/bin/python python /usr/bin/python3 1
     update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
     pip install ipython
     install_dir=/vagrant
     echo "set background=dark" | tee -a /root/.vimrc /home/vagrant/.vimrc
+    wget
+    https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz -P /tmp
+    tar zxvf /tmp/gechodriver-v0.24.0-linux64.tar.gz -C /usr/bin
 fi
 
 if [[ ! -d /usr/include/ta-lib ]]; then
