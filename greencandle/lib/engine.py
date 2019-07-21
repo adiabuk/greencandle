@@ -160,18 +160,14 @@ class Engine(dict):
 
             # get indicators supertrend, and API for each trading pair
             with ThreadPoolExecutor(max_workers=100) as pool:
-                #pool.submit(getattr(self, function)(pair, klines, name, period))
+
                 for item in config:
                     function, name, period = item.split(';')
+                    # call each method defined in config with current pair and name,period tuple
+                    # from config eg. self.supertrend(pair, config), where config is a tuple
+                    # each method has the method name in 'function't st
+
                     pool.submit(getattr(self, function)(pair, (name, period)))
-
-                pool.submit(self.get_indicators, pair)
-                pool.submit(self.get_oscillators, pair)
-                pool.submit(self.get_moving_averages, pair)
-
-                pool.submit(self.get_sup_res, pair)
-                pool.submit(self.get_supertrend, pair)
-                pool.submit(self.get_rsi, pair)
 
                 pool.shutdown(wait=True)
 
@@ -179,7 +175,7 @@ class Engine(dict):
         return self
 
     @get_exceptions
-    def get_sup_res(self, pair):
+    def get_sup_res(self, pair, config=None):
         """
         get support & resistance values for current pair
         Append data to supres instance variable (dict)
@@ -236,7 +232,7 @@ class Engine(dict):
         LOGGER.debug("Done getting Support & resistance")
 
     @get_exceptions
-    def get_rsi(self, pair=None):
+    def get_rsi(self, pair=None, config=None):
         """
         get RSI oscillator values for given pair
         Append current RSI data to instance variable
@@ -291,7 +287,7 @@ class Engine(dict):
         return dataframe
 
     @get_exceptions
-    def get_supertrend(self, pair=None):
+    def get_supertrend(self, pair=None, config=None):
         """
         Get the super trend oscillator values for a given pair
         append current supertrend data to instance variable
@@ -470,7 +466,7 @@ class Engine(dict):
         LOGGER.debug("done getting moving averages")
 
     @get_exceptions
-    def get_oscillators(self, pair):
+    def get_oscillators(self, pair, config=None):
         """
 
         Apply osscilators to klines and get BUY/SELL triggers
@@ -546,7 +542,7 @@ class Engine(dict):
         LOGGER.debug("Done getting Oscillators")
 
     @get_exceptions
-    def get_indicators(self, pair):
+    def get_indicators(self, pair, config=None):
         """
 
         Cross Reference data against trend indicators
