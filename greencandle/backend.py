@@ -12,10 +12,11 @@ import time
 import sys
 import re
 import argcomplete
-from str2bool import str2bool
 import setproctitle
 
 import binance
+from str2bool import str2bool
+
 from .lib.binance_common import get_dataframes
 from .lib.engine import Engine
 from .lib.config import get_config
@@ -62,8 +63,10 @@ def loop(interval, test, system):
     """
     Loop through collection cycle
     """
-    dbase = Mysql(test=False, interval=interval)
+    main_indicators = get_config("backend")["indicators"].split()
+    print(main_indicators)
     main_pairs = get_config("backend")["pairs_{0}".format(interval)].split()
+    dbase = Mysql(test=False, interval=interval)
     additional_pairs = dbase.get_trades()
     del dbase
     # get unique list of pairs in config,
@@ -87,7 +90,7 @@ def loop(interval, test, system):
 
     engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval)
     if system == "redis":
-        engine.get_data()
+        engine.get_data(config=main_indicators)
         redis = Redis(interval=interval, test=False, db=0)
     else:
         pass

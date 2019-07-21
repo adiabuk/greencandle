@@ -23,7 +23,6 @@ from .common import make_float, pipify, pip_calc
 from .logger import getLogger, get_decorator
 
 
-POOL = ThreadPoolExecutor(max_workers=50)
 LOGGER = getLogger(__name__)
 
 class Balance(dict):  #FIXME
@@ -144,7 +143,7 @@ class Engine(dict):
         return json.dumps(self)
 
     @get_exceptions
-    def get_data(self):
+    def get_data(self, config=None):
         """
         Iterate through data and trading pairs to extract data
         Run data through indicator, oscillators, moving average
@@ -155,26 +154,32 @@ class Engine(dict):
         Returns:
             dict containing all collected data
         """
+
         LOGGER.debug("Getting data")
-        global POOL
-        POOL = ThreadPoolExecutor(max_workers=1000)
         for pair in self.pairs:
 
             # get indicators supertrend, and API for each trading pair
-            POOL.submit(self.get_indicators, pair, self.ohlcs[pair])
-            POOL.submit(self.get_oscillators, pair, self.ohlcs[pair])
-            POOL.submit(self.get_moving_averages, pair, self.ohlcs[pair])
-            POOL.submit(self.get_sup_res, pair, self.dataframes[pair])
-            POOL.submit(self.get_supertrend, pair, self.dataframes[pair])
-            POOL.submit(self.get_rsi, pair, self.dataframes[pair])
+            with ThreadPoolExecutor(max_workers=100) as pool:
+                #pool.submit(getattr(self, function)(pair, klines, name, period))
+                for item in config:
+                    function, name, period = item.split(';')
+                    pool.submit(getattr(self, function)(pair, (name, period)))
 
-        POOL.shutdown(wait=True)
-        POOL = ThreadPoolExecutor(max_workers=100)
+                pool.submit(self.get_indicators, pair)
+                pool.submit(self.get_oscillators, pair)
+                pool.submit(self.get_moving_averages, pair)
+
+                pool.submit(self.get_sup_res, pair)
+                pool.submit(self.get_supertrend, pair)
+                pool.submit(self.get_rsi, pair)
+
+                pool.shutdown(wait=True)
+
         LOGGER.debug("Done getting data")
         return self
 
     @get_exceptions
-    def get_sup_res(self, pair, klines):
+    def get_sup_res(self, pair):
         """
         get support & resistance values for current pair
         Append data to supres instance variable (dict)
@@ -187,6 +192,7 @@ class Engine(dict):
         """
 
         LOGGER.debug("Getting Support & resistance for %s", pair)
+        klines = self.dataframes[pair]
 
         close_values = make_float(klines.close)
         support, resistance = supres(close_values, 10)
@@ -230,7 +236,7 @@ class Engine(dict):
         LOGGER.debug("Done getting Support & resistance")
 
     @get_exceptions
-    def get_rsi(self, pair=None, klines=None):
+    def get_rsi(self, pair=None):
         """
         get RSI oscillator values for given pair
         Append current RSI data to instance variable
@@ -243,6 +249,7 @@ class Engine(dict):
 
         """
         LOGGER.debug("Getting RSI_21 for %s", pair)
+        klines = self.dataframes[pair]
         dataframe = self.renamed_dataframe_columns(klines)
         scheme = {}
         mine = dataframe.apply(pandas.to_numeric)
@@ -284,7 +291,7 @@ class Engine(dict):
         return dataframe
 
     @get_exceptions
-    def get_supertrend(self, pair=None, klines=None):
+    def get_supertrend(self, pair=None):
         """
         Get the super trend oscillator values for a given pair
         append current supertrend data to instance variable
@@ -297,8 +304,9 @@ class Engine(dict):
 
         """
 
-        scheme = {}
         LOGGER.debug("Getting supertrend for %s", pair)
+        scheme = {}
+        klines = self.dataframes[pair]
         dataframe = self.renamed_dataframe_columns(klines)
 
         mine = dataframe.apply(pandas.to_numeric)
@@ -397,7 +405,7 @@ class Engine(dict):
                 "HOLD": 0}[trigger]
 
     @get_exceptions
-    def get_moving_averages(self, pair, klines):
+    def get_moving_averages(self, pair, config=None):
         """
         Apply moving averages to klines and get BUY/SELL triggers
         Add data to DB
@@ -409,7 +417,9 @@ class Engine(dict):
         Returns:
             None
         """
+        LOGGER.critical("calling MA with %s", config)
         LOGGER.debug("Getting moving averages for %s", pair)
+        klines = self.ohlcs[pair]
         try:
             close = klines[-1]
         except Exception as e:
@@ -460,7 +470,7 @@ class Engine(dict):
         LOGGER.debug("done getting moving averages")
 
     @get_exceptions
-    def get_oscillators(self, pair, klines):
+    def get_oscillators(self, pair):
         """
 
         Apply osscilators to klines and get BUY/SELL triggers
@@ -474,6 +484,7 @@ class Engine(dict):
             None
         """
         LOGGER.debug("Getting Oscillators for %s", pair)
+        klines = self.ohlcs[pair]
         open, high, low, close = klines
         scheme = {}
         trends = {
@@ -535,7 +546,7 @@ class Engine(dict):
         LOGGER.debug("Done getting Oscillators")
 
     @get_exceptions
-    def get_indicators(self, pair, klines):
+    def get_indicators(self, pair):
         """
 
         Cross Reference data against trend indicators
@@ -548,6 +559,7 @@ class Engine(dict):
         Returns:
             None
         """
+        klines = self.ohlcs[pair]
         LOGGER.debug("Getting Indicators for %s", pair)
         trends = {"HAMMER": {100: "BUY", 0:"HOLD"},
                   "INVERTEDHAMMER": {100: "SELL", 0:"HOLD"},
