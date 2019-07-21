@@ -11,6 +11,8 @@ import calendar
 import operator
 from concurrent.futures import ThreadPoolExecutor
 from decimal import Decimal
+import pickle
+import zlib
 import pandas
 import talib
 from indicator import SuperTrend, RSI
@@ -182,7 +184,7 @@ class Engine(dict):
 
         Args:
               pair: trading pair (eg. XRPBTC)
-              klines: pandas dataframe containing data for specified pair
+              config: indicator config tuple
         Returns:
             None
         """
@@ -239,7 +241,7 @@ class Engine(dict):
 
         Args:
               pair: trading pair (eg. XRPBTC)
-              klines: pandas dataframe containing data for specified pair
+              config: indicator config tuple
         Returns:
             None
 
@@ -294,7 +296,7 @@ class Engine(dict):
 
         Args:
               pair: trading pair (eg. XRPBTC)
-              klines: pandas dataframe containing data for specified pair
+              config: indicator config tuple
         Returns:
             None
 
@@ -408,7 +410,7 @@ class Engine(dict):
 
         Args:
             pair: trading pair (eg. XRPBTC)
-            klines: tuple of ohlc float values
+            config: indicator config tuple
 
         Returns:
             None
@@ -462,7 +464,7 @@ class Engine(dict):
 
         Args:
             pair: trading pair (eg. XRPBTC)
-            klines: tuple of ohlc float values
+            config: indicator config tuple
 
         Returns:
             None
@@ -538,7 +540,7 @@ class Engine(dict):
 
         Args:
             pair: trading pair (eg. XRPBTC)
-            klines: tuple of ohlc float values
+            config: indicator config tuple
 
         Returns:
             None
@@ -584,10 +586,11 @@ class Engine(dict):
         result = 0.0 if (isinstance(scheme["data"], float) and
                          math.isnan(scheme["data"]))  else scheme["data"]
         try:
-
             data = {scheme["event"]:{"result": result,
                                      "current_price": format(float(current_price), ".20f"),
                                      "date": close_time,
+                                     # compress and pickle current dataframe for redis storage
+                                     "ohlc": zlib.compress(pickle.dumps(self.dataframes[pair].iloc[-1])),
                                      "action":self.get_action(scheme["direction"])}}
 
             redis = Redis(interval=self.interval, test=self.test,

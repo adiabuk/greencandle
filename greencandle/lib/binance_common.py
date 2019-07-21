@@ -128,7 +128,7 @@ def get_dataframes(pairs, interval=None):
     Get details from binance API
 
     Args:
-        graph: boolean value, create graphs or not
+        pairs: list of pairss
         interval: Interval used for candlesticks (eg. 1m, 3m, 15m, 1d etc)
 
     Returns:
