@@ -1,6 +1,8 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/bionic64"
   config.disksize.size = '50GB'
+  config.vm.network "forwarded_port", guest: 6379, host: 6379
+  config.vm.network "forwarded_port", guest: 3306, host: 3306
 
   # Bootstrap machine
   #config.vm.provision :shell, :inline => "bash bootstrap.sh"

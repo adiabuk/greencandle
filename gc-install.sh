@@ -12,6 +12,7 @@ if [ -f /.dockerenv ]; then
     install_dir=/install
 else
     echo "I'm living in real world!";
+    apt-get update
     apt-get -y install python3 python3-pip wget make git mysql-client libmysqlclient-dev python3-dev
     pip install ipython
     update-alternatives --install /usr/bin/python python /usr/bin/python3 1
