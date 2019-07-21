@@ -2,6 +2,7 @@
 *.swo
 *.swn
 *.html
+src
 notes.txt
 .~*
 *.old

@@ -22,7 +22,7 @@ for item in REQUIREMENTS:
     if item.req:
         REQUIRES.append(str(item.req))
 
-VER = '0.03'
+VER = '0.3'
 
 setup(
     name='greencandle',
