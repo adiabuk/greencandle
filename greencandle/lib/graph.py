@@ -2,8 +2,11 @@
 
 """Create candlestick graphs from OHLC data"""
 
+import ast
 import os
 import time
+import pickle
+import zlib
 import pandas
 from selenium import webdriver
 from pyvirtualdisplay import Display
@@ -13,7 +16,10 @@ import plotly.graph_objs as go
 
 from PIL import Image
 from resizeimage import resizeimage
+from .redis_conn import Redis
+
 PATH = os.getcwd() + "/graphs/in/"
+PATH = '/tmp/'
 
 def get_screenshot(filename=None):
     """Capture screenshot using selenium/firefox in Xvfb """
@@ -51,5 +57,21 @@ def create_graph(dataframe, pair):
                            close=dataframe.close)
     filename = "simple_candlestick_{0}".format(pair)
     py.plot([trace], filename="{0}/{1}.html".format(PATH, filename), auto_open=False)
-    get_screenshot(filename)
-    resize_screenshot(filename)
+    #get_screenshot(filename)
+    #resize_screenshot(filename)
+
+def get_data():
+    """Fetch data from redis"""
+    redis = Redis()
+    list_of_series = []
+    index = redis.get_items('ETHBTC', '1m')
+    for item in index:
+        datas = redis.get_details(item)
+
+
+        for data in datas: # data is a tuple
+            stuff = ast.literal_eval(data[-1].decode())
+            rehydrated = pickle.loads(zlib.decompress(stuff['ohlc']))
+            list_of_series.append(rehydrated)
+    dataframe = pandas.DataFrame(list_of_series)
+    return dataframe
