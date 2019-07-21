@@ -3,7 +3,7 @@
 set -e
 
 if [[ $EUID -ne 0 ]]; then
-   echo "This script must be run as root" 
+   echo "This script must be run as root"
    exit 1
 fi
 
@@ -14,9 +14,9 @@ else
     echo "I'm living in real world!";
     apt-get update
     apt-get -y install python3 python3-pip wget make git mysql-client libmysqlclient-dev python3-dev
-    pip install ipython
     update-alternatives --install /usr/bin/python python /usr/bin/python3 1
     update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
+    pip install ipython
     install_dir=/vagrant
     echo "set background=dark" | tee -a /root/.vimrc /home/vagrant/.vimrc
 fi
