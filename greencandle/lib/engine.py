@@ -590,7 +590,9 @@ class Engine(dict):
                                      "current_price": format(float(current_price), ".20f"),
                                      "date": close_time,
                                      # compress and pickle current dataframe for redis storage
-                                     "ohlc": zlib.compress(pickle.dumps(self.dataframes[pair].iloc[-1])),
+                                     "ohlc":
+                                     zlib.compress(pickle.dumps(self.dataframes[pair].iloc[-2])),
+                                     # dont get most recent one, as it may not be complete
                                      "action":self.get_action(scheme["direction"])}}
 
             redis = Redis(interval=self.interval, test=self.test,
