@@ -115,12 +115,12 @@ class Redis(object):
         Get the current price and date for given item where item is an address:
         eg.  b"XRPBTC:15m:1520871299999"
         All items within a group should have the same date and price, as they relate to the same
-        data - so we pick an indicator at random (RSI) to reference in the JSON that is stored.
+        data - so we pick an indicator at random (EMA) to reference in the JSON that is stored.
         Returns:
             a tuple of current_price and current_date
         """
 
-        byte = self.conn.hget(item, "RSI")
+        byte = self.conn.hget(item, "EMA-25")
         try:
             data = ast.literal_eval(byte.decode("UTF-8"))
         except AttributeError:
@@ -145,9 +145,10 @@ class Redis(object):
             return None, None, None
         for item in items[-4:]:
             totals.append(self.get_total(item))
+
         current = self.get_current(items[-1])
         current_price = current[0]
-        current_mepoch = float(current[1])/1000
+        current_mepoch = float(current[1]) / 1000
         LOGGER.debug("AMROX10 %s %s %s ", pair, str(current[-1]), str(totals[-1]))
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_mepoch))
         value = self.dbase.get_trade_value(pair)
