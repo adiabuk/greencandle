@@ -14,7 +14,7 @@ else
     echo "I'm living in real world!";
     apt-get update
     apt-get -y install python3 python3-pip wget make git mysql-client libmysqlclient-dev \
-      python3-dev xvfb firefox
+      python3-dev xvfb firefox redis-tools
     update-alternatives --install /usr/bin/python python /usr/bin/python3 1
     update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
     pip install ipython

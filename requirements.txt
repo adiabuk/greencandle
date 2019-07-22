@@ -1,4 +1,4 @@
-argcomplete==1.9.3
+argcomplete>=1.9.3
 coinbase==2.0.6
 configparser==3.5.0
 -e git+https://github.com/adiabuk/Technical-Indicators.git#egg=indicator
