@@ -65,6 +65,8 @@ class Redis(object):
         Returns:
             success of operation: True/False
         """
+
+        LOGGER.critical("Adding to Redis:{0} {1} {2}".format(interval, data, now))
         response = self.conn.hmset("{0}:{1}:{2}".format(pair, interval, now), data)
         return response
 
@@ -109,6 +111,9 @@ class Redis(object):
         for _, value in self.conn.hgetall(address).items():
             val += ast.literal_eval(str(value.decode("UTF-8")))["action"]
         return val
+
+    def get_item(self, address, key):
+        return self.conn.hget(address, key)
 
     def get_current(self, item):
         """
