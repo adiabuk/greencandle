@@ -31,13 +31,14 @@ class Balance(dict):  #FIXME
     def __init__(self, interval, test=False):
         self.db = Mysql(test=test, interval=interval)
         self.interval = interval
-        self = get_balance(test=test)
+        self.balance = get_balance(test=test)
 
     def __del__(self):
         del self.db
 
 
     def save_balance(self):
+        scheme = {}
         if not self.test:
             #  Add prices for current symbol to scheme
             prices = {"buy": get_buy_price(pair), "sell": get_sell_price(pair),
@@ -107,10 +108,6 @@ class Engine(dict):
         except NameError:
             pass
 
-    def get_test_data(self, data):
-        """Get test data"""
-        pass
-
     def print_text(self):
         """
         Print text output to stdout
@@ -173,8 +170,22 @@ class Engine(dict):
 
                 pool.shutdown(wait=True)
 
+            self.send_ohlcs(pair)
+
         LOGGER.debug("Done getting data")
         return self
+
+    def send_ohlcs(self, pair):
+        """Send ohcls data to redis"""
+        scheme = {}
+        scheme["symbol"] = pair
+        scheme["direction"] = "HOLD"
+
+        # compress and pickle current dataframe for redis storage
+        # dont get most recent one, as it may not be complete
+        scheme['data'] = zlib.compress(pickle.dumps(self.dataframes[pair].iloc[-2]))
+        scheme["event"] = "ohlc"
+        self.add_scheme(scheme)
 
     @get_exceptions
     def get_sup_res(self, pair, config=None):
@@ -200,8 +211,8 @@ class Engine(dict):
             value = (pip_calc(support[-1], resistance[-1]))
         except IndexError:
             LOGGER.debug("Skipping {0} {1} {2} for support/resistance ".format(pair,
-                                                                                 str(support),
-                                                                                 str(resistance)))
+                                                                               str(support),
+                                                                               str(resistance)))
             return None
 
         cur_to_res = resistance[-1] - close_values[-1]
@@ -589,10 +600,6 @@ class Engine(dict):
             data = {scheme["event"]:{"result": result,
                                      "current_price": format(float(current_price), ".20f"),
                                      "date": close_time,
-                                     # compress and pickle current dataframe for redis storage
-                                     "ohlc":
-                                     zlib.compress(pickle.dumps(self.dataframes[pair].iloc[-2])),
-                                     # dont get most recent one, as it may not be complete
                                      "action":self.get_action(scheme["direction"])}}
 
             redis = Redis(interval=self.interval, test=self.test,
