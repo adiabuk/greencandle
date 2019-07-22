@@ -46,17 +46,29 @@ def resize_screenshot(filename=None):
             cover = resizeimage.resize_width(image, 120)
             cover.save("{0}/{1}_resized.png".format(PATH, filename), image.format)
 
-def create_graph(dataframe, pair):
+def create_graph(dataframe, dataframe2, dataframe3, dataframe4, pair):
     """Create graph html file using plotly offline-mode from dataframe object"""
     py.init_notebook_mode()
     dataframe["time"] = pandas.to_datetime(dataframe["closeTime"], unit="ms")
-    trace = go.Candlestick(x=dataframe.time,
-                           open=dataframe.open,
-                           high=dataframe.high,
-                           low=dataframe.low,
-                           close=dataframe.close)
+    candles = go.Candlestick(x=dataframe.time + pandas.Timedelta(hours=1),
+                             open=dataframe.open,
+                             high=dataframe.high,
+                             low=dataframe.low,
+                             close=dataframe.close)
+    ema18 = go.Scatter(x=dataframe2['date'], # assign x as the dataframe column 'x'
+                       y=dataframe2['value'],
+                       name='EMA-18')
+    ema25 = go.Scatter(x=dataframe3['date'], # assign x as the dataframe column 'x'
+                       y=dataframe3['value'],
+                       name='EMA-25')
+    wma7 = go.Scatter(x=dataframe4['date'], # assign x as the dataframe column 'x'
+                      y=dataframe4['value'],
+                      name='WMA-7')
+
+
+
     filename = "simple_candlestick_{0}".format(pair)
-    py.plot([trace], filename="{0}/{1}.html".format(PATH, filename), auto_open=False)
+    py.plot([candles, ema18, ema25, wma7], filename="{0}/{1}.html".format(PATH, filename), auto_open=False)
     #get_screenshot(filename)
     #resize_screenshot(filename)
 
@@ -64,14 +76,23 @@ def get_data():
     """Fetch data from redis"""
     redis = Redis()
     list_of_series = []
+    list_of_ema18 = []
+    list_of_ema25 = []
+    list_of_wma7 = []
     index = redis.get_items('ETHBTC', '1m')
-    for item in index:
-        datas = redis.get_details(item)
+    for index_item in index:
+        ema18 = ast.literal_eval(redis.get_item(index_item, 'EMA-18').decode())
+        ema25 = ast.literal_eval(redis.get_item(index_item, 'EMA-25').decode())
+        wma7 = ast.literal_eval(redis.get_item(index_item, 'WMA-7').decode())
+        ohlc = ast.literal_eval(redis.get_item(index_item, 'ohlc').decode())['result']
+        rehydrated = pickle.loads(zlib.decompress(ohlc))
+        list_of_series.append(rehydrated)
+        list_of_ema18.append((ema18['result'], ema18['date']))
+        list_of_ema25.append((ema25['result'], ema25['date']))
+        list_of_wma7.append((wma7['result'], wma7['date']))
 
-
-        for data in datas: # data is a tuple
-            stuff = ast.literal_eval(data[-1].decode())
-            rehydrated = pickle.loads(zlib.decompress(stuff['ohlc']))
-            list_of_series.append(rehydrated)
     dataframe = pandas.DataFrame(list_of_series)
-    return dataframe
+    dataframe2 = pandas.DataFrame(list_of_ema18, columns=['value', 'date'])
+    dataframe3 = pandas.DataFrame(list_of_ema25, columns=['value', 'date'])
+    dataframe4 = pandas.DataFrame(list_of_wma7, columns=['value', 'date'])
+    return dataframe, dataframe2, dataframe3, dataframe4
