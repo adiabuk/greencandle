@@ -64,7 +64,6 @@ def loop(interval, test, system):
     Loop through collection cycle
     """
     main_indicators = get_config("backend")["indicators"].split()
-    print(main_indicators)
     main_pairs = get_config("backend")["pairs_{0}".format(interval)].split()
     dbase = Mysql(test=False, interval=interval)
     additional_pairs = dbase.get_trades()

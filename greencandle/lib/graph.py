@@ -57,13 +57,13 @@ def create_graph(dataframe, dataframe2, dataframe3, dataframe4, dataframe5, pair
                              close=dataframe.close)
     ema18 = go.Scatter(x=dataframe2['date'], # assign x as the dataframe column 'x'
                        y=dataframe2['value'],
-                       name='EMA-18')
+                       name='EMA_18')
     ema25 = go.Scatter(x=dataframe3['date'], # assign x as the dataframe column 'x'
                        y=dataframe3['value'],
-                       name='EMA-25')
+                       name='EMA_25')
     wma7 = go.Scatter(x=dataframe4['date'], # assign x as the dataframe column 'x'
                       y=dataframe4['value'],
-                      name='WMA-7')
+                      name='WMA_7')
     events = go.Scatter(x=dataframe5['date'],
                         y=dataframe5['current_price'],
                         name="events",
@@ -71,9 +71,9 @@ def create_graph(dataframe, dataframe2, dataframe3, dataframe4, dataframe5, pair
                         text=dataframe5['result'],
                         textposition='top center',
                         marker=dict(size=16, color=dataframe5['result']))
-
+    graphs = [candles, ema18, ema25, wma7, events]
     filename = "simple_candlestick_{0}".format(pair)
-    py.plot([candles, ema18, ema25, wma7, events], filename="{0}/{1}.html".format(PATH, filename), auto_open=False)
+    py.plot(graphs, filename="{0}/{1}.html".format(PATH, filename), auto_open=False)
 
 def get_data(test=False, db=0):
     """Fetch data from redis"""
@@ -86,9 +86,9 @@ def get_data(test=False, db=0):
     list_of_events = []
     index = redis.get_items('ETHBTC', '1m')
     for index_item in index:
-        ema18 = ast.literal_eval(redis.get_item(index_item, 'EMA-18').decode())
-        ema25 = ast.literal_eval(redis.get_item(index_item, 'EMA-25').decode())
-        wma7 = ast.literal_eval(redis.get_item(index_item, 'WMA-7').decode())
+        ema18 = ast.literal_eval(redis.get_item(index_item, 'EMA_18').decode())
+        ema25 = ast.literal_eval(redis.get_item(index_item, 'EMA_25').decode())
+        wma7 = ast.literal_eval(redis.get_item(index_item, 'WMA_7').decode())
         ohlc = ast.literal_eval(redis.get_item(index_item, 'ohlc').decode())['result']
         try:
             event = ast.literal_eval(redis.get_item(index_item, 'trigger').decode())
