@@ -5,6 +5,10 @@ Common functions that don't belong anywhere else
 from decimal import Decimal
 import numpy
 
+def percent(num, perc):
+    """return percentage of a given number"""
+    return (num * perc) /100
+
 def make_float(arr):
     """Convert dataframe array into float array"""
     return numpy.array([float(x) for x in arr.values])
