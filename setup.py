@@ -49,6 +49,7 @@ setup(
                                      'pip_value=greencandle.scripts.pip_value:main',
                                      'sell_1p=greencandle.scripts.sell_1p:main',
                                      'sell_now=greencandle.scripts.sell_now:main',
+                                     'create_graph=greencandle.scripts.create_graph:main',
                                      'create_test_data=greencandle.scripts.create_test_data:main']},
     classifiers=[],
 )
