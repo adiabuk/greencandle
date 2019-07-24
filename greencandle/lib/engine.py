@@ -447,7 +447,7 @@ class Engine(dict):
         try:
             current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
             close_time = str(self.dataframes[pair].iloc[-1]["closeTime"])
-            data = {func+"-"+str(timeperiod):{"result": format(float(result), ".20f"),
+            data = {func+"_"+str(timeperiod):{"result": format(float(result), ".20f"),
                                               "current_price":current_price,
                                               "date":close_time,
                                               "action":self.get_action(trigger)}}
@@ -456,7 +456,7 @@ class Engine(dict):
             scheme["time"] = calendar.timegm(time.gmtime())
             scheme["symbol"] = pair
             scheme["direction"] = trigger
-            scheme["event"] = func+"-"+str(timeperiod)
+            scheme["event"] = func+"_"+str(timeperiod)
             scheme["difference"] = None
 
             self.add_scheme(scheme)

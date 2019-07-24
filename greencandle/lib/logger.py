@@ -40,7 +40,9 @@ def get_decorator(errors=(Exception,)):
             try:
                 return func(*args, **kwargs)
             except errors:
-                logger.critical("Got Error %s", str(sys.exc_info()))
+                logger.critical("Got Error %s", str(sys.exc_info()), errors)
+                #logger.critical('Function', method.__name__, 'time:', round((te -ts)*1000,1), 'ms')
+
                 raise
 
         return new_func

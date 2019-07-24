@@ -21,6 +21,8 @@ from ..lib.config import get_config
 
 def main():
     """ Main function """
+    if not len(sys.argv) > 1:
+        sys.exit("Usage: {0} <mepoch>".format(sys.argv[0]))
 
     klines_multiplier = {"15m": 1, "5m": 3, "3m": 5, "1m": 15}
     pairs = get_config("test")["serial_pairs"].split()
@@ -47,7 +49,6 @@ def main():
                                                                 start_time=real_start_time,
                                                                 no_of_klines=klines))
             pickle.dump(current, open(filename, "wb"))
-
 
 if __name__ == "__main__":
     main()

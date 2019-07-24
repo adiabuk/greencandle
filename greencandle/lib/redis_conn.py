@@ -1,4 +1,4 @@
-#pylint: disable=logging-format-interpolation
+#pylint: disable=logging-format-interpolation,eval-used,no-else-return
 
 """
 Store and retrieve items from redis
@@ -15,7 +15,14 @@ LOGGER = getLogger(__name__)
 HOST = get_config("redis")["host"]
 PORT = get_config("redis")["port"]
 
-class Redis(object):
+class AttributeDict(dict):
+    """Access dictionary keys like attributes"""
+    def __getattr__(self, attr):
+        return self[attr]
+    def __setattr__(self, attr, value):
+        self[attr] = value
+
+class Redis():
     """
     Redis object
     """
@@ -66,7 +73,7 @@ class Redis(object):
             success of operation: True/False
         """
 
-        LOGGER.critical("Adding to Redis:{0} {1} {2}".format(interval, data, now))
+        LOGGER.info("Adding to Redis:{0} {1} {2}".format(interval, list(data.keys()), now))
         response = self.conn.hmset("{0}:{1}:{2}".format(pair, interval, now), data)
         return response
 
@@ -125,7 +132,7 @@ class Redis(object):
             a tuple of current_price and current_date
         """
 
-        byte = self.conn.hget(item, "EMA-25")
+        byte = self.conn.hget(item, "EMA_25")
         try:
             data = ast.literal_eval(byte.decode("UTF-8"))
         except AttributeError:
@@ -133,6 +140,43 @@ class Redis(object):
             return None, None
 
         return data["current_price"], data["date"]
+
+    def get_action(self, pair):
+
+        results = AttributeDict(current=AttributeDict(), previous=AttributeDict())
+        try:
+            previous, current = self.get_items(pair='ETHBTC', interval='1m')[-2:]
+        except ValueError:
+            return ('HOLD', 'Not enough data', 0)
+
+        print(previous, current)
+        # get current & previous indicator values
+        for indicator in ['EMA_18', 'EMA_25', 'WMA_7']:
+
+            results['current'][indicator] = ast.literal_eval(self.get_item( \
+                    current, indicator).decode())['result']
+            results['previous'][indicator] = ast.literal_eval(self.get_item( \
+                    previous, indicator).decode())['result']
+
+        items = self.get_items(pair, self.interval)
+        current = self.get_current(items[-1])
+        current_mepoch = float(current[1]) / 1000
+        current_price = current[0]
+        current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_mepoch))
+        # rules
+        sell_rule1 = eval("results.current.EMA_25 < results.current.EMA_18")
+        sell_rule2 = eval("results.previous.EMA_25 > results.previous.EMA_18")
+
+        buy_rule1 = eval("results.current.EMA_25 > results.current.EMA_18")
+        buy_rule2 = eval("results.previous.EMA_25 < results.previous.EMA_18")
+
+        if sell_rule1 and sell_rule2:
+            return ('SELL', current_time, current_price)
+        elif buy_rule1 and buy_rule2:
+            return ('BUY', current_time, current_price)
+        else:
+            return ('HOLD', current_time, current_price)
+
 
     def get_change(self, pair):
         """
@@ -194,7 +238,7 @@ class Redis(object):
         elif value and float(current_price) < float(value[0][0]) * (1- (2/100)):  # 2% stop loss
             LOGGER.info("SELL stoploss {0} {1} {2} {3}".format(totals, current_time,
                                                                format(float(current_price), ".20f"),
-                                                               items[-1]))
-            return "sell", current_time, format(float(current_price), ".20f")
+                                                                items[-1]))
+            return "sell" , current_time, format(float(current_price), ".20f")
         """
         return "hold", current_time, format(float(current_price), ".20f")

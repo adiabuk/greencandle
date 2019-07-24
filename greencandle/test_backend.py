@@ -53,6 +53,7 @@ def main():
     parallel_interval = get_config("test")["parallel_interval"].split()[0]
     parallel_interval = args.interval if args.interval else parallel_interval
     serial_intervals = get_config("test")["serial_intervals"].split()
+    main_indicators = get_config("backend")["indicators"].split()
     serial_intervals = [args.interval] if args.interval else serial_intervals
     redis_db = {"15m":1, "5m":2, "3m":3, "1m":4}[parallel_interval]
 
@@ -60,12 +61,12 @@ def main():
     dbase.delete_data()
     del dbase
     if args.serial:
-        do_serial(pairs, serial_intervals, args.data_dir)
+        do_serial(pairs, serial_intervals, args.data_dir, main_indicators)
     else:
         do_parallel(pairs, parallel_interval, redis_db, args.data_dir)
 
 @get_exceptions
-def do_serial(pairs, intervals, data_dir):
+def do_serial(pairs, intervals, data_dir, indicators):
     """
     Do test with serial data
     """
@@ -86,18 +87,16 @@ def do_serial(pairs, intervals, data_dir):
 
         for interval in intervals:
             with ThreadPoolExecutor(max_workers=len(intervals)) as pool:
-                pool.submit(perform_data, pair, interval, data_dir)
-    #filename = "./results.p"   #FIXME
-    #pickle.dump(results, open(filename, "wb"))
+                pool.submit(perform_data, pair, interval, data_dir, indicators)
 
 @get_exceptions
-def perform_data(pair, interval, data_dir):
+def perform_data(pair, interval, data_dir, indicators):
     redis_db = {"15m":1, "5m":2, "3m":3, "1m":4}[interval]
     LOGGER.info("Serial run %s %s %s", pair, interval, redis_db)
     redis = Redis(interval=interval, test=True, db=redis_db)
-    filename = "test_data/{0}/{1}_{2}.p".format(data_dir, pair, interval)
+    filename = "{0}/{1}_{2}.p".format(data_dir, pair, interval)
     if not os.path.exists(filename):
-        LOGGER.critical("Data not found for %s %s", pair, interval)
+        LOGGER.critical("Filename:%s not found for %s %s",filename, pair, interval)
         return
     with open(filename, "rb") as handle:
         dframe = pickle.load(handle)
@@ -115,12 +114,35 @@ def perform_data(pair, interval, data_dir):
         dataframes = {pair:dataframe}
         engine = Engine(prices=prices_trunk, dataframes=dataframes,
                         interval=interval, test=True, db=redis_db)
-        engine.get_data()
-        del engine
+        LOGGER.warning(str(prices_trunk))
+        LOGGER.warning(str(interval))
+        LOGGER.warning(str(redis_db))
+        engine.get_data(config=indicators)
         result, current_time, current_price = redis.get_change(pair=pair)
         LOGGER.debug("Changed items: %s %s %s", pair, result, current_time)
+
+        ########TEST stategy############
+        result2, current_time2, current_price2 = redis.get_action(pair=pair)
+        LOGGER.info('In Strategy %s', result2)
+        if 'SELL' in result2 or 'BUY' in result2:
+            LOGGER.info('Strategy - Adding to redis')
+            scheme = {}
+            scheme["symbol"] = pair
+            scheme["direction"] = result2
+            scheme['result'] = 0
+            # compress and pickle current dataframe for redis storage
+            # dont get most recent one, as it may not be complete
+            scheme['data'] = result2
+            scheme["event"] = "trigger"
+            LOGGER.info('AMROX99 %s', str(scheme))
+            engine.add_scheme(scheme)
+
+        ################################
+
+        del engine
+
         if result == "buy":
-            LOGGER.debug("Items to buy")
+            LOGGER.debug("Items to buy: {0}".format(buys))
             buys.append((pair, current_time, current_price))
         elif result == "sell":
             LOGGER.debug("Items to sell")
@@ -179,8 +201,6 @@ def do_parallel(pairs, interval, redis_db, data_dir):
                 sells.append(pair)
         sell(sells, test_data=True, test_trade=True, interval=interval)
         buy(buys, test_data=True, test_trade=True, interval=interval)
-
-
 
     print(get_recent_profit(True, interval=interval))
 
