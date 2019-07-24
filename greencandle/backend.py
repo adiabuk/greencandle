@@ -97,6 +97,24 @@ def loop(interval, test, system):
     buys = []
     sells = []
     for pair in pairs:
+        ########TEST stategy############
+        result, current_time, current_price = redis.get_action(pair=pair)
+        LOGGER.info('In Strategy %s', result)
+        if 'SELL' in result or 'BUY' in result:
+            LOGGER.info('Strategy - Adding to redis')
+            scheme = {}
+            scheme["symbol"] = pair
+            scheme["direction"] = result
+            scheme['result'] = 0
+            # compress and pickle current dataframe for redis storage
+            # dont get most recent one, as it may not be complete
+            scheme['data'] = result
+            scheme["event"] = "trigger"
+            LOGGER.info('AMROX99 %s', str(scheme))
+            engine.add_scheme(scheme)
+
+
+        ################################
         if system == "redis":
             result, current_time, current_price = redis.get_change(pair=pair)
         else:
