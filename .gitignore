@@ -1,7 +1,7 @@
 *.swp
 *.swo
 *.swn
-*.html
+*.html*
 src
 notes.txt
 .~*
