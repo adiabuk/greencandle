@@ -46,7 +46,7 @@ def resize_screenshot(filename=None):
             cover = resizeimage.resize_width(image, 120)
             cover.save("{0}/{1}_resized.png".format(PATH, filename), image.format)
 
-def create_graph(dataframe, dataframe2, dataframe3, dataframe4, pair):
+def create_graph(dataframe, dataframe2, dataframe3, dataframe4, dataframe5, pair):
     """Create graph html file using plotly offline-mode from dataframe object"""
     py.init_notebook_mode()
     dataframe["time"] = pandas.to_datetime(dataframe["closeTime"], unit="ms")
@@ -64,27 +64,37 @@ def create_graph(dataframe, dataframe2, dataframe3, dataframe4, pair):
     wma7 = go.Scatter(x=dataframe4['date'], # assign x as the dataframe column 'x'
                       y=dataframe4['value'],
                       name='WMA-7')
-
-
+    events = go.Scatter(x=dataframe5['date'],
+                        y=dataframe5['current_price'],
+                        name="events",
+                        mode='markers+text',
+                        text=dataframe5['result'],
+                        textposition='top center',
+                        marker=dict(size=16, color=dataframe5['result']))
 
     filename = "simple_candlestick_{0}".format(pair)
-    py.plot([candles, ema18, ema25, wma7], filename="{0}/{1}.html".format(PATH, filename), auto_open=False)
-    #get_screenshot(filename)
-    #resize_screenshot(filename)
+    py.plot([candles, ema18, ema25, wma7, events], filename="{0}/{1}.html".format(PATH, filename), auto_open=False)
 
-def get_data():
+def get_data(test=False, db=0):
     """Fetch data from redis"""
-    redis = Redis()
+    print('Using db: {0}'.format(db))
+    redis = Redis(test=test, db=db)
     list_of_series = []
     list_of_ema18 = []
     list_of_ema25 = []
     list_of_wma7 = []
+    list_of_events = []
     index = redis.get_items('ETHBTC', '1m')
     for index_item in index:
         ema18 = ast.literal_eval(redis.get_item(index_item, 'EMA-18').decode())
         ema25 = ast.literal_eval(redis.get_item(index_item, 'EMA-25').decode())
         wma7 = ast.literal_eval(redis.get_item(index_item, 'WMA-7').decode())
         ohlc = ast.literal_eval(redis.get_item(index_item, 'ohlc').decode())['result']
+        try:
+            event = ast.literal_eval(redis.get_item(index_item, 'trigger').decode())
+            list_of_events.append((event['result'], event['current_price'], event['date']))
+        except AttributeError:  # no event for this time period, so skip
+            pass
         rehydrated = pickle.loads(zlib.decompress(ohlc))
         list_of_series.append(rehydrated)
         list_of_ema18.append((ema18['result'], ema18['date']))
@@ -95,4 +105,5 @@ def get_data():
     dataframe2 = pandas.DataFrame(list_of_ema18, columns=['value', 'date'])
     dataframe3 = pandas.DataFrame(list_of_ema25, columns=['value', 'date'])
     dataframe4 = pandas.DataFrame(list_of_wma7, columns=['value', 'date'])
-    return dataframe, dataframe2, dataframe3, dataframe4
+    dataframe5 = pandas.DataFrame(list_of_events, columns=['result', 'current_price', 'date'])
+    return dataframe, dataframe2, dataframe3, dataframe4, dataframe5
