@@ -153,7 +153,6 @@ class Engine(dict):
         Returns:
             dict containing all collected data
         """
-
         LOGGER.debug("Getting data")
         for pair in self.pairs:
 
@@ -257,13 +256,14 @@ class Engine(dict):
             None
 
         """
-        LOGGER.debug("Getting RSI_21 for %s", pair)
+        func, timeperiod = config  # split tuple
+        LOGGER.debug("Getting %s_%s for %s",func, timeperiod, pair)
         klines = self.dataframes[pair]
         dataframe = self.renamed_dataframe_columns(klines)
         scheme = {}
         mine = dataframe.apply(pandas.to_numeric)
-        rsi = RSI(mine)
-        df_list = rsi["RSI_21"].tolist()
+        rsi = RSI(mine, period=timeperiod)
+        df_list = rsi["{0}_{1}".format(func, timeperiod)].tolist()
         df_list = ["%.1f" % float(x) for x in df_list]
         scheme["data"] = df_list[-1]
         scheme["url"] = self.get_url(pair)
@@ -276,9 +276,9 @@ class Engine(dict):
         else:
             direction = "HOLD"
         scheme["direction"] = direction
-        scheme["event"] = "RSI_21"
+        scheme["event"] = "{0}_{1}".format(func, timeperiod)
         self.add_scheme(scheme)
-        LOGGER.debug("Done getting RSI_21")
+        LOGGER.debug("Done getting RSI")
 
     @staticmethod
     def renamed_dataframe_columns(klines=None):
