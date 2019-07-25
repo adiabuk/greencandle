@@ -3,10 +3,12 @@
 """
 Store and retrieve items from redis
 """
-
+import sys
 import ast
 import time
 import redis
+import zlib
+import pickle
 from .mysql import Mysql
 from .logger import getLogger
 from .config import get_config
@@ -132,51 +134,75 @@ class Redis():
             a tuple of current_price and current_date
         """
 
-        byte = self.conn.hget(item, "EMA_25")
+        byte = self.conn.hget(item, "ohlc")
         try:
             data = ast.literal_eval(byte.decode("UTF-8"))
         except AttributeError:
             LOGGER.error("No Data")
             return None, None
 
-        return data["current_price"], data["date"]
+        return data["current_price"], data["date"], data['result']
 
-    def get_action(self, pair):
+    def get_action(self, pair, interval):
 
-        results = AttributeDict(current=AttributeDict(), previous=AttributeDict())
+        results = AttributeDict(current=AttributeDict(), previous=AttributeDict(),
+                                previous1=AttributeDict())
         try:
-            previous, current = self.get_items(pair='ETHBTC', interval='1m')[-2:]
+            previous1, previous, current = self.get_items(pair='ETHBTC', interval=interval)[-3:]
         except ValueError:
             return ('HOLD', 'Not enough data', 0)
 
         print(previous, current)
         # get current & previous indicator values
-        for indicator in ['EMA_18', 'EMA_25', 'WMA_7']:
+        main_indicators = get_config("backend")["indicators"].split()
+        ind_list = []
+        for i in main_indicators:
+            split = i.split(';')
+            ind = split[1] + '_' + split[2]
+            ind_list.append(ind)
+
+        for indicator in ind_list:
 
             results['current'][indicator] = ast.literal_eval(self.get_item( \
                     current, indicator).decode())['result']
             results['previous'][indicator] = ast.literal_eval(self.get_item( \
                     previous, indicator).decode())['result']
-
+            results['previous1'][indicator] = ast.literal_eval(self.get_item( \
+                    previous1, indicator).decode())['result']
         items = self.get_items(pair, self.interval)
         current = self.get_current(items[-1])
+        previous = self.get_current(items[-2])
         current_mepoch = float(current[1]) / 1000
+
+        rehydrated = pickle.loads(zlib.decompress(current[-1]))
+        last_rehydrated = pickle.loads(zlib.decompress(previous[-1]))
+        high = rehydrated.high
+        low = rehydrated.low
+
+        last_high = last_rehydrated.high
+        last_low = last_rehydrated.low
+
         current_price = current[0]
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_mepoch))
-        # rules
-        sell_rule1 = eval("results.current.EMA_25 < results.current.EMA_18")
-        sell_rule2 = eval("results.previous.EMA_25 > results.previous.EMA_18")
 
-        buy_rule1 = eval("results.current.EMA_25 > results.current.EMA_18")
-        buy_rule2 = eval("results.previous.EMA_25 < results.previous.EMA_18")
+        buy_rules = []
+        sell_rules = []
+        for seq in range(1, 6):
+            try:
+                buy_rules.append(eval(get_config('backend')['buy_rule{}'.format(seq)]))
+            except KeyError:
+                pass
+            try:
+                sell_rules.append(eval(get_config('backend')['sell_rule{}'.format(seq)]))
+            except KeyError:
+                pass
 
-        if sell_rule1 and sell_rule2:
+        if all(sell_rules):
             return ('SELL', current_time, current_price)
-        elif buy_rule1 and buy_rule2:
+        elif all(buy_rules):
             return ('BUY', current_time, current_price)
         else:
             return ('HOLD', current_time, current_price)
-
 
     def get_change(self, pair):
         """
