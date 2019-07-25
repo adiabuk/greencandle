@@ -122,7 +122,7 @@ def perform_data(pair, interval, data_dir, indicators):
         LOGGER.debug("Changed items: %s %s %s", pair, result, current_time)
 
         ########TEST stategy############
-        result2, current_time2, current_price2 = redis.get_action(pair=pair)
+        result2, current_time2, current_price2 = redis.get_action(pair=pair, interval=interval)
         LOGGER.info('In Strategy %s', result2)
         if 'SELL' in result2 or 'BUY' in result2:
             LOGGER.info('Strategy - Adding to redis')
@@ -130,27 +130,23 @@ def perform_data(pair, interval, data_dir, indicators):
             scheme["symbol"] = pair
             scheme["direction"] = result2
             scheme['result'] = 0
-            # compress and pickle current dataframe for redis storage
-            # dont get most recent one, as it may not be complete
             scheme['data'] = result2
             scheme["event"] = "trigger"
-            LOGGER.info('AMROX99 %s', str(scheme))
             engine.add_scheme(scheme)
-
+        LOGGER.critical('AMX ' + result2)
         ################################
 
         del engine
 
-        if result == "buy":
+        if result2 == "BUY":
             LOGGER.debug("Items to buy: {0}".format(buys))
             buys.append((pair, current_time, current_price))
-        elif result == "sell":
+        elif result2 == "SELL":
             LOGGER.debug("Items to sell")
             sells.append((pair, current_time, current_price))
         sell(sells, test_data=True, test_trade=True, interval=interval)
         buy(buys, test_data=True, test_trade=True, interval=interval)
 
-    #results[pair][interval] = profit[0]  #FIXME
     del redis
     LOGGER.info("Selling remaining items")
     sells = []
