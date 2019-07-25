@@ -3,6 +3,7 @@ from = someone@gmail.com
 to = someone.else@gmail.com
 password = password
 
+
 [logging]
 level = 20
 
@@ -17,10 +18,10 @@ update_interval = 15
 [backend]
 binance_api_key =
 binance_api_secret =
-coinbase_api_key =
-coinbase_api_secret =
+coinbase_api_key = blablabla
+coinbase_api_secret = hello
 base = ETH BTC BCC
-pairs = KNCBTC CMTBTC TNBBTC MDABTC POWRBTC TRXBTC BCDBTC INSBTC HSRBTC EOSBTC BTGBTC ZRXBTC DLTBTC VIBEBTC ICXBTC STORMBTC WANBTC SALTBTC ONTBTC OMGBTC
+pairs_1m = ETHBTC
 test_trade = True
 price_per_trade = 200
 max_trades = 20
@@ -29,6 +30,11 @@ drain_15m = True
 drain_5m = True
 drain_3m = True
 drain_1m = False
+indicators = get_moving_averages;WMA;7 get_moving_averages;EMA;18 get_moving_averages;EMA;25
+buy_rule1 = results.current.EMA_25 > results.current.EMA_18
+buy_rule2 = results.previous.EMA_25 < results.previous.EMA_18
+sell_rule1 = results.current.EMA_25 < results.current.EMA_18
+sell_rule2 = results.previous.EMA_25 > results.previous.EMA_18
 
 [api]
 port = 5001
@@ -36,16 +42,31 @@ interval = 15m
 pairs = XRPETH ETHBTC BCCETH DASHETH ZECETH DGDETH XMRETH BNBETH BNBBTC TRXBTC STRATBTC
 
 [database]
-host = 127.1
+host = 127.0.0.1
 user = root
 password = password
 db = greencandle
 db_test = greencandle_test
 
+[redis]
+host = 127.1
+port = 6379
+
 [test]
-parallel_pairs = RLCBTC NULSBTC VIABTC GVTBTC ZILBTC BQXBTC BCDBTC DLTBTC WTCBTC XLMBTC DNTBTC KNCBTC ICNBTC OSTBTC MTLBTC XRPBTC XRPBTC MTHBTC STORMBTC CNDBTC
-serial_pairs = FUNBTC ADXBTC WANBTC LINKBTC YOYOBTC NEOBTC BCCBTC NULSBTC NCASHBTC CDTBTC LENDBTC CNDBTC POWRBTC STORMBTC VIBEBTC RCNBTC OMGBTC VIABTC IOSTBTC ZRXBTC WTCBTC XVGBTC ARKBTC CHATBTC DASHBTC SUBBTC KMDBTC GASBTC AEBTC VENBTC BLZBTC MTHBTC PPTBTC STEEMBTC SALTBTC BNBBTC QSPBTC EDOBTC XLMBTC VIBBTC EVXBTC BTGBTC GVTBTC AIONBTC ARNBTC GXSBTC XRPBTC XEMBTC RPXBTC NAVBTC LSKBTC INSBTC LUNBTC MDABTC OAXBTC ICXBTC GTOBTC ASTBTC ICNBTC NEBLBTC MTLBTC RDNBTC ELFBTC ENGBTC BTSBTC BRDBTC WAVESBTC FUELBTC APPCBTC ADABTC BNTBTC IOTABTC TNBBTC LTCBTC ZILBTC ETHBTC WINGSBTC EOSBTC BATBTC NANOBTC QTUMBTC MCOBTC ZECBTC RLCBTC SNGLSBTC LRCBTC XZCBTC REQBTC BQXBTC TRIGBTC BCPTBTC ETCBTC DLTBTC XMRBTC OSTBTC CTRBTC MODBTC WABIBTC POEBTC PIVXBTC ENJBTC BCDBTC STRATBTC DGDBTC MANABTC POABTC SNTBTC DNTBTC SNMBTC KNCBTC STORJBTC AMBBTC HSRBTC TNTBTC ONTBTC TRXBTC CMTBTC
+parallel_pairs = RLCBTC
+serial_pairs = ETHBTC
 parallel_interval= 15m
 serial_intervals = 15m 5m 3m 1m
 start_time = 1524519480600
 no_of_klines = 1000
+indicator1 = MA;30
+indicator2 = MA;20
+indicator3 = MA;10
+indicator4 = AWESOME;30
+pairs_1m = ETHBTC
+buy_rule1 = ?
+buy_rule2 = ?
+buy_rule3 = ?
+sell_rule1 = ?
+sell_rule2 = ?
+sell_rule3 = ?
