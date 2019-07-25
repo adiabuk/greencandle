@@ -101,7 +101,7 @@ def buy(buy_list, test_data=False, test_trade=True, interval=None):
                         (not test_trade and 'transactTime' in result):
                     # only insert into db, if:
                     # 1. we are using test_data
-                    # 2. we we performed a test trade which was successful - (empty dict)
+                    # 2. we performed a test trade which was successful - (empty dict)
                     # 3. we proformed a real trade which was successful - (transactTime in dict)
                     dbase.insert_trade(pair=item, price=cost, date=current_time,
                                        investment=20, total=amount)
