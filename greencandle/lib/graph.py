@@ -14,14 +14,12 @@ from pyvirtualdisplay import Display
 import plotly.offline as py
 import plotly.graph_objs as go
 
-
 from PIL import Image
 from resizeimage import resizeimage
 from .redis_conn import Redis
 from .config import get_config
 
-PATH = os.getcwd() + "/graphs/in/"
-PATH = '/tmp/'
+PATH = '/tmp'
 
 def get_screenshot(filename=None):
     """Capture screenshot using selenium/firefox in Xvfb """
@@ -50,7 +48,6 @@ def resize_screenshot(filename=None):
 
 def create_graph(pair, data):
     """Create graph html file using plotly offline-mode from dataframe object"""
-    py.init_notebook_mode()
     graphs = []
     for name, value in data.items():
         if name == 'ohlc':
@@ -73,8 +70,8 @@ def create_graph(pair, data):
                               y=value['value'],
                               name=name)
         graphs.append(item)
-    filename = "simple_candlestick_{0}".format(pair)
-    py.plot(graphs, filename="{0}/{1}.html".format(PATH, filename), auto_open=False)
+    filename = "{0}/simple_candlestick_{1}.html".format(PATH, pair)
+    py.plot(graphs, filename=filename, auto_open=False)
 
 def get_data(test=False, db=0, interval='1m'):
     """Fetch data from redis"""
@@ -108,14 +105,15 @@ def get_data(test=False, db=0, interval='1m'):
             list_of_results[ind].append((result_list[ind]['result'], result_list[ind]['date']))
         try:
             list_of_results['event'].append((result_list['event']['result'],
-                result_list['event']['current_price'], result_list['event']['date']))
+                                             result_list['event']['current_price'],
+                                             result_list['event']['date']))
         except KeyError:
             pass
     dataframes = {}
 
     dataframes['ohlc'] = pandas.DataFrame(list_of_series)
     dataframes['event'] = pandas.DataFrame(list_of_results['event'], columns=['result',
-        'current_price', 'date'])
+                                           'current_price', 'date'])
     for ind in ind_list:
         dataframes[ind] = pandas.DataFrame(list_of_results[ind], columns=['value', 'date'])
     return dataframes

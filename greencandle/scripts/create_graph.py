@@ -1,18 +1,20 @@
 #!/usr/bin/env python
 
 import os
-import sys
+import argparse
+import argcomplete
 from greencandle.lib.graph import create_graph, get_data
 
 def main():
-    if len(sys.argv) <= 1:
-        sys.exit("Usage: {0} <redis db #>".format(sys.argv[0]))
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-d", "--db")
+    parser.add_argument("-i", "--interval")
+    parser.add_argument("-t", "--test", action="store_true", default=False)
+    argcomplete.autocomplete(parser)
+    args = parser.parse_args()
 
-    db = sys.argv[1]
-    test = True
-    dataframes = get_data(test=test, db=db)
+    dataframes = get_data(test=args.test, db=args.db, interval=args.interval)
     create_graph('ETHBTC', dataframes)
-    os.system('mv /tmp/simple_candlestick_ETHBTC.html /vagrant')
 
 if __name__ == '__main__':
     main()
