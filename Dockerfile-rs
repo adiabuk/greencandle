@@ -1,4 +1,5 @@
 FROM redis:5.0.5
 
 EXPOSE 6379
+HEALTHCHECK CMD redis-cli ping
 CMD [ "redis-server" ]

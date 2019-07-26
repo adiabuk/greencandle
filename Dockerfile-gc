@@ -3,3 +3,4 @@ FROM python:3.6.9
 ADD . /install
 RUN bash /install/gc-install.sh
 COPY config.ini /etc/greencandle.ini
+HEALTHCHECK CMD find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1

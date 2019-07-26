@@ -8,6 +8,11 @@ services:
     restart: on-failure
     links:
       - mysql
+    healthcheck:
+      test: redis-cli ping
+      interval: 1m
+      timeout: 2s
+      retries: 5
 
   mysql:
     image: gc-mysql
@@ -16,6 +21,11 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=password
     restart: on-failure
+    healthcheck:
+      test: echo 'SELECT version();'| mysql -uroot -ppassword
+      interval: 1m
+      timeout: 2s
+      retries: 5
 
   greencandle-test:
     image: greencandle
@@ -25,6 +35,12 @@ services:
     depends_on:
       - mysql
       - redis
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+
   greencandle-test2:
     image: greencandle
     entrypoint: backend --use-redis --test
