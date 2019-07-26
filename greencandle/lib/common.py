@@ -5,7 +5,7 @@ Common functions that don't belong anywhere else
 from decimal import Decimal
 import numpy
 
-def percent(num, perc):
+def percent(perc, num):
     """return percentage of a given number"""
     return (num * perc) /100
 
