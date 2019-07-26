@@ -11,6 +11,7 @@ import argparse
 import time
 import sys
 import re
+from pathlib import Path
 import argcomplete
 import setproctitle
 
@@ -78,6 +79,7 @@ def loop(interval, test, system):
     max_trades = int(get_config("backend")["max_trades"])
     test_trade = test if test else str2bool(get_config("backend")["test_trade"])
     LOGGER.info("Starting new cycle")
+    Path('/var/run/greencandle').touch()
     LOGGER.debug("max trades: %s", max_trades)
 
     prices = binance.prices()
