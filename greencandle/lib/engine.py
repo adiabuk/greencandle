@@ -262,7 +262,7 @@ class Engine(dict):
         dataframe = self.renamed_dataframe_columns(klines)
         scheme = {}
         mine = dataframe.apply(pandas.to_numeric)
-        rsi = RSI(mine, period=timeperiod)
+        rsi = RSI(mine, period=int(timeperiod))
         df_list = rsi["{0}_{1}".format(func, timeperiod)].tolist()
         df_list = ["%.1f" % float(x) for x in df_list]
         scheme["data"] = df_list[-1]
