@@ -99,7 +99,7 @@ def loop(interval, test, system):
     sells = []
     for pair in pairs:
         ########TEST stategy############
-        result, current_time, current_price = redis.get_action(pair=pair)
+        result, current_time, current_price = redis.get_action(pair=pair, interval=interval)
         LOGGER.info('In Strategy %s', result)
         if 'SELL' in result or 'BUY' in result:
             LOGGER.info('Strategy - Adding to redis')
