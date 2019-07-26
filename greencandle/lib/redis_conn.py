@@ -1,18 +1,17 @@
-#pylint: disable=logging-format-interpolation,eval-used,no-else-return
+#pylint: disable=logging-format-interpolation,eval-used,no-else-return,unused-variable
 
 """
 Store and retrieve items from redis
 """
-import sys
 import ast
 import time
-import redis
 import zlib
 import pickle
+import redis
 from .mysql import Mysql
 from .logger import getLogger
 from .config import get_config
-
+from .common import add_perc, sub_perc
 LOGGER = getLogger(__name__)
 HOST = get_config("redis")["host"]
 PORT = get_config("redis")["port"]
@@ -47,6 +46,7 @@ class Redis():
             redis_db = 0
             test_str = "Live"
         self.interval = interval
+        self.test = test
 
         LOGGER.debug("Starting Redis with interval %s %s, db=%s", interval, test_str, str(redis_db))
         pool = redis.ConnectionPool(host=HOST, port=PORT, db=redis_db)
@@ -148,7 +148,7 @@ class Redis():
         results = AttributeDict(current=AttributeDict(), previous=AttributeDict(),
                                 previous1=AttributeDict())
         try:
-            previous1, previous, current = self.get_items(pair='ETHBTC', interval=interval)[-3:]
+            previous1, previous, current = self.get_items(pair=pair, interval=interval)[-3:]
         except ValueError:
             return ('HOLD', 'Not enough data', 0)
 
@@ -174,15 +174,18 @@ class Redis():
         previous = self.get_current(items[-2])
         current_mepoch = float(current[1]) / 1000
 
+
+
         rehydrated = pickle.loads(zlib.decompress(current[-1]))
         last_rehydrated = pickle.loads(zlib.decompress(previous[-1]))
+
+        # variables that can be referenced in config file
         high = rehydrated.high
         low = rehydrated.low
-
         last_high = last_rehydrated.high
         last_low = last_rehydrated.low
 
-        current_price = current[0]
+        current_price = float(current[0])
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_mepoch))
 
         buy_rules = []
@@ -197,9 +200,31 @@ class Redis():
             except KeyError:
                 pass
 
-        if all(sell_rules):
+        stop_loss_perc = float(get_config("backend")["stop_loss_perc"])
+        take_profit_perc = float(get_config("backend")["take_profit_perc"])
+
+        try:
+            # function returns an empty list if no results so cannot get first element
+            buy_price = float(self.dbase.get_trade_value(pair)[0][0])
+            stop_loss_rule = current_price < sub_perc(stop_loss_perc, buy_price)
+            take_profit_rule = current_price > add_perc(take_profit_perc, buy_price)
+
+        except (IndexError, ValueError):
+            # Setting to none to indicate we are currently not in a trade
+            buy_price = None
+            stop_loss_rule = False
+            take_profit_rule = False
+
+
+
+        # if we have a buy_price (ie. currently in a trade) and
+        # ether match all sell rules or at the stop loss amount
+        if buy_price and (all(sell_rules) or stop_loss_rule):
             return ('SELL', current_time, current_price)
-        elif all(buy_rules):
+
+        # if we don't have a buy price (ie. not currently in a trade) and
+        # either match all buy rules or at the take profit amount
+        elif not buy_price and (all(buy_rules) or take_profit_rule):
             return ('BUY', current_time, current_price)
         else:
             return ('HOLD', current_time, current_price)
