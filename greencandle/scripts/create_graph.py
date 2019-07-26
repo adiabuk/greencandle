@@ -10,8 +10,8 @@ def main():
 
     db = sys.argv[1]
     test = True
-    df1, df2, df3, df4, df5 = get_data(test=test, db=db)
-    create_graph(df1, df2, df3, df4, df5, 'ETHBTC')
+    dataframes = get_data(test=test, db=db)
+    create_graph('ETHBTC', dataframes)
     os.system('mv /tmp/simple_candlestick_ETHBTC.html /vagrant')
 
 if __name__ == '__main__':
