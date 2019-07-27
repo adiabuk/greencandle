@@ -48,7 +48,7 @@ def resize_screenshot(filename=None):
             cover = resizeimage.resize_width(image, 120)
             cover.save("{0}/{1}_resized.png".format(PATH, filename), image.format)
 
-def create_graph(pair, data):
+def create_graph(pair, data, interval):
     """Create graph html file using plotly offline-mode from dataframe object"""
 
     fig = tls.make_subplots(rows=2, cols=1, shared_xaxes=True)
@@ -88,7 +88,7 @@ def create_graph(pair, data):
 
         fig.append_trace(item, row, col)
 
-    filename = "{0}/simple_candlestick_{1}.html".format(PATH, pair)
+    filename = "{0}/simple_candlestick_{1}-{2}.html".format(PATH, pair, interval)
     py.plot(fig, filename=filename, auto_open=False)
 
 def get_data(test=False, pair='ETHBTC', db=0, interval='1m'):

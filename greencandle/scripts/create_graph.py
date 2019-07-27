@@ -15,7 +15,7 @@ def main():
     args = parser.parse_args()
 
     dataframes = get_data(pair=args.pair, test=args.test, db=args.db, interval=args.interval)
-    create_graph(args.pair, dataframes)
+    create_graph(args.pair, dataframes, args.interval)
 
 if __name__ == '__main__':
     main()
