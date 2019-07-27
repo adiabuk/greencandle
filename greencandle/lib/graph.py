@@ -7,13 +7,14 @@ import os
 import time
 import pickle
 import zlib
-import pandas
 from collections import defaultdict
+import pandas
 from selenium import webdriver
 from pyvirtualdisplay import Display
 
 import plotly.offline as py
 import plotly.graph_objs as go
+import plotly.tools as tls
 
 from PIL import Image
 from resizeimage import resizeimage
@@ -49,8 +50,12 @@ def resize_screenshot(filename=None):
 
 def create_graph(pair, data):
     """Create graph html file using plotly offline-mode from dataframe object"""
-    graphs = []
+
+    fig = tls.make_subplots(rows=2, cols=1, shared_xaxes=True)
     for name, value in data.items():
+        row = 1
+        col = 1
+
         if name == 'ohlc':
             value["time"] = pandas.to_datetime(value["closeTime"], unit="ms")
             item = go.Candlestick(x=value.time + pandas.Timedelta(hours=1),
@@ -67,13 +72,23 @@ def create_graph(pair, data):
                               name="events",
                               mode='markers',
                               marker=dict(size=16, color=event['result']))
+        elif 'RSI' in name:
+            item = go.Bar(x=value['date'],
+                          y=value['value'],
+                          name=name)
+            # add rsi graph in second subply (below) if it exists
+            row = 2
+
+
         else:
-            item = go.Scatter(x=value['date'], # assign x as the dataframe column 'x'
+            item = go.Scatter(x=value['date'],
                               y=value['value'],
                               name=name)
-        graphs.append(item)
+
+        fig.append_trace(item, row, col)
+
     filename = "{0}/simple_candlestick_{1}.html".format(PATH, pair)
-    py.plot(graphs, filename=filename, auto_open=False)
+    py.plot(fig, filename=filename, auto_open=False)
 
 def get_data(test=False, pair='ETHBTC', db=0, interval='1m'):
     """Fetch data from redis"""
