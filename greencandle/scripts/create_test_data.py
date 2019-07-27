@@ -17,30 +17,29 @@ BASE_DIR = os.getcwd().split("greencandle", 1)[0] + "greencandle"
 sys.path.append(BASE_DIR)
 
 from ..lib.binance_common import get_all_klines
-from ..lib.config import get_config
 
 def main():
     """ Main function """
-    if not len(sys.argv) > 1:
-        sys.exit("Usage: {0} <mepoch>".format(sys.argv[0]))
-
-    klines_multiplier = {"15m": 1, "5m": 3, "3m": 5, "1m": 15}
-    pairs = get_config("test")["serial_pairs"].split()
-    intervals = get_config("test")["serial_intervals"].split()
-    start_time = get_config("test")["start_time"].split()
+    if len(sys.argv) <= 2:
+        sys.exit("Usage: {0} <mepoch> <pairs>".format(sys.argv[0]))
+    no_of_klines = 1440  # number of minutes in a day
+    additional_klines = 50
+    klines_multiplier = {"15m": 1/15,
+                         "5m": 1/5,
+                         "3m": 1/3,
+                         "1m": 1}
+    pairs = sys.argv[2:]
     start_time = sys.argv[1]
 
-    no_of_klines = int(get_config("test")["no_of_klines"].split()[0])
     for pair in pairs:
-         for interval in intervals:
-            klines = no_of_klines * int(klines_multiplier[interval]) +50
+        for interval in ['1m', '3m', '5m', '15m']:
+            klines = int(no_of_klines * klines_multiplier[interval]) + additional_klines
             if not os.path.isdir('/tmp/test_data'):
                 os.mkdir('/tmp/test_data')
             filename = "/tmp/test_data/{0}_{1}.p".format(pair, interval)
             print("Using filename:", filename)
             if os.path.exists(filename):
                 continue
-            adiitional_klines = 50
             minutes = [int(s) for s in re.findall(r'(\d+)m', interval)][0]
             milliseconds = minutes * 60000
             real_start_time = int(start_time) - milliseconds
