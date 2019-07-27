@@ -11,6 +11,7 @@ import pandas
 from collections import defaultdict
 from selenium import webdriver
 from pyvirtualdisplay import Display
+
 import plotly.offline as py
 import plotly.graph_objs as go
 
@@ -58,13 +59,14 @@ def create_graph(pair, data):
                                   low=value.low,
                                   close=value.close)
         elif name == 'event':
-            item = go.Scatter(x=value['date'],
-                              y=value['current_price'],
+            # dataframe is mutable so we cannot reference exisiting values by hashing
+            # therefore we will substitute buy/sell with and rgb value for red/green
+            event = value.replace('SELL', 'rgb(255,0,0)').replace('BUY', 'rgb(0,255,0)')
+            item = go.Scatter(x=event['date'],
+                              y=event['current_price'],
                               name="events",
-                              mode='markers+text',
-                              text=value['result'],
-                              textposition='top center',
-                              marker=dict(size=16, color=value['result']))
+                              mode='markers',
+                              marker=dict(size=16, color=event['result']))
         else:
             item = go.Scatter(x=value['date'], # assign x as the dataframe column 'x'
                               y=value['value'],
@@ -73,12 +75,12 @@ def create_graph(pair, data):
     filename = "{0}/simple_candlestick_{1}.html".format(PATH, pair)
     py.plot(graphs, filename=filename, auto_open=False)
 
-def get_data(test=False, db=0, interval='1m'):
+def get_data(test=False, pair='ETHBTC', db=0, interval='1m'):
     """Fetch data from redis"""
     print('Using db: {0}'.format(db))
     redis = Redis(test=test, db=db)
     list_of_series = []
-    index = redis.get_items('ETHBTC', interval)
+    index = redis.get_items(pair, interval)
 
     main_indicators = get_config("backend")["indicators"].split()
     ind_list = []
