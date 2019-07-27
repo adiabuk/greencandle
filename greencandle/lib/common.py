@@ -49,7 +49,8 @@ def add_perc(perc, num):
     Returns:
         total: num + perc%
     """
-    return num * (1 + perc/100)
+
+    return float(num) * (1 + float(perc)/100)
 
 def sub_perc(perc, num):
     """
@@ -60,7 +61,7 @@ def sub_perc(perc, num):
     Returns:
         total: num - perc%
     """
-    return num * (1 - perc/100)
+    return float(num) * (1 - float(perc)/100)
 
 def perc_diff(num1, num2):
     """
