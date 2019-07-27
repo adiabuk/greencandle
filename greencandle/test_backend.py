@@ -139,13 +139,13 @@ def perform_data(pair, interval, data_dir, indicators):
         del engine
 
         if result2 == "BUY":
-            LOGGER.debug("Items to buy: {0}".format(buys))
             buys.append((pair, current_time, current_price))
+            LOGGER.debug("Items to buy: %s", buys)
+            buy(buys, test_data=True, test_trade=True, interval=interval, pair=pair)
         elif result2 == "SELL":
-            LOGGER.debug("Items to sell")
             sells.append((pair, current_time, current_price))
-        sell(sells, test_data=True, test_trade=True, interval=interval)
-        buy(buys, test_data=True, test_trade=True, interval=interval)
+            LOGGER.debug("Items to sell: %s", sells)
+            sell(sells, test_data=True, test_trade=True, interval=interval)
 
     del redis
     LOGGER.info("Selling remaining items")

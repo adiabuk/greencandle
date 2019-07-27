@@ -24,7 +24,6 @@ from .supres import supres
 from .common import make_float, pipify, pip_calc
 from .logger import getLogger, get_decorator
 
-
 LOGGER = getLogger(__name__)
 
 class Balance(dict):  #FIXME

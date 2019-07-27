@@ -40,7 +40,7 @@ def get_sell_price(pair=None):
     return sorted([float(i) for i in binance.depth(pair)["bids"].keys()])[-1]
 
 @GET_EXCEPTIONS
-def buy(buy_list, test_data=False, test_trade=True, interval=None):
+def buy(buy_list, test_data=False, test_trade=True, interval=None, pair=None):
     """
     Buy as many items as we can from buy_list depending on max amount of trades, and current
     balance in BTC
@@ -72,7 +72,9 @@ def buy(buy_list, test_data=False, test_trade=True, interval=None):
 
             LOGGER.info("btc_amount: %s", btc_amount)
             cost = current_price
-            if test_data:
+            if pair:
+                main_pairs = [pair]
+            elif test_data:
                 main_pairs = get_config("test")["pairs_{0}".format(interval)].split()
             else:
                 main_pairs = get_config("backend")["pairs_{0}".format(interval)].split()
