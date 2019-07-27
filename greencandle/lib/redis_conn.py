@@ -220,16 +220,21 @@ class Redis():
             stop_loss_rule = False
             take_profit_rule = False
 
-        if stop_loss_rule:
-            LOGGER.critical('stop_loss %s %s %s', buy_price, current_price, sub_perc(stop_loss_perc, buy_price))
-        # if we have a buy_price (ie. currently in a trade) and
-        # ether match all sell rules or at the stop loss amount
-        if buy_price and (all(sell_rules) or stop_loss_rule):
+        # if we match stop_loss rule and are in a trade
+        if stop_loss_rule and buy_price:
+            LOGGER.critical('EVENT: stop_loss %s %s %s', buy_price, current_price, sub_perc(stop_loss_perc, buy_price))
             return ('SELL', current_time, current_price)
-
-        # if we don't have a buy price (ie. not currently in a trade) and
-        # either match all buy rules or at the take profit amount
-        elif not buy_price and (all(buy_rules) or take_profit_rule):
+        # if we match take_profit rule and are in a trade
+        elif take_profit_rule and buy_price:
+            LOGGER.critical('EVENT: take_profit %s %s %s', buy_price, current_price, add_perc(take_profit_perc, buy_price))
+            return ('SELL', current_time, current_price)
+        # if we match all sell rules and are in a trade
+        elif all(sell_rules) and buy_price:
+            LOGGER.critical('EVENT: NORMAL SELL')
+            return ('SELL', current_time, current_price)
+        # if we match all buy rules and are NOT in a trade
+        elif all(buy_rules) and not buy_price:
+            LOGGER.critical('EVENT: NORMAL BUY')
             return ('BUY', current_time, current_price)
         else:
             return ('HOLD', current_time, current_price)
