@@ -180,11 +180,16 @@ class Redis():
         last_rehydrated = pickle.loads(zlib.decompress(previous[-1]))
 
         # variables that can be referenced in config file
+        open = rehydrated.open
         high = rehydrated.high
         low = rehydrated.low
+        close = rehydrated.close
+        last_open = last_rehydrated.open
         last_high = last_rehydrated.high
         last_low = last_rehydrated.low
-
+        last_close = last_rehydrated.close
+        LOGGER.critical("Current OHLC: %s %s %s %s", open, high, low, close)
+        LOGGER.critical("Previous OHLC: %s %s %s %s", last_open, last_high, last_low, last_close)
         current_price = float(current[0])
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_mepoch))
 
@@ -215,8 +220,8 @@ class Redis():
             stop_loss_rule = False
             take_profit_rule = False
 
-
-
+        if stop_loss_rule:
+            LOGGER.critical('stop_loss %s %s %s', buy_price, current_price, sub_perc(stop_loss_perc, buy_price))
         # if we have a buy_price (ie. currently in a trade) and
         # ether match all sell rules or at the stop loss amount
         if buy_price and (all(sell_rules) or stop_loss_rule):
