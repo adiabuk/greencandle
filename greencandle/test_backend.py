@@ -22,7 +22,7 @@ from .lib.logger import getLogger, get_decorator
 
 LOGGER = getLogger(__name__)
 CHUNK_SIZE = 50
-get_exceptions = get_decorator((Exception))
+GET_EXCEPTIONS = get_decorator((Exception))
 
 def make_data_tupple(dataframe):
     """
@@ -52,9 +52,8 @@ def main():
     pairs = args.pairs if args.pairs else get_config("test")["pairs"].split()
     parallel_interval = get_config("test")["parallel_interval"].split()[0]
     parallel_interval = args.interval if args.interval else parallel_interval
-    serial_intervals = get_config("test")["serial_intervals"].split()
     main_indicators = get_config("backend")["indicators"].split()
-    serial_intervals = [args.interval] if args.interval else serial_intervals
+    serial_intervals = [args.interval]
     redis_db = {"15m":1, "5m":2, "3m":3, "1m":4}[parallel_interval]
 
     dbase = Mysql(test=True, interval=parallel_interval)
@@ -65,7 +64,7 @@ def main():
     else:
         do_parallel(pairs, parallel_interval, redis_db, args.data_dir)
 
-@get_exceptions
+@GET_EXCEPTIONS
 def do_serial(pairs, intervals, data_dir, indicators):
     """
     Do test with serial data
@@ -89,14 +88,14 @@ def do_serial(pairs, intervals, data_dir, indicators):
             with ThreadPoolExecutor(max_workers=len(intervals)) as pool:
                 pool.submit(perform_data, pair, interval, data_dir, indicators)
 
-@get_exceptions
+@GET_EXCEPTIONS
 def perform_data(pair, interval, data_dir, indicators):
     redis_db = {"15m":1, "5m":2, "3m":3, "1m":4}[interval]
     LOGGER.info("Serial run %s %s %s", pair, interval, redis_db)
     redis = Redis(interval=interval, test=True, db=redis_db)
     filename = "{0}/{1}_{2}.p".format(data_dir, pair, interval)
     if not os.path.exists(filename):
-        LOGGER.critical("Filename:%s not found for %s %s",filename, pair, interval)
+        LOGGER.critical("Filename:%s not found for %s %s", filename, pair, interval)
         return
     with open(filename, "rb") as handle:
         dframe = pickle.load(handle)
@@ -107,7 +106,9 @@ def perform_data(pair, interval, data_dir, indicators):
         sells = []
         buys = []
         end = beg + CHUNK_SIZE
+        LOGGER.info("chunk: %s, %s", beg, end)
         dataframe = dframe.copy()[beg: end]
+        LOGGER.info("current date: %s, %s" ,dataframe.iloc[-1].closeTime, len(dataframe))
         if len(dataframe) < CHUNK_SIZE:
             LOGGER.info("End of dataframe")
             break
@@ -118,31 +119,29 @@ def perform_data(pair, interval, data_dir, indicators):
         LOGGER.warning(str(interval))
         LOGGER.warning(str(redis_db))
         engine.get_data(config=indicators)
-        result, current_time, current_price = redis.get_change(pair=pair)
-        LOGGER.debug("Changed items: %s %s %s", pair, result, current_time)
 
         ########TEST stategy############
-        result2, current_time2, current_price2 = redis.get_action(pair=pair, interval=interval)
-        LOGGER.info('In Strategy %s', result2)
-        if 'SELL' in result2 or 'BUY' in result2:
+        result, current_time, current_price = redis.get_action(pair=pair, interval=interval)
+        LOGGER.info('In Strategy %s', result)
+        if 'SELL' in result or 'BUY' in result:
             LOGGER.info('Strategy - Adding to redis')
             scheme = {}
             scheme["symbol"] = pair
-            scheme["direction"] = result2
+            scheme["direction"] = result
             scheme['result'] = 0
-            scheme['data'] = result2
+            scheme['data'] = result
             scheme["event"] = "trigger"
             engine.add_scheme(scheme)
-        LOGGER.critical('AMX ' + result2)
+        LOGGER.critical('AMX %s', result)
         ################################
 
         del engine
 
-        if result2 == "BUY":
+        if result == "BUY":
             buys.append((pair, current_time, current_price))
             LOGGER.debug("Items to buy: %s", buys)
             buy(buys, test_data=True, test_trade=True, interval=interval, pair=pair)
-        elif result2 == "SELL":
+        elif result == "SELL":
             sells.append((pair, current_time, current_price))
             LOGGER.debug("Items to sell: %s", sells)
             sell(sells, test_data=True, test_trade=True, interval=interval)
