@@ -62,7 +62,8 @@ def create_graph(pair, data):
                                   open=value.open,
                                   high=value.high,
                                   low=value.low,
-                                  close=value.close)
+                                  close=value.close,
+                                  name = pair)
         elif name == 'event':
             # dataframe is mutable so we cannot reference exisiting values by hashing
             # therefore we will substitute buy/sell with and rgb value for red/green
