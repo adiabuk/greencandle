@@ -19,24 +19,8 @@ before_install:
 
 # command to install dependencies
 install:
-  - pip install -r requirements.txt
-  - wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz -P /tmp
-  - tar zxvf /tmp/ta-lib-0.4.0-src.tar.gz -C /tmp
-  - cd /tmp/ta-lib
-  - ./configure --prefix=/usr
-  - make
-  - make install
-  - cd -
-  - pip install pip==9.0.1 numpy==1.16.0
+  - bash bootstrap.sh
 
 # command to run tests
 script:
-  wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz -P /tmp
-  tar zxvf /tmp/ta-lib-0.4.0-src.tar.gz -C /tmp
-  cd /tmp/ta-lib
-  ./configure --prefix=/usr
-  make
-  make install
-  cd -
-  pip install pip==9.0.1 numpy==1.16.0
-  ./setup.py test
+  ls
