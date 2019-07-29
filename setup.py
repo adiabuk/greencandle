@@ -34,6 +34,7 @@ setup(
     url='https://github.com/adiabuk/greencandle',
     install_requires=REQUIRES,
     dependency_links=LINKS,
+    scripts = ['greencandle/scripts/get_db_schema.sh'],
     entry_points={'console_scripts':['backend=greencandle.backend:main',
                                      'test_backend=greencandle.test_backend:main',
                                      'average_down=greencandle.scripts.average_down:main',
