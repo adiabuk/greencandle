@@ -10,6 +10,7 @@ from requests.exceptions import ReadTimeout
 from .balance_common import default_to_regular
 from .auth import coinbase_auth
 from .timeout import restrict_timeout
+from . import config
 
 CLIENT = coinbase_auth()
 

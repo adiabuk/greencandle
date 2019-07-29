@@ -6,7 +6,6 @@ Generic logging class for greencandle modules
 
 import sys
 import logging
-from .config import get_config
 
 def getLogger(logger_name=None):
     """
@@ -17,7 +16,7 @@ def getLogger(logger_name=None):
             logging instance with formatted handler
         """
 
-    logging_level = int(get_config("logging")["level"])
+    logging_level = 20
     logger = logging.getLogger(logger_name)
     if logger.hasHandlers():
         logger.handlers.clear()
@@ -30,7 +29,6 @@ def getLogger(logger_name=None):
     ch.setFormatter(formatter)
     logger.addHandler(ch)
     return logger
-
 
 def get_decorator(errors=(Exception,)):
     logger = getLogger(__name__)

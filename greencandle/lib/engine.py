@@ -19,7 +19,8 @@ from indicator import SuperTrend, RSI
 from .mysql import Mysql
 from .redis_conn import Redis
 from . import balance
-from .order import get_buy_price, get_sell_price
+from . import config
+from .order import Trade
 from .supres import supres
 from .common import make_float, pipify, pip_calc
 from .logger import getLogger, get_decorator
@@ -40,7 +41,8 @@ class Balance(dict):  #FIXME
         scheme = {}
         if not self.test:
             #  Add prices for current symbol to scheme
-            prices = {"buy": get_buy_price(pair), "sell": get_sell_price(pair),
+            trade = Trade(pair=pair)
+            prices = {"buy": trade.get_buy_price(), "sell": trade.get_sell_price(),
                       "market": binance.prices()[pair]}
             scheme.update(prices)
 

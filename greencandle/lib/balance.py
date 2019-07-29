@@ -10,6 +10,7 @@ from .binance_accounts import get_binance_values
 from .coinbase_accounts import get_coinbase_values
 from .mysql import Mysql
 from .logger import getLogger
+from . import config
 
 LOGGER = getLogger(__name__)
 

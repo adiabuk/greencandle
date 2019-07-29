@@ -10,18 +10,9 @@ import pickle
 import redis
 from .mysql import Mysql
 from .logger import getLogger
-from .config import get_config
-from .common import add_perc, sub_perc
-LOGGER = getLogger(__name__)
-HOST = get_config("redis")["host"]
-PORT = get_config("redis")["port"]
+from . import config
+from .common import add_perc, sub_perc, AttributeDict
 
-class AttributeDict(dict):
-    """Access dictionary keys like attributes"""
-    def __getattr__(self, attr):
-        return self[attr]
-    def __setattr__(self, attr, value):
-        self[attr] = value
 
 class Redis():
     """
@@ -38,7 +29,11 @@ class Redis():
         returns:
             initialized redis connection
         """
-        LOGGER.debug("AMROX77 {0}".format(db))
+        self.logger = getLogger(__name__)
+        self.host = config.redis.host
+        self.port = config.redis.port
+        self.logger.debug("AMROX77 {0}".format(db))
+
         if test:
             redis_db = db
             test_str = "Test"
@@ -48,8 +43,8 @@ class Redis():
         self.interval = interval
         self.test = test
 
-        LOGGER.debug("Starting Redis with interval %s %s, db=%s", interval, test_str, str(redis_db))
-        pool = redis.ConnectionPool(host=HOST, port=PORT, db=redis_db)
+        self.logger.debug("Starting Redis with interval %s %s, db=%s", interval, test_str, str(redis_db))
+        pool = redis.ConnectionPool(host=self.host, port=self.port, db=redis_db)
         self.conn = redis.StrictRedis(connection_pool=pool)
         self.dbase = Mysql(test=test, interval=interval)
 
@@ -75,7 +70,7 @@ class Redis():
             success of operation: True/False
         """
 
-        LOGGER.info("Adding to Redis:{0} {1} {2}".format(interval, list(data.keys()), now))
+        self.logger.info("Adding to Redis:{0} {1} {2}".format(interval, list(data.keys()), now))
         response = self.conn.hmset("{0}:{1}:{2}".format(pair, interval, now), data)
         return response
 
@@ -138,7 +133,7 @@ class Redis():
         try:
             data = ast.literal_eval(byte.decode("UTF-8"))
         except AttributeError:
-            LOGGER.error("No Data")
+            self.logger.error("No Data")
             return None, None
 
         return data["current_price"], data["date"], data['result']
@@ -154,7 +149,7 @@ class Redis():
 
         print(previous, current)
         # get current & previous indicator values
-        main_indicators = get_config("backend")["indicators"].split()
+        main_indicators = config.main.indicators.split()
         ind_list = []
         for i in main_indicators:
             split = i.split(';')
@@ -188,8 +183,8 @@ class Redis():
         last_high = last_rehydrated.high
         last_low = last_rehydrated.low
         last_close = last_rehydrated.close
-        LOGGER.critical("Current OHLC: %s %s %s %s", open, high, low, close)
-        LOGGER.critical("Previous OHLC: %s %s %s %s", last_open, last_high, last_low, last_close)
+        self.logger.critical("Current OHLC: %s %s %s %s", open, high, low, close)
+        self.logger.critical("Previous OHLC: %s %s %s %s", last_open, last_high, last_low, last_close)
         current_price = float(current[0])
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_mepoch))
 
@@ -197,16 +192,16 @@ class Redis():
         sell_rules = []
         for seq in range(1, 6):
             try:
-                buy_rules.append(eval(get_config('backend')['buy_rule{}'.format(seq)]))
+                buy_rules.append(eval(config.main['buy_rule{}'.format(seq)]))
             except KeyError:
                 pass
             try:
-                sell_rules.append(eval(get_config('backend')['sell_rule{}'.format(seq)]))
+                sell_rules.append(eval(config.main['sell_rule{}'.format(seq)]))
             except KeyError:
                 pass
 
-        stop_loss_perc = float(get_config("backend")["stop_loss_perc"])
-        take_profit_perc = float(get_config("backend")["take_profit_perc"])
+        stop_loss_perc = float(config.main["stop_loss_perc"])
+        take_profit_perc = float(config.main["take_profit_perc"])
 
         try:
             # function returns an empty list if no results so cannot get first element
@@ -222,19 +217,19 @@ class Redis():
 
         # if we match stop_loss rule and are in a trade
         if stop_loss_rule and buy_price:
-            LOGGER.critical('EVENT: stop_loss %s %s %s', buy_price, current_price, sub_perc(stop_loss_perc, buy_price))
+            self.logger.critical('EVENT: stop_loss %s %s %s', buy_price, current_price, sub_perc(stop_loss_perc, buy_price))
             return ('SELL', current_time, current_price)
         # if we match take_profit rule and are in a trade
         elif take_profit_rule and buy_price:
-            LOGGER.critical('EVENT: take_profit %s %s %s', buy_price, current_price, add_perc(take_profit_perc, buy_price))
+            self.logger.critical('EVENT: take_profit %s %s %s', buy_price, current_price, add_perc(take_profit_perc, buy_price))
             return ('SELL', current_time, current_price)
         # if we match all sell rules and are in a trade
         elif all(sell_rules) and buy_price:
-            LOGGER.critical('EVENT: NORMAL SELL')
+            self.logger.critical('EVENT: NORMAL SELL')
             return ('SELL', current_time, current_price)
         # if we match all buy rules and are NOT in a trade
         elif all(buy_rules) and not buy_price:
-            LOGGER.critical('EVENT: NORMAL BUY')
+            self.logger.critical('EVENT: NORMAL BUY')
             return ('BUY', current_time, current_price)
         else:
             return ('HOLD', current_time, current_price)
@@ -251,7 +246,7 @@ class Redis():
         totals = []
         items = self.get_items(pair, self.interval)
         if len(items) < 3:
-            LOGGER.warning("insufficient history for %s, skipping", pair)
+            self.logger.warning("insufficient history for %s, skipping", pair)
             return None, None, None
         for item in items[-4:]:
             totals.append(self.get_total(item))
@@ -259,14 +254,14 @@ class Redis():
         current = self.get_current(items[-1])
         current_price = current[0]
         current_mepoch = float(current[1]) / 1000
-        LOGGER.debug("AMROX10 %s %s %s ", pair, str(current[-1]), str(totals[-1]))
+        self.logger.debug("AMROX10 %s %s %s ", pair, str(current[-1]), str(totals[-1]))
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_mepoch))
         value = self.dbase.get_trade_value(pair)
 
         if not value and (1 <= totals[-1] <= 50 and
                           1 <= totals[-2] <= 50 and
                           float(sum(totals[:3])) / max(len(totals[:3]), 1) < totals[-1]):
-            LOGGER.critical("AMROX8: BUY {0} {1} {2} {3}".format(totals, current_time,
+            self.logger.critical("AMROX8: BUY {0} {1} {2} {3}".format(totals, current_time,
                                                                  format(float(current_price),
                                                                         ".20f"),
                                                                  items[-1]))
@@ -277,7 +272,7 @@ class Redis():
 
         elif value and float(current_price) > (float(value[0][0]) *((8/100)+1)):
             # More than 8% over
-            LOGGER.info("SELL 4% {0} {1} {2} {3}".format(totals, current_time,
+            self.logger.info("SELL 4% {0} {1} {2} {3}".format(totals, current_time,
                                                          format(float(current_price),
                                                                 ".20f"),
                                                          items[-1]))
@@ -291,13 +286,13 @@ class Redis():
             # current_price is 2% more than buy price
 
 
-            LOGGER.info("SELL 2% {0} {1} {2} {3}".format(totals, current_time,
+            self.logger.info("SELL 2% {0} {1} {2} {3}".format(totals, current_time,
                                                          format(float(current_price), ".20f"),
                                                          items[-1]))
             return "sell", current_time, format(float(current_price), ".20f")
         """ # FIXME
         elif value and float(current_price) < float(value[0][0]) * (1- (2/100)):  # 2% stop loss
-            LOGGER.info("SELL stoploss {0} {1} {2} {3}".format(totals, current_time,
+            self.logger.info("SELL stoploss {0} {1} {2} {3}".format(totals, current_time,
                                                                format(float(current_price), ".20f"),
                                                                 items[-1]))
             return "sell" , current_time, format(float(current_price), ".20f")

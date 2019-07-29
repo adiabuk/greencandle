@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+#pylint: disable=no-member
 # PYTHON_ARGCOMPLETE_OK
 """
 Run module with test data
@@ -6,18 +7,21 @@ Run module with test data
 
 import argparse
 import os
+import sys
 import pickle
 from concurrent.futures import ThreadPoolExecutor
 import argcomplete
 import setproctitle
 
+from .lib import config
+config.create_config(test=True)
+
 from .lib.engine import Engine
 from .lib.common import make_float
 from .lib.redis_conn import Redis
-from .lib.config import get_config
 from .lib.mysql import Mysql
 from .lib.profit import get_recent_profit
-from .lib.order import buy, sell
+from .lib.order import Trade
 from .lib.logger import getLogger, get_decorator
 
 LOGGER = getLogger(__name__)
@@ -49,10 +53,10 @@ def main():
 
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
-    pairs = args.pairs if args.pairs else get_config("test")["pairs"].split()
-    parallel_interval = get_config("test")["parallel_interval"].split()[0]
+    pairs = args.pairs if args.pairs else config.main.pairs.split()
+    parallel_interval = config.main.parallel_interval.split()[0]
     parallel_interval = args.interval if args.interval else parallel_interval
-    main_indicators = get_config("backend")["indicators"].split()
+    main_indicators = config.main.indicators.split()
     serial_intervals = [args.interval]
     redis_db = {"15m":1, "5m":2, "3m":3, "1m":4}[parallel_interval]
 
@@ -62,7 +66,7 @@ def main():
     if args.serial:
         do_serial(pairs, serial_intervals, args.data_dir, main_indicators)
     else:
-        do_parallel(pairs, parallel_interval, redis_db, args.data_dir)
+        do_parallel(pairs, parallel_interval, redis_db, args.data_dir, main_indicators)
 
 @GET_EXCEPTIONS
 def do_serial(pairs, intervals, data_dir, indicators):
@@ -81,8 +85,6 @@ def do_serial(pairs, intervals, data_dir, indicators):
             redis = Redis(interval=interval, test=True, db=redis_db)
             redis.clear_all()
             del redis
-
-
 
         for interval in intervals:
             with ThreadPoolExecutor(max_workers=len(intervals)) as pool:
@@ -103,12 +105,14 @@ def perform_data(pair, interval, data_dir, indicators):
     prices_trunk = {pair: "0"}
     for beg in range(len(dframe) - CHUNK_SIZE):
         LOGGER.info("IN LOOP %s ", beg)
+        trade = Trade(interval=interval, test=True, test_trade=True, test_data=True)
+
         sells = []
         buys = []
         end = beg + CHUNK_SIZE
         LOGGER.info("chunk: %s, %s", beg, end)
         dataframe = dframe.copy()[beg: end]
-        LOGGER.info("current date: %s, %s" ,dataframe.iloc[-1].closeTime, len(dataframe))
+        LOGGER.info("current date: %s, %s", dataframe.iloc[-1].closeTime, len(dataframe))
         if len(dataframe) < CHUNK_SIZE:
             LOGGER.info("End of dataframe")
             break
@@ -140,21 +144,21 @@ def perform_data(pair, interval, data_dir, indicators):
         if result == "BUY":
             buys.append((pair, current_time, current_price))
             LOGGER.debug("Items to buy: %s", buys)
-            buy(buys, test_data=True, test_trade=True, interval=interval, pair=pair)
+            trade.buy(buys)
         elif result == "SELL":
             sells.append((pair, current_time, current_price))
             LOGGER.debug("Items to sell: %s", sells)
-            sell(sells, test_data=True, test_trade=True, interval=interval)
+            trade.sell(sells)
 
     del redis
     LOGGER.info("Selling remaining items")
     sells = []
     sells.append((pair, current_time, current_price))
-    sell(sells, test_data=True, test_trade=True, interval=interval)
+    trade.sell(sells)
     profit = get_recent_profit(True, interval=interval)
     LOGGER.info("AMROX4 %s %s %s", pair, interval, profit)
 
-def do_parallel(pairs, interval, redis_db, data_dir):
+def do_parallel(pairs, interval, redis_db, data_dir, indicators):
     """
     Do test with parallel data
     """
@@ -162,11 +166,13 @@ def do_parallel(pairs, interval, redis_db, data_dir):
     redis = Redis(interval=interval, test=True, db=redis_db)
     size = 1000 * {"15m": 1, "5m": 3, "3m": 5, "1m": 15}[interval]
 
+    trade = Trade(interval=interval, test=True, test_trade=True, test_data=True)
     redis.clear_all()
     dframes = {}
     for pair in pairs:
-        filename = "test_data/{0}/{1}_{2}.p".format(data_dir, pair, interval)
+        filename = "/{0}/{1}_{2}.p".format(data_dir, pair, interval)
         if not os.path.exists(filename):
+            LOGGER.critical("Cannot file file: %s", filename)
             continue
         with open(filename, "rb") as handle:
             dframes[pair] = pickle.load(handle)
@@ -184,20 +190,39 @@ def do_parallel(pairs, interval, redis_db, data_dir):
             dataframes.update({pair:dataframe})
             engine = Engine(prices=prices_trunk, dataframes=dataframes,
                             interval=interval, test=True, db=redis_db)
-            engine.get_data()
+            engine.get_data(config=indicators)
+
+            ########TEST stategy############
+            result, current_time, current_price = redis.get_action(pair=pair, interval=interval)
+            LOGGER.info('In Strategy %s', result)
+            if 'SELL' in result or 'BUY' in result:
+                LOGGER.info('Strategy - Adding to redis')
+                scheme = {}
+                scheme["symbol"] = pair
+                scheme["direction"] = result
+                scheme['result'] = 0
+                scheme['data'] = result
+                scheme["event"] = "trigger"
+                engine.add_scheme(scheme)
+            LOGGER.critical('AMX %s', result)
+            ################################
+
             del engine
-            result, _, _ = redis.get_change(pair=pair)
-            LOGGER.info("Changed items: %s %s", result, pair)
+
+
             if result == "BUY":
                 LOGGER.debug("Items to buy")
-                buys.append(pair)
+                buys.append((pair, current_time, current_price))
             if result == "SELL":
                 LOGGER.debug("Items to sell")
-                sells.append(pair)
-        sell(sells, test_data=True, test_trade=True, interval=interval)
-        buy(buys, test_data=True, test_trade=True, interval=interval)
+                sells.append((pair, current_time, current_price))
+        trade.sell(sells)
+        trade.buy(buys)
 
     print(get_recent_profit(True, interval=interval))
 
 if __name__ == "__main__":
+
+    print(config)
+    sys.exit()
     main()
