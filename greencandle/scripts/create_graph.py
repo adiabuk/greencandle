@@ -2,7 +2,10 @@
 
 import argparse
 import argcomplete
+
+from greencandle.lib import config
 from greencandle.lib.graph import Graph
+config.create_config(test=True)
 
 def main():
     parser = argparse.ArgumentParser()

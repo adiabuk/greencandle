@@ -3,7 +3,6 @@
 """Create candlestick graphs from OHLC data"""
 
 import ast
-import os
 import time
 import pickle
 import zlib
@@ -18,13 +17,13 @@ import plotly.tools as tls
 
 from PIL import Image
 from resizeimage import resizeimage
-from .redis_conn import Redis
 from . import config
+from .redis_conn import Redis
 
 PATH = '/tmp'
 
 class Graph():
-
+    """class for creating graph html and images"""
     def __init__(self, test=False, pair='ETHBTC', db=0, interval='1m'):
         self.test = test
         self.pair = pair
@@ -61,7 +60,7 @@ class Graph():
     def create_graph(self):
         """Create graph html file using plotly offline-mode from dataframe object"""
 
-        fig = tls.make_subplots(rows=2, cols=1, shared_xaxes=True)
+        fig = tls.make_subplots(rows=2, cols=1, shared_xaxes=True, print_grid=False)
         for name, value in self.data.items():
             row = 1
             col = 1

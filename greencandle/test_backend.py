@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-member
+#pylint: disable=no-member, wrong-import-position
 # PYTHON_ARGCOMPLETE_OK
 """
 Run module with test data
@@ -14,6 +14,7 @@ import argcomplete
 import setproctitle
 
 from .lib import config
+# config is required before loading other modules as it is global
 config.create_config(test=True)
 
 from .lib.engine import Engine
@@ -27,16 +28,6 @@ from .lib.logger import getLogger, get_decorator
 LOGGER = getLogger(__name__)
 CHUNK_SIZE = 50
 GET_EXCEPTIONS = get_decorator((Exception))
-
-def make_data_tupple(dataframe):
-    """
-    Transform dataframe to tupple of of floats
-    """
-    ohlc = (make_float(dataframe.open),
-            make_float(dataframe.high),
-            make_float(dataframe.low),
-            make_float(dataframe.close))
-    return ohlc
 
 def main():
     """
