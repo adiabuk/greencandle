@@ -1,4 +1,4 @@
-#pylint: disable=undefined-variable, wrong-import-position, broad-except
+#pylint: disable=undefined-variable, wrong-import-position, broad-except, no-member
 
 """
 Push/Pull crypto signals and data to mysql
@@ -13,26 +13,27 @@ import binance
 BASE_DIR = os.getcwd().split("greencandle", 1)[0] + "greencandle"
 sys.path.append(BASE_DIR)
 
-from .config import get_config
+from . import config
 from .logger import getLogger, get_decorator
 
-HOST = get_config("database")["host"]
-USER = get_config("database")["user"]
-PASSWORD = get_config("database")["password"]
-DB = get_config("database")["db"]
-DB_TEST = get_config("database")["db_test"]
-LOGGER = getLogger(__name__)
 
-class Mysql(object):
+class Mysql():
     """
     Custom mysql object with methods to store and retrive given data
     """
     get_exceptions = get_decorator((Exception))
 
     def __init__(self, test=False, interval="15m"):
+        self.host = config.database.host
+        self.user = config.database.user
+        self.password = config.database.password
+        self.db = config.database.db
+        self.db_test = config.database.db_test
+        self.logger = getLogger(__name__)
+
         self.connect(test=test)
         self.interval = interval
-        LOGGER.debug("Starting Mysql with interval %s, test=%s", interval, test)
+        self.logger.debug("Starting Mysql with interval %s, test=%s", interval, test)
 
     @get_exceptions
     def connect(self, test=False):
@@ -40,12 +41,12 @@ class Mysql(object):
         Connect to Mysql DB
         """
         if test:
-            dbase_name = DB_TEST
+            dbase_name = self.db
         else:
-            dbase_name = DB
-        self.dbase = MySQLdb.connect(host=HOST,
-                                     user=USER,
-                                     passwd=PASSWORD,
+            dbase_name = self.db_test
+        self.dbase = MySQLdb.connect(host=self.host,
+                                     user=self.user,
+                                     passwd=self.password,
                                      db=dbase_name)
         self.cursor = self.dbase.cursor()
 
@@ -76,7 +77,7 @@ class Mysql(object):
         Returns:
               sorted tuple each containing pair, score, current price
         """
-        LOGGER.debug("Finding symbols to buy")
+        self.logger.debug("Finding symbols to buy")
         potential_buys = self.get_changes()
         sorted_buys = sorted(potential_buys.items(), key=operator.itemgetter(1))[::-1]
 
@@ -163,16 +164,16 @@ class Mysql(object):
         try:
             self.execute(cur, query)
         except NameError as e:
-            LOGGER.critical("One or more expected variables not passed to DB %s", e)
+            self.logger.critical("One or more expected variables not passed to DB %s", e)
         except Exception:
-            LOGGER.critical("AMROX6 - unable to execute query %s", query)
+            self.logger.critical("AMROX6 - unable to execute query %s", query)
 
     @get_exceptions
     def delete_data(self):
         """
         Delete all data from trades table
         """
-        LOGGER.info("Deleting all trades from mysql")
+        self.logger.info("Deleting all trades from mysql")
         command = "delete from trades_{0};".format(self.interval)
         command2 = "delete from actions;"
         self.run_sql_query(command)
@@ -189,7 +190,7 @@ class Mysql(object):
               None
         """
 
-        LOGGER.info("Cleaning stale data from mysql")
+        self.logger.info("Cleaning stale data from mysql")
         command1 = "delete from action_totals where ctime < NOW() - INTERVAL 30 MINUTE;"
         command2 = "delete from actions where ctime < NOW() - INTERVAL 30 MINUTE;"
         self.run_sql_query(command1)
@@ -210,7 +211,7 @@ class Mysql(object):
               None
         """
 
-        LOGGER.info("AMROX5 Buying %s using %s", pair, self.interval)
+        self.logger.info("AMROX5 Buying %s using %s", pair, self.interval)
         command = """insert into trades_{0} (pair, buy_time, buy_price, investment,
                      total) VALUES ("{1}", "{2}", "{3}", "{4}", "{5}");""".format(self.interval,
                                                                                   pair, date,
@@ -230,7 +231,7 @@ class Mysql(object):
         self.execute(cur, command)
 
         row = [item[0] for item in cur.fetchall()]
-        LOGGER.debug("%s %s", command, row)
+        self.logger.debug("%s %s", command, row)
         return row[0] if row else None # There should only be one open trade, so return first item
 
     @get_exceptions
@@ -257,7 +258,7 @@ class Mysql(object):
         cur = self.dbase.cursor()
         self.execute(cur, command)
         row = [item for item in cur.fetchall()]
-        return True if row else False
+        return bool(row)
 
     @get_exceptions
     def get_last_trades(self):
@@ -294,7 +295,7 @@ class Mysql(object):
         """
         Update an existing trade with sell price
         """
-        LOGGER.info("Selling %s for %s", pair, self.interval)
+        self.logger.info("Selling %s for %s", pair, self.interval)
         command = """update trades_{0} set sell_price={1},sell_time="{2}"
         where sell_price is NULL and pair="{3}" """.format(self.interval,
                                                            float(sell_price), sell_time, pair)
@@ -347,16 +348,16 @@ class Mysql(object):
                                                                        data["USD"], data["count"],
                                                                        coin, exchange)
                 except KeyError:
-                    LOGGER.critical(" ".join(["XXX", coin, exchange, "KEYERROR"]))
+                    self.logger.critical(" ".join(["XXX", coin, exchange, "KEYERROR"]))
                     continue
                 except IndexError:
-                    LOGGER.critical("Index error %s", exchange)
+                    self.logger.critical("Index error %s", exchange)
                     raise
 
                 try:
                     self.run_sql_query(command)
                 except NameError:
-                    LOGGER.error("One or more expected variables not passed to insert into DB")
+                    self.logger.error("One or more expected variables not passed to insert into DB")
 
     @get_exceptions
     def insert_action_totals(self):
@@ -368,7 +369,7 @@ class Mysql(object):
               None
         """
 
-        LOGGER.debug("Inserting Totals")
+        self.logger.debug("Inserting Totals")
         command = """ INSERT INTO action_totals (pair, total) select pair, SUM(action) as total from
         recent_actions group by pair order by total;"""
         self.run_sql_query(command)
