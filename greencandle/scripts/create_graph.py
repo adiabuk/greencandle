@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 
-import os
 import argparse
 import argcomplete
-from greencandle.lib.graph import create_graph, get_data
+from greencandle.lib.graph import Graph
 
 def main():
     parser = argparse.ArgumentParser()
@@ -14,8 +13,10 @@ def main():
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
 
-    dataframes = get_data(pair=args.pair, test=args.test, db=args.db, interval=args.interval)
-    create_graph(args.pair, dataframes, args.interval)
+
+    graph = Graph(test=args, pair=args.pair, db=args.db, interval=args.interval)
+    graph.get_data()
+    graph.create_graph()
 
 if __name__ == '__main__':
     main()
