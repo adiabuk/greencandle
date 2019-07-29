@@ -5,23 +5,27 @@
 Get values from config file
 """
 
-import sys
-
 from configparser import ConfigParser
+from .logger import getLogger, get_decorator
+from .common import AttributeDict
 
-
-def get_config(section):
+def create_config(test=False):
     """
     Read config file and return required config
     Args:
-        section: string section of configfile
+        test: boolean - will determine if "main" will be backend or test
     Return
-        dict of config parameters/values in given section
+        None: sections will be added to globals() by section and be available module-wide
     """
+    logger = getLogger(__name__)
+    config = AttributeDict()
+    logger.info('Getting config')
     parser = ConfigParser()
     parser.read("/etc/greencandle.ini")
-    return parser._sections[section]
 
-
-if __name__ == "__main__":
-    print(get_config(sys.argv[1]))
+    for section in parser.sections():
+        globals()[section] = AttributeDict(parser._sections[section])
+    if test:
+        globals()['main'] = AttributeDict(parser._sections['test'])
+    else:
+        globals()['main'] = AttributeDict(parser._sections['backend'])
