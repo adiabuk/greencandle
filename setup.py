@@ -13,6 +13,8 @@ LINKS = []
 REQUIREMENTS = pip.req.parse_requirements(
     'requirements.txt', session=pip.download.PipSession())
 
+exec(open('greencandle/version.py').read())
+
 for item in REQUIREMENTS:
     # we want to handle package names and also repo urls
     if getattr(item, 'url', None):  # older pip has url
@@ -22,12 +24,10 @@ for item in REQUIREMENTS:
     if item.req:
         REQUIRES.append(str(item.req))
 
-VER = '0.4'
-
 setup(
     name='greencandle',
     packages=find_packages(),
-    version=VER,
+    version=__version__,
     description='a trading bot for binance and coinbase',
     author='Amro Diab',
     author_email='adiab@linuxmail.org',
