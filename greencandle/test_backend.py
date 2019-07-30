@@ -64,7 +64,6 @@ def do_serial(pairs, intervals, data_dir, indicators):
     """
     Do test with serial data
     """
-    #results = defaultdict(defaultdict)
     LOGGER.info("Performaing serial run")
 
     for pair in pairs:
@@ -199,7 +198,6 @@ def do_parallel(pairs, interval, redis_db, data_dir, indicators):
             ################################
 
             del engine
-
 
             if result == "BUY":
                 LOGGER.debug("Items to buy")

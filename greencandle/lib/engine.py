@@ -16,10 +16,10 @@ import zlib
 import pandas
 import talib
 from indicator import SuperTrend, RSI
+from . import config
 from .mysql import Mysql
 from .redis_conn import Redis
 from . import balance
-from . import config
 from .order import Trade
 from .supres import supres
 from .common import make_float, pipify, pip_calc
