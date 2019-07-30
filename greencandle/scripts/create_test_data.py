@@ -7,61 +7,68 @@ Save as a pandas dataframe in a pickle file
 
 """
 
+import argparse
 import os
 import sys
 import pickle
 import time
 import datetime
 import pandas
-
-BASE_DIR = os.getcwd().split("greencandle", 1)[0] + "greencandle"
-sys.path.append(BASE_DIR)
+import argcomplete
 
 from ..lib.binance_common import get_all_klines
 
 def main():
     """ Main function """
-    if len(sys.argv) <= 2:
-        sys.exit("Usage: {0} <time> <days> <pairs>".format(sys.argv[0]))
 
-    start_time = sys.argv[1]
-    days = int(sys.argv[2])
-    pairs = sys.argv[3:]
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-s", "--startdate", required=True)
+    parser.add_argument("-d", "--days", required=True)
+    parser.add_argument("-o", "--outputdir", required=True)
+    parser.add_argument("-p", "--pairs", nargs='+', required=True, default=[])
 
+    argcomplete.autocomplete(parser)
+    args = parser.parse_args()
 
-    dt = datetime.datetime.strptime(start_time, '%Y-%m-%d')
-    given_start_epoch = time.mktime(dt.timetuple())
+    given_date = datetime.datetime.strptime(args.startdate, '%Y-%m-%d')
+    given_start_epoch = time.mktime(given_date.timetuple())
+
+    daily_minutes = 1440  # number of minutes in a day
+
+    # For testing we use 50 klines buffer to calculate trends/averages etc.
+    # so we need to add 50 more klines to the end (total_klines) so that we
+    #still end up with the exact number of lines for the days specified
     number_of_extra_klines = 50
-    no_of_klines = 1440  # number of minutes in a day
 
     klines_multiplier = {"15m": 15,
                          "5m": 5,
                          "3m": 3,
                          "1m": 1}
 
-    for pair in pairs:
-        for interval in ['1m', '3m', '5m', '15m']:
-            if not os.path.isdir('/tmp/test_data'):
-                os.mkdir('/tmp/test_data')
-            filename = "/tmp/test_data/{0}_{1}.p".format(pair, interval)
+    for pair in args.pairs:
+        for interval in klines_multiplier.keys():
+            if not os.path.isdir(args.outputdir):
+                sys.exit("Invalid output directory: {0}".format(args.outputdir))
+            filename = "{0}/{1}_{2}.p".format(args.outputdir, pair, interval)
             print("Using filename:", filename)
             if os.path.exists(filename):
                 continue
 
-            # For testing we use 50 klines buffer to calculate trends/averages etc.
-            # so we need to add 50 more klines by calculating how much time that would be depending
-            # on the interval
+
+            # calculate start_time, and number of klines we need for interval
             ###################################
             seconds_per_kline = klines_multiplier[interval] * 60
+
+            # number of seconds ealier we need to start
             additional_seconds = seconds_per_kline * number_of_extra_klines
             actual_start_epoch = given_start_epoch - additional_seconds
-            klines_in_a_day = no_of_klines * (1/klines_multiplier[interval])
-            total_klines = int(klines_in_a_day * days)
+            klines_in_a_day = daily_minutes * (1/klines_multiplier[interval])
+            total_klines = int(klines_in_a_day) * int(args.days) + number_of_extra_klines
             start_mepoch = int(actual_start_epoch * 1000)
             ###################################
 
             print("Getting {0} klines for {1} {2} - {3} days".format(total_klines,
-                                                                     pair, interval, days))
+                                                                     pair, interval, args.days))
             current = pandas.DataFrame.from_dict(get_all_klines(pair=pair, interval=interval,
                                                                 start_time=start_mepoch,
                                                                 no_of_klines=total_klines))
