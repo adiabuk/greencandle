@@ -19,10 +19,12 @@ echo "127.0.0.1    mysql" >> /etc/hosts
 echo "127.0.0.1    redis" >> /etc/hosts
 
 docker-compose up -d mysql
+sleep 30
+
 mysql --protocol=tcp  -uroot -ppassword  -e "create database greencandle"
 mysql --protocol=tcp  -uroot -ppassword  -e "create database greencandle_test"
 mysql --protocol=tcp  -uroot -ppassword  -e "grant all on *.* to 'greencandle'@'%' identified by 'password' with grant option;"
-
 mysql --protocol tcp -h localhost -uroot -ppassword greencandle < ./greencandle.sql
 mysql --protocol tcp -h localhost -uroot -ppassword greencandle_test < ./greencandle.sql
+
 docker-compose up -d
