@@ -33,17 +33,14 @@ class Mysql():
 
         self.connect(test=test)
         self.interval = interval
-        self.logger.debug("Starting Mysql with interval %s, test=%s", interval, test)
+        self.logger.info("Starting Mysql with interval %s, test=%s", interval, test)
 
     @get_exceptions
     def connect(self, test=False):
         """
         Connect to Mysql DB
         """
-        if test:
-            dbase_name = self.db
-        else:
-            dbase_name = self.db_test
+        dbase_name = self.db_test if test else self.db
         self.dbase = MySQLdb.connect(host=self.host,
                                      user=self.user,
                                      passwd=self.password,
