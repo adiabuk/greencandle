@@ -20,26 +20,29 @@ binance_api_key =
 binance_api_secret =
 coinbase_api_key = blablabla
 coinbase_api_secret = hello
+stop_loss_perc = 0.8
+take_profit_perc = 3
 base = ETH BTC BCC
-pairs_1m = ETHBTC
+pairs_5m = ETHBTC
 test_trade = True
 price_per_trade = 200
 max_trades = 20
-interval = 1m
+interval = 5m
 drain_15m = True
 drain_5m = True
 drain_3m = True
 drain_1m = False
-indicators = get_moving_averages;WMA;7 get_moving_averages;EMA;18 get_moving_averages;EMA;25
-buy_rule1 = results.current.EMA_25 > results.current.EMA_18
-buy_rule2 = results.previous.EMA_25 < results.previous.EMA_18
-sell_rule1 = results.current.EMA_25 < results.current.EMA_18
-sell_rule2 = results.previous.EMA_25 > results.previous.EMA_18
+indicators = get_moving_averages;EMA;50 get_rsi;RSI;50 get_moving_averages;EMA;20
+buy_rule1 =  low > results.current.EMA_50 and high > results.current.EMA_50
+buy_rule2 =  last_low < results.previous.EMA_50 and results.current.EMA_20 > results.current.EMA_50 and results.current.RSI_50 > str(50)
+
+sell_rule1 =  str(add_perc(0.03, close)) < results.current.EMA_50 and str(sub_perc(0.03,last_close))  > results.previous.EMA_50 and results.current.EMA20<results.current.EMA_50
+sell_rule2 =  close < last_close
 
 [api]
 port = 5001
 interval = 15m
-pairs = XRPETH ETHBTC BCCETH DASHETH ZECETH DGDETH XMRETH BNBETH BNBBTC TRXBTC STRATBTC
+#pairs = XRPETH ETHBTC BCCETH DASHETH ZECETH DGDETH XMRETH BNBETH BNBBTC TRXBTC STRATBTC
 
 [database]
 host = 127.0.0.1
@@ -53,20 +56,25 @@ host = 127.1
 port = 6379
 
 [test]
-parallel_pairs = RLCBTC
-serial_pairs = ETHBTC
+max_trades = 5
+binance_api_key = Ziuqk55zl3uEsPwbJYmHg0eK1FQpuCqg5NaxukMlg8kuH346MtbbpbXD3ccA7gIl
+binance_api_secret = ruM4Cof1pryI0b9YLBecqr9z31qKgJZnXHH01k9INoah9HoJreIo0U5hx9YA9HrY
+coinbase_api_key = blablabla
+coinbase_api_secret = hello
+parallel_pairs = ETHBTC
 parallel_interval= 15m
-serial_intervals = 15m 5m 3m 1m
-start_time = 1524519480600
+drain_15m = False
 no_of_klines = 1000
 indicator1 = MA;30
 indicator2 = MA;20
 indicator3 = MA;10
 indicator4 = AWESOME;30
-pairs_1m = ETHBTC
-buy_rule1 = ?
-buy_rule2 = ?
-buy_rule3 = ?
-sell_rule1 = ?
-sell_rule2 = ?
-sell_rule3 = ?
+#pairs_1m = ETHBTC
+pairs_15m = EOSBTC MCOBTC LRCBTC OAXBTC SNMBTC REQBTC TRXBTC BNBBTC IOTABTC STRATBTC BTGBTC ASTBTC YOYOBTC EVXBTC NEOBTC QTUMBTC LTCBTC DASHBTC ZRXBTC VIBBTC ETCBTC BQXBTC MTLBTC FUNBTC STORJBTC ETHBTC LINKBTC MDABTC KNCBTC ENGBTC POWRBTC WTCBTC ENJBTC XRPBTC MTHBTC ARKBTC
+stop_loss_perc = 0.09
+take_profit_perc = 5
+indicators = get_moving_averages;EMA;50 get_rsi;RSI;50 get_moving_averages;EMA;20
+buy_rule1 =  low > results.current.EMA_50 and high > results.current.EMA_50
+buy_rule2 =  last_low < results.previous.EMA_50 and results.current.EMA_20 > results.current.EMA_50 and results.current.RSI_50 > str(50)
+sell_rule1 =  str(add_perc(0.03, close)) < results.current.EMA_50 and str(sub_perc(0.03,last_close))  > results.previous.EMA_50 and results.current.EMA20<results.current.EMA_50
+sell_rule2 =  close < last_close
