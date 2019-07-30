@@ -11,7 +11,7 @@ docker build -f ./Dockerfile-rs . --tag=gc-redis
 echo "127.0.0.1    mysql" >> /etc/hosts
 echo "127.0.0.1    redis" >> /etc/hosts
 
-cd /vagrant/docker
+cd docker
 docker-compose up -d mysql
 mysql --protocol=tcp  -uroot -ppassword  -e "create database greencandle"
 mysql --protocol=tcp  -uroot -ppassword  -e "create database greencandle_test"
