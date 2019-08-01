@@ -4,7 +4,7 @@ function usage () {
   cat << EOF
 Usage: $0 [-g|-p] -f <filename>
 
-Get and put arch packages on the system using pacman and yaourt
+Add and retrieve mysql db schema without data
 
   -g    Get schema
   -p    Put schema
