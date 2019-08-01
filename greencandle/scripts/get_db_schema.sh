@@ -50,9 +50,9 @@ elif [[ -z $GET && -z $PUT ]]; then
   usage
 
 elif [[ -n $GET ]]; then
-  mysqldump -u greencandle -p --no-data greencandle > $FILENAME
-  mysqldump -u greencandle -p greencandle exchange >> $FILENAME
+  mysqldump --protocol=tcp -u greencandle -ppassword --no-data greencandle > $FILENAME
+  mysqldump --protocol=tcp -u greencandle -ppassword greencandle exchange >> $FILENAME
 elif [[ -n $PUT ]]; then
-  mysql -p -u  greencandle greencandle < $FILENAME
-  mysql -p -u  greencandle greencandle_test < $FILENAME
+  mysql --protocol=tcp -u greencandle -ppassword greencandle < $FILENAME
+  mysql --protocol=tcp -u greencandle -ppassword greencandle_test < $FILENAME
 fi
