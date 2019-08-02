@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/adiabuk/greencandle.svg?branch=master)](https://travis-ci.org/adiabuk/greencandle) 
+ 
  sudo apt-get install libcanberra-gtk-module
 sudo apt-get install firefox xvfb
 
