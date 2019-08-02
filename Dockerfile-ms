@@ -1,10 +1,4 @@
-FROM mysql:5.7.26
+FROM mariadb:10.1.24
+RUN cp -r /var/lib/mysql /var/lib/mysql-no-volume
+CMD ["--datadir", "/var/lib/mysql-no-volume"]
 
-ENV MYSQL_ROOT_PASSWORD=password
-ENV MYSQL_HOST=localhost
-COPY greencandle.sql /tmp
-COPY ./greencandle/scripts/get_db_schema.sh /tmp
-RUN /tmp/get_db_schema.sh -p -f /tmp/greencandle.sql
-EXPOSE 3306
-HEALTHCHECK CMD echo 'SELECT version();'| mysql -uroot -ppassword
-CMD ["mysqld"]
