@@ -12,9 +12,11 @@ sudo systemctl unmask docker.service
 sudo systemctl unmask docker.socket
 sudo systemctl start docker.service
 sudo systemctl status docker
-docker build -f ./Dockerfile-gc . --tag=greencandle
-docker build -f ./Dockerfile-ms . --tag=gc-mysql
-docker build -f ./Dockerfile-rs . --tag=gc-redis
+docker build --force-rm --no-cache -f ./Dockerfile-gc . --tag=greencandle
+docker build --force-rm --no-cache -f ./Dockerfile-ms . --tag=gc-mysql
+docker build --force-rm --no-cache -f ./Dockerfile-rs . --tag=gc-redis
+docker volume create data
+
 echo "127.0.0.1    mysql" >> /etc/hosts
 echo "127.0.0.1    redis" >> /etc/hosts
 
