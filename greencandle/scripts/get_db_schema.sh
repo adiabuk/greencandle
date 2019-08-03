@@ -16,8 +16,6 @@ EOF
   exit 1
 }
 
-
-
 while getopts "hgpf:" opt; do
   case $opt in
     g)
@@ -50,9 +48,9 @@ elif [[ -z $GET && -z $PUT ]]; then
   usage
 
 elif [[ -n $GET ]]; then
-  mysqldump --protocol=tcp -u greencandle -ppassword --no-data greencandle > $FILENAME
-  mysqldump --protocol=tcp -u greencandle -ppassword greencandle exchange >> $FILENAME
+  mysqldump --protocol=tcp -u root -ppassword --no-data greencandle > $FILENAME
+  mysqldump --protocol=tcp -u root -ppassword greencandle exchange >> $FILENAME
 elif [[ -n $PUT ]]; then
-  mysql --protocol=tcp -u greencandle -ppassword greencandle < $FILENAME
-  mysql --protocol=tcp -u greencandle -ppassword greencandle_test < $FILENAME
+  mysql --protocol=tcp -u root -ppassword greencandle < $FILENAME
+  mysql --protocol=tcp -u root -ppassword greencandle_test < $FILENAME
 fi
