@@ -79,7 +79,7 @@ DROP TABLE IF EXISTS `changes`;
 /*!50001 DROP VIEW IF EXISTS `changes`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `changes` AS SELECT 
+/*!50001 CREATE VIEW `changes` AS SELECT
  1 AS `ctime`,
  1 AS `pair`,
  1 AS `gt`,
@@ -109,7 +109,7 @@ DROP TABLE IF EXISTS `daily_profit_15m`;
 /*!50001 DROP VIEW IF EXISTS `daily_profit_15m`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `daily_profit_15m` AS SELECT 
+/*!50001 CREATE VIEW `daily_profit_15m` AS SELECT
  1 AS `date`,
  1 AS `profit`*/;
 SET character_set_client = @saved_cs_client;
@@ -122,7 +122,7 @@ DROP TABLE IF EXISTS `daily_profit_1m`;
 /*!50001 DROP VIEW IF EXISTS `daily_profit_1m`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `daily_profit_1m` AS SELECT 
+/*!50001 CREATE VIEW `daily_profit_1m` AS SELECT
  1 AS `date`,
  1 AS `profit`*/;
 SET character_set_client = @saved_cs_client;
@@ -135,7 +135,7 @@ DROP TABLE IF EXISTS `daily_profit_3m`;
 /*!50001 DROP VIEW IF EXISTS `daily_profit_3m`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `daily_profit_3m` AS SELECT 
+/*!50001 CREATE VIEW `daily_profit_3m` AS SELECT
  1 AS `date`,
  1 AS `profit`*/;
 SET character_set_client = @saved_cs_client;
@@ -148,7 +148,7 @@ DROP TABLE IF EXISTS `daily_profit_5m`;
 /*!50001 DROP VIEW IF EXISTS `daily_profit_5m`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `daily_profit_5m` AS SELECT 
+/*!50001 CREATE VIEW `daily_profit_5m` AS SELECT
  1 AS `date`,
  1 AS `profit`*/;
 SET character_set_client = @saved_cs_client;
@@ -224,7 +224,7 @@ DROP TABLE IF EXISTS `hour_balance`;
 /*!50001 DROP VIEW IF EXISTS `hour_balance`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `hour_balance` AS SELECT 
+/*!50001 CREATE VIEW `hour_balance` AS SELECT
  1 AS `exchange_id`,
  1 AS `usd1`,
  1 AS `coin`,
@@ -246,7 +246,7 @@ DROP TABLE IF EXISTS `profit_15m`;
 /*!50001 DROP VIEW IF EXISTS `profit_15m`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profit_15m` AS SELECT 
+/*!50001 CREATE VIEW `profit_15m` AS SELECT
  1 AS `buy_time`,
  1 AS `sell_time`,
  1 AS `pair`,
@@ -268,7 +268,7 @@ DROP TABLE IF EXISTS `profit_1m`;
 /*!50001 DROP VIEW IF EXISTS `profit_1m`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profit_1m` AS SELECT 
+/*!50001 CREATE VIEW `profit_1m` AS SELECT
  1 AS `buy_time`,
  1 AS `sell_time`,
  1 AS `pair`,
@@ -290,7 +290,7 @@ DROP TABLE IF EXISTS `profit_3m`;
 /*!50001 DROP VIEW IF EXISTS `profit_3m`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profit_3m` AS SELECT 
+/*!50001 CREATE VIEW `profit_3m` AS SELECT
  1 AS `buy_time`,
  1 AS `sell_time`,
  1 AS `pair`,
@@ -312,7 +312,7 @@ DROP TABLE IF EXISTS `profit_5m`;
 /*!50001 DROP VIEW IF EXISTS `profit_5m`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profit_5m` AS SELECT 
+/*!50001 CREATE VIEW `profit_5m` AS SELECT
  1 AS `buy_time`,
  1 AS `sell_time`,
  1 AS `pair`,
@@ -334,7 +334,7 @@ DROP TABLE IF EXISTS `recent_actions`;
 /*!50001 DROP VIEW IF EXISTS `recent_actions`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `recent_actions` AS SELECT 
+/*!50001 CREATE VIEW `recent_actions` AS SELECT
  1 AS `id`,
  1 AS `ctime`,
  1 AS `pair`,
@@ -602,7 +602,7 @@ CREATE TABLE `trades_back` (
 /*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `profit_15m` AS select `trades_15m`.`buy_time` AS `buy_time`,`trades_15m`.`sell_time` AS `sell_time`,`trades_15m`.`pair` AS `pair`,`trades_15m`.`buy_price` AS `buy_price`,`trades_15m`.`sell_price` AS `sell_price`,`trades_15m`.`total` AS `total`,(((`trades_15m`.`sell_price` - `trades_15m`.`buy_price`) / `trades_15m`.`sell_price`) * 100) AS `perc`,(`trades_15m`.`sell_price` - `trades_15m`.`buy_price`) AS `base_profit`,(((`trades_15m`.`sell_price` - `trades_15m`.`buy_price`) * 8223.25) * `trades_15m`.`total`) AS `profit`,((`trades_15m`.`buy_price` * `trades_15m`.`total`) * 8223.25) AS `buy_bbp`,((`trades_15m`.`sell_price` * `trades_15m`.`total`) * 8223.25) AS `sell_gbp` from `trades_15m` where (`trades_15m`.`sell_time` like '2019-07-01%') order by (((`trades_15m`.`sell_price` - `trades_15m`.`buy_price`) / `trades_15m`.`sell_price`) * 100) desc */;
+/*!50001 VIEW `profit_15m` AS select `trades_15m`.`buy_time` AS `buy_time`,`trades_15m`.`sell_time` AS `sell_time`,`trades_15m`.`pair` AS `pair`,`trades_15m`.`buy_price` AS `buy_price`,`trades_15m`.`sell_price` AS `sell_price`,`trades_15m`.`total` AS `total`,(((`trades_15m`.`sell_price` - `trades_15m`.`buy_price`) / `trades_15m`.`sell_price`) * 100) AS `perc`,(`trades_15m`.`sell_price` - `trades_15m`.`buy_price`) AS `base_profit`,(((`trades_15m`.`sell_price` - `trades_15m`.`buy_price`) * 8223.25) * `trades_15m`.`total`) AS `profit`,((`trades_15m`.`buy_price` * `trades_15m`.`total`) * 8223.25) AS `buy_bbp`,((`trades_15m`.`sell_price` * `trades_15m`.`total`) * 8223.25) AS `sell_gbp` from `trades_15m` order by (((`trades_15m`.`sell_price` - `trades_15m`.`buy_price`) / `trades_15m`.`sell_price`) * 100) desc */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -620,7 +620,7 @@ CREATE TABLE `trades_back` (
 /*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `profit_1m` AS select `trades_1m`.`buy_time` AS `buy_time`,`trades_1m`.`sell_time` AS `sell_time`,`trades_1m`.`pair` AS `pair`,`trades_1m`.`buy_price` AS `buy_price`,`trades_1m`.`sell_price` AS `sell_price`,`trades_1m`.`total` AS `total`,(((`trades_1m`.`sell_price` - `trades_1m`.`buy_price`) / `trades_1m`.`sell_price`) * 100) AS `perc`,(`trades_1m`.`sell_price` - `trades_1m`.`buy_price`) AS `base_profit`,(((`trades_1m`.`sell_price` - `trades_1m`.`buy_price`) * 8223.25) * `trades_1m`.`total`) AS `profit`,((`trades_1m`.`buy_price` * `trades_1m`.`total`) * 8223.25) AS `buy_bbp`,((`trades_1m`.`sell_price` * `trades_1m`.`total`) * 8223.25) AS `sell_gbp` from `trades_1m` where (`trades_1m`.`sell_time` like '2019-07-01%') order by (((`trades_1m`.`sell_price` - `trades_1m`.`buy_price`) / `trades_1m`.`sell_price`) * 100) desc */;
+/*!50001 VIEW `profit_1m` AS select `trades_1m`.`buy_time` AS `buy_time`,`trades_1m`.`sell_time` AS `sell_time`,`trades_1m`.`pair` AS `pair`,`trades_1m`.`buy_price` AS `buy_price`,`trades_1m`.`sell_price` AS `sell_price`,`trades_1m`.`total` AS `total`,(((`trades_1m`.`sell_price` - `trades_1m`.`buy_price`) / `trades_1m`.`sell_price`) * 100) AS `perc`,(`trades_1m`.`sell_price` - `trades_1m`.`buy_price`) AS `base_profit`,(((`trades_1m`.`sell_price` - `trades_1m`.`buy_price`) * 8223.25) * `trades_1m`.`total`) AS `profit`,((`trades_1m`.`buy_price` * `trades_1m`.`total`) * 8223.25) AS `buy_bbp`,((`trades_1m`.`sell_price` * `trades_1m`.`total`) * 8223.25) AS `sell_gbp` from `trades_1m` order by (((`trades_1m`.`sell_price` - `trades_1m`.`buy_price`) / `trades_1m`.`sell_price`) * 100) desc */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -638,7 +638,7 @@ CREATE TABLE `trades_back` (
 /*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `profit_3m` AS select `trades_3m`.`buy_time` AS `buy_time`,`trades_3m`.`sell_time` AS `sell_time`,`trades_3m`.`pair` AS `pair`,`trades_3m`.`buy_price` AS `buy_price`,`trades_3m`.`sell_price` AS `sell_price`,`trades_3m`.`total` AS `total`,(((`trades_3m`.`sell_price` - `trades_3m`.`buy_price`) / `trades_3m`.`sell_price`) * 100) AS `perc`,(`trades_3m`.`sell_price` - `trades_3m`.`buy_price`) AS `base_profit`,(((`trades_3m`.`sell_price` - `trades_3m`.`buy_price`) * 8223.25) * `trades_3m`.`total`) AS `profit`,((`trades_3m`.`buy_price` * `trades_3m`.`total`) * 8223.25) AS `buy_bbp`,((`trades_3m`.`sell_price` * `trades_3m`.`total`) * 8223.25) AS `sell_gbp` from `trades_3m` where (`trades_3m`.`sell_time` like '2019-07-01%') order by (((`trades_3m`.`sell_price` - `trades_3m`.`buy_price`) / `trades_3m`.`sell_price`) * 100) desc */;
+/*!50001 VIEW `profit_3m` AS select `trades_3m`.`buy_time` AS `buy_time`,`trades_3m`.`sell_time` AS `sell_time`,`trades_3m`.`pair` AS `pair`,`trades_3m`.`buy_price` AS `buy_price`,`trades_3m`.`sell_price` AS `sell_price`,`trades_3m`.`total` AS `total`,(((`trades_3m`.`sell_price` - `trades_3m`.`buy_price`) / `trades_3m`.`sell_price`) * 100) AS `perc`,(`trades_3m`.`sell_price` - `trades_3m`.`buy_price`) AS `base_profit`,(((`trades_3m`.`sell_price` - `trades_3m`.`buy_price`) * 8223.25) * `trades_3m`.`total`) AS `profit`,((`trades_3m`.`buy_price` * `trades_3m`.`total`) * 8223.25) AS `buy_bbp`,((`trades_3m`.`sell_price` * `trades_3m`.`total`) * 8223.25) AS `sell_gbp` from `trades_3m` order by (((`trades_3m`.`sell_price` - `trades_3m`.`buy_price`) / `trades_3m`.`sell_price`) * 100) desc */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -656,7 +656,7 @@ CREATE TABLE `trades_back` (
 /*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `profit_5m` AS select `trades_5m`.`buy_time` AS `buy_time`,`trades_5m`.`sell_time` AS `sell_time`,`trades_5m`.`pair` AS `pair`,`trades_5m`.`buy_price` AS `buy_price`,`trades_5m`.`sell_price` AS `sell_price`,`trades_5m`.`total` AS `total`,(((`trades_5m`.`sell_price` - `trades_5m`.`buy_price`) / `trades_5m`.`sell_price`) * 100) AS `perc`,(`trades_5m`.`sell_price` - `trades_5m`.`buy_price`) AS `base_profit`,(((`trades_5m`.`sell_price` - `trades_5m`.`buy_price`) * 8223.25) * `trades_5m`.`total`) AS `profit`,((`trades_5m`.`buy_price` * `trades_5m`.`total`) * 8223.25) AS `buy_bbp`,((`trades_5m`.`sell_price` * `trades_5m`.`total`) * 8223.25) AS `sell_gbp` from `trades_5m` where (`trades_5m`.`sell_time` like '2019-07-01%') order by (((`trades_5m`.`sell_price` - `trades_5m`.`buy_price`) / `trades_5m`.`sell_price`) * 100) desc */;
+/*!50001 VIEW `profit_5m` AS select `trades_5m`.`buy_time` AS `buy_time`,`trades_5m`.`sell_time` AS `sell_time`,`trades_5m`.`pair` AS `pair`,`trades_5m`.`buy_price` AS `buy_price`,`trades_5m`.`sell_price` AS `sell_price`,`trades_5m`.`total` AS `total`,(((`trades_5m`.`sell_price` - `trades_5m`.`buy_price`) / `trades_5m`.`sell_price`) * 100) AS `perc`,(`trades_5m`.`sell_price` - `trades_5m`.`buy_price`) AS `base_profit`,(((`trades_5m`.`sell_price` - `trades_5m`.`buy_price`) * 8223.25) * `trades_5m`.`total`) AS `profit`,((`trades_5m`.`buy_price` * `trades_5m`.`total`) * 8223.25) AS `buy_bbp`,((`trades_5m`.`sell_price` * `trades_5m`.`total`) * 8223.25) AS `sell_gbp` from `trades_5m` order by (((`trades_5m`.`sell_price` - `trades_5m`.`buy_price`) / `trades_5m`.`sell_price`) * 100) desc */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
