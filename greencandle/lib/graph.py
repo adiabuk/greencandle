@@ -129,7 +129,10 @@ class Graph():
         for index_item in index:
             result_list = {}
             for ind in ind_list:
-                result_list[ind] = ast.literal_eval(redis.get_item(index_item, ind).decode())
+                try:
+                    result_list[ind] = ast.literal_eval(redis.get_item(index_item, ind).decode())
+                except AttributeError:
+                    pass
             result_list['ohlc'] = ast.literal_eval(redis.get_item(index_item,
                                                                   'ohlc').decode())['result']
             try:
@@ -140,8 +143,11 @@ class Graph():
             rehydrated = pickle.loads(zlib.decompress(result_list['ohlc']))
             list_of_series.append(rehydrated)
             for ind in ind_list:
-                list_of_results[ind].append((result_list[ind]['result'],
-                                             result_list[ind]['date']))
+                try:
+                    list_of_results[ind].append((result_list[ind]['result'],
+                                                 result_list[ind]['date']))
+                except KeyError:
+                    pass
             try:
                 list_of_results['event'].append((result_list['event']['result'],
                                                  result_list['event']['current_price'],
