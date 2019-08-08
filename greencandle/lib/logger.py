@@ -7,7 +7,7 @@ Generic logging class for greencandle modules
 import sys
 import logging
 
-def getLogger(logger_name=None):
+def getLogger(logger_name=None, logging_level=20):
     """
     Get Customized logging instance
         Args:
@@ -16,7 +16,6 @@ def getLogger(logger_name=None):
             logging instance with formatted handler
         """
 
-    logging_level = 20
     logger = logging.getLogger(logger_name)
     if logger.hasHandlers():
         logger.handlers.clear()
