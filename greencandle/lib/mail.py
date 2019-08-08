@@ -1,17 +1,12 @@
-#pylint: disable=wrong-import-position
+#pylint: disable=wrong-import-position,no-member
 """
 Functions for sending email alerts
 """
 
-import os
-import sys
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-
-BASE_DIR = os.getcwd().split("greencandle", 1)[0] + "greencandle"
-sys.path.append(BASE_DIR)
 from . import config
 from .timeout import restrict_timeout
 from .logger import getLogger, get_decorator
@@ -23,7 +18,7 @@ def send_gmail_alert(action, pair, price):
     """
     Send email alert using gmail
     """
-    logger = getLogger()
+    logger = getLogger(__name__, config.main.logging_level)
     email_to = config.email.to
     email_from = config.email['from']
     email_password = config.email.password

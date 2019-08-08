@@ -11,8 +11,9 @@ from .binance_accounts import get_binance_values
 from .coinbase_accounts import get_coinbase_values
 from .mysql import Mysql
 from .logger import getLogger
+from . import config
 
-LOGGER = getLogger(__name__)
+LOGGER = getLogger(__name__, config.main.logging_level)
 
 def get_balance(test=False, interval="5m", coinbase=False):
     """

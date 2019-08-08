@@ -22,7 +22,7 @@ GET_EXCEPTIONS = get_decorator((Exception))
 class Trade():
 
     def __init__(self, interval=None, test=False, test_data=False, test_trade=False):
-        self.logger = getLogger(__name__)
+        self.logger = getLogger(__name__, config.main.logging_level)
         self.test_data = test_data
         self.test_trade = test_trade
         self.max_trades = int(config.main.max_trades)

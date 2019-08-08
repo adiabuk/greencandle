@@ -29,7 +29,7 @@ class Mysql():
         self.password = config.database.password
         self.db = config.database.db
         self.db_test = config.database.db_test
-        self.logger = getLogger(__name__)
+        self.logger = getLogger(__name__, config.main.logging_level)
 
         self.connect(test=test)
         self.interval = interval

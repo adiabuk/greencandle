@@ -8,9 +8,10 @@ import binance
 from .balance_common import default_to_regular
 from .auth import binance_auth
 from .logger import getLogger
+from . import config
 
 BITCOIN = {}
-LOGGER = getLogger(__name__)
+LOGGER = getLogger(__name__, config.main.logging_level)
 
 def get_binance_values():
     """Get totals for each crypto from binance and convert to USD/GBP"""

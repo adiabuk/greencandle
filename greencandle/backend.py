@@ -28,7 +28,7 @@ from .lib.order import Trade
 from .lib.mysql import Mysql
 from .lib.api_data import get_change
 
-LOGGER = getLogger(__name__)
+LOGGER = getLogger(__name__, config.main.logging_level)
 
 def main():
     """ main function """
@@ -44,7 +44,7 @@ def main():
     args = parser.parse_args()
 
     starttime = time.time()
-    interval = args.interval if args.interval else str(config.main.interval) 
+    interval = args.interval if args.interval else str(config.main.interval)
     system = "api" if args.use_api else "redis"
     minutes = [int(s) for s in re.findall(r'(\d+)m', interval)][0]
     drain = str2bool( config.main['drain_'+interval])
@@ -78,7 +78,7 @@ def loop(interval, test, system):
 
     max_trades = int(config.main.max_trades)
     test_trade = test if test else str2bool(config.main.test_trade)
-    
+
     LOGGER.info("Starting new cycle")
     Path('/var/run/greencandle').touch()
     LOGGER.debug("max trades: %s", max_trades)

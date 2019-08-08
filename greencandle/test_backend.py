@@ -25,7 +25,7 @@ from .lib.profit import get_recent_profit
 from .lib.order import Trade
 from .lib.logger import getLogger, get_decorator
 
-LOGGER = getLogger(__name__)
+LOGGER = getLogger(__name__, config.main.logging_level)
 CHUNK_SIZE = 50
 GET_EXCEPTIONS = get_decorator((Exception))
 

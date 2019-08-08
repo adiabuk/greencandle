@@ -6,20 +6,15 @@ Functions to fetch data from binance
 
 import sys
 import csv
-import os
-
 
 from concurrent.futures import ThreadPoolExecutor
 import pandas
 import binance
 
-BASE_DIR = os.getcwd().split("greencandle", 1)[0] + "greencandle"
-sys.path.append(BASE_DIR)
-
-
+from . import config
 from .logger import getLogger
 
-LOGGER = getLogger(__name__)
+LOGGER = getLogger(__name__, config.main.logging_config)
 
 def get_binance_klines(pair, interval=None):
     """

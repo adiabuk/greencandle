@@ -11,9 +11,9 @@ from urllib.request import urlopen
 import binance
 from .mysql import Mysql
 from .logger import getLogger
+from . import config
 
-
-LOGGER = getLogger(__name__)
+LOGGER = getLogger(__name__, config.main.logging_level)
 
 def get_change(pair, interval="5m"):
     """

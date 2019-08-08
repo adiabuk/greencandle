@@ -2,10 +2,10 @@
 
 import signal
 from contextlib import contextmanager
+from . import config
 from .logger import getLogger
 
-LOGGER = getLogger(__name__)
-
+LOGGER = getLogger(__name__, config.main.logging_level)
 
 def timeout_handler(signum, frame):
     """ Register a handler for the timeout"""
