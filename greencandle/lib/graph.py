@@ -90,7 +90,14 @@ class Graph():
                               name=name)
                 # add rsi graph in second subply (below) if it exists
                 row = 2
-
+            elif 'Sup_Res' in name:
+                print("FOUND SUP_RES")
+                print(value['value'])
+                print('---')
+                item = go.Scatter(x=value['date'],
+                                  y=value['value'],
+                                  mode='markers',
+                                  name="Resistance")
 
             else:
                 item = go.Scatter(x=value['date'],
