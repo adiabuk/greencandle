@@ -183,7 +183,8 @@ class Engine(dict):
 
         # compress and pickle current dataframe for redis storage
         # dont get most recent one, as it may not be complete
-        scheme['data'] = zlib.compress(pickle.dumps(self.dataframes[pair].iloc[-2]))
+        # FIXME - changed back to current one
+        scheme['data'] = zlib.compress(pickle.dumps(self.dataframes[pair].iloc[-1]))
         scheme["event"] = "ohlc"
         self.add_scheme(scheme)
 
