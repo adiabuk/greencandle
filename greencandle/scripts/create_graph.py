@@ -13,13 +13,14 @@ def main():
     parser.add_argument("-p", "--pair")
     parser.add_argument("-i", "--interval")
     parser.add_argument("-t", "--test", action="store_true", default=False)
+    parser.add_argument("-o", "--output_dir")
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
 
 
     graph = Graph(test=args, pair=args.pair, db=args.db, interval=args.interval)
     graph.get_data()
-    graph.create_graph()
+    graph.create_graph(args.output_dir)
 
 if __name__ == '__main__':
     main()

@@ -20,8 +20,6 @@ from resizeimage import resizeimage
 from . import config
 from .redis_conn import Redis
 
-PATH = '/tmp'
-
 class Graph():
     """class for creating graph html and images"""
     def __init__(self, test=False, pair='ETHBTC', db=0, interval='1m'):
@@ -32,7 +30,7 @@ class Graph():
         self.data = {}
         self.filename = ''
 
-    def get_screenshot(self):
+    def get_screenshot(self, output_dir='/tmp'):
         """Capture screenshot using selenium/firefox in Xvfb """
         display = Display(visible=0, size=(1366, 768))
         display.start()
@@ -44,23 +42,24 @@ class Graph():
         profile.set_preference("browser.helperApps.neverAsk.saveToDisk", "image/png")
 
         driver = webdriver.Firefox(firefox_profile=profile)
-        driver.get("file://{0}/{1}.html".format(PATH, self.filename))
-        driver.save_screenshot("{0}/{1}.png".format(PATH, self.filename))
+        driver.get("file://{0}/{1}.html".format(output_dir, self.filename))
+        driver.save_screenshot("{0}/{1}.png".format(output_dir, self.filename))
         time.sleep(10)
         driver.quit()
         display.stop()
 
-    def resize_screenshot(self):
+    def resize_screenshot(self, output_dir='/tmp'):
         """Resize screenshot to thumbnail - for use in API"""
-        with open("{0}/{1}.png".format(PATH, self.filename), "r+b") as png_file:
+        with open("{0}/{1}.png".format(output_dir, self.filename), "r+b") as png_file:
             with Image.open(png_file) as image:
                 cover = resizeimage.resize_width(image, 120)
-                cover.save("{0}/{1}_resized.png".format(PATH, self.filename), image.format)
+                cover.save("{0}/{1}_resized.png".format(output_dir, self.filename), image.format)
 
-    def create_graph(self):
+    def create_graph(self, output_dir='/tmp'):
         """Create graph html file using plotly offline-mode from dataframe object"""
 
         fig = tls.make_subplots(rows=2, cols=1, shared_xaxes=True, print_grid=False)
+
         for name, value in self.data.items():
             row = 1
             col = 1
@@ -97,7 +96,7 @@ class Graph():
 
             fig.append_trace(item, row, col)
 
-        self.filename = "{0}/simple_candlestick_{1}-{2}.html".format(PATH, self.pair,
+        self.filename = "{0}/simple_candlestick_{1}-{2}.html".format(output_dir, self.pair,
                                                                      self.interval)
         py.plot(fig, filename=self.filename, auto_open=False)
 
