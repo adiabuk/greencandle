@@ -1,4 +1,4 @@
-#pylint: disable=logging-format-interpolation,eval-used,no-else-return,unused-variable
+#pylint: disable=logging-format-interpolation,eval-used,no-else-return,unused-variable,no-member
 
 """
 Store and retrieve items from redis
@@ -156,14 +156,19 @@ class Redis():
             ind = split[1] + '_' + split[2]
             ind_list.append(ind)
 
+
+        def get_result(item, indicator):
+            try:
+                return ast.literal_eval(self.get_item(item, indicator).decode())['result']
+            except AttributeError:
+                return None
+
         for indicator in ind_list:
 
-            results['current'][indicator] = ast.literal_eval(self.get_item( \
-                    current, indicator).decode())['result']
-            results['previous'][indicator] = ast.literal_eval(self.get_item( \
-                    previous, indicator).decode())['result']
-            results['previous1'][indicator] = ast.literal_eval(self.get_item( \
-                    previous1, indicator).decode())['result']
+            self.logger.critical("Fetching indicator results for %s", indicator)
+            results['current'][indicator] = get_result(current, indicator)
+            results['previous'][indicator] = get_result(previous, indicator)
+            results['previous1'][indicator] = get_result(previous1, indicator)
         items = self.get_items(pair, self.interval)
         current = self.get_current(items[-1])
         previous = self.get_current(items[-2])
@@ -188,12 +193,18 @@ class Redis():
         current_price = float(current[0])
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_mepoch))
 
+        #buy_rule1 =  results.current.EMA_5 > results.current.EMA_50
+        #buy_rule2 =  (results.previous.EMA_5 < results.previous.EMA_50) or (results.previous1.EMA_5 < results.previous1.EMA_50)
+        self.logger.critical('current_epoch: %s, current_time %s, current_ema10 %s, current_ema50 %s, previous_ema10:%s, previous_ema50: %s, previous1.ema_10: %s, previous1.ema50: %s, current_open: %s', current_mepoch,
+                current_time, results.current.EMA_20, results.current.EMA_50,
+                results.previous.EMA_20, results.previous.EMA_50, results.previous1.EMA_20,
+                results.previous1.EMA_50, open)
         buy_rules = []
         sell_rules = []
         for seq in range(1, 6):
             try:
                 buy_rules.append(eval(config.main['buy_rule{}'.format(seq)]))
-            except KeyError:
+            except (KeyError, TypeError):
                 pass
             try:
                 sell_rules.append(eval(config.main['sell_rule{}'.format(seq)]))
@@ -224,7 +235,7 @@ class Redis():
             self.logger.critical('EVENT: take_profit %s %s %s', buy_price, current_price, add_perc(take_profit_perc, buy_price))
             return ('SELL', current_time, current_price)
         # if we match all sell rules and are in a trade
-        elif all(sell_rules) and buy_price:
+        elif any(sell_rules) and buy_price:
             self.logger.critical('EVENT: NORMAL SELL')
             return ('SELL', current_time, current_price)
         # if we match all buy rules and are NOT in a trade
