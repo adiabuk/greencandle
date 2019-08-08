@@ -201,18 +201,19 @@ class Engine(dict):
             None
         """
 
-        LOGGER.debug("Getting Support & resistance for %s", pair)
+        func, timeperiod = config  # split tuple
+        LOGGER.info("Getting Support & resistance for %s", pair)
         klines = self.dataframes[pair]
 
         close_values = make_float(klines.close)
-        support, resistance = supres(close_values, 10)
-
+        support, resistance = supres(close_values, int(timeperiod))
+        print('SUPRES ', support,  resistance)
         scheme = {}
         try:
             value = (pip_calc(support[-1], resistance[-1]))
         except IndexError:
-            LOGGER.debug("Skipping {0} {1} {2} for support/resistance ".format(pair,
-                                                                               str(support),
+            LOGGER.debug("Skipping {0} {1} {2} for support/re sistance ".format(pair,
+                                                                                str(support),
                                                                                str(resistance)))
             return None
 
@@ -220,8 +221,7 @@ class Engine(dict):
         cur_to_sup = close_values[-1] - support[-1]
         data = {}
         scheme["value"] = value
-        scheme["support"] = support
-        scheme["resistance"] = resistance
+        scheme["result"] = resistance
 
         if cur_to_res > cur_to_sup:
             scheme["direction"] = "BUY"
@@ -235,13 +235,16 @@ class Engine(dict):
         except TypeError as type_error:
             print("Type error", support[-1], resistance[-1], type_error)
             return None
-
-        scheme["data"] = scheme['support'], scheme['resistance']
+        if func == 'RES':
+            scheme["data"] = str(resistance[-1])  #FIXME
+        elif func == 'SUP':
+            scheme["data"] = str(support[-1])  #FIXME
+        #scheme["data"] = scheme['support'], scheme['resistance']
         scheme["url"] = self.get_url(pair)
         scheme["time"] = calendar.timegm(time.gmtime())
         scheme["symbol"] = pair
+        scheme["event"] = "{0}_{1}".format(func, timeperiod)
         scheme["direction"] = scheme['direction']
-        scheme["event"] = "Support/Resistance"
         self.add_scheme(scheme)
         LOGGER.debug("Done getting Support & resistance")
 
