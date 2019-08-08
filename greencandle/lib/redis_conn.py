@@ -29,7 +29,7 @@ class Redis():
         returns:
             initialized redis connection
         """
-        self.logger = getLogger(__name__)
+        self.logger = getLogger(__name__, config.main.logging_level)
         self.host = config.redis.host
         self.port = config.redis.port
         self.logger.debug("AMROX77 {0}".format(db))
@@ -228,19 +228,19 @@ class Redis():
 
         # if we match stop_loss rule and are in a trade
         if stop_loss_rule and buy_price:
-            self.logger.critical('EVENT: stop_loss %s %s %s', buy_price, current_price, sub_perc(stop_loss_perc, buy_price))
+            self.logger.critical('EVENT:(%s) stop_loss %s %s %s',pair, buy_price, current_price, sub_perc(stop_loss_perc, buy_price))
             return ('SELL', current_time, current_price)
         # if we match take_profit rule and are in a trade
         elif take_profit_rule and buy_price:
-            self.logger.critical('EVENT: take_profit %s %s %s', buy_price, current_price, add_perc(take_profit_perc, buy_price))
+            self.logger.critical('EVENT:(%s) take_profit %s %s %s',pair, buy_price, current_price, add_perc(take_profit_perc, buy_price))
             return ('SELL', current_time, current_price)
         # if we match all sell rules and are in a trade
         elif any(sell_rules) and buy_price:
-            self.logger.critical('EVENT: NORMAL SELL')
+            self.logger.critical('EVENT:(%s) NORMAL SELL', pair)
             return ('SELL', current_time, current_price)
         # if we match all buy rules and are NOT in a trade
         elif all(buy_rules) and not buy_price:
-            self.logger.critical('EVENT: NORMAL BUY')
+            self.logger.critical('EVENT:(%s) NORMAL BUY', pair)
             return ('BUY', current_time, current_price)
         else:
             return ('HOLD', current_time, current_price)
