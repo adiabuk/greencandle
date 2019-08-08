@@ -64,13 +64,12 @@ class Graph():
         for name, value in self.data.items():
             row = 1
             col = 1
-
             if name == 'ohlc':
                 if value.empty:  # empty dataframe:
                     print('Unable to find data for {0}, exiting...'.format(name))
                     sys.exit(2)
                 value["time"] = pandas.to_datetime(value["closeTime"], unit="ms")
-                item = go.Candlestick(x=value.time + pandas.Timedelta(hours=1),
+                item = go.Candlestick(x=value.time, # + pandas.Timedelta(hours=1),
                                       open=value.open,
                                       high=value.high,
                                       low=value.low,
