@@ -54,6 +54,13 @@ class Engine(dict):
         super(Engine, self).__init__()
         LOGGER.debug("Finished fetching raw data")
 
+    @get_exceptions
+    def __del__(self):
+        try:
+            del self.db
+        except NameError:
+            pass
+
     @staticmethod
     def make_data_tupple(dataframes):
         """
@@ -69,17 +76,135 @@ class Engine(dict):
             ohlcs[key] = ohlc
         return ohlcs
 
-    @get_exceptions
-    def __del__(self):
-        try:
-            del self.db
-        except NameError:
-            pass
-
     def get_json(self):
         """return serialized JSON of dict """
         return json.dumps(self)
 
+    @staticmethod
+    def renamed_dataframe_columns(klines=None):
+        """
+        Return dataframe with ordered/renamed coulumns
+        Rename dataframe columns and reorder, only fetch columns that we care about
+        Args:
+              klines: pandas dataframe containing data for specified pair
+        Returns:
+              klines: pandas dataframe with modified column names and ordering
+        """
+
+
+        dataframe = pandas.DataFrame(klines, columns=["openTime", "open", "high",
+                                                      "low", "close", "volume"])
+        columns = ["date", "Open", "High", "Low", "Close", "Volume"]  # rename columns
+        for index, item in enumerate(columns):
+            dataframe.columns.values[index] = item
+        return dataframe
+
+    @staticmethod
+    def get_url(pair):
+        """
+        Get tradingview graph URL for given pair
+
+        Args:
+            pair: trading pair (eg. XRPBTC)
+        Returns:
+            String URL for given pair
+
+        """
+
+        return "https://uk.tradingview.com/symbols/{0}/".format(pair)
+
+    @staticmethod
+    def get_supertrend_direction(supertrend):
+        """
+        Get new direction of supertrend from pattern
+
+        Args:
+            supertrend: list of trend directions (up/down)
+        Returns:
+            String action based on patten (BUY/SELL/HOLD/UNKNOWN)
+
+        """
+        if supertrend == "up":
+            result = 1, "BUY"
+        elif supertrend == "down":
+            result = 2, "SELL"
+        else:
+            result = 0, "HOLD"
+        return result
+
+    @staticmethod
+    def get_operator_fn(op):
+        """
+        Get operator function from string
+        Args:
+            op: string operator "<" or ">"
+        Returns:
+            operator.lt or operator.gt function
+        """
+
+        return {
+            "<" : operator.lt,
+            ">" : operator.gt,
+            }[op]
+
+    @get_exceptions
+    def eval_binary_expr(self, op1, oper, op2):
+        """
+        Evaluate a binary expression
+        eg 2 > 5, 0.12123 < 0.121
+        Args:
+            op1: value #1
+            oper: string operator "<" or ">"
+            op2: value #2
+        Returns:
+            Boolean result of binary expression (True/False)
+        """
+
+        op1, op2 = float(op1), float(op2)
+        return self.get_operator_fn(oper)(op1, op2)
+
+    @staticmethod
+    def get_action(trigger):
+        """
+        Transform action into an integer so that overall sentiment for a pair can be easily
+        calculated
+
+        Args:
+            trigger: BUY/SELL/HOLD
+
+        Returns:
+            integer representation of given trigger.  BUY=1, SELL=-1, HOLD=0
+
+        """
+
+
+        return {"BUY": 1,
+                "SELL": -1,
+                "HOLD": 0}[trigger]
+
+    @get_exceptions
+    def add_scheme(self, scheme):
+        """ add scheme to correct structure """
+        pair = scheme["symbol"]
+
+        # add to redis
+        current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
+        close_time = str(self.dataframes[pair].iloc[-1]["closeTime"])
+        result = 0.0 if (isinstance(scheme["data"], float) and
+                         math.isnan(scheme["data"]))  else scheme["data"]
+        try:
+            data = {scheme["event"]:{"result": result,
+                                     "current_price": format(float(current_price), ".20f"),
+                                     "date": close_time,
+                                     }}
+
+            redis = Redis(interval=self.interval, test=self.test,
+                          db=self.redis_db)
+            redis.redis_conn(pair, self.interval, data, close_time)
+            del redis
+
+        except Exception as e:
+            LOGGER.critical("Redis failure %s %s", str(e), repr(sys.exc_info()))
     @get_exceptions
     def get_data(self, localconfig=None):
         """
@@ -204,141 +329,6 @@ class Engine(dict):
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
         self.add_scheme(scheme)
         LOGGER.debug("Done getting RSI")
-
-    @staticmethod
-    def renamed_dataframe_columns(klines=None):
-        """
-        Return dataframe with ordered/renamed coulumns
-        Rename dataframe columns and reorder, only fetch columns that we care about
-        Args:
-              klines: pandas dataframe containing data for specified pair
-        Returns:
-              klines: pandas dataframe with modified column names and ordering
-        """
-
-
-        dataframe = pandas.DataFrame(klines, columns=["openTime", "open", "high",
-                                                      "low", "close", "volume"])
-        columns = ["date", "Open", "High", "Low", "Close", "Volume"]  # rename columns
-        for index, item in enumerate(columns):
-            dataframe.columns.values[index] = item
-        return dataframe
-
-    @get_exceptions
-    def get_supertrend(self, pair=None, localconfig=None):
-        """
-        Get the super trend oscillator values for a given pair
-        append current supertrend data to instance variable
-
-        Args:
-              pair: trading pair (eg. XRPBTC)
-              localconfig: indicator config tuple
-        Returns:
-            None
-
-        """
-
-        func, timef = localconfig  # split tuple
-        LOGGER.debug("Getting supertrend for %s", pair)
-        scheme = {}
-        klines = self.dataframes[pair]
-        dataframe = self.renamed_dataframe_columns(klines)
-
-        mine = dataframe.apply(pandas.to_numeric)
-        timeframe, multiplier = timef.split(',')
-        supertrend = SuperTrend(mine, int(timeframe), int(multiplier))
-        df_list = supertrend["STX_{0}_{1}".format(timeframe, multiplier)].tolist()
-
-        scheme["url"] = self.get_url(pair)
-        scheme["time"] = calendar.timegm(time.gmtime())
-        scheme["symbol"] = pair
-        scheme["data"] = self.get_supertrend_direction(df_list[-1])[0]
-        scheme["event"] = "Supertrend_{0},{1}".format(timeframe, multiplier)
-        self.add_scheme(scheme)
-        LOGGER.debug("done getting supertrend")
-
-    @staticmethod
-    def get_url(pair):
-        """
-        Get tradingview graph URL for given pair
-
-        Args:
-            pair: trading pair (eg. XRPBTC)
-        Returns:
-            String URL for given pair
-
-        """
-
-        return "https://uk.tradingview.com/symbols/{0}/".format(pair)
-
-    @staticmethod
-    def get_supertrend_direction(supertrend):
-        """
-        Get new direction of supertrend from pattern
-
-        Args:
-            supertrend: list of trend directions (up/down)
-        Returns:
-            String action based on patten (BUY/SELL/HOLD/UNKNOWN)
-
-        """
-        if supertrend == "up":
-            result = 1, "BUY"
-        elif supertrend == "down":
-            result = 2, "SELL"
-        else:
-            result = 0, "HOLD"
-        return result
-
-    @staticmethod
-    def get_operator_fn(op):
-        """
-        Get operator function from string
-        Args:
-            op: string operator "<" or ">"
-        Returns:
-            operator.lt or operator.gt function
-        """
-
-        return {
-            "<" : operator.lt,
-            ">" : operator.gt,
-            }[op]
-
-    @get_exceptions
-    def eval_binary_expr(self, op1, oper, op2):
-        """
-        Evaluate a binary expression
-        eg 2 > 5, 0.12123 < 0.121
-        Args:
-            op1: value #1
-            oper: string operator "<" or ">"
-            op2: value #2
-        Returns:
-            Boolean result of binary expression (True/False)
-        """
-
-        op1, op2 = float(op1), float(op2)
-        return self.get_operator_fn(oper)(op1, op2)
-
-    @staticmethod
-    def get_action(trigger):
-        """
-        Transform action into an integer so that overall sentiment for a pair can be easily
-        calculated
-
-        Args:
-            trigger: BUY/SELL/HOLD
-
-        Returns:
-            integer representation of given trigger.  BUY=1, SELL=-1, HOLD=0
-
-        """
-
-
-        return {"BUY": 1,
-                "SELL": -1,
-                "HOLD": 0}[trigger]
 
     @get_exceptions
     def get_moving_averages(self, pair, localconfig=None):
@@ -506,25 +496,34 @@ class Engine(dict):
         LOGGER.debug("Done getting Indicators")
 
     @get_exceptions
-    def add_scheme(self, scheme):
-        """ add scheme to correct structure """
-        pair = scheme["symbol"]
+    def get_supertrend(self, pair=None, localconfig=None):
+        """
+        Get the super trend oscillator values for a given pair
+        append current supertrend data to instance variable
 
-        # add to redis
-        current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
-        close_time = str(self.dataframes[pair].iloc[-1]["closeTime"])
-        result = 0.0 if (isinstance(scheme["data"], float) and
-                         math.isnan(scheme["data"]))  else scheme["data"]
-        try:
-            data = {scheme["event"]:{"result": result,
-                                     "current_price": format(float(current_price), ".20f"),
-                                     "date": close_time,
-                                     }}
+        Args:
+              pair: trading pair (eg. XRPBTC)
+              localconfig: indicator config tuple
+        Returns:
+            None
 
-            redis = Redis(interval=self.interval, test=self.test,
-                          db=self.redis_db)
-            redis.redis_conn(pair, self.interval, data, close_time)
-            del redis
+        """
 
-        except Exception as e:
-            LOGGER.critical("Redis failure %s %s", str(e), repr(sys.exc_info()))
+        func, timef = localconfig  # split tuple
+        LOGGER.debug("Getting supertrend for %s", pair)
+        scheme = {}
+        klines = self.dataframes[pair]
+        dataframe = self.renamed_dataframe_columns(klines)
+
+        mine = dataframe.apply(pandas.to_numeric)
+        timeframe, multiplier = timef.split(',')
+        supertrend = SuperTrend(mine, int(timeframe), int(multiplier))
+        df_list = supertrend["STX_{0}_{1}".format(timeframe, multiplier)].tolist()
+
+        scheme["url"] = self.get_url(pair)
+        scheme["time"] = calendar.timegm(time.gmtime())
+        scheme["symbol"] = pair
+        scheme["data"] = self.get_supertrend_direction(df_list[-1])[0]
+        scheme["event"] = "Supertrend_{0},{1}".format(timeframe, multiplier)
+        self.add_scheme(scheme)
+        LOGGER.debug("done getting supertrend")
