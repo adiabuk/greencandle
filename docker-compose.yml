@@ -40,12 +40,25 @@ services:
       interval: 1m
       timeout: 2s
       retries: 5
+    volumes:
+      - ./test:/tmp
 
-  greencandle-test2:
+  cron:
     image: greencandle
-    entrypoint: backend --use-redis --test
+    entrypoint: cron -f
     links:
       - mysql
+      - redis
     depends_on:
       - mysql
       - redis
+    volumes:
+      - ./data:/data
+
+  webserver:
+     image: webserver
+     ports:
+       - 80:80
+     entrypoint: bash -c nginx|more
+     volumes:
+       - ./data:/data
