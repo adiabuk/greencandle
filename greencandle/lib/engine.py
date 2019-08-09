@@ -16,6 +16,7 @@ import zlib
 import pandas
 import talib
 from indicator import SuperTrend, RSI
+
 from . import config
 from .mysql import Mysql
 from .redis_conn import Redis
@@ -35,7 +36,6 @@ class Balance(dict):  #FIXME
 
     def __del__(self):
         del self.db
-
 
     def save_balance(self):
         scheme = {}
@@ -318,20 +318,23 @@ class Engine(dict):
 
         """
 
+        func, timef = config  # split tuple
         LOGGER.debug("Getting supertrend for %s", pair)
         scheme = {}
         klines = self.dataframes[pair]
         dataframe = self.renamed_dataframe_columns(klines)
 
         mine = dataframe.apply(pandas.to_numeric)
-        supertrend = SuperTrend(mine, 10, 3)
-        df_list = supertrend["STX_10_3"].tolist()
-        scheme["data"] = df_list[-1]
+        timeframe, multiplier = timef.split(',')
+        supertrend = SuperTrend(mine, int(timeframe), int(multiplier))
+        df_list = supertrend["STX_{0}_{1}".format(timeframe, multiplier)].tolist()
+
         scheme["url"] = self.get_url(pair)
         scheme["time"] = calendar.timegm(time.gmtime())
         scheme["symbol"] = pair
-        scheme["direction"] = self.get_supertrend_direction(df_list[-1])
-        scheme["event"] = "Supertrend"
+        scheme["data"] = self.get_supertrend_direction(df_list[-1])[0]
+        scheme["direction"] = self.get_supertrend_direction(df_list[-1])[1]
+        scheme["event"] = "Supertrend_10"
         self.add_scheme(scheme)
         LOGGER.debug("done getting supertrend")
 
@@ -361,11 +364,11 @@ class Engine(dict):
 
         """
         if supertrend == "up":
-            result = "BUY"
+            result = 1, "BUY"
         elif supertrend == "down":
-            result = "SELL"
+            result = 2, "SELL"
         else:
-            result = "HOLD"
+            result = 0, "HOLD"
         return result
 
     @staticmethod
