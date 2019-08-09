@@ -1,19 +1,53 @@
-#!/usr/bin/env python
+#pylint: disable=no-member,
 
 """Get account value from binance and coinbase """
 
 from __future__ import print_function
 import json
-
+import binance
 from . import config
 from requests.exceptions import ReadTimeout
 from .binance_accounts import get_binance_values
 from .coinbase_accounts import get_coinbase_values
 from .mysql import Mysql
+from .order import Trade
 from .logger import getLogger
-from . import config
 
 LOGGER = getLogger(__name__, config.main.logging_level)
+
+class Balance(dict):
+    def __init__(self, interval, test=False, *args, **kwargs):
+        self.db = Mysql(test=test, interval=interval)
+        self.interval = interval
+        self.balance = get_balance(test=test)
+        super(Balance, self).__init__(*args, **kwargs)
+
+
+    def __del__(self):
+        del self.db
+
+    def save_balance(self):
+        scheme = {}
+        if not self.test:
+            #  Add prices for current symbol to scheme
+            trade = Trade(interval=self.interval, test=self.test)
+            prices = {"buy": trade.get_buy_price(), "sell": trade.get_sell_price(),
+                      "market": binance.prices()[pair]}
+            scheme.update(prices)
+
+            bal = self.balance["binance"]["TOTALS"]["GBP"]
+
+            # Add scheme to DB
+            try:
+                self.db.insert_data(interval=self.interval,
+                                    symbol=scheme["symbol"], event=scheme["event"],
+                                    data=scheme["data"],
+                                    resistance=str(scheme["resistance"]),
+                                    support=str(scheme["support"]), buy=str(scheme["buy"]),
+                                    sell=str(scheme["sell"]), market=str(scheme["market"]),
+                                    balance=str(bal))
+            except Exception as excp:
+                LOGGER.critical("AMROX25 Error: %s", str(excp))
 
 def get_balance(test=False, interval="5m", coinbase=False):
     """

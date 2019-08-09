@@ -1,5 +1,5 @@
 #pylint: disable=no-member,consider-iterating-dictionary,global-statement,broad-except,
-#pylint: disable=unused-variable,invalid-name,logging-not-lazy,logging-format-interpolation
+#pylint: disable=unused-variable,invalid-name,possibly-unused-variable
 
 from __future__ import print_function
 import json
@@ -18,47 +18,15 @@ import talib
 from indicator import SuperTrend, RSI
 
 from . import config
+from . import balance
+
 from .mysql import Mysql
 from .redis_conn import Redis
-from . import balance
-from .order import Trade
 from .supres import supres
 from .common import make_float, pipify, pip_calc
 from .logger import getLogger, get_decorator
 
 LOGGER = getLogger(__name__, config.main.logging_level)
-
-class Balance(dict):  #FIXME
-    def __init__(self, interval, test=False):
-        self.db = Mysql(test=test, interval=interval)
-        self.interval = interval
-        self.balance = get_balance(test=test)
-
-    def __del__(self):
-        del self.db
-
-    def save_balance(self):
-        scheme = {}
-        if not self.test:
-            #  Add prices for current symbol to scheme
-            trade = Trade(pair=pair)
-            prices = {"buy": trade.get_buy_price(), "sell": trade.get_sell_price(),
-                      "market": binance.prices()[pair]}
-            scheme.update(prices)
-
-            bal = self.balance["binance"]["TOTALS"]["GBP"]
-
-            # Add scheme to DB
-            try:
-                self.db.insert_data(interval=self.interval,
-                                    symbol=scheme["symbol"], event=scheme["event"],
-                                    data=scheme["data"],
-                                    resistance=str(scheme["resistance"]),
-                                    support=str(scheme["support"]), buy=str(scheme["buy"]),
-                                    sell=str(scheme["sell"]), market=str(scheme["market"]),
-                                    balance=str(bal))
-            except Exception as excp:
-                LOGGER.critical("AMROX25 Error: " + str(excp))
 
 class Engine(dict):
     """ Represent events created from data & indicators """
@@ -113,7 +81,7 @@ class Engine(dict):
         return json.dumps(self)
 
     @get_exceptions
-    def get_data(self, config=None):
+    def get_data(self, localconfig=None):
         """
         Iterate through data and trading pairs to extract data
         Run data through indicator, oscillators, moving average
@@ -130,7 +98,7 @@ class Engine(dict):
             # get indicators supertrend, and API for each trading pair
             with ThreadPoolExecutor(max_workers=100) as pool:
 
-                for item in config:
+                for item in localconfig:
                     function, name, period = item.split(';')
                     # call each method defined in config with current pair and name,period tuple
                     # from config eg. self.supertrend(pair, config), where config is a tuple
@@ -158,32 +126,30 @@ class Engine(dict):
         self.add_scheme(scheme)
 
     @get_exceptions
-    def get_sup_res(self, pair, config=None):
+    def get_sup_res(self, pair, localconfig=None):
         """
         get support & resistance values for current pair
         Append data to supres instance variable (dict)
 
         Args:
               pair: trading pair (eg. XRPBTC)
-              config: indicator config tuple
+              localconfig: indicator config tuple
         Returns:
             None
         """
 
-        func, timeperiod = config  # split tuple
+        func, timeperiod = localconfig  # split tuple
         LOGGER.info("Getting Support & resistance for %s", pair)
         klines = self.dataframes[pair]
 
         close_values = make_float(klines.close)
         support, resistance = supres(close_values, int(timeperiod))
-        print('SUPRES ', support,  resistance)
         scheme = {}
         try:
             value = (pip_calc(support[-1], resistance[-1]))
         except IndexError:
-            LOGGER.debug("Skipping {0} {1} {2} for support/re sistance ".format(pair,
-                                                                                str(support),
-                                                                               str(resistance)))
+            LOGGER.debug("Skipping %s %s %s for support/resistance",
+                         pair, str(support), str(resistance))
             return None
 
         cur_to_res = resistance[-1] - close_values[-1]
@@ -207,22 +173,23 @@ class Engine(dict):
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
         self.add_scheme(scheme)
         LOGGER.debug("Done getting Support & resistance")
+        return None
 
     @get_exceptions
-    def get_rsi(self, pair=None, config=None):
+    def get_rsi(self, pair=None, localconfig=None):
         """
         get RSI oscillator values for given pair
         Append current RSI data to instance variable
 
         Args:
               pair: trading pair (eg. XRPBTC)
-              config: indicator config tuple
+              localconfig: indicator config tuple
         Returns:
             None
 
         """
-        func, timeperiod = config  # split tuple
-        LOGGER.debug("Getting %s_%s for %s",func, timeperiod, pair)
+        func, timeperiod = localconfig  # split tuple
+        LOGGER.debug("Getting %s_%s for %s", func, timeperiod, pair)
         klines = self.dataframes[pair]
         dataframe = self.renamed_dataframe_columns(klines)
         scheme = {}
@@ -258,20 +225,20 @@ class Engine(dict):
         return dataframe
 
     @get_exceptions
-    def get_supertrend(self, pair=None, config=None):
+    def get_supertrend(self, pair=None, localconfig=None):
         """
         Get the super trend oscillator values for a given pair
         append current supertrend data to instance variable
 
         Args:
               pair: trading pair (eg. XRPBTC)
-              config: indicator config tuple
+              localconfig: indicator config tuple
         Returns:
             None
 
         """
 
-        func, timef = config  # split tuple
+        func, timef = localconfig  # split tuple
         LOGGER.debug("Getting supertrend for %s", pair)
         scheme = {}
         klines = self.dataframes[pair]
@@ -374,30 +341,30 @@ class Engine(dict):
                 "HOLD": 0}[trigger]
 
     @get_exceptions
-    def get_moving_averages(self, pair, config=None):
+    def get_moving_averages(self, pair, localconfig=None):
         """
         Apply moving averages to klines and get BUY/SELL triggers
         Add data to DB
 
         Args:
             pair: trading pair (eg. XRPBTC)
-            config: indicator config tuple
+            localconfig: indicator config tuple
 
         Returns:
             None
         """
-        LOGGER.critical("calling MA with %s", config)
+        LOGGER.critical("calling MA with %s", localconfig)
         LOGGER.debug("Getting moving averages for %s", pair)
         klines = self.ohlcs[pair]
         try:
             close = klines[-1]  # numpy.ndarray
         except Exception as e:
-            LOGGER.critical("FAILED moving averages " + str(e))
-        func, timeperiod = config  # split tuple
+            LOGGER.critical("FAILED moving averages: %s ", str(e))
+        func, timeperiod = localconfig  # split tuple
         try:
             result = getattr(talib, func)(close, int(timeperiod))[-1]
         except Exception as e:
-            LOGGER.critical("Overall Exception getting moving averages", e)
+            LOGGER.critical("Overall Exception getting moving averages: %s", e)
         if result > close[-1]:
             trigger = "SELL"
         else:
@@ -419,12 +386,12 @@ class Engine(dict):
             self.add_scheme(scheme)
 
         except KeyError as e:
-            LOGGER.critical("KEY FAILURE in moving averages " + str(e))
+            LOGGER.critical("KEY FAILURE in moving averages: %s ", str(e))
 
         LOGGER.debug("done getting moving averages")
 
     @get_exceptions
-    def get_oscillators(self, pair, config=None):
+    def get_oscillators(self, pair, localconfig=None):
         """
 
         Apply osscilators to klines and get BUY/SELL triggers
@@ -432,7 +399,7 @@ class Engine(dict):
 
         Args:
             pair: trading pair (eg. XRPBTC)
-            config: indicator config tuple
+            localconfig: indicator config tuple
 
         Returns:
             None
@@ -476,7 +443,7 @@ class Engine(dict):
 
             except Exception as error:
                 traceback.print_exc()
-                LOGGER.critical("failed getting oscillators" + str(error))
+                LOGGER.critical("failed getting oscillators: %s", str(error))
 
             current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
             close_time = str(self.dataframes[pair].iloc[-1]["closeTime"])
@@ -494,11 +461,11 @@ class Engine(dict):
                 self.add_scheme(scheme)
 
             except KeyError as e:
-                LOGGER.critical("Key failure while getting oscillators " + str(e))
+                LOGGER.critical("Key failure while getting oscillators: %s", str(e))
         LOGGER.debug("Done getting Oscillators")
 
     @get_exceptions
-    def get_indicators(self, pair, config=None):
+    def get_indicators(self, pair, localconfig=None):
         """
 
         Cross Reference data against trend indicators
@@ -534,8 +501,7 @@ class Engine(dict):
 
                 self.add_scheme(scheme)
             except KeyError as ke:
-                LOGGER.critical("KEYERROR while getting indicators "  + str(sys.exc_info()))
-                continue
+                LOGGER.critical("KEYERROR while getting indicators: %s", str(sys.exc_info()))
 
         LOGGER.debug("Done getting Indicators")
 

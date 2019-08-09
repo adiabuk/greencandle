@@ -20,7 +20,7 @@ def getLogger(logger_name=None, logging_level=20):
     if logger.hasHandlers():
         logger.handlers.clear()
 
-    logger.setLevel(logging_level)
+    logger.setLevel(int(logging_level))
     logger.propagate = False
     ch = logging.StreamHandler()
     formatter = logging.Formatter("%(asctime)s %(levelname)s %(name)s %(message)s",
