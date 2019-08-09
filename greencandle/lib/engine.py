@@ -52,8 +52,7 @@ class Balance(dict):  #FIXME
             try:
                 self.db.insert_data(interval=self.interval,
                                     symbol=scheme["symbol"], event=scheme["event"],
-                                    direction=scheme["direction"], data=scheme["data"],
-                                    difference=str(scheme["difference"]),
+                                    data=scheme["data"],
                                     resistance=str(scheme["resistance"]),
                                     support=str(scheme["support"]), buy=str(scheme["buy"]),
                                     sell=str(scheme["sell"]), market=str(scheme["market"]),
@@ -109,35 +108,6 @@ class Engine(dict):
         except NameError:
             pass
 
-    def print_text(self):
-        """
-        Print text output to stdout
-        """
-
-        red = "\033[31m"
-        white = "\033[0m"
-        if not self.values:
-            LOGGER.critical("ERROR: no values available")
-        for value in self.values():
-            if not "direction" in value or "HOLD" in value["direction"]:
-                #no_change.append(value["symbol"])
-                continue
-            try:
-                print("Symbol:", value["symbol"])
-                print("URL:", value["url"])
-                if value["direction"] != "HOLD":
-                    print("direction:", red, value["direction"], white)
-                else:
-                    print("direction:", value["direction"])
-                print("event:", red, value["event"], white)
-                print("time:", value["time"])
-                for key2, value2 in value["data"].items():
-                    print(key2, value2)
-            except KeyError as key_error:
-                print("AMROX25 KEYERROR", value, key_error)
-                continue
-            print("\n")
-
     def get_json(self):
         """return serialized JSON of dict """
         return json.dumps(self)
@@ -179,7 +149,6 @@ class Engine(dict):
         """Send ohcls data to redis"""
         scheme = {}
         scheme["symbol"] = pair
-        scheme["direction"] = "HOLD"
 
         # compress and pickle current dataframe for redis storage
         # dont get most recent one, as it may not be complete
@@ -223,13 +192,6 @@ class Engine(dict):
         scheme["value"] = value
         scheme["result"] = resistance
 
-        if cur_to_res > cur_to_sup:
-            scheme["direction"] = "BUY"
-        elif cur_to_res < cur_to_sup:
-            scheme["direction"] = "SELL"
-        else:
-            scheme["direction"] = "HOLD"
-
         try:
             scheme["difference"] = pipify(resistance[-1]) - pipify(support[-1])
         except TypeError as type_error:
@@ -239,12 +201,10 @@ class Engine(dict):
             scheme["data"] = str(resistance[-1])  #FIXME
         elif func == 'SUP':
             scheme["data"] = str(support[-1])  #FIXME
-        #scheme["data"] = scheme['support'], scheme['resistance']
         scheme["url"] = self.get_url(pair)
         scheme["time"] = calendar.timegm(time.gmtime())
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
-        scheme["direction"] = scheme['direction']
         self.add_scheme(scheme)
         LOGGER.debug("Done getting Support & resistance")
 
@@ -274,13 +234,6 @@ class Engine(dict):
         scheme["url"] = self.get_url(pair)
         scheme["time"] = calendar.timegm(time.gmtime())
         scheme["symbol"] = pair
-        if float(df_list[-1]) > 70:
-            direction = "SELL"
-        elif float(df_list[-1]) < 30:
-            direction = "BUY"
-        else:
-            direction = "HOLD"
-        scheme["direction"] = direction
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
         self.add_scheme(scheme)
         LOGGER.debug("Done getting RSI")
@@ -333,8 +286,7 @@ class Engine(dict):
         scheme["time"] = calendar.timegm(time.gmtime())
         scheme["symbol"] = pair
         scheme["data"] = self.get_supertrend_direction(df_list[-1])[0]
-        scheme["direction"] = self.get_supertrend_direction(df_list[-1])[1]
-        scheme["event"] = "Supertrend_10"
+        scheme["event"] = "Supertrend_{0},{1}".format(timeframe, multiplier)
         self.add_scheme(scheme)
         LOGGER.debug("done getting supertrend")
 
@@ -460,12 +412,9 @@ class Engine(dict):
                                               "date":close_time,
                                               "action":self.get_action(trigger)}}
             scheme["data"] = result
-            scheme["url"] = "google.com"
             scheme["time"] = calendar.timegm(time.gmtime())
             scheme["symbol"] = pair
-            scheme["direction"] = trigger
             scheme["event"] = func+"_"+str(timeperiod)
-            scheme["difference"] = None
 
             self.add_scheme(scheme)
 
@@ -538,10 +487,8 @@ class Engine(dict):
                                "current_price":current_price,
                                "action":self.get_action(trigger)}}
                 scheme["data"] = result
-                scheme["url"] = "google.com"
                 scheme["time"] = calendar.timegm(time.gmtime())
                 scheme["symbol"] = pair
-                scheme["direction"] = trigger
                 scheme["event"] = check
                 scheme["difference"] = None
                 self.add_scheme(scheme)
@@ -583,9 +530,7 @@ class Engine(dict):
                 scheme["url"] = self.get_url(pair)
                 scheme["time"] = calendar.timegm(time.gmtime())
                 scheme["symbol"] = pair
-                scheme["direction"] = trends[check][result]
                 scheme["event"] = check
-                scheme["difference"] = "None"
 
                 self.add_scheme(scheme)
             except KeyError as ke:
@@ -608,7 +553,7 @@ class Engine(dict):
             data = {scheme["event"]:{"result": result,
                                      "current_price": format(float(current_price), ".20f"),
                                      "date": close_time,
-                                     "action":self.get_action(scheme["direction"])}}
+                                     }}
 
             redis = Redis(interval=self.interval, test=self.test,
                           db=self.redis_db)
@@ -617,9 +562,3 @@ class Engine(dict):
 
         except Exception as e:
             LOGGER.critical("Redis failure %s %s", str(e), repr(sys.exc_info()))
-
-        if scheme["direction"] == "HOLD":
-            self["hold"][id(scheme)] = scheme
-        else:
-            # Fetch resistance/support/PIP Value
-            self["event"][id(scheme)] = scheme
