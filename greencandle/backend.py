@@ -92,7 +92,7 @@ def loop(interval, test, system):
 
     engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval)
     if system == "redis":
-        engine.get_data(config=main_indicators)
+        engine.get_data(localconfig=main_indicators)
         redis = Redis(interval=interval, test=False, db=0)
     else:
         pass

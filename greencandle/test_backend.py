@@ -112,7 +112,7 @@ def perform_data(pair, interval, data_dir, indicators):
         LOGGER.warning(str(prices_trunk))
         LOGGER.warning(str(interval))
         LOGGER.warning(str(redis_db))
-        engine.get_data(config=indicators)
+        engine.get_data(localconfig=indicators)
 
         ########TEST stategy############
         result, current_time, current_price = redis.get_action(pair=pair, interval=interval)
@@ -180,7 +180,7 @@ def do_parallel(pairs, interval, redis_db, data_dir, indicators):
             dataframes.update({pair:dataframe})
             engine = Engine(prices=prices_trunk, dataframes=dataframes,
                             interval=interval, test=True, db=redis_db)
-            engine.get_data(config=indicators)
+            engine.get_data(localconfig=indicators)
 
             ########TEST stategy############
             result, current_time, current_price = redis.get_action(pair=pair, interval=interval)

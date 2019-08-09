@@ -10,7 +10,6 @@ from requests.exceptions import ReadTimeout
 from .binance_accounts import get_binance_values
 from .coinbase_accounts import get_coinbase_values
 from .mysql import Mysql
-from .order import Trade
 from .logger import getLogger
 
 LOGGER = getLogger(__name__, config.main.logging_level)
@@ -26,13 +25,14 @@ class Balance(dict):
     def __del__(self):
         del self.db
 
-    def save_balance(self):
+    def save_balance(self, prices):
+        # Save balances to db
         scheme = {}
         if not self.test:
             #  Add prices for current symbol to scheme
-            trade = Trade(interval=self.interval, test=self.test)
-            prices = {"buy": trade.get_buy_price(), "sell": trade.get_sell_price(),
-                      "market": binance.prices()[pair]}
+            #trade = Trade(interval=self.interval, test=self.test)
+            #prices = {"buy": trade.get_buy_price(), "sell": trade.get_sell_price(),
+            #          "market": binance.prices()[pair]}
             scheme.update(prices)
 
             bal = self.balance["binance"]["TOTALS"]["GBP"]
