@@ -2,6 +2,11 @@
 
 set -xe
 
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root"
+   exit 1
+fi
+
 # Setup local env
 apt-get -y update
 apt-get -y install docker.io ntpdate mysql-client screen
@@ -12,6 +17,11 @@ chmod +x /usr/local/bin/docker-compose
 sudo systemctl unmask docker.service
 sudo systemctl unmask docker.socket
 sudo systemctl start docker.service
+
+if getent passwd ubuntu; 2>/dev/null; then
+  usermod -aG docker ubuntu
+  newgrp docker
+fi
 
 echo "127.0.0.1    mysql" >> /etc/hosts
 echo "127.0.0.1    redis" >> /etc/hosts
