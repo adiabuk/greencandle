@@ -350,13 +350,11 @@ class Engine(dict):
         Returns:
             None
         """
-        LOGGER.critical("calling MA with %s", localconfig)
         LOGGER.debug("Getting moving averages for %s", pair)
         klines = self.ohlcs[pair]
         func, timeperiod = localconfig  # split tuple
         try:
             close = klines[-1] # numpy.ndarray
-            LOGGER.critical('AMROX3 len of close %s', len(close))
         except Exception as e:
             LOGGER.critical("FAILED moving averages: %s ", str(e))
         try:
@@ -436,7 +434,6 @@ class Engine(dict):
         current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
         close_time = str(self.dataframes[pair].iloc[-1]["closeTime"])
         result = fastk[-1]
-        LOGGER.critical('STOCHF: %s', result)
         try:
             data = {check:{"result": result,
                            "date": close_time,

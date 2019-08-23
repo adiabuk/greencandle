@@ -123,7 +123,6 @@ def perform_data(pair, interval, data_dir, indicators):
             scheme['data'] = result
             scheme["event"] = "trigger"
             engine.add_scheme(scheme)
-        LOGGER.critical('AMX %s', result)
         ################################
 
         del engine
@@ -143,7 +142,6 @@ def perform_data(pair, interval, data_dir, indicators):
     sells.append((pair, current_time, current_price))
     trade.sell(sells)
     profit = get_recent_profit(True, interval=interval)
-    LOGGER.critical("AMROX4 %s %s %s", pair, interval, profit)
 
 def do_parallel(pairs, interval, redis_db, data_dir, indicators):
     """
@@ -191,7 +189,6 @@ def do_parallel(pairs, interval, redis_db, data_dir, indicators):
                 scheme['data'] = result
                 scheme["event"] = "trigger"
                 engine.add_scheme(scheme)
-            LOGGER.critical('AMX %s', result)
             ################################
 
             del engine

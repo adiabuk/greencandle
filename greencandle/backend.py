@@ -112,7 +112,6 @@ def loop(interval, test, system):
             # dont get most recent one, as it may not be complete
             scheme['data'] = result
             scheme["event"] = "trigger"
-            LOGGER.info('AMROX99 %s', str(scheme))
             engine.add_scheme(scheme)
 
 

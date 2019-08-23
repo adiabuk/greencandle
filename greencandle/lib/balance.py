@@ -47,7 +47,7 @@ class Balance(dict):
                                     sell=str(scheme["sell"]), market=str(scheme["market"]),
                                     balance=str(bal))
             except Exception as excp:
-                LOGGER.critical("AMROX25 Error: %s", str(excp))
+                pass
 
 def get_balance(test=False, interval="5m", coinbase=False):
     """

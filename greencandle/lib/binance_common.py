@@ -72,7 +72,6 @@ def get_all_klines(pair, interval=None, start_time=0, no_of_klines=1E1000):
         try:
             start_time = current_section[-1]["openTime"] + 1
         except IndexError:
-            print("AMROX ERROR: " + str(len(current_section)))
             break
         if len(current_section) < 500:
             # Break out of while true loop as we have exhausted possible entries

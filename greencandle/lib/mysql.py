@@ -163,7 +163,8 @@ class Mysql():
         except NameError as e:
             self.logger.critical("One or more expected variables not passed to DB %s", e)
         except Exception:
-            self.logger.critical("AMROX6 - unable to execute query %s", query)
+            self.logger.critical("Error - unable to execute query %s", query)
+
 
     @get_exceptions
     def delete_data(self):
@@ -208,7 +209,7 @@ class Mysql():
               None
         """
 
-        self.logger.info("AMROX5 Buying %s using %s", pair, self.interval)
+        self.logger.info("Buying %s using %s", pair, self.interval)
         command = """insert into trades_{0} (pair, buy_time, buy_price, investment,
                      total) VALUES ("{1}", "{2}", "{3}", "{4}", "{5}");""".format(self.interval,
                                                                                   pair, date,

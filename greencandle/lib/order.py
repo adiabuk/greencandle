@@ -110,8 +110,6 @@ class Trade():
                                            investment=20, total=amount)
                     if not self.test_data and not result:
                         send_gmail_alert("BUY", item, cost)
-                    else:
-                        self.logger.critical("Buy Failed")
             del dbase
         else:
             self.logger.info("Nothing to buy")
