@@ -14,9 +14,9 @@ import binance
 from . import config
 from .logger import getLogger
 
-LOGGER = getLogger(__name__, config.main.logging_config)
+LOGGER = getLogger(__name__, config.main.logging_level)
 
-def get_binance_klines(pair, interval=None):
+def get_binance_klines(pair, interval=None, limit=50):
     """
     Get binance klines data for given trading pair and return as a pandas dataframe
 
@@ -29,7 +29,7 @@ def get_binance_klines(pair, interval=None):
     """
 
     try:
-        raw = binance.klines(pair, interval, limit=50)
+        raw = binance.klines(pair, interval, limit=limit)
     except IndexError:
         LOGGER.critical("Unable to fetch data for " + pair)
         sys.exit(2)

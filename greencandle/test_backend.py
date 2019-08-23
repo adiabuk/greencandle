@@ -26,7 +26,7 @@ from .lib.order import Trade
 from .lib.logger import getLogger, get_decorator
 
 LOGGER = getLogger(__name__, config.main.logging_level)
-CHUNK_SIZE = 50
+CHUNK_SIZE = 200
 GET_EXCEPTIONS = get_decorator((Exception))
 
 def main():
@@ -49,7 +49,7 @@ def main():
     parallel_interval = args.interval if args.interval else parallel_interval
     main_indicators = config.main.indicators.split()
     serial_intervals = [args.interval]
-    redis_db = {"15m":1, "5m":2, "3m":3, "1m":4}[parallel_interval]
+    redis_db = {"4h":1, "2h":1, "1h":1, "30m":1, "15m":1, "5m":2, "3m":3, "1m":4}[parallel_interval]
 
     dbase = Mysql(test=True, interval=parallel_interval)
     dbase.delete_data()
@@ -71,7 +71,7 @@ def do_serial(pairs, intervals, data_dir, indicators):
             dbase = Mysql(test=True, interval=interval)
             dbase.delete_data()
             del dbase
-            redis_db = {"15m":1, "5m":2, "3m":3, "1m":4}[interval]
+            redis_db = {"4h":1, "2h":1, "1h":1, "30m":1, "15m":1, "5m":2, "3m":3, "1m":4}[interval]
             redis = Redis(interval=interval, test=True, db=redis_db)
             redis.clear_all()
             del redis
@@ -82,7 +82,7 @@ def do_serial(pairs, intervals, data_dir, indicators):
 
 @GET_EXCEPTIONS
 def perform_data(pair, interval, data_dir, indicators):
-    redis_db = {"15m":1, "5m":2, "3m":3, "1m":4}[interval]
+    redis_db = {"4h":1, "2h":1, "1h":1, "30m":1, "15m":1, "5m":2, "3m":3, "1m":4}[interval]
     LOGGER.info("Serial run %s %s %s", pair, interval, redis_db)
     redis = Redis(interval=interval, test=True, db=redis_db)
     filename = "{0}/{1}_{2}.p".format(data_dir, pair, interval)
@@ -109,9 +109,6 @@ def perform_data(pair, interval, data_dir, indicators):
         dataframes = {pair:dataframe}
         engine = Engine(prices=prices_trunk, dataframes=dataframes,
                         interval=interval, test=True, db=redis_db)
-        LOGGER.warning(str(prices_trunk))
-        LOGGER.warning(str(interval))
-        LOGGER.warning(str(redis_db))
         engine.get_data(localconfig=indicators)
 
         ########TEST stategy############
@@ -146,7 +143,7 @@ def perform_data(pair, interval, data_dir, indicators):
     sells.append((pair, current_time, current_price))
     trade.sell(sells)
     profit = get_recent_profit(True, interval=interval)
-    LOGGER.info("AMROX4 %s %s %s", pair, interval, profit)
+    LOGGER.critical("AMROX4 %s %s %s", pair, interval, profit)
 
 def do_parallel(pairs, interval, redis_db, data_dir, indicators):
     """
@@ -154,7 +151,7 @@ def do_parallel(pairs, interval, redis_db, data_dir, indicators):
     """
     LOGGER.info("Performaing parallel run %s", interval)
     redis = Redis(interval=interval, test=True, db=redis_db)
-    size = 1000 * {"15m": 1, "5m": 3, "3m": 5, "1m": 15}[interval]
+    size = 1000 * {"1h":0.25, "30m":0.5, "15m": 1, "5m": 3, "3m": 5, "1m": 15}[interval]
 
     trade = Trade(interval=interval, test=True, test_trade=True, test_data=True)
     redis.clear_all()
@@ -167,7 +164,7 @@ def do_parallel(pairs, interval, redis_db, data_dir, indicators):
         with open(filename, "rb") as handle:
             dframes[pair] = pickle.load(handle)
 
-    for beg in range(size - CHUNK_SIZE * 2):
+    for beg in range(int(size) - CHUNK_SIZE * 2):
         dataframes = {}
         buys = []
         sells = []
@@ -175,7 +172,7 @@ def do_parallel(pairs, interval, redis_db, data_dir, indicators):
             end = beg + CHUNK_SIZE
             dataframe = dframes[pair][beg: end]
             prices_trunk = {pair: "0"}
-            if len(dataframe) < 50:
+            if len(dataframe) < CHUNK_SIZE:
                 break
             dataframes.update({pair:dataframe})
             engine = Engine(prices=prices_trunk, dataframes=dataframes,

@@ -58,7 +58,7 @@ class Trade():
         if buy_list:
             dbase = Mysql(test=self.test_data, interval=self.interval)
             if self.test_data or self.test_trade:
-                current_btc_bal = 0.36 # 2000GBP
+                current_btc_bal = 37000
 
             else:
                 current_btc_bal = get_balance()['binance']['BTC']['BTC']
@@ -88,8 +88,8 @@ class Trade():
                 amount = math.ceil(btc_amount / float(cost))
                 if (float(cost)*float(amount) >= float(current_btc_bal) or
                         float(current_btc_bal) <= 0.0031):
-                    self.logger.warning("Unable to purchase %s, insufficient funds:%s/%s",
-                                        item, btc_amount, current_btc_bal)
+                    self.logger.warning("Unable to purchase %s of %s, insufficient funds:%s/%s",
+                                        amount, item, btc_amount, current_btc_bal)
                     continue
                 elif item in current_trades:
                     self.logger.warning("We already have a trade of %s, skipping...", item)
@@ -134,12 +134,10 @@ class Trade():
                 if not self.test_data:
                     result = binance.order(symbol=item, side=binance.SELL, quantity=quantity,
                                            price='', orderType="MARKET", test=self.test_trade)
+                    send_gmail_alert("SELL", item, price)
                 if self.test_data or (self.test_trade and not result) or \
                         (not self.test_trade and 'transactTime' in result):
                     dbase.update_trades(pair=item, sell_time=current_time, sell_price=price)
-                if not self.test_data:
-                    send_gmail_alert("SELL", item, price)
-
                 else:
                     self.logger.critical("Sell Failed")
             del dbase

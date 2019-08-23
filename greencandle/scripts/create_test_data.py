@@ -16,6 +16,8 @@ import datetime
 import pandas
 import argcomplete
 
+from ..lib import config
+config.create_config(test=True)
 from ..lib.binance_common import get_all_klines
 
 def main():
@@ -40,7 +42,11 @@ def main():
     #still end up with the exact number of lines for the days specified
     number_of_extra_klines = 50
 
-    klines_multiplier = {"15m": 15,
+    klines_multiplier = {"4h": 240,
+                         "2h": 120,
+                         "1h": 60,
+                         "30m": 30,
+                         "15m": 15,
                          "5m": 5,
                          "3m": 3,
                          "1m": 1}
