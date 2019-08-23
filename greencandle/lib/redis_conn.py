@@ -41,7 +41,8 @@ class Redis():
         self.interval = interval
         self.test = test
 
-        self.logger.debug("Starting Redis with interval %s %s, db=%s", interval, test_str, str(redis_db))
+        self.logger.debug("Starting Redis with interval %s %s, db=%s", interval,
+                          test_str, str(redis_db))
         pool = redis.ConnectionPool(host=self.host, port=self.port, db=redis_db)
         self.conn = redis.StrictRedis(connection_pool=pool)
         self.dbase = Mysql(test=test, interval=interval)
@@ -137,6 +138,18 @@ class Redis():
 
         return data["current_price"], data["date"], data['result']
 
+    def get_result(self, item, indicator):
+        """Retrive decoded OHLC data from redis"""
+        try:
+            return ast.literal_eval(self.get_item(item, indicator).decode())['result']
+        except AttributeError:
+            return None
+
+    def log_event(self, event, rate, buy, sell, pair, current_time):
+        """Send event data to logger"""
+        self.logger.critical('EVENT:(%s) %s rate:%s buy:%s sell:%s, time:%s',
+                             pair, event, rate, buy, sell, current_time)
+
     def get_action(self, pair, interval):
         """Determine if we are in a BUY/HOLD/SELL situration for a specific pair and interval"""
         results = AttributeDict(current=AttributeDict(), previous=AttributeDict(),
@@ -154,18 +167,10 @@ class Redis():
             ind = split[1] + '_' + split[2]
             ind_list.append(ind)
 
-
-        def get_result(item, indicator):
-            try:
-                return ast.literal_eval(self.get_item(item, indicator).decode())['result']
-            except AttributeError:
-                return None
-
         for indicator in ind_list:
-
-            results['current'][indicator] = get_result(current, indicator)
-            results['previous'][indicator] = get_result(previous, indicator)
-            results['previous1'][indicator] = get_result(previous1, indicator)
+            results['current'][indicator] = self.get_result(current, indicator)
+            results['previous'][indicator] = self.get_result(previous, indicator)
+            results['previous1'][indicator] = self.get_result(previous1, indicator)
         items = self.get_items(pair, self.interval)
         current = self.get_current(items[-1])
         previous = self.get_current(items[-2])
@@ -220,25 +225,25 @@ class Redis():
 
         # if we match stop_loss rule and are in a trade
         if stop_loss_rule and buy_price:
-            self.logger.critical('EVENT:(%s) stop_loss rate:%s buy:%s sell:%s, %s',
-                                 pair, rate, buy_price, sub_perc(stop_loss_perc, buy_price),
-                                 current_time)
+            self.log_event('StopLoss', rate, buy_price, sub_perc(stop_loss_perc, buy_price),
+                           pair, current_time)
             return ('SELL', current_time, current_price)
         # if we match take_profit rule and are in a trade
         elif take_profit_rule and buy_price:
-            self.logger.critical('EVENT:(%s) take_profit rate:%s %s %s %s, %s',
-                                 pair, rate, buy_price, current_price,
-                                 add_perc(take_profit_perc, buy_price), current_time)
+            self.log_event('TakeProfit', rate, buy_price, current_price, pair, current_time)
             return ('SELL', current_time, current_price)
         # if we match any sell rules and are in a trade
         elif any(sell_rules) and buy_price:
-            self.logger.critical('EVENT:(%s) NORMAL SELL rate:%s, %s', pair, rate, current_time)
+
+            self.log_event('NormalSell', rate, buy_price, current_price, pair, current_time)
             return ('SELL', current_time, current_price)
         # if we match all buy rules and are NOT in a trade
         elif all(buy_rules) and not buy_price:
+            self.log_event('NormalBuy', rate, buy_price, current_price, pair, current_time)
             self.logger.critical('EVENT:(%s) NORMAL BUY rate:%s, %s', pair, rate, current_time)
             return ('BUY', current_time, current_price)
         elif buy_price:
+            self.log_event('Hold', rate, buy_price, current_price, pair, current_time)
             self.logger.critical('EVENT:(%s) HOLD rate:%s, %s', pair, rate, current_time)
             return ('HOLD', current_time, current_price)
         else:
