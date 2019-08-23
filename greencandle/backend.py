@@ -54,7 +54,7 @@ def main():
         try:
             loop(interval, args.test, system)
         except KeyboardInterrupt:
-            LOGGER.critical("\nExiting on user command...")
+            LOGGER.warning("\nExiting on user command...")
             sys.exit(1)
         remaining_time = (minutes * 60.0) - ((time.time() - starttime) % 60.0)
         LOGGER.info("Sleeping for %s seconds", remaining_time)

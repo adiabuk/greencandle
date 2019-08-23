@@ -147,7 +147,7 @@ class Redis():
 
     def log_event(self, event, rate, buy, sell, pair, current_time):
         """Send event data to logger"""
-        self.logger.critical('EVENT:(%s) %s rate:%s buy:%s sell:%s, time:%s',
+        self.logger.info('EVENT:(%s) %s rate:%s buy:%s sell:%s, time:%s',
                              pair, event, rate, buy, sell, current_time)
 
     def get_action(self, pair, interval):
@@ -247,11 +247,9 @@ class Redis():
         # if we match all buy rules and are NOT in a trade
         elif all(buy_rules) and not buy_price:
             self.log_event('NormalBuy', rate, buy_price, current_price, pair, current_time)
-            self.logger.critical('EVENT:(%s) NORMAL BUY rate:%s, %s', pair, rate, current_time)
             return ('BUY', current_time, current_price)
         elif buy_price:
             self.log_event('Hold', rate, buy_price, current_price, pair, current_time)
-            self.logger.critical('EVENT:(%s) HOLD rate:%s, %s', pair, rate, current_time)
             return ('HOLD', current_time, current_price)
         else:
             return ('NOITEM', current_time, current_price)
