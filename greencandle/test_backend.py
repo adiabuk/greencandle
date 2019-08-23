@@ -7,6 +7,7 @@ Run module with test data
 
 import argparse
 import os
+import time
 import sys
 import pickle
 from concurrent.futures import ThreadPoolExecutor
@@ -18,7 +19,6 @@ from .lib import config
 config.create_config(test=True)
 
 from .lib.engine import Engine
-from .lib.common import make_float
 from .lib.redis_conn import Redis
 from .lib.mysql import Mysql
 from .lib.profit import get_recent_profit
@@ -82,6 +82,7 @@ def do_serial(pairs, intervals, data_dir, indicators):
 
 @GET_EXCEPTIONS
 def perform_data(pair, interval, data_dir, indicators):
+    """Serial test loop"""
     redis_db = {"4h":1, "2h":1, "1h":1, "30m":1, "15m":1, "5m":2, "3m":3, "1m":4}[interval]
     LOGGER.info("Serial run %s %s %s", pair, interval, redis_db)
     redis = Redis(interval=interval, test=True, db=redis_db)
@@ -102,7 +103,9 @@ def perform_data(pair, interval, data_dir, indicators):
         end = beg + CHUNK_SIZE
         LOGGER.info("chunk: %s, %s", beg, end)
         dataframe = dframe.copy()[beg: end]
-        LOGGER.info("current date: %s, %s", dataframe.iloc[-1].closeTime, len(dataframe))
+
+        current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(dataframe.iloc[-1].closeTime))
+        LOGGER.info("current date: %s", current_time)
         if len(dataframe) < CHUNK_SIZE:
             LOGGER.info("End of dataframe")
             break
@@ -141,7 +144,6 @@ def perform_data(pair, interval, data_dir, indicators):
     sells = []
     sells.append((pair, current_time, current_price))
     trade.sell(sells)
-    profit = get_recent_profit(True, interval=interval)
 
 def do_parallel(pairs, interval, redis_db, data_dir, indicators):
     """

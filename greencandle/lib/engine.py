@@ -1,5 +1,5 @@
-#pylint: disable=no-member,consider-iterating-dictionary,global-statement,broad-except,
-#pylint: disable=unused-variable,invalid-name,possibly-unused-variable
+#pylint: disable=no-member,consider-iterating-dictionary,broad-except,
+#pylint: disable=unused-variable,possibly-unused-variable
 
 """
 Module for collecting price data and creating TA results
@@ -24,7 +24,6 @@ from indicator import SuperTrend, RSI
 from . import config
 from . import balance
 
-from .mysql import Mysql
 from .redis_conn import Redis
 from .supres import supres
 from .common import make_float, pipify, pip_calc
@@ -45,7 +44,6 @@ class Engine(dict):
         LOGGER.debug("Fetching raw data")
         self.interval = interval
         self.pairs = prices.keys()
-        self.db = Mysql(test=test, interval=interval)
         if not test:  #FIXME
             self.balance = balance.get_balance(test=test)
         self.test = test
@@ -57,13 +55,6 @@ class Engine(dict):
         self.ohlcs = self.make_data_tupple(dataframes)
         super(Engine, self).__init__()
         LOGGER.debug("Finished fetching raw data")
-
-    @get_exceptions
-    def __del__(self):
-        try:
-            del self.db
-        except NameError:
-            pass
 
     @staticmethod
     def make_data_tupple(dataframes):
@@ -137,11 +128,11 @@ class Engine(dict):
         return result
 
     @staticmethod
-    def get_operator_fn(op):
+    def get_operator_fn(symbol):
         """
         Get operator function from string
         Args:
-            op: string operator "<" or ">"
+            symbol: string operator "<" or ">"
         Returns:
             operator.lt or operator.gt function
         """
@@ -149,7 +140,7 @@ class Engine(dict):
         return {
             "<" : operator.lt,
             ">" : operator.gt,
-            }[op]
+            }[symbol]
 
     @get_exceptions
     def eval_binary_expr(self, op1, oper, op2):
@@ -207,8 +198,8 @@ class Engine(dict):
             redis.redis_conn(pair, self.interval, data, close_time)
             del redis
 
-        except Exception as e:
-            LOGGER.critical("Redis failure %s %s", str(e), repr(sys.exc_info()))
+        except Exception as exc:
+            LOGGER.critical("Redis failure %s %s", str(exc), repr(sys.exc_info()))
 
     @get_exceptions
     def get_data(self, localconfig=None):
@@ -250,7 +241,6 @@ class Engine(dict):
 
         # compress and pickle current dataframe for redis storage
         # dont get most recent one, as it may not be complete
-        # FIXME - changed back to current one
         scheme['data'] = zlib.compress(pickle.dumps(self.dataframes[pair].iloc[-1]))
         scheme["event"] = "ohlc"
         self.add_scheme(scheme)
@@ -355,12 +345,12 @@ class Engine(dict):
         func, timeperiod = localconfig  # split tuple
         try:
             close = klines[-1] # numpy.ndarray
-        except Exception as e:
-            LOGGER.critical("FAILED moving averages: %s ", str(e))
+        except Exception as exc:
+            LOGGER.critical("FAILED moving averages: %s ", str(exc))
         try:
             result = getattr(talib, func)(close, int(timeperiod))[-1]
-        except Exception as e:
-            LOGGER.critical("Overall Exception getting moving averages: %s", e)
+        except Exception as exc:
+            LOGGER.critical("Overall Exception getting moving averages: %s", exc)
         if result > close[-1]:
             trigger = "SELL"
         else:
@@ -381,8 +371,8 @@ class Engine(dict):
 
             self.add_scheme(scheme)
 
-        except KeyError as e:
-            LOGGER.critical("KEY FAILURE in moving averages: %s ", str(e))
+        except KeyError as exc:
+            LOGGER.critical("KEY FAILURE in moving averages: %s ", str(exc))
 
         LOGGER.debug("done getting moving averages")
 

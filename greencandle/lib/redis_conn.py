@@ -1,4 +1,4 @@
-#pylint: disable=logging-format-interpolation,eval-used,no-else-return,unused-variable,no-member
+#pylint: disable=eval-used,no-else-return,unused-variable,no-member
 
 """
 Store and retrieve items from redis
@@ -69,7 +69,7 @@ class Redis():
             success of operation: True/False
         """
 
-        self.logger.info("Adding to Redis:{0} {1} {2}".format(interval, list(data.keys()), now))
+        self.logger.info("Adding to Redis: %s %s %s", interval, list(data.keys()), now)
         response = self.conn.hmset("{0}:{1}:{2}".format(pair, interval, now), data)
         return response
 
@@ -148,7 +148,7 @@ class Redis():
     def log_event(self, event, rate, buy, sell, pair, current_time):
         """Send event data to logger"""
         self.logger.info('EVENT:(%s) %s rate:%s buy:%s sell:%s, time:%s',
-                             pair, event, rate, buy, sell, current_time)
+                         pair, event, rate, buy, sell, current_time)
 
     def get_action(self, pair, interval):
         """Determine if we are in a BUY/HOLD/SELL situration for a specific pair and interval"""
