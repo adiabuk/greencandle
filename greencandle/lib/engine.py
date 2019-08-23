@@ -205,6 +205,7 @@ class Engine(dict):
 
         except Exception as e:
             LOGGER.critical("Redis failure %s %s", str(e), repr(sys.exc_info()))
+
     @get_exceptions
     def get_data(self, localconfig=None):
         """
@@ -319,12 +320,14 @@ class Engine(dict):
         dataframe = self.renamed_dataframe_columns(klines)
         scheme = {}
         mine = dataframe.apply(pandas.to_numeric)
-        rsi = RSI(mine, period=int(timeperiod))
+
+        rsi = RSI(mine, base='Close', period=int(timeperiod))
         df_list = rsi["{0}_{1}".format(func, timeperiod)].tolist()
         df_list = ["%.1f" % float(x) for x in df_list]
         scheme["data"] = df_list[-1]
         scheme["url"] = self.get_url(pair)
         scheme["time"] = calendar.timegm(time.gmtime())
+        scheme["epoch"] = rsi['date'].iloc[-1]
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
         self.add_scheme(scheme)
@@ -346,11 +349,12 @@ class Engine(dict):
         LOGGER.critical("calling MA with %s", localconfig)
         LOGGER.debug("Getting moving averages for %s", pair)
         klines = self.ohlcs[pair]
+        func, timeperiod = localconfig  # split tuple
         try:
-            close = klines[-1]  # numpy.ndarray
+            close = klines[-1] # numpy.ndarray
+            LOGGER.critical('AMROX3 len of close %s', len(close))
         except Exception as e:
             LOGGER.critical("FAILED moving averages: %s ", str(e))
-        func, timeperiod = localconfig  # split tuple
         try:
             result = getattr(talib, func)(close, int(timeperiod))[-1]
         except Exception as e:
@@ -360,7 +364,7 @@ class Engine(dict):
         else:
             trigger = "BUY"
         scheme = {}
-        result = 0.0 if math.isnan(result) else format(float(result), ".20f")
+        result = str(0.0) if math.isnan(result) else format(float(result), ".20f")
         try:
             current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
             close_time = str(self.dataframes[pair].iloc[-1]["closeTime"])
