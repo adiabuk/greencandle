@@ -161,6 +161,7 @@ class Redis():
 
         # get current & previous indicator values
         main_indicators = config.main.indicators.split()
+
         ind_list = []
         for i in main_indicators:
             split = i.split(';')
@@ -192,9 +193,15 @@ class Redis():
         last_close = last_rehydrated.close
 
         current_price = float(close)
-        #current_price = float(current[0])
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_mepoch))
-        rate = str(float(results.current.EMA_200) - float(results.previous.EMA_200))
+
+
+        # rate of Moving Average increate/decreate based on indicator
+        # specified in the rate_indicator config option - best with EMA_200
+        rate_indicator = config.main.rate_indicator
+        rate = str(float(results.current[rate_indicator]) - float(results.previous[rate_indicator]))
+        last_rate = str(float(results.previous[rate_indicator]) - \
+                float(results.previous1[rate_indicator]))
 
         buy_rules = []
         sell_rules = []
