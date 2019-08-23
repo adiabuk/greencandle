@@ -1,6 +1,10 @@
 #pylint: disable=no-member,consider-iterating-dictionary,global-statement,broad-except,
 #pylint: disable=unused-variable,invalid-name,possibly-unused-variable
 
+"""
+Module for collecting price data and creating TA results
+"""
+
 from __future__ import print_function
 import json
 import math
@@ -401,61 +405,51 @@ class Engine(dict):
         LOGGER.debug("Getting Oscillators for %s", pair)
         klines = self.ohlcs[pair]
         open, high, low, close = klines
+        func, timeperiod = localconfig  # split tuple
+
         scheme = {}
         trends = {
-            #"STOCHF": {"BUY": "< 25", "SELL": ">75", "args":[20]},
-            "CCI": {"BUY": "< -100", "SELL": "> 100",
-                    "klines": ("high", "low", "close"), "args": [14]},
-            #"ADX": {"BUY": ???
-            "RSI": {"BUY": "< 30", "SELL": "> 70", "klines": tuple(("close",)), "args": [14]},
-            "MOM": {"BUY": "< 0", "SELL": "> 0", "klines": tuple(("close",)), "args": [10]},
-            "APO": {"BUY": "> 0000001677", "SELL": "< 0", "klines": tuple(("close",)), "args": []},
-            "ULTOSC": {"BUY": "< 30", "SELL": "> 70",
-                       "klines": ("high", "low", "close"), "args":[7, 14, 28]},
-            #"WILLR": {"BUY": "> 80", "SELL": "< 20",  #bad
-            "WILLR": {"BUY": "< -80", "SELL": "> 20",  #good
-                      "klines": ("high", "low", "close"), "args": [14]},
-            "AROONOSC": {"BUY": "> 50", "SELL": "< -50", "klines": ("high", "low"), "args": []}
+            "STOCHF": {"args":[20], "klines":("high", "low", "close")},
+            #"CCI": {"klines": ("high", "low", "close"), "args": [14]},
+            #"RSI": {"klines": tuple(("close",)), "args": [14]},
+            #"MOM": {"klines": tuple(("close",)), "args": [10]},
+            #"APO": {"klines": tuple(("close",)), "args": []},
+            #"ULTOSC": {"klines": ("high", "low", "close"), "args":[7, 14, 28]},
+            #"WILLR": {"klines": ("high", "low", "close"), "args": [14]},
+            #"AROONOSC": {"klines": ("high", "low"), "args": []}
             }
+        check = func
+        attrs = trends[func]
+        try:
+            a = attrs["klines"][0]
+            li = []
+            for i in attrs["klines"]:
+                li.append(locals()[i])
 
-        for check, attrs in trends.items():
-            try:
-                a = attrs["klines"][0]
-                li = []
-                for i in attrs["klines"]:
-                    li.append(locals()[i])
+            fastk, fastd = getattr(talib, func)(high, low, close, int(timeperiod))
+            #result = getattr(talib, func)(close, int(timeperiod))[-1]
+        except Exception as error:
+            traceback.print_exc()
+            LOGGER.critical("failed getting oscillators: %s", str(error))
+            return
 
-                j = getattr(talib, check)(*(*li, *attrs["args"]))[-1]
-                trigger = "HOLD"
-                for item in "BUY", "SELL":
-                    s = str(j) + " " + attrs[item]   # From numpy.float64 to str
-                    if self.eval_binary_expr(*(s.split())):
-                        trigger = item
-                        #self.db.insert_actions(pair=pair, indicator=check, value=j,
-                        #                       action=self.get_action(trigger))
-                        break
+        current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
+        close_time = str(self.dataframes[pair].iloc[-1]["closeTime"])
+        result = fastk[-1]
+        LOGGER.critical('STOCHF: %s', result)
+        try:
+            data = {check:{"result": result,
+                           "date": close_time,
+                           "current_price":current_price}}
+            scheme["data"] = result
+            scheme["time"] = calendar.timegm(time.gmtime())
+            scheme["symbol"] = pair
+            scheme["event"] = '{}_{}'.format(func, timeperiod)
+            scheme["difference"] = None
+            self.add_scheme(scheme)
 
-            except Exception as error:
-                traceback.print_exc()
-                LOGGER.critical("failed getting oscillators: %s", str(error))
-
-            current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
-            close_time = str(self.dataframes[pair].iloc[-1]["closeTime"])
-            result = 0.0 if math.isnan(j) else format(float(j), ".20f")
-            try:
-                data = {check:{"result": result,
-                               "date": close_time,
-                               "current_price":current_price,
-                               "action":self.get_action(trigger)}}
-                scheme["data"] = result
-                scheme["time"] = calendar.timegm(time.gmtime())
-                scheme["symbol"] = pair
-                scheme["event"] = check
-                scheme["difference"] = None
-                self.add_scheme(scheme)
-
-            except KeyError as e:
-                LOGGER.critical("Key failure while getting oscillators: %s", str(e))
+        except KeyError as e:
+            LOGGER.critical("Key failure while getting oscillators: %s", str(e))
         LOGGER.debug("Done getting Oscillators")
 
     @get_exceptions
