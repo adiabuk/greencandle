@@ -18,7 +18,7 @@ def percent(perc, num):
 
 def make_float(arr):
     """Convert dataframe array into float array"""
-    return numpy.array([float(x) for x in arr.values])
+    return numpy.array([float(x) for x in arr.values],dtype='f8')
 
 def pip_calc(open_val, close_val):
     open_val = Decimal(open_val)
