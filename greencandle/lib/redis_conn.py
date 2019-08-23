@@ -13,7 +13,6 @@ from .logger import getLogger
 from . import config
 from .common import add_perc, sub_perc, AttributeDict
 
-
 class Redis():
     """
     Redis object
@@ -139,7 +138,6 @@ class Redis():
         return data["current_price"], data["date"], data['result']
 
     def get_action(self, pair, interval):
-
         results = AttributeDict(current=AttributeDict(), previous=AttributeDict(),
                                 previous1=AttributeDict())
         try:
@@ -147,7 +145,6 @@ class Redis():
         except ValueError:
             return ('HOLD', 'Not enough data', 0)
 
-        print(previous, current)
         # get current & previous indicator values
         main_indicators = config.main.indicators.split()
         ind_list = []
@@ -188,25 +185,24 @@ class Redis():
         last_high = last_rehydrated.high
         last_low = last_rehydrated.low
         last_close = last_rehydrated.close
+
         self.logger.critical("Current OHLC: %s %s %s %s", open, high, low, close)
         self.logger.critical("Previous OHLC: %s %s %s %s", last_open, last_high, last_low, last_close)
-        current_price = float(current[0])
+        current_price = float(close)
+        #current_price = float(current[0])
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_mepoch))
+        rate = str(float(results.current.EMA_200) - float(results.previous.EMA_200))
+        self.logger.critical("RATE of EMA_200: %s", format(float(rate), ".4f"))
 
-        #buy_rule1 =  results.current.EMA_5 > results.current.EMA_50
-        #buy_rule2 =  (results.previous.EMA_5 < results.previous.EMA_50) or (results.previous1.EMA_5 < results.previous1.EMA_50)
-        self.logger.critical('current_epoch: %s, current_time %s, current_ema10 %s, current_ema50 %s, previous_ema10:%s, previous_ema50: %s, previous1.ema_10: %s, previous1.ema50: %s, current_open: %s', current_mepoch,
-                current_time, results.current.EMA_20, results.current.EMA_50,
-                results.previous.EMA_20, results.previous.EMA_50, results.previous1.EMA_20,
-                results.previous1.EMA_50, open)
         buy_rules = []
         sell_rules = []
-        for seq in range(1, 6):
+        for seq in range(1, 10):
             try:
                 buy_rules.append(eval(config.main['buy_rule{}'.format(seq)]))
             except (KeyError, TypeError):
                 pass
             try:
+                self.logger.critical(config.main['sell_rule{}'.format(seq)])
                 sell_rules.append(eval(config.main['sell_rule{}'.format(seq)]))
             except KeyError:
                 pass
@@ -228,22 +224,26 @@ class Redis():
 
         # if we match stop_loss rule and are in a trade
         if stop_loss_rule and buy_price:
-            self.logger.critical('EVENT:(%s) stop_loss %s %s %s',pair, buy_price, current_price, sub_perc(stop_loss_perc, buy_price))
+            self.logger.critical('EVENT:(%s) stop_loss buy:%s perc:%s, %s',pair, buy_price, sub_perc(stop_loss_perc, buy_price), current_time)
             return ('SELL', current_time, current_price)
         # if we match take_profit rule and are in a trade
         elif take_profit_rule and buy_price:
-            self.logger.critical('EVENT:(%s) take_profit %s %s %s',pair, buy_price, current_price, add_perc(take_profit_perc, buy_price))
+            self.logger.critical('EVENT:(%s) take_profit %s %s %s, %s',pair, buy_price, current_price,
+                    add_perc(take_profit_perc, buy_price), current_time)
             return ('SELL', current_time, current_price)
-        # if we match all sell rules and are in a trade
+        # if we match any sell rules and are in a trade
         elif any(sell_rules) and buy_price:
-            self.logger.critical('EVENT:(%s) NORMAL SELL', pair)
+            self.logger.critical('EVENT:(%s) NORMAL SELL, %s', pair, current_time)
             return ('SELL', current_time, current_price)
         # if we match all buy rules and are NOT in a trade
         elif all(buy_rules) and not buy_price:
-            self.logger.critical('EVENT:(%s) NORMAL BUY', pair)
+            self.logger.critical('EVENT:(%s) NORMAL BUY, %s', pair, current_time)
             return ('BUY', current_time, current_price)
-        else:
+        elif buy_price:
+            self.logger.critical('EVENT:(%s) HOLD rate:%s, %s', pair, rate, current_time)
             return ('HOLD', current_time, current_price)
+        else:
+            return ('NOITEM', current_time, current_price)
 
     def get_change(self, pair):
         """
