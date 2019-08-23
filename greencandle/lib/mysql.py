@@ -63,72 +63,6 @@ class Mysql():
         self.dbase.commit()
 
     @get_exceptions
-    def get_buy(self):
-        """
-        Get list of pairs which have just changed from SELL, to BUY and order by strength,
-        return ordered tuple.  We look at pairs which have just switched from SELL to BUY
-        to catch it at the beginning of an upward trend.  If the state is already BUY then we
-        have likely missed the train, so we pass.
-        Args:
-              None
-        Returns:
-              sorted tuple each containing pair, score, current price
-        """
-        self.logger.debug("Finding symbols to buy")
-        potential_buys = self.get_changes()
-        sorted_buys = sorted(potential_buys.items(), key=operator.itemgetter(1))[::-1]
-
-        return sorted_buys
-
-    @get_exceptions
-    def get_sell(self):
-        """
-        From list of current pair holdings list all which are currently in SELL regardless of
-        score.  We are not just looking for pairs that have just switched, incase we miss the
-        trigger ordered tuple
-        Args:
-              None
-        Returns:
-              None
-        """
-
-        current_holdings = self.get_trades()
-        command = """select t1.pair from (select pair, total, max(ctime) AS MaxCreated
-                     from action_totals group by pair) t2 join action_totals t1 on
-                     t2.pair = t1.pair and t2.MaxCreated = t1.ctime and
-                     t1.total < 1 and t1.total = t2.total ;"""
-
-        cur = self.dbase.cursor()
-        self.execute(cur, command)
-        all_sell = [item[0] for item in cur.fetchall()]
-
-        current_sell = [item for item in current_holdings if item in all_sell]
-        return current_sell
-
-    @get_exceptions
-    def get_changes(self):
-        """
-        Get changes of status from BUY to SELL by running a query that compares current value to
-        previous value
-        Args:
-              None
-        Returns:
-              dict of values.  Keys: pair, ctime, total, gt
-              where gt indicates the strength of the BUY signal
-        """
-        # FIXME: make select match docstring returns
-        command = """ select s1.pair as pair, s1.ctime AS ctime1, s2.ctime as ctime2,
-                      s1.total AS total1, s2.total as total2,
-                      ((s1.total >= 0) and (s2.total <= 0)) AS gt
-                      from (action_totals s1 left join action_totals s2 on
-                      ((s1.pair = s2.pair))) where (
-                      (s1.total <> s2.total) and
-                      ((s1.total > 0) and (s2.total <0)) and
-                      (s1.ctime > (now() - interval 5 minute)) and
-                      (s2.ctime < now() - interval 15 minute)); """
-        return self.fetch_sql_data(command)
-
-    @get_exceptions
     def fetch_sql_data(self, query):
         """"
         Fetch SQL data for totals and return dict
@@ -165,7 +99,6 @@ class Mysql():
         except Exception:
             self.logger.critical("Error - unable to execute query %s", query)
 
-
     @get_exceptions
     def delete_data(self):
         """
@@ -175,23 +108,6 @@ class Mysql():
         command = "delete from trades_{0};".format(self.interval)
         command2 = "delete from actions;"
         self.run_sql_query(command)
-        self.run_sql_query(command2)
-
-    @get_exceptions
-    def clean_stale(self):
-        """
-        Delete stale records from actions and action_totals db tables - any records older than 30
-        minutes
-        Args:
-              None
-        Returns:
-              None
-        """
-
-        self.logger.info("Cleaning stale data from mysql")
-        command1 = "delete from action_totals where ctime < NOW() - INTERVAL 30 MINUTE;"
-        command2 = "delete from actions where ctime < NOW() - INTERVAL 30 MINUTE;"
-        self.run_sql_query(command1)
         self.run_sql_query(command2)
 
     @get_exceptions
@@ -356,38 +272,3 @@ class Mysql():
                     self.run_sql_query(command)
                 except NameError:
                     self.logger.error("One or more expected variables not passed to insert into DB")
-
-    @get_exceptions
-    def insert_action_totals(self):
-        """
-        Get recent coin actions from actions table, sum totals and insert into action_totals table
-        Args:
-              None
-        Returns:
-              None
-        """
-
-        self.logger.debug("Inserting Totals")
-        command = """ INSERT INTO action_totals (pair, total) select pair, SUM(action) as total from
-        recent_actions group by pair order by total;"""
-        self.run_sql_query(command)
-
-    @get_exceptions
-    def insert_actions(self, **kwargs):
-        """
-        Insert actions into actions table
-        Args:
-              pair (string pairname)
-              indicator (eg. RSI, Supertrend)
-              value: value of indicator/oscilator
-              action: 0/1/-1 for HOLD, BUY,SELL (used to sum totals later)
-        Returns:
-              None
-        """
-
-        globals().update(kwargs)
-
-        command = """INSERT INTO actions (pair, indicator, value, action)
-                     VALUES ("{0}","{1}","{2}","{3}");""".format(pair, indicator, value, action)
-
-        self.run_sql_query(command)
