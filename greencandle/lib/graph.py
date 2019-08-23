@@ -1,9 +1,10 @@
 #!/usr/bin/env python
-
+#pylint: disable=no-member
 """Create candlestick graphs from OHLC data"""
 
 import ast
 import time
+import datetime
 import sys
 import pickle
 import zlib
@@ -105,9 +106,10 @@ class Graph():
                                   name=name)
 
             fig.append_trace(item, row, col)
-
-        self.filename = "{0}/simple_candlestick_{1}-{2}.html".format(output_dir, self.pair,
-                                                                     self.interval)
+        now = datetime.datetime.now()
+        date = now.strftime('%Y-%m-%d_%H-%M-%S')
+        self.filename = "{0}/{1}_{2}-{3}.html".format(output_dir, self.pair, date,
+                                                      self.interval)
         py.plot(fig, filename=self.filename, auto_open=False)
 
     def get_data(self):
