@@ -165,7 +165,8 @@ def do_parallel(pairs, interval, redis_db, data_dir, indicators):
         with open(filename, "rb") as handle:
             dframes[pair] = pickle.load(handle)
 
-    for beg in range(int(size) - CHUNK_SIZE * 2):
+    LOGGER.critical(dframes.keys())
+    for beg in range(len(dframes[pair]) - CHUNK_SIZE):
         dataframes = {}
         buys = []
         sells = []
