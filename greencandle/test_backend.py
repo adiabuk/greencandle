@@ -104,7 +104,8 @@ def perform_data(pair, interval, data_dir, indicators):
         LOGGER.info("chunk: %s, %s", beg, end)
         dataframe = dframe.copy()[beg: end]
 
-        current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(dataframe.iloc[-1].closeTime))
+        current_time = time.strftime("%Y-%m-%d %H:%M:%S",
+                time.gmtime(int(dataframe.iloc[-1].closeTime)/1000))
         LOGGER.info("current date: %s", current_time)
         if len(dataframe) < CHUNK_SIZE:
             LOGGER.info("End of dataframe")
