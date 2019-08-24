@@ -19,8 +19,8 @@ sudo systemctl unmask docker.socket
 sudo systemctl start docker.service
 
 if getent passwd ubuntu; 2>/dev/null; then
-  usermod -aG docker ubuntu|| true
-  newgrp docker
+  usermod -aG docker ubuntu || true
+  newgrp docker || true
 fi
 
 echo "127.0.0.1    mysql" >> /etc/hosts
