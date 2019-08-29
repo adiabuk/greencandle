@@ -153,8 +153,8 @@ class Mysql():
         for each complete trade logged
         """
         cur = self.dbase.cursor()
-        command = """ select sell_time, buy_price, sell_price, total from trades_{0} where
-                      sell_price is NOT NULL; """.format(self.interval)
+        command = """ select sell_time, buy_price, sell_price, total from trades where
+                      `interval` = "{0}" and sell_price is NOT NULL; """.format(self.interval)
 
         self.execute(cur, command)
         return cur.fetchall()
@@ -170,7 +170,8 @@ class Mysql():
               a single list of pairs that we currently hold
         """
         cur = self.dbase.cursor()
-        command = """ select pair from trades where sell_price is NULL and `interval`="{0}" """.format(self.interval)
+        command = """ select pair from trades where sell_price is NULL and `interval`="{0}"
+                  """.format(self.interval)
 
         self.execute(cur, command)
         row = [item[0] for item in cur.fetchall()]
@@ -183,10 +184,10 @@ class Mysql():
         """
         self.logger.info("Selling %s for %s", pair, self.interval)
         command = """update trades set sell_price={0},sell_time="{1}"
-        where sell_price is NULL, interval="{2}" and pair="{3}" """.format(float(sell_price),
-                                                                           sell_time,
-                                                                           self.interval,
-                                                                           pair)
+        where sell_price is NULL and `interval`="{2}" and pair="{3}" """.format(float(sell_price),
+                                                                                sell_time,
+                                                                                self.interval,
+                                                                                pair)
         self.run_sql_query(command)
 
     @get_exceptions
