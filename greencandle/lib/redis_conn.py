@@ -71,6 +71,8 @@ class Redis():
 
         self.logger.info("Adding to Redis: %s %s %s", interval, list(data.keys()), now)
         response = self.conn.hmset("{0}:{1}:{2}".format(pair, interval, now), data)
+        #expiry = 600 if self.test else 18000
+        #response = self.conn.set("{0}:{1}{2}".format(pair, interval, now), data, ex=expiry)
         return response
 
     def get_items(self, pair, interval):
@@ -148,7 +150,7 @@ class Redis():
     def log_event(self, event, rate, buy, sell, pair, current_time):
         """Send event data to logger"""
         self.logger.info('EVENT:(%s) %s rate:%s buy:%s sell:%s, time:%s',
-                         pair, event, rate, buy, sell, current_time)
+                         pair, event, format(float(rate), ".2f"), buy, sell, current_time)
 
     def get_action(self, pair, interval):
         """Determine if we are in a BUY/HOLD/SELL situration for a specific pair and interval"""
@@ -246,7 +248,7 @@ class Redis():
             return ('SELL', current_time, current_price)
         # if we match all buy rules and are NOT in a trade
         elif all(buy_rules) and not buy_price:
-            self.log_event('NormalBuy', rate, buy_price, current_price, pair, current_time)
+            self.log_event('NormalBuy', rate, current_price, current_price, pair, current_time)
             return ('BUY', current_time, current_price)
         elif buy_price:
             self.log_event('Hold', rate, buy_price, current_price, pair, current_time)
