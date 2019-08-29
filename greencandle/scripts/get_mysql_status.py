@@ -4,25 +4,25 @@
 Get details of current trades using mysql and current value from binance
 """
 
-import os
 import json
 import sys
 
 from urllib.request import urlopen
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 from operator import itemgetter
 import binance
 
-BASE_DIR = os.getcwd().split("greencandle", 1)[0] + "greencandle"
-sys.path.append(BASE_DIR)
 from ..lib.mysql import Mysql
-from ..lib.auth import binance_auth
+from ..lib import config
 
+test = True if sys.argv[2].lower() == "test" else False
+config.create_config(test=test)
+from ..lib.auth import binance_auth
 
 def main():
     prices = binance.prices()
     binance_auth()
-    dbase = Mysql(test=False, interval=sys.argv[1])
+    dbase = Mysql(test=test, interval=sys.argv[1])
 
     trades = dbase.get_trades()
     profits = []
@@ -36,7 +36,7 @@ def main():
     url = "http://127.1:5001/data"
     try:
         data = urlopen(url).read().decode("utf-8")
-    except HTTPError:
+    except (HTTPError, URLError):
         data = []
         trades = []
         print("Waiting for API...")
@@ -63,7 +63,7 @@ def main():
 
     details = sorted(details, key=itemgetter(-2))
     for item in details:
-        #sys.stdout.write(*item)
+
         print("{0} {1} {2} {3} {4} {5} {6} {7}".format(*item))
     print("\nxxx\n")
     count = len(profits)
