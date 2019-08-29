@@ -48,7 +48,7 @@ elif [[ -z $GET && -z $PUT ]]; then
   usage
 
 elif [[ -n $GET ]]; then
-  mysqldump --protocol=tcp -u root -ppassword --no-data greencandle > $FILENAME
+  mysqldump --protocol=tcp -u root -ppassword --no-data greencandle_test > $FILENAME
   mysqldump --protocol=tcp -u root -ppassword greencandle exchange >> $FILENAME
 elif [[ -n $PUT ]]; then
   mysql --protocol=tcp -u root -ppassword greencandle < $FILENAME
