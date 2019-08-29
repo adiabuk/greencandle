@@ -3,16 +3,7 @@
 """
 Push/Pull crypto signals and data to mysql
 """
-import os
-import sys
-import operator
 import MySQLdb
-import MySQLdb.cursors
-import binance
-
-BASE_DIR = os.getcwd().split("greencandle", 1)[0] + "greencandle"
-sys.path.append(BASE_DIR)
-
 from . import config
 from .logger import getLogger, get_decorator
 
@@ -69,18 +60,12 @@ class Mysql():
         Args:
               String SQL select query
         Returns:
-              dict of tuples.  where key is pair name containing a tuple of total and current price)
+              tuple result
         """
 
-        di = {}
-        prices = binance.prices()
-        with self.cursor(MySQLdb.cursors.DictCursor) as cursor:
-            self.execute(cur, query)
-            data = cursor.fetchall()
-            for record in data:
-                di[record["pair"]] = record["total1"], prices[record["pair"]]
-
-        return di
+        self.execute(cur, query)
+        data = cursor.fetchall()
+        return data
 
     @get_exceptions
     def run_sql_query(self, query):
@@ -94,10 +79,12 @@ class Mysql():
         cur = self.dbase.cursor()
         try:
             self.execute(cur, query)
-        except NameError as e:
-            self.logger.critical("One or more expected variables not passed to DB %s", e)
+        except NameError as exc:
+            self.logger.critical("One or more expected variables not passed to DB %s", exc)
         except Exception:
             self.logger.critical("Error - unable to execute query %s", query)
+        except MySQLdb.ProgrammingError:
+            self.logger.critical("Syntax error in query: %s", query)
 
     @get_exceptions
     def delete_data(self):
@@ -105,10 +92,8 @@ class Mysql():
         Delete all data from trades table
         """
         self.logger.info("Deleting all trades from mysql")
-        command = "delete from trades_{0};".format(self.interval)
-        command2 = "delete from actions;"
+        command = "delete from trades;"
         self.run_sql_query(command)
-        self.run_sql_query(command2)
 
     @get_exceptions
     def insert_trade(self, pair, date, price, investment, total):
@@ -145,7 +130,6 @@ class Mysql():
         self.execute(cur, command)
 
         row = [item[0] for item in cur.fetchall()]
-        self.logger.debug("%s %s", command, row)
         return row[0] if row else None # There should only be one open trade, so return first item
 
     @get_exceptions
@@ -161,18 +145,6 @@ class Mysql():
 
         row = [(item[0], item[1], item[2]) for item in cur.fetchall()]
         return row
-
-    @get_exceptions
-    def is_recent_sell(self, pair):
-        """
-        check if pair was sold recently
-        """
-        command = """select pair from trades_{0} where pair="{1}" and sell_price is not null and
-        sell_time > (NOW() - 600);""".format(self.interval, pair)
-        cur = self.dbase.cursor()
-        self.execute(cur, command)
-        row = [item for item in cur.fetchall()]
-        return bool(row)
 
     @get_exceptions
     def get_last_trades(self):
