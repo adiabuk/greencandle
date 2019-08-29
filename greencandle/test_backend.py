@@ -36,7 +36,6 @@ def main():
     setproctitle.setproctitle("greencandle-test")
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--interval")
-    parser.add_argument("-p", "--pairs", nargs='+', required=False, default=[])
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("-s", "--serial", default=False, action="store_true")
     group.add_argument("-a", "--parallel", default=True, action="store_true")
@@ -44,7 +43,7 @@ def main():
 
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
-    pairs = args.pairs if args.pairs else config.main.pairs.split()
+    pairs = config.main.pairs.split()
     parallel_interval = config.main.parallel_interval.split()[0]
     parallel_interval = args.interval if args.interval else parallel_interval
     main_indicators = config.main.indicators.split()

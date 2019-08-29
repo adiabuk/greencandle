@@ -75,7 +75,7 @@ class Trade():
 
                 self.logger.info("btc_amount: %s", btc_amount)
                 cost = current_price
-                main_pairs = config.main['pairs_'+self.interval].split()
+                main_pairs = config.main.pairs
 
                 if item not in main_pairs:
                     self.logger.warning("%s not in buy_list, but active trade "
