@@ -70,9 +70,10 @@ class Redis():
         """
 
         self.logger.info("Adding to Redis: %s %s %s", interval, list(data.keys()), now)
-        response = self.conn.hmset("{0}:{1}:{2}".format(pair, interval, now), data)
-        #expiry = 600 if self.test else 18000
-        #response = self.conn.set("{0}:{1}{2}".format(pair, interval, now), data, ex=expiry)
+        key = "{0}:{1}:{2}".format(pair, interval, now)
+        expiry = 600 if self.test else 18000
+        response = self.conn.hmset(key, data)
+        self.conn.expire(key, expiry)
         return response
 
     def get_items(self, pair, interval):
