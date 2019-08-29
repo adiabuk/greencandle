@@ -27,7 +27,7 @@ class Graph():
     def __init__(self, test=False, pair='ETHBTC', db=0, interval='1m'):
         self.test = test
         self.pair = pair
-        self.db = db
+        self.dbase = db
         self.interval = interval
         self.data = {}
         self.filename = ''
@@ -89,7 +89,12 @@ class Graph():
                 item = go.Bar(x=value['date'],
                               y=value['value'],
                               name=name)
+                row = 2
                 # add rsi graph in second subply (below) if it exists
+            elif 'STOCHF' in name:
+                item = go.Bar(x=value['date'],
+                              y=value['value'],
+                              name=name)
                 row = 2
             elif 'Sup_Res' in name:
                 print("FOUND SUP_RES")
@@ -99,7 +104,6 @@ class Graph():
                                   y=value['value'],
                                   mode='markers',
                                   name="Resistance")
-
             else:
                 item = go.Scatter(x=value['date'],
                                   y=value['value'],
@@ -114,14 +118,12 @@ class Graph():
 
     def get_data(self):
         """Fetch data from redis"""
-        print('Using db: {0}'.format(self.db))
-        redis = Redis(test=self.test, db=self.db)
+        redis = Redis(test=self.test, db=self.dbase)
         list_of_series = []
         index = redis.get_items(self.pair, self.interval)
 
         main_indicators = config.main.indicators.split()
         ind_list = []
-        print(main_indicators)
         for i in main_indicators:
             split = i.split(';')
             ind = split[1] + '_' + split[2]
