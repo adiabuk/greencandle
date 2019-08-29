@@ -28,6 +28,7 @@ def main():
     parser.add_argument("-d", "--days", required=True)
     parser.add_argument("-o", "--outputdir", required=True)
     parser.add_argument("-p", "--pairs", nargs='+', required=True, default=[])
+    parser.add_argument("-i", "--intervals", nargs='+', required=False, default=[])
 
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
@@ -51,11 +52,12 @@ def main():
                          "3m": 3,
                          "1m": 1}
 
+    intervals = args.intervals if args.intervals else klines_multiplier.keys()
     for pair in args.pairs:
-        for interval in klines_multiplier.keys():
+        for interval in intervals:
             if not os.path.isdir(args.outputdir):
                 sys.exit("Invalid output directory: {0}".format(args.outputdir))
-            filename = "{0}/{1}_{2}.p".format(args.outputdir, pair, interval)
+            filename = "{0}/{1}_{2}.p".format(args.outputdir.rstrip('/'), pair, interval)
             print("Using filename:", filename)
             if os.path.exists(filename):
                 continue
