@@ -111,12 +111,12 @@ class Mysql():
         """
 
         self.logger.info("Buying %s using %s", pair, self.interval)
-        command = """insert into trades_{0} (pair, buy_time, buy_price, investment,
-                     total) VALUES ("{1}", "{2}", "{3}", "{4}", "{5}");""".format(self.interval,
-                                                                                  pair, date,
-                                                                                  float(price),
-                                                                                  investment,
-                                                                                  total)
+        command = """insert into trades (pair, buy_time, buy_price, investment, `interval`,
+                     total) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}", "{5}");""".format(pair, date,
+                                                                                         float(price),
+                                                                                         investment,
+                                                                                         self.interval,
+                                                                                         total)
         self.run_sql_query(command)
 
     @get_exceptions
@@ -124,8 +124,8 @@ class Mysql():
         """
         Return quantity for a current open trade
         """
-        command = """ select total from trades_{0} where sell_price
-                      is NULL and pair = "{1}" """.format(self.interval, pair)
+        command = """ select total from trades where sell_price
+                      is NULL and `interval` = "{0}" and pair = "{1}" """.format(self.interval, pair)
         cur = self.dbase.cursor()
         self.execute(cur, command)
 
@@ -138,8 +138,8 @@ class Mysql():
         Return the value of an open trade for a given trading pair
         """
 
-        command = """ select buy_price, total, buy_time from trades_{0} where sell_price
-                      is NULL and pair = "{1}" """.format(self.interval, pair)
+        command = """ select buy_price, total, buy_time from trades where sell_price
+                      is NULL and `interval` = "{0}" and pair = "{1}" """.format(self.interval, pair)
         cur = self.dbase.cursor()
         self.execute(cur, command)
 
@@ -170,7 +170,7 @@ class Mysql():
               a single list of pairs that we currently hold
         """
         cur = self.dbase.cursor()
-        command = """ select pair from trades_{0} where sell_price is NULL """.format(self.interval)
+        command = """ select pair from trades where sell_price is NULL and `interval`="{0}" """.format(self.interval)
 
         self.execute(cur, command)
         row = [item[0] for item in cur.fetchall()]
@@ -182,9 +182,11 @@ class Mysql():
         Update an existing trade with sell price
         """
         self.logger.info("Selling %s for %s", pair, self.interval)
-        command = """update trades_{0} set sell_price={1},sell_time="{2}"
-        where sell_price is NULL and pair="{3}" """.format(self.interval,
-                                                           float(sell_price), sell_time, pair)
+        command = """update trades set sell_price={0},sell_time="{1}"
+        where sell_price is NULL, interval="{2}" and pair="{3}" """.format(float(sell_price),
+                                                                           sell_time,
+                                                                           self.interval,
+                                                                           pair)
         self.run_sql_query(command)
 
     @get_exceptions
