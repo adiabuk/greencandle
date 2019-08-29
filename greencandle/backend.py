@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # PYTHON_ARGCOMPLETE_OK
-# pylint: disable=broad-except,c-extension-no-member,too-many-locals
+# pylint: disable=broad-except,no-member,too-many-locals,wrong-import-position
 
 """
 Get ohlc (Open, High, Low, Close) values from given cryptos
@@ -26,7 +26,6 @@ from .lib.logger import getLogger
 from .lib.redis_conn import Redis
 from .lib.order import Trade
 from .lib.mysql import Mysql
-from .lib.api_data import get_change
 
 LOGGER = getLogger(__name__, config.main.logging_level)
 
@@ -46,8 +45,8 @@ def main():
     starttime = time.time()
     interval = args.interval if args.interval else str(config.main.interval)
     system = "api" if args.use_api else "redis"
-    minutes = [int(s) for s in re.findall(r'(\d+)m', interval)][0]
-    drain = str2bool( config.main['drain_'+interval])
+    minutes = [int(s) for s in re.findall(r'(\d+)[mh]', interval)][0]
+    drain = str2bool(config.main['drain_'+interval])
     drain_string = "(draining)" if drain else "(active)"
     setproctitle.setproctitle("greencandle-backend_{0}{1}".format(interval, drain_string))
     while True:
@@ -108,30 +107,23 @@ def loop(interval, test, system):
             scheme["symbol"] = pair
             scheme["direction"] = result
             scheme['result'] = 0
-            # compress and pickle current dataframe for redis storage
-            # dont get most recent one, as it may not be complete
             scheme['data'] = result
             scheme["event"] = "trigger"
             engine.add_scheme(scheme)
-
-
         ################################
-        if system == "redis":
-            result, current_time, current_price = redis.get_change(pair=pair)
-        else:
-            result, current_time, current_price = get_change(pair=pair)
-        if result == "buy":
+
+        del engine
+
+        if result == "BUY":
             LOGGER.debug("Items to buy")
             buys.append((pair, current_time, current_price))
-        elif result == "sell":
-            LOGGER.info("Items to sell")
+        if result == "SELL":
+            LOGGER.debug("Items to sell")
             sells.append((pair, current_time, current_price))
-    LOGGER.info("Items to sell: %s", sells)
-    LOGGER.info("Items to buy: %s", buys)
-
-    trade = Trade(interval=interval, test=test, test_trade=test, test_data=False)
+    trade = Trade(interval=interval, test=test, test_trade=test_trade, test_data=False)
     trade.sell(sells)
     trade.buy(buys)
+
     if system == "redis":
         del redis
 
