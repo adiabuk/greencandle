@@ -1,0 +1,35 @@
+<script type='text/javascript'>
+ $(function() {
+   Dashing.gridsterLayout('[{"col":1,"row":1,"size_x":2,"size_y":1},{"col":1,"row":2,"size_x":1,"size_y":1},{"col":4,"row":1,"size_x":1,"size_y":1},{"col":3,"row":1,"size_x":1,"size_y":1},{"col":2,"row":2,"size_x":1,"size_y":1},{"col":3,"row":2,"size_x":2,"size_y":1}]')
+ });
+ </script>
+<% content_for :title do %>Greencandle Dashboard<% end %>
+<div class="gridster">
+  <ul>
+    <li data-row="1" data-col="1" data-sizex="2" data-sizey="1">
+      <div data-id="welcome" data-view="Text" data-title="Hello" data-text="This is your shiny new dashboard." data-moreinfo="Protip: You can drag the widgets around!"></div>
+    </li>
+
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="synergy" data-view="Meter" data-title="Daily Target" data-height="200" data-width="200" data-min="-100" data-max="500" data-suffix="%"></div>
+    </li>
+
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="asc1" data-view="List" data-unordered="true" data-title="asc perc pair" data-moreinfo="# of times said around the office"></div>
+    </li>
+
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="desc1" data-view="List" data-unordered="true" data-title="desc perc pair" data-moreinfo="Descending average percentage by pair"></div>
+    </li>
+
+
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="valuation" data-view="Number" data-title="Current Balance" data-moreinfo="In billions" data-prefix="£"></div>
+    </li>
+
+    <li data-row="1" data-col="1" data-sizex="2" data-sizey="1">
+      <div data-id="convergence" data-view="Graph" data-title="Recent Trades" data-suffix="%" style="background-color:#ff9618"></div>
+    </li>
+  </ul>
+  <center><div style="font-size: 12px">Try this: curl -d '{ "auth_token": "YOUR_AUTH_TOKEN", "text": "Hey, Look what I can do!" }' \http://<%=request.host%>:<%=request.port%>/widgets/welcome</div></center>
+</div>
