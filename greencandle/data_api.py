@@ -17,7 +17,7 @@ from .lib import config
 from .lib.scrape import scrape_data
 
 CONFIG = config.get_data()
-PAIRS = CONFIG.api.pairs.split() 
+PAIRS = CONFIG.api.pairs.split()
 INTERVAL = CONFIG.api.interval
 PORT = int(CONFIG.api.port)
 
