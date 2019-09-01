@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+#pylint: disable=exec-used,undefined-variable
 
 """
 Setup script for greencandle - a trading bot
@@ -34,7 +35,7 @@ setup(
     url='https://github.com/adiabuk/greencandle',
     install_requires=REQUIRES,
     dependency_links=LINKS,
-    scripts = ['greencandle/scripts/get_db_schema.sh'],
+    scripts=['greencandle/scripts/get_db_schema.sh'],
     entry_points={'console_scripts':['backend=greencandle.backend:main',
                                      'test_backend=greencandle.test_backend:main',
                                      'average_down=greencandle.scripts.average_down:main',
@@ -45,7 +46,7 @@ setup(
                                      'get_order_status=greencandle.scripts.get_order_status:main',
                                      'get_recent_profit=greencandle.scripts.get_recent_profit:main',
                                      'get_totals_csv=greencandle.scripts.get_totals_csv:main',
-                                     'green_top=greencandle.scripts.green_top:main',
+                                     'green_top=greencandle.scripts.green_top.py:main',
                                      'investment=greencandle.scripts.investment:main',
                                      'pip_value=greencandle.scripts.pip_value:main',
                                      'sell_1p=greencandle.scripts.sell_1p:main',
