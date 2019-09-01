@@ -7,7 +7,6 @@ import MySQLdb
 from . import config
 from .logger import getLogger, get_decorator
 
-
 class Mysql():
     """
     Custom mysql object with methods to store and retrive given data
@@ -63,9 +62,12 @@ class Mysql():
               tuple result
         """
 
+        cur = self.dbase.cursor()
         self.execute(cur, query)
-        data = cursor.fetchall()
-        return data
+        output = list(cur.fetchall())
+        description = list(list(column[0] for column in cur.description))
+        output.insert(0, description)
+        return output
 
     @get_exceptions
     def run_sql_query(self, query):
