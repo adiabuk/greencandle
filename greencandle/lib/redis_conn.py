@@ -217,6 +217,8 @@ class Redis():
                 sell_rules.append(eval(config.main['sell_rule{}'.format(seq)]))
             except KeyError:
                 pass
+            except TypeError as error:
+                self.logger.warning("Failed to eval sell rule: %s", error)
 
         stop_loss_perc = float(config.main["stop_loss_perc"])
         take_profit_perc = float(config.main["take_profit_perc"])
