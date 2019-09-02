@@ -53,7 +53,7 @@ services:
       - mysql
       - redis
     volumes:
-      - ./data:/data
+      - /data:/data
 
   webserver:
      image: webserver
@@ -61,4 +61,4 @@ services:
        - 80:80
      entrypoint: bash -c nginx|more
      volumes:
-       - ./data:/data
+       - /data:/data
