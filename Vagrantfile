@@ -5,6 +5,8 @@ Vagrant.configure("2") do |config|
   config.vm.network "forwarded_port", guest: 3306, host: 3306, auto_correct: true
   config.vm.network "forwarded_port", guest: 80, host: 80, auto_correct: true
   config.vm.synced_folder "~/data", "/data"
+  config.vm.synced_folder "", "/srv/greencandle"
+  config.vm.synced_folder '.', '/vagrant', disabled: true
 
   # Bootstrap machine
   #config.vm.provision :shell, :inline => "bash bootstrap.sh"
