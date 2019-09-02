@@ -20,10 +20,9 @@ else
     update-alternatives --install /usr/bin/python python /usr/bin/python3 1
     update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
     pip install ipython
-    install_dir=/vagrant
-    echo "set background=dark" | tee -a /root/.vimrc /home/vagrant/.vimrc
-    wget
-    https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz -P /tmp
+    install_dir=/srv/greencandle
+    echo "set background=dark" | tee -a /root/.vimrc /home/ubuntu/.vimrc
+    wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz -P /tmp
     tar zxvf /tmp/gechodriver-v0.24.0-linux64.tar.gz -C /usr/bin
 fi
 
