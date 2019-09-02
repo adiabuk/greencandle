@@ -23,7 +23,7 @@ else
     install_dir=/srv/greencandle
     echo "set background=dark" | tee -a /root/.vimrc /home/ubuntu/.vimrc
     wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz -P /tmp
-    tar zxvf /tmp/gechodriver-v0.24.0-linux64.tar.gz -C /usr/bin
+    tar zxvf /tmp/geckodriver-v0.24.0-linux64.tar.gz -C /usr/bin
 fi
 
 if [[ ! -d /usr/include/ta-lib ]]; then
