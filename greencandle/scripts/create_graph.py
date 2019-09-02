@@ -9,11 +9,11 @@ config.create_config(test=True)
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-d", "--db")
-    parser.add_argument("-p", "--pair")
-    parser.add_argument("-i", "--interval")
-    parser.add_argument("-t", "--test", action="store_true", default=False)
-    parser.add_argument("-o", "--output_dir")
+    parser.add_argument("-d", "--db", required=True)
+    parser.add_argument("-p", "--pair", required=True)
+    parser.add_argument("-i", "--interval", required=True)
+    parser.add_argument("-t", "--test", action="store_true", default=False, required=False)
+    parser.add_argument("-o", "--output_dir", required=True)
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
 
