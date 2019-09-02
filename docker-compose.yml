@@ -59,6 +59,22 @@ services:
      image: webserver
      ports:
        - 80:80
+     links:
+       - dashboard:dashboard
      entrypoint: bash -c nginx|more
      volumes:
        - /data:/data
+
+  dashboard:
+    image: visibilityspots/smashing
+    ports:
+      - 8080:3030
+    environment:
+      - GEMS=mysql2
+    entrypoint: /run.sh
+    links:
+      - mysql:mysql
+    volumes: 
+      - /srv/greencandle/dashboard/dashboards:/dashboards
+      - /srv/greencandle/dashboard/jobs:/jobs
+      - /srv/greencandle/dashboard/widgets:/widgets
