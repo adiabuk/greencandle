@@ -156,21 +156,25 @@ def do_parallel(pairs, interval, redis_db, data_dir, indicators):
     trade = Trade(interval=interval, test=True, test_trade=True, test_data=True)
     redis.clear_all()
     dframes = {}
+    sizes = []
     for pair in pairs:
         filename = "/{0}/{1}_{2}.p".format(data_dir, pair, interval)
         if not os.path.exists(filename):
-            LOGGER.critical("Cannot file file: %s", filename)
+            LOGGER.critical("Cannot find file: %s", filename)
             continue
         with open(filename, "rb") as handle:
             dframes[pair] = pickle.load(handle)
+            sizes.append(len(dframes[pair]))
+            LOGGER.info("%s dataframe size: %s", pair, len(dframes[pair]))
 
     LOGGER.critical(dframes.keys())
-    for beg in range(len(dframes[pair]) - CHUNK_SIZE):
+    for beg in range(max(sizes) - CHUNK_SIZE):
+        end = beg + CHUNK_SIZE
         dataframes = {}
         buys = []
         sells = []
         for pair in pairs:
-            end = beg + CHUNK_SIZE
+            LOGGER.info("Current loop: %s to %s pair:%s", beg, end, pair)
             dataframe = dframes[pair][beg: end]
             prices_trunk = {pair: "0"}
             if len(dataframe) < CHUNK_SIZE:
