@@ -18,7 +18,7 @@ class Redis():
     Redis object
     """
 
-    def __init__(self, interval=None, test=False, db=1):
+    def __init__(self, interval=None, test=False, db=1, expire=True):
         """
         Args:
             interval
@@ -31,6 +31,7 @@ class Redis():
         self.logger = getLogger(__name__, config.main.logging_level)
         self.host = config.redis.host
         self.port = config.redis.port
+        self.expire = expire
 
         if test:
             redis_db = db
@@ -73,7 +74,8 @@ class Redis():
         key = "{0}:{1}:{2}".format(pair, interval, now)
         expiry = 600 if self.test else 18000
         response = self.conn.hmset(key, data)
-        self.conn.expire(key, expiry)
+        if self.expire:
+            self.conn.expire(key, expiry)
         return response
 
     def get_items(self, pair, interval):

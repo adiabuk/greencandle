@@ -84,7 +84,7 @@ def perform_data(pair, interval, data_dir, indicators):
     """Serial test loop"""
     redis_db = {"4h":1, "2h":1, "1h":1, "30m":1, "15m":1, "5m":2, "3m":3, "1m":4}[interval]
     LOGGER.info("Serial run %s %s %s", pair, interval, redis_db)
-    redis = Redis(interval=interval, test=True, db=redis_db)
+    redis = Redis(interval=interval, test=True, db=redis_db, expire=False)
     filename = "{0}/{1}_{2}.p".format(data_dir, pair, interval)
     if not os.path.exists(filename):
         LOGGER.critical("Filename:%s not found for %s %s", filename, pair, interval)
