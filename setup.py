@@ -5,12 +5,14 @@
 Setup script for greencandle - a trading bot
 """
 
+import sys
 import pip
 from setuptools import setup, find_packages
 
 REQUIRES = []
 LINKS = []
 
+filename = sys.argv[1]
 REQUIREMENTS = pip.req.parse_requirements(
     'requirements.txt', session=pip.download.PipSession())
 
@@ -52,6 +54,7 @@ setup(
                                      'sell_1p=greencandle.scripts.sell_1p:main',
                                      'sell_now=greencandle.scripts.sell_now:main',
                                      'create_graph=greencandle.scripts.create_graph:main',
-                                     'create_test_data=greencandle.scripts.create_test_data:main']},
+                                     'create_test_data=greencandle.scripts.create_test_data:main',
+                                     'report=greencandle.scripts.report:main']},
     classifiers=[],
 )
