@@ -5,6 +5,7 @@
 Create Excel Spreadsheet with results and analysis of trades
 """
 
+import sys
 import openpyxl
 from greencandle.lib.mysql import Mysql
 from greencandle.lib import config
@@ -15,6 +16,7 @@ def main():
     main function
     """
 
+    filename = sys.argv[1]
     workbook = openpyxl.Workbook()
     workbook.remove(workbook.get_sheet_by_name('Sheet'))
 
@@ -38,7 +40,7 @@ def main():
         for row_no, row in enumerate(result):
             for col_no, col in enumerate(row):
                 sheet.cell(row=row_no+1, column=col_no+1).value = col
-        workbook.save('results.xlsx')
+        workbook.save(filename)
 
 if __name__ == "__main__":
     main()
