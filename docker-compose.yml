@@ -67,7 +67,7 @@ services:
        - 80:80
      links:
        - dashboard:dashboard
-     entrypoint: bash -c nginx|more
+     entrypoint: nginx -g 'daemon off;'
      volumes:
        - /data:/data
 
