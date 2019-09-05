@@ -40,10 +40,11 @@ def main():
     group.add_argument("-s", "--serial", default=False, action="store_true")
     group.add_argument("-a", "--parallel", default=True, action="store_true")
     parser.add_argument("-d", "--data_dir", required=True)
+    parser.add_argument("-p", "--pair")
 
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
-    pairs = config.main.pairs.split()
+    pairs = [args.pair] if args.pair and args.serial else config.main.pairs.split()
     parallel_interval = config.main.parallel_interval.split()[0]
     parallel_interval = args.interval if args.interval else parallel_interval
     main_indicators = config.main.indicators.split()
