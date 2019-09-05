@@ -11,6 +11,7 @@ import time
 import sys
 import pickle
 import gzip
+from glob import glob
 from concurrent.futures import ThreadPoolExecutor
 import argcomplete
 import setproctitle
@@ -87,7 +88,7 @@ def perform_data(pair, interval, data_dir, indicators):
     redis_db = {"4h":1, "2h":1, "1h":1, "30m":1, "15m":1, "5m":2, "3m":3, "1m":4}[interval]
     LOGGER.info("Serial run %s %s %s", pair, interval, redis_db)
     redis = Redis(interval=interval, test=True, db=redis_db, expire=False)
-    filename = "{0}/{1}_{2}.p".format(data_dir, pair, interval)
+    filename = glob("{0}/{1}_{2}.p*".format(data_dir, pair, interval))[0]
     if not os.path.exists(filename):
         LOGGER.critical("Filename:%s not found for %s %s", filename, pair, interval)
         return
@@ -164,14 +165,19 @@ def do_parallel(pairs, interval, redis_db, data_dir, indicators):
     dframes = {}
     sizes = []
     for pair in pairs:
-        filename = "/{0}/{1}_{2}.p".format(data_dir, pair, interval)
+        filename = glob("/{0}/{1}_{2}.p*".format(data_dir, pair, interval))[0]
         if not os.path.exists(filename):
             LOGGER.critical("Cannot find file: %s", filename)
             continue
-        with open(filename, "rb") as handle:
-            dframes[pair] = pickle.load(handle)
-            sizes.append(len(dframes[pair]))
-            LOGGER.info("%s dataframe size: %s", pair, len(dframes[pair]))
+        if filename.endswith("gz"):
+            handle = gzip.open(filename, "rb")
+        else:
+            handle = open(filename, "rb")
+
+        dframes[pair] = pickle.load(handle)
+        sizes.append(len(dframes[pair]))
+        LOGGER.info("%s dataframe size: %s", pair, len(dframes[pair]))
+        handle.close()
 
     LOGGER.critical(dframes.keys())
     for beg in range(max(sizes) - CHUNK_SIZE):
