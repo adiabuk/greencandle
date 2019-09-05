@@ -10,6 +10,7 @@ import os
 import time
 import sys
 import pickle
+import gzip
 from concurrent.futures import ThreadPoolExecutor
 import argcomplete
 import setproctitle
@@ -90,8 +91,12 @@ def perform_data(pair, interval, data_dir, indicators):
     if not os.path.exists(filename):
         LOGGER.critical("Filename:%s not found for %s %s", filename, pair, interval)
         return
-    with open(filename, "rb") as handle:
-        dframe = pickle.load(handle)
+    if filename.endswith("gz"):
+        handle = gzip.open(filename, "rb")
+    else:
+        handle = open(filename, "rb")
+    dframe = pickle.load(handle)
+    handle.close()
 
     prices_trunk = {pair: "0"}
     for beg in range(len(dframe) - CHUNK_SIZE):
