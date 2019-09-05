@@ -9,7 +9,7 @@ fi
 
 # Setup local env
 apt-get -y update
-apt-get -y install docker.io ntpdate mysql-client screen atop
+apt-get -y install docker.io ntpdate mysql-client screen atop jq iotop
 curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 [[ ! -f config.ini ]] && cp config.ini.sample config.ini
