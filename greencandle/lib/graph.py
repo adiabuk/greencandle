@@ -61,7 +61,6 @@ class Graph():
         """Create graph html file using plotly offline-mode from dataframe object"""
 
         fig = tls.make_subplots(rows=2, cols=1, shared_xaxes=True, print_grid=False)
-
         for name, value in self.data.items():
             row = 1
             col = 1
@@ -96,10 +95,12 @@ class Graph():
                               y=value['value'],
                               name=name)
                 row = 2
+            elif 'SHOOTINGSTAR' in name:
+                item = go.Bar(x=value['date'],
+                              y=value['value'],
+                              name=name)
+                row = 2
             elif 'Sup_Res' in name:
-                print("FOUND SUP_RES")
-                print(value['value'])
-                print('---')
                 item = go.Scatter(x=value['date'],
                                   y=value['value'],
                                   mode='markers',
@@ -128,7 +129,6 @@ class Graph():
             split = i.split(';')
             ind = split[1] + '_' + split[2]
             ind_list.append(ind)
-
         list_of_results = defaultdict(list)
         for index_item in index:
             result_list = {}
