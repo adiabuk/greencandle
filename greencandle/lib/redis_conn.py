@@ -8,6 +8,7 @@ import time
 import zlib
 import pickle
 import redis
+from str2bool import str2bool
 from .mysql import Mysql
 from .logger import getLogger
 from . import config
@@ -18,7 +19,7 @@ class Redis():
     Redis object
     """
 
-    def __init__(self, interval=None, test=False, db=1, expire=True):
+    def __init__(self, interval=None, test=False, db=1):
         """
         Args:
             interval
@@ -31,7 +32,7 @@ class Redis():
         self.logger = getLogger(__name__, config.main.logging_level)
         self.host = config.redis.host
         self.port = config.redis.port
-        self.expire = expire
+        self.expire = str2bool(config.redis.expire)
 
         if test:
             redis_db = db
@@ -249,7 +250,15 @@ class Redis():
         # if we match any sell rules and are in a trade
         elif any(sell_rules) and buy_price:
 
+            winning_rules = []
+            # Determine which sell rules matched
+            for seq, sell_rule in enumerate(sell_rules):
+                if sell_rule:
+                    winning_rules.append(seq + 1)
+
             self.log_event('NormalSell', rate, buy_price, current_price, pair, current_time)
+            self.logger.info('Sell Rules matched: %s', winning_rules)
+
             return ('SELL', current_time, current_price)
         # if we match all buy rules and are NOT in a trade
         elif all(buy_rules) and not buy_price:

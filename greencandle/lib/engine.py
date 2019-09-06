@@ -193,8 +193,7 @@ class Engine(dict):
                                      "date": close_time,
                                      }}
 
-            redis = Redis(interval=self.interval, test=self.test,
-                          db=self.redis_db)
+            redis = Redis(interval=self.interval, test=self.test, db=self.redis_db)
             redis.redis_conn(pair, self.interval, data, close_time)
             del redis
 
@@ -453,8 +452,10 @@ class Engine(dict):
         Returns:
             None
         """
+        func, timeperiod = localconfig
         klines = self.ohlcs[pair]
         LOGGER.debug("Getting Indicators for %s", pair)
+        scheme = {}
         trends = {"HAMMER": {100: "BUY", 0:"HOLD"},
                   "INVERTEDHAMMER": {100: "SELL", 0:"HOLD"},
                   "ENGULFING": {-100:"SELL", 100:"BUY", 0:"HOLD"},
@@ -463,20 +464,17 @@ class Engine(dict):
                   "MARUBOZU": {-100:"SELL", 100:"BUY", 0:"HOLD"},
                   "DOJI": {100: "HOLD", 0:"HOLD"}}
 
-        for check in trends.keys():
-            scheme = {}
-            try:
+        result = getattr(talib, "CDL" + func)(*klines).tolist()[-1]
+        close_time = str(self.dataframes[pair].iloc[-1]["closeTime"])
 
-                result = getattr(talib, "CDL" + check)(*klines).tolist()[-1]
-                scheme["data"] = result   # convert from array to list
-                scheme["url"] = self.get_url(pair)
-                scheme["time"] = calendar.timegm(time.gmtime())
-                scheme["symbol"] = pair
-                scheme["event"] = check
+        LOGGER.debug("SHOOTING STAR: %s: time:%s", result, close_time)
+        scheme["data"] = result   # convert from array to list
+        scheme["url"] = self.get_url(pair)
+        scheme["time"] = calendar.timegm(time.gmtime())
+        scheme["symbol"] = pair
+        scheme["event"] = "{0}_{1}".format(func,timeperiod)
 
-                self.add_scheme(scheme)
-            except KeyError as ke:
-                LOGGER.critical("KEYERROR while getting indicators: %s", str(sys.exc_info()))
+        self.add_scheme(scheme)
 
         LOGGER.debug("Done getting Indicators")
 
