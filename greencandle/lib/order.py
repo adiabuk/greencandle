@@ -77,7 +77,7 @@ class Trade():
                 cost = current_price
                 main_pairs = config.main.pairs
 
-                if item not in main_pairs:
+                if item not in main_pairs and not self.test_data:
                     self.logger.warning("%s not in buy_list, but active trade "
                                         "exists, skipping...", item)
                     continue
