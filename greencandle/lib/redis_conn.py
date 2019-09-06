@@ -175,9 +175,9 @@ class Redis():
             ind_list.append(ind)
 
         for indicator in ind_list:
-            results['current'][indicator] = self.get_result(current, indicator)
-            results['previous'][indicator] = self.get_result(previous, indicator)
-            results['previous1'][indicator] = self.get_result(previous1, indicator)
+            results['current'][indicator] = str(self.get_result(current, indicator))
+            results['previous'][indicator] = str(self.get_result(previous, indicator))
+            results['previous1'][indicator] = str(self.get_result(previous1, indicator))
         items = self.get_items(pair, self.interval)
         current = self.get_current(items[-1])
         previous = self.get_current(items[-2])
@@ -200,7 +200,6 @@ class Redis():
 
         current_price = float(close)
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_mepoch))
-
 
         # rate of Moving Average increate/decreate based on indicator
         # specified in the rate_indicator config option - best with EMA_200
