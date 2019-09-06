@@ -193,8 +193,7 @@ class Engine(dict):
                                      "date": close_time,
                                      }}
 
-            redis = Redis(interval=self.interval, test=self.test,
-                          db=self.redis_db)
+            redis = Redis(interval=self.interval, test=self.test, db=self.redis_db)
             redis.redis_conn(pair, self.interval, data, close_time)
             del redis
 

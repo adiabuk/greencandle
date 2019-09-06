@@ -31,7 +31,7 @@ class Redis():
         self.logger = getLogger(__name__, config.main.logging_level)
         self.host = config.redis.host
         self.port = config.redis.port
-        self.expire = expire
+        self.expire = str2bool(config.redis.expire)
 
         if test:
             redis_db = db
