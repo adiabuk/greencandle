@@ -196,34 +196,6 @@ class Mysql():
         self.run_sql_query(command)
 
     @get_exceptions
-    def insert_data(self, **kwargs):
-        """
-        Insert Data into DB
-        Args:
-              symbol
-              event
-              direction
-              data
-              difference
-              resistance
-              support
-              buy
-              sell
-              market
-              balance
-        Returns:
-              None
-        """
-
-        globals().update(kwargs)
-        command = """INSERT INTO data (symbol, event, direction, data, difference,
-                     resistance, support, buy, sell, market, balance) VALUES
-                     ("{0}","{1}","{2}","{3}","{4}","{5}","{6}","{7}","{8}","{9}","{10}");
-                     """.format(symbol, event, direction, data, difference, resistance,
-                                support, buy, sell, market, balance)
-        self.run_sql_query(command)
-
-    @get_exceptions
     def insert_balance(self, balances):
         """
         Insert balance in GBP/BTC/USD into balance table for coinbase & binance
