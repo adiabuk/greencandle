@@ -17,9 +17,8 @@ class Balance(dict):
     """
     Class to add/retrieve balance to/from mysql db
     """
-    def __init__(self, interval, test, *args, **kwargs):
-        self.dbase = Mysql(test=test, interval=interval)
-        self.interval = interval
+    def __init__(self, test, *args, **kwargs):
+        self.dbase = Mysql(test=test, interval='1h')
         super(Balance, self).__init__(*args, **kwargs)
 
 
@@ -28,10 +27,9 @@ class Balance(dict):
 
     def save_balance(self, prices):
         """Save balances to db"""
-        if not self.test:
 
-            # Add scheme to DB
-            self.dbase.insert_balance(prices)
+        # Add scheme to DB
+        self.dbase.insert_balance(prices)
 
     @staticmethod
     def get_balance(coinbase=False):
