@@ -60,37 +60,12 @@ DROP TABLE IF EXISTS `daily_profit`;
 /*!50001 DROP VIEW IF EXISTS `daily_profit`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `daily_profit` AS SELECT 
+/*!50001 CREATE VIEW `daily_profit` AS SELECT
  1 AS `date`,
  1 AS `interval`,
  1 AS `profit`,
  1 AS `perc`*/;
 SET character_set_client = @saved_cs_client;
-
---
--- Table structure for table `data`
---
-
-DROP TABLE IF EXISTS `data`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `data` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `symbol` varchar(10) DEFAULT NULL,
-  `ctime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `event` varchar(20) DEFAULT NULL,
-  `direction` varchar(20) DEFAULT NULL,
-  `data` varchar(1000) DEFAULT NULL,
-  `difference` varchar(5) DEFAULT NULL,
-  `resistance` varchar(1000) DEFAULT NULL,
-  `support` varchar(1000) DEFAULT NULL,
-  `buy` varchar(20) DEFAULT NULL,
-  `sell` varchar(20) DEFAULT NULL,
-  `market` varchar(20) DEFAULT NULL,
-  `balance` varchar(20) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `exchange`
@@ -114,7 +89,7 @@ DROP TABLE IF EXISTS `hour_balance`;
 /*!50001 DROP VIEW IF EXISTS `hour_balance`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `hour_balance` AS SELECT 
+/*!50001 CREATE VIEW `hour_balance` AS SELECT
  1 AS `exchange_id`,
  1 AS `usd1`,
  1 AS `coin`,
@@ -136,7 +111,7 @@ DROP TABLE IF EXISTS `profit`;
 /*!50001 DROP VIEW IF EXISTS `profit`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profit` AS SELECT 
+/*!50001 CREATE VIEW `profit` AS SELECT
  1 AS `buy_time`,
  1 AS `interval`,
  1 AS `sell_time`,
