@@ -12,7 +12,6 @@ pandas==0.21.1
 numpy==1.16.0
 Pillow==5.0.0
 plotly==3.10.0
-PyQt5
 python_resize_image==1.1.11
 PyVirtualDisplay==0.2.1
 redis==2.10.6
