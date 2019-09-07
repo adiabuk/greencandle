@@ -114,11 +114,12 @@ class Mysql():
 
         self.logger.info("Buying %s using %s", pair, self.interval)
         command = """insert into trades (pair, buy_time, buy_price, investment, `interval`,
-                     total) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}", "{5}");""".format(pair, date,
-                                                                                         float(price),
-                                                                                         investment,
-                                                                                         self.interval,
-                                                                                         total)
+                     total) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}",
+                     "{5}");""".format(pair, date,
+                                       float(price),
+                                       investment,
+                                       self.interval,
+                                       total)
         self.run_sql_query(command)
 
     @get_exceptions
@@ -127,7 +128,8 @@ class Mysql():
         Return quantity for a current open trade
         """
         command = """ select total from trades where sell_price
-                      is NULL and `interval` = "{0}" and pair = "{1}" """.format(self.interval, pair)
+                      is NULL and `interval` = "{0}" and
+                      pair = "{1}" """.format(self.interval, pair)
         cur = self.dbase.cursor()
         self.execute(cur, command)
 
@@ -141,7 +143,8 @@ class Mysql():
         """
 
         command = """ select buy_price, total, buy_time from trades where sell_price
-                      is NULL and `interval` = "{0}" and pair = "{1}" """.format(self.interval, pair)
+                      is NULL and `interval` = "{0}" and
+                      pair = "{1}" """.format(self.interval, pair)
         cur = self.dbase.cursor()
         self.execute(cur, command)
 
