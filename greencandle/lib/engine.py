@@ -274,8 +274,6 @@ class Engine(dict):
         cur_to_res = resistance[-1] - close_values[-1]
         cur_to_sup = close_values[-1] - support[-1]
         data = {}
-        scheme["value"] = value
-        scheme["result"] = resistance
 
         try:
             scheme["difference"] = pipify(resistance[-1]) - pipify(support[-1])
@@ -286,8 +284,6 @@ class Engine(dict):
             scheme["data"] = str(resistance[-1])  #FIXME
         elif func == 'SUP':
             scheme["data"] = str(support[-1])  #FIXME
-        scheme["url"] = self.get_url(pair)
-        scheme["time"] = calendar.timegm(time.gmtime())
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
         self.add_scheme(scheme)
@@ -318,9 +314,6 @@ class Engine(dict):
         df_list = rsi["{0}_{1}".format(func, timeperiod)].tolist()
         df_list = ["%.1f" % float(x) for x in df_list]
         scheme["data"] = df_list[-1]
-        scheme["url"] = self.get_url(pair)
-        scheme["time"] = calendar.timegm(time.gmtime())
-        scheme["epoch"] = rsi['date'].iloc[-1]
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
         self.add_scheme(scheme)
@@ -364,7 +357,6 @@ class Engine(dict):
                                               "date":close_time,
                                               "action":self.get_action(trigger)}}
             scheme["data"] = result
-            scheme["time"] = calendar.timegm(time.gmtime())
             scheme["symbol"] = pair
             scheme["event"] = func+"_"+str(timeperiod)
 
@@ -428,10 +420,8 @@ class Engine(dict):
                            "date": close_time,
                            "current_price":current_price}}
             scheme["data"] = result
-            scheme["time"] = calendar.timegm(time.gmtime())
             scheme["symbol"] = pair
             scheme["event"] = '{}_{}'.format(func, timeperiod)
-            scheme["difference"] = None
             self.add_scheme(scheme)
 
         except KeyError as e:
@@ -469,8 +459,6 @@ class Engine(dict):
 
         LOGGER.debug("SHOOTING STAR: %s: time:%s", result, close_time)
         scheme["data"] = result   # convert from array to list
-        scheme["url"] = self.get_url(pair)
-        scheme["time"] = calendar.timegm(time.gmtime())
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func,timeperiod)
 
@@ -503,8 +491,6 @@ class Engine(dict):
         supertrend = SuperTrend(mine, int(timeframe), int(multiplier))
         df_list = supertrend["STX_{0}_{1}".format(timeframe, multiplier)].tolist()
 
-        scheme["url"] = self.get_url(pair)
-        scheme["time"] = calendar.timegm(time.gmtime())
         scheme["symbol"] = pair
         scheme["data"] = self.get_supertrend_direction(df_list[-1])[0]
         scheme["event"] = "Supertrend_{0},{1}".format(timeframe, multiplier)
