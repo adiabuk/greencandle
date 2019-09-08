@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-position,import-error
+#pylint: disable=wrong-import-position,import-error,no-member
 
 """
 Test Buy/Sell orders
@@ -13,7 +13,7 @@ from str2bool import str2bool
 from .auth import binance_auth
 from .logger import getLogger, get_decorator
 from .mysql import Mysql
-from .balance import get_balance
+from .balance import Balance
 from .mail import send_gmail_alert
 from . import config
 
@@ -21,7 +21,7 @@ GET_EXCEPTIONS = get_decorator((Exception))
 
 class Trade():
 
-    def __init__(self, interval=None, test=False, test_data=False, test_trade=False):
+    def __init__(self, interval=None, test_data=False, test_trade=False):
         self.logger = getLogger(__name__, config.main.logging_level)
         self.test_data = test_data
         self.test_trade = test_trade
@@ -61,7 +61,10 @@ class Trade():
                 current_btc_bal = 37000
 
             else:
-                current_btc_bal = get_balance()['binance']['BTC']['BTC']
+                balance = Balance(test=False)
+                prices = balance.get_balance()
+
+                current_btc_bal = prices['binance']['BTC']['BTC']
 
             for item, current_time, current_price in buy_list:
 

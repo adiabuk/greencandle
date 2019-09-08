@@ -8,10 +8,8 @@ Module for collecting price data and creating TA results
 from __future__ import print_function
 import json
 import math
-import time
 import sys
 import traceback
-import calendar
 import operator
 from concurrent.futures import ThreadPoolExecutor
 from decimal import Decimal
@@ -22,7 +20,6 @@ import talib
 from indicator import SuperTrend, RSI
 
 from . import config
-from . import balance
 
 from .redis_conn import Redis
 from .supres import supres
@@ -44,8 +41,6 @@ class Engine(dict):
         LOGGER.debug("Fetching raw data")
         self.interval = interval
         self.pairs = prices.keys()
-        if not test:  #FIXME
-            self.balance = balance.get_balance(test=test)
         self.test = test
         self.redis_db = db
         self["hold"] = {}
@@ -281,9 +276,9 @@ class Engine(dict):
             print("Type error", support[-1], resistance[-1], type_error)
             return None
         if func == 'RES':
-            scheme["data"] = str(resistance[-1])  #FIXME
+            scheme["data"] = str(resistance[-1])
         elif func == 'SUP':
-            scheme["data"] = str(support[-1])  #FIXME
+            scheme["data"] = str(support[-1])
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
         self.add_scheme(scheme)

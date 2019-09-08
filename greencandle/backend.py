@@ -64,12 +64,14 @@ def loop(interval, test, system):
     Loop through collection cycle
     """
     main_indicators = config.main.indicators.split()
-    main_pairs = config.main.pairs
+    main_pairs = config.main.pairs.split()
     dbase = Mysql(test=False, interval=interval)
     additional_pairs = dbase.get_trades()
     del dbase
     # get unique list of pairs in config,
     #and those currently in an active trade
+    print(type(main_pairs))
+    print(type(additional_pairs))
     pairs = list(set(main_pairs + additional_pairs))
     LOGGER.info("Pairs DB: %s", additional_pairs)
     LOGGER.info("Pairs in config: %s", main_pairs)
@@ -120,7 +122,7 @@ def loop(interval, test, system):
         if result == "SELL":
             LOGGER.debug("Items to sell")
             sells.append((pair, current_time, current_price))
-    trade = Trade(interval=interval, test=test, test_trade=test_trade, test_data=False)
+    trade = Trade(interval=interval, test_trade=test_trade, test_data=False)
     trade.sell(sells)
     trade.buy(buys)
 

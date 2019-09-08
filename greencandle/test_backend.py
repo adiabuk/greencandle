@@ -102,7 +102,7 @@ def perform_data(pair, interval, data_dir, indicators):
     prices_trunk = {pair: "0"}
     for beg in range(len(dframe) - CHUNK_SIZE):
         LOGGER.info("IN LOOP %s ", beg)
-        trade = Trade(interval=interval, test=True, test_trade=True, test_data=True)
+        trade = Trade(interval=interval, test_trade=True, test_data=True)
 
         sells = []
         buys = []
@@ -111,7 +111,7 @@ def perform_data(pair, interval, data_dir, indicators):
         dataframe = dframe.copy()[beg: end]
 
         current_time = time.strftime("%Y-%m-%d %H:%M:%S",
-                time.gmtime(int(dataframe.iloc[-1].closeTime)/1000))
+                                     time.gmtime(int(dataframe.iloc[-1].closeTime)/1000))
         LOGGER.info("current date: %s", current_time)
         if len(dataframe) < CHUNK_SIZE:
             LOGGER.info("End of dataframe")
@@ -158,9 +158,8 @@ def do_parallel(pairs, interval, redis_db, data_dir, indicators):
     """
     LOGGER.info("Performaing parallel run %s", interval)
     redis = Redis(interval=interval, test=True, db=redis_db)
-    size = 1000 * {"1h":0.25, "30m":0.5, "15m": 1, "5m": 3, "3m": 5, "1m": 15}[interval]
 
-    trade = Trade(interval=interval, test=True, test_trade=True, test_data=True)
+    trade = Trade(interval=interval, test_trade=True, test_data=True)
     redis.clear_all()
     dframes = {}
     sizes = []
