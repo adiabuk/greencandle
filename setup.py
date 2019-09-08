@@ -37,7 +37,7 @@ setup(
     dependency_links=LINKS,
     scripts=['greencandle/scripts/get_db_schema.sh'],
     entry_points={'console_scripts':['backend=greencandle.backend:main',
-                                     'test_backend=greencandle.test_backend:main',
+                                     'backend_test=greencandle.backend_test:main',
                                      'average_down=greencandle.scripts.average_down:main',
                                      'balances=greencandle.scripts.balances:main',
                                      'get_details=greencandle.scripts.get_details:main',
