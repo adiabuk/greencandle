@@ -7,8 +7,6 @@ Get details of current trades using mysql and current value from binance
 import json
 import sys
 
-from urllib.request import urlopen
-from urllib.error import HTTPError, URLError
 from operator import itemgetter
 import binance
 
@@ -20,6 +18,7 @@ config.create_config(test=test)
 from ..lib.auth import binance_auth
 
 def main():
+    """ Main function """
     prices = binance.prices()
     binance_auth()
     dbase = Mysql(test=test, interval=sys.argv[1])
@@ -33,14 +32,6 @@ def main():
 
 
     details = []
-    url = "http://127.1:5001/data"
-    try:
-        data = urlopen(url).read().decode("utf-8")
-    except (HTTPError, URLError):
-        data = []
-        trades = []
-        print("Waiting for API...")
-    json_data = json.loads(str(data))
     for trade in trades:
         current_price = float(prices[trade])
         trade_details = dbase.get_trade_value(trade)
@@ -48,25 +39,23 @@ def main():
         amount = float(trade_details[0][1])
         profit = (current_price/0.00014*amount) - (buy_price/0.00014*amount)
         perc = 100 * (current_price - buy_price) / buy_price
-        try:
-            direction = json_data[trade]
-        except KeyError:
-            direction = "Unknown"
+
         profits.append(profit)
         percs.append(perc)
         perc = float(format(perc, ".4f"))
         profit = float(format(profit, ".4f"))
-
+        direction = 'unknown'
         details.append((trade, format(float(buy_price), ".20f"),
                         format(float(current_price), ".20f"),
                         amount, current_price > buy_price, perc, profit, direction))
 
     details = sorted(details, key=itemgetter(-2))
     for item in details:
-
         print("{0} {1} {2} {3} {4} {5} {6} {7}".format(*item))
-    print("\nxxx\n")
+
+    print("\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n")
     count = len(profits)
+    count = 1 if count==0 else count
     print("Total_profit: {0} Avg_Profit: {1} Avg_Percs: {2} count: {3}".format(sum(profits),
                                                                                sum(profits)/count,
                                                                                sum(percs)/count,

@@ -49,7 +49,7 @@ def guess_profit(buy_price, sell_price, investment_gbp):
     perc = perc_diff(buy_price, sell_price)
     return profit, amount, difference, perc
 
-def get_recent_profit(test=False, interval=None):
+def get_recent_profit(interval=None, test=False):
     """
     calulate profit from aggregrate of recent transaction profits
     Args:
