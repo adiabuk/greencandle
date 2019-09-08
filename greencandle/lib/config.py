@@ -25,7 +25,3 @@ def create_config(test=False):
 
     for section in parser.sections():
         globals()[section] = AttributeDict(parser._sections[section])
-    if test:
-        globals()['main'] = AttributeDict(parser._sections['test'])
-    else:
-        globals()['main'] = AttributeDict(parser._sections['backend'])
