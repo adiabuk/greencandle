@@ -53,7 +53,7 @@ class Mysql():
         self.dbase.commit()
 
     @get_exceptions
-    def fetch_sql_data(self, query):
+    def fetch_sql_data(self, query, header=True):
         """"
         Fetch SQL data for totals and return dict
         Args:
@@ -66,7 +66,8 @@ class Mysql():
         self.execute(cur, query)
         output = list(cur.fetchall())
         description = list(list(column[0] for column in cur.description))
-        output.insert(0, description)
+        if header:
+            output.insert(0, description)
         return output
 
     @get_exceptions

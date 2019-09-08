@@ -133,7 +133,8 @@ def get_data(startdate, intervals, pairs, days, outputdir):
             current = pandas.DataFrame.from_dict(get_all_klines(pair=pair, interval=interval,
                                                                 start_time=start_mepoch,
                                                                 no_of_klines=total_klines))
-            pickle.dump(current, open(filename, "wb"))
+            with open(filename, "wb") as output:
+                pickle.dump(current, output)
 
 def to_csv(pair, data):
     """
