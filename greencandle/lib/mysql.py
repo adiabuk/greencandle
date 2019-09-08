@@ -23,7 +23,7 @@ class Mysql():
 
         self.connect(test=test)
         self.interval = interval
-        self.logger.info("Starting Mysql with interval %s, test=%s", interval, test)
+        self.logger.debug("Starting Mysql with interval %s, test=%s", interval, test)
 
     @get_exceptions
     def connect(self, test=False):

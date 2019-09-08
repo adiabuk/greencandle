@@ -25,7 +25,7 @@ def serial_test(pairs, intervals, data_dir, indicators):
     """
     Do test with serial data
     """
-    LOGGER.info("Performaing serial run")
+    LOGGER.debug("Performaing serial run")
 
     for pair in pairs:
         for interval in intervals:
@@ -45,7 +45,7 @@ def serial_test(pairs, intervals, data_dir, indicators):
 def perform_data(pair, interval, data_dir, indicators):
     """Serial test loop"""
     redis_db = {"4h":1, "2h":1, "1h":1, "30m":1, "15m":1, "5m":2, "3m":3, "1m":4}[interval]
-    LOGGER.info("Serial run %s %s %s", pair, interval, redis_db)
+    LOGGER.debug("Serial run %s %s %s", pair, interval, redis_db)
     redis = Redis(interval=interval, test=True, db=redis_db)
     filename = glob("{0}/{1}_{2}.p*".format(data_dir, pair, interval))[0]
     if not os.path.exists(filename):
@@ -60,20 +60,20 @@ def perform_data(pair, interval, data_dir, indicators):
 
     prices_trunk = {pair: "0"}
     for beg in range(len(dframe) - CHUNK_SIZE):
-        LOGGER.info("IN LOOP %s ", beg)
+        LOGGER.debug("IN LOOP %s ", beg)
         trade = Trade(interval=interval, test_trade=True, test_data=True)
 
         sells = []
         buys = []
         end = beg + CHUNK_SIZE
-        LOGGER.info("chunk: %s, %s", beg, end)
+        LOGGER.debug("chunk: %s, %s", beg, end)
         dataframe = dframe.copy()[beg: end]
 
         current_time = time.strftime("%Y-%m-%d %H:%M:%S",
                                      time.gmtime(int(dataframe.iloc[-1].closeTime)/1000))
-        LOGGER.info("current date: %s", current_time)
+        LOGGER.debug("current date: %s", current_time)
         if len(dataframe) < CHUNK_SIZE:
-            LOGGER.info("End of dataframe")
+            LOGGER.debug("End of dataframe")
             break
         dataframes = {pair:dataframe}
         engine = Engine(prices=prices_trunk, dataframes=dataframes,
@@ -82,9 +82,9 @@ def perform_data(pair, interval, data_dir, indicators):
 
         ########TEST stategy############
         result, current_time, current_price = redis.get_action(pair=pair, interval=interval)
-        LOGGER.info('In Strategy %s', result)
+        LOGGER.debug('In Strategy %s', result)
         if 'SELL' in result or 'BUY' in result:
-            LOGGER.info('Strategy - Adding to redis')
+            LOGGER.debug('Strategy - Adding to redis')
             scheme = {}
             scheme["symbol"] = pair
             scheme["direction"] = result

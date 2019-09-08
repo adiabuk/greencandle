@@ -71,7 +71,7 @@ class Redis():
             success of operation: True/False
         """
 
-        self.logger.info("Adding to Redis: %s %s %s", interval, list(data.keys()), now)
+        self.logger.debug("Adding to Redis: %s %s %s", interval, list(data.keys()), now)
         key = "{0}:{1}:{2}".format(pair, interval, now)
         expiry = 600 if self.test else 18000
         response = self.conn.hmset(key, data)
@@ -153,8 +153,10 @@ class Redis():
 
     def log_event(self, event, rate, buy, sell, pair, current_time):
         """Send event data to logger"""
-        self.logger.info('EVENT:(%s) %s rate:%s buy:%s sell:%s, time:%s',
-                         pair, event, format(float(rate), ".2f"), buy, sell, current_time)
+        message = 'EVENT:({0}) {1} rate:{2} buy:{3} sell:{4}, time:{5}'.format(
+                   pair, event, format(float(rate), ".2f"), buy, sell, current_time)
+
+        self.logger.debug(message) if event == "Hold" else self.logger.info(message)
 
     def get_action(self, pair, interval):
         """Determine if we are in a BUY/HOLD/SELL situration for a specific pair and interval"""
