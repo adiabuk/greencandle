@@ -1,4 +1,4 @@
-#pylint: disable=logging-not-lazy,wrong-import-position
+#pylint: disable=logging-not-lazy,wrong-import-position,no-member
 
 """
 Functions to fetch data from binance
@@ -6,10 +6,14 @@ Functions to fetch data from binance
 
 import sys
 import csv
-
+import os
+import pickle
+import time
+import datetime
 from concurrent.futures import ThreadPoolExecutor
 import pandas
 import binance
+
 
 from . import config
 from .logger import getLogger
@@ -78,6 +82,58 @@ def get_all_klines(pair, interval=None, start_time=0, no_of_klines=1E1000):
             break
 
     return result[:no_of_klines] if no_of_klines != float("inf") else result
+
+def get_data(startdate, intervals, pairs, days, outputdir):
+    """Calculate which data to fetch given args and fetch into outputdir"""
+
+    given_date = datetime.datetime.strptime(startdate, '%Y-%m-%d')
+    given_start_epoch = time.mktime(given_date.timetuple())
+
+    daily_minutes = 1440  # number of minutes in a day
+
+    # For testing we use 50 klines buffer to calculate trends/averages etc.
+    # so we need to add 50 more klines to the end (total_klines) so that we
+    #still end up with the exact number of lines for the days specified
+    number_of_extra_klines = 50
+
+    klines_multiplier = {"4h": 240,
+                         "2h": 120,
+                         "1h": 60,
+                         "30m": 30,
+                         "15m": 15,
+                         "5m": 5,
+                         "3m": 3,
+                         "1m": 1}
+
+    intervals = intervals if intervals else klines_multiplier.keys()
+    for pair in pairs:
+        for interval in intervals:
+            if not os.path.isdir(outputdir):
+                sys.exit("Invalid output directory: {0}".format(outputdir))
+            filename = "{0}/{1}_{2}.p".format(outputdir.rstrip('/'), pair, interval)
+            print("Using filename:", filename)
+            if os.path.exists(filename):
+                continue
+
+
+            # calculate start_time, and number of klines we need for interval
+            ###################################
+            seconds_per_kline = klines_multiplier[interval] * 60
+
+            # number of seconds ealier we need to start
+            additional_seconds = seconds_per_kline * number_of_extra_klines
+            actual_start_epoch = given_start_epoch - additional_seconds
+            klines_in_a_day = daily_minutes * (1/klines_multiplier[interval])
+            total_klines = int(klines_in_a_day) * int(days) + number_of_extra_klines
+            start_mepoch = int(actual_start_epoch * 1000)
+            ###################################
+
+            print("Getting {0} klines for {1} {2} - {3} days".format(total_klines,
+                                                                     pair, interval, days))
+            current = pandas.DataFrame.from_dict(get_all_klines(pair=pair, interval=interval,
+                                                                start_time=start_mepoch,
+                                                                no_of_klines=total_klines))
+            pickle.dump(current, open(filename, "wb"))
 
 def to_csv(pair, data):
     """
