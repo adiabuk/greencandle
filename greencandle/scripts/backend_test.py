@@ -10,13 +10,13 @@ import argparse
 import argcomplete
 import setproctitle
 
-from .lib import config
+from ..lib import config
 # config is required before loading other modules as it is global
 config.create_config(test=True)
 
-from .lib.mysql import Mysql
-from .lib.logger import getLogger, get_decorator
-from .lib.run import serial_test, parallel_test
+from ..lib.mysql import Mysql
+from ..lib.logger import getLogger, get_decorator
+from ..lib.run import serial_test, parallel_test
 
 LOGGER = getLogger(__name__, config.main.logging_level)
 CHUNK_SIZE = 200

@@ -15,10 +15,10 @@ import argcomplete
 import setproctitle
 
 from str2bool import str2bool
-from .lib import config
+from ..lib import config
 config.create_config(test=False)
-from .lib.logger import getLogger
-from .lib.run import prod_loop
+from ..lib.logger import getLogger
+from ..lib.run import prod_loop
 
 LOGGER = getLogger(__name__, config.main.logging_level)
 
