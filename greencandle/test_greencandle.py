@@ -14,7 +14,7 @@ from greencandle.lib.binance_common import get_data
 from greencandle.lib.logger import getLogger
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.mysql import Mysql
-from greencandle.backend_test import serial_test
+from greencandle.lib.run import serial_test
 
 LOGGER = getLogger(__name__, config.main.logging_level)
 
