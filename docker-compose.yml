@@ -27,6 +27,24 @@ services:
       timeout: 2s
       retries: 5
 
+  greencandle-prod:
+    image: greencandle
+    entrypoint: backend --use-redis --test
+    links:
+      - mysql
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      - CONFIG_ENV=prod
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - ./test:/tmp
+
   greencandle-test:
     image: greencandle
     entrypoint: backend --use-redis --test
@@ -35,6 +53,8 @@ services:
     depends_on:
       - mysql
       - redis
+    environment:
+      - CONFIG_ENV=test
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
@@ -60,7 +80,6 @@ services:
       timeout: 2s
       retries: 5
 
-
   webserver:
      image: webserver
      ports:
@@ -80,7 +99,7 @@ services:
     entrypoint: /run.sh
     links:
       - mysql:mysql
-    volumes: 
+    volumes:
       - /srv/greencandle/dashboard/dashboards:/dashboards
       - /srv/greencandle/dashboard/jobs:/jobs
       - /srv/greencandle/dashboard/widgets:/widgets
