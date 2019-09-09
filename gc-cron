@@ -1,1 +1,2 @@
 * * * * * touch /var/run/cron # healthcheck
+*/15 * * * * write_balance
