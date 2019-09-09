@@ -50,7 +50,7 @@ class Trade():
         """
         self.logger.info("We have %s potential items to buy", len(buy_list))
 
-        drain = str2bool(config.main['drain_' + self.interval])
+        drain = str2bool(config.main.drain)
         if drain and not self.test_data:
             self.logger.warning("Skipping Buy as %s is in drain", self.interval)
             return

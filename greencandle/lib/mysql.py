@@ -18,7 +18,6 @@ class Mysql():
         self.user = config.database.user
         self.password = config.database.password
         self.db = config.database.db
-        self.db_test = config.database.db_test
         self.logger = getLogger(__name__, config.main.logging_level)
 
         self.connect(test=test)
@@ -30,11 +29,10 @@ class Mysql():
         """
         Connect to Mysql DB
         """
-        dbase_name = self.db_test if test else self.db
         self.dbase = MySQLdb.connect(host=self.host,
                                      user=self.user,
                                      passwd=self.password,
-                                     db=dbase_name)
+                                     db=self.db)
         self.cursor = self.dbase.cursor()
 
     @get_exceptions

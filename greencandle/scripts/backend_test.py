@@ -38,8 +38,7 @@ def main():
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
     pairs = [args.pair] if args.pair and args.serial else config.main.pairs.split()
-    parallel_interval = config.main.parallel_interval.split()[0]
-    parallel_interval = args.interval if args.interval else parallel_interval
+    parallel_interval = args.interval if args.interval else config.main.interval
     main_indicators = config.main.indicators.split()
     serial_intervals = [args.interval]
     redis_db = {"4h":1, "2h":1, "1h":1, "30m":1, "15m":1, "5m":2, "3m":3, "1m":4}[parallel_interval]

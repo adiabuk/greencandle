@@ -35,7 +35,7 @@ def main():
     starttime = time.time()
     interval = args.interval if args.interval else str(config.main.interval)
     minutes = [int(s) for s in re.findall(r'(\d+)[mh]', interval)][0]
-    drain = str2bool(config.main['drain_'+interval])
+    drain = str2bool(config.main.drain)
     drain_string = "(draining)" if drain else "(active)"
     setproctitle.setproctitle("greencandle-backend_{0}{1}".format(interval, drain_string))
     while True:
