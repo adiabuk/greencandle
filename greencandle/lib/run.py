@@ -237,9 +237,8 @@ def prod_loop(interval, test):
             scheme['data'] = result
             scheme["event"] = "trigger"
             engine.add_scheme(scheme)
+            del engine
         ################################
-
-        del engine
 
         if result == "BUY":
             LOGGER.debug("Items to buy")
