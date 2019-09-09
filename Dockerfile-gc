@@ -2,5 +2,9 @@
 FROM python:3.6.9
 ADD . /install
 RUN bash /install/gc-install.sh
-COPY config.ini /etc/greencandle.ini
+COPY docker-entrypoint.sh /
+COPY config /opt/config
+RUN mkdir /opt/output
+RUN chmod +x /docker-entrypoint.sh
 HEALTHCHECK CMD find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+CMD ["/docker-entrypoint.sh"]
