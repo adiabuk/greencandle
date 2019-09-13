@@ -6,6 +6,7 @@ Functions for sending alerts
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import notify_run
 
 from . import config
 from .timeout import restrict_timeout
@@ -42,3 +43,12 @@ def send_gmail_alert(action, pair, price):
     with restrict_timeout(3, name="email alert"):
         server.sendmail(fromaddr, toaddr, text)
     server.quit()
+
+def send_push_notif(*args):
+    """
+    Send push notification via notify.run
+    """
+    text = ' '.join(args)
+    notify = notify_run.Notify('YD4ElOAAGonJYofO')
+    notify.endpoint = 'https://notify.run/YD4ElOAAGonJYofO'
+    notify.send(text)
