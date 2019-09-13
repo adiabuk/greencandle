@@ -14,22 +14,14 @@ before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y libpoppler-cpp-dev pkg-config
   - pip install cpp-coveralls
-
-# command to install dependencies
-bootstrap:
-  - sudo bash -x bootstrap.sh
-
-get-versions:
   - sudo pip --version
   - sudo which pip
   - sudo python --version
   - sudo which python
 
-fix-pip:
-  - sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-  - sudo python /tmp/get-pip.py --force-reinstall
-  - sudo pip install pip=9.0.1
-  - sudo rm -rf /tmp/get-pip.py
+
+bootstrap:
+  - sudo bash -x bootstrap.sh
 
 install:
   - sudo bash -x gc-install.sh
