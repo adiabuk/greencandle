@@ -17,9 +17,9 @@ before_install:
 
 # command to install dependencies
 bootstrap:
-  - sudo bash bootstrap.sh
+  - sudo bash -x bootstrap.sh
 install:
-  - sudo bash gc-install.sh
+  - sudo bash -x gc-install.sh
 check:
   - sudo docker ps
 script:
