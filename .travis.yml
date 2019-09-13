@@ -19,6 +19,12 @@ before_install:
 bootstrap:
   - sudo bash -x bootstrap.sh
 
+get-versions:
+  - sudo pip --version
+  - sudo which pip
+  - sudo python --version
+  - sudo which python
+
 fix-pip:
   - sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
   - sudo python /tmp/get-pip.py --force-reinstall
