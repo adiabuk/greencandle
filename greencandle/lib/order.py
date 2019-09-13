@@ -14,7 +14,7 @@ from .auth import binance_auth
 from .logger import getLogger, get_decorator
 from .mysql import Mysql
 from .balance import Balance
-from .mail import send_gmail_alert
+from .alerts import send_gmail_alert
 from . import config
 
 GET_EXCEPTIONS = get_decorator((Exception))

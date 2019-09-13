@@ -1,6 +1,6 @@
-#pylint: disable=wrong-import-position,no-member
+#pylint: disable=no-member
 """
-Functions for sending email alerts
+Functions for sending alerts
 """
 
 import smtplib
