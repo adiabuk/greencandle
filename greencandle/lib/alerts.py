@@ -48,7 +48,10 @@ def send_push_notif(*args):
     """
     Send push notification via notify.run
     """
-    text = ' '.join(args)
-    notify = notify_run.Notify('YD4ElOAAGonJYofO')
-    notify.endpoint = 'https://notify.run/YD4ElOAAGonJYofO'
+    host = config.push.host
+    channel = config.push.channel
+    text = ' '.join(str(item) for item in args)
+    notify = notify_run.Notify(channel)
+
+    notify.endpoint = 'https://{0}/{1}'.format(host, channel)
     notify.send(text)

@@ -40,6 +40,7 @@ def check_config():
     required_config = {'database':['host', 'user', 'password', 'db'],
                        'email': ['from', 'to', 'password'],
                        'redis': ['host', 'port', 'expire'],
+                       'push': ['host', 'channel'],
                        'main': ['logging_level', 'max_trades', 'binance_api_key',
                                 'binance_api_secret', 'coinbase_api_key', 'buy_rule1',
                                 'coinbase_api_secret', 'interval', 'sell_rule1',
