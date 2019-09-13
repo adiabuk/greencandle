@@ -2,15 +2,9 @@ dist: "bionic"
 env:
    - CPPFLAGS=--coverage
 
-jobs:
-  include:
-    - stage: "Bootstrap"
-      name: "Bootstrap"
-      script: sudo bash -x bootstrap.sh
-      name: "Start DB"
-      script: sudo docker-compose up -d mysql redis
-      name: "Unit Tests"
-      script: ls
-      name: "Integration Tests"
-      name: "Deploy"
-      script: ls
+install:
+  - sudo bash bootstrap.sh
+
+script:
+  - sudo docker-compose up -d mysql redis
+  - sudo docker ps
