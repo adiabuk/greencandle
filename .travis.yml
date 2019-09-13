@@ -16,9 +16,11 @@ before_install:
   - pip install cpp-coveralls
 
 # command to install dependencies
-install:
+bootstrap:
   - sudo bash bootstrap.sh
-
-# command to run tests
+install:
+  - sudo bash gc-install.sh
+check:
+  - sudo docker ps
 script:
   ls
