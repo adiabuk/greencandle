@@ -11,7 +11,7 @@ import argparse
 import argcomplete
 
 from ..lib import config
-config.create_config(test=True)
+config.create_config()
 from ..lib.binance_common import get_data
 
 def main():

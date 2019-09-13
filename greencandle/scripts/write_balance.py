@@ -2,7 +2,7 @@
 #pylint: wrong-import-position
 
 from greencandle.lib import config
-config.create_config(test=False)
+config.create_config()
 from greencandle.lib.balance import Balance
 
 def main():

@@ -4,12 +4,12 @@
 """
 Get values from config file
 """
-
 from configparser import ConfigParser
-from .logger import getLogger, get_decorator
+import numpy
+from .logger import getLogger
 from .common import AttributeDict
 
-def create_config(test=False):
+def create_config():
     """
     Read config file and return required config
     Args:

@@ -8,7 +8,7 @@ Get daily trading profits from database
 import sys
 
 from ..lib import config
-config.create_config(test=sys.argv[1])
+config.create_config()
 from ..lib.profit import get_recent_profit
 
 def main():

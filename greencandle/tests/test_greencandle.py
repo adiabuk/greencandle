@@ -8,7 +8,7 @@ import unittest
 import os
 import shutil
 from greencandle.lib import config
-config.create_config(test=True)
+config.create_config()
 
 from greencandle.lib.binance_common import get_data
 from greencandle.lib.logger import getLogger

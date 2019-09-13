@@ -12,7 +12,7 @@ import setproctitle
 
 from ..lib import config
 # config is required before loading other modules as it is global
-config.create_config(test=True)
+config.create_config()
 
 from ..lib.mysql import Mysql
 from ..lib.logger import getLogger, get_decorator

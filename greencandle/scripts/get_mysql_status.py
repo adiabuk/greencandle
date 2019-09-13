@@ -14,7 +14,7 @@ from ..lib.mysql import Mysql
 from ..lib import config
 
 test = True if sys.argv[2].lower() == "test" else False
-config.create_config(test=test)
+config.create_config()
 from ..lib.auth import binance_auth
 
 def main():

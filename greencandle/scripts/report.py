@@ -9,7 +9,7 @@ import sys
 import openpyxl
 from greencandle.lib.mysql import Mysql
 from greencandle.lib import config
-config.create_config(test=True)
+config.create_config()
 
 def main():
     """
