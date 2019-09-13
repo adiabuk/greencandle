@@ -14,12 +14,13 @@ from .auth import binance_auth
 from .logger import getLogger, get_decorator
 from .mysql import Mysql
 from .balance import Balance
-from .alerts import send_gmail_alert
+from .alerts import send_gmail_alert, send_push_notif
 from . import config
 
 GET_EXCEPTIONS = get_decorator((Exception))
 
 class Trade():
+    """Buy & Sell class"""
 
     def __init__(self, interval=None, test_data=False, test_trade=False):
         self.logger = getLogger(__name__, config.main.logging_level)
@@ -111,6 +112,7 @@ class Trade():
                         # 3. we proformed a real trade which was successful - (transactTime in dict)
                         dbase.insert_trade(pair=item, price=cost, date=current_time,
                                            investment=20, total=amount)
+                        send_push_notif('BUY', item, cost)
                     if not self.test_data and not result:
                         send_gmail_alert("BUY", item, cost)
             del dbase
@@ -139,6 +141,8 @@ class Trade():
                 if self.test_data or (self.test_trade and not result) or \
                         (not self.test_trade and 'transactTime' in result):
                     dbase.update_trades(pair=item, sell_time=current_time, sell_price=price)
+                    send_push_notif('SELL', item, price)
+
                 else:
                     self.logger.critical("Sell Failed")
             del dbase
