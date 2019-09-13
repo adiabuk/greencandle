@@ -26,7 +26,7 @@ else
     if [[ ! -f /usr/local/bin/gechodriver ]]; then
         wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz -P /tmp
         tar zxvf /tmp/geckodriver-v0.24.0-linux64.tar.gz -C /usr/local/bin
-        rm -rf /tmp/geckodriver-v0.24.0-linux64.tar.gz 
+        rm -rf /tmp/geckodriver-v0.24.0-linux64.tar.gz
     fi
 fi
 
@@ -53,5 +53,5 @@ cd $install_dir
 pip install . --src /tmp
 pip install -e git+https://github.com/adiabuk/Technical-Indicators.git#egg=indicator
 pip install -e git+https://github.com/adiabuk/binance#egg=binance
-mkdir /opt/output
+[[ ! -d /opt/output ]] && mkdir /opt/output
 echo "Installation Complete"
