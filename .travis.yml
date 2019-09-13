@@ -7,14 +7,10 @@ jobs:
     - stage: "Bootstrap"
       name: "Bootstrap"
       script: sudo bash -x bootstrap.sh
-    - stage: "Start DB"
       name: "Start DB"
       script: sudo docker-compose up -d mysql redis
-    - stage: "Tests"
       name: "Unit Tests"
       script: ls
-    - script: ls
       name: "Integration Tests"
-    - stage: deploy
-      name: "Deploy to GCP"
+      name: "Deploy"
       script: ls
