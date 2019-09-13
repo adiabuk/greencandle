@@ -38,9 +38,9 @@ def check_config():
     missing_list = []
     missing_section = []
     required_config = {'database':['host', 'user', 'password', 'db'],
-                       'email': ['from', 'to', 'password'],
+                       'email': ['from', 'to', 'password', 'active'],
                        'redis': ['host', 'port', 'expire'],
-                       'push': ['host', 'channel'],
+                       'push': ['host', 'channel', 'active'],
                        'main': ['logging_level', 'max_trades', 'binance_api_key',
                                 'binance_api_secret', 'coinbase_api_key', 'buy_rule1',
                                 'coinbase_api_secret', 'interval', 'sell_rule1',
@@ -56,6 +56,7 @@ def check_config():
         list_2 = required_config[key]
         missing_list.extend(list(numpy.setdiff1d(list_2, list_1, assume_unique=True)))
     config = True
+
     if missing_list:
         print('error, missing config', missing_list)
         config = False

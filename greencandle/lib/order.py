@@ -112,9 +112,8 @@ class Trade():
                         # 3. we proformed a real trade which was successful - (transactTime in dict)
                         dbase.insert_trade(pair=item, price=cost, date=current_time,
                                            investment=20, total=amount)
-                        send_push_notif('BUY', item, cost)
-                    if not self.test_data and not result:
-                        send_gmail_alert("BUY", item, cost)
+                    send_push_notif('BUY', item, cost)
+                    send_gmail_alert("BUY", item, cost)
             del dbase
         else:
             self.logger.info("Nothing to buy")
@@ -134,14 +133,14 @@ class Trade():
                     self.logger.critical("Unable to find quantity for %s", item)
                     return
                 price = current_price
+                send_gmail_alert("SELL", item, price)
+                send_push_notif('SELL', item, price)
                 if not self.test_data:
                     result = binance.order(symbol=item, side=binance.SELL, quantity=quantity,
                                            price='', orderType="MARKET", test=self.test_trade)
-                    send_gmail_alert("SELL", item, price)
                 if self.test_data or (self.test_trade and not result) or \
                         (not self.test_trade and 'transactTime' in result):
                     dbase.update_trades(pair=item, sell_time=current_time, sell_price=price)
-                    send_push_notif('SELL', item, price)
 
                 else:
                     self.logger.critical("Sell Failed")

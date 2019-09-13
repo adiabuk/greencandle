@@ -7,7 +7,7 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import notify_run
-
+from str2bool import str2bool
 from . import config
 from .timeout import restrict_timeout
 from .logger import getLogger, get_decorator
@@ -19,6 +19,8 @@ def send_gmail_alert(action, pair, price):
     """
     Send email alert using gmail
     """
+    if not str2bool(config.email.active):
+        return
     logger = getLogger(__name__, config.main.logging_level)
     email_to = config.email.to
     email_from = config.email['from']
@@ -48,6 +50,8 @@ def send_push_notif(*args):
     """
     Send push notification via notify.run
     """
+    if not str2bool(config.push.active):
+        return
     host = config.push.host
     channel = config.push.channel
     text = ' '.join(str(item) for item in args)
