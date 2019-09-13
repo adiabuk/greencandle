@@ -19,15 +19,19 @@ before_install:
   - sudo python --version
   - sudo which python
 
-
-bootstrap:
-  - sudo bash -x bootstrap.sh
-
-install:
-  - sudo bash -x gc-install.sh
-
-check:
-  - sudo docker ps
-
-script:
-  ls
+jobs:
+include:
+  - stage: "Bootstrap"
+    name: "Bootstrap"
+    script: bash -x bootstrap.sh
+  - stage: "Start DB"
+    name: "Start DB"
+    script: docker-compose up -d mysql redis
+  - stage: "Tests"
+    name: "Unit Tests"
+    script: ls
+  - script: ls
+    name: "Integration Tests"
+  - stage: deploy
+    name: "Deploy to GCP"
+    script: ls
