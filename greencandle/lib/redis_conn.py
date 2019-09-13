@@ -12,7 +12,7 @@ from str2bool import str2bool
 from .mysql import Mysql
 from .logger import getLogger
 from . import config
-from .common import add_perc, sub_perc, AttributeDict
+from .common import add_perc, sub_perc, AttributeDict, perc_diff
 
 class Redis():
     """
@@ -154,10 +154,12 @@ class Redis():
     def log_event(self, event, rate, buy, sell, pair, current_time, current):
         """Send event data to logger"""
         message = 'EVENT:({0}) {1} rate:{2} buy:{3} sell:{4}, time:{5}'.format(
-                   pair, event, format(float(rate), ".2f"), buy, sell, current_time)
-
-        self.logger.debug(message) if event == "Hold" else self.logger.info(message)
-        self.logger.debug("%s, %s",message, current)
+            pair, event, format(float(rate), ".2f"), buy, sell, current_time)
+        if event == "Hold":
+            self.logger.debug(message)
+        else:
+            self.logger.info(message)
+        self.logger.debug("%s, %s", message, current)
 
     def get_action(self, pair, interval):
         """Determine if we are in a BUY/HOLD/SELL situration for a specific pair and interval"""
@@ -205,9 +207,14 @@ class Redis():
         # rate of Moving Average increate/decreate based on indicator
         # specified in the rate_indicator config option - best with EMA_200
         rate_indicator = config.main.rate_indicator
+        perc_rate = str(perc_diff(float(results.previous[rate_indicator]),
+                                  float(results.current[rate_indicator])))
         rate = str(float(results.current[rate_indicator]) - float(results.previous[rate_indicator]))
-        last_rate = str(float(results.previous[rate_indicator]) - \
-                float(results.previous1[rate_indicator]))
+
+        last_perc_rate = str(perc_diff(float(results.previous1[rate_indicator]),
+                                       float(results.previous[rate_indicator])))
+        last_rate = str(float(results.previous[rate_indicator]) -
+                        float(results.previous1[rate_indicator]))
 
         buy_rules = []
         sell_rules = []
@@ -244,7 +251,8 @@ class Redis():
             return ('SELL', current_time, current_price)
         # if we match take_profit rule and are in a trade
         elif take_profit_rule and buy_price:
-            self.log_event('TakeProfit', rate, buy_price, current_price, pair, current_time, results.current)
+            self.log_event('TakeProfit', rate, buy_price, current_price, pair,
+                           current_time, results.current)
             return ('SELL', current_time, current_price)
         # if we match any sell rules and are in a trade
         elif any(sell_rules) and buy_price:
@@ -255,17 +263,18 @@ class Redis():
                     winning_rules.append(seq + 1)
 
             self.log_event('NormalSell', rate, buy_price, current_price, pair, current_time,
-                    results.current)
+                           results.current)
             self.logger.info('Sell Rules matched: %s', winning_rules)
 
             return ('SELL', current_time, current_price)
         # if we match all buy rules and are NOT in a trade
         elif all(buy_rules) and not buy_price:
             self.log_event('NormalBuy', rate, current_price, current_price, pair, current_time,
-                    results.current)
+                           results.current)
             return ('BUY', current_time, current_price)
         elif buy_price:
-            self.log_event('Hold', rate, buy_price, current_price, pair, current_time, results.current)
+            self.log_event('Hold', rate, buy_price, current_price, pair, current_time,
+                           results.current)
             return ('HOLD', current_time, current_price)
         else:
             return ('NOITEM', current_time, current_price)
