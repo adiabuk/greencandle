@@ -18,9 +18,18 @@ before_install:
 # command to install dependencies
 bootstrap:
   - sudo bash -x bootstrap.sh
+
+fix-pip:
+  - sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+  - sudo python /tmp/get-pip.py --force-reinstall
+  - sudo pip install pip=9.0.1
+  - sudo rm -rf /tmp/get-pip.py
+
 install:
   - sudo bash -x gc-install.sh
+
 check:
   - sudo docker ps
+
 script:
   ls
