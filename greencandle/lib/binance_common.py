@@ -94,7 +94,7 @@ def get_data(startdate, intervals, pairs, days, outputdir):
     # For testing we use 50 klines buffer to calculate trends/averages etc.
     # so we need to add 50 more klines to the end (total_klines) so that we
     #still end up with the exact number of lines for the days specified
-    number_of_extra_klines = 50
+    number_of_extra_klines = 200
 
     klines_multiplier = {"4h": 240,
                          "2h": 120,
