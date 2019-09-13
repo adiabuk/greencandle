@@ -6,10 +6,10 @@ jobs:
   include:
     - stage: "Bootstrap"
       name: "Bootstrap"
-      script: bash -x bootstrap.sh
+      script: sudo bash -x bootstrap.sh
     - stage: "Start DB"
       name: "Start DB"
-      script: docker-compose up -d mysql redis
+      script: sudo docker-compose up -d mysql redis
     - stage: "Tests"
       name: "Unit Tests"
       script: ls
