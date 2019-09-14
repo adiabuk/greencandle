@@ -55,7 +55,7 @@ services:
       - mysql
       - redis
     environment:
-      - CONFIG_ENV=test
+      - CONFIG_ENV=test/unit
     volumes:
       - /srv/greencandle:/srv/greencandle
 
