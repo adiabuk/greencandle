@@ -115,6 +115,11 @@
       "is_binary": false,
       "is_secret": false
     },
+    "email_active": {
+      "value": "False",
+      "is_binary": false,
+      "is_secret": false
+    },
     "email_from": {
       "value": "a@b.c",
       "is_binary": false,
@@ -157,6 +162,21 @@
     },
     "pairs": {
       "value": "BNBBTC ETHBTC LTCBTC LINKBTC XRPBTC BCHABCBTC EOSBTC ADABTC RENBTC NANOBTC XRPETH",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "push_active": {
+      "value": "=",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "push_channel": {
+      "value": "=",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "push_host": {
+      "value": "=",
       "is_binary": false,
       "is_secret": false
     },
