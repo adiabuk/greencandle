@@ -6,12 +6,12 @@
   "data_key": "OfvuQJ0Cis1CvnFV2KTTYv3WCPKXOIord3OBDc0kwcU=",
   "data": {
     "binance_key": {
-      "value": "",
+      "value": "x",
       "is_binary": false,
       "is_secret": false
     },
     "binance_secret": {
-      "value": "",
+      "value": "x",
       "is_binary": false,
       "is_secret": false
     },
@@ -72,16 +72,6 @@
     },
     "coinbase_secret": {
       "value": "hello",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "coinbase_key": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "coinbase_secret": {
-      "value": "",
       "is_binary": false,
       "is_secret": false
     },
