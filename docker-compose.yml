@@ -29,7 +29,7 @@ services:
 
   greencandle-prod:
     image: greencandle
-    entrypoint: backend --use-redis --test
+    entrypoint: /docker-entrypoint.sh backend --use-redis --test
     links:
       - mysql
     depends_on:
@@ -47,7 +47,7 @@ services:
 
   greencandle-test:
     image: greencandle
-    entrypoint: backend --use-redis --test
+    entrypoint: /docker-entrypoint.sh backend_test --use-redis --test
     links:
       - mysql
     depends_on:
