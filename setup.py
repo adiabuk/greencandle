@@ -55,7 +55,7 @@ setup(
     author_email='adiab@linuxmail.org',
     url='https://github.com/adiabuk/greencandle',
     install_requires=get_reqs('requires'),
-    dependency_links=get_reqs('links'),
+    dependency_links=get_reqs('link'),
     scripts=get_shell_scripts(),
     entry_points={'console_scripts': get_entrypoints()},
     classifiers=[],
