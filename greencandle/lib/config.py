@@ -56,7 +56,11 @@ def check_config():
         list_2 = required_config[key]
         missing_list.extend(list(numpy.setdiff1d(list_2, list_1, assume_unique=True)))
     config = True
-
+    for section in required_config.keys():
+        for key in list(globals()[section]):
+            if globals()[section][key] == '':
+                print(key)
+                globals()[section].pop(key, None)
     if missing_list:
         print('error, missing config', missing_list)
         config = False

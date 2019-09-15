@@ -11,6 +11,9 @@ class AttributeDict(dict):
         return self[attr]
     def __setattr__(self, attr, value):
         self[attr] = value
+    def __del_attr__(self, attr):
+        #del self[attr]
+        self.pop(attr, None)
 
 def percent(perc, num):
     """return percentage of a given number"""
