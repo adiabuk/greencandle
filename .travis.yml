@@ -1,24 +1,11 @@
-language: python
 dist: "bionic"
-python:
-  - "3.5-dev" # 3.5 development branch
-  - "3.6"
-  - "3.6-dev" # 3.6 development branch
-  - "3.7-dev" # 3.7 development branch
-  - "3.8-dev" # 3.8 development branch
-  - "nightly"
 env:
    - CPPFLAGS=--coverage
 
-before_install:
-  - sudo apt-get -qq update
-  - sudo apt-get install -y libpoppler-cpp-dev pkg-config
-  - pip install cpp-coveralls
-
-# command to install dependencies
 install:
   - sudo bash bootstrap.sh
 
-# command to run tests
 script:
-  ls
+  - sudo docker-compose up -d mysql redis
+  - sudo docker ps
+  - sudo docker-compose up greencandle-unittest

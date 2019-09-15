@@ -10,4 +10,4 @@ fi
 configstore package process_templates --ignore-role --basedir /opt/config $CONFIG_ENV /opt/output
 cp /opt/output/greencandle.ini /etc/greencandle.ini
 
-backend -t
+exec $@

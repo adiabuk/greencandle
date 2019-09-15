@@ -40,9 +40,9 @@ def get_reqs(req):
         # we want to handle package names and also repo urls
         if getattr(item, 'url', None):  # older pip has url
             results['link'].append(str(item.url))
-        elif getattr(item, 'link', None): # newer pip has link
+        if getattr(item, 'link', None): # newer pip has link
             results['link'].append(str(item.link))
-        elif item.req:
+        if item.req:
             results['requires'].append(str(item.req))
     return results[req]
 
@@ -55,7 +55,7 @@ setup(
     author_email='adiab@linuxmail.org',
     url='https://github.com/adiabuk/greencandle',
     install_requires=get_reqs('requires'),
-    dependency_links=get_reqs('links'),
+    dependency_links=get_reqs('link'),
     scripts=get_shell_scripts(),
     entry_points={'console_scripts': get_entrypoints()},
     classifiers=[],

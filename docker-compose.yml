@@ -29,7 +29,7 @@ services:
 
   greencandle-prod:
     image: greencandle
-    entrypoint: backend --use-redis --test
+    entrypoint: /docker-entrypoint.sh backend --use-redis --test
     links:
       - mysql
     depends_on:
@@ -45,9 +45,23 @@ services:
     volumes:
       - ./test:/tmp
 
+  greencandle-unittest:
+    image: greencandle
+    entrypoint: /docker-entrypoint.sh python -m unittest
+    links:
+      - mysql
+    working_dir: /srv/greencandle
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      - CONFIG_ENV=test/unit
+    volumes:
+      - ./:/srv/greencandle
+
   greencandle-test:
     image: greencandle
-    entrypoint: backend --use-redis --test
+    entrypoint: /docker-entrypoint.sh backend_test --use-redis --test
     links:
       - mysql
     depends_on:

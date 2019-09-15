@@ -6,12 +6,12 @@
   "data_key": "OfvuQJ0Cis1CvnFV2KTTYv3WCPKXOIord3OBDc0kwcU=",
   "data": {
     "binance_key": {
-      "value": "",
+      "value": "x",
       "is_binary": false,
       "is_secret": false
     },
     "binance_secret": {
-      "value": "",
+      "value": "x",
       "is_binary": false,
       "is_secret": false
     },
@@ -65,23 +65,13 @@
       "is_binary": false,
       "is_secret": false
     },
-    "coinbase_api_key": {
+    "coinbase_key": {
       "value": "blablabla",
       "is_binary": false,
       "is_secret": false
     },
-    "coinbase_api_secret": {
-      "value": "hello",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "coinbase_key": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
     "coinbase_secret": {
-      "value": "",
+      "value": "hello",
       "is_binary": false,
       "is_secret": false
     },
@@ -91,7 +81,7 @@
       "is_secret": false
     },
     "db_host": {
-      "value": "127.0.0.1",
+      "value": "mysql",
       "is_binary": false,
       "is_secret": false
     },
@@ -111,6 +101,11 @@
       "is_secret": false
     },
     "drain": {
+      "value": "False",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "email_active": {
       "value": "False",
       "is_binary": false,
       "is_secret": false
@@ -160,6 +155,21 @@
       "is_binary": false,
       "is_secret": false
     },
+    "push_active": {
+      "value": "True",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "push_channel": {
+      "value": "x",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "push_host": {
+      "value": "x",
+      "is_binary": false,
+      "is_secret": false
+    },
     "rate_indicator": {
       "value": "EMA_200",
       "is_binary": false,
@@ -171,7 +181,7 @@
       "is_secret": false
     },
     "redis_host": {
-      "value": "127.0.0.1",
+      "value": "redis",
       "is_binary": false,
       "is_secret": false
     },
