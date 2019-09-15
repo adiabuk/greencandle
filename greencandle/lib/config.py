@@ -59,7 +59,7 @@ def check_config():
     for section in required_config.keys():
         for key in list(globals()[section]):
             if globals()[section][key] == '':
-                print(key)
+                # delete empty keys
                 globals()[section].pop(key, None)
     if missing_list:
         print('error, missing config', missing_list)
