@@ -41,22 +41,22 @@
       "is_secret": false
     },
     "buy_rule5": {
-      "value": "results.current.RSI_50 \u003e str(40)",
+      "value": "results.current.RSI_48 \u003e str(20)",
       "is_binary": false,
       "is_secret": false
     },
     "buy_rule6": {
-      "value": "results.current.RSI_50 \u003c str(73)",
+      "value": "results.current.RSI_48 \u003c str(73)",
       "is_binary": false,
       "is_secret": false
     },
     "buy_rule7": {
-      "value": "close \u003e results.current.EMA_200",
+      "value": "results.current.EMA_200 \u003c close",
       "is_binary": false,
       "is_secret": false
     },
     "buy_rule8": {
-      "value": "rate \u003e str(0)",
+      "value": "",
       "is_binary": false,
       "is_secret": false
     },
@@ -126,7 +126,7 @@
       "is_secret": false
     },
     "indicators": {
-      "value": "get_moving_averages;EMA;8 get_moving_averages;EMA;13 get_moving_averages;EMA;21 get_moving_averages;EMA;34 get_moving_averages;EMA;55 get_rsi;RSI;50 get_moving_averages;EMA;200 get_oscillators;STOCHF;14",
+      "value": "get_moving_averages;EMA;8 get_moving_averages;EMA;13 get_moving_averages;EMA;21 get_moving_averages;EMA;34 get_moving_averages;EMA;55 get_rsi;RSI;48 get_moving_averages;EMA;200 get_oscillators;STOCHF;14",
       "is_binary": false,
       "is_secret": false
     },
@@ -141,7 +141,7 @@
       "is_secret": false
     },
     "max_trades": {
-      "value": "10",
+      "value": "2",
       "is_binary": false,
       "is_secret": false
     },
@@ -151,7 +151,7 @@
       "is_secret": false
     },
     "pairs": {
-      "value": "BNBBTC ETHBTC LTCBTC LINKBTC XRPBTC BCHABCBTC EOSBTC ADABTC RENBTC NANOBTC XRPETH",
+      "value": "BNBUSDT BTCUSDT ETHUSDT NEOUSDT LTCUSDT",
       "is_binary": false,
       "is_secret": false
     },
@@ -201,12 +201,12 @@
       "is_secret": false
     },
     "sell_rule2": {
-      "value": "results.current.RSI_50 \u003e str(70)",
+      "value": "results.current.RSI_48 \u003e str(73)",
       "is_binary": false,
       "is_secret": false
     },
     "sell_rule3": {
-      "value": "",
+      "value": "results.current.EMA_200 \u003e close",
       "is_binary": false,
       "is_secret": false
     },
@@ -241,7 +241,7 @@
       "is_secret": false
     },
     "stop_loss_perc": {
-      "value": "4",
+      "value": "20",
       "is_binary": false,
       "is_secret": false
     },
