@@ -244,6 +244,13 @@ class Redis():
             buy_price = None
             stop_loss_rule = False
             take_profit_rule = False
+
+
+        if buy_price and all(all_rules) and any(sell_rules):
+            self.logger.warning('We ARE In a trade and have matched both buy and sell rules for %s', pair)
+        if not buy_price and all(all_rules) and any(sell_rules):
+            self.logger.warning('We are NOT in a trade and have matched both buy and sell rules for %s', pair)
+
         # if we match stop_loss rule and are in a trade
         if stop_loss_rule and buy_price:
             self.log_event('StopLoss', rate, buy_price, sub_perc(stop_loss_perc, buy_price),
