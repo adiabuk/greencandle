@@ -97,7 +97,7 @@ class Mysql():
         self.run_sql_query(command)
 
     @get_exceptions
-    def insert_trade(self, pair, date, price, investment, total):
+    def insert_trade(self, pair, date, price, base_amount, quote):
         """
         Insert new trade into DB
         Args:
@@ -112,13 +112,13 @@ class Mysql():
         """
 
         self.logger.info("Buying %s using %s", pair, self.interval)
-        command = """insert into trades (pair, buy_time, buy_price, investment, `interval`,
-                     total) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}",
+        command = """insert into trades (pair, buy_time, buy_price, base_in, `interval`,
+                     quote_in) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}",
                      "{5}");""".format(pair, date,
                                        float(price),
-                                       investment,
+                                       base_amount,
                                        self.interval,
-                                       total)
+                                       quote)
         self.run_sql_query(command)
 
     @get_exceptions
@@ -126,7 +126,7 @@ class Mysql():
         """
         Return quantity for a current open trade
         """
-        command = """ select total from trades where sell_price
+        command = """ select quote_in from trades where sell_price
                       is NULL and `interval` = "{0}" and
                       pair = "{1}" """.format(self.interval, pair)
         cur = self.dbase.cursor()
@@ -141,13 +141,13 @@ class Mysql():
         Return the value of an open trade for a given trading pair
         """
 
-        command = """ select buy_price, total, buy_time from trades where sell_price
+        command = """ select buy_price, quote_in, buy_time, base_in from trades where sell_price
                       is NULL and `interval` = "{0}" and
                       pair = "{1}" """.format(self.interval, pair)
         cur = self.dbase.cursor()
         self.execute(cur, command)
 
-        row = [(item[0], item[1], item[2]) for item in cur.fetchall()]
+        row = [(item[0], item[1], item[2], item[3]) for item in cur.fetchall()]
         return row
 
     @get_exceptions
@@ -157,7 +157,7 @@ class Mysql():
         for each complete trade logged
         """
         cur = self.dbase.cursor()
-        command = """ select sell_time, buy_price, sell_price, total from trades where
+        command = """ select sell_time, buy_price, sell_price, quote_in from trades where
                       `interval` = "{0}" and sell_price is NOT NULL; """.format(self.interval)
 
         self.execute(cur, command)
@@ -182,16 +182,16 @@ class Mysql():
         return row
 
     @get_exceptions
-    def update_trades(self, pair, sell_time, sell_price):
+    def update_trades(self, pair, sell_time, sell_price, quote, base_out):
         """
         Update an existing trade with sell price
         """
         self.logger.info("Selling %s for %s", pair, self.interval)
-        command = """update trades set sell_price={0},sell_time="{1}"
-        where sell_price is NULL and `interval`="{2}" and pair="{3}" """.format(float(sell_price),
-                                                                                sell_time,
-                                                                                self.interval,
-                                                                                pair)
+        command = """update trades set sell_price={0},sell_time="{1}", quote_out="{2}", base_out="{3}"
+        where sell_price is NULL and `interval`="{4}" and pair="{5}" """.format(float(sell_price),
+                                                                                sell_time, quote, 
+                                                                                base_out,
+                                                                                self.interval, pair)
         self.run_sql_query(command)
 
     @get_exceptions

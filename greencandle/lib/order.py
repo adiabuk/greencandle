@@ -6,7 +6,6 @@ Test Buy/Sell orders
 """
 
 from __future__ import print_function
-import math
 import binance
 from str2bool import str2bool
 
@@ -14,12 +13,15 @@ from .auth import binance_auth
 from .logger import getLogger, get_decorator
 from .mysql import Mysql
 from .balance import Balance
+from .balance_common import get_base
+from .common import perc_diff, add_perc
 from .alerts import send_gmail_alert, send_push_notif
 from . import config
+from collections import defaultdict
 
 GET_EXCEPTIONS = get_decorator((Exception))
 
-class Trade():
+class Trade(object):
     """Buy & Sell class"""
 
     def __init__(self, interval=None, test_data=False, test_trade=False):
@@ -47,7 +49,7 @@ class Trade():
     def buy(self, buy_list):
         """
         Buy as many items as we can from buy_list depending on max amount of trades, and current
-        balance in BTC
+        balance in base currency
         """
         self.logger.info("We have %s potential items to buy", len(buy_list))
 
@@ -59,25 +61,42 @@ class Trade():
         if buy_list:
             dbase = Mysql(test=self.test_data, interval=self.interval)
             if self.test_data or self.test_trade:
-                current_btc_bal = 37000
+                prices = defaultdict(lambda: defaultdict(defaultdict))
+
+                prices['binance']['BTC']['count'] = 0.002935
+                prices['binance']['ETH']['count'] = 0.144289
+                prices['binance']['USDT']['count'] = 30
+                prices['binance']['BNB']['count'] = 1.423817
+                for base in ['BTC', 'ETH', 'USDT', 'BNB']:
+                    result = dbase.fetch_sql_data("select sum(base_out-base_in) from trades where pair like '%{0}'".format(base), header=False)[0][0]
+                    result = float(result) if result else 0
+                    current_trade_values = dbase.fetch_sql_data("select sum(base_in) from trades where pair like '%{0}' and base_out is null".format(base), header=False)[0][0]
+                    current_trade_values = float(current_trade_values) if current_trade_values else 0
+                    prices['binance'][base]['count'] += result + current_trade_values
 
             else:
                 balance = Balance(test=False)
                 prices = balance.get_balance()
 
-                current_btc_bal = prices['binance']['BTC']['BTC']
 
             for item, current_time, current_price in buy_list:
 
+                base = get_base(item)
+                try:
+                    last_buy_price = dbase.fetch_sql_data("select base_in from trades where pair='{0}'".format(item), header=False)[-1][-1]
+                    last_buy_price = float(last_buy_price) if last_buy_price else 0
+                except IndexError:
+                    last_buy_price = 0
+                current_base_bal = prices['binance'][base]['count']
                 current_trades = dbase.get_trades()
                 avail_slots = self.max_trades - len(current_trades)
                 self.logger.info("%s buy slots available", avail_slots)
                 if avail_slots <= 0:
                     self.logger.warning("Too many trades, skipping")
                     break
-                btc_amount = current_btc_bal / avail_slots
-
-                self.logger.info("btc_amount: %s", btc_amount)
+                proposed_base_amount = current_base_bal / (self.max_trades + 1)
+                self.logger.info('item: %s, proposed: %s, last:%s',item, proposed_base_amount, last_buy_price)
+                base_amount = max(proposed_base_amount, last_buy_price)
                 cost = current_price
                 main_pairs = config.main.pairs
 
@@ -85,25 +104,28 @@ class Trade():
                     self.logger.warning("%s not in buy_list, but active trade "
                                         "exists, skipping...", item)
                     continue
-                if (btc_amount >= (current_btc_bal / self.max_trades) and avail_slots <= 5):
+                if (base_amount >= (current_base_bal / self.max_trades) and avail_slots <= 5):
                     self.logger.info("Reducing trade value by a third")
-                    btc_amount /= 1.5
+                    base_amount /= 1.5
 
-                amount = math.ceil(btc_amount / float(cost))
-                if (float(cost)*float(amount) >= float(current_btc_bal) or
-                        float(current_btc_bal) <= 0.0031):
+                amount = base_amount / float(cost)
+                if (float(cost)*float(amount) >= float(current_base_bal) or
+                        float(current_base_bal) <= 0.0031):
                     self.logger.warning("Unable to purchase %s of %s, insufficient funds:%s/%s",
-                                        amount, item, btc_amount, current_btc_bal)
+                                        amount, item, base_amount, current_base_bal)
                     continue
                 elif item in current_trades:
                     self.logger.warning("We already have a trade of %s, skipping...", item)
                     continue
                 else:
-                    self.logger.info("Buying %s of %s with %s BTC", amount, item, btc_amount)
+                    self.logger.info("Buying %s of %s with %s %s", amount, item, base_amount, base)
+                    self.logger.debug("amount to buy: %s, cost: %s, amount:%s",
+                                      base_amount, cost, amount)
                     if not self.test_data:
                         result = binance.order(symbol=item, side=binance.BUY, quantity=amount,
-                                               price=btc_amount, orderType="MARKET",
+                                               price=base_amount, orderType="MARKET",
                                                test=self.test_trade)
+
                     if self.test_data or (self.test_trade and not result) or \
                             (not self.test_trade and 'transactTime' in result):
                         # only insert into db, if:
@@ -111,7 +133,7 @@ class Trade():
                         # 2. we performed a test trade which was successful - (empty dict)
                         # 3. we proformed a real trade which was successful - (transactTime in dict)
                         dbase.insert_trade(pair=item, price=cost, date=current_time,
-                                           investment=20, total=amount)
+                                           base_amount=base_amount, quote=amount)
                     send_push_notif('BUY', item, cost)
                     send_gmail_alert("BUY", item, cost)
             del dbase
@@ -133,14 +155,20 @@ class Trade():
                     self.logger.critical("Unable to find quantity for %s", item)
                     return
                 price = current_price
+                buy_price, _, _, base_in = dbase.get_trade_value(item)[0]
+                perc_inc = perc_diff(buy_price, price)
+                base_out = add_perc(perc_inc, base_in)
+
+                self.logger.critical("AMROX base out:%s", base_out)
                 send_gmail_alert("SELL", item, price)
                 send_push_notif('SELL', item, price)
                 if not self.test_data:
                     result = binance.order(symbol=item, side=binance.SELL, quantity=quantity,
                                            price='', orderType="MARKET", test=self.test_trade)
+
                 if self.test_data or (self.test_trade and not result) or \
                         (not self.test_trade and 'transactTime' in result):
-                    dbase.update_trades(pair=item, sell_time=current_time, sell_price=price)
+                    dbase.update_trades(pair=item, sell_time=current_time, sell_price=price, quote=quantity, base_out=base_out)
 
                 else:
                     self.logger.critical("Sell Failed")
