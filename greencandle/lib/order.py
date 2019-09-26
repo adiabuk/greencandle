@@ -109,8 +109,7 @@ class Trade(object):
                     base_amount /= 1.5
 
                 amount = base_amount / float(cost)
-                if (float(cost)*float(amount) >= float(current_base_bal) or
-                        float(current_base_bal) <= 0.0031):
+                if float(cost)*float(amount) >= float(current_base_bal):
                     self.logger.warning("Unable to purchase %s of %s, insufficient funds:%s/%s",
                                         amount, item, base_amount, current_base_bal)
                     continue

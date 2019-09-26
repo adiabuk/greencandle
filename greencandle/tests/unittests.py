@@ -1,3 +1,4 @@
+#pylint: disable=wrong-import-position,no-member
 
 import unittest
 import os
@@ -17,7 +18,7 @@ class OrderedTest(unittest.TestCase):
             func(*args, **kwargs)
             self.assertFail()
         except Exception as inst:
-            self.assertEqual(inst.message, msg)    
+            self.assertEqual(inst.message, msg)
 
     def _steps(self):
         """
@@ -38,7 +39,6 @@ class OrderedTest(unittest.TestCase):
             except Exception as exc:
                 self.fail("{} failed ({}: {})".format(step, type(exc), exc))
 
-
 def make_test_case(pairs, startdate, xsum, xmax, xmin):
     class UnitRun(OrderedTest):
         """
@@ -48,18 +48,18 @@ def make_test_case(pairs, startdate, xsum, xmax, xmin):
                        * mysql/redis connection
                        * results
         """
-           
+
         def setUp(self):
             """
             Define static instance variables and create redis/mysql objects as well as working test
             directory
             """
-    
+
             self.pairs = [pairs]
             self.startdate = startdate
-            self.sum=xsum
-            self.max=xmax
-            self.min=xmin
+            self.sum = xsum
+            self.max = xmax
+            self.min = xmin
 
             self.days = 15
             self.outputdir = "/tmp/test_data"
@@ -70,19 +70,18 @@ def make_test_case(pairs, startdate, xsum, xmax, xmin):
             self.dbase = Mysql(test=True, interval=self.intervals[0])
             if not os.path.exists(self.outputdir):
                 os.mkdir(self.outputdir)
-    
-            
+
         def step_1(self):
             """
             Step 1 - get test data
             """
-    
+
             self.logger.info("Getting test data")
-    
             get_data(self.startdate, self.intervals, self.pairs, self.days, self.outputdir)
             filename = self.outputdir + '/' + self.pairs[0]+ '_' + self.intervals[0] + '.p'
+            self.logger.info("Filename: %s", filename)
             assert os.path.exists(filename) == 1
-    
+
         def step_2(self):
             """
             Step 2 - execute test run
@@ -91,7 +90,7 @@ def make_test_case(pairs, startdate, xsum, xmax, xmin):
             main_indicators = config.main.indicators.split()
             serial_test(self.pairs, self.intervals, self.outputdir, main_indicators)
             assert True
-    
+
         def step_3(self):
             """
             Step 3 - collect and compare data
@@ -100,12 +99,14 @@ def make_test_case(pairs, startdate, xsum, xmax, xmin):
             db_sum = self.dbase.fetch_sql_data("select sum(perc) from profit", header=False)[0][0]
             db_min = self.dbase.fetch_sql_data("select min(perc) from profit", header=False)[0][0]
             db_max = self.dbase.fetch_sql_data("select max(perc) from profit", header=False)[0][0]
-            self.logger.info(db_sum)
+            self.logger.info("DB_SUM: %s", db_sum)
+            self.logger.info("DB_MAX: %s", db_max)
+            self.logger.info("DB_MIN: %s", db_min)
+
             self.assertGreaterEqual(float(db_sum), self.sum)
             self.assertGreaterEqual(float(db_max), self.max)
             self.assertGreaterEqual(float(db_min), self.min)
-            
-    
+
         def tearDown(self):
             """Cleanup DB and files"""
             self.redis.clear_all()
@@ -113,7 +114,5 @@ def make_test_case(pairs, startdate, xsum, xmax, xmin):
             del self.redis
             del self.dbase
             shutil.rmtree(self.outputdir)
-    
+
     return UnitRun
-
-
