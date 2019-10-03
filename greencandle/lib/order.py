@@ -55,7 +55,7 @@ class Trade(object):
 
         drain = str2bool(config.main.drain)
         if drain and not self.test_data:
-            self.logger.warning("Skipping Buy as %s is in drain", self.interval)
+            self.logger.warning("Skip ping Buy as %s is in drain", self.interval)
             return
 
         if buy_list:
@@ -66,8 +66,9 @@ class Trade(object):
                 prices['binance']['BTC']['count'] = 0.002935
                 prices['binance']['ETH']['count'] = 0.144289
                 prices['binance']['USDT']['count'] = 30
+                prices['binance']['USDC']['count'] = 30
                 prices['binance']['BNB']['count'] = 1.423817
-                for base in ['BTC', 'ETH', 'USDT', 'BNB']:
+                for base in ['BTC', 'ETH', 'USDT', 'BNB', 'USDC']:
                     result = dbase.fetch_sql_data("select sum(base_out-base_in) from trades where pair like '%{0}'".format(base), header=False)[0][0]
                     result = float(result) if result else 0
                     current_trade_values = dbase.fetch_sql_data("select sum(base_in) from trades where pair like '%{0}' and base_out is null".format(base), header=False)[0][0]
