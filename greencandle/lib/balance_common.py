@@ -13,7 +13,7 @@ def default_to_regular(ddict):
 
 def get_base(pair):
     """Return BaseCurrency of trading pair"""
-    bases = ['USDT', 'BTC', 'ETH', 'BNB']
+    bases = ['USDT', 'USDC', 'BTC', 'ETH', 'BNB']
     try:
         return list(filter(pair.endswith, bases))[0]
     except IndexError:
