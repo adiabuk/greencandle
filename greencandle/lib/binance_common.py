@@ -96,7 +96,8 @@ def get_data(startdate, intervals, pairs, days, outputdir):
     #still end up with the exact number of lines for the days specified
     number_of_extra_klines = 200
 
-    klines_multiplier = {"4h": 240,
+    klines_multiplier = {"1d": 720,
+			 "4h": 240,
                          "2h": 120,
                          "1h": 60,
                          "30m": 30,

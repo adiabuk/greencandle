@@ -38,7 +38,7 @@ def serial_test(pairs, intervals, data_dir, indicators):
             dbase = Mysql(test=True, interval=interval)
             dbase.delete_data()
             del dbase
-            redis_db = {"4h":1, "2h":1, "1h":1, "30m":1, "15m":1, "5m":2, "3m":3, "1m":4}[interval]
+            redis_db = {"1d":1, "4h":1, "2h":1, "1h":1, "30m":1, "15m":1, "5m":2, "3m":3, "1m":4}[interval]
             redis = Redis(interval=interval, test=True, db=redis_db)
             redis.clear_all()
             del redis
@@ -50,7 +50,7 @@ def serial_test(pairs, intervals, data_dir, indicators):
 @GET_EXCEPTIONS
 def perform_data(pair, interval, data_dir, indicators):
     """Serial test loop"""
-    redis_db = {"4h":1, "2h":1, "1h":1, "30m":1, "15m":1, "5m":2, "3m":3, "1m":4}[interval]
+    redis_db = {"1d":1, "4h":1, "2h":1, "1h":1, "30m":1, "15m":1, "5m":2, "3m":3, "1m":4}[interval]
     LOGGER.debug("Serial run %s %s %s", pair, interval, redis_db)
     redis = Redis(interval=interval, test=True, db=redis_db)
     filename = glob("{0}/{1}_{2}.p*".format(data_dir, pair, interval))[0]

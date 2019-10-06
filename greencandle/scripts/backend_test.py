@@ -41,7 +41,7 @@ def main():
     parallel_interval = args.interval if args.interval else config.main.interval
     main_indicators = config.main.indicators.split()
     serial_intervals = [args.interval]
-    redis_db = {"4h":1, "2h":1, "1h":1, "30m":1, "15m":1, "5m":2, "3m":3, "1m":4}[parallel_interval]
+    redis_db = {"1d":1, "4h":1, "2h":1, "1h":1, "30m":1, "15m":1, "5m":2, "3m":3, "1m":4}[parallel_interval]
 
     dbase = Mysql(test=True, interval=parallel_interval)
     dbase.delete_data()
