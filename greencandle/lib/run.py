@@ -198,8 +198,6 @@ def prod_loop(interval, test):
     del dbase
     # get unique list of pairs in config,
     #and those currently in an active trade
-    print(type(main_pairs))
-    print(type(additional_pairs))
     pairs = list(set(main_pairs + additional_pairs))
     LOGGER.info("Pairs DB: %s", additional_pairs)
     LOGGER.info("Pairs in config: %s", main_pairs)
