@@ -166,10 +166,10 @@ CREATE TABLE `trades` (
   `interval` varchar(3) DEFAULT NULL,
   `buy_price` varchar(60) DEFAULT NULL,
   `sell_price` varchar(30) DEFAULT NULL,
-  `base_in` varchar(20) DEFAULT NULL,
+  `base_in` varchar(30) DEFAULT NULL,
   `base_out` varchar(30) DEFAULT NULL,
-  `quote_in` varchar(20) DEFAULT NULL,
-  `quote_out` varchar(20) DEFAULT NULL
+  `quote_in` varchar(30) DEFAULT NULL,
+  `quote_out` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
