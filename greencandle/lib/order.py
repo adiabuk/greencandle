@@ -164,7 +164,6 @@ class Trade():
                 perc_inc = perc_diff(buy_price, price)
                 base_out = add_perc(perc_inc, base_in)
 
-                self.logger.critical("AMROX base out:%s", base_out)
                 send_gmail_alert("SELL", item, price)
                 send_push_notif('SELL', item, price)
                 if not self.test_data:
