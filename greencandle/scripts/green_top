@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
 
-#cd "$(dirname "$0")"
+interval=$1
+
+if [[ -z $interval ]]; then
+  echo "Usage: $0 <interval>"
+  exit 1
+fi
 
 watch -cpd "get_mysql_status 1h test|column -t -c20;
             echo -e "\n\n\n\n";
-            get_recent_profit 1h test 2>&1|grep -v INFO|tail -3"
+            get_recent_profit 30m test 2>&1|grep -v INFO|tail -3"
 
