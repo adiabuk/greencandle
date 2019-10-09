@@ -60,7 +60,7 @@ DROP TABLE IF EXISTS `daily_profit`;
 /*!50001 DROP VIEW IF EXISTS `daily_profit`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `daily_profit` AS SELECT 
+/*!50001 CREATE VIEW `daily_profit` AS SELECT
  1 AS `date`,
  1 AS `interval`,
  1 AS `profit`,
@@ -89,7 +89,7 @@ DROP TABLE IF EXISTS `hour_balance`;
 /*!50001 DROP VIEW IF EXISTS `hour_balance`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `hour_balance` AS SELECT 
+/*!50001 CREATE VIEW `hour_balance` AS SELECT
  1 AS `exchange_id`,
  1 AS `usd1`,
  1 AS `coin`,
@@ -111,7 +111,7 @@ DROP TABLE IF EXISTS `profit`;
 /*!50001 DROP VIEW IF EXISTS `profit`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profit` AS SELECT 
+/*!50001 CREATE VIEW `profit` AS SELECT
  1 AS `buy_time`,
  1 AS `interval`,
  1 AS `sell_time`,
@@ -167,7 +167,7 @@ CREATE TABLE `trades` (
   `buy_price` varchar(60) DEFAULT NULL,
   `sell_price` varchar(30) DEFAULT NULL,
   `base_in` varchar(20) DEFAULT NULL,
-  `base_out` varchar(20) DEFAULT NULL,
+  `base_out` varchar(30) DEFAULT NULL,
   `quote_in` varchar(20) DEFAULT NULL,
   `quote_out` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
