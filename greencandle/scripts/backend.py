@@ -44,7 +44,7 @@ def main():
         except KeyboardInterrupt:
             LOGGER.warning("\nExiting on user command...")
             sys.exit(1)
-        remaining_time = (minutes * 60.0) - ((time.time() - starttime) % 60.0)
+        remaining_time = ((minutes * 60.0) - ((time.time() - starttime) % 60.0))/2
         LOGGER.info("Sleeping for %s seconds", remaining_time)
         time.sleep(remaining_time)
 
