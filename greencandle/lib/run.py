@@ -235,7 +235,6 @@ def prod_loop(interval, test):
             scheme['data'] = result
             scheme["event"] = "trigger"
             engine.add_scheme(scheme)
-            del engine
         ################################
 
         if result == "BUY":
@@ -247,5 +246,5 @@ def prod_loop(interval, test):
     trade = Trade(interval=interval, test_trade=test_trade, test_data=False)
     trade.sell(sells)
     trade.buy(buys)
-
+    del engine
     del redis
