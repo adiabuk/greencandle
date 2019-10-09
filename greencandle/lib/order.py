@@ -122,6 +122,11 @@ class Trade():
                     self.logger.debug("amount to buy: %s, cost: %s, amount:%s",
                                       base_amount, cost, amount)
                     if not self.test_data:
+                        # Round amount to required precision
+                        step_size = binance.exchange_info()[item]["stepSize"]
+                        precision = int(round(-math.log(step_size, 10), 0))
+                        amount = round(amount, precision)
+
                         result = binance.order(symbol=item, side=binance.BUY, quantity=amount,
                                                price='', orderType=binance.MARKET,
                                                test=self.test_trade)
