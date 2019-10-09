@@ -6,6 +6,8 @@ Test Buy/Sell orders
 """
 
 from __future__ import print_function
+from collections import defaultdict
+import math
 import binance
 from str2bool import str2bool
 
@@ -17,11 +19,9 @@ from .balance_common import get_base
 from .common import perc_diff, add_perc
 from .alerts import send_gmail_alert, send_push_notif
 from . import config
-from collections import defaultdict
-
 GET_EXCEPTIONS = get_decorator((Exception))
 
-class Trade(object):
+class Trade():
     """Buy & Sell class"""
 
     def __init__(self, interval=None, test_data=False, test_trade=False):
@@ -96,7 +96,7 @@ class Trade(object):
                     self.logger.warning("Too many trades, skipping")
                     break
                 proposed_base_amount = current_base_bal / (self.max_trades + 1)
-                self.logger.info('item: %s, proposed: %s, last:%s',item, proposed_base_amount, last_buy_price)
+                self.logger.info('item: %s, proposed: %s, last:%s', item, proposed_base_amount, last_buy_price)
                 base_amount = max(proposed_base_amount, last_buy_price)
                 cost = current_price
                 main_pairs = config.main.pairs
@@ -123,7 +123,7 @@ class Trade(object):
                                       base_amount, cost, amount)
                     if not self.test_data:
                         result = binance.order(symbol=item, side=binance.BUY, quantity=amount,
-                                               price=base_amount, orderType="MARKET",
+                                               price='', orderType=binance.MARKET,
                                                test=self.test_trade)
 
                     if self.test_data or (self.test_trade and not result) or \
@@ -134,8 +134,8 @@ class Trade(object):
                         # 3. we proformed a real trade which was successful - (transactTime in dict)
                         dbase.insert_trade(pair=item, price=cost, date=current_time,
                                            base_amount=base_amount, quote=amount)
-                    send_push_notif('BUY', item, cost)
-                    send_gmail_alert("BUY", item, cost)
+                        send_push_notif('BUY', item, cost)
+                        send_gmail_alert("BUY", item, cost)
             del dbase
         else:
             self.logger.info("Nothing to buy")
@@ -164,7 +164,7 @@ class Trade(object):
                 send_push_notif('SELL', item, price)
                 if not self.test_data:
                     result = binance.order(symbol=item, side=binance.SELL, quantity=quantity,
-                                           price='', orderType="MARKET", test=self.test_trade)
+                                           price='', orderType=binance.MARKET, test=self.test_trade)
 
                 if self.test_data or (self.test_trade and not result) or \
                         (not self.test_trade and 'transactTime' in result):
