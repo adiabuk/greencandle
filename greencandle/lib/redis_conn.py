@@ -180,9 +180,9 @@ class Redis():
             ind_list.append(ind)
 
         for indicator in ind_list:
-            results['current'][indicator] = str(self.get_result(current, indicator))
-            results['previous'][indicator] = str(self.get_result(previous, indicator))
-            results['previous1'][indicator] = str(self.get_result(previous1, indicator))
+            results['current'][indicator] = float(self.get_result(current, indicator))
+            results['previous'][indicator] = float(self.get_result(previous, indicator))
+            results['previous1'][indicator] = float(self.get_result(previous1, indicator))
         items = self.get_items(pair, self.interval)
         current = self.get_current(items[-1])
         previous = self.get_current(items[-2])
@@ -207,13 +207,13 @@ class Redis():
         # rate of Moving Average increate/decreate based on indicator
         # specified in the rate_indicator config option - best with EMA_200
         rate_indicator = config.main.rate_indicator
-        perc_rate = str(perc_diff(float(results.previous[rate_indicator]),
-                                  float(results.current[rate_indicator])))
-        rate = str(float(results.current[rate_indicator]) - float(results.previous[rate_indicator]))
+        perc_rate = float(perc_diff(float(results.previous[rate_indicator]),
+                                    float(results.current[rate_indicator])))
+        rate = float(float(results.current[rate_indicator]) - float(results.previous[rate_indicator]))
 
-        last_perc_rate = str(perc_diff(float(results.previous1[rate_indicator]),
+        last_perc_rate = float(perc_diff(float(results.previous1[rate_indicator]),
                                        float(results.previous[rate_indicator])))
-        last_rate = str(float(results.previous[rate_indicator]) -
+        last_rate = float(float(results.previous[rate_indicator]) -
                         float(results.previous1[rate_indicator]))
 
         buy_rules = []
