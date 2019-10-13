@@ -63,11 +63,11 @@ class Trade():
             if self.test_data or self.test_trade:
                 prices = defaultdict(lambda: defaultdict(defaultdict))
 
-                prices['binance']['BTC']['count'] = 0.002935
-                prices['binance']['ETH']['count'] = 0.144289
-                prices['binance']['USDT']['count'] = 30
-                prices['binance']['USDC']['count'] = 30
-                prices['binance']['BNB']['count'] = 1.423817
+                prices['binance']['BTC']['count'] = 0.00587
+                prices['binance']['ETH']['count'] = 0.288578
+                prices['binance']['USDT']['count'] = 60
+                prices['binance']['USDC']['count'] = 60
+                prices['binance']['BNB']['count'] = 2.847634
                 for base in ['BTC', 'ETH', 'USDT', 'BNB', 'USDC']:
                     result = dbase.fetch_sql_data("select sum(base_out-base_in) from trades where pair like '%{0}'".format(base), header=False)[0][0]
                     result = float(result) if result else 0
