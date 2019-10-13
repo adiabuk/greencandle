@@ -27,7 +27,7 @@ def main():
     profits = []
     percs = []
     print("\033[1m") # BOLD
-    print("pair buy_price current_price amount in_profit percentage profit direction")
+    print("pair buy_price current_price amount in_profit percentage profit")
     print("\033[0m") # END
 
 
@@ -44,16 +44,15 @@ def main():
         percs.append(perc)
         perc = float(format(perc, ".4f"))
         profit = float(format(profit, ".4f"))
-        direction = 'unknown'
         details.append((trade, format(float(buy_price), ".20f"),
                         format(float(current_price), ".20f"),
-                        amount, current_price > buy_price, perc, profit, direction))
+                        amount, current_price > buy_price, perc, profit))
 
     details = sorted(details, key=itemgetter(-2))
     for item in details:
         print("{0} {1} {2} {3} {4} {5} {6} {7}".format(*item))
 
-    print("\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n")
+    print("\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n\n\n")
     count = len(profits)
     count = 1 if count==0 else count
     print("Total_profit: {0} Avg_Profit: {1} Avg_Percs: {2} count: {3}".format(sum(profits),
