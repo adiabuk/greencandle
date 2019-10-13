@@ -68,7 +68,7 @@ services:
       - mysql
       - redis
     environment:
-      - CONFIG_ENV=test
+      - CONFIG_ENV=test/4MA
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
