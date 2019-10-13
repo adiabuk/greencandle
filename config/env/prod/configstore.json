@@ -170,6 +170,11 @@
       "is_binary": false,
       "is_secret": false
     },
+    "push_title": {
+      "value": "prod",
+      "is_binary": false,
+      "is_secret": false
+    },
     "rate_indicator": {
       "value": "EMA_200",
       "is_binary": false,
