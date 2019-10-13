@@ -54,7 +54,8 @@ def send_push_notif(*args):
         return
     host = config.push.host
     channel = config.push.channel
-    text = ' '.join(str(item) for item in args)
+    title = config.push.title
+    text = title + ' ' + ' '.join(str(item) for item in args)
     notify = notify_run.Notify(channel)
 
     notify.endpoint = 'https://{0}/{1}'.format(host, channel)
