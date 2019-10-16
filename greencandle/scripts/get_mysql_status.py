@@ -50,7 +50,7 @@ def main():
 
     details = sorted(details, key=itemgetter(-2))
     for item in details:
-        print("{0} {1} {2} {3} {4} {5} {6} {7}".format(*item))
+        print("{0} {1} {2} {3} {4} {5} {6}".format(*item))
 
     print("\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n\n\n")
     count = len(profits)
