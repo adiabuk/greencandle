@@ -10,7 +10,6 @@ import pickle
 import gzip
 from concurrent.futures import ThreadPoolExecutor
 from glob import glob
-from pathlib import Path
 import binance
 from str2bool import str2bool
 from .engine import Engine
@@ -207,7 +206,6 @@ def prod_loop(interval, test):
     test_trade = test if test else str2bool(config.main.test_trade)
 
     LOGGER.info("Starting new cycle")
-    Path('/var/run/greencandle').touch()
     LOGGER.debug("max trades: %s", max_trades)
 
     prices = binance.prices()

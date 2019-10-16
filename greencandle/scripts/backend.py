@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # PYTHON_ARGCOMPLETE_OK
-# pylint: disable=broad-except,no-member,too-many-locals,wrong-import-position
+# pylint: disable=broad-except,no-member,too-many-locals,wrong-import-position,unused-variable
 
 """
 Get ohlc (Open, High, Low, Close) values from given cryptos
@@ -8,12 +8,12 @@ and detect trends using candlestick patterns
 """
 
 import argparse
-import time
 import sys
-import re
+from pathlib import Path
 import argcomplete
 import setproctitle
 
+from apscheduler.schedulers.blocking import BlockingScheduler
 from str2bool import str2bool
 from ..lib import config
 config.create_config()
@@ -32,22 +32,39 @@ def main():
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
 
-    starttime = time.time()
     interval = args.interval if args.interval else str(config.main.interval)
-    minutes = [int(s) for s in re.findall(r'(\d+)[mhd]', interval)][0]
     drain = str2bool(config.main.drain)
     drain_string = "(draining)" if drain else "(active)"
     setproctitle.setproctitle("greencandle-backend_{0}{1}".format(interval, drain_string))
-    while True:
-        try:
-            prod_loop(interval, args.test)
-        except KeyboardInterrupt:
-            LOGGER.warning("\nExiting on user command...")
-            sys.exit(1)
-        remaining_time = ((minutes * 60.0) - ((time.time() - starttime) % 60.0))/2
-        LOGGER.info("Sleeping for %s seconds", remaining_time)
-        time.sleep(remaining_time)
 
+    prod_loop(interval, args.test) # initial run, before scheduling begins
+
+    times = {"30m": "01,31",
+             "1h": "01",
+             "15m": "01,31,46",
+             "5m": "01,06,11,16,21,26,31,36,41,46,51,56",
+             "3m": "01,04,07,10,13,16,19,22,25,28,31,34,37,40,43,46,49,52,55,58",
+             "2h": "01",
+             "3h": "01",
+            }
+
+    sched = BlockingScheduler()
+
+    @sched.scheduled_job('interval', seconds=60)
+    def timed_job():
+        Path('/var/run/greencandle').touch()
+
+    @sched.scheduled_job('cron', minute=times[interval])
+    def scheduled_job():
+        LOGGER.info("Starting prod run")
+        prod_loop(interval, args.test)
+        LOGGER.info("Finished prod run")
+
+    try:
+        sched.start()
+    except KeyboardInterrupt:
+        LOGGER.warning("\nExiting on user command...")
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
