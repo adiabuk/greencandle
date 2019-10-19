@@ -49,6 +49,7 @@ class Redis():
         self.conn = redis.StrictRedis(connection_pool=pool)
         self.dbase = Mysql(test=test, interval=interval)
 
+
     def __del__(self):
         del self.dbase
 
@@ -160,6 +161,28 @@ class Redis():
         else:
             self.logger.info(message)
         self.logger.debug("%s, %s", message, current)
+
+    def get_intermittant(self, pair, buy_price, current_price):
+        """
+        Check if price between intervals and sell if matches stop_loss or take_profit rules
+        """
+
+        stop_loss_perc = float(config.main["stop_loss_perc"])
+        take_profit_perc = float(config.main["take_profit_perc"])
+        stop_loss_rule = float(current_price) < sub_perc(stop_loss_perc, buy_price)
+        take_profit_rule = float(current_price) > add_perc(take_profit_perc, buy_price)
+
+        current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
+        if stop_loss_rule and buy_price:
+            message = "StopLoss intermittant"
+            self.logger.info(message)
+            return ('SELL', current_time, current_price)
+        elif take_profit_rule and buy_price:
+            message = "TakeProfit intermittant"
+            self.logger.info(message)
+            return ('SELL', current_time, current_price)
+        else:
+            return ('HOLD', current_time, current_price)
 
     def get_action(self, pair, interval):
         """Determine if we are in a BUY/HOLD/SELL situration for a specific pair and interval"""

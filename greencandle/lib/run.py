@@ -186,6 +186,26 @@ def parallel_test(pairs, interval, redis_db, data_dir, indicators):
 
     print(get_recent_profit(True, interval=interval))
 
+def prod_int_check(interval):
+    prices = binance.prices()
+    dbase = Mysql(test=False, interval=interval)
+    current_trades = dbase.get_trades()
+    redis = Redis(interval=interval, test=False, db=0)
+    current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
+    sells = []
+    for pair in current_trades:
+        buy_price = dbase.get_trade_value(pair)[0][0]
+        result, current_price, current_time = redis.get_intermittant(pair, buy_price=buy_price, current_price=prices[pair])
+        current_price = dbase.get_trade_value(pair)[0][0]
+        if result == "SELL":
+            LOGGER.debug("Items to sell")
+            sells.append((pair, current_time, current_price))
+
+    trade = Trade(interval=interval, test_trade=False, test_data=False)
+    trade.sell(sells)
+    del redis
+    del dbase
+
 def prod_loop(interval, test):
     """
     Loop through collection cycle (PROD)
@@ -196,7 +216,7 @@ def prod_loop(interval, test):
     additional_pairs = dbase.get_trades()
     del dbase
     # get unique list of pairs in config,
-    #and those currently in an active trade
+    # and those currently in an active trade
     pairs = list(set(main_pairs + additional_pairs))
     LOGGER.info("Pairs DB: %s", additional_pairs)
     LOGGER.info("Pairs in config: %s", main_pairs)

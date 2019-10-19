@@ -18,7 +18,7 @@ from str2bool import str2bool
 from ..lib import config
 config.create_config()
 from ..lib.logger import getLogger
-from ..lib.run import prod_loop
+from ..lib.run import prod_loop, prod_int_check
 
 LOGGER = getLogger(__name__, config.main.logging_level)
 
@@ -37,7 +37,9 @@ def main():
     drain_string = "(draining)" if drain else "(active)"
     setproctitle.setproctitle("greencandle-backend_{0}{1}".format(interval, drain_string))
 
+    LOGGER.info("Starting initial prod run")
     prod_loop(interval, args.test) # initial run, before scheduling begins
+    LOGGER.info("Finished initial prod run")
 
     times = {"30m": "01,31",
              "1h": "01",
@@ -51,11 +53,17 @@ def main():
     sched = BlockingScheduler()
 
     @sched.scheduled_job('interval', seconds=60)
-    def timed_job():
+    def get_price():
+        LOGGER.info("Starting Price check")
+        prod_int_check(interval)
+        LOGGER.info("Finished Price check")
+
+    @sched.scheduled_job('interval', seconds=60)
+    def keepalive():
         Path('/var/run/greencandle').touch()
 
     @sched.scheduled_job('cron', minute=times[interval])
-    def scheduled_job():
+    def prod_run():
         LOGGER.info("Starting prod run")
         prod_loop(interval, args.test)
         LOGGER.info("Finished prod run")
