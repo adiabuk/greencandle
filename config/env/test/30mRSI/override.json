@@ -8,7 +8,7 @@
   "buy_rule7": "",
   "indicators": "get_moving_averages;EMA;5 get_rsi;RSI;2",
   "interval": "30m",
-  "pairs": "ETHUSDT BTCUSDT BNBUSDT LINKUSDT EOSUSDT BCHABCUSDT LTCUSDT BTTUSDT",
+  "pairs": "ETHUSDT BTCUSDT BNBUSDT LINKUSDT EOSUSDT BCHABCUSDT LTCUSDT BTTUSDT XRPUSDT LINKUSDT",
   "push_title": "4MA",
   "rate_indicator": "EMA_5",
   "sell_rule1": "close \u003e results.current.EMA5",
@@ -18,6 +18,6 @@
   "sell_rule5": "",
   "sell_rule6": "",
   "sell_rule7": "",
-  "stop_loss_perc": "3",
-  "take_profit_perc": "6"
+  "stop_loss_perc": "1.5",
+  "take_profit_perc": "3"
 }
