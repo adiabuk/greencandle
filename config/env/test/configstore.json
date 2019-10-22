@@ -1,14 +1,15 @@
 {
   "version": 3,
-  "region": "",
+  "region": "eu-west-1",
   "role": "",
-  "is_insecure": true,
-  "data_key": "OfvuQJ0Cis1CvnFV2KTTYv3WCPKXOIord3OBDc0kwcU=",
+  "is_insecure": false,
+  "data_key": "AQIDAHh86o+e1l3vhl3F7Gn0lhwL0nWY7Q8sBy8abugAZ50HlgHWXTb+opwnlclDUETECOxJAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQM8slMBA6Za+7SeKqrAgEQgDucEV1NZqtJm9nemfnGa4IY+Ib5AyopYDA6eUDaAXQUh6dvkhOgxd4Q6JGgzCtIjxDI0IyiADFqABAVDQ==",
+  "master_key_id": "alias/greencandle",
   "data": {
     "binance_key": {
-      "value": "x",
+      "value": "ojdpCwoEMEHKl74+O7/QCofTlEE=",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "binance_secret": {
       "value": "x",
