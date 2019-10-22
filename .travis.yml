@@ -6,7 +6,6 @@ install:
   - sudo bash bootstrap.sh
 
 script:
-  - sudo configstore package process_templates test/unit /etc
   - sudo docker-compose up -d mysql redis
   - sudo docker ps
   - sudo docker-compose run greencandle-unittest
