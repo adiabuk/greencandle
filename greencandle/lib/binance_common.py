@@ -170,7 +170,7 @@ def get_dataframe(pair, interval):
     Returns:
         A truple containing full pandas dataframe and a tuple of float values
     """
-    dataframe = get_binance_klines(pair, interval=interval)
+    dataframe = get_binance_klines(pair, interval=interval, limit=int(config.main.no_of_klines))
     return dataframe
 
 def get_dataframes(pairs, interval=None):
