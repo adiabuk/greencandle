@@ -1,3 +1,4 @@
+APScheduler==3.6.1
 argcomplete>=1.9.3
 coinbase==2.0.6
 configparser==3.5.0
