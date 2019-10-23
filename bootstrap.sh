@@ -9,13 +9,14 @@ fi
 
 # Setup local env
 apt-get -y update
-apt-get -y install docker.io ntpdate mysql-client screen atop jq iotop
+apt-get -y install docker.io ntpdate mysql-client screen atop jq iotop ntp
 curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 
-sudo systemctl unmask docker.service
-sudo systemctl unmask docker.socket
-sudo systemctl start docker.service
+systemctl start ntp
+systemctl unmask docker.service
+systemctl unmask docker.socket
+systemctl start docker.service
 
 usermod -aG docker ubuntu || true
 
