@@ -148,7 +148,7 @@ class Redis():
     def get_result(self, item, indicator):
         """Retrive decoded OHLC data from redis"""
         try:
-            return ast.literal_eval(self.get_item(item, indicator).decode())['result']
+            return float(ast.literal_eval(self.get_item(item, indicator).decode())['result'])
         except AttributeError:
             return None
 
@@ -203,9 +203,9 @@ class Redis():
             ind_list.append(ind)
 
         for indicator in ind_list:
-            results['current'][indicator] = float(self.get_result(current, indicator))
-            results['previous'][indicator] = float(self.get_result(previous, indicator))
-            results['previous1'][indicator] = float(self.get_result(previous1, indicator))
+            results['current'][indicator] = self.get_result(current, indicator)
+            results['previous'][indicator] = self.get_result(previous, indicator)
+            results['previous1'][indicator] = self.get_result(previous1, indicator)
         items = self.get_items(pair, self.interval)
         current = self.get_current(items[-1])
         previous = self.get_current(items[-2])
@@ -231,13 +231,13 @@ class Redis():
         # specified in the rate_indicator config option - best with EMA_200
         rate_indicator = config.main.rate_indicator
         perc_rate = float(perc_diff(float(results.previous[rate_indicator]),
-                                    float(results.current[rate_indicator])))
-        rate = float(float(results.current[rate_indicator]) - float(results.previous[rate_indicator]))
+                                    float(results.current[rate_indicator]))) if results.previous[rate_indicator] else 0
+        rate = float(float(results.current[rate_indicator]) - float(results.previous[rate_indicator])) if results.previous[rate_indicator] else 0
 
         last_perc_rate = float(perc_diff(float(results.previous1[rate_indicator]),
-                                       float(results.previous[rate_indicator])))
+                                       float(results.previous[rate_indicator]))) if results.previous1[rate_indicator] else 0
         last_rate = float(float(results.previous[rate_indicator]) -
-                        float(results.previous1[rate_indicator]))
+                        float(results.previous1[rate_indicator])) if results.previous1[rate_indicator] else 0
 
         buy_rules = []
         sell_rules = []
