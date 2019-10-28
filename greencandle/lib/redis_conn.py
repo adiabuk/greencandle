@@ -215,14 +215,15 @@ class Redis():
         last_rehydrated = pickle.loads(zlib.decompress(previous[-1]))
 
         # variables that can be referenced in config file
-        open = rehydrated.open
-        high = rehydrated.high
-        low = rehydrated.low
-        close = rehydrated.close
-        last_open = last_rehydrated.open
-        last_high = last_rehydrated.high
-        last_low = last_rehydrated.low
-        last_close = last_rehydrated.close
+        open = float(rehydrated.open)
+        high = float(rehydrated.high)
+        low = float(rehydrated.low)
+        close = float(rehydrated.close)
+        trades = float(rehydrated.numTrades)
+        last_open = float(last_rehydrated.open)
+        last_high = float(last_rehydrated.high)
+        last_low = float(last_rehydrated.low)
+        last_close = float(last_rehydrated.close)
 
         current_price = float(close)
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_mepoch))
