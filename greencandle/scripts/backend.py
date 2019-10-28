@@ -55,7 +55,7 @@ def main():
     @sched.scheduled_job('interval', seconds=60)
     def get_price():
         LOGGER.info("Starting Price check")
-        prod_int_check(interval)
+        prod_int_check(interval, args.test)
         LOGGER.info("Finished Price check")
 
     @sched.scheduled_job('interval', seconds=60)

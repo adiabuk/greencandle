@@ -186,7 +186,7 @@ def parallel_test(pairs, interval, redis_db, data_dir, indicators):
 
     print(get_recent_profit(True, interval=interval))
 
-def prod_int_check(interval):
+def prod_int_check(interval, test):
     prices = binance.prices()
     dbase = Mysql(test=False, interval=interval)
     current_trades = dbase.get_trades()
@@ -202,7 +202,7 @@ def prod_int_check(interval):
             LOGGER.debug("Items to sell")
             sells.append((pair, current_time, current_price))
 
-    trade = Trade(interval=interval, test_trade=False, test_data=False)
+    trade = Trade(interval=interval, test_trade=test, test_data=False)
     trade.sell(sells)
     del redis
     del dbase
