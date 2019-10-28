@@ -152,10 +152,10 @@ class Redis():
         except AttributeError:
             return None
 
-    def log_event(self, event, rate, buy, sell, pair, current_time, current):
+    def log_event(self, event, rate, perc_rate, buy, sell, pair, current_time, current):
         """Send event data to logger"""
-        message = 'EVENT:({0}) {1} rate:{2} buy:{3} sell:{4}, time:{5}'.format(
-            pair, event, format(float(rate), ".2f"), buy, sell, current_time)
+        message = 'EVENT:({0}) {1} rate:{2} perc_rate:{3} buy:{4} sell:{5}, time:{6}'.format(
+            pair, event, format(float(rate), ".2f"), format(float(perc_rate), ".2f"), buy, sell, current_time)
         if event == "Hold":
             self.logger.debug(message)
         else:
@@ -243,6 +243,7 @@ class Redis():
         sell_rules = []
         for seq in range(1, 10):
             try:
+                self.logger.debug(config.main['buy_rule{}'.format(seq)])
                 buy_rules.append(eval(config.main['buy_rule{}'.format(seq)]))
             except (KeyError, TypeError):
                 pass
@@ -276,12 +277,12 @@ class Redis():
 
         # if we match stop_loss rule and are in a trade
         if stop_loss_rule and buy_price:
-            self.log_event('StopLoss', rate, buy_price, sub_perc(stop_loss_perc, buy_price),
+            self.log_event('StopLoss', rate, perc_rate, buy_price, sub_perc(stop_loss_perc, buy_price),
                            pair, current_time, results.current)
             return ('SELL', current_time, current_price)
         # if we match take_profit rule and are in a trade
         elif take_profit_rule and buy_price:
-            self.log_event('TakeProfit', rate, buy_price, current_price, pair,
+            self.log_event('TakeProfit', rate, perc_rate, buy_price, current_price, pair,
                            current_time, results.current)
             return ('SELL', current_time, current_price)
         # if we match any sell rules and are in a trade
@@ -292,18 +293,19 @@ class Redis():
                 if sell_rule:
                     winning_rules.append(seq + 1)
 
-            self.log_event('NormalSell', rate, buy_price, current_price, pair, current_time,
+            self.log_event('NormalSell', rate, perc_rate, buy_price, current_price, pair, current_time,
                            results.current)
             self.logger.info('Sell Rules matched: %s', winning_rules)
 
             return ('SELL', current_time, current_price)
         # if we match all buy rules and are NOT in a trade
         elif all(buy_rules) and not buy_price:
-            self.log_event('NormalBuy', rate, current_price, current_price, pair, current_time,
+            self.log_event('NormalBuy', rate, perc_rate, current_price, current_price, pair, current_time,
                            results.current)
+            self.logger.debug("Close: {0}, Previous Close: {1}, >: {2}".format(close, last_close, close > last_close))
             return ('BUY', current_time, current_price)
         elif buy_price:
-            self.log_event('Hold', rate, buy_price, current_price, pair, current_time,
+            self.log_event('Hold', rate, perc_rate, buy_price, current_price, pair, current_time,
                            results.current)
             return ('HOLD', current_time, current_price)
         else:
