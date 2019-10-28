@@ -95,7 +95,7 @@ class Graph():
                               y=value['value'],
                               name=name)
                 row = 2
-            elif 'SHOOTINGSTAR' in name:
+            elif 'SHOOTINGSTAR' in name or 'SPINNINGTOP' in name:
                 item = go.Bar(x=value['date'],
                               y=value['value'],
                               name=name)
