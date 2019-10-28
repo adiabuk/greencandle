@@ -315,6 +315,43 @@ class Engine(dict):
         LOGGER.debug("Done getting RSI")
 
     @get_exceptions
+    def get_hma(self, pair, localconfig=None):
+        """
+        Calculate Hull Moving Average using Weighted Moving Average
+        """
+        klines = self.ohlcs[pair]
+        func, timeperiod = localconfig
+        close = klines[-1]
+        first = talib.WMA(close, int(timeperiod)/2)
+        second = talib.WMA(close, int(timeperiod))
+
+        result = talib.WMA((2 * first) - second, round(math.sqrt(int(timeperiod))))[-1]
+        trigger = "BUY"
+        if result > close[-1]:
+            trigger = "SELL"
+        else:
+            trigger = "BUY"
+        scheme = {}
+
+        try:
+            current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
+            close_time = str(self.dataframes[pair].iloc[-1]["closeTime"])
+            data = {func+"_"+str(timeperiod):{"result": format(float(result), ".20f"),
+                                              "current_price":current_price,
+                                              "date":close_time,
+                                              "action":self.get_action(trigger)}}
+            scheme["data"] = result
+            scheme["symbol"] = pair
+            scheme["event"] = func+"_"+str(timeperiod)
+
+            self.add_scheme(scheme)
+        except KeyError as exc:
+            LOGGER.critical("KEY FAILURE in moving averages: %s ", str(exc))
+
+        LOGGER.debug("done getting moving averages")
+
+
+    @get_exceptions
     def get_moving_averages(self, pair, localconfig=None):
         """
         Apply moving averages to klines and get BUY/SELL triggers
@@ -446,6 +483,7 @@ class Engine(dict):
                   "ENGULFING": {-100:"SELL", 100:"BUY", 0:"HOLD"},
                   "MORNINGSTAR": {-100:"SELL", 100:"BUY", 0:"HOLD"},
                   "SHOOTINGSTAR": {-100:"SELL", 100:"BUY", 0:"HOLD"},
+                  "SPINNINGTOP": {-100:"SELL", 100:"BUY", 0:"HOLD"},
                   "MARUBOZU": {-100:"SELL", 100:"BUY", 0:"HOLD"},
                   "DOJI": {100: "HOLD", 0:"HOLD"}}
 
@@ -455,7 +493,7 @@ class Engine(dict):
         LOGGER.debug("SHOOTING STAR: %s: time:%s", result, close_time)
         scheme["data"] = result   # convert from array to list
         scheme["symbol"] = pair
-        scheme["event"] = "{0}_{1}".format(func,timeperiod)
+        scheme["event"] = "{0}_{1}".format(func, timeperiod)
 
         self.add_scheme(scheme)
 
