@@ -47,6 +47,7 @@ class Mysql():
         """
         Execute query on MYSQL DB - if fail, then try reconnecting and retry the operation
         """
+        self.logger.debug("Running Mysql command: %s", command)
         cur.execute(command)
         self.dbase.commit()
 
