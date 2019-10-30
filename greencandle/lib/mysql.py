@@ -136,6 +136,17 @@ class Mysql():
         row = [item[0] for item in cur.fetchall()]
         return row[0] if row else None # There should only be one open trade, so return first item
 
+    def get_last_close_time(self, pair):
+        """
+        Get time we closed last trade
+        """
+        cur = self.dbase.cursor()
+        command = """select sell_time,pair from trades where pair="{0}"
+                     and interval = "{1}" and sell_time != '0000-00-00 00:00:00'
+                     order by sell_time desc LIMIT 1; """.format(pair, interval)
+        self.execute(cur, command)
+        return cur.fetchall()
+
     @get_exceptions
     def get_trade_value(self, pair):
         """
@@ -190,7 +201,7 @@ class Mysql():
         self.logger.info("Selling %s for %s", pair, self.interval)
         command = """update trades set sell_price={0},sell_time="{1}", quote_out="{2}", base_out="{3}"
         where sell_price is NULL and `interval`="{4}" and pair="{5}" """.format(float(sell_price),
-                                                                                sell_time, quote, 
+                                                                                sell_time, quote,
                                                                                 base_out,
                                                                                 self.interval, pair)
         self.run_sql_query(command)
