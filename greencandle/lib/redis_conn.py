@@ -80,6 +80,29 @@ class Redis():
             self.conn.expire(key, expiry)
         return response
 
+    def put_high_price(self, pair, interval, price):
+        """
+        update high price if current price is
+        higher then previously stored value
+        """
+        key = 'highClose_{0}_{1}'.format(pair, interval)
+
+        last_price = self.conn.get(key)
+        if not last_price or float(price) > float(last_price):
+            self.conn.set(key, price)
+
+    def get_high_price(self, pair, interval):
+        """get current highest price for pair and interval"""
+        key = 'highClose_{0}_{1}'.format(pair, interval)
+        last_price = float(self.conn.get(key))
+        return last_price
+
+    def del_high_price(self, pair, interval):
+        """Delete highest price in redis"""
+        key = 'highClose_{0}_{1}'.format(pair, interval)
+        result = self.conn.delete(key)
+        self.logger.debug("Deleting high price, result:%s", result)
+
     def get_items(self, pair, interval):
         """
         Get sorted list of keys for a trading pair/interval
@@ -155,7 +178,9 @@ class Redis():
     def log_event(self, event, rate, perc_rate, buy, sell, pair, current_time, current):
         """Send event data to logger"""
         message = 'EVENT:({0}) {1} rate:{2} perc_rate:{3} buy:{4} sell:{5}, time:{6}'.format(
-            pair, event, format(float(rate), ".2f"), format(float(perc_rate), ".2f"), buy, sell, current_time)
+            pair, event, format(float(rate), ".4f"), format(float(perc_rate), ".4f"),
+            buy, sell, current_time)
+
         if event == "Hold":
             self.logger.debug(message)
         else:
@@ -187,9 +212,9 @@ class Redis():
     def get_action(self, pair, interval):
         """Determine if we are in a BUY/HOLD/SELL situration for a specific pair and interval"""
         results = AttributeDict(current=AttributeDict(), previous=AttributeDict(),
-                                previous1=AttributeDict())
+                                previous1=AttributeDict(), previous2=AttributeDict(), previous3=AttributeDict())
         try:
-            previous1, previous, current = self.get_items(pair=pair, interval=interval)[-3:]
+            previous3, previous2, previous1, previous, current = self.get_items(pair=pair, interval=interval)[-5:]
         except ValueError:
             return ('HOLD', 'Not enough data', 0)
 
@@ -206,6 +231,8 @@ class Redis():
             results['current'][indicator] = self.get_result(current, indicator)
             results['previous'][indicator] = self.get_result(previous, indicator)
             results['previous1'][indicator] = self.get_result(previous1, indicator)
+            results['previous2'][indicator] = self.get_result(previous2, indicator)
+            results['previous3'][indicator] = self.get_result(previous3, indicator)
         items = self.get_items(pair, self.interval)
         current = self.get_current(items[-1])
         previous = self.get_current(items[-2])
@@ -220,16 +247,21 @@ class Redis():
         low = float(rehydrated.low)
         close = float(rehydrated.close)
         trades = float(rehydrated.numTrades)
+
         last_open = float(last_rehydrated.open)
         last_high = float(last_rehydrated.high)
         last_low = float(last_rehydrated.low)
         last_close = float(last_rehydrated.close)
+        last_trades = float(last_rehydrated.numTrades)
 
         current_price = float(close)
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_mepoch))
 
+        # Store/update highest price
+        self.put_high_price(pair, interval, current_price)
+
         # rate of Moving Average increate/decreate based on indicator
-        # specified in the rate_indicator config option - best with EMA_200
+        # specified in the rate_indicator config option - best with EMA_500
         rate_indicator = config.main.rate_indicator
         perc_rate = float(perc_diff(float(results.previous[rate_indicator]),
                                     float(results.current[rate_indicator]))) if results.previous[rate_indicator] else 0
@@ -261,7 +293,24 @@ class Redis():
         try:
             # function returns an empty list if no results so cannot get first element
             buy_price = float(self.dbase.get_trade_value(pair)[0][0])
-            stop_loss_rule = current_price < sub_perc(stop_loss_perc, buy_price)
+
+            if str2bool(config.main["trailing_stop_loss"]):
+                high_price = self.get_high_price(pair, interval)
+                take_profit_price = add_perc(take_profit_perc, buy_price)
+
+
+                trailing_perc = float(config.main["trailing_stop_loss_perc"])
+                if high_price > take_profit_price:
+                    trailing_stop = current_price < sub_perc(trailing_perc, high_price)
+                else:
+                    trailing_stop = False
+            else:
+                trailing_stop = False
+                high_price = buy_price
+
+            main_stop = current_price < sub_perc(stop_loss_perc, buy_price)
+            stop_loss_rule = main_stop or trailing_stop
+
             take_profit_rule = current_price > add_perc(take_profit_perc, buy_price)
 
         except (IndexError, ValueError):
@@ -278,14 +327,17 @@ class Redis():
 
         # if we match stop_loss rule and are in a trade
         if stop_loss_rule and buy_price:
+            self.logger.warning("StopLoss: buy_price:%s high_price:%s", buy_price, high_price)
             self.log_event('StopLoss', rate, perc_rate, buy_price, sub_perc(stop_loss_perc, buy_price),
                            pair, current_time, results.current)
+            self.del_high_price(pair, interval)
             return ('SELL', current_time, current_price)
         # if we match take_profit rule and are in a trade
-        elif take_profit_rule and buy_price:
-            self.log_event('TakeProfit', rate, perc_rate, buy_price, current_price, pair,
-                           current_time, results.current)
-            return ('SELL', current_time, current_price)
+        #elif take_profit_rule and buy_price:
+        #    self.log_event('TakeProfit', rate, perc_rate, buy_price, current_price, pair,
+        #                   current_time, results.current)
+        #    self.del_high_price(pair, interval)
+        #    return ('SELL', current_time, current_price)
         # if we match any sell rules and are in a trade
         elif any(sell_rules) and buy_price:
             winning_rules = []
@@ -298,11 +350,16 @@ class Redis():
                            results.current)
             self.logger.info('Sell Rules matched: %s', winning_rules)
 
+            self.del_high_price(pair, interval)
             return ('SELL', current_time, current_price)
         # if we match all buy rules and are NOT in a trade
         elif all(buy_rules) and not buy_price:
             self.log_event('NormalBuy', rate, perc_rate, current_price, current_price, pair, current_time,
                            results.current)
+
+            # delete and re-store high price
+            self.del_high_price(pair, interval)
+            self.put_high_price(pair, interval, current_price)
             self.logger.debug("Close: {0}, Previous Close: {1}, >: {2}".format(close, last_close, close > last_close))
             return ('BUY', current_time, current_price)
         elif buy_price:
