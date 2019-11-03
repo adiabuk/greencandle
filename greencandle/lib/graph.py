@@ -75,38 +75,44 @@ class Graph():
                                       low=value.low,
                                       close=value.close,
                                       name=self.pair)
+
             elif name == 'event':
                 # dataframe is mutable so we cannot reference exisiting values by hashing
                 # therefore we will substitute buy/sell with and rgb value for red/green
                 event = value.replace('SELL', 'rgb(255,0,0)').replace('BUY', 'rgb(0,255,0)')
-                item = go.Scatter(x=event['date'],
+                item = go.Scatter(x=pandas.to_datetime(event["date"], unit="ms"),
                                   y=event['current_price'],
                                   name="events",
                                   mode='markers',
                                   marker=dict(size=16, color=event['result']))
+
             elif 'RSI' in name:
-                item = go.Bar(x=value['date'],
+                item = go.Bar(x=pandas.to_datetime(value["date"], unit="ms"),
                               y=value['value'],
                               name=name)
                 row = 2
                 # add rsi graph in second subply (below) if it exists
+
             elif 'STOCHF' in name:
-                item = go.Bar(x=value['date'],
+                item = go.Bar(x=pandas.to_datetime(value["date"], unit="ms"),
                               y=value['value'],
                               name=name)
                 row = 2
+
             elif 'SHOOTINGSTAR' in name or 'SPINNINGTOP' in name:
-                item = go.Bar(x=value['date'],
+                item = go.Bar(x=pandas.to_datetime(value["date"], unit="ms"),
                               y=value['value'],
                               name=name)
                 row = 2
+
             elif 'Sup_Res' in name:
-                item = go.Scatter(x=value['date'],
+                item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=value['value'],
                                   mode='markers',
                                   name="Resistance")
+
             else:
-                item = go.Scatter(x=value['date'],
+                item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=value['value'],
                                   name=name)
 
