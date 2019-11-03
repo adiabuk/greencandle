@@ -22,7 +22,7 @@ from .logger import getLogger, get_decorator
 
 from . import config
 LOGGER = getLogger(__name__, config.main.logging_level)
-CHUNK_SIZE = 200
+CHUNK_SIZE = int(config.main.no_of_klines)
 GET_EXCEPTIONS = get_decorator((Exception))
 
 @GET_EXCEPTIONS
