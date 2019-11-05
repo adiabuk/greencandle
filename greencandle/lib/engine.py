@@ -1,5 +1,5 @@
 #pylint: disable=no-member,consider-iterating-dictionary,broad-except,
-#pylint: disable=unused-variable,possibly-unused-variable
+#pylint: disable=unused-variable,possibly-unused-variable,redefining-builtin
 
 """
 Module for collecting price data and creating TA results
@@ -334,12 +334,6 @@ class Engine(dict):
         scheme = {}
 
         try:
-            current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
-            close_time = str(self.dataframes[pair].iloc[-1]["closeTime"])
-            data = {func+"_"+str(timeperiod):{"result": format(float(result), ".20f"),
-                                              "current_price":current_price,
-                                              "date":close_time,
-                                              "action":self.get_action(trigger)}}
             scheme["data"] = result
             scheme["symbol"] = pair
             scheme["event"] = func+"_"+str(timeperiod)
@@ -375,19 +369,10 @@ class Engine(dict):
             result = getattr(talib, func)(close, int(timeperiod))[-1]
         except Exception as exc:
             LOGGER.critical("Overall Exception getting moving averages: %s", exc)
-        if result > close[-1]:
-            trigger = "SELL"
-        else:
-            trigger = "BUY"
+
         scheme = {}
         result = str(0.0) if math.isnan(result) else format(float(result), ".20f")
         try:
-            current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
-            close_time = str(self.dataframes[pair].iloc[-1]["closeTime"])
-            data = {func+"_"+str(timeperiod):{"result": format(float(result), ".20f"),
-                                              "current_price":current_price,
-                                              "date":close_time,
-                                              "action":self.get_action(trigger)}}
             scheme["data"] = result
             scheme["symbol"] = pair
             scheme["event"] = func+"_"+str(timeperiod)
@@ -438,26 +423,21 @@ class Engine(dict):
                 li.append(locals()[i])
 
             fastk, fastd = getattr(talib, func)(high, low, close, int(timeperiod))
-            #result = getattr(talib, func)(close, int(timeperiod))[-1]
+
         except Exception as error:
             traceback.print_exc()
             LOGGER.critical("failed getting oscillators: %s", str(error))
             return
 
-        current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
-        close_time = str(self.dataframes[pair].iloc[-1]["closeTime"])
         result = fastk[-1]
         try:
-            data = {check:{"result": result,
-                           "date": close_time,
-                           "current_price":current_price}}
             scheme["data"] = result
             scheme["symbol"] = pair
             scheme["event"] = '{}_{}'.format(func, timeperiod)
             self.add_scheme(scheme)
 
-        except KeyError as e:
-            LOGGER.critical("Key failure while getting oscillators: %s", str(e))
+        except KeyError as error:
+            LOGGER.critical("Key failure while getting oscillators: %s", str(error))
         LOGGER.debug("Done getting Oscillators")
 
     @get_exceptions
@@ -524,8 +504,8 @@ class Engine(dict):
         supertrend = SuperTrend(mine, int(timeframe), int(multiplier))
         df_list = supertrend["STX_{0}_{1}".format(timeframe, multiplier)].tolist()
 
-        scheme["symbol"] = pair
         scheme["data"] = self.get_supertrend_direction(df_list[-1])[0]
+        scheme["symbol"] = pair
         scheme["event"] = "Supertrend_{0},{1}".format(timeframe, multiplier)
         self.add_scheme(scheme)
         LOGGER.debug("done getting supertrend")
