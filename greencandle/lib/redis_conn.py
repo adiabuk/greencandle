@@ -253,6 +253,12 @@ class Redis():
         last_low = float(last_rehydrated.low)
         last_close = float(last_rehydrated.close)
         last_trades = float(last_rehydrated.numTrades)
+        try:
+            # function returns an empty list if no results so cannot get first element
+            buy_price = float(self.dbase.get_trade_value(pair)[0][0])
+        except IndexError:
+            buy_price = None
+
 
         current_price = float(close)
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_mepoch))
@@ -320,9 +326,9 @@ class Redis():
             take_profit_rule = False
 
 
-        if buy_price and all(buy_rules) and any(sell_rules):
+        if buy_price and any(buy_rules) and any(sell_rules):
             self.logger.warning('We ARE In a trade and have matched both buy and sell rules for %s', pair)
-        if not buy_price and all(buy_rules) and any(sell_rules):
+        if not buy_price and any(buy_rules) and any(sell_rules):
             self.logger.warning('We are NOT in a trade and have matched both buy and sell rules for %s', pair)
 
         # if we match stop_loss rule and are in a trade
@@ -353,7 +359,7 @@ class Redis():
             self.del_high_price(pair, interval)
             return ('SELL', current_time, current_price)
         # if we match all buy rules and are NOT in a trade
-        elif all(buy_rules) and not buy_price:
+        elif any(buy_rules) and not buy_price:
             self.log_event('NormalBuy', rate, perc_rate, current_price, current_price, pair, current_time,
                            results.current)
 
