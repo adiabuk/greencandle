@@ -19,7 +19,6 @@ from ..lib.logger import getLogger, get_decorator
 from ..lib.run import serial_test, parallel_test
 
 LOGGER = getLogger(__name__, config.main.logging_level)
-CHUNK_SIZE = 200
 GET_EXCEPTIONS = get_decorator((Exception))
 
 def main():
