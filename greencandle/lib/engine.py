@@ -319,7 +319,7 @@ class Engine(dict):
 
             scheme["data"] = results[func]
             scheme["symbol"] = pair
-            scheme["event"] = "{0}_{1}".format(func, timeperiod)
+            scheme["event"] = "{0}_{1}".format(func, timeframe)
 
             self.add_scheme(scheme)
 
