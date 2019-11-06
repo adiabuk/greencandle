@@ -196,7 +196,7 @@
       "is_secret": false
     },
     "sell_rule1": {
-      "value": "results.current.EMA_13 \u003c results.current.EMA_55",
+      "value": "",
       "is_binary": false,
       "is_secret": false
     },
@@ -206,12 +206,12 @@
       "is_secret": false
     },
     "sell_rule2": {
-      "value": "results.current.RSI_48 \u003e str(73)",
+      "value": "",
       "is_binary": false,
       "is_secret": false
     },
     "sell_rule3": {
-      "value": "results.current.EMA_200 \u003e close",
+      "value": "",
       "is_binary": false,
       "is_secret": false
     },
