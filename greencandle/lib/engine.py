@@ -285,6 +285,49 @@ class Engine(dict):
         LOGGER.debug("Done getting Support & resistance")
         return None
 
+    def get_bb(self, pair=None, localconfig=None):
+        """get bollinger bands"""
+
+        LOGGER.debug("Getting bollinger bands for %s", pair)
+        klines = self.ohlcs[pair]
+        func, timef = localconfig  # split tuple
+        timeframe, multiplier = timef.split(',')
+        results = {}
+        try:
+            close = klines[-1]
+        except Exception as exc:
+            LOGGER.critical("FAILED bbands: %s ", str(exc))
+        try:
+            upper, middle, lower = \
+                    talib.BBANDS(close * 100000, timeperiod=int(timeframe),
+                                 nbdevup=(multiplier), nbdevdn=float(multiplier), matype=0)
+
+            results['upper'] = upper[-1]/100000
+            results['middle'] = middle[-1]/100000
+            results['lower'] = lower[-1]/100000
+
+        except Exception as exc:
+            results['upper'] = 0
+            results['middle'] = 0
+            results['lower'] = 0
+            LOGGER.critical("Overall Exception getting bollinger bands: %s", exc)
+        trigger = None
+        scheme = {}
+        try:
+            current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
+            close_time = str(self.dataframes[pair].iloc[-1]["closeTime"])
+
+            scheme["data"] = results[func]
+            scheme["symbol"] = pair
+            scheme["event"] = "{0}_{1}".format(func, timeperiod)
+
+            self.add_scheme(scheme)
+
+        except KeyError as exc:
+            LOGGER.critical("KEY FAILURE in bollinger bands: %s ", str(exc))
+
+        LOGGER.debug("Done getting Bollinger bands")
+
     @get_exceptions
     def get_rsi(self, pair=None, localconfig=None):
         """
