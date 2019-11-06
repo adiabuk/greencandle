@@ -133,7 +133,7 @@ class Graph():
         ind_list = []
         for i in main_indicators:
             split = i.split(';')
-            ind = split[1] + '_' + split[2]
+            ind = split[1] + '_' + split[2].split(',')[0]
             ind_list.append(ind)
         list_of_results = defaultdict(list)
         for index_item in index:

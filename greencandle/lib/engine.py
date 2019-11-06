@@ -300,7 +300,7 @@ class Engine(dict):
         try:
             upper, middle, lower = \
                     talib.BBANDS(close * 100000, timeperiod=int(timeframe),
-                                 nbdevup=(multiplier), nbdevdn=float(multiplier), matype=0)
+                                 nbdevup=float(multiplier), nbdevdn=float(multiplier), matype=0)
 
             results['upper'] = upper[-1]/100000
             results['middle'] = middle[-1]/100000
