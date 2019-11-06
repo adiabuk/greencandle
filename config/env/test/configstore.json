@@ -16,7 +16,7 @@
       "is_secret": false
     },
     "buy_rule1": {
-      "value": "results.current.EMA_8 \u003e results.current.EMA_13",
+      "value": "",
       "is_binary": false,
       "is_secret": false
     },
@@ -26,32 +26,32 @@
       "is_secret": false
     },
     "buy_rule2": {
-      "value": "results.current.EMA_13 \u003e results.current.EMA_21",
+      "value": "",
       "is_binary": false,
       "is_secret": false
     },
     "buy_rule3": {
-      "value": "results.current.EMA_21 \u003e results.current.EMA_34",
+      "value": "",
       "is_binary": false,
       "is_secret": false
     },
     "buy_rule4": {
-      "value": "results.current.EMA_34 \u003e results.current.EMA_55",
+      "value": "",
       "is_binary": false,
       "is_secret": false
     },
     "buy_rule5": {
-      "value": "results.current.RSI_48 \u003e str(20)",
+      "value": "",
       "is_binary": false,
       "is_secret": false
     },
     "buy_rule6": {
-      "value": "results.current.RSI_48 \u003c str(73)",
+      "value": "",
       "is_binary": false,
       "is_secret": false
     },
     "buy_rule7": {
-      "value": "results.current.EMA_200 \u003c close",
+      "value": "",
       "is_binary": false,
       "is_secret": false
     },

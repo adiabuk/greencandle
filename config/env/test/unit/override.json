@@ -1,4 +1,5 @@
 {
+  "buy_rule1": "results.current.EMA_8 \u003e results.current.EMA_13 and results.current.EMA_13 \u003e results.current.EMA_21 and results.current.EMA_21 \u003e results.current.EMA_34 and results.current.EMA_34 \u003e results.current.EMA_55 and results.current.RSI_48 \u003e str(20) and results.current.RSI_48 \u003c str(73) and results.current.EMA_200 \u003c close",
   "logging_level": "50",
   "push_active": "False"
 }
