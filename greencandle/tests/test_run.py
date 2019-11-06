@@ -6,7 +6,7 @@ Unittest file for testing results of a run using downloaded data
 import unittest
 from .unittests import make_test_case
 
-class TestBTCUSDT(make_test_case('BTCUSDT', '2019-05-05', 27, 11, -4.6)):
+class TestBTCUSDT(make_test_case('BTCUSDT', '2019-05-05', 27, 11, -6.6)):
     """Test BTCUSDT"""
     pass
 
