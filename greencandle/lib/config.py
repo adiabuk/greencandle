@@ -10,6 +10,18 @@ import numpy
 from .logger import getLogger
 from .common import AttributeDict
 
+
+REQUIRED_CONFIG = {'database':['db_host', 'db_user', 'db_password', 'db_database'],
+                   'email': ['email_from', 'email_to', 'email_password', 'email_active'],
+                   'redis': ['redis_host', 'redis_port', 'redis_expire'],
+                   'push': ['push_host', 'push_channel', 'push_active'],
+                   'main': ['logging_level', 'max_trades', 'binance_api_key',
+                            'binance_api_secret', 'coinbase_api_key', 'buy_rule1',
+                            'coinbase_api_secret', 'interval', 'sell_rule1',
+                            'drain', 'no_of_klines', 'pairs', 'stop_loss_perc',
+                            'take_profit_perc', 'indicators', 'rate_indicator',
+                            'trailing_stop_loss', 'trailing_stop_loss_perc']}
+
 def create_config():
     """
     Read config file and return required config
@@ -37,27 +49,16 @@ def check_config():
 
     missing_list = []
     missing_section = []
-    required_config = {'database':['host', 'user', 'password', 'db'],
-                       'email': ['from', 'to', 'password', 'active'],
-                       'redis': ['host', 'port', 'expire'],
-                       'push': ['host', 'channel', 'active'],
-                       'main': ['logging_level', 'max_trades', 'binance_api_key',
-                                'binance_api_secret', 'coinbase_api_key', 'buy_rule1',
-                                'coinbase_api_secret', 'interval', 'sell_rule1',
-                                'drain', 'no_of_klines', 'pairs', 'stop_loss_perc',
-                                'take_profit_perc', 'indicators', 'rate_indicator',
-                                'trailing_stop_loss', 'trailing_stop_loss_perc']}
-
-    for key in required_config.keys():
+    for key in REQUIRED_CONFIG.keys():
         try:
             list_1 = list(globals()[key].keys())
         except KeyError:
             missing_section.append(key)
             continue
-        list_2 = required_config[key]
+        list_2 = REQUIRED_CONFIG[key]
         missing_list.extend(list(numpy.setdiff1d(list_2, list_1, assume_unique=True)))
     config = True
-    for section in required_config.keys():
+    for section in REQUIRED_CONFIG.keys():
         for key in list(globals()[section]):
             if globals()[section][key] == '':
                 # delete empty keys

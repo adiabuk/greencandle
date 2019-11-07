@@ -19,12 +19,12 @@ def send_gmail_alert(action, pair, price):
     """
     Send email alert using gmail
     """
-    if not str2bool(config.email.active):
+    if not str2bool(config.email.email_active):
         return
     logger = getLogger(__name__, config.main.logging_level)
-    email_to = config.email.to
-    email_from = config.email['from']
-    email_password = config.email.password
+    email_to = config.email.email_to
+    email_from = config.email.email_from
+    email_password = config.email.email_password
 
     fromaddr = email_from
     toaddr = email_to
@@ -50,11 +50,11 @@ def send_push_notif(*args):
     """
     Send push notification via notify.run
     """
-    if not str2bool(config.push.active):
+    if not str2bool(config.push.push_active):
         return
-    host = config.push.host
-    channel = config.push.channel
-    title = config.push.title
+    host = config.push.push_host
+    channel = config.push.push_channel
+    title = config.push.push_title
     text = title + ' ' + ' '.join(str(item) for item in args)
     notify = notify_run.Notify(channel)
 

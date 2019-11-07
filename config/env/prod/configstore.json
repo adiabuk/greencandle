@@ -6,12 +6,12 @@
   "data_key": "AQIDAHh86o+e1l3vhl3F7Gn0lhwL0nWY7Q8sBy8abugAZ50HlgFByZYGyV9NwGy6UkmVEb2oAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMnQc09bFnrB/sDzJoAgEQgDs7H09GPBab3jf9VOE0bF06keLff5e2CuoQr2pOn6WEMWWtyDeWt/+0Afeq6LxxkfomB2Hd59fuUe/fxA==",
   "master_key_id": "alias/greencandle",
   "data": {
-    "binance_key": {
+    "binance_api_key": {
       "value": "gBEQmJIV1QK0Fqss0HJTonce5Ag=",
       "is_binary": false,
       "is_secret": true
     },
-    "binance_secret": {
+    "binance_api_secret": {
       "value": "x",
       "is_binary": false,
       "is_secret": false
@@ -66,12 +66,12 @@
       "is_binary": false,
       "is_secret": false
     },
-    "coinbase_key": {
+    "coinbase_api_key": {
       "value": "blablabla",
       "is_binary": false,
       "is_secret": false
     },
-    "coinbase_secret": {
+    "coinbase_api_secret": {
       "value": "hello",
       "is_binary": false,
       "is_secret": false

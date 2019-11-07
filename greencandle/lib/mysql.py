@@ -14,10 +14,10 @@ class Mysql():
     get_exceptions = get_decorator((Exception))
 
     def __init__(self, test=False, interval="15m"):
-        self.host = config.database.host
-        self.user = config.database.user
-        self.password = config.database.password
-        self.db = config.database.db
+        self.host = config.database.db_host
+        self.user = config.database.db_user
+        self.password = config.database.db_password
+        self.db = config.database.db_database
         self.logger = getLogger(__name__, config.main.logging_level)
 
         self.connect(test=test)

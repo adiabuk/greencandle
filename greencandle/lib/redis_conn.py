@@ -30,9 +30,9 @@ class Redis():
             initialized redis connection
         """
         self.logger = getLogger(__name__, config.main.logging_level)
-        self.host = config.redis.host
-        self.port = config.redis.port
-        self.expire = str2bool(config.redis.expire)
+        self.host = config.redis.redis_host
+        self.port = config.redis.redis_port
+        self.expire = str2bool(config.redis.redis_expire)
 
         if test:
             redis_db = db
