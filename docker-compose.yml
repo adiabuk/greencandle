@@ -2,6 +2,8 @@ version: "3.1"
 services:
 
   redis:
+    container_name: redis
+    hostname: redis
     image: amrox/gc-redis
     ports:
       - 6379:6379
@@ -15,6 +17,8 @@ services:
       retries: 5
 
   mysql:
+    container_name: mysql
+    hostname: mysql
     image: amrox/gc-mysql
     ports:
       - 3306:3306
@@ -28,6 +32,8 @@ services:
       retries: 5
 
   redis-local:
+    container_name: redis-local
+    hostname: redis-local
     image: gc-redis
     ports:
       - 6379:6379
@@ -41,6 +47,8 @@ services:
       retries: 5
 
   mysql-local:
+    container_name: mysql-lcaol
+    hostname: mysql-local
     image: gc-mysql
     ports:
       - 3306:3306
@@ -53,17 +61,18 @@ services:
       timeout: 2s
       retries: 5
 
-
-  greencandle-prod:
+  4ma:
+    container_name: 4ma
+    hostname: 4ma
     image: amrox/greencandle
-    entrypoint: /docker-entrypoint.sh backend --use-redis --test
+    entrypoint: /docker-entrypoint.sh backend --test
     links:
       - mysql
     depends_on:
       - mysql
       - redis
     environment:
-      - CONFIG_ENV=prod
+      - CONFIG_ENV=prod/4MA
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
@@ -71,8 +80,32 @@ services:
       retries: 5
     volumes:
       - ./test:/tmp
+      - /root/.aws:/root/.aws
+
+  30mRSI:
+    container_name: 30mRSI
+    hostname: 30mRSI
+    image: amrox/greencandle
+    entrypoint: /docker-entrypoint.sh backend --test
+    links:
+      - mysql
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      - CONFIG_ENV=prod/30mRSI
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - ./test:/tmp
+      - /root/.aws:/root/.aws
 
   greencandle-unittest:
+    container_name: unittest
+    hostname: unittest
     image: amrox/greencandle
     entrypoint: /docker-entrypoint.sh python -m unittest
     links:
@@ -87,25 +120,9 @@ services:
     volumes:
       - ./:/srv/greencandle
 
-  greencandle-prodtest:
-    image: amrox/greencandle
-    entrypoint: /docker-entrypoint.sh backend --test
-    links:
-      - mysql
-    depends_on:
-      - mysql
-      - redis
-    environment:
-      - CONFIG_ENV
-    healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    volumes:
-      - ./test:/tmp
-
   cron:
+    container_name: cron
+    hostname: cron
     image: greencandle
     entrypoint: cron -f
     links:
@@ -123,6 +140,8 @@ services:
       retries: 5
 
   webserver:
+     container_name: webserver
+     hostname: webserver
      image: amrox/webserver
      ports:
        - 80:80
@@ -133,6 +152,8 @@ services:
        - /data:/data
 
   dashboard:
+    container_name: dashboard
+    hostname: dashboard
     image: visibilityspots/smashing
     ports:
       - 8080:3030
