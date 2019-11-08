@@ -59,16 +59,16 @@ services:
     volumes:
       - ./:/srv/greencandle
 
-  greencandle-test:
+  greencandle-prodtest:
     image: greencandle
-    entrypoint: /docker-entrypoint.sh backend_test --use-redis --test
+    entrypoint: /docker-entrypoint.sh backend --test
     links:
       - mysql
     depends_on:
       - mysql
       - redis
     environment:
-      - CONFIG_ENV=test/4MA
+      - CONFIG_ENV
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
