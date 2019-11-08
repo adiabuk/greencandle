@@ -6,14 +6,14 @@
   "data_key": "OfvuQJ0Cis1CvnFV2KTTYv3WCPKXOIord3OBDc0kwcU=",
   "data": {
     "binance_api_key": {
-      "value": "x",
+      "value": "PDWJ518SHQiP8tfPt/puaNrDeWFVCLHm2rrI8PuJ75JqFXP02kyZjuQrB3s/RfAeS4mDYy/KQa0cd5QpL17fx8A8FAdZMSbX2HlkZp1ulTrtf3j7ReiUjXiTs9L8oVMARRfWOaeAlm4=",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "binance_api_secret": {
-      "value": "x",
+      "value": "bIBhWCzFleDLFLnbAANCvkXmWxvuoTtdDYABJwZk2lEZhrBgY4QtcjO/kbPWF1vzFVHlNHiDlbviZcwNA+1RY7ql5a+4tV9SXB1xdRRNw1FJACkgzLOM9Ly3lc/mFbGvtkSZoYYgg/A=",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "buy_rule1": {
       "value": "",
@@ -161,14 +161,14 @@
       "is_secret": false
     },
     "push_channel": {
-      "value": "x",
+      "value": "KmkU0NtKVkPNRtkAWXG2H549aw01uIG/rtny7bzyO4QVeXkWDuX4gg==",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "push_host": {
-      "value": "x",
+      "value": "oprMdGv44+V3qNRYNXumBBgMbBaAWd5A8rbPU6IAxKQ=",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "push_title": {
       "value": "test",
