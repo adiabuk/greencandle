@@ -78,7 +78,7 @@ services:
       - ./test:/tmp
 
   cron:
-    image: amrox/greencandle
+    image: greencandle
     entrypoint: cron -f
     links:
       - mysql
