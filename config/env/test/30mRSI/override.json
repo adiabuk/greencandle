@@ -1,5 +1,5 @@
 {
-  "buy_rule1": "close \u003c results.current.EMA_5",
+  "buy_rule1": "close \u003c results.current.EMA_5 and results.current.RSI_2 \u003c 3",
   "buy_rule2": "results.current.RSI_2 \u003c 3",
   "buy_rule3": "",
   "buy_rule4": "",
@@ -8,6 +8,7 @@
   "buy_rule7": "",
   "indicators": "get_moving_averages;EMA;5 get_rsi;RSI;2",
   "interval": "30m",
+  "no_of_klines": "10",
   "pairs": "ETHUSDT BTCUSDT BNBUSDT LINKUSDT EOSUSDT BCHABCUSDT LTCUSDT BTTUSDT XRPUSDT LINKUSDT",
   "push_title": "4MA",
   "rate_indicator": "EMA_5",
@@ -19,5 +20,7 @@
   "sell_rule6": "",
   "sell_rule7": "",
   "stop_loss_perc": "1.5",
-  "take_profit_perc": "3"
+  "take_profit_perc": "0",
+  "trailing_stop_loss": "False",
+  "trailing_stop_loss_perc": "0"
 }
