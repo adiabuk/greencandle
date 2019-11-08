@@ -16,7 +16,7 @@ plotly==3.10.0
 python_resize_image==1.1.11
 PyVirtualDisplay==0.2.1
 redis==2.10.6
-requests>=2.20.0
+requests==2.20.0
 scipy==1.0.0
 selenium==3.8.1
 setproctitle==1.1.10
