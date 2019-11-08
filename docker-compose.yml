@@ -2,7 +2,7 @@ version: "3.1"
 services:
 
   redis:
-    image: gc-redis
+    image: amrox/gc-redis
     ports:
       - 6379:6379
     restart: on-failure
@@ -15,7 +15,7 @@ services:
       retries: 5
 
   mysql:
-    image: gc-mysql
+    image: amrox/gc-mysql
     ports:
       - 3306:3306
     environment:
@@ -28,7 +28,7 @@ services:
       retries: 5
 
   greencandle-prod:
-    image: greencandle
+    image: amrox/greencandle
     entrypoint: /docker-entrypoint.sh backend --use-redis --test
     links:
       - mysql
@@ -46,7 +46,7 @@ services:
       - ./test:/tmp
 
   greencandle-unittest:
-    image: greencandle
+    image: amrox/greencandle
     entrypoint: /docker-entrypoint.sh python -m unittest
     links:
       - mysql
@@ -60,7 +60,7 @@ services:
       - ./:/srv/greencandle
 
   greencandle-prodtest:
-    image: greencandle
+    image: amrox/greencandle
     entrypoint: /docker-entrypoint.sh backend --test
     links:
       - mysql
@@ -78,7 +78,7 @@ services:
       - ./test:/tmp
 
   cron:
-    image: greencandle
+    image: amrox/greencandle
     entrypoint: cron -f
     links:
       - mysql
@@ -95,7 +95,7 @@ services:
       retries: 5
 
   webserver:
-     image: webserver
+     image: amrox/webserver
      ports:
        - 80:80
      links:
