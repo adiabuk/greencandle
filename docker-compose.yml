@@ -27,6 +27,33 @@ services:
       timeout: 2s
       retries: 5
 
+  redis-local:
+    image: gc-redis
+    ports:
+      - 6379:6379
+    restart: on-failure
+    links:
+      - mysql
+    healthcheck:
+      test: redis-cli ping
+      interval: 1m
+      timeout: 2s
+      retries: 5
+
+  mysql-local:
+    image: gc-mysql
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+    restart: on-failure
+    healthcheck:
+      test: echo 'SELECT version();'| mysql -uroot -ppassword
+      interval: 1m
+      timeout: 2s
+      retries: 5
+
+
   greencandle-prod:
     image: amrox/greencandle
     entrypoint: /docker-entrypoint.sh backend --use-redis --test
@@ -49,11 +76,12 @@ services:
     image: amrox/greencandle
     entrypoint: /docker-entrypoint.sh python -m unittest
     links:
-      - mysql
+      - mysql:mysql-local
+      - redis:redis-local
     working_dir: /srv/greencandle
     depends_on:
-      - mysql
-      - redis
+      - redis-local
+      - mysql-local
     environment:
       - CONFIG_ENV=test/unit
     volumes:
