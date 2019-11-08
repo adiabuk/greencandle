@@ -1,5 +1,5 @@
 {
-  "buy_rule1": "results.current.EMA_8 \u003e results.current.EMA_13",
+  "buy_rule1": "results.current.EMA_8 \u003e results.current.EMA_13 and results.current.EMA_13 \u003e results.current.EMA_21 and results.current.EMA_21 \u003e results.current.EMA_55",
   "buy_rule2": "results.current.EMA_13 \u003e results.current.EMA_21",
   "buy_rule3": "results.current.EMA_21 \u003e results.current.EMA_55",
   "buy_rule4": "results.previous.EMA_8 \u003c results.previous.EMA_13 or results.previous.EMA_13 \u003c results.previous.EMA_21 or results.previous.EMA_21 \u003c results.previous.EMA_55",
@@ -7,14 +7,17 @@
   "buy_rule6": "",
   "buy_rule7": "",
   "indicators": "get_moving_averages;EMA;8 get_moving_averages;EMA;13 get_moving_averages;EMA;21 get_moving_averages;EMA;55",
-  "interval": "30m",
-  "pairs": "MDAETH MTLETH SUBETH ETCETH MTHETH ENGETH ZECETH ASTETH DASHETH BTGETH EVXETH REQETH VIBETH HSRETH TRXETH POWRETH ARKETH YOYOETH XRPETH MODETH ENJETH STORJETH VENETH KMDETH RCNETH NULSETH RDNETH XMRETH DLTETH AMBETH BCCETH BATETH BCPTETH ARNETH GVTETH CDTETH GXSETH POEETH QSPETH BTSETH XZCETH LSKETH TNTETH FUELETH MANAETH BCDETH DGDETH ADXETH ADAETH PPTETH CMTETH XLMETH CNDETH LENDETH WABIETH LTCETH TNBETH WAVESETH GTOETH ICXETH OSTETH ELFETH AIONETH NEBLETH BRDETH EDOETH WINGSETH NAVETH LUNETH TRIGETH APPCETH VIBEETH RLCETH INSETH PIVXETH IOSTETH CHATETH STEEMETH NANOETH VIAETH BLZETH AEETH RPXETH NCASHETH POAETH ZILETH ONTETH STORMETH XEMETH WANETH WPRETH QLCETH SYSETH GRSETH CLOAKETH GNTETH LOOMETH BCNETH REPETH TUSDETH ZENETH SKYETH CVCETH THETAETH IOTXETH QKCETH AGIETH NXSETH DATAETH SCETH NPXSETH KEYETH NASETH MFTETH DENTETH ARDRETH HOTETH VETETH DOCKETH PHXETH HCETH PAXETH",
-  "push_title": "4MA",
+  "interval": "4h",
+  "no_of_klines": "55",
+  "pairs": "BNBBTC XRPBTC ETHBTC EOSBTC",
+  "push_title": "4MATest",
   "rate_indicator": "EMA_8",
   "sell_rule1": "results.current.EMA_8 \u003c results.current.EMA_13",
   "sell_rule2": "",
   "sell_rule3": "",
   "sell_rule4": "",
-  "stop_loss_perc": "5",
-  "take_profit_perc": "20"
+  "stop_loss_perc": "3",
+  "take_profit_perc": "20",
+  "trailing_stop_loss": "False",
+  "trailing_stop_loss_perc": "0"
 }
