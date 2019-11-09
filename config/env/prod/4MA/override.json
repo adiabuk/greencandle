@@ -10,7 +10,7 @@
   "interval": "4h",
   "no_of_klines": "55",
   "pairs": "BNBBTC XRPBTC ETHBTC EOSBTC",
-  "push_title": "4MATest",
+  "push_title": "prod_4MA",
   "rate_indicator": "EMA_8",
   "sell_rule1": "results.current.EMA_8 \u003c results.current.EMA_13",
   "sell_rule2": "",
