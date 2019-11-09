@@ -39,7 +39,7 @@ services:
       - 6379:6379
     restart: on-failure
     links:
-      - mysql
+      - mysql-local:mysql
     healthcheck:
       test: redis-cli ping
       interval: 1m
