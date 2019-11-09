@@ -20,6 +20,7 @@ services:
     container_name: mysql
     hostname: mysql
     image: amrox/gc-mysql
+    entrypoint: /docker-entrypoint.sh mysqld --datadir /var/lib/mysql-no-volume
     ports:
       - 3306:3306
     environment:
