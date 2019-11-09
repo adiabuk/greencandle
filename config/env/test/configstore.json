@@ -185,6 +185,11 @@
       "is_binary": false,
       "is_secret": false
     },
+    "redis_expiry_seconds": {
+      "value": "18000",
+      "is_binary": false,
+      "is_secret": false
+    },
     "redis_host": {
       "value": "redis",
       "is_binary": false,

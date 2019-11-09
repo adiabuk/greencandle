@@ -12,6 +12,7 @@
   "pairs": "BNBBTC XRPBTC ETHBTC EOSBTC",
   "push_title": "prod_4MA",
   "rate_indicator": "EMA_8",
+  "redis_expiry_seconds": "36000",
   "sell_rule1": "results.current.EMA_8 \u003c results.current.EMA_13",
   "sell_rule2": "",
   "sell_rule3": "",

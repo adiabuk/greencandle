@@ -74,7 +74,7 @@ class Redis():
 
         self.logger.debug("Adding to Redis: %s %s %s", interval, list(data.keys()), now)
         key = "{0}:{1}:{2}".format(pair, interval, now)
-        expiry = 600 if self.test else 18000
+        expiry = 600 if self.test else int(config.redis.redis_expiry_seconds)
         response = self.conn.hmset(key, data)
         if self.expire:
             self.conn.expire(key, expiry)
