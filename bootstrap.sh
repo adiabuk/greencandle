@@ -43,7 +43,6 @@ docker build --force-rm --no-cache -f ./Dockerfile-rs . --tag=gc-redis
 docker run -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password -d vanilla-mysql
 sleep 20
 mysql --protocol=tcp  -uroot -ppassword  -e "create database greencandle"
-mysql --protocol=tcp  -uroot -ppassword  -e "create database greencandle_test"
 mysql --protocol=tcp  -uroot -ppassword  -e "CREATE USER 'greencandle'@'%' IDENTIFIED BY 'password';"
 mysql --protocol=tcp  -uroot -ppassword  -e "GRANT ALL PRIVILEGES ON *.* TO 'greencandle'@'%' WITH GRANT OPTION;"
 mysql --protocol=tcp -uroot -ppassword -e "SET GLOBAL sql_mode = 'NO_ENGINE_SUBSTITUTION';"
