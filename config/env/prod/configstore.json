@@ -7,14 +7,14 @@
   "master_key_id": "alias/greencandle",
   "data": {
     "binance_api_key": {
-      "value": "gBEQmJIV1QK0Fqss0HJTonce5Ag=",
+      "value": "xIMqp6vswIdXlCY1XZMzhEmaCm6FiGZuB7hMZ6Z7DssXknoHE0IHhEuz6PTOGIZ8N1PLCl7hPjN4pMfv++0fIUWr/hLJREjlCkFndtvu6NBL72FsrHTcNVYLhaLzQvJty5ySI5mZC2Q=",
       "is_binary": false,
       "is_secret": true
     },
     "binance_api_secret": {
-      "value": "x",
+      "value": "jdodVMpYvsliVbD8Q/fRVxnMynsn7o8aedhVvlq6Ls12basfW0UR5NkrMON/eUhM96/wQFzNmv0LbBdGqp50J6yu4LDsfLbu4JYFyB8VI3j7Nw+MP3GHS1en/sH1yURJW53da8wu5cQ=",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "buy_rule1": {
       "value": "results.current.EMA_8 \u003e results.current.EMA_13",
