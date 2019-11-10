@@ -1,6 +1,6 @@
 {
   "buy_rule1": "close \u003c results.current.EMA_5 and results.current.RSI_2 \u003c 3",
-  "buy_rule2": "results.current.RSI_2 \u003c 3",
+  "buy_rule2": "",
   "buy_rule3": "",
   "buy_rule4": "",
   "buy_rule5": "",
