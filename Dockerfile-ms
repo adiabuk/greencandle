@@ -1,8 +1,8 @@
 FROM mariadb:10.1.24
 RUN cp -r /var/lib/mysql /var/lib/mysql-no-volume
 CMD ["--datadir", "/var/lib/mysql-no-volume"]
-ADD ["greencandle.sql", "/tmp/greencandle.sql"]
 ENV MYSQL_PASSWORD=password
 ENV MYSQL_DATABASE=greencandle
-COPY greencandle.sql /docker-entrypoint-initdb.d/
+COPY mysql_files/greencandle.sql /docker-entrypoint-initdb.d/
+COPY mysql_files/perms.sql /docker-entrypoint-initdb.d/
 
