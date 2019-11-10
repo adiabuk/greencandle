@@ -3,7 +3,7 @@ require 'mysql2'
 SCHEDULER.every '15s', :first_in => 0 do |job|
 
   # Myql connection
-  db = Mysql2::Client.new(:host => "mysql", :username => "root", :password => "password", :port => 3306, :database => "greencandle_test" )
+  db = Mysql2::Client.new(:host => "mysql", :username => "root", :password => "password", :port => 3306, :database => "greencandle" )
 
   # Mysql query
   #sql = "SELECT acct AS account, COUNT( acct ) AS count FROM users ORDER BY COUNT(*) DESC LIMIT 0 , 5"
