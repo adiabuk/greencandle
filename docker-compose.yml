@@ -107,7 +107,7 @@ services:
   greencandle-unittest:
     container_name: unittest
     hostname: unittest
-    image: amrox/greencandle
+    image: greencandle
     entrypoint: /docker-entrypoint.sh python -m unittest
     links:
       - mysql-local:mysql
