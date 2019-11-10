@@ -77,7 +77,7 @@ services:
   cron:
     container_name: cron
     hostname: cron
-    image: greencandle
+    image: amrox/greencandle
     entrypoint: cron -f
     links:
       - mysql
