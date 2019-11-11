@@ -47,7 +47,3 @@ services:
       - CONFIG_ENV=test/unit
     volumes:
       - ./:/srv/greencandle
-
-
-
-

@@ -9,4 +9,4 @@ script:
   - configstore package test
   - sudo docker-compose up -d mysql-local redis-local
   - sudo docker ps
-  - sudo docker-compose -f ./docker-compose_local.yml run greencandle-unittest --remove-orphans
+  - sudo docker-compose -f ./docker-compose_local.yml run greencandle-unittest
