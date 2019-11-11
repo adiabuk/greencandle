@@ -7,12 +7,12 @@
   "master_key_id": "alias/greencandle",
   "data": {
     "binance_api_key": {
-      "value": "xIMqp6vswIdXlCY1XZMzhEmaCm6FiGZuB7hMZ6Z7DssXknoHE0IHhEuz6PTOGIZ8N1PLCl7hPjN4pMfv++0fIUWr/hLJREjlCkFndtvu6NBL72FsrHTcNVYLhaLzQvJty5ySI5mZC2Q=",
+      "value": "Nvm29Nv7dnlsh3xWl2QPOb1Tly8F5X1TbqTdAfKrSe2WaAPwdMztpN2b1v2ieqbzvoGS7FUX5ZidXxoX7t7hWuEdtSTXCEIshqI2PHM7f/0QJeucxeRAw/8wvyFNBiXyF2kCR+46Phk=",
       "is_binary": false,
       "is_secret": true
     },
     "binance_api_secret": {
-      "value": "jdodVMpYvsliVbD8Q/fRVxnMynsn7o8aedhVvlq6Ls12basfW0UR5NkrMON/eUhM96/wQFzNmv0LbBdGqp50J6yu4LDsfLbu4JYFyB8VI3j7Nw+MP3GHS1en/sH1yURJW53da8wu5cQ=",
+      "value": "8GwufnTVqSUqc/BF25/xfJ2cPud+MAIXi6yg/Tpo/iV94XVCZ/ByhALeY2OYEgTx/6Zo+XOIep33c/rYRnP5uAU5DvMyKX8a0XL14jJoTB/Bn1K7rwnKd3vmsOERmz6Lx4dWT4kUf60=",
       "is_binary": false,
       "is_secret": true
     },
