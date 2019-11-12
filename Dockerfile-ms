@@ -13,6 +13,3 @@ COPY config /opt/config
 RUN chmod +x /docker-entrypoint.sh
 ENV MYSQL_PASSWORD=password
 ENV MYSQL_DATABASE=greencandle
-COPY mysql_files/greencandle.sql /docker-entrypoint-initdb.d/
-COPY mysql_files/perms.sql /docker-entrypoint-initdb.d/
-
