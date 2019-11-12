@@ -1,4 +1,4 @@
-FROM greencandle:latest
+FROM amrox/greencandle:latest
 
 COPY gc-cron /tmp/gc-cron
 RUN crontab /tmp/gc-cron
