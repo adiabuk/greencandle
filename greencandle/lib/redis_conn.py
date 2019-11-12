@@ -216,6 +216,9 @@ class Redis():
         try:
             previous3, previous2, previous1, previous, current = self.get_items(pair=pair, interval=interval)[-5:]
         except ValueError:
+
+            self.logger.debug("Not enough data for {0}".format(pair))
+
             return ('HOLD', 'Not enough data', 0)
 
         # get current & previous indicator values
