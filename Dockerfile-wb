@@ -9,4 +9,4 @@ RUN mkdir /opt/output
 COPY docker-entrypoint.sh /
 COPY config /opt/config
 RUN chmod +x /docker-entrypoint.sh
-CMD ['nginx -g 'daemon off;']
+CMD ['/docker-entrypoint.sh nginx -g 'daemon off;']
