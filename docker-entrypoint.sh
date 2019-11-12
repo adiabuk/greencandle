@@ -19,6 +19,9 @@ while ! nc -z redis 6379; do
 done
 
 configstore package process_templates --ignore-role --basedir /opt/config $CONFIG_ENV /opt/output
-cp /opt/output/greencandle.ini /etc/greencandle.ini
+cp /opt/output/greencandle.ini /etc/greencandle.ini || true
+cp /opt/output/default.conf /etc/nginx/conf.d/default.conf || true
+crontab /opt/cron || true
+> /etc/nginx/sites-available/default || true
 
 exec $@
