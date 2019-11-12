@@ -44,6 +44,7 @@ services:
       - redis
     environment:
       - CONFIG_ENV=prod/4MA
+      - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
@@ -65,6 +66,7 @@ services:
       - redis
     environment:
       - CONFIG_ENV=prod/30mRSI
+      - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
