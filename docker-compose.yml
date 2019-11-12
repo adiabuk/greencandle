@@ -24,6 +24,7 @@ services:
     ports:
       - 3306:3306
     environment:
+      - CONFIG_ENV=prod
       - MYSQL_ROOT_PASSWORD=password
     restart: on-failure
     healthcheck:
@@ -78,9 +79,12 @@ services:
 
   cron:
     container_name: cron
+    environment:
+      - CONFIG_ENV=prod
+      - HOST=$HOSTNAME
     hostname: cron
     image: amrox/greencandle
-    entrypoint: /docker-entrypoint.sh cron -f
+    entrypoint: bash -x /docker-entrypoint.sh cron -f
     links:
       - mysql
       - redis
