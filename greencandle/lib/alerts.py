@@ -3,6 +3,7 @@
 Functions for sending alerts
 """
 
+import os
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -55,7 +56,11 @@ def send_push_notif(*args):
     host = config.push.push_host
     channel = config.push.push_channel
     title = config.push.push_title
-    text = title + ' ' + ' '.join(str(item) for item in args)
+    try:
+        host = "-{0}-".format(os.environ['HOST'])
+    except KeyError:
+        host = ""
+    text = title + host ' ' + ' '.join(str(item) for item in args)
     notify = notify_run.Notify(channel)
 
     notify.endpoint = 'https://{0}/{1}'.format(host, channel)
