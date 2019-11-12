@@ -80,7 +80,7 @@ services:
     container_name: cron
     hostname: cron
     image: amrox/greencandle
-    entrypoint: cron -f
+    entrypoint: /docker-entrypoint.sh cron -f
     links:
       - mysql
       - redis
