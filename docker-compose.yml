@@ -129,6 +129,11 @@ services:
     image: visibilityspots/smashing
     ports:
       - 8080:3030
+    healthcheck:
+      test: curl --fail 127.1:3030/dashboard/gc || exit 1
+      interval: 10m
+      timeout: 5s
+      retries: 5
     environment:
       - GEMS=mysql2
     entrypoint: /run.sh

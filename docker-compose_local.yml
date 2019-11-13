@@ -28,6 +28,11 @@ services:
     container_name: dashboard
     hostname: dashboard
     image: visibilityspots/smashing
+    healthcheck:
+      test: curl --fail 127.1:3030/dashboard/gc || exit 1
+      interval: 10m
+      timeout: 5s
+      retries: 5
     ports:
       - 8080:3030
     environment:
