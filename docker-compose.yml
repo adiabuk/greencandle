@@ -107,6 +107,11 @@ services:
      container_name: webserver
      hostname: webserver
      image: amrox/webserver
+     healthcheck:
+       test: service nginx status || exit 1
+       interval: 5m
+       timeout: 5s
+       retries: 5
      environment:
        - CONFIG_ENV=prod
      ports:

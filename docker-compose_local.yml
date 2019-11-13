@@ -6,6 +6,11 @@ services:
      hostname: webserver
      image: webserver
      entrypoint: bash -x /docker-entrypoint.sh nginx -g 'daemon off;'
+     healthcheck:
+       test: service nginx status || exit 1
+       interval: 5m
+       timeout: 5s
+       retries: 5
      environment:
        - CONFIG_ENV=test
      ports:
