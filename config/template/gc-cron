@@ -1,2 +1,6 @@
 * * * * * touch /var/run/cron # healthcheck
 */15 * * * * write_balance
+@daily mysqldump --host mysql --all-databases -u{.db_user} -p{db_password} > /data/mysql/backup_$(date +"%Y-%m-%d").sql
+@daily report /data/reports/report_$(date +"%Y-%m-%d").xlsx
+@daily create_graph -d0 -p BNBBTC -i 4h -o /data/graphs/
+@weekly ls -1t /data/mysql| tail -n +31 | xargs -d '\n' rm -f
