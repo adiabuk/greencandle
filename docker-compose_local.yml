@@ -24,6 +24,7 @@ services:
       - 3306:3306
     environment:
       - MYSQL_ROOT_PASSWORD=password
+      - CONFIG_ENV=test
     restart: on-failure
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword

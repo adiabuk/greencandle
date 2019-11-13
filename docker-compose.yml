@@ -98,11 +98,15 @@ services:
       interval: 1m
       timeout: 2s
       retries: 5
+    volumes:
+      - /root/.aws:/root/.aws
 
   webserver:
      container_name: webserver
      hostname: webserver
      image: amrox/webserver
+     environment:
+       - CONFIG_ENV=prod
      ports:
        - 80:80
      links:
