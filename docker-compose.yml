@@ -143,3 +143,5 @@ services:
       - /srv/greencandle/dashboard/dashboards:/dashboards
       - /srv/greencandle/dashboard/jobs:/jobs
       - /srv/greencandle/dashboard/widgets:/widgets
+      - /srv/greencandle/dashboard/config:/config
+      - /srv/greencandle/dashboard/assets:/assets

@@ -5,7 +5,7 @@ services:
      container_name: webserver
      hostname: webserver
      image: webserver
-     entrypoint: bash -x /docker-entrypoint.sh nginx -g 'daemon off;'
+     entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
      healthcheck:
        test: service nginx status || exit 1
        interval: 5m
