@@ -1,6 +1,4 @@
 FROM mariadb:10.1.24
-RUN cp -r /var/lib/mysql /var/lib/mysql-no-volume
-CMD ["--datadir", "/var/lib/mysql-no-volume"]
 RUN apt-get update \
    && apt-get install -y cron bash wget nginx-extras netcat vim
 RUN [ ! -f /usr/local/bin/configstore ] && \

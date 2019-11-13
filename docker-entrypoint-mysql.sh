@@ -8,6 +8,7 @@ fi
 
 configstore package process_templates --ignore-role --basedir /opt/config $CONFIG_ENV /opt/output
 cp /opt/output/*.sql /docker-entrypoint-initdb.d
+chown mysql.mysql /docker-entrypoint-initdb.d/*
 
 set -eo pipefail
 shopt -s nullglob
