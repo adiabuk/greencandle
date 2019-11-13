@@ -113,7 +113,7 @@ services:
        - 80:80
      links:
        - dashboard:dashboard
-     entrypoint: nginx -g 'daemon off;'
+     entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
      volumes:
        - /data:/data
        - /root/.aws:/root/.aws

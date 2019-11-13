@@ -1,6 +1,41 @@
 version: "3.1"
 services:
 
+  webserver:
+     container_name: webserver
+     hostname: webserver
+     image: webserver
+     entrypoint: bash -x /docker-entrypoint.sh nginx -g 'daemon off;'
+     environment:
+       - CONFIG_ENV=test
+     ports:
+       - 80:80
+     links:
+       - mysql-local:mysql
+       - redis-local:redis
+       - dashboard:dashboard
+     volumes:
+       - /data:/data
+       - /root/.aws:/root/.aws
+
+  dashboard:
+    container_name: dashboard
+    hostname: dashboard
+    image: visibilityspots/smashing
+    ports:
+      - 8080:3030
+    environment:
+      - GEMS=mysql2
+    entrypoint: /run.sh
+    links:
+      - mysql-local:mysql
+    volumes:
+      - /srv/greencandle/dashboard/dashboards:/dashboards
+      - /srv/greencandle/dashboard/jobs:/jobs
+      - /srv/greencandle/dashboard/widgets:/widgets
+      - /srv/greencandle/dashboard/config:/config
+      - /srv/greencandle/dashboard/assets:/assets
+
   redis-local:
     container_name: redis-local
     hostname: redis-local
