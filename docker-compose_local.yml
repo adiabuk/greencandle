@@ -14,6 +14,7 @@ services:
        - mysql-local:mysql
        - redis-local:redis
        - dashboard:dashboard
+     restart: on-failure
      volumes:
        - /data:/data
        - /root/.aws:/root/.aws
@@ -26,6 +27,7 @@ services:
       - 8080:3030
     environment:
       - GEMS=mysql2
+    restart: on-failure
     entrypoint: /run.sh
     links:
       - mysql-local:mysql

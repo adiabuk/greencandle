@@ -4,7 +4,7 @@ current_karma = 0
 
 SCHEDULER.every '10s' do
 
-  db = Mysql2::Client.new(:host => "mysql", :username => "root", :password => "password", :port => 3306, :database => "greencandle" )
+  db = Mysql2::Client.new(:host => "mysql", :username => "greencandle", :password => "password", :port => 3306, :database => "greencandle" )
   sql = "select round(sum(perc)/(datediff(max(sell_time),'2018-01-01 00:00')),2) as average from profit"
 
 
