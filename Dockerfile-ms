@@ -2,7 +2,7 @@ FROM mariadb:10.1.24
 RUN cp -r /var/lib/mysql /var/lib/mysql-no-volume
 CMD ["--datadir", "/var/lib/mysql-no-volume"]
 RUN apt-get update \
-   && apt-get install -y cron bash wget nginx-extras netcat
+   && apt-get install -y cron bash wget nginx-extras netcat vim
 RUN [ ! -f /usr/local/bin/configstore ] && \
     wget https://github.com/motns/configstore/releases/download/v2.4.0/configstore-2.4.0-linux-amd64.tar.gz -P /tmp && \
     tar zxvf /tmp/configstore-2.4.0-linux-amd64.tar.gz -C /usr/local/bin && \

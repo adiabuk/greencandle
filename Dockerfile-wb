@@ -1,6 +1,6 @@
 FROM nginx:stable
 RUN apt-get update \
-   && apt-get install -y cron bash wget nginx-extras netcat
+   && apt-get install -y cron bash wget nginx-extras netcat vim
 RUN [ ! -f /usr/local/bin/configstore ] && \
     wget https://github.com/motns/configstore/releases/download/v2.4.0/configstore-2.4.0-linux-amd64.tar.gz -P /tmp && \
     tar zxvf /tmp/configstore-2.4.0-linux-amd64.tar.gz -C /usr/local/bin && \

@@ -10,14 +10,14 @@ fi
 if [ -f /.dockerenv ]; then
     echo "I'm inside matrix ;(";
     apt-get update
-    apt-get -y install cron netcat
+    apt-get -y install cron netcat vim
     install_dir=/install
 else
     echo "I'm living in real world!";
     cp -rv config /opt
     apt-get update
     apt-get -y install python3 python3-pip wget make git mysql-client libmysqlclient-dev \
-      python3-dev xvfb firefox redis-tools cron
+      python3-dev xvfb firefox redis-tools cron vim
     update-alternatives --install /usr/bin/python python /usr/bin/python3 1
     update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
     pip install ipython

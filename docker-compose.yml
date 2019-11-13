@@ -114,6 +114,7 @@ services:
      entrypoint: nginx -g 'daemon off;'
      volumes:
        - /data:/data
+       - /root/.aws:/root/.aws
 
   dashboard:
     container_name: dashboard
