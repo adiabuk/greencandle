@@ -1,6 +1,7 @@
-* * * * * touch /var/run/cron # healthcheck
-*/15 * * * * write_balance
-@daily mysqldump --host mysql --all-databases -u{.db_user} -p{db_password} > /data/mysql/backup_$(date +"%Y-%m-%d").sql
-@daily report /data/reports/report_$(date +"%Y-%m-%d").xlsx
-@daily create_graph -d0 -p BNBBTC -i 4h -o /data/graphs/
-@weekly ls -1t /data/mysql| tail -n +31 | xargs -d '\n' rm -f
+* * * * * touch /var/run/cron > /proc/1/fd/1 2>/proc/1/fd/2 # healthcheck 
+*/15 * * * * /usr/local/bin/write_balance > /proc/1/fd/1 2>/proc/1/fd/2
+@daily mysqldump --host mysql --all-databases -u{.db_user} -p{db_password} > /data/mysql/backup_$(date +"%Y-%m-%d").sql > /proc/1/fd/1 2>/proc/1/fd/2
+@daily /usr/local/bin/report /data/reports/report_$(date +"%Y-%m-%d").xlsx > /proc/1/fd/1 2>/proc/1/fd/2
+@daily /usr/local/bin/create_graph -d0 -p BNBBTC -i 4h -o /data/graphs/ > /proc/1/fd/1 2>/proc/1/fd/2
+@weekly ls -1t /data/mysql| tail -n +31 | xargs -d '\n' rm -f > /proc/1/fd/1 2>/proc/1/fd/2
+

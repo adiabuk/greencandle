@@ -86,7 +86,7 @@ services:
       - HOST=$HOSTNAME
     hostname: cron
     image: amrox/greencandle
-    entrypoint: bash -x /docker-entrypoint.sh cron -f
+    entrypoint: /docker-entrypoint.sh cron -f
     links:
       - mysql
       - redis
