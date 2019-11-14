@@ -93,14 +93,13 @@ services:
     depends_on:
       - mysql
       - redis
-    volumes:
-      - /data:/data
     healthcheck:
       test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
     volumes:
+      - /data:/data
       - /root/.aws:/root/.aws
 
   webserver:
