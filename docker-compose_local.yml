@@ -1,6 +1,30 @@
 version: "3.1"
 services:
 
+  cron:
+    container_name: cron
+    environment:
+      - CONFIG_ENV=test
+      - HOST=$HOSTNAME
+    hostname: cron
+    image: greencandle
+    entrypoint: /docker-entrypoint.sh cron -f
+    links:
+      - mysql-local:mysql
+      - redis-local:redis
+    depends_on:
+      - mysql-local
+      - redis-local
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+
+
   webserver:
      container_name: webserver
      hostname: webserver
