@@ -13,7 +13,11 @@ SCHEDULER.every '10s' do
   result = db.query(sql)
   last_valuation = current_valuation
   last_karma     = current_karma
-  current_valuation = balance.first['gbp']
+  if balance.size == 0
+    current_valuation = 0
+  else
+    current_valuation = balance.first['gbp']
+  end
   current_karma     = rand(200000)
   puts result.first['average']
   send_event('valuation', { current: current_valuation, last: last_valuation })
