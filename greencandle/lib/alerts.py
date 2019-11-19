@@ -57,7 +57,7 @@ def send_push_notif(*args):
     channel = config.push.push_channel
     title = config.push.push_title
     try:
-        base_host = "-{0}-".format(os.environ['HOST'])
+        base_host = "-{0}".format(os.environ['HOST'])
     except KeyError:
         base_host = ""
     text = title + base_host + ' ' + ' '.join(str(item) for item in args)
