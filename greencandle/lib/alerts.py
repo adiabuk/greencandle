@@ -57,10 +57,10 @@ def send_push_notif(*args):
     channel = config.push.push_channel
     title = config.push.push_title
     try:
-        host = "-{0}-".format(os.environ['HOST'])
+        base_host = "-{0}-".format(os.environ['HOST'])
     except KeyError:
-        host = ""
-    text = title + host + ' ' + ' '.join(str(item) for item in args)
+        base_host = ""
+    text = title + base_host + ' ' + ' '.join(str(item) for item in args)
     notify = notify_run.Notify(channel)
 
     notify.endpoint = 'https://{0}/{1}'.format(host, channel)
