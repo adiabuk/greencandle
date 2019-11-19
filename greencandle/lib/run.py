@@ -195,9 +195,11 @@ def prod_int_check(interval, test):
     sells = []
     for pair in current_trades:
         buy_price = dbase.get_trade_value(pair)[0][0]
-        result, current_price, current_time = redis.get_intermittant(pair, buy_price=buy_price, current_price=prices[pair])
-        current_price = dbase.get_trade_value(pair)[0][0]
-        LOGGER.debug("Int check result: %s %s %s", result, current_price, current_time)
+        result, current_price, current_time = redis.get_intermittant(pair, buy_price=buy_price,
+                                                                     current_price=prices[pair])
+        buy_price = dbase.get_trade_value(pair)[0][0]
+        LOGGER.debug("Int check result: %s Buy:%s Current:%s Time:%s", result, buy_price,
+                     current_price, current_time)
         if result == "SELL":
             LOGGER.debug("Items to sell")
             sells.append((pair, current_time, current_price))
