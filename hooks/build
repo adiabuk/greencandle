@@ -1,10 +1,13 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
+
+set -x
 
 # This is so we can get the commit into the build log of a Dangerfile runner
 # These come from https://docs.docker.com/docker-cloud/builds/advanced/
 
 # For debugging all env vars
 printenv
+echo "Starting build hook..."
 
 #  Convert the location "/Dockerfile" to "Dockerfile"
 FILE=$(echo -n $BUILD_PATH | tail -c +2)
