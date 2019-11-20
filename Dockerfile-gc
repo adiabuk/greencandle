@@ -1,9 +1,19 @@
-#FROM ubuntu:18.04
 FROM python:3.6.9
+LABEL branch=${BRANCH}
+LABEL commit=${COMMIT}
 ADD . /install
 RUN bash /install/gc-install.sh
 COPY docker-entrypoint.sh /
 COPY config /opt/config
 RUN chmod +x /docker-entrypoint.sh
 HEALTHCHECK CMD find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+
+ARG BRANCH="master"
+ARG COMMIT=""
+
+# Now set it as an env var
+ENV COMMIT_SHA=${COMMIT}
+ENV COMMIT_BRANCH=${BRANCH}
+
+
 CMD ["/docker-entrypoint.sh"]
