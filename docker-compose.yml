@@ -35,9 +35,9 @@ services:
     volumes:
       - /root/.aws:/root/.aws
 
-  4ma:
-    container_name: 4ma
-    hostname: 4ma
+4ma-btc:
+    container_name: 4ma-btc
+    hostname: 4ma-btc
     image: amrox/greencandle
     entrypoint: /docker-entrypoint.sh backend --test
     links:
@@ -46,7 +46,51 @@ services:
       - mysql
       - redis
     environment:
-      - CONFIG_ENV=prod/4MA
+      - CONFIG_ENV=prod/4MA/btc
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - ./test:/tmp
+      - /root/.aws:/root/.aws
+
+4ma-usdt:
+    container_name: 4ma-usdt
+    hostname: 4ma-usdt
+    image: amrox/greencandle
+    entrypoint: /docker-entrypoint.sh backend --test
+    links:
+      - mysql
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      - CONFIG_ENV=prod/4MA/usdt
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - ./test:/tmp
+      - /root/.aws:/root/.aws
+
+  4ma-eth:
+    container_name: 4ma-eth
+    hostname: 4ma-eth
+    image: amrox/greencandle
+    entrypoint: /docker-entrypoint.sh backend --test
+    links:
+      - mysql
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      - CONFIG_ENV=prod/4MA/eth
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
