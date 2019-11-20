@@ -4,7 +4,7 @@
 # These come from https://docs.docker.com/docker-cloud/builds/advanced/
 
 # For debugging all env vars
-# printenv
+printenv
 
 #  Convert the location "/Dockerfile" to "Dockerfile"
 FILE=$(echo -n $BUILD_PATH | tail -c +2)
