@@ -35,7 +35,7 @@ services:
     volumes:
       - /root/.aws:/root/.aws
 
-4ma-btc:
+  4ma-btc:
     container_name: 4ma-btc
     hostname: 4ma-btc
     image: amrox/greencandle
@@ -57,7 +57,7 @@ services:
       - ./test:/tmp
       - /root/.aws:/root/.aws
 
-4ma-usdt:
+  4ma-usdt:
     container_name: 4ma-usdt
     hostname: 4ma-usdt
     image: amrox/greencandle
