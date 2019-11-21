@@ -1,6 +1,8 @@
 FROM python:3.6.9
 LABEL branch=${BRANCH}
 LABEL commit=${COMMIT}
+LABEL date=${DATE}
+
 ADD . /install
 RUN bash /install/gc-install.sh
 COPY docker-entrypoint.sh /
@@ -13,7 +15,8 @@ ARG COMMIT=""
 
 # Now set it as an env var
 ENV COMMIT_SHA=${COMMIT}
-ENV COMMIT_BRANCH=${BRANCH}
+ENV VERSION=${BRANCH}
+ENV BUILD_DATE=${DATE}
 
 
 CMD ["/docker-entrypoint.sh"]

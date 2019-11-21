@@ -2,11 +2,8 @@
 
 set -x
 
-# This is so we can get the commit into the build log of a Dangerfile runner
-# These come from https://docs.docker.com/docker-cloud/builds/advanced/
-
 # For debugging all env vars
 printenv
 echo "Starting build hook..."
 
-docker build --build-arg=COMMIT=$(git rev-parse --short HEAD) --build-arg=BRANCH=$(git describe --tags) -t $IMAGE_NAME -f $DOCKERFILE_PATH .
+docker build --build-arg=COMMIT=$(git rev-parse --short HEAD) --build-arg=BRANCH=$(git describe --tags) --build-arg_DATE=$(date +"%Y_%m_%d-%I:%M_%P") $IMAGE_NAME -f $DOCKERFILE_PATH .
