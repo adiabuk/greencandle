@@ -12,6 +12,7 @@ HEALTHCHECK CMD find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greenca
 
 ARG BRANCH="master"
 ARG COMMIT=""
+ARG DATE=""
 
 # Now set it as an env var
 ENV COMMIT_SHA=${COMMIT}

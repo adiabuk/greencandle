@@ -7,6 +7,10 @@ LABEL date=${DATE}
 COPY gc-cron /tmp/gc-cron
 RUN crontab /tmp/gc-cron
 
+ARG BRANCH="master"
+ARG COMMIT=""
+ARG DATE=""
+
 ENV COMMIT_SHA=${COMMIT}
 ENV VERSION=${BRANCH}
 ENV BUILD_DATE=${DATE}

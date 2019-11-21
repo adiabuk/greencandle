@@ -15,6 +15,11 @@ RUN mkdir /opt/output
 COPY docker-entrypoint-mysql.sh /docker-entrypoint.sh
 COPY config /opt/config
 RUN chmod +x /docker-entrypoint.sh
+
+ARG BRANCH="master"
+ARG COMMIT=""
+ARG DATE=""
+
 ENV MYSQL_PASSWORD=password
 ENV MYSQL_DATABASE=greencandle
 
