@@ -1,4 +1,10 @@
 FROM mariadb:10.1.24
+
+LABEL branch=${BRANCH}
+LABEL commit=${COMMIT}
+LABEL date=${DATE}
+
+
 RUN apt-get update \
    && apt-get install -y cron bash wget nginx-extras netcat vim
 RUN [ ! -f /usr/local/bin/configstore ] && \
@@ -11,3 +17,9 @@ COPY config /opt/config
 RUN chmod +x /docker-entrypoint.sh
 ENV MYSQL_PASSWORD=password
 ENV MYSQL_DATABASE=greencandle
+
+ENV COMMIT_SHA=${COMMIT}
+ENV VERSION=${BRANCH}
+ENV BUILD_DATE=${DATE}
+
+

@@ -1,5 +1,14 @@
 FROM redis:5.0.5
 
+LABEL branch=${BRANCH}
+LABEL commit=${COMMIT}
+LABEL date=${DATE}
+
 EXPOSE 6379
 HEALTHCHECK CMD redis-cli ping
+
+ENV COMMIT_SHA=${COMMIT}
+ENV VERSION=${BRANCH}
+ENV BUILD_DATE=${DATE}
+
 CMD [ "redis-server" ]

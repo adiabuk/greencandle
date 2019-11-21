@@ -1,5 +1,14 @@
 FROM amrox/greencandle:latest
+LABEL branch=${BRANCH}
+LABEL commit=${COMMIT}
+LABEL date=${DATE}
+
 
 COPY gc-cron /tmp/gc-cron
 RUN crontab /tmp/gc-cron
+
+ENV COMMIT_SHA=${COMMIT}
+ENV VERSION=${BRANCH}
+ENV BUILD_DATE=${DATE}
+
 CMD cron -f

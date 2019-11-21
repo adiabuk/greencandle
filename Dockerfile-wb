@@ -1,4 +1,9 @@
 FROM nginx:stable
+
+LABEL branch=${BRANCH}
+LABEL commit=${COMMIT}
+LABEL date=${DATE}
+
 RUN apt-get update \
    && apt-get install -y cron bash wget nginx-extras netcat vim
 RUN [ ! -f /usr/local/bin/configstore ] && \
@@ -9,4 +14,9 @@ RUN mkdir /opt/output
 COPY docker-entrypoint.sh /
 COPY config /opt/config
 RUN chmod +x /docker-entrypoint.sh
+
+ENV COMMIT_SHA=${COMMIT}
+ENV VERSION=${BRANCH}
+ENV BUILD_DATE=${DATE}
+
 CMD ['/docker-entrypoint.sh nginx -g 'daemon off;']
