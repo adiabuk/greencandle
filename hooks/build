@@ -6,4 +6,4 @@ set -x
 printenv
 echo "Starting build hook..."
 
-docker build --build-arg=COMMIT=$(git rev-parse --short HEAD) --build-arg=BRANCH=$(git describe --tags) --build-arg_DATE=$(date +"%Y_%m_%d-%I:%M_%P") $IMAGE_NAME -f $DOCKERFILE_PATH .
+docker build --build-arg=COMMIT=$(git rev-parse --short HEAD) --build-arg=BRANCH=$(git describe --tags) --build-arg=DATE=$(date +"%Y_%m_%d-%I:%M_%P") -t $IMAGE_NAME -f $DOCKERFILE_PATH .
