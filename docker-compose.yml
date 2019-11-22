@@ -169,7 +169,7 @@ services:
   dashboard:
     container_name: dashboard
     hostname: dashboard
-    image: visibilityspots/smashing
+    image: amrox/dashboard
     ports:
       - 8080:3030
     healthcheck:
@@ -177,14 +177,6 @@ services:
       interval: 10m
       timeout: 5s
       retries: 5
-    environment:
-      - GEMS=mysql2
     entrypoint: /run.sh
     links:
       - mysql:mysql
-    volumes:
-      - /srv/greencandle/dashboard/dashboards:/dashboards
-      - /srv/greencandle/dashboard/jobs:/jobs
-      - /srv/greencandle/dashboard/widgets:/widgets
-      - /srv/greencandle/dashboard/config:/config
-      - /srv/greencandle/dashboard/assets:/assets

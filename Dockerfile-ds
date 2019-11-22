@@ -6,9 +6,12 @@ LABEL date=${DATE}
 ADD dashboard/config /config
 ADD dashboard/dashboards /dashboards
 ADD dashboard/jobs /jobs
+ADD dashboard/assets /assets
 ADD dashboard/widgets /widgets
+
 ADD dashboard/install.sh /install.sh
 ADD dashboard/docker-entrypoint.sh /docker-entrypoint.sh
+
 RUN apt-get update; apt-get install -y netcat; apt-get clean
 RUN GEMS=mysql2 /install.sh
 
