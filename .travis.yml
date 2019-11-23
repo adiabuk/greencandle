@@ -9,4 +9,4 @@ script:
   - configstore package test
   - sudo docker ps
   - sudo docker-compose -f ./docker-compose_local.yml run greencandle-unittest
-  - sudo mysqlcheck --host mysql  --databases greencandle
+  - sudo mysqlcheck --host mysql -uroot -ppassword  --databases greencandle
