@@ -46,7 +46,7 @@ services:
       - mysql
       - redis
     environment:
-      - CONFIG_ENV=prod/4MA/btc
+      - CONFIG_ENV=prod/4MA/BTC
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -68,7 +68,7 @@ services:
       - mysql
       - redis
     environment:
-      - CONFIG_ENV=prod/4MA/usdt
+      - CONFIG_ENV=prod/4MA/USDT
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -90,7 +90,7 @@ services:
       - mysql
       - redis
     environment:
-      - CONFIG_ENV=prod/4MA/eth
+      - CONFIG_ENV=prod/4MA/ETH
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -138,7 +138,7 @@ services:
       - mysql
       - redis
     healthcheck:
-      test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5

@@ -10,7 +10,7 @@ fi
 if [ -f /.dockerenv ]; then
     echo "I'm inside matrix ;(";
     apt-get update
-    apt-get -y install cron netcat vim
+    apt-get -y install cron netcat vim default-mysql-client
     install_dir=/install
 else
     echo "I'm living in real world!";
