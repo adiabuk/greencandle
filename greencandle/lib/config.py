@@ -19,7 +19,7 @@ REQUIRED_CONFIG = {'database':['db_host', 'db_user', 'db_password', 'db_database
                             'binance_api_secret', 'coinbase_api_key', 'buy_rule1',
                             'coinbase_api_secret', 'interval', 'sell_rule1',
                             'drain', 'no_of_klines', 'pairs', 'stop_loss_perc',
-                            'take_profit_perc', 'indicators', 'rate_indicator',
+                            'take_profit','take_profit_perc', 'indicators', 'rate_indicator',
                             'trailing_stop_loss', 'trailing_stop_loss_perc']}
 
 def create_config():

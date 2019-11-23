@@ -192,8 +192,8 @@ class Redis():
         Check if price between intervals and sell if matches stop_loss or take_profit rules
         """
 
-        stop_loss_perc = float(config.main["stop_loss_perc"])
-        take_profit_perc = float(config.main["take_profit_perc"])
+        stop_loss_perc = float(config.main.stop_loss_perc)
+        take_profit_perc = float(config.main.take_profit_perc)
         stop_loss_rule = float(current_price) < sub_perc(stop_loss_perc, buy_price)
         take_profit_rule = float(current_price) > add_perc(take_profit_perc, buy_price)
 
@@ -202,7 +202,7 @@ class Redis():
             message = "StopLoss intermittant"
             self.logger.info(message)
             return ('SELL', current_time, current_price)
-        elif take_profit_rule and buy_price:
+        elif str2bool(config.main.take_profit) and take_profit_rule and buy_price:
             message = "TakeProfit intermittant"
             self.logger.info(message)
             return ('SELL', current_time, current_price)
@@ -296,8 +296,8 @@ class Redis():
             except TypeError as error:
                 self.logger.warning("Failed to eval sell rule: %s", error)
 
-        stop_loss_perc = float(config.main["stop_loss_perc"])
-        take_profit_perc = float(config.main["take_profit_perc"])
+        stop_loss_perc = float(config.main.stop_loss_perc)
+        take_profit_perc = float(config.main.take_profit_perc)
 
         try:
             # function returns an empty list if no results so cannot get first element
@@ -306,7 +306,6 @@ class Redis():
             if str2bool(config.main["trailing_stop_loss"]):
                 high_price = self.get_high_price(pair, interval)
                 take_profit_price = add_perc(take_profit_perc, buy_price)
-
 
                 trailing_perc = float(config.main["trailing_stop_loss_perc"])
                 if high_price > take_profit_price:
@@ -341,12 +340,14 @@ class Redis():
                            pair, current_time, results.current)
             self.del_high_price(pair, interval)
             return ('SELL', current_time, current_price)
+
         # if we match take_profit rule and are in a trade
-        #elif take_profit_rule and buy_price:
-        #    self.log_event('TakeProfit', rate, perc_rate, buy_price, current_price, pair,
-        #                   current_time, results.current)
-        #    self.del_high_price(pair, interval)
-        #    return ('SELL', current_time, current_price)
+        elif str2bool(config.main.take_profit) and take_profit_rule and buy_price:
+            self.log_event('TakeProfit', rate, perc_rate, buy_price, current_price, pair,
+                           current_time, results.current)
+            self.del_high_price(pair, interval)
+            return ('SELL', current_time, current_price)
+
         # if we match any sell rules and are in a trade
         elif any(sell_rules) and buy_price:
             winning_rules = []
@@ -361,6 +362,7 @@ class Redis():
 
             self.del_high_price(pair, interval)
             return ('SELL', current_time, current_price)
+
         # if we match all buy rules and are NOT in a trade
         elif any(buy_rules) and not buy_price:
             self.log_event('NormalBuy', rate, perc_rate, current_price, current_price, pair, current_time,
@@ -371,6 +373,7 @@ class Redis():
             self.put_high_price(pair, interval, current_price)
             self.logger.debug("Close: {0}, Previous Close: {1}, >: {2}".format(close, last_close, close > last_close))
             return ('BUY', current_time, current_price)
+
         elif buy_price:
             self.log_event('Hold', rate, perc_rate, buy_price, current_price, pair, current_time,
                            results.current)

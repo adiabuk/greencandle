@@ -256,6 +256,11 @@
       "is_binary": false,
       "is_secret": false
     },
+    "take_profit": {
+      "value": "False",
+      "is_binary": false,
+      "is_secret": false
+    },
     "take_profit_perc": {
       "value": "30",
       "is_binary": false,
