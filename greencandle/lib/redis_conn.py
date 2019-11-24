@@ -67,7 +67,7 @@ class Redis():
               pair: trading pair (eg. XRPBTC)
               interval: interval of each kline
               data: json with data to store
-              now: datatime stamp
+              now: datetime stamp
         Returns:
             success of operation: True/False
         """
@@ -94,7 +94,10 @@ class Redis():
     def get_high_price(self, pair, interval):
         """get current highest price for pair and interval"""
         key = 'highClose_{0}_{1}'.format(pair, interval)
-        last_price = float(self.conn.get(key))
+        try:
+            last_price = float(self.conn.get(key))
+        except TypeError:
+            last_price = None
         return last_price
 
     def del_high_price(self, pair, interval):
@@ -196,8 +199,8 @@ class Redis():
         take_profit_perc = float(config.main.take_profit_perc)
         stop_loss_rule = float(current_price) < sub_perc(stop_loss_perc, buy_price)
         take_profit_rule = float(current_price) > add_perc(take_profit_perc, buy_price)
-
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
+
         if stop_loss_rule and buy_price:
             message = "StopLoss intermittant"
             self.logger.info(message)
