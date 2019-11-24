@@ -303,12 +303,12 @@ class Redis():
             # function returns an empty list if no results so cannot get first element
             buy_price = float(self.dbase.get_trade_value(pair)[0][0])
 
-            if str2bool(config.main["trailing_stop_loss"]):
+            if str2bool(config.main.trailing_stop_loss):
                 high_price = self.get_high_price(pair, interval)
                 take_profit_price = add_perc(take_profit_perc, buy_price)
 
-                trailing_perc = float(config.main["trailing_stop_loss_perc"])
-                if high_price > take_profit_price:
+                trailing_perc = float(config.main.trailing_stop_loss_perc)
+                if high_price and high_price > take_profit_price:
                     trailing_stop = current_price < sub_perc(trailing_perc, high_price)
                 else:
                     trailing_stop = False
