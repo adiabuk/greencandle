@@ -36,5 +36,5 @@ SCHEDULER.every '15s', :first_in => 0 do |job|
   send_event('asc1', { items: asc } )
   send_event('desc1', { items: desc } )
 
+  db.close
 end
-

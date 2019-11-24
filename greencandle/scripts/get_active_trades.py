@@ -26,7 +26,7 @@ def main():
         print(pair)
         buy_time = trade[1]
         buy_price = trade[2]
-        current_price = prices()[pair]
+        current_price = prices[pair]
         perc = 100 * (float(current_price) - float(buy_price)) / float(buy_price)
         insert = ('insert into open_trades (pair, buy_time, buy_price, current_price, perc) '
                   'VALUES ("{0}", "{1}", "{2}", "{3}", "{4}")'.format(pair, buy_time,

@@ -12,8 +12,6 @@ db = Mysql2::Client.new(:host => "mysql", :username => "greencandle", :password 
 end
 last_x = points.last[:x]
 
-
-
 SCHEDULER.every '10s' do
   points.shift
   last_x += 1
@@ -25,3 +23,4 @@ SCHEDULER.every '10s' do
   end
 
 end
+db.close

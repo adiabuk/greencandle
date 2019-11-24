@@ -17,5 +17,5 @@ SCHEDULER.every '120s', :first_in => 0 do |job|
         table.push({ cols: [ {value: row['pair']}, {value: row['buy_time']}, {value: row['buy_price']},{value: row['current_price']},{value: row['perc']} ]})
     end
     send_event('my-table', { hrows: hrows, rows: table })
-
+    db.close
 end
