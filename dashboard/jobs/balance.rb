@@ -1,6 +1,5 @@
 require 'mysql2'
-current_valuation = 0
-current_karma = 0
+current_balance = 0
 
 SCHEDULER.every '10s' do
 
@@ -11,17 +10,14 @@ SCHEDULER.every '10s' do
   balance_sql = "select round(gbp,2) from balance limit 1"
   balance = db.query(balance_sql)
   result = db.query(sql)
-  last_valuation = current_valuation
-  last_karma     = current_karma
+  last_balance = current_balance
   if balance.size == 0
-    current_valuation = 0
+    current_balance = 0
   else
-    current_valuation = balance.first['gbp']
+    current_balance = balance.first['gbp']
   end
-  current_karma     = rand(200000)
   puts result.first['average']
-  send_event('valuation', { current: current_valuation, last: last_valuation })
-  send_event('karma', { current: current_karma, last: last_karma })
+  send_event('balance', { current: current_balance, last: last_balance })
   send_event('synergy',   { value: result.first['average']*100 })
   db.close
 end
