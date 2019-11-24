@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 5.7.27, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.28, for Linux (x86_64)
 --
 -- Host: localhost    Database: greencandle
 -- ------------------------------------------------------
@@ -60,7 +60,7 @@ DROP TABLE IF EXISTS `daily_profit`;
 /*!50001 DROP VIEW IF EXISTS `daily_profit`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `daily_profit` AS SELECT
+/*!50001 CREATE VIEW `daily_profit` AS SELECT 
  1 AS `date`,
  1 AS `interval`,
  1 AS `profit`,
@@ -89,7 +89,7 @@ DROP TABLE IF EXISTS `hour_balance`;
 /*!50001 DROP VIEW IF EXISTS `hour_balance`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `hour_balance` AS SELECT
+/*!50001 CREATE VIEW `hour_balance` AS SELECT 
  1 AS `exchange_id`,
  1 AS `usd1`,
  1 AS `coin`,
@@ -104,6 +104,22 @@ SET character_set_client = utf8;
 SET character_set_client = @saved_cs_client;
 
 --
+-- Table structure for table `open_trades`
+--
+
+DROP TABLE IF EXISTS `open_trades`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `open_trades` (
+  `pair` varchar(30) DEFAULT NULL,
+  `buy_price` varchar(30) DEFAULT NULL,
+  `buy_time` varchar(30) DEFAULT NULL,
+  `current_price` varchar(30) DEFAULT NULL,
+  `perc` varchar(30) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Temporary table structure for view `profit`
 --
 
@@ -111,7 +127,7 @@ DROP TABLE IF EXISTS `profit`;
 /*!50001 DROP VIEW IF EXISTS `profit`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profit` AS SELECT
+/*!50001 CREATE VIEW `profit` AS SELECT 
  1 AS `buy_time`,
  1 AS `interval`,
  1 AS `sell_time`,
@@ -236,8 +252,8 @@ CREATE TABLE `trades` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-09-18 10:16:15
--- MySQL dump 10.13  Distrib 5.7.27, for Linux (x86_64)
+-- Dump completed on 2019-11-24 17:45:01
+-- MySQL dump 10.13  Distrib 5.7.28, for Linux (x86_64)
 --
 -- Host: localhost    Database: greencandle
 -- ------------------------------------------------------
@@ -287,4 +303,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-09-18 10:16:15
+-- Dump completed on 2019-11-24 17:45:01
