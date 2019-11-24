@@ -120,16 +120,6 @@ class Redis():
         """
         return sorted(list(self.conn.scan_iter("{0}:{1}:*".format(pair, interval))))
 
-    def get_details(self, address):
-        """
-        Get totals of results in each group
-
-        Args:
-              address
-              eg.  b"XRPBTC:15m:1520869499999",
-        """
-        return self.conn.hgetall(address).items()
-
     def get_total(self, address):
         """
         Get totals of results in each group
