@@ -50,7 +50,7 @@ services:
   dashboard:
     container_name: dashboard
     hostname: dashboard
-    image: visibilityspots/smashing
+    image: dashboard
     healthcheck:
       test: curl --fail 127.1:3030/dashboard/gc || exit 1
       interval: 10m
@@ -58,12 +58,11 @@ services:
       retries: 5
     ports:
       - 8080:3030
-    environment:
-      - GEMS=mysql2
     restart: on-failure
-    entrypoint: /run.sh
+    entrypoint: /docker-entrypoint.sh
     links:
       - mysql-local:mysql
+      - redis-local:redis
     volumes:
       - /srv/greencandle/dashboard/dashboards:/dashboards
       - /srv/greencandle/dashboard/jobs:/jobs
