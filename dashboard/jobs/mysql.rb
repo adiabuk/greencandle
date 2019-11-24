@@ -14,7 +14,7 @@ SCHEDULER.every '15s', :first_in => 0 do |job|
   descending = "SELECT pair, concat(truncate(sum(perc),2),'%') as perc from profit where sell_time != '0000-00-00 00:00:00' group by pair order by sum(perc) desc limit 6"
 
   # Execute the query
-  ascending_results = db.query(asceding)
+  ascending_results = db.query(ascending)
   descending_results = db.query(descending)
 
   # Sending to List widget, so map to :label and :value
