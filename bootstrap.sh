@@ -46,20 +46,11 @@ echo "127.0.0.1    redis" >> /etc/hosts
 docker build --force-rm --no-cache -f ./Dockerfile-gc . --tag=greencandle
 docker build --force-rm --no-cache -f ./Dockerfile-ms . --tag=gc-mysql
 docker build --force-rm --no-cache -f ./Dockerfile-rs . --tag=gc-redis
+docker build --force-rm --no-cache -f ./Dockerfile-cn . --tag-cron
+docker build --force-rm --no-cache -f ./Dockerfile-ds . --tag=dashboard
+docker build --force-rm --no-cache -f ./Dockerfile-wb . --tag=webserver
 
-#sleep 20
-#mysql --protocol=tcp  -uroot -ppassword  -e "create database greencandle"
-#mysql --protocol=tcp  -uroot -ppassword  -e "CREATE USER 'greencandle'@'%' IDENTIFIED BY 'password';"
-#mysql --protocol=tcp  -uroot -ppassword  -e "GRANT ALL PRIVILEGES ON *.* TO 'greencandle'@'%' WITH GRANT OPTION;"
-#mysql --protocol=tcp -uroot -ppassword -e "SET GLOBAL sql_mode = 'NO_ENGINE_SUBSTITUTION';"
-#greencandle/scripts/get_db_schema.sh -p -f ./greencandle.sql
 container=$(docker ps|grep mysql|awk {'print $1'})
-#docker commit $container gc-mysql
-#docker stop $container
-
-# Cleanup docker env
-#docker rm $container
-#docker image rm vanilla-mysql
 
 # Create shared volume
 docker volume create data
