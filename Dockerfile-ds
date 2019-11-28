@@ -3,12 +3,12 @@ LABEL branch=${BRANCH}
 LABEL commit=${COMMIT}
 LABEL date=${DATE}
 
-RUN rm -rf /config /dashboards /jobs /assets /widgets
-ADD dashboard/config /config
-ADD dashboard/dashboards /dashboards
-ADD dashboard/jobs /jobs
-ADD dashboard/assets /assets
-ADD dashboard/widgets /widgets
+RUN rm -rf /smashing/config/* /smashing/dashboards/* /smashing/jobs/* /smashing/assets/* /smashing/widgets/*
+ADD dashboard/config /smashing/config
+ADD dashboard/dashboards /smashing/dashboards
+ADD dashboard/jobs /smashing/jobs
+ADD dashboard/assets /smashing/assets
+ADD dashboard/widgets /smashing/widgets
 
 ADD dashboard/install.sh /install.sh
 ADD dashboard/docker-entrypoint.sh /docker-entrypoint.sh
