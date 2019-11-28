@@ -2,8 +2,8 @@
 
 require 'mysql2'
 
-SCHEDULER.every '15s', :first_in => 0 do |job|
-
+SCHEDULER.every '30s', :first_in => 0 do |job|
+  puts "Getting recent profits..."
   # Myql connection
   db = Mysql2::Client.new(:host => "mysql", :username => "greencandle", :password => "password", :port => 3306, :database => "greencandle" )
 

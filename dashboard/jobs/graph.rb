@@ -5,6 +5,7 @@ points = []
 
 
 SCHEDULER.every '10s' do
+  puts "Getting current profit..."
   sql = "select truncate(perc,2) as perc from profit where sell_time != '0000-00-00 00:00:00' order by sell_time desc limit 1"
   db = Mysql2::Client.new(:host => "mysql", :username => "greencandle", :password => "password", :port => 3306, :database => "greencandle" )
 
