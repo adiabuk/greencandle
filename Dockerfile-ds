@@ -3,6 +3,7 @@ LABEL branch=${BRANCH}
 LABEL commit=${COMMIT}
 LABEL date=${DATE}
 
+RUN rm -rf /config /dashboards /jobs /assets /widgets
 ADD dashboard/config /config
 ADD dashboard/dashboards /dashboards
 ADD dashboard/jobs /jobs
