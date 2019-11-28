@@ -6,7 +6,6 @@
   "buy_rule5": "",
   "buy_rule6": "",
   "buy_rule7": "",
-  "get_moving_averages;EMA;2 get_moving_averages;EMA;69": "",
   "indicators": "get_moving_averages;EMA;2 get_moving_averages;EMA;69",
   "interval": "4h",
   "max_trades": "3",
