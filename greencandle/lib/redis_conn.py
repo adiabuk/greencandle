@@ -1,9 +1,10 @@
-#pylint: disable=eval-used,no-else-return,unused-variable,no-member
+#pylint: disable=eval-used,no-else-return,unused-variable,no-member,redefined-builtin
 
 """
 Store and retrieve items from redis
 """
 import ast
+import sys
 import time
 import zlib
 import pickle
@@ -205,12 +206,14 @@ class Redis():
     def get_action(self, pair, interval):
         """Determine if we are in a BUY/HOLD/SELL situration for a specific pair and interval"""
         results = AttributeDict(current=AttributeDict(), previous=AttributeDict(),
-                                previous1=AttributeDict(), previous2=AttributeDict(), previous3=AttributeDict())
+                                previous1=AttributeDict(), previous2=AttributeDict(),
+                                previous3=AttributeDict())
         try:
-            previous3, previous2, previous1, previous, current = self.get_items(pair=pair, interval=interval)[-5:]
+            previous3, previous2, previous1, previous, current = \
+                    self.get_items(pair=pair, interval=interval)[-5:]
         except ValueError:
 
-            self.logger.debug("Not enough data for {0}".format(pair))
+            self.logger.debug("Not enough data for %s", pair)
 
             return ('HOLD', 'Not enough data', 0)
 
@@ -266,28 +269,35 @@ class Redis():
         # specified in the rate_indicator config option - best with EMA_500
         rate_indicator = config.main.rate_indicator
         perc_rate = float(perc_diff(float(results.previous[rate_indicator]),
-                                    float(results.current[rate_indicator]))) if results.previous[rate_indicator] else 0
-        rate = float(float(results.current[rate_indicator]) - float(results.previous[rate_indicator])) if results.previous[rate_indicator] else 0
+                                    float(results.current[rate_indicator]))) \
+                                    if results.previous[rate_indicator] else 0
+        rate = float(float(results.current[rate_indicator]) - \
+                     float(results.previous[rate_indicator])) \
+                     if results.previous[rate_indicator] else 0
 
         last_perc_rate = float(perc_diff(float(results.previous1[rate_indicator]),
-                                       float(results.previous[rate_indicator]))) if results.previous1[rate_indicator] else 0
+                                         float(results.previous[rate_indicator]))) \
+                                               if results.previous1[rate_indicator] else 0
         last_rate = float(float(results.previous[rate_indicator]) -
-                        float(results.previous1[rate_indicator])) if results.previous1[rate_indicator] else 0
+                          float(results.previous1[rate_indicator])) \
+                                  if results.previous1[rate_indicator] else 0
 
-        buy_rules = []
-        sell_rules = []
+        rules = {'buy': [], 'sell': []}
         for seq in range(1, 10):
-            try:
-                self.logger.debug(config.main['buy_rule{}'.format(seq)])
-                buy_rules.append(eval(config.main['buy_rule{}'.format(seq)]))
-            except (KeyError, TypeError):
-                pass
-            try:
-                sell_rules.append(eval(config.main['sell_rule{}'.format(seq)]))
-            except KeyError:
-                pass
-            except TypeError as error:
-                self.logger.warning("Failed to eval sell rule: %s", error)
+            current_config = None
+            for rule in "buy", "sell":
+                try:
+                    current_config = config.main['{}_rule{}'.format(rule, seq)]
+                    self.logger.debug("Rule: %s_rule%s: %s", rule, seq, current_config)
+                except (KeyError, TypeError):
+                    pass
+                if current_config:
+                    try:
+                        rules[rule].append(eval(current_config))
+                    except KeyError:
+                        self.logger.error("Unable to eval config rule: %s_rule: %s",
+                                          rule, current_config)
+                        sys.exit(2)
 
         stop_loss_perc = float(config.main.stop_loss_perc)
         take_profit_perc = float(config.main.take_profit_perc)
@@ -321,15 +331,18 @@ class Redis():
             take_profit_rule = False
 
 
-        if buy_price and any(buy_rules) and any(sell_rules):
-            self.logger.warning('We ARE In a trade and have matched both buy and sell rules for %s', pair)
-        if not buy_price and any(buy_rules) and any(sell_rules):
-            self.logger.warning('We are NOT in a trade and have matched both buy and sell rules for %s', pair)
+        if buy_price and any(rules['buy']) and any(rules['sell']):
+            self.logger.warning('We ARE In a trade and have matched both buy and '
+                                'sell rules for %s', pair)
+        if not buy_price and any(rules['buy']) and any(rules['sell']):
+            self.logger.warning('We are NOT in a trade and have matched both buy and '
+                                'sell rules for %s', pair)
 
         # if we match stop_loss rule and are in a trade
         if stop_loss_rule and buy_price:
             self.logger.warning("StopLoss: buy_price:%s high_price:%s", buy_price, high_price)
-            self.log_event('StopLoss', rate, perc_rate, buy_price, sub_perc(stop_loss_perc, buy_price),
+            self.log_event('StopLoss', rate, perc_rate, buy_price,
+                           sub_perc(stop_loss_perc, buy_price),
                            pair, current_time, results.current)
             self.del_high_price(pair, interval)
             return ('SELL', current_time, current_price)
@@ -342,29 +355,30 @@ class Redis():
             return ('SELL', current_time, current_price)
 
         # if we match any sell rules and are in a trade
-        elif any(sell_rules) and buy_price:
+        elif any(rules['sell']) and buy_price:
             winning_rules = []
             # Determine which sell rules matched
-            for seq, sell_rule in enumerate(sell_rules):
+            for seq, sell_rule in enumerate(rules['sell']):
                 if sell_rule:
                     winning_rules.append(seq + 1)
 
-            self.log_event('NormalSell', rate, perc_rate, buy_price, current_price, pair, current_time,
-                           results.current)
+            self.log_event('NormalSell', rate, perc_rate, buy_price, current_price,
+                           pair, current_time, results.current)
             self.logger.info('Sell Rules matched: %s', winning_rules)
 
             self.del_high_price(pair, interval)
             return ('SELL', current_time, current_price)
 
         # if we match all buy rules and are NOT in a trade
-        elif any(buy_rules) and not buy_price:
-            self.log_event('NormalBuy', rate, perc_rate, current_price, current_price, pair, current_time,
-                           results.current)
+        elif any(rules['buy']) and not buy_price:
+            self.log_event('NormalBuy', rate, perc_rate, current_price, current_price,
+                           pair, current_time, results.current)
 
             # delete and re-store high price
             self.del_high_price(pair, interval)
             self.put_high_price(pair, interval, current_price)
-            self.logger.debug("Close: {0}, Previous Close: {1}, >: {2}".format(close, last_close, close > last_close))
+            self.logger.debug("Close: %s, Previous Close: %s, >: %s",
+                              close, last_close, close > last_close)
             return ('BUY', current_time, current_price)
 
         elif buy_price:
