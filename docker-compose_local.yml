@@ -4,7 +4,7 @@ services:
   cron:
     container_name: cron
     environment:
-      - CONFIG_ENV=test
+      - CONFIG_ENV=test/cron
       - HOST=$HOSTNAME
     hostname: cron
     image: greencandle

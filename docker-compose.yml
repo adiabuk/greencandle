@@ -193,7 +193,7 @@ services:
   cron:
     container_name: cron
     environment:
-      - CONFIG_ENV=prod
+      - CONFIG_ENV=prod/cron
       - HOST=$HOSTNAME
     hostname: cron
     image: amrox/greencandle
