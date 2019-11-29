@@ -32,7 +32,6 @@ def create_config():
     """
     logger = getLogger(__name__)
 
-    logger.info('Getting config')
     parser = ConfigParser()
     parser.read("/etc/greencandle.ini")
 
