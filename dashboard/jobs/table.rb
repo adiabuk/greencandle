@@ -6,7 +6,7 @@ SCHEDULER.every '120s', :first_in => 0 do |job|
     puts "Getting current open trades..."
     db = Mysql2::Client.new(:host => "mysql", :username => "greencandle", :password => "password", :port => 3306, :database => "greencandle" )
 
-    query = "select pair, round(buy_price,4) as buy_price, buy_time, round(current_price,4) as current_price, round(perc,2) as perc from open_trades"
+    query = "select pair, round(buy_price,5) as buy_price, buy_time, round(current_price,5) as current_price, round(perc,2) as perc from open_trades"
     results = db.query(query)
     print results
     hrows = [
