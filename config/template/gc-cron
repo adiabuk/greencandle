@@ -7,3 +7,4 @@
 00 02 * * *  /usr/local/bin/create_graph -d0 -p BNBBTC -i 4h -o /data/graphs/ > /proc/1/fd/1 2>/proc/1/fd/2
 00 03 * * 1 /bin/ls -1t /data/mysql| tail -n +31 | /usr/bin/xargs -d '\n' bin/rm -f > /proc/1/fd/1 2>/proc/1/fd/2
 */2 * * * * /usr/local/bin/get_active_trades > /proc/1/fd/1 2>/proc/1/fd/2
+0 * * * *  /usr/local/bin/send_docker_alerts
