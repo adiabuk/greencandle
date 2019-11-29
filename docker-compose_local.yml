@@ -8,6 +8,7 @@ services:
       - HOST=$HOSTNAME
     hostname: cron
     image: greencandle
+    restart: on-failure
     entrypoint: /docker-entrypoint.sh cron -f
     links:
       - mysql-local:mysql
