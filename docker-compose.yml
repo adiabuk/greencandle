@@ -224,6 +224,7 @@ services:
        retries: 5
      environment:
        - CONFIG_ENV=prod
+       - HOST=$HOSTNAME
      ports:
        - 80:80
      links:

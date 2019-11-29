@@ -21,6 +21,7 @@ configstore package process_templates --ignore-role --basedir /opt/config $CONFI
 cp /opt/output/greencandle.ini /etc/greencandle.ini || true
 cp /opt/output/default.conf /etc/nginx/conf.d/default.conf || true
 cp /opt/output/nginx.conf /etc/nginx/ || true
+echo $HOST > /var/www/html/env.txt || true
 cp /opt/output/{*.html,*.css,*.js,*.jpg} /var/www/html ||true
 crontab /opt/output/gc-cron || true
 > /etc/nginx/sites-available/default || true

@@ -393,11 +393,19 @@ body {
 }
 
         </style>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script>
+        $(document).ready(function(){
+         jQuery.get('env.txt', function(data) {
+          $("p").text('Greencandle' + data);
+          });
+         });
+    </script>
 </head>
 <body>
 <content>
 <section class="msg">
-<div>Greencandle</div>
+<div><p>Greencandle</p></div>
 <ul class="features">
 <li>
 <svg class="icon"><use xlink:href="#icon-chrome"></use></svg>

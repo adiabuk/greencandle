@@ -3,6 +3,7 @@ FROM nginx:stable
 LABEL branch=${BRANCH}
 LABEL commit=${COMMIT}
 LABEL date=${DATE}
+LABEL host=${HOST}
 
 RUN apt-get update \
    && apt-get install -y cron bash wget nginx-extras netcat vim
