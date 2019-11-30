@@ -16,6 +16,11 @@ def main():
     main function
     """
 
+    if len(sys.argv) > 1 and sys.argv[1] == '--help':
+        print("Generate Excel report from database entries")
+        sys.exit(0)
+
+
     filename = sys.argv[1]
     workbook = openpyxl.Workbook()
     workbook.remove(workbook.get_sheet_by_name('Sheet'))

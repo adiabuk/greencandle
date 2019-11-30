@@ -8,7 +8,7 @@ namespace so that alerts can be sent
 Errors will also be printed to STDOUT.
 This script is intended to be run from crontab.
 """
-
+import sys
 import json
 from greencandle.lib import config
 config.create_config()
@@ -34,6 +34,11 @@ def get_docker_status(docker_socket):
 
 def main():
     """main_function"""
+
+    if len(sys.argv) > 1 and sys.argv[1] == '--help':
+        print("Send alerts if docker containers are down")
+        sys.exit(0)
+
 
     issues = []
     docker_socket = "/var/run/docker.sock"
