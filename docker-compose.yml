@@ -1,6 +1,20 @@
 version: "3.1"
 services:
 
+  cadvisor:
+    container_name: cadvisor
+    hostname: cadvisor
+    image: google/cadvisor:latest
+    restart: on-failure
+    ports:
+      - 18080:8080
+    volumes:
+      - /:/rootfs
+      - /var/run:/var/run
+      - /sys:/sys
+      - /var/lib/docker:/var/lib/docker
+      - /dev/disk:/dev/disk
+
   redis:
     container_name: redis
     hostname: redis
