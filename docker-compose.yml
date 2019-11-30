@@ -4,10 +4,8 @@ services:
   cadvisor:
     container_name: cadvisor
     hostname: cadvisor
-    image: google/cadvisor:latest
+    image: google/cadvisor:canary
     restart: on-failure
-    ports:
-      - 18080:8080
     volumes:
       - /:/rootfs
       - /var/run:/var/run
