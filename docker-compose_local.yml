@@ -1,6 +1,18 @@
 version: "3.1"
 services:
 
+  cadvisor:
+    container_name: cadvisor
+    hostname: cadvisor
+    image: google/cadvisor:canary
+    restart: on-failure
+    volumes:
+      - /:/rootfs
+      - /var/run:/var/run
+      - /sys:/sys
+      - /var/lib/docker:/var/lib/docker
+      - /dev/disk:/dev/disk
+
   cron:
     container_name: cron
     environment:
