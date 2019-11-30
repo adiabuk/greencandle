@@ -5,8 +5,6 @@ services:
     container_name: redis
     hostname: redis
     image: amrox/gc-redis
-    ports:
-      - 6379:6379
     restart: on-failure
     links:
       - mysql
@@ -21,8 +19,6 @@ services:
     hostname: mysql
     image: amrox/gc-mysql
     entrypoint: /docker-entrypoint.sh mysqld
-    ports:
-      - 3306:3306
     environment:
       - CONFIG_ENV=prod
       - MYSQL_ROOT_PASSWORD=password
