@@ -1,9 +1,13 @@
 # Testing & Build status
-Main image build: ![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/amrox/greencandle)
-Mysql image build: ![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/amrox/gc-mysql)
-Redis image build: ![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/amrox/gc-redis)
-Webserver image build: ![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/amrox/webserver)
-Dashboard image build: ![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/amrox/dashboard)
+Main image build: [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/amrox/greencandle)](https://hub.docker.com/repository/docker/amrox/greencandle)
+
+Mysql image build: [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/amrox/gc-mysql)](https://hub.docker.com/repository/docker/amrox/gc-mysql)
+
+Redis image build: [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/amrox/gc-redis)](https://hub.docker.com/repository/docker/amrox/gc-redis)
+
+Webserver image build: [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/amrox/webserver)](https://hub.docker.com/repository/docker/amrox/webserver)
+
+Dashboard image build: [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/amrox/dashboard)](https://hub.docker.com/repository/docker/amrox/dashboard)
 
 Testing: [![Build Status](https://travis-ci.org/adiabuk/greencandle.svg?branch=master)](https://travis-ci.org/adiabuk/greencandle)
 
