@@ -1,3 +1,4 @@
+#pylint: disable=no-member
 """
 Helper functions for authernticating with APIs
 """
