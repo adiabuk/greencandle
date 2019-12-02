@@ -2,7 +2,6 @@
 """Test lint of python files"""
 
 import unittest
-from glob import glob
 from pathlib import Path
 from pylint.lint import Run
 
@@ -20,6 +19,6 @@ class TestLint(unittest.TestCase):
                 try:
                     print(filename)
                     score = results.linter.stats['global_note']
-                    self.assertGreaterEqual(score, 5)
+                    self.assertGreaterEqual(score, 9.0)
                 except KeyError:
                     pass
