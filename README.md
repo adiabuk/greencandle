@@ -1,6 +1,13 @@
-[![Build Status](https://travis-ci.org/adiabuk/greencandle.svg?branch=master)](https://travis-ci.org/adiabuk/greencandle) 
- 
- sudo apt-get install libcanberra-gtk-module
+# Testing & Build status
+Main image build: ![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/amrox/greencandle)
+Mysql image build: ![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/amrox/gc-mysql)
+Redis image build: ![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/amrox/gc-redis)
+Webserver image build: ![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/amrox/webserver)
+Dashboard image build: ![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/amrox/dashboard)
+
+Testing: [![Build Status](https://travis-ci.org/adiabuk/greencandle.svg?branch=master)](https://travis-ci.org/adiabuk/greencandle)
+
+sudo apt-get install libcanberra-gtk-module
 sudo apt-get install firefox xvfb
 
 $ wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
