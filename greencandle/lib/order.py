@@ -69,10 +69,16 @@ class Trade():
                 prices['binance']['USDC']['count'] = 60
                 prices['binance']['BNB']['count'] = 2.847634
                 for base in ['BTC', 'ETH', 'USDT', 'BNB', 'USDC']:
-                    result = dbase.fetch_sql_data("select sum(base_out-base_in) from trades where pair like '%{0}'".format(base), header=False)[0][0]
+                    result = dbase.fetch_sql_data("select sum(base_out-base_in) from trades "
+                                                  "where pair like '%{0}'"
+                                                  .format(base), header=False)[0][0]
                     result = float(result) if result else 0
-                    current_trade_values = dbase.fetch_sql_data("select sum(base_in) from trades where pair like '%{0}' and base_out is null".format(base), header=False)[0][0]
-                    current_trade_values = float(current_trade_values) if current_trade_values else 0
+                    current_trade_values = dbase.fetch_sql_data("select sum(base_in) from trades "
+                                                                "where pair like '%{0}' and "
+                                                                "base_out is null"
+                                                                .format(base), header=False)[0][0]
+                    current_trade_values = float(current_trade_values) if \
+                            current_trade_values else 0
                     prices['binance'][base]['count'] += result + current_trade_values
 
             else:
@@ -84,7 +90,9 @@ class Trade():
 
                 base = get_base(item)
                 try:
-                    last_buy_price = dbase.fetch_sql_data("select base_in from trades where pair='{0}'".format(item), header=False)[-1][-1]
+                    last_buy_price = dbase.fetch_sql_data("select base_in from trades where "
+                                                          "pair='{0}'".format(item),
+                                                          header=False)[-1][-1]
                     last_buy_price = float(last_buy_price) if last_buy_price else 0
                 except IndexError:
                     last_buy_price = 0
@@ -96,7 +104,8 @@ class Trade():
                     self.logger.warning("Too many trades, skipping")
                     break
                 proposed_base_amount = current_base_bal / (self.max_trades + 1)
-                self.logger.info('item: %s, proposed: %s, last:%s', item, proposed_base_amount, last_buy_price)
+                self.logger.info('item: %s, proposed: %s, last:%s', item, proposed_base_amount,
+                                 last_buy_price)
                 base_amount = max(proposed_base_amount, last_buy_price)
                 cost = current_price
                 main_pairs = config.main.pairs
@@ -172,7 +181,8 @@ class Trade():
 
                 if self.test_data or (self.test_trade and not result) or \
                         (not self.test_trade and 'transactTime' in result):
-                    dbase.update_trades(pair=item, sell_time=current_time, sell_price=price, quote=quantity, base_out=base_out)
+                    dbase.update_trades(pair=item, sell_time=current_time,
+                                        sell_price=price, quote=quantity, base_out=base_out)
 
                 else:
                     self.logger.critical("Sell Failed")

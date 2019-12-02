@@ -1,4 +1,8 @@
-#pylint: disable=unused-argument
+#pylint: disable=unused-argument,no-member,unnecessary-pass
+
+"""
+Custom Exception for timeout
+"""
 
 import signal
 from contextlib import contextmanager
@@ -39,6 +43,6 @@ def restrict_timeout(time, name):
     try:
         yield None
     except TimeoutException:
-        LOGGER.critical("Timed out waiting {0} seconds for {1}".format(time, name))
+        LOGGER.critical("Timed out waiting %s seconds for %s", time, name)
     finally:
         signal.alarm(0)

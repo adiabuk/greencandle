@@ -1,10 +1,12 @@
+#pylint: disable=no-member
+
 """
 Get/Convert Balances from Binance
 """
 
 from collections import defaultdict
-from forex_python.converter import CurrencyRates, RatesNotAvailableError
 import binance
+from forex_python.converter import CurrencyRates, RatesNotAvailableError
 from .balance_common import default_to_regular
 from .auth import binance_auth
 from .logger import getLogger

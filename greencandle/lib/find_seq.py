@@ -1,23 +1,23 @@
 #!/usr/bin/env python
 
-def get_sequences(li):
+def get_sequences(sequence_list):
     current_li = []
     sequences = []
-    for index, item in enumerate(li):
+    for index, item in enumerate(sequence_list):
         print(index, item)
         if index == 0:
             current_li.append((index, item))
             continue
 
-        if item >= li[index -1]:
+        if item >= sequence_list[index -1]:
             print("still in seq", current_li, "item:", item)
             current_li.append((index, item))
-            if index == len(li) - 1 and len(current_li) > 1:
+            if index == len(sequence_list) - 1 and len(current_li) > 1:
                 sequences .append(current_li)
-        elif item < li[index -1]:
+        elif item < sequence_list[index -1]:
             print("end of seq")
             sequences.append(current_li)
-            current_li =  [(index, item)]
+            current_li = [(index, item)]
 
     print(sequences, len(sequences))
     for sequence in sequences:

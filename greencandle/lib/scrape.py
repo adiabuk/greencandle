@@ -51,7 +51,8 @@ def scrape_data(binary="firefox"):
 
     #Select 5m as interval
     driver.find_element_by_xpath('//*[@id="js-screener-container"]/div[2]/div[7]/div[2]').click()
-    driver.find_element_by_xpath(' //*[@id="js-screener-container"]/div[2]/div[7]/div[3]/div/div[1]/div[1]/div').click()
+    driver.find_element_by_xpath(' //*[@id="js-screener-container"]/div[2]/div[7]/div[3]'
+                                 '/div/div[1]/div[1]/div').click()
     for i in range(1, 500):
         try:
             item = driver.find_element_by_xpath("//div[@id='js-screener-container']/div[4]/"
@@ -63,26 +64,23 @@ def scrape_data(binary="firefox"):
         except NoSuchElementException:
             #print("no element")
             break
-        except Exception as ex:
-            #print("exception", ex)
+        except Exception:
             wait.until(EC.staleness_of(item))
-            #line = u"".join(line).encode("utf-8").strip()
             continue
 
         try:
-            li = line.replace("Strong ", "Strong_").split()
-            if "BTC" in li[0]:
+            item = line.replace("Strong ", "Strong_").split()
+            if "BTC" in item[0]:
                 #print(line)
-                results[li[0]] = li[-2]
+                results[item[0]] = item[-2]
 
-        except Exception as e:
-            #print("exception2", e)
+        except Exception:
             continue
-    #driver.close()
+
     driver.quit()
     return results
 
 if __name__ == "__main__":
-    data = scrape_data("firefox")
-    for key, value in data.items():
+    DATA = scrape_data("firefox")
+    for key, value in DATA.items():
         print(key, value)

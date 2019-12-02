@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+"""
+Standalone script for generating graphs from data in redis
+"""
+
 import argparse
 import argcomplete
 
@@ -8,6 +12,7 @@ from greencandle.lib.graph import Graph
 config.create_config()
 
 def main():
+    """Main function"""
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--db", required=True)
     parser.add_argument("-p", "--pair", required=True)

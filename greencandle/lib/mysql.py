@@ -20,12 +20,12 @@ class Mysql():
         self.db = config.database.db_database
         self.logger = getLogger(__name__, config.main.logging_level)
 
-        self.connect(test=test)
+        self.connect()
         self.interval = interval
         self.logger.debug("Starting Mysql with interval %s, test=%s", interval, test)
 
     @get_exceptions
-    def connect(self, test=False):
+    def connect(self):
         """
         Connect to Mysql DB
         """
@@ -199,11 +199,10 @@ class Mysql():
         Update an existing trade with sell price
         """
         self.logger.info("Selling %s for %s", pair, self.interval)
-        command = """update trades set sell_price={0},sell_time="{1}", quote_out="{2}", base_out="{3}"
-        where sell_price is NULL and `interval`="{4}" and pair="{5}" """.format(float(sell_price),
-                                                                                sell_time, quote,
-                                                                                base_out,
-                                                                                self.interval, pair)
+        command = """update trades set sell_price={0},sell_time="{1}", quote_out="{2}",
+        base_out="{3}" where sell_price is NULL and `interval`="{4}"
+        and pair="{5}" """.format(float(sell_price), sell_time, quote,
+                                  base_out, self.interval, pair)
         self.run_sql_query(command)
 
     @get_exceptions

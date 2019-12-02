@@ -29,6 +29,7 @@ def getLogger(logger_name=None, logging_level=20):
     return logger
 
 def get_decorator(errors=(Exception,)):
+    """logging decorator"""
     logger = getLogger(__name__)
     def decorator(func):
 
@@ -36,7 +37,7 @@ def get_decorator(errors=(Exception,)):
             try:
                 return func(*args, **kwargs)
             except errors:
-                logger.critical("Got Error %s", str(sys.exc_info()), errors)
+                logger.critical("Got Error %s %s", str(sys.exc_info()), errors)
                 #logger.critical('Function', method.__name__, 'time:', round((te -ts)*1000,1), 'ms')
 
                 raise
