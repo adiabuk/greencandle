@@ -114,12 +114,12 @@ class Mysql():
 
         self.logger.info("Buying %s using %s", pair, self.interval)
         command = """insert into trades (pair, buy_time, buy_price, base_in, `interval`,
-                     quote_in) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}",
-                     "{5}");""".format(pair, date,
-                                       '%f' % float(price),
-                                       '%f' % float(base_amount),
-                                       self.interval,
-                                       quote)
+                     quote_in, name) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}",
+                     "{5}", "{6}");""".format(pair, date,
+                                              '%f' % float(price),
+                                              '%f' % float(base_amount),
+                                              self.interval,
+                                              quote, config.main.name)
         self.run_sql_query(command)
 
     @get_exceptions
@@ -187,7 +187,8 @@ class Mysql():
         """
         cur = self.dbase.cursor()
         command = """ select pair from trades where sell_price is NULL and `interval`="{0}"
-                  """.format(self.interval)
+                  and name="{1}"
+                  """.format(self.interval, config.main.name)
 
         self.execute(cur, command)
         row = [item[0] for item in cur.fetchall()]
@@ -201,12 +202,13 @@ class Mysql():
         self.logger.info("Selling %s for %s", pair, self.interval)
         command = """update trades set sell_price={0},sell_time="{1}", quote_out="{2}",
         base_out="{3}" where sell_price is NULL and `interval`="{4}"
-        and pair="{5}" """.format('%f' % float(sell_price),
-                                  sell_time,
-                                  '%f' % float(quote),
-                                  '%f' % float(base_out),
-                                  self.interval,
-                                  pair)
+        and pair="{5}" and name="{6}" """.format('%f' % float(sell_price),
+                                                 sell_time,
+                                                 '%f' % float(quote),
+                                                 '%f' % float(base_out),
+                                                 self.interval,
+                                                 pair,
+                                                 config.main.name)
         self.run_sql_query(command)
 
     @get_exceptions

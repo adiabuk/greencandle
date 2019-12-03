@@ -15,7 +15,7 @@ REQUIRED_CONFIG = {'database':['db_host', 'db_user', 'db_password', 'db_database
                    'email': ['email_from', 'email_to', 'email_password', 'email_active'],
                    'redis': ['redis_host', 'redis_port', 'redis_expire', 'redis_expiry_seconds'],
                    'push': ['push_host', 'push_channel', 'push_active'],
-                   'main': ['logging_level', 'max_trades', 'binance_api_key',
+                   'main': ['logging_level', 'max_trades', 'binance_api_key', 'name',
                             'binance_api_secret', 'coinbase_api_key', 'buy_rule1',
                             'coinbase_api_secret', 'interval', 'sell_rule1',
                             'drain', 'no_of_klines', 'pairs', 'stop_loss_perc',
