@@ -51,6 +51,5 @@ def main():
         parallel_test(pairs, parallel_interval, redis_db, args.data_dir, main_indicators)
 
 if __name__ == "__main__":
-    print(config)
     sys.exit()
     main()

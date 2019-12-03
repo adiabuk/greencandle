@@ -23,7 +23,6 @@ def main():
                                   "sell_price is NULL", header=False)
     for trade in trades:
         pair = trade[0]
-        print(pair)
         buy_time = trade[1]
         buy_price = trade[2]
         current_price = prices[pair]

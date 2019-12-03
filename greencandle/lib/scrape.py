@@ -62,7 +62,6 @@ def scrape_data(binary="firefox"):
             actions.move_to_element(item).perform()
             line = item.text
         except NoSuchElementException:
-            #print("no element")
             break
         except Exception:
             wait.until(EC.staleness_of(item))
@@ -71,7 +70,6 @@ def scrape_data(binary="firefox"):
         try:
             item = line.replace("Strong ", "Strong_").split()
             if "BTC" in item[0]:
-                #print(line)
                 results[item[0]] = item[-2]
 
         except Exception:
