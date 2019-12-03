@@ -146,6 +146,11 @@
       "is_binary": false,
       "is_secret": false
     },
+    "name": {
+      "value": "prod",
+      "is_binary": false,
+      "is_secret": false
+    },
     "no_of_klines": {
       "value": "1000",
       "is_binary": false,
