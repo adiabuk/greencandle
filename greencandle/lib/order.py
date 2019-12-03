@@ -148,8 +148,8 @@ class Trade():
                         # 3. we proformed a real trade which was successful - (transactTime in dict)
                         dbase.insert_trade(pair=item, price=cost, date=current_time,
                                            base_amount=base_amount, quote=amount)
-                        send_push_notif('BUY', item, cost)
-                        send_gmail_alert("BUY", item, cost)
+                        send_push_notif('BUY', item, '%f' % float(cost))
+                        send_gmail_alert('BUY', item, '%f' % float(cost))
             del dbase
         else:
             self.logger.info("Nothing to buy")
