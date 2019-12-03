@@ -185,7 +185,8 @@ CREATE TABLE `trades` (
   `base_in` varchar(30) DEFAULT NULL,
   `base_out` varchar(30) DEFAULT NULL,
   `quote_in` varchar(30) DEFAULT NULL,
-  `quote_out` varchar(30) DEFAULT NULL
+  `quote_out` varchar(30) DEFAULT NULL,
+  `name` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -252,7 +253,7 @@ CREATE TABLE `trades` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-11-24 17:45:01
+-- Dump completed on 2019-12-03 23:07:38
 -- MySQL dump 10.13  Distrib 5.7.28, for Linux (x86_64)
 --
 -- Host: localhost    Database: greencandle
@@ -303,4 +304,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-11-24 17:45:01
+-- Dump completed on 2019-12-03 23:07:38
