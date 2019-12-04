@@ -3,11 +3,11 @@ env:
    - CPPFLAGS=--coverage
 
 install:
-  - sudo bash bootstrap.sh
+  - sudo bash install/bootstrap.sh
 
 script:
   - configstore package test
   - sudo docker ps
-  - sudo docker-compose -f ./docker-compose_local.yml run greencandle-unittest
+  - sudo docker-compose -f ./install/docker-compose_local.yml run greencandle-unittest
   - sudo mysqlcheck --host mysql -uroot -ppassword  --databases greencandle
   - sudo crontab config/template/gc-cron

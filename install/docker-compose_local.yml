@@ -130,4 +130,4 @@ services:
     environment:
       - CONFIG_ENV=test/unit
     volumes:
-      - ./:/srv/greencandle
+      - ../:/srv/greencandle
