@@ -3,7 +3,7 @@ env:
    - CPPFLAGS=--coverage
 
 install:
-  - sudo bash install/bootstrap.sh
+  - sudo bash install/bootstrap_dev.sh
 
 script:
   - configstore package test
