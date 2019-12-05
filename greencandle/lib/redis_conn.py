@@ -13,7 +13,7 @@ from str2bool import str2bool
 from .mysql import Mysql
 from .logger import getLogger
 from . import config
-from .common import add_perc, sub_perc, AttributeDict, perc_diff
+from .common import add_perc, sub_perc, AttributeDict, perc_diff, convert_to_seconds
 
 class Redis():
     """
@@ -259,6 +259,7 @@ class Redis():
             buy_price = None
 
 
+
         current_price = float(close)
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_mepoch))
 
@@ -301,6 +302,22 @@ class Redis():
 
         stop_loss_perc = float(config.main.stop_loss_perc)
         take_profit_perc = float(config.main.take_profit_perc)
+        able_to_buy = True
+
+        if not buy_price and str2bool(config.main.wait_between_trades):
+            try:
+                buy_time = self.dbase.fetch_sql_data("select sell_time from trades order by "
+                                                     "sell_time desc LIMIT 1", header=False)[0][0]
+                pattern = '%Y-%m-%d %H:%M:%S'
+                buy_epoch = buy_time.timestamp()
+                current_epoch = current_mepoch    # FIXME
+                able_to_buy = (int(buy_epoch) +
+                               int(convert_to_seconds(config.main.time_between_trades))) < \
+                               current_epoch
+            except IndexError:
+                pass  # no previous trades
+        else:
+            able_to_buy = True
 
         try:
             # function returns an empty list if no results so cannot get first element
@@ -370,7 +387,7 @@ class Redis():
             return ('SELL', current_time, current_price)
 
         # if we match all buy rules and are NOT in a trade
-        elif any(rules['buy']) and not buy_price:
+        elif any(rules['buy']) and not buy_price and able_to_buy:
             self.log_event('NormalBuy', rate, perc_rate, current_price, current_price,
                            pair, current_time, results.current)
 
