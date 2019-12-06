@@ -116,8 +116,8 @@ class Mysql():
         command = """insert into trades (pair, buy_time, buy_price, base_in, `interval`,
                      quote_in, name) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}",
                      "{5}", "{6}");""".format(pair, date,
-                                              '%f' % float(price),
-                                              '%f' % float(base_amount),
+                                              '%.15f' % float(price),
+                                              '%.15f' % float(base_amount),
                                               self.interval,
                                               quote, config.main.name)
         self.run_sql_query(command)
@@ -202,10 +202,10 @@ class Mysql():
         self.logger.info("Selling %s for %s", pair, self.interval)
         command = """update trades set sell_price={0},sell_time="{1}", quote_out="{2}",
         base_out="{3}" where sell_price is NULL and `interval`="{4}"
-        and pair="{5}" and name="{6}" """.format('%f' % float(sell_price),
+        and pair="{5}" and name="{6}" """.format('%.15f' % float(sell_price),
                                                  sell_time,
-                                                 '%f' % float(quote),
-                                                 '%f' % float(base_out),
+                                                 '%.15f' % float(quote),
+                                                 '%.15f' % float(base_out),
                                                  self.interval,
                                                  pair,
                                                  config.main.name)
