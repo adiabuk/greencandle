@@ -30,18 +30,14 @@ def main():
             buy_time = trade[1]
             buy_price = trade[2]
             current_price = prices[pair]
-            perc = 100 * (float(current_price) - float(buy_price)) / float(buy_price)  #FIXME
+            perc = 100 * (float(current_price) - float(buy_price)) / float(buy_price)
             insert = ('insert into open_trades (pair, buy_time, buy_price, current_price, perc) '
                       'VALUES ("{0}", "{1}", "{2}", "{3}", "{4}")'.format(pair, buy_time,
                                                                           buy_price,
                                                                           current_price, perc))
             dbase.run_sql_query(insert)
         except ZeroDivisionError:
-            LOGGER.critical("{} has a zero buy price, unable to calculate percentage".format(pair))
-
-
-
-
+            LOGGER.critical("%s has a zero buy price, unable to calculate percentage", pair)
 
 if __name__ == "__main__":
     main()
