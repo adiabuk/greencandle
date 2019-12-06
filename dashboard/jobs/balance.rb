@@ -4,7 +4,7 @@ current_balance = 0
 SCHEDULER.every '30s' do
   puts "Getting balance..."
   db = Mysql2::Client.new(:host => "mysql", :username => "greencandle", :password => "password", :port => 3306, :database => "greencandle" )
-  sql = "select round(sum(perc)/(datediff(max(sell_time),'2019-01-01 00:00')),2) as average from profit"
+  sql = "select round(sum(perc)/(datediff(max(sell_time),(select min(buy_time) from profit))),2) as average from profit"
 
 
   balance_sql = "select round(gbp,2) as gbp from balance order by ctime desc limit 1"
