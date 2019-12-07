@@ -4,7 +4,7 @@
 */15 * * * * /usr/local/bin/write_balance > /proc/1/fd/1 2>/proc/1/fd/2
 00 00 * * * /usr/bin/mysqldump --host mysql --all-databases -u{{.db_user}} -p{{.db_password}} > /data/mysql/backup_$(date +"%Y-%m-%d").sql 2>/proc/1/fd/2
 00 01 * * * /usr/local/bin/report /data/reports/report_$(date +"%Y-%m-%d").xlsx > /proc/1/fd/1 2>/proc/1/fd/2
-00 02 * * *  /usr/local/bin/create_graph -d0 -p BNBBTC -i 4h -o /data/graphs/ > /proc/1/fd/1 2>/proc/1/fd/2
+00 02 * * *  /usr/local/bin/create_graph -d0 -a -i 4h -o /data/graphs/ > /proc/1/fd/1 2>/proc/1/fd/2
 00 03 * * 1 /bin/ls -1t /data/mysql| tail -n +31 | /usr/bin/xargs -d '\n' bin/rm -f > /proc/1/fd/1 2>/proc/1/fd/2
 */2 * * * * /usr/local/bin/get_active_trades > /proc/1/fd/1 2>/proc/1/fd/2
 0 * * * *  /usr/local/bin/send_docker_alerts

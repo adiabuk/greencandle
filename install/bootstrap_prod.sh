@@ -38,7 +38,7 @@ usermod -aG docker ubuntu || true
 
 # Create shared volume
 docker volume create data
-mkdir -p /data/{mysql,config,graphs,report}
+mkdir -p /data/{mysql,config,graphs,reports}
 
 # Create and mount swap
 fallocate -l 1G /swapfile
