@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-position
+#pylint: disable=wrong-import-position,no-member
+
 """
 Get details of current trades using mysql and current value from binance
 """
