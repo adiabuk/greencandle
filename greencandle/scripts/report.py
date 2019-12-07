@@ -35,6 +35,8 @@ def main():
                         order by month,perc;",
                "profit-pair": "select pair, sum(perc) as perc from profit where \
                         sell_time != '0000-00-00 00:00:00' group by pair;",
+               "trades": "select buy_time, sell_time, buy_price, sell_price, base_profit \
+                          from profit;",
                "hours-pair": "select pair, sum(hour(timediff(sell_time,buy_time))) \
                         as hours from trades where sell_time \
                         != '0000-00-00 00:00:00' group by pair"}
