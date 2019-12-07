@@ -174,7 +174,7 @@ class Trade():
                 base_out = add_perc(perc_inc, base_in)
 
                 send_gmail_alert("SELL", item, price)
-                send_push_notif('SELL', item, price)
+                send_push_notif('SELL', item, '%15f' % float(price))
                 if not self.test_data:
                     result = binance.order(symbol=item, side=binance.SELL, quantity=quantity,
                                            price='', orderType=binance.MARKET, test=self.test_trade)
