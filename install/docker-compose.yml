@@ -256,7 +256,7 @@ services:
        - CONFIG_ENV=prod
        - HOST=$HOSTNAME
      ports:
-       - 80:80
+       - 8888:8888
      links:
        - dashboard:dashboard
        - cadvisor:cadvisor

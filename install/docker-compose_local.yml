@@ -51,7 +51,7 @@ services:
        - CONFIG_ENV=test
        - HOST=$HOSTNAME
      ports:
-       - 80:80
+       - 7777:7777
      links:
        - mysql-local:mysql
        - redis-local:redis
