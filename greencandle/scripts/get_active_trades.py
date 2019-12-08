@@ -23,19 +23,17 @@ def main():
     dbase = Mysql()
 
     dbase.run_sql_query("delete from open_trades")
-    trades = dbase.fetch_sql_data("select pair, buy_time, buy_price from trades where "
+    trades = dbase.fetch_sql_data("select pair, buy_time, buy_price, name from trades where "
                                   "sell_price is NULL", header=False)
     for trade in trades:
         try:
-            pair = trade[0]
-            buy_time = trade[1]
-            buy_price = trade[2]
+            pair, buy_time, buy_price, name - trade
             current_price = prices[pair]
             perc = 100 * (float(current_price) - float(buy_price)) / float(buy_price)
-            insert = ('insert into open_trades (pair, buy_time, buy_price, current_price, perc) '
-                      'VALUES ("{0}", "{1}", "{2}", "{3}", "{4}")'.format(pair, buy_time,
-                                                                          buy_price,
-                                                                          current_price, perc))
+            insert = ('insert into open_trades (pair, buy_time, buy_price, current_price, perc, name) '
+                      'VALUES ("{0}", "{1}", "{2}", "{3}", "{4}", "{5}")'
+                      .format(pair, buy_time, buy_price, current_price, perc, name))
+
             dbase.run_sql_query(insert)
         except ZeroDivisionError:
             LOGGER.critical("%s has a zero buy price, unable to calculate percentage", pair)
