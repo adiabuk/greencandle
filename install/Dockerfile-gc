@@ -4,7 +4,7 @@ LABEL commit=${COMMIT}
 LABEL date=${DATE}
 
 ADD . /install
-RUN bash /install/install/gc-install.sh
+RUN bash /install/gc-install.sh
 COPY install/docker-entrypoint.sh /
 COPY config /opt/config
 RUN chmod +x /docker-entrypoint.sh
