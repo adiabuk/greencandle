@@ -195,10 +195,11 @@ class Mysql():
         return row
 
     @get_exceptions
-    def update_trades(self, pair, sell_time, sell_price, quote, base_out):
+    def update_trades(self, pair, sell_time, sell_price, quote, base_out, name=None):
         """
         Update an existing trade with sell price
         """
+        job_name = name if name else config.main.name
         self.logger.info("Selling %s for %s", pair, self.interval)
         command = """update trades set sell_price={0},sell_time="{1}", quote_out="{2}",
         base_out="{3}" where sell_price is NULL and `interval`="{4}"
@@ -208,7 +209,7 @@ class Mysql():
                                                  '%.15f' % float(base_out),
                                                  self.interval,
                                                  pair,
-                                                 config.main.name)
+                                                 job_name)
         self.run_sql_query(command)
 
     @get_exceptions
