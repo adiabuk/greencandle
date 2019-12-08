@@ -5,7 +5,7 @@ LABEL date=${DATE}
 
 ADD . /install
 RUN bash /install/gc-install.sh
-COPY install/docker-entrypoint.sh /
+COPY install/install/docker-entrypoint.sh /
 COPY config /opt/config
 RUN chmod +x /docker-entrypoint.sh
 HEALTHCHECK CMD find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
