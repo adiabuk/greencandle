@@ -25,7 +25,7 @@ else
 
     pip install ipython
     install_dir=/srv/greencandle
-    echo "set background=dark" | tee -a /root/.vimrc /home/ubuntu/.vimrc
+    echo "set background=dark" | tee -a $HOME/.vimrc
     if [[ ! -f /usr/local/bin/gechodriver ]]; then
         wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz -P /tmp
         tar zxvf /tmp/geckodriver-v0.24.0-linux64.tar.gz -C /usr/local/bin
