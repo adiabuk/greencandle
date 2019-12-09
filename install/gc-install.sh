@@ -16,10 +16,12 @@ else
     echo "I'm living in real world!";
     cp -rv config /opt
     apt-get update
+    rm -rf /usr/local/lib/python3.6/dist-packages/
     apt-get -y install python3 python3-pip wget make git mysql-client libmysqlclient-dev \
       python3-dev xvfb firefox redis-tools cron vim bsdmainutils libssl-dev
     update-alternatives --install /usr/bin/python python /usr/bin/python3 1
     update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
+
     pip install ipython
     install_dir=/srv/greencandle
     echo "set background=dark" | tee -a /root/.vimrc /home/ubuntu/.vimrc
