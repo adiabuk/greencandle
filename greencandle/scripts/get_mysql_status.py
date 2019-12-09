@@ -4,7 +4,6 @@
 Get details of current trades using mysql and current value from binance
 """
 
-import json
 import sys
 
 from operator import itemgetter
@@ -13,12 +12,18 @@ import binance
 from ..lib.mysql import Mysql
 from ..lib import config
 
-test = True if sys.argv[2].lower() == "test" else False
 config.create_config()
 from ..lib.auth import binance_auth
 
 def main():
     """ Main function """
+
+    if len(sys.argv) > 1 and sys.argv[1] == '--help':
+        print("Get current trade status")
+        print("Usage {} [pair] [interval]".format(sys.argv[0]))
+        sys.exit(0)
+
+    test = sys.argv[2].lower() == "test"
     prices = binance.prices()
     binance_auth()
     dbase = Mysql(test=test, interval=sys.argv[1])
@@ -54,7 +59,7 @@ def main():
 
     print("\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n\n\n")
     count = len(profits)
-    count = 1 if count==0 else count
+    count = 1 if count == 0 else count
     print("Total_profit: {0} Avg_Profit: {1} Avg_Percs: {2} count: {3}".format(sum(profits),
                                                                                sum(profits)/count,
                                                                                sum(percs)/count,
