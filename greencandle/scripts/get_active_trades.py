@@ -27,11 +27,11 @@ def main():
                                   "sell_price is NULL", header=False)
     for trade in trades:
         try:
-            pair, buy_time, buy_price, name - trade
+            pair, buy_time, buy_price, name = trade
             current_price = prices[pair]
             perc = 100 * (float(current_price) - float(buy_price)) / float(buy_price)
-            insert = ('insert into open_trades (pair, buy_time, buy_price, current_price, perc, name) '
-                      'VALUES ("{0}", "{1}", "{2}", "{3}", "{4}", "{5}")'
+            insert = ('insert into open_trades (pair, buy_time, buy_price, current_price, '
+                      'perc, name) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}", "{5}")'
                       .format(pair, buy_time, buy_price, current_price, perc, name))
 
             dbase.run_sql_query(insert)
