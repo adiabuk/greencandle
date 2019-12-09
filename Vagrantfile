@@ -16,5 +16,5 @@ Vagrant.configure("2") do |config|
   end
 
   # Bootstrap machine
-  config.vm.provision :shell, :inline => "cd /srv/greencandle;bash bootstrap.sh && bash gc-install.sh"
+  config.vm.provision :shell, :inline => "cd /srv/greencandle;bash install/bootstrap_dev.sh"
 end
