@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # PYTHON_ARGCOMPLETE_OK
-# pylint: disable=broad-except,no-member,too-many-locals,wrong-import-position,unused-variable
+# pylint: disable=no-member, wrong-import-position, unused-variable
 
 """
 Get ohlc (Open, High, Low, Close) values from given cryptos
@@ -17,6 +17,7 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 from str2bool import str2bool
 from ..lib import config
 config.create_config()
+
 from ..lib.logger import getLogger
 from ..lib.run import prod_loop, prod_int_check
 
