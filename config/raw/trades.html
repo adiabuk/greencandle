@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+<meta http-equiv="refresh" content="6" >
+{% block content %}
+      <H1 class="logo">Deployment status</h1>
+
+
+                    <H3>{{key}}-{{k}}</H3>
+
+                        <table border=0, id="customers">
+                          <tr>
+                            <th>Pair</th>
+                            <th>Buy Price</th>
+                            <th>Buy Time</th>
+                            <th>Current Price</th>
+                            <th>Perc</th>
+                            <th>Sell Now</th>
+                            <th>Link</th>
+                          </tr>
+                    {% for k, v in versions.items() %}
+                          <tr>
+                            <td class="y_n">{{ k }}</td>
+                            <td class="y_n">{{ v['buy_price'] }}</td>
+                            <td class="y_n">{{ v['buy_time'] }}</td>
+                            <td class="y_n">{{ v['current_price'] }}</td>
+                            <td class="y_n">{{ v['perc'] }}</td>
+                            <td class="y_n"> <button type="button">Click Me!</button> </td>
+                            <td class="y_n"> <a
+                                       href="https://uk.tradingview.com/chart?symbol=BINANCE%3A{{ k }}">Trading View</a>  </td>
+                          </tr>
+
+                    {% endfor %}
+
+                        </table>
+                        <hr>
+
+
+  {% endblock %}

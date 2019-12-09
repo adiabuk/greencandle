@@ -7,7 +7,8 @@ ADD . /install
 RUN bash /install/install/gc-install.sh
 RUN cp install/install/docker-entrypoint.sh /
 RUN cp -rv /install/config /opt/config
-RUN chmod +x /docker-entrypoint.sh
+RUN mkdir /etc/gcapi
+RUN cp -rv /opt/config/raw/* /etc/gcapi/
 HEALTHCHECK CMD find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
 
 ARG BRANCH="master"
