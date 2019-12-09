@@ -29,3 +29,4 @@ xlrd==1.2.0
 requests-unixsocket==0.2.0
 pylint==2.4.4
 waitress
+six==1.12
