@@ -50,9 +50,14 @@ docker build --force-rm --no-cache -f $DIR/Dockerfile-rs . --tag=gc-redis
 docker build --force-rm --no-cache -f $DIR/Dockerfile-cn . --tag=cron
 docker build --force-rm --no-cache -f $DIR/Dockerfile-ds . --tag=dashboard
 docker build --force-rm --no-cache -f $DIR/Dockerfile-wb . --tag=webserver
+docker build --force-rm --no-cache -f $DIR/Dockerfile-ap . --tag=api
 
 container=$(docker ps|grep mysql|awk {'print $1'})
 
 # Create shared volume
 docker volume create data
 mkdir -p /data/{mysql,config,graphs,report}
+
+# Install outside docker
+install/gc-install.sh
+
