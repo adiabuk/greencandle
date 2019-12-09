@@ -1,4 +1,5 @@
 {
   "name": "2ma-bnb",
-  "pairs": "RCNBNB DLTBNB RVNBNB IOTABNB"
+  "pairs": "RCNBNB DLTBNB RVNBNB IOTABNB",
+  "stop_loss_perc": "1"
 }

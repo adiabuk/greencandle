@@ -1,4 +1,5 @@
 {
+  "name": "2ma-eth",
   "pairs": "ETCETH BNBETH BQXETH ENJETH EOSETH GXSETH LINKETH QTUMETH TRXETH XZCETH ZRXETH",
-  "name": "2ma-eth"
+  "stop_loss_perc": "1"
 }
