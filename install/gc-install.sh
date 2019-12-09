@@ -17,7 +17,7 @@ else
     cp -rv config /opt
     apt-get update
     apt-get -y install python3 wget make git mysql-client libmysqlclient-dev \
-      python3-dev xvfb firefox redis-tools cron vim bsdmainutils libssl-dev
+      python3-dev xvfb firefox redis-tools cron vim bsdmainutils libssl-dev gcc
     update-alternatives --install /usr/bin/python python /usr/bin/python3 1
     curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
     python get-pip.py
