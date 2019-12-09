@@ -262,7 +262,7 @@
       "is_secret": false
     },
     "stop_loss_perc": {
-      "value": "4",
+      "value": "1",
       "is_binary": false,
       "is_secret": false
     },
