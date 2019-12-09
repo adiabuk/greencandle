@@ -37,6 +37,29 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
 
+  api:
+    container_name: api
+    environment:
+      - CONFIG_ENV=test
+      - HOST=$HOSTNAME
+    hostname: api
+    image: api
+    restart: on-failure
+    entrypoint: /docker-entrypoint.sh api
+    links:
+      - mysql-local:mysql
+      - redis-local:redis
+    depends_on:
+      - mysql-local
+      - redis-local
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+
   webserver:
      container_name: webserver
      hostname: webserver
