@@ -9,6 +9,8 @@ from __future__ import print_function
 import threading
 import sched
 import sys
+import glob
+import os
 from time import time, sleep
 from pathlib import Path
 from flask import Flask, render_template
@@ -61,8 +63,11 @@ def get_data(scheduler):
     results = dbase.fetch_sql_data("select * from open_trades", header=False)
 
     for pair, buy_price, buy_time, current_price, perc in results:
+        list_of_files = glob.glob('/data/graphs/BNB*')
+        latest_file = max(list_of_files, key=os.path.getctime)
+
         VERSION_DATA[pair] = {"buy_price":buy_price, "buy_time":buy_time,
-                              "current_price": current_price, "perc":perc}
+                              "current_price": current_price, "perc":perc, "graph": latest_file}
 
     SCHED.enter(60, 60, get_data, (scheduler, ))
 
