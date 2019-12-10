@@ -18,7 +18,7 @@ class TestLRCBTC(make_test_case('LRCBTC', '2019-01-08', 20, 12, -8.5)):
     """Test LRCBTC"""
     pass
 
-class TestRCNBNB(make_test_case('RCNBNB', '2019-03-29', 24, 23, -5)):
+class TestRCNBNB(make_test_case('RCNBNB', '2019-03-29', 22, 23, -5)):
     """Test RCNBNB"""
     pass
 
