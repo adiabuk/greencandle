@@ -7,7 +7,6 @@ Get values from config file
 from configparser import ConfigParser
 import sys
 import numpy
-from .logger import getLogger
 from .common import AttributeDict
 
 
@@ -17,10 +16,10 @@ REQUIRED_CONFIG = {'database':['db_host', 'db_user', 'db_password', 'db_database
                    'push': ['push_host', 'push_channel', 'push_active'],
                    'main': ['logging_level', 'max_trades', 'binance_api_key', 'name',
                             'binance_api_secret', 'coinbase_api_key', 'buy_rule1',
-                            'wait_between_trades','time_between_trades',
+                            'wait_between_trades', 'time_between_trades',
                             'coinbase_api_secret', 'interval', 'sell_rule1',
                             'drain', 'no_of_klines', 'pairs', 'stop_loss_perc',
-                            'take_profit','take_profit_perc', 'indicators', 'rate_indicator',
+                            'take_profit', 'take_profit_perc', 'indicators', 'rate_indicator',
                             'trailing_stop_loss', 'trailing_stop_loss_perc']}
 
 def create_config():
@@ -31,8 +30,6 @@ def create_config():
     Return
         None: sections will be added to globals() by section and be available module-wide
     """
-    logger = getLogger(__name__)
-
     parser = ConfigParser()
     parser.read("/etc/greencandle.ini")
 

@@ -37,7 +37,8 @@ def serial_test(pairs, intervals, data_dir, indicators):
             dbase = Mysql(test=True, interval=interval)
             dbase.delete_data()
             del dbase
-            redis_db = {"1d":1, "4h":1, "2h":1, "1h":1, "30m":1, "15m":1, "5m":2, "3m":3, "1m":4}[interval]
+            redis_db = {"1d":1, "4h":1, "2h":1, "1h":1, "30m":1, "15m":1, "5m":2,
+                        "3m":3, "1m":4}[interval]
             redis = Redis(interval=interval, test=True, db=redis_db)
             redis.clear_all()
             del redis
