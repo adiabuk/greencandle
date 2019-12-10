@@ -49,6 +49,8 @@ services:
     links:
       - mysql-local:mysql
       - redis-local:redis
+    ports:
+      - 5000
     depends_on:
       - mysql-local
       - redis-local
@@ -79,6 +81,7 @@ services:
        - mysql-local:mysql
        - redis-local:redis
        - dashboard:dashboard
+       - api
      restart: on-failure
      volumes:
        - /data:/data

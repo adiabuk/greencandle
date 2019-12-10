@@ -2,7 +2,7 @@
 # pylint: disable=global-statement,wrong-import-position,too-few-public-methods, no-else-return
 
 """
-Main WCOL dashboard
+API dashboard
 """
 
 from __future__ import print_function
@@ -38,7 +38,7 @@ class PrefixMiddleware():
 
 APP = Flask(__name__, template_folder="/etc/gcapi", static_url_path='/etc/gcapi/',
             static_folder='/etc/gcapi')
-APP.wsgi_app = PrefixMiddleware(APP.wsgi_app, prefix='/dashboards')
+APP.wsgi_app = PrefixMiddleware(APP.wsgi_app, prefix='/api')
 
 SCHED = sched.scheduler(time, sleep)
 VERSION_DATA = {}
