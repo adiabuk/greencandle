@@ -11,6 +11,8 @@ import math
 import sys
 import traceback
 import operator
+from time import time
+from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
 from decimal import Decimal
 import pickle
@@ -180,6 +182,11 @@ class Engine(dict):
         # add to redis
         current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
         close_time = str(self.dataframes[pair].iloc[-1]["closeTime"])
+
+        # close time might be in the future if we run between open/close
+        if datetime.fromtimestamp(close_time) > datetime.now():
+            close_time = int(time()*1000)
+
         result = 0.0 if (isinstance(scheme["data"], float) and
                          math.isnan(scheme["data"]))  else scheme["data"]
         try:
