@@ -45,7 +45,7 @@ services:
     hostname: api
     image: api
     restart: on-failure
-    entrypoint: /docker-entrypoint.sh api
+    entrypoint: /docker-entrypoint.sh api --test
     links:
       - mysql-local:mysql
       - redis-local:redis
