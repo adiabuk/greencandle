@@ -43,7 +43,7 @@ APP.wsgi_app = PrefixMiddleware(APP.wsgi_app, prefix='/api')
 SCHED = sched.scheduler(time, sleep)
 VERSION_DATA = {}
 
-@APP.route('/trades')
+@APP.route('/')
 def trades():
     """deployments page"""
     return render_template('trades.html', versions=VERSION_DATA)
