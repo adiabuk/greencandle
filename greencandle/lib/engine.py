@@ -184,7 +184,7 @@ class Engine(dict):
         close_time = str(self.dataframes[pair].iloc[-1]["closeTime"])
 
         # close time might be in the future if we run between open/close
-        if datetime.fromtimestamp(close_time) > datetime.now():
+        if datetime.fromtimestamp(int(close_time)/1000) > datetime.now():
             close_time = int(time()*1000)
 
         result = 0.0 if (isinstance(scheme["data"], float) and
@@ -393,7 +393,6 @@ class Engine(dict):
             LOGGER.critical("KEY FAILURE in moving averages: %s ", str(exc))
 
         LOGGER.debug("done getting moving averages")
-
 
     @get_exceptions
     def get_moving_averages(self, pair, localconfig=None):
