@@ -52,10 +52,10 @@ fi
 
 pip install pip==9.0.1 numpy==1.16.0
 [[ ! -d $install_dir ]] && ln -s /home/travis/build/adiabuk/greencandle/ $install_dir
-cd $install_dir
 
 pip install . --src /tmp
 pip install -e git+https://github.com/adiabuk/Technical-Indicators.git#egg=indicator
 pip install -e git+https://github.com/adiabuk/binance#egg=binance
+
 [[ ! -d /opt/output ]] && mkdir /opt/output
 echo "Installation Complete"
