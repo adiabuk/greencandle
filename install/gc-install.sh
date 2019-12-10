@@ -51,6 +51,7 @@ if [[ ! -d /usr/include/ta-lib ]]; then
 fi
 
 pip install pip==9.0.1 numpy==1.16.0
+[[ ! -d /srv/greencandle ]] && mkdir /srv/greencandle
 cd $install_dir
 
 pip install . --src /tmp
