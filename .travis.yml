@@ -1,6 +1,4 @@
 dist: "bionic"
-env:
-   - CPPFLAGS=--coverage
 
 install:
   - sudo bash install/bootstrap_dev.sh
