@@ -155,7 +155,7 @@ class Trade():
             self.logger.info("Nothing to buy")
 
     @GET_EXCEPTIONS
-    def sell(self, sell_list):
+    def sell(self, sell_list, name=None):
         """
         Sell items in sell_list
         """
@@ -182,7 +182,8 @@ class Trade():
                 if self.test_data or (self.test_trade and not result) or \
                         (not self.test_trade and 'transactTime' in result):
                     dbase.update_trades(pair=item, sell_time=current_time,
-                                        sell_price=price, quote=quantity, base_out=base_out)
+                                        sell_price=price, quote=quantity,
+                                        base_out=base_out, name=name)
 
                 else:
                     self.logger.critical("Sell Failed")

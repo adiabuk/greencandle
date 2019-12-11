@@ -68,7 +68,7 @@ def sell():
     sells = [(pair, current_time, current_price)]
 
     # Sell, then update page
-    trade.sell(sells)
+    trade.sell(sells, name=name)
     sleep(1)
     get_data(SCHED)
     return trades()
