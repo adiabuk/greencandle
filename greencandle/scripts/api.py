@@ -11,7 +11,7 @@ import sched
 import sys
 import glob
 import os
-from time import time, sleep
+from time import time, sleep, strftime, gmtime
 from pathlib import Path
 from flask import Flask, render_template, request
 
@@ -58,10 +58,19 @@ def sell():
     print("SELL", file=sys.stderr)
     pair = request.args.get('pair')
     name = request.args.get('name')
+    current_price = request.args.get('price')
     print(pair, name, file=sys.stderr)
 
-    trade = Trade(interval='4h', test_data=TEST, test_trade=False)
-    trade.sell(pair)
+    test_trade = bool(os.environ['HOST'] in ["test", "stag"])
+    trade = Trade(interval='4h', test_data=TEST, test_trade=test_trade)
+
+    current_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+    sells = [(pair, current_time, current_price)]
+
+    # Sell, then update page
+    trade.sell(sells)
+    sleep(1)
+    get_data(SCHED)
     return trades()
 
 def healthcheck(scheduler):
