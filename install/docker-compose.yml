@@ -142,7 +142,7 @@ services:
       - CONFIG_ENV=prod
       - HOST=$HOSTNAME
     hostname: api
-    image: api
+    image: amrox/api
     restart: on-failure
     entrypoint: /docker-entrypoint.sh api
     links:
