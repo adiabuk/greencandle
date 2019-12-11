@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+#pylint: disable=wrong-import-position
 
 """
 Standalone script for generating graphs from data in redis

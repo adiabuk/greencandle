@@ -1,5 +1,5 @@
 #pylint: disable=no-member,consider-iterating-dictionary,broad-except,
-#pylint: disable=unused-variable,possibly-unused-variable,redefining-builtin
+#pylint: disable=unused-variable,possibly-unused-variable,redefined-builtin
 
 """
 Module for collecting price data and creating TA results

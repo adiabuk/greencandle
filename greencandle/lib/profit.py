@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+#pylint: disable=wrong-import-order
 """
 Calculate potential profits from historical data
 """
@@ -8,13 +9,14 @@ from collections import defaultdict
 from forex_python.converter import CurrencyRates
 import binance
 from .mysql import Mysql
-from .common import add_perc, sub_perc, perc_diff
+from .common import sub_perc, perc_diff
 
 CURRENCY = CurrencyRates()
 RATE = 0.00014 # GBP to BTC
 FEES = 0.05
 
 def get_quantity(buy_price, total_buy_btc):
+    """get amount to buy"""
     total_buy_btc = sub_perc(FEES, total_buy_btc)   # Subtract trading fees
     amount = total_buy_btc / buy_price
     return amount

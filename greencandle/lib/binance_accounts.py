@@ -1,4 +1,4 @@
-#pylint: disable=no-member
+#pylint: disable=no-member,wrong-import-order
 
 """
 Get/Convert Balances from Binance

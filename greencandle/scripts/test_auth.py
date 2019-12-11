@@ -1,12 +1,19 @@
 #!/usr/bin/env python
+#pylint: disable=wrong-import-order
+
+"""
+Test authentication to binance using creds in config
+"""
+
+import sys
+import binance
 
 from greencandle.lib import config
 from greencandle.lib.auth import binance_auth
-import binance
-import sys
-
 
 def main():
+    """main function"""
+
     config.create_config()
     binance_auth()
 

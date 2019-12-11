@@ -1,5 +1,9 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-position
+#pylint: disable=wrong-import-order,wrong-import-position
+
+"""
+Sell a particular trade immediately
+"""
 
 import sys
 import time
@@ -11,6 +15,7 @@ from greencandle.lib.order import Trade
 from greencandle.lib.auth import binance_auth
 
 def main():
+    """ main function """
 
     if len(sys.argv) > 1 and sys.argv[1] == '--help':
         print("Sell a particular trade immediately")

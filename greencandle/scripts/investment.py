@@ -9,6 +9,7 @@ import argparse
 import argcomplete
 
 def main():
+    """ Main function """
     parser = argparse.ArgumentParser()
     parser.add_argument("-s", "--start", required=True,
                         help="Initial investment")

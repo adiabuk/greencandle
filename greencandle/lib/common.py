@@ -21,9 +21,10 @@ def percent(perc, num):
 
 def make_float(arr):
     """Convert dataframe array into float array"""
-    return numpy.array([float(x) for x in arr.values],dtype='f8')
+    return numpy.array([float(x) for x in arr.values], dtype='f8')
 
 def pip_calc(open_val, close_val):
+    """Get number of pips between open and close"""
     open_val = Decimal(open_val)
     close_val = Decimal(close_val)
     if "." not in str(open_val):
