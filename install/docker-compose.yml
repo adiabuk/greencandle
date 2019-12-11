@@ -12,6 +12,11 @@ services:
       - /sys:/sys
       - /var/lib/docker:/var/lib/docker
       - /dev/disk:/dev/disk
+    healthcheck:
+      test: curl -f http://localhost:8080/healthz || exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
 
   redis:
     container_name: redis
@@ -149,7 +154,7 @@ services:
       - mysql
       - redis
     healthcheck:
-      test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
