@@ -13,7 +13,7 @@
   "pairs": "",
   "push_title": "prod_4MA",
   "rate_indicator": "EMA_8",
-  "redis_expiry_seconds": "172800",
+  "redis_expiry_seconds": "1036800",
   "sell_rule1": "results.current.EMA_8 \u003c results.current.EMA_13",
   "sell_rule2": "low \u003c results.current.EMA_55",
   "sell_rule3": "",
