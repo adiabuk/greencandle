@@ -48,6 +48,7 @@ class Engine(dict):
         self["hold"] = {}
         self["event"] = {}
         self.supres = {}
+        self.current_time = str(int(time()*1000))
         self.dataframes = dataframes
         self.ohlcs = self.make_data_tupple(dataframes)
         super(Engine, self).__init__()
@@ -185,7 +186,7 @@ class Engine(dict):
 
         # close time might be in the future if we run between open/close
         if datetime.fromtimestamp(int(close_time)/1000) > datetime.now():
-            close_time = int(time()*1000)
+            close_time = self.current_time
 
         result = 0.0 if (isinstance(scheme["data"], float) and
                          math.isnan(scheme["data"]))  else scheme["data"]
