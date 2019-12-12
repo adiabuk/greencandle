@@ -11,6 +11,13 @@
 
 # Releases
 
+## 0.25
+* Add api for displaying current open trades with ability to sell
+* Add local install to travis tests
+* Fix Crontabs with dates in path
+* Fix webserver reverse proxy paths
+* General cleanup
+
 ## 0.24
 * Fix paths for nginx reverse proxy
 * Allow scipts to determine open trades
