@@ -34,7 +34,7 @@ CREATE TABLE `balance` (
   PRIMARY KEY (`id`),
   KEY `exchange_id` (`exchange_id`),
   CONSTRAINT `balance_ibfk_2` FOREIGN KEY (`exchange_id`) REFERENCES `exchange` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3845 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -101,6 +101,21 @@ SET character_set_client = utf8;
  1 AS `COUNT_diff`,
  1 AS `perc_change`,
  1 AS `BTC_diff`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `monthly_profit`
+--
+
+DROP TABLE IF EXISTS `monthly_profit`;
+/*!50001 DROP VIEW IF EXISTS `monthly_profit`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `monthly_profit` AS SELECT 
+ 1 AS `date`,
+ 1 AS `interval`,
+ 1 AS `profit`,
+ 1 AS `perc`*/;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -228,6 +243,24 @@ CREATE TABLE `trades` (
 /*!50001 SET collation_connection      = @saved_col_connection */;
 
 --
+-- Final view structure for view `monthly_profit`
+--
+
+/*!50001 DROP VIEW IF EXISTS `monthly_profit`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `monthly_profit` AS select left(`profit`.`sell_time`,7) AS `date`,`profit`.`interval` AS `interval`,sum(`profit`.`base_profit`) AS `profit`,sum(`profit`.`perc`) AS `perc` from `profit` group by left(`profit`.`sell_time`,7) order by left(`profit`.`sell_time`,7),sum(`profit`.`base_profit`) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
 -- Final view structure for view `profit`
 --
 
@@ -254,7 +287,7 @@ CREATE TABLE `trades` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-12-08 14:44:52
+-- Dump completed on 2019-12-12 12:37:10
 -- MySQL dump 10.13  Distrib 5.7.28, for Linux (x86_64)
 --
 -- Host: localhost    Database: greencandle
@@ -305,4 +338,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-12-08 14:44:52
+-- Dump completed on 2019-12-12 12:37:11
