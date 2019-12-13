@@ -9,8 +9,8 @@ import argparse
 import argcomplete
 
 from greencandle.lib import config
-from greencandle.lib.graph import Graph
 config.create_config()
+from greencandle.lib.graph import Graph
 from greencandle.lib.mysql import Mysql
 
 def main():
