@@ -22,6 +22,10 @@ from resizeimage import resizeimage
 from . import config
 from .redis_conn import Redis
 
+from .logger import getLogger
+
+LOGGER = getLogger(__name__, config.main.logging_level)
+
 class Graph():
     """class for creating graph html and images"""
     def __init__(self, test=False, pair='ETHBTC', db=0, interval='1m'):
@@ -143,8 +147,12 @@ class Graph():
                     result_list[ind] = ast.literal_eval(redis.get_item(index_item, ind).decode())
                 except AttributeError:
                     pass
-            result_list['ohlc'] = ast.literal_eval(redis.get_item(index_item,
-                                                                  'ohlc').decode())['result']
+            try:
+                result_list['ohlc'] = ast.literal_eval(redis.get_item(index_item,
+                                                                      'ohlc').decode())['result']
+            except AttributeError as error:
+                LOGGER.error("Error, unable to find ohlc data for %s %s %s",
+                             index_item, ind, error)
             try:
                 result_list['event'] = ast.literal_eval(redis.get_item(index_item,
                                                                        'trigger').decode())
