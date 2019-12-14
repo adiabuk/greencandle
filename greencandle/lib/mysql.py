@@ -3,8 +3,10 @@
 """
 Push/Pull crypto signals and data to mysql
 """
+import binance
 import MySQLdb
 from . import config
+from ..lib.auth import binance_auth
 from .logger import getLogger, get_decorator
 
 class Mysql():
@@ -17,7 +19,7 @@ class Mysql():
         self.host = config.database.db_host
         self.user = config.database.db_user
         self.password = config.database.db_password
-        self.db = config.database.db_database
+        self.database = config.database.db_database
         self.logger = getLogger(__name__, config.main.logging_level)
 
         self.connect()
@@ -32,7 +34,7 @@ class Mysql():
         self.dbase = MySQLdb.connect(host=self.host,
                                      user=self.user,
                                      passwd=self.password,
-                                     db=self.db)
+                                     db=self.database)
         self.cursor = self.dbase.cursor()
 
     @get_exceptions
@@ -211,6 +213,31 @@ class Mysql():
                                                  pair,
                                                  job_name)
         self.run_sql_query(command)
+
+    def get_active_trades(self):
+        """
+        Get current active trades and store in active_trades table with current price
+        """
+        prices = binance.prices()
+        binance_auth()
+
+        self.run_sql_query("delete from open_trades")
+        trades = self.fetch_sql_data("select pair, buy_time, buy_price, name from trades where "
+                                     "sell_price is NULL", header=False)
+        for trade in trades:
+            try:
+                pair, buy_time, buy_price, name = trade
+                current_price = prices[pair]
+                perc = 100 * (float(current_price) - float(buy_price)) / float(buy_price)
+                insert = ('insert into open_trades (pair, buy_time, buy_price, current_price, '
+                          'perc, name) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}", "{5}")'
+                          .format(pair, buy_time, buy_price, current_price, perc, name))
+
+                self.run_sql_query(insert)
+            except ZeroDivisionError:
+                self.logger.critical("%s has a zero buy price, unable to calculate percentage",
+                                     pair)
+
 
     @get_exceptions
     def insert_balance(self, balances):
