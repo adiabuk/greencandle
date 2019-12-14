@@ -70,6 +70,9 @@ def sell():
     # Sell, then update page
     trade.sell(sells, name=name)
     sleep(1)
+    dbase = Mysql()
+    dbase.get_active_trades()
+    del dbase
     get_data(SCHED)
     return trades()
 
