@@ -129,9 +129,9 @@ class Mysql():
         """
         Return quantity for a current open trade
         """
-        command = """ select quote_in from trades where sell_price
-                      is NULL and `interval` = "{0}" and
-                      pair = "{1}" """.format(self.interval, pair)
+        command = ('select quote_in from trades where sell_price '
+                   'is NULL and `interval` = "{0}" and '
+                   'pair = "{1}"'.format(self.interval, pair))
         cur = self.dbase.cursor()
         self.execute(cur, command)
 
@@ -143,9 +143,9 @@ class Mysql():
         Get time we closed last trade
         """
         cur = self.dbase.cursor()
-        command = """select sell_time,pair from trades where pair="{0}"
-                     and interval = "{1}" and sell_time != '0000-00-00 00:00:00'
-                     order by sell_time desc LIMIT 1; """.format(pair, interval)
+        command = ('select sell_time,pair from trades where pair="{0}" '
+                   'and interval = "{1}" and sell_time != "0000-00-00 00:00:00" '
+                   'order by sell_time desc LIMIT 1'.format(pair, interval))
         self.execute(cur, command)
         return cur.fetchall()
 
@@ -155,9 +155,9 @@ class Mysql():
         Return the value of an open trade for a given trading pair
         """
 
-        command = """ select buy_price, quote_in, buy_time, base_in from trades where sell_price
-                      is NULL and `interval` = "{0}" and
-                      pair = "{1}" """.format(self.interval, pair)
+        command = ('select buy_price, quote_in, buy_time, base_in from trades where sell_price '
+                   'is NULL and `interval` = "{0}" and '
+                   'pair = "{1}"'.format(self.interval, pair))
         cur = self.dbase.cursor()
         self.execute(cur, command)
 
@@ -171,8 +171,8 @@ class Mysql():
         for each complete trade logged
         """
         cur = self.dbase.cursor()
-        command = """ select sell_time, buy_price, sell_price, quote_in from trades where
-                      `interval` = "{0}" and sell_price is NOT NULL; """.format(self.interval)
+        command = ('select sell_time, buy_price, sell_price, quote_in from trades where '
+                   '`interval` = "{0}" and sell_price is NOT NULL'.format(self.interval))
 
         self.execute(cur, command)
         return cur.fetchall()
@@ -188,9 +188,8 @@ class Mysql():
               a single list of pairs that we currently hold
         """
         cur = self.dbase.cursor()
-        command = """ select pair from trades where sell_price is NULL and `interval`="{0}"
-                  and name="{1}"
-                  """.format(self.interval, config.main.name)
+        command = ('select pair from trades where sell_price is NULL and `interval`="{0}" '
+                   'and name="{1}"'.format(self.interval, config.main.name))
 
         self.execute(cur, command)
         row = [item[0] for item in cur.fetchall()]
@@ -252,11 +251,11 @@ class Mysql():
         for exchange, values in balances.items():
             for coin, data in values.items():
                 try:
-                    command = """insert into balance (gbp, btc, usd, count, coin, exchange_id)
-                                 values ("{0}", "{1}", "{2}", "{3}", "{4}", (select id from
-                                 exchange where name="{5}"))""".format(data["GBP"], data["BTC"],
-                                                                       data["USD"], data["count"],
-                                                                       coin, exchange)
+                    command = ('insert into balance (gbp, btc, usd, count, coin, exchange_id) '
+                               'values ("{0}", "{1}", "{2}", "{3}", "{4}", (select id from '
+                               'exchange where name="{5}"))'.format(data["GBP"], data["BTC"],
+                                                                    data["USD"], data["count"],
+                                                                    coin, exchange))
                 except KeyError:
                     self.logger.critical(" ".join(["XXX", coin, exchange, "KEYERROR"]))
                     continue
