@@ -16,7 +16,7 @@ REQUIRED_CONFIG = {'database':['db_host', 'db_user', 'db_password', 'db_database
                    'push': ['push_host', 'push_channel', 'push_active'],
                    'main': ['logging_level', 'max_trades', 'binance_api_key', 'name',
                             'binance_api_secret', 'coinbase_api_key', 'buy_rule1',
-                            'wait_between_trades', 'time_between_trades',
+                            'wait_between_trades', 'time_between_trades', 'logging_output',
                             'coinbase_api_secret', 'interval', 'sell_rule1',
                             'drain', 'no_of_klines', 'pairs', 'stop_loss_perc',
                             'take_profit', 'take_profit_perc', 'indicators', 'rate_indicator',

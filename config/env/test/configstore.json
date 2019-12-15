@@ -135,6 +135,11 @@
       "is_binary": false,
       "is_secret": false
     },
+    "logging_output": {
+      "value": "stdout",
+      "is_binary": false,
+      "is_secret": false
+    },
     "logging_level": {
       "value": "10",
       "is_binary": false,
