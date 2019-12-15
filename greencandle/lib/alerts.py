@@ -22,7 +22,7 @@ def send_gmail_alert(action, pair, price):
     """
     if not str2bool(config.email.email_active):
         return
-    logger = getLogger(__name__, config.main.logging_level)
+    logger = getLogger(__name__)
     email_to = config.email.email_to
     email_from = config.email.email_from
     email_password = config.email.email_password

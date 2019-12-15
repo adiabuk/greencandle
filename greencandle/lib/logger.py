@@ -9,7 +9,7 @@ import logging
 from systemd.journal import JournaldLogHandler
 from . import config
 
-def getLogger(logger_name=None, logging_level=20):
+def getLogger(logger_name=None)
     """
     Get Customized logging instance
         Args:

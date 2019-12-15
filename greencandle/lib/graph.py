@@ -24,7 +24,7 @@ from .redis_conn import Redis
 
 from .logger import getLogger
 
-LOGGER = getLogger(__name__, config.main.logging_level)
+LOGGER = getLogger(__name__)
 
 class Graph():
     """class for creating graph html and images"""

@@ -64,7 +64,7 @@ def make_test_case(pairs, startdate, xsum, xmax, xmin):
             self.days = 15
             self.outputdir = "/tmp/test_data"
             self.intervals = ["1h"]
-            self.logger = getLogger(__name__, config.main.logging_level)
+            self.logger = getLogger(__name__)
             self.logger.info("Setting up environment")
             self.redis = Redis(interval=self.intervals[0], test=True, db=1)
             self.dbase = Mysql(test=True, interval=self.intervals[0])

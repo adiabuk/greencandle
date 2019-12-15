@@ -28,7 +28,7 @@ from .supres import supres
 from .common import make_float, pipify, pip_calc
 from .logger import getLogger, get_decorator
 
-LOGGER = getLogger(__name__, config.main.logging_level)
+LOGGER = getLogger(__name__)
 
 class Engine(dict):
     """ Represent events created from data & indicators """

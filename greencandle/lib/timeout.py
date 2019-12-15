@@ -9,7 +9,7 @@ from contextlib import contextmanager
 from . import config
 from .logger import getLogger
 
-LOGGER = getLogger(__name__, config.main.logging_level)
+LOGGER = getLogger(__name__)
 
 def timeout_handler(signum, frame):
     """ Register a handler for the timeout"""

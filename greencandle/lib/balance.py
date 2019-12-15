@@ -11,7 +11,7 @@ from .coinbase_accounts import get_coinbase_values
 from .mysql import Mysql
 from .logger import getLogger
 
-LOGGER = getLogger(__name__, config.main.logging_level)
+LOGGER = getLogger(__name__)
 
 class Balance(dict):
     """

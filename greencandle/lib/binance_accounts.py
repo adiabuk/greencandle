@@ -13,7 +13,7 @@ from .logger import getLogger
 from . import config
 
 BITCOIN = {}
-LOGGER = getLogger(__name__, config.main.logging_level)
+LOGGER = getLogger(__name__)
 
 def get_binance_values():
     """Get totals for each crypto from binance and convert to USD/GBP"""

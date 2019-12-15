@@ -18,7 +18,7 @@ import binance
 from . import config
 from .logger import getLogger
 
-LOGGER = getLogger(__name__, config.main.logging_level)
+LOGGER = getLogger(__name__)
 
 def get_binance_klines(pair, interval=None, limit=50):
     """

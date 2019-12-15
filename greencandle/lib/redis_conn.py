@@ -30,7 +30,7 @@ class Redis():
         returns:
             initialized redis connection
         """
-        self.logger = getLogger(__name__, config.main.logging_level)
+        self.logger = getLogger(__name__)
         self.host = config.redis.redis_host
         self.port = config.redis.redis_port
         self.expire = str2bool(config.redis.redis_expire)

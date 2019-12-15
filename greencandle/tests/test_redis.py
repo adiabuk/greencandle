@@ -9,7 +9,7 @@ config.create_config()
 from greencandle.lib.logger import getLogger
 from greencandle.lib.redis_conn import Redis
 
-LOGGER = getLogger(__name__, config.main.logging_level)
+LOGGER = getLogger(__name__)
 
 class TestRedis(unittest.TestCase):
     """

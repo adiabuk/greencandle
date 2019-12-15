@@ -20,7 +20,7 @@ class Mysql():
         self.user = config.database.db_user
         self.password = config.database.db_password
         self.database = config.database.db_database
-        self.logger = getLogger(__name__, config.main.logging_level)
+        self.logger = getLogger(__name__)
 
         self.connect()
         self.interval = interval

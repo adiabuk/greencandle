@@ -25,7 +25,7 @@ class Trade():
     """Buy & Sell class"""
 
     def __init__(self, interval=None, test_data=False, test_trade=False):
-        self.logger = getLogger(__name__, config.main.logging_level)
+        self.logger = getLogger(__name__)
         self.test_data = test_data
         self.test_trade = test_trade
         self.max_trades = int(config.main.max_trades)

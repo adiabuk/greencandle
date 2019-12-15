@@ -13,7 +13,7 @@ from greencandle.lib.mysql import Mysql
 from greencandle.lib.common import perc_diff, add_perc
 from .unittests import OrderedTest
 
-LOGGER = getLogger(__name__, config.main.logging_level)
+LOGGER = getLogger(__name__)
 
 class TestMysql(OrderedTest):
     """Test mysql class methods"""
