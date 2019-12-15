@@ -9,11 +9,11 @@ import sys
 from operator import itemgetter
 import binance
 
-from ..lib.mysql import Mysql
 from ..lib import config
 
 config.create_config()
 from ..lib.auth import binance_auth
+from ..lib.mysql import Mysql
 
 def main():
     """ Main function """
