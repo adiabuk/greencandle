@@ -1,13 +1,14 @@
 #!/usr/bin/env python
+#pylint: disable=wrong-import-position
 
 """
 Get details of current trades using mysql and current value from binance
 """
 
-from ..lib.mysql import Mysql
 from ..lib import config
-
 config.create_config()
+
+from ..lib.mysql import Mysql
 
 def main():
     """ Main function """

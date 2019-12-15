@@ -7,9 +7,9 @@ Create Excel Spreadsheet with results and analysis of trades
 
 import sys
 import openpyxl
-from greencandle.lib.mysql import Mysql
 from greencandle.lib import config
 config.create_config()
+from greencandle.lib.mysql import Mysql
 
 def main():
     """
