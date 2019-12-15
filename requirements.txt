@@ -30,3 +30,4 @@ requests-unixsocket==0.2.0
 pylint==2.4.4
 waitress
 six==1.12
+systemd==0.16.1

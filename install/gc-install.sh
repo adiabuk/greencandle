@@ -10,14 +10,14 @@ fi
 if [ -f /.dockerenv ]; then
     echo "I'm inside matrix ;(";
     apt-get update
-    apt-get -y install cron netcat vim default-mysql-client bsdmainutils libssl-dev
+    apt-get -y install cron netcat vim default-mysql-client bsdmainutils libssl-dev libsystemd-dev
     install_dir=/install
 else
     echo "I'm living in real world!";
     cp -rv config /opt
     apt-get update
     apt-get -y install python3 wget make git mysql-client libmysqlclient-dev \
-      python3-dev xvfb firefox redis-tools cron vim bsdmainutils libssl-dev gcc
+      python3-dev xvfb firefox redis-tools cron vim bsdmainutils libssl-dev gcc libsystemd-dev
     update-alternatives --install /usr/bin/python python /usr/bin/python3 1
     curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
     python get-pip.py

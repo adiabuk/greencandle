@@ -1,4 +1,4 @@
-#pylint: disable=invalid-name,global-statement
+#pylint: disable=invalid-name,global-statement,protected-access,no-member
 
 """
 Generic logging class for greencandle modules
@@ -6,6 +6,8 @@ Generic logging class for greencandle modules
 
 import sys
 import logging
+from systemd.journal import JournaldLogHandler
+from . import config
 
 def getLogger(logger_name=None, logging_level=20):
     """
@@ -20,12 +22,21 @@ def getLogger(logger_name=None, logging_level=20):
     if logger.hasHandlers():
         logger.handlers.clear()
 
-    logger.setLevel(int(logging_level))
+    logger.setLevel(int(config.main.logging_level))
     logger.propagate = False
-    ch = logging.StreamHandler()
-    formatter = logging.Formatter("%(levelname)s %(name)s %(message)s")
-    ch.setFormatter(formatter)
-    logger.addHandler(ch)
+    if config.main.logging_output == "journald":
+        handler = JournaldLogHandler()
+        #handler = logging.StreamHandler()
+        formatter = logging.Formatter('[%(levelname)s] %(message)s')
+        #formatter = logging.Formatter(logging.BASIC_FORMAT)
+        handler.setFormatter(formatter)
+
+    else:
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter("%(levelname)s %(name)s %(message)s")
+        handler.setFormatter(formatter)
+
+    logger.addHandler(handler)
     return logger
 
 def get_decorator(errors=(Exception,)):
