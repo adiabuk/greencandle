@@ -11,7 +11,7 @@ import pickle
 import redis
 from str2bool import str2bool
 from .mysql import Mysql
-from .logger import getLogger
+from .logger import get_logger
 from . import config
 from .common import add_perc, sub_perc, AttributeDict, perc_diff, convert_to_seconds
 
@@ -30,7 +30,7 @@ class Redis():
         returns:
             initialized redis connection
         """
-        self.logger = getLogger(__name__)
+        self.logger = get_logger(__name__)
         self.host = config.redis.redis_host
         self.port = config.redis.redis_port
         self.expire = str2bool(config.redis.redis_expire)

@@ -11,7 +11,7 @@ import notify_run
 from str2bool import str2bool
 from . import config
 from .timeout import restrict_timeout
-from .logger import getLogger, get_decorator
+from .logger import get_logger, get_decorator
 
 GET_EXCEPTIONS = get_decorator((Exception))
 
@@ -22,7 +22,7 @@ def send_gmail_alert(action, pair, price):
     """
     if not str2bool(config.email.email_active):
         return
-    logger = getLogger(__name__)
+    logger = get_logger(__name__)
     email_to = config.email.email_to
     email_from = config.email.email_from
     email_password = config.email.email_password

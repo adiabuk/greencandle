@@ -1,4 +1,4 @@
-#pylint: disable=invalid-name,no-member,arguments-differ
+#pylint: disable=no-member,arguments-differ
 
 """
 Generic logging class for greencandle modules
@@ -20,7 +20,7 @@ class OneLineFormatter(logging.Formatter):
             result = result.replace("\n", "")
         return result
 
-def getLogger(logger_name=None):
+def get_logger(logger_name=None):
     """
     Get Customized logging instance
       Args:
@@ -58,7 +58,7 @@ def getLogger(logger_name=None):
 
 def get_decorator(errors=(Exception,)):
     """logging decorator"""
-    logger = getLogger(__name__)
+    logger = get_logger(__name__)
     def decorator(func):
 
         def new_func(*args, **kwargs):

@@ -15,10 +15,10 @@ from ..lib import config
 config.create_config()
 
 from ..lib.mysql import Mysql
-from ..lib.logger import getLogger, get_decorator
+from ..lib.logger import get_logger, get_decorator
 from ..lib.run import serial_test, parallel_test
 
-LOGGER = getLogger(__name__)
+LOGGER = get_logger(__name__)
 GET_EXCEPTIONS = get_decorator((Exception))
 
 def main():

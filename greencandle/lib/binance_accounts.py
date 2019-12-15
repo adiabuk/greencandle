@@ -9,11 +9,11 @@ import binance
 from forex_python.converter import CurrencyRates, RatesNotAvailableError
 from .balance_common import default_to_regular
 from .auth import binance_auth
-from .logger import getLogger
+from .logger import get_logger
 from . import config
 
 BITCOIN = {}
-LOGGER = getLogger(__name__)
+LOGGER = get_logger(__name__)
 
 def get_binance_values():
     """Get totals for each crypto from binance and convert to USD/GBP"""

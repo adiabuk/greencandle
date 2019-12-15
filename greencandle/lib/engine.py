@@ -26,9 +26,9 @@ from . import config
 from .redis_conn import Redis
 from .supres import supres
 from .common import make_float, pipify, pip_calc
-from .logger import getLogger, get_decorator
+from .logger import get_logger, get_decorator
 
-LOGGER = getLogger(__name__)
+LOGGER = get_logger(__name__)
 
 class Engine(dict):
     """ Represent events created from data & indicators """

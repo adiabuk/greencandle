@@ -12,7 +12,7 @@ import binance
 from str2bool import str2bool
 
 from .auth import binance_auth
-from .logger import getLogger, get_decorator
+from .logger import get_logger, get_decorator
 from .mysql import Mysql
 from .balance import Balance
 from .balance_common import get_base
@@ -25,7 +25,7 @@ class Trade():
     """Buy & Sell class"""
 
     def __init__(self, interval=None, test_data=False, test_trade=False):
-        self.logger = getLogger(__name__)
+        self.logger = get_logger(__name__)
         self.test_data = test_data
         self.test_trade = test_trade
         self.max_trades = int(config.main.max_trades)

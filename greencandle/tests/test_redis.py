@@ -6,10 +6,10 @@ import time
 from greencandle.lib import config
 config.create_config()
 
-from greencandle.lib.logger import getLogger
+from greencandle.lib.logger import get_logger
 from greencandle.lib.redis_conn import Redis
 
-LOGGER = getLogger(__name__)
+LOGGER = get_logger(__name__)
 
 class TestRedis(unittest.TestCase):
     """

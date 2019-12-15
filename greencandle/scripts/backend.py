@@ -18,10 +18,10 @@ from str2bool import str2bool
 from ..lib import config
 config.create_config()
 
-from ..lib.logger import getLogger
+from ..lib.logger import get_logger
 from ..lib.run import prod_loop, prod_int_check
 
-LOGGER = getLogger(__name__)
+LOGGER = get_logger(__name__)
 
 def main():
     """ main function """

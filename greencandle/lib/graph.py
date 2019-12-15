@@ -22,9 +22,9 @@ from resizeimage import resizeimage
 from . import config
 from .redis_conn import Redis
 
-from .logger import getLogger
+from .logger import get_logger
 
-LOGGER = getLogger(__name__)
+LOGGER = get_logger(__name__)
 
 class Graph():
     """class for creating graph html and images"""

@@ -9,9 +9,9 @@ from . import config
 from .binance_accounts import get_binance_values
 from .coinbase_accounts import get_coinbase_values
 from .mysql import Mysql
-from .logger import getLogger
+from .logger import get_logger
 
-LOGGER = getLogger(__name__)
+LOGGER = get_logger(__name__)
 
 class Balance(dict):
     """

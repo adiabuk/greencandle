@@ -7,7 +7,7 @@ from greencandle.lib import config
 config.create_config()
 
 from greencandle.lib.binance_common import get_data
-from greencandle.lib.logger import getLogger
+from greencandle.lib.logger import get_logger
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.run import serial_test
@@ -64,7 +64,7 @@ def make_test_case(pairs, startdate, xsum, xmax, xmin):
             self.days = 15
             self.outputdir = "/tmp/test_data"
             self.intervals = ["1h"]
-            self.logger = getLogger(__name__)
+            self.logger = get_logger(__name__)
             self.logger.info("Setting up environment")
             self.redis = Redis(interval=self.intervals[0], test=True, db=1)
             self.dbase = Mysql(test=True, interval=self.intervals[0])

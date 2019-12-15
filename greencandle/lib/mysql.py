@@ -7,7 +7,7 @@ import binance
 import MySQLdb
 from . import config
 from ..lib.auth import binance_auth
-from .logger import getLogger, get_decorator
+from .logger import get_logger, get_decorator
 
 class Mysql():
     """
@@ -20,7 +20,7 @@ class Mysql():
         self.user = config.database.db_user
         self.password = config.database.db_password
         self.database = config.database.db_database
-        self.logger = getLogger(__name__)
+        self.logger = get_logger(__name__)
 
         self.connect()
         self.interval = interval

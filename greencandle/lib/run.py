@@ -18,10 +18,10 @@ from .mysql import Mysql
 from .profit import get_recent_profit
 from .order import Trade
 from .binance_common import get_dataframes
-from .logger import getLogger, get_decorator
+from .logger import get_logger, get_decorator
 
 from . import config
-LOGGER = getLogger(__name__)
+LOGGER = get_logger(__name__)
 CHUNK_SIZE = int(config.main.no_of_klines)
 GET_EXCEPTIONS = get_decorator((Exception))
 

@@ -7,9 +7,9 @@ Custom Exception for timeout
 import signal
 from contextlib import contextmanager
 from . import config
-from .logger import getLogger
+from .logger import get_logger
 
-LOGGER = getLogger(__name__)
+LOGGER = get_logger(__name__)
 
 def timeout_handler(signum, frame):
     """ Register a handler for the timeout"""
