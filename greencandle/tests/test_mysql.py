@@ -25,15 +25,8 @@ class TestMysql(OrderedTest):
         LOGGER.info("Setting up environment")
         self.dbase = Mysql(test=True, interval="1h")
 
-    def step_1(self):
-        """Test good and bad query"""
-        with self.assertRaises(Exception) as context:
-            cur = self.dbase.dbase.cursor()
-            self.dbase.execute(cur, 'select dasdasdas')
-        self.assertIn('Unknown column', str(context.exception))
-        self.dbase.execute(cur, 'select * from trades')
 
-    def step_2(self):
+    def step_1(self):
         """Check insert and update trades"""
 
         self.date = '2018-05-07 22:44:59'
