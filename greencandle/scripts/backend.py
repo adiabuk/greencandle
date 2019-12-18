@@ -42,15 +42,26 @@ def main():
     prod_loop(interval, args.test) # initial run, before scheduling begins
     LOGGER.info("Finished initial prod run")
 
-    times = {"30m": "01,31",
-             "1h": "01",
-             "15m": "01,31,46",
-             "5m": "01,06,11,16,21,26,31,36,41,46,51,56",
-             "3m": "01,04,07,10,13,16,19,22,25,28,31,34,37,40,43,46,49,52,55,58",
-             "2h": "01",
-             "3h": "01",
-             "4h": "01",
-            }
+    minute = {"3m": "0,3,6,9,12,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57",
+              "5m": "0,5,10,15,20,25,30,35,40,45,50,55",
+              "15m": "0,15,30,45",
+              "30m": "0,30",
+              "1h": "0",
+              "2h": "0",
+              "3h": "0",
+              "4h": "0",
+             }
+
+    hour = {"3m": "*",
+            "5m": "*",
+            "15m": "*",
+            "30m": "*",
+            "1h": "*",
+            "2h": "0,2,4,6,8,10,12,14,16,18,20,22",
+            "3h": "0,3,6,9,12,15,18,21",
+            "4h": "0,4,8,12,16,20"
+           }
+
 
     sched = BlockingScheduler()
 
@@ -64,7 +75,7 @@ def main():
     def keepalive():
         Path('/var/run/greencandle').touch()
 
-    @sched.scheduled_job('cron', minute=times[interval])
+    @sched.scheduled_job('cron', minute=minute[interval], hour=hour[interval], second="30")
     def prod_run():
         LOGGER.info("Starting prod run")
         prod_loop(interval, args.test)
