@@ -155,7 +155,7 @@ services:
     logging:
       driver: journald
     hostname: api
-    image: amrox/api
+    image: amrox/greencandle
     restart: on-failure
     entrypoint: /docker-entrypoint.sh api
     links:

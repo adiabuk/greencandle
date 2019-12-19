@@ -72,7 +72,7 @@ services:
       - CONFIG_ENV=test
       - HOST=$HOSTNAME
     hostname: api
-    image: api
+    image: greencandle
     restart: on-failure
     entrypoint: /docker-entrypoint.sh api --test
     links:

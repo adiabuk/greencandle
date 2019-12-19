@@ -47,10 +47,8 @@ echo "127.0.0.1    redis" >> /etc/hosts
 docker build --force-rm --no-cache -f $DIR/Dockerfile-gc . --tag=greencandle
 docker build --force-rm --no-cache -f $DIR/Dockerfile-ms . --tag=gc-mysql
 docker build --force-rm --no-cache -f $DIR/Dockerfile-rs . --tag=gc-redis
-docker build --force-rm --no-cache -f $DIR/Dockerfile-cn . --tag=cron
 docker build --force-rm --no-cache -f $DIR/Dockerfile-ds . --tag=dashboard
 docker build --force-rm --no-cache -f $DIR/Dockerfile-wb . --tag=webserver
-docker build --force-rm --no-cache -f $DIR/Dockerfile-ap . --tag=api
 
 container=$(docker ps|grep mysql|awk {'print $1'})
 
