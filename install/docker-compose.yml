@@ -45,9 +45,6 @@ services:
       interval: 1m
       timeout: 2s
       retries: 5
-    volumes:
-      - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
   2ma-btc:
     container_name: 2ma-btc
