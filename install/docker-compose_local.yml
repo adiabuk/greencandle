@@ -4,7 +4,7 @@ services:
   cadvisor:
     container_name: cadvisor
     hostname: cadvisor
-    image: google/cadvisor:canary
+    image: gcr.io/google_containers/cadvisor:v0.35.0
     restart: on-failure
     volumes:
       - /:/rootfs
@@ -40,7 +40,6 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
-
 
   cron:
     container_name: cron
