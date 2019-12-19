@@ -10,7 +10,8 @@ fi
 if [ -f /.dockerenv ]; then
     echo "I'm inside matrix ;(";
     apt-get update
-    apt-get -y install cron netcat vim default-mysql-client bsdmainutils libssl-dev libsystemd-dev
+    apt-get -y install cron netcat default-mysql-client bsdmainutils libssl-dev libsystemd-dev --no-install-recommends
+    apt-get clean; apt-get autoclean; rm -rf /var/lib/apt/lists/*
     install_dir=/install
 else
     echo "I'm living in real world!";

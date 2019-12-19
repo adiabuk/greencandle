@@ -4,11 +4,10 @@ LABEL commit=${COMMIT}
 LABEL date=${DATE}
 
 ADD . /install
-RUN bash /install/install/gc-install.sh
-RUN cp install/install/docker-entrypoint.sh /
-RUN cp -rv /install/config /opt/config
-RUN chmod +x /docker-entrypoint.sh
-HEALTHCHECK CMD find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+RUN bash /install/install/gc-install.sh && \
+    cp install/install/docker-entrypoint.sh / && \
+    cp -rv /install/config /opt/config && \
+    chmod +x /docker-entrypoint.sh
 
 ARG BRANCH="master"
 ARG COMMIT=""
