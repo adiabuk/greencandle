@@ -13,7 +13,7 @@ services:
       - /var/lib/docker:/var/lib/docker
       - /dev/disk:/dev/disk
     healthcheck:
-      test: printf 'GET /healthz HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc localhost 8080
+      test: "printf 'GET /healthz HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc localhost 8080"
       interval: 1m
       timeout: 2s
       retries: 5
