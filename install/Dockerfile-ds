@@ -9,12 +9,10 @@ ADD dashboard/dashboards /smashing/dashboards
 ADD dashboard/jobs /smashing/jobs
 ADD dashboard/assets /smashing/assets
 ADD dashboard/widgets /smashing/widgets
-
-ADD dashboard/install.sh /install.sh
 ADD dashboard/docker-entrypoint.sh /docker-entrypoint.sh
+ADD dashboard/install.sh /install.sh
 
-RUN apt-get update; apt-get install -y netcat; apt-get clean
-RUN GEMS=mysql2 /install.sh
+RUN apt-get update; apt-get install -y netcat; apt-get clean && GEMS=mysql2 /install.sh
 
 ARG BRANCH="master"
 ARG COMMIT=""
