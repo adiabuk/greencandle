@@ -6,6 +6,7 @@ LABEL date=${DATE}
 ADD . /install
 RUN bash /install/install/gc-install.sh && \
     cp install/install/docker-entrypoint.sh / && \
+    cp install/install/docker-entrypoint-api.sh / && \
     cp -rv /install/config /opt/config && \
     chmod +x /docker-entrypoint.sh
 

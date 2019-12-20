@@ -73,7 +73,7 @@ services:
     hostname: api
     image: greencandle
     restart: on-failure
-    entrypoint: /docker-entrypoint.sh api --test
+    entrypoint: /docker-entrypoint-api.sh api --test
     links:
       - mysql-local:mysql
       - redis-local:redis
