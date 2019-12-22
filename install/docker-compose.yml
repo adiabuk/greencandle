@@ -164,7 +164,7 @@ services:
       - mysql
       - redis
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/run/  -mmin -2 -name api 2>&1 |grep -q api || exit 1
       interval: 1m
       timeout: 2s
       retries: 5

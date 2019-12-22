@@ -78,7 +78,7 @@ def sell():
 
 def healthcheck(scheduler):
     """Healtcheck for docker"""
-    Path('/var/run/greencandle').touch()
+    Path('/var/run/api').touch()
     SCHED.enter(60, 60, healthcheck, (scheduler, ))
 
 def get_data(scheduler):

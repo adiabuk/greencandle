@@ -6,6 +6,8 @@ services:
     hostname: cadvisor
     image: gcr.io/google_containers/cadvisor:v0.35.0
     restart: on-failure
+    ports:
+      - 8080:8080
     volumes:
       - /:/rootfs
       - /var/run:/var/run
@@ -57,7 +59,7 @@ services:
       - mysql-local
       - redis-local
     healthcheck:
-      test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -78,12 +80,12 @@ services:
       - mysql-local:mysql
       - redis-local:redis
     ports:
-      - 5000
+      - 5000:5000
     depends_on:
       - mysql-local
       - redis-local
     healthcheck:
-      test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/run/  -mmin -2 -name api 2>&1 |grep -q api || exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -97,8 +99,8 @@ services:
      entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
      healthcheck:
        test: service nginx status || exit 1
-       interval: 5m
-       timeout: 5s
+       interval: 1m
+       timeout: 1s
        retries: 5
      environment:
        - CONFIG_ENV=test
@@ -114,6 +116,11 @@ services:
      volumes:
        - /data:/data
        - /root/.aws:/root/.aws
+     depends_on:
+      - cadvisor
+      - api
+      - dashboard
+    
 
   dashboard:
     container_name: dashboard
@@ -121,11 +128,11 @@ services:
     image: dashboard
     healthcheck:
       test: curl --fail 127.1:3030/dashboard/gc || exit 1
-      interval: 10m
+      interval: 1m
       timeout: 5s
       retries: 5
     ports:
-      - 8080:3030
+      - 3030:3030
     restart: on-failure
     entrypoint: /docker-entrypoint.sh
     links:
