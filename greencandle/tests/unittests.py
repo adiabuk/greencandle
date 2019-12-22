@@ -1,8 +1,15 @@
-#pylint: disable=wrong-import-position,no-member
+#pylint: disable=wrong-import-position,no-member,broad-except,too-many-instance-attributes
+
+"""
+Helper classes and functions for creating and running unittests
+"""
 
 import unittest
 import os
 import shutil
+import subprocess
+import time
+
 from greencandle.lib import config
 config.create_config()
 
@@ -13,7 +20,11 @@ from greencandle.lib.mysql import Mysql
 from greencandle.lib.run import serial_test
 
 class OrderedTest(unittest.TestCase):
-    def assertRaisesWithMessage(self, msg, func, *args, **kwargs):
+    """
+    Custom unittest class which allows test methods to be run sequentially
+    """
+    def assert_raises_with_message(self, msg, func, *args, **kwargs):
+        """ensure exception is raised with a specific message"""
         try:
             func(*args, **kwargs)
             self.assertFail()
@@ -39,7 +50,88 @@ class OrderedTest(unittest.TestCase):
             except Exception as exc:
                 self.fail("{} failed ({}: {})".format(step, type(exc), exc))
 
+def make_docker_case(container, checks=None):
+    """
+    return docker unittest customized with argument config
+    """
+    class DockerRun(OrderedTest):
+        """
+        Test given docker instance with given check commands
+        """
+
+        def run_subprocess(self, command):
+            """
+            Run given command using subprocess and return exit code
+            """
+
+            self.logger.critical("Running command: %s", command)
+            process = subprocess.Popen(command, stdout=subprocess.PIPE,
+                                       stderr=subprocess.STDOUT, shell=True)
+            while process.poll() is None:
+                # Process hasn't exited yet, let's wait some
+                time.sleep(0.5)
+
+            out, err = process.communicate()
+            conv = lambda i: i or b''
+            return (process.returncode,
+                    conv(out).decode('utf-8').strip(),
+                    conv(err).decode('utf-8').strip())
+
+        def setUp(self):
+            self.logger = get_logger(__name__)
+            self.tearDown()
+
+        def tearDown(self):
+            self.logger.info("Cleanup up docker instances")
+            command = "docker stop `docker ps -a -q`"
+            self.run_subprocess(command)
+            command = "docker rm `docker ps -a -q`"
+            self.run_subprocess(command)
+
+        def step_1(self):
+            """Start Instance"""
+
+            self.logger.info("Starting instance %s", container)
+            command = "docker-compose -f install/docker-compose_local.yml up -d " + container
+            return_code, out, err = self.run_subprocess(command)
+            if err:
+                self.logger.error(err)
+            elif out:
+                self.logger.info(out)
+            self.assertEqual(return_code, 0)
+
+        def step_2(self):
+            """Check instance is still running"""
+            self.logger.info("Waiting 2mins")
+            time.sleep(120)
+            command = 'docker ps --format "{{.Names}}"  -f name=' + container
+            return_code, stdout, stderr = self.run_subprocess(command)
+            self.assertEqual(return_code, 0)
+            self.assertEqual(stdout, container)
+            self.assertEqual(stderr, "")
+
+        def step_3(self):
+            """Run healthchecks"""
+            if checks:
+                for check in checks:
+                    return_code, _, _ = self.run_subprocess(check)
+                    self.assertEqual(return_code, 0)
+
+        def step_4(self):
+            """check health status"""
+            command = 'docker ps --format "{{.Status}}"  -f name=' + container
+            stdout = self.run_subprocess(command)[1]
+            self.assertIn("healthy", stdout)
+            self.assertNotIn("unhealthy", stdout)
+            self.assertNotIn("starting", stdout)
+
+
+    return DockerRun
+
 def make_test_case(pairs, startdate, xsum, xmax, xmin):
+    """
+    return run unittest customized with argument config
+    """
     class UnitRun(OrderedTest):
         """
         Sequential unit tests which download data from binance, run process, and collect results

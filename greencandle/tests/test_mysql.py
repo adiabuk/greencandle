@@ -25,7 +25,6 @@ class TestMysql(OrderedTest):
         LOGGER.info("Setting up environment")
         self.dbase = Mysql(test=True, interval="1h")
 
-
     def step_1(self):
         """Check insert and update trades"""
 
