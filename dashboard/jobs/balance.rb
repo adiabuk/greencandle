@@ -7,7 +7,7 @@ SCHEDULER.every '30s' do
   sql = "select round(sum(perc)/(datediff(max(sell_time),(select min(buy_time) from profit))),2) as average from profit"
 
 
-  balance_sql = "select round(gbp,2) as gbp from balance where coin="TOTALS" order by ctime desc limit 1"
+  balance_sql = "select round(gbp,2) as gbp from balance where coin='TOTALS' order by ctime desc limit 1"
   balance = db.query(balance_sql)
   result = db.query(sql)
   last_balance = current_balance
