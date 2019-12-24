@@ -6,6 +6,7 @@ install:
 script:
   - configstore package test
   - sudo docker ps
+  - sudo configstore package process_templates test /etc
   - sudo docker-compose -f ./install/docker-compose_local.yml up -d mysql-local redis-local
   - sudo python -m unittest
   - sudo mysqlcheck --host mysql -uroot -ppassword  --databases greencandle
