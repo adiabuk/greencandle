@@ -1,4 +1,4 @@
-#pylint: disable=no-member,arguments-differ
+#pylint: disable=no-member,arguments-differ,too-few-public-methods
 
 """
 Generic logging class for greencandle modules
@@ -20,7 +20,20 @@ class OneLineFormatter(logging.Formatter):
             result = result.replace("\n", "")
         return result
 
-def get_logger(logger_name=None):
+class AppFilter(logging.Filter):
+    """
+    Add module_name as well as app_name for journald logging
+    """
+
+    def __init__(self, module_name, *args, **kwargs):
+        self.module_name = module_name
+        super(AppFilter, self).__init__(*args, **kwargs)
+
+    def filter(self, record):
+        record.module_name = self.module_name
+        return True
+
+def get_logger(module_name=None):
     """
     Get Customized logging instance
       Args:
@@ -28,28 +41,23 @@ def get_logger(logger_name=None):
       Returns:
         logging instance with formatted handler
     """
-    logger = logging.getLogger(logger_name)
+    app_name = config.main.name
+    logger = logging.getLogger(app_name)
     if logger.hasHandlers():
         logger.handlers.clear()
 
     logger.setLevel(int(config.main.logging_level))
     logger.propagate = False
+    logger.addFilter(AppFilter(module_name=module_name))
     if config.main.logging_output == "journald":
         handler = JournaldLogHandler()
-        #handler = logging.StreamHandler()
 
-        formatter = OneLineFormatter('[%(levelname)s] %(message)s')
-        #formatter = logging.Formatter('[%(levelname)s] %(message)s')
-
-        #formatter = logging.Formatter(logging.BASIC_FORMAT)
+        formatter = OneLineFormatter('[%(levelname)s] %(module_name)s %(message)s')
         handler.setFormatter(formatter)
 
     else:
-        #handler = OneLineExceptionFormatter()
         handler = logging.StreamHandler()
-        #formatter = logging.Formatter("%(levelname)s %(name)s %(message)s")
-        #formatter = OneLineExceptionFormatter("%(levelname)s %(name)s %(message)s")
-        formatter = logging.Formatter("%(asctime)s %(levelname)s %(name)s %(message)s",
+        formatter = logging.Formatter("%(asctime)s %(levelname)s %(module_name)s %(message)s",
                                       "%Y-%m-%d %H:%M:%S")
         handler.setFormatter(formatter)
 
