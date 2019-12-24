@@ -13,7 +13,9 @@ class TestLint(unittest.TestCase):
         test lint
         """
         for filename in Path('greencandle').rglob('*.py'):
-            count = len(open(str(filename)).readlines())
+            file = open(str(filename))
+            count = len(file.readlines())
+            file.close()
             if 'test' not in str(filename) and count > 5:
                 results = Run([str(filename)], do_exit=False)
                 try:
