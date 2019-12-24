@@ -2,12 +2,15 @@ dist: "bionic"
 
 install:
   - sudo bash install/bootstrap_dev.sh
+  - sudo docker-compose -f ./install/docker-compose_local.yml up -d mysql-local redis-local
+
+before_script:
+  - sleep 120
 
 script:
   - configstore package test
   - sudo docker ps
-  - sudo configstore package process_templates test /etc
-  - sudo docker-compose -f ./install/docker-compose_local.yml up -d mysql-local redis-local
+  - sudo configstore package process_templates test/unit /etc
   - sudo python -m unittest
   - sudo mysqlcheck --host mysql -uroot -ppassword  --databases greencandle
   - sudo crontab config/template/gc-cron
