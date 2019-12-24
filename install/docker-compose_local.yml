@@ -120,7 +120,6 @@ services:
       - cadvisor
       - api
       - dashboard
-    
 
   dashboard:
     container_name: dashboard
@@ -175,20 +174,3 @@ services:
       interval: 1m
       timeout: 2s
       retries: 5
-
-  greencandle-unittest:
-    container_name: unittest
-    hostname: unittest
-    image: greencandle
-    entrypoint: /docker-entrypoint.sh python -m unittest
-    links:
-      - mysql-local:mysql
-      - redis-local:redis
-    working_dir: /srv/greencandle
-    depends_on:
-      - redis-local
-      - mysql-local
-    environment:
-      - CONFIG_ENV=test/unit
-    volumes:
-      - ../:/srv/greencandle
