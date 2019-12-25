@@ -11,7 +11,7 @@ script:
   - configstore package test
   - sudo docker ps
   - sudo configstore package process_templates test/unit /etc
-  - sudo pytest -k "not docker"
-  - sudo pytest -k "docker"
   - sudo mysqlcheck --host mysql -uroot -ppassword  --databases greencandle
   - sudo crontab config/template/gc-cron
+  - sudo pytest -k "not docker"
+  - sudo pytest -k "docker"
