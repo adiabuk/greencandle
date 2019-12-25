@@ -21,7 +21,7 @@ services:
   redis:
     container_name: redis
     hostname: redis
-    image: amrox/gc-redis
+    image: amrox/gc-redis:${TAG}
     restart: on-failure
     links:
       - mysql
@@ -34,7 +34,7 @@ services:
   mysql:
     container_name: mysql
     hostname: mysql
-    image: amrox/gc-mysql
+    image: amrox/gc-mysql:${TAG}
     entrypoint: /docker-entrypoint.sh mysqld
     environment:
       - CONFIG_ENV=prod
@@ -49,7 +49,7 @@ services:
   2ma-btc:
     container_name: 2ma-btc
     hostname: 2ma-btc
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
     logging:
       driver: journald
@@ -73,7 +73,7 @@ services:
   2ma-usdt:
     container_name: 2ma-usdt
     hostname: 2ma-usdt
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
     logging:
       driver: journald
@@ -97,7 +97,7 @@ services:
   2ma-eth:
     container_name: 2ma-eth
     hostname: 2ma-eth
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
     logging:
       driver: journald
@@ -121,7 +121,7 @@ services:
   2ma-bnb:
     container_name: 2ma-bnb
     hostname: 2ma-bnb
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
     logging:
       driver: journald
@@ -152,7 +152,7 @@ services:
     logging:
       driver: journald
     hostname: api
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     restart: on-failure
     entrypoint: /docker-entrypoint-api.sh api
     links:
@@ -179,7 +179,7 @@ services:
       - CONFIG_ENV=prod/cron
       - HOST=$HOSTNAME
     hostname: cron
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh cron -f
     logging:
       driver: journald
@@ -203,7 +203,7 @@ services:
   webserver:
      container_name: webserver
      hostname: webserver
-     image: amrox/webserver
+     image: amrox/webserver:${TAG}
      healthcheck:
        test: service nginx status || exit 1
        interval: 5m
@@ -224,7 +224,7 @@ services:
   dashboard:
     container_name: dashboard
     hostname: dashboard
-    image: amrox/dashboard
+    image: amrox/dashboard:${TAG}
     ports:
       - 8080:3030
     healthcheck:
