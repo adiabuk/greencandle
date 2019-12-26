@@ -9,7 +9,7 @@ fi
 
 # Setup local env
 apt-get -y update
-apt-get -y install docker.io ntpdate mysql-client screen atop jq iotop ntp awscli vim atop htop
+apt-get -y install docker.io ntpdate mysql-client screen atop jq iotop ntp awscli vim atop htop automake autotools-dev fuse g++ git libcurl4-gnutls-dev libfuse-dev libssl-dev libxml2-dev make pkg-config
 apt autoremove --purge snapd
 apt-get dist-upgrade -y
 apt-get clean; apt-get autoclean; rm -rf /var/lib/apt/lists/*
