@@ -12,7 +12,6 @@ import shlex
 from ..lib import config
 config.create_config()
 
-
 def get_result(command):
     """
     Run command using subprocess and return stdout in UTF-8

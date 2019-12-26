@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-position
+#pylint: disable=wrong-import-position,no-member
 
 """
 Standalone script for generating graphs from data in redis
@@ -11,7 +11,6 @@ import argcomplete
 from greencandle.lib import config
 config.create_config()
 from greencandle.lib.graph import Graph
-from greencandle.lib.mysql import Mysql
 
 def main():
     """Main function"""
@@ -27,9 +26,6 @@ def main():
 
 
     if args.all_pairs:
-        dbase = Mysql()
-        results = dbase.fetch_sql_data("select pair, `interval` from trades where "
-                                       "sell_price is NULL", header=False)
         pairs = config.main.pairs
         for pair in pairs:
             graph = Graph(test=args, pair=pair, db=args.db, interval=args.interval)
