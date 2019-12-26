@@ -11,6 +11,15 @@
 
 # Releases
 
+## 0.26
+* Testing of docker instance functionality
+* Combine API and GC into single image
+* Log directly to journald with preserved severity
+* More cleanup of wasted diskspace on host and containers
+* Fix of engine using incomplete data to populate redis in live mode
+* Release script to pull latest version tag and deploy
+* Add AWS S3 fuse package to non-test server for backups and other data
+
 ## 0.25
 * Add api for displaying current open trades with ability to sell
 * Add local install to travis tests
