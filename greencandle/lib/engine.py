@@ -1,5 +1,5 @@
 #pylint: disable=no-member,consider-iterating-dictionary,broad-except,
-#pylint: disable=unused-variable,possibly-unused-variable,redefined-builtin
+#pylint: disable=unused-variable,possibly-unused-variable,redefined-builtin,unused-import
 
 """
 Module for collecting price data and creating TA results
@@ -240,10 +240,13 @@ class Engine(dict):
         """Send ohcls data to redis"""
         scheme = {}
         scheme["symbol"] = pair
+        # Unless we are in test mode, use the second to last data row as the previous one is still
+        # being constructed and contains incomplete data
+        location = -1 if self.test else -2
 
         # compress and pickle current dataframe for redis storage
         # dont get most recent one, as it may not be complete
-        scheme['data'] = zlib.compress(pickle.dumps(self.dataframes[pair].iloc[-1]))
+        scheme['data'] = zlib.compress(pickle.dumps(self.dataframes[pair].iloc[location]))
         scheme["event"] = "ohlc"
         self.add_scheme(scheme)
 
