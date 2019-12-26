@@ -3,5 +3,10 @@
 set -e
 
 git pull
+if [[ -n "$1" ]]; then
+  export TAG=$1
+else
+  export TAG=$(python greencandle/version.py)
+fi 
 docker-compose -f ./install/docker-compose.yml pull
-TAG=$(python greencandle/version.py) docker-compose -f ./install/docker-compose.yml up -d 
+docker-compose -f ./install/docker-compose.yml up -d 
