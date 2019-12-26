@@ -13,6 +13,17 @@ apt-get -y install docker.io ntpdate mysql-client screen atop jq iotop ntp awscl
 apt autoremove --purge snapd
 apt-get dist-upgrade -y
 apt-get clean; apt-get autoclean; rm -rf /var/lib/apt/lists/*
+update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+
+cd /tmp
+git clone https://github.com/s3fs-fuse/s3fs-fuse.git
+cd s3fs-fuse
+./autogen.sh
+./configure
+make
+make install
+cd -
+rm -rf /tmp/s3fs-fuse
 
 curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
