@@ -25,6 +25,18 @@ make install
 cd -
 rm -rf /tmp/s3fs-fuse
 
+wget https://github.com/motns/configstore/releases/download/v2.4.0/configstore-2.4.0-linux-amd64.tar.gz -P /tmp
+tar zxvf /tmp/configstore-2.4.0-linux-amd64.tar.gz -C /usr/local/bin 
+rm -rf /tmp/configstore-2.4.0-linux-amd64.tar.gz
+
+subdomain=$(configstore package get prod loggly_subdomain)
+token=$(configstore package get prod loggly_token)
+username=$(configstore package get prod loggly_username)
+password=$(configstore package get prod loggly_password)
+
+curl -O https://www.loggly.com/install/configure-linux.sh
+sudo bash configure-linux.sh -a $subdomain -t $token -u $username -p $password
+
 curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 echo "export HOSTNAME >> ~/.bashrc"
