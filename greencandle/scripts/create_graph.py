@@ -26,7 +26,7 @@ def main():
 
 
     if args.all_pairs:
-        pairs = config.main.pairs
+        pairs = config.main.pairs.split()
         for pair in pairs:
             graph = Graph(test=args, pair=pair, db=args.db, interval=args.interval)
             graph.get_data()
