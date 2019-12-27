@@ -314,7 +314,7 @@ class Redis():
                 able_to_buy = (int(buy_epoch) +
                                int(convert_to_seconds(config.main.time_between_trades))) < \
                                current_epoch
-            except IndexError:
+            except (IndexError, AttributeError):
                 pass  # no previous trades
         else:
             able_to_buy = True
