@@ -10,7 +10,7 @@ fi
 # Setup local env
 apt-get -y update
 apt-get -y install docker.io ntpdate mysql-client screen atop jq iotop ntp awscli vim atop htop automake autotools-dev fuse g++ git libcurl4-gnutls-dev libfuse-dev libssl-dev libxml2-dev make pkg-config
-apt autoremove --purge snapd
+apt autoremove --purge -y snapd emacs
 apt-get dist-upgrade -y
 apt-get clean; apt-get autoclean; rm -rf /var/lib/apt/lists/*
 update-alternatives --install /usr/bin/python python /usr/bin/python3 1
@@ -26,7 +26,7 @@ cd -
 rm -rf /tmp/s3fs-fuse
 
 wget https://github.com/motns/configstore/releases/download/v2.4.0/configstore-2.4.0-linux-amd64.tar.gz -P /tmp
-tar zxvf /tmp/configstore-2.4.0-linux-amd64.tar.gz -C /usr/local/bin 
+tar zxvf /tmp/configstore-2.4.0-linux-amd64.tar.gz -C /usr/local/bin
 rm -rf /tmp/configstore-2.4.0-linux-amd64.tar.gz
 
 subdomain=$(configstore package get prod loggly_subdomain)
