@@ -59,4 +59,6 @@ pip install . --src /tmp
 pip install -e git+https://github.com/adiabuk/Technical-Indicators.git#egg=indicator
 pip install -e git+https://github.com/adiabuk/binance#egg=binance
 [[ ! -d /opt/output ]] && mkdir /opt/output
+apt-get purge -y gcc g++ g++-8 gcc-8 libx265-165 mercurial-common
+apt-get -y autoremove
 echo "Installation Complete"
