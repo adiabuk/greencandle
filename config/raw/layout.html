@@ -1,54 +1,51 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     <title>Greencandle</title>
 
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.js"></script>
-<script type="text/javascript">
-
-$(document).ready(function(){
-    $('#customers td.y_n').each(function(){
-      if ($(this).text() < 0) {
-            $(this).css('background-color','#f00');
-        }
-    });
-});
-
-</script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#customers td.y_n').each(function() {
+                if ($(this).text() < 0) {
+                    $(this).css('background-color', '#f00');
+                }
+            });
+        });
+    </script>
 
 </head>
 
+<body>
 
-  <body>
-
-<header>
-  <div class="container">
-    <h1 class="logo">Greencandle</h1>
-    <strong><nav>
+    <header>
+        <div class="container">
+            <h1 class="logo">Greencandle</h1>
+            <strong><nav>
       <ul class="menu">
         <li><a href="/" target="_blank">Main Page</a></li>
       </ul>
     </nav></strong>
-  </div>
+        </div>
 
+    </header>
 
-</header>
+    {% if request.path=="/" %}
+    <p id="demo"></p>
+    <meta http-equiv="refresh" content="60">
+    <script>
+        var d = new Date();
+        document.getElementById("demo").innerHTML = "Page last updated: " + d;
+    </script>
 
-{% if request.path=="/" %}
-<p id="demo"></p>
-<meta http-equiv="refresh" content="60" >
-<script>
-    var d = new Date();
-    document.getElementById("demo").innerHTML = "Page last updated: " + d;
-</script>
-
-{% endif %}
+    {% endif %}
 
     <div class="container">
-      {% block content %}
-      {% endblock %}
+        {% block content %} {% endblock %}
     </div>
 
-  </body>
+</body>
+
 </html>
