@@ -13,7 +13,7 @@ import glob
 import os
 from time import time, sleep, strftime, gmtime
 from pathlib import Path
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 
 from waitress import serve
 from greencandle.lib import config
@@ -74,7 +74,7 @@ def sell():
     dbase.get_active_trades()
     del dbase
     get_data(SCHED)
-    return trades()
+    return redirect("/api", code=302)
 
 def healthcheck(scheduler):
     """Healtcheck for docker"""
