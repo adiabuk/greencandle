@@ -21,6 +21,7 @@ def main():
     parser.add_argument("-i", "--interval", required=False)
     parser.add_argument("-t", "--test", action="store_true", default=False, required=False)
     parser.add_argument("-o", "--output_dir", required=True)
+    parser.add_argument("-m", "--thumbnails", required=False, action="store_true", default=False)
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
 
@@ -31,10 +32,18 @@ def main():
             graph = Graph(test=args, pair=pair, db=args.db, interval=args.interval)
             graph.get_data()
             graph.create_graph(args.output_dir)
+            if args.thumbnails:
+                graph.get_screenshot()
+                graph.resize_screenshot()
+
+
     else:
         graph = Graph(test=args, pair=args.pair, db=args.db, interval=args.interval)
         graph.get_data()
         graph.create_graph(args.output_dir)
+        if args.thumbnails:
+            graph.get_screenshot()
+            graph.resize_screenshot()
 
 if __name__ == '__main__':
     main()

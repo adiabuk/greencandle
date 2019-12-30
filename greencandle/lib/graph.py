@@ -11,6 +11,7 @@ import zlib
 from collections import defaultdict
 import pandas
 from selenium import webdriver
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from pyvirtualdisplay import Display
 
 import plotly.offline as py
@@ -36,25 +37,27 @@ class Graph():
         self.data = {}
         self.filename = ''
 
-    def get_screenshot(self, output_dir='/tmp'):
+    def get_screenshot(self, output_dir=''):
         """Capture screenshot using selenium/firefox in Xvfb """
         display = Display(visible=0, size=(1366, 768))
         display.start()
-
+        cap = DesiredCapabilities().FIREFOX
+        cap["marionette"] = True
         profile = webdriver.FirefoxProfile()
         profile.set_preference("browser.download.folderList", 2)  # custom location
         profile.set_preference("browser.download.manager.showWhenStarting", False)
         profile.set_preference("browser.download.dir", "/tmp")
         profile.set_preference("browser.helperApps.neverAsk.saveToDisk", "image/png")
 
-        driver = webdriver.Firefox(firefox_profile=profile)
-        driver.get("file://{0}/{1}.html".format(output_dir, self.filename))
+        driver = webdriver.Firefox(firefox_profile=profile, capabilities=cap,
+                                   executable_path="/usr/local/bin/geckodriver")
+        driver.get("file://{0}/{1}".format(output_dir, self.filename))
         driver.save_screenshot("{0}/{1}.png".format(output_dir, self.filename))
         time.sleep(10)
         driver.quit()
         display.stop()
 
-    def resize_screenshot(self, output_dir='/tmp'):
+    def resize_screenshot(self, output_dir=''):
         """Resize screenshot to thumbnail - for use in API"""
         with open("{0}/{1}.png".format(output_dir, self.filename), "r+b") as png_file:
             with Image.open(png_file) as image:

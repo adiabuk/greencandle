@@ -10,7 +10,8 @@ fi
 if [ -f /.dockerenv ]; then
     echo "I'm inside matrix ;(";
     apt-get update
-    apt-get -y install cron netcat default-mysql-client bsdmainutils libssl-dev libsystemd-dev --no-install-recommends
+    apt-get -y install cron netcat default-mysql-client bsdmainutils libssl-dev libsystemd-dev \
+      xvfb xauth iceweasel --no-install-recommends
     apt-get clean; apt-get autoclean; rm -rf /var/lib/apt/lists/*
     install_dir=/install
 else
@@ -27,11 +28,12 @@ else
     pip install ipython
     install_dir=/srv/greencandle
     echo "set background=dark" | tee -a $HOME/.vimrc
-    if [[ ! -f /usr/local/bin/gechodriver ]]; then
-        wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz -P /tmp
-        tar zxvf /tmp/geckodriver-v0.24.0-linux64.tar.gz -C /usr/local/bin
-        rm -rf /tmp/geckodriver-v0.24.0-linux64.tar.gz
-    fi
+fi
+
+if [[ ! -f /usr/local/bin/gechodriver ]]; then
+    wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz -P /tmp
+    tar zxvf /tmp/geckodriver-v0.24.0-linux64.tar.gz -C /usr/local/bin
+    rm -rf /tmp/geckodriver-v0.24.0-linux64.tar.gz
 fi
 
 if [[ ! -f /usr/local/bin/configstore ]]; then
