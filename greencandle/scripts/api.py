@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# pylint: disable=global-statement,wrong-import-position,too-few-public-methods, no-else-return
+#pylint: disable=global-statement,wrong-import-position,too-few-public-methods,no-member,no-else-return
 
 """
 API dashboard
@@ -43,12 +43,13 @@ APP.wsgi_app = PrefixMiddleware(APP.wsgi_app, prefix='/api')
 
 SCHED = sched.scheduler(time, sleep)
 DATA = {}
+ALL = {}
 TEST = None
 
 @APP.route('/')
 def trades():
     """deployments page"""
-    return render_template('trades.html', versions=DATA)
+    return render_template('trades.html', versions=DATA, all=ALL)
 
 @APP.route('/sell', methods=["GET", "POST"])
 def sell():
@@ -81,10 +82,36 @@ def healthcheck(scheduler):
     Path('/var/run/api').touch()
     SCHED.enter(60, 60, healthcheck, (scheduler, ))
 
+def get_all(scheduler):
+    """
+    get details of all pairs
+    """
+    global ALL
+    ALL = {}
+    print("Getting all pairs", file=sys.stderr)
+    pairs = config.main.pairs.split()
+    for pair in pairs:
+        ALL[pair] = {"graph": get_latest_graph(pair), "thumbnail": ""}
+    SCHED.enter(600, 600, get_data, (scheduler, ))
+
+def get_latest_graph(pair):
+    """
+    return path of latest graph for a given pair
+    """
+
+    list_of_files = glob.glob('/data/graphs/{}*'.format(pair))
+    try:
+        # strip path from filename
+        latest_file = max(list_of_files, key=os.path.getctime).split('/')[-1]
+    except ValueError: # no files
+        latest_file = ""
+    return latest_file
+
+
 def get_data(scheduler):
     """get data from mysql"""
     global DATA
-    print("Getting version data", file=sys.stderr)
+    print("Getting open trades", file=sys.stderr)
     DATA = {}
     dbase = Mysql()
 
@@ -93,16 +120,10 @@ def get_data(scheduler):
     for entry in results:
         pair, buy_price, buy_time, current_price, perc, name = entry
         print(entry, file=sys.stdout)
-        list_of_files = glob.glob('/data/graphs/{}*'.format(pair))
-        try:
-            # strip path from filename
-            latest_file = max(list_of_files, key=os.path.getctime).split('/')[-1]
-        except ValueError: # no files
-            latest_file = ""
 
         DATA[pair] = {"buy_price": buy_price, "buy_time": buy_time,
                       "current_price": current_price, "perc": perc,
-                      "graph": latest_file, "name": name}
+                      "graph": get_latest_graph(pair), "name": name}
 
     SCHED.enter(60, 60, get_data, (scheduler, ))
 
@@ -116,6 +137,7 @@ def main():
     TEST = bool(len(sys.argv) > 1 and sys.argv[1] == '--test')
 
     SCHED.enter(0, 60, get_data, (SCHED,))
+    SCHED.enter(0, 600, get_all, (SCHED,))
     SCHED.enter(0, 60, healthcheck, (SCHED,))
 
     background_thread = threading.Thread(target=SCHED.run, args=())

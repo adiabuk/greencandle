@@ -3,8 +3,6 @@
 {% block content %}
   <H1 class="logo">Open Trades</h1>
 
-    <H3>{{key}}-{{k}}</H3>
-
         <table border=0, id="customers">
           <tr>
             <th>Pair</th>
@@ -24,8 +22,8 @@
             <td class="y_n">{{ v['current_price'] }}</td>
             <td class="y_n">{{ v['perc'] }}</td>
             <td class="y_n"> <form action="sell?pair={{ k }}&name={{ v['name'] }}&price={{ v['current_price'] }}" method="post"><button name="button" type="submit">SELL</button></form></td>
-            <td class="y_n"> <a target="_blank" href="https://uk.tradingview.com/chart?symbol=BINANCE%3A{{ k }}">Trading View</a>  </td>
-            <td class="y_n"> <a target="_blank" href="/data/graphs/{{ v['graph'] }}">{{ v['graph'] }}</a> </td>
+            <td class="y_n"> <a href="https://uk.tradingview.com/chart?symbol=BINANCE%3A{{ k }}">Trading View</a>  </td>
+            <td class="y_n"> <a href="/data/graphs/{{ v['graph'] }}">{{ v['graph'] }}</a> </td>
           </tr>
 
     {% endfor %}
@@ -33,5 +31,24 @@
         </table>
         <hr>
 
+  <H1 class="logo">All Trades</h1>
+
+        <table border=0, id="customers">
+		<tr>
+			<th>pair</th>
+			<th>Link</th>
+			<th>Local Graph</th>
+		</tr>
+
+    {% for k, v in all.items() %}
+    <tr>
+            <td class="y_n">{{ k }}</td>
+            <td class="y_n"> <a href="https://uk.tradingview.com/chart?symbol=BINANCE%3A{{ k }}">Trading View</a>  </td>
+            <td class="y_n"> <a href="/data/graphs/{{ v['graph'] }}">{{ v['graph'] }}</a> </td>
+    </tr>
+    {% endfor %}
+
+     </table>
+     <hr>
 
   {% endblock %}
