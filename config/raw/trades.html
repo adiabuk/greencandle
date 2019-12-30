@@ -38,6 +38,7 @@
 			<th>pair</th>
 			<th>Link</th>
 			<th>Local Graph</th>
+			<th>Thumbnail</th>
 		</tr>
 
     {% for k, v in all.items() %}
@@ -45,6 +46,7 @@
             <td class="y_n">{{ k }}</td>
             <td class="y_n"> <a href="https://uk.tradingview.com/chart?symbol=BINANCE%3A{{ k }}">Trading View</a>  </td>
             <td class="y_n"> <a href="/data/graphs/{{ v['graph'] }}">{{ v['graph'] }}</a> </td>
+            <td class="y_n"> <img src="/data/graphs/{{ v['graph'] }}_resized.png">  </td>
     </tr>
     {% endfor %}
 

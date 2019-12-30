@@ -92,7 +92,7 @@ def get_all(scheduler):
     pairs = config.main.pairs.split()
     for pair in pairs:
         ALL[pair] = {"graph": get_latest_graph(pair), "thumbnail": ""}
-    SCHED.enter(600, 600, get_data, (scheduler, ))
+    SCHED.enter(600, 600, get_all, (scheduler, ))
 
 def get_latest_graph(pair):
     """
@@ -106,7 +106,6 @@ def get_latest_graph(pair):
     except ValueError: # no files
         latest_file = ""
     return latest_file
-
 
 def get_data(scheduler):
     """get data from mysql"""
