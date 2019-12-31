@@ -74,7 +74,7 @@ def sell():
     dbase = Mysql()
     dbase.get_active_trades()
     del dbase
-    get_data(SCHED)
+    get_open(SCHED)
     return redirect("/api", code=302)
 
 def healthcheck(scheduler):
@@ -82,9 +82,29 @@ def healthcheck(scheduler):
     Path('/var/run/api').touch()
     SCHED.enter(60, 60, healthcheck, (scheduler, ))
 
-def get_all(scheduler):
+def get_open(scheduler):
+    """get open trades from mysql"""
+    global DATA
+    print("Getting open trades", file=sys.stderr)
+    DATA = {}
+    dbase = Mysql()
+
+    results = dbase.fetch_sql_data("select * from open_trades", header=False)
+
+    for entry in results:
+        pair, buy_price, buy_time, current_price, perc, name = entry
+        print(entry, file=sys.stdout)
+
+        DATA[pair] = {"buy_price": buy_price, "buy_time": buy_time,
+                      "current_price": current_price, "perc": perc,
+                      "graph": get_latest_graph(pair, "html"), "name": name
+                      "thumbnail": get_latest_graph(pair, "resized.png")}
+
+    SCHED.enter(60, 60, get_open, (scheduler, ))
+
+def get_closed(scheduler):
     """
-    get details of all pairs
+    get details of closed pairs
     """
     global ALL
     global DATA
@@ -93,8 +113,8 @@ def get_all(scheduler):
     pairs = [pair for pair in config.main.pairs.split() if pair not in DATA.keys()]
     for pair in pairs:
         ALL[pair] = {"graph": get_latest_graph(pair),
-                     "thumbnail": get_latest_graph(pair, "_resized.png")}
-    SCHED.enter(600, 600, get_all, (scheduler, ))
+                     "thumbnail": get_latest_graph(pair, "resized.png")}
+    SCHED.enter(600, 600, get_closed, (scheduler, ))
 
 def get_latest_graph(pair, suffix=''):
     """
@@ -109,25 +129,6 @@ def get_latest_graph(pair, suffix=''):
         latest_file = ""
     return latest_file
 
-def get_data(scheduler):
-    """get data from mysql"""
-    global DATA
-    print("Getting open trades", file=sys.stderr)
-    DATA = {}
-    dbase = Mysql()
-
-    results = dbase.fetch_sql_data("select * from open_trades", header=False)
-
-    for entry in results:
-        pair, buy_price, buy_time, current_price, perc, name = entry
-        print(entry, file=sys.stdout)
-
-        DATA[pair] = {"buy_price": buy_price, "buy_time": buy_time,
-                      "current_price": current_price, "perc": perc,
-                      "graph": get_latest_graph(pair), "name": name}
-
-    SCHED.enter(60, 60, get_data, (scheduler, ))
-
 def main():
     """main func"""
 
@@ -137,8 +138,8 @@ def main():
         sys.exit(0)
     TEST = bool(len(sys.argv) > 1 and sys.argv[1] == '--test')
 
-    SCHED.enter(0, 60, get_data, (SCHED,))
-    SCHED.enter(0, 600, get_all, (SCHED,))
+    SCHED.enter(0, 60, get_open, (SCHED,))
+    SCHED.enter(0, 600, get_closed, (SCHED,))
     SCHED.enter(0, 60, healthcheck, (SCHED,))
 
     background_thread = threading.Thread(target=SCHED.run, args=())
