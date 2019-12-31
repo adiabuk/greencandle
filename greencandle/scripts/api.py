@@ -87,9 +87,10 @@ def get_all(scheduler):
     get details of all pairs
     """
     global ALL
+    global DATA
     ALL = {}
     print("Getting all pairs", file=sys.stderr)
-    pairs = config.main.pairs.split()
+    pairs = [pair for pair in config.main.pairs.split() if pair not in DATA.keys()]
     for pair in pairs:
         ALL[pair] = {"graph": get_latest_graph(pair),
                      "thumbnail": get_latest_graph(pair, "_resized.png")}
