@@ -61,7 +61,19 @@ class Graph():
         """Resize screenshot to thumbnail - for use in API"""
         with open("{0}/{1}.png".format(output_dir, self.filename), "r+b") as png_file:
             with Image.open(png_file) as image:
-                cover = resizeimage.resize_width(image, 120)
+                _, height = image.size
+
+                # Setting the points for cropped image
+                left = 90
+                top = height / 6
+                right = 1100
+                bottom = 290
+                # Cropped image of above dimension
+                # (It will not change orginal image)
+                im1 = image.crop((left, top, right, bottom))
+
+                # Shows the image in image viewer
+                cover = resizeimage.resize_width(im1, 120)
                 cover.save("{0}/{1}_resized.png".format(output_dir, self.filename), image.format)
 
     def create_graph(self, output_dir='/tmp'):
