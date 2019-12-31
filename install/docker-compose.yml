@@ -147,7 +147,7 @@ services:
   api:
     container_name: api
     environment:
-      - CONFIG_ENV=prod
+      - CONFIG_ENV=prod/cron
       - HOST=$HOSTNAME
     logging:
       driver: journald
