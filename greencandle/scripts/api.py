@@ -92,7 +92,7 @@ def get_all(scheduler):
     pairs = config.main.pairs.split()
     for pair in pairs:
         ALL[pair] = {"graph": get_latest_graph(pair),
-                     "thumbnail": get_latest_graph(pair, "_resized.png"}
+                     "thumbnail": get_latest_graph(pair, "_resized.png")}
     SCHED.enter(600, 600, get_all, (scheduler, ))
 
 def get_latest_graph(pair, suffix=''):
