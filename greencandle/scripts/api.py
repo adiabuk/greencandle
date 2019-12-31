@@ -91,15 +91,16 @@ def get_all(scheduler):
     print("Getting all pairs", file=sys.stderr)
     pairs = config.main.pairs.split()
     for pair in pairs:
-        ALL[pair] = {"graph": get_latest_graph(pair), "thumbnail": ""}
+        ALL[pair] = {"graph": get_latest_graph(pair),
+                     "thumbnail": get_latest_graph(pair, "_resized.png"}
     SCHED.enter(600, 600, get_all, (scheduler, ))
 
-def get_latest_graph(pair):
+def get_latest_graph(pair, suffix=''):
     """
     return path of latest graph for a given pair
     """
 
-    list_of_files = glob.glob('/data/graphs/{}*'.format(pair))
+    list_of_files = glob.glob('/data/graphs/{}*{}'.format(pair, suffix))
     try:
         # strip path from filename
         latest_file = max(list_of_files, key=os.path.getctime).split('/')[-1]
