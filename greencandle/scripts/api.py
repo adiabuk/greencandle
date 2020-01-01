@@ -97,7 +97,7 @@ def get_open(scheduler):
 
         DATA[pair] = {"buy_price": buy_price, "buy_time": buy_time,
                       "current_price": current_price, "perc": perc,
-                      "graph": get_latest_graph(pair, "html"), "name": name
+                      "graph": get_latest_graph(pair, "html"), "name": name,
                       "thumbnail": get_latest_graph(pair, "resized.png")}
 
     SCHED.enter(60, 60, get_open, (scheduler, ))
