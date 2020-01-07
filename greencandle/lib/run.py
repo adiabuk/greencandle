@@ -87,7 +87,7 @@ def perform_data(pair, interval, data_dir, indicators):
         engine.get_data(localconfig=indicators)
 
         ########TEST stategy############
-        result, current_time, current_price = redis.get_action(pair=pair, interval=interval)
+        result, current_time, current_price, _ = redis.get_action(pair=pair, interval=interval)
         LOGGER.debug('In Strategy %s', result)
         if 'SELL' in result or 'BUY' in result:
             LOGGER.debug('Strategy - Adding to redis')
@@ -161,7 +161,7 @@ def parallel_test(pairs, interval, redis_db, data_dir, indicators):
             engine.get_data(localconfig=indicators)
 
             ########TEST stategy############
-            result, current_time, current_price = redis.get_action(pair=pair, interval=interval)
+            result, current_time, current_price, _ = redis.get_action(pair=pair, interval=interval)
             LOGGER.info('In Strategy %s', result)
             if 'SELL' in result or 'BUY' in result:
                 LOGGER.info('Strategy - Adding to redis')
@@ -246,7 +246,7 @@ def prod_loop(interval, test):
     sells = []
     for pair in pairs:
         ########TEST stategy############
-        result, current_time, current_price = redis.get_action(pair=pair, interval=interval)
+        result, current_time, current_price, _ = redis.get_action(pair=pair, interval=interval)
         LOGGER.info('In Strategy %s', result)
         if 'SELL' in result or 'BUY' in result:
             LOGGER.info('Strategy - Adding to redis')

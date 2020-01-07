@@ -203,6 +203,15 @@ class Redis():
         else:
             return ('HOLD', current_time, current_price)
 
+    @staticmethod
+    def get_rules(rules, direction):
+        """determine which rules have been matched"""
+        winning = []
+        for seq, sell_rule in enumerate(rules[direction]):
+            if sell_rule:
+                winning.append(seq + 1)
+        return winning
+
     def get_action(self, pair, interval):
         """Determine if we are in a BUY/HOLD/SELL situration for a specific pair and interval"""
         results = AttributeDict(current=AttributeDict(), previous=AttributeDict(),
@@ -215,7 +224,7 @@ class Redis():
 
             self.logger.debug("Not enough data for %s", pair)
 
-            return ('HOLD', 'Not enough data', 0)
+            return ('HOLD', 'Not enough data', 0, {'buy':[], 'sell':[]})
 
         # get current & previous indicator values
         main_indicators = config.main.indicators.split()
@@ -362,29 +371,23 @@ class Redis():
                            sub_perc(stop_loss_perc, buy_price),
                            pair, current_time, results.current)
             self.del_high_price(pair, interval)
-            return ('SELL', current_time, current_price)
+            result = 'SELL'
 
         # if we match take_profit rule and are in a trade
         elif str2bool(config.main.take_profit) and take_profit_rule and buy_price:
             self.log_event('TakeProfit', rate, perc_rate, buy_price, current_price, pair,
                            current_time, results.current)
             self.del_high_price(pair, interval)
-            return ('SELL', current_time, current_price)
+            result = 'SELL'
 
         # if we match any sell rules and are in a trade
         elif any(rules['sell']) and buy_price:
-            winning_rules = []
-            # Determine which sell rules matched
-            for seq, sell_rule in enumerate(rules['sell']):
-                if sell_rule:
-                    winning_rules.append(seq + 1)
 
             self.log_event('NormalSell', rate, perc_rate, buy_price, current_price,
                            pair, current_time, results.current)
-            self.logger.info('Sell Rules matched: %s', winning_rules)
 
             self.del_high_price(pair, interval)
-            return ('SELL', current_time, current_price)
+            result = 'SELL'
 
         # if we match all buy rules and are NOT in a trade
         elif any(rules['buy']) and not buy_price and able_to_buy:
@@ -396,11 +399,19 @@ class Redis():
             self.put_high_price(pair, interval, current_price)
             self.logger.debug("Close: %s, Previous Close: %s, >: %s",
                               close, last_close, close > last_close)
-            return ('BUY', current_time, current_price)
+            result = 'BUY'
 
         elif buy_price:
             self.log_event('Hold', rate, perc_rate, buy_price, current_price, pair, current_time,
                            results.current)
-            return ('HOLD', current_time, current_price)
+            result = 'HOLD'
         else:
-            return ('NOITEM', current_time, current_price)
+            result = 'NOITEM'
+
+
+        winning_sell = self.get_rules(rules, 'sell')
+        winning_buy = self.get_rules(rules, 'buy')
+        self.logger.info('Sell Rules matched: %s', winning_sell)
+        self.logger.info('Buy Rules matched: %s', winning_buy)
+        return (result, current_time, current_price, {'sell':winning_sell,
+                                                      'buy': winning_buy})
