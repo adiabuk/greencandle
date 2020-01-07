@@ -20,6 +20,7 @@ from greencandle.lib import config
 config.create_config()
 from greencandle.lib.order import Trade
 from greencandle.lib.mysql import Mysql
+from greencandle.lib.binance_common import get_current_price
 
 class PrefixMiddleware():
     """ API prefix handler """
@@ -75,7 +76,29 @@ def sell():
     dbase.get_active_trades()
     del dbase
     get_open(SCHED)
+    get_closed(SCHED)
     return redirect("/api", code=302)
+
+@APP.route('/buy', methods=["GET", "POST"])
+def buy():
+    """Buy a given pair"""
+    global TEST
+    print("BUY", file=sys.stderr)
+    pair = request.args.get('pair')
+    test_trade = bool(os.environ['HOST'] in ["test", "stag"])
+    trade = Trade(interval='4h', test_data=TEST, test_trade=test_trade)
+    current_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+    current_price = get_current_price(pair)
+    buys = [(pair, current_time, current_price)]
+    trade.buy(buys)
+    sleep(1)
+    dbase = Mysql()
+    dbase.get_active_trades()
+    del dbase
+    get_open(SCHED)
+    get_closed(SCHED)
+    return redirect("/api", code=302)
+
 
 def healthcheck(scheduler):
     """Healtcheck for docker"""

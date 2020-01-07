@@ -48,7 +48,12 @@
     <tr>
         <td class="y_n">{{ k }}</td>
         <td class="y_n"> <a target="_blank" href="https://uk.tradingview.com/chart?symbol=BINANCE%3A{{ k }}">Trading View</a> </td>
-        <td class="y_n"> <button name="button" type=submit">BUY</button> </td>
+        <td class="y_n">
+          <form action="buy?pair={{ k }}&name="None" method="post">
+          <button name="button" type=submit">BUY</button>
+          </form>
+        </td>
+
         <td class="y_n"> <a target="_blank" href="/data/graphs/{{ v['graph'] }}"><img src="/data/graphs/{{ v['thumbnail'] }}"></a></td>
 
     </tr>
