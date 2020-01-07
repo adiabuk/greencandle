@@ -3,10 +3,9 @@
 """
 Push/Pull crypto signals and data to mysql
 """
-import binance
 import MySQLdb
 from . import config
-from ..lib.auth import binance_auth
+from .binance_common import get_current_price
 from .logger import get_logger, get_decorator
 
 class Mysql():
@@ -217,8 +216,6 @@ class Mysql():
         """
         Get current active trades and store in active_trades table with current price
         """
-        prices = binance.prices()
-        binance_auth()
 
         self.run_sql_query("delete from open_trades")
         trades = self.fetch_sql_data("select pair, buy_time, buy_price, name from trades where "
@@ -226,7 +223,7 @@ class Mysql():
         for trade in trades:
             try:
                 pair, buy_time, buy_price, name = trade
-                current_price = prices[pair]
+                current_price = get_current_price(pair)
                 perc = 100 * (float(current_price) - float(buy_price)) / float(buy_price)
                 insert = ('insert into open_trades (pair, buy_time, buy_price, current_price, '
                           'perc, name) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}", "{5}")'
