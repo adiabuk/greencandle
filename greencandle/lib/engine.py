@@ -156,25 +156,6 @@ class Engine(dict):
         op1, op2 = float(op1), float(op2)
         return self.get_operator_fn(oper)(op1, op2)
 
-    @staticmethod
-    def get_action(trigger):
-        """
-        Transform action into an integer so that overall sentiment for a pair can be easily
-        calculated
-
-        Args:
-            trigger: BUY/SELL/HOLD
-
-        Returns:
-            integer representation of given trigger.  BUY=1, SELL=-1, HOLD=0
-
-        """
-
-
-        return {"BUY": 1,
-                "SELL": -1,
-                "HOLD": 0}[trigger]
-
     @get_exceptions
     def add_scheme(self, scheme):
         """ add scheme to correct structure """
