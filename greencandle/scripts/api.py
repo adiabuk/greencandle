@@ -19,6 +19,7 @@ from waitress import serve
 from greencandle.lib import config
 config.create_config()
 from greencandle.lib.order import Trade
+from greencandle.lib.redis_conn import Redis
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.binance_common import get_current_price
 
@@ -135,8 +136,15 @@ def get_closed(scheduler):
     print("Getting all pairs", file=sys.stderr)
     pairs = [pair for pair in config.main.pairs.split() if pair not in DATA.keys()]
     for pair in pairs:
-        ALL[pair] = {"graph": get_latest_graph(pair),
+        interval = '4h'
+        redis = Redis(interval=interval, test=False, db=0)
+        matching = redis.get_action(pair=pair, interval=interval)[-1]
+        del redis
+
+        ALL[pair] = {"matching": "Buy:{},Sell:{}".format(matching["buy"], matching["sell"]),
+                     "graph": get_latest_graph(pair),
                      "thumbnail": get_latest_graph(pair, "resized.png")}
+
     SCHED.enter(600, 600, get_closed, (scheduler, ))
 
 def get_latest_graph(pair, suffix=''):

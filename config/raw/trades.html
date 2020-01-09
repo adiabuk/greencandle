@@ -41,6 +41,7 @@
         <th>pair</th>
         <th>Link</th>
         <th>Buy</th>
+        <th>Matched Rules</th>
         <th>Local Graph</th>
     </tr>
 
@@ -53,7 +54,7 @@
           <button name="button" type=submit">BUY</button>
           </form>
         </td>
-
+        <td class="y_n">{{ v['matching'] }}</td>
         <td class="y_n"> <a target="_blank" href="/data/graphs/{{ v['graph'] }}"><img src="/data/graphs/{{ v['thumbnail'] }}"></a></td>
 
     </tr>
