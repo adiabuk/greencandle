@@ -185,7 +185,7 @@ class Engine(dict):
             LOGGER.critical("Redis failure %s %s", str(exc), repr(sys.exc_info()))
 
     @get_exceptions
-    def get_data(self, localconfig=None):
+    def get_data(self, localconfig=None, first_run=False):
         """
         Iterate through data and trading pairs to extract data
         Run data through indicator, oscillators, moving average
@@ -212,12 +212,12 @@ class Engine(dict):
 
                 pool.shutdown(wait=True)
 
-            self.send_ohlcs(pair)
+            self.send_ohlcs(pair, first_run=first_run)
 
         LOGGER.debug("Done getting data")
         return self
 
-    def send_ohlcs(self, pair):
+    def send_ohlcs(self, pair, first_run):
         """Send ohcls data to redis"""
         scheme = {}
         scheme["symbol"] = pair
@@ -230,6 +230,11 @@ class Engine(dict):
         scheme['data'] = zlib.compress(pickle.dumps(self.dataframes[pair].iloc[location]))
         scheme["event"] = "ohlc"
         self.add_scheme(scheme)
+        if first_run:
+            for seq in range(int(config.main.no_of_klines) -1):
+                scheme['data'] = zlib.compress(pickle.dumps(self.dataframes[pair].iloc[seq]))
+                scheme["event"] = "ohlc"
+                self.add_scheme(scheme)
 
     @get_exceptions
     def get_sup_res(self, pair, localconfig=None):
