@@ -25,6 +25,8 @@ services:
     restart: on-failure
     links:
       - mysql
+    ports:
+      - 6379:6379
     healthcheck:
       test: redis-cli ping
       interval: 1m
@@ -40,6 +42,8 @@ services:
       - CONFIG_ENV=prod
       - MYSQL_ROOT_PASSWORD=password
     restart: on-failure
+    ports:
+      - 3306:3306
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
       interval: 1m
