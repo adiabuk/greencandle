@@ -19,7 +19,7 @@ from ..lib import config
 config.create_config()
 
 from ..lib.logger import get_logger
-from ..lib.run import prod_loop, prod_int_check
+from ..lib.run import prod_loop, prod_int_check, prod_initial
 
 LOGGER = get_logger(__name__)
 
