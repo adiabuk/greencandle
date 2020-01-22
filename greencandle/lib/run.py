@@ -210,8 +210,7 @@ def prod_int_check(interval, test):
     del redis
     del dbase
 
-
-def prod_initial(interval, test):
+def prod_initial(interval):
     """
     Initial prod run - back-fetching data for tech analysis.
     """
@@ -246,6 +245,7 @@ def prod_loop(interval, test):
     # get unique list of pairs in config,
     # and those currently in an active trade
     pairs = list(set(main_pairs + additional_pairs))
+    LOGGER.debug("Performaing prod loop")
     LOGGER.info("Pairs DB: %s", additional_pairs)
     LOGGER.info("Pairs in config: %s", main_pairs)
     LOGGER.info("Total unique pairs: %s", len(pairs))
