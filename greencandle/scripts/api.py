@@ -142,7 +142,7 @@ def get_closed(scheduler):
         del redis
 
         ALL[pair] = {"matching": "Buy:{},Sell:{}".format(matching["buy"], matching["sell"]),
-                     "graph": get_latest_graph(pair),
+                     "graph": get_latest_graph(pair, "html"),
                      "thumbnail": get_latest_graph(pair, "resized.png")}
 
     SCHED.enter(600, 600, get_closed, (scheduler, ))
