@@ -231,7 +231,8 @@ class Engine(dict):
         scheme["event"] = "ohlc"
         self.add_scheme(scheme)
         if first_run:
-            for seq in range(int(config.main.no_of_klines -1)):
+            for seq in range(int(config.main.no_of_klines) -1):
+                LOGGER.info("Getting initial sequence number %s", seq)
                 scheme['data'] = zlib.compress(pickle.dumps(self.dataframes[pair].iloc[seq]))
                 scheme["event"] = "ohlc"
                 self.add_scheme(scheme)
