@@ -163,7 +163,8 @@ class Engine(dict):
 
         # add to redis
         current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
-        close_time = str(self.dataframes[pair].iloc[-1]["closeTime"])
+        close_time = str(self.dataframes[pair].iloc[-1]["closeTime"]) if not "close_time" in \
+                scheme else scheme["close_time"]
 
         # close time might be in the future if we run between open/close
         if datetime.fromtimestamp(int(close_time)/1000) > datetime.now():
@@ -235,6 +236,7 @@ class Engine(dict):
                 LOGGER.info("Getting initial sequence number %s", seq)
                 scheme['data'] = zlib.compress(pickle.dumps(self.dataframes[pair].iloc[seq]))
                 scheme["event"] = "ohlc"
+                scheme["close_time"] = str(self.dataframes[pair].iloc[seq]["closeTime"])
                 self.add_scheme(scheme)
 
     @get_exceptions
