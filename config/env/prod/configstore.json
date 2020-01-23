@@ -212,7 +212,7 @@
       "is_secret": false
     },
     "rate_indicator": {
-      "value": "EMA_200",
+      "value": "EMA_2",
       "is_binary": false,
       "is_secret": false
     },
