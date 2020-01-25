@@ -6,14 +6,14 @@
   "data_key": "OfvuQJ0Cis1CvnFV2KTTYv3WCPKXOIord3OBDc0kwcU=",
   "data": {
     "binance_api_key": {
-      "value": "x",
+      "value": "Rt2CpndPDGP5+q5WbO8yjhrK1zR7oIlTtPuPbWfKdJS5AK/LbUVUocqxcEbQmGFOUarZvsfMyurG0yBxWL2ZctRzjAscfvbpJm6huw5qit4Ccqb1ELt8QXP9SaXtJ1mtNE+jcc6ajzU=",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "binance_api_secret": {
-      "value": "x",
+      "value": "XrszhQjiCCI1KYQpTY/gMZOwC7+63HdgKuvOUp0XHMx5m1lo5GUjM5iI4gzl1X6BQ48rgGg6wJdpOSatwbDLvcZoPcoGfkYQm0HTC2ISLe/OhoQQGr7/Khm/f8UHCGF1yJMKjocIywk=",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "buy_rule1": {
       "value": "",
