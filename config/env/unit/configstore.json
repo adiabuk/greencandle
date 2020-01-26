@@ -6,12 +6,12 @@
   "data_key": "OfvuQJ0Cis1CvnFV2KTTYv3WCPKXOIord3OBDc0kwcU=",
   "data": {
     "binance_api_key": {
-      "value": "",
+      "value": "x",
       "is_binary": false,
       "is_secret": false
     },
     "binance_api_secret": {
-      "value": "",
+      "value": "x",
       "is_binary": false,
       "is_secret": false
     },
