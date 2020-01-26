@@ -1,0 +1,324 @@
+{
+  "version": 3,
+  "region": "",
+  "role": "",
+  "is_insecure": true,
+  "data_key": "OfvuQJ0Cis1CvnFV2KTTYv3WCPKXOIord3OBDc0kwcU=",
+  "data": {
+    "binance_api_key": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "binance_api_secret": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "buy_rule1": {
+      "value": "results.current.EMA_8 \u003e results.current.EMA_13 and results.current.EMA_13 \u003e results.current.EMA_21 and results.current.EMA_21 \u003e results.current.EMA_34 and results.current.EMA_34 \u003e results.current.EMA_55 and results.current.RSI_48 \u003e 20 and results.current.RSI_48 \u003c 73 and results.current.EMA_200 \u003c close",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "buy_rule10": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "buy_rule2": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "buy_rule3": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "buy_rule4": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "buy_rule5": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "buy_rule6": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "buy_rule7": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "buy_rule8": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "buy_rule9": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "coinbase_api_key": {
+      "value": "blablabla",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "coinbase_api_secret": {
+      "value": "hello",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "db_database": {
+      "value": "greencandle",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "db_host": {
+      "value": "mysql",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "db_password": {
+      "value": "password",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "db_test": {
+      "value": "greencandle_test",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "db_user": {
+      "value": "root",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "drain": {
+      "value": "False",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "email_active": {
+      "value": "False",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "email_from": {
+      "value": "a@b.c",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "email_password": {
+      "value": "password",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "email_to": {
+      "value": "a@b.c",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "indicators": {
+      "value": "get_moving_averages;EMA;8 get_moving_averages;EMA;13 get_moving_averages;EMA;21 get_moving_averages;EMA;34 get_moving_averages;EMA;55 get_rsi;RSI;48 get_moving_averages;EMA;200 get_oscillators;STOCHF;14",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "interval": {
+      "value": "1h",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "logging_level": {
+      "value": "50",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "logging_output": {
+      "value": "stdout",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "loggly_password": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "loggly_subdomain": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "loggly_token": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "loggly_username": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "max_trades": {
+      "value": "2",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "name": {
+      "value": "test",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "nginx_port": {
+      "value": "7777",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "no_of_klines": {
+      "value": "200",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "pairs": {
+      "value": "BNBUSDT BTCUSDT ETHUSDT NEOUSDT LTCUSDT",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "push_active": {
+      "value": "False",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "push_channel": {
+      "value": "x",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "push_host": {
+      "value": "x",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "push_title": {
+      "value": "test",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "rate_indicator": {
+      "value": "EMA_200",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "redis_expire": {
+      "value": "False",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "redis_expiry_seconds": {
+      "value": "18000",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "redis_host": {
+      "value": "redis",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "redis_port": {
+      "value": "6379",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "sell_rule1": {
+      "value": "results.current.EMA_8 \u003c results.current.EMA_13",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "sell_rule10": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "sell_rule2": {
+      "value": "results.current.RSI_48 \u003e 73",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "sell_rule3": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "sell_rule4": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "sell_rule5": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "sell_rule6": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "sell_rule7": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "sell_rule8": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "sell_rule9": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "stop_loss_perc": {
+      "value": "20",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "take_profit": {
+      "value": "False",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "take_profit_perc": {
+      "value": "30",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "time_between_trades": {
+      "value": "3h",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "trailing_stop_loss": {
+      "value": "True",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "trailing_stop_loss_perc": {
+      "value": "0.1",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "wait_between_trades": {
+      "value": "False",
+      "is_binary": false,
+      "is_secret": false
+    }
+  }
+}
