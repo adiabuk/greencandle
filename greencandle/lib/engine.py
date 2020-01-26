@@ -50,24 +50,20 @@ class Engine(dict):
         self.supres = {}
         self.current_time = str(int(time()*1000))
         self.dataframes = dataframes
-        self.ohlcs = self.make_data_tupple(dataframes)
         super(Engine, self).__init__()
         LOGGER.debug("Finished fetching raw data")
 
     @staticmethod
-    def make_data_tupple(dataframes):
+    def make_data_tupple(dataframe):
         """
         Transform dataframe to tupple of of floats
         """
-        ohlcs = {}
-        for key, value in dataframes.items():
-            ohlc = (make_float(value.open),
-                    make_float(value.high),
-                    make_float(value.low),
-                    make_float(value.close))
+        ohlc = (make_float(dataframe.open),
+                make_float(dataframe.high),
+                make_float(dataframe.low),
+                make_float(dataframe.close))
 
-            ohlcs[key] = ohlc
-        return ohlcs
+        return ohlc
 
     def get_json(self):
         """return serialized JSON of dict """
@@ -209,7 +205,8 @@ class Engine(dict):
                     # from config eg. self.supertrend(pair, config), where config is a tuple
                     # each method has the method name in 'function't st
 
-                    pool.submit(getattr(self, function)(pair, (name, period)))
+                    pool.submit(getattr(self, function)(pair, self.dataframes[pair],
+                                                        (name, period)))
 
                 pool.shutdown(wait=True)
 
@@ -240,7 +237,7 @@ class Engine(dict):
                 self.add_scheme(scheme)
 
     @get_exceptions
-    def get_sup_res(self, pair, localconfig=None):
+    def get_sup_res(self, pair, dataframe, localconfig=None):
         """
         get support & resistance values for current pair
         Append data to supres instance variable (dict)
@@ -254,9 +251,8 @@ class Engine(dict):
 
         func, timeperiod = localconfig  # split tuple
         LOGGER.info("Getting Support & resistance for %s", pair)
-        klines = self.dataframes[pair]
 
-        close_values = make_float(klines.close)
+        close_values = make_float(dataframe.close)
         support, resistance = supres(close_values, int(timeperiod))
         scheme = {}
         try:
@@ -285,11 +281,11 @@ class Engine(dict):
         LOGGER.debug("Done getting Support & resistance")
         return None
 
-    def get_bb(self, pair=None, localconfig=None):
+    def get_bb(self, pair, dataframe, localconfig=None):
         """get bollinger bands"""
 
         LOGGER.debug("Getting bollinger bands for %s", pair)
-        klines = self.ohlcs[pair]
+        klines = self.make_data_tupple(dataframe)
         func, timef = localconfig  # split tuple
         timeframe, multiplier = timef.split(',')
         results = {}
@@ -329,7 +325,7 @@ class Engine(dict):
         LOGGER.debug("Done getting Bollinger bands")
 
     @get_exceptions
-    def get_rsi(self, pair=None, localconfig=None):
+    def get_rsi(self, pair, dataframe, localconfig=None):
         """
         get RSI oscillator values for given pair
         Append current RSI data to instance variable
@@ -343,8 +339,7 @@ class Engine(dict):
         """
         func, timeperiod = localconfig  # split tuple
         LOGGER.debug("Getting %s_%s for %s", func, timeperiod, pair)
-        klines = self.dataframes[pair]
-        dataframe = self.renamed_dataframe_columns(klines)
+        dataframe = self.renamed_dataframe_columns(dataframe)
         scheme = {}
         mine = dataframe.apply(pandas.to_numeric)
 
@@ -358,11 +353,11 @@ class Engine(dict):
         LOGGER.debug("Done getting RSI")
 
     @get_exceptions
-    def get_hma(self, pair, localconfig=None):
+    def get_hma(self, pair, dataframe, localconfig=None):
         """
         Calculate Hull Moving Average using Weighted Moving Average
         """
-        klines = self.ohlcs[pair]
+        klines = self.make_data_tupple(dataframe)
         func, timeperiod = localconfig
         close = klines[-1]
         first = talib.WMA(close, int(timeperiod)/2)
@@ -388,7 +383,7 @@ class Engine(dict):
         LOGGER.debug("done getting moving averages")
 
     @get_exceptions
-    def get_moving_averages(self, pair, localconfig=None):
+    def get_moving_averages(self, pair, dataframe, localconfig=None):
         """
         Apply moving averages to klines and get BUY/SELL triggers
         Add data to DB
@@ -401,7 +396,7 @@ class Engine(dict):
             None
         """
         LOGGER.debug("Getting moving averages for %s", pair)
-        klines = self.ohlcs[pair]
+        klines = self.make_data_tupple(dataframe)
         func, timeperiod = localconfig  # split tuple
         try:
             close = klines[-1] # numpy.ndarray
@@ -427,7 +422,7 @@ class Engine(dict):
         LOGGER.debug("done getting moving averages")
 
     @get_exceptions
-    def get_oscillators(self, pair, localconfig=None):
+    def get_oscillators(self, pair, dataframe, localconfig=None):
         """
 
         Apply osscilators to klines and get BUY/SELL triggers
@@ -441,7 +436,7 @@ class Engine(dict):
             None
         """
         LOGGER.debug("Getting Oscillators for %s", pair)
-        klines = self.ohlcs[pair]
+        klines = self.make_data_tupple(dataframe)
         open, high, low, close = klines
         func, timeperiod = localconfig  # split tuple
 
@@ -483,7 +478,7 @@ class Engine(dict):
         LOGGER.debug("Done getting Oscillators")
 
     @get_exceptions
-    def get_indicators(self, pair, localconfig=None):
+    def get_indicators(self, pair, dataframe, localconfig=None):
         """
 
         Cross Reference data against trend indicators
@@ -497,7 +492,7 @@ class Engine(dict):
             None
         """
         func, timeperiod = localconfig
-        klines = self.ohlcs[pair]
+        klines = self.make_data_tupple(dataframe)
         LOGGER.debug("Getting Indicators for %s", pair)
         scheme = {}
         trends = {"HAMMER": {100: "BUY", 0:"HOLD"},
@@ -522,7 +517,7 @@ class Engine(dict):
         LOGGER.debug("Done getting Indicators")
 
     @get_exceptions
-    def get_supertrend(self, pair=None, localconfig=None):
+    def get_supertrend(self, pair, dataframe, localconfig=None):
         """
         Get the super trend oscillator values for a given pair
         append current supertrend data to instance variable
@@ -538,8 +533,7 @@ class Engine(dict):
         func, timef = localconfig  # split tuple
         LOGGER.debug("Getting supertrend for %s", pair)
         scheme = {}
-        klines = self.dataframes[pair]
-        dataframe = self.renamed_dataframe_columns(klines)
+        dataframe = self.renamed_dataframe_columns(dataframe)
 
         mine = dataframe.apply(pandas.to_numeric)
         timeframe, multiplier = timef.split(',')
