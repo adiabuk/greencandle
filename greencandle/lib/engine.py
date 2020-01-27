@@ -237,7 +237,7 @@ class Engine(dict):
                 self.add_scheme(scheme)
 
     @get_exceptions
-    def get_sup_res(self, pair, dataframe, localconfig=None):
+    def get_sup_res(self, pair, dataframe, index=-1, localconfig=None):
         """
         get support & resistance values for current pair
         Append data to supres instance variable (dict)
@@ -256,32 +256,32 @@ class Engine(dict):
         support, resistance = supres(close_values, int(timeperiod))
         scheme = {}
         try:
-            value = (pip_calc(support[-1], resistance[-1]))
+            value = (pip_calc(support[index], resistance[index]))
         except IndexError:
             LOGGER.debug("Skipping %s %s %s for support/resistance",
                          pair, str(support), str(resistance))
             return None
 
-        cur_to_res = resistance[-1] - close_values[-1]
-        cur_to_sup = close_values[-1] - support[-1]
+        cur_to_res = resistance[index] - close_values[index]
+        cur_to_sup = close_values[index] - support[index]
         data = {}
 
         try:
-            scheme["difference"] = pipify(resistance[-1]) - pipify(support[-1])
+            scheme["difference"] = pipify(resistance[index]) - pipify(support[index])
         except TypeError as type_error:
-            print("Type error", support[-1], resistance[-1], type_error)
+            print("Type error", support[index], resistance[index], type_error)
             return None
         if func == 'RES':
-            scheme["data"] = str(resistance[-1])
+            scheme["data"] = str(resistance[index])
         elif func == 'SUP':
-            scheme["data"] = str(support[-1])
+            scheme["data"] = str(support[index])
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
         self.add_scheme(scheme)
         LOGGER.debug("Done getting Support & resistance")
         return None
 
-    def get_bb(self, pair, dataframe, localconfig=None):
+    def get_bb(self, pair, dataframe, index=-1, localconfig=None):
         """get bollinger bands"""
 
         LOGGER.debug("Getting bollinger bands for %s", pair)
@@ -290,7 +290,7 @@ class Engine(dict):
         timeframe, multiplier = timef.split(',')
         results = {}
         try:
-            close = klines[-1]
+            close = klines[index]
         except Exception as exc:
             LOGGER.critical("FAILED bbands: %s ", str(exc))
         try:
@@ -298,9 +298,9 @@ class Engine(dict):
                     talib.BBANDS(close * 100000, timeperiod=int(timeframe),
                                  nbdevup=float(multiplier), nbdevdn=float(multiplier), matype=0)
 
-            results['upper'] = upper[-1]/100000
-            results['middle'] = middle[-1]/100000
-            results['lower'] = lower[-1]/100000
+            results['upper'] = upper[index]/100000
+            results['middle'] = middle[index]/100000
+            results['lower'] = lower[index]/100000
 
         except Exception as exc:
             results['upper'] = 0
@@ -310,8 +310,8 @@ class Engine(dict):
         trigger = None
         scheme = {}
         try:
-            current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
-            close_time = str(self.dataframes[pair].iloc[-1]["closeTime"])
+            current_price = str(Decimal(self.dataframes[pair].iloc[index]["close"]))
+            close_time = str(self.dataframes[pair].iloc[index]["closeTime"])
 
             scheme["data"] = results[func]
             scheme["symbol"] = pair
@@ -325,7 +325,7 @@ class Engine(dict):
         LOGGER.debug("Done getting Bollinger bands")
 
     @get_exceptions
-    def get_rsi(self, pair, dataframe, localconfig=None):
+    def get_rsi(self, pair, dataframe, index=-1, localconfig=None):
         """
         get RSI oscillator values for given pair
         Append current RSI data to instance variable
@@ -346,26 +346,26 @@ class Engine(dict):
         rsi = RSI(mine, base='Close', period=int(timeperiod))
         df_list = rsi["{0}_{1}".format(func, timeperiod)].tolist()
         df_list = ["%.1f" % float(x) for x in df_list]
-        scheme["data"] = df_list[-1]
+        scheme["data"] = df_list[index]
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
         self.add_scheme(scheme)
         LOGGER.debug("Done getting RSI")
 
     @get_exceptions
-    def get_hma(self, pair, dataframe, localconfig=None):
+    def get_hma(self, pair, dataframe, index=-1, localconfig=None):
         """
         Calculate Hull Moving Average using Weighted Moving Average
         """
         klines = self.make_data_tupple(dataframe)
         func, timeperiod = localconfig
-        close = klines[-1]
+        close = klines[index]
         first = talib.WMA(close, int(timeperiod)/2)
         second = talib.WMA(close, int(timeperiod))
 
-        result = talib.WMA((2 * first) - second, round(math.sqrt(int(timeperiod))))[-1]
+        result = talib.WMA((2 * first) - second, round(math.sqrt(int(timeperiod))))[index]
         trigger = "BUY"
-        if result > close[-1]:
+        if result > close[index]:
             trigger = "SELL"
         else:
             trigger = "BUY"
@@ -383,7 +383,7 @@ class Engine(dict):
         LOGGER.debug("done getting moving averages")
 
     @get_exceptions
-    def get_moving_averages(self, pair, dataframe, localconfig=None):
+    def get_moving_averages(self, pair, dataframe, index=-1, localconfig=None):
         """
         Apply moving averages to klines and get BUY/SELL triggers
         Add data to DB
@@ -403,7 +403,7 @@ class Engine(dict):
         except Exception as exc:
             LOGGER.critical("FAILED moving averages: %s ", str(exc))
         try:
-            result = getattr(talib, func)(close, int(timeperiod))[-1]
+            result = getattr(talib, func)(close, int(timeperiod))[index]
         except Exception as exc:
             LOGGER.critical("Overall Exception getting moving averages: %s", exc)
 
@@ -422,7 +422,7 @@ class Engine(dict):
         LOGGER.debug("done getting moving averages")
 
     @get_exceptions
-    def get_oscillators(self, pair, dataframe, localconfig=None):
+    def get_oscillators(self, pair, dataframe, index=-1, localconfig=None):
         """
 
         Apply osscilators to klines and get BUY/SELL triggers
@@ -466,7 +466,7 @@ class Engine(dict):
             LOGGER.critical("failed getting oscillators: %s", str(error))
             return
 
-        result = fastk[-1]
+        result = fastk[index]
         try:
             scheme["data"] = result
             scheme["symbol"] = pair
@@ -478,7 +478,7 @@ class Engine(dict):
         LOGGER.debug("Done getting Oscillators")
 
     @get_exceptions
-    def get_indicators(self, pair, dataframe, localconfig=None):
+    def get_indicators(self, pair, dataframe, index=-1, localconfig=None):
         """
 
         Cross Reference data against trend indicators
@@ -504,8 +504,8 @@ class Engine(dict):
                   "MARUBOZU": {-100:"SELL", 100:"BUY", 0:"HOLD"},
                   "DOJI": {100: "HOLD", 0:"HOLD"}}
 
-        result = getattr(talib, "CDL" + func)(*klines).tolist()[-1]
-        close_time = str(self.dataframes[pair].iloc[-1]["closeTime"])
+        result = getattr(talib, "CDL" + func)(*klines).tolist()[index]
+        close_time = str(self.dataframes[pair].iloc[index]["closeTime"])
 
         LOGGER.debug("SHOOTING STAR: %s: time:%s", result, close_time)
         scheme["data"] = result   # convert from array to list
@@ -517,7 +517,7 @@ class Engine(dict):
         LOGGER.debug("Done getting Indicators")
 
     @get_exceptions
-    def get_supertrend(self, pair, dataframe, localconfig=None):
+    def get_supertrend(self, pair, dataframe, index=-1, localconfig=None):
         """
         Get the super trend oscillator values for a given pair
         append current supertrend data to instance variable
@@ -540,7 +540,7 @@ class Engine(dict):
         supertrend = SuperTrend(mine, int(timeframe), int(multiplier))
         df_list = supertrend["STX_{0}_{1}".format(timeframe, multiplier)].tolist()
 
-        scheme["data"] = self.get_supertrend_direction(df_list[-1])[0]
+        scheme["data"] = self.get_supertrend_direction(df_list[index])[0]
         scheme["symbol"] = pair
         scheme["event"] = "Supertrend_{0},{1}".format(timeframe, multiplier)
         self.add_scheme(scheme)
