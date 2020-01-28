@@ -285,7 +285,7 @@ class Engine(dict):
         """get bollinger bands"""
 
         LOGGER.debug("Getting bollinger bands for %s", pair)
-        klines = self.make_data_tupple(dataframe)[:index]
+        klines = self.make_data_tupple(dataframe.loc[:index])
         func, timef = localconfig  # split tuple
         timeframe, multiplier = timef.split(',')
         results = {}
@@ -341,7 +341,7 @@ class Engine(dict):
         LOGGER.debug("Getting %s_%s for %s", func, timeperiod, pair)
         dataframe = self.renamed_dataframe_columns(dataframe)
         scheme = {}
-        mine = dataframe.apply(pandas.to_numeric).locr[:index]
+        mine = dataframe.apply(pandas.to_numeric).loc[:index]
 
         rsi = RSI(mine, base='Close', period=int(timeperiod))
         df_list = rsi["{0}_{1}".format(func, timeperiod)].tolist()
@@ -357,7 +357,7 @@ class Engine(dict):
         """
         Calculate Hull Moving Average using Weighted Moving Average
         """
-        klines = self.make_data_tupple(dataframe)[:index]
+        klines = self.make_data_tupple(dataframe.loc[:index])
         func, timeperiod = localconfig
         close = klines[-1]
         first = talib.WMA(close, int(timeperiod)/2)
@@ -396,7 +396,7 @@ class Engine(dict):
             None
         """
         LOGGER.debug("Getting moving averages for %s", pair)
-        klines = self.make_data_tupple(dataframe)[:index]
+        klines = self.make_data_tupple(dataframe.loc[:index])
         func, timeperiod = localconfig  # split tuple
         try:
             close = klines[-1] # numpy.ndarray
@@ -436,7 +436,7 @@ class Engine(dict):
             None
         """
         LOGGER.debug("Getting Oscillators for %s", pair)
-        klines = self.make_data_tupple(dataframe)[:index]
+        klines = self.make_data_tupple(dataframe.loc[:index])
         open, high, low, close = klines
         func, timeperiod = localconfig  # split tuple
 
@@ -492,7 +492,7 @@ class Engine(dict):
             None
         """
         func, timeperiod = localconfig
-        klines = self.make_data_tupple(dataframe)[:index]
+        klines = self.make_data_tupple(dataframe.loc[:index])
         LOGGER.debug("Getting Indicators for %s", pair)
         scheme = {}
         trends = {"HAMMER": {100: "BUY", 0:"HOLD"},
