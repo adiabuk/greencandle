@@ -205,8 +205,8 @@ class Engine(dict):
                     # from config eg. self.supertrend(pair, config), where config is a tuple
                     # each method has the method name in 'function't st
 
-                    pool.submit(getattr(self, function)(pair, self.dataframes[pair],
-                                                        (name, period)))
+                    pool.submit(getattr(self, function)(pair, self.dataframes[pair], index=None,
+                                                        localconfig=(name, period)))
 
                 pool.shutdown(wait=True)
 
@@ -237,7 +237,7 @@ class Engine(dict):
                 self.add_scheme(scheme)
 
     @get_exceptions
-    def get_sup_res(self, pair, dataframe, localconfig=None):
+    def get_sup_res(self, pair, dataframe, index=None, localconfig=None):
         """
         get support & resistance values for current pair
         Append data to supres instance variable (dict)
@@ -252,7 +252,7 @@ class Engine(dict):
         func, timeperiod = localconfig  # split tuple
         LOGGER.info("Getting Support & resistance for %s", pair)
 
-        close_values = make_float(dataframe.close)
+        close_values = make_float(dataframe.close)[:index]
         support, resistance = supres(close_values, int(timeperiod))
         scheme = {}
         try:
@@ -281,11 +281,11 @@ class Engine(dict):
         LOGGER.debug("Done getting Support & resistance")
         return None
 
-    def get_bb(self, pair, dataframe, localconfig=None):
+    def get_bb(self, pair, dataframe, index=None, localconfig=None):
         """get bollinger bands"""
 
         LOGGER.debug("Getting bollinger bands for %s", pair)
-        klines = self.make_data_tupple(dataframe)
+        klines = self.make_data_tupple(dataframe.iloc[:index])
         func, timef = localconfig  # split tuple
         timeframe, multiplier = timef.split(',')
         results = {}
@@ -325,7 +325,7 @@ class Engine(dict):
         LOGGER.debug("Done getting Bollinger bands")
 
     @get_exceptions
-    def get_rsi(self, pair, dataframe, localconfig=None):
+    def get_rsi(self, pair, dataframe, index=None, localconfig=None):
         """
         get RSI oscillator values for given pair
         Append current RSI data to instance variable
@@ -341,7 +341,7 @@ class Engine(dict):
         LOGGER.debug("Getting %s_%s for %s", func, timeperiod, pair)
         dataframe = self.renamed_dataframe_columns(dataframe)
         scheme = {}
-        mine = dataframe.apply(pandas.to_numeric)
+        mine = dataframe.apply(pandas.to_numeric).loc[:index]
 
         rsi = RSI(mine, base='Close', period=int(timeperiod))
         df_list = rsi["{0}_{1}".format(func, timeperiod)].tolist()
@@ -353,11 +353,11 @@ class Engine(dict):
         LOGGER.debug("Done getting RSI")
 
     @get_exceptions
-    def get_hma(self, pair, dataframe, localconfig=None):
+    def get_hma(self, pair, dataframe, index=None, localconfig=None):
         """
         Calculate Hull Moving Average using Weighted Moving Average
         """
-        klines = self.make_data_tupple(dataframe)
+        klines = self.make_data_tupple(dataframe.iloc[:index])
         func, timeperiod = localconfig
         close = klines[-1]
         first = talib.WMA(close, int(timeperiod)/2)
@@ -383,7 +383,7 @@ class Engine(dict):
         LOGGER.debug("done getting moving averages")
 
     @get_exceptions
-    def get_moving_averages(self, pair, dataframe, localconfig=None):
+    def get_moving_averages(self, pair, dataframe, index=None, localconfig=None):
         """
         Apply moving averages to klines and get BUY/SELL triggers
         Add data to DB
@@ -396,7 +396,7 @@ class Engine(dict):
             None
         """
         LOGGER.debug("Getting moving averages for %s", pair)
-        klines = self.make_data_tupple(dataframe)
+        klines = self.make_data_tupple(dataframe.iloc[:index])
         func, timeperiod = localconfig  # split tuple
         try:
             close = klines[-1] # numpy.ndarray
@@ -422,7 +422,7 @@ class Engine(dict):
         LOGGER.debug("done getting moving averages")
 
     @get_exceptions
-    def get_oscillators(self, pair, dataframe, localconfig=None):
+    def get_oscillators(self, pair, dataframe, index=None, localconfig=None):
         """
 
         Apply osscilators to klines and get BUY/SELL triggers
@@ -436,7 +436,7 @@ class Engine(dict):
             None
         """
         LOGGER.debug("Getting Oscillators for %s", pair)
-        klines = self.make_data_tupple(dataframe)
+        klines = self.make_data_tupple(dataframe.iloc[:index])
         open, high, low, close = klines
         func, timeperiod = localconfig  # split tuple
 
@@ -478,7 +478,7 @@ class Engine(dict):
         LOGGER.debug("Done getting Oscillators")
 
     @get_exceptions
-    def get_indicators(self, pair, dataframe, localconfig=None):
+    def get_indicators(self, pair, dataframe, index=None, localconfig=None):
         """
 
         Cross Reference data against trend indicators
@@ -492,7 +492,7 @@ class Engine(dict):
             None
         """
         func, timeperiod = localconfig
-        klines = self.make_data_tupple(dataframe)
+        klines = self.make_data_tupple(dataframe.iloc[:index])
         LOGGER.debug("Getting Indicators for %s", pair)
         scheme = {}
         trends = {"HAMMER": {100: "BUY", 0:"HOLD"},
@@ -517,7 +517,7 @@ class Engine(dict):
         LOGGER.debug("Done getting Indicators")
 
     @get_exceptions
-    def get_supertrend(self, pair, dataframe, localconfig=None):
+    def get_supertrend(self, pair, dataframe, index=None, localconfig=None):
         """
         Get the super trend oscillator values for a given pair
         append current supertrend data to instance variable
@@ -535,7 +535,7 @@ class Engine(dict):
         scheme = {}
         dataframe = self.renamed_dataframe_columns(dataframe)
 
-        mine = dataframe.apply(pandas.to_numeric)
+        mine = dataframe.apply(pandas.to_numeric).loc[:index]
         timeframe, multiplier = timef.split(',')
         supertrend = SuperTrend(mine, int(timeframe), int(multiplier))
         df_list = supertrend["STX_{0}_{1}".format(timeframe, multiplier)].tolist()
