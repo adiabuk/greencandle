@@ -205,8 +205,8 @@ class Engine(dict):
                     # from config eg. self.supertrend(pair, config), where config is a tuple
                     # each method has the method name in 'function't st
 
-                    pool.submit(getattr(self, function)(pair, self.dataframes[pair],
-                                                        (name, period)))
+                    pool.submit(getattr(self, function)(pair, self.dataframes[pair], index=None,
+                                                        localconfig=(name, period)))
 
                 pool.shutdown(wait=True)
 
@@ -285,7 +285,7 @@ class Engine(dict):
         """get bollinger bands"""
 
         LOGGER.debug("Getting bollinger bands for %s", pair)
-        klines = self.make_data_tupple(dataframe.loc[:index])
+        klines = self.make_data_tupple(dataframe.iloc[:index])
         func, timef = localconfig  # split tuple
         timeframe, multiplier = timef.split(',')
         results = {}
@@ -357,7 +357,7 @@ class Engine(dict):
         """
         Calculate Hull Moving Average using Weighted Moving Average
         """
-        klines = self.make_data_tupple(dataframe.loc[:index])
+        klines = self.make_data_tupple(dataframe.iloc[:index])
         func, timeperiod = localconfig
         close = klines[-1]
         first = talib.WMA(close, int(timeperiod)/2)
@@ -396,7 +396,7 @@ class Engine(dict):
             None
         """
         LOGGER.debug("Getting moving averages for %s", pair)
-        klines = self.make_data_tupple(dataframe.loc[:index])
+        klines = self.make_data_tupple(dataframe.iloc[:index])
         func, timeperiod = localconfig  # split tuple
         try:
             close = klines[-1] # numpy.ndarray
@@ -436,7 +436,7 @@ class Engine(dict):
             None
         """
         LOGGER.debug("Getting Oscillators for %s", pair)
-        klines = self.make_data_tupple(dataframe.loc[:index])
+        klines = self.make_data_tupple(dataframe.iloc[:index])
         open, high, low, close = klines
         func, timeperiod = localconfig  # split tuple
 
@@ -492,7 +492,7 @@ class Engine(dict):
             None
         """
         func, timeperiod = localconfig
-        klines = self.make_data_tupple(dataframe.loc[:index])
+        klines = self.make_data_tupple(dataframe.iloc[:index])
         LOGGER.debug("Getting Indicators for %s", pair)
         scheme = {}
         trends = {"HAMMER": {100: "BUY", 0:"HOLD"},
