@@ -166,7 +166,7 @@ class Engine(dict):
         if datetime.fromtimestamp(int(close_time)/1000) > datetime.now():
             close_time = self.current_time
 
-        result = 0.0 if (isinstance(scheme["data"], float) and
+        result = None if (isinstance(scheme["data"], float) and
                          math.isnan(scheme["data"]))  else scheme["data"]
         try:
             data = {scheme["event"]:{"result": result,
@@ -207,6 +207,11 @@ class Engine(dict):
 
                     pool.submit(getattr(self, function)(pair, self.dataframes[pair], index=None,
                                                         localconfig=(name, period)))
+                    if first_run:
+                        for seq in range(int(config.main.no_of_klines) -1):
+                            pool.submit(getattr(self, function)(pair, self.dataframes[pair],
+                                                                index=seq,
+                                                                localconfig=(name, period)))
 
                 pool.shutdown(wait=True)
 
@@ -277,6 +282,7 @@ class Engine(dict):
             scheme["data"] = str(support[-1])
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
+        scheme["close_time"] = str(dataframe.iloc[index]["closeTime"])
         self.add_scheme(scheme)
         LOGGER.debug("Done getting Support & resistance")
         return None
@@ -316,6 +322,7 @@ class Engine(dict):
             scheme["data"] = results[func]
             scheme["symbol"] = pair
             scheme["event"] = "{0}_{1}".format(func, timeframe)
+            scheme["close_time"] = str(dataframe.iloc[index]["closeTime"])
 
             self.add_scheme(scheme)
 
@@ -349,6 +356,8 @@ class Engine(dict):
         scheme["data"] = df_list[-1]
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
+        scheme["close_time"] = str(dataframe.iloc[index]["closeTime"])
+
         self.add_scheme(scheme)
         LOGGER.debug("Done getting RSI")
 
@@ -375,6 +384,7 @@ class Engine(dict):
             scheme["data"] = result
             scheme["symbol"] = pair
             scheme["event"] = func+"_"+str(timeperiod)
+            scheme["close_time"] = str(dataframe.iloc[index]["closeTime"])
 
             self.add_scheme(scheme)
         except KeyError as exc:
@@ -408,11 +418,12 @@ class Engine(dict):
             LOGGER.critical("Overall Exception getting moving averages: %s", exc)
 
         scheme = {}
-        result = str(0.0) if math.isnan(result) else format(float(result), ".20f")
+        result = None if math.isnan(result) else format(float(result), ".20f")
         try:
             scheme["data"] = result
             scheme["symbol"] = pair
-            scheme["event"] = func+"_"+str(timeperiod)
+            scheme["event"] = func + "_" + str(timeperiod)
+            scheme["close_time"] = str(dataframe.iloc[index]["closeTime"])
 
             self.add_scheme(scheme)
 
@@ -471,6 +482,8 @@ class Engine(dict):
             scheme["data"] = result
             scheme["symbol"] = pair
             scheme["event"] = '{}_{}'.format(func, timeperiod)
+            scheme["close_time"] = str(dataframe.iloc[index]["closeTime"])
+
             self.add_scheme(scheme)
 
         except KeyError as error:
@@ -511,6 +524,7 @@ class Engine(dict):
         scheme["data"] = result   # convert from array to list
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
+        scheme["close_time"] = str(dataframe.iloc[index]["closeTime"])
 
         self.add_scheme(scheme)
 
@@ -543,5 +557,7 @@ class Engine(dict):
         scheme["data"] = self.get_supertrend_direction(df_list[-1])[0]
         scheme["symbol"] = pair
         scheme["event"] = "Supertrend_{0},{1}".format(timeframe, multiplier)
+        scheme["close_time"] = str(dataframe.iloc[index]["closeTime"])
+
         self.add_scheme(scheme)
         LOGGER.debug("done getting supertrend")
