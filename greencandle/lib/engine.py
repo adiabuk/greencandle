@@ -282,7 +282,7 @@ class Engine(dict):
             scheme["data"] = str(support[-1])
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
-        scheme["close_time"] = str(dataframe.iloc[index]["closeTime"])
+        scheme["close_time"] = str(dataframe.iloc[index or -1]["closeTime"])
         self.add_scheme(scheme)
         LOGGER.debug("Done getting Support & resistance")
         return None
@@ -322,7 +322,7 @@ class Engine(dict):
             scheme["data"] = results[func]
             scheme["symbol"] = pair
             scheme["event"] = "{0}_{1}".format(func, timeframe)
-            scheme["close_time"] = str(dataframe.iloc[index]["closeTime"])
+            scheme["close_time"] = str(dataframe.iloc[index or -1]["closeTime"])
 
             self.add_scheme(scheme)
 
@@ -356,7 +356,7 @@ class Engine(dict):
         scheme["data"] = df_list[-1]
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
-        scheme["close_time"] = str(dataframe.iloc[index]["closeTime"])
+        scheme["close_time"] = str(dataframe.iloc[index or -1]["closeTime"])
 
         self.add_scheme(scheme)
         LOGGER.debug("Done getting RSI")
@@ -384,7 +384,7 @@ class Engine(dict):
             scheme["data"] = result
             scheme["symbol"] = pair
             scheme["event"] = func+"_"+str(timeperiod)
-            scheme["close_time"] = str(dataframe.iloc[index]["closeTime"])
+            scheme["close_time"] = str(dataframe.iloc[index -1]["closeTime"])
 
             self.add_scheme(scheme)
         except KeyError as exc:
@@ -423,7 +423,7 @@ class Engine(dict):
             scheme["data"] = result
             scheme["symbol"] = pair
             scheme["event"] = func + "_" + str(timeperiod)
-            scheme["close_time"] = str(dataframe.iloc[index]["closeTime"])
+            scheme["close_time"] = str(dataframe.iloc[index or -1]["closeTime"])
 
             self.add_scheme(scheme)
 
@@ -482,7 +482,7 @@ class Engine(dict):
             scheme["data"] = result
             scheme["symbol"] = pair
             scheme["event"] = '{}_{}'.format(func, timeperiod)
-            scheme["close_time"] = str(dataframe.iloc[index]["closeTime"])
+            scheme["close_time"] = str(dataframe.iloc[index or -1]["closeTime"])
 
             self.add_scheme(scheme)
 
@@ -524,7 +524,7 @@ class Engine(dict):
         scheme["data"] = result   # convert from array to list
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
-        scheme["close_time"] = str(dataframe.iloc[index]["closeTime"])
+        scheme["close_time"] = str(dataframe.iloc[index or -1]["closeTime"])
 
         self.add_scheme(scheme)
 
@@ -557,7 +557,7 @@ class Engine(dict):
         scheme["data"] = self.get_supertrend_direction(df_list[-1])[0]
         scheme["symbol"] = pair
         scheme["event"] = "Supertrend_{0},{1}".format(timeframe, multiplier)
-        scheme["close_time"] = str(dataframe.iloc[index]["closeTime"])
+        scheme["close_time"] = str(dataframe.iloc[index or -1]["closeTime"])
 
         self.add_scheme(scheme)
         LOGGER.debug("done getting supertrend")
