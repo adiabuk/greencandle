@@ -454,7 +454,7 @@ class Engine(dict):
         check = func
         attrs = trends[func]
         try:
-            a = attrs["klines"][0]
+
             li = []
             for i in attrs["klines"]:
                 li.append(locals()[i])
