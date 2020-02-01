@@ -21,6 +21,7 @@ if [[ ! -e /installed ]]; then
   cp /opt/output/greencandle.ini /etc/greencandle.ini || true
   cp /opt/output/default.conf /etc/nginx/conf.d/default.conf || true
   cp /opt/output/nginx.conf /etc/nginx/ || true
+  cp /opt/output/50x.html /usr/share/nginx/html || true
   echo $HOST > /var/www/html/env.txt || true
   cp /opt/output/{*.html,*.css,*.js,*.jpg} /var/www/html ||true
   crontab /opt/output/gc-cron || true
