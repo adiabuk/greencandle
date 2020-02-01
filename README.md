@@ -11,6 +11,14 @@
 
 # Releases
 
+## 0.27
+* Create graphs for all pairs in config
+* Create thumbnails for API
+* Add closed trades to API
+* Expose matched buy/sell rules to API
+* Better cron timings
+* Download historic prices and indicators and populate redis/graph
+
 ## 0.26
 * Testing of docker instance functionality
 * Combine API and GC into single image
