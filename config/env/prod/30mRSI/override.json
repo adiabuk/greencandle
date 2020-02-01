@@ -8,7 +8,6 @@
   "buy_rule7": "",
   "indicators": "get_moving_averages;EMA;5 get_rsi;RSI;2",
   "interval": "30m",
-  "no_of_klines": "10",
   "pairs": "ETHUSDT BTCUSDT BNBUSDT LINKUSDT EOSUSDT BCHABCUSDT LTCUSDT BTTUSDT XRPUSDT LINKUSDT",
   "push_title": "prod_30mRSI",
   "rate_indicator": "EMA_5",
