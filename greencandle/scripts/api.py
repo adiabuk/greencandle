@@ -18,6 +18,7 @@ from flask import Flask, render_template, request, redirect
 from waitress import serve
 from greencandle.lib import config
 config.create_config()
+from greencandle.lib.logger import get_logger
 from greencandle.lib.order import Trade
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.mysql import Mysql
@@ -41,6 +42,9 @@ class PrefixMiddleware():
 
 APP = Flask(__name__, template_folder="/etc/gcapi", static_url_path='/etc/gcapi/',
             static_folder='/etc/gcapi')
+LOGGER = get_logger(__name__)
+HANDLER = LOGGER.handlers[0]
+APP.logger.addHandler(HANDLER)
 APP.wsgi_app = PrefixMiddleware(APP.wsgi_app, prefix='/api')
 
 SCHED = sched.scheduler(time, sleep)
