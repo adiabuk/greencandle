@@ -1,5 +1,4 @@
 {
-  "2ma_usdt": "",
   "name": "2ma-usdt",
   "pairs": "BNBUSDT ETHUSDT MATICUSDT",
   "stop_loss_perc": "1"
