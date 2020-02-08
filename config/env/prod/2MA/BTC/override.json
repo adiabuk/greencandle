@@ -1,6 +1,5 @@
 {
-  "2ma_btc": "",
   "name": "2ma-btc",
-  "pairs": "BNBBTC BNTBTC ENGBTC ENJBTC EOSBTC ETHBTC FUNBTC GXSBTC IOTABTC LRCBTC ZRXBTC",
+  "pairs": "IOTABTC",
   "stop_loss_perc": "1"
 }

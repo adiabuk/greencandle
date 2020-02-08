@@ -142,6 +142,32 @@ services:
     links:
       - mysql:mysql
 
+  2ma-btc:
+    container_name: 2ma-btc
+    hostname: 2ma-btc
+    image: amrox/greencandle:${TAG}
+    entrypoint: /docker-entrypoint.sh backend --test
+    logging:
+      driver: journald
+    links:
+      - mysql
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      - CONFIG_ENV=prod/2MA/BTC
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - ./test:/tmp
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
   4ma-btc:
     container_name: 4ma-btc
     hostname: 4ma-btc
