@@ -1,5 +1,5 @@
 {
   "indicators": "get_moving_averages;EMA;2 get_moving_averages;EMA;69",
   "logging_level": "50",
-  "pairs": "BNBBTC BNTBTC ENGBTC ENJBTC EOSBTC ETHBTC GXSBTC ZRXBTC"
+  "pairs": "BNBBTC BNTBTC ENGBTC ENJBTC EOSBTC ETHBTC GXSBTC ZRXBTC IOTABTC"
 }
