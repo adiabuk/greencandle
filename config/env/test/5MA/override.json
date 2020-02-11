@@ -10,7 +10,7 @@
   "interval": "4h",
   "max_trades": "3",
   "pairs": "",
-  "push_title": "prod_4MA",
+  "push_title": "prod_5MA",
   "rate_indicator": "EMA_8",
   "redis_expiry_seconds": "1036800",
   "sell_rule1": "low \u003c results.current.EMA_100",
