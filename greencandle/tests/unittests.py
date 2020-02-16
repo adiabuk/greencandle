@@ -169,7 +169,8 @@ def make_test_case(pairs, startdate, xsum, xmax, xmin):
             """
 
             self.logger.info("Getting test data")
-            get_data(self.startdate, self.intervals, self.pairs, self.days, self.outputdir)
+            get_data(self.startdate, self.intervals, self.pairs, self.days, self.outputdir,
+                     extra=200)
             filename = self.outputdir + '/' + self.pairs[0]+ '_' + self.intervals[0] + '.p'
             self.logger.info("Filename: %s", filename)
             assert os.path.exists(filename) == 1
