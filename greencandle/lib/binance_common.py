@@ -88,7 +88,7 @@ def get_all_klines(pair, interval=None, start_time=0, no_of_klines=1E1000):
 
     return result[:no_of_klines] if no_of_klines != float("inf") else result
 
-def get_data(startdate, intervals, pairs, days, outputdir):
+def get_data(startdate, intervals, pairs, days, outputdir, extra):
     """Calculate which data to fetch given args and fetch into outputdir"""
 
     given_date = datetime.datetime.strptime(startdate, '%Y-%m-%d')
@@ -99,7 +99,7 @@ def get_data(startdate, intervals, pairs, days, outputdir):
     # For testing we use 50 klines buffer to calculate trends/averages etc.
     # so we need to add 50 more klines to the end (total_klines) so that we
     #still end up with the exact number of lines for the days specified
-    number_of_extra_klines = 200
+    number_of_extra_klines = extra
 
     klines_multiplier = {"1d": 720,
                          "4h": 240,
