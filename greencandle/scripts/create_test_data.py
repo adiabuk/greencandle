@@ -20,7 +20,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-s", "--startdate", required=True)
     parser.add_argument("-d", "--days", required=True)
-    parser.add_argument("-e", "--extra", required=False, default=1000,
+    parser.add_argument("-e", "--extra", required=False, default=1000, type=int,
                         help="number of extra klines")
     parser.add_argument("-i", "--intervals", nargs='+', required=False, default=[])
     parser.add_argument("-o", "--outputdir", required=True)
