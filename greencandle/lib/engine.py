@@ -167,7 +167,7 @@ class Engine(dict):
             close_time = self.current_time
 
         result = None if (isinstance(scheme["data"], float) and
-                         math.isnan(scheme["data"]))  else scheme["data"]
+                          math.isnan(scheme["data"]))  else scheme["data"]
         try:
             data = {scheme["event"]:{"result": result,
                                      "current_price": format(float(current_price), ".20f"),
@@ -518,7 +518,6 @@ class Engine(dict):
 
         result = getattr(talib, "CDL" + func)(*klines).tolist()[-1]
 
-        LOGGER.debug("SHOOTING STAR: %s: time:%s", result, close_time)
         scheme["data"] = result   # convert from array to list
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
