@@ -25,7 +25,7 @@ def main():
     workbook = openpyxl.Workbook()
     workbook.remove(workbook.get_sheet_by_name('Sheet'))
 
-    mysql = Mysql(test=True, interval='1h')
+    mysql = Mysql(test=True, interval='4h')
     queries = {"weekly": "select perc, pair, week(sell_time) as week from profit",
                "monthly": "select perc, pair, month(sell_time) as month from profit",
                "average-day": "select pair, hour(timediff(sell_time,buy_time)) as hours from \
@@ -39,7 +39,10 @@ def main():
                           from profit;",
                "hours-pair": "select pair, sum(hour(timediff(sell_time,buy_time))) \
                         as hours from trades where sell_time \
-                        != '0000-00-00 00:00:00' group by pair"}
+                        != '0000-00-00 00:00:00' group by pair",
+               "profit-factor": "select (select sum(base_profit) from profit where base_profit \
+                                 >0)/-(select sum(base_profit) from profit where base_profit <0) \
+                                 as profit_factor"}
     for name, query in queries.items():
         result = mysql.fetch_sql_data(query)
         workbook.create_sheet(title=name)
