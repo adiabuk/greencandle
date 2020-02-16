@@ -29,13 +29,14 @@ LOGGER = get_logger(__name__)
 
 class Graph():
     """class for creating graph html and images"""
-    def __init__(self, test=False, pair='ETHBTC', db=0, interval='1m'):
+    def __init__(self, test=False, pair='ETHBTC', db=0, interval='1m', volume=True):
         self.test = test
         self.pair = pair
         self.dbase = db
         self.interval = interval
         self.data = {}
         self.filename = ''
+        self.volume = volume
 
     def get_screenshot(self, output_dir=''):
         """Capture screenshot using selenium/firefox in Xvfb """
@@ -95,6 +96,7 @@ class Graph():
                                       close=value.close,
                                       name=self.pair)
 
+
             elif name == 'event':
                 # dataframe is mutable so we cannot reference exisiting values by hashing
                 # therefore we will substitute buy/sell with and rgb value for red/green
@@ -134,8 +136,29 @@ class Graph():
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=value['value'],
                                   name=name)
-
             fig.append_trace(item, row, col)
+
+            if name == "ohlc" and self.volume:
+                increasing_color = '#17BECF'
+                decreasing_color = '#7F7F7F'
+                colors = []
+
+                for i in range(len(value.close)):
+                    if i != 0:
+                        if value.close.iloc[i] > value.close.iloc[i-1]:
+                            colors.append(increasing_color)
+                        else:
+                            colors.append(decreasing_color)
+                    else:
+                        colors.append(decreasing_color)
+
+                item = go.Bar(x=value.time,
+                               y=value.volume,
+                               name="volume",
+                               marker=dict(color=colors))
+                row = 2
+                fig.append_trace(item, row, col)
+
         now = datetime.datetime.now()
         date = now.strftime('%Y-%m-%d_%H-%M-%S')
         self.filename = "{0}/{1}_{2}-{3}.html".format(output_dir, self.pair, date,
