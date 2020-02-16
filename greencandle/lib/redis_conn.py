@@ -36,7 +36,7 @@ class Redis():
         self.expire = str2bool(config.redis.redis_expire)
 
         if test:
-            redis_db = db
+            redis_db = 1
             test_str = "Test"
         else:
             redis_db = 0

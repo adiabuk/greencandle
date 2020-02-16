@@ -185,9 +185,10 @@ def parallel_test(pairs, interval, redis_db, data_dir, indicators):
         trade.sell(sells)
         trade.buy(buys)
 
-    print(get_recent_profit(True, interval=interval))
+    print(get_recent_profit(True, interval))
 
 def prod_int_check(interval, test):
+    """Check price between candles for slippage below stoploss"""
     prices = binance.prices()
     dbase = Mysql(test=False, interval=interval)
     current_trades = dbase.get_trades()
@@ -210,14 +211,14 @@ def prod_int_check(interval, test):
     del redis
     del dbase
 
-def prod_initial(interval):
+def prod_initial(interval, test=False):
     """
     Initial prod run - back-fetching data for tech analysis.
     """
     prices = binance.prices()
     prices_trunk = {}
     main_pairs = config.main.pairs.split()
-    dbase = Mysql(test=False, interval=interval)
+    dbase = Mysql(test=test, interval=interval)
     additional_pairs = dbase.get_trades()
     del dbase
     # get unique list of pairs in config,
@@ -230,7 +231,7 @@ def prod_initial(interval):
 
     main_indicators = config.main.indicators.split()
     dataframes = get_dataframes(pairs, interval=interval)
-    engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval)
+    engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, test=test)
     engine.get_data(localconfig=main_indicators, first_run=True)
 
 def prod_loop(interval, test):
@@ -266,7 +267,7 @@ def prod_loop(interval, test):
     engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval)
     engine.get_data(localconfig=main_indicators, first_run=True)
     engine.get_data(localconfig=main_indicators)
-    redis = Redis(interval=interval, test=False, db=0)
+    redis = Redis(interval=interval, test=test)
     buys = []
     sells = []
     for pair in pairs:
