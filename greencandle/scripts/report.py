@@ -42,7 +42,11 @@ def main():
                         != '0000-00-00 00:00:00' group by pair",
                "profit-factor": "select (select sum(base_profit) from profit where base_profit \
                                  >0)/-(select sum(base_profit) from profit where base_profit <0) \
-                                 as profit_factor"}
+                                 as profit_factor",
+               "buy-hold-return": "select (select buy_price from profit order by buy_time limit 1) \
+                                   as first_buy, (select sell_price from profit order by \
+                                   buy_time desc limit 1) as last_sell, (select \
+                                   (last_sell-first_buy)/first_buy)*100 as buy_hold"}
     for name, query in queries.items():
         result = mysql.fetch_sql_data(query)
         workbook.create_sheet(title=name)
