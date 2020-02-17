@@ -58,5 +58,4 @@ mkdir -p /data/{mysql,config,graphs,report}
 
 # Install outside docker
 install/gc-install.sh
-pip install pytest
-
+pip install pytest redis-dump-load
