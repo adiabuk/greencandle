@@ -153,9 +153,9 @@ class Graph():
                         colors.append(decreasing_color)
 
                 item = go.Bar(x=value.time,
-                               y=value.volume,
-                               name="volume",
-                               marker=dict(color=colors))
+                              y=value.volume,
+                              name="volume",
+                              marker=dict(color=colors))
                 row = 2
                 fig.append_trace(item, row, col)
 
