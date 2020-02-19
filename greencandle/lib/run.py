@@ -97,7 +97,8 @@ def perform_data(pair, interval, data_dir, indicators):
             scheme['result'] = 0
             scheme['data'] = result
             scheme["event"] = "trigger"
-            engine.add_scheme(scheme)
+            engine.schemes.append(scheme)
+            engine.add_schemes()
         ################################
 
         del engine

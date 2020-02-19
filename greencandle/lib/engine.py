@@ -50,6 +50,7 @@ class Engine(dict):
         self.supres = {}
         self.current_time = str(int(time()*1000))
         self.dataframes = dataframes
+        self.schemes = []
         super(Engine, self).__init__()
         LOGGER.debug("Finished fetching raw data")
 
@@ -153,33 +154,35 @@ class Engine(dict):
         return self.get_operator_fn(oper)(op1, op2)
 
     @get_exceptions
-    def add_scheme(self, scheme):
+    def add_schemes(self):
         """ add scheme to correct structure """
-        pair = scheme["symbol"]
 
-        # add to redis
-        current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
-        close_time = str(self.dataframes[pair].iloc[-1]["closeTime"]) if not "close_time" in \
-                scheme else scheme["close_time"]
+        redis = Redis(interval=self.interval, test=self.test, db=self.redis_db)
+        for scheme in self.schemes:
+            pair = scheme["symbol"]
+            # add to redis
+            current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
+            close_time = str(self.dataframes[pair].iloc[-1]["closeTime"]) if not "close_time" in \
+                    scheme else scheme["close_time"]
 
-        # close time might be in the future if we run between open/close
-        if datetime.fromtimestamp(int(close_time)/1000) > datetime.now():
-            close_time = self.current_time
+            # close time might be in the future if we run between open/close
+            if datetime.fromtimestamp(int(close_time)/1000) > datetime.now():
+                close_time = self.current_time
 
-        result = None if (isinstance(scheme["data"], float) and
-                          math.isnan(scheme["data"]))  else scheme["data"]
-        try:
-            data = {scheme["event"]:{"result": result,
-                                     "current_price": format(float(current_price), ".20f"),
-                                     "date": close_time,
-                                     }}
+            result = None if (isinstance(scheme["data"], float) and
+                              math.isnan(scheme["data"]))  else scheme["data"]
+            try:
+                data = {scheme["event"]:{"result": result,
+                                         "current_price": format(float(current_price), ".20f"),
+                                         "date": close_time,
+                                         }}
 
-            redis = Redis(interval=self.interval, test=self.test, db=self.redis_db)
-            redis.redis_conn(pair, self.interval, data, close_time)
-            del redis
+                redis.redis_conn(pair, self.interval, data, close_time)
 
-        except Exception as exc:
-            LOGGER.critical("Redis failure %s %s", str(exc), repr(sys.exc_info()))
+            except Exception as exc:
+                LOGGER.critical("Redis failure %s %s", str(exc), repr(sys.exc_info()))
+        del redis
+        self.schemes = []
 
     @get_exceptions
     def get_data(self, localconfig=None, first_run=False):
@@ -216,6 +219,7 @@ class Engine(dict):
                 pool.shutdown(wait=True)
 
             self.send_ohlcs(pair, first_run=first_run)
+        self.add_schemes()
 
         LOGGER.debug("Done getting data")
         return self
@@ -232,14 +236,17 @@ class Engine(dict):
         # dont get most recent one, as it may not be complete
         scheme['data'] = zlib.compress(pickle.dumps(self.dataframes[pair].iloc[location]))
         scheme["event"] = "ohlc"
-        self.add_scheme(scheme)
+
+        #self.add_scheme(scheme)
+        self.schemes.append(scheme)
         if first_run:
             for seq in range(int(config.main.no_of_klines) -1):
                 LOGGER.info("Getting initial sequence number %s", seq)
                 scheme['data'] = zlib.compress(pickle.dumps(self.dataframes[pair].iloc[seq]))
                 scheme["event"] = "ohlc"
                 scheme["close_time"] = str(self.dataframes[pair].iloc[seq]["closeTime"])
-                self.add_scheme(scheme)
+                self.schemes.append(scheme)
+                #self.add_scheme(scheme)
 
     @get_exceptions
     def get_sup_res(self, pair, dataframe, index=None, localconfig=None):
@@ -283,7 +290,8 @@ class Engine(dict):
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
         scheme["close_time"] = str(self.dataframes[pair].iloc[index or -1]["closeTime"])
-        self.add_scheme(scheme)
+        #self.add_scheme(scheme)
+        self.schemes.append(scheme)
         LOGGER.debug("Done getting Support & resistance")
         return None
 
@@ -323,7 +331,8 @@ class Engine(dict):
             scheme["event"] = "{0}_{1}".format(func, timeframe)
             scheme["close_time"] = str(self.dataframes[pair].iloc[index or -1]["closeTime"])
 
-            self.add_scheme(scheme)
+            self.schemes.append(scheme)
+            #self.add_scheme(scheme)
 
         except KeyError as exc:
             LOGGER.critical("KEY FAILURE in bollinger bands: %s ", str(exc))
@@ -357,7 +366,8 @@ class Engine(dict):
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
         scheme["close_time"] = str(self.dataframes[pair].iloc[index or -1]["closeTime"])
 
-        self.add_scheme(scheme)
+        self.schemes.append(scheme)
+        #self.add_scheme(scheme)
         LOGGER.debug("Done getting RSI")
 
     @get_exceptions
@@ -385,14 +395,16 @@ class Engine(dict):
             scheme["event"] = func+"_"+str(timeperiod)
             scheme["close_time"] = str(self.dataframes[pair].iloc[index or -1]["closeTime"])
 
-            self.add_scheme(scheme)
+            self.schemes.append(scheme)
+            #self.add_scheme(scheme)
+
         except KeyError as exc:
             LOGGER.critical("KEY FAILURE in moving averages: %s ", str(exc))
 
         LOGGER.debug("done getting moving averages")
 
     @get_exceptions
-    def get_moving_averages(self, pair, dataframe, index=None, localconfig=None):
+    def get_moving_averages(self, pair, dataframe, index=None, localconfig=None, volume=False):
         """
         Apply moving averages to klines and get BUY/SELL triggers
         Add data to DB
@@ -424,7 +436,8 @@ class Engine(dict):
             scheme["event"] = func + "_" + str(timeperiod)
             scheme["close_time"] = str(self.dataframes[pair].iloc[index or -1]["closeTime"])
 
-            self.add_scheme(scheme)
+            self.schemes.append(scheme)
+            #self.add_scheme(scheme)
 
         except KeyError as exc:
             LOGGER.critical("KEY FAILURE in moving averages: %s ", str(exc))
@@ -483,7 +496,8 @@ class Engine(dict):
             scheme["event"] = '{}_{}'.format(func, timeperiod)
             scheme["close_time"] = str(self.dataframes[pair].iloc[index or -1]["closeTime"])
 
-            self.add_scheme(scheme)
+            self.schemes.append(scheme)
+            #self.add_scheme(scheme)
 
         except KeyError as error:
             LOGGER.critical("Key failure while getting oscillators: %s", str(error))
@@ -523,7 +537,8 @@ class Engine(dict):
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
         scheme["close_time"] = str(self.dataframes[pair].iloc[index or -1]["closeTime"])
 
-        self.add_scheme(scheme)
+        self.schemes.append(scheme)
+        #self.add_scheme(scheme)
 
         LOGGER.debug("Done getting Indicators")
 
@@ -556,5 +571,6 @@ class Engine(dict):
         scheme["event"] = "Supertrend_{0},{1}".format(timeframe, multiplier)
         scheme["close_time"] = str(self.dataframes[pair].iloc[index or -1]["closeTime"])
 
-        self.add_scheme(scheme)
+        self.schemes.append(scheme)
+        #self.add_scheme(scheme)
         LOGGER.debug("done getting supertrend")
