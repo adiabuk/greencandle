@@ -14,7 +14,6 @@ from ..lib import config
 # config is required before loading other modules as it is global
 config.create_config()
 
-from ..lib.mysql import Mysql
 from ..lib.logger import get_logger, get_decorator
 from ..lib.run import serial_test, parallel_test
 
@@ -43,9 +42,6 @@ def main():
     redis_db = {"1d":1, "4h":1, "2h":1, "1h":1, "30m":1,
                 "15m":1, "5m":2, "3m":3, "1m":4}[parallel_interval]
 
-    dbase = Mysql(test=True, interval=parallel_interval)
-    dbase.delete_data()
-    del dbase
     if args.serial:
         serial_test(pairs, serial_intervals, args.data_dir, main_indicators)
     else:
