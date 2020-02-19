@@ -34,7 +34,7 @@ class Engine(dict):
     """ Represent events created from data & indicators """
 
     get_exceptions = get_decorator((Exception))
-    def __init__(self, dataframes, prices, interval=None, test=False, db=None):
+    def __init__(self, dataframes, prices, interval=None, test=False, redis=None):
         """
         Initialize class
         Create hold and event dicts
@@ -44,7 +44,7 @@ class Engine(dict):
         self.interval = interval
         self.pairs = prices.keys()
         self.test = test
-        self.redis_db = db
+        self.redis = redis
         self["hold"] = {}
         self["event"] = {}
         self.supres = {}
@@ -157,7 +157,6 @@ class Engine(dict):
     def add_schemes(self):
         """ add scheme to correct structure """
 
-        redis = Redis(interval=self.interval, test=self.test, db=self.redis_db)
         for scheme in self.schemes:
             pair = scheme["symbol"]
             # add to redis
@@ -177,11 +176,10 @@ class Engine(dict):
                                          "date": close_time,
                                          }}
 
-                redis.redis_conn(pair, self.interval, data, close_time)
+                self.redis.redis_conn(pair, self.interval, data, close_time)
 
             except Exception as exc:
                 LOGGER.critical("Redis failure %s %s", str(exc), repr(sys.exc_info()))
-        del redis
         self.schemes = []
 
     @get_exceptions

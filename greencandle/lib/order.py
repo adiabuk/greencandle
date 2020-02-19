@@ -55,7 +55,7 @@ class Trade():
 
         drain = str2bool(config.main.drain)
         if drain and not self.test_data:
-            self.logger.warning("Skip ping Buy as %s is in drain", self.interval)
+            self.logger.warning("Skipping Buy as %s is in drain", self.interval)
             return
 
         if buy_list:

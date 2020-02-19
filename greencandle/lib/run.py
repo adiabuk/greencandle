@@ -53,6 +53,7 @@ def perform_data(pair, interval, data_dir, indicators):
     redis_db = {"1d":1, "4h":1, "2h":1, "1h":1, "30m":1, "15m":1, "5m":2, "3m":3, "1m":4}[interval]
     LOGGER.debug("Serial run %s %s %s", pair, interval, redis_db)
     redis = Redis(interval=interval, test=True, db=redis_db)
+
     filename = glob("{0}/{1}_{2}.p*".format(data_dir, pair, interval))[0]
     if not os.path.exists(filename):
         LOGGER.critical("Filename:%s not found for %s %s", filename, pair, interval)
@@ -83,7 +84,7 @@ def perform_data(pair, interval, data_dir, indicators):
             break
         dataframes = {pair:dataframe}
         engine = Engine(prices=prices_trunk, dataframes=dataframes,
-                        interval=interval, test=True, db=redis_db)
+                        interval=interval, test=True, redis=redis)
         engine.get_data(localconfig=indicators)
 
         ########TEST stategy############
@@ -124,9 +125,12 @@ def parallel_test(pairs, interval, redis_db, data_dir, indicators):
     """
     LOGGER.info("Performaing parallel run %s", interval)
     redis = Redis(interval=interval, test=True, db=redis_db)
+    redis.clear_all()
+    dbase = Mysql(test=True, interval=interval)
+    dbase.delete_data()
+    del dbase
 
     trade = Trade(interval=interval, test_trade=True, test_data=True)
-    redis.clear_all()
     dframes = {}
     sizes = []
     for pair in pairs:
@@ -158,7 +162,7 @@ def parallel_test(pairs, interval, redis_db, data_dir, indicators):
                 break
             dataframes.update({pair:dataframe})
             engine = Engine(prices=prices_trunk, dataframes=dataframes,
-                            interval=interval, test=True, db=redis_db)
+                            interval=interval, test=True, redis=redis)
             engine.get_data(localconfig=indicators)
 
             ########TEST stategy############
@@ -230,10 +234,13 @@ def prod_initial(interval, test=False):
         if key in pairs:
             prices_trunk[key] = val
 
+    redis = Redis(interval=interval, test=test)
     main_indicators = config.main.indicators.split()
     dataframes = get_dataframes(pairs, interval=interval)
-    engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, test=test)
+    engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, test=test,
+                    redis=redis)
     engine.get_data(localconfig=main_indicators, first_run=True)
+    del redis
 
 def prod_loop(interval, test):
     """
