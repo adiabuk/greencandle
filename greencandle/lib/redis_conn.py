@@ -48,11 +48,9 @@ class Redis():
                           test_str, str(redis_db))
         pool = redis.ConnectionPool(host=self.host, port=self.port, db=redis_db)
         self.conn = redis.StrictRedis(connection_pool=pool)
-        self.dbase = Mysql(test=test, interval=interval)
-
 
     def __del__(self):
-        del self.dbase
+        del self.conn
 
     def clear_all(self):
         """
@@ -261,9 +259,10 @@ class Redis():
         last_low = float(last_rehydrated.low)
         last_close = float(last_rehydrated.close)
         last_trades = float(last_rehydrated.numTrades)
+        dbase = Mysql(test=self.test, interval=interval)
         try:
             # function returns an empty list if no results so cannot get first element
-            buy_price = float(self.dbase.get_trade_value(pair)[0][0])
+            buy_price = float(dbase.get_trade_value(pair)[0][0])
         except IndexError:
             buy_price = None
 
@@ -315,8 +314,8 @@ class Redis():
 
         if not buy_price and str2bool(config.main.wait_between_trades):
             try:
-                buy_time = self.dbase.fetch_sql_data("select sell_time from trades order by "
-                                                     "sell_time desc LIMIT 1", header=False)[0][0]
+                buy_time = dbase.fetch_sql_data("select sell_time from trades order by "
+                                                "sell_time desc LIMIT 1", header=False)[0][0]
                 pattern = '%Y-%m-%d %H:%M:%S'
                 buy_epoch = buy_time.timestamp()
                 current_epoch = current_mepoch    # FIXME
@@ -330,7 +329,7 @@ class Redis():
 
         try:
             # function returns an empty list if no results so cannot get first element
-            buy_price = float(self.dbase.get_trade_value(pair)[0][0])
+            buy_price = float(dbase.get_trade_value(pair)[0][0])
 
             if str2bool(config.main.trailing_stop_loss):
                 high_price = self.get_high_price(pair, interval)
@@ -413,5 +412,6 @@ class Redis():
         winning_buy = self.get_rules(rules, 'buy')
         self.logger.info('Sell Rules matched: %s', winning_sell)
         self.logger.info('Buy Rules matched: %s', winning_buy)
+        del dbase
         return (result, current_time, current_price, {'sell':winning_sell,
                                                       'buy': winning_buy})
