@@ -8,30 +8,22 @@ All tests should be run from here
 
 import argparse
 import sys
-
+import unittest
 from greencandle.tests.print_format import SuppressStdoutStderr
 from greencandle.tests.finish import start_test as test_finish
 from greencandle.tests.__init__ import __all__
-#from lib.tests.test_lint import start_test as test_lint
-#from lib.tests.test_api import start_test as test_api
-#from lib.tests.test_journey import start_test as test_journey
-#from lib.tests.test_finish import start_test as test_finish
-#from lib.tests.test_unit import start_test as test_unit
-#from lib.tests.test_selenium import start_test as test_selenium
+#for i in __all__:
+#    globals()[i[1]] = __import__('greencandle.tests.'+i[1])
+
+from greencandle.tests import test_redis, test_run, test_mysql, test_lint, test_scripts, test_docker
 
 # Tuple of tuples
 # (name, module)
 TESTS = __all__
-#TESTS = [  # main tests - run by default
-#    ("API", "test_api"),
-#    ("Journey", "test_journey"),
-#    ("Unit", "test_unit"),
-#    ("Lint", "test_lint"),
-#    ]
-TESTS = [("redis", "redis2")]
-from greencandle.tests.test_redis2 import start_test as test_redis2
-
 print(TESTS)
+#from greencandle.tests.redis2 import start_test as redis2
+#from greencandle.tests.redis2 import start_test
+
 
 # Optional Tests - only run with the --run-optional flag
 OPT_TESTS = [
@@ -58,8 +50,12 @@ def run_tests(tests_to_run='all', run_optional=False):
     # Run each module and append to list as tuple, with the name
     for name, module in run_lst:
         print(name, module)
-        results.append((name, globals()[module]()))
+        print(globals())
+        #results.append((name, dglobals()[module]()))
+        results.append((name, start_test(module)))
 
+    print(results)
+    print('xxx')
     return results
 
 def print_list():
@@ -116,6 +112,20 @@ def main():
         print("Details suppressed.  Run with --verbose to see full output\n")
 
     sys.exit(exit_code)
+
+def start_test(module):
+    """ run unit tests """
+    test_suite = []
+    test_suite.extend(unittest.TestLoader().loadTestsFromModule(
+            globals()[module]))
+
+    test_suite = unittest.suite.TestSuite(test_suite)
+    runner = unittest.TextTestRunner()
+    result = runner.run(test_suite)
+    total = result.testsRun
+    failed = len(result.errors) + len(result.failures)
+    perc = 100 - (100*float(failed)/total)
+    return perc
 
 if __name__ == '__main__':
     main()
