@@ -14,7 +14,7 @@ sys.path.append(BASE_DIR)
 
 from .print_format import  print_status_line
 
-def start_test(results=None):
+def finish_test(results=None):
     """ Start tests """
     total = 0
     print("\n\n")
@@ -35,15 +35,21 @@ def start_test(results=None):
     print_status_line(total_text, total_code)
     update_results(int(total))
 
+    create_link()
+
+    return total_code
+
+def create_link():
+    """
+    Create link to pre-push git hook to enforce test run
+    """
     # Ensure git hook is in place
     repo = git.Repo('.')
     current_repo = repo.git.working_dir + '/'
-    src = current_repo + 'greencandle/tests/pre-push'
+    src = 'greencandle/tests/pre-push'
     dst = current_repo + '.git/hooks/pre-push'
     if not os.path.lexists(dst):
         os.symlink(src, dst)
-
-    return total_code
 
 def update_results(result):
     """ Adding new test results. """
@@ -60,10 +66,8 @@ def update_results(result):
         print(results)
         results_file.write(results)
 
-
-
 if __name__ == '__main__':
-    start_test()
+    finish_test()
     print("This module is a library and should not be called directly.")
     print("Use run_tests.py instead from the root directory")
     sys.exit(1)
