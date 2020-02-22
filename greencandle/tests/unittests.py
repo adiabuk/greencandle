@@ -128,6 +128,24 @@ def make_docker_case(container, checks=None):
 
     return DockerRun
 
+
+def run_subprocess(command):
+
+    """
+    Run given command using subprocess and return exit code
+    """
+    process = subprocess.Popen(command, stdout=subprocess.PIPE,
+                               stderr=subprocess.STDOUT, shell=True)
+    while process.poll() is None:
+        # Process hasn't exited yet, let's wait some
+        time.sleep(0.5)
+
+    out, err = process.communicate()
+    conv = lambda i: i or b''
+    return (process.returncode,
+            conv(out).decode('utf-8').strip(),
+            conv(err).decode('utf-8').strip())
+
 def make_test_case(pairs, startdate, xsum, xmax, xmin):
     """
     return run unittest customized with argument config

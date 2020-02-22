@@ -1,0 +1,70 @@
+#!/usr/bin/env python
+# pylint: disable=invalid-name
+
+"""
+Local git hook for setting & verifying commit message
+which indicate STATUS of tests for the current commit.
+This will be checked by server-side pre-receive hooks along with other checks
+"""
+
+import re
+import subprocess
+import sys
+
+# get commit message
+PROC = subprocess.Popen(["git", "log", "-1", "--pretty=%B"],
+                        stdout=subprocess.PIPE)
+
+MESSAGE = PROC.stdout.read().decode()
+LINE_LIST = [str(_f) for _f in MESSAGE.split() if _f]
+CONTENT = ' '.join(LINE_LIST)
+RED = "\033[31m"
+WHITE = "\033[0m"
+
+if re.findall(".*tests passed.*", CONTENT):  # commit message already updated
+    print('OK')
+    sys.exit(0)
+
+else:  # have not yet checked if tests passed
+    # get commit_id
+    PROC = subprocess.Popen(["git", "rev-parse", "HEAD"],
+                            stdout=subprocess.PIPE)
+    CURRENT_ID = PROC.stdout.read().strip()
+
+    # get test results
+    FILENAME = './results.log'
+    FILE_CONTENTS = open(FILENAME, 'r').read().split(':')
+    TESTED_ID = FILE_CONTENTS[-1].strip()  # commit_id when tests passed
+    STATUS = FILE_CONTENTS[0].strip()  # STATUS of last test run
+    if STATUS == 'OK':  # Tests OK for current commit
+        # last test run passed, need to proceed to check if for current commit
+        pass
+    elif STATUS == 'failed':  # last test run failed
+        print(RED)
+        print("ERROR: One or more tests have failed for the current commit")
+        print(WHITE)
+    else:  # unable to determine if tests have passed or failed
+        print(RED)
+        print("ERROR: Unable to parse results of tests: tests/results.log")
+        print(WHITE)
+        sys.exit(1)
+
+    if CURRENT_ID.decode() == str(TESTED_ID):
+        # if current commit id matches that of when tests last ran
+        MESSAGE += "tests passed: " + CURRENT_ID.decode()
+
+        # update commit message
+        PROC = subprocess.Popen(["git", "commit", "--amend", "-m", MESSAGE],
+                                stdout=subprocess.PIPE)
+        print(PROC.stdout)
+        sys.exit(0)
+
+    else:  # current commit id does not match that when tests last ran
+        print(RED)
+        print(("ERROR: You have not run tests for this commit, please run "
+               "./run_tests.sh from the root directory of this repository "
+               "and ensure all tests are passing before pushing any branches "
+               "to this repository",))
+        print(WHITE)
+        sys.exit(1)
+    sys.exit(0)

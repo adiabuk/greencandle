@@ -5,13 +5,14 @@ Unittest file for testing results of a run using downloaded data
 """
 
 import unittest
+import time
 from greencandle.lib import config
 config.create_config()
 
 from greencandle.lib.logger import get_logger
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.common import perc_diff, add_perc
-from .unittests import OrderedTest
+from .unittests import OrderedTest, run_subprocess
 
 LOGGER = get_logger(__name__)
 
@@ -23,6 +24,9 @@ class TestMysql(OrderedTest):
         directory
         """
         LOGGER.info("Setting up environment")
+        for container in ['mysql-local', 'redis-local']:
+            command = "docker-compose -f install/docker-compose_local.yml up -d " + container
+        time.sleep(6)
         self.dbase = Mysql(test=True, interval="1h")
 
     def step_1(self):
