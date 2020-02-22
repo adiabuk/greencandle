@@ -11,6 +11,14 @@
 
 # Releases
 
+## 0.28
+* Add local testing framework
+* Reduce number of connections to DB and Redis
+* Add Volume indicator to graphs
+* Add profit factor to test runs
+* Allow custom number of klines for test data
+* Synchronize test and prod config
+
 ## 0.27
 * Create graphs for all pairs in config
 * Create thumbnails for API
