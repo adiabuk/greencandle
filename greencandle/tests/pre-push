@@ -15,7 +15,7 @@ import sys
 PROC = subprocess.Popen(["git", "log", "-1", "--pretty=%B"],
                         stdout=subprocess.PIPE)
 
-MESSAGE = PROC.stdout.read()
+MESSAGE = PROC.stdout.read().decode()
 LINE_LIST = [str(_f) for _f in MESSAGE.split() if _f]
 CONTENT = ' '.join(LINE_LIST)
 RED = "\033[31m"
@@ -26,7 +26,6 @@ if re.findall(".*tests passed.*", CONTENT):  # commit message already updated
     sys.exit(0)
 
 else:  # have not yet checked if tests passed
-
     # get commit_id
     PROC = subprocess.Popen(["git", "rev-parse", "HEAD"],
                             stdout=subprocess.PIPE)
@@ -37,7 +36,6 @@ else:  # have not yet checked if tests passed
     FILE_CONTENTS = open(FILENAME, 'r').read().split(':')
     TESTED_ID = FILE_CONTENTS[-1].strip()  # commit_id when tests passed
     STATUS = FILE_CONTENTS[0].strip()  # STATUS of last test run
-
     if STATUS == 'OK':  # Tests OK for current commit
         # last test run passed, need to proceed to check if for current commit
         pass
@@ -51,9 +49,9 @@ else:  # have not yet checked if tests passed
         print(WHITE)
         sys.exit(1)
 
-    if CURRENT_ID == TESTED_ID:
+    if CURRENT_ID.decode() == str(TESTED_ID):
         # if current commit id matches that of when tests last ran
-        MESSAGE += "tests passed: " + CURRENT_ID
+        MESSAGE += "tests passed: " + CURRENT_ID.decode()
 
         # update commit message
         PROC = subprocess.Popen(["git", "commit", "--amend", "-m", MESSAGE],
