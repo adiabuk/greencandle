@@ -10,7 +10,7 @@ import argparse
 import sys
 
 from greencandle.tests.print_format import SuppressStdoutStderr
-from greencandle.tests.test_finish import start_test as test_finish
+from greencandle.tests.finish import start_test as test_finish
 from greencandle.tests.__init__ import __all__
 #from lib.tests.test_lint import start_test as test_lint
 #from lib.tests.test_api import start_test as test_api
@@ -28,7 +28,7 @@ TESTS = __all__
 #    ("Unit", "test_unit"),
 #    ("Lint", "test_lint"),
 #    ]
-TESTS = [("redis", "test_redis2")]
+TESTS = [("redis", "redis2")]
 from greencandle.tests.test_redis2 import start_test as test_redis2
 
 print(TESTS)
