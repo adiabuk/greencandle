@@ -46,7 +46,7 @@ def create_link():
     # Ensure git hook is in place
     repo = git.Repo('.')
     current_repo = repo.git.working_dir + '/'
-    src = 'greencandle/tests/pre-push'
+    src = '../../greencandle/tests/pre-push'
     dst = current_repo + '.git/hooks/pre-push'
     if not os.path.lexists(dst):
         os.symlink(src, dst)
