@@ -38,7 +38,7 @@ def run_tests(tests_to_run='all', run_optional=False):
             tests.remove(item)
     else:
         OPT_TESTS.remove((None, None))
-        tests = TESTS + OPT_TESTS
+        tests = TESTS
 
     # Construct list of what to run
     run_lst = [x for x in tests if x[0] == tests_to_run or tests_to_run == 'all']
