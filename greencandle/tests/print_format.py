@@ -1,4 +1,4 @@
-# pylint: disable=too-few-public-methods,attribute-defined-outside-init
+# pylint: disable=too-few-public-methods,attribute-defined-outside-init,no-else-return
 
 """
 helper functions for print formatting
@@ -12,8 +12,9 @@ import sys
 import textwrap
 import time
 
+ROWS, COLUMNS = os.popen('stty size', 'r').read().split()
 
-class SuppressStdoutStderr(object):
+class SuppressStdoutStderr():
     """
     A context manager for doing a "deep suppression" of stdout and stderr in
     Python, i.e. will suppress all print, even if the print originates in a
@@ -42,7 +43,6 @@ class SuppressStdoutStderr(object):
         os.close(self.null_fds[0])
         os.close(self.null_fds[1])
 
-
 class CaptureText(list):
     """ class for capturing stdout """
 
@@ -56,7 +56,6 @@ class CaptureText(list):
         del self._stringio    # free up some memory
         sys.stdout = self._stdout
 
-
 def print_line(length=111, char='-'):
     """ print a line of a given length """
     print(char * length)
@@ -65,27 +64,6 @@ def print_if_not_silent(text, silent):
     """ Print text if silent is False """
     if not silent:
         print(text)
-
-def check_print_results(results):
-
-    if results:
-        print("[SUCCESS] Pre-configuration checks succeeded.")
-        return True
-    else:
-        print("[ERROR] Some of the checks failed, please fix issues "
-              "before you can proceed.")
-        return False
-
-def check_print_conf_results(results, commit):
-
-    if not results:
-        print("[ERROR] There was an error during configuration.")
-        return False
-    elif not commit:
-        print("[SUCCESS] Configuration check succeeded.")
-        return True
-    else:
-        print("[SUCCESS] Configuration succeeded.")
 
 def print_banner(text, length=48, char='-'):
     """
@@ -97,16 +75,6 @@ def print_banner(text, length=48, char='-'):
     dedented_text = textwrap.dedent(text).strip()
     print(textwrap.fill(dedented_text, width=length))
     print_line(length, char)
-    print
-
-
-def input_header(text, length=111):
-    """
-    prompt for user input and wrap text to a given length
-    """
-
-    print_line(length)
-    return raw_input(text)
 
 def get_date_stamp():
     """ Return string timestamp for use in filenames """
@@ -114,9 +82,6 @@ def get_date_stamp():
     date_stamp = datetime.datetime.fromtimestamp(epoch).strftime('%Y-%m-%d_'
                                                                  '%H-%M-%S')
     return date_stamp
-
-ROWS, COLUMNS = os.popen('stty size', 'r').read().split()
-
 
 def print_status_line(strings, exit_code):
     """
