@@ -13,6 +13,7 @@ if [ -f /.dockerenv ]; then
     apt-get -y install cron netcat default-mysql-client bsdmainutils libssl-dev libsystemd-dev \
       xvfb xauth iceweasel --no-install-recommends
     apt-get clean; apt-get autoclean; rm -rf /var/lib/apt/lists/*
+    pip install cython
     install_dir=/install
 else
     echo "I'm living in real world!";
@@ -25,7 +26,7 @@ else
     python get-pip.py
     rm -rf get-pip.py
 
-    pip install ipython
+    pip install ipython cython
     install_dir=/srv/greencandle
     echo "set background=dark" | tee -a $HOME/.vimrc
 fi
@@ -58,8 +59,6 @@ pip install pip==9.0.1 numpy==1.16.0
 cd $install_dir
 
 pip install . --src /tmp
-pip install -e git+https://github.com/adiabuk/Technical-Indicators.git#egg=indicator
-pip install -e git+https://github.com/adiabuk/binance#egg=binance
 [[ ! -d /opt/output ]] && mkdir /opt/output
 apt-get purge -y gcc g++ g++-8 gcc-8 libx265-165 mercurial-common || true
 apt-get -y autoremove
