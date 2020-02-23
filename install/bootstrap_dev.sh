@@ -25,12 +25,17 @@ export PYENV_ROOT="/opt/pyenv"
 curl https://pyenv.run | bash
 
 cat << \EOF >> ~/.bashrc
-# Load pyenv automatically by adding
-# the following to ~/.bashrc:
 export PATH="/opt/pyenv/bin:$PATH"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 EOF
+
+cat << \EOF >> ~travis/.bashrc || true
+export PATH="/opt/pyenv/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+EOF
+
 
 export PATH="/opt/pyenv/bin:$PATH"
 eval "$(pyenv init -)"
