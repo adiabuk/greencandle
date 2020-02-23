@@ -21,19 +21,21 @@ libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
 libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl
 
 rm -rf /opt/pyenv ||true  # for travisci
+export PYENV_ROOT="/opt/pyenv"
 curl https://pyenv.run | bash
 
 cat << \EOF >> ~/.bashrc
 # Load pyenv automatically by adding
 # the following to ~/.bashrc:
-export PATH="$HOME/.pyenv/bin:$PATH"
+export PATH="/opt/pyenv/bin:$PATH"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 EOF
 
-export PATH="$HOME/.pyenv/bin:$PATH"
+export PATH="/opt/pyenv/bin:$PATH"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
+
 pyenv install 3.7.0
 pyenv global 3.7.0
 
