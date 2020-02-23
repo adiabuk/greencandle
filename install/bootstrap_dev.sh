@@ -15,6 +15,28 @@ curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compos
 chmod +x /usr/local/bin/docker-compose
 echo "export HOSTNAME >> ~/.bashrc"
 
+# Install Python 3.7.0 with pyenv
+apt-get install -y make build-essential libssl-dev zlib1g-dev \
+libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
+libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl
+
+curl https://pyenv.run | bash
+
+cat << \EOF >> ~/.bashrc
+# Load pyenv automatically by adding
+# the following to ~/.bashrc:
+export PATH="$HOME/.pyenv/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+EOF
+
+export PATH="$HOME/.pyenv/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+pyenv install 3.7.0
+pyenv global 3.7.0
+
+
 if [[ ! -f /usr/local/bin/configstore ]]; then
     wget https://github.com/motns/configstore/releases/download/v2.4.0/configstore-2.4.0-linux-amd64.tar.gz -P /tmp
     tar zxvf /tmp/configstore-2.4.0-linux-amd64.tar.gz -C /usr/local/bin
