@@ -25,21 +25,21 @@ export PYENV_ROOT="/opt/pyenv"
 curl https://pyenv.run | bash
 
 cat << \EOF >> ~/.bashrc
-export PATH="/opt/pyenv/bin:$PATH"
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
+export ConEmuDefaultCp=65001
+export PYTHONIOENCODING=utf-8
+if [ -d "/opt/pyenv" ]; then
+ export PYENV_ROOT="/opt/pyenv"
+ PYENV_BIN=/opt/pyenv/versions/3.7.0/bin/
+ export PATH="$PYENV_BIN:$PYENV_ROOT/bin:$PATH"
+ eval "$(pyenv init -)"
+fi
 EOF
 
-cat << \EOF >> ~travis/.bashrc || true
-export PATH="/opt/pyenv/bin:$PATH"
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
-EOF
 
-
-export PATH="/opt/pyenv/bin:$PATH"
+export PYENV_ROOT="/opt/pyenv"
+PYENV_BIN=/opt/pyenv/versions/3.7.0/bin/
+export PATH="$PYENV_BIN:$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
 
 pyenv install 3.7.0
 pyenv global 3.7.0
@@ -88,4 +88,4 @@ mkdir -p /data/{mysql,config,graphs,report}
 
 # Install outside docker
 install/gc-install.sh
-pip install pytest redis-dump-load gitpython setuptools==40.4.3
+pip install pytest redis-dump-load gitpython setuptools==45.1.0

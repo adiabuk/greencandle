@@ -3,7 +3,6 @@ dist: "bionic"
 install:
   - sudo bash install/bootstrap_dev.sh
   - sudo docker-compose -f ./install/docker-compose_unit.yml up -d mysql-unit redis-unit
-  - source ~/.bashrc
 
 before_script:
   - sleep 120
@@ -14,5 +13,5 @@ script:
   - sudo configstore package process_templates unit /etc
   - sudo mysqlcheck --host mysql -uroot -ppassword  --databases greencandle
   - sudo crontab config/template/gc-cron
-  - PATH="/opt/pyenv/bin:$PATH" sudo pytest -k "not docker"
-  - PATH="/opt/pyenv/bin:$PATH" sudo pytest -k "docker"
+  - sudo greencandle/tests/travis_tests.sh "not docker"
+  - sudo greencandle/tests/travis_tests.sh "docker"
