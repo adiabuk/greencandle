@@ -10,7 +10,9 @@ fi
 
 # Setup local env
 apt-get -y update
-apt-get -y install docker.io ntpdate mysql-client screen atop jq iotop ntp awscli vim
+apt-get -y install docker.io ntpdate mysql-client screen atop jq iotop ntp awscli vim \
+    wget make git mysql-client libmysqlclient-dev python3-dev xvfb firefox redis-tools \
+    cron bsdmainutils libssl-dev gcc libsystemd-dev
 curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 echo "export HOSTNAME >> ~/.bashrc"
@@ -49,6 +51,17 @@ if [[ ! -f /usr/local/bin/configstore ]]; then
     wget https://github.com/motns/configstore/releases/download/v2.4.0/configstore-2.4.0-linux-amd64.tar.gz -P /tmp
     tar zxvf /tmp/configstore-2.4.0-linux-amd64.tar.gz -C /usr/local/bin
     rm -rf /tmp/configstore-2.4.0-linux-amd64.tar.gz
+fi
+
+if [[ ! -d /usr/include/ta-lib ]]; then
+  wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz -P /tmp
+  tar zxvf /tmp/ta-lib-0.4.0-src.tar.gz -C /tmp
+  cd /tmp/ta-lib
+  ./configure --prefix=/usr
+  make
+  make install
+  cd -
+  rm -rf /tmp/ta-lib
 fi
 
 cat > /etc/docker/daemon.json << EOF
