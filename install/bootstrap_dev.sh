@@ -43,7 +43,7 @@ eval "$(pyenv init -)"
 
 pyenv install 3.7.0
 pyenv global 3.7.0
-
+chmod o+w /opt/pyenv/shims /opt/pyenv/versions
 
 if [[ ! -f /usr/local/bin/configstore ]]; then
     wget https://github.com/motns/configstore/releases/download/v2.4.0/configstore-2.4.0-linux-amd64.tar.gz -P /tmp
@@ -87,5 +87,5 @@ docker volume create data
 mkdir -p /data/{mysql,config,graphs,report}
 
 # Install outside docker
-install/gc-install.sh
+pip install -r requirements.txt --src /tmp
 pip install pytest redis-dump-load gitpython setuptools==45.1.0
