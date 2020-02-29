@@ -103,6 +103,7 @@ mkdir -p /data/{mysql,config,graphs,report}
 install_dir=/srv/greencandle
 [[ ! -d $install_dir ]] && ln -s /home/travis/build/adiabuk/greencandle/ $install_dir
 cd $install_dir
-pip install --upgrade pip
+pip install pip==9.0.1
+pip install numpy==1.16.0
 python ./setup.py install
 pip install pytest redis-dump-load gitpython setuptools==45.1.0

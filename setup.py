@@ -33,7 +33,7 @@ def get_shell_scripts():
 def get_reqs(req):
     """get requirements and links from requirements.txt"""
     results = defaultdict(list)
-    requirements = pip._internal.req.parse_requirements(
+    requirements = pip.req.parse_requirements(
         'requirements.txt', session=pip.download.PipSession())
 
     for item in requirements:
