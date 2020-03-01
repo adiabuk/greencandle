@@ -16,19 +16,7 @@ if [ -f /.dockerenv ]; then
     pip install cython
     install_dir=/install
 else
-    echo "I'm living in real world!";
-    cp -rv config /opt
-    apt-get update
-    apt-get -y install python3 wget make git mysql-client libmysqlclient-dev \
-      python3-dev xvfb firefox redis-tools cron vim bsdmainutils libssl-dev gcc libsystemd-dev
-    update-alternatives --install /usr/bin/python python /usr/bin/python3 1
-    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-    python get-pip.py
-    rm -rf get-pip.py
-
-    pip install ipython cython
-    install_dir=/srv/greencandle
-    echo "set background=dark" | tee -a $HOME/.vimrc
+  echo "I am on a host machine"
 fi
 
 if [[ ! -f /usr/local/bin/gechodriver ]]; then
