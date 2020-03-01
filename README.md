@@ -11,6 +11,13 @@
 
 # Releases
 
+## 0.29
+* Upgrade all bootstraps to use Python 3.7.0
+* Upgrade requirements to match dependencies
+* Add local test framework and enforce running with git hooks
+* Use separate bootstrap scripts for dev/prod/docker
+* Test cleanup
+
 ## 0.28
 * Add local testing framework
 * Reduce number of connections to DB and Redis
