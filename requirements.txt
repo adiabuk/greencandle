@@ -16,7 +16,7 @@ plotly==3.10.0
 python_resize_image==1.1.11
 PyVirtualDisplay==0.2.1
 redis==2.10.6
-requests==2.20.0
+requests==2.22.0
 scipy==1.4.1
 selenium==3.8.1
 setproctitle==1.1.10
@@ -24,7 +24,7 @@ simplejson==3.13.2
 ta-lib==0.4.14
 str2bool==1.1
 openpyxl==2.6.3
-notify-run==0.0.12
+notify-run==0.0.13
 xlrd==1.2.0
 requests-unixsocket==0.2.0
 pylint==2.4.4
