@@ -33,4 +33,6 @@ while ! nc -z $redis 6379; do
   sleep 1;
 done
 
-run_in_docker $YEAR $STRATEGY $PAIR
+pair = $(echo "$PAIR" | tr '[:lower:]' '[:upper:]')
+
+run_in_docker $YEAR $STRATEGY $pair

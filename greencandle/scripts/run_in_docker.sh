@@ -1,20 +1,20 @@
 #!/usr/bin/env bash
 YEAR=$1
-strategy=$2
-pair=$3
-base_dir=/data/$strategy
+STRATEGY=$2
+PAIR=$3
+base_dir=/data/$STRATEGY
 
-if [[ -z $pair ]]; then
-   echo "Usage: $0 <YEAR> <strategy>"
+if [[ -z $PAIR ]]; then
+   echo "Usage: $0 <YEAR> <STRATEGY> <PAIR>"
   exit 1
 fi
 
 date=`date +"%Y-%m-%d"`
 
 mkdir -p ${base_dir}/${YEAR}
-echo $pair $date
-backend_test -d /data/altcoin_historical/${YEAR}/YEAR/ -s -i 4h -p $pair &> ${base_dir}/${YEAR}/${pair}_${date}.log
-create_graph -d1 -p $pair -i 4h -o ${basedir}/${YEAR} &>/dev/null
-report ${base_dir}/${YEAR}/${pair}_${date}.xlsx &>> ${base_dir}/${YEAR}/${pair}_${date}.log
-redis-dump --db=1 > ${base_dir}/${YEAR}/${pair}_${date}.rs
-aws s3 cp ${base_dir}/${YEAR}/${pair}_${date}.{rs,log,xlsx} s3://greencandle/${YEAR}/
+echo $PAIR $date
+backend_test -d /data/altcoin_historical/${YEAR}/YEAR/ -s -i 4h -p $PAIR &> ${base_dir}/${YEAR}/${PAIR}_${date}.log
+create_graph -d1 -p $PAIR -i 4h -o ${basedir}/${YEAR} &>/dev/null
+report ${base_dir}/${YEAR}/${PAIR}_${date}.xlsx &>> ${base_dir}/${YEAR}/${PAIR}_${date}.log
+redis-dump --db=1 > ${base_dir}/${YEAR}/${PAIR}_${date}.rs
+aws s3 cp ${base_dir}/${YEAR}/${PAIR}_${date}.{rs,log,xlsx} s3://greencandle/${YEAR}/
