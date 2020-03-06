@@ -2,8 +2,7 @@
 
 set -e
 
-if [[ -z $CONFIG_ENV ]]; then
-if [[ -z $CONFIG_ENV || -z $YEAR || -z $PAIR || -z $STRATEGY ]];
+if [[ -z $CONFIG_ENV || -z $YEAR || -z $PAIR || -z $STRATEGY ]]; then
   echo "CONFIG_ENV var not set, exiting..."
   exit 1
 fi
