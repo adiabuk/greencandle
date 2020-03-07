@@ -16,6 +16,14 @@ spec:
         ports:
         - containerPort: 3336
         image: amrox/gc-mysql
+        command: ["/bin/bash", "-c"]
+        args:
+          - |
+            /docker-entrypoint.sh mysqld &
+            CHILD_PID=$!
+            (while true; do echo "waiting"; if [[ -f "/tmp/pod/main-job-terminated" ]]; then kill $CHILD_PID; fi; sleep 1; done) &
+            wait $CHILD_PID
+            if [[ -f "/tmp/pod/main-job-terminated" ]]; then exit 0; fi
         env:
         - name: CONFIG_ENV
           value: test/4MA/k8s
@@ -23,6 +31,15 @@ spec:
           value: password
       - name: redis
         image: amrox/gc-redis
+        command: ["/bin/bash", "-c"]
+        args:
+          - |
+            redis-server &
+            CHILD_PID=$!
+            (while true; do if [[ -f "/tmp/pod/main-job-terminated" ]]; then kill $CHILD_PID; fi; sleep 1; done) &
+            wait $CHILD_PID
+            if [[ -f "/tmp/pod/main-job-terminated" ]]; then exit 0; fi
+
         ports:
         - containerPort: 6379
         env:
@@ -30,8 +47,16 @@ spec:
           value: test/4MA/k8s
       - name: greencandle
         image: amrox/greencandle
-        #command: ["sh", "-c", "echo Processing item apple && sleep 5"]
-        command: ["/docker-entrypoint-test.sh"]
+        volumeMounts:
+          - mountPath: /data
+            name: test-results
+          - mountPath: /tmp/pod
+            name: tmp-pod
+        command: ["/bin/bash", "-c"]
+        args:
+          - |
+            trap "touch /tmp/pod/main-job-terminated" EXIT
+            echo "HELLO";/docker-entrypoint-test.sh 2019 ethbtc 4ma
         env:
         - name: CONFIG_ENV
           value: test/4MA/k8s
@@ -41,5 +66,13 @@ spec:
           value: 4ma
         - name: PAIR
           value: ETHBTC
-
+      volumes:
+      - name: test-results
+        hostPath:
+          # directory location on host
+          path: /data
+          # this field is optional
+          type: Directory
+      - name: tmp-pod
+        emptyDir: {}
       restartPolicy: Never

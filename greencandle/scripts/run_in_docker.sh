@@ -13,7 +13,7 @@ date=`date +"%Y-%m-%d"`
 
 mkdir -p ${base_dir}/${YEAR}
 echo $PAIR $date
-backend_test -d /data/altcoin_historical/${YEAR}/YEAR/ -s -i 4h -p $PAIR &> ${base_dir}/${YEAR}/${PAIR}_${date}.log
+backend_test -d /data/altcoin_historical/${YEAR}/year/ -s -i 4h -p $PAIR &> ${base_dir}/${YEAR}/${PAIR}_${date}.log
 create_graph -d1 -p $PAIR -i 4h -o ${basedir}/${YEAR} &>/dev/null
 report ${base_dir}/${YEAR}/${PAIR}_${date}.xlsx &>> ${base_dir}/${YEAR}/${PAIR}_${date}.log
 redis-dump --db=1 > ${base_dir}/${YEAR}/${PAIR}_${date}.rs
