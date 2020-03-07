@@ -13,7 +13,7 @@ if [ -f /.dockerenv ]; then
     apt-get -y install cron netcat default-mysql-client bsdmainutils libssl-dev libsystemd-dev \
       xvfb xauth iceweasel --no-install-recommends
     apt-get clean; apt-get autoclean; rm -rf /var/lib/apt/lists/*
-    pip install cython
+    pip install cython redis-dump-load
     install_dir=/install
 else
   echo "I am on a host machine"
