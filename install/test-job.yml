@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ethbtc
+  labels:
+    jobgroup: jobexample
+spec:
+  template:
+    metadata:
+      name: jobexample
+      labels:
+        jobgroup: jobexample
+    spec:
+      containers:
+      - name: mysql
+        ports:
+        - containerPort: 3336
+        image: amrox/gc-mysql
+        env:
+        - name: CONFIG_ENV
+          value: test/4MA/k8s
+        - name: MYSQL_ROOT_PASSWORD
+          value: password
+      - name: redis
+        image: amrox/gc-redis
+        ports:
+        - containerPort: 6379
+        env:
+        - name: CONFIG_ENV
+          value: test/4MA/k8s
+        - name: YEAR
+          value: "2019"
+        - name: STRATEGY
+          value: 4ma
+        - name: PAIR
+          value: ETHBTC
+        - name: greencandle
+        image: amrox/greencandle
+        #command: ["sh", "-c", "echo Processing item apple && sleep 5"]
+        command: ["/docker-entrypoint-test.sh"]
+        env:
+        - name: CONFIG_ENV
+          value: test/4MA/k8s
+      restartPolicy: Never
