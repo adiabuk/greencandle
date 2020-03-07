@@ -3,15 +3,9 @@
 set -e
 
 if [[ -z $CONFIG_ENV || -z $YEAR || -z $PAIR || -z $STRATEGY ]]; then
-  echo "CONFIG_ENV var not set, exiting..."
+  echo "missing variables, exiting..."
   exit 1
 fi
-
-get_data()
-$YEAR
-$PAIR
-$STRATEGY
-
 
 if [[ ! -e /installed ]]; then
   configstore package process_templates --ignore-role --basedir /opt/config $CONFIG_ENV /opt/output
