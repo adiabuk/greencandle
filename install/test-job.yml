@@ -28,17 +28,18 @@ spec:
         env:
         - name: CONFIG_ENV
           value: test/4MA/k8s
-        - name: YEAR
-          value: "2019"
-        - name: STRATEGY
-          value: 4ma
-        - name: PAIR
-          value: ETHBTC
-        - name: greencandle
+      - name: greencandle
         image: amrox/greencandle
         #command: ["sh", "-c", "echo Processing item apple && sleep 5"]
         command: ["/docker-entrypoint-test.sh"]
         env:
         - name: CONFIG_ENV
           value: test/4MA/k8s
+        - name: YEAR
+          value: "2019"
+        - name: STRATEGY
+          value: 4ma
+        - name: PAIR
+          value: ETHBTC
+
       restartPolicy: Never
