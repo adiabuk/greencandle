@@ -16,14 +16,17 @@ spec:
         ports:
         - containerPort: 3336
         image: amrox/gc-mysql
+        volumeMounts:
+          - mountPath: /tmp/pod
+            name: tmp-pod
         command: ["/bin/bash", "-c"]
         args:
           - |
             /docker-entrypoint.sh mysqld &
             CHILD_PID=$!
-            (while true; do echo "waiting"; if [[ -f "/tmp/pod/main-job-terminated" ]]; then kill $CHILD_PID; fi; sleep 1; done) &
+            (while true; do echo "waiting"; if [[ -f "/tmp/pod/ethbtc-job-terminated" ]]; then kill $CHILD_PID; fi; sleep 1; done) &
             wait $CHILD_PID
-            if [[ -f "/tmp/pod/main-job-terminated" ]]; then exit 0; fi
+            if [[ -f "/tmp/pod/ethbtc-job-terminated" ]]; then exit 0; fi
         env:
         - name: CONFIG_ENV
           value: test/4MA/k8s
@@ -31,14 +34,18 @@ spec:
           value: password
       - name: redis
         image: amrox/gc-redis
+        volumeMounts:
+          - mountPath: /tmp/pod
+            name: tmp-pod
+
         command: ["/bin/bash", "-c"]
         args:
           - |
             redis-server &
             CHILD_PID=$!
-            (while true; do if [[ -f "/tmp/pod/main-job-terminated" ]]; then kill $CHILD_PID; fi; sleep 1; done) &
+            (while true; do if [[ -f "/tmp/pod/ethbtc-job-terminated" ]]; then kill $CHILD_PID; fi; sleep 1; done) &
             wait $CHILD_PID
-            if [[ -f "/tmp/pod/main-job-terminated" ]]; then exit 0; fi
+            if [[ -f "/tmp/pod/ethbtc-job-terminated" ]]; then echo "DONE";exit 0; fi
 
         ports:
         - containerPort: 6379
@@ -55,7 +62,7 @@ spec:
         command: ["/bin/bash", "-c"]
         args:
           - |
-            trap "touch /tmp/pod/main-job-terminated" EXIT
+            trap "touch /tmp/pod/ethbtc-job-terminated" EXIT
             echo "HELLO";/docker-entrypoint-test.sh 2019 ethbtc 4ma
         env:
         - name: CONFIG_ENV
@@ -74,5 +81,6 @@ spec:
           # this field is optional
           type: Directory
       - name: tmp-pod
-        emptyDir: {}
+        hostPath:
+          path: /tmp/pod
       restartPolicy: Never
