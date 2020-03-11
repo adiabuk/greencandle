@@ -1,10 +1,11 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: ethbtc
+  name: $ITEM
   labels:
     jobgroup: jobexample
 spec:
+  ttlSecondsAfterFinished: 0
   template:
     metadata:
       name: jobexample
@@ -24,9 +25,9 @@ spec:
           - |
             /docker-entrypoint.sh mysqld &
             CHILD_PID=$!
-            (while true; do echo "waiting"; if [[ -f "/tmp/pod/ethbtc-job-terminated" ]]; then kill $CHILD_PID; fi; sleep 1; done) &
+            (while true; do echo "waiting"; if [[ -f "/tmp/pod/$ITEM-job-terminated" ]]; then kill $CHILD_PID; fi; sleep 1; done) &
             wait $CHILD_PID
-            if [[ -f "/tmp/pod/ethbtc-job-terminated" ]]; then exit 0; fi
+            if [[ -f "/tmp/pod/$ITEM-job-terminated" ]]; then exit 0; fi
         env:
         - name: CONFIG_ENV
           value: test/4MA/k8s
@@ -43,9 +44,9 @@ spec:
           - |
             redis-server &
             CHILD_PID=$!
-            (while true; do if [[ -f "/tmp/pod/ethbtc-job-terminated" ]]; then kill $CHILD_PID; fi; sleep 1; done) &
+            (while true; do if [[ -f "/tmp/pod/$ITEM-job-terminated" ]]; then kill $CHILD_PID; fi; sleep 1; done) &
             wait $CHILD_PID
-            if [[ -f "/tmp/pod/ethbtc-job-terminated" ]]; then echo "DONE";exit 0; fi
+            if [[ -f "/tmp/pod/$ITEM-job-terminated" ]]; then echo "DONE";exit 0; fi
 
         ports:
         - containerPort: 6379
@@ -62,8 +63,8 @@ spec:
         command: ["/bin/bash", "-c"]
         args:
           - |
-            trap "touch /tmp/pod/ethbtc-job-terminated" EXIT
-            echo "HELLO";/docker-entrypoint-test.sh 2019 ethbtc 4ma
+            trap "touch /tmp/pod/$ITEM-job-terminated" EXIT
+            echo "HELLO";/docker-entrypoint-test.sh 2019 $ITEM 4ma
         env:
         - name: CONFIG_ENV
           value: test/4MA/k8s
@@ -72,7 +73,7 @@ spec:
         - name: STRATEGY
           value: 4ma
         - name: PAIR
-          value: ETHBTC
+          value: $ITEM
       volumes:
       - name: test-results
         hostPath:
