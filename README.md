@@ -11,6 +11,12 @@
 
 # Releases
 
+## 0.30
+* Create Kubernetes Template for running test runs at scale
+* Make docker containers k8s-friendly
+* Script for collecting all associated data for test run
+* New test configstore env for kubernetes
+
 ## 0.29
 * Upgrade all bootstraps to use Python 3.7.0
 * Upgrade requirements to match dependencies
