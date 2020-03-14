@@ -3,14 +3,14 @@ kind: Job
 metadata:
   name: $ITEM
   labels:
-    jobgroup: jobexample
+    jobgroup: test-run
 spec:
   ttlSecondsAfterFinished: 0
   template:
     metadata:
-      name: jobexample
+      name: test-run
       labels:
-        jobgroup: jobexample
+        jobgroup: test-run
     spec:
       containers:
       - name: mysql
@@ -25,7 +25,7 @@ spec:
           - |
             /docker-entrypoint.sh mysqld &
             CHILD_PID=$!
-            (while true; do echo "waiting"; if [[ -f "/tmp/pod/$ITEM-job-terminated" ]]; then kill $CHILD_PID; fi; sleep 1; done) &
+            (while true; do if [[ -f "/tmp/pod/$ITEM-job-terminated" ]]; then kill $CHILD_PID; fi; sleep 1; done) &
             wait $CHILD_PID
             if [[ -f "/tmp/pod/$ITEM-job-terminated" ]]; then exit 0; fi
         env:
@@ -64,7 +64,7 @@ spec:
         args:
           - |
             trap "touch /tmp/pod/$ITEM-job-terminated" EXIT
-            echo "HELLO";/docker-entrypoint-test.sh 2019 $ITEM 4ma
+            /docker-entrypoint-test.sh 2019 $ITEM 4ma
         env:
         - name: CONFIG_ENV
           value: test/4MA/k8s
