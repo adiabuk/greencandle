@@ -30,7 +30,7 @@ spec:
             if [[ -f "/tmp/pod/$ITEM-job-terminated" ]]; then exit 0; fi
         env:
         - name: CONFIG_ENV
-          value: test/4MA/k8s
+          value: test/4MA
         - name: MYSQL_ROOT_PASSWORD
           value: password
       - name: redis

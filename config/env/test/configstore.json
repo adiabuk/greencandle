@@ -81,7 +81,7 @@
       "is_secret": false
     },
     "db_host": {
-      "value": "mysql",
+      "value": "127.0.0.1",
       "is_binary": false,
       "is_secret": false
     },
@@ -226,7 +226,7 @@
       "is_secret": false
     },
     "redis_host": {
-      "value": "redis",
+      "value": "127.0.0.1",
       "is_binary": false,
       "is_secret": false
     },

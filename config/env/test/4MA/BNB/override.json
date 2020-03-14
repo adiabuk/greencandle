@@ -1,3 +1,5 @@
 {
-  "name": "4ma_bnb"
+  "db_host": "mysql",
+  "name": "4ma_bnb",
+  "redis_host": "redis"
 }

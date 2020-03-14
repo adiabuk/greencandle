@@ -1,4 +1,6 @@
 {
+  "db_host": "mysql",
   "name": "4ma_usdt",
-  "pairs": "BNBUSDT ETHUSDT"
+  "pairs": "BNBUSDT ETHUSDT",
+  "redis_host": "redis"
 }

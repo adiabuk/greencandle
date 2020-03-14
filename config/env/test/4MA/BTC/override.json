@@ -1,4 +1,6 @@
 {
+  "db_host": "mysql",
   "name": "4ma_btc",
-  "pairs": "BNBBTC BNTBTC EOSBTC"
+  "pairs": "BNBBTC BNTBTC EOSBTC",
+  "redis_host": "redis"
 }

@@ -1,5 +1,7 @@
 {
+  "db_host": "mysql",
   "name": "2ma-usdt",
   "pairs": "BNBUSDT ETHUSDT MATICUSDT",
+  "redis_host": "redis",
   "stop_loss_perc": "1"
 }
