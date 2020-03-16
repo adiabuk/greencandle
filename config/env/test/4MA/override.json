@@ -9,7 +9,6 @@
   "indicators": "get_moving_averages;EMA;8 get_moving_averages;EMA;13 get_moving_averages;EMA;21 get_moving_averages;EMA;55",
   "interval": "4h",
   "max_trades": "3",
-  "pairs": "",
   "push_title": "prod_4MA",
   "rate_indicator": "EMA_8",
   "redis_expiry_seconds": "1036800",
