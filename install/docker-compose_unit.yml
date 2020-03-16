@@ -18,7 +18,7 @@ services:
   cron:
     container_name: cron
     environment:
-      - CONFIG_ENV=test/cron
+      - CONFIG_ENV=unit/cron
       - HOST=$HOSTNAME
     hostname: cron
     image: greencandle
@@ -42,7 +42,7 @@ services:
   api:
     container_name: api
     environment:
-      - CONFIG_ENV=test
+      - CONFIG_ENV=unit
       - HOST=$HOSTNAME
     hostname: api
     image: greencandle
@@ -75,7 +75,7 @@ services:
        timeout: 1s
        retries: 5
      environment:
-       - CONFIG_ENV=test
+       - CONFIG_ENV=unit
        - HOST=$HOSTNAME
      ports:
        - 7777:7777
@@ -139,7 +139,7 @@ services:
       - 3306:3306
     environment:
       - MYSQL_ROOT_PASSWORD=password
-      - CONFIG_ENV=test
+      - CONFIG_ENV=unit
     restart: on-failure
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
