@@ -224,7 +224,7 @@ def prod_initial(interval, test=False):
     prices_trunk = {}
     main_pairs = config.main.pairs.split()
     dbase = Mysql(test=test, interval=interval)
-    additional_pairs = dbase.get_trades()
+    additional_pairs = dbase.get_trades() or []
     del dbase
     # get unique list of pairs in config,
     # and those currently in an active trade
