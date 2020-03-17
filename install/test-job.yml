@@ -64,7 +64,7 @@ spec:
         args:
           - |
             trap "touch /tmp/pod/$ITEM-job-terminated" EXIT
-            /docker-entrypoint-test.sh 2019 $ITEM 4ma
+            /usr/bin/timeout 3600 /docker-entrypoint-test.sh 2019 $ITEM 4ma
         env:
         - name: CONFIG_ENV
           value: test/4MA/k8s
