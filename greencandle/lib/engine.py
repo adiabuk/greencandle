@@ -305,6 +305,7 @@ class Engine(dict):
             close = klines[-1]
         except Exception as exc:
             LOGGER.critical("FAILED bbands: %s ", str(exc))
+            return None
         try:
             upper, middle, lower = \
                     talib.BBANDS(close * 100000, timeperiod=int(timeframe),
@@ -421,10 +422,12 @@ class Engine(dict):
             close = klines[-1] # numpy.ndarray
         except Exception as exc:
             LOGGER.critical("FAILED moving averages: %s ", str(exc))
+            return None
         try:
             result = getattr(talib, func)(close, int(timeperiod))[-1]
         except Exception as exc:
             LOGGER.critical("Overall Exception getting moving averages: %s", exc)
+            return None
 
         scheme = {}
         result = None if math.isnan(result) else format(float(result), ".20f")
@@ -485,7 +488,7 @@ class Engine(dict):
         except Exception as error:
             traceback.print_exc()
             LOGGER.critical("failed getting oscillators: %s", str(error))
-            return
+            return None
 
         result = fastk[-1]
         try:
