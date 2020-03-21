@@ -92,7 +92,7 @@ def make_docker_case(container, checks=None):
             """Start Instance"""
 
             self.logger.info("Starting instance %s", container)
-            command = "docker-compose -f install/docker-compose_local.yml up -d " + container
+            command = "docker-compose -f install/docker-compose_unit.yml up -d " + container
             return_code, out, err = self.run_subprocess(command)
             if err:
                 self.logger.error(err)
