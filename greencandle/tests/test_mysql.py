@@ -24,8 +24,8 @@ class TestMysql(OrderedTest):
         directory
         """
         LOGGER.info("Setting up environment")
-        for container in ['mysql-local', 'redis-local']:
-            command = "docker-compose -f install/docker-compose_local.yml up -d " + container
+        for container in ['mysql-unit', 'redis-unit']:
+            command = "docker-compose -f install/docker-compose_unit.yml up -d " + container
         time.sleep(6)
         self.dbase = Mysql(test=True, interval="1h")
 
