@@ -15,6 +15,11 @@
       "is_binary": false,
       "is_secret": false
     },
+    "buy_rul1": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
     "buy_rule1": {
       "value": "results.current.EMA_8 \u003e results.current.EMA_13 and results.current.EMA_13 \u003e results.current.EMA_21 and results.current.EMA_21 \u003e results.current.EMA_34 and results.current.EMA_34 \u003e results.current.EMA_55 and results.current.RSI_48 \u003e 20 and results.current.RSI_48 \u003c 73 and results.current.EMA_200 \u003c close",
       "is_binary": false,
@@ -136,7 +141,7 @@
       "is_secret": false
     },
     "logging_level": {
-      "value": "50",
+      "value": "10",
       "is_binary": false,
       "is_secret": false
     },
@@ -306,12 +311,12 @@
       "is_secret": false
     },
     "trailing_stop_loss": {
-      "value": "True",
+      "value": "0",
       "is_binary": false,
       "is_secret": false
     },
     "trailing_stop_loss_perc": {
-      "value": "0.1",
+      "value": "",
       "is_binary": false,
       "is_secret": false
     },
