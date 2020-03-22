@@ -74,9 +74,13 @@ class Redis():
         self.logger.debug("Adding to Redis: %s %s %s", interval, list(data.keys()), now)
         key = "{0}:{1}:{2}".format(pair, interval, now)
         expiry = 600 if self.test else int(config.redis.redis_expiry_seconds)
-        response = self.conn.hmset(key, data)
+
+        for k, v in data.items():
+            response = self.conn.hset(key, k,v)
+
         if self.expire:
             self.conn.expire(key, expiry)
+
         return response
 
     def put_high_price(self, pair, interval, price):
@@ -415,3 +419,4 @@ class Redis():
         del dbase
         return (result, current_time, current_price, {'sell':winning_sell,
                                                       'buy': winning_buy})
+
