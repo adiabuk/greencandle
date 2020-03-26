@@ -7,6 +7,8 @@ if [[ -z $CONFIG_ENV ]]; then
   exit 1
 fi
 
+source ~/.bashrc
+
 if [[ ! -e /installed ]]; then
   configstore package process_templates --ignore-role --basedir /opt/config $CONFIG_ENV /opt/output
   cp /opt/output/greencandle.ini /etc/greencandle.ini || true

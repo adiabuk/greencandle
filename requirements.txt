@@ -15,7 +15,7 @@ Pillow==6.2.0
 plotly==3.10.0
 python_resize_image==1.1.11
 PyVirtualDisplay==0.2.1
-redis==2.10.6
+redis==3.4.1
 requests==2.22.0
 scipy==1.4.1
 selenium==3.8.1
