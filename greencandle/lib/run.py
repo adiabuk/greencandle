@@ -272,14 +272,13 @@ def prod_loop(interval, test):
             prices_trunk[key] = val
     dataframes = get_dataframes(pairs, interval=interval)
 
-    engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval)
+    redis = Redis(interval=interval, test=test)
+    engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, redis=redis)
     engine.get_data(localconfig=main_indicators, first_run=True)
     engine.get_data(localconfig=main_indicators)
-    redis = Redis(interval=interval, test=test)
     buys = []
     sells = []
     for pair in pairs:
-        ########TEST stategy############
         result, current_time, current_price, _ = redis.get_action(pair=pair, interval=interval)
         LOGGER.info('In Strategy %s', result)
         if 'SELL' in result or 'BUY' in result:
@@ -291,7 +290,6 @@ def prod_loop(interval, test):
             scheme['data'] = result
             scheme["event"] = "trigger"
             engine.add_scheme(scheme)
-        ################################
 
         if result == "BUY":
             LOGGER.debug("Items to buy")

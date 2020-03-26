@@ -175,7 +175,6 @@ class Engine(dict):
                                          "current_price": format(float(current_price), ".20f"),
                                          "date": close_time,
                                          }}
-
                 self.redis.redis_conn(pair, self.interval, data, close_time)
 
             except Exception as exc:
@@ -235,7 +234,6 @@ class Engine(dict):
         scheme['data'] = zlib.compress(pickle.dumps(self.dataframes[pair].iloc[location]))
         scheme["event"] = "ohlc"
 
-        #self.add_scheme(scheme)
         self.schemes.append(scheme)
         if first_run:
             for seq in range(int(config.main.no_of_klines) -1):
@@ -244,7 +242,9 @@ class Engine(dict):
                 scheme["event"] = "ohlc"
                 scheme["close_time"] = str(self.dataframes[pair].iloc[seq]["closeTime"])
                 self.schemes.append(scheme)
-                #self.add_scheme(scheme)
+
+                # reset for next loop
+                scheme = {"symbol": pair, "event": "ohlc"}
 
     @get_exceptions
     def get_sup_res(self, pair, dataframe, index=None, localconfig=None):
@@ -287,8 +287,12 @@ class Engine(dict):
             scheme["data"] = str(support[-1])
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
-        scheme["close_time"] = str(self.dataframes[pair].iloc[index or -1]["closeTime"])
-        #self.add_scheme(scheme)
+
+        if not index and self.test:
+            index = -1
+        elif not index and not self.test:
+            index = -2
+        scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
         self.schemes.append(scheme)
         LOGGER.debug("Done getting Support & resistance")
         return None
@@ -328,10 +332,14 @@ class Engine(dict):
             scheme["data"] = results[func]
             scheme["symbol"] = pair
             scheme["event"] = "{0}_{1}".format(func, timeframe)
-            scheme["close_time"] = str(self.dataframes[pair].iloc[index or -1]["closeTime"])
+
+            if not index and self.test:
+                index = -1
+            elif not index and not self.test:
+                index = -2
+            scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
             self.schemes.append(scheme)
-            #self.add_scheme(scheme)
 
         except KeyError as exc:
             LOGGER.critical("KEY FAILURE in bollinger bands: %s ", str(exc))
@@ -363,10 +371,14 @@ class Engine(dict):
         scheme["data"] = df_list[-1]
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
-        scheme["close_time"] = str(self.dataframes[pair].iloc[index or -1]["closeTime"])
+
+        if not index and self.test:
+            index = -1
+        elif not index and not self.test:
+            index = -2
+        scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
         self.schemes.append(scheme)
-        #self.add_scheme(scheme)
         LOGGER.debug("Done getting RSI")
 
     @get_exceptions
@@ -392,10 +404,14 @@ class Engine(dict):
             scheme["data"] = result
             scheme["symbol"] = pair
             scheme["event"] = func+"_"+str(timeperiod)
-            scheme["close_time"] = str(self.dataframes[pair].iloc[index or -1]["closeTime"])
+
+            if not index and self.test:
+                index = -1
+            elif not index and not self.test:
+                index = -2
+            scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
             self.schemes.append(scheme)
-            #self.add_scheme(scheme)
 
         except KeyError as exc:
             LOGGER.critical("KEY FAILURE in moving averages: %s ", str(exc))
@@ -435,10 +451,13 @@ class Engine(dict):
             scheme["data"] = result
             scheme["symbol"] = pair
             scheme["event"] = func + "_" + str(timeperiod)
-            scheme["close_time"] = str(self.dataframes[pair].iloc[index or -1]["closeTime"])
+            if not index and self.test:
+                index = -1
+            elif not index and not self.test:
+                index = -2
+            scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
             self.schemes.append(scheme)
-            #self.add_scheme(scheme)
 
         except KeyError as exc:
             LOGGER.critical("KEY FAILURE in moving averages: %s ", str(exc))
@@ -495,10 +514,14 @@ class Engine(dict):
             scheme["data"] = result
             scheme["symbol"] = pair
             scheme["event"] = '{}_{}'.format(func, timeperiod)
-            scheme["close_time"] = str(self.dataframes[pair].iloc[index or -1]["closeTime"])
+
+            if not index and self.test:
+                index = -1
+            elif not index and not self.test:
+                index = -2
+            scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
             self.schemes.append(scheme)
-            #self.add_scheme(scheme)
 
         except KeyError as error:
             LOGGER.critical("Key failure while getting oscillators: %s", str(error))
@@ -536,10 +559,14 @@ class Engine(dict):
         scheme["data"] = result   # convert from array to list
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
-        scheme["close_time"] = str(self.dataframes[pair].iloc[index or -1]["closeTime"])
+
+        if not index and self.test:
+            index = -1
+        elif not index and not self.test:
+            index = -2
+        scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
         self.schemes.append(scheme)
-        #self.add_scheme(scheme)
 
         LOGGER.debug("Done getting Indicators")
 
@@ -570,8 +597,12 @@ class Engine(dict):
         scheme["data"] = self.get_supertrend_direction(df_list[-1])[0]
         scheme["symbol"] = pair
         scheme["event"] = "Supertrend_{0},{1}".format(timeframe, multiplier)
-        scheme["close_time"] = str(self.dataframes[pair].iloc[index or -1]["closeTime"])
+
+        if not index and self.test:
+            index = -1
+        elif not index and not self.test:
+            index = -2
+        scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
         self.schemes.append(scheme)
-        #self.add_scheme(scheme)
         LOGGER.debug("done getting supertrend")
