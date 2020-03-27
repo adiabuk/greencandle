@@ -16,9 +16,9 @@
   "sell_rule2": "low \u003c results.current.EMA_69",
   "sell_rule3": "",
   "sell_rule4": "",
-  "stop_loss_perc": "1",
+  "stop_loss_perc": "20",
   "take_profit": "False",
   "take_profit_perc": "30",
-  "trailing_stop_loss": "true",
+  "trailing_stop_loss": "false",
   "trailing_stop_loss_perc": "5"
 }
