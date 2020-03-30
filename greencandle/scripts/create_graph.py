@@ -29,13 +29,12 @@ def main():
     if args.all_pairs:
         pairs = config.main.pairs.split()
         for pair in pairs:
-            graph = Graph(test=args, pair=pair, db=args.db, interval=args.interval)
+            graph = Graph(test=args.test, pair=pair, db=args.db, interval=args.interval)
             graph.get_data()
             graph.create_graph(args.output_dir)
             if args.thumbnails:
                 graph.get_screenshot()
                 graph.resize_screenshot()
-
 
     else:
         graph = Graph(test=args, pair=args.pair, db=args.db, interval=args.interval)

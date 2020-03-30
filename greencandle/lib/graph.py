@@ -5,7 +5,6 @@
 import ast
 import time
 import datetime
-import sys
 import pickle
 import zlib
 from collections import defaultdict
@@ -87,7 +86,7 @@ class Graph():
             if name == 'ohlc':
                 if value.empty:  # empty dataframe:
                     print('Unable to find data for {0}, exiting...'.format(name))
-                    sys.exit(2)
+                    return
                 value["time"] = pandas.to_datetime(value["openTime"], unit="ms")
                 item = go.Candlestick(x=value.time,
                                       open=value.open,
