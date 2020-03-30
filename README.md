@@ -11,6 +11,13 @@
 
 # Releases
 
+## 0.31
+* Improve efficiency for Redis data
+* Fix bug with non-aligned epoch times
+* Fix missing data in graphs
+* Add mysql dump to test runs
+* Improved testing template
+
 ## 0.30
 * Create Kubernetes Template for running test runs at scale
 * Make docker containers k8s-friendly
