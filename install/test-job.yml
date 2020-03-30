@@ -1,11 +1,11 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: $ITEM
+  name: $ITEM-$NAME-$YEAR
   labels:
     jobgroup: test-run
 spec:
-  ttlSecondsAfterFinished: 0
+  #ttlSecondsAfterFinished: 0
   template:
     metadata:
       name: test-run
@@ -20,17 +20,18 @@ spec:
         volumeMounts:
           - mountPath: /tmp/pod
             name: tmp-pod
+            readOnly: true
         command: ["/bin/bash", "-c"]
         args:
           - |
             /docker-entrypoint.sh mysqld &
             CHILD_PID=$!
-            (while true; do if [[ -f "/tmp/pod/$ITEM-job-terminated" ]]; then kill $CHILD_PID; fi; sleep 1; done) &
+            (while true; do echo "waiting"; if [[ -f "/tmp/pod/$ITEM-job-terminated" ]]; then kill $CHILD_PID; fi; sleep 1; done) &
             wait $CHILD_PID
             if [[ -f "/tmp/pod/$ITEM-job-terminated" ]]; then exit 0; fi
         env:
         - name: CONFIG_ENV
-          value: test/4MA
+          value: test/$ENV
         - name: MYSQL_ROOT_PASSWORD
           value: password
       - name: redis
@@ -38,7 +39,7 @@ spec:
         volumeMounts:
           - mountPath: /tmp/pod
             name: tmp-pod
-
+            readOnly: true
         command: ["/bin/bash", "-c"]
         args:
           - |
@@ -52,7 +53,7 @@ spec:
         - containerPort: 6379
         env:
         - name: CONFIG_ENV
-          value: test/4MA/k8s
+          value: test/$ENV
       - name: greencandle
         image: amrox/greencandle
         volumeMounts:
@@ -64,14 +65,14 @@ spec:
         args:
           - |
             trap "touch /tmp/pod/$ITEM-job-terminated" EXIT
-            /usr/bin/timeout 3600 /docker-entrypoint-test.sh 2019 $ITEM 4ma
+            /usr/bin/timeout 3600 /docker-entrypoint-test.sh $YEAR $ITEM $STRATEGY
         env:
         - name: CONFIG_ENV
-          value: test/4MA/k8s
+          value: test/$ENV
         - name: YEAR
-          value: "2019"
+          value: "$YEAR"
         - name: STRATEGY
-          value: 4ma
+          value: $STRATEGY
         - name: PAIR
           value: $ITEM
       volumes:
@@ -82,6 +83,5 @@ spec:
           # this field is optional
           type: Directory
       - name: tmp-pod
-        hostPath:
-          path: /tmp/pod
+        emptyDir: {}
       restartPolicy: Never
