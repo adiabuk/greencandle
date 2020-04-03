@@ -85,7 +85,7 @@ class Graph():
             col = 1
             if name == 'ohlc':
                 if value.empty:  # empty dataframe:
-                    print('Unable to find data for {0}, exiting...'.format(name))
+                    print('Unable to find ohlc data for {0}, passing...'.format(self.pair))
                     return
                 value["time"] = pandas.to_datetime(value["openTime"], unit="ms")
                 item = go.Candlestick(x=value.time,
