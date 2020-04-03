@@ -142,6 +142,58 @@ services:
     links:
       - mysql:mysql
 
+  2ma-eth:
+    container_name: 2ma-eth
+    hostname: 2ma-btc
+    image: amrox/greencandle:${TAG}
+    entrypoint: /docker-entrypoint.sh backend --test
+    logging:
+      driver: journald
+    links:
+      - mysql
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      - CONFIG_ENV=prod/2MA/ETH
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - ./test:/tmp
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  2ma-usdt:
+    container_name: 2ma-usdt
+    hostname: 2ma-usdt
+    image: amrox/greencandle:${TAG}
+    entrypoint: /docker-entrypoint.sh backend --test
+    logging:
+      driver: journald
+    links:
+      - mysql
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      - CONFIG_ENV=prod/2MA/USDT
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - ./test:/tmp
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
   2ma-btc:
     container_name: 2ma-btc
     hostname: 2ma-btc
@@ -156,6 +208,84 @@ services:
       - redis
     environment:
       - CONFIG_ENV=prod/2MA/BTC
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - ./test:/tmp
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  2ma-bnb:
+    container_name: 2ma-bnb
+    hostname: 2ma-bnb
+    image: amrox/greencandle:${TAG}
+    entrypoint: /docker-entrypoint.sh backend --test
+    logging:
+      driver: journald
+    links:
+      - mysql
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      - CONFIG_ENV=prod/2MA/BNB
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - ./test:/tmp
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  4ma-usdt:
+    container_name: 4ma-usdt
+    hostname: 4ma-usdt
+    image: amrox/greencandle:${TAG}
+    entrypoint: /docker-entrypoint.sh backend --test
+    logging:
+      driver: journald
+    links:
+      - mysql
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      - CONFIG_ENV=prod/4MA/USDT
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - ./test:/tmp
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  4ma-eth:
+    container_name: 4ma-eth
+    hostname: 4ma-btc
+    image: amrox/greencandle:${TAG}
+    entrypoint: /docker-entrypoint.sh backend --test
+    logging:
+      driver: journald
+    links:
+      - mysql
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      - CONFIG_ENV=prod/4MA/ETH
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -193,10 +323,9 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
-
-  5ma-btc:
-    container_name: 5ma-btc
-    hostname: 5ma-btc
+  4ma-bnb:
+    container_name: 4ma-bnb
+    hostname: 4ma-bnb
     image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
     logging:
@@ -207,7 +336,7 @@ services:
       - mysql
       - redis
     environment:
-      - CONFIG_ENV=prod/5MA/BTC
+      - CONFIG_ENV=prod/4MA/BNB
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
