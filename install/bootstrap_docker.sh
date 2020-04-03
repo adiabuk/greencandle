@@ -39,7 +39,8 @@ if [[ ! -d /usr/include/ta-lib ]]; then
     make
     make install
     cd -
-    rm -rf /tmp/ta-lib
+    rm -rf /tmp/ta-lib /tmp/ta-lib-0.4.0-src.tar.gz
+
 fi
 
 pip install pip==9.0.1 numpy==1.16.0
