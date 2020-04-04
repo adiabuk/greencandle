@@ -6,7 +6,7 @@
   "buy_rule5": "",
   "buy_rule6": "",
   "buy_rule7": "",
-  "indicators": "get_moving_averages;EMA;8 get_moving_averages;EMA;13 get_moving_averages;EMA;21 get_moving_averages;EMA;55",
+  "indicators": "get_moving_averages;EMA;8 get_moving_averages;EMA;13 get_moving_averages;EMA;21 get_moving_averages;EMA;55 get_moving_averages;EMA;100",
   "interval": "4h",
   "max_trades": "3",
   "push_title": "prod_5MA",
@@ -16,8 +16,9 @@
   "sell_rule2": "",
   "sell_rule3": "",
   "sell_rule4": "",
-  "stop_loss_perc": "3",
+  "stop_loss_perc": "20",
+  "take_profit": "false",
   "take_profit_perc": "20",
-  "trailing_stop_loss": "False",
+  "trailing_stop_loss": "false",
   "trailing_stop_loss_perc": "0"
 }
