@@ -2,7 +2,7 @@
 
 set -e
 
-if [[ -z $CONFIG_ENV || -z $YEAR || -z $PAIR || -z $STRATEGY ]]; then
+if [[ -z $CONFIG_ENV || -z $YEAR || -z $PAIR || -z $STRATEGY || -z $INTERVAL ]]; then
   echo "missing variables, exiting..."
   exit 1
 fi
@@ -28,4 +28,4 @@ done
 
 pair=$(echo "$PAIR" | tr '[:lower:]' '[:upper:]')
 
-run_in_docker.sh $YEAR $STRATEGY $pair
+run_in_docker.sh $YEAR $STRATEGY $pair $INTERVAL

@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: $ITEM-$NAME-$YEAR
+  name: $ITEM-$STRATEGY-$YEAR
   labels:
     jobgroup: test-run
 spec:
@@ -68,7 +68,7 @@ spec:
         args:
           - |
             trap "touch /tmp/pod/$ITEM-job-terminated" EXIT
-            /usr/bin/timeout 3600 /docker-entrypoint-test.sh $YEAR $ITEM $STRATEGY
+            /usr/bin/timeout 3600 /docker-entrypoint-test.sh $YEAR $ITEM $STRATEGY $INTERVAL
         env:
         - name: CONFIG_ENV
           value: test/$ENV
