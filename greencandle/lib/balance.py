@@ -1,4 +1,4 @@
-#pylint: disable=no-member,
+#pylint: disable=no-member,unused-import
 
 """Get account value from binance and coinbase """
 
@@ -6,7 +6,7 @@ from __future__ import print_function
 import json
 from requests.exceptions import ReadTimeout
 from . import config
-from .binance_accounts import get_binance_values
+from .binance_accounts import get_binance_values, get_binance_margin
 from .coinbase_accounts import get_coinbase_values
 from .mysql import Mysql
 from .logger import get_logger
@@ -21,7 +21,6 @@ class Balance(dict):
         self.dbase = Mysql(test=test, interval='1h')
         super(Balance, self).__init__(*args, **kwargs)
 
-
     def __del__(self):
         del self.dbase
 
@@ -32,7 +31,7 @@ class Balance(dict):
         self.dbase.insert_balance(prices)
 
     @staticmethod
-    def get_balance(coinbase=False):
+    def get_balance(coinbase=False, margin=False):
         """
         get dict of all balances
 
@@ -40,7 +39,9 @@ class Balance(dict):
             None
 
         Returns:
-            dict of balances for each coin owned in binance and coinbase
+            dict of balances for each coin owned in binance (spot/margin)
+            and coinbase
+
             Example structure is as follows:
             {
         "binance": {
@@ -80,16 +81,17 @@ class Balance(dict):
         """
 
         binance = get_binance_values()
+        combined_dict = binance.copy()   # start with binance"s keys and values
         if coinbase:
             try:
                 coinbase = get_coinbase_values()
             except ReadTimeout:
                 LOGGER.critical("Unable to get coinbase balance")
                 coinbase = {}
-            combined_dict = binance.copy()   # start with binance"s keys and values
             combined_dict.update(coinbase)   # modifies z with y"s keys and values & returns None
-        else:
-            combined_dict = binance
+        if margin:
+            margin = get_binance_margin()
+            combined_dict.update(margin)
 
         return combined_dict
 
