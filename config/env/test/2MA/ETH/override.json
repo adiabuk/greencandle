@@ -1,7 +1,0 @@
-{
-  "db_host": "mysql",
-  "name": "2ma-eth",
-  "pairs": "ETCETH BNBETH BQXETH ENJETH EOSETH GXSETH LINKETH QTUMETH TRXETH XZCETH ZRXETH",
-  "redis_host": "redis",
-  "stop_loss_perc": "1"
-}

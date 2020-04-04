@@ -1,5 +1,0 @@
-{
-  "db_host": "mysql",
-  "name": "5ma_bnb",
-  "redis_host": "redis"
-}

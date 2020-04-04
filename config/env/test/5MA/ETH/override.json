@@ -1,6 +1,0 @@
-{
-  "db_host": "mysql",
-  "name": "5ma_eth",
-  "pairs": "ETCETH BNBETH BQXETH ENJETH EOSETH GXSETH LINKETH QTUMETH TRXETH XZCETH ZRXETH",
-  "redis_host": "redis"
-}
