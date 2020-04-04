@@ -17,6 +17,7 @@ spec:
         ports:
         - containerPort: 3336
         image: amrox/gc-mysql
+        imagePullPolicy: Always
         volumeMounts:
           - mountPath: /tmp/pod
             name: tmp-pod
@@ -36,6 +37,7 @@ spec:
           value: password
       - name: redis
         image: amrox/gc-redis
+        imagePullPolicy: Always
         volumeMounts:
           - mountPath: /tmp/pod
             name: tmp-pod
@@ -56,6 +58,7 @@ spec:
           value: test/$ENV
       - name: greencandle
         image: amrox/greencandle
+        imagePullPolicy: Always
         volumeMounts:
           - mountPath: /data
             name: test-results
