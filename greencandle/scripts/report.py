@@ -20,12 +20,16 @@ def main():
         print("Generate Excel report from database entries")
         sys.exit(0)
 
+    if len(sys.argv) != 3:
+        sys.stderr.write("Usage: report <interval> <filename>\n")
+        sys.exit(1)
 
-    filename = sys.argv[1]
+    interval = sys.argv[1]
+    filename = sys.argv[2]
     workbook = openpyxl.Workbook()
     workbook.remove(workbook.get_sheet_by_name('Sheet'))
 
-    mysql = Mysql(test=True, interval='4h')
+    mysql = Mysql(test=True, interval=interval)
     queries = {"weekly": "select perc, pair, week(sell_time) as week from profit",
                "monthly": "select perc, pair, month(sell_time) as month from profit",
                "average-day": "select pair, hour(timediff(sell_time,buy_time)) as hours from \
