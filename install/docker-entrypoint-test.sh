@@ -28,4 +28,4 @@ done
 
 pair=$(echo "$PAIR" | tr '[:lower:]' '[:upper:]')
 
-run_in_docker.sh $YEAR $STRATEGY $pair $INTERVAL
+bash -x run_in_docker.sh $YEAR $STRATEGY $pair $INTERVAL
