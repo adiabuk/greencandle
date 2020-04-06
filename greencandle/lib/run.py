@@ -274,8 +274,7 @@ def prod_loop(interval, test):
 
     redis = Redis(interval=interval, test=test)
     engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, redis=redis)
-    engine.get_data(localconfig=main_indicators, first_run=True)
-    engine.get_data(localconfig=main_indicators)
+    engine.get_data(localconfig=main_indicators, first_run=False)
     buys = []
     sells = []
     for pair in pairs:
