@@ -308,7 +308,7 @@ class Engine(dict):
         try:
             close = klines[-1]
         except Exception as exc:
-            LOGGER.critical("FAILED bbands: %s ", str(exc))
+            LOGGER.warning("FAILED bbands: %s ", str(exc))
             return None
         try:
             upper, middle, lower = \
@@ -323,7 +323,7 @@ class Engine(dict):
             results['upper'] = 0
             results['middle'] = 0
             results['lower'] = 0
-            LOGGER.critical("Overall Exception getting bollinger bands: %s", exc)
+            LOGGER.warning("Overall Exception getting bollinger bands: %s", exc)
         trigger = None
         scheme = {}
         try:
@@ -342,7 +342,7 @@ class Engine(dict):
             self.schemes.append(scheme)
 
         except KeyError as exc:
-            LOGGER.critical("KEY FAILURE in bollinger bands: %s ", str(exc))
+            LOGGER.warning("KEY FAILURE in bollinger bands: %s ", str(exc))
 
         LOGGER.debug("Done getting Bollinger bands")
 
@@ -414,7 +414,7 @@ class Engine(dict):
             self.schemes.append(scheme)
 
         except KeyError as exc:
-            LOGGER.critical("KEY FAILURE in moving averages: %s ", str(exc))
+            LOGGER.warning("KEY FAILURE in moving averages: %s ", str(exc))
 
         LOGGER.debug("done getting moving averages")
 
@@ -437,12 +437,12 @@ class Engine(dict):
         try:
             close = klines[-1] # numpy.ndarray
         except Exception as exc:
-            LOGGER.critical("FAILED moving averages: %s ", str(exc))
+            LOGGER.warning("FAILED moving averages: %s ", str(exc))
             return None
         try:
             result = getattr(talib, func)(close, int(timeperiod))[-1]
         except Exception as exc:
-            LOGGER.critical("Overall Exception getting moving averages: %s", exc)
+            LOGGER.warning("Overall Exception getting moving averages: %s", exc)
             return None
 
         scheme = {}
@@ -460,7 +460,7 @@ class Engine(dict):
             self.schemes.append(scheme)
 
         except KeyError as exc:
-            LOGGER.critical("KEY FAILURE in moving averages: %s ", str(exc))
+            LOGGER.warning("KEY FAILURE in moving averages: %s ", str(exc))
 
         LOGGER.debug("done getting moving averages")
 
@@ -506,7 +506,7 @@ class Engine(dict):
 
         except Exception as error:
             traceback.print_exc()
-            LOGGER.critical("failed getting oscillators: %s", str(error))
+            LOGGER.warning("failed getting oscillators: %s", str(error))
             return None
 
         result = fastk[-1]
@@ -524,7 +524,7 @@ class Engine(dict):
             self.schemes.append(scheme)
 
         except KeyError as error:
-            LOGGER.critical("Key failure while getting oscillators: %s", str(error))
+            LOGGER.warning("Key failure while getting oscillators: %s", str(error))
         LOGGER.debug("Done getting Oscillators")
 
     @get_exceptions
