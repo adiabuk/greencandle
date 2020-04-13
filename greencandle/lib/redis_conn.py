@@ -20,7 +20,7 @@ class Redis():
     Redis object
     """
 
-    def __init__(self, interval=None, test=False, db=1):
+    def __init__(self, interval=None, test=False, db=0):
         """
         Args:
             interval
@@ -36,17 +36,15 @@ class Redis():
         self.expire = str2bool(config.redis.redis_expire)
 
         if test:
-            redis_db = 1
             test_str = "Test"
         else:
-            redis_db = 0
             test_str = "Live"
         self.interval = interval
         self.test = test
 
         self.logger.debug("Starting Redis with interval %s %s, db=%s", interval,
-                          test_str, str(redis_db))
-        pool = redis.ConnectionPool(host=self.host, port=self.port, db=redis_db)
+                          test_str, str(db))
+        pool = redis.ConnectionPool(host=self.host, port=self.port, db=db)
         self.conn = redis.StrictRedis(connection_pool=pool)
 
     def __del__(self):
