@@ -14,8 +14,8 @@ from ..lib.mysql import Mysql
 def main():
     """ Main function """
     if len(sys.argv) > 1 and sys.argv[1] == '--help':
-        print("Get list of current trades from mysql")
-    sys.exit(0)
+        print("Get list of current trades")
+        sys.exit(0)
     dbase = Mysql()
     dbase.get_active_trades()
     del dbase
