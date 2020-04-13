@@ -16,8 +16,8 @@ date=`date +"%Y-%m-%d"`
 mkdir -p ${base_dir}/${YEAR}
 echo $PAIR $date
 backend_test -d /data/altcoin_historical/${YEAR}/year/ -s -i $INTERVAL -p $PAIR &> ${base_dir}/${YEAR}/${PAIR}_${date}.log
-create_graph -d1 -p $PAIR -i $INTERVAL -o ${base_dir}/${YEAR}
+create_graph -d0 -p $PAIR -i $INTERVAL -o ${base_dir}/${YEAR}
 report ${base_dir}/${YEAR}/${PAIR}_${date}.xlsx &>> ${base_dir}/${YEAR}/${PAIR}_${date}.log
-redis-dump --db=1 > ${base_dir}/${YEAR}/${PAIR}_${date}.rs
+redis-dump --db=0 > ${base_dir}/${YEAR}/${PAIR}_${date}.rs
 mysqldump --protocol=tcp -uroot -ppassword greencandle > ${base_dir}/${YEAR}/${PAIR}_${date}.sql
 gzip ${base_dir}/${YEAR}/${PAIR}_${date}.sql ${base_dir}/${YEAR}/${PAIR}_${date}.log
