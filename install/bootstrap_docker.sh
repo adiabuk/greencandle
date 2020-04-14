@@ -20,9 +20,9 @@ else
 fi
 
 if [[ ! -f /usr/local/bin/gechodriver ]]; then
-    wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz -P /tmp
-    tar zxvf /tmp/geckodriver-v0.24.0-linux64.tar.gz -C /usr/local/bin
-    rm -rf /tmp/geckodriver-v0.24.0-linux64.tar.gz
+    wget https://github.com/mozilla/geckodriver/releases/download/v0.26.0/geckodriver-v0.26.0-linux64.tar.gz -P /tmp
+    tar zxvf /tmp/geckodriver-v0.26.0-linux64.tar.gz -C /usr/local/bin
+    rm -rf /tmp/geckodriver-v0.26.0-linux64.tar.gz
 fi
 
 if [[ ! -f /usr/local/bin/configstore ]]; then
