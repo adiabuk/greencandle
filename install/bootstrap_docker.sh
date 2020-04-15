@@ -48,6 +48,7 @@ pip install pip==9.0.1 numpy==1.16.0
 cd $install_dir
 
 python ./setup.py install
+pip install -U pyopenssl
 [[ ! -d /opt/output ]] && mkdir /opt/output
 apt-get purge -y gcc g++ g++-8 gcc-8 libx265-165 mercurial-common || true
 apt-get -y autoremove
