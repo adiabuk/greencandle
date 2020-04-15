@@ -107,4 +107,3 @@ pip install pip==9.0.1 numpy==1.16.0
 
 python ./setup.py install
 pip install pytest redis-dump-load gitpython setuptools==45.1.0
-pip install -U pyopenssl
