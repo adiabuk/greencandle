@@ -136,13 +136,21 @@ def get_closed(scheduler):
     """
     global ALL
     global DATA
+    global config
     ALL = {}
     print("Getting all pairs", file=sys.stderr)
     pairs = [pair for pair in config.main.pairs.split() if pair not in DATA.keys()]
     for pair in pairs:
         interval = '4h'
+        print("Getting pair", pair, file=sys.stderr)
         redis = Redis(interval=interval, test=False, db=0)
-        matching = redis.get_action(pair=pair, interval=interval)[-1]
+        try:
+            matching = redis.get_action(pair=pair, interval=interval)[-1]
+        except TypeError:
+            config.main.rate_indicator='EMA_2'
+            matching = redis.get_action(pair=pair, interval=interval)[-1]
+        finally: 
+            matching = {"buy":None, "sell":None}
         del redis
 
         ALL[pair] = {"matching": "Buy:{},Sell:{}".format(matching["buy"], matching["sell"]),
