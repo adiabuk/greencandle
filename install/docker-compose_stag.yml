@@ -39,7 +39,7 @@ services:
     image: amrox/gc-mysql:${TAG}
     entrypoint: /docker-entrypoint.sh mysqld
     environment:
-      - CONFIG_ENV=prod
+      - CONFIG_ENV=stag
       - MYSQL_ROOT_PASSWORD=password
     restart: on-failure
     ports:
@@ -53,7 +53,7 @@ services:
   api:
     container_name: api
     environment:
-      - CONFIG_ENV=prod/cron
+      - CONFIG_ENV=stag/cron
       - HOST=$HOSTNAME
     logging:
       driver: journald
@@ -82,7 +82,7 @@ services:
   cron:
     container_name: cron
     environment:
-      - CONFIG_ENV=prod/cron
+      - CONFIG_ENV=stag/cron
       - HOST=$HOSTNAME
     hostname: cron
     image: amrox/greencandle:${TAG}
@@ -116,7 +116,7 @@ services:
        timeout: 5s
        retries: 5
      environment:
-       - CONFIG_ENV=prod
+       - CONFIG_ENV=stag
        - HOST=$HOSTNAME
      ports:
        - 8888:8888
@@ -155,7 +155,7 @@ services:
       - mysql
       - redis
     environment:
-      - CONFIG_ENV=prod/2MA/ETH
+      - CONFIG_ENV=stag/2MA/ETH
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -181,7 +181,7 @@ services:
       - mysql
       - redis
     environment:
-      - CONFIG_ENV=prod/2MA/USDT
+      - CONFIG_ENV=stag/2MA/USDT
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -207,7 +207,7 @@ services:
       - mysql
       - redis
     environment:
-      - CONFIG_ENV=prod/2MA/BTC
+      - CONFIG_ENV=stag/2MA/BTC
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -233,7 +233,7 @@ services:
       - mysql
       - redis
     environment:
-      - CONFIG_ENV=prod/2MA/BNB
+      - CONFIG_ENV=stag/2MA/BNB
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -259,7 +259,7 @@ services:
       - mysql
       - redis
     environment:
-      - CONFIG_ENV=prod/4MA/USDT
+      - CONFIG_ENV=stag/4MA/USDT
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -285,7 +285,7 @@ services:
       - mysql
       - redis
     environment:
-      - CONFIG_ENV=prod/4MA/ETH
+      - CONFIG_ENV=stag/4MA/ETH
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -311,7 +311,7 @@ services:
       - mysql
       - redis
     environment:
-      - CONFIG_ENV=prod/4MA/BTC
+      - CONFIG_ENV=stag/4MA/BTC
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -336,7 +336,7 @@ services:
       - mysql
       - redis
     environment:
-      - CONFIG_ENV=prod/4MA/BNB
+      - CONFIG_ENV=stag/4MA/BNB
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
