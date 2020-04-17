@@ -97,6 +97,7 @@ class Trade():
                 except IndexError:
                     last_buy_price = 0
                 current_base_bal = prices['binance'][base]['count']
+
                 current_trades = dbase.get_trades()
                 avail_slots = self.max_trades - len(current_trades)
                 self.logger.info("%s buy slots available", avail_slots)
@@ -139,6 +140,8 @@ class Trade():
                         result = binance.order(symbol=item, side=binance.BUY, quantity=amount,
                                                price='', orderType=binance.MARKET,
                                                test=self.test_trade)
+                        base_amount = result['executedQty'] if 'executedQty' in result \
+                                else base_amount
 
                     if self.test_data or (self.test_trade and not result) or \
                             (not self.test_trade and 'transactTime' in result):
