@@ -96,7 +96,10 @@ class Trade():
                     last_buy_price = float(last_buy_price) if last_buy_price else 0
                 except IndexError:
                     last_buy_price = 0
-                current_base_bal = prices['binance'][base]['count']
+                try:
+                    current_base_bal = prices['binance'][base]['count']
+                except KeyError:
+                    current_base_bal = 0
 
                 current_trades = dbase.get_trades()
                 avail_slots = self.max_trades - len(current_trades)
