@@ -204,12 +204,12 @@ class Mysql():
         command = """update trades set sell_price={0},sell_time="{1}", quote_out="{2}",
         base_out="{3}" where sell_price is NULL and `interval`="{4}"
         and pair="{5}" and name in ("{6}", "prod") """.format('%.15f' % float(sell_price),
-                                                 sell_time,
-                                                 '%.15f' % float(quote),
-                                                 '%.15f' % float(base_out),
-                                                 self.interval,
-                                                 pair,
-                                                 job_name)
+                                                              sell_time,
+                                                              '%.15f' % float(quote),
+                                                              '%.15f' % float(base_out),
+                                                              self.interval,
+                                                              pair,
+                                                              job_name)
         self.run_sql_query(command)
 
     def get_active_trades(self):
