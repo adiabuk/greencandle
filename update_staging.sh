@@ -8,7 +8,7 @@ if [[ -n "$1" ]]; then
 else
   export TAG=$(python greencandle/version.py)
 fi
-docker-compose -f ./install/docker-compose.yml pull
-docker-compose -f ./install/docker-compose.yml up -d
+docker-compose -f ./install/docker-compose_stag.yml pull
+docker-compose -f ./install/docker-composei_stag.yml up -d
 
 docker system prune --volumes --all -f

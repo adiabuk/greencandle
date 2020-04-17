@@ -60,7 +60,7 @@ services:
     hostname: api
     image: amrox/greencandle:${TAG}
     restart: on-failure
-    entrypoint: /docker-entrypoint-api.sh api
+    entrypoint: /docker-entrypoint-api.sh api --test
     links:
       - mysql:mysql
       - redis:redis
