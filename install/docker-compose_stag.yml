@@ -323,6 +323,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
   4ma-bnb:
     container_name: 4ma-bnb
     hostname: 4ma-bnb
@@ -337,6 +338,84 @@ services:
       - redis
     environment:
       - CONFIG_ENV=stag/4MA/BNB
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - ./test:/tmp
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  5ma-btc:
+    container_name: 5ma-btc
+    hostname: 5ma-btc
+    image: amrox/greencandle:${TAG}
+    entrypoint: /docker-entrypoint.sh backend --test
+    logging:
+      driver: journald
+    links:
+      - mysql
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      - CONFIG_ENV=stag/5MA/BTC
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - ./test:/tmp
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  5ma-eth:
+    container_name: 5ma-eth
+    hostname: 5ma-eth
+    image: amrox/greencandle:${TAG}
+    entrypoint: /docker-entrypoint.sh backend --test
+    logging:
+      driver: journald
+    links:
+      - mysql
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      - CONFIG_ENV=stag/5MA/ETH
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - ./test:/tmp
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  5ma-usdt:
+    container_name: 5ma-usdt
+    hostname: 5ma-usdt
+    image: amrox/greencandle:${TAG}
+    entrypoint: /docker-entrypoint.sh backend --test
+    logging:
+      driver: journald
+    links:
+      - mysql
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      - CONFIG_ENV=stag/5MA/USDT
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
