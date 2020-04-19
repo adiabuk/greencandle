@@ -4,7 +4,6 @@
 Store and retrieve items from redis
 """
 import ast
-import sys
 import time
 import zlib
 import pickle
@@ -416,4 +415,3 @@ class Redis():
         del dbase
         return (result, current_time, current_price, {'sell':winning_sell,
                                                       'buy': winning_buy})
-
