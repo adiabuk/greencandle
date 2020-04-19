@@ -11,6 +11,7 @@ import sched
 import sys
 import glob
 import os
+from importlib import reload
 from time import time, sleep, strftime, gmtime
 from pathlib import Path
 from flask import Flask, render_template, request, redirect
@@ -20,7 +21,7 @@ from greencandle.lib import config
 config.create_config()
 from greencandle.lib.logger import get_logger
 from greencandle.lib.order import Trade
-from greencandle.lib.redis_conn import Redis
+import greencandle.lib.redis_conn as redis_conn
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.binance_common import get_current_price
 
@@ -77,7 +78,7 @@ def sell():
     # Sell, then update page
     trade.sell(sells, name=name)
     sleep(1)
-    dbase = Mysql()
+    dbase = Mysql(interval='4h', test=test_trade)
     dbase.get_active_trades()
     del dbase
     get_open(SCHED)
@@ -143,15 +144,18 @@ def get_closed(scheduler):
     for pair in pairs:
         interval = '4h'
         print("Getting pair", pair, file=sys.stderr)
-        redis = Redis(interval=interval, test=False, db=0)
         try:
-            matching = redis.get_action(pair=pair, interval=interval)[-1]
-        except TypeError:
             config.main.rate_indicator='EMA_2'
+            reload(redis_conn)
+            redis = redis_conn.Redis(interval=interval, test=False, db=0)
             matching = redis.get_action(pair=pair, interval=interval)[-1]
-        finally: 
-            matching = {"buy":None, "sell":None}
-        del redis
+            del redis
+        except (TypeError, KeyError):
+            config.main.rate_indicator='EMA_8'
+            reload(redis_conn)
+            redis = redis_conn.Redis(interval=interval, test=False, db=0)
+            matching = redis.get_action(pair=pair, interval=interval)[-1]
+            del redis
 
         ALL[pair] = {"matching": "Buy:{},Sell:{}".format(matching["buy"], matching["sell"]),
                      "graph": get_latest_graph(pair, "html"),
