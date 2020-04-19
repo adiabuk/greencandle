@@ -101,6 +101,8 @@ def perform_data(pair, interval, data_dir, indicators):
 
         del engine
 
+        current_trades = dbase.get_trades()
+
         if result == "BUY":
             buys.append((pair, current_time, current_price))
             LOGGER.debug("Items to buy: %s", buys)
@@ -197,7 +199,8 @@ def prod_int_check(interval, test):
     redis = Redis(interval=interval, test=False, db=0)
     current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
     sells = []
-    for pair in current_trades:
+    for trade in current_trades:
+        pair = trade[0]
         buy_price = dbase.get_trade_value(pair)[0][0]
         result, current_time, current_price = redis.get_intermittant(pair, buy_price=buy_price,
                                                                      current_price=prices[pair])

@@ -184,11 +184,12 @@ class Mysql():
 
         Args:
         Returns:
-              a single list of pairs that we currently hold
+              a single list of pairs that we currently hold with the buy time
         """
         cur = self.dbase.cursor()
-        command = ('select pair from trades where sell_price is NULL and `interval`="{0}" '
-                   'and name in ("{1}","prod")'.format(self.interval, config.main.name))
+        command = ('select pair, buy_time from trades where sell_price is NULL and '
+                   '`interval`="{0}" ' 'and name in ("{1}","prod")'
+                   .format(self.interval, config.main.name))
 
         self.execute(cur, command)
         row = [item[0] for item in cur.fetchall()]

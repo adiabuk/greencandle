@@ -38,8 +38,9 @@ def main():
 
     details = []
     for trade in trades:
-        current_price = float(prices[trade])
-        trade_details = dbase.get_trade_value(trade)
+        pair = trade[0]
+        current_price = float(prices[pair])
+        trade_details = dbase.get_trade_value(pair)
         buy_price = float(trade_details[0][0])
         amount = float(trade_details[0][1])
         profit = (current_price/0.00014*amount) - (buy_price/0.00014*amount)
@@ -49,7 +50,7 @@ def main():
         percs.append(perc)
         perc = float(format(perc, ".4f"))
         profit = float(format(profit, ".4f"))
-        details.append((trade, format(float(buy_price), ".20f"),
+        details.append((pair, format(float(buy_price), ".20f"),
                         format(float(current_price), ".20f"),
                         amount, current_price > buy_price, perc, profit))
 
