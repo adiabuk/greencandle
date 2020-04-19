@@ -132,7 +132,7 @@
       "is_secret": false
     },
     "interval": {
-      "value": "1h",
+      "value": "4h",
       "is_binary": false,
       "is_secret": false
     },
