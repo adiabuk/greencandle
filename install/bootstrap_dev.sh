@@ -15,7 +15,7 @@ apt-get -y install docker.io ntpdate mysql-client screen atop jq iotop ntp awscl
     cron bsdmainutils libssl-dev gcc libsystemd-dev
 curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
-echo "export HOSTNAME >> ~/.bashrc"
+echo "export HOSTNAME" >> ~/.bashrc
 
 # Install Python 3.7.0 with pyenv
 apt-get install -y make build-essential libssl-dev zlib1g-dev \

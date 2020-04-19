@@ -39,7 +39,7 @@ sudo bash configure-linux.sh -a $subdomain -t $token -u $username -p $password
 
 curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
-echo "export HOSTNAME >> ~/.bashrc"
+echo "export HOSTNAME" >> ~/.bashrc
 
 cat > /etc/docker/daemon.json << EOF
 {
