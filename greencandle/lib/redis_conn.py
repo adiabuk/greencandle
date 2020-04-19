@@ -74,7 +74,7 @@ class Redis():
         expiry = 600 if self.test else int(config.redis.redis_expiry_seconds)
 
         for k, v in data.items():
-            response = self.conn.hset(key, k,v)
+            response = self.conn.hset(key, k, v)
 
         if self.expire:
             self.conn.expire(key, expiry)
@@ -223,7 +223,6 @@ class Redis():
         except ValueError:
 
             self.logger.debug("Not enough data for %s", pair)
-
             return ('HOLD', 'Not enough data', 0, {'buy':[], 'sell':[]})
 
         # get current & previous indicator values
@@ -305,10 +304,10 @@ class Redis():
                 if current_config:
                     try:
                         rules[rule].append(eval(current_config))
-                    except KeyError:
+                    except (TypeError, KeyError):
                         self.logger.error("Unable to eval config rule: %s_rule: %s",
                                           rule, current_config)
-                        sys.exit(2)
+                        continue
 
         stop_loss_perc = float(config.main.stop_loss_perc)
         take_profit_perc = float(config.main.take_profit_perc)
