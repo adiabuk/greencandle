@@ -11,6 +11,18 @@
 
 # Releases
 
+## 0.32
+* Clean up c9e envs
+* Add 5MA to stag
+* New k8s job script and update template
+* Add initial support for margin trading
+* Fetch balance from margin wallet
+* Update gechodriver for graphing
+* Fix buy/sell from API
+* Display buy/sell status in API dashboard
+* Better logging for graphs and minor tweaks
+* Ensure HOSTNAME var is added to docker compose
+
 ## 0.31
 * Improve efficiency for Redis data
 * Fix bug with non-aligned epoch times
