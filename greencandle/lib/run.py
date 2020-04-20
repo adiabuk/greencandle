@@ -11,7 +11,6 @@ import gzip
 from concurrent.futures import ThreadPoolExecutor
 from glob import glob
 import binance
-from str2bool import str2bool
 from .engine import Engine
 from .redis_conn import Redis
 from .mysql import Mysql
@@ -84,24 +83,8 @@ def perform_data(pair, interval, data_dir, indicators):
                         interval=interval, test=True, redis=redis)
         engine.get_data(localconfig=indicators)
 
-        ########TEST stategy############
         result, current_time, current_price, _ = redis.get_action(pair=pair, interval=interval)
-        LOGGER.debug('In Strategy %s', result)
-        if 'SELL' in result or 'BUY' in result:
-            LOGGER.debug('Strategy - Adding to redis')
-            scheme = {}
-            scheme["symbol"] = pair
-            scheme["direction"] = result
-            scheme['result'] = 0
-            scheme['data'] = result
-            scheme["event"] = "trigger"
-            engine.schemes.append(scheme)
-            engine.add_schemes()
-        ################################
-
         del engine
-
-        current_trades = dbase.get_trades()
 
         if result == "BUY":
             buys.append((pair, current_time, current_price))
@@ -164,20 +147,8 @@ def parallel_test(pairs, interval, data_dir, indicators):
                             interval=interval, test=True, redis=redis)
             engine.get_data(localconfig=indicators)
 
-            ########TEST stategy############
             result, current_time, current_price, _ = redis.get_action(pair=pair, interval=interval)
             LOGGER.info('In Strategy %s', result)
-            if 'SELL' in result or 'BUY' in result:
-                LOGGER.info('Strategy - Adding to redis')
-                scheme = {}
-                scheme["symbol"] = pair
-                scheme["direction"] = result
-                scheme['result'] = 0
-                scheme['data'] = result
-                scheme["event"] = "trigger"
-                engine.add_scheme(scheme)
-            ################################
-
             del engine
 
             if result == "BUY":
@@ -236,7 +207,7 @@ def prod_initial(interval, test=False):
     engine.get_data(localconfig=main_indicators, first_run=True)
     del redis
 
-def prod_loop(interval, test):
+def prod_loop(interval, test_trade):
     """
     Loop through collection cycle (PROD)
     """
@@ -244,12 +215,10 @@ def prod_loop(interval, test):
     pairs = config.main.pairs.split()
 
     LOGGER.debug("Performaing prod loop")
-    LOGGER.info("Pairs DB: %s", additional_pairs)
-    LOGGER.info("Pairs in config: %s", main_pairs)
+    LOGGER.info("Pairs in config: %s", pairs)
     LOGGER.info("Total unique pairs: %s", len(pairs))
 
     max_trades = int(config.main.max_trades)
-    test_trade = test if test else str2bool(config.main.test_trade)
 
     LOGGER.info("Starting new cycle")
     LOGGER.debug("max trades: %s", max_trades)
@@ -261,23 +230,13 @@ def prod_loop(interval, test):
             prices_trunk[key] = val
     dataframes = get_dataframes(pairs, interval=interval)
 
-    redis = Redis(interval=interval, test=test)
+    redis = Redis(interval=interval, test=False)
     engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, redis=redis)
     engine.get_data(localconfig=main_indicators, first_run=False)
     buys = []
     sells = []
     for pair in pairs:
         result, current_time, current_price, _ = redis.get_action(pair=pair, interval=interval)
-        LOGGER.info('In Strategy %s', result)
-        if 'SELL' in result or 'BUY' in result:
-            LOGGER.info('Strategy - Adding to redis')
-            scheme = {}
-            scheme["symbol"] = pair
-            scheme["direction"] = result
-            scheme['result'] = 0
-            scheme['data'] = result
-            scheme["event"] = "trigger"
-            engine.add_scheme(scheme)
 
         if result == "BUY":
             LOGGER.debug("Items to buy")

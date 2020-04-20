@@ -78,7 +78,7 @@ def main():
     @sched.scheduled_job('cron', minute=minute[interval], hour=hour[interval], second="30")
     def prod_run():
         LOGGER.info("Starting prod run")
-        prod_loop(interval, args.test)
+        prod_loop(interval, test_trade=args.test)
         LOGGER.info("Finished prod run")
 
     try:
