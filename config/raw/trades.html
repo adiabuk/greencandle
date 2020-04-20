@@ -10,6 +10,7 @@
         <th>Current Price</th>
         <th>Perc</th>
         <th>Sell Now</th>
+        <th>Strategy</th>
         <th>Link</th>
         <th>Local Graph</th>
     </tr>
@@ -25,6 +26,7 @@
                 <button name="button" type="submit">SELL</button>
             </form>
         </td>
+        <td class="y_n">{{ v['strategy'] }}</td>
         <td class="y_n"> <a target="_blank" href="https://uk.tradingview.com/chart?symbol=BINANCE%3A{{ k }}">Trading View</a> </td>
         <td class="y_n"> <a target="_blank" href="/data/graphs/{{ v['graph'] }}"><img src="/data/graphs/{{ v['thumbnail'] }}"></a></td>
     </tr>
@@ -42,6 +44,7 @@
         <th>Link</th>
         <th>Buy</th>
         <th>Matched Rules</th>
+        <th>Strategy</th>
         <th>Local Graph</th>
     </tr>
 
@@ -55,12 +58,14 @@
           </form>
         </td>
         <td class="y_n">{{ v['matching'] }}</td>
+        <td class="y_n">{{ v['strategy'] }}</td>
         <td class="y_n"> <a target="_blank" href="/data/graphs/{{ v['graph'] }}"><img src="/data/graphs/{{ v['thumbnail'] }}"></a></td>
 
     </tr>
     {% endfor %}
 
 </table>
+
 
 <H1 class="logo">Rules</h1>
 <table border=0, id="rules">

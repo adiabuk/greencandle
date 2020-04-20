@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-#pylint: disable=global-statement,wrong-import-position,too-few-public-methods,no-member,no-else-return
+#pylint: disable=global-statement,wrong-import-position,too-few-public-methods,
+#pylint: disable=invalid-name,no-member,no-else-return
 
 """
 API dashboard
@@ -128,9 +129,20 @@ def get_open(scheduler):
         DATA[pair] = {"buy_price": buy_price, "buy_time": buy_time,
                       "current_price": current_price, "perc": perc,
                       "graph": get_latest_graph(pair, "html"), "name": name,
+                      "strategy": get_keys_by_value(config.pairs, pair),
                       "thumbnail": get_latest_graph(pair, "resized.png")}
 
     SCHED.enter(60, 60, get_open, (scheduler, ))
+
+def get_keys_by_value(dict_of_elements, value_to_find):
+    """
+    get dict key containing a given value
+    """
+    list_of_items = dict_of_elements.items()
+    for item in list_of_items:
+        if  value_to_find in item[1]:
+            return item[0]
+    return "Unknown"
 
 def get_rules():
     """
@@ -143,10 +155,8 @@ def get_rules():
         for seq in range(1, 10):
             try:
                 RULES["{}_{}".format(rule, seq)] = config.main["{}_rule{}".format(rule, seq)]
-                #print(rule, seq, config.main['{}_rule{}'.format(rule, seq)])
             except KeyError:
                 pass
-
 
 def get_closed(scheduler):
     """
@@ -176,6 +186,7 @@ def get_closed(scheduler):
 
         ALL[pair] = {"matching": "Buy:{},Sell:{}".format(matching["buy"], matching["sell"]),
                      "graph": get_latest_graph(pair, "html"),
+                     "strategy": get_keys_by_value(config.pairs, pair),
                      "thumbnail": get_latest_graph(pair, "resized.png")}
 
     SCHED.enter(600, 600, get_closed, (scheduler, ))
