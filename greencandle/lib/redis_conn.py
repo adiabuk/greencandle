@@ -165,7 +165,7 @@ class Redis():
         """Retrive decoded OHLC data from redis"""
         try:
             return float(ast.literal_eval(self.get_item(item, indicator).decode())['result'])
-        except AttributeError:
+        except (TypeError,AttributeError):
             return None
 
     def log_event(self, event, rate, perc_rate, buy, sell, pair, current_time, current):
@@ -272,7 +272,7 @@ class Redis():
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_mepoch))
 
         # Store/update highest price
-        self.put_high_price(pair, interval, current_price)
+        #self.put_high_price(pair, interval, current_price)
 
         # rate of Moving Average increate/decreate based on indicator
         # specified in the rate_indicator config option - best with EMA_500
@@ -303,9 +303,9 @@ class Redis():
                 if current_config:
                     try:
                         rules[rule].append(eval(current_config))
-                    except (TypeError, KeyError):
-                        self.logger.error("Unable to eval config rule: %s_rule: %s",
-                                          rule, current_config)
+                    except (TypeError, KeyError) as error:
+                        self.logger.error("Unable to eval config rule: %s_rule: %s %s",
+                                          rule, current_config, error)
                         continue
 
         stop_loss_perc = float(config.main.stop_loss_perc)
