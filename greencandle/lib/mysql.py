@@ -192,8 +192,7 @@ class Mysql():
                    .format(self.interval, config.main.name))
 
         self.execute(cur, command)
-        row = [item[0] for item in cur.fetchall()]
-        return row
+        return cur.fetchall()
 
     @get_exceptions
     def update_trades(self, pair, sell_time, sell_price, quote, base_out, name=None):
