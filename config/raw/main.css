@@ -30,6 +30,22 @@ body {
     padding: 1px;
 }
 
+#rules th {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+  }
+
+
+#rules td, #rules th {
+    border: 1px solid #ddd;
+    font-size:13px;
+    padding: 4px;
+}
+
+
 .grid-container {
   display: grid;
   grid-template-columns: auto auto auto auto;

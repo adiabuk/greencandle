@@ -50,13 +50,14 @@ APP.wsgi_app = PrefixMiddleware(APP.wsgi_app, prefix='/api')
 
 SCHED = sched.scheduler(time, sleep)
 DATA = {}
+RULES = []
 ALL = {}
 TEST = None
 
 @APP.route('/')
 def trades():
     """deployments page"""
-    return render_template('trades.html', versions=DATA, all=ALL)
+    return render_template('trades.html', versions=DATA, all=ALL, rules=RULES)
 
 @APP.route('/sell', methods=["GET", "POST"])
 def sell():
@@ -131,6 +132,22 @@ def get_open(scheduler):
 
     SCHED.enter(60, 60, get_open, (scheduler, ))
 
+def get_rules():
+    """
+    Get buy and sell rules from config
+    """
+    global RULES
+    RULES = {}
+
+    for rule in "buy", "sell":
+        for seq in range(1, 10):
+            try:
+                RULES["{}_{}".format(rule, seq)] = config.main["{}_rule{}".format(rule, seq)]
+                #print(rule, seq, config.main['{}_rule{}'.format(rule, seq)])
+            except KeyError:
+                pass
+
+
 def get_closed(scheduler):
     """
     get details of closed pairs
@@ -145,13 +162,13 @@ def get_closed(scheduler):
         interval = '4h'
         print("Getting pair", pair, file=sys.stderr)
         try:
-            config.main.rate_indicator='EMA_2'
+            config.main.rate_indicator = 'EMA_2'
             reload(redis_conn)
             redis = redis_conn.Redis(interval=interval, test=False, db=0)
             matching = redis.get_action(pair=pair, interval=interval)[-1]
             del redis
         except (TypeError, KeyError):
-            config.main.rate_indicator='EMA_8'
+            config.main.rate_indicator = 'EMA_8'
             reload(redis_conn)
             redis = redis_conn.Redis(interval=interval, test=False, db=0)
             matching = redis.get_action(pair=pair, interval=interval)[-1]
@@ -192,7 +209,7 @@ def main():
     background_thread = threading.Thread(target=SCHED.run, args=())
     background_thread.daemon = True
     background_thread.start()
-
+    get_rules()
     if TEST:
         print("test node")
         APP.run(debug=True, host='0.0.0.0', port=5000, threaded=True)

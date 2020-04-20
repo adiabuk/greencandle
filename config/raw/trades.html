@@ -61,4 +61,19 @@
     {% endfor %}
 
 </table>
+
+<H1 class="logo">Rules</h1>
+<table border=0, id="rules">
+	<tr>
+        <th>name</th>
+        <th>rule</th>
+	</tr>
+	{% for k, v in rules.items() %}
+	<tr>
+		<td class="y_n">{{ k }}</td>
+		<td class="y_n">{{ v }}</td>
+        </tr>
+	{% endfor%}
+</table>
+
 <hr> {% endblock %}
