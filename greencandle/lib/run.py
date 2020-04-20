@@ -222,13 +222,7 @@ def prod_initial(interval, test=False):
     """
     prices = binance.prices()
     prices_trunk = {}
-    main_pairs = config.main.pairs.split()
-    dbase = Mysql(test=test, interval=interval)
-    additional_pairs = dbase.get_trades() or []
-    del dbase
-    # get unique list of pairs in config,
-    # and those currently in an active trade
-    pairs = list(set(main_pairs + additional_pairs))
+    pairs = config.main.pairs.split()
 
     for key, val in prices.items():
         if key in pairs:
@@ -247,13 +241,8 @@ def prod_loop(interval, test):
     Loop through collection cycle (PROD)
     """
     main_indicators = config.main.indicators.split()
-    main_pairs = config.main.pairs.split()
-    dbase = Mysql(test=False, interval=interval)
-    additional_pairs = dbase.get_trades()
-    del dbase
-    # get unique list of pairs in config,
-    # and those currently in an active trade
-    pairs = list(set(main_pairs + additional_pairs))
+    pairs = config.main.pairs.split()
+
     LOGGER.debug("Performaing prod loop")
     LOGGER.info("Pairs DB: %s", additional_pairs)
     LOGGER.info("Pairs in config: %s", main_pairs)
