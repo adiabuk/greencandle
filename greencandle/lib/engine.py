@@ -233,6 +233,7 @@ class Engine(dict):
         # dont get most recent one, as it may not be complete
         scheme['data'] = zlib.compress(pickle.dumps(self.dataframes[pair].iloc[location]))
         scheme["event"] = "ohlc"
+        scheme["close_time"] = str(self.dataframes[pair].iloc[location]["closeTime"])
 
         self.schemes.append(scheme)
         if first_run:
