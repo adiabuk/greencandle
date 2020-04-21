@@ -164,7 +164,7 @@ class Trade():
                         result = binance.order(symbol=item, side=binance.BUY, quantity=amount,
                                                price='', orderType=binance.MARKET,
                                                test=self.test_trade)
-                        cost = result.get('fills',{})[0].get('price', cost)
+                        cost = result.get('fills', {})[0].get('price', cost)
                         base_amount = result.get('executedQty', base_amount)
 
                     if self.test_data or (self.test_trade and not result) or \
@@ -208,7 +208,7 @@ class Trade():
                     result = binance.order(symbol=item, side=binance.SELL, quantity=quantity,
                                            price='', orderType=binance.MARKET, test=self.test_trade)
 
-                price = result.get('fills',{})[0].get('price', price)
+                price = result.get('fills', {})[0].get('price', price)
                 if self.test_data or (self.test_trade and not result) or \
                         (not self.test_trade and 'transactTime' in result):
                     dbase.update_trades(pair=item, sell_time=current_time,
