@@ -14,6 +14,7 @@ from str2bool import str2bool
 from .auth import binance_auth
 from .logger import get_logger, get_decorator
 from .mysql import Mysql
+from .redis_conn import Redis
 from .balance import Balance
 from .balance_common import get_base
 from .common import perc_diff, add_perc
@@ -21,7 +22,7 @@ from .alerts import send_gmail_alert, send_push_notif
 from . import config
 GET_EXCEPTIONS = get_decorator((Exception))
 
-class Trade():Dermaflash
+class Trade():
     """Buy & Sell class"""
 
     def __init__(self, interval=None, test_data=False, test_trade=False):
@@ -44,6 +45,26 @@ class Trade():Dermaflash
     def get_sell_price(pair=None):
         """ return highest selling price """
         return sorted([float(i) for i in binance.depth(pair)["bids"].keys()])[-1]
+
+
+    def send_redis_trade(self, pair, price, interval, event):
+        """
+        Send trade event to redis
+        """
+        self.logger.debug('Strategy - Adding to redis')
+
+        # get last close time
+        redis = Redis()
+        close_time = redis.get_items(pair, interval)[-1].decode().split(':')[-1]
+        scheme = {}
+        data = {scheme["event"]:{"result": event,
+                                 "current_price": format(float(price), ".20f"),
+                                 "date": close_time,
+                                }}
+
+        redis.redis_conn(pair, interval, data, close_time)
+        del redis
+
 
     @GET_EXCEPTIONS
     def buy(self, buy_list):
@@ -156,6 +177,8 @@ class Trade():Dermaflash
                                            base_amount=base_amount, quote=amount)
                         send_push_notif('BUY', item, '%.15f' % float(cost))
                         send_gmail_alert('BUY', item, '%.15f' % float(cost))
+
+                        self.send_redis_trade(item, cost, self.interval, "BUY")
             del dbase
         else:
             self.logger.info("Nothing to buy")
@@ -192,6 +215,7 @@ class Trade():Dermaflash
                                         sell_price=price, quote=quantity,
                                         base_out=base_out, name=name)
 
+                    self.send_redis_trade(item, price, self.interval, "SELL")
                 else:
                     self.logger.critical("Sell Failed")
             del dbase
