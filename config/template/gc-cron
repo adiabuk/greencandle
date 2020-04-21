@@ -6,7 +6,7 @@
 
 59 23 * * * /usr/local/bin/report 4h /data/reports/report_$(date +"\%Y-\%m-\%d").xlsx > /proc/1/fd/1 2>/proc/1/fd/2
 @reboot /usr/local/bin/report 4h /data/reports/report_$(date +"\%Y-\%m-\%d").xlsx > /proc/1/fd/1 2>/proc/1/fd/2
-
+@reboot echo C.UTF-8 > /etc/default/locale
 0 * * * *  /usr/local/bin/create_graph -d0 -a -i 4h -o /data/graphs/ -m > /proc/1/fd/1 2>/proc/1/fd/2
 @reboot /usr/local/bin/create_graph -d0 -a -i 4h -o /data/graphs/ -m > /proc/1/fd/1 2>/proc/1/fd/2
 
