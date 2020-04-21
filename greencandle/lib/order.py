@@ -21,7 +21,7 @@ from .alerts import send_gmail_alert, send_push_notif
 from . import config
 GET_EXCEPTIONS = get_decorator((Exception))
 
-class Trade():
+class Trade():Dermaflash
     """Buy & Sell class"""
 
     def __init__(self, interval=None, test_data=False, test_trade=False):
@@ -143,8 +143,8 @@ class Trade():
                         result = binance.order(symbol=item, side=binance.BUY, quantity=amount,
                                                price='', orderType=binance.MARKET,
                                                test=self.test_trade)
-                        base_amount = result['executedQty'] if 'executedQty' in result \
-                                else base_amount
+                        cost = result.get('fills',{})[0].get('price', cost)
+                        base_amount = result.get('executedQty', base_amount)
 
                     if self.test_data or (self.test_trade and not result) or \
                             (not self.test_trade and 'transactTime' in result):
@@ -185,6 +185,7 @@ class Trade():
                     result = binance.order(symbol=item, side=binance.SELL, quantity=quantity,
                                            price='', orderType=binance.MARKET, test=self.test_trade)
 
+                price = result.get('fills',{})[0].get('price', price)
                 if self.test_data or (self.test_trade and not result) or \
                         (not self.test_trade and 'transactTime' in result):
                     dbase.update_trades(pair=item, sell_time=current_time,
