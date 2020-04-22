@@ -14,6 +14,6 @@ for pair in `cat /data/altcoin_historical/all_pairs.txt`; do
   echo $pair $date
   backend_test -d /data/altcoin_historical/${year}/year/ -s -i 4h -p $pair &> ${base_dir}/${year}/${pair}_${date}.log
   create_graph -d0 -p $pair -i 4h -o ${basedir}/${year} &>/dev/null
-  report ${base_dir}/${year}/${pair}_${date}.xlsx &>> ${base_dir}/${year}/${pair}_${date}.log
+  report 4h ${base_dir}/${year}/${pair}_${date}.xlsx &>> ${base_dir}/${year}/${pair}_${date}.log
   redis-dump --db=0 > ${base_dir}/${year}/${pair}_${date}.rs
 done
