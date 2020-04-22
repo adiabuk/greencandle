@@ -1,13 +1,13 @@
--- MySQL dump 10.13  Distrib 5.7.29, for Linux (x86_64)
+-- MySQL dump 10.16  Distrib 10.1.44-MariaDB, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: greencandle
+-- Host: mysql    Database: greencandle
 -- ------------------------------------------------------
--- Server version	5.5.5-10.1.24-MariaDB-1~jessie
+-- Server version	10.1.24-MariaDB-1~jessie
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -34,7 +34,7 @@ CREATE TABLE `balance` (
   PRIMARY KEY (`id`),
   KEY `exchange_id` (`exchange_id`),
   CONSTRAINT `balance_ibfk_2` FOREIGN KEY (`exchange_id`) REFERENCES `exchange` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10644 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -60,11 +60,12 @@ DROP TABLE IF EXISTS `daily_profit`;
 /*!50001 DROP VIEW IF EXISTS `daily_profit`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `daily_profit` AS SELECT 
- 1 AS `date`,
- 1 AS `interval`,
- 1 AS `profit`,
- 1 AS `perc`*/;
+/*!50001 CREATE TABLE `daily_profit` (
+  `date` tinyint NOT NULL,
+  `interval` tinyint NOT NULL,
+  `profit` tinyint NOT NULL,
+  `perc` tinyint NOT NULL
+) ENGINE=MyISAM */;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -89,18 +90,19 @@ DROP TABLE IF EXISTS `hour_balance`;
 /*!50001 DROP VIEW IF EXISTS `hour_balance`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `hour_balance` AS SELECT 
- 1 AS `exchange_id`,
- 1 AS `usd1`,
- 1 AS `coin`,
- 1 AS `ctime1`,
- 1 AS `ctime2`,
- 1 AS `usd2`,
- 1 AS `USD_diff`,
- 1 AS `GBP_diff`,
- 1 AS `COUNT_diff`,
- 1 AS `perc_change`,
- 1 AS `BTC_diff`*/;
+/*!50001 CREATE TABLE `hour_balance` (
+  `exchange_id` tinyint NOT NULL,
+  `usd1` tinyint NOT NULL,
+  `coin` tinyint NOT NULL,
+  `ctime1` tinyint NOT NULL,
+  `ctime2` tinyint NOT NULL,
+  `usd2` tinyint NOT NULL,
+  `USD_diff` tinyint NOT NULL,
+  `GBP_diff` tinyint NOT NULL,
+  `COUNT_diff` tinyint NOT NULL,
+  `perc_change` tinyint NOT NULL,
+  `BTC_diff` tinyint NOT NULL
+) ENGINE=MyISAM */;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -111,11 +113,12 @@ DROP TABLE IF EXISTS `monthly_profit`;
 /*!50001 DROP VIEW IF EXISTS `monthly_profit`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `monthly_profit` AS SELECT 
- 1 AS `date`,
- 1 AS `interval`,
- 1 AS `profit`,
- 1 AS `perc`*/;
+/*!50001 CREATE TABLE `monthly_profit` (
+  `date` tinyint NOT NULL,
+  `interval` tinyint NOT NULL,
+  `profit` tinyint NOT NULL,
+  `perc` tinyint NOT NULL
+) ENGINE=MyISAM */;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -143,15 +146,16 @@ DROP TABLE IF EXISTS `profit`;
 /*!50001 DROP VIEW IF EXISTS `profit`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profit` AS SELECT 
- 1 AS `buy_time`,
- 1 AS `interval`,
- 1 AS `sell_time`,
- 1 AS `pair`,
- 1 AS `buy_price`,
- 1 AS `sell_price`,
- 1 AS `perc`,
- 1 AS `base_profit`*/;
+/*!50001 CREATE TABLE `profit` (
+  `buy_time` tinyint NOT NULL,
+  `interval` tinyint NOT NULL,
+  `sell_time` tinyint NOT NULL,
+  `pair` tinyint NOT NULL,
+  `buy_price` tinyint NOT NULL,
+  `sell_price` tinyint NOT NULL,
+  `perc` tinyint NOT NULL,
+  `base_profit` tinyint NOT NULL
+) ENGINE=MyISAM */;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -162,12 +166,13 @@ DROP TABLE IF EXISTS `profitable`;
 /*!50001 DROP VIEW IF EXISTS `profitable`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profitable` AS SELECT 
- 1 AS `pair`,
- 1 AS `total`,
- 1 AS `profit`,
- 1 AS `loss`,
- 1 AS `perc_profitable`*/;
+/*!50001 CREATE TABLE `profitable` (
+  `pair` tinyint NOT NULL,
+  `total` tinyint NOT NULL,
+  `profit` tinyint NOT NULL,
+  `loss` tinyint NOT NULL,
+  `perc_profitable` tinyint NOT NULL
+) ENGINE=MyISAM */;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -218,7 +223,8 @@ CREATE TABLE `trades` (
   `base_out` varchar(30) DEFAULT NULL,
   `quote_in` varchar(30) DEFAULT NULL,
   `quote_out` varchar(30) DEFAULT NULL,
-  `name` varchar(10) DEFAULT NULL
+  `name` varchar(10) DEFAULT NULL,
+  `closed_by` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -226,6 +232,7 @@ CREATE TABLE `trades` (
 -- Final view structure for view `daily_profit`
 --
 
+/*!50001 DROP TABLE IF EXISTS `daily_profit`*/;
 /*!50001 DROP VIEW IF EXISTS `daily_profit`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -244,6 +251,7 @@ CREATE TABLE `trades` (
 -- Final view structure for view `hour_balance`
 --
 
+/*!50001 DROP TABLE IF EXISTS `hour_balance`*/;
 /*!50001 DROP VIEW IF EXISTS `hour_balance`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -262,6 +270,7 @@ CREATE TABLE `trades` (
 -- Final view structure for view `monthly_profit`
 --
 
+/*!50001 DROP TABLE IF EXISTS `monthly_profit`*/;
 /*!50001 DROP VIEW IF EXISTS `monthly_profit`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -280,6 +289,7 @@ CREATE TABLE `trades` (
 -- Final view structure for view `profit`
 --
 
+/*!50001 DROP TABLE IF EXISTS `profit`*/;
 /*!50001 DROP VIEW IF EXISTS `profit`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -298,6 +308,7 @@ CREATE TABLE `trades` (
 -- Final view structure for view `profitable`
 --
 
+/*!50001 DROP TABLE IF EXISTS `profitable`*/;
 /*!50001 DROP VIEW IF EXISTS `profitable`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -321,17 +332,17 @@ CREATE TABLE `trades` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-04 21:33:02
--- MySQL dump 10.13  Distrib 5.7.29, for Linux (x86_64)
+-- Dump completed on 2020-04-22 15:35:24
+-- MySQL dump 10.16  Distrib 10.1.44-MariaDB, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: greencandle
+-- Host: mysql    Database: greencandle
 -- ------------------------------------------------------
--- Server version	5.5.5-10.1.24-MariaDB-1~jessie
+-- Server version	10.1.24-MariaDB-1~jessie
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -372,4 +383,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-04 21:33:02
+-- Dump completed on 2020-04-22 15:35:24
