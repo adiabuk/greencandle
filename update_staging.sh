@@ -9,17 +9,18 @@ else
   export TAG=$(python greencandle/version.py)
 fi
 docker-compose -f ./install/docker-compose_stag.yml pull
-base=$(yq r install/*stag* services | grep -v '^ .*' | sed 's/:.*$//'|grep -vE '\-|cron|api')
-gc=$(yq r install/*stag* services | grep -v '^ .*' | sed 's/:.*$//'|grep '\-')
+base=$(yq r install/*stag* services | grep -v '^ .*' | sed 's/:.*$//'|grep 'base')
+be=$(yq r install/*stag* services | grep -v '^ .*' | sed 's/:.*$//'|grep 'be')
+fe=$(yq r install/*stag* services | grep -v '^ .*' | sed 's/:.*$//'|grep 'fe')
 
 docker-compose -f ./install/docker-compose_stag.yml up -d $base
 
-for i in $gc; do
-  docker-compose -f ./install/docker-compose_stag.yml up -d $i
+for container in $be; do
+  docker-compose -f ./install/docker-compose_stag.yml up -d $container
   sleep 60
 done
 
 sleep 120
-docker-compose -f ./install/docker-compose_stag.yml up -d cron api
+docker-compose -f ./install/docker-compose_stag.yml up -d $fe
 
 docker system prune --volumes --all -f

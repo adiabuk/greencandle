@@ -1,9 +1,9 @@
 version: "3.1"
 services:
 
-  cadvisor:
-    container_name: cadvisor
-    hostname: cadvisor
+  fe-cadvisor:
+    container_name: fe-cadvisor
+    hostname: fe-cadvisor
     image: gcr.io/google_containers/cadvisor:v0.35.0
     restart: on-failure
     volumes:
@@ -18,13 +18,14 @@ services:
       timeout: 2s
       retries: 5
 
-  redis:
-    container_name: redis
-    hostname: redis
+  base-redis:
+    container_name: base-redis
+    hostname: base-redis
     image: amrox/gc-redis:${TAG}
     restart: on-failure
     links:
-      - mysql
+      - base-mysql:mysql
+      - base-redis:redis
     ports:
       - 6379:6379
     healthcheck:
@@ -33,9 +34,9 @@ services:
       timeout: 2s
       retries: 5
 
-  mysql:
-    container_name: mysql
-    hostname: mysql
+  base-mysql:
+    container_name: base-mysql
+    hostname: base-mysql
     image: amrox/gc-mysql:${TAG}
     entrypoint: /docker-entrypoint.sh mysqld
     environment:
@@ -50,51 +51,51 @@ services:
       timeout: 2s
       retries: 5
 
-  api:
-    container_name: api
+  fe-api:
+    container_name: fe-api
+    hostname: fe-api
     environment:
-      - CONFIG_ENV=stag/cron
+      - CONFIG_ENV=stag /cron
       - HOST=$HOSTNAME
     logging:
       driver: journald
-    hostname: api
     image: amrox/greencandle:${TAG}
     restart: on-failure
     entrypoint: /docker-entrypoint-api.sh api --test
     links:
-      - mysql:mysql
-      - redis:redis
+      - base-mysql:mysql
+      - base-redis:redis
     ports:
       - 5000
     depends_on:
-      - mysql
-      - redis
+      - base-mysql
+      - base-redis
     healthcheck:
       test: find /var/run/  -mmin -2 -name api 2>&1 |grep -q api || exit 1
       interval: 1m
       timeout: 2s
-      retries: 5
+       retries: 5
     volumes:
-      - /data:/data
+      -  /data:/data
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  cron:
-    container_name: cron
+  fe-cron:
+    container_name: fe-cron
+    hostname: fe-cron
     environment:
       - CONFIG_ENV=stag/cron
       - HOST=$HOSTNAME
-    hostname: cron
     image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh cron -f
     logging:
       driver: journald
     links:
-      - mysql
-      - redis
+      - base-mysql:mysql
+      - base-redis:redis
     depends_on:
-      - mysql
-      - redis
+      - base-mysql
+      - base-redis
     healthcheck:
       test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
       interval: 1m
@@ -106,9 +107,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  webserver:
-     container_name: webserver
-     hostname: webserver
+  fe-webserver:
+     container_name: fe-webserver
+     hostname: fe-webserver
      image: amrox/webserver:${TAG}
      healthcheck:
        test: service nginx status || exit 1
@@ -121,39 +122,45 @@ services:
      ports:
        - 8888:8888
      links:
-       - dashboard:dashboard
-       - cadvisor:cadvisor
+       - fe-dashboard:dashboard
+       - fe-cadvisor:cadvisor
+     depends_on:
+       - fe-dashboard
+       - fe-cadvisor
      entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
      volumes:
        - /data:/data
 
-  dashboard:
-    container_name: dashboard
-    hostname: dashboard
+  fe-dashboard:
+    container_name: fe-dashboard
+    hostname: fe-dashboard
     image: amrox/dashboard:${TAG}
     ports:
       - 8080:3030
     healthcheck:
-      test: curl --fail 127.1:3030/dashboard/gc || exit 1
+      test: curl  --fail 127.1:3030/dashboard/gc || exit 1
       interval: 10m
       timeout: 5s
       retries: 5
     entrypoint: /run.sh
     links:
-      - mysql:mysql
+      - base-mysql:mysql
+    depends_on:
+      - base-mysql
 
-  2ma-eth:
-    container_name: 2ma-eth
-    hostname: 2ma-btc
+  be-2ma-eth-4h:
+    container_name : be-2ma-eth-4h
+    hostname: be-2ma-eth-4h
     image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
     logging:
       driver: journald
     links:
-      - mysql
+      - base-mysql:mysql
+      - base-redis:redis
     depends_on:
-      - mysql
-      - redis
+      - base-mysql
+      - base-redis
     environment:
       - CONFIG_ENV=stag/2MA/ETH
       - HOST=$HOSTNAME
@@ -163,23 +170,23 @@ services:
       timeout: 2s
       retries: 5
     volumes:
-      - ./test:/tmp
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  2ma-usdt:
-    container_name: 2ma-usdt
-    hostname: 2ma-usdt
+  be-2ma-usdt-4h:
+    container_name: be-2ma-usdt-4h
+    hostname: be-2ma-usdt-4h
     image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
     logging:
       driver: journald
     links:
-      - mysql
+      - base-mysql:mysql
+      - base-redis:redis
     depends_on:
-      - mysql
-      - redis
+      - base-mysql
+      - base-redis
     environment:
       - CONFIG_ENV=stag/2MA/USDT
       - HOST=$HOSTNAME
@@ -189,23 +196,23 @@ services:
       timeout: 2s
       retries: 5
     volumes:
-      - ./test:/tmp
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  2ma-btc:
-    container_name: 2ma-btc
-    hostname: 2ma-btc
+  be-2ma-btc-4h:
+    container_name: be-2ma-btc-5h
+    hostname: be-2ma-btc-4h
     image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
     logging:
       driver: journald
     links:
-      - mysql
+      - base-mysql:mysql
+      - base-redis:redis
     depends_on:
-      - mysql
-      - redis
+      - base-mysql
+      - base-redis
     environment:
       - CONFIG_ENV=stag/2MA/BTC
       - HOST=$HOSTNAME
@@ -215,23 +222,23 @@ services:
       timeout: 2s
       retries: 5
     volumes:
-      - ./test:/tmp
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  2ma-bnb:
-    container_name: 2ma-bnb
-    hostname: 2ma-bnb
+  be-2ma-bnb-4h:
+    container_name: be-2ma-bnb-4h
+    hostname: stag2ma-bnb-4h
     image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
     logging:
       driver: journald
     links:
-      - mysql
+      - base-mysql:mysql
+      - base-redis:redis
     depends_on:
-      - mysql
-      - redis
+      - base-mysql
+      - base-redis
     environment:
       - CONFIG_ENV=stag/2MA/BNB
       - HOST=$HOSTNAME
@@ -241,23 +248,23 @@ services:
       timeout: 2s
       retries: 5
     volumes:
-      - ./test:/tmp
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  4ma-usdt:
-    container_name: 4ma-usdt
-    hostname: 4ma-usdt
+  be-4ma-usdt-4h:
+    container_name: be-4ma-usdt-4h
+    hostname: be-4ma-usdt-4h
     image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
     logging:
       driver: journald
     links:
-      - mysql
+      - base-mysql:mysql
+      - base-redis:redis
     depends_on:
-      - mysql
-      - redis
+      - base-mysql
+      - base-redis
     environment:
       - CONFIG_ENV=stag/4MA/USDT
       - HOST=$HOSTNAME
@@ -267,23 +274,23 @@ services:
       timeout: 2s
       retries: 5
     volumes:
-      - ./test:/tmp
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  4ma-eth:
-    container_name: 4ma-eth
-    hostname: 4ma-btc
+  be-4ma-eth-4h:
+    container_name: be-4ma-eth-4h
+    hostname: be-4ma-eth-4h
     image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
     logging:
       driver: journald
     links:
-      - mysql
+      - base-mysql:mysql
+      - base-redis:redis
     depends_on:
-      - mysql
-      - redis
+      - base-mysql
+      - base-redis
     environment:
       - CONFIG_ENV=stag/4MA/ETH
       - HOST=$HOSTNAME
@@ -293,23 +300,23 @@ services:
       timeout: 2s
       retries: 5
     volumes:
-      - ./test:/tmp
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  4ma-btc:
-    container_name: 4ma-btc
-    hostname: 4ma-btc
+  be-4ma-btc-4h:
+    container_name: be-4ma-btc-4h
+    hostname: be-4ma-btc-4h
     image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
     logging:
       driver: journald
     links:
-      - mysql
+      - base-mysql:mysql
+      - base-redis:redis
     depends_on:
-      - mysql
-      - redis
+      - base-mysql
+      - base-redis
     environment:
       - CONFIG_ENV=stag/4MA/BTC
       - HOST=$HOSTNAME
@@ -319,23 +326,23 @@ services:
       timeout: 2s
       retries: 5
     volumes:
-      - ./test:/tmp
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  4ma-bnb:
-    container_name: 4ma-bnb
-    hostname: 4ma-bnb
+  be-4ma-bnb-4h:
+    container_name: be-4ma-bnb-4h
+    hostname: be-4ma-bnb-4h
     image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
     logging:
       driver: journald
     links:
-      - mysql
+      - base-mysql:mysql
+      - base-redis:redis
     depends_on:
-      - mysql
-      - redis
+      - base-mysql
+      - base-redis
     environment:
       - CONFIG_ENV=stag/4MA/BNB
       - HOST=$HOSTNAME
@@ -345,23 +352,23 @@ services:
       timeout: 2s
       retries: 5
     volumes:
-      - ./test:/tmp
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  5ma-btc:
-    container_name: 5ma-btc
-    hostname: 5ma-btc
+  be-5ma-btc-4h:
+    container_name: be-5ma-btc-4h
+    hostname: be-5ma-btc-4h
     image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
     logging:
       driver: journald
     links:
-      - mysql
+      - base-mysql:mysql
+      - base-redis:redis
     depends_on:
-      - mysql
-      - redis
+      - base-mysql
+      - base-redis
     environment:
       - CONFIG_ENV=stag/5MA/BTC
       - HOST=$HOSTNAME
@@ -371,23 +378,23 @@ services:
       timeout: 2s
       retries: 5
     volumes:
-      - ./test:/tmp
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  5ma-eth:
-    container_name: 5ma-eth
-    hostname: 5ma-eth
+  be-5ma-eth-4h:
+    container_name: be-5ma-eth-4h
+    hostname: be-5ma-eth-4h
     image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
     logging:
       driver: journald
     links:
-      - mysql
+      - base-mysql:mysql
+      - base-redis:redis
     depends_on:
-      - mysql
-      - redis
+      - base-mysql
+      - base-redis
     environment:
       - CONFIG_ENV=stag/5MA/ETH
       - HOST=$HOSTNAME
@@ -397,23 +404,23 @@ services:
       timeout: 2s
       retries: 5
     volumes:
-      - ./test:/tmp
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  5ma-usdt:
-    container_name: 5ma-usdt
-    hostname: 5ma-usdt
+  be-5ma-usdt-4h:
+    container_name: be-5ma-usdt-4h
+    hostname: be-5ma-usdt-4h
     image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
     logging:
       driver: journald
     links:
-      - mysql
+      - base-mysql:mysql
+      - base-redis:redis
     depends_on:
-      - mysql
-      - redis
+      - base-mysql
+      - base-redis
     environment:
       - CONFIG_ENV=stag/5MA/USDT
       - HOST=$HOSTNAME
@@ -423,7 +430,6 @@ services:
       timeout: 2s
       retries: 5
     volumes:
-      - ./test:/tmp
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
