@@ -8,6 +8,11 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
+apt-get update
+apt-get -y install software-properties-common
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys CC86BB64
+add-apt-repository ppa:rmescandon/yq -y
+
 # Setup local env
 apt-get -y update
 apt-get -y install docker.io ntpdate mysql-client screen atop jq iotop ntp awscli vim \
@@ -20,7 +25,7 @@ echo "export HOSTNAME" >> ~/.bashrc
 # Install Python 3.7.0 with pyenv
 apt-get install -y make build-essential libssl-dev zlib1g-dev \
 libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
-libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl
+libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl yq
 
 rm -rf /opt/pyenv ||true  # for travisci
 export PYENV_ROOT="/opt/pyenv"

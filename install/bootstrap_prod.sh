@@ -7,9 +7,14 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
+apt-get update
+apt-get install software-properties-common
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys CC86BB64
+add-apt-repository ppa:rmescandon/yq -y
+
 # Setup local env
 apt-get -y update
-apt-get -y install docker.io ntpdate mysql-client screen atop jq iotop ntp awscli vim atop htop automake autotools-dev fuse g++ git libcurl4-gnutls-dev libfuse-dev libssl-dev libxml2-dev make pkg-config
+apt-get -y install docker.io ntpdate mysql-client screen atop jq iotop ntp awscli vim atop htop automake autotools-dev fuse g++ git libcurl4-gnutls-dev libfuse-dev libssl-dev libxml2-dev make pkg-config yq
 apt autoremove --purge -y snapd emacs
 apt-get dist-upgrade -y
 apt-get clean; apt-get autoclean; rm -rf /var/lib/apt/lists/*
