@@ -97,7 +97,7 @@ container=$(docker ps|grep mysql|awk {'print $1'})
 
 # Create shared volume
 docker volume create data
-mkdir -p /data/{mysql,config,graphs,report}
+mkdir -p /data/{mysql,config,graphs,reports}
 
 # Install outside docker
 install_dir=/srv/greencandle
