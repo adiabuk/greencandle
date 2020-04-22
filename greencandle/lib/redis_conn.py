@@ -7,6 +7,7 @@ import ast
 import time
 import zlib
 import pickle
+from datetime import datetime
 import redis
 from str2bool import str2bool
 from .mysql import Mysql
@@ -165,7 +166,7 @@ class Redis():
         """Retrive decoded OHLC data from redis"""
         try:
             return float(ast.literal_eval(self.get_item(item, indicator).decode())['result'])
-        except (TypeError,AttributeError):
+        except (TypeError, AttributeError):
             return None
 
     def log_event(self, event, rate, perc_rate, buy, sell, pair, current_time, current):
@@ -242,7 +243,7 @@ class Redis():
         items = self.get_items(pair, self.interval)
         current = self.get_current(items[-1])
         previous = self.get_current(items[-2])
-        current_mepoch = float(current[1]) / 1000
+        current_epoch = float(current[1]) / 1000
 
         rehydrated = pickle.loads(zlib.decompress(current[-1]))
         last_rehydrated = pickle.loads(zlib.decompress(previous[-1]))
@@ -269,7 +270,7 @@ class Redis():
 
 
         current_price = float(close)
-        current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_mepoch))
+        current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_epoch))
 
         # Store/update highest price
         #self.put_high_price(pair, interval, current_price)
@@ -314,11 +315,13 @@ class Redis():
 
         if not buy_price and str2bool(config.main.wait_between_trades):
             try:
-                buy_time = dbase.fetch_sql_data("select sell_time from trades order by "
-                                                "sell_time desc LIMIT 1", header=False)[0][0]
+                buy_time = dbase.fetch_sql_data("select sell_time from trades where pair='{}' "
+                                                "and closed_by = 'prod' order by sell_time desc "
+                                                "LIMIT 1", header=False)[0][0]
+                buy_epoch = 0 if not isinstance(buy_time, datetime) else \
+                    buy_time.timestamp()
                 pattern = '%Y-%m-%d %H:%M:%S'
                 buy_epoch = buy_time.timestamp()
-                current_epoch = current_mepoch    # FIXME
                 able_to_buy = (int(buy_epoch) +
                                int(convert_to_seconds(config.main.time_between_trades))) < \
                                current_epoch
