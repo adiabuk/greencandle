@@ -104,7 +104,7 @@ class Redis():
         """Delete highest price in redis"""
         key = 'highClose_{0}_{1}'.format(pair, interval)
         result = self.conn.delete(key)
-        self.logger.debug("Deleting high price, result:%s", result)
+        self.logger.debug("Deleting high price for %s, result:%s", pair, result)
 
     def get_items(self, pair, interval):
         """
@@ -410,8 +410,8 @@ class Redis():
 
         winning_sell = self.get_rules(rules, 'sell')
         winning_buy = self.get_rules(rules, 'buy')
-        self.logger.info('Sell Rules matched: %s', winning_sell)
-        self.logger.info('Buy Rules matched: %s', winning_buy)
+        self.logger.info('%s sell Rules matched: %s', pair, winning_sell)
+        self.logger.info('%s buy Rules matched: %s', pair, winning_buy)
         del dbase
         return (result, current_time, current_price, {'sell':winning_sell,
                                                       'buy': winning_buy})
