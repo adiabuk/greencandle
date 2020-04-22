@@ -56,11 +56,10 @@ class Trade():
         # get last close time
         redis = Redis()
         close_time = redis.get_items(pair, interval)[-1].decode().split(':')[-1]
-        scheme = {}
-        data = {scheme["event"]:{"result": event,
-                                 "current_price": format(float(price), ".20f"),
-                                 "date": close_time,
-                                }}
+        data = {"event":{"result": event,
+                         "current_price": format(float(price), ".20f"),
+                         "date": close_time,
+                        }}
 
         redis.redis_conn(pair, interval, data, close_time)
         del redis
