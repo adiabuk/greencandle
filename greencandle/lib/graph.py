@@ -192,7 +192,7 @@ class Graph():
                              index_item, ind, error)
             try:
                 result_list['event'] = ast.literal_eval(redis.get_item(index_item,
-                                                                       'trigger').decode())
+                                                                       'event').decode())
             except AttributeError:  # no event for this time period, so skip
                 pass
             rehydrated = pickle.loads(zlib.decompress(result_list['ohlc']))
