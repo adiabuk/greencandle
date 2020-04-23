@@ -100,6 +100,11 @@
       "is_binary": false,
       "is_secret": false
     },
+    "divisor": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
     "drain": {
       "value": "False",
       "is_binary": false,

@@ -30,6 +30,7 @@ class Trade():
         self.test_data = test_data
         self.test_trade = test_trade
         self.max_trades = int(config.main.max_trades)
+        self.divisor = int(config.main.divisor) if config.main.divisor else None
         binance_auth()
 
         self.interval = interval
@@ -127,7 +128,10 @@ class Trade():
                 if avail_slots <= 0:
                     self.logger.warning("Too many trades, skipping")
                     break
-                proposed_base_amount = current_base_bal / (self.max_trades + 1)
+                if self.main.divisor
+                    proposed_base_amount = current_base_bal / self.divisor
+                else:
+                    proposed_base_amount = current_base_bal / (self.max_trades + 1)
                 self.logger.info('item: %s, proposed: %s, last:%s', item, proposed_base_amount,
                                  last_buy_price)
                 base_amount = max(proposed_base_amount, last_buy_price)
