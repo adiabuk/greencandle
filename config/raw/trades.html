@@ -9,6 +9,7 @@
         <th>Buy Time</th>
         <th>Current Price</th>
         <th>Perc</th>
+        <th>Matched Rules</th>
         <th>Sell Now</th>
         <th>Strategy</th>
         <th>Link</th>
@@ -21,6 +22,7 @@
         <td class="y_n">{{ v['buy_time'] }}</td>
         <td class="y_n">{{ v['current_price'] }}</td>
         <td class="y_n">{{ v['perc'] }}</td>
+        <td class="y_n">{{ v['matching'] }}</td>
         <td class="y_n">
             <form action="sell?pair={{ k }}&name={{ v['name'] }}&price={{ v['current_price'] }}" method="post">
                 <button name="button" type="submit">SELL</button>

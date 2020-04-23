@@ -119,19 +119,22 @@ def get_open(scheduler):
     print("Getting open trades", file=sys.stderr)
     DATA = {}
     dbase = Mysql()
-
+    interval = '4h'
     results = dbase.fetch_sql_data("select * from open_trades", header=False)
 
+    redis = redis_conn.Redis(interval=interval, test=False, db=0)
     for entry in results:
         pair, buy_price, buy_time, current_price, perc, name = entry
+        matching = redis.get_action(pair=pair, interval=interval)[-1]
         print(entry, file=sys.stdout)
 
         DATA[pair] = {"buy_price": buy_price, "buy_time": buy_time,
+                      "matching": "Buy:{},Sell:{}".format(matching["buy"], matching["sell"]),
                       "current_price": current_price, "perc": perc,
                       "graph": get_latest_graph(pair, "html"), "name": name,
                       "strategy": get_keys_by_value(config.pairs, pair),
                       "thumbnail": get_latest_graph(pair, "resized.png")}
-
+    del redis
     SCHED.enter(60, 60, get_open, (scheduler, ))
 
 def get_keys_by_value(dict_of_elements, value_to_find):
