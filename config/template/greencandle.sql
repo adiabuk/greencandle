@@ -34,7 +34,7 @@ CREATE TABLE `balance` (
   PRIMARY KEY (`id`),
   KEY `exchange_id` (`exchange_id`),
   CONSTRAINT `balance_ibfk_2` FOREIGN KEY (`exchange_id`) REFERENCES `exchange` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10644 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1471 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -224,7 +224,8 @@ CREATE TABLE `trades` (
   `quote_in` varchar(30) DEFAULT NULL,
   `quote_out` varchar(30) DEFAULT NULL,
   `name` varchar(10) DEFAULT NULL,
-  `closed_by` varchar(10) DEFAULT NULL
+  `closed_by` varchar(10) DEFAULT NULL,
+  `drawdown_perc` varchar(4) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -332,7 +333,7 @@ CREATE TABLE `trades` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-22 15:35:24
+-- Dump completed on 2020-04-23 20:08:48
 -- MySQL dump 10.16  Distrib 10.1.44-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: mysql    Database: greencandle
@@ -383,4 +384,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-22 15:35:24
+-- Dump completed on 2020-04-23 20:08:48
