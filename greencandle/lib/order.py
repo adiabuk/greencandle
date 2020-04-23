@@ -128,7 +128,7 @@ class Trade():
                 if avail_slots <= 0:
                     self.logger.warning("Too many trades, skipping")
                     break
-                if self.main.divisor
+                if self.main.divisor:
                     proposed_base_amount = current_base_bal / self.divisor
                 else:
                     proposed_base_amount = current_base_bal / (self.max_trades + 1)
