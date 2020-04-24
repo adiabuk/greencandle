@@ -128,7 +128,7 @@ class Trade():
                 if avail_slots <= 0:
                     self.logger.warning("Too many trades, skipping")
                     break
-                if self.main.divisor:
+                if self.divisor:
                     proposed_base_amount = current_base_bal / self.divisor
                 else:
                     proposed_base_amount = current_base_bal / (self.max_trades + 1)
@@ -187,7 +187,7 @@ class Trade():
             self.logger.info("Nothing to buy")
 
     @GET_EXCEPTIONS
-    def sell(self, sell_list, name=None):
+    def sell(self, sell_list, name=None, drawdown='NULL'):
         """
         Sell items in sell_list
         """
@@ -216,7 +216,7 @@ class Trade():
                         (not self.test_trade and 'transactTime' in result):
                     dbase.update_trades(pair=item, sell_time=current_time,
                                         sell_price=price, quote=quantity,
-                                        base_out=base_out, name=name)
+                                        base_out=base_out, name=name, drawdown=drawdown)
 
                     self.send_redis_trade(item, price, self.interval, "SELL")
                 else:
