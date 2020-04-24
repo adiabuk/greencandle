@@ -30,7 +30,7 @@ def create_config():
     Return
         None: sections will be added to globals() by section and be available module-wide
     """
-    parser = ConfigParser()
+    parser = ConfigParser(allow_no_value=True)
     parser.read("/etc/greencandle.ini")
 
     for section in parser.sections():
