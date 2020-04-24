@@ -2,6 +2,7 @@
   "buy_rule1": "last_low \u003c results.previous.lower_52 and low \u003e results.current.lower_52 and close \u003e last_close and high \u003c results.current.middle_52 and perc_rate \u003e0",
   "buy_rule2": "last_low \u003c results.previous.middle_52 and low \u003e results.current.middle_52 and close \u003e last_close and high \u003c results.current.upper_52 and perc_rate \u003e0",
   "buy_rule3": "results.current.RSI_14 \u003c 10",
+  "divisor": "3",
   "indicators": "get_hma;HMA;14 get_rsi;RSI;14 get_bb;upper;52,4.3 get_bb;lower;52,4.3 get_bb;middle;52,4.3",
   "interval": "2h",
   "no_of_klines": "52",

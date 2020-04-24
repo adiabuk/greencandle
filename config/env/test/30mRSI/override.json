@@ -6,6 +6,7 @@
   "buy_rule5": "",
   "buy_rule6": "",
   "buy_rule7": "",
+  "divisor": "3",
   "indicators": "get_moving_averages;EMA;5 get_rsi;RSI;2",
   "interval": "30m",
   "pairs": "ETHUSDT BTCUSDT BNBUSDT LINKUSDT EOSUSDT BCHABCUSDT LTCUSDT BTTUSDT XRPUSDT LINKUSDT",
