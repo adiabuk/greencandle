@@ -18,7 +18,7 @@ from .profit import get_recent_profit
 from .order import Trade
 from .binance_common import get_dataframes
 from .logger import get_logger, get_decorator
-
+from .common import perc_diff
 from . import config
 LOGGER = get_logger(__name__)
 CHUNK_SIZE = int(config.main.no_of_klines)
@@ -43,6 +43,28 @@ def serial_test(pairs, intervals, data_dir, indicators):
         for interval in intervals:
             with ThreadPoolExecutor(max_workers=len(intervals)) as pool:
                 pool.submit(perform_data, pair, interval, data_dir, indicators)
+
+def update_minprice(pair, buy_time, current_price, interval):
+    """
+    bla bla bla
+    """
+    redis = Redis(interval=interval, test=True, db=1)
+
+    min_price = redis.get_item(pair, current_price)
+
+    if (min_price and current_price < float(min_price)) or not min_price:
+        data = {"buy_time": buy_time, "current_price": current_price}
+        redis.redis_conn(pair, interval, data, buy_time)
+    del redis
+
+def get_drawdown():
+    """
+    bla bla bla
+    """
+    drawdown = perc_diff(buy_price, min_price)
+    save_to_db
+    remove_min_price
+    dbase = Mysql(test=True, interval=interval)
 
 @GET_EXCEPTIONS
 def perform_data(pair, interval, data_dir, indicators):
@@ -90,10 +112,15 @@ def perform_data(pair, interval, data_dir, indicators):
             buys.append((pair, current_time, current_price))
             LOGGER.debug("Items to buy: %s", buys)
             trade.buy(buys)
+            update_minprice(pair, current_time, current_price, interval)
+            # add current_price
         elif result == "SELL":
             sells.append((pair, current_time, current_price))
             LOGGER.debug("Items to sell: %s", sells)
             trade.sell(sells)
+            # update price
+        # elif still in trade
+            # update price
 
     del redis
     LOGGER.info("Selling remaining items")
@@ -157,7 +184,7 @@ def parallel_test(pairs, interval, data_dir, indicators):
             if result == "SELL":
                 LOGGER.debug("Items to sell")
                 sells.append((pair, current_time, current_price))
-        trade.sell(sells)
+        trade.sell(sells, drawdown=drawdown)
         trade.buy(buys)
 
     print(get_recent_profit(True, interval))
