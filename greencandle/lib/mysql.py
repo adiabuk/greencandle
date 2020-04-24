@@ -195,21 +195,22 @@ class Mysql():
         return cur.fetchall()
 
     @get_exceptions
-    def update_trades(self, pair, sell_time, sell_price, quote, base_out, name=None):
+    def update_trades(self, pair, sell_time, sell_price, quote, base_out,
+                      name=None, drawdown='NULL'):
         """
         Update an existing trade with sell price
         """
         job_name = name if name else config.main.name
         self.logger.info("Selling %s for %s", pair, self.interval)
         command = """update trades set sell_price={0},sell_time="{1}", quote_out="{2}",
-        base_out="{3}", closed_by="{6}" where sell_price is NULL and `interval`="{4}"
+        base_out="{3}", closed_by="{6}", drawdown={7} where sell_price is NULL and `interval`="{4}"
         and pair="{5}" and name in ("{6}", "prod") """.format('%.15f' % float(sell_price),
                                                               sell_time,
                                                               '%.15f' % float(quote),
                                                               '%.15f' % float(base_out),
                                                               self.interval,
                                                               pair,
-                                                              job_name)
+                                                              job_name, drawdown)
         self.run_sql_query(command)
 
     def get_active_trades(self):
