@@ -36,8 +36,9 @@ def serial_test(pairs, intervals, data_dir, indicators):
             dbase = Mysql(test=True, interval=interval)
             dbase.delete_data()
             del dbase
-            redis = Redis(interval=interval, test=True, db=0)
-            redis.clear_all()
+            for db in (0, 1):
+                redis = Redis(interval=interval, test=True, db=db)
+                redis.clear_all()
             del redis
 
         for interval in intervals:
@@ -49,15 +50,17 @@ def update_minprice(pair, buy_time, current_price, interval):
     bla bla bla
     """
     redis = Redis(interval=interval, test=True, db=1)
-
-    items = redis.get_items(pair, interval)
-    min_price = redis.get_item(items[-1],'min_price')
+    try:
+        items = redis.get_items(pair, interval)
+        min_price = redis.get_item(items[-1], 'min_price')
+    except IndexError:
+        min_price = None
+    LOGGER.debug("AMROX - getting here, %s", buy_time)
 
     if (min_price and float(current_price) < float(min_price)) or not min_price:
         data = {"buy_time": buy_time, "min_price": current_price}
         redis.redis_conn(pair, interval, data, buy_time)
-        LOGGER.debug("AMROX - updating pricei %s %s", current_price, min_price)
-        LOGGER.debug("AMROX - type:%s", type(current_price))
+        LOGGER.debug("AMROX - updating price current:%s min:%s", current_price, min_price)
     else:
         LOGGER.debug("AMROX - NOT updating price")
     del redis
@@ -66,12 +69,11 @@ def get_drawdown(pair, buy_price, interval):
     """
     bla bla bla
     """
-    min_price = 0
-
     redis = Redis(interval=interval, test=True, db=1)
     items = redis.get_items(pair, interval)
-    min_price = redis.get_item(items[-1],'min_price')
+    min_price = redis.get_item(items[-1], 'min_price')
     drawdown = perc_diff(buy_price, min_price)
+    redis.del_key(items[-1])
     return drawdown
 
 def remove_min_price(pair, interval):
@@ -108,9 +110,11 @@ def perform_data(pair, interval, data_dir, indicators):
         LOGGER.debug("chunk: %s, %s", beg, end)
         dataframe = dframe.copy()[beg: end]
 
+        current_ctime = int(dataframe.iloc[-1].closeTime)/1000
         current_time = time.strftime("%Y-%m-%d %H:%M:%S",
-                                     time.gmtime(int(dataframe.iloc[-1].closeTime)/1000))
+                                     time.gmtime(current_ctime))
         LOGGER.debug("current date: %s", current_time)
+
         if len(dataframe) < CHUNK_SIZE:
             LOGGER.debug("End of dataframe")
             break
@@ -126,19 +130,20 @@ def perform_data(pair, interval, data_dir, indicators):
             buys.append((pair, current_time, current_price))
             LOGGER.debug("Items to buy: %s", buys)
             trade.buy(buys)
-            update_minprice(pair, current_time, current_price, interval)
+            update_minprice(pair, current_ctime, current_price, interval)
             # add current_price
         elif result == "SELL":
             sells.append((pair, current_time, current_price))
             LOGGER.debug("Items to sell: %s", sells)
-            buy_time = current_trade[0][3]
+            buy_time = int(current_trade[0][2].timestamp())
             buy_price = current_trade[0][0]
             drawdown = get_drawdown(pair, buy_price, interval)
             trade.sell(sells, drawdown=drawdown)
             update_minprice(pair, buy_time, current_price, interval)
 
         elif current_trade:
-            buy_time = current_trade[0][3]
+            buy_time = int(current_trade[0][2].timestamp())
+
             update_minprice(pair, buy_time, current_price, interval)
 
     del redis
