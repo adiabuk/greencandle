@@ -107,6 +107,13 @@ class Redis():
         result = self.conn.delete(key)
         self.logger.debug("Deleting high price for %s, result:%s", pair, result)
 
+    def del_key(self, key):
+        """
+        delete a given entry
+        """
+        result = self.conn.delete(key)
+        self.logger.debug("Deleting key %s, result:%s", key, result)
+
     def get_items(self, pair, interval):
         """
         Get sorted list of keys for a trading pair/interval

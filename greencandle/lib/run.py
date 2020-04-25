@@ -18,7 +18,7 @@ from .profit import get_recent_profit
 from .order import Trade
 from .binance_common import get_dataframes
 from .logger import get_logger, get_decorator
-
+from .common import perc_diff
 from . import config
 LOGGER = get_logger(__name__)
 CHUNK_SIZE = int(config.main.no_of_klines)
@@ -36,13 +36,51 @@ def serial_test(pairs, intervals, data_dir, indicators):
             dbase = Mysql(test=True, interval=interval)
             dbase.delete_data()
             del dbase
-            redis = Redis(interval=interval, test=True, db=0)
-            redis.clear_all()
+            for db in (0, 1):
+                redis = Redis(interval=interval, test=True, db=db)
+                redis.clear_all()
             del redis
 
         for interval in intervals:
             with ThreadPoolExecutor(max_workers=len(intervals)) as pool:
                 pool.submit(perform_data, pair, interval, data_dir, indicators)
+
+def update_minprice(pair, buy_time, current_price, interval):
+    """
+    Update minimum price for current asset.  Create redis record if it doesn't exist.
+    """
+    redis = Redis(interval=interval, test=True, db=1)
+    try:
+        # get most recent record in redis db1
+        # key contains epoch time to ensure they are ordered.
+        items = redis.get_items(pair, interval)
+        min_price = redis.get_item(items[-1], 'min_price')
+    except IndexError:
+        min_price = None
+
+    # if min price already exists and current price is lower, or there is no min price yet.
+    if (min_price and float(current_price) < float(min_price)) or not min_price:
+        data = {"buy_time": buy_time, "min_price": current_price}
+        redis.redis_conn(pair, interval, data, buy_time)
+    del redis
+
+def get_drawdown(pair, buy_price, interval):
+    """
+    Get minimum price of current open trade for given pair/interval
+    and calculate drawdown based on trade opening price.
+    Return drawdown as a percentage
+    """
+    redis = Redis(interval=interval, test=True, db=1)
+    items = redis.get_items(pair, interval)
+    min_price = redis.get_item(items[-1], 'min_price')
+    drawdown = perc_diff(buy_price, min_price)
+    redis.del_key(items[-1])
+    return drawdown
+
+def remove_min_price(pair, interval):
+    """
+    bla bla bla
+    """
 
 @GET_EXCEPTIONS
 def perform_data(pair, interval, data_dir, indicators):
@@ -61,6 +99,7 @@ def perform_data(pair, interval, data_dir, indicators):
     dframe = pickle.load(handle)
     handle.close()
 
+    dbase = Mysql(test=True, interval=interval)
     prices_trunk = {pair: "0"}
     for beg in range(len(dframe) - CHUNK_SIZE):
         LOGGER.debug("IN LOOP %s ", beg)
@@ -72,9 +111,11 @@ def perform_data(pair, interval, data_dir, indicators):
         LOGGER.debug("chunk: %s, %s", beg, end)
         dataframe = dframe.copy()[beg: end]
 
+        current_ctime = int(dataframe.iloc[-1].closeTime)/1000
         current_time = time.strftime("%Y-%m-%d %H:%M:%S",
-                                     time.gmtime(int(dataframe.iloc[-1].closeTime)/1000))
+                                     time.gmtime(current_ctime))
         LOGGER.debug("current date: %s", current_time)
+
         if len(dataframe) < CHUNK_SIZE:
             LOGGER.debug("End of dataframe")
             break
@@ -85,17 +126,28 @@ def perform_data(pair, interval, data_dir, indicators):
 
         result, current_time, current_price, _ = redis.get_action(pair=pair, interval=interval)
         del engine
-
+        current_trade = dbase.get_trade_value(pair)
         if result == "BUY":
             buys.append((pair, current_time, current_price))
             LOGGER.debug("Items to buy: %s", buys)
             trade.buy(buys)
+            update_minprice(pair, current_ctime, current_price, interval)
         elif result == "SELL":
             sells.append((pair, current_time, current_price))
             LOGGER.debug("Items to sell: %s", sells)
-            trade.sell(sells)
+            buy_time = int(current_trade[0][2].timestamp())
+            buy_price = current_trade[0][0]
+            drawdown = get_drawdown(pair, buy_price, interval)
+            trade.sell(sells, drawdown=drawdown)
+            update_minprice(pair, buy_time, current_price, interval)
+
+        elif current_trade:
+            # open trade exists but no BUY or SELL signal.
+            buy_time = int(current_trade[0][2].timestamp())
+            update_minprice(pair, buy_time, current_price, interval)
 
     del redis
+    del dbase
     LOGGER.info("Selling remaining items")
     sells = []
     sells.append((pair, current_time, current_price))
@@ -148,6 +200,7 @@ def parallel_test(pairs, interval, data_dir, indicators):
             engine.get_data(localconfig=indicators)
 
             result, current_time, current_price, _ = redis.get_action(pair=pair, interval=interval)
+
             LOGGER.info('In Strategy %s', result)
             del engine
 
@@ -157,7 +210,8 @@ def parallel_test(pairs, interval, data_dir, indicators):
             if result == "SELL":
                 LOGGER.debug("Items to sell")
                 sells.append((pair, current_time, current_price))
-        trade.sell(sells)
+        drawdown = 0
+        trade.sell(sells, drawdown=drawdown)
         trade.buy(buys)
 
     print(get_recent_profit(True, interval))
