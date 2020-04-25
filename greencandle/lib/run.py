@@ -50,11 +50,16 @@ def update_minprice(pair, buy_time, current_price, interval):
     """
     redis = Redis(interval=interval, test=True, db=1)
 
-    min_price = redis.get_item(pair, current_price)
+    items = redis.get_items(pair, interval)
+    min_price = redis.get_item(items[-1],'min_price')
 
-    if (min_price and current_price < float(min_price)) or not min_price:
-        data = {"buy_time": buy_time, "current_price": current_price}
+    if (min_price and float(current_price) < float(min_price)) or not min_price:
+        data = {"buy_time": buy_time, "min_price": current_price}
         redis.redis_conn(pair, interval, data, buy_time)
+        LOGGER.debug("AMROX - updating pricei %s %s", current_price, min_price)
+        LOGGER.debug("AMROX - type:%s", type(current_price))
+    else:
+        LOGGER.debug("AMROX - NOT updating price")
     del redis
 
 def get_drawdown(pair, buy_price, interval):
@@ -64,7 +69,8 @@ def get_drawdown(pair, buy_price, interval):
     min_price = 0
 
     redis = Redis(interval=interval, test=True, db=1)
-    min_price = redis.get_item(pair, 1, 1)
+    items = redis.get_items(pair, interval)
+    min_price = redis.get_item(items[-1],'min_price')
     drawdown = perc_diff(buy_price, min_price)
     return drawdown
 
@@ -90,6 +96,7 @@ def perform_data(pair, interval, data_dir, indicators):
     dframe = pickle.load(handle)
     handle.close()
 
+    dbase = Mysql(test=True, interval=interval)
     prices_trunk = {pair: "0"}
     for beg in range(len(dframe) - CHUNK_SIZE):
         LOGGER.debug("IN LOOP %s ", beg)
@@ -114,7 +121,7 @@ def perform_data(pair, interval, data_dir, indicators):
 
         result, current_time, current_price, _ = redis.get_action(pair=pair, interval=interval)
         del engine
-
+        current_trade = dbase.get_trade_value(pair)
         if result == "BUY":
             buys.append((pair, current_time, current_price))
             LOGGER.debug("Items to buy: %s", buys)
@@ -124,12 +131,18 @@ def perform_data(pair, interval, data_dir, indicators):
         elif result == "SELL":
             sells.append((pair, current_time, current_price))
             LOGGER.debug("Items to sell: %s", sells)
-            trade.sell(sells)
-            # update price
-        # elif still in trade
-            # update price
+            buy_time = current_trade[0][3]
+            buy_price = current_trade[0][0]
+            drawdown = get_drawdown(pair, buy_price, interval)
+            trade.sell(sells, drawdown=drawdown)
+            update_minprice(pair, buy_time, current_price, interval)
+
+        elif current_trade:
+            buy_time = current_trade[0][3]
+            update_minprice(pair, buy_time, current_price, interval)
 
     del redis
+    del dbase
     LOGGER.info("Selling remaining items")
     sells = []
     sells.append((pair, current_time, current_price))
