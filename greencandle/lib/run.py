@@ -57,14 +57,21 @@ def update_minprice(pair, buy_time, current_price, interval):
         redis.redis_conn(pair, interval, data, buy_time)
     del redis
 
-def get_drawdown():
+def get_drawdown(pair, buy_price, interval):
     """
     bla bla bla
     """
+    min_price = 0
+
+    redis = Redis(interval=interval, test=True, db=1)
+    min_price = redis.get_item(pair, 1, 1)
     drawdown = perc_diff(buy_price, min_price)
-    save_to_db
-    remove_min_price
-    dbase = Mysql(test=True, interval=interval)
+    return drawdown
+
+def remove_min_price(pair, interval):
+    """
+    bla bla bla
+    """
 
 @GET_EXCEPTIONS
 def perform_data(pair, interval, data_dir, indicators):
@@ -175,6 +182,7 @@ def parallel_test(pairs, interval, data_dir, indicators):
             engine.get_data(localconfig=indicators)
 
             result, current_time, current_price, _ = redis.get_action(pair=pair, interval=interval)
+
             LOGGER.info('In Strategy %s', result)
             del engine
 
@@ -184,6 +192,7 @@ def parallel_test(pairs, interval, data_dir, indicators):
             if result == "SELL":
                 LOGGER.debug("Items to sell")
                 sells.append((pair, current_time, current_price))
+        drawdown = 0
         trade.sell(sells, drawdown=drawdown)
         trade.buy(buys)
 
