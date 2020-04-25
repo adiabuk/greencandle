@@ -55,14 +55,10 @@ def update_minprice(pair, buy_time, current_price, interval):
         min_price = redis.get_item(items[-1], 'min_price')
     except IndexError:
         min_price = None
-    LOGGER.debug("AMROX - getting here, %s", buy_time)
 
     if (min_price and float(current_price) < float(min_price)) or not min_price:
         data = {"buy_time": buy_time, "min_price": current_price}
         redis.redis_conn(pair, interval, data, buy_time)
-        LOGGER.debug("AMROX - updating price current:%s min:%s", current_price, min_price)
-    else:
-        LOGGER.debug("AMROX - NOT updating price")
     del redis
 
 def get_drawdown(pair, buy_price, interval):
@@ -131,7 +127,6 @@ def perform_data(pair, interval, data_dir, indicators):
             LOGGER.debug("Items to buy: %s", buys)
             trade.buy(buys)
             update_minprice(pair, current_ctime, current_price, interval)
-            # add current_price
         elif result == "SELL":
             sells.append((pair, current_time, current_price))
             LOGGER.debug("Items to sell: %s", sells)
