@@ -47,15 +47,18 @@ def serial_test(pairs, intervals, data_dir, indicators):
 
 def update_minprice(pair, buy_time, current_price, interval):
     """
-    bla bla bla
+    Update minimum price for current asset.  Create redis record if it doesn't exist.
     """
     redis = Redis(interval=interval, test=True, db=1)
     try:
+        # get most recent record in redis db1
+        # key contains epoch time to ensure they are ordered.
         items = redis.get_items(pair, interval)
         min_price = redis.get_item(items[-1], 'min_price')
     except IndexError:
         min_price = None
 
+    # if min price already exists and current price is lower, or there is no min price yet.
     if (min_price and float(current_price) < float(min_price)) or not min_price:
         data = {"buy_time": buy_time, "min_price": current_price}
         redis.redis_conn(pair, interval, data, buy_time)
@@ -63,7 +66,9 @@ def update_minprice(pair, buy_time, current_price, interval):
 
 def get_drawdown(pair, buy_price, interval):
     """
-    bla bla bla
+    Get minimum price of current open trade for given pair/interval
+    and calculate drawdown based on trade opening price.
+    Return drawdown as a percentage
     """
     redis = Redis(interval=interval, test=True, db=1)
     items = redis.get_items(pair, interval)
@@ -137,8 +142,8 @@ def perform_data(pair, interval, data_dir, indicators):
             update_minprice(pair, buy_time, current_price, interval)
 
         elif current_trade:
+            # open trade exists but no BUY or SELL signal.
             buy_time = int(current_trade[0][2].timestamp())
-
             update_minprice(pair, buy_time, current_price, interval)
 
     del redis
