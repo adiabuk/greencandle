@@ -203,7 +203,7 @@ class Mysql():
         job_name = name if name else config.main.name
         self.logger.info("Selling %s for %s", pair, self.interval)
         command = """update trades set sell_price={0},sell_time="{1}", quote_out="{2}",
-        base_out="{3}", closed_by="{6}", drawdown_perc={7} where sell_price is NULL and `interval`="{4}"
+        base_out="{3}", closed_by="{6}", drawdown_perc=abs({7}) where sell_price is NULL and `interval`="{4}"
         and pair="{5}" and name in ("{6}", "prod") """.format('%.15f' % float(sell_price),
                                                               sell_time,
                                                               '%.15f' % float(quote),
