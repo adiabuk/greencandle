@@ -1,5 +1,5 @@
 {
-  "buy_rule1": "results.current.EMA_2 \u003e results.current.EMA_69 and results.previous.EMA_2 \u003c results.previous.EMA_69",
+  "buy_rule1": "results.current.EMA_2 \u003e results.current.EMA_69",
   "buy_rule2": "",
   "buy_rule3": "",
   "buy_rule4": "",
