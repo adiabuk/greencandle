@@ -10,12 +10,21 @@ import plotly.offline as py
 import pandas as pd
 from greencandle.lib import config
 config.create_config()
-
 from greencandle.lib.mysql import Mysql
+
+def usage():
+    """
+    print command usage
+    """
+    sys.stderr.write("Usage: {0} <interval> <filename>\n".format(sys.argv[0]))
+
 def main():
     """Main function"""
-    if len(sys.argv) < 3:
-        sys.stderr.write("Usage: {0} <interval> <filename>\n".format(sys.argv[0]))
+    if len(sys.argv) > 1 and sys.argv[1] == '--help':
+        usage()
+        sys.exit(0)
+    elif len(sys.argv) < 3:
+        usage()
         sys.exit(1)
     interval = sys.argv[1]
     dbase = Mysql(interval=interval)
