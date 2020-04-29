@@ -50,18 +50,12 @@ def update_minprice(pair, buy_time, current_price, interval):
     Update minimum price for current asset.  Create redis record if it doesn't exist.
     """
     redis = Redis(interval=interval, test=True, db=1)
-    try:
-        # get most recent record in redis db1
-        # key contains epoch time to ensure they are ordered.
-        items = redis.get_items(pair, interval)
-        min_price = redis.get_item(items[-1], 'min_price')
-    except IndexError:
-        min_price = None
+    min_price = redis.get_item(pair, 'min_price')
 
     # if min price already exists and current price is lower, or there is no min price yet.
     if (min_price and float(current_price) < float(min_price)) or not min_price:
-        data = {"buy_time": buy_time, "min_price": current_price}
-        redis.redis_conn(pair, interval, data, buy_time)
+        data = {"buy_time": int(buy_time), "min_price": current_price}
+        redis.add_min_price(pair, data)
     del redis
 
 def get_drawdown(pair, buy_price, interval):
@@ -71,16 +65,11 @@ def get_drawdown(pair, buy_price, interval):
     Return drawdown as a percentage
     """
     redis = Redis(interval=interval, test=True, db=1)
-    items = redis.get_items(pair, interval)
-    min_price = redis.get_item(items[-1], 'min_price')
+    min_price = redis.get_item(pair, 'min_price')
     drawdown = perc_diff(buy_price, min_price)
-    redis.del_key(items[-1])
+    redis.rm_min_price(pair)
+    LOGGER.debug("Getting drawdown: buy_price:%s, min_price:%s", buy_price, min_price)
     return drawdown
-
-def remove_min_price(pair, interval):
-    """
-    bla bla bla
-    """
 
 @GET_EXCEPTIONS
 def perform_data(pair, interval, data_dir, indicators):
@@ -133,13 +122,13 @@ def perform_data(pair, interval, data_dir, indicators):
             trade.buy(buys)
             update_minprice(pair, current_ctime, current_price, interval)
         elif result == "SELL":
+            update_minprice(pair, current_ctime, current_price, interval)
             sells.append((pair, current_time, current_price))
             LOGGER.debug("Items to sell: %s", sells)
             buy_time = int(current_trade[0][2].timestamp())
             buy_price = current_trade[0][0]
             drawdown = get_drawdown(pair, buy_price, interval)
             trade.sell(sells, drawdown=drawdown)
-            update_minprice(pair, buy_time, current_price, interval)
 
         elif current_trade:
             # open trade exists but no BUY or SELL signal.
@@ -151,6 +140,7 @@ def perform_data(pair, interval, data_dir, indicators):
     LOGGER.info("Selling remaining items")
     sells = []
     sells.append((pair, current_time, current_price))
+    update_minprice(pair, buy_time, current_price, interval)
     trade.sell(sells)
 
 def parallel_test(pairs, interval, data_dir, indicators):

@@ -56,6 +56,20 @@ class Redis():
         """
         self.conn.execute_command("flushdb")
 
+    def add_min_price(self, pair, data):
+        """
+        add/update min price dict
+        """
+        for key, val in data.items():
+            response = self.conn.hset(pair, key, val)
+            return response
+
+    def rm_min_price(self, pair):
+        """
+        Remove current min_price
+        """
+        result = self.conn.delete(pair)
+
     def redis_conn(self, pair, interval, data, now):
         """
         Add data to redis
