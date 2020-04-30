@@ -61,8 +61,10 @@ class Redis():
         add/update min price dict
         """
         for key, val in data.items():
+
+            self.logger.debug("Adding to Redis: %s %s %s", pair, key, val)
             response = self.conn.hset(pair, key, val)
-            return response
+        return response
 
     def rm_min_price(self, pair):
         """
