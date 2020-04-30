@@ -307,7 +307,7 @@
       "is_secret": false
     },
     "time_between_trades": {
-      "value": "24h",
+      "value": "84h",
       "is_binary": false,
       "is_secret": false
     },
