@@ -54,7 +54,7 @@ services:
     container_name: fe-api
     hostname: fe-api
     environment:
-      - CONFIG_ENV=stag/cron
+      - CONFIG_ENV=stag/fe/api
       - HOST=$HOSTNAME
     logging:
       driver: journald
@@ -83,7 +83,7 @@ services:
     container_name: fe-cron
     hostname: fe-cron
     environment:
-      - CONFIG_ENV=stag/cron
+      - CONFIG_ENV=stag/fe/cron
       - HOST=$HOSTNAME
     image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh cron -f
