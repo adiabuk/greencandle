@@ -339,7 +339,7 @@ class Redis():
         if not buy_price and str2bool(config.main.wait_between_trades):
             try:
                 buy_time = dbase.fetch_sql_data("select sell_time from trades where pair='{}' "
-                                                "and closed_by = 'prod' order by sell_time desc "
+                                                "and closed_by = 'api' order by sell_time desc "
                                                 "LIMIT 1", header=False)[0][0]
                 buy_epoch = 0 if not isinstance(buy_time, datetime) else \
                     buy_time.timestamp()

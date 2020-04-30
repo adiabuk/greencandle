@@ -177,7 +177,7 @@
       "is_secret": false
     },
     "name": {
-      "value": "prod",
+      "value": "stag",
       "is_binary": false,
       "is_secret": false
     },
@@ -212,7 +212,7 @@
       "is_secret": true
     },
     "push_title": {
-      "value": "prod",
+      "value": "stag",
       "is_binary": false,
       "is_secret": false
     },

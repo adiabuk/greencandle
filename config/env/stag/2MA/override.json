@@ -11,7 +11,7 @@
   "interval": "4h",
   "max_trades": "3",
   "pairs": "MATICBNB ONEBNB WANBTC HCBTC ADAETH WAVESETH ZRXETH BCHABCUSDT DASHUSDT DOGEUSDT EOSUSDT LTCUSDT NEOUSDT ONTUSDT XMRUSDT ZILUSDT",
-  "push_title": "prod_2MA",
+  "push_title": "stag_2MA",
   "rate_indicator": "EMA_2",
   "redis_expiry_seconds": "1036800",
   "sell_rule1": "results.current.EMA_2 \u003c results.current.EMA_69",

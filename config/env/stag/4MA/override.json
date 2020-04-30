@@ -11,7 +11,7 @@
   "interval": "4h",
   "max_trades": "3",
   "pairs": "RENBNB ATOMBTC BNBBTC GXSETH LENDETH LINKETH LTCETH BTCUSDT ETHUSDT",
-  "push_title": "prod_4MA",
+  "push_title": "stag_4MA",
   "rate_indicator": "EMA_8",
   "redis_expiry_seconds": "1036800",
   "sell_rule1": "results.current.EMA_8 \u003c results.current.EMA_13",
