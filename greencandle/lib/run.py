@@ -66,9 +66,9 @@ def get_drawdown(pair, buy_price, interval):
     """
     redis = Redis(interval=interval, test=True, db=1)
     min_price = redis.get_item(pair, 'min_price')
+    LOGGER.debug("Getting drawdown: buy_price:%s, min_price:%s", buy_price, min_price)
     drawdown = perc_diff(buy_price, min_price)
     redis.rm_min_price(pair)
-    LOGGER.debug("Getting drawdown: buy_price:%s, min_price:%s", buy_price, min_price)
     return drawdown
 
 @GET_EXCEPTIONS
