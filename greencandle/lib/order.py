@@ -7,7 +7,6 @@ Test Buy/Sell orders
 
 from __future__ import print_function
 from collections import defaultdict
-import math
 import binance
 from str2bool import str2bool
 
@@ -47,7 +46,6 @@ class Trade():
         """ return highest selling price """
         return sorted([float(i) for i in binance.depth(pair)["bids"].keys()])[-1]
 
-
     def send_redis_trade(self, pair, price, interval, event):
         """
         Send trade event to redis
@@ -64,7 +62,6 @@ class Trade():
 
         redis.redis_conn(pair, interval, data, close_time)
         del redis
-
 
     @GET_EXCEPTIONS
     def buy(self, buy_list):
@@ -160,11 +157,11 @@ class Trade():
                                       base_amount, cost, amount)
                     if not self.test_data:
                         # Round amount to required precision
-                        step_size = binance.exchange_info()[item]["stepSize"]
-                        precision = int(round(-math.log(step_size, 10), 0))
-                        amount = round(amount, precision)
+                        # binance uses 1 dp under given precision
+                        precision = int(binance.exchange_info()[item]['quoteAssetPrecision']) - 1
+                        amt_str = "{:0.0{}f}".format(amount, precision)
 
-                        result = binance.order(symbol=item, side=binance.BUY, quantity=amount,
+                        result = binance.order(symbol=item, side=binance.BUY, quantity=amt_str,
                                                price='', orderType=binance.MARKET,
                                                test=self.test_trade)
                         try:
@@ -228,7 +225,7 @@ class Trade():
 
                     self.send_redis_trade(item, price, self.interval, "SELL")
                 else:
-                    self.logger.critical("Sell Failed")
+                    self.logger.critical("Sell Failed %s:%s", name, item)
             del dbase
         else:
             self.logger.info("No items to sell")
