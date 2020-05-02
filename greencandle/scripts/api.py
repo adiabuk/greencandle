@@ -116,6 +116,7 @@ def healthcheck(scheduler):
 def get_open(scheduler):
     """get open trades from mysql"""
     global DATA
+    local_data = {}
     print("Getting open trades", file=sys.stderr)
     DATA = {}
     dbase = Mysql()
@@ -128,12 +129,13 @@ def get_open(scheduler):
         matching = redis.get_action(pair=pair, interval=interval)[-1]
         print(entry, file=sys.stdout)
 
-        DATA[pair] = {"buy_price": buy_price, "buy_time": buy_time,
-                      "matching": "Buy:{},Sell:{}".format(matching["buy"], matching["sell"]),
-                      "current_price": current_price, "perc": perc,
-                      "graph": get_latest_graph(pair, "html"), "name": name,
-                      "strategy": get_keys_by_value(config.pairs, pair),
-                      "thumbnail": get_latest_graph(pair, "resized.png")}
+        local_data[pair] = {"buy_price": buy_price, "buy_time": buy_time,
+                            "matching": "Buy:{},Sell:{}".format(matching["buy"], matching["sell"]),
+                            "current_price": current_price, "perc": perc,
+                            "graph": get_latest_graph(pair, "html"), "name": name,
+                            "strategy": get_keys_by_value(config.pairs, pair),
+                            "thumbnail": get_latest_graph(pair, "resized.png")}
+    DATA = local_data
     del redis
     SCHED.enter(60, 60, get_open, (scheduler, ))
 
@@ -166,9 +168,8 @@ def get_closed(scheduler):
     get details of closed pairs
     """
     global ALL
-    global DATA
     global config
-    ALL = {}
+    local_all = {}
     print("Getting all pairs", file=sys.stderr)
     pairs = [pair for pair in config.main.pairs.split() if pair not in DATA.keys()]
     for pair in pairs:
@@ -187,11 +188,11 @@ def get_closed(scheduler):
             matching = redis.get_action(pair=pair, interval=interval)[-1]
             del redis
 
-        ALL[pair] = {"matching": "Buy:{},Sell:{}".format(matching["buy"], matching["sell"]),
-                     "graph": get_latest_graph(pair, "html"),
-                     "strategy": get_keys_by_value(config.pairs, pair),
-                     "thumbnail": get_latest_graph(pair, "resized.png")}
-
+        local_all[pair] = {"matching": "Buy:{},Sell:{}".format(matching["buy"], matching["sell"]),
+                           "graph": get_latest_graph(pair, "html"),
+                           "strategy": get_keys_by_value(config.pairs, pair),
+                           "thumbnail": get_latest_graph(pair, "resized.png")}
+    ALL = local_all
     SCHED.enter(600, 600, get_closed, (scheduler, ))
 
 def get_latest_graph(pair, suffix=''):
