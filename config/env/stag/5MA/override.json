@@ -1,5 +1,5 @@
 {
-  "5ma": "",
+  "name": "5ma",
   "buy_rule1": "results.current.EMA_8 \u003e results.current.EMA_13 and results.current.EMA_13 \u003e results.current.EMA_21 and results.current.EMA_21 \u003e results.current.EMA_55 and results.current.EMA_55 \u003e results.current.EMA_100",
   "buy_rule2": "",
   "buy_rule3": "",

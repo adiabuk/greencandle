@@ -1,5 +1,5 @@
 {
-  "2ma": "",
+  "name": "2ma",
   "buy_rule1": "results.current.EMA_2 \u003e results.current.EMA_69",
   "buy_rule2": "",
   "buy_rule3": "",
