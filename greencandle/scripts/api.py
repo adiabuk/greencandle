@@ -67,7 +67,7 @@ def sell():
     global TEST
     print("SELL", file=sys.stderr)
     pair = request.args.get('pair')
-    name = request.args.get('name')
+    name = config.main.name
     current_price = request.args.get('price')
     print(pair, name, file=sys.stderr)
 
