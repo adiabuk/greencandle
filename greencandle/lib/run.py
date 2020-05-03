@@ -113,7 +113,8 @@ def perform_data(pair, interval, data_dir, indicators):
                         interval=interval, test=True, redis=redis)
         engine.get_data(localconfig=indicators)
 
-        result, current_time, current_price, _ = redis.get_action(pair=pair, interval=interval)
+        result, current_time, current_price, _ = redis.get_action(pair=pair, interval=interval,
+                                                                  test_data=True)
         del engine
         current_trade = dbase.get_trade_value(pair)
         if result == "BUY":
@@ -189,7 +190,8 @@ def parallel_test(pairs, interval, data_dir, indicators):
                             interval=interval, test=True, redis=redis)
             engine.get_data(localconfig=indicators)
 
-            result, current_time, current_price, _ = redis.get_action(pair=pair, interval=interval)
+            result, current_time, current_price, _ = redis.get_action(pair=pair, interval=interval,
+                                                                      test_data=True)
 
             LOGGER.info('In Strategy %s', result)
             del engine

@@ -235,7 +235,7 @@ class Redis():
                 winning.append(seq + 1)
         return winning
 
-    def get_action(self, pair, interval):
+    def get_action(self, pair, interval, test_data=False):
         """Determine if we are in a BUY/HOLD/SELL situration for a specific pair and interval"""
         results = AttributeDict(current=AttributeDict(), previous=AttributeDict(),
                                 previous1=AttributeDict(), previous2=AttributeDict(),
@@ -392,10 +392,16 @@ class Redis():
         # if we match stop_loss rule and are in a trade
         if stop_loss_rule and buy_price:
             self.logger.warning("StopLoss: buy_price:%s high_price:%s", buy_price, high_price)
+            stop_at = sub_perc(stop_loss_perc, buy_price)
             self.log_event('StopLoss', rate, perc_rate, buy_price,
-                           sub_perc(stop_loss_perc, buy_price),
-                           pair, current_time, results.current)
+                           stop_at, pair, current_time, results.current)
             self.del_high_price(pair, interval)
+            if test_data:
+                # with test data we don't check between candles so frequently skip over the
+                # stop-loss value.  As a test workaround we will set the current price to the price
+                # where we would have exited the trade in order to have test results that mimic what
+                # we would see in production
+                current_price = stop_at
             result = 'SELL'
 
         # if we match take_profit rule and are in a trade
