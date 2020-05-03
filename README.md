@@ -10,6 +10,23 @@
 |Testing| [![Build Status](https://travis-ci.org/adiabuk/greencandle.svg?branch=master)](https://travis-ci.org/adiabuk/greencandle)|
 
 # Releases
+## 0.33
+* More explicit debug logging
+* Add buy/sell rules and strategy names to API dashboard
+* Fix bugs with initial prod run
+* Uncouple test trade and test run
+* Do an initial prod run immediately after collecting initial data
+* Fix and sort naming convention for environments, hosts, tiers, and containers
+* Add scatter graphs for calculating drawdown
+* Sync pricing with exchange when initiating and closing a trade
+* fix intervals between trades
+* Better deploy script
+* Cleanup c9e environments
+* Add divisor var to decide how much to buy whilst supporting varying number of pairs
+* Fix for margin balance to exclude debt
+* Get monthly aggregated percentage test results per pair
+* Avoid missing data in API by only updating when all data has been collected
+* Add stop loss support for test data (which doesn't contain intermittent prices)
 
 ## 0.32
 * Clean up c9e envs
