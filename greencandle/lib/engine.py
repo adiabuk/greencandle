@@ -59,7 +59,8 @@ class Engine(dict):
         """
         Transform dataframe to tupple of of floats
         """
-        ohlc = (make_float(dataframe.open),
+        ohlc = (make_float(dataframe.volume),
+                make_float(dataframe.open),
                 make_float(dataframe.high),
                 make_float(dataframe.low),
                 make_float(dataframe.close))
@@ -420,6 +421,30 @@ class Engine(dict):
         LOGGER.debug("done getting moving averages")
 
     @get_exceptions
+    def get_vol_moving_averages(self, pair, dataframe, index=None, localconfig=None):
+        self.get_moving_averages(pair, dataframe, index, localconfig, volume=True)
+
+        scheme = {}
+        try:
+            scheme["symbol"] = pair
+            if not index and self.test:
+                index = -1
+            elif not index and not self.test:
+                index = -2
+            scheme["data"] = str(self.dataframes[pair].iloc[index]["volume"])
+            scheme["event"] = "volume"
+            scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
+            self.schemes.append(scheme)
+
+        except KeyError as exc:
+            LOGGER.warning("KEY FAILURE in moving averages: %s ", str(exc))
+
+        LOGGER.debug("done getting moving averages")
+
+
+
+
+    @get_exceptions
     def get_moving_averages(self, pair, dataframe, index=None, localconfig=None, volume=False):
         """
         Apply moving averages to klines and get BUY/SELL triggers
@@ -437,11 +462,13 @@ class Engine(dict):
         func, timeperiod = localconfig  # split tuple
         try:
             close = klines[-1] # numpy.ndarray
+            vol = klines[0]
         except Exception as exc:
             LOGGER.warning("FAILED moving averages: %s ", str(exc))
             return None
+        data = vol if volume else close
         try:
-            result = getattr(talib, func)(close, int(timeperiod))[-1]
+            result = getattr(talib, func)(data, int(timeperiod))[-1]
         except Exception as exc:
             LOGGER.warning("Overall Exception getting moving averages: %s", exc)
             return None
@@ -451,7 +478,10 @@ class Engine(dict):
         try:
             scheme["data"] = result
             scheme["symbol"] = pair
-            scheme["event"] = func + "_" + str(timeperiod)
+            if volume:
+                scheme["event"] = func + "_vol_" + str(timeperiod)
+            else:
+                scheme["event"] = func + "_" + str(timeperiod)
             if not index and self.test:
                 index = -1
             elif not index and not self.test:
