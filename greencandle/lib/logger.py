@@ -7,6 +7,7 @@ Generic logging class for greencandle modules
 import logging
 from systemd.journal import JournaldLogHandler
 from . import config
+from .alerts import send_push_notif
 
 class OneLineFormatter(logging.Formatter):
     """logging formatter for exceptions"""
@@ -33,6 +34,25 @@ class AppFilter(logging.Filter):
         record.module_name = self.module_name
         return True
 
+class NotifyOnCriticalStream(logging.StreamHandler):
+    """
+    Stream handler to send push notifications on error or critical
+    """
+    def emit(self, record):
+        super().emit(record)
+        if record.levelno in (logging.ERROR, logging.CRITICAL):
+            send_push_notif(record.msg)
+
+class NotifyOnCriticalJournald(JournaldLogHandler):
+    """
+    Journald handler to send push notification on error or critical
+    """
+    def emit(self, record):
+        super().emit(record)
+        if record.levelno in (logging.ERROR, logging.CRITICAL):
+            send_push_notif(record.msg)
+
+
 def get_logger(module_name=None):
     """
     Get Customized logging instance
@@ -50,13 +70,12 @@ def get_logger(module_name=None):
     logger.propagate = False
     logger.addFilter(AppFilter(module_name=module_name))
     if config.main.logging_output == "journald":
-        handler = JournaldLogHandler()
-
+        handler = NotifyOnCriticalJournald()
         formatter = OneLineFormatter('[%(levelname)s] %(module_name)s %(message)s')
         handler.setFormatter(formatter)
-
     else:
-        handler = logging.StreamHandler()
+        #handler = logging.StreamHandler()
+        handler = NotifyOnCriticalStream()
         formatter = logging.Formatter("%(asctime)s %(levelname)s %(module_name)s %(message)s",
                                       "%Y-%m-%d %H:%M:%S")
         handler.setFormatter(formatter)

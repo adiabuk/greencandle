@@ -10,19 +10,14 @@ from email.mime.text import MIMEText
 import notify_run
 from str2bool import str2bool
 from . import config
-from .timeout import restrict_timeout
-from .logger import get_logger, get_decorator
 
-GET_EXCEPTIONS = get_decorator((Exception))
 
-@GET_EXCEPTIONS
 def send_gmail_alert(action, pair, price):
     """
     Send email alert using gmail
     """
     if not str2bool(config.email.email_active):
         return
-    logger = get_logger(__name__)
     email_to = config.email.email_to
     email_from = config.email.email_from
     email_password = config.email.email_password
@@ -42,9 +37,7 @@ def send_gmail_alert(action, pair, price):
     server.starttls()
     server.login(email_from, email_password)
     text = msg.as_string()
-    logger.info("Sending Email")
-    with restrict_timeout(3, name="email alert"):
-        server.sendmail(fromaddr, toaddr, text)
+    server.sendmail(fromaddr, toaddr, text)
     server.quit()
 
 def send_push_notif(*args):
