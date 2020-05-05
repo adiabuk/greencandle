@@ -14,7 +14,6 @@ def main():
     Take substitution vars from agruments and create one output file per job
     """
     parser = argparse.ArgumentParser()
-    parser.add_argument('-d', '--dir', type=str, required=True)
     parser.add_argument('-y', '--year', type=str, required=True)
     parser.add_argument('-n', '--name', type=str, required=True)
     parser.add_argument('-c', '--configenv', type=str, required=True)
@@ -23,7 +22,7 @@ def main():
 
     contents = open('test-job.yml', 'r').read()
     pairs = open('good_pairs.txt', 'r').read().splitlines()
-    os.mkdir(args.dir)
+    os.mkdir(args.name.lower())
 
     for pair in pairs:
 
@@ -36,7 +35,7 @@ def main():
         pattern = re.compile("|".join(rep.keys()))
         text = pattern.sub(lambda m: rep[re.escape(m.group(0))], contents)
 
-        with open('{}/job-{}.yaml'.format(args.dir, pair), 'w') as handle:
+        with open('{}/job-{}.yaml'.format(args.name.lower(), pair), 'w') as handle:
             handle.write(text)
 
 if __name__ == '__main__':
