@@ -13,7 +13,7 @@ fi
 
 date=`date +"%Y-%m-%d"`
 
-mkdir -p ${base_dir}/${YEAR}
+mkdir -p ${base_dir}
 echo $PAIR $date
 backend_test -d /data/altcoin_historical/${YEAR}/year/ -s -i $INTERVAL -p $PAIR &> ${base_dir}/${PAIR}_${date}.log
 create_graph -d0 -p $PAIR -i $INTERVAL -o ${base_dir}
