@@ -30,9 +30,9 @@ make install
 cd -
 rm -rf /tmp/s3fs-fuse
 
-wget https://github.com/motns/configstore/releases/download/v2.4.0/configstore-2.4.0-linux-amd64.tar.gz -P /tmp
-tar zxvf /tmp/configstore-2.4.0-linux-amd64.tar.gz -C /usr/local/bin
-rm -rf /tmp/configstore-2.4.0-linux-amd64.tar.gz
+wget https://github.com/motns/configstore/releases/download/v2.5.0/configstore-2.5.0-linux-amd64.tar.gz -P /tmp
+tar zxvf /tmp/configstore-2.5.0-linux-amd64.tar.gz -C /usr/local/bin
+rm -rf /tmp/configstore-2.5.0-linux-amd64.tar.gz
 
 subdomain=$(configstore package get prod loggly_subdomain)
 token=$(configstore package get prod loggly_token)

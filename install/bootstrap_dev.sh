@@ -53,9 +53,9 @@ pyenv global 3.7.0
 chmod o+w /opt/pyenv/shims /opt/pyenv/versions
 
 if [[ ! -f /usr/local/bin/configstore ]]; then
-    wget https://github.com/motns/configstore/releases/download/v2.4.0/configstore-2.4.0-linux-amd64.tar.gz -P /tmp
-    tar zxvf /tmp/configstore-2.4.0-linux-amd64.tar.gz -C /usr/local/bin
-    rm -rf /tmp/configstore-2.4.0-linux-amd64.tar.gz
+    wget https://github.com/motns/configstore/releases/download/v2.5.0/configstore-2.5.0-linux-amd64.tar.gz -P /tmp
+    tar zxvf /tmp/configstore-2.5.0-linux-amd64.tar.gz -C /usr/local/bin
+    rm -rf /tmp/configstore-2.5.0-linux-amd64.tar.gz
 fi
 
 if [[ ! -d /usr/include/ta-lib ]]; then
