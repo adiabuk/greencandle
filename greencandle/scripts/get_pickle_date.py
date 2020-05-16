@@ -16,7 +16,10 @@ def main():
 
         with gzip.open(filename, 'rb') as handle:
             dframe = pickle.load(handle)
-            date = time.strftime("%Y-%m-%d", time.gmtime(int(dframe.iloc[0].closeTime)/1000))
+            try:
+              date = time.strftime("%Y-%m-%d", time.gmtime(int(dframe.iloc[0].closeTime)/1000))
+            except:
+                print("skipping {}".format(filename))
             print(filename, date)
 
 if __name__ == '__main__':
