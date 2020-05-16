@@ -87,7 +87,7 @@ class Redis():
 
         self.logger.debug("Adding to Redis: %s %s %s", interval, list(data.keys()), now)
         key = "{0}:{1}:{2}".format(pair, interval, now)
-        expiry = 600 if self.test else int(config.redis.redis_expiry_seconds)
+        expiry = int(config.redis.redis_expiry_seconds)
 
         for k, v in data.items():
             response = self.conn.hset(key, k, v)
@@ -106,7 +106,8 @@ class Redis():
 
         last_price = self.conn.get(key)
         if not last_price or float(price) > float(last_price):
-            self.conn.set(key, price)
+            result = self.conn.set(key, price)
+            self.logger.debug("Setting high price for %s, result:%s", pair, result)
 
     def get_high_price(self, pair, interval):
         """get current highest price for pair and interval"""
@@ -388,9 +389,13 @@ class Redis():
         if buy_price and any(rules['buy']) and any(rules['sell']):
             self.logger.warning('We ARE In a trade and have matched both buy and '
                                 'sell rules for %s', pair)
-        if not buy_price and any(rules['buy']) and any(rules['sell']):
+            both = True
+        elif not buy_price and any(rules['buy']) and any(rules['sell']):
             self.logger.warning('We are NOT in a trade and have matched both buy and '
                                 'sell rules for %s', pair)
+            both = True
+        else:
+            both = False
 
         # if we match stop_loss rule and are in a trade
         if stop_loss_rule and buy_price:
@@ -414,8 +419,8 @@ class Redis():
             self.del_high_price(pair, interval)
             result = 'SELL'
 
-        # if we match any sell rules and are in a trade
-        elif any(rules['sell']) and buy_price:
+        # if we match any sell rules, are in a trade and no buy rules match
+        elif any(rules['sell']) and buy_price and not both:
 
             self.log_event('NormalSell', rate, perc_rate, buy_price, current_price,
                            pair, current_time, results.current)
@@ -423,8 +428,8 @@ class Redis():
             self.del_high_price(pair, interval)
             result = 'SELL'
 
-        # if we match all buy rules and are NOT in a trade
-        elif any(rules['buy']) and not buy_price and able_to_buy:
+        # if we match any buy rules are NOT in a trade and sell rules don't match
+        elif any(rules['buy']) and not buy_price and able_to_buy and not both:
             self.log_event('NormalBuy', rate, perc_rate, current_price, current_price,
                            pair, current_time, results.current)
 

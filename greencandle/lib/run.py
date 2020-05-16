@@ -173,7 +173,6 @@ def parallel_test(pairs, interval, data_dir, indicators):
         LOGGER.info("%s dataframe size: %s", pair, len(dframes[pair]))
         handle.close()
 
-    LOGGER.critical(dframes.keys())
     for beg in range(max(sizes) - CHUNK_SIZE):
         end = beg + CHUNK_SIZE
         dataframes = {}
