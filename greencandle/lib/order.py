@@ -122,9 +122,15 @@ class Trade():
                 current_trades = dbase.get_trades()
                 avail_slots = self.max_trades - len(current_trades)
                 self.logger.info("%s buy slots available", avail_slots)
-                if avail_slots <= 0:
+
+                if dbase.get_recent_high(item, current_time, 12, 80):
+                    self.logger.warning("Recently sold %s with high profit, skipping",
+                                        item)
+                    break
+                elif avail_slots <= 0:
                     self.logger.warning("Too many trades, skipping")
                     break
+
                 if self.divisor:
                     proposed_base_amount = current_base_bal / self.divisor
                 else:

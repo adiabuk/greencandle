@@ -124,6 +124,16 @@ class Mysql():
         self.run_sql_query(command)
 
     @get_exceptions
+    def get_recent_high(self, pair, date, months, max_perc):
+        command=('select *  from profit where pair="{0}" and '
+                 'sell_time >= ("{1}" - interval "{2}" month) '
+                 'and perc > "{3}"'.format(pair, date, months, max_perc));
+        cur = self.dbase.cursor()
+        self.execute(cur, command)
+        return bool(cur.fetchall())
+
+
+    @get_exceptions
     def get_quantity(self, pair):
         """
         Return quantity for a current open trade
