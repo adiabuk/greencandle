@@ -44,9 +44,9 @@ def main():
                "hours-pair": "select pair, sum(hour(timediff(sell_time,buy_time))) \
                         as hours from trades where sell_time \
                         != '0000-00-00 00:00:00' group by pair",
-               "profit-factor": "select (select sum(base_profit) from profit where base_profit \
-                                 >0)/-(select sum(base_profit) from profit where base_profit <0) \
-                                 as profit_factor",
+               "profit-factor": "select IFNULL((select sum(base_profit) from profit where \
+                                base_profit >0)/-(select sum(base_profit) from profit where \
+                                base_profit <0),100) as profit_factor",
                "buy-hold-return": "select (select buy_price from profit order by buy_time limit 1) \
                                    as first_buy, (select sell_price from profit order by \
                                    buy_time desc limit 1) as last_sell, (select \
