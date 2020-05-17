@@ -4,7 +4,7 @@ YEAR=$1
 STRATEGY=$2
 PAIR=${3^^}  # Ensure pair is uppercase
 INTERVAL=$4
-base_dir=/data/$STRATEGY/year
+base_dir=/data/output/$STRATEGY/year
 
 
 if [[ -z $PAIR ]]; then
