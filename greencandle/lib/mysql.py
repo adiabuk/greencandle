@@ -125,9 +125,16 @@ class Mysql():
 
     @get_exceptions
     def get_recent_high(self, pair, date, months, max_perc):
+        """
+        Dertermine if we have completed a profitable trade for
+        given pair within given amount of time
+
+        Return True/False
+        """
         command=('select *  from profit where pair="{0}" and '
                  'sell_time >= ("{1}" - interval "{2}" month) '
-                 'and perc > "{3}"'.format(pair, date, months, max_perc));
+                 'and perc > "{3}"'.format(pair, date, months, max_perc))
+
         cur = self.dbase.cursor()
         self.execute(cur, command)
         return bool(cur.fetchall())
@@ -215,12 +222,12 @@ class Mysql():
         command = """update trades set sell_price={0},sell_time="{1}", quote_out="{2}",
         base_out="{3}", closed_by="{6}", drawdown_perc=abs(round({7},1)) where sell_price is NULL and `interval`="{4}"
         and pair="{5}" and name in ("{6}", "api") """.format('%.15f' % float(sell_price),
-                                                              sell_time,
-                                                              '%.15f' % float(quote),
-                                                              '%.15f' % float(base_out),
-                                                              self.interval,
-                                                              pair,
-                                                              job_name, drawdown)
+                                                             sell_time,
+                                                             '%.15f' % float(quote),
+                                                             '%.15f' % float(base_out),
+                                                             self.interval,
+                                                             pair,
+                                                             job_name, drawdown)
         self.run_sql_query(command)
 
     def get_active_trades(self):
