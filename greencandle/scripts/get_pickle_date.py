@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+#pylint: disable=broad-except
 """
 Iterate through pickle data files and get date of first candle close
 """
@@ -17,8 +18,8 @@ def main():
         with gzip.open(filename, 'rb') as handle:
             dframe = pickle.load(handle)
             try:
-              date = time.strftime("%Y-%m-%d", time.gmtime(int(dframe.iloc[0].closeTime)/1000))
-            except:
+                date = time.strftime("%Y-%m-%d", time.gmtime(int(dframe.iloc[0].closeTime)/1000))
+            except Exception:
                 print("skipping {}".format(filename))
             print(filename, date)
 
