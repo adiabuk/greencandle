@@ -27,5 +27,5 @@ while ! nc -z $redis 6379; do
 done
 
 pair=$(echo "$PAIR" | tr '[:lower:]' '[:upper:]')
-
+STRAREGY=$(echo "$STRATEGY" | sed -e "s/${YEAR}-//")
 bash -x run_in_docker.sh $YEAR $STRATEGY $pair $INTERVAL
