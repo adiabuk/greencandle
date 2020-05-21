@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-position,import-error,no-member
+#pylint: disable=wrong-import-position,import-error,no-member,no-else-break,no-else-continue
 
 """
 Test Buy/Sell orders
@@ -62,6 +62,19 @@ class Trade():
 
         redis.redis_conn(pair, interval, data, close_time)
         del redis
+
+    @staticmethod
+    @GET_EXCEPTIONS
+    def get_precision(item, amount):
+        """
+        Round amount to required precision
+        binance uses 1 dp under given precision
+        """
+
+        precision = int(binance.exchange_info()[item]['quoteAssetPrecision']) - 1
+        amt_str = "{:0.0{}f}".format(amount, precision)
+        return amt_str
+
 
     @GET_EXCEPTIONS
     def buy(self, buy_list):
@@ -162,11 +175,7 @@ class Trade():
                     self.logger.debug("amount to buy: %s, cost: %s, amount:%s",
                                       base_amount, cost, amount)
                     if not self.test_data:
-                        # Round amount to required precision
-                        # binance uses 1 dp under given precision
-                        precision = int(binance.exchange_info()[item]['quoteAssetPrecision']) - 1
-                        amt_str = "{:0.0{}f}".format(amount, precision)
-
+                        amt_str = self.get_precision(item, amount)
                         result = binance.order(symbol=item, side=binance.BUY, quantity=amt_str,
                                                price='', orderType=binance.MARKET,
                                                test=self.test_trade)
@@ -215,7 +224,8 @@ class Trade():
                 send_gmail_alert("SELL", item, price)
                 send_push_notif('SELL', item, '%.15f' % float(price))
                 if not self.test_data:
-                    result = binance.order(symbol=item, side=binance.SELL, quantity=quantity,
+                    amt_str = self.get_precision(item, quantity)
+                    result = binance.order(symbol=item, side=binance.SELL, quantity=amt_str,
                                            price='', orderType=binance.MARKET, test=self.test_trade)
 
                     try:
