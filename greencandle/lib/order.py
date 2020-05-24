@@ -72,7 +72,7 @@ class Trade():
         """
 
         precision = int(binance.exchange_info()[item]['quoteAssetPrecision']) - 1
-        amt_str = "{:0.0{}f}".format(amount, precision)
+        amt_str = format(amount, '.{}f'.format(precision))
         return amt_str
 
 
