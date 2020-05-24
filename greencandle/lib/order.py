@@ -63,9 +63,8 @@ class Trade():
         redis.redis_conn(pair, interval, data, close_time)
         del redis
 
-    @staticmethod
     @GET_EXCEPTIONS
-    def get_precision(item, amount):
+    def get_precision(self, item, amount):
         """
         Round amount to required precision
         binance uses 1 dp under given precision
@@ -73,6 +72,7 @@ class Trade():
 
         precision = int(binance.exchange_info()[item]['quoteAssetPrecision']) - 1
         amt_str = format(amount, '.{}f'.format(precision))
+        self.logger.info("Final amount: %s", amt_str)
         return amt_str
 
 
