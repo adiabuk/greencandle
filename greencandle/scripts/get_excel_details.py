@@ -4,10 +4,11 @@ Get total sum of perc profit from each xlsx file in current directory
 Monthly and Annually
 """
 
+import os
 import sys
 import glob
 import pandas as pd
-
+from xlrd.biffh import XLRDError
 
 
 def main():
@@ -24,20 +25,34 @@ def main():
         sys.exit(0)
 
     output = sys.argv[1]
+    year = os.getcwd().split('/')[-1]
+    strategy = os.getcwd().split('/')[-2]
 
     for file in files:
         try:
             if output == "annual":
+
                 dframe = pd.read_excel(file, sheet_name='profit-pair')
-                print(dframe["pair"].to_string(header=False).split()[-1],
-                      dframe["perc"].to_string(header=False).split()[-1])
+                pair = dframe["pair"].to_string(header=False).split()[-1]
+                perc = dframe["perc"].to_string(header=False).split()[-1]
+
+                dframe = pd.read_excel(file, sheet_name='hours-pair')
+                hours = dframe["hours"].to_string(header=False).split()[-1]
+
+                dframe = pd.read_excel(file, sheet_name='profit-factor')
+                factor = dframe["profit_factor"].to_string(header=False).split()[-1]
+
+                dframe = pd.read_excel(file, sheet_name='perc-month')
+                sorted = dframe.sort_values('perc', ascending=False)['month']
+                highest_month = sorted.iloc[0]
+                print(pair, perc, hours, factor, highest_month, year, strategy)
             elif output == "monthly":
                 dframe = pd.read_excel(file, sheet_name='perc-month')
                 print(dframe)
-            elif output =="factor":
+            elif output == "factor":
                 dframe = pd.read_excel(file, sheet_name='profit-factor')
                 print(file, dframe["profit_factor"].to_string(header=False).split()[-1])
-        except:
+        except (IndexError, XLRDError):
             continue
 
 
