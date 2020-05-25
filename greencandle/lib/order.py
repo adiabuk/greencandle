@@ -71,8 +71,8 @@ class Trade():
         """
 
         precision = int(binance.exchange_info()[item]['quoteAssetPrecision']) - 1
-        amt_str = format(amount, '.{}f'.format(precision))
-        self.logger.info("Final amount: %s", amt_str)
+        amt_str = format(float(amount), '.{}f'.format(precision))
+        self.logger.debug("Final amount: %s", amt_str)
         return amt_str
 
 
