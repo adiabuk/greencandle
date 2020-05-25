@@ -332,8 +332,8 @@ class Redis():
                     try:
                         rules[rule].append(eval(current_config))
                     except (TypeError, KeyError) as error:
-                        self.logger.error("Unable to eval config rule: %s_rule: %s %s",
-                                          rule, current_config, error)
+                        self.logger.warning("Unable to eval config rule: %s_rule: %s %s",
+                                            rule, current_config, error)
                         continue
 
         stop_loss_perc = float(config.main.stop_loss_perc)
