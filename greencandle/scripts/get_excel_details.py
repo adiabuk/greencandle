@@ -27,7 +27,9 @@ def main():
     output = sys.argv[1]
     year = os.getcwd().split('/')[-1]
     strategy = os.getcwd().split('/')[-2]
-
+    if output == "annual":
+        # print titles
+        print("pair perc hours factor max_month year strategy prof count prof_perc")
     for file in files:
         try:
             if output == "annual":
@@ -45,7 +47,14 @@ def main():
                 dframe = pd.read_excel(file, sheet_name='perc-month')
                 sorted = dframe.sort_values('perc', ascending=False)['month']
                 highest_month = sorted.iloc[0]
-                print(pair, perc, hours, factor, highest_month, year, strategy)
+
+                dframe = pd.read_excel(file, sheet_name='trades')
+                total = len(dframe['perc'])
+                more = len(dframe[(dframe['perc']>0)])
+                perc_prof = (more/total) * 100
+
+                print(pair, perc, hours, factor, highest_month, year, strategy, more, total,
+                      perc_prof)
             elif output == "monthly":
                 dframe = pd.read_excel(file, sheet_name='perc-month')
                 print(dframe)
