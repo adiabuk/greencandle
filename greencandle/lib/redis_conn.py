@@ -72,31 +72,6 @@ class Redis():
         """
         result = self.conn.delete(pair)
 
-    def redis_conn(self, pair, interval, data, now):
-        """
-        Add data to redis
-
-        Args:
-              pair: trading pair (eg. XRPBTC)
-              interval: interval of each kline
-              data: json with data to store
-              now: datetime stamp
-        Returns:
-            success of operation: True/False
-        """
-
-        self.logger.debug("Adding to Redis: %s %s %s", interval, list(data.keys()), now)
-        key = "{0}:{1}:{2}".format(pair, interval, now)
-        expiry = int(config.redis.redis_expiry_seconds)
-
-        for k, v in data.items():
-            response = self.conn.hset(key, k, v)
-
-        if self.expire:
-            self.conn.expire(key, expiry)
-
-        return response
-
     def put_high_price(self, pair, interval, price):
         """
         update high price if current price is
@@ -123,6 +98,32 @@ class Redis():
         key = 'highClose_{0}_{1}'.format(pair, interval)
         result = self.conn.delete(key)
         self.logger.debug("Deleting high price for %s, result:%s", pair, result)
+
+
+    def redis_conn(self, pair, interval, data, now):
+        """
+        Add data to redis
+
+        Args:
+              pair: trading pair (eg. XRPBTC)
+              interval: interval of each kline
+              data: json with data to store
+              now: datetime stamp
+        Returns:
+            success of operation: True/False
+        """
+
+        self.logger.debug("Adding to Redis: %s %s %s", interval, list(data.keys()), now)
+        key = "{0}:{1}:{2}".format(pair, interval, now)
+        expiry = int(config.redis.redis_expiry_seconds)
+
+        for k, v in data.items():
+            response = self.conn.hset(key, k, v)
+
+        if self.expire:
+            self.conn.expire(key, expiry)
+
+        return response
 
     def del_key(self, key):
         """
@@ -192,6 +193,7 @@ class Redis():
             return float(ast.literal_eval(self.get_item(item, indicator).decode())['result'])
         except (TypeError, AttributeError):
             return None
+
 
     def log_event(self, event, rate, perc_rate, buy, sell, pair, current_time, current):
         """Send event data to logger"""
@@ -300,7 +302,7 @@ class Redis():
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_epoch))
 
         # Store/update highest price
-        #self.put_high_price(pair, interval, current_price)
+        self.put_high_price(pair, interval, current_price)
 
         # rate of Moving Average increate/decreate based on indicator
         # specified in the rate_indicator config option - best with EMA_500
@@ -366,16 +368,16 @@ class Redis():
                 take_profit_price = add_perc(take_profit_perc, buy_price)
 
                 trailing_perc = float(config.main.trailing_stop_loss_perc)
-                if high_price and high_price > take_profit_price:
-                    trailing_stop = current_price < sub_perc(trailing_perc, high_price)
+                if high_price:
+                    trailing_stop = current_price <= sub_perc(trailing_perc, high_price)
+
                 else:
                     trailing_stop = False
             else:
                 trailing_stop = False
                 high_price = buy_price
 
-            main_stop = current_price < sub_perc(stop_loss_perc, buy_price)
-            stop_loss_rule = main_stop or trailing_stop
+            stop_loss_rule  = current_price < sub_perc(stop_loss_perc, buy_price)
 
             take_profit_rule = current_price > add_perc(take_profit_perc, buy_price)
 
@@ -384,6 +386,7 @@ class Redis():
             buy_price = None
             stop_loss_rule = False
             take_profit_rule = False
+            trailing_stop = False
 
 
         if buy_price and any(rules['buy']) and any(rules['sell']):
@@ -411,11 +414,22 @@ class Redis():
                 # we would see in production
                 current_price = stop_at
             result = 'SELL'
+        elif trailing_stop and buy_price:
+            stop_at = sub_perc(trailing_perc, high_price)
+            self.logger.info("TrailingStopLoss: buy_price:%s high_price:%s", buy_price, high_price)
+            self.logger.info("Trailing stop loss reached")
+            self.log_event('TrailingStopLoss', rate, perc_rate, buy_price,
+                           stop_at, pair, current_time, results.current)
+            self.del_high_price(pair, interval)
+
+            if test_data:
+                current_price = stop_at
+            result = 'SELL'
 
         # if we match take_profit rule and are in a trade
         elif str2bool(config.main.take_profit) and take_profit_rule and buy_price:
-            self.log_event('TakeProfit', rate, perc_rate, buy_price, current_price, pair,
-                           current_time, results.current)
+            self.log_event('TakeProfit', rate, perc_rate, buy_price, current_price,
+                           pair, current_time, results.current)
             self.del_high_price(pair, interval)
             result = 'SELL'
 
@@ -441,8 +455,8 @@ class Redis():
             result = 'BUY'
 
         elif buy_price:
-            self.log_event('Hold', rate, perc_rate, buy_price, current_price, pair, current_time,
-                           results.current)
+            self.log_event('Hold', rate, perc_rate, buy_price, current_price, current_time,
+                           pair, results.current)
             result = 'HOLD'
         else:
             result = 'NOITEM'

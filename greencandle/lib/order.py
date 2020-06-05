@@ -136,7 +136,7 @@ class Trade():
                 avail_slots = self.max_trades - len(current_trades)
                 self.logger.info("%s buy slots available", avail_slots)
 
-                if dbase.get_recent_high(item, current_time, 12, 80):
+                if dbase.get_recent_high(item, current_time, 12, 200):
                     self.logger.warning("Recently sold %s with high profit, skipping",
                                         item)
                     break
