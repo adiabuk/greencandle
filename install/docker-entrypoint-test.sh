@@ -2,7 +2,7 @@
 
 set -e
 
-if [[ -z $CONFIG_ENV || -z $YEAR || -z $PAIR || -z $STRATEGY || -z $INTERVAL ]]; then
+if [[ -z $CONFIG_ENV || -z $YEAR || -z $PAIR || -z $STRATEGY || -z $INTERVAL || -z $ARGS ]]; then
   echo "missing variables, exiting..."
   exit 1
 fi
@@ -28,4 +28,4 @@ done
 
 pair=$(echo "$PAIR" | tr '[:lower:]' '[:upper:]')
 STRATEGY=$(echo "$STRATEGY" | sed -e "s/${YEAR}-//")
-bash -x run_in_docker.sh $YEAR $STRATEGY $pair $INTERVAL
+bash -x run_in_docker.sh $YEAR $STRATEGY $pair $INTERVAL $ARGS

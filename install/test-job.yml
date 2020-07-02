@@ -68,8 +68,10 @@ spec:
         args:
           - |
             trap "touch /tmp/pod/$ITEM-job-terminated" EXIT
-            /usr/bin/timeout 3600 /docker-entrypoint-test.sh $YEAR $ITEM $STRATEGY $INTERVAL
+            /usr/bin/timeout 3600 /docker-entrypoint-test.sh
         env:
+        - name: ARGS
+          value: "-a"
         - name: CONFIG_ENV
           value: test/$ENV
         - name: YEAR
