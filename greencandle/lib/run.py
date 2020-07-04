@@ -5,6 +5,7 @@ Perform run for test & prod
 """
 
 import os
+import sys
 import time
 import pickle
 import gzip
@@ -76,8 +77,11 @@ def perform_data(pair, interval, data_dir, indicators):
     """Serial test loop"""
     LOGGER.debug("Serial run %s %s", pair, interval)
     redis = Redis(interval=interval, test=True, db=0)
-
-    filename = glob("{0}/{1}_{2}.p*".format(data_dir, pair, interval))[0]
+    try:
+        filename = glob("{0}/{1}_{2}.p*".format(data_dir, pair, interval))[0]
+    except IndexError:
+        print("File not found: {0}/{1}_{2}.p*".format(data_dir, pair, interval))
+        sys.exit(1)
     if not os.path.exists(filename):
         LOGGER.critical("Filename:%s not found for %s %s", filename, pair, interval)
         return
@@ -159,7 +163,11 @@ def parallel_test(pairs, interval, data_dir, indicators):
     dframes = {}
     sizes = []
     for pair in pairs:
-        filename = glob("/{0}/{1}_{2}.p*".format(data_dir, pair, interval))[0]
+        try:
+            filename = glob("/{0}/{1}_{2}.p*".format(data_dir, pair, interval))[0]
+        except IndexError:
+            print("File not found: {0}/{1}_{2}.p*".format(data_dir, pair, interval))
+            sys.exit(1)
         if not os.path.exists(filename):
             LOGGER.critical("Cannot find file: %s", filename)
             continue
