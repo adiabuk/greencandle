@@ -24,7 +24,7 @@ date=`date +"%Y-%m-%d"`
 
 mkdir -p ${base_dir}
 echo $PAIR $date
-backend_test -d /data/altcoin_historical/${YEAR}/year/ $ARGS -i $INTERVAL -p $PAIR &> ${filename}.log
+backend_test -d /data/altcoin_historical/${YEAR}/year/ $ARGS -i $INTERVAL -p "$PAIR" &> ${filename}.log
 
 if [[ $ARGS == *"-a"* ]]; then
   create_graph -d0 -a -i $INTERVAL -o $base_dir
