@@ -2,9 +2,11 @@
 
 YEAR=$1
 STRATEGY=$2
-PAIR=${3^^}  # Ensure pair is uppercase
-INTERVAL=$4
+INTERVAL=$3
+ARGS=$4
 base_dir=/data/output/$STRATEGY/$YEAR
+shift 4
+PAIR=${@^^}  # Ensure pair is uppercase
 
 
 if [[ -z $PAIR ]]; then

@@ -28,4 +28,4 @@ done
 
 pair=$(echo "$PAIR" | tr '[:lower:]' '[:upper:]')
 STRATEGY=$(echo "$STRATEGY" | sed -e "s/${YEAR}-//")
-bash -x run_in_docker.sh $YEAR $STRATEGY $pair $INTERVAL $ARGS
+bash -x run_in_docker.sh $YEAR $STRATEGY $INTERVAL $ARGS $pair
