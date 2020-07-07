@@ -35,7 +35,7 @@ def main():
 
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
-    pairs = [args.pair.split()] if args.pair  else config.main.pairs.split()
+    pairs = list(args.pair.split()) if args.pair  else config.main.pairs.split()
     parallel_interval = args.interval if args.interval else config.main.interval
     main_indicators = config.main.indicators.split()
     serial_intervals = [args.interval]

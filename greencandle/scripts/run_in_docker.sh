@@ -6,6 +6,7 @@ INTERVAL=$3
 ARGS=$4
 shift 4
 PAIR=${@^^}  # Ensure pair is uppercase
+date=`date +"%Y-%m-%d"`
 
 if [[ $ARGS == *"-a"* ]]; then
   base_dir=/data/output/parallel/$YEAR
@@ -20,7 +21,6 @@ if [[ -z $PAIR ]]; then
   exit 1
 fi
 
-date=`date +"%Y-%m-%d"`
 
 mkdir -p ${base_dir}
 echo $PAIR $date

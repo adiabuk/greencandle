@@ -158,7 +158,7 @@ def parallel_test(pairs, interval, data_dir, indicators):
     dbase = Mysql(test=True, interval=interval)
     dbase.delete_data()
     del dbase
-
+    print(pairs)
     trade = Trade(interval=interval, test_trade=True, test_data=True)
     dframes = {}
     sizes = []
