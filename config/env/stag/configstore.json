@@ -307,7 +307,7 @@
       "is_secret": false
     },
     "time_between_trades": {
-      "value": "84h",
+      "value": "3",
       "is_binary": false,
       "is_secret": false
     },
@@ -317,12 +317,12 @@
       "is_secret": false
     },
     "trailing_stop_loss_perc": {
-      "value": "100",
+      "value": "",
       "is_binary": false,
       "is_secret": false
     },
     "wait_between_trades": {
-      "value": "true",
+      "value": "False",
       "is_binary": false,
       "is_secret": false
     }
