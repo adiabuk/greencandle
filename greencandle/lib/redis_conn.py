@@ -455,8 +455,8 @@ class Redis():
             result = 'BUY'
 
         elif buy_price:
-            self.log_event('Hold', rate, perc_rate, buy_price, current_price, current_time,
-                           pair, results.current)
+            self.log_event('Hold', rate, perc_rate, buy_price, current_price, pair, current_time,
+                           results.current)
             result = 'HOLD'
         else:
             result = 'NOITEM'
