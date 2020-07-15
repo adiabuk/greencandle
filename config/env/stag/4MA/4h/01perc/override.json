@@ -1,3 +1,4 @@
 {
+  "pairs": "IOSTBTC MTHBTC RCNBTC SNMBTC APPCBTC ARNBTC",
   "stop_loss_perc": "0.1"
 }
