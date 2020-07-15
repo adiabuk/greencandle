@@ -13,7 +13,8 @@ base=$(yq r install/*stag* services | grep -v '^ .*' | sed 's/:.*$//'|grep 'base
 be=$(yq r install/*stag* services | grep -v '^ .*' | sed 's/:.*$//'|grep 'be')
 fe=$(yq r install/*stag* services | grep -v '^ .*' | sed 's/:.*$//'|grep 'fe')
 
-docker-compose -f ./install/docker-compose_stag.yml up -d $base
+
+docker-compose -f ./install/docker-compose_stag.yml up --remove-orphans -d $base
 
 for container in $be; do
   docker-compose -f ./install/docker-compose_stag.yml up -d $container
