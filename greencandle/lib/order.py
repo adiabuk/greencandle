@@ -93,9 +93,8 @@ class Trade():
         exchange_info = binance.exchange_info()[item]
         flat = self.flatten(exchange_info)
         step_size = float(flat['stepSize'])
-        #return round(float(amount) / step_size) * step_size
         precision = int(round(-math.log(step_size, 10), 0))
-        return round(amount, precision)
+        return round(float(amount), precision)
 
     @GET_EXCEPTIONS
     def buy(self, buy_list):
