@@ -6,6 +6,7 @@ Test Buy/Sell orders
 """
 
 from __future__ import print_function
+import math
 from collections import defaultdict
 import binance
 from str2bool import str2bool
@@ -75,6 +76,26 @@ class Trade():
         self.logger.debug("Final amount: %s", amt_str)
         return amt_str
 
+    def flatten(self, flat):
+        # traverse tree to find flatten-able object
+        # cast to list to avoid RuntimeError-dict size changed
+        for item_key, item_val in list(flat.items()):  # second level
+            if item_key == "filters":
+                for i in item_val:
+                    for key, val in i.items():
+                        if key != "filterType" and key not in flat:
+                            flat[key] = val
+
+        del flat["filters"]
+        return flat
+
+    def get_step_precision(self, item, amount):
+        exchange_info = binance.exchange_info()[item]
+        flat = self.flatten(exchange_info)
+        step_size = float(flat['stepSize'])
+        #return round(float(amount) / step_size) * step_size
+        precision = int(round(-math.log(step_size, 10), 0))
+        return round(amount, precision)
 
     @GET_EXCEPTIONS
     def buy(self, buy_list):
@@ -116,9 +137,7 @@ class Trade():
                 balance = Balance(test=False)
                 prices = balance.get_balance()
 
-
             for item, current_time, current_price in buy_list:
-
                 base = get_base(item)
                 try:
                     last_buy_price = dbase.fetch_sql_data("select base_in from trades where "
@@ -175,7 +194,7 @@ class Trade():
                     self.logger.debug("amount to buy: %s, cost: %s, amount:%s",
                                       base_amount, cost, amount)
                     if not self.test_data:
-                        amt_str = self.get_precision(item, amount)
+                        amt_str = self.get_step_precision(item, amount)
                         result = binance.order(symbol=item, side=binance.BUY, quantity=amt_str,
                                                price='', orderType=binance.MARKET,
                                                test=self.test_trade)
@@ -224,7 +243,7 @@ class Trade():
                 send_gmail_alert("SELL", item, price)
                 send_push_notif('SELL', item, '%.15f' % float(price))
                 if not self.test_data:
-                    amt_str = self.get_precision(item, quantity)
+                    amt_str = self.get_step_precision(item, quantity)
                     result = binance.order(symbol=item, side=binance.SELL, quantity=amt_str,
                                            price='', orderType=binance.MARKET, test=self.test_trade)
 
