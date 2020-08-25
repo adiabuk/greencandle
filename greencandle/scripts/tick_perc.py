@@ -9,7 +9,6 @@ import binance
 from greencandle.lib import config
 from greencandle.lib.common import perc_diff
 config.create_config()
-PAIR = sys.argv[1]
 
 def flatten(flat):
     """
@@ -29,13 +28,24 @@ def flatten(flat):
 
 def main():
     """ main function """
+
+
+    if len(sys.argv) > 1 and sys.argv[1] == '--help':
+        print("Get percentage change for single pip")
+        sys.exit(0)
+    elif len(sys.argv) !=2:
+        sys.stderr.write("Usage: {} <pair>\n".format(sys.argv[0]))
+        sys.exit(1)
+
+
+    pair = sys.argv[1]
     prices = binance.prices()
-    exchange_info = binance.exchange_info()[PAIR]
+    exchange_info = binance.exchange_info()[pair]
     flatten(exchange_info)
-    price = float(prices[PAIR])
+    price = float(prices[pair])
     tick_size = float(exchange_info['tickSize'])
     diff = perc_diff(price, price+tick_size)
-    print(PAIR, diff)
+    print(pair, diff)
 
 if __name__ == '__main__':
     main()
