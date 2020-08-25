@@ -1,5 +1,5 @@
 {
   "name": "2ma-01perc",
-  "pairs": "EVXBTC FUELBTC LINKBTC MCOBTC SNGLSBTC ENGBTC",
+  "pairs": "EVXBTC LINKBTC MCOBTC",
   "stop_loss_perc": "0.1"
 }

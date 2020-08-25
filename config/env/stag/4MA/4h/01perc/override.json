@@ -1,5 +1,5 @@
 {
   "name": "4ma-01perc",
-  "pairs": "IOSTBTC MTHBTC RCNBTC SNMBTC APPCBTC ARNBTC",
+  "pairs": "ENGBTC LENDBTC GXSBTC",
   "stop_loss_perc": "0.1"
 }
