@@ -1,5 +1,5 @@
 {
-  "buy_rule1": "results.current.RSI_10 \u003e 32 and results.previous.RSI_10 \u003c 32 and close \u003e results.current.EMA_200",
+  "buy_rule1": "results.current.RSI_10 \u003e 32 and results.previous.RSI_10 \u003c 32 and close \u003e results.current.SMA_200",
   "buy_rule2": "",
   "buy_rule3": "",
   "buy_rule4": "",
