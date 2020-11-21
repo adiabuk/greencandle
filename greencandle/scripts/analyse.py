@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-Analize and collate data from Excep reports
+Analise and collate data from Excel reports
 """
 
 import sys
