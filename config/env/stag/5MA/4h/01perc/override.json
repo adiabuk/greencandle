@@ -1,5 +1,5 @@
 {
   "name": "5ma-01perc",
-  "pairs": "ZRXBTC BQXBTC EOSBTC",
+  "pairs": "AMBBNB ARNBTC ARNETH RLCBNB RLCETH",
   "stop_loss_perc": "0.1"
 }

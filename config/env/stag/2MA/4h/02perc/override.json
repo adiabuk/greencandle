@@ -1,0 +1,5 @@
+{
+  "name": "2ma-02perc",
+  "pairs": "BATETH GXSETH NANOBNB RCNBNB SNGLSETH",
+  "stop_loss_perc": "0.2"
+}

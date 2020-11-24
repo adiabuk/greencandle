@@ -1,7 +1,0 @@
-{
-  "name": "4ma-start-new",
-  "pairs": "ENJBTC LUNBTC BATBTC",
-  "stop_loss_perc": "1",
-  "trailing_stop_loss": "True",
-  "trailing_stop_loss_perc": "10"
-}
