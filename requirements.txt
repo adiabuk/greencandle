@@ -32,3 +32,4 @@ pylint==2.4.4
 waitress
 six==1.12
 systemd==0.16.1
+tzlocal==2.1b1
