@@ -113,7 +113,6 @@ class Mysql():
               None
         """
 
-        self.logger.info("Buying %s using %s", pair, self.interval)
         command = """insert into trades (pair, buy_time, buy_price, base_in, `interval`,
                      quote_in, name) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}",
                      "{5}", "{6}");""".format(pair, date,
@@ -218,7 +217,6 @@ class Mysql():
         Update an existing trade with sell price
         """
         job_name = name if name else config.main.name
-        self.logger.info("Selling %s for %s", pair, self.interval)
         command = """update trades set sell_price={0},sell_time="{1}", quote_out="{2}",
         base_out="{3}", closed_by="{6}", drawdown_perc=abs(round({7},1)) where sell_price is NULL and `interval`="{4}"
         and pair="{5}" and name in ("{6}", "api") """.format('%.15f' % float(sell_price),

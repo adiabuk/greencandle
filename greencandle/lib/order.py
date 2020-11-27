@@ -231,6 +231,7 @@ class Trade():
             self.logger.info("We need to sell %s", sell_list)
             dbase = Mysql(test=self.test_data, interval=self.interval)
             for item, current_time, current_price in sell_list:
+                base = get_base(item)
                 quantity = dbase.get_quantity(item)
                 if not quantity:
                     self.logger.critical("Unable to find quantity for %s", item)
@@ -243,6 +244,8 @@ class Trade():
                 send_gmail_alert("SELL", item, price)
                 send_push_notif('SELL', item, '%.15f' % float(price))
                 send_slack_message('longs', 'SELL %s %.15f' % (item, float(price)))
+
+                self.logger.info("Selling %s of %s for %.15f %s", quantity, item, price, base)
                 if not self.test_data:
                     amt_str = self.get_step_precision(item, quantity)
                     result = binance.order(symbol=item, side=binance.SELL, quantity=amt_str,
