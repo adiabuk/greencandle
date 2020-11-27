@@ -7,7 +7,7 @@ Generic logging class for greencandle modules
 import logging
 from systemd.journal import JournaldLogHandler
 from . import config
-from .alerts import send_push_notif
+from .alerts import send_push_notif, send_slack_message
 
 class OneLineFormatter(logging.Formatter):
     """logging formatter for exceptions"""
@@ -42,6 +42,7 @@ class NotifyOnCriticalStream(logging.StreamHandler):
         super().emit(record)
         if record.levelno in (logging.ERROR, logging.CRITICAL):
             send_push_notif(record.msg)
+            send_slack_message(alerts, record.msg)
 
 class NotifyOnCriticalJournald(JournaldLogHandler):
     """
