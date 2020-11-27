@@ -291,6 +291,21 @@
       "is_binary": false,
       "is_secret": false
     },
+    "slack_active": {
+      "value": "true",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "slack_alerts": {
+      "value": "DpD7jovM3w33HhoJACV5zEhj5B1S6QTvqBPHgr53Ro8aT6lNI2LkqIkQhOudo3sy30zg2QEns1UOn5ynN26IQx52lB4CwpoYWs+IGDvEl+BvYTq8Wb3aXCJwnb2g4TDgei9G4weB2zl252c9HcnjD43bXHaixWrZHq4W1A==",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "slack_longs": {
+      "value": "0zn1o3Jm5N7DSkcSv50vfnAbo1ZyRzlPVpUTuaNcMA+VvLVnNaYIQDZYOxdZ5nRDOXHTGSknbEagIAJgt5vSck0iqpyRzKO7ebLUXQX0Tc4v839aAYAvvxbqAXAEDNytPisopX2h044zrWN5lMdupIK46UJ/Oc+gUw9nbA==",
+      "is_binary": false,
+      "is_secret": true
+    },
     "stop_loss_perc": {
       "value": "20",
       "is_binary": false,

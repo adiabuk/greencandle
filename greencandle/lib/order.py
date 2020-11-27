@@ -18,7 +18,7 @@ from .redis_conn import Redis
 from .balance import Balance
 from .balance_common import get_base
 from .common import perc_diff, add_perc
-from .alerts import send_gmail_alert, send_push_notif
+from .alerts import send_gmail_alert, send_push_notif, send_slack_message
 from . import config
 GET_EXCEPTIONS = get_decorator((Exception))
 
@@ -214,6 +214,7 @@ class Trade():
                                            base_amount=base_amount, quote=amount)
                         send_push_notif('BUY', item, '%.15f' % float(cost))
                         send_gmail_alert('BUY', item, '%.15f' % float(cost))
+                        send_slack_message('longs', 'BUY %s %.15f' % (item, float(cost)))
 
                         self.send_redis_trade(item, cost, self.interval, "BUY")
             del dbase
@@ -241,6 +242,7 @@ class Trade():
 
                 send_gmail_alert("SELL", item, price)
                 send_push_notif('SELL', item, '%.15f' % float(price))
+                send_slack_message('longs', 'SELL %s %.15f' % (item, float(price)))
                 if not self.test_data:
                     amt_str = self.get_step_precision(item, quantity)
                     result = binance.order(symbol=item, side=binance.SELL, quantity=amt_str,

@@ -7,6 +7,7 @@ import os
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import requests
 import notify_run
 from str2bool import str2bool
 from . import config
@@ -58,3 +59,16 @@ def send_push_notif(*args):
 
     notify.endpoint = 'https://{0}/{1}'.format(host, channel)
     notify.send(text)
+
+def send_slack_message(channel, message):
+    """
+    Send notification using slack api
+    """
+    if not str2bool(config.slack.slack_active):
+        return
+    title = config.push.push_title
+    payload = '{"text":"%s %s"}' % (message, title)
+    webhook = config.slack[channel]
+
+    response = requests.post(webhook, data=payload)
+    print(response.text)
