@@ -42,7 +42,7 @@ class NotifyOnCriticalStream(logging.StreamHandler):
         super().emit(record)
         if record.levelno in (logging.ERROR, logging.CRITICAL):
             send_push_notif(record.msg)
-            send_slack_message(alerts, record.msg)
+            send_slack_message('alerts', record.msg)
 
 class NotifyOnCriticalJournald(JournaldLogHandler):
     """
