@@ -32,6 +32,10 @@ services:
       interval: 1m
       timeout: 2s
       retries: 5
+    volumes:
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.aws:/root/.aws
+
 
   base-mysql:
     container_name: base-mysql
@@ -49,6 +53,9 @@ services:
       interval: 1m
       timeout: 2s
       retries: 5
+    volumes:
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.aws:/root/.aws
 
   fe-api:
     container_name: fe-api
@@ -77,6 +84,7 @@ services:
     volumes:
       - /data:/data
       - /dev/log:/dev/log
+      - /root/.aws:/root/.aws
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
   fe-cron:
@@ -102,6 +110,7 @@ services:
       retries: 5
     volumes:
       - /data:/data
+      - /root/.aws:/root/.aws
       - /var/run/docker.sock:/var/run/docker.sock
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
@@ -135,6 +144,7 @@ services:
      entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
      volumes:
        - /data:/data
+       - /root/.aws:/root/.aws
 
   fe-dashboard:
     container_name: fe-dashboard
