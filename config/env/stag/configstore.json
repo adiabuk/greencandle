@@ -301,6 +301,11 @@
       "is_binary": false,
       "is_secret": true
     },
+    "slack_balance": {
+      "value": "48bun14AjdxcQlNVIUnnW7GRwe7G8P7bzkDooAYuoHHTQiDKlk1W/ty1GYEI0ioJMjGJ+C+ZOVBtyrr7XR7JXNjDT1m/w4M8jkQxTpN4NTlKmIwwQ42OpmtZyb1fJJ/HQq4hKOnlFy4UWRlZzj/8waklY5m6cJpNC2+S16dtLgw=",
+      "is_binary": false,
+      "is_secret": true
+    },
     "slack_longs": {
       "value": "0zn1o3Jm5N7DSkcSv50vfnAbo1ZyRzlPVpUTuaNcMA+VvLVnNaYIQDZYOxdZ5nRDOXHTGSknbEagIAJgt5vSck0iqpyRzKO7ebLUXQX0Tc4v839aAYAvvxbqAXAEDNytPisopX2h044zrWN5lMdupIK46UJ/Oc+gUw9nbA==",
       "is_binary": false,

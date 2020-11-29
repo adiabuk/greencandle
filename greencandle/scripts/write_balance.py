@@ -19,6 +19,7 @@ def main():
     balance = Balance(test=False)
     prices = balance.get_balance(margin=True)
     balance.save_balance(prices)
+    balance.get_saved_balance()
 
 if __name__ == "__main__":
     main()

@@ -5,12 +5,14 @@
 from __future__ import print_function
 import json
 from requests.exceptions import ReadTimeout
+from greencandle.lib.alerts import send_slack_message
 from . import config
 from .binance_accounts import get_binance_values, get_binance_margin
 from .coinbase_accounts import get_coinbase_values
 from .mysql import Mysql
 from .logger import get_logger
 
+config.create_config()
 LOGGER = get_logger(__name__)
 
 class Balance(dict):
@@ -97,4 +99,10 @@ class Balance(dict):
 
     def get_saved_balance(self):
         """print live balance"""
+        bal = self.get_balance()
+        binance_usd = bal['margin']['TOTALS']['USD'] + bal['binance']['TOTALS']['USD']
+        binance_btc = bal['margin']['TOTALS']['BTC'] + bal['binance']['TOTALS']['BTC']
+        send_slack_message("balance", "binance USD = {}".format(binance_usd))
+        send_slack_message("balance", "binance BTC = {}".format(binance_btc))
+
         print(json.dumps(self.get_balance(), indent=4))
