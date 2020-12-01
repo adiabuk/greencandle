@@ -193,7 +193,7 @@ class Trade():
                     self.logger.info("Buying %s of %s with %s %s", amount, item, base_amount, base)
                     self.logger.debug("amount to buy: %s, cost: %s, amount:%s",
                                       base_amount, cost, amount)
-                    if prod not self.test_data:
+                    if prod and not self.test_data:
                         amt_str = self.get_step_precision(item, amount)
                         result = binance.order(symbol=item, side=binance.BUY, quantity=amt_str,
                                                price='', orderType=binance.MARKET,
@@ -248,7 +248,7 @@ class Trade():
                 send_slack_message('longs', 'SELL %s %.15f' % (item, float(price)))
 
                 self.logger.info("Selling %s of %s for %.15f %s", quantity, item, float(price), base)
-                if prod not self.test_data:
+                if prod and not self.test_data:
                     amt_str = self.get_step_precision(item, quantity)
                     result = binance.order(symbol=item, side=binance.SELL, quantity=amt_str,
                                            price='', orderType=binance.MARKET, test=self.test_trade)

@@ -196,6 +196,26 @@
       "is_binary": false,
       "is_secret": false
     },
+    "phemex_api_ket": {
+      "value": "3sxRYpjOgOLWq5JOvoHh1X7VYg7lBa4cEYZ0OIC2MOv2Lz1TSck5P0a/kGv8P5OplKiWrOSUvfh+zmgZyayLVg==",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "phemex_api_key": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "phemex_api_secret": {
+      "value": "oS/mWMELEUOM8QdcavmjTCiMinUxdFvij4NjAExhJZPe6GUcn2pjadoh34V2TRVZB48rcAfEt5M9Y4vP3dCNrq2omuHlUgBnq1zo9qG8OL5qq1lNMOP8veD8NddTtKMpS1KOWtUL3+VHJbxcGacBKGIRKSJvZ0w/zutXkbK2m62JjgBdFwNnioP4BlY=",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "production": {
+      "value": "true",
+      "is_binary": false,
+      "is_secret": false
+    },
     "push_active": {
       "value": "True",
       "is_binary": false,
