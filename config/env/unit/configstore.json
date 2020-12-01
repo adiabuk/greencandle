@@ -195,6 +195,21 @@
       "is_binary": false,
       "is_secret": false
     },
+    "phemex_api_key": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "phemex_api_secret": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "production": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
     "push_active": {
       "value": "False",
       "is_binary": false,

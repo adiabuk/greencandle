@@ -196,7 +196,7 @@
       "is_binary": false,
       "is_secret": false
     },
-    "phemex_api_ket": {
+    "phemex_api_key": {
       "value": "3sxRYpjOgOLWq5JOvoHh1X7VYg7lBa4cEYZ0OIC2MOv2Lz1TSck5P0a/kGv8P5OplKiWrOSUvfh+zmgZyayLVg==",
       "is_binary": false,
       "is_secret": true
