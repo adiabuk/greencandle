@@ -33,7 +33,7 @@ class Balance(dict):
         self.dbase.insert_balance(prices)
 
     @staticmethod
-    def get_balance(coinbase=False, margin=False):
+    def get_balance(coinbase=False, margin=True):
         """
         get dict of all balances
 
