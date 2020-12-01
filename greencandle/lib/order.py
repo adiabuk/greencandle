@@ -105,6 +105,7 @@ class Trade():
         self.logger.info("We have %s potential items to buy", len(buy_list))
 
         drain = str2bool(config.main.drain)
+        prod = str2bool(config.main.production)
         if drain and not self.test_data:
             self.logger.warning("Skipping Buy as %s is in drain", self.interval)
             return
@@ -192,7 +193,7 @@ class Trade():
                     self.logger.info("Buying %s of %s with %s %s", amount, item, base_amount, base)
                     self.logger.debug("amount to buy: %s, cost: %s, amount:%s",
                                       base_amount, cost, amount)
-                    if not self.test_data:
+                    if prod not self.test_data:
                         amt_str = self.get_step_precision(item, amount)
                         result = binance.order(symbol=item, side=binance.BUY, quantity=amt_str,
                                                price='', orderType=binance.MARKET,
@@ -227,6 +228,7 @@ class Trade():
         Sell items in sell_list
         """
 
+        prod = str2bool(config.main.production)
         if sell_list:
             self.logger.info("We need to sell %s", sell_list)
             dbase = Mysql(test=self.test_data, interval=self.interval)
@@ -245,8 +247,8 @@ class Trade():
                 send_push_notif('SELL', item, '%.15f' % float(price))
                 send_slack_message('longs', 'SELL %s %.15f' % (item, float(price)))
 
-                self.logger.info("Selling %s of %s for %.15f %s", quantity, item, price, base)
-                if not self.test_data:
+                self.logger.info("Selling %s of %s for %.15f %s", quantity, item, float(price), base)
+                if prod not self.test_data:
                     amt_str = self.get_step_precision(item, quantity)
                     result = binance.order(symbol=item, side=binance.SELL, quantity=amt_str,
                                            price='', orderType=binance.MARKET, test=self.test_trade)
