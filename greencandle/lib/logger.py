@@ -4,6 +4,7 @@
 Generic logging class for greencandle modules
 """
 
+import sys
 import logging
 from systemd.journal import JournaldLogHandler
 from . import config
@@ -53,7 +54,6 @@ class NotifyOnCriticalJournald(JournaldLogHandler):
         if record.levelno in (logging.ERROR, logging.CRITICAL):
             send_push_notif(record.msg)
 
-
 def get_logger(module_name=None):
     """
     Get Customized logging instance
@@ -94,6 +94,7 @@ def get_decorator(errors=(Exception,)):
                 return func(*args, **kwargs)
             except errors:
                 logger.exception("Got Error: ")   # %s %s", str(sys.exc_info()), errors)
+                send_slack_message("alerts", "Exception raised: {}".format(str(sys.exc.info())))
                 #logger.critical('Function', method.__name__, 'time:', round((te -ts)*1000,1), 'ms')
 
 #                raise
