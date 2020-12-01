@@ -118,7 +118,6 @@ def get_open(scheduler):
     global DATA
     local_data = {}
     print("Getting open trades", file=sys.stderr)
-    DATA = {}
     dbase = Mysql()
     interval = '4h'
     results = dbase.fetch_sql_data("select * from open_trades", header=False)
