@@ -4,7 +4,6 @@
 Generic logging class for greencandle modules
 """
 
-import sys
 import logging
 from systemd.journal import JournaldLogHandler
 from . import config
@@ -94,7 +93,7 @@ def get_decorator(errors=(Exception,)):
                 return func(*args, **kwargs)
             except errors:
                 logger.exception("Got Error: ")   # %s %s", str(sys.exc_info()), errors)
-                send_slack_message("alerts", "Exception raised: {}".format(str(sys.exc.info())))
+                send_slack_message("alerts", "Exception raised")
                 #logger.critical('Function', method.__name__, 'time:', round((te -ts)*1000,1), 'ms')
 
 #                raise
