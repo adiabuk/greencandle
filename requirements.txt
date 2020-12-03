@@ -33,3 +33,4 @@ waitress
 six==1.12
 systemd==0.16.1
 tzlocal==2.1b1
+ccxt=1.30.47
