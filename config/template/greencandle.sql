@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 5.7.29, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.32, for Linux (x86_64)
 --
 -- Host: localhost    Database: greencandle
 -- ------------------------------------------------------
@@ -34,7 +34,7 @@ CREATE TABLE `balance` (
   PRIMARY KEY (`id`),
   KEY `exchange_id` (`exchange_id`),
   CONSTRAINT `balance_ibfk_2` FOREIGN KEY (`exchange_id`) REFERENCES `exchange` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=127 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -60,7 +60,7 @@ DROP TABLE IF EXISTS `daily_profit`;
 /*!50001 DROP VIEW IF EXISTS `daily_profit`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `daily_profit` AS SELECT
+/*!50001 CREATE VIEW `daily_profit` AS SELECT 
  1 AS `date`,
  1 AS `interval`,
  1 AS `profit`,
@@ -78,7 +78,7 @@ CREATE TABLE `exchange` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -89,7 +89,7 @@ DROP TABLE IF EXISTS `hour_balance`;
 /*!50001 DROP VIEW IF EXISTS `hour_balance`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `hour_balance` AS SELECT
+/*!50001 CREATE VIEW `hour_balance` AS SELECT 
  1 AS `exchange_id`,
  1 AS `usd1`,
  1 AS `coin`,
@@ -111,7 +111,7 @@ DROP TABLE IF EXISTS `monthly_profit`;
 /*!50001 DROP VIEW IF EXISTS `monthly_profit`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `monthly_profit` AS SELECT
+/*!50001 CREATE VIEW `monthly_profit` AS SELECT 
  1 AS `date`,
  1 AS `interval`,
  1 AS `profit`,
@@ -143,7 +143,7 @@ DROP TABLE IF EXISTS `profit`;
 /*!50001 DROP VIEW IF EXISTS `profit`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profit` AS SELECT
+/*!50001 CREATE VIEW `profit` AS SELECT 
  1 AS `buy_time`,
  1 AS `interval`,
  1 AS `sell_time`,
@@ -163,7 +163,7 @@ DROP TABLE IF EXISTS `profitable`;
 /*!50001 DROP VIEW IF EXISTS `profitable`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profitable` AS SELECT
+/*!50001 CREATE VIEW `profitable` AS SELECT 
  1 AS `pair`,
  1 AS `total`,
  1 AS `profit`,
@@ -219,8 +219,8 @@ CREATE TABLE `trades` (
   `base_out` varchar(30) DEFAULT NULL,
   `quote_in` varchar(30) DEFAULT NULL,
   `quote_out` varchar(30) DEFAULT NULL,
-  `name` varchar(20) DEFAULT NULL,
-  `closed_by` varchar(20) DEFAULT NULL,
+  `name` varchar(10) DEFAULT NULL,
+  `closed_by` varchar(10) DEFAULT NULL,
   `drawdown_perc` varchar(4) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -324,8 +324,8 @@ CREATE TABLE `trades` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-25 15:26:54
--- MySQL dump 10.13  Distrib 5.7.29, for Linux (x86_64)
+-- Dump completed on 2020-12-03  0:06:42
+-- MySQL dump 10.13  Distrib 5.7.32, for Linux (x86_64)
 --
 -- Host: localhost    Database: greencandle
 -- ------------------------------------------------------
@@ -353,7 +353,7 @@ CREATE TABLE `exchange` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -362,7 +362,7 @@ CREATE TABLE `exchange` (
 
 LOCK TABLES `exchange` WRITE;
 /*!40000 ALTER TABLE `exchange` DISABLE KEYS */;
-INSERT INTO `exchange` VALUES (3,'coinbase'),(4,'binance'),(5,'margin');
+INSERT INTO `exchange` VALUES (3,'coinbase'),(4,'binance'),(5,'margin'),(6,'phemex');
 /*!40000 ALTER TABLE `exchange` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -375,4 +375,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-25 15:26:55
+-- Dump completed on 2020-12-03  0:06:42

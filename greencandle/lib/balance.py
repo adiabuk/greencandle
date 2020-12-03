@@ -9,6 +9,7 @@ from greencandle.lib.alerts import send_slack_message
 from . import config
 from .binance_accounts import get_binance_values, get_binance_margin
 from .coinbase_accounts import get_coinbase_values
+from .phemex_accounts import get_phemex_values
 from .mysql import Mysql
 from .logger import get_logger
 
@@ -33,7 +34,7 @@ class Balance(dict):
         self.dbase.insert_balance(prices)
 
     @staticmethod
-    def get_balance(coinbase=False, margin=True):
+    def get_balance(coinbase=False, margin=True, phemex=True):
         """
         get dict of all balances
 
@@ -84,6 +85,11 @@ class Balance(dict):
 
         binance = get_binance_values()
         combined_dict = binance.copy()   # start with binance"s keys and values
+
+        if phemex:
+            phemex = get_phemex_values()
+            combined_dict.update(phemex)
+
         if coinbase:
             try:
                 coinbase = get_coinbase_values()
@@ -102,7 +108,10 @@ class Balance(dict):
         bal = self.get_balance()
         binance_usd = bal['margin']['TOTALS']['USD'] + bal['binance']['TOTALS']['USD']
         binance_btc = bal['margin']['TOTALS']['BTC'] + bal['binance']['TOTALS']['BTC']
+        phemex_usd = bal['phemex']['TOTALS']['USD']
+        phemex_btc = bal['phemex']['TOTALS']['BTC']
         send_slack_message("balance", "binance USD = {}".format(binance_usd))
         send_slack_message("balance", "binance BTC = {}".format(binance_btc))
 
-        print(json.dumps(self.get_balance(), indent=4))
+        send_slack_message("balance", "phemex USD = {}".format(phemex_usd))
+        send_slack_message("balance", "phemex BTC = {}".format(phemex_btc))

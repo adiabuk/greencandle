@@ -196,14 +196,14 @@
       "is_secret": false
     },
     "phemex_api_key": {
-      "value": "",
+      "value": "0fbp2H0HsqztdYO8adiPjhk++hESAO+dC93T7PbGJMl8vzkkJEG8LyFRJ2c958K0cBwMSofs4DC7ca55ES59Mw==",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "phemex_api_secret": {
-      "value": "",
+      "value": "dqfm1yfO7npA0abyqpfLnU98dEfD8YlB/jModvmBjkw/ASfls6lAjmo/dh8hPCjbQM9yNfJU4qkIXbYHIbjo9k+Anpf4a0rfpNLLaZy16V5tufu7Ux8bYrv7S//cZoBN5MublzwZ5zavF5YApOqW5ZV7FgUnyEYXr3g0XkgXKlgmZmh/lZkXOKebBxw=",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "production": {
       "value": "false",
@@ -316,9 +316,9 @@
       "is_secret": true
     },
     "slack_balance": {
-      "value": "",
+      "value": "5dxWuX8SGLoL523lBVxgtUByOYwAune1wmkMD8IZNVqi2atJz+uJeoX01mzbjDOrMmXJsZU6ne/yEtkw4RmLJVqi2JZcNPzgwNcMY+R9Kz1J2lRgps5zEHO8j+CDLFFQ7qc7r5hUZTKEfHj/qa1QDimV2tQYiZk9dCbNrQ==",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "slack_longs": {
       "value": "SQY20QQwO+Vxgr4kVEPK77RCBRwfyBNLK7ux2PM56s7jdb9RDP60Hky19eJOhk70Z5jnSjJ1vyZni/CWIKfhUyAd/XxI0f6E6wtxLje3cKgnJtQNtzXCyemAKquTwdQf1i2agtg51STneTpTboRWKthmIAugO7onnVK0/w==",

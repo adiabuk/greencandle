@@ -5,6 +5,7 @@ Helper functions for authernticating with APIs
 
 import os
 from coinbase.wallet.client import Client
+import ccxt
 import binance
 from . import config
 
@@ -30,3 +31,23 @@ def coinbase_auth():
 
     client = Client(api_key, api_secret)
     return client
+
+def phemex_auth():
+    """
+    Authenticatate with API using key/secret
+    Returns: Coinbase phemex client object
+    """
+
+    api_key = config.main.phemex_api_key
+    api_secret = config.main.phemex_api_secret
+
+    exchange = ccxt.phemex({
+        'enableRateLimit': True,  # https://github.com/ccxt/ccxt/wiki/Manual#rate-limit
+        'apiKey': api_key,  # testnet keys if using the testnet sandbox
+        'secret': api_secret,  # testnet keys if using the testnet sandbox
+        'options': {
+            'defaultType': 'swap',
+        },
+    })
+
+    return exchange

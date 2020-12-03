@@ -17,7 +17,7 @@ def main():
         sys.exit(0)
 
     balance = Balance(test=False)
-    prices = balance.get_balance(margin=True)
+    prices = balance.get_balance(margin=True, phemex=True)
     balance.save_balance(prices)
     balance.get_saved_balance()
 
