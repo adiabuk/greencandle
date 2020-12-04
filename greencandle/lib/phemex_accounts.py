@@ -16,15 +16,31 @@ LOGGER = get_logger(__name__)
 
 def get_phemex_values():
     """Get totals for each crypto from binance and convert to USD/GBP"""
-    phemex = phemex_auth()
     currency = CurrencyRates()
+
+    hitbtc = ccxt.hitbtc()
+
+    # Get spot account details
+    phemex = phemex_auth('spot')
+    balance = phemex.fetch_balance({'code':'BTC'})
+    spot_total = balance['free']['USDT']
+    for key, val in balance['free'].items():
+        # iterate through all items and convert to USDT
+        if val > 0 and key != 'USDT':
+            ticker = hitbtc.fetch_ticker('{}/USDT'.format(key))['close']
+            spot_total += val * ticker
+
+
+    # Get margin account details
+    phemex = phemex_auth('swap')
     usd2gbp = lambda: currency.get_rate("USD", "GBP")
     btc = phemex.fetch_balance({'code': 'BTC'})['total']['BTC']
-    usd = phemex.fetch_balance({'code': 'USD'})['total']['USD']
+
+    # add spot usdt to usd
+    usd = phemex.fetch_balance({'code': 'USD'})['total']['USD'] + spot_total
 
     mydict = lambda: defaultdict(mydict)
     result = mydict()
-    hitbtc = ccxt.hitbtc()
     bitcoin_ticker = hitbtc.fetch_ticker('BTC/USDT')
     price = bitcoin_ticker['close']
     gbp = (btc*price) * usd2gbp()
@@ -54,11 +70,3 @@ def get_phemex_values():
     gbp = usd2gbp() * usd_total
 
     return default_to_regular(result)
-
-def add_value(key, value):
-    """Add value to dict to save offline """
-    try:
-        BITCOIN[key].append(value)
-    except KeyError:
-        BITCOIN[key] = []
-        BITCOIN[key].append(value)
