@@ -1,5 +1,6 @@
 {
   "name": "2ma-05perc",
   "pairs": "ETHBTC",
+  "push_title": "stag_2ma-05perc",
   "stop_loss_perc": "0.5"
 }

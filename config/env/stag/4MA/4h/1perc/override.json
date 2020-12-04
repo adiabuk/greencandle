@@ -1,5 +1,6 @@
 {
   "name": "4ma-1perc",
   "pairs": "MDABTC",
+  "push_title": "stag_4ma-1perc",
   "stop_loss_perc": "1"
 }

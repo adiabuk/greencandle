@@ -1,5 +1,6 @@
 {
   "name": "2ma-02perc",
   "pairs": "BATETH GXSETH SNGLSETH",
+  "push_title": "stag_2ma-02perc",
   "stop_loss_perc": "0.2"
 }

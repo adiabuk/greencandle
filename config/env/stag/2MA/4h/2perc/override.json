@@ -1,5 +1,6 @@
 {
   "name": "2ma-2perc",
   "pairs": "ZRXBTC",
+  "push_title": "stag_2ma-2perc",
   "stop_loss_perc": "2"
 }
