@@ -191,6 +191,7 @@ def get_closed(scheduler):
                            "graph": get_latest_graph(pair, "html"),
                            "strategy": get_keys_by_value(config.pairs, pair),
                            "thumbnail": get_latest_graph(pair, "resized.png")}
+        ALL[pair] = local_all[pair]
     ALL = local_all
     SCHED.enter(600, 600, get_closed, (scheduler, ))
 
