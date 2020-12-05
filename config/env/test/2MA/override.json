@@ -9,7 +9,7 @@
   "divisor": "3",
   "indicators": "get_moving_averages;EMA;2 get_moving_averages;EMA;69",
   "interval": "4h",
-  "max_trades": "3",
+  "max_trades": "5",
   "push_title": "prod_2MA",
   "rate_indicator": "EMA_2",
   "redis_expiry_seconds": "1036800",
