@@ -163,7 +163,7 @@ def to_csv(pair, data):
         dict_writer.writeheader()
         dict_writer.writerows(reversed(data))
 
-def get_dataframe(pair, interval):
+def get_dataframe(pair, interval, no_of_klines):
     """
     Extract and return ohlc (open, high, low close) data
     for single pair from available data
@@ -175,10 +175,10 @@ def get_dataframe(pair, interval):
     Returns:
         A truple containing full pandas dataframe and a tuple of float values
     """
-    dataframe = get_binance_klines(pair, interval=interval, limit=int(config.main.no_of_klines))
+    dataframe = get_binance_klines(pair, interval=interval, limit=int(no_of_klines))
     return dataframe
 
-def get_dataframes(pairs, interval=None):
+def get_dataframes(pairs, interval=None, no_of_klines=None):
     """
     Get details from binance API
 
@@ -190,6 +190,8 @@ def get_dataframes(pairs, interval=None):
         #TODO: fix order of return value, which is opposite of above function
         A truple containing full pandas dataframes and a tuple of float values for all pairs
     """
+    if not no_of_klines:
+        no_of_klines = config.main.no_of_klines
 
     pool = ThreadPoolExecutor(max_workers=50)
     dataframe = {}
@@ -198,7 +200,8 @@ def get_dataframes(pairs, interval=None):
         event = {}
         event["symbol"] = pair
         event["data"] = {}
-        results[pair] = pool.submit(get_dataframe, pair=pair, interval=interval)
+        results[pair] = pool.submit(get_dataframe, pair=pair, interval=interval,
+                                    no_of_klines=no_of_klines)
 
     # extract results
     for key, value in results.items():

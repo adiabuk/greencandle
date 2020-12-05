@@ -252,12 +252,39 @@ def prod_initial(interval, test=False):
         if key in pairs:
             prices_trunk[key] = val
 
+
+    # Number of klines for a given number of seconds
+    multiplier = {'1d': 3600 * 24,
+                  '4h': 3600 * 4,
+                  '2h': 3600 * 2,
+                  '1h': 3600,
+                  '30m': 3600 / 2,
+                  '15m': 3600 / 4,
+                  '5m': 3600 / 12,
+                  '3m': 3600 / 20,
+                  '1m': 3600 / 60
+                 }
+
     redis = Redis(interval=interval, test=test)
     main_indicators = config.main.indicators.split()
-    dataframes = get_dataframes(pairs, interval=interval)
+    try:
+        last_item = redis.get_items(pairs[0], interval)[-1]
+        last_epoch = int(int(last_item.decode("utf-8").split(':')[-1])/1000)+1
+        current_epoch = time.time()
+        time_since_last = current_epoch - last_epoch
+        print(last_epoch, current_epoch)
+        print(time_since_last)
+        print(multiplier)
+        no_of_klines = int(time_since_last / multiplier[interval] +1)
+    except IndexError:
+        no_of_klines = config.main.no_of_klines
+
+    print('xxxxx', no_of_klines)
+
+    dataframes = get_dataframes(pairs, interval=interval, no_of_klines=no_of_klines)
     engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, test=test,
                     redis=redis)
-    engine.get_data(localconfig=main_indicators, first_run=True)
+    engine.get_data(localconfig=main_indicators, first_run=True, no_of_klines=no_of_klines)
     del redis
 
 def prod_loop(interval, test_trade):

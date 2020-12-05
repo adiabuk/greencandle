@@ -183,7 +183,7 @@ class Engine(dict):
         self.schemes = []
 
     @get_exceptions
-    def get_data(self, localconfig=None, first_run=False):
+    def get_data(self, localconfig=None, first_run=False, no_of_klines=None):
         """
         Iterate through data and trading pairs to extract data
         Run data through indicator, oscillators, moving average
@@ -209,7 +209,7 @@ class Engine(dict):
                     pool.submit(getattr(self, function)(pair, self.dataframes[pair], index=None,
                                                         localconfig=(name, period)))
                     if first_run:
-                        for seq in range(int(config.main.no_of_klines) -1):
+                        for seq in range(int(no_of_klines) -1):
                             pool.submit(getattr(self, function)(pair, self.dataframes[pair],
                                                                 index=seq,
                                                                 localconfig=(name, period)))
