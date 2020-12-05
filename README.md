@@ -10,6 +10,16 @@
 |Testing| [![Build Status](https://travis-ci.org/adiabuk/greencandle.svg?branch=master)](https://travis-ci.org/adiabuk/greencandle)|
 
 # Releases
+## 0.34
+* Speed up API refresh
+* Speed up initial download of historic data
+* Add Phemex integration
+* Verified staging trading pairs
+* Slack integration for alerts and notifications
+* Better parallel testing
+* Better description when errors are captured
+* Sort out currency precision when making/closing an order
+
 ## 0.33
 * More explicit debug logging
 * Add buy/sell rules and strategy names to API dashboard
