@@ -11,6 +11,6 @@
 @reboot /usr/local/bin/create_graph -d0 -a -i 4h -o /data/graphs/ -m > /proc/1/fd/1 2>/proc/1/fd/2
 
 0 3 * * 1 /bin/ls -1t /data/mysql| tail -n +31 | /usr/bin/xargs -d '\n' /bin/rm -f > /proc/1/fd/1 2>/proc/1/fd/2
-30 * * * * /usr/bin/find /data/graphs -type f -mmin +600 -delete > /proc/1/fd/1 2>/proc/1/fd/2
+30 * * * * /usr/bin/find /data/graphs -type f -mtime +1 -delete > /proc/1/fd/1 2>/proc/1/fd/2
 */2 * * * * /usr/local/bin/get_active_trades > /proc/1/fd/1 2>/proc/1/fd/2
 0 * * * *  /usr/local/bin/send_docker_alerts
