@@ -53,12 +53,14 @@ SCHED = sched.scheduler(time, sleep)
 DATA = {}
 RULES = []
 ALL = {}
-TEST = None
+TEST = bool(len(sys.argv) > 1 and sys.argv[1] == '--test')
+TEST_TRADE = bool(os.environ['HOST'] in ["test", "stag"])
 
 @APP.route('/')
 def trades():
     """deployments page"""
-    return render_template('trades.html', versions=DATA, all=ALL, rules=RULES)
+    return render_template('trades.html', versions=DATA, all=ALL, rules=RULES, test=TEST,
+                           test_trade=TEST_TRADE)
 
 @APP.route('/sell', methods=["GET", "POST"])
 def sell():
@@ -71,8 +73,7 @@ def sell():
     current_price = request.args.get('price')
     print(pair, name, file=sys.stderr)
 
-    test_trade = bool(os.environ['HOST'] in ["test", "stag"])
-    trade = Trade(interval='4h', test_data=TEST, test_trade=test_trade)
+    trade = Trade(interval='4h', test_data=TEST, test_trade=TEST_TRADE)
 
     current_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     sells = [(pair, current_time, current_price)]
@@ -80,7 +81,7 @@ def sell():
     # Sell, then update page
     trade.sell(sells, name=name)
     sleep(1)
-    dbase = Mysql(interval='4h', test=test_trade)
+    dbase = Mysql(interval='4h', test=TEST_TRADE)
     dbase.get_active_trades()
     del dbase
     get_open(SCHED)
@@ -93,8 +94,7 @@ def buy():
     global TEST
     print("BUY", file=sys.stderr)
     pair = request.args.get('pair')
-    test_trade = bool(os.environ['HOST'] in ["test", "stag"])
-    trade = Trade(interval='4h', test_data=TEST, test_trade=test_trade)
+    trade = Trade(interval='4h', test_data=TEST, test_trade=TEST_TRADE)
     current_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     current_price = get_current_price(pair)
     buys = [(pair, current_time, current_price)]
@@ -215,7 +215,6 @@ def main():
     if len(sys.argv) > 1 and sys.argv[1] == '--help':
         print("API for interacting with trading system")
         sys.exit(0)
-    TEST = bool(len(sys.argv) > 1 and sys.argv[1] == '--test')
 
     SCHED.enter(0, 60, get_open, (SCHED,))
     SCHED.enter(0, 600, get_closed, (SCHED,))
