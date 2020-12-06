@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=global-statement,wrong-import-position,too-few-public-methods,
+#pylint: disable=global-statement,wrong-import-position,too-few-public-methods
 #pylint: disable=invalid-name,no-member,no-else-return
 
 """
@@ -7,14 +7,13 @@ API dashboard
 """
 
 from __future__ import print_function
-import threading
-import sched
 import sys
 import glob
 import os
 from importlib import reload
-from time import time, sleep, strftime, gmtime
+from time import sleep, strftime, gmtime
 from pathlib import Path
+from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, render_template, request, redirect
 
 from waitress import serve
@@ -49,7 +48,7 @@ HANDLER = LOGGER.handlers[0]
 APP.logger.addHandler(HANDLER)
 APP.wsgi_app = PrefixMiddleware(APP.wsgi_app, prefix='/api')
 
-SCHED = sched.scheduler(time, sleep)
+SCHED = BackgroundScheduler(daemon=True)
 DATA = {}
 RULES = []
 ALL = {}
@@ -59,8 +58,8 @@ TEST_TRADE = bool(os.environ['HOST'] in ["test", "stag"])
 @APP.route('/')
 def trades():
     """deployments page"""
-    return render_template('trades.html', versions=DATA, all=ALL, rules=RULES, test=TEST,
-                           test_trade=TEST_TRADE)
+    return render_template('trades.html', versions=DATA, all=ALL, rules=RULES,
+                           test=TEST, test_trade=TEST_TRADE)
 
 @APP.route('/sell', methods=["GET", "POST"])
 def sell():
@@ -84,8 +83,6 @@ def sell():
     dbase = Mysql(interval='4h', test=TEST_TRADE)
     dbase.get_active_trades()
     del dbase
-    get_open(SCHED)
-    get_closed(SCHED)
     return redirect("/api", code=302)
 
 @APP.route('/buy', methods=["GET", "POST"])
@@ -103,17 +100,14 @@ def buy():
     dbase = Mysql()
     dbase.get_active_trades()
     del dbase
-    get_open(SCHED)
-    get_closed(SCHED)
     return redirect("/api", code=302)
 
 
-def healthcheck(scheduler):
+def healthcheck():
     """Healtcheck for docker"""
     Path('/var/run/api').touch()
-    SCHED.enter(60, 60, healthcheck, (scheduler, ))
 
-def get_open(scheduler):
+def get_open():
     """get open trades from mysql"""
     global DATA
     local_data = {}
@@ -134,9 +128,10 @@ def get_open(scheduler):
                             "graph": get_latest_graph(pair, "html"), "name": name,
                             "strategy": get_keys_by_value(config.pairs, pair),
                             "thumbnail": get_latest_graph(pair, "resized.png")}
+        DATA[pair] = local_data[pair]
+
     DATA = local_data
     del redis
-    SCHED.enter(60, 60, get_open, (scheduler, ))
 
 def get_keys_by_value(dict_of_elements, value_to_find):
     """
@@ -162,7 +157,7 @@ def get_rules():
             except KeyError:
                 pass
 
-def get_closed(scheduler):
+def get_closed():
     """
     get details of closed pairs
     """
@@ -193,7 +188,6 @@ def get_closed(scheduler):
                            "thumbnail": get_latest_graph(pair, "resized.png")}
         ALL[pair] = local_all[pair]
     ALL = local_all
-    SCHED.enter(600, 600, get_closed, (scheduler, ))
 
 def get_latest_graph(pair, suffix=''):
     """
@@ -216,13 +210,11 @@ def main():
         print("API for interacting with trading system")
         sys.exit(0)
 
-    SCHED.enter(0, 60, get_open, (SCHED,))
-    SCHED.enter(0, 600, get_closed, (SCHED,))
-    SCHED.enter(0, 60, healthcheck, (SCHED,))
+    SCHED.add_job(get_open, 'interval', seconds=5)
+    SCHED.add_job(get_closed, 'interval', seconds=60)
+    SCHED.add_job(healthcheck, 'interval', seconds=60)
+    SCHED.start()
 
-    background_thread = threading.Thread(target=SCHED.run, args=())
-    background_thread.daemon = True
-    background_thread.start()
     get_rules()
     if TEST:
         print("test node")
