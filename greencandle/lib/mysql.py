@@ -219,7 +219,7 @@ class Mysql():
         job_name = name if name else config.main.name
         command = """update trades set sell_price={0},sell_time="{1}", quote_out="{2}",
         base_out="{3}", closed_by="{6}", drawdown_perc=abs(round({7},1)) where sell_price is NULL and `interval`="{4}"
-        and pair="{5}" and name in ("{6}", "api") """.format('%.15f' % float(sell_price),
+        and pair="{5}" and (name like "{6}" or name like "api") """.format('%.15f' % float(sell_price),
                                                              sell_time,
                                                              '%.15f' % float(quote),
                                                              '%.15f' % float(base_out),
