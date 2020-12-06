@@ -171,7 +171,7 @@
       "is_secret": false
     },
     "max_trades": {
-      "value": "5",
+      "value": "50",
       "is_binary": false,
       "is_secret": false
     },
