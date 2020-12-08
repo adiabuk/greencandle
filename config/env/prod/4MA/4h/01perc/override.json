@@ -1,0 +1,6 @@
+{
+  "name": "4ma-01perc",
+  "pairs": "LINKETH RLCETH",
+  "push_title": "prod_4ma-01perc",
+  "stop_loss_perc": "0.1"
+}

@@ -1,0 +1,16 @@
+{
+  "buy_rule1": "results.current.EMA_2 \u003e results.current.EMA_69 and results.previous.EMA_2 \u003c results.previous.EMA_69",
+  "buy_rule2": "results.current.EMA_8 \u003e results.current.EMA_13 and results.current.EMA_13 \u003e results.current.EMA_21 and results.current.EMA_21 \u003e results.current.EMA_55 and close \u003e last_close",
+  "buy_rule3": "results.current.EMA_8 \u003e results.current.EMA_13 and results.current.EMA_13 \u003e results.current.EMA_21 and results.current.EMA_21 \u003e results.current.EMA_55 and results.current.EMA_55 \u003e results.current.EMA_100",
+  "indicators": "get_moving_averages;EMA;2 get_moving_averages;EMA;69 get_moving_averages;EMA;8 get_moving_averages;EMA;13 get_moving_averages;EMA;21 get_moving_averages;EMA;55 get_moving_averages;EMA;100",
+  "logging_level": "10",
+  "name": "api",
+  "push_title": "api",
+  "max_trades": "1000",
+  "pairs": "LINKETH RLCETH XZCBNB LENDETH KNCBTC DLTBTC DLTETH ENJETH",
+  "sell_rule1": "results.current.EMA_2 \u003c results.current.EMA_69",
+  "sell_rule2": "low \u003c results.current.EMA_69",
+  "sell_rule3": "low \u003c results.current.EMA_55",
+  "sell_rule4": "low \u003c results.current.EMA_100",
+  "sell_rule5": "results.current.EMA_8 \u003c results.current.EMA_13"
+}

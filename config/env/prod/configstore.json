@@ -1,0 +1,365 @@
+{
+  "version": 3,
+  "region": "eu-west-1",
+  "role": "",
+  "is_insecure": false,
+  "data_key": "AQIDAHh86o+e1l3vhl3F7Gn0lhwL0nWY7Q8sBy8abugAZ50HlgFByZYGyV9NwGy6UkmVEb2oAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMnQc09bFnrB/sDzJoAgEQgDs7H09GPBab3jf9VOE0bF06keLff5e2CuoQr2pOn6WEMWWtyDeWt/+0Afeq6LxxkfomB2Hd59fuUe/fxA==",
+  "master_key_id": "alias/greencandle",
+  "data": {
+    "binance_api_key": {
+      "value": "Nvm29Nv7dnlsh3xWl2QPOb1Tly8F5X1TbqTdAfKrSe2WaAPwdMztpN2b1v2ieqbzvoGS7FUX5ZidXxoX7t7hWuEdtSTXCEIshqI2PHM7f/0QJeucxeRAw/8wvyFNBiXyF2kCR+46Phk=",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "binance_api_secret": {
+      "value": "8GwufnTVqSUqc/BF25/xfJ2cPud+MAIXi6yg/Tpo/iV94XVCZ/ByhALeY2OYEgTx/6Zo+XOIep33c/rYRnP5uAU5DvMyKX8a0XL14jJoTB/Bn1K7rwnKd3vmsOERmz6Lx4dWT4kUf60=",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "buy_rule1": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "buy_rule10": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "buy_rule2": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "buy_rule3": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "buy_rule4": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "buy_rule5": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "buy_rule6": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "buy_rule7": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "buy_rule8": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "buy_rule9": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "coinbase_api_key": {
+      "value": "blablabla",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "coinbase_api_secret": {
+      "value": "hello",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "db_database": {
+      "value": "greencandle",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "db_host": {
+      "value": "mysql",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "db_password": {
+      "value": "password",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "db_test": {
+      "value": "greencandle_test",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "db_user": {
+      "value": "root",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "divisor": {
+      "value": "5",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "drain": {
+      "value": "False",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "email_active": {
+      "value": "False",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "email_from": {
+      "value": "a@b.c",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "email_password": {
+      "value": "password",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "email_to": {
+      "value": "a@b.c",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "indicators": {
+      "value": "get_moving_averages;EMA;8 get_moving_averages;EMA;13 get_moving_averages;EMA;21 get_moving_averages;EMA;34 get_moving_averages;EMA;55 get_rsi;RSI;50 get_moving_averages;EMA;200 get_oscillators;STOCHF;14",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "interval": {
+      "value": "4h",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "logging_level": {
+      "value": "10",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "logging_output": {
+      "value": "journald",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "loggly_password": {
+      "value": "uMhOkac1yAzehzUvAnMDf7AJ8fToY8KyDXu2iA==",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "loggly_subdomain": {
+      "value": "Vc0s5srq5Xm6ike+H7baCaILfGN0qlZ1",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "loggly_token": {
+      "value": "48D0Nbi9c20skg64W/sK6uyv3+0pso0dHL0/f7Ga9FYBbYsEougb34YAmilgL4JO4tl9LC+InbsDFQDGtmlO/g==",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "loggly_username": {
+      "value": "sHIEJMiwOnKCaYtlsQ5iib1m24Q6LmHj",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "max_trades": {
+      "value": "1000",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "name": {
+      "value": "prod",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "nginx_port": {
+      "value": "8888",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "no_of_klines": {
+      "value": "1000",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "pairs": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "phemex_api_key": {
+      "value": "G/SH5EeeINM22CO03jB0aZEI5KP4J9gqEhE+M8cuIyhGBN2jujqqjSWf3tXDl5SKwjGJcMU0BnfdYCUrNJFQMQ==",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "phemex_api_secret": {
+      "value": "6vi7X0z3RSRfr9IIuDInf3zZCTHkNrunT1sZeszT1YwL6MjMntrE7CAwD7U1kmkQPH6QQSfN+uLz2QDAb3NZfRljms2wEOOAl0LMGGf0xhdBcYJOnKznNf1jAVGMV2zf9ysXp20e9SJq1QXpdh3xbCWVwJ8ob4+Rygs6fHd+zEc9OyIerkRTm/WH9LY=",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "production": {
+      "value": "true",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "push_active": {
+      "value": "True",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "push_channel": {
+      "value": "SdvcRWRXAQ6TQF/cxPqdZEJqSh7O3X/L9cCyuxq0qxQM4p6vUH5wMQ==",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "push_host": {
+      "value": "l3sQHA1Nxd2awwIpvw1hwcaozfcdBjLDu+nzFPE2dy4=",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "push_title": {
+      "value": "prod",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "rate_indicator": {
+      "value": "EMA_2",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "redis_expire": {
+      "value": "True",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "redis_expiry_seconds": {
+      "value": "18000",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "redis_host": {
+      "value": "redis",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "redis_port": {
+      "value": "6379",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "sell_rule1": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "sell_rule10": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "sell_rule2": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "sell_rule3": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "sell_rule4": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "sell_rule5": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "sell_rule6": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "sell_rule7": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "sell_rule8": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "sell_rule9": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "slack_active": {
+      "value": "true",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "slack_alerts": {
+      "value": "DpD7jovM3w33HhoJACV5zEhj5B1S6QTvqBPHgr53Ro8aT6lNI2LkqIkQhOudo3sy30zg2QEns1UOn5ynN26IQx52lB4CwpoYWs+IGDvEl+BvYTq8Wb3aXCJwnb2g4TDgei9G4weB2zl252c9HcnjD43bXHaixWrZHq4W1A==",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "slack_balance": {
+      "value": "48bun14AjdxcQlNVIUnnW7GRwe7G8P7bzkDooAYuoHHTQiDKlk1W/ty1GYEI0ioJMjGJ+C+ZOVBtyrr7XR7JXNjDT1m/w4M8jkQxTpN4NTlKmIwwQ42OpmtZyb1fJJ/HQq4hKOnlFy4UWRlZzj/8waklY5m6cJpNC2+S16dtLgw=",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "slack_longs": {
+      "value": "0zn1o3Jm5N7DSkcSv50vfnAbo1ZyRzlPVpUTuaNcMA+VvLVnNaYIQDZYOxdZ5nRDOXHTGSknbEagIAJgt5vSck0iqpyRzKO7ebLUXQX0Tc4v839aAYAvvxbqAXAEDNytPisopX2h044zrWN5lMdupIK46UJ/Oc+gUw9nbA==",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "stop_loss_perc": {
+      "value": "20",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "take_profit": {
+      "value": "False",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "take_profit_perc": {
+      "value": "30",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "time_between_trades": {
+      "value": "3",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "trailing_stop_loss": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "trailing_stop_loss_perc": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "wait_between_trades": {
+      "value": "False",
+      "is_binary": false,
+      "is_secret": false
+    }
+  }
+}
