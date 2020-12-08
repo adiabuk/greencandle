@@ -1,0 +1,346 @@
+version: "3.1"
+services:
+
+  fe-cadvisor:
+    container_name: fe-cadvisor
+    hostname: fe-cadvisor
+    image: gcr.io/google_containers/cadvisor:v0.35.0
+    restart: on-failure
+    volumes:
+      - /:/rootfs
+      - /var/run:/var/run
+      - /sys:/sys
+      - /var/lib/docker:/var/lib/docker
+      - /dev/disk:/dev/disk
+    healthcheck:
+      test: "printf 'GET /healthz HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc localhost 8080"
+      interval: 1m
+      timeout: 2s
+      retries: 5
+
+  base-redis:
+    container_name: base-redis
+    hostname: base-redis
+    image: amrox/gc-redis:${TAG}
+    restart: on-failure
+    links:
+      - base-mysql:mysql
+    ports:
+      - 6379:6379
+    healthcheck:
+      test: redis-cli ping
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.aws:/root/.aws
+
+  base-mysql:
+    container_name: base-mysql
+    hostname: base-mysql
+    image: amrox/gc-mysql:${TAG}
+    entrypoint: /docker-entrypoint.sh mysqld
+    environment:
+      - CONFIG_ENV=prod
+      - MYSQL_ROOT_PASSWORD=password
+    restart: on-failure
+    ports:
+      - 3306:3306
+    healthcheck:
+      test: echo 'SELECT version();'| mysql -uroot -ppassword
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.aws:/root/.aws
+
+  fe-api:
+    container_name: fe-api
+    hostname: fe-api
+    environment:
+      - CONFIG_ENV=prod/fe/api
+      - HOST=$HOSTNAME
+    logging:
+      driver: journald
+    image: amrox/greencandle:${TAG}
+    restart: on-failure
+    entrypoint: /docker-entrypoint-api.sh api
+    links:
+      - base-mysql:mysql
+      - base-redis:redis
+    ports:
+      - 5000
+    depends_on:
+      - base-mysql
+      - base-redis
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name api 2>&1 |grep -q api || exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /dev/log:/dev/log
+      - /root/.aws:/root/.aws
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  fe-cron:
+    container_name: fe-cron
+    hostname: fe-cron
+    environment:
+      - CONFIG_ENV=prod/fe/cron
+      - HOST=$HOSTNAME
+    image: amrox/greencandle:${TAG}
+    entrypoint: /docker-entrypoint.sh cron -f
+    logging:
+      driver: journald
+    links:
+      - base-mysql:mysql
+      - base-redis:redis
+    depends_on:
+      - base-mysql
+      - base-redis
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  fe-webserver:
+     container_name: fe-webserver
+     hostname: fe-webserver
+     image: amrox/webserver:${TAG}
+     healthcheck:
+       test: service nginx status || exit 1
+       interval: 5m
+       timeout: 5s
+       retries: 5
+     environment:
+       - CONFIG_ENV=prod
+       - HOST=$HOSTNAME
+     ports:
+       - 8888:8888
+     links:
+       - fe-dashboard:dashboard
+       - fe-cadvisor:cadvisor
+       - fe-api:api
+       - base-mysql:mysql
+       - base-redis:redis
+     depends_on:
+       - fe-dashboard
+       - fe-cadvisor
+       - fe-api
+       - base-mysql
+       - base-redis
+     entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
+     volumes:
+       - /data:/data
+       - /root/.aws:/root/.aws
+
+  fe-dashboard:
+    container_name: fe-dashboard
+    hostname: fe-dashboard
+    image: amrox/dashboard:${TAG}
+    ports:
+      - 8080:3030
+    healthcheck:
+      test: curl  --fail 127.1:3030/dashboard/gc || exit 1
+      interval: 10m
+      timeout: 5s
+      retries: 5
+    entrypoint: /run.sh
+    links:
+      - base-mysql:mysql
+    depends_on:
+      - base-mysql
+
+  be-2ma-01perc:
+    container_name : be-2ma-01perc
+    hostname: be-2ma-01perc
+    image: amrox/greencandle:${TAG}
+    entrypoint: /docker-entrypoint.sh backend --test
+    logging:
+      driver: journald
+    links:
+      - base-mysql:mysql
+      - base-redis:redis
+    depends_on:
+      - base-mysql
+      - base-redis
+    environment:
+      - CONFIG_ENV=prod/2MA/4h/01perc
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  be-4ma-01perc:
+    container_name : be-4ma-01perc
+    hostname: be-4ma-01perc
+    image: amrox/greencandle:${TAG}
+    entrypoint: /docker-entrypoint.sh backend --test
+    logging:
+      driver: journald
+    links:
+      - base-mysql:mysql
+      - base-redis:redis
+    depends_on:
+      - base-mysql
+      - base-redis
+    environment:
+      - CONFIG_ENV=prod/4MA/4h/01perc
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  be-4ma-02perc:
+    container_name : be-4ma-02perc
+    hostname: be-4ma-02perc
+    image: amrox/greencandle:${TAG}
+    entrypoint: /docker-entrypoint.sh backend --test
+    logging:
+      driver: journald
+    links:
+      - base-mysql:mysql
+      - base-redis:redis
+    depends_on:
+      - base-mysql
+      - base-redis
+    environment:
+      - CONFIG_ENV=prod/4MA/4h/02perc
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/jour nal/socket:/var/run/systemd/journal/socket
+
+  be-4ma-2perc-vol:
+    container_name : be-4ma-2perc-vol
+    hostname: be-4ma-2perc-vol
+    image: amrox/greencandle:${TAG}
+    entrypoint: /docker-entrypoint.sh backend --test
+    logging:
+      driver: journald
+    links:
+      - base-mysql:mysql
+      - base-redis:redis
+    depends_on:
+      - base-mysql
+      - base-redis
+    environment:
+      - CONFIG_ENV=prod/4MA/4h/2perc/vol
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/jour nal/socket:/var/run/systemd/journal/socket
+
+  be-5ma-01perc:
+    container_name : be-5ma-01perc
+    hostname: be-5ma-01perc
+    image: amrox/greencandle:${TAG}
+    entrypoint: /docker-entrypoint.sh backend --test
+    logging:
+      driver: journald
+    links:
+      - base-mysql:mysql
+      - base-redis:redis
+    depends_on:
+      - base-mysql
+      - base-redis
+    environment:
+      - CONFIG_ENV=prod/5MA/4h/01perc
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+
+  be-5ma-05perc-vol:
+    container_name : be-5ma-0r51perc-vol
+    hostname: be-5ma-05perc-vol
+    image: amrox/greencandle:${TAG}
+    entrypoint: /docker-entrypoint.sh backend --test
+    logging:
+      driver: journald
+    links:
+      - base-mysql:mysql
+      - base-redis:redis
+    depends_on:
+      - base-mysql
+      - base-redis
+    environment:
+      - CONFIG_ENV=prod/5MA/4h/05perc-vol
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  be-5ma-4perc-vol:
+    container_name : be-5ma-4perc-vol
+    hostname: be-5ma-4perc-vol
+    image: amrox/greencandle:${TAG}
+    entrypoint: /docker-entrypoint.sh backend --test
+    logging:
+      driver: journald
+    links:
+      - base-mysql:mysql
+      - base-redis:redis
+    depends_on:
+      - base-mysql
+      - base-redis
+    environment:
+      - CONFIG_ENV=prod/5MA/4h/4perc/vol
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
