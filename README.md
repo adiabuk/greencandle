@@ -10,6 +10,12 @@
 |Testing| [![Build Status](https://travis-ci.org/adiabuk/greencandle.svg?branch=master)](https://travis-ci.org/adiabuk/greencandle)|
 
 # Releases
+
+## 0.35
+* Fix trading pairs on API dashboard
+* fixes to API and CRON
+* Add production config
+
 ## 0.34
 * Speed up API refresh
 * Speed up initial download of historic data
