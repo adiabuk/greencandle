@@ -53,7 +53,7 @@ DATA = {}
 RULES = []
 ALL = {}
 TEST = bool(len(sys.argv) > 1 and sys.argv[1] == '--test')
-TEST_TRADE = bool(os.environ['HOST'] in ["test", "stag"])
+TEST_TRADE = False if 'HOST' in os.environ and os.environ['HOST'] == "prod" else True
 
 @APP.route('/')
 def trades():
