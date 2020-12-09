@@ -247,7 +247,8 @@ class Trade():
                 send_push_notif('SELL', item, '%.15f' % float(price))
                 send_slack_message('longs', 'SELL %s %.15f' % (item, float(price)))
 
-                self.logger.info("Selling %s of %s for %.15f %s", quantity, item, float(price), base)
+                self.logger.info("Selling %s of %s for %.15f %s", quantity, item, float(price),
+                                 base_out)
                 if prod and not self.test_data:
                     amt_str = self.get_step_precision(item, quantity)
                     result = binance.order(symbol=item, side=binance.SELL, quantity=amt_str,
