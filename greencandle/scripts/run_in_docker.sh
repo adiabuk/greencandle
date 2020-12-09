@@ -16,6 +16,14 @@ else
   filename=${base_dir}/${PAIR}_${date}
 fi
 
+if [[ $ARGS == *"-m"* ]]; then
+  month=`echo $ARGS|cut -d "m" -f2-|sed 's/ //g'`
+  data="/data/altcoin_historical/${YEAR}/monthly/${month}/"
+  ARGS=`echo $ARGS|cut -c 1-2`
+else
+  data="/data/altcoin_historical/${YEAR}/"
+fi
+
 if [[ -z $PAIR ]]; then
    echo "Usage: $0 <YEAR> <STRATEGY> <PAIR>"
   exit 1
@@ -23,8 +31,7 @@ fi
 
 
 mkdir -p ${base_dir}
-echo $PAIR $date
-backend_test -d /data/altcoin_historical/${YEAR}/year/ $ARGS -i $INTERVAL -p "$PAIR" &> ${filename}.log
+backend_test -d $data $ARGS -i $INTERVAL -p "$PAIR" &> ${filename}.log
 
 if [[ $ARGS == *"-a"* ]]; then
   create_graph -d0 -a -i $INTERVAL -o $base_dir
