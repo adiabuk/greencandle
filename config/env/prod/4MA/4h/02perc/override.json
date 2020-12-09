@@ -1,6 +1,6 @@
 {
   "name": "4ma-02perc",
-  "pairs": "LRCETH",
+  "pairs": "LRCETH XZCBNB",
   "push_title": "prod_4ma-02perc",
   "stop_loss_perc": "0.2"
 }
