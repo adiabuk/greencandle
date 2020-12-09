@@ -23,20 +23,20 @@ echo "version: $version";
 export TAG=$version
 export HOSTNAME=$env
 git pull
-docker-compose -f ./install/docker-compose_stag.yml pull
-base=$(yq r install/*stag* services | grep -v '^ .*' | sed 's/:.*$//'|grep 'base')
-be=$(yq r install/*stag* services | grep -v '^ .*' | sed 's/:.*$//'|grep 'be')
-fe=$(yq r install/*stag* services | grep -v '^ .*' | sed 's/:.*$//'|grep 'fe')
+docker-compose -f ./install/docker-compose_${env}.yml pull
+base=$(yq r install/*${env}* services | grep -v '^ .*' | sed 's/:.*$//'|grep 'base')
+be=$(yq r install/*${env}* services | grep -v '^ .*' | sed 's/:.*$//'|grep 'be')
+fe=$(yq r install/*${env}* services | grep -v '^ .*' | sed 's/:.*$//'|grep 'fe')
 
 
-docker-compose -f ./install/docker-compose_stag.yml up --remove-orphans -d $base
+docker-compose -f ./install/docker-compose_${env}.yml up --remove-orphans -d $base
 
 for container in $be; do
-  docker-compose -f ./install/docker-compose_stag.yml up -d $container
+  docker-compose -f ./install/docker-compose_${env}.yml up -d $container
   sleep 60
 done
 
 sleep 120
-docker-compose -f ./install/docker-compose_stag.yml up -d $fe
+docker-compose -f ./install/docker-compose_${env}.yml up -d $fe
 
 docker system prune --volumes --all -f
