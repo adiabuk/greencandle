@@ -384,6 +384,45 @@ class Engine(dict):
         LOGGER.debug("Done getting RSI")
 
     @get_exceptions
+    def get_envelope(self, pair, dataframe, index=None, localconfig=None):
+        """
+        Get envelope strategy
+        """
+        klines = self.make_data_tupple(dataframe.iloc[:index])
+        func, timeperiod = localconfig
+        close = klines[-1]
+        basis = talib.SMA(close, int(timeperiod))
+        percent = 1.1
+        k = percent / 100
+        upper = basis * (1 + k)
+        lower = basis * (1 - k)
+
+        results = {}
+        results['upper'] = upper[-1]
+        results['middle'] = basis[-1]
+        results['lower'] = lower[-1]
+        scheme = {}
+        try:
+            current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
+
+            scheme["data"] = results[func]
+            scheme["symbol"] = pair
+            scheme["event"] = func + "_" + str(timeperiod)
+
+            if not index and self.test:
+                index = -1
+            elif not index and not self.test:
+                index = -2
+            scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
+
+            self.schemes.append(scheme)
+
+        except KeyError as exc:
+            LOGGER.warning("KEY FAILURE in envelope  %s ", str(exc))
+        LOGGER.debug("Done getting envelope")
+
+
+    @get_exceptions
     def get_hma(self, pair, dataframe, index=None, localconfig=None):
         """
         Calculate Hull Moving Average using Weighted Moving Average
