@@ -1,0 +1,12 @@
+{
+  "buy_rule1": "((last_low \u003c results.previous.lower_2 and high \u003e results.current.lower_2) or (last_close \u003c results.previous.middle_2)) and close \u003e results.current.EMA_200",
+  "indicators": "get_envelope;upper;2 get_envelope;middle;2 get_envelope;lower;2 get_moving_averages;EMA;200",
+  "pairs": "WAVESBNB",
+  "rate_indicator": "EMA_200",
+  "sell_rule1": "last_close \u003e results.previous.upper_2 and low \u003c results.current.upper_2",
+  "stop_loss_perc": "10.5",
+  "take_profit": "true",
+  "take_profit_perc": "15.4",
+  "trailing_stop_loss": "false",
+  "trailing_stop_loss_perc": "5"
+}
