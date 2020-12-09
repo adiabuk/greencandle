@@ -2,12 +2,27 @@
 
 set -e
 
-git pull
-if [[ -n "$1" ]]; then
-  export TAG=$1
-else
-  export TAG=$(python greencandle/version.py)
+while getopts e:v: flag
+do
+    case "${flag}" in
+        e) env=${OPTARG};;
+        v) version=${OPTARG};;
+    esac
+done
+
+if [[ -z $env ]]; then
+  echo "Usage $0 -e [stag|prod] -v <version>"
+  exit 1
+elif [[ -z $version ]]; then
+  version=$(python greencandle/version.py)
 fi
+
+echo "env: $env";
+echo "version: $version";
+
+export TAG=$version
+export HOSTNAME=$env
+git pull
 docker-compose -f ./install/docker-compose_stag.yml pull
 base=$(yq r install/*stag* services | grep -v '^ .*' | sed 's/:.*$//'|grep 'base')
 be=$(yq r install/*stag* services | grep -v '^ .*' | sed 's/:.*$//'|grep 'be')
