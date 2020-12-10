@@ -1,6 +1,6 @@
 {
   "name": "5ma-01perc",
-  "pairs": "ARNBTC  RLCBNB RLCETH",
+  "pairs": "ARNBTC RLCBNB",
   "push_title": "stag_5ma-01perc",
   "stop_loss_perc": "0.1"
 }
