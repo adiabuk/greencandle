@@ -186,7 +186,7 @@
       "is_secret": false
     },
     "no_of_klines": {
-      "value": "1000",
+      "value": "500",
       "is_binary": false,
       "is_secret": false
     },
