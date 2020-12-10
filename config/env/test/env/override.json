@@ -1,5 +1,5 @@
 {
-  "buy_rule1": "((last_low \u003c results.previous.lower_2 and high \u003e results.current.lower_2) or (last_close \u003c results.previous.middle_2)) and close \u003e results.current.EMA_200",
+  "buy_rule1": "((last_low \u003c results.previous.lower_2 and high \u003e results.current.lower_2) or (last_close \u003c results.previous.middle_2)) and close \u003e results.current.EMA_200 and perc_rate \u003e 0",
   "indicators": "get_envelope;upper;2 get_envelope;middle;2 get_envelope;lower;2 get_moving_averages;EMA;200",
   "pairs": "WAVESBNB",
   "rate_indicator": "EMA_200",
