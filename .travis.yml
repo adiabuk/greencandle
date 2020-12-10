@@ -1,17 +1,17 @@
-dist: "bionic"
-
+dist: bionic
 install:
-  - sudo bash install/bootstrap_dev.sh
-  - sudo docker-compose -f ./install/docker-compose_unit.yml up -d mysql-unit redis-unit
-
+- sudo bash install/bootstrap_dev.sh
+- sudo docker-compose -f ./install/docker-compose_unit.yml up -d mysql-unit redis-unit
 before_script:
-  - sleep 120
-
+- sleep 120
 script:
-  - configstore package test
-  - sudo docker ps
-  - sudo configstore package process_templates unit /etc
-  - sudo mysqlcheck --host mysql -uroot -ppassword  --databases greencandle
-  - cat  config/template/gc-cron |grep -v ^{| sudo crontab -
-  - sudo greencandle/tests/travis_tests.sh "not docker"
-  - sudo greencandle/tests/travis_tests.sh "docker"
+- configstore package test
+- sudo docker ps
+- sudo configstore package process_templates unit /etc
+- sudo mysqlcheck --host mysql -uroot -ppassword  --databases greencandle
+- cat  config/template/gc-cron |grep -v ^{| sudo crontab -
+- sudo greencandle/tests/travis_tests.sh "not docker"
+- sudo greencandle/tests/travis_tests.sh "docker"
+notifications:
+  slack:
+    secure: QCEGE6ncguTVrd6omsYWjDrZty0XVJrf7VLK+sYqJci26H2iDF2PBqiLGibQr6UyPNKFStvAJKurhe6ORLxq8waGopEihfKByPgDksZkvJHvhSQNMjU859uWz4w/YZ1/45iA5REphzh5zQuUl7EM+AzwjsEagZJMHrkDB5NkRRD5i8fgMfLcuddPXAj1RwWjVGPcLmCIzjY9rJLNQBQHRjPOsTHtYStji20JRsqsZP4fNepI1F9eFOdS3ledwqnYdxeESOsa/VPhzpWtUnd1a0s7EwuhFK1E+C5iI+HfRSscewmuJbT6v31UDzScaAo7y5yHd/vjDjLgwfUZr6SFFqFOHxuxGSTQtOLyOM8t0pVZFvBGFSJbBD7QQ2PGw4/C2epmEwb8u+KtpZ4rFVCG9IlqWXtXje0XPl8/lFK0Tc4PAxHUUjnagbf1VrnIwMPYYp/RIwxCs/qbu0BChdZqZdKJIhEkDwUVxEI8UMRojgOMFK+kdsp+jcYlTPH/wghv7+rLAYE02W3x3yebCP+TyJmurdXe689OUob8H8490UWzwmRR5HjtWv6GTEfx03p7VxYxso+CF9KXwNAtKTKORnlIwy8BfYvUHVK7jNI9QMbmZu8vikKqAmfkE58zteKdx6beyX5tR2o7GQv/LwK5ov4JqhCB49UBiNI+9+2WaUo=
