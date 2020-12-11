@@ -11,6 +11,12 @@
 
 # Releases
 
+# 0.36
+* Enable production trades
+* Slack notifications for CI builds and tests
+* Testing of 3m envelope strategy
+* Small API/Cron fixes
+
 ## 0.35
 * Fix trading pairs on API dashboard
 * fixes to API and CRON
