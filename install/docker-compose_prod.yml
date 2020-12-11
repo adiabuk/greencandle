@@ -166,7 +166,7 @@ services:
     container_name : be-2ma-01perc
     hostname: be-2ma-01perc
     image: amrox/greencandle:${TAG}
-    entrypoint: /docker-entrypoint.sh backend --test
+    entrypoint: /docker-entrypoint.sh backend
     logging:
       driver: journald
     links:
@@ -192,7 +192,7 @@ services:
     container_name : be-4ma-01perc
     hostname: be-4ma-01perc
     image: amrox/greencandle:${TAG}
-    entrypoint: /docker-entrypoint.sh backend --test
+    entrypoint: /docker-entrypoint.sh backend
     logging:
       driver: journald
     links:
@@ -218,7 +218,7 @@ services:
     container_name : be-4ma-02perc
     hostname: be-4ma-02perc
     image: amrox/greencandle:${TAG}
-    entrypoint: /docker-entrypoint.sh backend --test
+    entrypoint: /docker-entrypoint.sh backend
     logging:
       driver: journald
     links:
@@ -244,7 +244,7 @@ services:
     container_name : be-4ma-2perc-vol
     hostname: be-4ma-2perc-vol
     image: amrox/greencandle:${TAG}
-    entrypoint: /docker-entrypoint.sh backend --test
+    entrypoint: /docker-entrypoint.sh backend
     logging:
       driver: journald
     links:
@@ -270,7 +270,7 @@ services:
     container_name : be-5ma-01perc
     hostname: be-5ma-01perc
     image: amrox/greencandle:${TAG}
-    entrypoint: /docker-entrypoint.sh backend --test
+    entrypoint: /docker-entrypoint.sh backend
     logging:
       driver: journald
     links:
@@ -297,7 +297,7 @@ services:
     container_name : be-5ma-0r51perc-vol
     hostname: be-5ma-05perc-vol
     image: amrox/greencandle:${TAG}
-    entrypoint: /docker-entrypoint.sh backend --test
+    entrypoint: /docker-entrypoint.sh backend
     logging:
       driver: journald
     links:
@@ -323,7 +323,7 @@ services:
     container_name : be-5ma-4perc-vol
     hostname: be-5ma-4perc-vol
     image: amrox/greencandle:${TAG}
-    entrypoint: /docker-entrypoint.sh backend --test
+    entrypoint: /docker-entrypoint.sh backend
     logging:
       driver: journald
     links:
