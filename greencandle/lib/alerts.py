@@ -69,6 +69,4 @@ def send_slack_message(channel, message):
     title = config.push.push_title
     payload = '{"text":"%s %s"}' % (message, title)
     webhook = config.slack[channel]
-
-    response = requests.post(webhook, data=payload)
-    print(response.text)
+    requests.post(webhook, data=payload, headers={'Content-Type': 'application/json'})
