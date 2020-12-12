@@ -1,5 +1,5 @@
 {
-  "stop_loss_perc": "7",
+  "stop_loss_perc": "3",
   "take_profit": "true",
   "take_profit_perc": "15.4"
 }
