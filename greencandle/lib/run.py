@@ -275,11 +275,10 @@ def prod_initial(interval, test=False):
         print(last_epoch, current_epoch)
         print(time_since_last)
         print(multiplier)
-        no_of_klines = int(time_since_last / multiplier[interval] +1)
+        no_of_klines = int(time_since_last / multiplier[interval] +3)
     except IndexError:
         no_of_klines = config.main.no_of_klines
 
-    print('xxxxx', no_of_klines)
 
     dataframes = get_dataframes(pairs, interval=interval, no_of_klines=no_of_klines)
     engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, test=test,

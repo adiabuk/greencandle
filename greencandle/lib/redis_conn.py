@@ -117,6 +117,10 @@ class Redis():
         key = "{0}:{1}:{2}".format(pair, interval, now)
         expiry = int(config.redis.redis_expiry_seconds)
 
+        if not key.endswith("999"):
+            self.logger.critical("Invalid time submitted to redis %s.  Skipping ", key)
+            return
+
         for k, v in data.items():
             response = self.conn.hset(key, k, v)
 

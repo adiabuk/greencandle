@@ -228,7 +228,7 @@ class Engine(dict):
         scheme["symbol"] = pair
         # Unless we are in test mode, use the second to last data row as the previous one is still
         # being constructed and contains incomplete data
-        location = -1 if self.test else -2
+        location = -1 if (self.test or len(self.dataframes[pair]) < 2) else -2
 
         # compress and pickle current dataframe for redis storage
         # dont get most recent one, as it may not be complete
@@ -238,7 +238,7 @@ class Engine(dict):
 
         self.schemes.append(scheme)
         if first_run:
-            for seq in range(int(config.main.no_of_klines) -1):
+            for seq in range(len(self.dataframes[pair]) -1):
                 LOGGER.info("Getting initial sequence number %s", seq)
                 scheme['data'] = zlib.compress(pickle.dumps(self.dataframes[pair].iloc[seq]))
                 scheme["event"] = "ohlc"
@@ -290,7 +290,7 @@ class Engine(dict):
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
 
-        if not index and self.test:
+        if (not index and self.test) or len(self.dataframes[pair]) < 2:
             index = -1
         elif not index and not self.test:
             index = -2
@@ -335,7 +335,7 @@ class Engine(dict):
             scheme["symbol"] = pair
             scheme["event"] = "{0}_{1}".format(func, timeframe)
 
-            if not index and self.test:
+            if (not index and self.test) or len(self.dataframes[pair]) < 2:
                 index = -1
             elif not index and not self.test:
                 index = -2
@@ -374,7 +374,7 @@ class Engine(dict):
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
 
-        if not index and self.test:
+        if (not index and self.test) or len(self.dataframes[pair]) < 2:
             index = -1
         elif not index and not self.test:
             index = -2
@@ -409,7 +409,7 @@ class Engine(dict):
             scheme["symbol"] = pair
             scheme["event"] = func + "_" + str(timeperiod)
 
-            if not index and self.test:
+            if (not index and self.test) or len(self.dataframes[pair]) < 2:
                 index = -1
             elif not index and not self.test:
                 index = -2
@@ -420,7 +420,6 @@ class Engine(dict):
         except KeyError as exc:
             LOGGER.warning("KEY FAILURE in envelope  %s ", str(exc))
         LOGGER.debug("Done getting envelope")
-
 
     @get_exceptions
     def get_hma(self, pair, dataframe, index=None, localconfig=None):
@@ -446,7 +445,7 @@ class Engine(dict):
             scheme["symbol"] = pair
             scheme["event"] = func+"_"+str(timeperiod)
 
-            if not index and self.test:
+            if (not index and self.test) or len(self.dataframes[pair]) < 2:
                 index = -1
             elif not index and not self.test:
                 index = -2
@@ -466,7 +465,7 @@ class Engine(dict):
         scheme = {}
         try:
             scheme["symbol"] = pair
-            if not index and self.test:
+            if (not index and self.test) or len(self.dataframes[pair]) < 2:
                 index = -1
             elif not index and not self.test:
                 index = -2
@@ -479,9 +478,6 @@ class Engine(dict):
             LOGGER.warning("KEY FAILURE in moving averages: %s ", str(exc))
 
         LOGGER.debug("done getting moving averages")
-
-
-
 
     @get_exceptions
     def get_moving_averages(self, pair, dataframe, index=None, localconfig=None, volume=False):
@@ -517,14 +513,16 @@ class Engine(dict):
         try:
             scheme["data"] = result
             scheme["symbol"] = pair
+
             if volume:
                 scheme["event"] = func + "_vol_" + str(timeperiod)
             else:
                 scheme["event"] = func + "_" + str(timeperiod)
-            if not index and self.test:
+            if (not index and self.test) or len(self.dataframes[pair]) < 2:
                 index = -1
             elif not index and not self.test:
                 index = -2
+
             scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
             self.schemes.append(scheme)
@@ -585,7 +583,7 @@ class Engine(dict):
             scheme["symbol"] = pair
             scheme["event"] = '{}_{}'.format(func, timeperiod)
 
-            if not index and self.test:
+            if (not index and self.test) or len(self.dataframes[pair]) < 2:
                 index = -1
             elif not index and not self.test:
                 index = -2
@@ -630,7 +628,7 @@ class Engine(dict):
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
 
-        if not index and self.test:
+        if (not index and self.test) or len(self.dataframes[pair]) < 2:
             index = -1
         elif not index and not self.test:
             index = -2
@@ -668,7 +666,7 @@ class Engine(dict):
         scheme["symbol"] = pair
         scheme["event"] = "Supertrend_{0},{1}".format(timeframe, multiplier)
 
-        if not index and self.test:
+        if (not index and self.test) or len(self.dataframes[pair]) < 2:
             index = -1
         elif not index and not self.test:
             index = -2
