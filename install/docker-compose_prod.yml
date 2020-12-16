@@ -176,7 +176,7 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=prod/2MA/4h/01perc
+      - CONFIG_ENV=prod/2MA/01perc
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -202,7 +202,7 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=prod/4MA/4h/01perc
+      - CONFIG_ENV=prod/4MA/01perc
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -228,7 +228,7 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=prod/4MA/4h/02perc
+      - CONFIG_ENV=prod/4MA/02perc
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -254,7 +254,7 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=prod/4MA/4h/2perc/vol
+      - CONFIG_ENV=prod/4MA/2perc/vol
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -280,7 +280,7 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=prod/5MA/4h/01perc
+      - CONFIG_ENV=prod/5MA/01perc
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -307,7 +307,7 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=prod/5MA/4h/05perc-vol
+      - CONFIG_ENV=prod/5MA/05perc-vol
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -333,7 +333,7 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=prod/5MA/4h/4perc/vol
+      - CONFIG_ENV=prod/5MA/4perc/vol
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
