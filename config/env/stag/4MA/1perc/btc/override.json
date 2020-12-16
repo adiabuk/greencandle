@@ -1,0 +1,6 @@
+{
+  "name": "4ma-1perc-btc",
+  "pairs": "MDABTC",
+  "push_title": "stag_4ma-1perc-btc",
+  "stop_loss_perc": "1"
+}

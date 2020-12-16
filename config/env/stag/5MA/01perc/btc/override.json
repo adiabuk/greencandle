@@ -1,0 +1,6 @@
+{
+  "name": "5ma-01perc-btc",
+  "pairs": "ARNBTC",
+  "push_title": "stag_5ma-01perc-btc",
+  "stop_loss_perc": "0.1"
+}
