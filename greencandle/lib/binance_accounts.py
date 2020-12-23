@@ -6,11 +6,11 @@ Get/Convert Balances from Binance
 
 from collections import defaultdict
 import binance
+import cryptocompare
 from forex_python.converter import CurrencyRates, RatesNotAvailableError
 from .balance_common import default_to_regular
 from .auth import binance_auth
 from .logger import get_logger
-from . import config
 
 BITCOIN = {}
 LOGGER = get_logger(__name__)
@@ -29,9 +29,10 @@ def get_binance_margin():
     currency = CurrencyRates()
 
     for key in all_balances:
+        LOGGER.debug('%s %s ', str(key), str(all_balances[key]["net"]))
         current_value = float(all_balances[key]["net"])
 
-        if float(current_value) != 0:  # available currency
+        if float(current_value) > 0:  # available currency
             result["margin"][key]["count"] = current_value
 
             if key == "BTC":
@@ -44,10 +45,11 @@ def get_binance_margin():
 
             else:  # other currencies that need converting to BTC
                 try:
+                    LOGGER.debug("Converting currency %s", key)
                     bcoin = float(current_value) * float(prices[key+"BTC"])  # value in BTC
                     bitcoin_totals += bcoin
                 except KeyError:
-                    LOGGER.critical("Error: Unable to quantify currency: %s ", key)
+                    LOGGER.critical("Error: Unable to quantify margin currency: %s ", key)
                     continue
 
             add_value(key, bcoin)
@@ -104,13 +106,19 @@ def get_binance_values():
             elif key == "USDT":
                 bcoin = float(current_value) / float(prices["BTCUSDT"])
                 bitcoin_totals += bcoin
+            elif key == "TWT":
+                bcoin = (float(current_value) * cryptocompare.get_price \
+                        ('TWT',curr='USD')['TWT']['USD']) \
+                        / float(prices["BTCUSDT"])
+                bitcoin_totals += bcoin
 
             else:  # other currencies that need converting to BTC
                 try:
+                    LOGGER.debug("Converting spot currency %s %s", key, str(current_value))
                     bcoin = float(current_value) * float(prices[key+"BTC"])  # value in BTC
                     bitcoin_totals += bcoin
                 except KeyError:
-                    LOGGER.critical("Error: Unable to quantify currency: %s ", key)
+                    LOGGER.critical("Error: Unable to spot quantify currency: %s ", key)
                     continue
 
             add_value(key, bcoin)
