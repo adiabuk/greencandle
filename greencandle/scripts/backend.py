@@ -61,7 +61,6 @@ def main():
 
     sched = BlockingScheduler()
 
-    @sched.scheduled_job('interval', seconds=60)
     def get_price():
         LOGGER.info("Starting Price check")
         prod_int_check(interval, args.test)
