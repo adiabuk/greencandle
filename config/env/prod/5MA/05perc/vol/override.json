@@ -2,7 +2,7 @@
   "buy_rule1": "results.current.EMA_8 \u003e results.current.EMA_13 and results.current.EMA_13 \u003e results.current.EMA_21 and results.current.EMA_21 \u003e results.current.EMA_55 and results.current.EMA_55 \u003e results.current.EMA_100 and results.current.volume \u003e results.current.SMA_vol_20",
   "indicators": "get_moving_averages;EMA;8 get_moving_averages;EMA;13 get_moving_averages;EMA;21 get_moving_averages;EMA;55 get_moving_averages;EMA;100 get_vol_moving_averages;SMA;20",
   "name": "5ma-05perc-vol",
-  "pairs": "DLTBTC DLTETH",
+  "pairs": "DLTBTC",
   "push_title": "prod_5ma-05perc-vol",
   "stop_loss_perc": "0.5"
 }

@@ -240,32 +240,6 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/jour nal/socket:/var/run/systemd/journal/socket
 
-  be-4ma-2perc-vol:
-    container_name : be-4ma-2perc-vol
-    hostname: be-4ma-2perc-vol
-    image: amrox/greencandle:${TAG}
-    entrypoint: /docker-entrypoint.sh backend
-    logging:
-      driver: journald
-    links:
-      - base-mysql:mysql
-      - base-redis:redis
-    depends_on:
-      - base-mysql
-      - base-redis
-    environment:
-      - CONFIG_ENV=prod/4MA/2perc/vol
-      - HOST=$HOSTNAME
-    healthcheck:
-      test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    volumes:
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run/systemd/jour nal/socket:/var/run/systemd/journal/socket
-
   be-5ma-01perc:
     container_name : be-5ma-01perc
     hostname: be-5ma-01perc
