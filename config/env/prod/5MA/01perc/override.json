@@ -1,6 +1,3 @@
 {
-  "name": "5ma-01perc",
-  "pairs": "KNCBTC",
-  "push_title": "prod_5ma-01perc",
   "stop_loss_perc": "0.1"
 }

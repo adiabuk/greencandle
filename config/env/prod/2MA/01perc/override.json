@@ -1,6 +1,3 @@
 {
-  "name": "2ma-01perc",
-  "pairs": "BNBUSDT BTCUSDT ETHUSDT NEOUSDT ENJBTC LINKBTC ZRXBTC IOTABNB WAVESBNB WTCBNB POWRBNB",
-  "push_title": "prod_2ma-01perc",
   "stop_loss_perc": "0.1"
 }
