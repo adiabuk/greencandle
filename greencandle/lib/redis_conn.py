@@ -407,27 +407,17 @@ class Redis():
         # if we match stop_loss rule and are in a trade
         if stop_loss_rule and buy_price:
             self.logger.warning("StopLoss: buy_price:%s high_price:%s", buy_price, high_price)
-            stop_at = sub_perc(stop_loss_perc, buy_price)
             self.log_event('StopLoss', rate, perc_rate, buy_price,
-                           stop_at, pair, current_time, results.current)
+                           current_price, pair, current_time, results.current)
             self.del_high_price(pair, interval)
-            if test_data:
-                # with test data we don't check between candles so frequently skip over the
-                # stop-loss value.  As a test workaround we will set the current price to the price
-                # where we would have exited the trade in order to have test results that mimic what
-                # we would see in production
-                current_price = stop_at
             result = 'SELL'
+
         elif trailing_stop and buy_price:
-            stop_at = sub_perc(trailing_perc, high_price)
             self.logger.info("TrailingStopLoss: buy_price:%s high_price:%s", buy_price, high_price)
             self.logger.info("Trailing stop loss reached")
             self.log_event('TrailingStopLoss', rate, perc_rate, buy_price,
-                           stop_at, pair, current_time, results.current)
+                           current_price, pair, current_time, results.current)
             self.del_high_price(pair, interval)
-
-            if test_data:
-                current_price = stop_at
             result = 'SELL'
 
         # if we match take_profit rule and are in a trade
@@ -464,7 +454,6 @@ class Redis():
             result = 'HOLD'
         else:
             result = 'NOITEM'
-
 
         winning_sell = self.get_rules(rules, 'sell')
         winning_buy = self.get_rules(rules, 'buy')
