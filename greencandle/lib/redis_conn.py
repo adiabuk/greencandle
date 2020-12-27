@@ -186,7 +186,7 @@ class Redis():
         try:
             data = ast.literal_eval(byte.decode("UTF-8"))
         except AttributeError:
-            self.logger.error("No Data")
+            self.logger.error("No Data for item %s", item)
             return None, None
 
         return data["current_price"], data["date"], data['result']
