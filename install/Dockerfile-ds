@@ -1,4 +1,4 @@
-FROM visibilityspots/smashing
+FROM amrox/smashing
 LABEL branch=${BRANCH}
 LABEL commit=${COMMIT}
 LABEL date=${DATE}

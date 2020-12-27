@@ -1,4 +1,4 @@
-FROM nginx:stable
+FROM amrox/nginx:stable
 
 LABEL branch=${BRANCH}
 LABEL commit=${COMMIT}

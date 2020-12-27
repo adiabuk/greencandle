@@ -1,4 +1,4 @@
-FROM redis:5.0.5
+FROM amrox/redis:5.0.5
 
 LABEL branch=${BRANCH}
 LABEL commit=${COMMIT}
