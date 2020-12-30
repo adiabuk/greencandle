@@ -124,7 +124,7 @@ def perform_data(pair, interval, data_dir, indicators):
         if result == "BUY":
             buys.append((pair, current_time, current_price))
             LOGGER.debug("Items to buy: %s", buys)
-            trade.buy(buys)
+            trade.open_long(buys)
             update_minprice(pair, current_ctime, current_price, interval)
         elif result == "SELL":
             update_minprice(pair, current_ctime, current_price, interval)
@@ -133,7 +133,7 @@ def perform_data(pair, interval, data_dir, indicators):
             buy_time = int(current_trade[0][2].timestamp())
             buy_price = current_trade[0][0]
             drawdown = get_drawdown(pair, buy_price, interval)
-            trade.sell(sells, drawdown=drawdown)
+            trade.close_long(sells, drawdown=drawdown)
 
         elif current_trade:
             # open trade exists but no BUY or SELL signal.
@@ -146,7 +146,7 @@ def perform_data(pair, interval, data_dir, indicators):
     sells = []
     sells.append((pair, current_time, current_price))
     update_minprice(pair, buy_time, current_price, interval)
-    trade.sell(sells)
+    trade.close_long(sells)
 
 def parallel_test(pairs, interval, data_dir, indicators):
     """
@@ -210,8 +210,8 @@ def parallel_test(pairs, interval, data_dir, indicators):
                 LOGGER.debug("Items to sell")
                 sells.append((pair, current_time, current_price))
         drawdown = 0
-        trade.sell(sells, drawdown=drawdown)
-        trade.buy(buys)
+        trade.close_long(sells, drawdown=drawdown)
+        trade.open_long(buys)
 
     print(get_recent_profit(True, interval))
 
@@ -236,7 +236,7 @@ def prod_int_check(interval, test):
             sells.append((pair, current_time, current_price))
 
     trade = Trade(interval=interval, test_trade=test, test_data=False)
-    trade.sell(sells)
+    trade.close_long(sells)
     del redis
     del dbase
 
@@ -324,7 +324,7 @@ def prod_loop(interval, test_trade):
             LOGGER.debug("Items to sell")
             sells.append((pair, current_time, current_price))
     trade = Trade(interval=interval, test_trade=test_trade, test_data=False)
-    trade.sell(sells)
-    trade.buy(buys)
+    trade.close_long(sells)
+    trade.open_long(buys)
     del engine
     del redis

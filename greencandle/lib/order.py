@@ -8,8 +8,8 @@ Test Buy/Sell orders
 from __future__ import print_function
 import math
 from collections import defaultdict
-import binance
 from str2bool import str2bool
+import binance
 
 from .auth import binance_auth
 from .logger import get_logger, get_decorator
@@ -97,7 +97,7 @@ class Trade():
         return round(float(amount), precision)
 
     @GET_EXCEPTIONS
-    def buy(self, buy_list):
+    def open_long(self, buy_list):
         """
         Buy as many items as we can from buy_list depending on max amount of trades, and current
         balance in base currency
@@ -195,7 +195,7 @@ class Trade():
                                       base_amount, cost, amount)
                     if prod and not self.test_data:
                         amt_str = self.get_step_precision(item, amount)
-                        result = binance.order(symbol=item, side=binance.BUY, quantity=amt_str,
+                        result = binance.margin_order(symbol=item, side=binance.BUY, quantity=amt_str,
                                                price='', orderType=binance.MARKET,
                                                test=self.test_trade)
                         try:
@@ -223,7 +223,7 @@ class Trade():
             self.logger.info("Nothing to buy")
 
     @GET_EXCEPTIONS
-    def sell(self, sell_list, name=None, drawdown='NULL'):
+    def close_long(self, sell_list, name=None, drawdown='NULL'):
         """
         Sell items in sell_list
         """
@@ -251,7 +251,7 @@ class Trade():
                                  base_out)
                 if prod and not self.test_data:
                     amt_str = self.get_step_precision(item, quantity)
-                    result = binance.order(symbol=item, side=binance.SELL, quantity=amt_str,
+                    result = binance.margin_order(symbol=item, side=binance.SELL, quantity=amt_str,
                                            price='', orderType=binance.MARKET, test=self.test_trade)
 
                     try:

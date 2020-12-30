@@ -35,7 +35,7 @@ def main():
     sells = []
     trade = Trade(interval=interval, test_data=test_data, test_trade=test_trade)
     sells.append((pair, current_time, current_price))
-    trade.sell(sells)
+    trade.close_long(sells)
 
 if __name__ == "__main__":
     main()
