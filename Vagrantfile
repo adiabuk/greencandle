@@ -7,6 +7,7 @@ Vagrant.configure("2") do |config|
   config.vm.network "forwarded_port", guest: 7777, host: 7777, auto_correct: true
   config.vm.network "forwarded_port", guest: 80, host: 8080, auto_correct: true
   config.vm.synced_folder "~/data", "/data"
+  config.vm.synced_folder "..//binance", "/mnt/binance"
   config.vm.synced_folder "", "/srv/greencandle"
   config.vm.synced_folder '.', '/vagrant', disabled: true
 
