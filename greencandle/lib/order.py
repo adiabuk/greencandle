@@ -195,7 +195,7 @@ class Trade():
                                       base_amount, cost, amount)
                     if prod and not self.test_data:
                         amt_str = self.get_step_precision(item, amount)
-                        result = binance.margin_order(symbol=item, side=binance.BUY, quantity=amt_str,
+                        result = binance.order(symbol=item, side=binance.BUY, quantity=amt_str,
                                                price='', orderType=binance.MARKET,
                                                test=self.test_trade)
                         try:
@@ -251,7 +251,7 @@ class Trade():
                                  base_out)
                 if prod and not self.test_data:
                     amt_str = self.get_step_precision(item, quantity)
-                    result = binance.margin_order(symbol=item, side=binance.SELL, quantity=amt_str,
+                    result = binance.order(symbol=item, side=binance.SELL, quantity=amt_str,
                                            price='', orderType=binance.MARKET, test=self.test_trade)
 
                     try:
