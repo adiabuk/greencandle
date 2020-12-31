@@ -163,7 +163,7 @@ services:
       - base-mysql
 
   be-2ma-01perc-btc:
-    container_name : be-2ma-01perc-btc
+    container_name: be-2ma-01perc-btc
     hostname: be-2ma-01perc-btc
     image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
@@ -189,7 +189,7 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
   be-2ma-01perc-eth:
-    container_name : be-2ma-01perc-eth
+    container_name: be-2ma-01perc-eth
     hostname: be-2ma-01perc-eth
     image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
@@ -215,7 +215,7 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
   be-2ma-01perc-usdt:
-    container_name : be-2ma-01perc-usdt
+    container_name: be-2ma-01perc-usdt
     hostname: be-2ma-01perc-usdt
     image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
@@ -240,8 +240,8 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-    be-2ma-01perc-vol-btc:
-    container_name : be-2ma-01perc-vol-btc
+  be-2ma-01perc-vol-btc:
+    container_name: be-2ma-01perc-vol-btc
     hostname: be-2ma-01perc-vol-btc
     image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
@@ -267,7 +267,7 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
   be-2ma-01perc-vol-eth:
-    container_name : be-2ma-01perc-vol-eth
+    container_name: be-2ma-01perc-vol-eth
     hostname: be-2ma-01perc-vol
     image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
@@ -293,7 +293,7 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
   be-2ma-02perc:
-    container_name : be-2ma-02perc-eth
+    container_name: be-2ma-02perc-eth
     hostname: be-2ma-02perc-eth
     image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
@@ -345,7 +345,7 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
   be-4ma-01perc-btc:
-    container_name : be-4ma-01perc-btc
+    container_name: be-4ma-01perc-btc
     hostname: be-4ma-01perc-btc
     image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
@@ -371,7 +371,7 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
   be-4ma-01perc-eth:
-    container_name : be-4ma-01perc-eth
+    container_name: be-4ma-01perc-eth
     hostname: be-4ma-01perc-eth
     image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
@@ -397,7 +397,7 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
   be-4ma-01perc-vol-btc:
-    container_name : be-4ma-01perc-vol-btc
+    container_name: be-4ma-01perc-vol-btc
     hostname: be-4ma-01perc-vol-btc
     image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
@@ -423,7 +423,7 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
   be-4ma-1perc-btc:
-    container_name : be-4ma-1perc-btc
+    container_name: be-4ma-1perc-btc
     hostname: be-4ma-1perc-btc
     image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
@@ -449,7 +449,7 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
   be-5ma-01perc-vol-btc:
-    container_name : be-5ma-01perc-vol-btc
+    container_name: be-5ma-01perc-vol-btc
     hostname: be-5ma-01perc-vol-btc
     image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
