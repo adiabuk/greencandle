@@ -459,7 +459,7 @@ class Redis():
         winning_sell = self.get_rules(rules, 'sell')
         winning_buy = self.get_rules(rules, 'buy')
         self.logger.info('%s sell Rules matched: %s' % (pair, winning_sell))
-        self.logger.info('%s buy Rules matched: %s' % pair, winning_buy))
+        self.logger.info('%s buy Rules matched: %s' % (pair, winning_buy))
         del dbase
         return (result, current_time, current_price, {'sell':winning_sell,
                                                       'buy': winning_buy})
