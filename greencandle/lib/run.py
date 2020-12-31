@@ -1,4 +1,4 @@
-# pylint: disable=no-member
+# pylint: disable=no-member, logging-not-lazy
 
 """
 Perform run for test & prod
@@ -229,8 +229,8 @@ def prod_int_check(interval, test):
         result, current_time, current_price = redis.get_intermittant(pair, buy_price=buy_price,
                                                                      current_price=prices[pair])
         buy_price = dbase.get_trade_value(pair)[0][0]
-        LOGGER.debug("%s int check result: %s Buy:%s Current:%s Time:%s" % (pair, result,
-            buy_price, current_price, current_time))
+        LOGGER.debug("%s int check result: %s Buy:%s Current:%s Time:%s"
+                     % (pair, result, buy_price, current_price, current_time))
         if result == "SELL":
             LOGGER.debug("Items to sell")
             sells.append((pair, current_time, current_price))

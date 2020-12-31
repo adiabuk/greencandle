@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-#pylint: disable=wrong-import-position,import-error,no-member,no-else-break,no-else-continue
+#pylint: disable=wrong-import-position,import-error,no-member,no-else-break,no-else-continue,logging-not-lazy
 
 """
 Test Buy/Sell orders
@@ -166,8 +165,8 @@ class Trade():
                     proposed_base_amount = current_base_bal / self.divisor
                 else:
                     proposed_base_amount = current_base_bal / (self.max_trades + 1)
-                self.logger.info('item: %s, proposed: %s, last:%s' % (item, proposed_base_amount,
-                                 last_buy_price))
+                self.logger.info('item: %s, proposed: %s, last:%s'
+                                 % (item, proposed_base_amount, last_buy_price))
                 base_amount = max(proposed_base_amount, last_buy_price)
                 cost = current_price
                 main_pairs = config.main.pairs
@@ -189,10 +188,10 @@ class Trade():
                     self.logger.warning("We already have a trade of %s, skipping..." % item)
                     continue
                 else:
-                    self.logger.info("Buying %s of %s with %s %s" % (amount, item, base_amount,
-                        base))
-                    self.logger.debug("amount to buy: %s, cost: %s, amount:%s" %
-                                      (base_amount, cost, amount))
+                    self.logger.info("Buying %s of %s with %s %s"
+                                     % (amount, item, base_amount, base))
+                    self.logger.debug("amount to buy: %s, cost: %s, amount:%s"
+                                      % (base_amount, cost, amount))
                     if prod and not self.test_data:
                         amt_str = self.get_step_precision(item, amount)
                         result = binance.order(symbol=item, side=binance.BUY, quantity=amt_str,
@@ -248,8 +247,8 @@ class Trade():
                 send_push_notif('SELL', item, '%.15f' % float(price))
                 send_slack_message('longs', 'SELL %s %.15f' % (item, float(price)))
 
-                self.logger.info("Selling %s of %s for %.15f %s" % (quantity, item, float(price),
-                                 base_out))
+                self.logger.info("Selling %s of %s for %.15f %s"
+                                 % (quantity, item, float(price), base_out))
                 if prod and not self.test_data:
                     amt_str = self.get_step_precision(item, quantity)
                     result = binance.order(symbol=item, side=binance.SELL, quantity=amt_str,

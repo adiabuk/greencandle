@@ -1,4 +1,4 @@
-#pylint: disable=unused-argument,no-member,unnecessary-pass
+#pylint: disable=unused-argument,no-member,unnecessary-pass,logging-not-lazy
 
 """
 Custom Exception for timeout
@@ -6,7 +6,6 @@ Custom Exception for timeout
 
 import signal
 from contextlib import contextmanager
-from . import config
 from .logger import get_logger
 
 LOGGER = get_logger(__name__)

@@ -1,4 +1,4 @@
-#pylint: disable=eval-used,no-else-return,unused-variable,no-member,redefined-builtin
+#pylint: disable=eval-used,no-else-return,unused-variable,no-member,redefined-builtin,logging-not-lazy
 
 """
 Store and retrieve items from redis
@@ -42,8 +42,8 @@ class Redis():
         self.interval = interval
         self.test = test
 
-        self.logger.debug("Starting Redis with interval %s %s, db=%s" % (interval,
-                          test_str, str(db)))
+        self.logger.debug("Starting Redis with interval %s %s, db=%s"
+                          % (interval, test_str, str(db)))
         pool = redis.ConnectionPool(host=self.host, port=self.port, db=db)
         self.conn = redis.StrictRedis(connection_pool=pool)
 
@@ -381,7 +381,7 @@ class Redis():
                 trailing_stop = False
                 high_price = buy_price
 
-            stop_loss_rule  = current_price < sub_perc(stop_loss_perc, buy_price)
+            stop_loss_rule = current_price < sub_perc(stop_loss_perc, buy_price)
 
             take_profit_rule = current_price > add_perc(take_profit_perc, buy_price)
 
@@ -413,8 +413,8 @@ class Redis():
             result = 'SELL'
 
         elif trailing_stop and buy_price:
-            self.logger.info("TrailingStopLoss: buy_price:%s high_price:%s" % (buy_price,
-                high_price))
+            self.logger.info("TrailingStopLoss: buy_price:%s high_price:%s"
+                             % (buy_price, high_price))
             self.logger.info("Trailing stop loss reached")
             self.log_event('TrailingStopLoss', rate, perc_rate, buy_price,
                            current_price, pair, current_time, results.current)

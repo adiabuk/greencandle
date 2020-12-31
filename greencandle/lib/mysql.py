@@ -1,4 +1,4 @@
-#pylint: disable=undefined-variable, wrong-import-position, broad-except, no-member
+#pylint: disable=undefined-variable, wrong-import-position, broad-except, no-member, logging-not-lazy
 
 """
 Push/Pull crypto signals and data to mysql
@@ -130,9 +130,9 @@ class Mysql():
 
         Return True/False
         """
-        command=('select *  from profit where pair="{0}" and '
-                 'sell_time >= ("{1}" - interval "{2}" month) '
-                 'and perc > "{3}"'.format(pair, date, months, max_perc))
+        command = ('select *  from profit where pair="{0}" and '
+                   'sell_time >= ("{1}" - interval "{2}" month) '
+                   'and perc > "{3}"'.format(pair, date, months, max_perc))
 
         cur = self.dbase.cursor()
         self.execute(cur, command)
@@ -218,14 +218,15 @@ class Mysql():
         """
         job_name = name if name else config.main.name
         command = """update trades set sell_price={0},sell_time="{1}", quote_out="{2}",
-        base_out="{3}", closed_by="{6}", drawdown_perc=abs(round({7},1)) where sell_price is NULL and `interval`="{4}"
-        and pair="{5}" and (name like "{6}" or name like "api") """.format('%.15f' % float(sell_price),
-                                                             sell_time,
-                                                             '%.15f' % float(quote),
-                                                             '%.15f' % float(base_out),
-                                                             self.interval,
-                                                             pair,
-                                                             job_name, drawdown)
+        base_out="{3}", closed_by="{6}", drawdown_perc=abs(round({7},1)) where sell_price is
+        NULL and `interval`="{4}" and pair="{5}" and (name like "{6}" or
+        name like "api") """.format('%.15f' % float(sell_price),
+                                    sell_time,
+                                    '%.15f' % float(quote),
+                                    '%.15f' % float(base_out),
+                                    self.interval,
+                                    pair,
+                                    job_name, drawdown)
         self.run_sql_query(command)
 
     def get_active_trades(self):

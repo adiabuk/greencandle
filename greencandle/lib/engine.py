@@ -1,4 +1,4 @@
-#pylint: disable=no-member,consider-iterating-dictionary,broad-except,
+#pylint: disable=no-member,consider-iterating-dictionary,broad-except,logging-not-lazy
 #pylint: disable=unused-variable,possibly-unused-variable,redefined-builtin,unused-import
 
 """

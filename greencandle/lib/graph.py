@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-#pylint: disable=no-member
+#pylint: disable=no-member,logging-not-lazy
 """Create candlestick graphs from OHLC data"""
 
 import ast
@@ -188,8 +187,8 @@ class Graph():
                 result_list['ohlc'] = ast.literal_eval(redis.get_item(index_item,
                                                                       'ohlc').decode())['result']
             except AttributeError as error:
-                LOGGER.error("Error, unable to find ohlc data for %s %s %s" % (
-                             index_item, ind, error))
+                LOGGER.error("Error, unable to find ohlc data for %s %s %s"
+                             % ( index_item, ind, error))
             try:
                 result_list['event'] = ast.literal_eval(redis.get_item(index_item,
                                                                        'event').decode())
