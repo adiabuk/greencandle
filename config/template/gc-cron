@@ -14,5 +14,5 @@
 */2 * * * * /usr/local/bin/get_active_trades > /proc/1/fd/1 2>/proc/1/fd/2
 0 * * * *  /usr/local/bin/send_docker_alerts
 {{if eq .push_title "prod_cron"}}
-*/15 * * * * /usr/local/bin/write_balance > /proc/1/fd/1 2>/proc/1/fd/2
+0 * * * * /usr/local/bin/write_balance > /proc/1/fd/1 2>/proc/1/fd/2
 {{end}}
