@@ -179,7 +179,7 @@ class Engine(dict):
                 self.redis.redis_conn(pair, self.interval, data, close_time)
 
             except Exception as exc:
-                LOGGER.critical("Redis failure %s %s", str(exc), repr(sys.exc_info()))
+                LOGGER.critical("Redis failure %s %s" % (str(exc), repr(sys.exc_info())))
         self.schemes = []
 
     @get_exceptions
@@ -239,7 +239,7 @@ class Engine(dict):
         self.schemes.append(scheme)
         if first_run:
             for seq in range(len(self.dataframes[pair]) -1):
-                LOGGER.info("Getting initial sequence number %s", seq)
+                LOGGER.info("Getting initial sequence number %s" % seq)
                 scheme['data'] = zlib.compress(pickle.dumps(self.dataframes[pair].iloc[seq]))
                 scheme["event"] = "ohlc"
                 scheme["close_time"] = str(self.dataframes[pair].iloc[seq]["closeTime"])
@@ -262,7 +262,7 @@ class Engine(dict):
         """
 
         func, timeperiod = localconfig  # split tuple
-        LOGGER.info("Getting Support & resistance for %s", pair)
+        LOGGER.info("Getting Support & resistance for %s" % pair)
 
         close_values = make_float(dataframe.close)[:index]
         support, resistance = supres(close_values, int(timeperiod))
@@ -270,8 +270,8 @@ class Engine(dict):
         try:
             value = (pip_calc(support[-1], resistance[-1]))
         except IndexError:
-            LOGGER.debug("Skipping %s %s %s for support/resistance",
-                         pair, str(support), str(resistance))
+            LOGGER.debug("Skipping %s %s %s for support/resistance" %
+                         (pair, str(support), str(resistance)))
             return None
 
         cur_to_res = resistance[-1] - close_values[-1]
@@ -302,7 +302,7 @@ class Engine(dict):
     def get_bb(self, pair, dataframe, index=None, localconfig=None):
         """get bollinger bands"""
 
-        LOGGER.debug("Getting bollinger bands for %s", pair)
+        LOGGER.debug("Getting bollinger bands for %s" % pair)
         klines = self.make_data_tupple(dataframe.iloc[:index])
         func, timef = localconfig  # split tuple
         timeframe, multiplier = timef.split(',')
@@ -310,7 +310,7 @@ class Engine(dict):
         try:
             close = klines[-1]
         except Exception as exc:
-            LOGGER.warning("FAILED bbands: %s ", str(exc))
+            LOGGER.warning("FAILED bbands: %s " % str(exc))
             return None
         try:
             upper, middle, lower = \
@@ -325,7 +325,7 @@ class Engine(dict):
             results['upper'] = 0
             results['middle'] = 0
             results['lower'] = 0
-            LOGGER.warning("Overall Exception getting bollinger bands: %s", exc)
+            LOGGER.warning("Overall Exception getting bollinger bands: %s" % exc)
         trigger = None
         scheme = {}
         try:
@@ -344,7 +344,7 @@ class Engine(dict):
             self.schemes.append(scheme)
 
         except KeyError as exc:
-            LOGGER.warning("KEY FAILURE in bollinger bands: %s ", str(exc))
+            LOGGER.warning("KEY FAILURE in bollinger bands: %s" % str(exc))
 
         LOGGER.debug("Done getting Bollinger bands")
 
@@ -362,7 +362,7 @@ class Engine(dict):
 
         """
         func, timeperiod = localconfig  # split tuple
-        LOGGER.debug("Getting %s_%s for %s", func, timeperiod, pair)
+        LOGGER.debug("Getting %s_%s for %s" % (func, timeperiod, pair))
         dataframe = self.renamed_dataframe_columns(dataframe)
         scheme = {}
         mine = dataframe.apply(pandas.to_numeric).loc[:index]
@@ -418,7 +418,7 @@ class Engine(dict):
             self.schemes.append(scheme)
 
         except KeyError as exc:
-            LOGGER.warning("KEY FAILURE in envelope  %s ", str(exc))
+            LOGGER.warning("KEY FAILURE in envelope  %s" % str(exc))
         LOGGER.debug("Done getting envelope")
 
     @get_exceptions
@@ -454,7 +454,7 @@ class Engine(dict):
             self.schemes.append(scheme)
 
         except KeyError as exc:
-            LOGGER.warning("KEY FAILURE in moving averages: %s ", str(exc))
+            LOGGER.warning("KEY FAILURE in moving averages: %s" % str(exc))
 
         LOGGER.debug("done getting moving averages")
 
@@ -475,7 +475,7 @@ class Engine(dict):
             self.schemes.append(scheme)
 
         except KeyError as exc:
-            LOGGER.warning("KEY FAILURE in moving averages: %s ", str(exc))
+            LOGGER.warning("KEY FAILURE in moving averages: %s" % str(exc))
 
         LOGGER.debug("done getting moving averages")
 
@@ -492,20 +492,20 @@ class Engine(dict):
         Returns:
             None
         """
-        LOGGER.debug("Getting moving averages for %s", pair)
+        LOGGER.debug("Getting moving averages for %s" % pair)
         klines = self.make_data_tupple(dataframe.iloc[:index])
         func, timeperiod = localconfig  # split tuple
         try:
             close = klines[-1] # numpy.ndarray
             vol = klines[0]
         except Exception as exc:
-            LOGGER.warning("FAILED moving averages: %s ", str(exc))
+            LOGGER.warning("FAILED moving averages: %s" % str(exc))
             return None
         data = vol if volume else close
         try:
             result = getattr(talib, func)(data, int(timeperiod))[-1]
         except Exception as exc:
-            LOGGER.warning("Overall Exception getting moving averages: %s", exc)
+            LOGGER.warning("Overall Exception getting moving averages: %s" % exc)
             return None
 
         scheme = {}
@@ -528,7 +528,7 @@ class Engine(dict):
             self.schemes.append(scheme)
 
         except KeyError as exc:
-            LOGGER.warning("KEY FAILURE in moving averages: %s ", str(exc))
+            LOGGER.warning("KEY FAILURE in moving averages: %s " % str(exc))
 
         LOGGER.debug("done getting moving averages")
 
@@ -546,7 +546,7 @@ class Engine(dict):
         Returns:
             None
         """
-        LOGGER.debug("Getting Oscillators for %s", pair)
+        LOGGER.debug("Getting Oscillators for %s" % pair)
         klines = self.make_data_tupple(dataframe.iloc[:index])
         open, high, low, close = klines
         func, timeperiod = localconfig  # split tuple
@@ -574,7 +574,7 @@ class Engine(dict):
 
         except Exception as error:
             traceback.print_exc()
-            LOGGER.warning("failed getting oscillators: %s", str(error))
+            LOGGER.warning("failed getting oscillators: %s" % str(error))
             return None
 
         result = fastk[-1]
@@ -592,7 +592,7 @@ class Engine(dict):
             self.schemes.append(scheme)
 
         except KeyError as error:
-            LOGGER.warning("Key failure while getting oscillators: %s", str(error))
+            LOGGER.warning("Key failure while getting oscillators: %s" % str(error))
         LOGGER.debug("Done getting Oscillators")
 
     @get_exceptions
@@ -611,7 +611,7 @@ class Engine(dict):
         """
         func, timeperiod = localconfig
         klines = self.make_data_tupple(dataframe.iloc[:index])
-        LOGGER.debug("Getting Indicators for %s", pair)
+        LOGGER.debug("Getting Indicators for %s" % pair)
         scheme = {}
         trends = {"HAMMER": {100: "BUY", 0:"HOLD"},
                   "INVERTEDHAMMER": {100: "SELL", 0:"HOLD"},
@@ -653,7 +653,7 @@ class Engine(dict):
         """
 
         func, timef = localconfig  # split tuple
-        LOGGER.debug("Getting supertrend for %s", pair)
+        LOGGER.debug("Getting supertrend for %s" % pair)
         scheme = {}
         dataframe = self.renamed_dataframe_columns(dataframe)
 

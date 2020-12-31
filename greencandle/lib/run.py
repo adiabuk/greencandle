@@ -67,7 +67,7 @@ def get_drawdown(pair, buy_price, interval):
     """
     redis = Redis(interval=interval, test=True, db=1)
     min_price = redis.get_item(pair, 'min_price')
-    LOGGER.debug("Getting drawdown: buy_price:%s, min_price:%s", buy_price, min_price)
+    LOGGER.debug("Getting drawdown: buy_price:%s, min_price:%s" % (buy_price, min_price))
     drawdown = perc_diff(buy_price, min_price)
     redis.rm_min_price(pair)
     return drawdown
@@ -75,7 +75,7 @@ def get_drawdown(pair, buy_price, interval):
 @GET_EXCEPTIONS
 def perform_data(pair, interval, data_dir, indicators):
     """Serial test loop"""
-    LOGGER.debug("Serial run %s %s", pair, interval)
+    LOGGER.debug("Serial run %s %s" % (pair, interval))
     redis = Redis(interval=interval, test=True, db=0)
     try:
         filename = glob("{0}/{1}_{2}.p*".format(data_dir, pair, interval))[0]
@@ -83,7 +83,7 @@ def perform_data(pair, interval, data_dir, indicators):
         print("File not found: {0}/{1}_{2}.p*".format(data_dir, pair, interval))
         sys.exit(1)
     if not os.path.exists(filename):
-        LOGGER.critical("Filename:%s not found for %s %s", filename, pair, interval)
+        LOGGER.critical("Filename:%s not found for %s %s" % (filename, pair, interval))
         return
     if filename.endswith("gz"):
         handle = gzip.open(filename, "rb")
@@ -95,19 +95,19 @@ def perform_data(pair, interval, data_dir, indicators):
     dbase = Mysql(test=True, interval=interval)
     prices_trunk = {pair: "0"}
     for beg in range(len(dframe) - CHUNK_SIZE):
-        LOGGER.debug("IN LOOP %s ", beg)
+        LOGGER.debug("IN LOOP %s " % beg)
         trade = Trade(interval=interval, test_trade=True, test_data=True)
 
         sells = []
         buys = []
         end = beg + CHUNK_SIZE
-        LOGGER.debug("chunk: %s, %s", beg, end)
+        LOGGER.debug("chunk: %s, %s" % (beg, end))
         dataframe = dframe.copy()[beg: end]
 
         current_ctime = int(dataframe.iloc[-1].closeTime)/1000
         current_time = time.strftime("%Y-%m-%d %H:%M:%S",
                                      time.gmtime(current_ctime))
-        LOGGER.debug("current date: %s", current_time)
+        LOGGER.debug("current date: %s" %  current_time)
 
         if len(dataframe) < CHUNK_SIZE:
             LOGGER.debug("End of dataframe")
@@ -123,13 +123,13 @@ def perform_data(pair, interval, data_dir, indicators):
         current_trade = dbase.get_trade_value(pair)
         if result == "BUY":
             buys.append((pair, current_time, current_price))
-            LOGGER.debug("Items to buy: %s", buys)
+            LOGGER.debug("Items to buy: %s" % buys)
             trade.open_long(buys)
             update_minprice(pair, current_ctime, current_price, interval)
         elif result == "SELL":
             update_minprice(pair, current_ctime, current_price, interval)
             sells.append((pair, current_time, current_price))
-            LOGGER.debug("Items to sell: %s", sells)
+            LOGGER.debug("Items to sell: %s" % sells)
             buy_time = int(current_trade[0][2].timestamp())
             buy_price = current_trade[0][0]
             drawdown = get_drawdown(pair, buy_price, interval)
@@ -152,7 +152,7 @@ def parallel_test(pairs, interval, data_dir, indicators):
     """
     Do test with parallel data
     """
-    LOGGER.info("Performaing parallel run %s", interval)
+    LOGGER.info("Performaing parallel run %s" % interval)
     redis = Redis(interval=interval, test=True, db=0)
     redis.clear_all()
     dbase = Mysql(test=True, interval=interval)
@@ -169,7 +169,7 @@ def parallel_test(pairs, interval, data_dir, indicators):
             print("File not found: {0}/{1}_{2}.p*".format(data_dir, pair, interval))
             sys.exit(1)
         if not os.path.exists(filename):
-            LOGGER.critical("Cannot find file: %s", filename)
+            LOGGER.critical("Cannot find file: %s" % filename)
             continue
         if filename.endswith("gz"):
             handle = gzip.open(filename, "rb")
@@ -178,7 +178,7 @@ def parallel_test(pairs, interval, data_dir, indicators):
 
         dframes[pair] = pickle.load(handle)
         sizes.append(len(dframes[pair]))
-        LOGGER.info("%s dataframe size: %s", pair, len(dframes[pair]))
+        LOGGER.info("%s dataframe size: %s" % (pair, len(dframes[pair])))
         handle.close()
 
     for beg in range(max(sizes) - CHUNK_SIZE):
@@ -187,7 +187,7 @@ def parallel_test(pairs, interval, data_dir, indicators):
         buys = []
         sells = []
         for pair in pairs:
-            LOGGER.info("Current loop: %s to %s pair:%s", beg, end, pair)
+            LOGGER.info("Current loop: %s to %s pair:%s" % (beg, end, pair))
             dataframe = dframes[pair][beg: end]
             prices_trunk = {pair: "0"}
             if len(dataframe) < CHUNK_SIZE:
@@ -200,7 +200,7 @@ def parallel_test(pairs, interval, data_dir, indicators):
             result, current_time, current_price, _ = redis.get_action(pair=pair, interval=interval,
                                                                       test_data=True)
 
-            LOGGER.info('In Strategy %s', result)
+            LOGGER.info('In Strategy %s' % result)
             del engine
 
             if result == "BUY":
@@ -229,8 +229,8 @@ def prod_int_check(interval, test):
         result, current_time, current_price = redis.get_intermittant(pair, buy_price=buy_price,
                                                                      current_price=prices[pair])
         buy_price = dbase.get_trade_value(pair)[0][0]
-        LOGGER.debug("%s int check result: %s Buy:%s Current:%s Time:%s", pair, result, buy_price,
-                     current_price, current_time)
+        LOGGER.debug("%s int check result: %s Buy:%s Current:%s Time:%s" % (pair, result,
+            buy_price, current_price, current_time))
         if result == "SELL":
             LOGGER.debug("Items to sell")
             sells.append((pair, current_time, current_price))
@@ -294,13 +294,13 @@ def prod_loop(interval, test_trade):
     pairs = config.main.pairs.split()
 
     LOGGER.debug("Performaing prod loop")
-    LOGGER.info("Pairs in config: %s", pairs)
-    LOGGER.info("Total unique pairs: %s", len(pairs))
+    LOGGER.info("Pairs in config: %s" % pairs)
+    LOGGER.info("Total unique pairs: %s" % len(pairs))
 
     max_trades = int(config.main.max_trades)
 
     LOGGER.info("Starting new cycle")
-    LOGGER.debug("max trades: %s", max_trades)
+    LOGGER.debug("max trades: %s" % max_trades)
 
     prices = binance.prices()
     prices_trunk = {}

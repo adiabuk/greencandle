@@ -23,7 +23,7 @@ class Mysql():
 
         self.connect()
         self.interval = interval
-        self.logger.debug("Starting Mysql with interval %s, test=%s", interval, test)
+        self.logger.debug("Starting Mysql with interval %s, test=%s" % (interval, test))
 
     @get_exceptions
     def connect(self):
@@ -48,7 +48,7 @@ class Mysql():
         """
         Execute query on MYSQL DB - if fail, then try reconnecting and retry the operation
         """
-        self.logger.debug("Running Mysql command: %s", command)
+        self.logger.debug("Running Mysql command: %s" % command)
         cur.execute(command)
         self.dbase.commit()
 
@@ -83,11 +83,11 @@ class Mysql():
         try:
             self.execute(cur, query)
         except NameError as exc:
-            self.logger.critical("One or more expected variables not passed to DB %s", exc)
+            self.logger.critical("One or more expected variables not passed to DB %s" % exc)
         except Exception:
-            self.logger.critical("Error - unable to execute query %s", query)
+            self.logger.critical("Error - unable to execute query %s" % query)
         except MySQLdb.ProgrammingError:
-            self.logger.critical("Syntax error in query: %s", query)
+            self.logger.critical("Syntax error in query: %s" % query)
 
     @get_exceptions
     def delete_data(self):
@@ -247,8 +247,8 @@ class Mysql():
 
                 self.run_sql_query(insert)
             except ZeroDivisionError:
-                self.logger.critical("%s has a zero buy price, unable to calculate percentage",
-                                     pair)
+                self.logger.critical("%s has a zero buy price, unable to calculate percentage"
+                                     % pair)
 
 
     @get_exceptions
@@ -273,7 +273,7 @@ class Mysql():
                     self.logger.critical(" ".join(["XXX", coin, exchange, "KEYERROR"]))
                     continue
                 except IndexError:
-                    self.logger.critical("Index error %s", exchange)
+                    self.logger.critical("Index error %s" % exchange)
                     raise
 
                 try:

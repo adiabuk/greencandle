@@ -73,7 +73,7 @@ class Trade():
 
         precision = int(binance.exchange_info()[item]['quoteAssetPrecision']) - 1
         amt_str = format(float(amount), '.{}f'.format(precision))
-        self.logger.debug("Final amount: %s", amt_str)
+        self.logger.debug("Final amount: %s" % amt_str)
         return amt_str
 
     def flatten(self, flat):
@@ -102,12 +102,12 @@ class Trade():
         Buy as many items as we can from buy_list depending on max amount of trades, and current
         balance in base currency
         """
-        self.logger.info("We have %s potential items to buy", len(buy_list))
+        self.logger.info("We have %s potential items to buy" % len(buy_list))
 
         drain = str2bool(config.main.drain)
         prod = str2bool(config.main.production)
         if drain and not self.test_data:
-            self.logger.warning("Skipping Buy as %s is in drain", self.interval)
+            self.logger.warning("Skipping Buy as %s is in drain" % self.interval)
             return
 
         if buy_list:
@@ -153,11 +153,10 @@ class Trade():
 
                 current_trades = dbase.get_trades()
                 avail_slots = self.max_trades - len(current_trades)
-                self.logger.info("%s buy slots available", avail_slots)
+                self.logger.info("%s buy slots available" % avail_slots)
 
                 if dbase.get_recent_high(item, current_time, 12, 200):
-                    self.logger.warning("Recently sold %s with high profit, skipping",
-                                        item)
+                    self.logger.warning("Recently sold %s with high profit, skipping" % item)
                     break
                 elif avail_slots <= 0:
                     self.logger.warning("Too many trades, skipping")
@@ -167,15 +166,15 @@ class Trade():
                     proposed_base_amount = current_base_bal / self.divisor
                 else:
                     proposed_base_amount = current_base_bal / (self.max_trades + 1)
-                self.logger.info('item: %s, proposed: %s, last:%s', item, proposed_base_amount,
-                                 last_buy_price)
+                self.logger.info('item: %s, proposed: %s, last:%s' % (item, proposed_base_amount,
+                                 last_buy_price))
                 base_amount = max(proposed_base_amount, last_buy_price)
                 cost = current_price
                 main_pairs = config.main.pairs
 
                 if item not in main_pairs and not self.test_data:
                     self.logger.warning("%s not in buy_list, but active trade "
-                                        "exists, skipping...", item)
+                                        "exists, skipping..." % item)
                     continue
                 if (base_amount >= (current_base_bal / self.max_trades) and avail_slots <= 5):
                     self.logger.info("Reducing trade value by a third")
@@ -183,21 +182,23 @@ class Trade():
 
                 amount = base_amount / float(cost)
                 if float(cost)*float(amount) >= float(current_base_bal):
-                    self.logger.warning("Unable to purchase %s of %s, insufficient funds:%s/%s",
-                                        amount, item, base_amount, current_base_bal)
+                    self.logger.warning("Unable to purchase %s of %s, insufficient funds:%s/%s" %
+                                        (amount, item, base_amount, current_base_bal))
                     continue
                 elif item in current_trades:
-                    self.logger.warning("We already have a trade of %s, skipping...", item)
+                    self.logger.warning("We already have a trade of %s, skipping..." % item)
                     continue
                 else:
-                    self.logger.info("Buying %s of %s with %s %s", amount, item, base_amount, base)
-                    self.logger.debug("amount to buy: %s, cost: %s, amount:%s",
-                                      base_amount, cost, amount)
+                    self.logger.info("Buying %s of %s with %s %s" % (amount, item, base_amount,
+                        base))
+                    self.logger.debug("amount to buy: %s, cost: %s, amount:%s" %
+                                      (base_amount, cost, amount))
                     if prod and not self.test_data:
                         amt_str = self.get_step_precision(item, amount)
                         result = binance.order(symbol=item, side=binance.BUY, quantity=amt_str,
                                                price='', orderType=binance.MARKET,
                                                test=self.test_trade)
+                        print(result)
                         try:
                             # result empty if test_trade
                             cost = result.get('fills', {})[0].get('price', cost)
@@ -230,13 +231,13 @@ class Trade():
 
         prod = str2bool(config.main.production)
         if sell_list:
-            self.logger.info("We need to sell %s", sell_list)
+            self.logger.info("We need to sell %s" % sell_list)
             dbase = Mysql(test=self.test_data, interval=self.interval)
             for item, current_time, current_price in sell_list:
                 base = get_base(item)
                 quantity = dbase.get_quantity(item)
                 if not quantity:
-                    self.logger.critical("Unable to find quantity for %s", item)
+                    self.logger.critical("Unable to find quantity for %s" % item)
                     return
                 price = current_price
                 buy_price, _, _, base_in = dbase.get_trade_value(item)[0]
@@ -247,8 +248,8 @@ class Trade():
                 send_push_notif('SELL', item, '%.15f' % float(price))
                 send_slack_message('longs', 'SELL %s %.15f' % (item, float(price)))
 
-                self.logger.info("Selling %s of %s for %.15f %s", quantity, item, float(price),
-                                 base_out)
+                self.logger.info("Selling %s of %s for %.15f %s" % (quantity, item, float(price),
+                                 base_out))
                 if prod and not self.test_data:
                     amt_str = self.get_step_precision(item, quantity)
                     result = binance.order(symbol=item, side=binance.SELL, quantity=amt_str,
@@ -269,7 +270,7 @@ class Trade():
 
                     self.send_redis_trade(item, price, self.interval, "SELL")
                 else:
-                    self.logger.critical("Sell Failed %s:%s", name, item)
+                    self.logger.critical("Sell Failed %s:%s" % (name, item))
             del dbase
         else:
             self.logger.info("No items to sell")

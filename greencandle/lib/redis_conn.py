@@ -42,8 +42,8 @@ class Redis():
         self.interval = interval
         self.test = test
 
-        self.logger.debug("Starting Redis with interval %s %s, db=%s", interval,
-                          test_str, str(db))
+        self.logger.debug("Starting Redis with interval %s %s, db=%s" % (interval,
+                          test_str, str(db)))
         pool = redis.ConnectionPool(host=self.host, port=self.port, db=db)
         self.conn = redis.StrictRedis(connection_pool=pool)
 
@@ -62,7 +62,7 @@ class Redis():
         """
         for key, val in data.items():
 
-            self.logger.debug("Adding to Redis: %s %s %s", pair, key, val)
+            self.logger.debug("Adding to Redis: %s %s %s" % (pair, key, val))
             response = self.conn.hset(pair, key, val)
         return response
 
@@ -82,7 +82,7 @@ class Redis():
         last_price = self.conn.get(key)
         if not last_price or float(price) > float(last_price):
             result = self.conn.set(key, price)
-            self.logger.debug("Setting high price for %s, result:%s", pair, result)
+            self.logger.debug("Setting high price for %s, result:%s" % (pair, result))
 
     def get_high_price(self, pair, interval):
         """get current highest price for pair and interval"""
@@ -97,7 +97,7 @@ class Redis():
         """Delete highest price in redis"""
         key = 'highClose_{0}_{1}'.format(pair, interval)
         result = self.conn.delete(key)
-        self.logger.debug("Deleting high price for %s, result:%s", pair, result)
+        self.logger.debug("Deleting high price for %s, result:%s" % (pair, result))
 
 
     def redis_conn(self, pair, interval, data, now):
@@ -113,12 +113,12 @@ class Redis():
             success of operation: True/False
         """
 
-        self.logger.debug("Adding to Redis: %s %s %s", interval, list(data.keys()), now)
+        self.logger.debug("Adding to Redis: %s %s %s" % (interval, list(data.keys()), now))
         key = "{0}:{1}:{2}".format(pair, interval, now)
         expiry = int(config.redis.redis_expiry_seconds)
 
         if not key.endswith("999"):
-            self.logger.critical("Invalid time submitted to redis %s.  Skipping ", key)
+            self.logger.critical("Invalid time submitted to redis %s.  Skipping " % key)
             return
 
         for k, v in data.items():
@@ -134,7 +134,7 @@ class Redis():
         delete a given entry
         """
         result = self.conn.delete(key)
-        self.logger.debug("Deleting key %s, result:%s", key, result)
+        self.logger.debug("Deleting key %s, result:%s" % (key, result))
 
     def get_items(self, pair, interval):
         """
@@ -186,7 +186,7 @@ class Redis():
         try:
             data = ast.literal_eval(byte.decode("UTF-8"))
         except AttributeError:
-            self.logger.error("No Data for item %s", item)
+            self.logger.error("No Data for item %s" % item)
             return None, None
 
         return data["current_price"], data["date"], data['result']
@@ -209,7 +209,7 @@ class Redis():
             self.logger.debug(message)
         else:
             self.logger.info(message)
-        self.logger.debug("%s, %s", message, current)
+        self.logger.debug("%s, %s" % (message, current))
 
     def get_intermittant(self, pair, buy_price, current_price):
         """
@@ -252,7 +252,7 @@ class Redis():
                     self.get_items(pair=pair, interval=interval)[-5:]
         except ValueError:
 
-            self.logger.debug("Not enough data for %s", pair)
+            self.logger.debug("Not enough data for %s" % pair)
             return ('HOLD', 'Not enough data', 0, {'buy':[], 'sell':[]})
 
         # get current & previous indicator values
@@ -331,15 +331,15 @@ class Redis():
             for rule in "buy", "sell":
                 try:
                     current_config = config.main['{}_rule{}'.format(rule, seq)]
-                    self.logger.debug("Rule: %s_rule%s: %s", rule, seq, current_config)
+                    self.logger.debug("Rule: %s_rule%s: %s" % (rule, seq, current_config))
                 except (KeyError, TypeError):
                     pass
                 if current_config:
                     try:
                         rules[rule].append(eval(current_config))
                     except (TypeError, KeyError) as error:
-                        self.logger.warning("Unable to eval config rule: %s_rule: %s %s",
-                                            rule, current_config, error)
+                        self.logger.warning("Unable to eval config rule: %s_rule: %s %s" %
+                                            (rule, current_config, error))
                         continue
 
         stop_loss_perc = float(config.main.stop_loss_perc)
@@ -406,14 +406,15 @@ class Redis():
 
         # if we match stop_loss rule and are in a trade
         if stop_loss_rule and buy_price:
-            self.logger.warning("StopLoss: buy_price:%s high_price:%s", buy_price, high_price)
+            self.logger.warning("StopLoss: buy_price:%s high_price:%s" % (buy_price, high_price))
             self.log_event('StopLoss', rate, perc_rate, buy_price,
                            current_price, pair, current_time, results.current)
             self.del_high_price(pair, interval)
             result = 'SELL'
 
         elif trailing_stop and buy_price:
-            self.logger.info("TrailingStopLoss: buy_price:%s high_price:%s", buy_price, high_price)
+            self.logger.info("TrailingStopLoss: buy_price:%s high_price:%s" % (buy_price,
+                high_price))
             self.logger.info("Trailing stop loss reached")
             self.log_event('TrailingStopLoss', rate, perc_rate, buy_price,
                            current_price, pair, current_time, results.current)
@@ -444,8 +445,8 @@ class Redis():
             # delete and re-store high price
             self.del_high_price(pair, interval)
             self.put_high_price(pair, interval, current_price)
-            self.logger.debug("Close: %s, Previous Close: %s, >: %s",
-                              close, last_close, close > last_close)
+            self.logger.debug("Close: %s, Previous Close: %s, >: %s" %
+                              (close, last_close, close > last_close))
             result = 'BUY'
 
         elif buy_price:
@@ -457,8 +458,8 @@ class Redis():
 
         winning_sell = self.get_rules(rules, 'sell')
         winning_buy = self.get_rules(rules, 'buy')
-        self.logger.info('%s sell Rules matched: %s', pair, winning_sell)
-        self.logger.info('%s buy Rules matched: %s', pair, winning_buy)
+        self.logger.info('%s sell Rules matched: %s' % (pair, winning_sell))
+        self.logger.info('%s buy Rules matched: %s' % pair, winning_buy))
         del dbase
         return (result, current_time, current_price, {'sell':winning_sell,
                                                       'buy': winning_buy})

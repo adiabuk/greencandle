@@ -25,7 +25,7 @@ def get_phemex_values():
     balance = phemex.fetch_balance({'code':'BTC'})
     spot_total = balance['total']['USDT']
     for key, val in balance['total'].items():
-        LOGGER.debug("Getting phemex %s", key)
+        LOGGER.debug("Getting phemex %s" % key)
         # iterate through all items and convert to USDT
         if val > 0 and key != 'USDT':
             ticker = hitbtc.fetch_ticker('{}/USDT'.format(key))['close']
