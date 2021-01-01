@@ -177,7 +177,9 @@ class Trade():
                         result = binance.order(symbol=item, side=binance.BUY, quantity=amt_str,
                                                price='', orderType=binance.MARKET,
                                                test=self.test_trade)
-                        print(result)
+                        if "msg" in result:
+                            self.logger.error(result)
+
                         try:
                             # result empty if test_trade
                             cost = result.get('fills', {})[0].get('price', cost)
@@ -232,6 +234,9 @@ class Trade():
                     amt_str = get_step_precision(item, quantity)
                     result = binance.order(symbol=item, side=binance.SELL, quantity=amt_str,
                                            price='', orderType=binance.MARKET, test=self.test_trade)
+
+                    if "msg" in result:
+                        self.logger.error(result)
 
                     try:
                         # result empty if test_trade
