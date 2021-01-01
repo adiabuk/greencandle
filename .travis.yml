@@ -1,5 +1,6 @@
 dist: bionic
 install:
+- echo "$DPWD" | sudo docker login -u "amrox" --password-stdin
 - sudo bash install/bootstrap_dev.sh
 - sudo docker-compose -f ./install/docker-compose_unit.yml up -d mysql-unit redis-unit
 before_script:
@@ -7,7 +8,7 @@ before_script:
 script:
 - configstore package test
 - sudo docker ps
-- echo "$DPWD" | docker login -u "amrox" --password-stdin
+- echo "$DPWD" | sudo docker login -u "amrox" --password-stdin
 - sudo configstore package process_templates unit /etc
 - sudo mysqlcheck --host mysql -uroot -ppassword  --databases greencandle
 - cat  config/template/gc-cron |grep -v ^{| sudo crontab -
