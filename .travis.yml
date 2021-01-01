@@ -7,6 +7,7 @@ before_script:
 script:
 - configstore package test
 - sudo docker ps
+- echo "$DPWD" | docker login -u "amrox" --password-stdin
 - sudo configstore package process_templates unit /etc
 - sudo mysqlcheck --host mysql -uroot -ppassword  --databases greencandle
 - cat  config/template/gc-cron |grep -v ^{| sudo crontab -
@@ -15,3 +16,6 @@ script:
 notifications:
   slack:
     secure: QCEGE6ncguTVrd6omsYWjDrZty0XVJrf7VLK+sYqJci26H2iDF2PBqiLGibQr6UyPNKFStvAJKurhe6ORLxq8waGopEihfKByPgDksZkvJHvhSQNMjU859uWz4w/YZ1/45iA5REphzh5zQuUl7EM+AzwjsEagZJMHrkDB5NkRRD5i8fgMfLcuddPXAj1RwWjVGPcLmCIzjY9rJLNQBQHRjPOsTHtYStji20JRsqsZP4fNepI1F9eFOdS3ledwqnYdxeESOsa/VPhzpWtUnd1a0s7EwuhFK1E+C5iI+HfRSscewmuJbT6v31UDzScaAo7y5yHd/vjDjLgwfUZr6SFFqFOHxuxGSTQtOLyOM8t0pVZFvBGFSJbBD7QQ2PGw4/C2epmEwb8u+KtpZ4rFVCG9IlqWXtXje0XPl8/lFK0Tc4PAxHUUjnagbf1VrnIwMPYYp/RIwxCs/qbu0BChdZqZdKJIhEkDwUVxEI8UMRojgOMFK+kdsp+jcYlTPH/wghv7+rLAYE02W3x3yebCP+TyJmurdXe689OUob8H8490UWzwmRR5HjtWv6GTEfx03p7VxYxso+CF9KXwNAtKTKORnlIwy8BfYvUHVK7jNI9QMbmZu8vikKqAmfkE58zteKdx6beyX5tR2o7GQv/LwK5ov4JqhCB49UBiNI+9+2WaUo=
+env:
+  global:
+    secure: KLUi2YMHnJGX99DaYjlbmVnVqMbU8YkjNFAs5a9GvqVyNXjY4abRSca+tAAPfMZebrt9EBRqCeFGoc3jmsFg7rq2zu0mfS+VSDQtO7WqevaogkSh0goqc1YfqMuUqGcKJIFQX/3GNIm9PP+/LS9qxD6ivd1bLtE0qtSnfdYWBvZJyHR6nBRIW4TN139cmUJBQ4tlGhMqoPAQbhy+waiCj9dQHZqnjJuFuBPt42VNlBZNLGSGqZlHEHpxcrVvnnmDFYh+qQdNL6yl5VSIhMtZFm6dWfxDn5q7urbHK8J2zTjDj2ZcKKspc+KUF7N1VoScS5zrOmzn2nf90m1+FQ753dhud+7+ky1yleci/3pPajbJ7TBhecOxm4F2LECu+5MZP29BMaHJeHBRhvKfdtAAb8nullxrvM2jHQTVNG3Jpo4Cl1oCSSDxptdCUWj4VYQo7sYHDwt6qlADKPfR79iXKDmy+sBu+Ur3uC/pUE1+07YzrtVhJVh+GmTwb2nYZ/f3e8rSuJi1bq96AW7ue/sG2GINsmd6t4UQnfqPwStjYgfDhmhAXpJzozhXfSs6lsPLAO7C1Oc7WIi5Gfc+yhx91RFOjUEPqOEjSduRPU52xcHFO1IYONj5njU+Kom2ZvSEa42b+bslr0y7mdXHqE0+Qb7dBZfirEzFerKEyTyLFNg=
