@@ -127,7 +127,7 @@ services:
        - CONFIG_ENV=prod
        - HOST=$HOSTNAME
      ports:
-       - 8888:8888
+       - 9999:9999
      links:
        - fe-dashboard:dashboard
        - fe-cadvisor:cadvisor
