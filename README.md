@@ -11,7 +11,19 @@
 
 # Releases
 
-# 0.36
+## 1.0
+* Tweaking of testing parameters
+* Get balance hourly on prod only
+* Preparations of margin trades
+* Checks for valid trading pairs
+* Better error reporting
+* Split containers by base currency
+* Use forked local docker images
+* Use cryptocompare module for TWT coin
+* Get balance for phemex sub accounts
+* Split slack messages per env
+
+## 0.36
 * Enable production trades
 * Slack notifications for CI builds and tests
 * Testing of 3m envelope strategy
