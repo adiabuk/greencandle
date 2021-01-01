@@ -17,12 +17,15 @@ def main():
     """
     Main method
     """
+    if sys.argv[1] == "--help":
+        print("Usage: {} <pair> <side>".format(sys.argv[0]))
+        sys.exit(0)
     if len(sys.argv) < 3:
         print("Usage: {} <pair> <side>".format(sys.argv[0]))
         sys.exit(1)
     pair = sys.argv[1]
     side = sys.argv[2]
-    base_amount = 1000
+    base_amount = 3000
     account = config.accounts.binance[0]
     binance_auth(account)
     base = get_base(pair)
