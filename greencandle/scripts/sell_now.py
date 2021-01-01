@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-order,wrong-import-position
+#pylint: disable=wrong-import-order,wrong-import-position,no-member
 
 """
 Sell a particular trade immediately
