@@ -6,17 +6,17 @@
   "data_key": "OfvuQJ0Cis1CvnFV2KTTYv3WCPKXOIord3OBDc0kwcU=",
   "data": {
     "account1_key": {
-      "value": "",
+      "value": "test",
       "is_binary": false,
       "is_secret": false
     },
     "account1_secret": {
-      "value": "",
+      "value": "test",
       "is_binary": false,
       "is_secret": false
     },
     "account1_type": {
-      "value": "",
+      "value": "binance",
       "is_binary": false,
       "is_secret": false
     },

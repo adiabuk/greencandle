@@ -39,7 +39,7 @@ def create_config():
 
     # sort account details
     for i in range(1, 5):
-        if globals()['accounts']['account{}_type'.format(i)]:
+        if 'account{}_type'.format(i) in globals()['accounts']:
             type = globals()['accounts']['account{}_type'.format(i)]
             key = globals()['accounts']['account{}_key'.format(i)]
             secret = globals()['accounts']['account{}_secret'.format(i)]
