@@ -21,7 +21,7 @@ if [[ $ARGS == *"-m"* ]]; then
   data="/data/altcoin_historical/${YEAR}/monthly/${month}/"
   ARGS=`echo $ARGS|cut -c 1-2`
 else
-  data="/data/altcoin_historical/${YEAR}/"
+  data="/data/altcoin_historical/${YEAR}/year/"
 fi
 
 if [[ -z $PAIR ]]; then
