@@ -40,12 +40,12 @@ def create_config():
     # sort account details
     for i in range(1, 5):
         if 'account{}_type'.format(i) in globals()['accounts']:
-            type = globals()['accounts']['account{}_type'.format(i)]
+            account_type = globals()['accounts']['account{}_type'.format(i)]
             key = globals()['accounts']['account{}_key'.format(i)]
             secret = globals()['accounts']['account{}_secret'.format(i)]
-            if type not in globals()['accounts']:
-                globals()['accounts'][type] = []
-            globals()['accounts'][type].append({'key':key, 'secret':secret})
+            if account_type not in globals()['accounts']:
+                globals()['accounts'][account_type] = []
+            globals()['accounts'][account_type].append({'key':key, 'secret':secret})
 
 def check_config():
     """
