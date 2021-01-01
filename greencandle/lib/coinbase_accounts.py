@@ -1,12 +1,12 @@
-#!/usr/bin/env python
+#pylint: disable=no-member
 
 """Get account details from coinbase"""
 
 from __future__ import print_function
 import json
 from collections import defaultdict
-from forex_python.converter import CurrencyRates
 from requests.exceptions import ReadTimeout
+from forex_python.converter import CurrencyRates
 from .balance_common import default_to_regular
 from .auth import coinbase_auth
 from .timeout import restrict_timeout
