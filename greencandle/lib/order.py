@@ -5,7 +5,6 @@ Test Buy/Sell orders
 """
 
 from __future__ import print_function
-import math
 from collections import defaultdict
 from str2bool import str2bool
 import binance
@@ -15,7 +14,7 @@ from .logger import get_logger, get_decorator
 from .mysql import Mysql
 from .redis_conn import Redis
 from .balance import Balance
-from .balance_common import get_base
+from .balance_common import get_base, get_step_precision
 from .common import perc_diff, add_perc
 from .alerts import send_gmail_alert, send_push_notif, send_slack_message
 from . import config
@@ -75,26 +74,6 @@ class Trade():
         amt_str = format(float(amount), '.{}f'.format(precision))
         self.logger.debug("Final amount: %s" % amt_str)
         return amt_str
-
-    def flatten(self, flat):
-        # traverse tree to find flatten-able object
-        # cast to list to avoid RuntimeError-dict size changed
-        for item_key, item_val in list(flat.items()):  # second level
-            if item_key == "filters":
-                for i in item_val:
-                    for key, val in i.items():
-                        if key != "filterType" and key not in flat:
-                            flat[key] = val
-
-        del flat["filters"]
-        return flat
-
-    def get_step_precision(self, item, amount):
-        exchange_info = binance.exchange_info()[item]
-        flat = self.flatten(exchange_info)
-        step_size = float(flat['stepSize'])
-        precision = int(round(-math.log(step_size, 10), 0))
-        return round(float(amount), precision)
 
     @GET_EXCEPTIONS
     def open_long(self, buy_list):
@@ -194,7 +173,7 @@ class Trade():
                     self.logger.debug("amount to buy: %s, cost: %s, amount:%s"
                                       % (base_amount, cost, amount))
                     if prod and not self.test_data:
-                        amt_str = self.get_step_precision(item, amount)
+                        amt_str = get_step_precision(item, amount)
                         result = binance.order(symbol=item, side=binance.BUY, quantity=amt_str,
                                                price='', orderType=binance.MARKET,
                                                test=self.test_trade)
@@ -234,7 +213,6 @@ class Trade():
             self.logger.info("We need to sell %s" % sell_list)
             dbase = Mysql(test=self.test_data, interval=self.interval)
             for item, current_time, current_price in sell_list:
-                base = get_base(item)
                 quantity = dbase.get_quantity(item)
                 if not quantity:
                     self.logger.critical("Unable to find quantity for %s" % item)
@@ -251,7 +229,7 @@ class Trade():
                 self.logger.info("Selling %s of %s for %.15f %s"
                                  % (quantity, item, float(price), base_out))
                 if prod and not self.test_data:
-                    amt_str = self.get_step_precision(item, quantity)
+                    amt_str = get_step_precision(item, quantity)
                     result = binance.order(symbol=item, side=binance.SELL, quantity=amt_str,
                                            price='', orderType=binance.MARKET, test=self.test_trade)
 
