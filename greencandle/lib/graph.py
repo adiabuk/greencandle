@@ -188,7 +188,7 @@ class Graph():
                                                                       'ohlc').decode())['result']
             except AttributeError as error:
                 LOGGER.error("Error, unable to find ohlc data for %s %s %s"
-                             % ( index_item, ind, error))
+                             % (index_item, ind, error))
             try:
                 result_list['event'] = ast.literal_eval(redis.get_item(index_item,
                                                                        'event').decode())

@@ -15,7 +15,8 @@ def main():
     """main function"""
 
     config.create_config()
-    binance_auth()
+    account = config.accounts.binance[0]
+    binance_auth(account)
 
     if len(sys.argv) > 1 and sys.argv[1] == '--help':
         print("Test binance authentication using config creds")

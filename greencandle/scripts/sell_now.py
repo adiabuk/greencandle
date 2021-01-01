@@ -21,8 +21,8 @@ def main():
         print("Sell a particular trade immediately")
         print("Usage {} [pair] [interval] [test_trade] [test_data]".format(sys.argv[0]))
         sys.exit(0)
-
-    binance_auth()
+    account = config.accounts.binance[0]
+    binance_auth(account)
     pair = sys.argv[1]
     interval = sys.argv[2]
 

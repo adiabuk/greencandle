@@ -6,15 +6,65 @@
   "data_key": "AQIDAHh86o+e1l3vhl3F7Gn0lhwL0nWY7Q8sBy8abugAZ50HlgFByZYGyV9NwGy6UkmVEb2oAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMnQc09bFnrB/sDzJoAgEQgDs7H09GPBab3jf9VOE0bF06keLff5e2CuoQr2pOn6WEMWWtyDeWt/+0Afeq6LxxkfomB2Hd59fuUe/fxA==",
   "master_key_id": "alias/greencandle",
   "data": {
-    "binance_api_key": {
-      "value": "Nvm29Nv7dnlsh3xWl2QPOb1Tly8F5X1TbqTdAfKrSe2WaAPwdMztpN2b1v2ieqbzvoGS7FUX5ZidXxoX7t7hWuEdtSTXCEIshqI2PHM7f/0QJeucxeRAw/8wvyFNBiXyF2kCR+46Phk=",
+    "account1_key": {
+      "value": "urY4cLXQ+NIE7zTQ3UHQ6b4Opo/tECW1ppYnkF5tpvqIchKny7A0Y8VTM/tptl97orLLaUQ+4aCwV8Cuqxg53OpeqeTY9SQPLPgpMRxKy41CoTLmVR+AOrrrp1baxgOZbeJCLXi7DjM=",
       "is_binary": false,
       "is_secret": true
     },
-    "binance_api_secret": {
-      "value": "8GwufnTVqSUqc/BF25/xfJ2cPud+MAIXi6yg/Tpo/iV94XVCZ/ByhALeY2OYEgTx/6Zo+XOIep33c/rYRnP5uAU5DvMyKX8a0XL14jJoTB/Bn1K7rwnKd3vmsOERmz6Lx4dWT4kUf60=",
+    "account1_secret": {
+      "value": "eJ3FXkHREKd7p9l1APitouZJ4qzaMIhOvlrY5NRKJg8n2RL7C7POxy2k16n924WBVfyLFjMuB2FiBu7RQEjLWV8AgVRZjujmDEdXl/wmlfbBq5G93XlAZWoNU34rAyW5cfs8GkNgpig=",
       "is_binary": false,
       "is_secret": true
+    },
+    "account1_type": {
+      "value": "binance",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account2_key": {
+      "value": "eQQUuQi8hiD+Xr8IUGltSaIqQeuFEW3iwamimApgcRzWtInyZu8DaGOMcNEfaIV2p3GbiT97xT87M+0u+gUyAQ==",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "account2_secret": {
+      "value": "NzjBwBl/MuUsIa5nEZWPksjXd1cE7WQHnhwuw6etptkxxP4XJ3VhnbQ94GpnVFl0VR4HJS3KPpaEO+U324YSwIWgqX8jgeucWhph8fC1Y7tcu2cRF71dsklPdtiWOqh1orAPZixGLaCBwAOqDq5LkL9Fb7VfJpvg2ESQg5lh2jvzZPUQyPJom2EsnZo=",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "account2_type": {
+      "value": "phemex",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account3_key": {
+      "value": "bBBZtu6yMqU7+uYf5H9exghsb3siHmLYVRDdxsijMNJ4Uz9b0dRvuk7RC5+qVBFVQP2RqzlJnffEe+tK2qg5AQ==",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "account3_secret": {
+      "value": "M8GPwaR3ZCGyFre+0P0lntHy53u86SyTNkD4m3qIFfDIoIJ0jLRr5rQHKoTO7iQwWRxccpSbAg6i5tt0IquocP/Kh1njUUG93syuAhx/DlYiumy7f/YuR59PK5+rpIFDiqGMJ80zZwALSUFYkiTH1pDB/6KkcUV4uxFoD5haXJO71l/EK0IXVLlH9ZM=",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "account3_type": {
+      "value": "phemex",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account4_key": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account4_secret": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account4_type": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
     },
     "buy_rule1": {
       "value": "",
@@ -63,16 +113,6 @@
     },
     "buy_rule9": {
       "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "coinbase_api_key": {
-      "value": "blablabla",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "coinbase_api_secret": {
-      "value": "hello",
       "is_binary": false,
       "is_secret": false
     },
@@ -195,16 +235,6 @@
       "value": "",
       "is_binary": false,
       "is_secret": false
-    },
-    "phemex_api_key": {
-      "value": "G/SH5EeeINM22CO03jB0aZEI5KP4J9gqEhE+M8cuIyhGBN2jujqqjSWf3tXDl5SKwjGJcMU0BnfdYCUrNJFQMQ==",
-      "is_binary": false,
-      "is_secret": true
-    },
-    "phemex_api_secret": {
-      "value": "6vi7X0z3RSRfr9IIuDInf3zZCTHkNrunT1sZeszT1YwL6MjMntrE7CAwD7U1kmkQPH6QQSfN+uLz2QDAb3NZfRljms2wEOOAl0LMGGf0xhdBcYJOnKznNf1jAVGMV2zf9ysXp20e9SJq1QXpdh3xbCWVwJ8ob4+Rygs6fHd+zEc9OyIerkRTm/WH9LY=",
-      "is_binary": false,
-      "is_secret": true
     },
     "production": {
       "value": "true",

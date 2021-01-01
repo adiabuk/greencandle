@@ -25,7 +25,8 @@ def main():
 
     test = sys.argv[2].lower() == "test"
     prices = binance.prices()
-    binance_auth()
+    account = config.accounts.binance[0]
+    binance_auth(account)
     dbase = Mysql(test=test, interval=sys.argv[1])
 
     trades = dbase.get_trades()

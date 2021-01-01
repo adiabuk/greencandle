@@ -5,13 +5,63 @@
   "is_insecure": true,
   "data_key": "OfvuQJ0Cis1CvnFV2KTTYv3WCPKXOIord3OBDc0kwcU=",
   "data": {
-    "binance_api_key": {
-      "value": "x",
+    "account1_key": {
+      "value": "",
       "is_binary": false,
       "is_secret": false
     },
-    "binance_api_secret": {
-      "value": "x",
+    "account1_secret": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account1_type": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account2_key": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account2_secret": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account2_type": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account3_key": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account3_secret": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account3_type": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account4_key": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account4_secret": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account4_type": {
+      "value": "",
       "is_binary": false,
       "is_secret": false
     },
@@ -62,16 +112,6 @@
     },
     "buy_rule9": {
       "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "coinbase_api_key": {
-      "value": "blablabla",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "coinbase_api_secret": {
-      "value": "hello",
       "is_binary": false,
       "is_secret": false
     },
@@ -192,16 +232,6 @@
     },
     "pairs": {
       "value": "BNBUSDT BTCUSDT ETHUSDT NEOUSDT LTCUSDT",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "phemex_api_key": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "phemex_api_secret": {
-      "value": "",
       "is_binary": false,
       "is_secret": false
     },
