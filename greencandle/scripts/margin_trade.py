@@ -39,9 +39,9 @@ def main():
                                       orderType=binance.MARKET)
 
         print("Buy result: {}".format(result))
+    elif side == 'SELL':
         result = binance.margin_order(symbol=pair, side='SELL', quantity=precise_amount,
                                       orderType=binance.MARKET)
-    elif side == 'SELL':
         print("Sell result: {}".format(result))
         result = binance.margin_repay(base, base_amount)
 
