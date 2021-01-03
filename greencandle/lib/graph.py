@@ -111,6 +111,13 @@ class Graph():
                               name=name)
                 row = 2
                 # add rsi graph in second subply (below) if it exists
+            elif 'tsi' in name or 'signal' in name:
+                item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
+                                  y=value['value'],
+                                  name=name)
+                row = 2
+                # add tsi graph in second subply (below) if it exists
+
 
             elif 'STOCHF' in name:
                 item = go.Bar(x=pandas.to_datetime(value["date"], unit="ms"),

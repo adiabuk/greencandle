@@ -19,6 +19,7 @@ import pickle
 import zlib
 import pandas
 import talib
+import pandas_ta as ta
 from indicator import SuperTrend, RSI
 
 from . import config
@@ -349,6 +350,35 @@ class Engine(dict):
         LOGGER.debug("Done getting Bollinger bands")
 
     @get_exceptions
+    def get_tsi(self, pair, dataframe, index=None, localconfig=None):
+        func, timeperiod = localconfig
+        #result = getattr(func,  func)(*klines).tolist()[-1]
+        #result = getattr(talib, "CDL" + func)(*klines).tolist()[-1]
+        tsi = ta.smi(dataframe.close.astype(float))
+        if func == 'tsi':
+            result = tsi[tsi.columns[0]].iloc[-1]
+        elif func == 'signal':
+            result = tsi[tsi.columns[1]].iloc[-1]
+        else:
+            raise RuntimeError
+        scheme = {}
+        scheme["data"] = result
+        scheme["symbol"] = pair
+        scheme["event"] = "{0}_{1}".format(func, timeperiod)
+
+        if (not index and self.test) or len(self.dataframes[pair]) < 2:
+            index = -1
+        elif not index and not self.test:
+            index = -2
+        scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
+
+        self.schemes.append(scheme)
+        LOGGER.debug("Done getting TSI")
+
+
+
+
+    @get_exceptions
     def get_rsi(self, pair, dataframe, index=None, localconfig=None):
         """
         get RSI oscillator values for given pair
@@ -439,7 +469,6 @@ class Engine(dict):
         else:
             trigger = "BUY"
         scheme = {}
-
         try:
             scheme["data"] = result
             scheme["symbol"] = pair
@@ -509,6 +538,7 @@ class Engine(dict):
             return None
 
         scheme = {}
+
         result = None if math.isnan(result) else format(float(result), ".20f")
         try:
             scheme["data"] = result
