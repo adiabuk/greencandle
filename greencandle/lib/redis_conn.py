@@ -99,7 +99,6 @@ class Redis():
         result = self.conn.delete(key)
         self.logger.debug("Deleting high price for %s, result:%s" % (pair, result))
 
-
     def redis_conn(self, pair, interval, data, now):
         """
         Add data to redis
@@ -198,7 +197,6 @@ class Redis():
         except (TypeError, AttributeError):
             return None
 
-
     def log_event(self, event, rate, perc_rate, buy, sell, pair, current_time, current):
         """Send event data to logger"""
         message = 'EVENT:({0}) {1} rate:{2} perc_rate:{3} buy:{4} sell:{5}, time:{6}'.format(
@@ -247,6 +245,10 @@ class Redis():
         results = AttributeDict(current=AttributeDict(), previous=AttributeDict(),
                                 previous1=AttributeDict(), previous2=AttributeDict(),
                                 previous3=AttributeDict())
+
+        stop_loss_perc = float(config.main.stop_loss_perc)
+        take_profit_perc = float(config.main.take_profit_perc)
+
         try:
             previous3, previous2, previous1, previous, current = \
                     self.get_items(pair=pair, interval=interval)[-5:]
@@ -296,9 +298,10 @@ class Redis():
         dbase = Mysql(test=self.test, interval=interval)
         try:
             # function returns an empty list if no results so cannot get first element
-            buy_price = float(dbase.get_trade_value(pair)[0][0])
+            buy_price,_, buy_time, _ = dbase.get_trade_value(pair)[0]
         except IndexError:
             buy_price = None
+            buy_time = None
 
 
 
@@ -341,10 +344,15 @@ class Redis():
                         self.logger.warning("Unable to eval config rule: %s_rule: %s %s" %
                                             (rule, current_config, error))
                         continue
-
-        stop_loss_perc = float(config.main.stop_loss_perc)
-        take_profit_perc = float(config.main.take_profit_perc)
+        sell_timeout = False
         able_to_buy = True
+
+        if buy_price:
+
+            buy_epoch = 0 if not isinstance(buy_time, datetime) else buy_time.timestamp()
+            sell_epoch = int(buy_epoch) + int(convert_to_seconds(config.main.time_in_trade))
+            sell_timeout = current_epoch > sell_epoch
+
 
         if not buy_price and str2bool(config.main.wait_between_trades):
             try:
@@ -365,11 +373,10 @@ class Redis():
 
         try:
             # function returns an empty list if no results so cannot get first element
-            buy_price = float(dbase.get_trade_value(pair)[0][0])
 
             if str2bool(config.main.trailing_stop_loss):
                 high_price = self.get_high_price(pair, interval)
-                take_profit_price = add_perc(take_profit_perc, buy_price)
+                take_profit_price = add_perc(take_profit_perc, float(buy_price))
 
                 trailing_perc = float(config.main.trailing_stop_loss_perc)
                 if high_price:
@@ -385,13 +392,12 @@ class Redis():
 
             take_profit_rule = current_price > add_perc(take_profit_perc, buy_price)
 
-        except (IndexError, ValueError):
+        except (IndexError, ValueError, TypeError):
             # Setting to none to indicate we are currently not in a trade
             buy_price = None
             stop_loss_rule = False
             take_profit_rule = False
             trailing_stop = False
-
 
         if buy_price and any(rules['buy']) and any(rules['sell']):
             self.logger.warning('We ARE In a trade and have matched both buy and '
@@ -404,15 +410,32 @@ class Redis():
         else:
             both = False
 
-        # if we match stop_loss rule and are in a trade
-        if stop_loss_rule and buy_price:
+        if sell_timeout:
+            self.logger.warning("TimeOut: buy_price:%s high_price:%s" % (buy_price, high_price))
+            self.log_event('TimeOut', rate, perc_rate, buy_price,
+                           current_price, pair, current_time, results.current)
+            self.del_high_price(pair, interval)
+            result = 'SELL'
+
+
+        elif stop_loss_rule and buy_price:
+            # if we match stop_loss rule and are in a trade
             self.logger.warning("StopLoss: buy_price:%s high_price:%s" % (buy_price, high_price))
+
+            if test_data and str2bool(config.main.immediate_stop):
+                stop_at = sub_perc(stop_loss_perc, buy_price)
+                current_price = stop_at
+
             self.log_event('StopLoss', rate, perc_rate, buy_price,
                            current_price, pair, current_time, results.current)
             self.del_high_price(pair, interval)
             result = 'SELL'
 
         elif trailing_stop and buy_price:
+
+            if test_data and str2bool(config.main.immediate_stop):
+                 stop_at = sub_perc(trailing_perc, high_price)
+                 current_price = stop_at
             self.logger.info("TrailingStopLoss: buy_price:%s high_price:%s"
                              % (buy_price, high_price))
             self.logger.info("Trailing stop loss reached")
@@ -450,6 +473,7 @@ class Redis():
             result = 'BUY'
 
         elif buy_price:
+            self.logger.debug("why getting here?")
             self.log_event('Hold', rate, perc_rate, buy_price, current_price, pair, current_time,
                            results.current)
             result = 'HOLD'
