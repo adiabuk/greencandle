@@ -376,6 +376,11 @@
       "is_binary": false,
       "is_secret": false
     },
+    "time_in_trade": {
+      "value": "52w",
+      "is_binary": false,
+      "is_secret": false
+    },
     "trailing_stop_loss": {
       "value": "false",
       "is_binary": false,
