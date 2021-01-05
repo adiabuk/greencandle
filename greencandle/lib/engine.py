@@ -1,5 +1,5 @@
-#pylint: disable=no-member,consider-iterating-dictionary,broad-except,logging-not-lazy
-#pylint: disable=unused-variable,possibly-unused-variable,redefined-builtin,unused-import
+#pylint: disable=no-member,consider-iterating-dictionary,broad-except,logging-not-lazy,unused-import
+#pylint: disable=unused-variable,possibly-unused-variable,redefined-builtin,global-statement
 
 """
 Module for collecting price data and creating TA results
@@ -11,7 +11,7 @@ import math
 import sys
 import traceback
 import operator
-from time import time
+from time import time, strftime, localtime
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
 from decimal import Decimal
@@ -27,9 +27,11 @@ from . import config
 from .redis_conn import Redis
 from .supres import supres
 from .common import make_float, pipify, pip_calc
+from .binance_common import get_all_klines
 from .logger import get_logger, get_decorator
 
 LOGGER = get_logger(__name__)
+CROSS_DATA = {}  # data from different time period
 
 class Engine(dict):
     """ Represent events created from data & indicators """
@@ -350,15 +352,56 @@ class Engine(dict):
         LOGGER.debug("Done getting Bollinger bands")
 
     @get_exceptions
-    def get_tsi(self, pair, dataframe, index=None, localconfig=None):
+    def get_pivot(self, pair, dataframe, index=None, localconfig=None):
+        """
+        Get pivot points based on previous day data
+        """
+
+        LOGGER.debug("Fetching pivot points")
+        global CROSS_DATA
         func, timeperiod = localconfig
-        #result = getattr(func,  func)(*klines).tolist()[-1]
-        #result = getattr(talib, "CDL" + func)(*klines).tolist()[-1]
+        if (not index and self.test) or len(self.dataframes[pair]) < 2:
+            index = -1
+        elif not index and not self.test:
+            index = -2
+        # Get current date:
+        scheme = {}
+        scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
+
+        # get yesterday's m'epoch time
+        get_data_for = int(int(scheme["close_time"]) - 1.728e+8)
+
+        # use human-readable date as dict key
+        key = strftime('%Y-%m-%d', localtime(get_data_for/1000))
+
+        if key not in CROSS_DATA:
+            # if data doesn't already exist for this date, then wipe previous data and re-fetch data
+            # for current date
+            CROSS_DATA = {}
+            CROSS_DATA[key] = get_all_klines(pair, '1d', get_data_for, 3)
+
+        klines = CROSS_DATA[key]
+        result = result = (float(klines[0]['high']) + float(klines[0]['low']) + \
+                           float(klines[0]['close']))/3
+        scheme["data"] = result
+        scheme["symbol"] = pair
+        scheme["event"] = "{0}_{1}".format(func, timeperiod)
+
+        self.schemes.append(scheme)
+        LOGGER.debug("Done getting pivot")
+
+    @get_exceptions
+    def get_tsi(self, pair, dataframe, index=None, localconfig=None):
+        """
+        Gte TSI osscilator
+        """
+
+        func, timeperiod = localconfig
         tsi = ta.smi(dataframe.close.astype(float))
         if func == 'tsi':
-            result = tsi[tsi.columns[0]].iloc[-1]
+            result = float(tsi[tsi.columns[0]].iloc[-1]) * 100
         elif func == 'signal':
-            result = tsi[tsi.columns[1]].iloc[-1]
+            result = float(tsi[tsi.columns[1]].iloc[-1]) * 100
         else:
             raise RuntimeError
         scheme = {}

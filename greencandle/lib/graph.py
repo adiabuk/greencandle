@@ -104,6 +104,11 @@ class Graph():
                                   name="events",
                                   mode='markers',
                                   marker=dict(size=16, color=event['result']))
+            elif 'pivot' in name:
+                item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
+                                  y=value['value'],
+                                  name=name,
+                                  mode='markers')
 
             elif 'RSI' in name:
                 item = go.Bar(x=pandas.to_datetime(value["date"], unit="ms"),
