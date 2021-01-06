@@ -118,7 +118,7 @@ def get_data(startdate, intervals, pairs, days, outputdir, extra):
                 sys.exit("Invalid output directory: {0}".format(outputdir))
             filename = "{0}/{1}_{2}.p".format(outputdir.rstrip('/'), pair, interval)
             print("Using filename:", filename)
-            if os.path.exists(filename):
+            if os.path.exists(filename) or os.path.exists(filename + '.gz'):
                 continue
 
 
