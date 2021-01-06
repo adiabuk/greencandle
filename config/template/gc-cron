@@ -15,4 +15,5 @@
 0 * * * *  /usr/local/bin/send_docker_alerts
 {{if eq .push_title "prod_cron"}}
 0 * * * * /usr/local/bin/write_balance > /proc/1/fd/1 2>/proc/1/fd/2
+30 * * * *  /usr/local/bin/get_mysql_status > /proc/1/fd/1 2>/proc/1/fd/2
 {{end}}
