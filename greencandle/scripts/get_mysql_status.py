@@ -5,66 +5,28 @@ Get details of current trades using mysql and current value from binance
 """
 
 import sys
-
-from operator import itemgetter
-import binance
-
 from ..lib import config
-
 config.create_config()
-from ..lib.auth import binance_auth
 from ..lib.mysql import Mysql
+from ..lib.alerts import send_slack_message
 
 def main():
     """ Main function """
 
     if len(sys.argv) > 1 and sys.argv[1] == '--help':
-        print("Get current trade status")
-        print("Usage {} [pair] [interval]".format(sys.argv[0]))
+        print("Get open trades status")
         sys.exit(0)
 
-    test = sys.argv[2].lower() == "test"
-    prices = binance.prices()
-    account = config.accounts.binance[0]
-    binance_auth(account)
-    dbase = Mysql(test=test, interval=sys.argv[1])
+    dbase = Mysql()
 
-    trades = dbase.get_trades()
-    profits = []
-    percs = []
-    print("\033[1m") # BOLD
-    print("pair buy_price current_price amount in_profit percentage profit")
-    print("\033[0m") # END
+    query = "select pair, buy_time, round(perc,2) as perc from open_trades order by perc DESC"
+    open_trades = dbase.fetch_sql_data(query, header=False)
+    output = ""
+    for trade in open_trades:
+        output += '\t\t'.join([str(item) for item in trade]) + '\n'
 
+    send_slack_message('balance', output)
+    sys.exit()
 
-    details = []
-    for trade in trades:
-        pair = trade[0]
-        current_price = float(prices[pair])
-        trade_details = dbase.get_trade_value(pair)
-        buy_price = float(trade_details[0][0])
-        amount = float(trade_details[0][1])
-        profit = (current_price/0.00014*amount) - (buy_price/0.00014*amount)
-        perc = 100 * (current_price - buy_price) / buy_price
-
-        profits.append(profit)
-        percs.append(perc)
-        perc = float(format(perc, ".4f"))
-        profit = float(format(profit, ".4f"))
-        details.append((pair, format(float(buy_price), ".20f"),
-                        format(float(current_price), ".20f"),
-                        amount, current_price > buy_price, perc, profit))
-
-    details = sorted(details, key=itemgetter(-2))
-    for item in details:
-        print("{0} {1} {2} {3} {4} {5} {6}".format(*item))
-
-    print("\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n\n\n")
-    count = len(profits)
-    count = 1 if count == 0 else count
-    print("Total_profit: {0} Avg_Profit: {1} Avg_Percs: {2} count: {3}".format(sum(profits),
-                                                                               sum(profits)/count,
-                                                                               sum(percs)/count,
-                                                                               count))
 if __name__ == "__main__":
     main()
