@@ -53,7 +53,10 @@ class NotifyOnCriticalJournald(JournaldLogHandler):
         super().emit(record)
         if record.levelno in (logging.ERROR, logging.CRITICAL):
             send_push_notif(record.msg)
-            send_slack_message('alerts', record.msg.replace('"', ''))
+            try:
+                send_slack_message('alerts', record.msg.replace('"', ''))
+            except AttributeError:
+                send_slack_message('alerts', record.msg)
 
 def get_logger(module_name=None):
     """
