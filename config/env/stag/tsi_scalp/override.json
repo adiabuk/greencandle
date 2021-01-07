@@ -8,5 +8,5 @@
   "stop_loss_perc": "0.1",
   "take_profit": "True",
   "take_profit_perc": "10",
-  "time_in_trade": "45m",
+  "time_in_trade": "45m"
 }
