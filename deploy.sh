@@ -27,6 +27,10 @@ url=$(configstore package get $env slack_alerts)
 text="Starting deployment $TAG on $HOSTNAME"
 curl -X POST -H 'Content-type: application/json' --data '{"text":"'"${text}"'"}' $url
 git pull
+
+# Stop existing fe and be containers
+docker ps --filter name=^fe-* --filter name=^be-*  |awk {'print $NF'} -q | xargs docker stop
+
 docker-compose -f ./install/docker-compose_${env}.yml pull
 base=$(yq r install/docker-compose_${env}.yml services | grep -v '^ .*' | sed 's/:.*$//'|grep 'base')
 be=$(yq r install/docker-compose_${env}.yml services | grep -v '^ .*' | sed 's/:.*$//'|grep 'be')
@@ -37,10 +41,10 @@ docker-compose -f ./install/docker-compose_${env}.yml up --remove-orphans -d $ba
 
 for container in $be; do
   docker-compose -f ./install/docker-compose_${env}.yml up -d $container
-  sleep 60
+  sleep 30
 done
 
-sleep 120
+sleep 60
 docker-compose -f ./install/docker-compose_${env}.yml up -d $fe
 
 docker system prune --volumes --all -f
