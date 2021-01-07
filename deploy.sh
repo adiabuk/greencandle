@@ -29,7 +29,7 @@ curl -X POST -H 'Content-type: application/json' --data '{"text":"'"${text}"'"}'
 git pull
 
 # Stop existing fe and be containers
-docker ps --filter name=^fe-* --filter name=^be-*  |awk {'print $NF'} -q | xargs docker stop
+docker ps --filter name=^fe-* --filter name=^be-* -q | xargs docker stop
 
 docker-compose -f ./install/docker-compose_${env}.yml pull
 base=$(yq r install/docker-compose_${env}.yml services | grep -v '^ .*' | sed 's/:.*$//'|grep 'base')
