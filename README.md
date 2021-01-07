@@ -11,6 +11,14 @@
 
 # Releases
 
+## 1.1
+* New strategy using TSI/daily pivots
+* Allow Closing a trade after a certain time
+* Allow both immediate and candle close stop losses
+* Manual Margin trading (long only)
+* Add open trades alert to Slack
+* Minor bug fixes
+
 ## 1.0
 * Tweaking of testing parameters
 * Get balance hourly on prod only
