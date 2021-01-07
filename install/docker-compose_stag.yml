@@ -162,188 +162,6 @@ services:
     depends_on:
       - base-mysql
 
-  be-2ma-01perc-btc:
-    container_name: be-2ma-01perc-btc
-    hostname: be-2ma-01perc-btc
-    image: amrox/greencandle:${TAG}
-    entrypoint: /docker-entrypoint.sh backend --test
-    logging:
-      driver: journald
-    links:
-      - base-mysql:mysql
-      - base-redis:redis
-    depends_on:
-      - base-mysql
-      - base-redis
-    environment:
-      - CONFIG_ENV=stag/2MA/01perc/btc
-      - HOST=$HOSTNAME
-    healthcheck:
-      test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    volumes:
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
-
-  be-2ma-01perc-eth:
-    container_name: be-2ma-01perc-eth
-    hostname: be-2ma-01perc-eth
-    image: amrox/greencandle:${TAG}
-    entrypoint: /docker-entrypoint.sh backend --test
-    logging:
-      driver: journald
-    links:
-      - base-mysql:mysql
-      - base-redis:redis
-    depends_on:
-      - base-mysql
-      - base-redis
-    environment:
-      - CONFIG_ENV=stag/2MA/01perc/eth
-      - HOST=$HOSTNAME
-    healthcheck:
-      test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    volumes:
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
-
-  be-2ma-01perc-usdt:
-    container_name: be-2ma-01perc-usdt
-    hostname: be-2ma-01perc-usdt
-    image: amrox/greencandle:${TAG}
-    entrypoint: /docker-entrypoint.sh backend --test
-    logging:
-      driver: journald
-    links:
-      - base-mysql:mysql
-      - base-redis:redis
-    depends_on:
-      - base-mysql
-      - base-redis
-    environment:
-      - CONFIG_ENV=stag/2MA/01perc/usdt
-      - HOST=$HOSTNAME
-    healthcheck:
-      test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    volumes:
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
-
-  be-2ma-01perc-vol-btc:
-    container_name: be-2ma-01perc-vol-btc
-    hostname: be-2ma-01perc-vol-btc
-    image: amrox/greencandle:${TAG}
-    entrypoint: /docker-entrypoint.sh backend --test
-    logging:
-      driver: journald
-    links:
-      - base-mysql:mysql
-      - base-redis:redis
-    depends_on:
-      - base-mysql
-      - base-redis
-    environment:
-      - CONFIG_ENV=stag/2MA/01perc/vol/btc
-      - HOST=$HOSTNAME
-    healthcheck:
-      test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    volumes:
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
-
-  be-2ma-01perc-vol-eth:
-    container_name: be-2ma-01perc-vol-eth
-    hostname: be-2ma-01perc-vol
-    image: amrox/greencandle:${TAG}
-    entrypoint: /docker-entrypoint.sh backend --test
-    logging:
-      driver: journald
-    links:
-      - base-mysql:mysql
-      - base-redis:redis
-    depends_on:
-      - base-mysql
-      - base-redis
-    environment:
-      - CONFIG_ENV=stag/2MA/01perc/vol/eth
-      - HOST=$HOSTNAME
-    healthcheck:
-      test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    volumes:
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
-
-  be-2ma-02perc:
-    container_name: be-2ma-02perc-eth
-    hostname: be-2ma-02perc-eth
-    image: amrox/greencandle:${TAG}
-    entrypoint: /docker-entrypoint.sh backend --test
-    logging:
-      driver: journald
-    links:
-      - base-mysql:mysql
-      - base-redis:redis
-    depends_on:
-      - base-mysql
-      - base-redis
-    environment:
-      - CONFIG_ENV=stag/2MA/02perc/eth
-      - HOST=$HOSTNAME
-    healthcheck:
-      test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    volumes:
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
-
-  be-2ma-05perc-btc:
-    container_name: be-2ma-05perc-btc
-    hostname: be-2ma-05perc-btc
-    image: amrox/greencandle:${TAG}
-    entrypoint: /docker-entrypoint.sh backend --test
-    logging:
-      driver: journald
-    links:
-      - base-mysql:mysql
-      - base-redis:redis
-    depends_on:
-      - base-mysql
-      - base-redis
-    environment:
-      - CONFIG_ENV=stag/2MA/05perc/btc
-      - HOST=$HOSTNAME
-    healthcheck:
-      test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    volumes:
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
-
   be-4ma-01perc-btc:
     container_name: be-4ma-01perc-btc
     hostname: be-4ma-01perc-btc
@@ -463,6 +281,58 @@ services:
       - base-redis
     environment:
       - CONFIG_ENV=stag/5MA/01perc/vol/btc
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  tsi-scalp-btc:
+    container_name: be-tsi-scalp-btc
+    hostname: be-tsi-scalp-btc
+    image: amrox/greencandle:${TAG}
+    entrypoint: /docker-entrypoint.sh backend --test
+    logging:
+      driver: journald
+    links:
+      - base-mysql:mysql
+      - base-redis:redis
+    depends_on:
+      - base-mysql
+      - base-redis
+    environment:
+      - CONFIG_ENV=stag/tsi-scalp/btc
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  tsi-scalp-usdt:
+    container_name: be-tsi-scalp-usdt
+    hostname: be-tsi-scalp-usdt
+    image: amrox/greencandle:${TAG}
+    entrypoint: /docker-entrypoint.sh backend --test
+    logging:
+      driver: journald
+    links:
+      - base-mysql:mysql
+      - base-redis:redis
+    depends_on:
+      - base-mysql
+      - base-redis
+    environment:
+      - CONFIG_ENV=stag/tsi-scalp/usdt
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
