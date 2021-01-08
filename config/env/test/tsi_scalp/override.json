@@ -1,5 +1,5 @@
 {
-  "buy_rule1": "results.current.tsi_25 \u003e results.current.signal_25 and results.previous.tsi_25 \u003c results.previous.signal_25 and close \u003e results.current.pivot_1 #and rate \u003e 5",
+  "buy_rule1": "results.current.tsi_25 \u003e results.current.signal_25 and results.previous.tsi_25 \u003c results.previous.signal_25 and close \u003e results.current.pivot_1",
   "immediate_stop": "True",
   "indicators": "get_moving_averages;EMA;20 get_tsi;tsi;25 get_tsi;signal;25 get_pivot;pivot;1",
   "interval": "15m",
