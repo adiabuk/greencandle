@@ -8,22 +8,24 @@ shift 4
 PAIR=${@^^}  # Ensure pair is uppercase
 date=`date +"%Y-%m-%d"`
 
-if [[ $ARGS == *"-a"* ]]; then
-  base_dir=/data/output/parallel/$YEAR
-  filename=${base_dir}/${STRATEGY}_${date}
-else
-  base_dir=/data/output/$STRATEGY/$YEAR
-  filename=${base_dir}/${PAIR}_${date}
-fi
-
 if [[ $ARGS == *"-m"* ]]; then
   month=`echo $ARGS|cut -d "m" -f2-|sed 's/ //g'`
   data="/data/altcoin_historical/${YEAR}/monthly/${month}/"
-  ARGS=`echo $ARGS|cut -c 1-2`
 else
   data="/data/altcoin_historical/${YEAR}/year/"
 fi
 
+if [[ $ARGS == *"-a"* ]]; then
+  base_dir=/data/output/parallel/$YEAR
+  filename=${base_dir}/${STRATEGY}_${date}
+elif [[ $ARGS == *"-m"* ]]; then
+  base_dir=/data/output/${STRATEGY}/$YEAR/${month}
+  filename=${base_dir}/${PAIR}_${date}
+  ARGS=`echo $ARGS|cut -c 1-2`
+else
+  base_dir=/data/output/$STRATEGY/$YEAR
+  filename=${base_dir}/${PAIR}_${date}
+fi
 if [[ -z $PAIR ]]; then
    echo "Usage: $0 <YEAR> <STRATEGY> <PAIR>"
   exit 1
