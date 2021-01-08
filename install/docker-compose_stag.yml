@@ -292,7 +292,7 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  tsi-scalp-btc:
+  be-tsi-scalp-btc:
     container_name: be-tsi-scalp-btc
     hostname: be-tsi-scalp-btc
     image: amrox/greencandle:${TAG}
@@ -306,7 +306,7 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=stag/tsi-scalp/btc
+      - CONFIG_ENV=stag/tsi_scalp/btc
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -318,7 +318,7 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  tsi-scalp-usdt:
+  be-tsi-scalp-usdt:
     container_name: be-tsi-scalp-usdt
     hostname: be-tsi-scalp-usdt
     image: amrox/greencandle:${TAG}
@@ -332,7 +332,7 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=stag/tsi-scalp/usdt
+      - CONFIG_ENV=stag/tsi_scalp/usdt
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
