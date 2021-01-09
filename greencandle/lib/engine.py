@@ -393,15 +393,20 @@ class Engine(dict):
     @get_exceptions
     def get_tsi(self, pair, dataframe, index=None, localconfig=None):
         """
-        Gte TSI osscilator
+        Get TSI osscilator
         """
+        LOGGER.debug("Fetching TSI oscillator")
+        if (not index and self.test) or len(self.dataframes[pair]) < 2:
+            index = -1
+        elif not index and not self.test:
+            index = -2
 
         func, timeperiod = localconfig
         tsi = ta.smi(dataframe.close.astype(float))
         if func == 'tsi':
-            result = float(tsi[tsi.columns[0]].iloc[-1]) * 100
+            result = float(tsi[tsi.columns[0]].iloc[index]) * 100
         elif func == 'signal':
-            result = float(tsi[tsi.columns[1]].iloc[-1]) * 100
+            result = float(tsi[tsi.columns[1]].iloc[index]) * 100
         else:
             raise RuntimeError
         scheme = {}
@@ -409,17 +414,10 @@ class Engine(dict):
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
 
-        if (not index and self.test) or len(self.dataframes[pair]) < 2:
-            index = -1
-        elif not index and not self.test:
-            index = -2
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
         self.schemes.append(scheme)
         LOGGER.debug("Done getting TSI")
-
-
-
 
     @get_exceptions
     def get_rsi(self, pair, dataframe, index=None, localconfig=None):
