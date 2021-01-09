@@ -185,7 +185,7 @@ class Trade():
                             cost = result.get('fills', {})[0].get('price', cost)
                         except KeyError:
                             pass
-                        base_amount = result.get('executedQty', base_amount)
+                        base_amount = result.get('cummulativeQuoteQty', base_amount)
 
                     if self.test_data or (self.test_trade and not result) or \
                             (not self.test_trade and 'transactTime' in result):
