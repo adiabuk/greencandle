@@ -158,7 +158,6 @@ def parallel_test(pairs, interval, data_dir, indicators):
     dbase = Mysql(test=True, interval=interval)
     dbase.delete_data()
     del dbase
-    print(pairs)
     trade = Trade(interval=interval, test_trade=True, test_data=True)
     dframes = {}
     sizes = []
@@ -265,6 +264,7 @@ def prod_initial(interval, test=False):
                   '1m': 3600 / 60
                  }
 
+
     redis = Redis(interval=interval, test=test)
     main_indicators = config.main.indicators.split()
     try:
@@ -272,10 +272,8 @@ def prod_initial(interval, test=False):
         last_epoch = int(int(last_item.decode("utf-8").split(':')[-1])/1000)+1
         current_epoch = time.time()
         time_since_last = current_epoch - last_epoch
-        print(last_epoch, current_epoch)
-        print(time_since_last)
-        print(multiplier)
-        no_of_klines = int(time_since_last / multiplier[interval] +3)
+        no_of_klines = int(time_since_last / multiplier[interval] + 3)
+        no_of_klines = 50 if no_of_klines < 50 else no_of_klines
     except IndexError:
         no_of_klines = config.main.no_of_klines
 
