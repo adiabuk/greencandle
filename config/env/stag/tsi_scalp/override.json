@@ -1,10 +1,10 @@
 {
-  "buy_rule1": "results.current.tsi_25 \u003e results.current.signal_25 and results.previous.tsi_25 \u003c results.previous.signal_25 and close \u003e results.current.pivot_1",
+  "open_rule1": "results.current.tsi_25 \u003e results.current.signal_25 and results.previous.tsi_25 \u003c results.previous.signal_25 and close \u003e results.current.pivot_1",
   "immediate_stop": "True",
   "indicators": "get_moving_averages;EMA;20 get_tsi;tsi;25 get_tsi;signal;25 get_pivot;pivot;1",
   "interval": "15m",
   "rate_indicator": "EMA_20",
-  "sell_rule1": "results.current.tsi_25 \u003c results.current.signal_25 and results.previous.tsi_25 \u003e results.previous.signal_25",
+  "close_rule1": "results.current.tsi_25 \u003c results.current.signal_25 and results.previous.tsi_25 \u003e results.previous.signal_25",
   "stop_loss_perc": "0.1",
   "take_profit": "True",
   "take_profit_perc": "10",

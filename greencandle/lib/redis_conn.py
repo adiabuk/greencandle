@@ -234,8 +234,8 @@ class Redis():
     def get_rules(rules, direction):
         """determine which rules have been matched"""
         winning = []
-        for seq, sell_rule in enumerate(rules[direction]):
-            if sell_rule:
+        for seq, close_rule in enumerate(rules[direction]):
+            if close_rule:
                 winning.append(seq + 1)
         return winning
 
@@ -330,7 +330,7 @@ class Redis():
         rules = {'buy': [], 'sell': []}
         for seq in range(1, 10):
             current_config = None
-            for rule in "buy", "sell":
+            for rule in "open", "close":
                 try:
                     current_config = config.main['{}_rule{}'.format(rule, seq)]
                     self.logger.debug("Rule: %s_rule%s: %s" % (rule, seq, current_config))

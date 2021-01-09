@@ -66,52 +66,52 @@
       "is_binary": false,
       "is_secret": false
     },
-    "buy_rule1": {
+    "open_rule1": {
       "value": "",
       "is_binary": false,
       "is_secret": false
     },
-    "buy_rule10": {
+    "open_rule10": {
       "value": "",
       "is_binary": false,
       "is_secret": false
     },
-    "buy_rule2": {
+    "open_rule2": {
       "value": "",
       "is_binary": false,
       "is_secret": false
     },
-    "buy_rule3": {
+    "open_rule3": {
       "value": "",
       "is_binary": false,
       "is_secret": false
     },
-    "buy_rule4": {
+    "open_rule4": {
       "value": "",
       "is_binary": false,
       "is_secret": false
     },
-    "buy_rule5": {
+    "open_rule5": {
       "value": "",
       "is_binary": false,
       "is_secret": false
     },
-    "buy_rule6": {
+    "open_rule6": {
       "value": "",
       "is_binary": false,
       "is_secret": false
     },
-    "buy_rule7": {
+    "open_rule7": {
       "value": "",
       "is_binary": false,
       "is_secret": false
     },
-    "buy_rule8": {
+    "open_rule8": {
       "value": "",
       "is_binary": false,
       "is_secret": false
     },
-    "buy_rule9": {
+    "open_rule9": {
       "value": "",
       "is_binary": false,
       "is_secret": false
@@ -291,52 +291,52 @@
       "is_binary": false,
       "is_secret": false
     },
-    "sell_rule1": {
+    "close_rule1": {
       "value": "",
       "is_binary": false,
       "is_secret": false
     },
-    "sell_rule10": {
+    "close_rule10": {
       "value": "",
       "is_binary": false,
       "is_secret": false
     },
-    "sell_rule2": {
+    "close_rule2": {
       "value": "",
       "is_binary": false,
       "is_secret": false
     },
-    "sell_rule3": {
+    "close_rule3": {
       "value": "",
       "is_binary": false,
       "is_secret": false
     },
-    "sell_rule4": {
+    "close_rule4": {
       "value": "",
       "is_binary": false,
       "is_secret": false
     },
-    "sell_rule5": {
+    "close_rule5": {
       "value": "",
       "is_binary": false,
       "is_secret": false
     },
-    "sell_rule6": {
+    "close_rule6": {
       "value": "",
       "is_binary": false,
       "is_secret": false
     },
-    "sell_rule7": {
+    "close_rule7": {
       "value": "",
       "is_binary": false,
       "is_secret": false
     },
-    "sell_rule8": {
+    "close_rule8": {
       "value": "",
       "is_binary": false,
       "is_secret": false
     },
-    "sell_rule9": {
+    "close_rule9": {
       "value": "",
       "is_binary": false,
       "is_secret": false

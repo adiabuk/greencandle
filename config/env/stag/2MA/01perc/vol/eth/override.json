@@ -1,5 +1,5 @@
 {
-  "buy_rule1": "results.current.EMA_2 \u003e results.current.EMA_69 and results.current.volume \u003e results.current.SMA_vol_20 and perc_rate \u003e 0",
+  "open_rule1": "results.current.EMA_2 \u003e results.current.EMA_69 and results.current.volume \u003e results.current.SMA_vol_20 and perc_rate \u003e 0",
   "indicators": "get_moving_averages;EMA;2 get_moving_averages;EMA;69 get_moving_averages;EMA;100 get_vol_moving_averages;SMA;20",
   "name": "2ma-01perc-vol-eth",
   "pairs": "LTCETH QSPETH",
