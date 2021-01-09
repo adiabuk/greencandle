@@ -267,9 +267,6 @@ def prod_initial(interval, test=False):
 
     redis = Redis(interval=interval, test=test)
     main_indicators = config.main.indicators.split()
-    last_item = redis.get_items(pairs[0], interval)[-1]
-    last_epoch = int(int(last_item.decode("utf-8").split(':')[-1])/1000)+1
-    current_epoch = time.time()
     no_of_klines = config.main.no_of_klines
 
     dataframes = get_dataframes(pairs, interval=interval, no_of_klines=no_of_klines)
