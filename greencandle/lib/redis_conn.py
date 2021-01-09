@@ -204,10 +204,9 @@ class Redis():
             buy, sell, current_time)
 
         if event == "Hold":
-            self.logger.debug(message)
+            self.logger.debug("%s, %s" % (message, current))
         else:
-            self.logger.info(message)
-        self.logger.debug("%s, %s" % (message, current))
+            self.logger.info("%s, %s" % (message, current))
 
     def get_intermittant(self, pair, buy_price, current_price):
         """
