@@ -65,52 +65,52 @@
       "is_binary": false,
       "is_secret": false
     },
-    "open_rule1": {
-      "value": "results.current.EMA_8 \u003e results.current.EMA_13 and results.current.EMA_13 \u003e results.current.EMA_21 and results.current.EMA_21 \u003e results.current.EMA_34 and results.current.EMA_34 \u003e results.current.EMA_55 and results.current.RSI_48 \u003e 20 and results.current.RSI_48 \u003c 73 and results.current.EMA_200 \u003c close",
+    "close_rule1": {
+      "value": "results.current.EMA_8 \u003c results.current.EMA_13",
       "is_binary": false,
       "is_secret": false
     },
-    "open_rule10": {
+    "close_rule10": {
       "value": "",
       "is_binary": false,
       "is_secret": false
     },
-    "open_rule2": {
+    "close_rule2": {
+      "value": "results.current.RSI_48 \u003e 73",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "close_rule3": {
       "value": "",
       "is_binary": false,
       "is_secret": false
     },
-    "open_rule3": {
+    "close_rule4": {
       "value": "",
       "is_binary": false,
       "is_secret": false
     },
-    "open_rule4": {
+    "close_rule5": {
       "value": "",
       "is_binary": false,
       "is_secret": false
     },
-    "open_rule5": {
+    "close_rule6": {
       "value": "",
       "is_binary": false,
       "is_secret": false
     },
-    "open_rule6": {
+    "close_rule7": {
       "value": "",
       "is_binary": false,
       "is_secret": false
     },
-    "open_rule7": {
+    "close_rule8": {
       "value": "",
       "is_binary": false,
       "is_secret": false
     },
-    "open_rule8": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "open_rule9": {
+    "close_rule9": {
       "value": "",
       "is_binary": false,
       "is_secret": false
@@ -235,6 +235,56 @@
       "is_binary": false,
       "is_secret": false
     },
+    "open_rule1": {
+      "value": "results.current.EMA_8 \u003e results.current.EMA_13 and results.current.EMA_13 \u003e results.current.EMA_21 and results.current.EMA_21 \u003e results.current.EMA_34 and results.current.EMA_34 \u003e results.current.EMA_55 and results.current.RSI_48 \u003e 20 and results.current.RSI_48 \u003c 73 and results.current.EMA_200 \u003c close",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "open_rule10": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "open_rule2": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "open_rule3": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "open_rule4": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "open_rule5": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "open_rule6": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "open_rule7": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "open_rule8": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "open_rule9": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
     "pairs": {
       "value": "BNBUSDT BTCUSDT ETHUSDT NEOUSDT LTCUSDT",
       "is_binary": false,
@@ -290,56 +340,6 @@
       "is_binary": false,
       "is_secret": false
     },
-    "close_rule1": {
-      "value": "results.current.EMA_8 \u003c results.current.EMA_13",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "close_rule10": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "close_rule2": {
-      "value": "results.current.RSI_48 \u003e 73",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "close_rule3": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "close_rule4": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "close_rule5": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "close_rule6": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "close_rule7": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "close_rule8": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "close_rule9": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
     "slack_active": {
       "value": "false",
       "is_binary": false,
@@ -359,6 +359,11 @@
       "value": "2laBbvsIjnncEFHRsF/zqkRWjDMimySkYyuA/ATx9GOgMTUgvLFA+NaCphfnx7wkRbhU1+YHtsXx6oIvmm/mbSkmbNLHp59GTFYzXlrAT5AdKENT6Ya5sN/V9vPI4xY7k2/x2xiVfQ2yxk3k0U/fQ+JKvgHoogENwfDTzg==",
       "is_binary": false,
       "is_secret": true
+    },
+    "slack_notifications": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
     },
     "stop_loss_perc": {
       "value": "20",

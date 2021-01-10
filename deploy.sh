@@ -23,7 +23,7 @@ echo "version: $version";
 
 export TAG=$version
 export HOSTNAME=$env
-url=$(configstore package get $env slack_alerts)
+url=$(configstore package get $env slack_notifications)
 text="Starting deployment $TAG on $HOSTNAME"
 curl -X POST -H 'Content-type: application/json' --data '{"text":"'"${text}"'"}' $url
 git pull
