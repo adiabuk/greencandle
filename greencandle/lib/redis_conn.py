@@ -327,7 +327,7 @@ class Redis():
                           float(results.previous1[rate_indicator])) \
                                   if results.previous1[rate_indicator] else 0
 
-        rules = {'buy': [], 'sell': []}
+        rules = {'open': [], 'close': []}
         for seq in range(1, 10):
             current_config = None
             for rule in "open", "close":
@@ -398,11 +398,11 @@ class Redis():
             take_profit_rule = False
             trailing_stop = False
 
-        if buy_price and any(rules['buy']) and any(rules['sell']):
+        if buy_price and any(rules['open']) and any(rules['close']):
             self.logger.warning('We ARE In a trade and have matched both buy and '
                                 'sell rules for %s', pair)
             both = True
-        elif not buy_price and any(rules['buy']) and any(rules['sell']):
+        elif not buy_price and any(rules['open']) and any(rules['close']):
             self.logger.warning('We are NOT in a trade and have matched both buy and '
                                 'sell rules for %s', pair)
             both = True
@@ -451,7 +451,7 @@ class Redis():
             result = 'SELL'
 
         # if we match any sell rules, are in a trade and no buy rules match
-        elif any(rules['sell']) and buy_price and not both:
+        elif any(rules['close']) and buy_price and not both:
 
             self.log_event('NormalSell', rate, perc_rate, buy_price, current_price,
                            pair, current_time, results.current)
@@ -460,7 +460,7 @@ class Redis():
             result = 'SELL'
 
         # if we match any buy rules are NOT in a trade and sell rules don't match
-        elif any(rules['buy']) and not buy_price and able_to_buy and not both:
+        elif any(rules['open']) and not buy_price and able_to_buy and not both:
             self.log_event('NormalBuy', rate, perc_rate, current_price, current_price,
                            pair, current_time, results.current)
 
@@ -472,15 +472,14 @@ class Redis():
             result = 'BUY'
 
         elif buy_price:
-            self.logger.debug("why getting here?")
             self.log_event('Hold', rate, perc_rate, buy_price, current_price, pair, current_time,
                            results.current)
             result = 'HOLD'
         else:
             result = 'NOITEM'
 
-        winning_sell = self.get_rules(rules, 'sell')
-        winning_buy = self.get_rules(rules, 'buy')
+        winning_sell = self.get_rules(rules, 'close')
+        winning_buy = self.get_rules(rules, 'open')
         self.logger.info('%s sell Rules matched: %s' % (pair, winning_sell))
         self.logger.info('%s buy Rules matched: %s' % (pair, winning_buy))
         del dbase

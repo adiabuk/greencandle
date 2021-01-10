@@ -142,11 +142,12 @@ def perform_data(pair, interval, data_dir, indicators):
 
     del redis
     del dbase
-    LOGGER.info("Selling remaining items")
+    LOGGER.info("Selling remaining item")
     sells = []
-    sells.append((pair, current_time, current_price))
-    update_minprice(pair, buy_time, current_price, interval)
-    trade.close_long(sells)
+    if current_trade:
+        sells.append((pair, current_time, current_price))
+        update_minprice(pair, buy_time, current_price, interval)
+        trade.close_long(sells)
 
 def parallel_test(pairs, interval, data_dir, indicators):
     """

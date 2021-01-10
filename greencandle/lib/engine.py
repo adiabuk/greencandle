@@ -619,7 +619,7 @@ class Engine(dict):
         """
         LOGGER.debug("Getting Oscillators for %s" % pair)
         klines = self.make_data_tupple(dataframe.iloc[:index])
-        open, high, low, close = klines
+        _, open, high, low, close = klines
         func, timeperiod = localconfig  # split tuple
 
         scheme = {}
