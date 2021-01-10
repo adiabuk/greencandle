@@ -110,8 +110,15 @@ class Balance(dict):
         binance_btc = bal['margin']['TOTALS']['BTC'] + bal['binance']['TOTALS']['BTC']
         phemex_usd = bal['phemex']['TOTALS']['USD']
         phemex_btc = bal['phemex']['TOTALS']['BTC']
-        send_slack_message("balance", "binance USD = {}".format(binance_usd))
-        send_slack_message("balance", "binance BTC = {}".format(binance_btc))
+        totals_btc = float(binance_btc) + float(phemex_btc)
+        totals_usd = float(binance_usd) + float(phemex_usd)
 
-        send_slack_message("balance", "phemex USD = {}".format(phemex_usd))
-        send_slack_message("balance", "phemex BTC = {}".format(phemex_btc))
+        balances = ["binance USD = {}".format(round(binance_usd, 2)),
+                    "binance BTC = {}".format(round(binance_btc, 5)),
+                    "phemex USD = {}".format(round(phemex_usd, 2)),
+                    "phemex BTC = {}".format(round(phemex_btc, 5)),
+                    "TOTAL USD = {}".format(round(totals_usd, 2)),
+                    "TOTAL BTC = {}".format(round(totals_btc, 5))]
+
+        bal_str = '\n'.join(balances) + '\n'
+        send_slack_message("balance", bal_str)
