@@ -268,14 +268,16 @@ def prod_initial(interval, test=False):
 
     redis = Redis(interval=interval, test=test)
     main_indicators = config.main.indicators.split()
-    try:
-        last_item = redis.get_items(pairs[0], interval)[-1]
-        last_epoch = int(int(last_item.decode("utf-8").split(':')[-1])/1000)+1
-        current_epoch = time.time()
-        time_since_last = current_epoch - last_epoch
-        no_of_klines = int(time_since_last / multiplier[interval] + 3)
-        no_of_klines = 50 if no_of_klines < 50 else no_of_klines
-    except IndexError:
+    if interval == '4h':
+        try:
+            last_item = redis.get_items(pairs[0], interval)[-1]
+            last_epoch = int(int(last_item.decode("utf-8").split(':')[-1])/1000)+1
+            current_epoch = time.time()
+            time_since_last = current_epoch - last_epoch
+            no_of_klines = int(time_since_last / multiplier[interval] + 3)
+        except IndexError:
+            no_of_klines = config.main.no_of_klines
+    else:
         no_of_klines = config.main.no_of_klines
 
     dataframes = get_dataframes(pairs, interval=interval, no_of_klines=no_of_klines)
