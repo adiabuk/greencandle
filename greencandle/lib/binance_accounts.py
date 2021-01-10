@@ -5,7 +5,7 @@ Get/Convert Balances from Binance
 """
 
 from collections import defaultdict
-import binance
+from binance import binance
 import cryptocompare
 from forex_python.converter import CurrencyRates, RatesNotAvailableError
 from .balance_common import default_to_regular

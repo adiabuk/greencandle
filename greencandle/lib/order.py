@@ -7,7 +7,7 @@ Test Buy/Sell orders
 from __future__ import print_function
 from collections import defaultdict
 from str2bool import str2bool
-import binance
+from binance import binance
 
 from .auth import binance_auth
 from .logger import get_logger, get_decorator

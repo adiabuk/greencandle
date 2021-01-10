@@ -7,7 +7,7 @@ Sell a particular trade immediately
 
 import sys
 import time
-import binance
+from binance import binance
 
 from greencandle.lib import config
 config.create_config()

@@ -5,7 +5,7 @@
 Get percentage change for single pip
 """
 import sys
-import binance
+from binance import binance
 from greencandle.lib import config
 from greencandle.lib.common import perc_diff
 config.create_config()

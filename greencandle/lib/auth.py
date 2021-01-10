@@ -6,7 +6,7 @@ Helper functions for authernticating with APIs
 import os
 from coinbase.wallet.client import Client
 import ccxt
-import binance
+from binance import binance
 from . import config
 
 HOME_DIR = os.path.expanduser("~")

@@ -12,7 +12,7 @@ import time
 import datetime
 from concurrent.futures import ThreadPoolExecutor
 import pandas
-import binance
+from binance import binance
 
 
 from . import config

@@ -11,7 +11,7 @@ import pickle
 import gzip
 from concurrent.futures import ThreadPoolExecutor
 from glob import glob
-import binance
+from binance import binance
 from .engine import Engine
 from .redis_conn import Redis
 from .mysql import Mysql

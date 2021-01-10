@@ -2,7 +2,7 @@
 
 import math
 from collections import defaultdict
-import binance
+from binance import binance
 
 def default_to_regular(ddict):
     """

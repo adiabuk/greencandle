@@ -6,7 +6,7 @@ Test authentication to binance using creds in config
 """
 
 import sys
-import binance
+from binance import binance
 
 from greencandle.lib import config
 from greencandle.lib.auth import binance_auth

@@ -7,7 +7,7 @@ Calculate potential profits from historical data
 from __future__ import print_function
 from collections import defaultdict
 from forex_python.converter import CurrencyRates
-import binance
+from binance import binance
 from .mysql import Mysql
 from .common import sub_perc, perc_diff
 
