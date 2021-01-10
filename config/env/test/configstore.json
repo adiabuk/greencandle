@@ -390,6 +390,16 @@
       "is_binary": false,
       "is_secret": false
     },
+    "trade_direction": {
+      "value": "long",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "trade_type": {
+      "value": "spot",
+      "is_binary": false,
+      "is_secret": false
+    },
     "trailing_stop_loss": {
       "value": "0",
       "is_binary": false,

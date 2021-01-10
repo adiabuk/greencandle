@@ -78,7 +78,7 @@ def sell():
     sells = [(pair, current_time, current_price)]
 
     # Sell, then update page
-    trade.close_long(sells, name=name)
+    trade.close_trade(sells, name=name)
     sleep(1)
     dbase = Mysql(interval='4h', test=TEST_TRADE)
     dbase.get_active_trades()
@@ -95,7 +95,7 @@ def buy():
     current_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     current_price = get_current_price(pair)
     buys = [(pair, current_time, current_price)]
-    trade.open_long(buys)
+    trade.open_trade(buys)
     sleep(1)
     dbase = Mysql()
     dbase.get_active_trades()

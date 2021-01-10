@@ -75,8 +75,16 @@ class Trade():
         self.logger.debug("Final amount: %s" % amt_str)
         return amt_str
 
+    def open_trade(self, items_list):
+        if config.main.trade_type == "spot" and config.main.trade_direction == "long":
+            self.open_spot_long(items_list)
+
+    def close_trade(self, items_list, name=None, drawdown='NULL'):
+        if config.main.trade_type == "spot" and  config.main.trade_direction == "long":
+            self.close_spot_long(items_list, name, drawdown)
+
     @GET_EXCEPTIONS
-    def open_long(self, buy_list):
+    def open_spot_long(self, buy_list):
         """
         Buy as many items as we can from buy_list depending on max amount of trades, and current
         balance in base currency
@@ -204,7 +212,7 @@ class Trade():
             self.logger.info("Nothing to buy")
 
     @GET_EXCEPTIONS
-    def close_long(self, sell_list, name=None, drawdown='NULL'):
+    def close_spot_long(self, sell_list, name=None, drawdown='NULL'):
         """
         Sell items in sell_list
         """
