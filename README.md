@@ -11,6 +11,18 @@
 
 # Releases
 
+## 1.2
+* Scalp strategy for prod
+* Create graphs inside each be container
+* Updates to binance module
+* Better formatting for slack balance
+* Split notifications and alerts in slack
+* Prep for adding margin & short trades
+* Fix base amount in DB
+* Ensure setting and retrieving open trades doesn't conflict
+* Reduce deploy time and log to slack
+* Log binance errors to slack
+
 ## 1.1
 * New strategy using TSI/daily pivots
 * Allow Closing a trade after a certain time
