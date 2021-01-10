@@ -1,0 +1,5 @@
+{
+  "name": "tsi-scalp-btc",
+  "pairs": "ALGOBTC FETBTC ARPABTC BANDBTC LENDBTC",
+  "push_title": "prod_tsi-scalp-btc"
+}
