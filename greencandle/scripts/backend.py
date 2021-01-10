@@ -18,6 +18,7 @@ from str2bool import str2bool
 from ..lib import config
 config.create_config()
 
+from ..lib.graph import Graph
 from ..lib.logger import get_logger
 from ..lib.run import prod_loop, prod_int_check, prod_initial
 
@@ -67,6 +68,16 @@ def main():
             LOGGER.info("Starting Price check")
             prod_int_check(interval, args.test)
             LOGGER.info("Finished Price check")
+
+    @sched.scheduled_job('interval', minutes=30)
+    def get_graph():
+        for pair in config.main.pairs.split():
+            LOGGER.info("Creating graph for %s" % pair)
+            graph = Graph(test=False, pair=pair, db=0, interval=config.main.interval)
+            graph.get_data()
+            graph.create_graph('/data/graphs/')
+            graph.get_screenshot()
+            graph.resize_screenshot()
 
     @sched.scheduled_job('interval', seconds=60)
     def keepalive():

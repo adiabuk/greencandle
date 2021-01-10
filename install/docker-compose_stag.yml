@@ -184,6 +184,7 @@ services:
       timeout: 2s
       retries: 5
     volumes:
+      - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
@@ -210,6 +211,7 @@ services:
       timeout: 2s
       retries: 5
     volumes:
+      - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
@@ -236,6 +238,7 @@ services:
       timeout: 2s
       retries: 5
     volumes:
+      - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
@@ -262,6 +265,7 @@ services:
       timeout: 2s
       retries: 5
     volumes:
+      - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
@@ -288,6 +292,7 @@ services:
       timeout: 2s
       retries: 5
     volumes:
+      - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
@@ -314,6 +319,7 @@ services:
       timeout: 2s
       retries: 5
     volumes:
+      - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
@@ -340,6 +346,7 @@ services:
       timeout: 2s
       retries: 5
     volumes:
+      - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
