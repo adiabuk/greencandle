@@ -174,9 +174,9 @@ class Trade():
                                       % (base_amount, cost, amount))
                     if prod and not self.test_data:
                         amt_str = get_step_precision(item, amount)
-                        result = binance.order(symbol=item, side=binance.BUY, quantity=amt_str,
-                                               price='', orderType=binance.MARKET,
-                                               test=self.test_trade)
+                        result = binance.spot_order(symbol=item, side=binance.BUY, quantity=amt_str,
+                                                    price='', order_type=binance.MARKET,
+                                                    test=self.test_trade)
                         if "msg" in result:
                             self.logger.error(result)
 
@@ -232,8 +232,9 @@ class Trade():
                                  % (quantity, item, float(price), base_out))
                 if prod and not self.test_data:
                     amt_str = get_step_precision(item, quantity)
-                    result = binance.order(symbol=item, side=binance.SELL, quantity=amt_str,
-                                           price='', orderType=binance.MARKET, test=self.test_trade)
+                    result = binance.spot_order(symbol=item, side=binance.SELL, quantity=amt_str,
+                                                price='', order_type=binance.MARKET,
+                                                test=self.test_trade)
 
                     if "msg" in result:
                         self.logger.error(result)
