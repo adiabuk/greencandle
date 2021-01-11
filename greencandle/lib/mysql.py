@@ -77,11 +77,12 @@ class Mysql():
         Args:
               string query
         Returns:
-              True/False success
+              Number of affected rows
         """
         cur = self.dbase.cursor()
         try:
             self.execute(cur, query)
+            return cur.rowcount
         except NameError as exc:
             self.logger.critical("One or more expected variables not passed to DB %s" % exc)
         except Exception:
@@ -227,7 +228,9 @@ class Mysql():
                                     self.interval,
                                     pair,
                                     job_name, drawdown)
-        self.run_sql_query(command)
+        result = self.run_sql_query(command)
+        if result != 1:
+            self.logger.critical("Query affected %s rows" % result)
 
     def get_active_trades(self):
         """
