@@ -405,7 +405,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
   be-tsi-scalp-btc:
     container_name: be-tsi-scalp-btc
