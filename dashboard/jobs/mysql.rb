@@ -9,9 +9,9 @@ SCHEDULER.every '30s', :first_in => 0 do |job|
 
   # Mysql query
 
-  ascending = "SELECT pair, concat(truncate(sum(perc),2),'%') as perc from profit where sell_time != '0000-00-00 00:00:00' group by pair order by sum(perc) asc limit 6"
+  ascending = "SELECT pair, concat(truncate(sum(perc),2),'%') as perc from profit where close_time != '0000-00-00 00:00:00' group by pair order by sum(perc) asc limit 6"
 
-  descending = "SELECT pair, concat(truncate(sum(perc),2),'%') as perc from profit where sell_time != '0000-00-00 00:00:00' group by pair order by sum(perc) desc limit 6"
+  descending = "SELECT pair, concat(truncate(sum(perc),2),'%') as perc from profit where close_time != '0000-00-00 00:00:00' group by pair order by sum(perc) desc limit 6"
 
   # Execute the query
   ascending_results = db.query(ascending)

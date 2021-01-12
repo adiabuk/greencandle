@@ -118,11 +118,11 @@ def get_open():
 
     redis = redis_conn.Redis(interval=interval, test=False, db=0)
     for entry in results:
-        pair, buy_price, buy_time, current_price, perc, name = entry
+        pair, open_price, open_time, current_price, perc, name = entry
         matching = redis.get_action(pair=pair, interval=interval)[-1]
         print(entry, file=sys.stdout)
 
-        local_data[pair] = {"buy_price": buy_price, "buy_time": buy_time,
+        local_data[pair] = {"open_price": open_price, "open_time": open_time,
                             "matching": "Buy:{},Sell:{}".format(matching["buy"], matching["sell"]),
                             "current_price": current_price, "perc": perc,
                             "graph": get_latest_graph(pair, "html"), "name": name,

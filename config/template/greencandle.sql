@@ -127,8 +127,8 @@ DROP TABLE IF EXISTS `open_trades`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `open_trades` (
   `pair` varchar(30) DEFAULT NULL,
-  `buy_price` varchar(30) DEFAULT NULL,
-  `buy_time` varchar(30) DEFAULT NULL,
+  `open_price` varchar(30) DEFAULT NULL,
+  `open_time` varchar(30) DEFAULT NULL,
   `current_price` varchar(30) DEFAULT NULL,
   `perc` varchar(30) DEFAULT NULL,
   `name` varchar(20) DEFAULT NULL
@@ -144,12 +144,12 @@ DROP TABLE IF EXISTS `profit`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 /*!50001 CREATE VIEW `profit` AS SELECT
- 1 AS `buy_time`,
+ 1 AS `open_time`,
  1 AS `interval`,
- 1 AS `sell_time`,
+ 1 AS `close_time`,
  1 AS `pair`,
- 1 AS `buy_price`,
- 1 AS `sell_price`,
+ 1 AS `open_price`,
+ 1 AS `close_price`,
  1 AS `perc`,
  1 AS `base_profit`,
  1 AS `drawdown_perc`*/;
@@ -209,12 +209,12 @@ DROP TABLE IF EXISTS `trades`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `trades` (
-  `buy_time` timestamp NULL DEFAULT '0000-00-00 00:00:00',
-  `sell_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `open_time` timestamp NULL DEFAULT '0000-00-00 00:00:00',
+  `close_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `pair` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `interval` varchar(3) DEFAULT NULL,
-  `buy_price` varchar(60) DEFAULT NULL,
-  `sell_price` varchar(30) DEFAULT NULL,
+  `open_price` varchar(60) DEFAULT NULL,
+  `close_price` varchar(30) DEFAULT NULL,
   `base_in` varchar(30) DEFAULT NULL,
   `base_out` varchar(30) DEFAULT NULL,
   `quote_in` varchar(30) DEFAULT NULL,
@@ -240,7 +240,7 @@ CREATE TABLE `trades` (
 /*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `daily_profit` AS select left(`profit`.`sell_time`,10) AS `date`,`profit`.`interval` AS `interval`,sum(`profit`.`base_profit`) AS `profit`,sum(`profit`.`perc`) AS `perc` from `profit` where (`profit`.`perc` is not null) group by left(`profit`.`sell_time`,10) order by left(`profit`.`sell_time`,10),sum(`profit`.`base_profit`) */;
+/*!50001 VIEW `daily_profit` AS select left(`profit`.`close_time`,10) AS `date`,`profit`.`interval` AS `interval`,sum(`profit`.`base_profit`) AS `profit`,sum(`profit`.`perc`) AS `perc` from `profit` where (`profit`.`perc` is not null) group by left(`profit`.`close_time`,10) order by left(`profit`.`close_time`,10),sum(`profit`.`base_profit`) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -276,7 +276,7 @@ CREATE TABLE `trades` (
 /*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `monthly_profit` AS select left(`profit`.`sell_time`,7) AS `date`,`profit`.`interval` AS `interval`,sum(`profit`.`base_profit`) AS `profit`,sum(`profit`.`perc`) AS `perc` from `profit` where (`profit`.`perc` is not null) group by left(`profit`.`sell_time`,7) order by left(`profit`.`sell_time`,7),sum(`profit`.`base_profit`) */;
+/*!50001 VIEW `monthly_profit` AS select left(`profit`.`close_time`,7) AS `date`,`profit`.`interval` AS `interval`,sum(`profit`.`base_profit`) AS `profit`,sum(`profit`.`perc`) AS `perc` from `profit` where (`profit`.`perc` is not null) group by left(`profit`.`close_time`,7) order by left(`profit`.`close_time`,7),sum(`profit`.`base_profit`) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -294,7 +294,7 @@ CREATE TABLE `trades` (
 /*!50001 SET collation_connection      = utf8mb4_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `profit` AS select `trades`.`buy_time` AS `buy_time`,`trades`.`interval` AS `interval`,`trades`.`sell_time` AS `sell_time`,`trades`.`pair` AS `pair`,`trades`.`buy_price` AS `buy_price`,`trades`.`sell_price` AS `sell_price`,(((`trades`.`sell_price` - `trades`.`buy_price`) / `trades`.`buy_price`) * 100) AS `perc`,(`trades`.`base_out` - `trades`.`base_in`) AS `base_profit`,`trades`.`drawdown_perc` AS `drawdown_perc` from `trades` order by (((`trades`.`sell_price` - `trades`.`buy_price`) / `trades`.`buy_price`) * 100) desc */;
+/*!50001 VIEW `profit` AS select `trades`.`open_time` AS `open_time`,`trades`.`interval` AS `interval`,`trades`.`close_time` AS `close_time`,`trades`.`pair` AS `pair`,`trades`.`open_price` AS `open_price`,`trades`.`close_price` AS `close_price`,(((`trades`.`close_price` - `trades`.`open_price`) / `trades`.`open_price`) * 100) AS `perc`,(`trades`.`base_out` - `trades`.`base_in`) AS `base_profit`,`trades`.`drawdown_perc` AS `drawdown_perc` from `trades` order by (((`trades`.`close_price` - `trades`.`open_price`) / `trades`.`open_price`) * 100) desc */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;

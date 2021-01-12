@@ -114,7 +114,7 @@ class Mysql():
               None
         """
 
-        command = """insert into trades (pair, buy_time, buy_price, base_in, `interval`,
+        command = """insert into trades (pair, open_time, open_price, base_in, `interval`,
                      quote_in, name, borrowed, multiplier) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}",
                      "{5}", "{6}", "{7}", "{8}");""".format(pair, date,
                                               '%.15f' % float(price),
@@ -132,7 +132,7 @@ class Mysql():
         Return True/False
         """
         command = ('select *  from profit where pair="{0}" and '
-                   'sell_time >= ("{1}" - interval "{2}" month) '
+                   'close_time >= ("{1}" - interval "{2}" month) '
                    'and perc > "{3}"'.format(pair, date, months, max_perc))
 
         cur = self.dbase.cursor()
@@ -144,7 +144,7 @@ class Mysql():
         """
         Return quantity for a current open trade
         """
-        command = ('select quote_in from trades where sell_price '
+        command = ('select quote_in from trades where close_price '
                    'is NULL and `interval` = "{0}" and '
                    'pair = "{1}"'.format(self.interval, pair))
         cur = self.dbase.cursor()
@@ -158,9 +158,9 @@ class Mysql():
         Get time we closed last trade
         """
         cur = self.dbase.cursor()
-        command = ('select sell_time,pair from trades where pair="{0}" '
-                   'and interval = "{1}" and sell_time != "0000-00-00 00:00:00" '
-                   'order by sell_time desc LIMIT 1'.format(pair, interval))
+        command = ('select close_time,pair from trades where pair="{0}" '
+                   'and interval = "{1}" and close_time != "0000-00-00 00:00:00" '
+                   'order by close_time desc LIMIT 1'.format(pair, interval))
         self.execute(cur, command)
         return cur.fetchall()
 
@@ -170,8 +170,8 @@ class Mysql():
         Return the value of an open trade for a given trading pair
         """
 
-        command = ('select buy_price, quote_in, buy_time, base_in, borrowed from trades '
-                   'where sell_price is NULL and `interval` = "{0}" and '
+        command = ('select open_price, quote_in, open_time, base_in, borrowed from trades '
+                   'where close_price is NULL and `interval` = "{0}" and '
                    'pair = "{1}"'.format(self.interval, pair))
         cur = self.dbase.cursor()
         self.execute(cur, command)
@@ -182,12 +182,12 @@ class Mysql():
     @get_exceptions
     def get_last_trades(self):
         """
-        Get list of sell_time, buy_price, sell_price, and investment
+        Get list of close_time, open_price, close_price, and investment
         for each complete trade logged
         """
         cur = self.dbase.cursor()
-        command = ('select sell_time, buy_price, sell_price, quote_in from trades where '
-                   '`interval` = "{0}" and sell_price is NOT NULL'.format(self.interval))
+        command = ('select close_time, open_price, close_price, quote_in from trades where '
+                   '`interval` = "{0}" and close_price is NOT NULL'.format(self.interval))
 
         self.execute(cur, command)
         return cur.fetchall()
@@ -203,7 +203,7 @@ class Mysql():
               a single list of pairs that we currently hold with the buy time
         """
         cur = self.dbase.cursor()
-        command = ('select pair, buy_time from trades where sell_price is NULL and '
+        command = ('select pair, open_time from trades where close_price is NULL and '
                    '`interval`="{0}" ' 'and name in ("{1}","api")'
                    .format(self.interval, config.main.name))
 
@@ -211,17 +211,17 @@ class Mysql():
         return cur.fetchall()
 
     @get_exceptions
-    def update_trades(self, pair, sell_time, sell_price, quote, base_out,
+    def update_trades(self, pair, close_time, close_price, quote, base_out,
                       name=None, drawdown='NULL'):
         """
         Update an existing trade with sell price
         """
         job_name = name if name else config.main.name
-        command = """update trades set sell_price={0},sell_time="{1}", quote_out="{2}",
-        base_out="{3}", closed_by="{6}", drawdown_perc=abs(round({7},1)) where sell_price is
+        command = """update trades set close_price={0},close_time="{1}", quote_out="{2}",
+        base_out="{3}", closed_by="{6}", drawdown_perc=abs(round({7},1)) where close_price is
         NULL and `interval`="{4}" and pair="{5}" and (name like "{6}" or
-        name like "api") """.format('%.15f' % float(sell_price),
-                                    sell_time,
+        name like "api") """.format('%.15f' % float(close_price),
+                                    close_time,
                                     '%.15f' % float(quote),
                                     '%.15f' % float(base_out),
                                     self.interval,
@@ -237,16 +237,16 @@ class Mysql():
         """
 
         self.run_sql_query("delete from open_trades")
-        trades = self.fetch_sql_data("select pair, buy_time, buy_price, name from trades where "
-                                     "sell_price is NULL", header=False)
+        trades = self.fetch_sql_data("select pair, open_time, open_price, name from trades where "
+                                     "close_price is NULL", header=False)
         for trade in trades:
             try:
-                pair, buy_time, buy_price, name = trade
+                pair, open_time, open_price, name = trade
                 current_price = get_current_price(pair)
-                perc = 100 * (float(current_price) - float(buy_price)) / float(buy_price)
-                insert = ('insert into open_trades (pair, buy_time, buy_price, current_price, '
+                perc = 100 * (float(current_price) - float(open_price)) / float(open_price)
+                insert = ('insert into open_trades (pair, open_time, open_price, current_price, '
                           'perc, name) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}", "{5}")'
-                          .format(pair, buy_time, buy_price, current_price, perc, name))
+                          .format(pair, open_time, open_price, current_price, perc, name))
 
                 self.run_sql_query(insert)
             except ZeroDivisionError:

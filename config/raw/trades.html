@@ -19,8 +19,8 @@ test_data: {{ test }}, test_trade: {{ test_trade }}
     {% for k, v in versions.items() %}
     <tr>
         <td class="y_n">{{ k }}</td>
-        <td class="y_n">{{ v['buy_price'] }}</td>
-        <td class="y_n">{{ v['buy_time'] }}</td>
+        <td class="y_n">{{ v['open_price'] }}</td>
+        <td class="y_n">{{ v['open_time'] }}</td>
         <td class="y_n">{{ v['current_price'] }}</td>
         <td class="y_n">{{ v['perc'] }}</td>
         <td class="y_n">{{ v['matching'] }}</td>

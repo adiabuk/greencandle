@@ -35,23 +35,23 @@ class TestMysql(OrderedTest):
         self.date = '2018-05-07 22:44:59'
         self.sell_date = '2018-05-07 22:44:59'
         self.pair = 'XXXYYY'
-        self.buy_price = 100
-        self.sell_price = 500
+        self.open_price = 100
+        self.close_price = 500
         base_in = 20
-        self.dbase.insert_trade(self.pair, self.date, self.buy_price, base_in, 30)
-        sql = 'select buy_time, sell_time from trades'
-        buy_time, sell_time = self.dbase.fetch_sql_data(sql)[-1]
-        current_time = buy_time.strftime("%Y-%m-%d %H:%M:%S")
+        self.dbase.insert_trade(self.pair, self.date, self.open_price, base_in, 30)
+        sql = 'select open_time, close_time from trades'
+        open_time, close_time = self.dbase.fetch_sql_data(sql)[-1]
+        current_time = open_time.strftime("%Y-%m-%d %H:%M:%S")
         assert current_time == self.date
-        assert sell_time is None
+        assert close_time is None
 
         quote = self.dbase.get_quantity(self.pair)
-        perc_inc = perc_diff(self.buy_price, self.sell_price)
+        perc_inc = perc_diff(self.open_price, self.close_price)
         base_out = add_perc(perc_inc, base_in)
-        self.dbase.update_trades(self.pair, self.sell_date, self.sell_price, quote=quote,
+        self.dbase.update_trades(self.pair, self.sell_date, self.close_price, quote=quote,
                                  base_out=base_out)
-        sell_time = self.dbase.fetch_sql_data('select sell_time from trades')[-1]
-        assert sell_time is not None
+        close_time = self.dbase.fetch_sql_data('select close_time from trades')[-1]
+        assert close_time is not None
 
     def tearDown(self):
         del self.dbase
