@@ -10,7 +10,6 @@
   "interval": "4h",
   "push_title": "prod_4MA",
   "rate_indicator": "EMA_8",
-  "redis_expiry_seconds": "1036800",
   "close_rule1": "results.current.EMA_8 \u003c results.current.EMA_13",
   "close_rule2": "low \u003c results.current.EMA_55",
   "close_rule3": "",
