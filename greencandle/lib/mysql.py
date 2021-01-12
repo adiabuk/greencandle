@@ -115,7 +115,7 @@ class Mysql():
         """
 
         command = """insert into trades (pair, buy_time, buy_price, base_in, `interval`,
-                     quote_in, name, borrowed) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}",
+                     quote_in, name, borrowed, multiplier) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}",
                      "{5}", "{6}", "{7}", "{8}");""".format(pair, date,
                                               '%.15f' % float(price),
                                               '%.15f' % float(base_amount),
