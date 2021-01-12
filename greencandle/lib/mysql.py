@@ -100,7 +100,7 @@ class Mysql():
         self.run_sql_query(command)
 
     @get_exceptions
-    def insert_trade(self, pair, date, price, base_amount, quote):
+    def insert_trade(self, pair, date, price, base_amount, quote, borrowed='', multiplier=''):
         """
         Insert new trade into DB
         Args:
@@ -115,12 +115,12 @@ class Mysql():
         """
 
         command = """insert into trades (pair, buy_time, buy_price, base_in, `interval`,
-                     quote_in, name) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}",
-                     "{5}", "{6}");""".format(pair, date,
+                     quote_in, name, borrowed) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}",
+                     "{5}", "{6}", "{7}", "{8}");""".format(pair, date,
                                               '%.15f' % float(price),
                                               '%.15f' % float(base_amount),
                                               self.interval,
-                                              quote, config.main.name)
+                                              quote, config.main.name, borrowed, multiplier)
         self.run_sql_query(command)
 
     @get_exceptions
@@ -138,7 +138,6 @@ class Mysql():
         cur = self.dbase.cursor()
         self.execute(cur, command)
         return bool(cur.fetchall())
-
 
     @get_exceptions
     def get_quantity(self, pair):
@@ -171,8 +170,8 @@ class Mysql():
         Return the value of an open trade for a given trading pair
         """
 
-        command = ('select buy_price, quote_in, buy_time, base_in from trades where sell_price '
-                   'is NULL and `interval` = "{0}" and '
+        command = ('select buy_price, quote_in, buy_time, base_in, borrowed from trades '
+                   'where sell_price is NULL and `interval` = "{0}" and '
                    'pair = "{1}"'.format(self.interval, pair))
         cur = self.dbase.cursor()
         self.execute(cur, command)

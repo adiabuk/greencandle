@@ -220,6 +220,7 @@ CREATE TABLE `trades` (
   `quote_in` varchar(30) DEFAULT NULL,
   `quote_out` varchar(30) DEFAULT NULL,
   `name` varchar(30) DEFAULT NULL,
+  `borrowed` varchar(30) DEFAULT NULL,
   `closed_by` varchar(30) DEFAULT NULL,
   `drawdown_perc` varchar(4) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
