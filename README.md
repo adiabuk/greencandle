@@ -11,6 +11,13 @@
 
 # Releases
 
+## 1.2.1
+* Fix pivit point bug in stag/prod
+* Ensure redis expiry is consistent across environments
+* Wait for candle to close for prod scalp stop-loss
+* Notify if db update was unsuccessful
+* Fix typo in prod docker-compose
+
 ## 1.2
 * Scalp strategy for prod
 * Create graphs inside each be container
