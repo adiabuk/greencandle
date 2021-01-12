@@ -370,9 +370,8 @@ class Engine(dict):
 
         # get yesterday's m'epoch time
         get_data_for = int(int(scheme["close_time"]) - 1.728e+8)
-
         # use human-readable date as dict key
-        key = strftime('%Y-%m-%d', localtime(get_data_for/1000))
+        key = pair + strftime('%Y-%m-%d', localtime(get_data_for/1000))
 
         if key not in CROSS_DATA:
             # if data doesn't already exist for this date, then wipe previous data and re-fetch data
