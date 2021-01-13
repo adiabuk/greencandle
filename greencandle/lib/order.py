@@ -171,11 +171,10 @@ class Trade():
                     self.logger.debug("amount to buy: %s, cost: %s, amount:%s"
                                       % (base_amount, cost, amount))
                     if prod:
-                        amount_to_borrow = amount * config.main.margin_multiplier
+                        amount_to_borrow = float(base_amount) * float(config.main.multiplier)
                         amount_to_use = sub_perc(5, amount_to_borrow)  # use 95% of borrowed funds
-                        quote_amount = amount_to_use/float(binance.prices()[item])
 
-                        amt_str = get_step_precision(item, quote_amount)
+                        amt_str = get_step_precision(item, amount_to_use)
                         self.logger.info("Will attempt to borrow %s of %s" % (amount_to_borrow,
                                                                               base))
                         borrow_result = binance.margin_borrow(base, amount_to_borrow)
@@ -187,14 +186,20 @@ class Trade():
                         if "msg" in trade_result:
                             self.logger.error(trade_result)
 
-                        try:
-                            # result empty if test_trade
-                            cost = trade_result.get('fills', {})[0].get('price', cost)
-                        except KeyError:
-                            pass
-                        base_amount = trade_result.get('cummulativeQuoteQty', base_amount)
+
+                    prices = []
+                    fill_price = cost
+
+                    base_amount = trade_result.get('cummulativeQuoteQty', base_amount)
 
                     if 'transactTime' in trade_result:
+                        # Get price from exchange
+                        for fill in trade_result['fills']:
+                            prices.append(float(fill['price']))
+                        fill_price = sum(prices) / len(prices)
+                        self.logger.info("Current price %s, Fill price: %s" % (cost, fill_price))
+
+
                         # only insert into db, if:
                         # 1. we are using test_data
                         # 2. we performed a test trade which was successful - (empty dict)
@@ -313,6 +318,7 @@ class Trade():
                         amt_str = get_step_precision(item, amount)
                         result = binance.spot_order(symbol=item, side=binance.BUY, quantity=amt_str,
                                                     order_type=binance.MARKET, test=self.test_trade)
+                        self.logger.error(result)
                         if "msg" in result:
                             self.logger.error(result)
 
@@ -447,16 +453,21 @@ class Trade():
                         self.logger.error(trade_result)
                     repay_result = binance.margin_repay(base, borrowed)
                     self.logger.info(repay_result)
-                    try:
-                        # result empty if test_trade
-                        price = trade_result.get('fills', {})[0].get('price', price)
-                    except KeyError:
-                        pass
+
+                    prices = []
+                    fill_price = price
+
                 if 'transactTime' in trade_result:
+                    # Get price from exchange
+                    for fill in trade_result['fills']:
+                        prices.append(float(fill['price']))
+                    fill_price = sum(prices) / len(prices)
+                    self.logger.info("Current price %s, Fill price: %s" % (price, fill_price))
+
                     if name == "api":
                         name = "%"
                     dbase.update_trades(pair=item, sell_time=current_time,
-                                        sell_price=price, quote=quantity,
+                                        sell_price=fill_price, quote=quantity,
                                         base_out=base_out, name=name, drawdown=drawdown)
 
                     self.send_redis_trade(item, price, self.interval, "SELL")
