@@ -36,13 +36,13 @@ class Trade():
 
     @staticmethod
     @GET_EXCEPTIONS
-    def get_buy_price(pair=None):
+    def get_open_price(pair=None):
         """ return lowest buying request """
         return sorted([float(item) for item in binance.depth(pair)["asks"].keys()])[0]
 
     @staticmethod
     @GET_EXCEPTIONS
-    def get_sell_price(pair=None):
+    def get_close_price(pair=None):
         """ return highest selling price """
         return sorted([float(item) for item in binance.depth(pair)["bids"].keys()])[-1]
 
@@ -117,12 +117,12 @@ class Trade():
             for item, current_time, current_price in buy_list:
                 base = get_base(item)
                 try:
-                    last_buy_price = dbase.fetch_sql_data("select base_in from trades where "
+                    last_open_price = dbase.fetch_sql_data("select base_in from trades where "
                                                           "pair='{0}'".format(item),
                                                           header=False)[-1][-1]
-                    last_buy_price = float(last_buy_price) if last_buy_price else 0
+                    last_open_price = float(last_open_price) if last_open_price else 0
                 except IndexError:
-                    last_buy_price = 0
+                    last_open_price = 0
                 try:
                     current_base_bal = prices['margin'][base]['count']
                 except KeyError:
@@ -144,8 +144,8 @@ class Trade():
                 else:
                     proposed_base_amount = current_base_bal / (self.max_trades + 1)
                 self.logger.info('item: %s, proposed: %s, last:%s'
-                                 % (item, proposed_base_amount, last_buy_price))
-                base_amount = max(proposed_base_amount, last_buy_price)
+                                 % (item, proposed_base_amount, last_open_price))
+                base_amount = max(proposed_base_amount, last_open_price)
                 cost = current_price
                 main_pairs = config.main.pairs
 
@@ -261,12 +261,12 @@ class Trade():
             for item, current_time, current_price in buy_list:
                 base = get_base(item)
                 try:
-                    last_buy_price = dbase.fetch_sql_data("select base_in from trades where "
+                    last_open_price = dbase.fetch_sql_data("select base_in from trades where "
                                                           "pair='{0}'".format(item),
                                                           header=False)[-1][-1]
-                    last_buy_price = float(last_buy_price) if last_buy_price else 0
+                    last_open_price = float(last_open_price) if last_open_price else 0
                 except IndexError:
-                    last_buy_price = 0
+                    last_open_price = 0
                 try:
                     current_base_bal = prices['binance'][base]['count']
                 except KeyError:
@@ -288,8 +288,8 @@ class Trade():
                 else:
                     proposed_base_amount = current_base_bal / (self.max_trades + 1)
                 self.logger.info('item: %s, proposed: %s, last:%s'
-                                 % (item, proposed_base_amount, last_buy_price))
-                base_amount = max(proposed_base_amount, last_buy_price)
+                                 % (item, proposed_base_amount, last_open_price))
+                base_amount = max(proposed_base_amount, last_open_price)
                 cost = current_price
                 main_pairs = config.main.pairs
 
@@ -371,6 +371,7 @@ class Trade():
                     self.logger.critical("Unable to find quantity for %s" % item)
                     return
                 price = current_price
+
                 new_price = price  # for ci env - is overwritten in prod/stag
                 buy_price, _, _, base_in = dbase.get_trade_value(item)[0]
                 perc_inc = perc_diff(buy_price, price)
@@ -404,6 +405,7 @@ class Trade():
                         (not self.test_trade and 'transactTime' in result):
                     if name == "api":
                         name = "%"
+
                     dbase.update_trades(pair=item, sell_time=current_time,
                                         sell_price=new_price, quote=quantity,
                                         base_out=base_out, name=name, drawdown=drawdown)
@@ -432,8 +434,8 @@ class Trade():
                     self.logger.critical("Unable to find quantity for %s" % item)
                     return
                 price = current_price
-                buy_price, _, _, base_in, borrowed = dbase.get_trade_value(item)[0]
-                perc_inc = perc_diff(buy_price, price)
+                open_price, _, _, base_in, borrowed = dbase.get_trade_value(item)[0]
+                perc_inc = perc_diff(open_price, price)
                 base_out = add_perc(perc_inc, base_in)
 
                 send_gmail_alert("SELL", item, price)
@@ -466,6 +468,7 @@ class Trade():
 
                     if name == "api":
                         name = "%"
+
                     dbase.update_trades(pair=item, sell_time=current_time,
                                         sell_price=fill_price, quote=quantity,
                                         base_out=base_out, name=name, drawdown=drawdown)

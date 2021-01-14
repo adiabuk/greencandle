@@ -15,19 +15,19 @@ CURRENCY = CurrencyRates()
 RATE = 0.00014 # GBP to BTC
 FEES = 0.05
 
-def get_quantity(buy_price, total_buy_btc):
+def get_quantity(open_price, total_buy_btc):
     """get amount to buy"""
     total_buy_btc = sub_perc(FEES, total_buy_btc)   # Subtract trading fees
-    amount = total_buy_btc / buy_price
+    amount = total_buy_btc / open_price
     return amount
 
-def guess_profit(buy_price, sell_price, investment_gbp):
+def guess_profit(open_price, close_price, investment_gbp):
     """
     Get profit prediction based on initial GBP investment and buy/sell values of currency pair
 
     Args:
-        buy_price
-        sell_price
+        open_price
+        close_price
         investment_gbp
 
     Returns: tuple contiaing the following:
@@ -36,19 +36,19 @@ def guess_profit(buy_price, sell_price, investment_gbp):
         difference
         perc
     """
-    buy_price = float(buy_price)
-    sell_price = float(sell_price)
+    open_price = float(open_price)
+    close_price = float(close_price)
 
     total_buy_btc = investment_gbp * RATE
     total_buy_btc = sub_perc(FEES, total_buy_btc)   # Subtract trading fees
-    amount = total_buy_btc / buy_price
+    amount = total_buy_btc / open_price
 
-    total_sell_btc = sell_price * amount
+    total_sell_btc = close_price * amount
     total_sell_btc = sub_perc(FEES, total_sell_btc)  # Subtract trading fees
 
     difference = total_sell_btc - total_buy_btc
     profit = difference * (1 / RATE)
-    perc = perc_diff(buy_price, sell_price)
+    perc = perc_diff(open_price, close_price)
     return profit, amount, difference, perc
 
 def get_recent_profit(interval=None, test=False):
@@ -70,9 +70,9 @@ def get_recent_profit(interval=None, test=False):
     trades = dbase.get_last_trades()# contains tuple db results
     del dbase
 
-    for trade in trades:  # each individual trade contains buy_price, sell_price, and inventment
+    for trade in trades:  # each individual trade contains open_price, close_price, and inventment
         # items contained in tupple are as follows:
-        # sell_time, buy_price, sell_price, and investment
+        # close_time, open_price, close_price, and investment
 
         # Remove the time from the datetime stamp
         # format is 'yyyy-mm-dd hh-mm-ss'
