@@ -391,6 +391,7 @@ class Trade():
                         self.logger.error(result)
 
                     prices = []
+                    new_price = price
                     if 'transactTime' in result:
                         # Get price from exchange
                         for fill in result['fills']:
