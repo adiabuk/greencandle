@@ -67,6 +67,9 @@ systemctl start atop
 
 usermod -aG docker ubuntu || true
 
+echo "127.0.0.1    mysql" >> /etc/hosts
+echo "127.0.0.1    redis" >> /etc/hosts
+
 # Create shared volume
 docker volume create data
 mkdir -p /data/{mysql,config,graphs,reports}

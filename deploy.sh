@@ -17,7 +17,6 @@ elif [[ -z $version ]]; then
   version=$(python greencandle/version.py)
 fi
 
-
 echo "env: $env";
 echo "version: $version";
 
@@ -30,6 +29,12 @@ git pull
 
 # Stop existing fe and be containers
 docker ps --filter name=^fe-* --filter name=^be-* -q | xargs docker stop
+
+FILE=database_change.sql
+if test -f "$FILE"; then
+  mysql --host mysql -uroot -ppassword greencandle < $FILE
+fi
+
 
 docker-compose -f ./install/docker-compose_${env}.yml pull
 base=$(yq r install/docker-compose_${env}.yml services | grep -v '^ .*' | sed 's/:.*$//'|grep 'base')
