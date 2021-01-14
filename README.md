@@ -11,6 +11,17 @@
 
 # Releases
 
+## 1.3
+* Add initial margin trading
+* Make all methods margin-friendly
+* Get more accurate fill-price from exchange
+* Log both current price and actual fill price
+* Seperate stag/prod alerts in slack
+* Fix some logging bugs
+* Database changes with new field names
+* Log critical when trade isn't logged in db
+* Initial doc for config
+
 ## 1.2.1
 * Fix pivit point bug in stag/prod
 * Ensure redis expiry is consistent across environments
