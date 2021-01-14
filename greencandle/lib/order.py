@@ -371,6 +371,7 @@ class Trade():
                     self.logger.critical("Unable to find quantity for %s" % item)
                     return
                 price = current_price
+                new_price = price  # for ci env - is overwritten in prod/stag
                 buy_price, _, _, base_in = dbase.get_trade_value(item)[0]
                 perc_inc = perc_diff(buy_price, price)
                 base_out = add_perc(perc_inc, base_in)
@@ -391,7 +392,6 @@ class Trade():
                         self.logger.error(result)
 
                     prices = []
-                    new_price = price
                     if 'transactTime' in result:
                         # Get price from exchange
                         for fill in result['fills']:
