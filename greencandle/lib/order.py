@@ -1,5 +1,5 @@
-#pylint: disable=wrong-import-position,import-error,no-member,no-else-break,no-else-continue,logging-not-lazy
-
+#pylint: disable=wrong-import-position,import-error,no-member,logging-not-lazy
+#pylint: disable=wrong-import-order,no-else-return,no-else-break,no-else-continue
 """
 Test Buy/Sell orders
 """
@@ -38,13 +38,13 @@ class Trade():
     @GET_EXCEPTIONS
     def get_open_price(pair=None):
         """ return lowest buying request """
-        return sorted([float(i) for i in binance.depth(pair)["asks"].keys()])[0]
+        return sorted([float(item) for item in binance.depth(pair)["asks"].keys()])[0]
 
     @staticmethod
     @GET_EXCEPTIONS
     def get_close_price(pair=None):
         """ return highest selling price """
-        return sorted([float(i) for i in binance.depth(pair)["bids"].keys()])[-1]
+        return sorted([float(item) for item in binance.depth(pair)["bids"].keys()])[-1]
 
     def send_redis_trade(self, pair, price, interval, event):
         """
@@ -76,10 +76,19 @@ class Trade():
         return amt_str
 
     def open_trade(self, items_list):
+        """
+        Main open trade method
+        Will choose between spot/margin and long/short
+        """
         if config.main.trade_type == "spot" and config.main.trade_direction == "long":
             self.open_spot_long(items_list)
 
     def close_trade(self, items_list, name=None, drawdown='NULL'):
+        """
+        Main close trade method
+        Will choose between spot/margin and long/short
+        """
+
         if config.main.trade_type == "spot" and  config.main.trade_direction == "long":
             self.close_spot_long(items_list, name, drawdown)
 
@@ -162,11 +171,10 @@ class Trade():
                     self.logger.debug("amount to buy: %s, cost: %s, amount:%s"
                                       % (base_amount, cost, amount))
                     if prod:
-                        amount_to_borrow = amount * config.main.margin_multiplier
+                        amount_to_borrow = float(base_amount) * float(config.main.multiplier)
                         amount_to_use = sub_perc(5, amount_to_borrow)  # use 95% of borrowed funds
-                        quote_amount = amount_to_use/float(binance.prices()[item])
 
-                        amt_str = get_step_precision(item, quote_amount)
+                        amt_str = get_step_precision(item, amount_to_use)
                         self.logger.info("Will attempt to borrow %s of %s" % (amount_to_borrow,
                                                                               base))
                         borrow_result = binance.margin_borrow(base, amount_to_borrow)
@@ -178,14 +186,20 @@ class Trade():
                         if "msg" in trade_result:
                             self.logger.error(trade_result)
 
-                        try:
-                            # result empty if test_trade
-                            cost = trade_result.get('fills', {})[0].get('price', cost)
-                        except KeyError:
-                            pass
-                        base_amount = trade_result.get('cummulativeQuoteQty', base_amount)
+
+                    prices = []
+                    fill_price = cost
+
+                    base_amount = trade_result.get('cummulativeQuoteQty', base_amount)
 
                     if 'transactTime' in trade_result:
+                        # Get price from exchange
+                        for fill in trade_result['fills']:
+                            prices.append(float(fill['price']))
+                        fill_price = sum(prices) / len(prices)
+                        self.logger.info("Current price %s, Fill price: %s" % (cost, fill_price))
+
+
                         # only insert into db, if:
                         # 1. we are using test_data
                         # 2. we performed a test trade which was successful - (empty dict)
@@ -202,7 +216,6 @@ class Trade():
             del dbase
         else:
             self.logger.info("Nothing to buy")
-
 
     @GET_EXCEPTIONS
     def open_spot_long(self, buy_list):
@@ -305,6 +318,7 @@ class Trade():
                         amt_str = get_step_precision(item, amount)
                         result = binance.spot_order(symbol=item, side=binance.BUY, quantity=amt_str,
                                                     order_type=binance.MARKET, test=self.test_trade)
+                        self.logger.error(result)
                         if "msg" in result:
                             self.logger.error(result)
 
@@ -314,6 +328,15 @@ class Trade():
                         except KeyError:
                             pass
                         base_amount = result.get('cummulativeQuoteQty', base_amount)
+
+                        prices = []
+                        if 'transactTime' in result:
+                            # Get price from exchange
+                            for fill in result['fills']:
+                                prices.append(float(fill['price']))
+                            new_cost = sum(prices) / len(prices)
+                            self.logger.info("Current price %s, Fill price: %s" % (cost, new_cost))
+                            cost = new_cost
 
                     if self.test_data or (self.test_trade and not result) or \
                             (not self.test_trade and 'transactTime' in result):
@@ -348,8 +371,10 @@ class Trade():
                     self.logger.critical("Unable to find quantity for %s" % item)
                     return
                 price = current_price
-                open_price, _, _, base_in = dbase.get_trade_value(item)[0]
-                perc_inc = perc_diff(open_price, price)
+
+                new_price = price  # for ci env - is overwritten in prod/stag
+                buy_price, _, _, base_in = dbase.get_trade_value(item)[0]
+                perc_inc = perc_diff(buy_price, price)
                 base_out = add_perc(perc_inc, base_in)
 
                 send_gmail_alert("SELL", item, price)
@@ -363,20 +388,26 @@ class Trade():
                     result = binance.spot_order(symbol=item, side=binance.SELL, quantity=amt_str,
                                                 order_type=binance.MARKET, test=self.test_trade)
 
+                    self.logger.error(result)
                     if "msg" in result:
                         self.logger.error(result)
 
-                    try:
-                        # result empty if test_trade
-                        price = result.get('fills', {})[0].get('price', price)
-                    except KeyError:
-                        pass
+                    prices = []
+                    if 'transactTime' in result:
+                        # Get price from exchange
+                        for fill in result['fills']:
+                            prices.append(float(fill['price']))
+                        new_price = sum(prices) / len(prices)
+                        self.logger.info("Current price %s, Fill price: %s" % (price, new_price))
+
+
                 if self.test_data or (self.test_trade and not result) or \
                         (not self.test_trade and 'transactTime' in result):
                     if name == "api":
                         name = "%"
-                    dbase.update_trades(pair=item, close_time=current_time,
-                                        close_price=price, quote=quantity,
+
+                    dbase.update_trades(pair=item, sell_time=current_time,
+                                        sell_price=new_price, quote=quantity,
                                         base_out=base_out, name=name, drawdown=drawdown)
 
                     self.send_redis_trade(item, price, self.interval, "SELL")
@@ -424,16 +455,22 @@ class Trade():
                         self.logger.error(trade_result)
                     repay_result = binance.margin_repay(base, borrowed)
                     self.logger.info(repay_result)
-                    try:
-                        # result empty if test_trade
-                        price = trade_result.get('fills', {})[0].get('price', price)
-                    except KeyError:
-                        pass
+
+                    prices = []
+                    fill_price = price
+
                 if 'transactTime' in trade_result:
+                    # Get price from exchange
+                    for fill in trade_result['fills']:
+                        prices.append(float(fill['price']))
+                    fill_price = sum(prices) / len(prices)
+                    self.logger.info("Current price %s, Fill price: %s" % (price, fill_price))
+
                     if name == "api":
                         name = "%"
-                    dbase.update_trades(pair=item, close_time=current_time,
-                                        close_price=price, quote=quantity,
+
+                    dbase.update_trades(pair=item, sell_time=current_time,
+                                        sell_price=fill_price, quote=quantity,
                                         base_out=base_out, name=name, drawdown=drawdown)
 
                     self.send_redis_trade(item, price, self.interval, "SELL")

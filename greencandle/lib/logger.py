@@ -18,7 +18,7 @@ class OneLineFormatter(logging.Formatter):
 
     def format(self, record):
         result = super().format(record)
-        if record.exc_text:
+        if record.exc_text or isinstance(record, str):
             result = result.replace("\n", "")
         return result
 
