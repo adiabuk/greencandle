@@ -56,7 +56,8 @@ class NotifyOnCriticalJournald(JournaldLogHandler):
             try:
                 send_slack_message('alerts', record.msg.replace('"', ''))
             except AttributeError:
-                send_slack_message('alerts', record.msg)
+                if record.msg:
+                    send_slack_message('alerts', record.msg)
 
 def get_logger(module_name=None):
     """
