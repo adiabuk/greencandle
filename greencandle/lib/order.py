@@ -159,8 +159,8 @@ class Trade():
 
                 amount = base_amount / float(cost)
                 if float(cost)*float(amount) >= float(current_base_bal):
-                    self.logger.warning("Unable to purchase %s of %s, insufficient funds:%s/%s" %
-                                        (amount, item, base_amount, current_base_bal))
+                    self.logger.critical("Unable to purchase %s of %s, insufficient funds:%s/%s" %
+                                         (amount, item, base_amount, current_base_bal))
                     continue
                 elif item in current_trades:
                     self.logger.warning("We already have a trade of %s, skipping..." % item)
@@ -303,8 +303,8 @@ class Trade():
 
                 amount = base_amount / float(cost)
                 if float(cost)*float(amount) >= float(current_base_bal):
-                    self.logger.warning("Unable to purchase %s of %s, insufficient funds:%s/%s" %
-                                        (amount, item, base_amount, current_base_bal))
+                    self.logger.critical("Unable to purchase %s of %s, insufficient funds:%s/%s" %
+                                         (amount, item, base_amount, current_base_bal))
                     continue
                 elif item in current_trades:
                     self.logger.warning("We already have a trade of %s, skipping..." % item)
