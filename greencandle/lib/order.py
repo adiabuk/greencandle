@@ -406,8 +406,8 @@ class Trade():
                     if name == "api":
                         name = "%"
 
-                    dbase.update_trades(pair=item, sell_time=current_time,
-                                        sell_price=new_price, quote=quantity,
+                    dbase.update_trades(pair=item, close_time=current_time,
+                                        close_price=new_price, quote=quantity,
                                         base_out=base_out, name=name, drawdown=drawdown)
 
                     self.send_redis_trade(item, price, self.interval, "SELL")
