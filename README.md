@@ -11,6 +11,9 @@
 
 # Releases
 
+## 1.3.1
+* Bugfix
+
 ## 1.3
 * Add initial margin trading
 * Make all methods margin-friendly
