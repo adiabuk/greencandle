@@ -1,5 +1,5 @@
 {
   "name": "tsi-scalp-btc",
-  "pairs": "LENDBTC FETBTC ARPABTC",
+  "pairs": "FETBTC ARPABTC",
   "push_title": "stag_tsi-scalp-btc"
 }
