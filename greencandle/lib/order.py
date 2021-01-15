@@ -108,7 +108,7 @@ class Trade():
         if buy_list:
             dbase = Mysql(test=self.test_data, interval=self.interval)
             if self.test_data or self.test_trade:
-                self.logger.error("Unable to perform margin trade in test mode")
+                self.logger.error("Unable to perform margin long trade in test mode, use spot")
                 return
             else:
                 balance = Balance(test=False)
@@ -354,6 +354,79 @@ class Trade():
             del dbase
         else:
             self.logger.info("Nothing to buy")
+
+    @GET_EXCEPTIONS
+    def open_margin_short(self, short_list):
+        """
+        bla bla bla
+        """
+        self.logger.info("We have %s potential items to short" % len(short_list))
+        drain = str2bool(config.main.drain)
+        prod = str2bool(config.main.production)
+        if drain and not self.test_data:
+            self.logger.warning("Skipping Buy as %s is in drain" % self.interval)
+            return
+        if short_list:
+            dbase = Mysql(test=self.test_data, interval=self.interval)
+
+            if self.test_trade and not self.test_data:
+                self.logger.error("Unable to perform margin short test without test data")
+            elif self.test_data:
+                prices = defaultdict(lambda: defaultdict(defaultdict))
+                prices['binance']['BTC']['count'] = 0.15
+                prices['binance']['ETH']['count'] = 5.84
+                prices['binance']['USDT']['count'] = 1000
+                prices['binance']['USDC']['count'] = 1000
+                prices['binance']['BNB']['count'] = 14
+                for base in ['BTC', 'ETH', 'USDT', 'BNB', 'USDC']:
+                    result = dbase.fetch_sql_data("select sum(base_out-base_in) from trades "
+                                                  "where pair like '%{0}'"
+                                                  .format(base), header=False)[0][0]
+                    result = float(result) if result else 0
+                    current_trade_values = dbase.fetch_sql_data("select sum(base_in) from trades "
+                                                                "where pair like '%{0}' and "
+                                                                "base_out is null"
+                                                                .format(base), header=False)[0][0]
+                    current_trade_values = float(current_trade_values) if \
+                            current_trade_values else 0
+                    prices['binance'][base]['count'] += result + current_trade_values
+
+            for item, current_time, current_price in short_list:
+                base = get_base(item)
+                try:
+                    last_open_price = dbase.fetch_sql_data("select base_in from trades where "
+                                                           "pair='{0}'".format(item),
+                                                            header=False)[-1][-1]
+
+                    last_open_price = float(last_open_price) if last_open_price else 0
+                except IndexError:
+                    last_open_price = 0
+
+                current_trades = dbase.get_trades()
+                avail_slots = self.max_trades - len(current_trades)
+                self.logger.info("%s trade slots available" % avail_slots)
+
+                if dbase.get_recent_high(item, current_time, 12, 200):
+                    self.logger.warning("Recently closed %s with high profit, skipping" % item)
+                    break
+                elif avail_slots <= 0:
+                    self.logger.warning("Too many trades, skipping")
+                    break
+                cost=current_price
+                main_pairs = config.main.pairs
+                if item not in main_pairs and not self.test_data:
+                    self.logger.warning("%s not in list, skipping..." % item)
+                    continue
+                if (base_amount >= (current_base_bal / self.max_trades) and avail_slots <= 5):
+                    self.logger.info("Reducing trade value by a third")
+                    base_amount /= 1.5
+
+                amount_to_borrow = float(base_amount) * float(config.main.multiplier)
+                amount_to_use = sub_perc(5, amount_to_borrow)  # use 95% of borrowed funds
+                amt_str = get_step_precision(item, amount_to_use)
+                dbase.insert_trade(pair=item, price=cost, date=current_time,
+                        base_amount=base_amount,
+                        quote=amount, borrowed=amount_to_borrow, multiplier=config.main.multiplier)
 
     @GET_EXCEPTIONS
     def close_spot_long(self, sell_list, name=None, drawdown='NULL'):
