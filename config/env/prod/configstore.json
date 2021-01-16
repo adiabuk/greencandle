@@ -172,7 +172,7 @@
       "is_secret": false
     },
     "immediate_stop": {
-      "value": "False",
+      "value": "True",
       "is_binary": false,
       "is_secret": false
     },
