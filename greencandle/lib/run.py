@@ -46,17 +46,22 @@ def serial_test(pairs, intervals, data_dir, indicators):
             with ThreadPoolExecutor(max_workers=len(intervals)) as pool:
                 pool.submit(perform_data, pair, interval, data_dir, indicators)
 
-def update_minprice(pair, open_time, current_price, interval):
+def update_drawdown(pair, open_time, current_price, interval):
     """
     Update minimum price for current asset.  Create redis record if it doesn't exist.
     """
     redis = Redis(interval=interval, test=True, db=1)
     min_price = redis.get_item(pair, 'min_price')
+    if config.main.trade_direction == 'long':
+        # if min price already exists and current price is lower, or there is no min price yet.
+        if (min_price and float(current_price) < float(min_price)) or not min_price:
+            data = {"open_time": int(open_time), "min_price": current_price}
+            redis.add_min_price(pair, data)
+    elif config.main.trade_direction == 'short':
+        if (min_price and float(current_price) > float(min_price)) or not min_price:
+            data = {"open_time": int(open_time), "min_price": current_price}
+            redis.add_min_price(pair, data)
 
-    # if min price already exists and current price is lower, or there is no min price yet.
-    if (min_price and float(current_price) < float(min_price)) or not min_price:
-        data = {"open_time": int(open_time), "min_price": current_price}
-        redis.add_min_price(pair, data)
     del redis
 
 def get_drawdown(pair, open_price, interval):
@@ -125,9 +130,9 @@ def perform_data(pair, interval, data_dir, indicators):
             buys.append((pair, current_time, current_price))
             LOGGER.debug("Items to buy: %s" % buys)
             trade.open_trade(buys)
-            update_minprice(pair, current_ctime, current_price, interval)
+            update_drawdown(pair, current_ctime, current_price, interval)
         elif result == "SELL":
-            update_minprice(pair, current_ctime, current_price, interval)
+            update_drawdown(pair, current_ctime, current_price, interval)
             sells.append((pair, current_time, current_price))
             LOGGER.debug("Items to sell: %s" % sells)
             open_time = int(current_trade[0][2].timestamp())
@@ -138,7 +143,7 @@ def perform_data(pair, interval, data_dir, indicators):
         elif current_trade:
             # open trade exists but no BUY or SELL signal.
             open_time = int(current_trade[0][2].timestamp())
-            update_minprice(pair, open_time, current_price, interval)
+            update_drawdown(pair, open_time, current_price, interval)
 
     del redis
     del dbase
@@ -146,7 +151,7 @@ def perform_data(pair, interval, data_dir, indicators):
     sells = []
     if current_trade:
         sells.append((pair, current_time, current_price))
-        update_minprice(pair, open_time, current_price, interval)
+        update_drawdown(pair, open_time, current_price, interval)
         trade.close_trade(sells)
 
 def parallel_test(pairs, interval, data_dir, indicators):
@@ -223,20 +228,26 @@ def prod_int_check(interval, test):
     redis = Redis(interval=interval, test=False, db=0)
     current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
     sells = []
+    drawdowns = {}
     for trade in current_trades:
         pair = trade[0]
         open_price = dbase.get_trade_value(pair)[0][0]
         result, current_time, current_price = redis.get_intermittant(pair, open_price=open_price,
                                                                      current_price=prices[pair])
         open_price = dbase.get_trade_value(pair)[0][0]
+
+        pattern = "%Y-%m-%d %H:%M:%S"
+        current_ctime = int(time.mktime(time.strptime(current_time, pattern)))
+        update_drawdown(pair, current_ctime, current_price, interval)
         LOGGER.debug("%s int check result: %s Buy:%s Current:%s Time:%s"
                      % (pair, result, open_price, current_price, current_time))
         if result == "SELL":
             LOGGER.debug("Items to sell")
+            drawdowns[pair] = get_drawdown(pair, current_price, interval)
             sells.append((pair, current_time, current_price))
 
     trade = Trade(interval=interval, test_trade=test, test_data=False)
-    trade.close_trade(sells)
+    trade.close_trade(sells, drawdowns=drawdowns)
     del redis
     del dbase
 
@@ -317,9 +328,9 @@ def prod_loop(interval, test_trade):
     drawdowns = {}
     for pair in pairs:
         result, current_time, current_price, _ = redis.get_action(pair=pair, interval=interval)
-        pattern = '%d-%m-%Y %H:%M:%S'
+        pattern = "%Y-%m-%d %H:%M:%S"
         current_ctime = int(time.mktime(time.strptime(current_time, pattern)))
-        update_minprice(pair, current_ctime, current_price, interval)
+        update_drawdown(pair, current_ctime, current_price, interval)
 
         if result == "BUY":
             LOGGER.debug("Items to buy")
@@ -327,7 +338,8 @@ def prod_loop(interval, test_trade):
         if result == "SELL":
             LOGGER.debug("Items to sell")
             sells.append((pair, current_time, current_price))
-            drawdowns[pair] = get_drawdown(pair, open_price, interval)
+
+            drawdowns[pair] = get_drawdown(pair, current_price, interval)
     trade = Trade(interval=interval, test_trade=test_trade, test_data=False)
     trade.close_trade(sells, drawdowns=drawdowns)
     trade.open_trade(buys)
