@@ -1,6 +1,6 @@
 use greencandle;
 
-ALTER TABLE trades ADD COLUMN direction varchar(30)
+ALTER TABLE trades ADD COLUMN direction varchar(30);
 update trades set direction="long" where direction="";
 drop view profit;
 
@@ -16,7 +16,7 @@ CASE
           END base_profit,
 
 
-,`trades`.`drawdown_perc` AS `drawdown_perc` from `trades`;
+`trades`.`drawdown_perc` AS `drawdown_perc` from `trades`;
 
 
 
