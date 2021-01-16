@@ -46,10 +46,10 @@ docker-compose -f ./install/docker-compose_${env}.yml up --remove-orphans -d $ba
 
 for container in $be; do
   docker-compose -f ./install/docker-compose_${env}.yml up -d $container
-  sleep 30
+  sleep 15
 done
 
-sleep 60
+sleep 30
 docker-compose -f ./install/docker-compose_${env}.yml up -d $fe
 
 docker system prune --volumes --all -f
