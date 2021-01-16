@@ -413,7 +413,7 @@ class Trade():
 
                     dbase.update_trades(pair=item, close_time=current_time,
                                         close_price=new_price, quote=quantity,
-                                        base_out=base_out, name=name, drawdown=drawdowns[pair])
+                                        base_out=base_out, name=name, drawdown=drawdowns[item])
 
                     self.send_redis_trade(item, price, self.interval, "SELL")
                 else:
@@ -572,7 +572,7 @@ class Trade():
 
                     dbase.update_trades(pair=item, close_time=current_time,
                                         close_price=new_price, quote=quantity,
-                                        base_out=base_out, name=name, drawdown=drawdowns[pair])
+                                        base_out=base_out, name=name, drawdown=drawdowns[item])
 
                     self.send_redis_trade(item, price, self.interval, "SELL")
                 else:
