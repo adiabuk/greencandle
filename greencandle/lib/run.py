@@ -317,7 +317,7 @@ def prod_loop(interval, test_trade):
     drawdowns = {}
     for pair in pairs:
         result, current_time, current_price, _ = redis.get_action(pair=pair, interval=interval)
-        pattern = '%d.%m.%Y %H:%M:%S'
+        pattern = '%d-%m-%Y %H:%M:%S'
         current_ctime = int(time.mktime(time.strptime(current_time, pattern)))
         update_minprice(pair, current_ctime, current_price, interval)
 
