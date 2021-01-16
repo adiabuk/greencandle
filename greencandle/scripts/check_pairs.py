@@ -21,8 +21,11 @@ def main():
     now = datetime.datetime.now()
     bad_pairs = []
     for pair in config.main.pairs.split():
-
-        dataframe = get_dataframes([pair], '4h', 1)[pair]
+        try:
+            dataframe = get_dataframes([pair], '4h', 1)[pair]
+        except:
+            print(pair)
+            print('no data')
         date = time.gmtime(int(dataframe.iloc[-1]['openTime']/1000))
         if date.tm_year != now.year and date.tm_mon !=now.month:
             print(pair)
