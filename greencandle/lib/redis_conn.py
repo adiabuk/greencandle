@@ -215,8 +215,10 @@ class Redis():
 
         stop_loss_perc = float(config.main.stop_loss_perc)
         take_profit_perc = float(config.main.take_profit_perc)
+
         stop_loss_rule = float(current_price) < sub_perc(stop_loss_perc, open_price)
         take_profit_rule = float(current_price) > add_perc(take_profit_perc, open_price)
+
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
 
         if stop_loss_rule and open_price:
@@ -297,7 +299,7 @@ class Redis():
         dbase = Mysql(test=self.test, interval=interval)
         try:
             # function returns an empty list if no results so cannot get first element
-            open_price,_, open_time, _ = dbase.get_trade_value(pair)[0]
+            open_price, _, open_time, _, _ = dbase.get_trade_value(pair)[0]
         except IndexError:
             open_price = None
             open_time = None
@@ -356,8 +358,8 @@ class Redis():
         if not open_price and str2bool(config.main.wait_between_trades):
             try:
                 open_time = dbase.fetch_sql_data("select close_time from trades where pair='{}' "
-                                                "and closed_by = 'api' order by close_time desc "
-                                                "LIMIT 1", header=False)[0][0]
+                                                 "and closed_by = 'api' order by close_time desc "
+                                                 "LIMIT 1", header=False)[0][0]
                 buy_epoch = 0 if not isinstance(open_time, datetime) else \
                     open_time.timestamp()
                 pattern = '%Y-%m-%d %H:%M:%S'
@@ -386,10 +388,12 @@ class Redis():
             else:
                 trailing_stop = False
                 high_price = open_price
-
-            stop_loss_rule = current_price < sub_perc(stop_loss_perc, open_price)
-
-            take_profit_rule = current_price > add_perc(take_profit_perc, open_price)
+            if config.main.trade_direction == "short":
+                stop_loss_rule = current_price > add_perc(stop_loss_perc, open_price)
+                take_profit_rule = current_price < sub_perc(take_profit_perc, open_price)
+            elif config.main.trade_direction == "long":
+                stop_loss_rule = current_price < sub_perc(stop_loss_perc, open_price)
+                take_profit_rule = current_price > add_perc(take_profit_perc, open_price)
 
         except (IndexError, ValueError, TypeError):
             # Setting to none to indicate we are currently not in a trade
@@ -422,8 +426,12 @@ class Redis():
             self.logger.warning("StopLoss: open_price:%s high_price:%s" % (open_price, high_price))
 
             if test_data and str2bool(config.main.immediate_stop):
-                stop_at = sub_perc(stop_loss_perc, open_price)
-                current_price = stop_at
+                if config.main.trade_direction == 'short':
+                    stop_at = add_perc(stop_loss_perc, open_price)
+                    current_price = stop_at
+                elif config.main.trade_direction == 'long':
+                    stop_at = add_perc(stop_loss_perc, open_price)
+                    current_price = stop_at
 
             self.log_event('StopLoss', rate, perc_rate, open_price,
                            current_price, pair, current_time, results.current)
@@ -433,8 +441,8 @@ class Redis():
         elif trailing_stop and open_price:
 
             if test_data and str2bool(config.main.immediate_stop):
-                 stop_at = sub_perc(trailing_perc, high_price)
-                 current_price = stop_at
+                stop_at = sub_perc(trailing_perc, high_price)
+                current_price = stop_at
             self.logger.info("TrailingStopLoss: open_price:%s high_price:%s"
                              % (open_price, high_price))
             self.logger.info("Trailing stop loss reached")

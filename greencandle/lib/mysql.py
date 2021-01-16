@@ -100,7 +100,8 @@ class Mysql():
         self.run_sql_query(command)
 
     @get_exceptions
-    def insert_trade(self, pair, date, price, base_amount, quote, borrowed='', multiplier=''):
+    def insert_trade(self, pair, date, price, base_amount, quote, borrowed='', multiplier='',
+                     direction=''):
         """
         Insert new trade into DB
         Args:
@@ -115,12 +116,15 @@ class Mysql():
         """
 
         command = """insert into trades (pair, open_time, open_price, base_in, `interval`,
-                     quote_in, name, borrowed, multiplier) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}",
-                     "{5}", "{6}", "{7}", "{8}");""".format(pair, date,
-                                              '%.15f' % float(price),
-                                              '%.15f' % float(base_amount),
-                                              self.interval,
-                                              quote, config.main.name, borrowed, multiplier)
+                     quote_in, name, borrowed, multiplier, direction) VALUES ("{0}", "{1}",
+                     "{2}", "{3}", "{4}", "{5}", "{6}", "{7}", "{8}", "{9}");
+                  """.format(pair,
+                             date,
+                             '%.15f' % float(price),
+                             '%.15f' % float(base_amount),
+                             self.interval,
+                             quote, config.main.name, borrowed, multiplier,
+                             direction)
         self.run_sql_query(command)
 
     @get_exceptions
@@ -176,7 +180,7 @@ class Mysql():
         cur = self.dbase.cursor()
         self.execute(cur, command)
 
-        row = [(item[0], item[1], item[2], item[3]) for item in cur.fetchall()]
+        row = [(item[0], item[1], item[2], item[3], item[4]) for item in cur.fetchall()]
         return row
 
     @get_exceptions
