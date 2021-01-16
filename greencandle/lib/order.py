@@ -85,16 +85,16 @@ class Trade():
         elif config.main.trade_type == "margin" and config.main.trade_direction == "short":
             self.open_margin_short(items_list)
 
-    def close_trade(self, items_list, name=None, drawdown='NULL'):
+    def close_trade(self, items_list, name=None, drawdowns={}):
         """
         Main close trade method
         Will choose between spot/margin and long/short
         """
 
         if config.main.trade_type == "spot" and  config.main.trade_direction == "long":
-            self.close_spot_long(items_list, name, drawdown)
+            self.close_spot_long(items_list, name, drawdowns)
         elif config.main.trade_type == "margin" and  config.main.trade_direction == "short":
-            self.close_margin_short(items_list, name, drawdown)
+            self.close_margin_short(items_list, name, drawdowns)
 
     def open_margin_long(self, buy_list):
         """
@@ -362,7 +362,7 @@ class Trade():
             self.logger.info("Nothing to buy")
 
     @GET_EXCEPTIONS
-    def close_margin_short(self, short_list, name=None, drawdown=None):
+    def close_margin_short(self, short_list, name=None, drawdowns=None):
         """
         Sell items in sell_list
         """
@@ -414,7 +414,7 @@ class Trade():
 
                     dbase.update_trades(pair=item, close_time=current_time,
                                         close_price=new_price, quote=quantity,
-                                        base_out=base_out, name=name, drawdown=drawdown)
+                                        base_out=base_out, name=name, drawdown=drawdowns[pair])
 
                     self.send_redis_trade(item, price, self.interval, "SELL")
                 else:
@@ -521,7 +521,7 @@ class Trade():
                 self.send_redis_trade(item, cost, self.interval, "BUY")
 
     @GET_EXCEPTIONS
-    def close_spot_long(self, sell_list, name=None, drawdown='NULL'):
+    def close_spot_long(self, sell_list, name=None, drawdowns={}):
         """
         Sell items in sell_list
         """
@@ -573,7 +573,7 @@ class Trade():
 
                     dbase.update_trades(pair=item, close_time=current_time,
                                         close_price=new_price, quote=quantity,
-                                        base_out=base_out, name=name, drawdown=drawdown)
+                                        base_out=base_out, name=name, drawdown=drawdowns[pair])
 
                     self.send_redis_trade(item, price, self.interval, "SELL")
                 else:
@@ -584,7 +584,7 @@ class Trade():
 
 
     @GET_EXCEPTIONS
-    def close_margin_long(self, sell_list, name=None, drawdown='NULL'):
+    def close_margin_long(self, sell_list, name=None, drawdowns={}):
         """
         Sell items in sell_list
         """
@@ -636,7 +636,7 @@ class Trade():
 
                     dbase.update_trades(pair=item, close_time=current_time,
                                         close_price=fill_price, quote=quantity,
-                                        base_out=base_out, name=name, drawdown=drawdown)
+                                        base_out=base_out, name=name, drawdown=drawdowns[pair])
 
                     self.send_redis_trade(item, price, self.interval, "SELL")
                 else:

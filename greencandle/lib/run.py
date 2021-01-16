@@ -133,7 +133,7 @@ def perform_data(pair, interval, data_dir, indicators):
             open_time = int(current_trade[0][2].timestamp())
             open_price = current_trade[0][0]
             drawdown = get_drawdown(pair, open_price, interval)
-            trade.close_trade(sells, drawdown=drawdown)
+            trade.close_trade(sells, drawdowns={pair:drawdown})
 
         elif current_trade:
             # open trade exists but no BUY or SELL signal.
@@ -210,7 +210,7 @@ def parallel_test(pairs, interval, data_dir, indicators):
                 LOGGER.debug("Items to sell")
                 sells.append((pair, current_time, current_price))
         drawdown = 0
-        trade.close_trade(sells, drawdown=drawdown)
+        trade.close_trade(sells, drawdowns={pair: drawdown})
         trade.open_trade(buys)
 
     print(get_recent_profit(True, interval))
@@ -314,8 +314,12 @@ def prod_loop(interval, test_trade):
     engine.get_data(localconfig=main_indicators, first_run=False)
     buys = []
     sells = []
+    drawdowns = {}
     for pair in pairs:
         result, current_time, current_price, _ = redis.get_action(pair=pair, interval=interval)
+        pattern = '%d.%m.%Y %H:%M:%S'
+        current_ctime = int(time.mktime(time.strptime(current_time, pattern)))
+        update_minprice(pair, current_ctime, current_price, interval)
 
         if result == "BUY":
             LOGGER.debug("Items to buy")
@@ -323,8 +327,9 @@ def prod_loop(interval, test_trade):
         if result == "SELL":
             LOGGER.debug("Items to sell")
             sells.append((pair, current_time, current_price))
+            drawdowns[pair] = get_drawdown(pair, open_price, interval)
     trade = Trade(interval=interval, test_trade=test_trade, test_data=False)
-    trade.close_trade(sells)
+    trade.close_trade(sells, drawdowns=drawdowns)
     trade.open_trade(buys)
     del engine
     del redis
