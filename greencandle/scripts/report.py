@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-position
+#pylint: disable=wrong-import-position,no-member
 
 """
 Create Excel Spreadsheet with results and analysis of trades
@@ -28,6 +28,10 @@ def main():
     filename = sys.argv[2]
     workbook = openpyxl.Workbook()
     workbook.remove(workbook.get_sheet_by_name('Sheet'))
+    if config.main.trade_direction == 'short':
+        buy_hold = "(select (first_buy-last_sell)/first_buy)*100 as buy_hold"
+    elif config.main.trade_direction == 'long':
+        buy_hold = "(select (last_sell-first_buy)/first_buy)*100 as buy_hold"
 
     mysql = Mysql(test=True, interval=interval)
     queries = {"weekly": "select perc, pair, week(close_time) as week from profit",
@@ -47,10 +51,10 @@ def main():
                "profit-factor": "select IFNULL((select sum(base_profit) from profit where \
                                 base_profit >0)/-(select sum(base_profit) from profit where \
                                 base_profit <0),100) as profit_factor",
-               "buy-hold-return": "select (select open_price from profit order by open_time limit 1) \
+               "buy-hold-return": "select (select open_price from profit order by \
+                                   open_time limit 1) \
                                    as first_buy, (select close_price from profit order by \
-                                   open_time desc limit 1) as last_sell, (select \
-                                   (last_sell-first_buy)/first_buy)*100 as buy_hold"}
+                                   open_time desc limit 1) as last_sell," + buy_hold}
     for name, query in queries.items():
         result = mysql.fetch_sql_data(query)
         workbook.create_sheet(title=name)
