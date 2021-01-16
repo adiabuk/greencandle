@@ -277,7 +277,7 @@ class Trade():
                 except KeyError:
                     current_base_bal = 0
                 except TypeError:
-                    self.logger.critical("Unable to get balance for base %s", % base)
+                    self.logger.critical("Unable to get balance for base %s" % base)
                     current_base_bal
 
                 current_trades = dbase.get_trades()
