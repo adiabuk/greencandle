@@ -11,6 +11,14 @@
 
 # Releases
 
+## 1.4
+* Re-enable immediate stop-loss
+* Better scalping rules
+* Test strategy for scalp short
+* DB changes for shorting strategy
+* Drawdown for stag and prod environments
+* Log cleanup
+
 ## 1.3.1
 * Bugfix
 
@@ -19,7 +27,7 @@
 * Make all methods margin-friendly
 * Get more accurate fill-price from exchange
 * Log both current price and actual fill price
-* Seperate stag/prod alerts in slack
+* Separate stag/prod alerts in slack
 * Fix some logging bugs
 * Database changes with new field names
 * Log critical when trade isn't logged in db
