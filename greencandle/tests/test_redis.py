@@ -17,28 +17,6 @@ class TestRedis(unittest.TestCase):
     Test redis methods
     """
 
-    def test_high_price(self):
-        """
-        Test setting, retrieving, deleting high price in redis
-        """
-
-        pair = 'ETHBTC'
-        interval = '1m'
-        price = 12
-        redis = Redis()
-
-        result = redis.get_high_price(pair, interval)
-        self.assertIsNone(result)
-
-        redis.put_high_price(pair, interval, price)
-        result = redis.get_high_price(pair, interval)
-        self.assertEqual(result, price)
-
-        redis.del_high_price(pair, interval)
-        result = redis.get_high_price(pair, interval)
-        self.assertIsNone(result)
-        del redis
-
     def test_get_items(self):
         """
         Test putting/getting items to/from redis

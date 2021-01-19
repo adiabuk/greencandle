@@ -92,6 +92,86 @@ class Redis():
             last_price = None
         return last_price
 
+    def get_drawup(self, pair, interval):
+        """
+        Get minimum price of current open trade for given pair/interval
+        and calculate drawdown based on trade opening price.
+        Return drawdown as a percentage
+        """
+        key = "{}_{}_drawup".format(pair, config.main.name)
+        max_price = self.get_item(key, 'max_price')
+        orig_price = self.get_item(key, 'orig_price')
+        drawup = perc_diff(orig_price, max_price)
+        self.rm_price(key)
+        return drawup
+
+    def get_drawdown(self, pair, interval):
+        """
+        Get minimum price of current open trade for given pair/interval
+        and calculate drawdown based on trade opening price.
+        Return drawdown as a percentage
+        """
+        key = "{}_{}_drawdown".format(pair, config.main.name)
+        min_price = self.get_item(key, 'min_price')
+        orig_price = self.get_item(key, 'orig_price')
+        drawdown = perc_diff(orig_price, min_price)
+        self.rm_price(key)
+        return drawdown
+
+
+    def update_drawdown(self, pair, current_candle, interval, event=None):
+        """
+        Update minimum price for current asset.  Create redis record if it doesn't exist.
+        """
+        key = "{}_{}_drawdown".format(pair, config.main.name)
+        min_price = self.get_item(key, 'min_price')
+        orig_price = self.get_item(key, 'orig_price')
+        current_low = current_candle['low']
+        current_high = current_candle['high']
+        current_price = current_candle['close']
+
+        if not orig_price:
+            orig_price = current_price
+        if config.main.trade_direction == 'long':
+            # if min price already exists and current price is lower, or there is no min price yet.
+
+            if (min_price and float(current_low) < float(min_price)) or \
+                    (not min_price and event == 'open'):
+
+                data = {"min_price": current_low, "orig_price": orig_price}
+                self.add_price(key, data)
+        elif config.main.trade_direction == 'short':
+            if (min_price and float(current_high) > float(min_price)) or \
+                    (not min_price and event == 'open'):
+                data = {"min_price": current_low, "orig_price": orig_price}
+                self.add_price(key, data)
+
+
+    def update_drawup(self, pair, current_candle, interval, event=None):
+        """
+        Update minimum price for current asset.  Create redis record if it doesn't exist.
+        """
+        key = "{}_{}_drawup".format(pair, config.main.name)
+        max_price = self.get_item(key, 'max_price')
+        orig_price = self.get_item(key, 'orig_price')
+        current_low = current_candle['low']
+        current_high = current_candle['high']
+        current_price = current_candle['close']
+        if not orig_price:
+            orig_price = current_price
+        if config.main.trade_direction == 'long':
+            if (max_price and float(current_high) > float(max_price)) or \
+                    (not max_price and event == 'open'):
+
+                data = {"max_price": current_high, "orig_price": orig_price}
+                self.add_price(key, data)
+        elif config.main.trade_direction == 'short':
+            if (max_price and float(current_low) < float(max_price)) or \
+                    (not max_price and event == 'open'):
+                data = {"max_price": current_high, "orig_price": orig_price}
+                self.add_price(key, data)
+
+
     def del_high_price(self, pair, interval):
         """Delete highest price in redis"""
         key = 'highClose_{0}_{1}'.format(pair, interval)

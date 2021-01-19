@@ -19,7 +19,6 @@ from .profit import get_recent_profit
 from .order import Trade
 from .binance_common import get_dataframes
 from .logger import get_logger, get_decorator
-from .common import perc_diff
 from . import config
 LOGGER = get_logger(__name__)
 CHUNK_SIZE = int(config.main.no_of_klines)
@@ -45,92 +44,6 @@ def serial_test(pairs, intervals, data_dir, indicators):
         for interval in intervals:
             with ThreadPoolExecutor(max_workers=len(intervals)) as pool:
                 pool.submit(perform_data, pair, interval, data_dir, indicators)
-
-def update_drawdown(pair, current_candle, interval, event=None):
-    """
-    Update minimum price for current asset.  Create redis record if it doesn't exist.
-    """
-    key = "{}_{}_drawdown".format(pair, config.main.name)
-    redis = Redis(interval=interval, test=True, db=0)
-    min_price = redis.get_item(key, 'min_price')
-    orig_price = redis.get_item(key, 'orig_price')
-    current_low = current_candle['low']
-    current_high = current_candle['high']
-    current_price = current_candle['close']
-
-    if not orig_price:
-        orig_price = current_price
-    if config.main.trade_direction == 'long':
-        # if min price already exists and current price is lower, or there is no min price yet.
-
-        if (min_price and float(current_low) < float(min_price)) or \
-                (not min_price and event == 'open'):
-
-            data = {"min_price": current_low, "orig_price": orig_price}
-            redis.add_price(key, data)
-    elif config.main.trade_direction == 'short':
-        if (min_price and float(current_high) > float(min_price)) or \
-                (not min_price and event == 'open'):
-            data = {"min_price": current_low, "orig_price": orig_price}
-            redis.add_price(key, data)
-
-    del redis
-
-def update_drawup(pair, current_candle, interval, event=None):
-    """
-    Update minimum price for current asset.  Create redis record if it doesn't exist.
-    """
-    key = "{}_{}_drawup".format(pair, config.main.name)
-    redis = Redis(interval=interval, test=True, db=0)
-    max_price = redis.get_item(key, 'max_price')
-    orig_price = redis.get_item(key, 'orig_price')
-    current_low = current_candle['low']
-    current_high = current_candle['high']
-    current_price = current_candle['close']
-    if not orig_price:
-        orig_price = current_price
-    if config.main.trade_direction == 'long':
-        if (max_price and float(current_high) > float(max_price)) or \
-                (not max_price and event == 'open'):
-
-            data = {"max_price": current_high, "orig_price": orig_price}
-            redis.add_price(key, data)
-    elif config.main.trade_direction == 'short':
-        if (max_price and float(current_low) < float(max_price)) or \
-                (not max_price and event == 'open'):
-            data = {"max_price": current_high, "orig_price": orig_price}
-            redis.add_price(key, data)
-
-    del redis
-
-
-def get_drawup(pair, interval):
-    """
-    Get minimum price of current open trade for given pair/interval
-    and calculate drawdown based on trade opening price.
-    Return drawdown as a percentage
-    """
-    redis = Redis(interval=interval, test=True, db=0)
-    key = "{}_{}_drawup".format(pair, config.main.name)
-    max_price = redis.get_item(key, 'max_price')
-    orig_price = redis.get_item(key, 'orig_price')
-    drawup = perc_diff(orig_price, max_price)
-    redis.rm_price(key)
-    return drawup
-
-def get_drawdown(pair, interval):
-    """
-    Get minimum price of current open trade for given pair/interval
-    and calculate drawdown based on trade opening price.
-    Return drawdown as a percentage
-    """
-    redis = Redis(interval=interval, test=True, db=0)
-    key = "{}_{}_drawdown".format(pair, config.main.name)
-    min_price = redis.get_item(key, 'min_price')
-    orig_price = redis.get_item(key, 'orig_price')
-    drawdown = perc_diff(orig_price, min_price)
-    redis.rm_price(key)
-    return drawdown
 
 @GET_EXCEPTIONS
 def perform_data(pair, interval, data_dir, indicators):
@@ -182,12 +95,12 @@ def perform_data(pair, interval, data_dir, indicators):
         del engine
         current_trade = dbase.get_trade_value(pair)
         current_candle = dataframes[pair].iloc[-1]
-        update_drawdown(pair, current_candle, interval)
-        update_drawup(pair, current_candle, interval)
+        redis.update_drawdown(pair, current_candle, interval)
+        redis.update_drawup(pair, current_candle, interval)
 
         if result == "BUY":
-            update_drawdown(pair, current_candle, interval, event='open')
-            update_drawup(pair, current_candle, interval, event='open')
+            redis.update_drawdown(pair, current_candle, interval, event='open')
+            redis.update_drawup(pair, current_candle, interval, event='open')
             buys.append((pair, current_time, current_price))
             LOGGER.debug("Items to buy: %s" % buys)
             trade.open_trade(buys)
@@ -195,8 +108,8 @@ def perform_data(pair, interval, data_dir, indicators):
         elif result == "SELL":
             sells.append((pair, current_time, current_price))
             LOGGER.debug("Items to sell: %s" % sells)
-            drawdown = get_drawdown(pair, interval)
-            drawup = get_drawup(pair, interval)
+            drawdown = redis.get_drawdown(pair, interval)
+            drawup = redis.get_drawup(pair, interval)
             trade.close_trade(sells, drawdowns={pair:drawdown}, drawups={pair:drawup})
 
     del redis
@@ -207,11 +120,11 @@ def perform_data(pair, interval, data_dir, indicators):
         sells.append((pair, current_time, current_price))
         current_candle = dataframes[pair].iloc[-1]
 
-        update_drawdown(pair, current_candle, interval)
-        update_drawup(pair, current_candle, interval)
+        redis.update_drawdown(pair, current_candle, interval)
+        redis.update_drawup(pair, current_candle, interval)
 
-        drawdown = get_drawdown(pair, interval)
-        drawup = get_drawup(pair, interval)
+        drawdown = redis.get_drawdown(pair, interval)
+        drawup = redis.get_drawup(pair, interval)
 
         trade.close_trade(sells, drawdowns={pair:drawdown}, drawups={pair:drawup})
 
@@ -294,18 +207,19 @@ def prod_int_check(interval, test):
         pair = trade[0]
         open_price = dbase.get_trade_value(pair)[0][0]
         result, current_time, current_price = redis.get_intermittant(pair, open_price=open_price,
-                                                                     current_price=prices[pair])
+                                                                    current_price=prices[pair])
+        dataframes = get_dataframes([pair], interval=interval, no_of_klines=1)
         current_candle = dataframes[pair].iloc[-1]
         open_price = dbase.get_trade_value(pair)[0][0]
 
         pattern = "%Y-%m-%d %H:%M:%S"
         current_ctime = int(time.mktime(time.strptime(current_time, pattern)))
-        update_drawdown(pair, current_ctime, current_candle, interval)
+        redis.update_drawdown(pair, current_ctime, current_candle, interval)
         LOGGER.debug("%s int check result: %s Buy:%s Current:%s Time:%s"
                      % (pair, result, open_price, current_price, current_time))
         if result == "SELL":
             LOGGER.debug("Items to sell")
-            drawdowns[pair] = get_drawdown(pair, interval)
+            drawdowns[pair] = redis.get_drawdown(pair, interval)
             sells.append((pair, current_time, current_price))
 
     trade = Trade(interval=interval, test_trade=test, test_data=False)
@@ -394,7 +308,7 @@ def prod_loop(interval, test_trade):
         pattern = "%Y-%m-%d %H:%M:%S"
         current_ctime = int(time.mktime(time.strptime(current_time, pattern)))
         current_candle = dataframes[pair].iloc[-1]
-        update_drawdown(pair, current_ctime, current_candle, interval)
+        redis.update_drawdown(pair, current_ctime, current_candle, interval)
 
         if result == "BUY":
             LOGGER.debug("Items to buy")
@@ -403,7 +317,7 @@ def prod_loop(interval, test_trade):
             LOGGER.debug("Items to sell")
             sells.append((pair, current_time, current_price))
 
-            drawdowns[pair] = get_drawdown(pair, interval)
+            drawdowns[pair] = redis.get_drawdown(pair, interval)
     trade = Trade(interval=interval, test_trade=test_trade, test_data=False)
     trade.close_trade(sells, drawdowns=drawdowns)
     trade.open_trade(buys)
