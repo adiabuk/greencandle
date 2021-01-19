@@ -73,7 +73,7 @@ class Redis():
         """
         result = self.conn.delete(name)
 
-    def put_high_price(self, pair, interval, price):
+    def put_high_price(self, key, interval, price):
         """
         update high price if current price is
         higher then previously stored value
@@ -81,13 +81,13 @@ class Redis():
         last_price = self.conn.get(key)
         if not last_price or float(price) > float(last_price):
             result = self.conn.set(key, price)
-            self.logger.debug("Setting high price for %s, result:%s" % (pair, result))
+            self.logger.debug("Setting high price for %s, result:%s" % (key, result))
 
     def get_high_price(self, pair, interval):
         """get current highest price for pair and interval"""
-        key=pair
+        key = pair
         try:
-            last_price = float(self.conn.hget(key,'max_price'))
+            last_price = float(self.conn.hget(key, 'max_price'))
         except TypeError:
             last_price = None
         return last_price
@@ -307,6 +307,7 @@ class Redis():
 
         current_price = float(close)
         current_low = float(low)
+        current_high = float(high)
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_epoch))
 
         # Store/update highest price
@@ -383,8 +384,8 @@ class Redis():
                 if high_price:
 
                     trailing_stop = current_price <= sub_perc(trailing_perc, high_price)
-                    if test_data and str2bool(config.main.immediate_stop):
-                        trailing_stop = current_low <= sub_perc(trailing_perc, high_price)
+                    #if test_data and str2bool(config.main.immediate_stop):
+                    #    trailing_stop = current_low <= sub_perc(trailing_perc, high_price)
 
                 else:
                     trailing_stop = False
@@ -394,12 +395,15 @@ class Redis():
             if config.main.trade_direction == "short":
                 stop_loss_rule = current_price > add_perc(stop_loss_perc, open_price)
                 take_profit_rule = current_price < sub_perc(take_profit_perc, open_price)
+
             elif config.main.trade_direction == "long":
                 #FIXME - get MINPRICE
                 stop_loss_rule = current_price < sub_perc(stop_loss_perc, open_price)
+                take_profit_rule = current_price > add_perc(take_profit_perc, open_price)
                 if test_data and str2bool(config.main.immediate_stop):
                     stop_loss_rule = current_low < sub_perc(stop_loss_perc, open_price)
-                take_profit_rule = current_price > add_perc(take_profit_perc, open_price)
+                    take_profit_rule = current_high > add_perc(take_profit_perc, open_price)
+
 
         except (IndexError, ValueError, TypeError):
             # Setting to none to indicate we are currently not in a trade
@@ -451,6 +455,10 @@ class Redis():
             result = 'SELL'
         # if we match take_profit rule and are in a trade
         elif str2bool(config.main.take_profit) and take_profit_rule and open_price:
+            if test_data and str2bool(config.main.immediate_stop):
+                stop_at = add_perc(take_profit_perc, open_price)
+                current_price = stop_at
+
             self.log_event('TakeProfit', rate, perc_rate, open_price, current_price,
                            pair, current_time, results.current)
             self.del_high_price(pair, interval)
