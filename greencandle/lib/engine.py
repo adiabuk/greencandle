@@ -401,7 +401,7 @@ class Engine(dict):
             index = -2
 
         func, timeperiod = localconfig
-        tsi = ta.smi(dataframe.close.astype(float))
+        tsi = ta.smi(dataframe.close.astype(float), fast=13, slow=25, signal=13)
         if func == 'tsi':
             result = float(tsi[tsi.columns[0]].iloc[index]) * 100
         elif func == 'signal':
