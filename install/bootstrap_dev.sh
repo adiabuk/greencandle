@@ -19,7 +19,7 @@ apt-get -y install docker.io ntpdate mysql-client screen atop jq iotop ntp awscl
     wget make git mysql-client libmysqlclient-dev python3-dev xvfb firefox redis-tools \
     cron bsdmainutils libssl-dev gcc libsystemd-dev
 #curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
-wget https://www.dropbox.com/sh/l22jyonei087h4o/AADJZi6xGYsn18CSy_hGmQz-a/docker-compose-1.24.1?dl=0 -O /usr/local/bin/docker-compose
+wget "https://www.dropbox.com/sh/l22jyonei087h4o/AADJZi6xGYsn18CSy_hGmQz-a/docker-compose-1.24.1?dl=0" -O /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 echo "export HOSTNAME" >> ~/.bashrc
 
@@ -55,7 +55,7 @@ chmod o+w /opt/pyenv/shims /opt/pyenv/versions
 
 if [[ ! -f /usr/local/bin/configstore ]]; then
     #wget https://github.com/motns/configstore/releases/download/v2.5.0/configstore-2.5.0-linux-amd64.tar.gz -P /tmp
-    wget https://www.dropbox.com/sh/l22jyonei087h4o/AAChfqr_j4ydTDjILz0Q62Y2a/configstore-2.5.0-linux-amd64.tar.gz?dl=0 -O /tmp/configstore-2.5.0-linux-amd64.tar.gz
+    wget "https://www.dropbox.com/sh/l22jyonei087h4o/AAChfqr_j4ydTDjILz0Q62Y2a/configstore-2.5.0-linux-amd64.tar.gz?dl=0" -O /tmp/configstore-2.5.0-linux-amd64.tar.gz
     tar zxvf /tmp/configstore-2.5.0-linux-amd64.tar.gz -C /usr/local/bin
     rm -rf /tmp/configstore-2.5.0-linux-amd64.tar.gz
 fi
