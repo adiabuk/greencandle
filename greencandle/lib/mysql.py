@@ -216,13 +216,14 @@ class Mysql():
 
     @get_exceptions
     def update_trades(self, pair, close_time, close_price, quote, base_out,
-                      name=None, drawdown='NULL'):
+                      name=None, drawdown=None, drawup=None):
         """
         Update an existing trade with sell price
         """
         job_name = name if name else config.main.name
         command = """update trades set close_price={0},close_time="{1}", quote_out="{2}",
-        base_out="{3}", closed_by="{6}", drawdown_perc=abs(round({7},1)) where close_price is
+        base_out="{3}", closed_by="{6}", drawdown_perc=abs(round({7},1)),
+        drawup_perc=abs(round({8},1)) where close_price is
         NULL and `interval`="{4}" and pair="{5}" and (name like "{6}" or
         name like "api") """.format('%.15f' % float(close_price),
                                     close_time,
@@ -230,7 +231,7 @@ class Mysql():
                                     '%.15f' % float(base_out),
                                     self.interval,
                                     pair,
-                                    job_name, drawdown)
+                                    job_name, drawdown, drawup)
         result = self.run_sql_query(command)
         if result != 1:
             self.logger.critical("Query affected %s rows" % result)
