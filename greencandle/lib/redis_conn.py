@@ -75,7 +75,8 @@ class Redis():
         max_price = self.get_item(key, 'max_price')
         orig_price = self.get_item(key, 'orig_price')
         drawup = perc_diff(orig_price, max_price)
-        return drawup
+        self.logger.warning("AMROX7 %s %s %s" % (orig_price, max_price, drawup))
+        return {'price':max_price, 'perc': drawup}
 
     def rm_drawup(self, pair):
         """
@@ -149,6 +150,7 @@ class Redis():
 
                 data = {"max_price": current_high, "orig_price": orig_price}
                 self.add_price(key, data)
+                self.logger.warning("AMROX3 %s" % current_high)
         elif config.main.trade_direction == 'short':
             if (max_price and float(current_low) < float(max_price)) or \
                     (not max_price and event == 'open'):
@@ -436,8 +438,8 @@ class Redis():
             # function returns an empty list if no results so cannot get first element
 
             if str2bool(config.main.trailing_stop_loss):
-                high_price = self.get_drawup(pair)
-
+                high_price = self.get_drawup(pair)['price']
+                self.logger.warning("AMROX6 %s" % high_price)
                 trailing_perc = float(config.main.trailing_stop_loss_perc)
                 if high_price:
 
@@ -497,7 +499,9 @@ class Redis():
         elif trailing_stop and open_price:
 
             if test_data and str2bool(config.main.immediate_stop):
-                stop_at = sub_perc(trailing_perc, high_price)
+                stop_at = sub_perc(trailing_perc, current_high)
+                self.logger.warning("AMROX %s %s" % (current_price, stop_at))
+                self.logger.warning("AMROX5 %s" % high_price)
                 current_price = stop_at
             event = 'TrailingStopLoss'
             result = 'SELL'
