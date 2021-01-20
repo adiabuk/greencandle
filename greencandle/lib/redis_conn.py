@@ -47,7 +47,6 @@ class Redis():
         pool = redis.ConnectionPool(host=self.host, port=self.port, db=db)
         self.conn = redis.StrictRedis(connection_pool=pool)
 
-
     def __del__(self):
         del self.conn
 
@@ -73,17 +72,7 @@ class Redis():
         """
         result = self.conn.delete(name)
 
-    def put_high_price(self, key, interval, price):
-        """
-        update high price if current price is
-        higher then previously stored value
-        """
-        last_price = self.conn.get(key)
-        if not last_price or float(price) > float(last_price):
-            result = self.conn.set(key, price)
-            self.logger.debug("Setting high price for %s, result:%s" % (key, result))
-
-    def get_high_price(self, pair, interval):
+    def get_high_price(self, pair):
         """get current highest price for pair and interval"""
         key = pair
         try:
@@ -92,7 +81,7 @@ class Redis():
             last_price = None
         return last_price
 
-    def get_drawup(self, pair, interval):
+    def get_drawup(self, pair):
         """
         Get minimum price of current open trade for given pair/interval
         and calculate drawdown based on trade opening price.
@@ -105,7 +94,7 @@ class Redis():
         self.rm_price(key)
         return drawup
 
-    def get_drawdown(self, pair, interval):
+    def get_drawdown(self, pair):
         """
         Get minimum price of current open trade for given pair/interval
         and calculate drawdown based on trade opening price.
@@ -118,8 +107,7 @@ class Redis():
         self.rm_price(key)
         return drawdown
 
-
-    def update_drawdown(self, pair, current_candle, interval, event=None):
+    def update_drawdown(self, pair, current_candle, event=None):
         """
         Update minimum price for current asset.  Create redis record if it doesn't exist.
         """
@@ -146,7 +134,6 @@ class Redis():
                 data = {"min_price": current_low, "orig_price": orig_price}
                 self.add_price(key, data)
 
-
     def update_drawup(self, pair, current_candle, interval, event=None):
         """
         Update minimum price for current asset.  Create redis record if it doesn't exist.
@@ -170,7 +157,6 @@ class Redis():
                     (not max_price and event == 'open'):
                 data = {"max_price": current_high, "orig_price": orig_price}
                 self.add_price(key, data)
-
 
     def del_high_price(self, pair, interval):
         """Delete highest price in redis"""
@@ -287,7 +273,7 @@ class Redis():
         else:
             self.logger.info("%s, %s" % (message, current))
 
-    def get_intermittant(self, pair, open_price, current_price):
+    def get_intermittant(self, open_price, current_price):
         """
         Check if price between intervals and sell if matches stop_loss or take_profit rules
         """
@@ -390,9 +376,6 @@ class Redis():
         current_high = float(high)
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_epoch))
 
-        # Store/update highest price
-        #self.put_high_price(pair, interval, current_price)  #FIXME
-
         # rate of Moving Average increate/decreate based on indicator
         # specified in the rate_indicator config option - best with EMA_500
         rate_indicator = config.main.rate_indicator
@@ -457,7 +440,7 @@ class Redis():
             # function returns an empty list if no results so cannot get first element
 
             if str2bool(config.main.trailing_stop_loss):
-                high_price = self.get_high_price(pair, interval)
+                high_price = self.get_high_price(pair)
                 take_profit_price = add_perc(take_profit_perc, float(open_price))
 
                 trailing_perc = float(config.main.trailing_stop_loss_perc)
@@ -569,7 +552,6 @@ class Redis():
 
             # delete and re-store high price
             self.del_high_price(pair, interval)
-            #self.put_high_price(pair, interval, current_price)  #FIXME
             self.logger.debug("Close: %s, Previous Close: %s, >: %s" %
                               (close, last_close, close > last_close))
             result = 'BUY'
