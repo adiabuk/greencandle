@@ -77,7 +77,7 @@ class Redis():
         drawup = perc_diff(orig_price, max_price)
         return drawup
 
-    def rm_drawdown(self, pair):
+    def rm_drawup(self, pair):
         """
         Delete current draw up value for given pair
         """
