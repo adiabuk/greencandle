@@ -96,11 +96,11 @@ def perform_data(pair, interval, data_dir, indicators):
         current_trade = dbase.get_trade_value(pair)
         current_candle = dataframes[pair].iloc[-1]
         redis.update_drawdown(pair, current_candle)
-        redis.update_drawup(pair, current_candle, interval)
+        redis.update_drawup(pair, current_candle)
 
         if result == "BUY":
             redis.update_drawdown(pair, current_candle, event='open')
-            redis.update_drawup(pair, current_candle, interval, event='open')
+            redis.update_drawup(pair, current_candle, event='open')
             buys.append((pair, current_time, current_price))
             LOGGER.debug("Items to buy: %s" % buys)
             trade.open_trade(buys)
@@ -121,7 +121,7 @@ def perform_data(pair, interval, data_dir, indicators):
         current_candle = dataframes[pair].iloc[-1]
 
         redis.update_drawdown(pair, current_candle)
-        redis.update_drawup(pair, current_candle, interval)
+        redis.update_drawup(pair, current_candle)
 
         drawdown = redis.get_drawdown(pair)
         drawup = redis.get_drawup(pair)

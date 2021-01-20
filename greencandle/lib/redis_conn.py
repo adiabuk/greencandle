@@ -134,7 +134,7 @@ class Redis():
                 data = {"min_price": current_low, "orig_price": orig_price}
                 self.add_price(key, data)
 
-    def update_drawup(self, pair, current_candle, interval, event=None):
+    def update_drawup(self, pair, current_candle, event=None):
         """
         Update minimum price for current asset.  Create redis record if it doesn't exist.
         """
@@ -183,10 +183,10 @@ class Redis():
 
         if not key.endswith("999"):
             self.logger.critical("Invalid time submitted to redis %s.  Skipping " % key)
-            return
+            return None
 
-        for k, v in data.items():
-            response = self.conn.hset(key, k, v)
+        for item, value in data.items():
+            response = self.conn.hset(key, item, value)
 
         if self.expire:
             self.conn.expire(key, expiry)
@@ -262,16 +262,24 @@ class Redis():
         except (TypeError, AttributeError):
             return None
 
-    def log_event(self, event, rate, perc_rate, buy, sell, pair, current_time, current):
+    def log_event(self, **kwargs):
         """Send event data to logger"""
-        message = 'EVENT:({0}) {1} rate:{2} perc_rate:{3} buy:{4} sell:{5}, time:{6}'.format(
-            pair, event, format(float(rate), ".4f"), format(float(perc_rate), ".4f"),
-            buy, sell, current_time)
+        valid_keys = ["event", "rate", "perc_rate", "open_price", "close_price",
+                      "pair", "current_time", "current"]
+        kwargs=AttributeDict(kwargs)
+        for key in valid_keys:
+            if key not in valid_keys:
+                raise KeyError("Missing param %s" % key)
 
-        if event == "Hold":
-            self.logger.debug("%s, %s" % (message, current))
+        message = ('EVENT:({0}) {1} rate:{2} perc_rate:{3} open_price:{4} close_price:{5}, '
+                   'time:{6}'.format(kwargs.pair, kwargs.event, format(float(kwargs.rate), ".4f"),
+                                     format(float(kwargs.perc_rate), ".4f"),
+                                     kwargs.open_price, kwargs.close_price, kwargs.current_time))
+
+        if kwargs.event == "Hold":
+            self.logger.debug("%s, %s" % (message, kwargs.current))
         else:
-            self.logger.info("%s, %s" % (message, current))
+            self.logger.info("%s, %s" % (message, kwargs.current))
 
     def get_intermittant(self, open_price, current_price):
         """
@@ -488,7 +496,6 @@ class Redis():
 
         if stop_loss_rule and open_price:
             # if we match stop_loss rule and are in a trade
-            self.logger.warning("StopLoss: open_price:%s high_price:%s" % (open_price, high_price))
 
             if test_data and str2bool(config.main.immediate_stop):
                 if config.main.trade_direction == 'short':
@@ -498,9 +505,8 @@ class Redis():
                     stop_at = sub_perc(stop_loss_perc, open_price)
                     current_price = stop_at
 
-            self.log_event('StopLoss', rate, perc_rate, open_price,
-                           current_price, pair, current_time, results.current)
             self.del_high_price(pair, interval)
+            event = 'StopLoss'
             result = 'SELL'
 
 
@@ -509,12 +515,8 @@ class Redis():
             if test_data and str2bool(config.main.immediate_stop):
                 stop_at = sub_perc(trailing_perc, high_price)
                 current_price = stop_at
-            self.logger.info("TrailingStopLoss: open_price:%s high_price:%s"
-                             % (open_price, high_price))
-            self.logger.info("Trailing stop loss reached")
-            self.log_event('TrailingStopLoss', rate, perc_rate, open_price,
-                           current_price, pair, current_time, results.current)
             self.del_high_price(pair, interval)
+            event = 'TrailingStopLoss'
             result = 'SELL'
         # if we match take_profit rule and are in a trade
         elif str2bool(config.main.take_profit) and take_profit_rule and open_price:
@@ -522,16 +524,13 @@ class Redis():
                 stop_at = add_perc(take_profit_perc, open_price)
                 current_price = stop_at
 
-            self.log_event('TakeProfit', rate, perc_rate, open_price, current_price,
-                           pair, current_time, results.current)
             self.del_high_price(pair, interval)
+            event = "TakeProfit"
             result = 'SELL'
 
         elif close_timeout:
-            self.logger.warning("TimeOut: open_price:%s high_price:%s" % (open_price, high_price))
-            self.log_event('TimeOut', rate, perc_rate, open_price,
-                           current_price, pair, current_time, results.current)
             self.del_high_price(pair, interval)
+            event = "TimeOut"
             result = 'SELL'
 
 
@@ -539,29 +538,31 @@ class Redis():
         # if we match any sell rules, are in a trade and no buy rules match
         elif any(rules['close']) and open_price and not both:
 
-            self.log_event('NormalSell', rate, perc_rate, open_price, current_price,
-                           pair, current_time, results.current)
-
             self.del_high_price(pair, interval)
+            event = "NormalSell"
             result = 'SELL'
 
         # if we match any buy rules are NOT in a trade and sell rules don't match
         elif any(rules['open']) and not open_price and able_to_buy and not both:
-            self.log_event('NormalBuy', rate, perc_rate, current_price, current_price,
-                           pair, current_time, results.current)
 
             # delete and re-store high price
             self.del_high_price(pair, interval)
             self.logger.debug("Close: %s, Previous Close: %s, >: %s" %
                               (close, last_close, close > last_close))
+
+            event = "NormalBuy"
             result = 'BUY'
 
         elif open_price:
-            self.log_event('Hold', rate, perc_rate, open_price, current_price, pair, current_time,
-                           results.current)
+            event = "Hold"
             result = 'HOLD'
         else:
+            event = "NoItem"
             result = 'NOITEM'
+
+        self.log_event(event=event, rate=rate, perc_rate=perc_rate,
+                           open_price=open_price, close_price=current_price,
+                           pair=pair, current_time=current_time, current=results.current)
 
         winning_sell = self.get_rules(rules, 'close')
         winning_buy = self.get_rules(rules, 'open')
