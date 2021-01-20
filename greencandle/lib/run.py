@@ -110,6 +110,8 @@ def perform_data(pair, interval, data_dir, indicators):
             LOGGER.debug("Items to sell: %s" % sells)
             drawdown = redis.get_drawdown(pair)
             drawup = redis.get_drawup(pair)
+            redis.rm_drawup(pair)
+            redis.rm_drawdown(pair)
             trade.close_trade(sells, drawdowns={pair:drawdown}, drawups={pair:drawup})
 
     del redis
@@ -125,6 +127,8 @@ def perform_data(pair, interval, data_dir, indicators):
 
         drawdown = redis.get_drawdown(pair)
         drawup = redis.get_drawup(pair)
+        redis.rm_drawup(pair)
+        redis.rm_drawdown(pair)
 
         trade.close_trade(sells, drawdowns={pair:drawdown}, drawups={pair:drawup})
 

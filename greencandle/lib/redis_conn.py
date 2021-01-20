@@ -61,25 +61,9 @@ class Redis():
         add/update min price dict
         """
         for key, val in data.items():
-
             self.logger.debug("Adding to Redis: %s %s %s" % (name, key, val))
             response = self.conn.hset(name, key, val)
         return response
-
-    def rm_price(self, name):
-        """
-        Remove current min_price
-        """
-        result = self.conn.delete(name)
-
-    def get_high_price(self, pair):
-        """get current highest price for pair and interval"""
-        key = pair
-        try:
-            last_price = float(self.conn.hget(key, 'max_price'))
-        except TypeError:
-            last_price = None
-        return last_price
 
     def get_drawup(self, pair):
         """
@@ -91,8 +75,21 @@ class Redis():
         max_price = self.get_item(key, 'max_price')
         orig_price = self.get_item(key, 'orig_price')
         drawup = perc_diff(orig_price, max_price)
-        self.rm_price(key)
         return drawup
+
+    def rm_drawdown(self, pair):
+        """
+        Delete current draw up value for given pair
+        """
+        key = "{}_{}_drawup".format(pair, config.main.name)
+        self.conn.delete(key)
+
+    def rm_drawdown(self, pair):
+        """
+        Delete current draw down value for given pair
+        """
+        key = "{}_{}_drawdown".format(pair, config.main.name)
+        self.conn.delete(key)
 
     def get_drawdown(self, pair):
         """
@@ -104,7 +101,7 @@ class Redis():
         min_price = self.get_item(key, 'min_price')
         orig_price = self.get_item(key, 'orig_price')
         drawdown = perc_diff(orig_price, min_price)
-        self.rm_price(key)
+        self.conn.delete(key)
         return drawdown
 
     def update_drawdown(self, pair, current_candle, event=None):
@@ -157,12 +154,6 @@ class Redis():
                     (not max_price and event == 'open'):
                 data = {"max_price": current_high, "orig_price": orig_price}
                 self.add_price(key, data)
-
-    def del_high_price(self, pair, interval):
-        """Delete highest price in redis"""
-        key = 'highClose_{0}_{1}'.format(pair, interval)
-        result = self.conn.delete(key)
-        self.logger.debug("Deleting high price for %s, result:%s" % (pair, result))
 
     def redis_conn(self, pair, interval, data, now):
         """
@@ -377,8 +368,6 @@ class Redis():
             open_price = None
             open_time = None
 
-
-
         current_price = float(close)
         current_low = float(low)
         current_high = float(high)
@@ -426,7 +415,6 @@ class Redis():
             sell_epoch = int(buy_epoch) + int(convert_to_seconds(config.main.time_in_trade))
             close_timeout = current_epoch > sell_epoch
 
-
         if not open_price and str2bool(config.main.wait_between_trades):
             try:
                 open_time = dbase.fetch_sql_data("select close_time from trades where pair='{}' "
@@ -448,8 +436,7 @@ class Redis():
             # function returns an empty list if no results so cannot get first element
 
             if str2bool(config.main.trailing_stop_loss):
-                high_price = self.get_high_price(pair)
-                take_profit_price = add_perc(take_profit_perc, float(open_price))
+                high_price = self.get_drawup(pair)
 
                 trailing_perc = float(config.main.trailing_stop_loss_perc)
                 if high_price:
@@ -474,7 +461,6 @@ class Redis():
                 if test_data and str2bool(config.main.immediate_stop):
                     stop_loss_rule = current_low < sub_perc(stop_loss_perc, open_price)
                     take_profit_rule = current_high > add_perc(take_profit_perc, open_price)
-
 
         except (IndexError, ValueError, TypeError):
             # Setting to none to indicate we are currently not in a trade
@@ -505,17 +491,14 @@ class Redis():
                     stop_at = sub_perc(stop_loss_perc, open_price)
                     current_price = stop_at
 
-            self.del_high_price(pair, interval)
             event = 'StopLoss'
             result = 'SELL'
-
 
         elif trailing_stop and open_price:
 
             if test_data and str2bool(config.main.immediate_stop):
                 stop_at = sub_perc(trailing_perc, high_price)
                 current_price = stop_at
-            self.del_high_price(pair, interval)
             event = 'TrailingStopLoss'
             result = 'SELL'
         # if we match take_profit rule and are in a trade
@@ -524,12 +507,10 @@ class Redis():
                 stop_at = add_perc(take_profit_perc, open_price)
                 current_price = stop_at
 
-            self.del_high_price(pair, interval)
             event = "TakeProfit"
             result = 'SELL'
 
         elif close_timeout:
-            self.del_high_price(pair, interval)
             event = "TimeOut"
             result = 'SELL'
 
@@ -538,7 +519,6 @@ class Redis():
         # if we match any sell rules, are in a trade and no buy rules match
         elif any(rules['close']) and open_price and not both:
 
-            self.del_high_price(pair, interval)
             event = "NormalSell"
             result = 'SELL'
 
@@ -546,7 +526,6 @@ class Redis():
         elif any(rules['open']) and not open_price and able_to_buy and not both:
 
             # delete and re-store high price
-            self.del_high_price(pair, interval)
             self.logger.debug("Close: %s, Previous Close: %s, >: %s" %
                               (close, last_close, close > last_close))
 
