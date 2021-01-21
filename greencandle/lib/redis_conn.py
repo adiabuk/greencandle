@@ -58,7 +58,7 @@ class Redis():
 
     def add_price(self, name, data):
         """
-        add/update min price dict
+        add/update min and max price dict
         """
         for key, val in data.items():
             self.logger.debug("Adding to Redis: %s %s %s" % (name, key, val))
@@ -67,9 +67,9 @@ class Redis():
 
     def get_drawup(self, pair):
         """
-        Get minimum price of current open trade for given pair/interval
-        and calculate drawdown based on trade opening price.
-        Return drawdown as a percentage
+        Get maximum price of current open trade for given pair/interval
+        and calculate drawdup based on trade opening price.
+        Return max price and drawup as a percentage
         """
         key = "{}_{}_drawup".format(pair, config.main.name)
         max_price = self.get_item(key, 'max_price')
@@ -95,7 +95,7 @@ class Redis():
         """
         Get minimum price of current open trade for given pair/interval
         and calculate drawdown based on trade opening price.
-        Return drawdown as a percentage
+        Return min price and drawdown as a percentage
         """
         key = "{}_{}_drawdown".format(pair, config.main.name)
         min_price = self.get_item(key, 'min_price')
@@ -117,7 +117,6 @@ class Redis():
         current_price = current_candle['close']
 
         if event == 'open':
-            self.logger.debug("Opening drawdown")
             current_low = current_price
             current_high = current_price
 
@@ -148,6 +147,11 @@ class Redis():
         current_low = current_candle['low']
         current_high = current_candle['high']
         current_price = current_candle['close']
+
+        if event == 'open':
+            current_low = current_price
+            current_high = current_price
+
         if not orig_price:
             orig_price = current_price
         if config.main.trade_direction == 'long':
