@@ -447,6 +447,7 @@ class Redis():
                 if high_price:
 
                     trailing_stop = current_price <= sub_perc(trailing_perc, high_price)
+                    # FIXME
                     #if test_data and str2bool(config.main.immediate_stop):
                     #    trailing_stop = current_low <= sub_perc(trailing_perc, high_price)
 
