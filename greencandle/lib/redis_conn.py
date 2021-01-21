@@ -75,7 +75,6 @@ class Redis():
         max_price = self.get_item(key, 'max_price')
         orig_price = self.get_item(key, 'orig_price')
         drawup = perc_diff(orig_price, max_price)
-        self.logger.warning("AMROX7 %s %s %s" % (orig_price, max_price, drawup))
         return {'price':max_price, 'perc': drawup}
 
     def rm_drawup(self, pair):
@@ -103,7 +102,7 @@ class Redis():
         orig_price = self.get_item(key, 'orig_price')
         drawdown = perc_diff(orig_price, min_price)
         self.conn.delete(key)
-        return drawdown
+        return drawdown if drawdown < 0 else 0
 
     def update_drawdown(self, pair, current_candle, event=None):
         """
@@ -112,12 +111,19 @@ class Redis():
         key = "{}_{}_drawdown".format(pair, config.main.name)
         min_price = self.get_item(key, 'min_price')
         orig_price = self.get_item(key, 'orig_price')
+
         current_low = current_candle['low']
         current_high = current_candle['high']
         current_price = current_candle['close']
 
+        if event == 'open':
+            self.logger.debug("Opening drawdown")
+            current_low = current_price
+            current_high = current_price
+
         if not orig_price:
             orig_price = current_price
+
         if config.main.trade_direction == 'long':
             # if min price already exists and current price is lower, or there is no min price yet.
 
@@ -150,7 +156,6 @@ class Redis():
 
                 data = {"max_price": current_high, "orig_price": orig_price}
                 self.add_price(key, data)
-                self.logger.warning("AMROX3 %s" % current_high)
         elif config.main.trade_direction == 'short':
             if (max_price and float(current_low) < float(max_price)) or \
                     (not max_price and event == 'open'):
@@ -356,7 +361,6 @@ class Redis():
         low = float(rehydrated.low)
         close = float(rehydrated.close)
         trades = float(rehydrated.numTrades)
-
         last_open = float(last_rehydrated.open)
         last_high = float(last_rehydrated.high)
         last_low = float(last_rehydrated.low)
@@ -439,7 +443,6 @@ class Redis():
 
             if str2bool(config.main.trailing_stop_loss):
                 high_price = self.get_drawup(pair)['price']
-                self.logger.warning("AMROX6 %s" % high_price)
                 trailing_perc = float(config.main.trailing_stop_loss_perc)
                 if high_price:
 
@@ -492,7 +495,6 @@ class Redis():
                 elif config.main.trade_direction == 'long':
                     stop_at = sub_perc(stop_loss_perc, open_price)
                     current_price = stop_at
-
             event = 'StopLoss'
             result = 'SELL'
 
@@ -500,8 +502,6 @@ class Redis():
 
             if test_data and str2bool(config.main.immediate_stop):
                 stop_at = sub_perc(trailing_perc, current_high)
-                self.logger.warning("AMROX %s %s" % (current_price, stop_at))
-                self.logger.warning("AMROX5 %s" % high_price)
                 current_price = stop_at
             event = 'TrailingStopLoss'
             result = 'SELL'
