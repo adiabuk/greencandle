@@ -17,6 +17,7 @@ graphs/in/*.html
 test_data/*
 log/*.log
 log/*.log.gz
+*.p
 
 graphs/out/*.html
 graphs/in/*.png

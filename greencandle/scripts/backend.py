@@ -64,10 +64,9 @@ def main():
 
     @sched.scheduled_job('interval', seconds=60)
     def get_price():
-        if str2bool(config.main.immediate_stop):
-            LOGGER.info("Starting Price check")
-            prod_int_check(interval, args.test)
-            LOGGER.info("Finished Price check")
+        LOGGER.info("Starting Price check")
+        prod_int_check(interval, args.test)
+        LOGGER.info("Finished Price check")
 
     @sched.scheduled_job('interval', minutes=30)
     def get_graph():

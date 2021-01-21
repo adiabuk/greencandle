@@ -451,9 +451,8 @@ class Redis():
                 if high_price:
 
                     trailing_stop = current_price <= sub_perc(trailing_perc, high_price)
-                    # FIXME
-                    #if test_data and str2bool(config.main.immediate_stop):
-                    #    trailing_stop = current_low <= sub_perc(trailing_perc, high_price)
+                    if test_data and str2bool(config.main.immediate_trailing_stop):
+                        trailing_stop = current_low <= sub_perc(trailing_perc, high_price)
 
                 else:
                     trailing_stop = False
@@ -470,6 +469,8 @@ class Redis():
                 take_profit_rule = current_price > add_perc(take_profit_perc, open_price)
                 if test_data and str2bool(config.main.immediate_stop):
                     stop_loss_rule = current_low < sub_perc(stop_loss_perc, open_price)
+
+                if test_data and str2bool(config.main.immediate_take_profit):
                     take_profit_rule = current_high > add_perc(take_profit_perc, open_price)
 
         except (IndexError, ValueError, TypeError):
