@@ -115,8 +115,6 @@ def perform_data(pair, interval, data_dir, indicators):
             LOGGER.debug("AMROX2 %s" % sells)
             trade.close_trade(sells, drawdowns={pair:drawdown}, drawups={pair:drawup})
 
-    del redis
-    del dbase
     LOGGER.info("Selling remaining item")
     sells = []
     if current_trade:
@@ -133,6 +131,8 @@ def perform_data(pair, interval, data_dir, indicators):
 
         trade.close_trade(sells, drawdowns={pair:drawdown}, drawups={pair:drawup})
 
+    del redis
+    del dbase
 def parallel_test(pairs, interval, data_dir, indicators):
     """
     Do test with parallel data
