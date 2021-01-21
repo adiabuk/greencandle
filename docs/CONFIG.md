@@ -61,7 +61,7 @@
 * **take_profit** *{True|False} take profit active*
 * **take_profit_perc** *Take profit percentage*
 * **trailing_stop_loss** *{True|False} Trailing stop loss active}
-* **trailing_stop_loss_perc** *Trailing stop loss percentage*
+* **trailing_stop_loss_perc** *Trailing stop loss percentage from maximum value since open*
 * **indicators** *List of indicators and values - see seperate doc*
 * **open_rule{1-10}** *Rules to open trade - see seperate doc*
 * **close_rule{1-10}** *Rules to close trade - see seperate doc*

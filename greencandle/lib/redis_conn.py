@@ -56,48 +56,115 @@ class Redis():
         """
         self.conn.execute_command("flushdb")
 
-    def add_min_price(self, pair, data):
+    def add_price(self, name, data):
         """
-        add/update min price dict
+        add/update min and max price dict
         """
         for key, val in data.items():
-
-            self.logger.debug("Adding to Redis: %s %s %s" % (pair, key, val))
-            response = self.conn.hset(pair, key, val)
+            self.logger.debug("Adding to Redis: %s %s %s" % (name, key, val))
+            response = self.conn.hset(name, key, val)
         return response
 
-    def rm_min_price(self, pair):
+    def get_drawup(self, pair):
         """
-        Remove current min_price
+        Get maximum price of current open trade for given pair/interval
+        and calculate drawdup based on trade opening price.
+        Return max price and drawup as a percentage
         """
-        result = self.conn.delete(pair)
+        key = "{}_{}_drawup".format(pair, config.main.name)
+        max_price = self.get_item(key, 'max_price')
+        orig_price = self.get_item(key, 'orig_price')
+        drawup = perc_diff(orig_price, max_price)
+        return {'price':max_price, 'perc': drawup}
 
-    def put_high_price(self, pair, interval, price):
+    def rm_drawup(self, pair):
         """
-        update high price if current price is
-        higher then previously stored value
+        Delete current draw up value for given pair
         """
-        key = 'highClose_{0}_{1}'.format(pair, interval)
+        key = "{}_{}_drawup".format(pair, config.main.name)
+        self.conn.delete(key)
 
-        last_price = self.conn.get(key)
-        if not last_price or float(price) > float(last_price):
-            result = self.conn.set(key, price)
-            self.logger.debug("Setting high price for %s, result:%s" % (pair, result))
+    def rm_drawdown(self, pair):
+        """
+        Delete current draw down value for given pair
+        """
+        key = "{}_{}_drawdown".format(pair, config.main.name)
+        self.conn.delete(key)
 
-    def get_high_price(self, pair, interval):
-        """get current highest price for pair and interval"""
-        key = 'highClose_{0}_{1}'.format(pair, interval)
-        try:
-            last_price = float(self.conn.get(key))
-        except TypeError:
-            last_price = None
-        return last_price
+    def get_drawdown(self, pair):
+        """
+        Get minimum price of current open trade for given pair/interval
+        and calculate drawdown based on trade opening price.
+        Return min price and drawdown as a percentage
+        """
+        key = "{}_{}_drawdown".format(pair, config.main.name)
+        min_price = self.get_item(key, 'min_price')
+        orig_price = self.get_item(key, 'orig_price')
+        drawdown = perc_diff(orig_price, min_price)
+        self.conn.delete(key)
+        return drawdown if drawdown < 0 else 0
 
-    def del_high_price(self, pair, interval):
-        """Delete highest price in redis"""
-        key = 'highClose_{0}_{1}'.format(pair, interval)
-        result = self.conn.delete(key)
-        self.logger.debug("Deleting high price for %s, result:%s" % (pair, result))
+    def update_drawdown(self, pair, current_candle, event=None):
+        """
+        Update minimum price for current asset.  Create redis record if it doesn't exist.
+        """
+        key = "{}_{}_drawdown".format(pair, config.main.name)
+        min_price = self.get_item(key, 'min_price')
+        orig_price = self.get_item(key, 'orig_price')
+
+        current_low = current_candle['low']
+        current_high = current_candle['high']
+        current_price = current_candle['close']
+
+        if event == 'open':
+            current_low = current_price
+            current_high = current_price
+
+        if not orig_price:
+            orig_price = current_price
+
+        if config.main.trade_direction == 'long':
+            # if min price already exists and current price is lower, or there is no min price yet.
+
+            if (min_price and float(current_low) < float(min_price)) or \
+                    (not min_price and event == 'open'):
+
+                data = {"min_price": current_low, "orig_price": orig_price}
+                self.add_price(key, data)
+        elif config.main.trade_direction == 'short':
+            if (min_price and float(current_high) > float(min_price)) or \
+                    (not min_price and event == 'open'):
+                data = {"min_price": current_low, "orig_price": orig_price}
+                self.add_price(key, data)
+
+    def update_drawup(self, pair, current_candle, event=None):
+        """
+        Update minimum price for current asset.  Create redis record if it doesn't exist.
+        """
+        key = "{}_{}_drawup".format(pair, config.main.name)
+        max_price = self.get_item(key, 'max_price')
+        orig_price = self.get_item(key, 'orig_price')
+        current_low = current_candle['low']
+        current_high = current_candle['high']
+        current_price = current_candle['close']
+
+        if event == 'open':
+            current_low = current_price
+            current_high = current_price
+
+        if not orig_price:
+            orig_price = current_price
+        if config.main.trade_direction == 'long':
+            if (max_price and float(current_high) > float(max_price)) or \
+                    (not max_price and event == 'open'):
+
+                data = {"max_price": current_high, "orig_price": orig_price}
+                self.add_price(key, data)
+        elif config.main.trade_direction == 'short':
+            if (max_price and float(current_low) < float(max_price)) or \
+                    (not max_price and event == 'open'):
+                data = {"max_price": current_high, "orig_price": orig_price}
+                self.add_price(key, data)
 
     def redis_conn(self, pair, interval, data, now):
         """
@@ -118,10 +185,10 @@ class Redis():
 
         if not key.endswith("999"):
             self.logger.critical("Invalid time submitted to redis %s.  Skipping " % key)
-            return
+            return None
 
-        for k, v in data.items():
-            response = self.conn.hset(key, k, v)
+        for item, value in data.items():
+            response = self.conn.hset(key, item, value)
 
         if self.expire:
             self.conn.expire(key, expiry)
@@ -197,18 +264,26 @@ class Redis():
         except (TypeError, AttributeError):
             return None
 
-    def log_event(self, event, rate, perc_rate, buy, sell, pair, current_time, current):
+    def log_event(self, **kwargs):
         """Send event data to logger"""
-        message = 'EVENT:({0}) {1} rate:{2} perc_rate:{3} buy:{4} sell:{5}, time:{6}'.format(
-            pair, event, format(float(rate), ".4f"), format(float(perc_rate), ".4f"),
-            buy, sell, current_time)
+        valid_keys = ["event", "rate", "perc_rate", "open_price", "close_price",
+                      "pair", "current_time", "current"]
+        kwargs=AttributeDict(kwargs)
+        for key in valid_keys:
+            if key not in valid_keys:
+                raise KeyError("Missing param %s" % key)
 
-        if event == "Hold":
-            self.logger.debug("%s, %s" % (message, current))
+        message = ('EVENT:({0}) {1} rate:{2} perc_rate:{3} open_price:{4} close_price:{5}, '
+                   'time:{6}'.format(kwargs.pair, kwargs.event, format(float(kwargs.rate), ".4f"),
+                                     format(float(kwargs.perc_rate), ".4f"),
+                                     kwargs.open_price, kwargs.close_price, kwargs.current_time))
+
+        if kwargs.event == "Hold":
+            self.logger.debug("%s, %s" % (message, kwargs.current))
         else:
-            self.logger.info("%s, %s" % (message, current))
+            self.logger.info("%s, %s" % (message, kwargs.current))
 
-    def get_intermittant(self, pair, open_price, current_price):
+    def get_intermittant(self, open_price, current_price):
         """
         Check if price between intervals and sell if matches stop_loss or take_profit rules
         """
@@ -290,7 +365,6 @@ class Redis():
         low = float(rehydrated.low)
         close = float(rehydrated.close)
         trades = float(rehydrated.numTrades)
-
         last_open = float(last_rehydrated.open)
         last_high = float(last_rehydrated.high)
         last_low = float(last_rehydrated.low)
@@ -304,13 +378,10 @@ class Redis():
             open_price = None
             open_time = None
 
-
-
         current_price = float(close)
+        current_low = float(low)
+        current_high = float(high)
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_epoch))
-
-        # Store/update highest price
-        self.put_high_price(pair, interval, current_price)
 
         # rate of Moving Average increate/decreate based on indicator
         # specified in the rate_indicator config option - best with EMA_500
@@ -354,7 +425,6 @@ class Redis():
             sell_epoch = int(buy_epoch) + int(convert_to_seconds(config.main.time_in_trade))
             close_timeout = current_epoch > sell_epoch
 
-
         if not open_price and str2bool(config.main.wait_between_trades):
             try:
                 open_time = dbase.fetch_sql_data("select close_time from trades where pair='{}' "
@@ -376,12 +446,14 @@ class Redis():
             # function returns an empty list if no results so cannot get first element
 
             if str2bool(config.main.trailing_stop_loss):
-                high_price = self.get_high_price(pair, interval)
-                take_profit_price = add_perc(take_profit_perc, float(open_price))
-
+                high_price = self.get_drawup(pair)['price']
                 trailing_perc = float(config.main.trailing_stop_loss_perc)
                 if high_price:
+
                     trailing_stop = current_price <= sub_perc(trailing_perc, high_price)
+                    # FIXME
+                    #if test_data and str2bool(config.main.immediate_stop):
+                    #    trailing_stop = current_low <= sub_perc(trailing_perc, high_price)
 
                 else:
                     trailing_stop = False
@@ -391,9 +463,14 @@ class Redis():
             if config.main.trade_direction == "short":
                 stop_loss_rule = current_price > add_perc(stop_loss_perc, open_price)
                 take_profit_rule = current_price < sub_perc(take_profit_perc, open_price)
+
             elif config.main.trade_direction == "long":
+                #FIXME - get MINPRICE
                 stop_loss_rule = current_price < sub_perc(stop_loss_perc, open_price)
                 take_profit_rule = current_price > add_perc(take_profit_perc, open_price)
+                if test_data and str2bool(config.main.immediate_stop):
+                    stop_loss_rule = current_low < sub_perc(stop_loss_perc, open_price)
+                    take_profit_rule = current_high > add_perc(take_profit_perc, open_price)
 
         except (IndexError, ValueError, TypeError):
             # Setting to none to indicate we are currently not in a trade
@@ -413,78 +490,67 @@ class Redis():
         else:
             both = False
 
-        if close_timeout:
-            self.logger.warning("TimeOut: open_price:%s high_price:%s" % (open_price, high_price))
-            self.log_event('TimeOut', rate, perc_rate, open_price,
-                           current_price, pair, current_time, results.current)
-            self.del_high_price(pair, interval)
-            result = 'SELL'
-
-
-        elif stop_loss_rule and open_price:
+        if stop_loss_rule and open_price:
             # if we match stop_loss rule and are in a trade
-            self.logger.warning("StopLoss: open_price:%s high_price:%s" % (open_price, high_price))
 
             if test_data and str2bool(config.main.immediate_stop):
                 if config.main.trade_direction == 'short':
                     stop_at = add_perc(stop_loss_perc, open_price)
                     current_price = stop_at
                 elif config.main.trade_direction == 'long':
-                    stop_at = add_perc(stop_loss_perc, open_price)
+                    stop_at = sub_perc(stop_loss_perc, open_price)
                     current_price = stop_at
-
-            self.log_event('StopLoss', rate, perc_rate, open_price,
-                           current_price, pair, current_time, results.current)
-            self.del_high_price(pair, interval)
+            event = 'StopLoss'
             result = 'SELL'
 
         elif trailing_stop and open_price:
 
             if test_data and str2bool(config.main.immediate_stop):
-                stop_at = sub_perc(trailing_perc, high_price)
+                stop_at = sub_perc(trailing_perc, current_high)
                 current_price = stop_at
-            self.logger.info("TrailingStopLoss: open_price:%s high_price:%s"
-                             % (open_price, high_price))
-            self.logger.info("Trailing stop loss reached")
-            self.log_event('TrailingStopLoss', rate, perc_rate, open_price,
-                           current_price, pair, current_time, results.current)
-            self.del_high_price(pair, interval)
+            event = 'TrailingStopLoss'
             result = 'SELL'
-
         # if we match take_profit rule and are in a trade
         elif str2bool(config.main.take_profit) and take_profit_rule and open_price:
-            self.log_event('TakeProfit', rate, perc_rate, open_price, current_price,
-                           pair, current_time, results.current)
-            self.del_high_price(pair, interval)
+            if test_data and str2bool(config.main.immediate_stop):
+                stop_at = add_perc(take_profit_perc, open_price)
+                current_price = stop_at
+
+            event = "TakeProfit"
             result = 'SELL'
+
+        elif close_timeout:
+            event = "TimeOut"
+            result = 'SELL'
+
+
 
         # if we match any sell rules, are in a trade and no buy rules match
         elif any(rules['close']) and open_price and not both:
 
-            self.log_event('NormalSell', rate, perc_rate, open_price, current_price,
-                           pair, current_time, results.current)
-
-            self.del_high_price(pair, interval)
+            event = "NormalSell"
             result = 'SELL'
 
         # if we match any buy rules are NOT in a trade and sell rules don't match
         elif any(rules['open']) and not open_price and able_to_buy and not both:
-            self.log_event('NormalBuy', rate, perc_rate, current_price, current_price,
-                           pair, current_time, results.current)
 
             # delete and re-store high price
-            self.del_high_price(pair, interval)
-            self.put_high_price(pair, interval, current_price)
             self.logger.debug("Close: %s, Previous Close: %s, >: %s" %
                               (close, last_close, close > last_close))
+
+            event = "NormalBuy"
             result = 'BUY'
 
         elif open_price:
-            self.log_event('Hold', rate, perc_rate, open_price, current_price, pair, current_time,
-                           results.current)
+            event = "Hold"
             result = 'HOLD'
         else:
+            event = "NoItem"
             result = 'NOITEM'
+
+        self.log_event(event=event, rate=rate, perc_rate=perc_rate,
+                           open_price=open_price, close_price=current_price,
+                           pair=pair, current_time=current_time, current=results.current)
 
         winning_sell = self.get_rules(rules, 'close')
         winning_buy = self.get_rules(rules, 'open')

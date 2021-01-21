@@ -85,14 +85,14 @@ class Trade():
         elif config.main.trade_type == "margin" and config.main.trade_direction == "short":
             self.open_margin_short(items_list)
 
-    def close_trade(self, items_list, name=None, drawdowns={}):
+    def close_trade(self, items_list, name=None, drawdowns={}, drawups={}):
         """
         Main close trade method
         Will choose between spot/margin and long/short
         """
 
         if config.main.trade_type == "spot" and  config.main.trade_direction == "long":
-            self.close_spot_long(items_list, name, drawdowns)
+            self.close_spot_long(items_list, name, drawdowns, drawups)
         elif config.main.trade_type == "margin" and  config.main.trade_direction == "short":
             self.close_margin_short(items_list, name, drawdowns)
 
@@ -432,7 +432,6 @@ class Trade():
         """
         self.logger.info("We have %s potential items to short" % len(short_list))
         drain = str2bool(config.main.drain)
-        prod = str2bool(config.main.production)
         if drain and not self.test_data:
             self.logger.warning("Skipping Buy as %s is in drain" % self.interval)
             return
@@ -479,11 +478,12 @@ class Trade():
                     last_open_price = 0
 
                 if self.divisor:
-                    proposed_quote_amount = (current_base_bal / float(binance.prices()[item])) / self.divisor
-
+                    proposed_quote_amount = (current_base_bal / float(binance.prices()[item])) \
+                            / self.divisor
                 else:
-                    pass
-                    proposed_base_amount = current_base_bal / (self.max_trades + 1)  #FIXME
+                    proposed_quote_amount = (current_base_bal / float(binance.prices()[item])) \
+                            / (self.max_trades + 1)
+
                 self.logger.info('item: %s, proposed: %s, last:%s'
                                  % (item, proposed_quote_amount, last_open_price))
                 self.logger.critical("AMROX %s quote amount" % proposed_quote_amount)
@@ -522,7 +522,7 @@ class Trade():
                 self.send_redis_trade(item, cost, self.interval, "BUY")
 
     @GET_EXCEPTIONS
-    def close_spot_long(self, sell_list, name=None, drawdowns={}):
+    def close_spot_long(self, sell_list, name=None, drawdowns={}, drawups={}):
         """
         Sell items in sell_list
         """
@@ -574,7 +574,8 @@ class Trade():
 
                     dbase.update_trades(pair=item, close_time=current_time,
                                         close_price=new_price, quote=quantity,
-                                        base_out=base_out, name=name, drawdown=drawdowns[item])
+                                        base_out=base_out, name=name, drawdown=drawdowns[item],
+                                        drawup=drawups[item])
 
                     self.send_redis_trade(item, price, self.interval, "SELL")
                 else:
