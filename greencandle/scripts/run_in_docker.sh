@@ -39,7 +39,8 @@ if [[ $ARGS == *"-a"* ]]; then
   create_graph -d0 -a -i $INTERVAL -o $base_dir
 else
   create_graph -d0 -p $PAIR -i $INTERVAL -o ${base_dir}
-  create_drawdownchart $INTERVAL ${base_dir}/drawdown_${PAIR}_${date}.html
+  create_drawdownchart $INTERVAL ${base_dir}/${PAIR}_drawdown_${date}.html
+  create_drawupchart $INTERVAL ${base_dir}/${PAIR}_drawup_${date}.html
 fi
 
 report $INTERVAL ${filename}.xlsx &>> ${filename}.log
