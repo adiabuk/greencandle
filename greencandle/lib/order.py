@@ -387,7 +387,7 @@ class Trade():
 
                 send_gmail_alert("SELL", item, price)
                 send_push_notif('SELL', item, '%.15f' % float(price))
-                send_slack_message('longs', 'SELL %s %.15f' % (item, float(price)))
+                send_slack_message('longs', 'SELL %s %.15f %s' % (item, float(price), perc_inc))
 
                 self.logger.info("Closing %s of %s for %.15f %s"
                                  % (quantity, item, float(price), base_out))
