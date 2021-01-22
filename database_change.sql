@@ -1,5 +1,7 @@
 use greencandle;
 
+alter table trades add drawup_perc varchar(4);
+
 drop view profit;
 
 CREATE VIEW profit as select `trades`.`open_time` AS `open_time`,`trades`.`interval` AS `interval`,`trades`.`close_time` AS `close_time`,`trades`.`pair` AS `pair`,`trades`.`open_price` AS `open_price`,`trades`.`close_price` AS `close_price`,
