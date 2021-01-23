@@ -170,6 +170,8 @@ def parallel_test(pairs, interval, data_dir, indicators):
         dataframes = {}
         buys = []
         sells = []
+        drawdowns = {}
+        drawups = {}
         for pair in pairs:
             LOGGER.info("Current loop: %s to %s pair:%s" % (beg, end, pair))
             dataframe = dframes[pair][beg: end]
@@ -183,18 +185,26 @@ def parallel_test(pairs, interval, data_dir, indicators):
 
             result, current_time, current_price, _ = redis.get_action(pair=pair, interval=interval,
                                                                       test_data=True)
+            current_candle = dataframe.iloc[-1]
+            redis.update_drawdown(pair, current_candle)
+            redis.update_drawup(pair, current_candle)
 
             LOGGER.info('In Strategy %s' % result)
             del engine
 
             if result == "BUY":
                 LOGGER.debug("Items to buy")
+                redis.update_drawdown(pair, current_candle, event='open')
+                redis.update_drawup(pair, current_candle, event='open')
                 buys.append((pair, current_time, current_price))
             if result == "SELL":
                 LOGGER.debug("Items to sell")
+                drawdowns[pair] = redis.get_drawdown(pair)
+                drawups[pair] = redis.get_drawup(pair)['perc']
                 sells.append((pair, current_time, current_price))
         drawdown = 0
-        trade.close_trade(sells, drawdowns={pair: drawdown})
+
+        trade.close_trade(sells, drawdowns=drawdowns, drawups=drawups)
         trade.open_trade(buys)
 
     print(get_recent_profit(True, interval))
