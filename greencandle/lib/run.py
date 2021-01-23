@@ -199,6 +199,7 @@ def parallel_test(pairs, interval, data_dir, indicators):
 
     print(get_recent_profit(True, interval))
 
+@GET_EXCEPTIONS
 def prod_int_check(interval, test):
     """Check price between candles for slippage below stoploss"""
     prices = binance.prices()
@@ -235,6 +236,7 @@ def prod_int_check(interval, test):
     del redis
     del dbase
 
+@GET_EXCEPTIONS
 def prod_initial(interval, test=False):
     """
     Initial prod run - back-fetching data for tech analysis.
@@ -281,6 +283,7 @@ def prod_initial(interval, test=False):
     engine.get_data(localconfig=main_indicators, first_run=True, no_of_klines=no_of_klines)
     del redis
 
+@GET_EXCEPTIONS
 def prod_loop(interval, test_trade):
     """
     Loop through collection cycle (PROD)
