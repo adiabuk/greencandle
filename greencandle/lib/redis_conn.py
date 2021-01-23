@@ -74,7 +74,10 @@ class Redis():
         key = "{}_{}_drawup".format(pair, config.main.name)
         max_price = self.get_item(key, 'max_price')
         orig_price = self.get_item(key, 'orig_price')
-        drawup = perc_diff(orig_price, max_price)
+        try:
+            drawup = perc_diff(orig_price, max_price)
+        except TypeError:
+            drawup = ''
         return {'price':max_price, 'perc': drawup}
 
     def rm_drawup(self, pair):
@@ -100,7 +103,10 @@ class Redis():
         key = "{}_{}_drawdown".format(pair, config.main.name)
         min_price = self.get_item(key, 'min_price')
         orig_price = self.get_item(key, 'orig_price')
-        drawdown = perc_diff(orig_price, min_price)
+        try:
+            drawdown = perc_diff(orig_price, min_price)
+        except TypeError:
+            drawdown = ''
         self.conn.delete(key)
         return drawdown if drawdown < 0 else 0
 
