@@ -222,6 +222,34 @@ class Trade():
         else:
             self.logger.info("Nothing to buy")
 
+    @staticmethod
+    @GET_EXCEPTIONS
+    def get_test_balance(dbase, account=None):
+        """
+        Get and return test balances
+        """
+        prices = defaultdict(lambda: defaultdict(defaultdict))
+
+        prices['binance']['BTC']['count'] = 0.15
+        prices['binance']['ETH']['count'] = 5.84
+        prices['binance']['USDT']['count'] = 1000
+        prices['binance']['USDC']['count'] = 1000
+        prices['binance']['BNB']['count'] = 14
+        for base in ['BTC', 'ETH', 'USDT', 'BNB', 'USDC']:
+            result = dbase.fetch_sql_data("select sum(base_out-base_in) from trades "
+                                          "where pair like '%{0}'"
+                                          .format(base), header=False)[0][0]
+            result = float(result) if result else 0
+            current_trade_values = dbase.fetch_sql_data("select sum(base_in) from trades "
+                                                        "where pair like '%{0}' and "
+                                                        "base_out is null"
+                                                        .format(base), header=False)[0][0]
+            current_trade_values = float(current_trade_values) if \
+                    current_trade_values else 0
+            prices[account][base]['count'] += result + current_trade_values
+        return prices
+
+
     @GET_EXCEPTIONS
     def open_spot_long(self, buy_list):
         """
@@ -239,26 +267,7 @@ class Trade():
         if buy_list:
             dbase = Mysql(test=self.test_data, interval=self.interval)
             if self.test_data or self.test_trade:
-                prices = defaultdict(lambda: defaultdict(defaultdict))
-
-                prices['binance']['BTC']['count'] = 0.15
-                prices['binance']['ETH']['count'] = 5.84
-                prices['binance']['USDT']['count'] = 1000
-                prices['binance']['USDC']['count'] = 1000
-                prices['binance']['BNB']['count'] = 14
-                for base in ['BTC', 'ETH', 'USDT', 'BNB', 'USDC']:
-                    result = dbase.fetch_sql_data("select sum(base_out-base_in) from trades "
-                                                  "where pair like '%{0}'"
-                                                  .format(base), header=False)[0][0]
-                    result = float(result) if result else 0
-                    current_trade_values = dbase.fetch_sql_data("select sum(base_in) from trades "
-                                                                "where pair like '%{0}' and "
-                                                                "base_out is null"
-                                                                .format(base), header=False)[0][0]
-                    current_trade_values = float(current_trade_values) if \
-                            current_trade_values else 0
-                    prices['binance'][base]['count'] += result + current_trade_values
-
+                prices = self.get_test_balance(dbase, account='binance')
             else:
                 balance = Balance(test=False)
                 prices = balance.get_balance()
@@ -278,7 +287,6 @@ class Trade():
                     current_base_bal = 0
                 except TypeError:
                     self.logger.critical("Unable to get balance for base %s" % base)
-                    current_base_bal
 
                 current_trades = dbase.get_trades()
                 avail_slots = self.max_trades - len(current_trades)
@@ -441,27 +449,7 @@ class Trade():
             if self.test_trade and not self.test_data:
                 self.logger.error("Unable to perform margin short test without test data")
             elif self.test_data:
-                prices = defaultdict(lambda: defaultdict(defaultdict))
-                prices['binance']['BTC']['count'] = 0.15
-                prices['binance']['ETH']['count'] = 5.84
-                prices['binance']['USDT']['count'] = 1000
-                prices['binance']['USDC']['count'] = 1000
-                prices['binance']['BNB']['count'] = 14
-                for base in ['BTC', 'ETH', 'USDT', 'BNB', 'USDC']:
-                    result = dbase.fetch_sql_data("select sum(base_out-base_in) from trades "
-                                                  "where pair like '%{0}'"
-                                                  .format(base), header=False)[0][0]
-                    try:
-                        result = float(result) if result else 0
-                    except:
-                        result = 0
-                    current_trade_values = dbase.fetch_sql_data("select sum(base_in) from trades "
-                                                                "where pair like '%{0}' and "
-                                                                "base_out is null"
-                                                                .format(base), header=False)[0][0]
-                    current_trade_values = float(current_trade_values) if \
-                            current_trade_values else 0
-                    prices['binance'][base]['count'] += result + current_trade_values
+                prices = self.get_test_balance(dbase, account='binance')
             try:
                 current_base_bal = prices['binance'][base]['count']
             except KeyError:
@@ -638,7 +626,7 @@ class Trade():
 
                     dbase.update_trades(pair=item, close_time=current_time,
                                         close_price=fill_price, quote=quantity,
-                                        base_out=base_out, name=name, drawdown=drawdowns[pair])
+                                        base_out=base_out, name=name, drawdown=drawdowns[item])
 
                     self.send_redis_trade(item, price, self.interval, "SELL")
                 else:
