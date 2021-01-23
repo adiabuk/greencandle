@@ -357,7 +357,7 @@ class Engine(dict):
         Get pivot points based on previous day data
         """
 
-        LOGGER.debug("Fetching pivot points")
+        LOGGER.debug("Getting pivot points for %s" % pair)
         global CROSS_DATA
         func, timeperiod = localconfig
         if (not index and self.test) or len(self.dataframes[pair]) < 2:
@@ -394,7 +394,7 @@ class Engine(dict):
         """
         Get TSI osscilator
         """
-        LOGGER.debug("Fetching TSI oscillator")
+        LOGGER.debug("Getting TSI oscillator for %s" % pair)
         if (not index and self.test) or len(self.dataframes[pair]) < 2:
             index = -1
         elif not index and not self.test:
