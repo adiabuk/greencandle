@@ -359,14 +359,14 @@ class Trade():
                         # 1. we are using test_data
                         # 2. we performed a test trade which was successful - (empty dict)
                         # 3. we proformed a real trade which was successful - (transactTime in dict)
-                        dbase.insert_trade(pair=item, price=cost, date=current_time,
-                                           base_amount=base_amount, quote=amount,
-                                           direction=config.main.trade_direction)
-                        send_push_notif('BUY', item, '%.15f' % float(cost))
-                        send_gmail_alert('BUY', item, '%.15f' % float(cost))
-                        send_slack_message('longs', 'BUY %s %.15f' % (item, float(cost)))
-
-                        self.send_redis_trade(item, cost, self.interval, "BUY")
+                        result = dbase.insert_trade(pair=item, price=cost, date=current_time,
+                                                    base_amount=base_amount, quote=amount,
+                                                    direction=config.main.trade_direction)
+                        if result:
+                            self.send_redis_trade(item, cost, self.interval, "BUY")
+                            send_push_notif('BUY', item, '%.15f' % float(cost))
+                            send_gmail_alert('BUY', item, '%.15f' % float(cost))
+                            send_slack_message('longs', 'BUY %s %.15f' % (item, float(cost)))
             del dbase
         else:
             self.logger.info("Nothing to buy")
@@ -531,9 +531,6 @@ class Trade():
                 perc_inc = perc_diff(buy_price, price)
                 base_out = add_perc(perc_inc, base_in)
 
-                send_gmail_alert("SELL", item, price)
-                send_push_notif('SELL', item, '%.15f' % float(price))
-                send_slack_message('longs', 'SELL %s %.15f' % (item, float(price)))
 
                 self.logger.info("Selling %s of %s for %.15f %s"
                                  % (quantity, item, float(price), base_out))
@@ -560,12 +557,17 @@ class Trade():
                     if name == "api":
                         name = "%"
 
-                    dbase.update_trades(pair=item, close_time=current_time,
-                                        close_price=new_price, quote=quantity,
-                                        base_out=base_out, name=name, drawdown=drawdowns[item],
-                                        drawup=drawups[item])
+                    result = dbase.update_trades(pair=item, close_time=current_time,
+                                                 close_price=new_price, quote=quantity,
+                                                 base_out=base_out, name=name,
+                                                 drawdown=drawdowns[item],
+                                                 drawup=drawups[item])
 
-                    self.send_redis_trade(item, price, self.interval, "SELL")
+                    if result:
+                        self.send_redis_trade(item, price, self.interval, "SELL")
+                        send_gmail_alert("SELL", item, price)
+                        send_push_notif('SELL', item, '%.15f' % float(price))
+                        send_slack_message('longs', 'SELL %s %.15f' % (item, float(price)))
                 else:
                     self.logger.critical("Sell Failed %s:%s" % (name, item))
             del dbase

@@ -125,7 +125,9 @@ class Mysql():
                              self.interval,
                              quote, config.main.name, borrowed, multiplier,
                              direction)
-        self.run_sql_query(command)
+        result = self.run_sql_query(command)
+        return result == 1
+
 
     @get_exceptions
     def get_recent_high(self, pair, date, months, max_perc):
@@ -235,6 +237,7 @@ class Mysql():
         result = self.run_sql_query(command)
         if result != 1:
             self.logger.critical("Query affected %s rows" % result)
+        return result == 1
 
     def get_active_trades(self):
         """
