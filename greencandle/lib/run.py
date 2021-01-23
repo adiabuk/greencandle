@@ -208,6 +208,7 @@ def prod_int_check(interval, test):
     current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
     sells = []
     drawdowns = {}
+    drawups = {}
     for trade in current_trades:
         pair = trade[0]
         open_price = dbase.get_trade_value(pair)[0][0]
@@ -226,9 +227,11 @@ def prod_int_check(interval, test):
             LOGGER.debug("Items to sell")
             drawdowns[pair] = redis.get_drawdown(pair)
             sells.append((pair, current_time, current_price))
+            drawdowns[pair] = redis.get_drawdown(pair)
+            drawups[pair] = redis.get_drawup(pair)['perc']
 
     trade = Trade(interval=interval, test_trade=test, test_data=False)
-    trade.close_trade(sells, drawdowns=drawdowns)
+    trade.close_trade(sells, drawdowns=drawdowns, drawups=drawups)
     del redis
     del dbase
 
@@ -307,6 +310,7 @@ def prod_loop(interval, test_trade):
     buys = []
     sells = []
     drawdowns = {}
+    drawups = {}
     dataframes = get_dataframes(pairs, interval=interval, no_of_klines=1)
     for pair in pairs:
         result, current_time, current_price, _ = redis.get_action(pair=pair, interval=interval)
@@ -314,17 +318,21 @@ def prod_loop(interval, test_trade):
         current_ctime = int(time.mktime(time.strptime(current_time, pattern)))
         current_candle = dataframes[pair].iloc[-1]
         redis.update_drawdown(pair, current_candle)
+        redis.update_drawup(pair, current_candle)
 
         if result == "BUY":
             LOGGER.debug("Items to buy")
+            redis.update_drawdown(pair, current_candle, event='open')
+            redis.update_drawup(pair, current_candle, event='open')
             buys.append((pair, current_time, current_price))
         if result == "SELL":
             LOGGER.debug("Items to sell")
             sells.append((pair, current_time, current_price))
-
             drawdowns[pair] = redis.get_drawdown(pair)
+            drawups[pair] = redis.get_drawup(pair)['perc']
+
     trade = Trade(interval=interval, test_trade=test_trade, test_data=False)
-    trade.close_trade(sells, drawdowns=drawdowns)
+    trade.close_trade(sells, drawdowns=drawdowns, drawups=drawups)
     trade.open_trade(buys)
     del engine
     del redis
