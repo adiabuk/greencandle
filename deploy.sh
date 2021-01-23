@@ -29,6 +29,8 @@ git pull
 
 # Stop existing fe and be containers
 docker ps --filter name=^fe-* --filter name=^be-* -q | xargs docker stop
+docker ps --filter name=^fe-* -q | xargs docker rm
+docker volume prune -f
 
 FILE=database_change.sql
 if test -f "$FILE"; then
