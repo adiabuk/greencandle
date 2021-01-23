@@ -274,7 +274,7 @@ class Redis():
         """Send event data to logger"""
         valid_keys = ["event", "rate", "perc_rate", "open_price", "close_price",
                       "pair", "current_time", "current"]
-        kwargs=AttributeDict(kwargs)
+        kwargs = AttributeDict(kwargs)
         for key in valid_keys:
             if key not in valid_keys:
                 raise KeyError("Missing param %s" % key)
@@ -321,6 +321,27 @@ class Redis():
             if close_rule:
                 winning.append(seq + 1)
         return winning
+
+    def get_trailing_stop(self, test_data, current_price, high_price, current_high, current_low):
+        direction = config.main.trade_direction
+        trailing_perc = float(config.main.trailing_stop_loss_perc)
+        immediate = str2bool(config.main.immediate_trailing_stop)
+
+        if not high_price:
+            return False
+        elif direction == 'long' and test_data and immediate:
+            check = current_high
+        elif direction == 'short' and test_data and immediate:
+            check = current_high
+        else:
+            check = current_price
+
+        if direction == "long":
+            return check <= sub_perc(trailing_perc, high_price)
+        elif direction == "short":
+            return check >= add_perc(trailing_perc, high_price)
+
+
 
     def get_action(self, pair, interval, test_data=False):
         """Determine if we are in a BUY/HOLD/SELL situration for a specific pair and interval"""
@@ -448,23 +469,13 @@ class Redis():
         else:
             able_to_buy = True
 
+
+        trailing_perc = float(config.main.trailing_stop_loss_perc)
+        high_price = self.get_drawup(pair)['price']
+        low_price = self.get_drawdown(pair)
+        trailing_stop = self.get_trailing_stop(test_data, current_price, high_price, current_high,
+                                                current_low)
         try:
-            # function returns an empty list if no results so cannot get first element
-
-            if str2bool(config.main.trailing_stop_loss):
-                high_price = self.get_drawup(pair)['price']
-                trailing_perc = float(config.main.trailing_stop_loss_perc)
-                if high_price:
-
-                    trailing_stop = current_price <= sub_perc(trailing_perc, high_price)
-                    if test_data and str2bool(config.main.immediate_trailing_stop):
-                        trailing_stop = current_low <= sub_perc(trailing_perc, high_price)
-
-                else:
-                    trailing_stop = False
-            else:
-                trailing_stop = False
-                high_price = open_price
             if config.main.trade_direction == "short":
                 stop_loss_rule = current_price > add_perc(stop_loss_perc, open_price)
                 take_profit_rule = current_price < sub_perc(take_profit_perc, open_price)
@@ -556,8 +567,8 @@ class Redis():
             result = 'NOITEM'
 
         self.log_event(event=event, rate=rate, perc_rate=perc_rate,
-                           open_price=open_price, close_price=current_price,
-                           pair=pair, current_time=current_time, current=results.current)
+                       open_price=open_price, close_price=current_price,
+                       pair=pair, current_time=current_time, current=results.current)
 
         winning_sell = self.get_rules(rules, 'close')
         winning_buy = self.get_rules(rules, 'open')

@@ -449,7 +449,7 @@ class Trade():
 
             if self.test_trade and not self.test_data:
                 self.logger.error("Unable to perform margin short test without test data")
-            
+
             for item, current_time, current_price in short_list:
                 base = get_base(item)
 
@@ -478,7 +478,6 @@ class Trade():
 
                 self.logger.info('item: %s, proposed: %s, last:%s'
                                  % (item, proposed_quote_amount, last_open_price))
-                self.logger.critical("AMROX %s quote amount" % proposed_quote_amount)
 
                 base = get_base(item)
                 current_trades = dbase.get_trades()
@@ -500,11 +499,9 @@ class Trade():
                 amount_to_borrow = float(proposed_quote_amount) * float(config.main.multiplier)
                 amount_to_use = sub_perc(5, amount_to_borrow)  # use 95% of borrowed funds
 
-                self.logger.critical("AMROX amount_to use %s" % amount_to_use)
                 amt_str = get_step_precision(item, amount_to_use)
                 base_amount = float(amt_str) * float(binance.prices()[item])
 
-                self.logger.critical("AMROX base_amount %s" % base_amount)
                 dbase.insert_trade(pair=item, price=cost, date=current_time,
                                    base_amount=base_amount,
                                    quote=amt_str, borrowed=amount_to_borrow,

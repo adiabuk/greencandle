@@ -112,7 +112,6 @@ def perform_data(pair, interval, data_dir, indicators):
             drawup = redis.get_drawup(pair)['perc']
             redis.rm_drawup(pair)
             redis.rm_drawdown(pair)
-            LOGGER.debug("AMROX2 %s" % sells)
             trade.close_trade(sells, drawdowns={pair:drawdown}, drawups={pair:drawup})
 
     LOGGER.info("Selling remaining item")
