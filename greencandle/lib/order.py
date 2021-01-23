@@ -94,7 +94,7 @@ class Trade():
         if config.main.trade_type == "spot" and  config.main.trade_direction == "long":
             self.close_spot_long(items_list, name, drawdowns, drawups)
         elif config.main.trade_type == "margin" and  config.main.trade_direction == "short":
-            self.close_margin_short(items_list, name, drawdowns)
+            self.close_margin_short(items_list, name, drawdowns, drawups)
 
     def open_margin_long(self, buy_list):
         """
@@ -230,11 +230,11 @@ class Trade():
         """
         prices = defaultdict(lambda: defaultdict(defaultdict))
 
-        prices['binance']['BTC']['count'] = 0.15
-        prices['binance']['ETH']['count'] = 5.84
-        prices['binance']['USDT']['count'] = 1000
-        prices['binance']['USDC']['count'] = 1000
-        prices['binance']['BNB']['count'] = 14
+        prices[account]['BTC']['count'] = 0.15
+        prices[account]['ETH']['count'] = 5.84
+        prices[account]['USDT']['count'] = 1000
+        prices[account]['USDC']['count'] = 1000
+        prices[account]['BNB']['count'] = 14
         for base in ['BTC', 'ETH', 'USDT', 'BNB', 'USDC']:
             result = dbase.fetch_sql_data("select sum(base_out-base_in) from trades "
                                           "where pair like '%{0}'"
@@ -372,7 +372,7 @@ class Trade():
             self.logger.info("Nothing to buy")
 
     @GET_EXCEPTIONS
-    def close_margin_short(self, short_list, name=None, drawdowns=None):
+    def close_margin_short(self, short_list, name=None, drawdowns=None, drawups=None):
         """
         Sell items in sell_list
         """
@@ -423,7 +423,8 @@ class Trade():
 
                     dbase.update_trades(pair=item, close_time=current_time,
                                         close_price=new_price, quote=quantity,
-                                        base_out=base_out, name=name, drawdown=drawdowns[item])
+                                        base_out=base_out, name=name, drawdown=drawdowns[item],
+                                        drawup=drawups[item])
 
                     self.send_redis_trade(item, price, self.interval, "SELL")
                 else:
@@ -448,14 +449,9 @@ class Trade():
 
             if self.test_trade and not self.test_data:
                 self.logger.error("Unable to perform margin short test without test data")
-            elif self.test_data:
-                prices = self.get_test_balance(dbase, account='binance')
-            try:
-                current_base_bal = prices['binance'][base]['count']
-            except KeyError:
-                current_base_bal = 0
-
+            
             for item, current_time, current_price in short_list:
+                base = get_base(item)
 
                 try:
                     last_open_price = dbase.fetch_sql_data("select base_in from trades where "
@@ -464,6 +460,14 @@ class Trade():
                     last_open_price = float(last_open_price) if last_open_price else 0
                 except IndexError:
                     last_open_price = 0
+
+                if self.test_data:
+                    base = get_base(item)
+                    prices = self.get_test_balance(dbase, account='margin')
+                try:
+                    current_base_bal = prices['margin'][base]['count']
+                except KeyError:
+                    current_base_bal = 0
 
                 if self.divisor:
                     proposed_quote_amount = (current_base_bal / float(binance.prices()[item])) \
