@@ -567,7 +567,8 @@ class Trade():
                         self.send_redis_trade(item, price, self.interval, "SELL")
                         send_gmail_alert("SELL", item, price)
                         send_push_notif('SELL', item, '%.15f' % float(price))
-                        send_slack_message('longs', 'SELL %s %.15f' % (item, float(price)))
+                        send_slack_message('longs', 'SELL %s %.15f %s' % (item, float(price),
+                                           perc_inc))
                 else:
                     self.logger.critical("Sell Failed %s:%s" % (name, item))
             del dbase
