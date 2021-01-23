@@ -77,7 +77,7 @@ class Redis():
         try:
             drawup = perc_diff(orig_price, max_price)
         except TypeError:
-            drawup = ''
+            drawup = 0
         return {'price':max_price, 'perc': drawup}
 
     def rm_drawup(self, pair):
@@ -106,7 +106,7 @@ class Redis():
         try:
             drawdown = perc_diff(orig_price, min_price)
         except TypeError:
-            drawdown = ''
+            drawdown = 0
         self.conn.delete(key)
         return drawdown
 
