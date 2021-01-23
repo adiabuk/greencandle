@@ -108,7 +108,7 @@ class Redis():
         except TypeError:
             drawdown = ''
         self.conn.delete(key)
-        return drawdown if drawdown < 0 else 0
+        return drawdown
 
     def update_drawdown(self, pair, current_candle, event=None):
         """
