@@ -421,7 +421,7 @@
       "is_secret": false
     },
     "trailing_stop_loss_perc": {
-      "value": "",
+      "value": "100",
       "is_binary": false,
       "is_secret": false
     },
