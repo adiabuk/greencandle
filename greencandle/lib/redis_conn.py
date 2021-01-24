@@ -300,7 +300,7 @@ class Redis():
         current_high = current_candle.high
         current_low = current_candle.low
 
-        stop_loss_rule = float(current_price) < sub_perc(stop_loss_perc, open_price)
+        stop_loss_rule = self.get_stop_loss(test_data, current_price, current_low, open_price)
         take_profit_rule = float(current_price) > add_perc(take_profit_perc, open_price)
 
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
@@ -372,7 +372,8 @@ class Redis():
         stop_perc = float(config.main.stop_loss_perc)
         immediate = str2bool(config.main.immediate_stop)
 
-        #stop_loss_rule = current_price > add_perc(stop_loss_perc, open_price)
+        if not open_price:
+            return False
         if direction == 'long' and test_data and immediate:
             check = current_low
         elif direction == 'short' and test_data and immediate:
@@ -516,18 +517,16 @@ class Redis():
         low_price = self.get_drawdown(pair)
         trailing_stop = self.get_trailing_stop(test_data, current_price, high_price, current_high,
                                                open_price)
+
+        stop_loss_rule = self.get_stop_loss(test_data, current_price, current_low, open_price)
         try:
             if config.main.trade_direction == "short":
-                stop_loss_rule = current_price > add_perc(stop_loss_perc, open_price)
                 take_profit_rule = current_price < sub_perc(take_profit_perc, open_price)
 
             elif config.main.trade_direction == "long":
                 #FIXME - get MINPRICE
-                stop_loss_rule = current_price < sub_perc(stop_loss_perc, open_price)
                 take_profit_rule = current_price > add_perc(take_profit_perc, open_price)
 
-                if test_data and str2bool(config.main.immediate_stop):
-                    stop_loss_rule = current_low < sub_perc(stop_loss_perc, open_price)
 
                 if test_data and str2bool(config.main.immediate_take_profit):
                     take_profit_rule = current_high > add_perc(take_profit_perc, open_price)
@@ -535,9 +534,7 @@ class Redis():
         except (IndexError, ValueError, TypeError):
             # Setting to none to indicate we are currently not in a trade
             open_price = None
-            stop_loss_rule = False
             take_profit_rule = False
-            trailing_stop = False
 
         if open_price and any(rules['open']) and any(rules['close']):
             self.logger.warning('We ARE In a trade and have matched both buy and '
