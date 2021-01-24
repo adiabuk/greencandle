@@ -229,7 +229,6 @@ def prod_int_check(interval, test):
         redis.update_drawdown(pair, current_candle)
         redis.update_drawup(pair, current_candle)
         result, current_time, current_price = redis.get_intermittant(pair, open_price, current_candle)
-        open_price = dbase.get_trade_value(pair)[0][0]
 
         pattern = "%Y-%m-%d %H:%M:%S"
         current_ctime = int(time.mktime(time.strptime(current_time, pattern)))
