@@ -1,4 +1,5 @@
-#pylint: disable=eval-used,no-else-return,unused-variable,no-member,redefined-builtin,logging-not-lazy
+#pylint: disable=eval-used,no-else-return,unused-variable,no-member,redefined-builtin
+#pylint: disable=logging-not-lazy,inconsistent-return-statements
 
 """
 Store and retrieve items from redis
@@ -308,7 +309,7 @@ class Redis():
         high_price = self.get_drawup(pair)['price']
         low_price = self.get_drawdown(pair)
         trailing_stop = self.get_trailing_stop(test_data, current_price, high_price, current_high,
-                                               current_low, open_price)
+                                               open_price)
         if trailing_stop and open_price:
             message = "TrailingStop intermittant"
             self.logger(message)
@@ -335,7 +336,13 @@ class Redis():
                 winning.append(seq + 1)
         return winning
 
-    def get_trailing_stop(self, test_data, current_price, high_price, current_high, current_low, open_price):
+    @staticmethod
+    def get_trailing_stop(test_data, current_price, high_price, current_high,
+                          open_price):
+        """
+        Check if we have reached trailing stop loss
+        return True/False
+        """
         direction = config.main.trade_direction
         trailing_perc = float(config.main.trailing_stop_loss_perc)
         immediate = str2bool(config.main.immediate_trailing_stop)
@@ -350,9 +357,33 @@ class Redis():
             check = current_price
 
         if direction == "long":
-            return check <= sub_perc(trailing_perc, high_price) and add_perc(trailing_start, open_price) > current_price
+            return check <= sub_perc(trailing_perc, high_price) and \
+                    add_perc(trailing_start, open_price) > current_price
         elif direction == "short":
             return check >= add_perc(trailing_perc, high_price)
+
+    @staticmethod
+    def get_stop_loss(test_data, current_price, current_low, open_price):
+        """
+        Check if we have reached stop loss
+        return True/False
+        """
+        direction = config.main.trade_direction
+        stop_perc = float(config.main.stop_loss_perc)
+        immediate = str2bool(config.main.immediate_stop)
+
+        #stop_loss_rule = current_price > add_perc(stop_loss_perc, open_price)
+        if direction == 'long' and test_data and immediate:
+            check = current_low
+        elif direction == 'short' and test_data and immediate:
+            check = current_low
+        else:
+            check = current_price
+
+        if direction == 'long':
+            return check < sub_perc(stop_perc, open_price)
+        elif direction == 'short':
+            return check > add_perc(stop_perc, open_price)
 
     def get_action(self, pair, interval, test_data=False):
         """Determine if we are in a BUY/HOLD/SELL situration for a specific pair and interval"""
@@ -484,7 +515,7 @@ class Redis():
         high_price = self.get_drawup(pair)['price']
         low_price = self.get_drawdown(pair)
         trailing_stop = self.get_trailing_stop(test_data, current_price, high_price, current_high,
-                                               current_low, open_price)
+                                               open_price)
         try:
             if config.main.trade_direction == "short":
                 stop_loss_rule = current_price > add_perc(stop_loss_perc, open_price)
