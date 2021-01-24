@@ -339,7 +339,7 @@ class Redis():
         direction = config.main.trade_direction
         trailing_perc = float(config.main.trailing_stop_loss_perc)
         immediate = str2bool(config.main.immediate_trailing_stop)
-        trailing_start = config.main.trailing_start
+        trailing_start = float(config.main.trailing_start)
         if not high_price:
             return False
         elif direction == 'long' and test_data and immediate:
