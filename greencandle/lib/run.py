@@ -202,6 +202,8 @@ def parallel_test(pairs, interval, data_dir, indicators):
                 drawdowns[pair] = redis.get_drawdown(pair)
                 drawups[pair] = redis.get_drawup(pair)['perc']
                 sells.append((pair, current_time, current_price))
+                redis.rm_drawup(pair)
+                redis.rm_drawdown(pair)
 
         trade.close_trade(sells, drawdowns=drawdowns, drawups=drawups)
         trade.open_trade(buys)
@@ -239,6 +241,8 @@ def prod_int_check(interval, test):
             sells.append((pair, current_time, current_price))
             drawdowns[pair] = redis.get_drawdown(pair)
             drawups[pair] = redis.get_drawup(pair)['perc']
+            redis.rm_drawup(pair)
+            redis.rm_drawdown(pair)
 
     trade = Trade(interval=interval, test_trade=test, test_data=False)
     trade.close_trade(sells, drawdowns=drawdowns, drawups=drawups)
@@ -342,6 +346,8 @@ def prod_loop(interval, test_trade):
             sells.append((pair, current_time, current_price))
             drawdowns[pair] = redis.get_drawdown(pair)
             drawups[pair] = redis.get_drawup(pair)['perc']
+            redis.rm_drawup(pair)
+            redis.rm_drawdown(pair)
 
     trade = Trade(interval=interval, test_trade=test_trade, test_data=False)
     trade.close_trade(sells, drawdowns=drawdowns, drawups=drawups)
