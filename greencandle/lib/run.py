@@ -132,6 +132,7 @@ def perform_data(pair, interval, data_dir, indicators):
 
     del redis
     del dbase
+
 def parallel_test(pairs, interval, data_dir, indicators):
     """
     Do test with parallel data
@@ -201,7 +202,6 @@ def parallel_test(pairs, interval, data_dir, indicators):
                 drawdowns[pair] = redis.get_drawdown(pair)
                 drawups[pair] = redis.get_drawup(pair)['perc']
                 sells.append((pair, current_time, current_price))
-        drawdown = 0
 
         trade.close_trade(sells, drawdowns=drawdowns, drawups=drawups)
         trade.open_trade(buys)
@@ -222,20 +222,20 @@ def prod_int_check(interval, test):
     for trade in current_trades:
         pair = trade[0]
         open_price = dbase.get_trade_value(pair)[0][0]
+        current_candle = dataframes[pair].iloc[-1]
+        redis.update_drawdown(pair, current_candle)
+        redis.update_drawup(pair, current_candle)
         result, current_time, current_price = redis.get_intermittant(open_price=open_price,
                                                                      current_price=prices[pair])
         dataframes = get_dataframes([pair], interval=interval, no_of_klines=1)
-        current_candle = dataframes[pair].iloc[-1]
         open_price = dbase.get_trade_value(pair)[0][0]
 
         pattern = "%Y-%m-%d %H:%M:%S"
         current_ctime = int(time.mktime(time.strptime(current_time, pattern)))
-        redis.update_drawdown(pair, current_candle)
         LOGGER.debug("%s int check result: %s Buy:%s Current:%s Time:%s"
                      % (pair, result, open_price, current_price, current_time))
         if result == "SELL":
             LOGGER.debug("Items to sell")
-            drawdowns[pair] = redis.get_drawdown(pair)
             sells.append((pair, current_time, current_price))
             drawdowns[pair] = redis.get_drawdown(pair)
             drawups[pair] = redis.get_drawup(pair)['perc']

@@ -302,10 +302,21 @@ class Redis():
 
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
 
-        if stop_loss_rule and open_price:
+        trailing_perc = float(config.main.trailing_stop_loss_perc)
+        high_price = self.get_drawup(pair)['price']
+        low_price = self.get_drawdown(pair)
+        trailing_stop = self.get_trailing_stop(test_data, current_price, high_price, current_high,
+                                                current_low)
+        if trailing_stop and open_price:
+            message = "TrailingStop intermittant"
+            self.logger(message)
+            return ('SELL', current_time, current_price)
+
+        elif stop_loss_rule and open_price:
             message = "StopLoss intermittant"
             self.logger.info(message)
             return ('SELL', current_time, current_price)
+
         elif str2bool(config.main.take_profit) and take_profit_rule and open_price:
             message = "TakeProfit intermittant"
             self.logger.info(message)
@@ -340,8 +351,6 @@ class Redis():
             return check <= sub_perc(trailing_perc, high_price)
         elif direction == "short":
             return check >= add_perc(trailing_perc, high_price)
-
-
 
     def get_action(self, pair, interval, test_data=False):
         """Determine if we are in a BUY/HOLD/SELL situration for a specific pair and interval"""
@@ -484,6 +493,7 @@ class Redis():
                 #FIXME - get MINPRICE
                 stop_loss_rule = current_price < sub_perc(stop_loss_perc, open_price)
                 take_profit_rule = current_price > add_perc(take_profit_perc, open_price)
+
                 if test_data and str2bool(config.main.immediate_stop):
                     stop_loss_rule = current_low < sub_perc(stop_loss_perc, open_price)
 
