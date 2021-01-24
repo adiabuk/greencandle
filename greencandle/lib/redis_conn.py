@@ -308,7 +308,7 @@ class Redis():
         high_price = self.get_drawup(pair)['price']
         low_price = self.get_drawdown(pair)
         trailing_stop = self.get_trailing_stop(test_data, current_price, high_price, current_high,
-                                               current_low)
+                                               current_low, open_price)
         if trailing_stop and open_price:
             message = "TrailingStop intermittant"
             self.logger(message)
@@ -335,11 +335,11 @@ class Redis():
                 winning.append(seq + 1)
         return winning
 
-    def get_trailing_stop(self, test_data, current_price, high_price, current_high, current_low):
+    def get_trailing_stop(self, test_data, current_price, high_price, current_high, current_low, open_price):
         direction = config.main.trade_direction
         trailing_perc = float(config.main.trailing_stop_loss_perc)
         immediate = str2bool(config.main.immediate_trailing_stop)
-
+        trailing_start = config.main.trailing_start
         if not high_price:
             return False
         elif direction == 'long' and test_data and immediate:
@@ -350,7 +350,7 @@ class Redis():
             check = current_price
 
         if direction == "long":
-            return check <= sub_perc(trailing_perc, high_price)
+            return check <= sub_perc(trailing_perc, high_price) and add_perc(trailing_start, open_price) > current_price
         elif direction == "short":
             return check >= add_perc(trailing_perc, high_price)
 
@@ -480,12 +480,11 @@ class Redis():
         else:
             able_to_buy = True
 
-
         trailing_perc = float(config.main.trailing_stop_loss_perc)
         high_price = self.get_drawup(pair)['price']
         low_price = self.get_drawdown(pair)
         trailing_stop = self.get_trailing_stop(test_data, current_price, high_price, current_high,
-                                               current_low)
+                                               current_low, open_price)
         try:
             if config.main.trade_direction == "short":
                 stop_loss_rule = current_price > add_perc(stop_loss_perc, open_price)
@@ -552,8 +551,6 @@ class Redis():
         elif close_timeout:
             event = "TimeOut"
             result = 'SELL'
-
-
 
         # if we match any sell rules, are in a trade and no buy rules match
         elif any(rules['close']) and open_price and not both:

@@ -12,6 +12,7 @@
   "take_profit": "True",
   "take_profit_perc": "10",
   "time_in_trade": "45m",
+  "trailing_start": "0",
   "trailing_stop_loss": "True",
   "trailing_stop_loss_perc": "0.1"
 }

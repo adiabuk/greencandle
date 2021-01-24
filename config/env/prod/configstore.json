@@ -176,12 +176,12 @@
       "is_binary": false,
       "is_secret": false
     },
-    "immediate_trailing_stop": {
+    "immediate_take_profit": {
       "value": "True",
       "is_binary": false,
       "is_secret": false
     },
-    "immediate_take_profit": {
+    "immediate_trailing_stop": {
       "value": "True",
       "is_binary": false,
       "is_secret": false
@@ -413,6 +413,11 @@
     },
     "trade_type": {
       "value": "spot",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "trailing_start": {
+      "value": "0",
       "is_binary": false,
       "is_secret": false
     },
