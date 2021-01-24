@@ -11,6 +11,19 @@
 
 # Releases
 
+## 1.5
+* Add draw up to db
+* fix trailing stop loss
+* DB config for drawup
+* better default values for TSI oscillator
+* Get downloads from dropbox
+* Use drawup/drawdown for high/low prices within trade
+* Add trailing stop loss to intermittent function
+* Add immediate stop option for trailing SL and TP separately
+* Unit tests for draw up/down
+* New scalp strategy
+* Cleanup of redis check functions
+
 ## 1.4
 * Re-enable immediate stop-loss
 * Better scalping rules
