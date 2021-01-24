@@ -289,13 +289,16 @@ class Redis():
         else:
             self.logger.info("%s, %s" % (message, kwargs.current))
 
-    def get_intermittant(self, open_price, current_price):
+    def get_intermittant(self, pair, open_price, current_candle):
         """
         Check if price between intervals and sell if matches stop_loss or take_profit rules
         """
-
+        test_data = False
         stop_loss_perc = float(config.main.stop_loss_perc)
         take_profit_perc = float(config.main.take_profit_perc)
+        current_price = current_candle.close
+        current_high = current_candle.high
+        current_low = current_candle.low
 
         stop_loss_rule = float(current_price) < sub_perc(stop_loss_perc, open_price)
         take_profit_rule = float(current_price) > add_perc(take_profit_perc, open_price)
@@ -306,7 +309,7 @@ class Redis():
         high_price = self.get_drawup(pair)['price']
         low_price = self.get_drawdown(pair)
         trailing_stop = self.get_trailing_stop(test_data, current_price, high_price, current_high,
-                                                current_low)
+                                               current_low)
         if trailing_stop and open_price:
             message = "TrailingStop intermittant"
             self.logger(message)
@@ -483,7 +486,7 @@ class Redis():
         high_price = self.get_drawup(pair)['price']
         low_price = self.get_drawdown(pair)
         trailing_stop = self.get_trailing_stop(test_data, current_price, high_price, current_high,
-                                                current_low)
+                                               current_low)
         try:
             if config.main.trade_direction == "short":
                 stop_loss_rule = current_price > add_perc(stop_loss_perc, open_price)
