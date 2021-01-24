@@ -107,7 +107,6 @@ class Redis():
             drawdown = perc_diff(orig_price, min_price)
         except TypeError:
             drawdown = 0
-        self.conn.delete(key)
         return drawdown
 
     def update_drawdown(self, pair, current_candle, event=None):
