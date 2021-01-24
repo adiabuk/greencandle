@@ -128,9 +128,7 @@ def make_docker_case(container, checks=None):
 
     return DockerRun
 
-
 def run_subprocess(command):
-
     """
     Run given command using subprocess and return exit code
     """
@@ -146,7 +144,7 @@ def run_subprocess(command):
             conv(out).decode('utf-8').strip(),
             conv(err).decode('utf-8').strip())
 
-def make_test_case(pairs, startdate, xsum, xmax, xmin):
+def make_test_case(pairs, startdate, xsum, xmax, xmin, drawup, drawdown):
     """
     return run unittest customized with argument config
     """
@@ -170,6 +168,8 @@ def make_test_case(pairs, startdate, xsum, xmax, xmin):
             self.sum = xsum
             self.max = xmax
             self.min = xmin
+            self.drawup = drawup
+            self.drawdown = drawdown
 
             self.days = 15
             self.outputdir = "/tmp/test_data"
@@ -217,6 +217,17 @@ def make_test_case(pairs, startdate, xsum, xmax, xmin):
             self.assertGreaterEqual(float(db_sum), self.sum)
             self.assertGreaterEqual(float(db_max), self.max)
             self.assertGreaterEqual(float(db_min), self.min)
+
+        def step_4(self):
+            """
+            Step 4 - Compare drawdown and draw up from db
+            """
+            up_sum = self.dbase.fetch_sql_data("select sum(drawup_perc) from profit",
+                                               header=False)[0][0]
+            down_sum = self.dbase.fetch_sql_data("select sum(drawdown_perc) from profit",
+                                                 header=False)[0][0]
+            self.assertEqual(float(up_sum), self.drawup)
+            self.assertEqual(float(down_sum), self.drawdown)
 
         def tearDown(self):
             """Cleanup DB and files"""
