@@ -54,6 +54,9 @@
 * **time_between_trades** *{1m|30h|1w} time between close and open*
 * **time_in_trade** *{1m|30h|1w} time before auto-closing trade*
 * **immediate_stop** *{True|False} Stop immediately after stop loss reached or wait for candle close*
+* **immediate_trailing_stop** *{True|False} Stop immediately after stop trailing stop loss reached or wait for candle close*
+* **immediate_take_profit** *{True|False} Stop immediately after take profit reached or wait for candle close*
+  **trailing_start** *percentage to commence trailing stop loss check*
 * **drain** *Only close trades, don't open new ones*
 * **no_of_klines** *number of candles to download initially*
 * **pairs** *list of trading pairs*
