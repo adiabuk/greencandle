@@ -57,7 +57,7 @@ class Redis():
         """
         self.conn.execute_command("flushdb")
 
-    def add_price(self, name, data):
+    def __add_price(self, name, data):
         """
         add/update min and max price dict
         """
@@ -136,12 +136,12 @@ class Redis():
                     (not min_price and event == 'open'):
 
                 data = {"min_price": current_low, "orig_price": orig_price}
-                self.add_price(key, data)
+                self.__add_price(key, data)
         elif config.main.trade_direction == 'short':
             if (min_price and float(current_high) > float(min_price)) or \
                     (not min_price and event == 'open'):
                 data = {"min_price": current_low, "orig_price": orig_price}
-                self.add_price(key, data)
+                self.__add_price(key, data)
 
     def update_drawup(self, pair, current_candle, event=None):
         """
@@ -165,12 +165,12 @@ class Redis():
                     (not max_price and event == 'open'):
 
                 data = {"max_price": current_high, "orig_price": orig_price}
-                self.add_price(key, data)
+                self.__add_price(key, data)
         elif config.main.trade_direction == 'short':
             if (max_price and float(current_low) < float(max_price)) or \
                     (not max_price and event == 'open'):
                 data = {"max_price": current_high, "orig_price": orig_price}
-                self.add_price(key, data)
+                self.__add_price(key, data)
 
     def redis_conn(self, pair, interval, data, now):
         """
@@ -201,13 +201,6 @@ class Redis():
 
         return response
 
-    def del_key(self, key):
-        """
-        delete a given entry
-        """
-        result = self.conn.delete(key)
-        self.logger.debug("Deleting key %s, result:%s" % (key, result))
-
     def get_items(self, pair, interval):
         """
         Get sorted list of keys for a trading pair/interval
@@ -221,24 +214,6 @@ class Redis():
          each item in the list contains PAIR:interval:epoch (in milliseconds)
         """
         return sorted(list(self.conn.scan_iter("{0}:{1}:*".format(pair, interval))))
-
-    def get_total(self, address):
-        """
-        Get totals of results in each group
-
-        Args:
-              address
-              eg.  b"XRPBTC:15m:1520869499999",
-        Returns:
-              integer value representing total score for this pair/interval/timeframe where the
-              score can be negative (indicating overall bearish) - the lower the number, the more
-              bearish.  Positive figures indicate bullish - the higher the number the more bullish.
-              Results close to zero are considered to be HOLD (if persistent)
-        """
-        val = 0
-        for _, value in self.conn.hgetall(address).items():
-            val += ast.literal_eval(str(value.decode("UTF-8")))["action"]
-        return val
 
     def get_item(self, address, key):
         """Return a specific item from redis, given an address and key"""
@@ -263,14 +238,14 @@ class Redis():
 
         return data["current_price"], data["date"], data['result']
 
-    def get_result(self, item, indicator):
+    def __get_result(self, item, indicator):
         """Retrive decoded OHLC data from redis"""
         try:
             return float(ast.literal_eval(self.get_item(item, indicator).decode())['result'])
         except (TypeError, AttributeError):
             return None
 
-    def log_event(self, **kwargs):
+    def __log_event(self, **kwargs):
         """Send event data to logger"""
         valid_keys = ["event", "rate", "perc_rate", "open_price", "close_price",
                       "pair", "current_time", "current"]
@@ -300,7 +275,7 @@ class Redis():
         current_high = current_candle.high
         current_low = current_candle.low
 
-        stop_loss_rule = self.get_stop_loss(test_data, current_price, current_low, open_price)
+        stop_loss_rule = self.__get_stop_loss(test_data, current_price, current_low, open_price)
         take_profit_rule = float(current_price) > add_perc(take_profit_perc, open_price)
 
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
@@ -308,7 +283,7 @@ class Redis():
         trailing_perc = float(config.main.trailing_stop_loss_perc)
         high_price = self.get_drawup(pair)['price']
         low_price = self.get_drawdown(pair)
-        trailing_stop = self.get_trailing_stop(test_data, current_price, high_price, current_high,
+        trailing_stop = self.__get_trailing_stop(test_data, current_price, high_price, current_high,
                                                open_price)
         if trailing_stop and open_price:
             result = "SELL"
@@ -326,7 +301,7 @@ class Redis():
             result = "HOLD"
             event = "HOLD"
 
-        self.log_event(event=event, rate="N/A", perc_rate="N/A",
+        self.__log_event(event=event, rate="N/A", perc_rate="N/A",
                        open_price=open_price, close_price=current_price,
                        pair=pair, current_time=current_time, current="N/A")
 
@@ -334,16 +309,7 @@ class Redis():
         return (result, event, current_time, current_price)
 
     @staticmethod
-    def get_rules(rules, direction):
-        """determine which rules have been matched"""
-        winning = []
-        for seq, close_rule in enumerate(rules[direction]):
-            if close_rule:
-                winning.append(seq + 1)
-        return winning
-
-    @staticmethod
-    def get_trailing_stop(test_data, current_price, high_price, current_high,
+    def __get_trailing_stop(test_data, current_price, high_price, current_high,
                           open_price):
         """
         Check if we have reached trailing stop loss
@@ -369,7 +335,7 @@ class Redis():
             return float(check) >= add_perc(float(trailing_perc), float(high_price))
 
     @staticmethod
-    def get_stop_loss(test_data, current_price, current_low, open_price):
+    def __get_stop_loss(test_data, current_price, current_low, open_price):
         """
         Check if we have reached stop loss
         return True/False
@@ -391,6 +357,15 @@ class Redis():
             return float(check) < sub_perc(float(stop_perc), float(open_price))
         elif direction == 'short':
             return float(check) > add_perc(float(stop_perc), float(open_price))
+
+    @staticmethod
+    def __get_rules(rules, direction):
+        """determine which rules have been matched"""
+        winning = []
+        for seq, close_rule in enumerate(rules[direction]):
+            if close_rule:
+                winning.append(seq + 1)
+        return winning
 
     def get_action(self, pair, interval, test_data=False):
         """Determine if we are in a BUY/HOLD/SELL situration for a specific pair and interval"""
@@ -422,11 +397,11 @@ class Redis():
         ind_list.append("volume")  #FIXME
 
         for indicator in ind_list:
-            results['current'][indicator] = self.get_result(current, indicator)
-            results['previous'][indicator] = self.get_result(previous, indicator)
-            results['previous1'][indicator] = self.get_result(previous1, indicator)
-            results['previous2'][indicator] = self.get_result(previous2, indicator)
-            results['previous3'][indicator] = self.get_result(previous3, indicator)
+            results['current'][indicator] = self.__get_result(current, indicator)
+            results['previous'][indicator] = self.__get_result(previous, indicator)
+            results['previous1'][indicator] = self.__get_result(previous1, indicator)
+            results['previous2'][indicator] = self.__get_result(previous2, indicator)
+            results['previous3'][indicator] = self.__get_result(previous3, indicator)
         items = self.get_items(pair, self.interval)
         current = self.get_current(items[-1])
         previous = self.get_current(items[-2])
@@ -521,10 +496,10 @@ class Redis():
         trailing_perc = float(config.main.trailing_stop_loss_perc)
         high_price = self.get_drawup(pair)['price']
         low_price = self.get_drawdown(pair)
-        trailing_stop = self.get_trailing_stop(test_data, current_price, high_price, current_high,
+        trailing_stop = self.__get_trailing_stop(test_data, current_price, high_price, current_high,
                                                open_price)
 
-        stop_loss_rule = self.get_stop_loss(test_data, current_price, current_low, open_price)
+        stop_loss_rule = self.__get_stop_loss(test_data, current_price, current_low, open_price)
         try:
             if config.main.trade_direction == "short":
                 take_profit_rule = current_price < sub_perc(take_profit_perc, open_price)
@@ -612,12 +587,12 @@ class Redis():
             event = "NoItem"
             result = 'NOITEM'
 
-        self.log_event(event=event, rate=rate, perc_rate=perc_rate,
+        self.__log_event(event=event, rate=rate, perc_rate=perc_rate,
                        open_price=open_price, close_price=current_price,
                        pair=pair, current_time=current_time, current=results.current)
 
-        winning_sell = self.get_rules(rules, 'close')
-        winning_buy = self.get_rules(rules, 'open')
+        winning_sell = self.__get_rules(rules, 'close')
+        winning_buy = self.__get_rules(rules, 'open')
         self.logger.info('%s sell Rules matched: %s' % (pair, winning_sell))
         self.logger.info('%s buy Rules matched: %s' % (pair, winning_buy))
         del dbase
