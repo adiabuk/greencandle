@@ -347,7 +347,7 @@ class Redis():
         trailing_perc = float(config.main.trailing_stop_loss_perc)
         immediate = str2bool(config.main.immediate_trailing_stop)
         trailing_start = float(config.main.trailing_start)
-        if not high_price:
+        if not high_price or not open_price:
             return False
         elif direction == 'long' and test_data and immediate:
             check = current_high
@@ -358,7 +358,7 @@ class Redis():
 
         if direction == "long":
             return check <= sub_perc(trailing_perc, high_price) and \
-                    add_perc(trailing_start, open_price) > current_price
+                    add_perc(trailing_start, float(open_price)) > current_price
         elif direction == "short":
             return check >= add_perc(trailing_perc, high_price)
 
