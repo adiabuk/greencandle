@@ -536,6 +536,9 @@ class Redis():
             open_price = None
             take_profit_rule = False
 
+        if any(rules['open']) and not able_to_buy:
+            self.logger.info("Unable to buy %s due to time_between_trades" % pair)
+
         if open_price and any(rules['open']) and any(rules['close']):
             self.logger.warning('We ARE In a trade and have matched both buy and '
                                 'sell rules for %s', pair)
