@@ -28,8 +28,8 @@ curl -X POST -H 'Content-type: application/json' --data '{"text":"'"${text}"'"}'
 git pull
 
 # Stop existing fe and be containers
-docker ps --filter name=^fe-* --filter name=^be-* -q | xargs docker stop
-docker ps --filter name=^fe-* -q | xargs docker rm
+docker ps --filter name=^fe-* --filter name=^be-* -q | xargs docker stop || true
+docker ps --filter name=^fe-* -q | xargs docker rm || true
 docker volume prune -f
 
 FILE=database_change.sql
