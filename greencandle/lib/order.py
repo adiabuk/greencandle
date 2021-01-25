@@ -34,19 +34,7 @@ class Trade():
 
         self.interval = interval
 
-    @staticmethod
-    @GET_EXCEPTIONS
-    def get_open_price(pair=None):
-        """ return lowest buying request """
-        return sorted([float(item) for item in binance.depth(pair)["asks"].keys()])[0]
-
-    @staticmethod
-    @GET_EXCEPTIONS
-    def get_close_price(pair=None):
-        """ return highest selling price """
-        return sorted([float(item) for item in binance.depth(pair)["bids"].keys()])[-1]
-
-    def send_redis_trade(self, pair, price, interval, event):
+    def __send_redis_trade(self, pair, price, interval, event):
         """
         Send trade event to redis
         """
@@ -63,40 +51,30 @@ class Trade():
         redis.redis_conn(pair, interval, data, close_time)
         del redis
 
-    @GET_EXCEPTIONS
-    def get_precision(self, item, amount):
-        """
-        Round amount to required precision
-        binance uses 1 dp under given precision
-        """
-
-        precision = int(binance.exchange_info()[item]['quoteAssetPrecision']) - 1
-        amt_str = format(float(amount), '.{}f'.format(precision))
-        self.logger.debug("Final amount: %s" % amt_str)
-        return amt_str
-
     def open_trade(self, items_list):
         """
         Main open trade method
         Will choose between spot/margin and long/short
         """
         if config.main.trade_type == "spot" and config.main.trade_direction == "long":
-            self.open_spot_long(items_list)
+            self.__open_spot_long(items_list)
         elif config.main.trade_type == "margin" and config.main.trade_direction == "short":
-            self.open_margin_short(items_list)
+            self.__open_margin_short(items_list)
 
     def close_trade(self, items_list, name=None, drawdowns={}, drawups={}):
         """
         Main close trade method
         Will choose between spot/margin and long/short
         """
+        trade_type = config.main.trade_type
+        trade_direction = config.main.trade_direction
 
-        if config.main.trade_type == "spot" and  config.main.trade_direction == "long":
-            self.close_spot_long(items_list, name, drawdowns, drawups)
-        elif config.main.trade_type == "margin" and  config.main.trade_direction == "short":
-            self.close_margin_short(items_list, name, drawdowns, drawups)
+        if trade_type == "spot" and  trade_direction == "long":
+            self.__close_spot_long(items_list, name, drawdowns, drawups)
+        elif trade_type == "margin" and  trade_direction == "short":
+            self.__close_margin_short(items_list, name, drawdowns, drawups)
 
-    def open_margin_long(self, buy_list):
+    def __open_margin_long(self, buy_list):
         """
         Buy as many items as we can from buy_list depending on max amount of trades, and current
         balance in base currency
@@ -217,14 +195,14 @@ class Trade():
                         send_gmail_alert('BUY', item, '%.15f' % float(cost))
                         send_slack_message('longs', '%s %s %.15f' % (event, item, float(cost)))
 
-                        self.send_redis_trade(item, cost, self.interval, "BUY")
+                        self.__send_redis_trade(item, cost, self.interval, "BUY")
             del dbase
         else:
             self.logger.info("Nothing to buy")
 
     @staticmethod
     @GET_EXCEPTIONS
-    def get_test_balance(dbase, account=None):
+    def __get_test_balance(dbase, account=None):
         """
         Get and return test balances
         """
@@ -249,9 +227,8 @@ class Trade():
             prices[account][base]['count'] += result + current_trade_values
         return prices
 
-
     @GET_EXCEPTIONS
-    def open_spot_long(self, buy_list):
+    def __open_spot_long(self, buy_list):
         """
         Buy as many items as we can from buy_list depending on max amount of trades, and current
         balance in base currency
@@ -267,7 +244,7 @@ class Trade():
         if buy_list:
             dbase = Mysql(test=self.test_data, interval=self.interval)
             if self.test_data or self.test_trade:
-                prices = self.get_test_balance(dbase, account='binance')
+                prices = self.__get_test_balance(dbase, account='binance')
             else:
                 balance = Balance(test=False)
                 prices = balance.get_balance()
@@ -363,7 +340,7 @@ class Trade():
                                                     base_amount=base_amount, quote=amount,
                                                     direction=config.main.trade_direction)
                         if result:
-                            self.send_redis_trade(item, cost, self.interval, "BUY")
+                            self.__send_redis_trade(item, cost, self.interval, "BUY")
                             send_push_notif('BUY', item, '%.15f' % float(cost))
                             send_gmail_alert('BUY', item, '%.15f' % float(cost))
                             send_slack_message('longs', '%s %s %.15f' % (event, item, float(cost)))
@@ -372,7 +349,7 @@ class Trade():
             self.logger.info("Nothing to buy")
 
     @GET_EXCEPTIONS
-    def close_margin_short(self, short_list, name=None, drawdowns=None, drawups=None):
+    def __close_margin_short(self, short_list, name=None, drawdowns=None, drawups=None):
         """
         Sell items in sell_list
         """
@@ -428,16 +405,15 @@ class Trade():
                                         base_out=base_out, name=name, drawdown=drawdowns[item],
                                         drawup=drawups[item])
 
-                    self.send_redis_trade(item, price, self.interval, "SELL")
+                    self.__send_redis_trade(item, price, self.interval, "SELL")
                 else:
                     self.logger.critical("Sell Failed %s:%s" % (name, item))
             del dbase
         else:
             self.logger.info("No items to sell")
 
-
     @GET_EXCEPTIONS
-    def open_margin_short(self, short_list):
+    def __open_margin_short(self, short_list):
         """
         bla bla bla
         """
@@ -465,7 +441,7 @@ class Trade():
 
                 if self.test_data:
                     base = get_base(item)
-                    prices = self.get_test_balance(dbase, account='margin')
+                    prices = self.__get_test_balance(dbase, account='margin')
                 try:
                     current_base_bal = prices['margin'][base]['count']
                 except KeyError:
@@ -510,10 +486,10 @@ class Trade():
                                    multiplier=config.main.multiplier,
                                    direction=config.main.trade_direction)
 
-                self.send_redis_trade(item, cost, self.interval, "BUY")
+                self.__send_redis_trade(item, cost, self.interval, "BUY")
 
     @GET_EXCEPTIONS
-    def close_spot_long(self, sell_list, name=None, drawdowns={}, drawups={}):
+    def __close_spot_long(self, sell_list, name=None, drawdowns={}, drawups={}):
         """
         Sell items in sell_list
         """
@@ -567,7 +543,7 @@ class Trade():
                                                  drawup=drawups[item])
 
                     if result:
-                        self.send_redis_trade(item, price, self.interval, "SELL")
+                        self.__send_redis_trade(item, price, self.interval, "SELL")
                         send_gmail_alert("SELL", item, price)
                         send_push_notif('SELL', item, '%.15f' % float(price))
                         send_slack_message('longs', '%s %s %.15f %.2f%%' % (event, item,
@@ -579,9 +555,8 @@ class Trade():
         else:
             self.logger.info("No items to sell")
 
-
     @GET_EXCEPTIONS
-    def close_margin_long(self, sell_list, name=None, drawdowns={}):
+    def __close_margin_long(self, sell_list, name=None, drawdowns={}):
         """
         Sell items in sell_list
         """
@@ -635,7 +610,7 @@ class Trade():
                                         close_price=fill_price, quote=quantity,
                                         base_out=base_out, name=name, drawdown=drawdowns[item])
 
-                    self.send_redis_trade(item, price, self.interval, "SELL")
+                    self.__send_redis_trade(item, price, self.interval, "SELL")
                 else:
                     self.logger.critical("Sell Failed %s:%s" % (name, item))
             del dbase
