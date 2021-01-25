@@ -21,12 +21,12 @@ class Mysql():
         self.database = config.database.db_database
         self.logger = get_logger(__name__)
 
-        self.connect()
+        self.__connect()
         self.interval = interval
         self.logger.debug("Starting Mysql with interval %s, test=%s" % (interval, test))
 
     @get_exceptions
-    def connect(self):
+    def __connect(self):
         """
         Connect to Mysql DB
         """
@@ -44,7 +44,7 @@ class Mysql():
             pass
 
     @get_exceptions
-    def execute(self, cur, command):
+    def __execute(self, cur, command):
         """
         Execute query on MYSQL DB - if fail, then try reconnecting and retry the operation
         """
@@ -63,7 +63,7 @@ class Mysql():
         """
 
         cur = self.dbase.cursor()
-        self.execute(cur, query)
+        self.__execute(cur, query)
         output = list(cur.fetchall())
         description = list(list(column[0] for column in cur.description))
         if header:
@@ -71,7 +71,7 @@ class Mysql():
         return output
 
     @get_exceptions
-    def run_sql_query(self, query):
+    def __run_sql_query(self, query):
         """
         Run a given mysql query (INSERT)
         Args:
@@ -81,7 +81,7 @@ class Mysql():
         """
         cur = self.dbase.cursor()
         try:
-            self.execute(cur, query)
+            self.__execute(cur, query)
             return cur.rowcount
         except NameError as exc:
             self.logger.critical("One or more expected variables not passed to DB %s" % exc)
@@ -97,7 +97,7 @@ class Mysql():
         """
         self.logger.info("Deleting all trades from mysql")
         command = "delete from trades;"
-        self.run_sql_query(command)
+        self.__run_sql_query(command)
 
     @get_exceptions
     def insert_trade(self, pair, date, price, base_amount, quote, borrowed='', multiplier='',
@@ -125,7 +125,7 @@ class Mysql():
                              self.interval,
                              quote, config.main.name, borrowed, multiplier,
                              direction)
-        result = self.run_sql_query(command)
+        result = self.__run_sql_query(command)
         return result == 1
 
 
@@ -142,7 +142,7 @@ class Mysql():
                    'and perc > "{3}"'.format(pair, date, months, max_perc))
 
         cur = self.dbase.cursor()
-        self.execute(cur, command)
+        self.__execute(cur, command)
         return bool(cur.fetchall())
 
     @get_exceptions
@@ -154,21 +154,10 @@ class Mysql():
                    'is NULL and `interval` = "{0}" and '
                    'pair = "{1}"'.format(self.interval, pair))
         cur = self.dbase.cursor()
-        self.execute(cur, command)
+        self.__execute(cur, command)
 
         row = [item[0] for item in cur.fetchall()]
         return row[0] if row else None # There should only be one open trade, so return first item
-
-    def get_last_close_time(self, pair):
-        """
-        Get time we closed last trade
-        """
-        cur = self.dbase.cursor()
-        command = ('select close_time,pair from trades where pair="{0}" '
-                   'and interval = "{1}" and close_time != "0000-00-00 00:00:00" '
-                   'order by close_time desc LIMIT 1'.format(pair, interval))
-        self.execute(cur, command)
-        return cur.fetchall()
 
     @get_exceptions
     def get_trade_value(self, pair):
@@ -180,7 +169,7 @@ class Mysql():
                    'where close_price is NULL and `interval` = "{0}" and '
                    'pair = "{1}"'.format(self.interval, pair))
         cur = self.dbase.cursor()
-        self.execute(cur, command)
+        self.__execute(cur, command)
 
         row = [(item[0], item[1], item[2], item[3], item[4]) for item in cur.fetchall()]
         return row
@@ -195,7 +184,7 @@ class Mysql():
         command = ('select close_time, open_price, close_price, quote_in from trades where '
                    '`interval` = "{0}" and close_price is NOT NULL'.format(self.interval))
 
-        self.execute(cur, command)
+        self.__execute(cur, command)
         return cur.fetchall()
 
     @get_exceptions
@@ -213,7 +202,7 @@ class Mysql():
                    '`interval`="{0}" ' 'and name in ("{1}","api")'
                    .format(self.interval, config.main.name))
 
-        self.execute(cur, command)
+        self.__execute(cur, command)
         return cur.fetchall()
 
     @get_exceptions
@@ -234,7 +223,7 @@ class Mysql():
                                     self.interval,
                                     pair,
                                     job_name, drawdown, drawup)
-        result = self.run_sql_query(command)
+        result = self.__run_sql_query(command)
         if result != 1:
             self.logger.critical("Query affected %s rows" % result)
         return result == 1
@@ -244,7 +233,7 @@ class Mysql():
         Get current active trades and store in active_trades table with current price
         """
 
-        self.run_sql_query("delete from open_trades")
+        self.__run_sql_query("delete from open_trades")
         trades = self.fetch_sql_data("select pair, open_time, open_price, name, `interval` from "
                                      "trades where close_price is NULL", header=False)
         for trade in trades:
@@ -257,7 +246,7 @@ class Mysql():
                           '"{5}", "{6}")'.format(pair, open_time, open_price, current_price,
                                                  perc, name, interval))
 
-                self.run_sql_query(insert)
+                self.__run_sql_query(insert)
             except ZeroDivisionError:
                 self.logger.critical("%s has a zero buy price, unable to calculate percentage"
                                      % pair)
@@ -289,6 +278,6 @@ class Mysql():
                     raise
 
                 try:
-                    self.run_sql_query(command)
+                    self.__run_sql_query(command)
                 except NameError:
                     self.logger.error("One or more expected variables not passed to insert into DB")
