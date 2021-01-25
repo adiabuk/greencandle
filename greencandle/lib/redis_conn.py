@@ -382,9 +382,9 @@ class Redis():
             check = current_price
 
         if direction == 'long':
-            return check < sub_perc(stop_perc, open_price)
+            return check < sub_perc(stop_perc, float(open_price))
         elif direction == 'short':
-            return check > add_perc(stop_perc, open_price)
+            return check > add_perc(stop_perc, float(open_price))
 
     def get_action(self, pair, interval, test_data=False):
         """Determine if we are in a BUY/HOLD/SELL situration for a specific pair and interval"""
