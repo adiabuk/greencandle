@@ -289,7 +289,7 @@ class Redis():
         else:
             self.logger.info("%s, %s" % (message, kwargs.current))
 
-    def get_intermittant(self, pair, open_price, current_candle):
+    def get_intermittent(self, pair, open_price, current_candle):
         """
         Check if price between intervals and sell if matches stop_loss or take_profit rules
         """
@@ -311,21 +311,27 @@ class Redis():
         trailing_stop = self.get_trailing_stop(test_data, current_price, high_price, current_high,
                                                open_price)
         if trailing_stop and open_price:
-            message = "TrailingStop intermittant"
-            self.logger(message)
-            return ('SELL', current_time, current_price)
+            result = "SELL"
+            event  = "TrailingStop intermittent"
 
         elif stop_loss_rule and open_price:
-            message = "StopLoss intermittant"
-            self.logger.info(message)
-            return ('SELL', current_time, current_price)
+            result = "SELL"
+            event = "StopLoss intermittent"
 
         elif str2bool(config.main.take_profit) and take_profit_rule and open_price:
-            message = "TakeProfit intermittant"
-            self.logger.info(message)
-            return ('SELL', current_time, current_price)
+            result = "SELL"
+            event = "TakeProfit intermittent"
+
         else:
-            return ('HOLD', current_time, current_price)
+            result = "HOLD"
+            event = "HOLD"
+
+        self.log_event(event=event, rate="N/A", perc_rate="N/A",
+                       open_price=open_price, close_price=current_price,
+                       pair=pair, current_time=current_time, current="N/A")
+
+
+        return (result, event,  current_time, current_price)
 
     @staticmethod
     def get_rules(rules, direction):
@@ -615,5 +621,5 @@ class Redis():
         self.logger.info('%s sell Rules matched: %s' % (pair, winning_sell))
         self.logger.info('%s buy Rules matched: %s' % (pair, winning_buy))
         del dbase
-        return (result, current_time, current_price, {'sell':winning_sell,
-                                                      'buy': winning_buy})
+        return (result, event, current_time, current_price, {'sell':winning_sell,
+                                                             'buy': winning_buy})

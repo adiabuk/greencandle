@@ -118,7 +118,7 @@ class Trade():
                 balance = Balance(test=False)
                 prices = balance.get_balance()
 
-            for item, current_time, current_price in buy_list:
+            for item, current_time, current_price, event in buy_list:
                 base = get_base(item)
                 try:
                     last_open_price = dbase.fetch_sql_data("select base_in from trades where "
@@ -215,7 +215,7 @@ class Trade():
                                            direction=config.main.trade_direction)
                         send_push_notif('BUY', item, '%.15f' % float(cost))
                         send_gmail_alert('BUY', item, '%.15f' % float(cost))
-                        send_slack_message('longs', 'BUY %s %.15f' % (item, float(cost)))
+                        send_slack_message('longs', '%s %s %.15f' % (event, item, float(cost)))
 
                         self.send_redis_trade(item, cost, self.interval, "BUY")
             del dbase
@@ -272,7 +272,7 @@ class Trade():
                 balance = Balance(test=False)
                 prices = balance.get_balance()
 
-            for item, current_time, current_price in buy_list:
+            for item, current_time, current_price, event in buy_list:
                 base = get_base(item)
                 try:
                     last_open_price = dbase.fetch_sql_data("select base_in from trades where "
@@ -366,7 +366,7 @@ class Trade():
                             self.send_redis_trade(item, cost, self.interval, "BUY")
                             send_push_notif('BUY', item, '%.15f' % float(cost))
                             send_gmail_alert('BUY', item, '%.15f' % float(cost))
-                            send_slack_message('longs', 'BUY %s %.15f' % (item, float(cost)))
+                            send_slack_message('longs', '%s %s %.15f' % (event, item, float(cost)))
             del dbase
         else:
             self.logger.info("Nothing to buy")
@@ -381,7 +381,7 @@ class Trade():
         if short_list:
             self.logger.info("We need to close short %s" % short_list)
             dbase = Mysql(test=self.test_data, interval=self.interval)
-            for item, current_time, current_price in short_list:
+            for item, current_time, current_price, event in short_list:
                 quantity = dbase.get_quantity(item)
                 if not quantity:
                     self.logger.critical("Unable to find quantity for %s" % item)
@@ -395,7 +395,9 @@ class Trade():
 
                 send_gmail_alert("SELL", item, price)
                 send_push_notif('SELL', item, '%.15f' % float(price))
-                send_slack_message('longs', 'SELL %s %.15f %.2f%%' % (item, float(price), perc_inc))
+                send_slack_message('longs', '%s %s %.15f %.2f%%' % (event, item,
+                                                                    float(price),
+                                                                    perc_inc))
 
                 self.logger.info("Closing %s of %s for %.15f %s"
                                  % (quantity, item, float(price), base_out))
@@ -450,7 +452,7 @@ class Trade():
             if self.test_trade and not self.test_data:
                 self.logger.error("Unable to perform margin short test without test data")
 
-            for item, current_time, current_price in short_list:
+            for item, current_time, current_price, event in short_list:
                 base = get_base(item)
 
                 try:
@@ -520,7 +522,7 @@ class Trade():
         if sell_list:
             self.logger.info("We need to sell %s" % sell_list)
             dbase = Mysql(test=self.test_data, interval=self.interval)
-            for item, current_time, current_price in sell_list:
+            for item, current_time, current_price, event in sell_list:
                 quantity = dbase.get_quantity(item)
                 if not quantity:
                     self.logger.critical("Unable to find quantity for %s" % item)
@@ -568,8 +570,9 @@ class Trade():
                         self.send_redis_trade(item, price, self.interval, "SELL")
                         send_gmail_alert("SELL", item, price)
                         send_push_notif('SELL', item, '%.15f' % float(price))
-                        send_slack_message('longs', 'SELL %s %.15f %.2f%%' % (item, float(price),
-                                           perc_inc))
+                        send_slack_message('longs', '%s %s %.15f %.2f%%' % (event, item,
+                                                                            float(price),
+                                                                            perc_inc))
                 else:
                     self.logger.critical("Sell Failed %s:%s" % (name, item))
             del dbase
@@ -587,7 +590,7 @@ class Trade():
         if sell_list:
             self.logger.info("We need to sell %s" % sell_list)
             dbase = Mysql(test=self.test_data, interval=self.interval)
-            for item, current_time, current_price in sell_list:
+            for item, current_time, current_price, event in sell_list:
                 quantity = dbase.get_quantity(item)
                 if not quantity:
                     self.logger.critical("Unable to find quantity for %s" % item)
@@ -599,7 +602,7 @@ class Trade():
 
                 send_gmail_alert("SELL", item, price)
                 send_push_notif('SELL', item, '%.15f' % float(price))
-                send_slack_message('longs', 'SELL %s %.15f' % (item, float(price)))
+                send_slack_message('longs', '%s %s %.15f' % (event, item, float(price)))
 
                 self.logger.info("Selling %s of %s for %.15f %s"
                                  % (quantity, item, float(price), base_out))

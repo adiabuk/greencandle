@@ -90,8 +90,9 @@ def perform_data(pair, interval, data_dir, indicators):
                         interval=interval, test=True, redis=redis)
         engine.get_data(localconfig=indicators)
 
-        result, current_time, current_price, _ = redis.get_action(pair=pair, interval=interval,
-                                                                  test_data=True)
+        result, event, current_time, current_price, _ = redis.get_action(pair=pair,
+                                                                         interval=interval,
+                                                                         test_data=True)
         del engine
         current_trade = dbase.get_trade_value(pair)
         current_candle = dataframes[pair].iloc[-1]
@@ -101,12 +102,12 @@ def perform_data(pair, interval, data_dir, indicators):
         if result == "BUY":
             redis.update_drawdown(pair, current_candle, event='open')
             redis.update_drawup(pair, current_candle, event='open')
-            buys.append((pair, current_time, current_price))
+            buys.append((pair, current_time, current_price, event))
             LOGGER.debug("Items to buy: %s" % buys)
             trade.open_trade(buys)
 
         elif result == "SELL":
-            sells.append((pair, current_time, current_price))
+            sells.append((pair, current_time, current_price, event))
             LOGGER.debug("Items to sell: %s" % sells)
             drawdown = redis.get_drawdown(pair)
             drawup = redis.get_drawup(pair)['perc']
@@ -117,7 +118,7 @@ def perform_data(pair, interval, data_dir, indicators):
     LOGGER.info("Selling remaining item")
     sells = []
     if current_trade:
-        sells.append((pair, current_time, current_price))
+        sells.append((pair, current_time, current_price, event))
         current_candle = dataframes[pair].iloc[-1]
 
         redis.update_drawdown(pair, current_candle)
@@ -183,8 +184,9 @@ def parallel_test(pairs, interval, data_dir, indicators):
                             interval=interval, test=True, redis=redis)
             engine.get_data(localconfig=indicators)
 
-            result, current_time, current_price, _ = redis.get_action(pair=pair, interval=interval,
-                                                                      test_data=True)
+            result, event, current_time, current_price, _ = redis.get_action(pair=pair,
+                                                                             interval=interval,
+                                                                             test_data=True)
             current_candle = dataframe.iloc[-1]
             redis.update_drawdown(pair, current_candle)
             redis.update_drawup(pair, current_candle)
@@ -196,12 +198,12 @@ def parallel_test(pairs, interval, data_dir, indicators):
                 LOGGER.debug("Items to buy")
                 redis.update_drawdown(pair, current_candle, event='open')
                 redis.update_drawup(pair, current_candle, event='open')
-                buys.append((pair, current_time, current_price))
+                buys.append((pair, current_time, current_price, event))
             if result == "SELL":
                 LOGGER.debug("Items to sell")
                 drawdowns[pair] = redis.get_drawdown(pair)
                 drawups[pair] = redis.get_drawup(pair)['perc']
-                sells.append((pair, current_time, current_price))
+                sells.append((pair, current_time, current_price, event))
                 redis.rm_drawup(pair)
                 redis.rm_drawdown(pair)
 
@@ -228,7 +230,9 @@ def prod_int_check(interval, test):
         current_candle = dataframes[pair].iloc[-1]
         redis.update_drawdown(pair, current_candle)
         redis.update_drawup(pair, current_candle)
-        result, current_time, current_price = redis.get_intermittant(pair, open_price, current_candle)
+        result, event, current_time, current_price = redis.get_intermittent(pair,
+                                                                            open_price,
+                                                                            current_candle)
 
         pattern = "%Y-%m-%d %H:%M:%S"
         current_ctime = int(time.mktime(time.strptime(current_time, pattern)))
@@ -236,7 +240,7 @@ def prod_int_check(interval, test):
                      % (pair, result, open_price, current_price, current_time))
         if result == "SELL":
             LOGGER.debug("Items to sell")
-            sells.append((pair, current_time, current_price))
+            sells.append((pair, current_time, current_price, event))
             drawdowns[pair] = redis.get_drawdown(pair)
             drawups[pair] = redis.get_drawup(pair)['perc']
             redis.rm_drawup(pair)
@@ -327,7 +331,8 @@ def prod_loop(interval, test_trade):
     drawups = {}
     dataframes = get_dataframes(pairs, interval=interval, no_of_klines=1)
     for pair in pairs:
-        result, current_time, current_price, _ = redis.get_action(pair=pair, interval=interval)
+        result, event, current_time, current_price, _ = redis.get_action(pair=pair,
+                                                                         interval=interval)
         pattern = "%Y-%m-%d %H:%M:%S"
         current_ctime = int(time.mktime(time.strptime(current_time, pattern)))
         current_candle = dataframes[pair].iloc[-1]
@@ -338,10 +343,10 @@ def prod_loop(interval, test_trade):
             LOGGER.debug("Items to buy")
             redis.update_drawdown(pair, current_candle, event='open')
             redis.update_drawup(pair, current_candle, event='open')
-            buys.append((pair, current_time, current_price))
+            buys.append((pair, current_time, current_price, event))
         if result == "SELL":
             LOGGER.debug("Items to sell")
-            sells.append((pair, current_time, current_price))
+            sells.append((pair, current_time, current_price, event))
             drawdowns[pair] = redis.get_drawdown(pair)
             drawups[pair] = redis.get_drawup(pair)['perc']
             redis.rm_drawup(pair)
