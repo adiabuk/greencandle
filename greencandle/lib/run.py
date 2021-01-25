@@ -215,7 +215,6 @@ def parallel_test(pairs, interval, data_dir, indicators):
 @GET_EXCEPTIONS
 def prod_int_check(interval, test):
     """Check price between candles for slippage below stoploss"""
-    prices = binance.prices()
     dbase = Mysql(test=False, interval=interval)
     current_trades = dbase.get_trades()
     redis = Redis(interval=interval, test=False, db=0)
@@ -234,8 +233,6 @@ def prod_int_check(interval, test):
                                                                             open_price,
                                                                             current_candle)
 
-        pattern = "%Y-%m-%d %H:%M:%S"
-        current_ctime = int(time.mktime(time.strptime(current_time, pattern)))
         LOGGER.debug("%s int check result: %s Buy:%s Current:%s Time:%s"
                      % (pair, result, open_price, current_price, current_time))
         if result == "SELL":
@@ -333,8 +330,6 @@ def prod_loop(interval, test_trade):
     for pair in pairs:
         result, event, current_time, current_price, _ = redis.get_action(pair=pair,
                                                                          interval=interval)
-        pattern = "%Y-%m-%d %H:%M:%S"
-        current_ctime = int(time.mktime(time.strptime(current_time, pattern)))
         current_candle = dataframes[pair].iloc[-1]
         redis.update_drawdown(pair, current_candle)
         redis.update_drawup(pair, current_candle)

@@ -331,7 +331,7 @@ class Redis():
                        pair=pair, current_time=current_time, current="N/A")
 
 
-        return (result, event,  current_time, current_price)
+        return (result, event, current_time, current_price)
 
     @staticmethod
     def get_rules(rules, direction):
@@ -407,7 +407,7 @@ class Redis():
         except ValueError:
 
             self.logger.debug("Not enough data for %s" % pair)
-            return ('HOLD', 'Not enough data', 0, {'buy':[], 'sell':[]})
+            return ('HOLD', 'Not enough data', 0, {'buy':[], 'sell':[]}, "Hold")
 
         # get current & previous indicator values
         main_indicators = config.main.indicators.split()
