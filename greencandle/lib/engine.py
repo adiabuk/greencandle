@@ -58,7 +58,7 @@ class Engine(dict):
         LOGGER.debug("Finished fetching raw data")
 
     @staticmethod
-    def make_data_tupple(dataframe):
+    def __make_data_tupple(dataframe):
         """
         Transform dataframe to tupple of of floats
         """
@@ -70,12 +70,8 @@ class Engine(dict):
 
         return ohlc
 
-    def get_json(self):
-        """return serialized JSON of dict """
-        return json.dumps(self)
-
     @staticmethod
-    def renamed_dataframe_columns(klines=None):
+    def __renamed_dataframe_columns(klines=None):
         """
         Return dataframe with ordered/renamed coulumns
         Rename dataframe columns and reorder, only fetch columns that we care about
@@ -92,20 +88,6 @@ class Engine(dict):
         for index, item in enumerate(columns):
             dataframe.columns.values[index] = item
         return dataframe
-
-    @staticmethod
-    def get_url(pair):
-        """
-        Get tradingview graph URL for given pair
-
-        Args:
-            pair: trading pair (eg. XRPBTC)
-        Returns:
-            String URL for given pair
-
-        """
-
-        return "https://uk.tradingview.com/symbols/{0}/".format(pair)
 
     @staticmethod
     def get_supertrend_direction(supertrend):
@@ -142,23 +124,7 @@ class Engine(dict):
             }[symbol]
 
     @get_exceptions
-    def eval_binary_expr(self, op1, oper, op2):
-        """
-        Evaluate a binary expression
-        eg 2 > 5, 0.12123 < 0.121
-        Args:
-            op1: value #1
-            oper: string operator "<" or ">"
-            op2: value #2
-        Returns:
-            Boolean result of binary expression (True/False)
-        """
-
-        op1, op2 = float(op1), float(op2)
-        return self.get_operator_fn(oper)(op1, op2)
-
-    @get_exceptions
-    def add_schemes(self):
+    def __add_schemes(self):
         """ add scheme to correct structure """
 
         for scheme in self.schemes:
@@ -219,13 +185,13 @@ class Engine(dict):
 
                 pool.shutdown(wait=True)
 
-            self.send_ohlcs(pair, first_run=first_run)
-        self.add_schemes()
+            self.__send_ohlcs(pair, first_run=first_run)
+        self.__add_schemes()
 
         LOGGER.debug("Done getting data")
         return self
 
-    def send_ohlcs(self, pair, first_run):
+    def __send_ohlcs(self, pair, first_run):
         """Send ohcls data to redis"""
         scheme = {}
         scheme["symbol"] = pair
@@ -306,7 +272,7 @@ class Engine(dict):
         """get bollinger bands"""
 
         LOGGER.debug("Getting bollinger bands for %s" % pair)
-        klines = self.make_data_tupple(dataframe.iloc[:index])
+        klines = self.__make_data_tupple(dataframe.iloc[:index])
         func, timef = localconfig  # split tuple
         timeframe, multiplier = timef.split(',')
         results = {}
@@ -433,7 +399,7 @@ class Engine(dict):
         """
         func, timeperiod = localconfig  # split tuple
         LOGGER.debug("Getting %s_%s for %s" % (func, timeperiod, pair))
-        dataframe = self.renamed_dataframe_columns(dataframe)
+        dataframe = self.__renamed_dataframe_columns(dataframe)
         scheme = {}
         mine = dataframe.apply(pandas.to_numeric).loc[:index]
 
@@ -458,7 +424,7 @@ class Engine(dict):
         """
         Get envelope strategy
         """
-        klines = self.make_data_tupple(dataframe.iloc[:index])
+        klines = self.__make_data_tupple(dataframe.iloc[:index])
         func, timeperiod = localconfig
         close = klines[-1]
         basis = talib.SMA(close, int(timeperiod))
@@ -496,7 +462,7 @@ class Engine(dict):
         """
         Calculate Hull Moving Average using Weighted Moving Average
         """
-        klines = self.make_data_tupple(dataframe.iloc[:index])
+        klines = self.__make_data_tupple(dataframe.iloc[:index])
         func, timeperiod = localconfig
         close = klines[-1]
         first = talib.WMA(close, int(timeperiod)/2)
@@ -562,7 +528,7 @@ class Engine(dict):
             None
         """
         LOGGER.debug("Getting moving averages for %s" % pair)
-        klines = self.make_data_tupple(dataframe.iloc[:index])
+        klines = self.__make_data_tupple(dataframe.iloc[:index])
         func, timeperiod = localconfig  # split tuple
         try:
             close = klines[-1] # numpy.ndarray
@@ -617,7 +583,7 @@ class Engine(dict):
             None
         """
         LOGGER.debug("Getting Oscillators for %s" % pair)
-        klines = self.make_data_tupple(dataframe.iloc[:index])
+        klines = self.__make_data_tupple(dataframe.iloc[:index])
         _, open, high, low, close = klines
         func, timeperiod = localconfig  # split tuple
 
@@ -680,7 +646,7 @@ class Engine(dict):
             None
         """
         func, timeperiod = localconfig
-        klines = self.make_data_tupple(dataframe.iloc[:index])
+        klines = self.__make_data_tupple(dataframe.iloc[:index])
         LOGGER.debug("Getting Indicators for %s" % pair)
         scheme = {}
         trends = {"HAMMER": {100: "BUY", 0:"HOLD"},
@@ -725,7 +691,7 @@ class Engine(dict):
         func, timef = localconfig  # split tuple
         LOGGER.debug("Getting supertrend for %s" % pair)
         scheme = {}
-        dataframe = self.renamed_dataframe_columns(dataframe)
+        dataframe = self.__renamed_dataframe_columns(dataframe)
 
         mine = dataframe.apply(pandas.to_numeric).loc[:index]
         timeframe, multiplier = timef.split(',')
