@@ -245,7 +245,7 @@ class Mysql():
         """
 
         self.run_sql_query("delete from open_trades")
-        trades = self.fetch_sql_data("select pair, open_time, open_price, name, interval from "
+        trades = self.fetch_sql_data("select pair, open_time, open_price, name, `interval` from "
                                      "trades where close_price is NULL", header=False)
         for trade in trades:
             try:
