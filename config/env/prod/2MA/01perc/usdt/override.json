@@ -1,5 +1,4 @@
 {
   "name": "2ma-01perc-usdt",
-  "pairs": "BNBUSDT BTCUSDT ETHUSDT NEOUSDT",
-  "push_title": "prod_2ma-01perc-usdt"
+  "pairs": "BNBUSDT BTCUSDT ETHUSDT NEOUSDT"
 }

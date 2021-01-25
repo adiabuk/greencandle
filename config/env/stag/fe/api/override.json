@@ -1,4 +1,4 @@
 {
   "name": "api",
-  "push_title": "stag_api"
+  "production": "false"
 }

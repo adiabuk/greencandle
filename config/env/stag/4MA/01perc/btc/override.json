@@ -1,6 +1,5 @@
 {
   "name": "4ma-01perc-btc",
   "pairs": "BQXBTC EOSBTC GXSBTC IOSTBTC LRCBTC MTHBTC OAXBTC IOSTBTC POWRBTC STEEMBTC WABIBTC YOYOBTC",
-  "push_title": "stag_4ma-01perc-btc",
   "stop_loss_perc": "0.1"
 }

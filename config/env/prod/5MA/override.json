@@ -8,7 +8,6 @@
   "open_rule7": "",
   "indicators": "get_moving_averages;EMA;8 get_moving_averages;EMA;13 get_moving_averages;EMA;21 get_moving_averages;EMA;55 get_moving_averages;EMA;100",
   "interval": "4h",
-  "push_title": "prod_5MA",
   "rate_indicator": "EMA_8",
   "close_rule1": "low \u003c results.current.EMA_100",
   "close_rule2": "",

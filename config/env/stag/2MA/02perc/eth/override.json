@@ -1,6 +1,5 @@
 {
   "name": "2ma-02perc-eth",
   "pairs": "BATETH GXSETH",
-  "push_title": "stag_2ma-02perc-eth",
   "stop_loss_perc": "0.2"
 }

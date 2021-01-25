@@ -1,4 +1,4 @@
 {
   "name": "cron",
-  "push_title": "stag_cron"
+  "production": "false"
 }

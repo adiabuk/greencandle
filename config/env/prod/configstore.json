@@ -147,12 +147,12 @@
       "is_secret": false
     },
     "drain": {
-      "value": "False",
+      "value": "false",
       "is_binary": false,
       "is_secret": false
     },
     "email_active": {
-      "value": "False",
+      "value": "false",
       "is_binary": false,
       "is_secret": false
     },
@@ -172,17 +172,17 @@
       "is_secret": false
     },
     "immediate_stop": {
-      "value": "True",
+      "value": "true",
       "is_binary": false,
       "is_secret": false
     },
     "immediate_take_profit": {
-      "value": "True",
+      "value": "true",
       "is_binary": false,
       "is_secret": false
     },
     "immediate_trailing_stop": {
-      "value": "True",
+      "value": "true",
       "is_binary": false,
       "is_secret": false
     },
@@ -307,7 +307,7 @@
       "is_secret": false
     },
     "push_active": {
-      "value": "True",
+      "value": "true",
       "is_binary": false,
       "is_secret": false
     },
@@ -321,18 +321,13 @@
       "is_binary": false,
       "is_secret": true
     },
-    "push_title": {
-      "value": "prod",
-      "is_binary": false,
-      "is_secret": false
-    },
     "rate_indicator": {
       "value": "EMA_2",
       "is_binary": false,
       "is_secret": false
     },
     "redis_expire": {
-      "value": "True",
+      "value": "true",
       "is_binary": false,
       "is_secret": false
     },
@@ -382,7 +377,7 @@
       "is_secret": false
     },
     "take_profit": {
-      "value": "False",
+      "value": "false",
       "is_binary": false,
       "is_secret": false
     },
@@ -432,7 +427,7 @@
       "is_secret": false
     },
     "wait_between_trades": {
-      "value": "False",
+      "value": "false",
       "is_binary": false,
       "is_secret": false
     }

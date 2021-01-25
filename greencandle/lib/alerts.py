@@ -49,12 +49,10 @@ def send_push_notif(*args):
         return
     host = config.push.push_host
     channel = config.push.push_channel
-    title = config.push.push_title
-    try:
-        base_host = "-{0}".format(os.environ['HOST'])
-    except KeyError:
-        base_host = ""
-    text = title + base_host + ' ' + ' '.join(str(item) for item in args)
+    host = "unk" if 'HOST' not in os.environ else os.environ['HOST']
+
+    title = "{}_{}".format(host, config.main.name)
+    text = title + ' ' + ' '.join(str(item) for item in args)
     notify = notify_run.Notify(channel)
 
     notify.endpoint = 'https://{0}/{1}'.format(host, channel)
@@ -66,7 +64,8 @@ def send_slack_message(channel, message):
     """
     if not str2bool(config.slack.slack_active):
         return
-    title = config.push.push_title
+    host = "unk" if 'HOST' not in os.environ else os.environ['HOST']
+    title = "{}_{}".format(host, config.main.name)
     payload = '{"text":"%s %s"}' % (message, title)
     webhook = config.slack[channel]
     requests.post(webhook, data=payload, headers={'Content-Type': 'application/json'})

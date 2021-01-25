@@ -8,7 +8,6 @@
   "open_rule7": "",
   "indicators": "get_moving_averages;EMA;8 get_moving_averages;EMA;13 get_moving_averages;EMA;21 get_moving_averages;EMA;55",
   "interval": "4h",
-  "push_title": "prod_4MA",
   "rate_indicator": "EMA_8",
   "close_rule1": "results.current.EMA_8 \u003c results.current.EMA_13",
   "close_rule2": "low \u003c results.current.EMA_55",
@@ -16,6 +15,6 @@
   "close_rule4": "",
   "stop_loss_perc": "20",
   "take_profit_perc": "20",
-  "trailing_stop_loss": "False",
+  "trailing_stop_loss": "false",
   "trailing_stop_loss_perc": "0"
 }

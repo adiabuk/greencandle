@@ -6,7 +6,6 @@
   "indicators": "get_moving_averages;EMA;2 get_moving_averages;EMA;69 get_moving_averages;EMA;8 get_moving_averages;EMA;13 get_moving_averages;EMA;21 get_moving_averages;EMA;55 get_moving_averages;EMA;100 get_moving_averages;EMA;20 get_tsi;tsi;25 get_tsi;signal;25 get_pivot;pivot;1",
   "logging_level": "10",
   "name": "api",
-  "push_title": "api",
   "max_trades": "1000",
   "pairs": "NULSBTC BQXBTC EOSBTC GXSBTC IOSTBTC LRCBTC MTHBTC OAXBTC IOSTBTC POWRBTC STEEMBTC WABIBTC YOYOBTC NANOBTC ADXETH AIONETH BQXETH CMTETH LSKETH MTLETH POWRETH WTCETH MDABTC BALBTC DOTUSDT ASTBTC BLZBTC CVCBTC BQXBTC TOMOBTC LRCBTC ZILUSDT DOCKUSDT RENUSDT ANKRUSDT",
   "close_rule1": "results.current.EMA_2 \u003c results.current.EMA_69",

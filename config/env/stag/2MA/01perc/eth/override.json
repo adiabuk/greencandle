@@ -1,6 +1,5 @@
 {
   "name": "2ma-01perc-eth",
   "pairs": "BLZETH BNBETH BRDETH CDTETH EOSETH FUNETH IOSTETH KMDETH KNCETH MANAETH NANOETH NEBLETH NEOETH IOSTETH STEEMETH TRXETH VIBETH WAVESETH XZCETH ZRXETH",
-  "push_title": "stag_2ma-01perc-eth",
   "stop_loss_perc": "0.1"
 }
