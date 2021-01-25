@@ -395,7 +395,7 @@ class Trade():
 
                 send_gmail_alert("SELL", item, price)
                 send_push_notif('SELL', item, '%.15f' % float(price))
-                send_slack_message('longs', 'SELL %s %.15f %s' % (item, float(price), perc_inc))
+                send_slack_message('longs', 'SELL %s %.15f %.2f%%' % (item, float(price), perc_inc))
 
                 self.logger.info("Closing %s of %s for %.15f %s"
                                  % (quantity, item, float(price), base_out))
@@ -568,7 +568,7 @@ class Trade():
                         self.send_redis_trade(item, price, self.interval, "SELL")
                         send_gmail_alert("SELL", item, price)
                         send_push_notif('SELL', item, '%.15f' % float(price))
-                        send_slack_message('longs', 'SELL %s %.15f %s' % (item, float(price),
+                        send_slack_message('longs', 'SELL %s %.15f %.2f%%' % (item, float(price),
                                            perc_inc))
                 else:
                     self.logger.critical("Sell Failed %s:%s" % (name, item))
