@@ -363,10 +363,10 @@ class Redis():
             check = current_price
 
         if direction == "long":
-            return check <= sub_perc(trailing_perc, high_price) and \
-                    add_perc(trailing_start, float(open_price)) > current_price
+            return float(check) <= sub_perc(float(trailing_perc), float(high_price)) and \
+                    add_perc(float(trailing_start), float(open_price)) > float(current_price)
         elif direction == "short":
-            return check >= add_perc(trailing_perc, high_price)
+            return float(check) >= add_perc(float(trailing_perc), float(high_price))
 
     @staticmethod
     def get_stop_loss(test_data, current_price, current_low, open_price):
@@ -388,9 +388,9 @@ class Redis():
             check = current_price
 
         if direction == 'long':
-            return check < sub_perc(stop_perc, float(open_price))
+            return float(check) < sub_perc(float(stop_perc), float(open_price))
         elif direction == 'short':
-            return check > add_perc(stop_perc, float(open_price))
+            return float(check) > add_perc(float(stop_perc), float(open_price))
 
     def get_action(self, pair, interval, test_data=False):
         """Determine if we are in a BUY/HOLD/SELL situration for a specific pair and interval"""
