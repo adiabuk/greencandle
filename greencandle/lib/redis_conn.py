@@ -301,9 +301,9 @@ class Redis():
             result = "HOLD"
             event = "HOLD"
 
-        self.__log_event(event=event, rate="N/A", perc_rate="N/A",
+        self.__log_event(event=event, rate=0, perc_rate=0,
                        open_price=open_price, close_price=current_price,
-                       pair=pair, current_time=current_time, current="N/A")
+                       pair=pair, current_time=current_time, current=0)
 
 
         return (result, event, current_time, current_price)
