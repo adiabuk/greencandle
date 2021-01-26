@@ -335,6 +335,31 @@ class Redis():
             return float(check) >= add_perc(float(trailing_perc), float(high_price))
 
     @staticmethod
+    def __get_take_profit(test_data, current_price, current_high, open_price):
+        """
+        Check if we have reached take profit
+        return True/False
+        """
+        direction = config.main.trade_direction
+        profit_perc = float(config.main.take_profit_perc)
+        immediate = str2bool(config.main.immediate_take_profit)
+
+        if not open_price:
+            return False
+
+        if direction == 'long' and test_data and immediate:
+            check = current_high
+        elif direction == 'short' and test_data and immediate:
+            check = current_high
+        else:
+            check = current_price
+
+        if direction == 'long':
+            return float(check) > add_perc(float(profit_perc), float(open_price))
+        elif direction == 'short':
+            return float(check) < sub_perc(float(profit_perc), float(open_price))
+
+    @staticmethod
     def __get_stop_loss(test_data, current_price, current_low, open_price):
         """
         Check if we have reached stop loss
@@ -393,8 +418,6 @@ class Redis():
             split = i.split(';')
             ind = split[1] + '_' + split[2].split(',')[0]
             ind_list.append(ind)
-        ind_list.append("SMA_vol_20")  #FIXME
-        ind_list.append("volume")  #FIXME
 
         for indicator in ind_list:
             results['current'][indicator] = self.__get_result(current, indicator)
@@ -498,24 +521,9 @@ class Redis():
         low_price = self.get_drawdown(pair)
         trailing_stop = self.__get_trailing_stop(test_data, current_price, high_price, current_high,
                                                open_price)
-
+        take_profit_rule = self.__get_take_profit(test_data, current_price, current_high,
+                                                  open_price)
         stop_loss_rule = self.__get_stop_loss(test_data, current_price, current_low, open_price)
-        try:
-            if config.main.trade_direction == "short":
-                take_profit_rule = current_price < sub_perc(take_profit_perc, open_price)
-
-            elif config.main.trade_direction == "long":
-                #FIXME - get MINPRICE
-                take_profit_rule = current_price > add_perc(take_profit_perc, open_price)
-
-
-                if test_data and str2bool(config.main.immediate_take_profit):
-                    take_profit_rule = current_high > add_perc(take_profit_perc, open_price)
-
-        except (IndexError, ValueError, TypeError):
-            # Setting to none to indicate we are currently not in a trade
-            open_price = None
-            take_profit_rule = False
 
         if any(rules['open']) and not able_to_buy:
             self.logger.info("Unable to buy %s due to time_between_trades" % pair)
