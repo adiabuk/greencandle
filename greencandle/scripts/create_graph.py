@@ -24,11 +24,11 @@ def main():
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
 
-
+    volume = 'vol' in config.main.indicators
     if args.all_pairs:
         pairs = config.main.pairs.split()
         for pair in pairs:
-            graph = Graph(test=args.test, pair=pair, interval=args.interval)
+            graph = Graph(test=args.test, pair=pair, interval=args.interval, volume=volume)
             graph.get_data()
             graph.create_graph(args.output_dir)
             if args.thumbnails:

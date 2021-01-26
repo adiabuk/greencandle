@@ -72,7 +72,9 @@ def main():
     def get_graph():
         for pair in config.main.pairs.split():
             LOGGER.info("Creating graph for %s" % pair)
-            graph = Graph(test=False, pair=pair, interval=config.main.interval)
+            volume = 'vol' in config.main.indicators
+            graph = Graph(test=False, pair=pair, interval=config.main.interval,
+                          volume=volume)
             graph.get_data()
             graph.create_graph('/data/graphs/')
             graph.get_screenshot()
