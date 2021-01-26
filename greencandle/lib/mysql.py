@@ -207,7 +207,7 @@ class Mysql():
 
     @get_exceptions
     def update_trades(self, pair, close_time, close_price, quote, base_out,
-                      name=None, drawdown=None, drawup=None):
+                      name=None, drawdown=0, drawup=0):
         """
         Update an existing trade with sell price
         """
