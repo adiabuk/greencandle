@@ -512,7 +512,7 @@ class Engine(dict):
         except KeyError as exc:
             LOGGER.warning("KEY FAILURE in moving averages: %s" % str(exc))
 
-        LOGGER.debug("done getting moving averages")
+        LOGGER.debug("done getting volume moving averages")
 
     @get_exceptions
     def get_moving_averages(self, pair, dataframe, index=None, localconfig=None, volume=False):
@@ -530,6 +530,7 @@ class Engine(dict):
         LOGGER.debug("Getting moving averages for %s" % pair)
         klines = self.__make_data_tupple(dataframe.iloc[:index])
         func, timeperiod = localconfig  # split tuple
+        new_func = func.strip("_vol") if volume else func
         try:
             close = klines[-1] # numpy.ndarray
             vol = klines[0]
@@ -538,7 +539,7 @@ class Engine(dict):
             return None
         data = vol if volume else close
         try:
-            result = getattr(talib, func)(data, int(timeperiod))[-1]
+            result = getattr(talib, new_func)(data, int(timeperiod))[-1]
         except Exception as exc:
             LOGGER.warning("Overall Exception getting moving averages: %s" % exc)
             return None
@@ -550,10 +551,7 @@ class Engine(dict):
             scheme["data"] = result
             scheme["symbol"] = pair
 
-            if volume:
-                scheme["event"] = func + "_vol_" + str(timeperiod)
-            else:
-                scheme["event"] = func + "_" + str(timeperiod)
+            scheme["event"] = func + "_" + str(timeperiod)
             if (not index and self.test) or len(self.dataframes[pair]) < 2:
                 index = -1
             elif not index and not self.test:
