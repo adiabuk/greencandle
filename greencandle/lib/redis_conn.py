@@ -34,18 +34,14 @@ class Redis():
         self.logger = get_logger(__name__)
         host = config.redis.redis_host
         port = config.redis.redis_port
-        db = config.redis.db
+        db = int(config.redis.db)
         expire = str2bool(config.redis.redis_expire)
 
-        if test:
-            test_str = "Test"
-        else:
-            test_str = "Live"
         self.interval = interval
         self.test = test
 
-        self.logger.debug("Starting Redis with interval %s %s, db=%s"
-                          % (interval, test_str, str(db)))
+        self.logger.debug("Starting Redis with interval %s db=%s"
+                          % (interval, db))
         pool = redis.ConnectionPool(host=host, port=port, db=db)
         self.conn = redis.StrictRedis(connection_pool=pool)
 
