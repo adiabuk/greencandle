@@ -326,7 +326,7 @@
       "is_secret": false
     },
     "redis_db": {
-      "value": "True",
+      "value": "0",
       "is_binary": false,
       "is_secret": false
     },
