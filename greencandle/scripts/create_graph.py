@@ -36,7 +36,7 @@ def main():
                 graph.resize_screenshot()
 
     else:
-        graph = Graph(test=args, pair=args.pair, db=args.db, interval=args.interval)
+        graph = Graph(test=args, pair=args.pair, interval=args.interval)
         graph.get_data()
         graph.create_graph(args.output_dir)
         if args.thumbnails:
