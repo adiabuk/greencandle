@@ -275,16 +275,20 @@ class Redis():
         current_high = current_candle.high
         current_low = current_candle.low
 
-        stop_loss_rule = self.__get_stop_loss(test_data, current_price, current_low, open_price)
-        take_profit_rule = float(current_price) > add_perc(take_profit_perc, open_price)
-
-        current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
-
         trailing_perc = float(config.main.trailing_stop_loss_perc)
         high_price = self.get_drawup(pair)['price']
         low_price = self.get_drawdown(pair)
+
+        stop_loss_rule = self.__get_stop_loss(test_data, current_price, current_low, open_price)
+
+        take_profit_rule = self.__get_take_profit(test_data, current_price, current_high,
+                                                  open_price)
+
         trailing_stop = self.__get_trailing_stop(test_data, current_price, high_price, current_high,
                                                open_price)
+
+        current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
+
         if trailing_stop and open_price:
             result = "SELL"
             event  = "TrailingStop intermittent"
