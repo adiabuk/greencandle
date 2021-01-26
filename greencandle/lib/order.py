@@ -6,6 +6,7 @@ Test Buy/Sell orders
 
 from __future__ import print_function
 from collections import defaultdict
+import time
 from str2bool import str2bool
 from binance import binance
 
@@ -34,21 +35,20 @@ class Trade():
 
         self.interval = interval
 
-    def __send_redis_trade(self, pair, price, interval, event):
+    def __send_redis_trade(self, pair, current_time, price, interval, event):
         """
         Send trade event to redis
         """
         self.logger.debug('Strategy - Adding to redis')
-
-        # get last close time
-        redis = Redis()
-        close_time = redis.get_items(pair, interval)[-1].decode().split(':')[-1]
+        # Change time back to milliseconds to line up with entries in redis
+        mepoch = int(time.mktime(time.strptime(current_time, '%Y-%m-%d %H:%M:%S'))) * 1000 + 999
         data = {"event":{"result": event,
                          "current_price": format(float(price), ".20f"),
-                         "date": close_time,
+                         "date": mepoch,
                         }}
 
-        redis.redis_conn(pair, interval, data, close_time)
+        redis = Redis()
+        redis.redis_conn(pair, interval, data, mepoch)
         del redis
 
     def open_trade(self, items_list):
@@ -195,7 +195,8 @@ class Trade():
                         send_gmail_alert('BUY', item, '%.15f' % float(cost))
                         send_slack_message('longs', '%s %s %.15f' % (event, item, float(cost)))
 
-                        self.__send_redis_trade(item, cost, self.interval, "BUY")
+                        self.__send_redis_trade(item, current_time, cost, current_time,
+                                                self.interval, "BUY")
             del dbase
         else:
             self.logger.info("Nothing to buy")
@@ -329,6 +330,8 @@ class Trade():
                             new_cost = sum(prices) / len(prices)
                             self.logger.info("Current price %s, Fill price: %s" % (cost, new_cost))
                             cost = new_cost
+                    else:
+                        result = True
 
                     if self.test_data or (self.test_trade and not result) or \
                             (not self.test_trade and 'transactTime' in result):
@@ -340,7 +343,7 @@ class Trade():
                                                     base_amount=base_amount, quote=amount,
                                                     direction=config.main.trade_direction)
                         if result:
-                            self.__send_redis_trade(item, cost, self.interval, "BUY")
+                            self.__send_redis_trade(item, current_time, cost, self.interval, "BUY")
                             send_push_notif('BUY', item, '%.15f' % float(cost))
                             send_gmail_alert('BUY', item, '%.15f' % float(cost))
                             send_slack_message('longs', '%s %s %.15f' % (event, item, float(cost)))
@@ -405,7 +408,7 @@ class Trade():
                                         base_out=base_out, name=name, drawdown=drawdowns[item],
                                         drawup=drawups[item])
 
-                    self.__send_redis_trade(item, price, self.interval, "SELL")
+                    self.__send_redis_trade(item, current_time, price, self.interval, "SELL")
                 else:
                     self.logger.critical("Sell Failed %s:%s" % (name, item))
             del dbase
@@ -486,7 +489,7 @@ class Trade():
                                    multiplier=config.main.multiplier,
                                    direction=config.main.trade_direction)
 
-                self.__send_redis_trade(item, cost, self.interval, "BUY")
+                self.__send_redis_trade(item, current_time, cost, self.interval, "BUY")
 
     @GET_EXCEPTIONS
     def __close_spot_long(self, sell_list, name=None, drawdowns={}, drawups={}):
@@ -543,7 +546,7 @@ class Trade():
                                                  drawup=drawups[item])
 
                     if result:
-                        self.__send_redis_trade(item, price, self.interval, "SELL")
+                        self.__send_redis_trade(item, current_time, price, self.interval, "SELL")
                         send_gmail_alert("SELL", item, price)
                         send_push_notif('SELL', item, '%.15f' % float(price))
                         send_slack_message('longs', '%s %s %.15f %.2f%%' % (event, item,
@@ -610,7 +613,7 @@ class Trade():
                                         close_price=fill_price, quote=quantity,
                                         base_out=base_out, name=name, drawdown=drawdowns[item])
 
-                    self.__send_redis_trade(item, price, self.interval, "SELL")
+                    self.__send_redis_trade(item, current_time, price, self.interval, "SELL")
                 else:
                     self.logger.critical("Sell Failed %s:%s" % (name, item))
             del dbase
