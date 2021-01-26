@@ -325,6 +325,11 @@
       "is_binary": false,
       "is_secret": false
     },
+    "redis_db": {
+      "value": "True",
+      "is_binary": false,
+      "is_secret": false
+    },
     "redis_expire": {
       "value": "false",
       "is_binary": false,

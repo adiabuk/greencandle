@@ -36,9 +36,8 @@ def serial_test(pairs, intervals, data_dir, indicators):
             dbase = Mysql(test=True, interval=interval)
             dbase.delete_data()
             del dbase
-            for redis_db in (0, 1, 2):
-                redis = Redis(interval=interval, test=True, db=redis_db)
-                redis.clear_all()
+            redis = Redis(interval=interval, test=True)
+            redis.clear_all()
             del redis
 
         for interval in intervals:
@@ -49,7 +48,7 @@ def serial_test(pairs, intervals, data_dir, indicators):
 def perform_data(pair, interval, data_dir, indicators):
     """Serial test loop"""
     LOGGER.debug("Serial run %s %s" % (pair, interval))
-    redis = Redis(interval=interval, test=True, db=0)
+    redis = Redis(interval=interval, test=True)
     try:
         filename = glob("{0}/{1}_{2}.p*".format(data_dir, pair, interval))[0]
     except IndexError:
@@ -139,7 +138,7 @@ def parallel_test(pairs, interval, data_dir, indicators):
     Do test with parallel data
     """
     LOGGER.info("Performaing parallel run %s" % interval)
-    redis = Redis(interval=interval, test=True, db=0)
+    redis = Redis(interval=interval, test=True)
     redis.clear_all()
     dbase = Mysql(test=True, interval=interval)
     dbase.delete_data()
@@ -217,7 +216,7 @@ def prod_int_check(interval, test):
     """Check price between candles for slippage below stoploss"""
     dbase = Mysql(test=False, interval=interval)
     current_trades = dbase.get_trades()
-    redis = Redis(interval=interval, test=False, db=0)
+    redis = Redis(interval=interval, test=False)
     current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
     sells = []
     drawdowns = {}

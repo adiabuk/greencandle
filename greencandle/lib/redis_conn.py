@@ -1,5 +1,5 @@
 #pylint: disable=eval-used,no-else-return,unused-variable,no-member,redefined-builtin
-#pylint: disable=logging-not-lazy,inconsistent-return-statements
+#pylint: disable=logging-not-lazy,inconsistent-return-statements,invalid-name
 
 """
 Store and retrieve items from redis
@@ -21,7 +21,7 @@ class Redis():
     Redis object
     """
 
-    def __init__(self, interval=None, test=False, db=0):
+    def __init__(self, interval=None, test=False):
         """
         Args:
             interval
@@ -32,9 +32,10 @@ class Redis():
             initialized redis connection
         """
         self.logger = get_logger(__name__)
-        self.host = config.redis.redis_host
-        self.port = config.redis.redis_port
-        self.expire = str2bool(config.redis.redis_expire)
+        host = config.redis.redis_host
+        port = config.redis.redis_port
+        db = config.redis.db
+        expire = str2bool(config.redis.redis_expire)
 
         if test:
             test_str = "Test"
@@ -45,7 +46,7 @@ class Redis():
 
         self.logger.debug("Starting Redis with interval %s %s, db=%s"
                           % (interval, test_str, str(db)))
-        pool = redis.ConnectionPool(host=self.host, port=self.port, db=db)
+        pool = redis.ConnectionPool(host=host, port=port, db=db)
         self.conn = redis.StrictRedis(connection_pool=pool)
 
     def __del__(self):

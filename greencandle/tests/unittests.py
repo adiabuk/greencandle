@@ -176,7 +176,7 @@ def make_test_case(pairs, startdate, xsum, xmax, xmin, drawup, drawdown):
             self.intervals = ["1h"]
             self.logger = get_logger(__name__)
             self.logger.info("Setting up environment")
-            self.redis = Redis(interval=self.intervals[0], test=True, db=0)
+            self.redis = Redis(interval=self.intervals[0], test=True)
             self.dbase = Mysql(test=True, interval=self.intervals[0])
             if not os.path.exists(self.outputdir):
                 os.mkdir(self.outputdir)

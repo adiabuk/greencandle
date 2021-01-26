@@ -15,7 +15,6 @@ from greencandle.lib.graph import Graph
 def main():
     """Main function"""
     parser = argparse.ArgumentParser()
-    parser.add_argument("-d", "--db", required=True)
     parser.add_argument("-a", "--all_pairs", action="store_true", required=False, default=False)
     parser.add_argument("-p", "--pair", required=False)
     parser.add_argument("-i", "--interval", required=False)
@@ -29,7 +28,7 @@ def main():
     if args.all_pairs:
         pairs = config.main.pairs.split()
         for pair in pairs:
-            graph = Graph(test=args.test, pair=pair, db=args.db, interval=args.interval)
+            graph = Graph(test=args.test, pair=pair, interval=args.interval)
             graph.get_data()
             graph.create_graph(args.output_dir)
             if args.thumbnails:

@@ -27,10 +27,9 @@ LOGGER = get_logger(__name__)
 
 class Graph():
     """class for creating graph html and images"""
-    def __init__(self, test=False, pair='ETHBTC', db=0, interval='1m', volume=True):
+    def __init__(self, test=False, pair='ETHBTC', interval='1m', volume=True):
         self.test = test
         self.pair = pair
-        self.dbase = db
         self.interval = interval
         self.data = {}
         self.filename = ''
@@ -177,7 +176,7 @@ class Graph():
 
     def get_data(self):
         """Fetch data from redis"""
-        redis = Redis(test=self.test, db=self.dbase)
+        redis = Redis(test=self.test)
         list_of_series = []
         index = redis.get_items(self.pair, self.interval)
 

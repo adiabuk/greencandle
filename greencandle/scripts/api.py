@@ -116,7 +116,7 @@ def get_open():
     interval = '4h'
     results = dbase.fetch_sql_data("select * from open_trades", header=False)
 
-    redis = redis_conn.Redis(interval=interval, test=False, db=0)
+    redis = redis_conn.Redis(interval=interval, test=False)
     for entry in results:
         pair, open_price, open_time, current_price, perc, name = entry
         matching = redis.get_action(pair=pair, interval=interval)[-1]
@@ -172,13 +172,13 @@ def get_closed():
         try:
             config.main.rate_indicator = 'EMA_2'
             reload(redis_conn)
-            redis = redis_conn.Redis(interval=interval, test=False, db=0)
+            redis = redis_conn.Redis(interval=interval, test=False)
             matching = redis.get_action(pair=pair, interval=interval)[-1]
             del redis
         except (TypeError, KeyError):
             config.main.rate_indicator = 'EMA_8'
             reload(redis_conn)
-            redis = redis_conn.Redis(interval=interval, test=False, db=0)
+            redis = redis_conn.Redis(interval=interval, test=False)
             matching = redis.get_action(pair=pair, interval=interval)[-1]
             del redis
 
