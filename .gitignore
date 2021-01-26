@@ -13,15 +13,9 @@ notes.txt
 tmp/*
 ta-lib*
 geckodriver*
-graphs/in/*.html
+*.html
 test_data/*
-log/*.log
-log/*.log.gz
 *.p
-
-graphs/out/*.html
-graphs/in/*.png
-graphs/out/*.png
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
