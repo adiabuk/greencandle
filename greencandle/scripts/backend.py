@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # PYTHON_ARGCOMPLETE_OK
-# pylint: disable=no-member, wrong-import-position, unused-variable
+# pylint: disable=no-member, wrong-import-position, unused-variable,logging-not-lazy
 
 """
 Get ohlc (Open, High, Low, Close) values from given cryptos
@@ -72,7 +72,7 @@ def main():
     def get_graph():
         for pair in config.main.pairs.split():
             LOGGER.info("Creating graph for %s" % pair)
-            graph = Graph(test=False, pair=pair, db=0, interval=config.main.interval)
+            graph = Graph(test=False, pair=pair, interval=config.main.interval)
             graph.get_data()
             graph.create_graph('/data/graphs/')
             graph.get_screenshot()
