@@ -167,20 +167,13 @@ def get_closed():
     print("Getting all pairs", file=sys.stderr)
     pairs = [pair for pair in config.main.pairs.split() if pair not in DATA.keys()]
     for pair in pairs:
-        interval = '4h'
         print("Getting pair", pair, file=sys.stderr)
-        try:
-            config.main.rate_indicator = 'EMA_2'
-            reload(redis_conn)
-            redis = redis_conn.Redis(interval=interval, test=False)
-            matching = redis.get_action(pair=pair, interval=interval)[-1]
-            del redis
-        except (TypeError, KeyError):
-            config.main.rate_indicator = 'EMA_8'
-            reload(redis_conn)
-            redis = redis_conn.Redis(interval=interval, test=False)
-            matching = redis.get_action(pair=pair, interval=interval)[-1]
-            del redis
+        config.main.rate_indicator = 'EMA_2'
+        interval = '4h'
+        reload(redis_conn)
+        redis = redis_conn.Redis(interval=interval, test=False)
+        matching = {'buy': 'N/A', 'sell': 'N/A'}
+        del redis
 
         local_all[pair] = {"matching": "Buy:{},Sell:{}".format(matching["buy"], matching["sell"]),
                            "graph": get_latest_graph(pair, "html"),
