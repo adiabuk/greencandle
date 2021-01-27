@@ -408,7 +408,7 @@ class Redis():
         except ValueError:
 
             self.logger.debug("Not enough data for %s" % pair)
-            return ('HOLD', 'Not enough data', 0, {'buy':[], 'sell':[]}, "Hold")
+            return ('HOLD', 'Not enough data', current_time, current_price, {'buy':[], 'sell':[]})
 
         # get current & previous indicator values
         main_indicators = config.main.indicators.split()
