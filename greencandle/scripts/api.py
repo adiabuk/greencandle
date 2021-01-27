@@ -72,7 +72,8 @@ def sell():
     current_price = request.args.get('price')
     print(pair, name, file=sys.stderr)
 
-    trade = Trade(interval='4h', test_data=TEST, test_trade=TEST_TRADE)
+    interval = DATA[pair]['interval']
+    trade = Trade(interval=interval, test_data=TEST, test_trade=TEST_TRADE)
 
     current_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     sells = [(pair, current_time, current_price)]
@@ -113,18 +114,17 @@ def get_open():
     local_data = {}
     print("Getting open trades", file=sys.stderr)
     dbase = Mysql()
-    interval = '4h'
     results = dbase.fetch_sql_data("select * from open_trades", header=False)
 
-    redis = redis_conn.Redis(interval=interval, test=False)
+    redis = redis_conn.Redis(interval='4h', test=False)
     for entry in results:
-        pair, open_price, open_time, current_price, perc, name = entry
+        pair, open_price, open_time, current_price, perc, interval, name = entry
         matching = redis.get_action(pair=pair, interval=interval)[-1]
         print(entry, file=sys.stdout)
 
         local_data[pair] = {"open_price": open_price, "open_time": open_time,
                             "matching": "Buy:{},Sell:{}".format(matching["buy"], matching["sell"]),
-                            "current_price": current_price, "perc": perc,
+                            "current_price": current_price, "perc": perc, "interval": interval,
                             "graph": get_latest_graph(pair, "html"), "name": name,
                             "strategy": get_keys_by_value(config.pairs, pair),
                             "thumbnail": get_latest_graph(pair, "resized.png")}
