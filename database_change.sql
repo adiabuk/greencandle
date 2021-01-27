@@ -18,3 +18,8 @@ CASE
 
 
 ,`trades`.`drawdown_perc` AS `drawdown_perc`, `trades`.`drawup_perc` as `drawup_perc` from `trades`;
+
+
+drop view monthly_profit;
+
+create VIEW `monthly_profit` AS select left(`profit`.`close_time`,7) AS `date`,`profit`.`interval` AS `interval`,sum(`profit`.`base_profit`) AS `profit`,sum(`profit`.`perc`) AS `perc` from `profit` where (`profit`.`perc` is not null) group by left(`profit`.`close_time`,7) order by left(`profit`.`close_time`,7),sum(`profit`.`base_profit`);
