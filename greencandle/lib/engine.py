@@ -52,7 +52,11 @@ class Engine(dict):
         self["event"] = {}
         self.supres = {}
         self.current_time = str(int(time()*1000))
-        self.dataframes = dataframes
+        self.dataframes = {}
+        for key, value in dataframes.items():
+            # Cleanout false datapoints
+            value['closeTime'] = value['closeTime'].astype(str)
+            self.dataframes[key] = value[value.closeTime.str.endswith('99999')]
         self.schemes = []
         super(Engine, self).__init__()
         LOGGER.debug("Finished fetching raw data")
@@ -134,9 +138,10 @@ class Engine(dict):
             close_time = str(self.dataframes[pair].iloc[-1]["closeTime"]) if not "close_time" in \
                     scheme else scheme["close_time"]
 
+
             # close time might be in the future if we run between open/close
             if datetime.fromtimestamp(int(close_time)/1000) > datetime.now():
-                close_time = self.current_time
+                continue
 
             result = None if (isinstance(scheme["data"], float) and
                               math.isnan(scheme["data"]))  else scheme["data"]
@@ -208,7 +213,7 @@ class Engine(dict):
         self.schemes.append(scheme)
         if first_run:
             for seq in range(len(self.dataframes[pair]) -1):
-                LOGGER.info("Getting initial sequence number %s" % seq)
+                LOGGER.debug("Getting initial sequence number %s" % seq)
                 scheme['data'] = zlib.compress(pickle.dumps(self.dataframes[pair].iloc[seq]))
                 scheme["event"] = "ohlc"
                 scheme["close_time"] = str(self.dataframes[pair].iloc[seq]["closeTime"])
@@ -558,7 +563,6 @@ class Engine(dict):
                 index = -2
 
             scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
-
             self.schemes.append(scheme)
 
         except KeyError as exc:
