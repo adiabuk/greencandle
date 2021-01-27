@@ -307,7 +307,7 @@
       "is_secret": false
     },
     "push_active": {
-      "value": "true",
+      "value": "false",
       "is_binary": false,
       "is_secret": false
     },
