@@ -36,7 +36,7 @@ class TestRedis(unittest.TestCase):
         items = redis.get_items('ETHBTC', '1m')
         self.assertEqual(len(items), 0)
 
-        redis.redis_conn('ETHBTC', '1m', {"a":1}, 1609108999)
+        redis.redis_conn('ETHBTC', '1m', {"a":1}, 1609199999)
         items = redis.get_items('ETHBTC', '1m')
         self.assertEqual(len(items), 1)
 
@@ -44,15 +44,18 @@ class TestRedis(unittest.TestCase):
             start_time = int(time.time())
             end_time = start_time + 5184000    # 60 days
             time_str = str(random.randint(start_time, end_time))
-            time_str.replace(" ", "").rstrip(time_str[-3:]).upper()
-            return int(time_str[:-3] +'999')
+            time_str.replace(" ", "").rstrip(time_str[-5:]).upper()
+            return int(time_str[:-5] +'99999')
 
-        for _ in range(10):
-            redis.redis_conn('ETHBNB', '1m', {"a":1}, random_epoch())
+        redis.clear_all()
+        time.sleep(1)
+        for i in range(10):
+            redis.redis_conn('ETHBNB', '1m', {i:i}, random_epoch())
             time.sleep(1)
+        time.sleep(1)
         items = redis.get_items('ETHBNB', '1m')
         self.assertEqual(len(items), 10)
-        redis.clear_all()
+        #redis.clear_all()
         del redis
 
     @staticmethod
@@ -82,8 +85,8 @@ class TestRedis(unittest.TestCase):
         self.assertEqual(action[0], 'HOLD')
         self.assertEqual(action[1], 'Not enough data')
         self.assertEqual(action[2], 0)
-        self.assertEqual(action[3]['buy'], [])
-        self.assertEqual(action[3]['sell'], [])
+        self.assertEqual(action[4]['buy'], [])
+        self.assertEqual(action[4]['sell'], [])
 
         redis.clear_all()
         dbase.delete_data()
