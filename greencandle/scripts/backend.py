@@ -19,7 +19,7 @@ from ..lib import config
 config.create_config()
 
 from ..lib.graph import Graph
-from ..lib.logger import get_logger
+from ..lib.logger import get_logger, get_decorator
 from ..lib.run import prod_loop, prod_int_check, prod_initial
 
 LOGGER = get_logger(__name__)
@@ -62,12 +62,14 @@ def main():
 
     sched = BlockingScheduler()
 
+    @GET_EXCEPTIONS
     @sched.scheduled_job('interval', seconds=60)
     def get_price():
         LOGGER.info("Starting Price check")
         prod_int_check(interval, args.test)
         LOGGER.info("Finished Price check")
 
+    @GET_EXCEPTIONS
     @sched.scheduled_job('interval', minutes=30)
     def get_graph():
         for pair in config.main.pairs.split():
@@ -80,10 +82,12 @@ def main():
             graph.get_screenshot()
             graph.resize_screenshot()
 
+    @GET_EXCEPTIONS
     @sched.scheduled_job('interval', seconds=60)
     def keepalive():
         Path('/var/run/greencandle').touch()
 
+    @GET_EXCEPTIONS
     @sched.scheduled_job('cron', minute=minute[interval], hour=hour[interval], second="30")
     def prod_run():
         LOGGER.info("Starting prod run")
