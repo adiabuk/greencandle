@@ -405,10 +405,10 @@ class Redis():
         try:
             previous3, previous2, previous1, previous, current = \
                     self.get_items(pair=pair, interval=interval)[-5:]
-        except ValueError:
+        except ValueError as ve:
 
-            self.logger.debug("Not enough data for %s" % pair)
-            return ('HOLD', 'Not enough data', current_time, current_price, {'buy':[], 'sell':[]})
+            self.logger.warning("Not enough data for %s: %s" % (pair, ve))
+            return ('HOLD', 'Not enough data', 0, 0, {'buy':[], 'sell':[]})
 
         # get current & previous indicator values
         main_indicators = config.main.indicators.split()
