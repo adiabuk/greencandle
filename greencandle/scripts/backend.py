@@ -22,6 +22,7 @@ from ..lib.graph import Graph
 from ..lib.logger import get_logger, get_decorator
 from ..lib.run import prod_loop, prod_int_check, prod_initial
 
+GET_EXCEPTIONS = get_decorator((Exception))
 LOGGER = get_logger(__name__)
 
 def main():
