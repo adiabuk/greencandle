@@ -52,7 +52,7 @@ class TestRedis(unittest.TestCase):
         for i in range(10):
             redis.redis_conn('ETHBNB', '1m', {i:i}, random_epoch())
             time.sleep(1)
-        time.sleep(1)
+        time.sleep(3)
         items = redis.get_items('ETHBNB', '1m')
         self.assertEqual(len(items), 10)
         #redis.clear_all()
