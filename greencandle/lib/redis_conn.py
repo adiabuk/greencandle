@@ -331,7 +331,7 @@ class Redis():
 
         if direction == "long":
             return float(check) <= sub_perc(float(trailing_perc), float(high_price)) and \
-                    add_perc(float(trailing_start), float(open_price)) > float(current_price)
+                    float(current_price) > add_perc(float(trailing_start), float(open_price))
         elif direction == "short":
             return float(check) >= add_perc(float(trailing_perc), float(high_price))
 
