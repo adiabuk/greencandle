@@ -65,6 +65,11 @@
       "is_binary": false,
       "is_secret": false
     },
+    "check_interval": {
+      "value": "60",
+      "is_binary": false,
+      "is_secret": false
+    },
     "close_rule1": {
       "value": "results.current.EMA_8 \u003c results.current.EMA_13",
       "is_binary": false,

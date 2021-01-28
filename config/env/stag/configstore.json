@@ -66,6 +66,11 @@
       "is_binary": false,
       "is_secret": false
     },
+    "check_interval": {
+      "value": "60",
+      "is_binary": false,
+      "is_secret": false
+    },
     "close_rule1": {
       "value": "",
       "is_binary": false,
