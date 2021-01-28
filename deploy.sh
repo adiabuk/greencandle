@@ -54,7 +54,6 @@ done
 sleep 30
 docker-compose -f ./install/docker-compose_${env}.yml up -d $fe
 
-docker system prune --volumes --all -f
 text="Finished deployment $TAG on $HOSTNAME"
 curl -X POST -H 'Content-type: application/json' --data '{"text":"'"${text}"'"}' $url
 
