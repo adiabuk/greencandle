@@ -64,7 +64,7 @@ def main():
     sched = BlockingScheduler()
 
     @GET_EXCEPTIONS
-    @sched.scheduled_job('interval', seconds=config.main.check_interval)
+    @sched.scheduled_job('interval', seconds=int(config.main.check_interval))
     def get_price():
         LOGGER.info("Starting Price check")
         prod_int_check(interval, args.test)
