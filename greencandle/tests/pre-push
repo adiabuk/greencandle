@@ -6,7 +6,7 @@ Local git hook for setting & verifying commit message
 which indicate STATUS of tests for the current commit.
 This will be checked by server-side pre-receive hooks along with other checks
 """
-
+import os
 import re
 import subprocess
 import sys
@@ -39,13 +39,15 @@ else:  # have not yet checked if tests passed
     if STATUS == 'OK':  # Tests OK for current commit
         # last test run passed, need to proceed to check if for current commit
         pass
-    elif STATUS == 'failed':  # last test run failed
+    elif STATUS == 'FAILED':  # last test run failed
         print(RED)
         print("ERROR: One or more tests have failed for the current commit")
         print(WHITE)
     else:  # unable to determine if tests have passed or failed
         print(RED)
-        print("ERROR: Unable to parse results of tests: tests/results.log")
+        print("ERROR: Unable to parse results of tests: ./results.log")
+        print(os.listdir())
+        print(FILE_CONTENTS)
         print(WHITE)
         sys.exit(1)
 
