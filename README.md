@@ -11,6 +11,19 @@
 
 # Releases
 
+## 1.6
+* Updated prod scalp strategy
+* Additional unit tests
+* Code cleanup
+* Trailing Stop Loss bug fix
+* Temp Api fix for multiple timeframes
+* More frequent intermittent price checks
+* DB fix for monthly view
+* Remove implicit volume from graph
+* Config cleanup
+* Deploy script enhancements
+* Doc update
+
 ## 1.5
 * Add draw up to db
 * fix trailing stop loss
