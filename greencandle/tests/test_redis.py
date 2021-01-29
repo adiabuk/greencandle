@@ -55,7 +55,7 @@ class TestRedis(unittest.TestCase):
         time.sleep(3)
         items = redis.get_items('ETHBNB', '1m')
         self.assertEqual(len(items), 10)
-        #redis.clear_all()
+        redis.clear_all()
         del redis
 
     @staticmethod
