@@ -162,9 +162,9 @@ services:
     depends_on:
       - base-mysql
 
-  be-4ma-01perc-btc:
-    container_name: be-4ma-01perc-btc
-    hostname: be-4ma-01perc-btc
+  be-2ma-5perc-btc:
+    container_name: be-2ma-5perc-btc
+    hostname: be-2ma-5perc-btc
     image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
     logging:
@@ -176,7 +176,7 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=stag/4MA/01perc/btc
+      - CONFIG_ENV=stag/4MA/5perc/btc
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -189,9 +189,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-4ma-01perc-eth:
-    container_name: be-4ma-01perc-eth
-    hostname: be-4ma-01perc-eth
+  be-2ma-5perc-bnb:
+    container_name: be-2ma-5perc-bnb
+    hostname: be-2ma-5perc-bnb
     image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
     logging:
@@ -203,7 +203,7 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=stag/4MA/01perc/eth
+      - CONFIG_ENV=stag/4MA/5perc/bnb
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -216,9 +216,11 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-4ma-01perc-vol-btc:
-    container_name: be-4ma-01perc-vol-btc
-    hostname: be-4ma-01perc-vol-btc
+
+
+  be-4ma-1perc-bnb:
+    container_name: be-4ma-1perc-bnb
+    hostname: be-4ma-1perc-bnb
     image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
     logging:
@@ -230,7 +232,34 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=stag/4MA/01perc/vol/btc
+      - CONFIG_ENV=stag/4MA/1perc/bnb
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  be-4ma-1perc-usdt:
+    container_name: be-4ma-1perc-usdt
+    hostname: be-4ma-1perc-usdt
+    image: amrox/greencandle:${TAG}
+    entrypoint: /docker-entrypoint.sh backend --test
+    logging:
+      driver: journald
+    links:
+      - base-mysql:mysql
+      - base-redis:redis
+    depends_on:
+      - base-mysql
+      - base-redis
+    environment:
+      - CONFIG_ENV=stag/4MA/1perc/usdt
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -270,9 +299,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-5ma-01perc-vol-btc:
-    container_name: be-5ma-01perc-vol-btc
-    hostname: be-5ma-01perc-vol-btc
+  be-5ma-nostop-btc:
+    container_name: be-5ma-nostop-btc
+    hostname: be-5ma-nostop-btc
     image: amrox/greencandle:${TAG}
     entrypoint: /docker-entrypoint.sh backend --test
     logging:
@@ -284,7 +313,61 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=stag/5MA/01perc/vol/btc
+      - CONFIG_ENV=stag/5MA/nostop/btc
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  be-5ma-nostop-bnb:
+    container_name: be-5ma-nostop-bnb
+    hostname: be-5ma-nostop-bnb
+    image: amrox/greencandle:${TAG}
+    entrypoint: /docker-entrypoint.sh backend --test
+    logging:
+      driver: journald
+    links:
+      - base-mysql:mysql
+      - base-redis:redis
+    depends_on:
+      - base-mysql
+      - base-redis
+    environment:
+      - CONFIG_ENV=stag/5MA/nostop/bnb
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  be-5ma-nostop-usdt:
+    container_name: be-5ma-nostop-usdt
+    hostname: be-5ma-nostop-usdt
+    image: amrox/greencandle:${TAG}
+    entrypoint: /docker-entrypoint.sh backend --test
+    logging:
+      driver: journald
+    links:
+      - base-mysql:mysql
+      - base-redis:redis
+    depends_on:
+      - base-mysql
+      - base-redis
+    environment:
+      - CONFIG_ENV=stag/5MA/nostop/usdt
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
