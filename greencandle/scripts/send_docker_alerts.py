@@ -45,10 +45,9 @@ def main():
     container_list = get_docker_status(docker_socket)
 
     for item in container_list:
+        name = item[0][0].lstrip('/')
         if any(status in item[1] for status in ["unhealthy", "Exited", "Restarting"]) and \
-                "Exited (0)" not in item[1]:
-            name = item[0][0].lstrip('/')
-            print(name, item[1])
+                "Exited (0)" not in item[1] and "k8s" not in name:
             issues.append(name)
 
     if issues:
