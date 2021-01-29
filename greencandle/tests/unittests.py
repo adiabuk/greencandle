@@ -144,7 +144,8 @@ def run_subprocess(command):
             conv(out).decode('utf-8').strip(),
             conv(err).decode('utf-8').strip())
 
-def make_test_case(pairs, startdate, xsum, xmax, xmin, drawup, drawdown):
+def make_test_case(config_env, pairs, interval, startdate, days, xsum, xmax, xmin,
+                   drawup, drawdown):
     """
     return run unittest customized with argument config
     """
@@ -171,9 +172,11 @@ def make_test_case(pairs, startdate, xsum, xmax, xmin, drawup, drawdown):
             self.drawup = drawup
             self.drawdown = drawdown
 
-            self.days = 15
+            os.system("configstore package process_templates {} /etc".format(config_env))
+            config.create_config()  # reload config
+            self.days = days
             self.outputdir = "/tmp/test_data"
-            self.intervals = ["1h"]
+            self.intervals = [interval]
             self.logger = get_logger(__name__)
             self.logger.info("Setting up environment")
             self.redis = Redis(interval=self.intervals[0], test=True)
