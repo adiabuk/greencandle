@@ -13,7 +13,7 @@
 * **push_title** *Title used for push notifications*
 
 ## [slack]  *Slack notifications section*
-* **slack_active** *{True|False} Slack notifications actvie*
+* **slack_active** *{True|False} Slack notifications active*
 * **alerts** *Webhook url for alerts channel*
 * **longs** *Webhook url for longs channel*
 * **balance** *Webhook url for balance channel*
