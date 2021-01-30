@@ -11,6 +11,12 @@
 
 # Releases
 
+## 1.6.1
+* Move 5MA and scalp strategies from stag to prod
+* Fix for redis unittests
+* Disable prod push notifications
+* Disable prod debug messages
+
 ## 1.6
 * Updated prod scalp strategy
 * Additional unit tests
