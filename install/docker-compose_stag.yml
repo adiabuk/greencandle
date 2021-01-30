@@ -176,7 +176,7 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=stag/4MA/5perc/btc
+      - CONFIG_ENV=stag/2MA/5perc/btc
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -203,7 +203,7 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=stag/4MA/5perc/bnb
+      - CONFIG_ENV=stag/2MA/5perc/bnb
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -215,8 +215,6 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
-
-
 
   be-4ma-1perc-bnb:
     container_name: be-4ma-1perc-bnb
