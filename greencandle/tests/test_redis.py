@@ -40,17 +40,16 @@ class TestRedis(unittest.TestCase):
         items = redis.get_items('ETHBTC', '1m')
         self.assertEqual(len(items), 1)
 
-        def random_epoch():
+        def random_mepoch():
             start_time = int(time.time())
             end_time = start_time + 10368000  # 120 days
-            time_str = str(random.randint(start_time, end_time))
-            time_str.replace(" ", "").rstrip(time_str[-5:]).upper()
+            time_str = str(random.randint(start_time, end_time *1000))
             return int(time_str[:-5] +'99999')
 
         redis.clear_all()
         time.sleep(1)
         for i in range(10):
-            redis.redis_conn('ETHBNB', '1m', {i:i}, random_epoch())
+            redis.redis_conn('ETHBNB', '1m', {i:i}, random_mepoch())
             time.sleep(1)
         time.sleep(3)
         items = redis.get_items('ETHBNB', '1m')
