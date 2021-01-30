@@ -42,7 +42,7 @@ class TestRedis(unittest.TestCase):
 
         def random_epoch():
             start_time = int(time.time())
-            end_time = start_time + 5184000    # 60 days
+            end_time = start_time + 10368000  # 120 days
             time_str = str(random.randint(start_time, end_time))
             time_str.replace(" ", "").rstrip(time_str[-5:]).upper()
             return int(time_str[:-5] +'99999')
