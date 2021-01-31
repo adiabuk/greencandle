@@ -186,7 +186,8 @@ class Redis():
         key = "{0}:{1}:{2}".format(pair, interval, now)
         expiry = int(config.redis.redis_expiry_seconds)
 
-        if not key.endswith("99999") and 'event' not in data.keys(): # closing time, 1 ms before next candle
+        # closing time, 1 ms before next candle
+        if not key.endswith("99999") and 'event' not in data.keys():
             self.logger.critical("Invalid time submitted to redis %s.  Skipping " % key)
             return None
 
@@ -282,13 +283,13 @@ class Redis():
                                                   open_price)
 
         trailing_stop = self.__get_trailing_stop(test_data, current_price, high_price, current_high,
-                                               open_price)
+                                                 open_price)
 
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
 
         if trailing_stop and open_price:
             result = "SELL"
-            event  = "TrailingStop intermittent"
+            event = "TrailingStop intermittent"
 
         elif stop_loss_rule and open_price:
             result = "SELL"
@@ -303,15 +304,15 @@ class Redis():
             event = "HOLD"
 
         self.__log_event(event=event, rate=0, perc_rate=0,
-                       open_price=open_price, close_price=current_price,
-                       pair=pair, current_time=current_time, current=0)
+                         open_price=open_price, close_price=current_price,
+                         pair=pair, current_time=current_time, current=0)
 
 
         return (result, event, current_time, current_price)
 
     @staticmethod
     def __get_trailing_stop(test_data, current_price, high_price, current_high,
-                          open_price):
+                            open_price):
         """
         Check if we have reached trailing stop loss
         return True/False
@@ -336,7 +337,7 @@ class Redis():
         if direction == "long":
             return float(check) <= sub_perc(float(trailing_perc), float(high_price)) and \
                     (test_data or float(current_price) > add_perc(float(trailing_start),
-                        float(open_price)))
+                                                                  float(open_price)))
         elif direction == "short":
             return float(check) >= add_perc(float(trailing_perc), float(high_price))
 
@@ -530,7 +531,7 @@ class Redis():
         high_price = self.get_drawup(pair)['price']
         low_price = self.get_drawdown(pair)
         trailing_stop = self.__get_trailing_stop(test_data, current_price, high_price, current_high,
-                                               open_price)
+                                                 open_price)
         take_profit_rule = self.__get_take_profit(test_data, current_price, current_high,
                                                   open_price)
         stop_loss_rule = self.__get_stop_loss(test_data, current_price, current_low, open_price)
@@ -606,8 +607,8 @@ class Redis():
             result = 'NOITEM'
 
         self.__log_event(event=event, rate=rate, perc_rate=perc_rate,
-                       open_price=open_price, close_price=current_price,
-                       pair=pair, current_time=current_time, current=results.current)
+                         open_price=open_price, close_price=current_price,
+                         pair=pair, current_time=current_time, current=results.current)
 
         winning_sell = self.__get_rules(rules, 'close')
         winning_buy = self.__get_rules(rules, 'open')
