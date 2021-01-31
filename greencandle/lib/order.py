@@ -521,7 +521,6 @@ class Trade():
                     result = binance.spot_order(symbol=item, side=binance.SELL, quantity=amt_str,
                                                 order_type=binance.MARKET, test=self.test_trade)
 
-                    self.logger.error(result)
                     if "msg" in result:
                         self.logger.error(result)
 
