@@ -174,6 +174,12 @@ class Graph():
                                                       self.interval)
         py.plot(fig, filename=self.filename, auto_open=False)
 
+    def insert_data(self, dframe):
+        """
+        insert ohlc data for creating graphs
+        """
+        self.data = {'ohlc': dframe}
+
     def get_data(self):
         """Fetch data from redis"""
         redis = Redis(test=self.test)
