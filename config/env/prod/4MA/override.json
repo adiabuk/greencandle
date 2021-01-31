@@ -15,6 +15,5 @@
   "close_rule4": "",
   "stop_loss_perc": "20",
   "take_profit_perc": "20",
-  "trailing_stop_loss": "false",
   "trailing_stop_loss_perc": "0"
 }

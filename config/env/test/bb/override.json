@@ -13,6 +13,5 @@
   "close_rule4": "results.current.RSI_14 \u003e 85",
   "stop_loss_perc": "1.5",
   "take_profit_perc": "50",
-  "trailing_stop_loss": "true",
   "trailing_stop_loss_perc": "5"
 }

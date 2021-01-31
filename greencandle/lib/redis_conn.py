@@ -294,7 +294,7 @@ class Redis():
             result = "SELL"
             event = "StopLoss intermittent"
 
-        elif str2bool(config.main.take_profit) and take_profit_rule and open_price:
+        elif take_profit_rule and open_price:
             result = "SELL"
             event = "TakeProfit intermittent"
 
@@ -316,8 +316,12 @@ class Redis():
         Check if we have reached trailing stop loss
         return True/False
         """
-        direction = config.main.trade_direction
         trailing_perc = float(config.main.trailing_stop_loss_perc)
+
+        if trailing_perc <= 0:
+            return False
+
+        direction = config.main.trade_direction
         immediate = str2bool(config.main.immediate_trailing_stop)
         trailing_start = float(config.main.trailing_start)
         if not high_price or not open_price:
@@ -342,8 +346,11 @@ class Redis():
         Check if we have reached take profit
         return True/False
         """
-        direction = config.main.trade_direction
         profit_perc = float(config.main.take_profit_perc)
+
+        if profit_perc <= 0:
+            return False
+        direction = config.main.trade_direction
         immediate = str2bool(config.main.immediate_take_profit)
 
         if not open_price:
@@ -563,7 +570,7 @@ class Redis():
             event = 'TrailingStopLoss'
             result = 'SELL'
         # if we match take_profit rule and are in a trade
-        elif str2bool(config.main.take_profit) and take_profit_rule and open_price:
+        elif take_profit_rule and open_price:
             if test_data and str2bool(config.main.immediate_stop):
                 stop_at = add_perc(take_profit_perc, open_price)
                 current_price = stop_at

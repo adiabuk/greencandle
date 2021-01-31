@@ -13,8 +13,6 @@
   "open_rule6": "",
   "open_rule7": "",
   "rate_indicator": "EMA_2",
-  "take_profit": "false",
-  "take_profit_perc": "30",
-  "trailing_stop_loss": "false",
-  "trailing_stop_loss_perc": "5"
+  "take_profit_perc": "0",
+  "trailing_stop_loss_perc": "0"
 }

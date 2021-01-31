@@ -10,10 +10,8 @@
   "open_rule1": "results.current.tsi_25 \u003e results.current.signal_25 and results.previous.tsi_25 \u003c results.previous.signal_25 and close \u003e results.current.pivot_1",
   "rate_indicator": "EMA_20",
   "stop_loss_perc": "10",
-  "take_profit": "true",
   "take_profit_perc": "10",
   "time_in_trade": "45m",
   "trailing_start": "1",
-  "trailing_stop_loss": "true",
   "trailing_stop_loss_perc": "0.1"
 }

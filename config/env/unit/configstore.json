@@ -385,13 +385,8 @@
       "is_binary": false,
       "is_secret": false
     },
-    "take_profit": {
-      "value": "false",
-      "is_binary": false,
-      "is_secret": false
-    },
     "take_profit_perc": {
-      "value": "30",
+      "value": "0",
       "is_binary": false,
       "is_secret": false
     },
@@ -425,13 +420,8 @@
       "is_binary": false,
       "is_secret": false
     },
-    "trailing_stop_loss": {
-      "value": "0",
-      "is_binary": false,
-      "is_secret": false
-    },
     "trailing_stop_loss_perc": {
-      "value": "100",
+      "value": "0",
       "is_binary": false,
       "is_secret": false
     },
