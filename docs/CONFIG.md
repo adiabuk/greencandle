@@ -61,10 +61,8 @@
 * **no_of_klines** *number of candles to download initially*
 * **pairs** *list of trading pairs*
 * **stop_loss_perc** *stop loss percentage*
-* **take_profit** *{True|False} take profit active*
-* **take_profit_perc** *Take profit percentage*
-* **trailing_stop_loss** *{True|False} Trailing stop loss active}
-* **trailing_stop_loss_perc** *Trailing stop loss percentage from maximum value since open*
+* **take_profit_perc** *Take profit percentage - disabled if 0 or less*
+* **trailing_stop_loss_perc** *Trailing stop loss percentage from maximum value since open - disabled if 0 or less*
 * **indicators** *List of indicators and values - see seperate doc*
 * **open_rule{1-10}** *Rules to open trade - see seperate doc*
 * **close_rule{1-10}** *Rules to close trade - see seperate doc*
