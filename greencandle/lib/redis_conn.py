@@ -524,6 +524,10 @@ class Redis():
                                current_epoch
             except (IndexError, AttributeError):
                 pass  # no previous trades
+        elif dbase.get_recent_high(item, config.main.name, current_time, 12, 200):
+            self.logger.war
+            able_to_buy = False
+
         else:
             able_to_buy = True
 

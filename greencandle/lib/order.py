@@ -127,7 +127,7 @@ class Trade():
         if buy_list:
             dbase = Mysql(test=self.test_data, interval=self.interval)
             if self.test_data or self.test_trade:
-                raise InvalidTradeError("Unable to perform margin long trade in test mode")
+                balance = self.__get_test_balance(dbase, account='margin')
             else:
                 balance = Balance(test=False)
                 prices = balance.get_balance()
@@ -150,10 +150,7 @@ class Trade():
                 avail_slots = self.max_trades - len(current_trades)
                 self.logger.info("%s buy slots available" % avail_slots)
 
-                if dbase.get_recent_high(item, current_time, 12, 200):
-                    self.logger.warning("Recently sold %s with high profit, skipping" % item)
-                    break
-                elif avail_slots <= 0:
+                if avail_slots <= 0:
                     self.logger.warning("Too many trades, skipping")
                     break
 
@@ -306,10 +303,7 @@ class Trade():
                 avail_slots = self.max_trades - len(current_trades)
                 self.logger.info("%s buy slots available" % avail_slots)
 
-                if dbase.get_recent_high(item, current_time, 12, 200):
-                    self.logger.warning("Recently sold %s with high profit, skipping" % item)
-                    break
-                elif avail_slots <= 0:
+                if avail_slots <= 0:
                     self.logger.warning("Too many trades, skipping")
                     break
 
@@ -501,10 +495,7 @@ class Trade():
                 avail_slots = self.max_trades - len(current_trades)
                 self.logger.info("%s trade slots available" % avail_slots)
 
-                if dbase.get_recent_high(item, current_time, 12, 200):
-                    self.logger.warning("Recently closed %s with high profit, skipping" % item)
-                    break
-                elif avail_slots <= 0:
+                if avail_slots <= 0:
                     self.logger.warning("Too many trades, skipping")
                     break
                 cost = current_price

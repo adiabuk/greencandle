@@ -130,16 +130,16 @@ class Mysql():
 
 
     @get_exceptions
-    def get_recent_high(self, pair, date, months, max_perc):
+    def get_recent_high(self, pair, name, date, months, max_perc):
         """
         Dertermine if we have completed a profitable trade for
         given pair within given amount of time
 
         Return True/False
         """
-        command = ('select *  from profit where pair="{0}" and '
-                   'close_time >= ("{1}" - interval "{2}" month) '
-                   'and perc > "{3}"'.format(pair, date, months, max_perc))
+        command = ('select * from profit where pair="{0}" and name="{1}" and close_time '
+                   '>= ("{2}" - interval "{3}" month) ' 'and perc '
+                   '> "{3}"'.format(pair, date, months, max_perc))
 
         cur = self.dbase.cursor()
         self.__execute(cur, command)
