@@ -76,7 +76,7 @@ def sell():
     sells = [(pair, current_time, current_price)]
 
     # Sell, then update page
-    trade.close_trade(sells, name=name)
+    trade.close_trade(sells)
     sleep(1)
     dbase = Mysql(interval='4h', test=TEST_TRADE)
     dbase.get_active_trades()

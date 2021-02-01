@@ -87,7 +87,7 @@ class Trade():
         else:
             raise InvalidTradeError("Invalid trade type")
 
-    def close_trade(self, items_list, name=None, drawdowns=None, drawups=None):
+    def close_trade(self, items_list, drawdowns=None, drawups=None):
         """
         Main close trade method
         Will choose between spot/margin and long/short
@@ -99,7 +99,7 @@ class Trade():
             else:
                 raise InvalidTradeError("Invalid trade direction for spot")
 
-        elif config.trade_type == "margin":
+        elif config.main.trade_type == "margin":
             if config.main.trade_direction == "long":
                 self.__close_margin_long(items_list, drawdowns=drawdowns, drawups=drawups)
             elif config.main.trade_direction == "short":
@@ -127,7 +127,7 @@ class Trade():
         if buy_list:
             dbase = Mysql(test=self.test_data, interval=self.interval)
             if self.test_data or self.test_trade:
-                balance = self.__get_test_balance(dbase, account='margin')
+                prices = self.__get_test_balance(dbase, account='margin')
             else:
                 balance = Balance(test=False)
                 prices = balance.get_balance()
@@ -185,13 +185,15 @@ class Trade():
                                      % (amount, item, base_amount, base))
                     self.logger.debug("amount to buy: %s, cost: %s, amount:%s"
                                       % (base_amount, cost, amount))
-                    if prod:
-                        amount_to_borrow = float(base_amount) * float(config.main.multiplier)
-                        amount_to_use = sub_perc(5, amount_to_borrow)  # use 95% of borrowed funds
 
-                        amt_str = get_step_precision(item, amount_to_use)
-                        self.logger.info("Will attempt to borrow %s of %s" % (amount_to_borrow,
-                                                                              base))
+                    amount_to_borrow = float(base_amount) * float(config.main.multiplier)
+                    amount_to_use = sub_perc(5, amount_to_borrow)  # use 95% of borrowed funds
+
+                    amt_str = get_step_precision(item, amount_to_use)
+                    self.logger.info("Will attempt to borrow %s of %s" % (amount_to_borrow,
+                                                                          base))
+
+                    if prod:
                         borrow_result = binance.margin_borrow(base, amount_to_borrow)
                         self.logger.info(borrow_result)
 
@@ -201,35 +203,34 @@ class Trade():
                         if "msg" in trade_result:
                             self.logger.error(trade_result)
 
+                        base_amount = trade_result.get('cummulativeQuoteQty', base_amount)
 
-                    prices = []
-                    fill_price = cost
-
-                    base_amount = trade_result.get('cummulativeQuoteQty', base_amount)
-
-                    if 'transactTime' in trade_result:
-                        # Get price from exchange
-                        for fill in trade_result['fills']:
-                            prices.append(float(fill['price']))
-                        fill_price = sum(prices) / len(prices)
-                        self.logger.info("Current price %s, Fill price: %s" % (cost, fill_price))
+                        prices = []
+                        fill_price = cost
 
 
-                        # only insert into db, if:
-                        # 1. we are using test_data
-                        # 2. we performed a test trade which was successful - (empty dict)
-                        # 3. we proformed a real trade which was successful - (transactTime in dict)
-                        dbase.insert_trade(pair=item, price=cost, date=current_time,
-                                           base_amount=base_amount, quote=amount,
-                                           borrowed=amount_to_borrow,
-                                           multiplier=config.main.multiplier,
-                                           direction=config.main.trade_direction)
-                        send_push_notif('BUY', item, '%.15f' % float(cost))
-                        send_gmail_alert('BUY', item, '%.15f' % float(cost))
-                        send_slack_message('longs', '%s %s %.15f' % (event, item, float(cost)))
+                        if 'transactTime' in trade_result:
+                            # Get price from exchange
+                            for fill in trade_result['fills']:
+                                prices.append(float(fill['price']))
+                            fill_price = sum(prices) / len(prices)
+                            self.logger.info("Current price %s, Fill price: %s"
+                                             % (cost, fill_price))
 
-                        self.__send_redis_trade(item, current_time, cost, current_time,
-                                                self.interval, "BUY")
+
+                if self.test_data or (self.test_trade and not trade_result) or \
+                        (not self.test_trade and 'transactTime' in trade_result):
+
+                    dbase.insert_trade(pair=item, price=cost, date=current_time,
+                                       base_amount=base_amount, quote=amount,
+                                       borrowed=amount_to_borrow,
+                                       multiplier=config.main.multiplier,
+                                       direction=config.main.trade_direction)
+                    send_push_notif('BUY', item, '%.15f' % float(cost))
+                    send_gmail_alert('BUY', item, '%.15f' % float(cost))
+                    send_slack_message('longs', '%s %s %.15f' % (event, item, float(cost)))
+
+                    self.__send_redis_trade(item, current_time, cost, self.interval, "BUY")
             del dbase
         else:
             self.logger.info("Nothing to buy")
@@ -611,6 +612,7 @@ class Trade():
                 self.logger.info("Selling %s of %s for %.15f %s"
                                  % (quantity, item, float(price), base_out))
                 base = get_base(item)
+                fill_price = price
                 if prod:
                     amt_str = get_step_precision(item, quantity)
                     trade_result = binance.margin_order(symbol=item, side=binance.SELL,
@@ -623,21 +625,24 @@ class Trade():
                     self.logger.info(repay_result)
 
                     prices = []
-                    fill_price = price
 
-                if 'transactTime' in trade_result:
-                    # Get price from exchange
-                    for fill in trade_result['fills']:
-                        prices.append(float(fill['price']))
-                    fill_price = sum(prices) / len(prices)
-                    self.logger.info("Current price %s, Fill price: %s" % (price, fill_price))
+                    if 'transactTime' in trade_result:
+                        # Get price from exchange
+                        for fill in trade_result['fills']:
+                            prices.append(float(fill['price']))
+                        fill_price = sum(prices) / len(prices)
+                        self.logger.info("Current price %s, Fill price: %s" % (price, fill_price))
 
+
+                if self.test_data or (self.test_trade and not trade_result) or \
+                        (not self.test_trade and 'transactTime' in trade_result):
                     if name == "api":
                         name = "%"
 
                     dbase.update_trades(pair=item, close_time=current_time,
                                         close_price=fill_price, quote=quantity,
-                                        base_out=base_out, name=name, drawdown=drawdowns[item])
+                                        base_out=base_out, name=name, drawdown=drawdowns[item],
+                                        drawup=drawups[item])
 
                     self.__send_redis_trade(item, current_time, price, self.interval, "SELL")
                 else:
