@@ -611,7 +611,7 @@ class Trade():
                 self.logger.info("Selling %s of %s for %.15f %s"
                                  % (quantity, item, float(price), base_out))
                 base = get_base(item)
-                if prod and not self.test_data:
+                if prod:
                     amt_str = get_step_precision(item, quantity)
                     trade_result = binance.margin_order(symbol=item, side=binance.SELL,
                                                         quantity=amt_str,
