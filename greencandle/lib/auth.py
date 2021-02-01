@@ -7,7 +7,6 @@ import os
 from coinbase.wallet.client import Client
 import ccxt
 from binance import binance
-from . import config
 
 HOME_DIR = os.path.expanduser("~")
 
