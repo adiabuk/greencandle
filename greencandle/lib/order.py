@@ -40,14 +40,23 @@ class Trade():
         Send trade event to redis
         """
         self.logger.debug('Strategy - Adding to redis')
+        redis = Redis()
         # Change time back to milliseconds to line up with entries in redis
         mepoch = int(time.mktime(time.strptime(current_time, '%Y-%m-%d %H:%M:%S'))) * 1000 + 999
+
+        # if we are in an intermittent check - use previous timeframe
+        if not str(mepoch).endswith('99999'):
+            try:
+                mepoch =  redis.get_items(pair, interval)[-1].decode().split(':')[-1]
+            except IndexError:
+                self.logger.error("Unable to get last epoch time for %s %s" % (pair, interval))
+                return
+
         data = {"event":{"result": event,
                          "current_price": format(float(price), ".20f"),
                          "date": mepoch,
                         }}
 
-        redis = Redis()
         redis.redis_conn(pair, interval, data, mepoch)
         del redis
 
