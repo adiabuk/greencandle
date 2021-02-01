@@ -6,7 +6,6 @@
 API dashboard
 """
 
-from __future__ import print_function
 import sys
 import glob
 import os
@@ -32,7 +31,6 @@ class PrefixMiddleware():
         self.prefix = prefix
 
     def __call__(self, environ, start_response):
-        print(self.prefix, environ['PATH_INFO'], file=sys.stderr)
         if environ['PATH_INFO'].startswith(self.prefix):
             environ['PATH_INFO'] = environ['PATH_INFO'][len(self.prefix):]
             environ['SCRIPT_NAME'] = self.prefix
@@ -66,11 +64,10 @@ def sell():
     """sell a given trade"""
 
     global TEST
-    print("SELL", file=sys.stderr)
     pair = request.args.get('pair')
+    LOGGER.info("Selling pair %s" % pair)
     name = config.main.name
     current_price = request.args.get('price')
-    print(pair, name, file=sys.stderr)
 
     interval = DATA[pair]['interval']
     trade = Trade(interval=interval, test_data=TEST, test_trade=TEST_TRADE)
@@ -90,8 +87,8 @@ def sell():
 def buy():
     """Buy a given pair"""
     global TEST
-    print("BUY", file=sys.stderr)
     pair = request.args.get('pair')
+    LOGGER.info("Buying pair %s" % pair)
     trade = Trade(interval='4h', test_data=TEST, test_trade=TEST_TRADE)
     current_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     current_price = get_current_price(pair)
@@ -112,7 +109,7 @@ def get_open():
     """get open trades from mysql"""
     global DATA
     local_data = {}
-    print("Getting open trades", file=sys.stderr)
+    LOGGER.debug("Getting open trades")
     dbase = Mysql()
     results = dbase.fetch_sql_data("select * from open_trades", header=False)
 
@@ -120,7 +117,6 @@ def get_open():
     for entry in results:
         pair, open_price, open_time, current_price, perc, interval, name = entry
         matching = redis.get_action(pair=pair, interval=interval)[-1]
-        print(entry, file=sys.stdout)
 
         local_data[pair] = {"open_price": open_price, "open_time": open_time,
                             "matching": "Buy:{},Sell:{}".format(matching["buy"], matching["sell"]),
@@ -164,10 +160,9 @@ def get_closed():
     global ALL
     global config
     local_all = {}
-    print("Getting all pairs", file=sys.stderr)
+    LOGGER.debug("Getting closed trades")
     pairs = [pair for pair in config.main.pairs.split() if pair not in DATA.keys()]
     for pair in pairs:
-        print("Getting pair", pair, file=sys.stderr)
         config.main.rate_indicator = 'EMA_2'
         interval = '4h'
         reload(redis_conn)
@@ -210,7 +205,7 @@ def main():
 
     get_rules()
     if TEST:
-        print("test node")
+        LOGGER.debug("API started in test mode")
         APP.run(debug=True, host='0.0.0.0', port=5000, threaded=True)
     else:
         serve(APP, host="0.0.0.0", port=5000)
