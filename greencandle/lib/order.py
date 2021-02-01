@@ -21,6 +21,12 @@ from .alerts import send_gmail_alert, send_push_notif, send_slack_message
 from . import config
 GET_EXCEPTIONS = get_decorator((Exception))
 
+class InvalidTradeError(Exception):
+    """
+    Custom Exception for invalid trade type of trade direction
+    """
+    pass
+
 class Trade():
     """Buy & Sell class"""
 
@@ -65,23 +71,46 @@ class Trade():
         Main open trade method
         Will choose between spot/margin and long/short
         """
-        if config.main.trade_type == "spot" and config.main.trade_direction == "long":
-            self.__open_spot_long(items_list)
-        elif config.main.trade_type == "margin" and config.main.trade_direction == "short":
-            self.__open_margin_short(items_list)
+        if config.main.trade_type == "spot":
+            if config.main.trade_direction == "long":
+                self.__open_spot_long(items_list)
+            else:
+                raise InvalidTradeError("Invalid trade direction for spot")
+
+        elif config.main.trade_type == "margin":
+            if config.main.trade_direction == "long":
+                self.__open_margin_long(items_list)
+            elif config.main.trade_direction == "short":
+                self.__open_margin_short(items_list)
+            else:
+                raise InvalidTradeError("Invalid trade direction")
+
+        else:
+            raise InvalidTradeError("Invalid trade type")
 
     def close_trade(self, items_list, name=None, drawdowns={}, drawups={}):
         """
         Main close trade method
         Will choose between spot/margin and long/short
         """
-        trade_type = config.main.trade_type
-        trade_direction = config.main.trade_direction
 
-        if trade_type == "spot" and  trade_direction == "long":
-            self.__close_spot_long(items_list, name, drawdowns, drawups)
-        elif trade_type == "margin" and  trade_direction == "short":
-            self.__close_margin_short(items_list, name, drawdowns, drawups)
+        if config.main.trade_type == "spot":
+            if config.main.trade_direction == "long":
+                self.__close_spot_long(items_list)
+            else:
+                raise InvalidTradeError("Invalid trade direction for spot")
+
+        elif config.trade_type == "margin":
+            if config.main.trade_direction == "long":
+                self.__close_margin_long(items_list)
+            elif config.main.trade_direction == "short":
+                self.__close_margin_short(items_list)
+            else:
+                raise InvalidTradeError("Invalid trade direction")
+
+        else:
+            raise InvalidTradeError("Invalid trade type")
+
 
     def __open_margin_long(self, buy_list):
         """
@@ -99,7 +128,7 @@ class Trade():
         if buy_list:
             dbase = Mysql(test=self.test_data, interval=self.interval)
             if self.test_data or self.test_trade:
-                self.logger.error("Unable to perform margin long trade in test mode, use spot")
+                raise InvalidTradeError("Unable to perform margin long trade in test mode")
                 return
             else:
                 balance = Balance(test=False)
