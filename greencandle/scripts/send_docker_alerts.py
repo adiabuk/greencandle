@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=ungrouped-imports,wrong-import-position,import-error
+#pylint: disable=ungrouped-imports,wrong-import-position,import-error,wrong-import-order
 
 """
 Get Status of docker containers from docker socket file and send alerts for erroring containers.

@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-#pylint: disable=protected-access,consider-iterating-dictionary
+#pylint: disable=protected-access,consider-iterating-dictionary,logging-not-lazy
 
 """
 Get values from config file

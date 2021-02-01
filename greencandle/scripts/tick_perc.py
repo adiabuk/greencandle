@@ -33,7 +33,7 @@ def main():
     if len(sys.argv) > 1 and sys.argv[1] == '--help':
         print("Get percentage change for single pip")
         sys.exit(0)
-    elif len(sys.argv) !=2:
+    elif len(sys.argv) != 2:
         sys.stderr.write("Usage: {} <pair>\n".format(sys.argv[0]))
         sys.exit(1)
 

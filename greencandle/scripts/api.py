@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #pylint: disable=global-statement,wrong-import-position,too-few-public-methods
-#pylint: disable=invalid-name,no-member,no-else-return
+#pylint: disable=invalid-name,no-member,no-else-return,logging-not-lazy
 
 """
 API dashboard
@@ -51,7 +51,7 @@ DATA = {}
 RULES = []
 ALL = {}
 TEST = bool(len(sys.argv) > 1 and sys.argv[1] == '--test')
-TEST_TRADE = False if 'HOST' in os.environ and os.environ['HOST'] == "prod" else True
+TEST_TRADE = not ('HOST' in os.environ and os.environ['HOST'] == "prod")
 
 @APP.route('/')
 def trades():

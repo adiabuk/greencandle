@@ -32,7 +32,7 @@ def coinbase_auth(account):
     client = Client(api_key, api_secret)
     return client
 
-def phemex_auth(type, account):
+def phemex_auth(acct_type, account):
     """
     Authenticatate with API using key/secret
     Returns: Coinbase phemex client object
@@ -46,7 +46,7 @@ def phemex_auth(type, account):
         'apiKey': api_key,  # testnet keys if using the testnet sandbox
         'secret': api_secret,  # testnet keys if using the testnet sandbox
         'options': {
-            'defaultType': type,
+            'defaultType': acct_type,
         },
     })
 

@@ -9,21 +9,21 @@ https://kite.trade/forum/discussion/1047/a-simple-python-function-to-detect-supp
 import numpy as np
 from scipy.signal import savgol_filter as smooth
 
-def supres(ltp, n):
+def supres(ltp, num):
     """
     This function takes a numpy array of last traded price
     and returns a list of support and resistance levels
-    respectively. n is the number of entries to be scanned.
+    respectively. num is the number of entries to be scanned.
     """
 
     #converting n to a nearest even number
-    if n%2 != 0:
-        n += 1
+    if num%2 != 0:
+        num += 1
 
     n_ltp = ltp.shape[0]
 
     # smoothening the curve
-    ltp_s = smooth(ltp, (n+1), 3)
+    ltp_s = smooth(ltp, (num + 1), 3)
 
     #taking a simple derivative
     ltp_d = np.zeros(n_ltp)
@@ -32,10 +32,10 @@ def supres(ltp, n):
     resistance = []
     support = []
 
-    for i in range(n_ltp - n):
-        arr_sl = ltp_d[i:(i+n)]
-        first = arr_sl[:int(n/2)] #first half
-        last = arr_sl[int(n/2):] #second half
+    for i in range(n_ltp - num):
+        arr_sl = ltp_d[i:(i + num)]
+        first = arr_sl[:int(num / 2)] #first half
+        last = arr_sl[int(num / 2):] #second half
 
         r_1 = np.sum(first > 0)
         r_2 = np.sum(last < 0)
@@ -44,11 +44,11 @@ def supres(ltp, n):
         s_2 = np.sum(last > 0)
 
         #local maxima detection
-        if (r_1 == (n/2)) and (r_2 == (n/2)):
-            resistance.append(ltp[int(i+((n/2)-1))])
+        if (r_1 == (num / 2)) and (r_2 == (num / 2)):
+            resistance.append(ltp[int(i+((num / 2)-1))])
 
         #local minima detection
-        if (s_1 == (n/2)) and (s_2 == (n/2)):
-            support.append(ltp[int(i+((n/2)-1))])
+        if (s_1 == (num / 2)) and (s_2 == (num / 2)):
+            support.append(ltp[int(i+((num / 2)-1))])
 
     return support, resistance

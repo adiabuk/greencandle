@@ -27,7 +27,7 @@ def main():
             print(pair)
             print('no data')
         date = time.gmtime(int(dataframe.iloc[-1]['openTime']/1000))
-        if date.tm_year != now.year and date.tm_mon !=now.month:
+        if date.tm_year != now.year and date.tm_mon != now.month:
             print(pair)
             print('no_data')
             bad_pairs.append(pair)
