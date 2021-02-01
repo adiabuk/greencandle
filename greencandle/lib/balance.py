@@ -1,4 +1,4 @@
-#pylint: disable=no-member,unused-import
+#pylint: disable=no-member,unused-import,logging-not-lazy
 
 """Get account value from binance and coinbase """
 
@@ -100,12 +100,29 @@ class Balance(dict):
         if margin:
             margin = get_binance_margin()
             combined_dict.update(margin)
-
         return combined_dict
+
+    @staticmethod
+    def check_balance(balance):
+        """
+        Check if balance dictionary is valid
+        """
+        for key, val in balance.items():
+            for item in ['USD', 'GBP', 'BTC', 'count']:
+                if not item in val.keys() or balance[key][item] == '':
+                    return False
+            return True
+
 
     def get_saved_balance(self):
         """print live balance"""
         bal = self.get_balance()
+        for key, val in bal.items():
+            result = self.check_balance(val)
+            if not result:
+                LOGGER.critical("Error: invalid balance entry for %s" % key)
+                return
+
         binance_usd = bal['margin']['TOTALS']['USD'] + bal['binance']['TOTALS']['USD']
         binance_btc = bal['margin']['TOTALS']['BTC'] + bal['binance']['TOTALS']['BTC']
         phemex_usd = bal['phemex']['TOTALS']['USD']

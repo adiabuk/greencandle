@@ -72,7 +72,7 @@ def get_binance_margin():
         usd_total = bitcoin_totals * float(prices["BTCUSDT"])
         result["margin"]["TOTALS"]["BTC"] += bitcoin_totals
         result["margin"]["TOTALS"]["USD"] += usd_total
-        result["margin"]["TOTALS"]["count"] = ""
+        result["margin"]["TOTALS"]["count"] = "N/A"
         for _ in range(3):
             # Try to get exchange rate 3 times before giving up
             try:
@@ -146,7 +146,7 @@ def get_binance_values():
         usd_total = bitcoin_totals * float(prices["BTCUSDT"])
         result["binance"]["TOTALS"]["BTC"] += bitcoin_totals
         result["binance"]["TOTALS"]["USD"] += usd_total
-        result["binance"]["TOTALS"]["count"] = ""
+        result["binance"]["TOTALS"]["count"] = "N/A"
         for _ in range(3):
             # Try to get exchange rate 3 times before giving up
             try:
@@ -157,7 +157,6 @@ def get_binance_values():
         result["binance"]["TOTALS"]["GBP"] = gbp_total
         add_value("USD", usd_total)
         add_value("GBP", gbp_total)
-
     return default_to_regular(result)
 
 def add_value(key, value):

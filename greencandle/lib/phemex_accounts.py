@@ -70,7 +70,7 @@ def get_phemex_values():
         usd_total = btc_total * price
         result["phemex"]["TOTALS"]["BTC"] += btc_total
         result["phemex"]["TOTALS"]["USD"] += usd_total
-        result["phemex"]["TOTALS"]["count"] = ""
+        result["phemex"]["TOTALS"]["count"] = "N/A"
         result["phemex"]["TOTALS"]["GBP"] += usd_total * usd2gbp()
 
 
