@@ -45,12 +45,12 @@ def main():
                 factor = dframe["profit_factor"].to_string(header=False).split()[-1]
 
                 dframe = pd.read_excel(file, sheet_name='perc-month')
-                sorted = dframe.sort_values('perc', ascending=False)['month']
-                highest_month = sorted.iloc[0]
+                sorted_dframe = dframe.sort_values('perc', ascending=False)['month']
+                highest_month = sorted_dframe.iloc[0]
 
                 dframe = pd.read_excel(file, sheet_name='trades')
                 total = len(dframe['perc'])
-                more = len(dframe[(dframe['perc']>0)])
+                more = len(dframe[(dframe['perc'] > 0)])
                 perc_prof = (more/total) * 100
 
                 print(pair, perc, hours, factor, highest_month, year, strategy, more, total,
