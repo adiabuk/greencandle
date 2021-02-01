@@ -187,7 +187,7 @@ class Redis():
         expiry = int(config.redis.redis_expiry_seconds)
 
         # closing time, 1 ms before next candle
-        if not key.endswith("99999") and 'event' not in data.keys():
+        if not key.endswith("99999"): # closing time, 1 ms before next candle
             self.logger.critical("Invalid time submitted to redis %s.  Skipping " % key)
             return None
 
