@@ -25,7 +25,6 @@ class InvalidTradeError(Exception):
     """
     Custom Exception for invalid trade type of trade direction
     """
-    pass
 
 class Trade():
     """Buy & Sell class"""
@@ -88,7 +87,7 @@ class Trade():
         else:
             raise InvalidTradeError("Invalid trade type")
 
-    def close_trade(self, items_list, name=None, drawdowns={}, drawups={}):
+    def close_trade(self, items_list, name=None, drawdowns=None, drawups=None):
         """
         Main close trade method
         Will choose between spot/margin and long/short
@@ -96,15 +95,15 @@ class Trade():
 
         if config.main.trade_type == "spot":
             if config.main.trade_direction == "long":
-                self.__close_spot_long(items_list)
+                self.__close_spot_long(items_list, drawdowns=drawdowns, drawups=drawups)
             else:
                 raise InvalidTradeError("Invalid trade direction for spot")
 
         elif config.trade_type == "margin":
             if config.main.trade_direction == "long":
-                self.__close_margin_long(items_list)
+                self.__close_margin_long(items_list, drawdowns=drawdowns, drawups=drawups)
             elif config.main.trade_direction == "short":
-                self.__close_margin_short(items_list)
+                self.__close_margin_short(items_list, drawdowns=drawdowns, drawups=drawups)
             else:
                 raise InvalidTradeError("Invalid trade direction")
 
@@ -129,7 +128,6 @@ class Trade():
             dbase = Mysql(test=self.test_data, interval=self.interval)
             if self.test_data or self.test_trade:
                 raise InvalidTradeError("Unable to perform margin long trade in test mode")
-                return
             else:
                 balance = Balance(test=False)
                 prices = balance.get_balance()
@@ -530,7 +528,7 @@ class Trade():
                 self.__send_redis_trade(item, current_time, cost, self.interval, "BUY")
 
     @GET_EXCEPTIONS
-    def __close_spot_long(self, sell_list, name=None, drawdowns={}, drawups={}):
+    def __close_spot_long(self, sell_list, name=None, drawdowns=None, drawups=None):
         """
         Sell items in sell_list
         """
@@ -596,7 +594,7 @@ class Trade():
             self.logger.info("No items to sell")
 
     @GET_EXCEPTIONS
-    def __close_margin_long(self, sell_list, name=None, drawdowns={}):
+    def __close_margin_long(self, sell_list, name=None, drawdowns=None, drawups=None):
         """
         Sell items in sell_list
         """
