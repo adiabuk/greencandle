@@ -147,7 +147,7 @@
       "is_secret": false
     },
     "divisor": {
-      "value": "5",
+      "value": "3",
       "is_binary": false,
       "is_secret": false
     },
