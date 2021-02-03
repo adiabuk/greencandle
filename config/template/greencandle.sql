@@ -172,36 +172,6 @@ SET character_set_client = utf8;
 SET character_set_client = @saved_cs_client;
 
 --
--- Table structure for table `symbols`
---
-
-DROP TABLE IF EXISTS `symbols`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `symbols` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `symbol` varchar(10) DEFAULT NULL,
-  `category` varchar(20) DEFAULT NULL,
-  `maximum_leverage` int(11) DEFAULT NULL,
-  `maximum_amount` int(11) DEFAULT NULL,
-  `overnight_charge_long_percent` float DEFAULT NULL,
-  `overnight_charge_short_percent` float DEFAULT NULL,
-  `decimals` int(11) DEFAULT NULL,
-  `timezone` varchar(80) DEFAULT NULL,
-  `timezone_offset` varchar(10) DEFAULT NULL,
-  `open_day` varchar(80) DEFAULT NULL,
-  `open_time` time DEFAULT NULL,
-  `close_day` varchar(80) DEFAULT NULL,
-  `close_time` time DEFAULT NULL,
-  `daily_break_start` time DEFAULT NULL,
-  `daily_break_stop` time DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `symbol` (`symbol`),
-  KEY `category` (`category`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `trades`
 --
 
