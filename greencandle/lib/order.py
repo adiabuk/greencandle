@@ -34,7 +34,7 @@ class Trade():
         self.test_data = test_data
         self.test_trade = test_trade
         self.max_trades = int(config.main.max_trades)
-        self.divisor = int(config.main.divisor) if config.main.divisor else None
+        self.divisor = float(config.main.divisor) if config.main.divisor else None
         account = config.accounts.binance[0]
         binance_auth(account)
 
