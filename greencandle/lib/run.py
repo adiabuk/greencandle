@@ -98,14 +98,14 @@ def perform_data(pair, interval, data_dir, indicators):
         redis.update_drawdown(pair, current_candle)
         redis.update_drawup(pair, current_candle)
 
-        if result == "BUY":
+        if result == "OPEN":
             redis.update_drawdown(pair, current_candle, event='open')
             redis.update_drawup(pair, current_candle, event='open')
             buys.append((pair, current_time, current_price, event))
             LOGGER.debug("Items to buy: %s" % buys)
             trade.open_trade(buys)
 
-        elif result == "SELL":
+        elif result == "CLOSE":
             sells.append((pair, current_time, current_price, event))
             LOGGER.debug("Items to sell: %s" % sells)
             drawdown = redis.get_drawdown(pair)
@@ -193,12 +193,12 @@ def parallel_test(pairs, interval, data_dir, indicators):
             LOGGER.info('In Strategy %s' % result)
             del engine
 
-            if result == "BUY":
+            if result == "OPEN":
                 LOGGER.debug("Items to buy")
                 redis.update_drawdown(pair, current_candle, event='open')
                 redis.update_drawup(pair, current_candle, event='open')
                 buys.append((pair, current_time, current_price, event))
-            if result == "SELL":
+            if result == "CLOSE":
                 LOGGER.debug("Items to sell")
                 drawdowns[pair] = redis.get_drawdown(pair)
                 drawups[pair] = redis.get_drawup(pair)['perc']
@@ -333,12 +333,12 @@ def prod_loop(interval, test_trade):
         redis.update_drawdown(pair, current_candle)
         redis.update_drawup(pair, current_candle)
 
-        if result == "BUY":
+        if result == "OPEN":
             LOGGER.debug("Items to buy")
             redis.update_drawdown(pair, current_candle, event='open')
             redis.update_drawup(pair, current_candle, event='open')
             buys.append((pair, current_time, current_price, event))
-        if result == "SELL":
+        if result == "CLOSE":
             LOGGER.debug("Items to sell")
             sells.append((pair, current_time, current_price, event))
             drawdowns[pair] = redis.get_drawdown(pair)

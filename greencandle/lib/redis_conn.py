@@ -288,20 +288,20 @@ class Redis():
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
 
         if trailing_stop and open_price:
-            result = "SELL"
-            event = "TrailingStop intermittent"
+            result = "CLOSE"
+            event = self.get_event("TrailingStopIntermittent" + result)
 
         elif stop_loss_rule and open_price:
-            result = "SELL"
-            event = "StopLoss intermittent"
+            result = "CLOSE"
+            event = self.get_event("StopIntermittent" + result)
 
         elif take_profit_rule and open_price:
-            result = "SELL"
-            event = "TakeProfit intermittent"
+            result = "CLOSE"
+            event = self.get_event("TakeProfitIntermittent" + result)
 
         else:
             result = "HOLD"
-            event = "HOLD"
+            event = self.get_event(result)
 
         self.__log_event(event=event, rate=0, perc_rate=0,
                          open_price=open_price, close_price=current_price,
@@ -401,6 +401,15 @@ class Redis():
             if close_rule:
                 winning.append(seq + 1)
         return winning
+
+    @staticmethod
+    def get_event(action):
+        """
+        Return trade string for use in logs & notifications
+        """
+        trade_direction = config.main.trade_direction
+        trade_type = config.main.trade_type
+        return "{}_{}_{}".format(trade_direction, trade_type, action)
 
     def get_action(self, pair, interval, test_data=False):
         """Determine if we are in a BUY/HOLD/SELL situration for a specific pair and interval"""
@@ -563,34 +572,34 @@ class Redis():
                 elif config.main.trade_direction == 'long':
                     stop_at = sub_perc(stop_loss_perc, open_price)
                     current_price = stop_at
-            event = 'StopLoss'
-            result = 'SELL'
+            result = 'CLOSE'
+            event = self.get_event("StopLoss" + result)
 
         elif trailing_stop and open_price:
 
             if test_data and str2bool(config.main.immediate_stop):
                 stop_at = sub_perc(trailing_perc, current_high)
                 current_price = stop_at
-            event = 'TrailingStopLoss'
-            result = 'SELL'
+            result = 'CLOSE'
+            event = self.get_event("TrailingStopLoss" + result)
         # if we match take_profit rule and are in a trade
         elif take_profit_rule and open_price:
             if test_data and str2bool(config.main.immediate_stop):
                 stop_at = add_perc(take_profit_perc, open_price)
                 current_price = stop_at
 
-            event = "TakeProfit"
-            result = 'SELL'
+            result = 'CLOSE'
+            event = self.get_event("TakeProfit" + result)
 
         elif close_timeout:
-            event = "TimeOut"
-            result = 'SELL'
+            result = 'CLOSE'
+            event = self.get_event("TimeOut" + result)
 
         # if we match any sell rules, are in a trade and no buy rules match
         elif any(rules['close']) and open_price and not both:
 
-            event = "NormalSell"
-            result = 'SELL'
+            result = 'CLOSE'
+            event = self.get_event("Normal" + result)
 
         # if we match any buy rules are NOT in a trade and sell rules don't match
         elif any(rules['open']) and not open_price and able_to_buy and not both:
@@ -599,15 +608,15 @@ class Redis():
             self.logger.debug("Close: %s, Previous Close: %s, >: %s" %
                               (close, last_close, close > last_close))
 
-            event = "NormalBuy"
-            result = 'BUY'
+            result = 'OPEN'
+            event = self.get_event("Normal" + result)
 
         elif open_price:
-            event = "Hold"
             result = 'HOLD'
+            event = self.get_event(result)
         else:
-            event = "NoItem"
             result = 'NOITEM'
+            event = self.get_event(result)
 
         self.__log_event(event=event, rate=rate, perc_rate=perc_rate,
                          open_price=open_price, close_price=current_price,

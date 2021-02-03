@@ -30,7 +30,7 @@ def main():
     binance_auth(account)
     base = get_base(pair)
 
-    if side == 'BUY':
+    if side == 'OPEN':
         result = binance.margin_borrow(base, base_amount)
         print("Borrow result: {}".format(result))
         quote_amount = 100/float(binance.prices()[pair])
@@ -39,7 +39,7 @@ def main():
                                       orderType=binance.MARKET)
 
         print("Buy result: {}".format(result))
-    elif side == 'SELL':
+    elif side == 'CLOSE':
         result = binance.margin_order(symbol=pair, side='SELL', quantity=precise_amount,
                                       orderType=binance.MARKET)
         print("Sell result: {}".format(result))
