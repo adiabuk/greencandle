@@ -61,7 +61,7 @@ if [[ ! -f /usr/local/bin/configstore ]]; then
 fi
 
 if [[ ! -d /usr/include/ta-lib ]]; then
-  wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz -P /tmp
+  wget "https://www.dropbox.com/sh/l22jyonei087h4o/AAD7jz7mz0iuY859pfm1HKVaa?dl=0/ta-lib-0.4.0-src.tar.gz?dl=0" -O /tmp/ta-lib-0.4.0-src.tar.gz.tar.gz
   tar zxvf /tmp/ta-lib-0.4.0-src.tar.gz -C /tmp
   cd /tmp/ta-lib
   ./configure --prefix=/usr
