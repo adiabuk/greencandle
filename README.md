@@ -11,6 +11,10 @@
 
 # Releases
 
+## 1.7.1
+* Fix broken link for downloading ta-lib
+* temporarily disable 5ma in prod
+
 ## 1.7
 * Remove underperforming prod strategies
 * Cleanup TSP and TP config options
