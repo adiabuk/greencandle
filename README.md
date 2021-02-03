@@ -11,6 +11,16 @@
 
 # Releases
 
+## 1.7
+* Remove underperforming prod strategies
+* Cleanup TSP and TP config options
+* Add OHLC graph for daily balance
+* Cleanup lint and dupe code
+* Fix missing event in graphs
+* Cleanup API debug messages
+* Margin long trades ready for testing
+* Use higher equity for prod trades
+
 ## 1.6.1
 * Move 5MA and scalp strategies from stag to prod
 * Fix for redis unittests
