@@ -17,7 +17,7 @@ from .redis_conn import Redis
 from .balance import Balance
 from .balance_common import get_base, get_step_precision
 from .common import perc_diff, add_perc, sub_perc
-from .alerts import send_gmail_alert, send_push_notif, send_slack_message
+from .alerts import send_gmail_alert, send_push_notif, send_slack_trade
 from . import config
 GET_EXCEPTIONS = get_decorator((Exception))
 
@@ -228,7 +228,8 @@ class Trade():
                                        direction=config.main.trade_direction)
                     send_push_notif('BUY', item, '%.15f' % float(cost))
                     send_gmail_alert('BUY', item, '%.15f' % float(cost))
-                    send_slack_message('longs', '%s %s %.15f' % (event, item, float(cost)))
+                    send_slack_trade(channel='longs', event=event, pair=item, action='open',
+                                     price=cost)
 
                     self.__send_redis_trade(item, current_time, cost, self.interval, "BUY")
             del dbase
@@ -377,7 +378,8 @@ class Trade():
                             self.__send_redis_trade(item, current_time, cost, self.interval, "BUY")
                             send_push_notif('BUY', item, '%.15f' % float(cost))
                             send_gmail_alert('BUY', item, '%.15f' % float(cost))
-                            send_slack_message('longs', '%s %s %.15f' % (event, item, float(cost)))
+                            send_slack_trade(channel='longs', event=event, pair=item,
+                                             action='open', price=cost)
             del dbase
         else:
             self.logger.info("Nothing to buy")
@@ -406,9 +408,8 @@ class Trade():
 
                 send_gmail_alert("SELL", item, price)
                 send_push_notif('SELL', item, '%.15f' % float(price))
-                send_slack_message('longs', '%s %s %.15f %.2f%%' % (event, item,
-                                                                    float(price),
-                                                                    perc_inc))
+                send_slack_trade(channel='longs', event=event, pair=item, action='close',
+                                 price=price, perc=perc_inc)
 
                 self.logger.info("Closing %s of %s for %.15f %s"
                                  % (quantity, item, float(price), base_out))
@@ -576,9 +577,8 @@ class Trade():
                         self.__send_redis_trade(item, current_time, price, self.interval, "SELL")
                         send_gmail_alert("SELL", item, price)
                         send_push_notif('SELL', item, '%.15f' % float(price))
-                        send_slack_message('longs', '%s %s %.15f %.2f%%' % (event, item,
-                                                                            float(price),
-                                                                            perc_inc))
+                        send_slack_trade(channel='longs', event=event, pair=item, action='close',
+                                         price=price, perc=perc_inc)
                 else:
                     self.logger.critical("Sell Failed %s:%s" % (name, item))
             del dbase
@@ -607,8 +607,8 @@ class Trade():
 
                 send_gmail_alert("SELL", item, price)
                 send_push_notif('SELL', item, '%.15f' % float(price))
-                send_slack_message('longs', '%s %s %.15f' % (event, item, float(price)))
-
+                send_slack_trade(channel='longs', event=event, pair=item, action='close',
+                                 price=price, perc=perc_inc)
                 self.logger.info("Selling %s of %s for %.15f %s"
                                  % (quantity, item, float(price), base_out))
                 base = get_base(item)
