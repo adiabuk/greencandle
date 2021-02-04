@@ -27,7 +27,7 @@ class TestCOTIUSDT(make_test_case('unit/scalp', 'COTIUSDT', '15m', '2020-03-01',
     pass
 
 class TestBTCUSDT(make_test_case('unit', 'BTCUSDT', '1h', '2019-05-05', 15, 27, 11, -6.6,
-                                 57.7, 15.2)):
+                                 56.39999999999999, 15.2)):
 
     """Test BTCUSDT"""
     pass
