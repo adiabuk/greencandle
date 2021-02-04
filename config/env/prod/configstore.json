@@ -232,7 +232,7 @@
       "is_secret": true
     },
     "max_trades": {
-      "value": "1000",
+      "value": "1",
       "is_binary": false,
       "is_secret": false
     },
