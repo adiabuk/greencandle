@@ -73,11 +73,67 @@ class Trade():
         redis.redis_conn(kwargs.pair, kwargs.interval, data, mepoch)
         del redis
 
+    def amount_to_use(self, item, current_base_bal):
+        """
+        Figire out how much of current asset to buy based on balance and divisor
+        """
+        dbase = Mysql(test=self.test_data, interval=self.interval)
+        try:
+            last_open_price = dbase.fetch_sql_data("select base_in from trades where "
+                                                   "pair='{0}'".format(item),
+                                                   header=False)[-1][-1]
+            last_open_price = float(last_open_price) if last_open_price else 0
+        except IndexError:
+            last_open_price = 0
+
+        if self.divisor:
+            proposed_base_amount = current_base_bal / self.divisor
+        else:
+            proposed_base_amount = current_base_bal / (self.max_trades + 1)
+        self.logger.info('item: %s, proposed: %s, last:%s'
+                         % (item, proposed_base_amount, last_open_price))
+        base_amount = max(proposed_base_amount, last_open_price)
+
+        if base_amount >= (current_base_bal / self.max_trades):
+            self.logger.info("Reducing trade value by a third")
+            base_amount /= 1.5
+        return base_amount
+
+
+    def check_pairs(self, items_list):
+        """
+        Check we can trade which each of given trading pairs
+        Return filtered list
+        """
+        dbase = Mysql(test=self.test_data, interval=self.interval)
+        current_trades = dbase.get_trades()
+        drain = str2bool(config.main.drain)
+        avail_slots = self.max_trades - len(current_trades)
+        main_pairs = config.main.pairs
+        self.logger.info("%s buy slots available" % avail_slots)
+        if avail_slots <= 0:
+            self.logger.warning("Too many trades, skipping")
+            return []
+        elif drain and not self.test_data:
+            self.logger.warning("%s is in drain, skipping..." % self.interval)
+            return []
+
+        final_list = []
+        for item in items_list:
+            if current_trades and item[0] in current_trades[0]:
+                self.logger.warning("We already have a trade of %s, skipping..." % item)
+            elif item[0] not in main_pairs and not self.test_data:
+                self.logger.warning("Pair %s not in main_pairs, skipping..." % item[0])
+            else:
+                final_list.append(item)
+        return final_list
+
     def open_trade(self, items_list):
         """
         Main open trade method
         Will choose between spot/margin and long/short
         """
+        items_list = self.check_pairs(items_list)
         if not items_list:
             self.logger.warning("No items to open trade with")
             return
@@ -134,11 +190,7 @@ class Trade():
         """
         self.logger.info("We have %s potential items to buy" % len(buy_list))
 
-        drain = str2bool(config.main.drain)
         prod = str2bool(config.main.production)
-        if drain and not self.test_data:
-            self.logger.warning("Skipping Buy as %s is in drain" % self.interval)
-            return
 
         dbase = Mysql(test=self.test_data, interval=self.interval)
         if self.test_data or self.test_trade:
@@ -150,50 +202,16 @@ class Trade():
         for item, current_time, current_price, event in buy_list:
             base = get_base(item)
             try:
-                last_open_price = dbase.fetch_sql_data("select base_in from trades where "
-                                                       "pair='{0}'".format(item),
-                                                       header=False)[-1][-1]
-                last_open_price = float(last_open_price) if last_open_price else 0
-            except IndexError:
-                last_open_price = 0
-            try:
                 current_base_bal = prices['margin'][base]['count']
             except KeyError:
                 current_base_bal = 0
-
-            current_trades = dbase.get_trades()
-            avail_slots = self.max_trades - len(current_trades)
-            self.logger.info("%s buy slots available" % avail_slots)
-
-            if avail_slots <= 0:
-                self.logger.warning("Too many trades, skipping")
-                break
-
-            if self.divisor:
-                proposed_base_amount = current_base_bal / self.divisor
-            else:
-                proposed_base_amount = current_base_bal / (self.max_trades + 1)
-            self.logger.info('item: %s, proposed: %s, last:%s'
-                             % (item, proposed_base_amount, last_open_price))
-            base_amount = max(proposed_base_amount, last_open_price)
+            base_amount = amount_to_use(item, current_base_bal)
             cost = current_price
-            main_pairs = config.main.pairs
-
-            if item not in main_pairs and not self.test_data:
-                self.logger.warning("%s not in buy_list, but active trade "
-                                    "exists, skipping..." % item)
-                continue
-            if (base_amount >= (current_base_bal / self.max_trades) and avail_slots <= 5):
-                self.logger.info("Reducing trade value by a third")
-                base_amount /= 1.5
 
             amount = base_amount / float(cost)
             if float(cost)*float(amount) >= float(current_base_bal):
                 self.logger.critical("Unable to purchase %s of %s, insufficient funds:%s/%s" %
                                      (amount, item, base_amount, current_base_bal))
-                continue
-            elif item in current_trades:
-                self.logger.warning("We already have a trade of %s, skipping..." % item)
                 continue
             else:
                 self.logger.info("Buying %s of %s with %s %s"
@@ -285,11 +303,7 @@ class Trade():
         """
         self.logger.info("We have %s potential items to buy" % len(buy_list))
 
-        drain = str2bool(config.main.drain)
         prod = str2bool(config.main.production)
-        if drain and not self.test_data:
-            self.logger.warning("Skipping Buy as %s is in drain" % self.interval)
-            return
 
         dbase = Mysql(test=self.test_data, interval=self.interval)
         if self.test_data or self.test_trade:
@@ -300,13 +314,7 @@ class Trade():
 
         for item, current_time, current_price, event in buy_list:
             base = get_base(item)
-            try:
-                last_open_price = dbase.fetch_sql_data("select base_in from trades where "
-                                                       "pair='{0}'".format(item),
-                                                       header=False)[-1][-1]
-                last_open_price = float(last_open_price) if last_open_price else 0
-            except IndexError:
-                last_open_price = 0
+
             try:
                 current_base_bal = prices['binance'][base]['count']
             except KeyError:
@@ -314,39 +322,14 @@ class Trade():
             except TypeError:
                 self.logger.critical("Unable to get balance for base %s" % base)
 
-            current_trades = dbase.get_trades()
-            avail_slots = self.max_trades - len(current_trades)
-            self.logger.info("%s buy slots available" % avail_slots)
 
-            if avail_slots <= 0:
-                self.logger.warning("Too many trades, skipping")
-                break
-
-            if self.divisor:
-                proposed_base_amount = current_base_bal / self.divisor
-            else:
-                proposed_base_amount = current_base_bal / (self.max_trades + 1)
-            self.logger.info('item: %s, proposed: %s, last:%s'
-                             % (item, proposed_base_amount, last_open_price))
-            base_amount = max(proposed_base_amount, last_open_price)
             cost = current_price
-            main_pairs = config.main.pairs
 
-            if item not in main_pairs and not self.test_data:
-                self.logger.warning("%s not in buy_list, but active trade "
-                                    "exists, skipping..." % item)
-                continue
-            if (base_amount >= (current_base_bal / self.max_trades) and avail_slots <= 5):
-                self.logger.info("Reducing trade value by a third")
-                base_amount /= 1.5
-
+            base_amount = self.amount_to_use(item, current_base_bal)
             amount = base_amount / float(cost)
             if float(cost)*float(amount) >= float(current_base_bal):
                 self.logger.critical("Unable to purchase %s of %s, insufficient funds:%s/%s" %
                                      (amount, item, base_amount, current_base_bal))
-                continue
-            elif item in current_trades:
-                self.logger.warning("We already have a trade of %s, skipping..." % item)
                 continue
             else:
                 self.logger.info("Buying %s of %s with %s %s"
@@ -476,14 +459,6 @@ class Trade():
         for item, current_time, current_price, event in short_list:
             base = get_base(item)
 
-            try:
-                last_open_price = dbase.fetch_sql_data("select base_in from trades where "
-                                                       "pair='{0}'".format(item),
-                                                       header=False)[-1][-1]
-                last_open_price = float(last_open_price) if last_open_price else 0
-            except IndexError:
-                last_open_price = 0
-
             if self.test_data:
                 base = get_base(item)
                 prices = self.__get_test_balance(dbase, account='margin')
@@ -492,29 +467,9 @@ class Trade():
             except KeyError:
                 current_base_bal = 0
 
-            if self.divisor:
-                proposed_quote_amount = (current_base_bal / float(binance.prices()[item])) \
-                        / self.divisor
-            else:
-                proposed_quote_amount = (current_base_bal / float(binance.prices()[item])) \
-                        / (self.max_trades + 1)
-
-            self.logger.info('item: %s, proposed: %s, last:%s'
-                             % (item, proposed_quote_amount, last_open_price))
-
+            proposed_quote_amount = self.amount_to_use(item, current_base_bal)
             base = get_base(item)
-            current_trades = dbase.get_trades()
-            avail_slots = self.max_trades - len(current_trades)
-            self.logger.info("%s trade slots available" % avail_slots)
-
-            if avail_slots <= 0:
-                self.logger.warning("Too many trades, skipping")
-                break
             cost = current_price
-            main_pairs = config.main.pairs
-            if item not in main_pairs and not self.test_data:
-                self.logger.warning("%s not in list, skipping..." % item)
-                continue
 
             amount_to_borrow = float(proposed_quote_amount) * float(config.main.multiplier)
             amount_to_use = sub_perc(5, amount_to_borrow)  # use 95% of borrowed funds
