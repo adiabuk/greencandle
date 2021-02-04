@@ -21,7 +21,7 @@ class Redis():
     Redis object
     """
 
-    def __init__(self, interval=None, test=False):
+    def __init__(self, interval=None, test=False, test_data=False):
         """
         Args:
             interval
@@ -39,6 +39,7 @@ class Redis():
 
         self.interval = interval
         self.test = test
+        self.test_data = test_data
 
         self.logger.debug("Starting Redis with interval %s db=%s"
                           % (interval, db))
@@ -154,14 +155,15 @@ class Redis():
         if event == 'open':
             current_low = current_price
             current_high = current_price
-
+        self.logger.debug("Calling update_drawup %s" % current_candle['close'])
         if not orig_price:
             orig_price = current_price
         if config.main.trade_direction == 'long':
-            if (max_price and float(current_high) > float(max_price)) or \
+            self.logger.debug("AMROX: current_price %s" % current_price)
+            if (max_price and float(current_price) > float(max_price)) or \
                     (not max_price and event == 'open'):
 
-                data = {"max_price": current_high, "orig_price": orig_price}
+                data = {"max_price": current_price, "orig_price": orig_price}
                 self.__add_price(key, data)
         elif config.main.trade_direction == 'short':
             if (max_price and float(current_low) < float(max_price)) or \
@@ -266,7 +268,6 @@ class Redis():
         """
         Check if price between intervals and sell if matches stop_loss or take_profit rules
         """
-        test_data = False
         stop_loss_perc = float(config.main.stop_loss_perc)
         take_profit_perc = float(config.main.take_profit_perc)
         current_price = current_candle.close
@@ -277,12 +278,11 @@ class Redis():
         high_price = self.get_drawup(pair)['price']
         low_price = self.get_drawdown(pair)
 
-        stop_loss_rule = self.__get_stop_loss(test_data, current_price, current_low, open_price)
+        stop_loss_rule = self.__get_stop_loss(current_price, current_low, open_price)
 
-        take_profit_rule = self.__get_take_profit(test_data, current_price, current_high,
-                                                  open_price)
+        take_profit_rule = self.__get_take_profit(current_price, current_high, open_price)
 
-        trailing_stop = self.__get_trailing_stop(test_data, current_price, high_price, current_high,
+        trailing_stop = self.__get_trailing_stop(current_price, high_price, current_high,
                                                  open_price)
 
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
@@ -310,9 +310,7 @@ class Redis():
 
         return (result, event, current_time, current_price)
 
-    @staticmethod
-    def __get_trailing_stop(test_data, current_price, high_price, current_high,
-                            open_price):
+    def __get_trailing_stop(self, current_price, high_price, current_high, open_price):
         """
         Check if we have reached trailing stop loss
         return True/False
@@ -327,22 +325,21 @@ class Redis():
         trailing_start = float(config.main.trailing_start)
         if not high_price or not open_price:
             return False
-        elif direction == 'long' and test_data and immediate:
+        elif direction == 'long' and self.test_data and immediate:
             check = current_high
-        elif direction == 'short' and test_data and immediate:
+        elif direction == 'short' and self.test_data and immediate:
             check = current_high
         else:
             check = current_price
 
         if direction == "long":
             return float(check) <= sub_perc(float(trailing_perc), float(high_price)) and \
-                    (test_data or float(current_price) > add_perc(float(trailing_start),
-                                                                  float(open_price)))
+                    (self.test_data or float(current_price) > add_perc(float(trailing_start),
+                                                                       float(open_price)))
         elif direction == "short":
             return float(check) >= add_perc(float(trailing_perc), float(high_price))
 
-    @staticmethod
-    def __get_take_profit(test_data, current_price, current_high, open_price):
+    def __get_take_profit(self, current_price, current_high, open_price):
         """
         Check if we have reached take profit
         return True/False
@@ -357,9 +354,9 @@ class Redis():
         if not open_price:
             return False
 
-        if direction == 'long' and test_data and immediate:
+        if direction == 'long' and self.test_data and immediate:
             check = current_high
-        elif direction == 'short' and test_data and immediate:
+        elif direction == 'short' and self.test_data and immediate:
             check = current_high
         else:
             check = current_price
@@ -369,8 +366,7 @@ class Redis():
         elif direction == 'short':
             return float(check) < sub_perc(float(profit_perc), float(open_price))
 
-    @staticmethod
-    def __get_stop_loss(test_data, current_price, current_low, open_price):
+    def __get_stop_loss(self, current_price, current_low, open_price):
         """
         Check if we have reached stop loss
         return True/False
@@ -381,9 +377,9 @@ class Redis():
 
         if not open_price:
             return False
-        if direction == 'long' and test_data and immediate:
+        if direction == 'long' and self.test_data and immediate:
             check = current_low
-        elif direction == 'short' and test_data and immediate:
+        elif direction == 'short' and self.test_data and immediate:
             check = current_low
         else:
             check = current_price
@@ -411,7 +407,7 @@ class Redis():
         trade_type = config.main.trade_type
         return "{}_{}_{}".format(trade_direction, trade_type, action)
 
-    def get_action(self, pair, interval, test_data=False):
+    def get_action(self, pair, interval):
         """Determine if we are in a BUY/HOLD/SELL situration for a specific pair and interval"""
         results = AttributeDict(current=AttributeDict(), previous=AttributeDict(),
                                 previous1=AttributeDict(), previous2=AttributeDict(),
@@ -542,11 +538,11 @@ class Redis():
         trailing_perc = float(config.main.trailing_stop_loss_perc)
         high_price = self.get_drawup(pair)['price']
         low_price = self.get_drawdown(pair)
-        trailing_stop = self.__get_trailing_stop(test_data, current_price, high_price, current_high,
+        trailing_stop = self.__get_trailing_stop(current_price, high_price, current_high,
                                                  open_price)
-        take_profit_rule = self.__get_take_profit(test_data, current_price, current_high,
+        take_profit_rule = self.__get_take_profit(current_price, current_high,
                                                   open_price)
-        stop_loss_rule = self.__get_stop_loss(test_data, current_price, current_low, open_price)
+        stop_loss_rule = self.__get_stop_loss(current_price, current_low, open_price)
 
         if any(rules['open']) and not able_to_buy:
             self.logger.info("Unable to buy %s due to time_between_trades" % pair)
@@ -565,7 +561,7 @@ class Redis():
         if stop_loss_rule and open_price:
             # if we match stop_loss rule and are in a trade
 
-            if test_data and str2bool(config.main.immediate_stop):
+            if self.test_data and str2bool(config.main.immediate_stop):
                 if config.main.trade_direction == 'short':
                     stop_at = add_perc(stop_loss_perc, open_price)
                     current_price = stop_at
@@ -577,14 +573,14 @@ class Redis():
 
         elif trailing_stop and open_price:
 
-            if test_data and str2bool(config.main.immediate_stop):
+            if self.test_data and str2bool(config.main.immediate_stop):
                 stop_at = sub_perc(trailing_perc, current_high)
                 current_price = stop_at
             result = 'CLOSE'
             event = self.get_event("TrailingStopLoss" + result)
         # if we match take_profit rule and are in a trade
         elif take_profit_rule and open_price:
-            if test_data and str2bool(config.main.immediate_stop):
+            if self.test_data and str2bool(config.main.immediate_stop):
                 stop_at = add_perc(take_profit_perc, open_price)
                 current_price = stop_at
 

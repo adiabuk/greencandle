@@ -24,7 +24,7 @@ class TestRedis(unittest.TestCase):
         Test putting/getting items to/from redis
         """
 
-        redis = Redis()
+        redis = Redis(test_data=True, test=True)
         redis.clear_all()
         items = redis.get_items('ABCDEF', '10m')
         self.assertEqual(len(items), 0)
@@ -76,7 +76,7 @@ class TestRedis(unittest.TestCase):
         """
         Test get action method
         """
-        redis = Redis(interval="4h")
+        redis = Redis(interval="4h", test_data=True, test=True)
         dbase = Mysql(test=True, interval="4h")
         redis.clear_all()
         dbase.delete_data()

@@ -36,7 +36,7 @@ def serial_test(pairs, intervals, data_dir, indicators):
             dbase = Mysql(test=True, interval=interval)
             dbase.delete_data()
             del dbase
-            redis = Redis(interval=interval, test=True)
+            redis = Redis(interval=interval, test=True, test_data=True)
             redis.clear_all()
             del redis
 
@@ -48,7 +48,7 @@ def serial_test(pairs, intervals, data_dir, indicators):
 def perform_data(pair, interval, data_dir, indicators):
     """Serial test loop"""
     LOGGER.debug("Serial run %s %s" % (pair, interval))
-    redis = Redis(interval=interval, test=True)
+    redis = Redis(interval=interval, test=True, test_data=True)
     try:
         filename = glob("{0}/{1}_{2}.p*".format(data_dir, pair, interval))[0]
     except IndexError:
@@ -90,8 +90,7 @@ def perform_data(pair, interval, data_dir, indicators):
         engine.get_data(localconfig=indicators)
 
         result, event, current_time, current_price, _ = redis.get_action(pair=pair,
-                                                                         interval=interval,
-                                                                         test_data=True)
+                                                                         interval=interval)
         del engine
         current_trade = dbase.get_trade_value(pair)
         current_candle = dataframes[pair].iloc[-1]
@@ -138,7 +137,7 @@ def parallel_test(pairs, interval, data_dir, indicators):
     Do test with parallel data
     """
     LOGGER.info("Performaing parallel run %s" % interval)
-    redis = Redis(interval=interval, test=True)
+    redis = Redis(interval=interval, test=True, test_data=True)
     redis.clear_all()
     dbase = Mysql(test=True, interval=interval)
     dbase.delete_data()
@@ -184,8 +183,7 @@ def parallel_test(pairs, interval, data_dir, indicators):
             engine.get_data(localconfig=indicators)
 
             result, event, current_time, current_price, _ = redis.get_action(pair=pair,
-                                                                             interval=interval,
-                                                                             test_data=True)
+                                                                             interval=interval)
             current_candle = dataframe.iloc[-1]
             redis.update_drawdown(pair, current_candle)
             redis.update_drawup(pair, current_candle)
