@@ -159,7 +159,6 @@ class Redis():
         if not orig_price:
             orig_price = current_price
         if config.main.trade_direction == 'long':
-            self.logger.debug("AMROX: current_price %s" % current_price)
             if (max_price and float(current_price) > float(max_price)) or \
                     (not max_price and event == 'open'):
 

@@ -51,7 +51,7 @@ def main():
             issues.append(name)
 
     if issues:
-        my_string = ','.join(issues)
+        my_string = ', '.join(issues)
         send_push_notif("Issues with docker containers: {}".format(my_string))
         send_slack_message("alerts", "Issues with docker containers: {}".format(my_string))
 
