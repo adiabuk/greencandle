@@ -7,22 +7,22 @@ import unittest
 from .unittests import make_test_case
 
 class TestBNBETH(make_test_case('unit', 'BNBETH', '1h', '2019-02-27', 15, 35, 14, -5.5,
-                                68.1, 12.8)):
+                                64.2, 12.8)):
     """Test BNBETH"""
     pass
 
 class TestLRCBTC(make_test_case('unit', 'LRCBTC', '1h', '2019-01-08', 15, 20, 12, -8.5,
-                                127.3, 36.9)):
+                                99.5, 36.9)):
     """Test LRCBTC"""
     pass
 
 class TestRCNBNB(make_test_case('unit', 'RCNBNB', '1h', '2019-03-29', 15, 22, 23, -5,
-                                64.5, 9.3)):
+                                60.7, 9.3)):
     """Test RCNBNB"""
     pass
 
 class TestCOTIUSDT(make_test_case('unit/scalp', 'COTIUSDT', '15m', '2020-03-01', 10, 31, 6, -0.39,
-                                  32, 46)):
+                                  27.2, 46.1)):
     """test COTIUSDT scalp with ST/TP/TSL"""
     pass
 
