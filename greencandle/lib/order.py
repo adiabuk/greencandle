@@ -205,7 +205,7 @@ class Trade():
                 current_base_bal = prices['margin'][base]['count']
             except KeyError:
                 current_base_bal = 0
-            base_amount = amount_to_use(item, current_base_bal)
+            base_amount = self.amount_to_use(item, current_base_bal)
             cost = current_price
 
             amount = base_amount / float(cost)
