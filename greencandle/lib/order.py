@@ -92,11 +92,12 @@ class Trade():
             proposed_base_amount = current_base_bal / (self.max_trades + 1)
         self.logger.info('item: %s, proposed: %s, last:%s'
                          % (item, proposed_base_amount, last_open_price))
-        base_amount = max(proposed_base_amount, last_open_price)
 
-        if base_amount >= (current_base_bal / self.max_trades):
-            self.logger.info("Reducing trade value by a third")
-            base_amount /= 1.5
+        if last_open_price < current_base_bal:
+            base_amount = max(proposed_base_amount, last_open_price)
+        else:
+            base_amount = proposed_base_amount
+
         return base_amount
 
 
