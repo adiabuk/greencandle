@@ -6,7 +6,7 @@
   "immediate_stop": "true",
   "immediate_take_profit": "true",
   "indicators": "get_moving_averages;EMA;20 get_tsi;tsi;25 get_tsi;signal;25 get_pivot;pivot;1",
-  "production": "false"
+  "production": "false",
   "interval": "15m",
   "open_rule1": "results.current.tsi_25 \u003e results.current.signal_25 and results.previous.tsi_25 \u003c results.previous.signal_25 and close \u003e results.current.pivot_1",
   "rate_indicator": "EMA_20",
