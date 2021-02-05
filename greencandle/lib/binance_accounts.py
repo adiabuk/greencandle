@@ -77,7 +77,7 @@ def get_binance_margin():
         for _ in range(3):
             # Try to get exchange rate 3 times before giving up
             try:
-                gbp_total = USD2GBP * usd_total
+                gbp_total = USD2GBP() * usd_total
             except RatesNotAvailableError:
                 continue
             break
@@ -149,7 +149,7 @@ def get_binance_values():
         for _ in range(3):
             # Try to get exchange rate 3 times before giving up
             try:
-                gbp_total = USD2GBP * usd_total
+                gbp_total = USD2GBP() * usd_total
             except RatesNotAvailableError:
                 continue
             break
