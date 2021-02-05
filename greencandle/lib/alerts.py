@@ -82,7 +82,7 @@ def send_slack_trade(**kwargs):
         if key not in kwargs:
             kwargs[key] = "N/A"
     try:
-        kwargs['price'] = "%.5f" % float(kwargs['price'])
+        kwawgs['price'] = str(kwargs['price']).rstrip("0")
         kwargs['perc'] = "%.2f" % (kwargs['perc'])
     except TypeError:
         pass
