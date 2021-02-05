@@ -11,6 +11,15 @@
 
 # Releases
 
+## 1.8
+* Enhancements to slack trade alerts
+* Cleanup of lint and dupe code
+* Fix for drawup calculations
+* Added more unittests
+* Only 1 trade per strategy in prod
+* More tests in stag
+* DB Cleanups
+
 ## 1.7.1
 * Fix broken link for downloading ta-lib
 * temporarily disable 5ma in prod
