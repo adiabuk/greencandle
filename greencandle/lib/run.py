@@ -232,7 +232,7 @@ def prod_int_check(interval, test):
 
         LOGGER.debug("%s int check result: %s Buy:%s Current:%s Time:%s"
                      % (pair, result, open_price, current_price, current_time))
-        if result == "SELL":
+        if result == "CLOSE":
             LOGGER.debug("Items to sell")
             sells.append((pair, current_time, current_price, event))
             drawdowns[pair] = redis.get_drawdown(pair)
