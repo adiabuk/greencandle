@@ -251,7 +251,7 @@ class Trade():
                                          % (cost, fill_price))
 
 
-            if self.test_data or (self.test_trade and not trade_result) or \
+            if self.test_data or self.test_trade or \
                     (not self.test_trade and 'transactTime' in trade_result):
 
                 dbase.insert_trade(pair=item, price=cost, date=current_time,
@@ -597,7 +597,7 @@ class Trade():
                     self.logger.info("Current price %s, Fill price: %s" % (price, fill_price))
 
 
-            if self.test_data or (self.test_trade and not trade_result) or \
+            if self.test_data or self.test_trade or \
                     (not self.test_trade and 'transactTime' in trade_result):
                 if name == "api":
                     name = "%"
