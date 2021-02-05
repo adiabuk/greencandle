@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-position,no-member
+#pylint: disable=wrong-import-position,no-member,bare-except
 
 """
 Check pairs in config are still current

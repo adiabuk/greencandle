@@ -6,6 +6,7 @@ Push/Pull crypto signals and data to mysql
 import MySQLdb
 from . import config
 from .binance_common import get_current_price
+from .common import AttributeDict
 from .logger import get_logger, get_decorator
 
 class Mysql():
@@ -15,10 +16,11 @@ class Mysql():
     get_exceptions = get_decorator((Exception))
 
     def __init__(self, test=False, interval="15m"):
-        self.host = config.database.db_host
-        self.user = config.database.db_user
-        self.password = config.database.db_password
-        self.database = config.database.db_database
+        self.creds = AttributeDict()
+        self.creds.host = config.database.db_host
+        self.creds.user = config.database.db_user
+        self.creds.password = config.database.db_password
+        self.creds.database = config.database.db_database
         self.logger = get_logger(__name__)
 
         self.__connect()
@@ -30,10 +32,10 @@ class Mysql():
         """
         Connect to Mysql DB
         """
-        self.dbase = MySQLdb.connect(host=self.host,
-                                     user=self.user,
-                                     passwd=self.password,
-                                     db=self.database)
+        self.dbase = MySQLdb.connect(host=self.creds.host,
+                                     user=self.creds.user,
+                                     passwd=self.creds.password,
+                                     db=self.creds.database)
         self.cursor = self.dbase.cursor()
 
     @get_exceptions
@@ -130,7 +132,7 @@ class Mysql():
 
 
     @get_exceptions
-    def get_recent_high(self, pair, name, date, months, max_perc):
+    def get_recent_high(self, pair, date, months, max_perc):
         """
         Dertermine if we have completed a profitable trade for
         given pair within given amount of time

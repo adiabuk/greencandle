@@ -1,4 +1,4 @@
-#pylint: disable=no-member,wrong-import-order
+#pylint: disable=no-member,wrong-import-order,logging-not-lazy
 
 """
 Get/Convert Balances from Phemex

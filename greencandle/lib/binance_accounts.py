@@ -16,6 +16,9 @@ config.create_config()
 BITCOIN = {}
 LOGGER = get_logger(__name__)
 
+CURRENCY = CurrencyRates()
+USD2GBP = lambda: CURRENCY.get_rate("USD", "GBP")
+
 def get_binance_margin():
     """Get totals for each crypto from binance and convert to USD/GBP"""
 
@@ -32,7 +35,6 @@ def get_binance_margin():
         bitcoin_totals = 0
         gbp_total = 0
         usd_total = 0
-        currency = CurrencyRates()
 
         for key in all_balances:
             LOGGER.debug('%s %s ' % (str(key), str(all_balances[key]["net"])))
@@ -59,10 +61,9 @@ def get_binance_margin():
                         continue
 
                 add_value(key, bcoin)
-                usd2gbp = lambda: currency.get_rate("USD", "GBP")
 
                 usd = bcoin *float(prices["BTCUSDT"])
-                gbp = usd2gbp() * usd
+                gbp = USD2GBP() * usd
                 usd_total += usd
                 gbp_total += gbp
                 result["margin"][key]["BTC"] = bcoin
@@ -76,7 +77,7 @@ def get_binance_margin():
         for _ in range(3):
             # Try to get exchange rate 3 times before giving up
             try:
-                gbp_total = currency.get_rate("USD", "GBP") * usd_total
+                gbp_total = USD2GBP * usd_total
             except RatesNotAvailableError:
                 continue
             break
@@ -102,7 +103,6 @@ def get_binance_values():
         bitcoin_totals = 0
         gbp_total = 0
         usd_total = 0
-        currency = CurrencyRates()
 
         for key in all_balances:
             current_value = float(all_balances[key]["free"]) + float(all_balances[key]["locked"])
@@ -133,10 +133,9 @@ def get_binance_values():
                         continue
 
                 add_value(key, bcoin)
-                usd2gbp = lambda: currency.get_rate("USD", "GBP")
 
                 usd = bcoin *float(prices["BTCUSDT"])
-                gbp = usd2gbp() * usd
+                gbp = USD2GBP() * usd
                 usd_total += usd
                 gbp_total += gbp
                 result["binance"][key]["BTC"] = bcoin
@@ -150,7 +149,7 @@ def get_binance_values():
         for _ in range(3):
             # Try to get exchange rate 3 times before giving up
             try:
-                gbp_total = currency.get_rate("USD", "GBP") * usd_total
+                gbp_total = USD2GBP * usd_total
             except RatesNotAvailableError:
                 continue
             break

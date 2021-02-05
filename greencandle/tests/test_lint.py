@@ -21,6 +21,6 @@ class TestLint(unittest.TestCase):
                 try:
                     print(filename)
                     score = results.linter.stats['global_note']
-                    self.assertGreaterEqual(score, 9.5)
+                    self.assertGreaterEqual(score, 9.7)
                 except KeyError:
                     pass

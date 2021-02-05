@@ -58,7 +58,7 @@ class Engine(dict):
             value['closeTime'] = value['closeTime'].astype(str)
             self.dataframes[key] = value[value.closeTime.str.endswith('99999')]
         self.schemes = []
-        super(Engine, self).__init__()
+        super().__init__()
         LOGGER.debug("Finished fetching raw data")
 
     @staticmethod
@@ -285,7 +285,7 @@ class Engine(dict):
             close = klines[-1]
         except Exception as exc:
             LOGGER.warning("FAILED bbands: %s " % str(exc))
-            return None
+            return
         try:
             upper, middle, lower = \
                     talib.BBANDS(close * 100000, timeperiod=int(timeframe),
@@ -337,7 +337,7 @@ class Engine(dict):
             index = -2
         # Get current date:
         scheme = {}
-        scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
+        scheme["close_time"] = str(dataframe.iloc[index]["closeTime"])
 
         # get yesterday's m'epoch time
         get_data_for = int(int(scheme["close_time"]) - 1.728e+8)
@@ -500,6 +500,9 @@ class Engine(dict):
 
     @get_exceptions
     def get_vol_moving_averages(self, pair, dataframe, index=None, localconfig=None):
+        """
+        Get moving averages with and expose volume indicator
+        """
         self.get_moving_averages(pair, dataframe, index, localconfig, volume=True)
 
         scheme = {}
@@ -541,13 +544,13 @@ class Engine(dict):
             vol = klines[0]
         except Exception as exc:
             LOGGER.warning("FAILED moving averages: %s" % str(exc))
-            return None
+            return
         data = vol if volume else close
         try:
             result = getattr(talib, new_func)(data, int(timeperiod))[-1]
         except Exception as exc:
             LOGGER.warning("Overall Exception getting moving averages: %s" % exc)
-            return None
+            return
 
         scheme = {}
 
@@ -604,16 +607,16 @@ class Engine(dict):
         attrs = trends[func]
         try:
 
-            li = []
+            klines = []
             for i in attrs["klines"]:
-                li.append(locals()[i])
+                klines.append(locals()[i])
 
             fastk, fastd = getattr(talib, func)(high, low, close, int(timeperiod))
 
         except Exception as error:
             traceback.print_exc()
             LOGGER.warning("failed getting oscillators: %s" % str(error))
-            return None
+            return
 
         result = fastk[-1]
         try:
