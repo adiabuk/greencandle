@@ -24,8 +24,8 @@ def main():
     output = ""
     for trade in open_trades:
         output += '\t\t'.join([str(item) for item in trade]) + '\n'
-
-    send_slack_message('balance', output)
+    if output:
+        send_slack_message('balance', output)
     sys.exit()
 
 if __name__ == "__main__":
