@@ -36,7 +36,7 @@ def main():
 
     # Update balance summary and clean out old balance records
     update = ("insert into balance_summary (select ctime, sum(usd) as usd from balance where "
-              "coin='TOTALS' and left(ctime,10) != CURDATE() group by ctime")
+              "coin='TOTALS' and left(ctime,10) != CURDATE() group by ctime)")
 
     delete2 = "delete from balance where left(ctime,10) != CURDATE()"
 
@@ -53,8 +53,8 @@ def main():
     mysql.fetch_sql_data(delete1)
     mysql.fetch_sql_data(drop)
     mysql.fetch_sql_data(update)
-    mysql.fetch_sql_data(delete2)
     results = mysql.fetch_sql_data(query)
+    mysql.fetch_sql_data(delete2)
 
     # Convert results into pandas dataframe using header as column title
     dframe = pandas.DataFrame(results, columns=results.pop(0))
