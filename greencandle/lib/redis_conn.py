@@ -332,11 +332,16 @@ class Redis():
             check = current_price
 
         if direction == "long":
-            return float(check) <= sub_perc(float(trailing_perc), float(high_price)) and \
+            result =  float(check) <= sub_perc(float(trailing_perc), float(high_price)) and \
                     (self.test_data or float(current_price) > add_perc(float(trailing_start),
                                                                        float(open_price)))
         elif direction == "short":
-            return float(check) >= add_perc(float(trailing_perc), float(high_price))
+            result =  float(check) >= add_perc(float(trailing_perc), float(high_price))
+
+        if result:
+            self.logger.info("TrailingStopLoss reached high_price: %s current_price: %s "
+                             "open_price: %s" % (high_price, current_price, open_price))
+        return result
 
     def __get_take_profit(self, current_price, current_high, open_price):
         """
@@ -361,9 +366,14 @@ class Redis():
             check = current_price
 
         if direction == 'long':
-            return float(check) > add_perc(float(profit_perc), float(open_price))
+            result = float(check) > add_perc(float(profit_perc), float(open_price))
         elif direction == 'short':
-            return float(check) < sub_perc(float(profit_perc), float(open_price))
+            results = float(check) < sub_perc(float(profit_perc), float(open_price))
+
+        if result:
+            self.logger.info("TakeProfit reached current_high: %s current_price: %s "
+                             "open_price: %s" % (current_high, current_price, open_price))
+        return result
 
     def __get_stop_loss(self, current_price, current_low, open_price):
         """
@@ -384,9 +394,14 @@ class Redis():
             check = current_price
 
         if direction == 'long':
-            return float(check) < sub_perc(float(stop_perc), float(open_price))
+            result = float(check) < sub_perc(float(stop_perc), float(open_price))
         elif direction == 'short':
-            return float(check) > add_perc(float(stop_perc), float(open_price))
+            result = float(check) > add_perc(float(stop_perc), float(open_price))
+
+        if result:
+            self.logger.info("StopLoss reached current_low: %s current_price: %s "
+                             "open_price: %s" % (current_low, current_price, open_price))
+        return result
 
     @staticmethod
     def __get_rules(rules, direction):
