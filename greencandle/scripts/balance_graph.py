@@ -42,19 +42,19 @@ def main():
 
     # Generate OHLC data
     query = ("select c1.ctime as closeTime, (SELECT c2.usd FROM balance_summary c2 WHERE "
-             "c2.ctime = MIN(c1.ctime)) AS open, MAX(c1.usd) AS high, MIN(c1.usd) AS low, "
-             "(SELECT c2.usd FROM balance_summary c2 WHERE c2.ctime = MAX(c1.ctime)) "
+             "c2.ctime = MIN(c1.ctime) limit 1) AS open, MAX(c1.usd) AS high, MIN(c1.usd) AS low, "
+             "(SELECT c2.usd FROM balance_summary c2 WHERE c2.ctime = MAX(c1.ctime) limit 1) "
              "AS close FROM balance_summary c1  GROUP BY left(ctime,10) "
              "ORDER BY c1.ctime ASC")
 
     # Run queries
-    mysql.fetch_sql_data(drop)
-    mysql.fetch_sql_data(clean)
-    mysql.fetch_sql_data(delete1)
-    mysql.fetch_sql_data(drop)
-    mysql.fetch_sql_data(update)
+    mysql.run_sql_statement(drop)
+    mysql.run_sql_statement(clean)
+    mysql.run_sql_statement(delete1)
+    mysql.run_sql_statement(drop)
+    mysql.run_sql_statement(update)
     results = mysql.fetch_sql_data(query)
-    mysql.fetch_sql_data(delete2)
+    mysql.run_sql_statement(delete2)
 
     # Convert results into pandas dataframe using header as column title
     dframe = pandas.DataFrame(results, columns=results.pop(0))

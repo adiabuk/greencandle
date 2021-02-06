@@ -55,6 +55,15 @@ class Mysql():
         self.dbase.commit()
 
     @get_exceptions
+    def run_sql_statement(self, command):
+        """
+        run sql statement without results
+        """
+        cur = self.dbase.cursor()
+        self.__execute(cur, command)
+
+
+    @get_exceptions
     def fetch_sql_data(self, query, header=True):
         """"
         Fetch SQL data for totals and return dict
