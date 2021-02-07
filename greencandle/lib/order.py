@@ -224,8 +224,8 @@ class Trade():
                 amount_to_use = sub_perc(5, amount_to_borrow)  # use 95% of borrowed funds
 
                 amt_str = get_step_precision(item, amount_to_use)
-                self.logger.info("Will attempt to borrow %s of %s" % (amount_to_borrow,
-                                                                      base))
+                self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
+                                 % (amount_to_borrow, base, base_amount))
 
                 if prod:
                     borrow_result = binance.margin_borrow(base, amount_to_borrow)
@@ -321,7 +321,9 @@ class Trade():
             except KeyError:
                 current_base_bal = 0
             except TypeError:
-                self.logger.critical("Unable to get balance for base %s" % base)
+                self.logger.critical("Unable to get balance for base %s while trading %s"
+                                     % (ase, item))
+                self.logger.debug("complete balance dict: %s" % current_base_bal)
 
 
             cost = current_price
