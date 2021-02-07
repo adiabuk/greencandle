@@ -322,7 +322,7 @@ class Trade():
                 current_base_bal = 0
             except TypeError:
                 self.logger.critical("Unable to get balance for base %s while trading %s"
-                                     % (ase, item))
+                                     % (base, item))
                 self.logger.debug("complete balance dict: %s" % current_base_bal)
 
 
