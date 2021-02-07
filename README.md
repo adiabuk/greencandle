@@ -11,6 +11,17 @@
 
 # Releases
 
+## 1.9
+* Fix prod scalp
+* Unit tests for TP/SL/TSL
+* Fix for balance graph
+* Lint fixes
+* Better trade notifications
+* Better trade amount calc
+* Bug fix, open trades showing overlapping strategies
+* Updated docs
+* Better profit and daily profit db view
+
 ## 1.8
 * Enhancements to slack trade alerts
 * Cleanup of lint and dupe code
