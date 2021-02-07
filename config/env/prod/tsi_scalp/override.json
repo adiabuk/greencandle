@@ -4,6 +4,7 @@
   "close_rule2": " perc_rate \u003c 0",
   "divisor": "1.6",
   "immediate_stop": "true",
+  "immediate_trailing_stop": "false",
   "immediate_take_profit": "true",
   "indicators": "get_moving_averages;EMA;20 get_tsi;tsi;25 get_tsi;signal;25 get_pivot;pivot;1",
   "interval": "15m",
