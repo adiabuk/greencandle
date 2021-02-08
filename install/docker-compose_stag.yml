@@ -419,7 +419,7 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=stag/tsc_scalp_margin/btc
+      - CONFIG_ENV=stag/tsi_scalp_margin/btc
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -446,7 +446,7 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=stag/tsc_scalp_margin/usdt
+      - CONFIG_ENV=stag/tsi_scalp_margin/usdt
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
