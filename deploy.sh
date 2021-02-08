@@ -2,6 +2,13 @@
 
 set -e
 
+function get_payload() {
+  payload='{"text": "'${1}'", "channel": "notifications", "username": "deploy-bot",
+            "content": "shit", "icon_emoji": ":rocket:", }'
+  echo $payload
+}
+
+
 while getopts e:v: flag
 do
     case "${flag}" in
@@ -22,9 +29,10 @@ echo "version: $version";
 
 export TAG=$version
 export HOSTNAME=$env
-url=$(configstore package get $env slack_notifications)
+url=$(configstore package get $env slack_url)
 text="Starting deployment $TAG on $HOSTNAME"
-curl -X POST -H 'Content-type: application/json' --data '{"text":"'"${text}"'"}' $url
+payload=$(get_payload "$text")
+curl -X POST -H "Content-Type: application/json" -d  "$payload"  $url
 git pull
 
 # Stop existing fe and be containers
@@ -55,5 +63,6 @@ sleep 30
 docker-compose -f ./install/docker-compose_${env}.yml up -d $fe
 
 text="Finished deployment $TAG on $HOSTNAME"
-curl -X POST -H 'Content-type: application/json' --data '{"text":"'"${text}"'"}' $url
+payload=$(get_payload "$text")
+curl -X POST -H "Content-Type: application/json" -d  "$payload"  $url
 
