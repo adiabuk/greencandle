@@ -361,24 +361,29 @@
       "is_secret": false
     },
     "slack_alerts": {
-      "value": "EOJliQhNtoY82MHc6Cg5O+1NZcT2OLi1PoMOaOgN1Qk+4NwnrlSz42Xt9bjrK9EFuSudpjhPXmifOPs4yk/5BQX6k+hmLP3NMIMPUIaCzJ5f3/TZ/qDLu6LEszBiRryuZwK3tj0eu7q+mNbHZyUt8rjLZWQAYekPlcdxSg==",
-      "is_binary": false,
-      "is_secret": true
-    },
-    "slack_balance": {
-      "value": "5dxWuX8SGLoL523lBVxgtUByOYwAune1wmkMD8IZNVqi2atJz+uJeoX01mzbjDOrMmXJsZU6ne/yEtkw4RmLJVqi2JZcNPzgwNcMY+R9Kz1J2lRgps5zEHO8j+CDLFFQ7qc7r5hUZTKEfHj/qa1QDimV2tQYiZk9dCbNrQ==",
-      "is_binary": false,
-      "is_secret": true
-    },
-    "slack_longs": {
-      "value": "SQY20QQwO+Vxgr4kVEPK77RCBRwfyBNLK7ux2PM56s7jdb9RDP60Hky19eJOhk70Z5jnSjJ1vyZni/CWIKfhUyAd/XxI0f6E6wtxLje3cKgnJtQNtzXCyemAKquTwdQf1i2agtg51STneTpTboRWKthmIAugO7onnVK0/w==",
-      "is_binary": false,
-      "is_secret": true
-    },
-    "slack_notifications": {
-      "value": "",
+      "value": "test",
       "is_binary": false,
       "is_secret": false
+    },
+    "slack_balance": {
+      "value": "test",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "slack_longs": {
+      "value": "test",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "slack_notifications": {
+      "value": "test",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "slack_url": {
+      "value": "fGVkI1nCv6E99CJDEpY3SzqHDK66KdIrSOs3Duc+0bkG2qIJyFsqZ8PPgDmsw2aY6/SHYCqVk2OOQGh0gf95PtebL7vuOm2RXCQPX4LrnDIFYuYks6A2NcPL3B0Ja0N7pv1x82uLZLxhoVqXedO54mhvJRM1mYD7SyPSnw==",
+      "is_binary": false,
+      "is_secret": true
     },
     "stop_loss_perc": {
       "value": "20",

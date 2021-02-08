@@ -361,24 +361,29 @@
       "is_secret": false
     },
     "slack_alerts": {
-      "value": "/WjJGcc6UuLDMBit3nloeDlUNoKQS6lKExsx7k8Tc0N++H0rG3o+5T9aFUEv5waRBkMxkQaDfZGu3XnQYbN/eMa2rTjLiAUhZPKrzAwCJ+poCUbt2HX4hgkMh1kB8FOA78CKyXltIfSdrwsec9tAeSo+EAmmnZeZFzkfTA==",
+      "value": "test",
       "is_binary": false,
-      "is_secret": true
+      "is_secret": false
     },
     "slack_balance": {
-      "value": "",
+      "value": "test",
       "is_binary": false,
       "is_secret": false
     },
     "slack_longs": {
-      "value": "2laBbvsIjnncEFHRsF/zqkRWjDMimySkYyuA/ATx9GOgMTUgvLFA+NaCphfnx7wkRbhU1+YHtsXx6oIvmm/mbSkmbNLHp59GTFYzXlrAT5AdKENT6Ya5sN/V9vPI4xY7k2/x2xiVfQ2yxk3k0U/fQ+JKvgHoogENwfDTzg==",
-      "is_binary": false,
-      "is_secret": true
-    },
-    "slack_notifications": {
-      "value": "",
+      "value": "test",
       "is_binary": false,
       "is_secret": false
+    },
+    "slack_notifications": {
+      "value": "test",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "slack_url": {
+      "value": "VkQYAwIYJHp9lJZg1poreOYSBxtEhzrtDzOJAWQcjEmidEhykTczX0ekT8d55txIENNJapxcrl46BltwtKNiUng8cqFk61dw5qdtzWVvOfQiEXicEbgcW1KGTKXnqFureIvw/SJLgh3IpOqX+Ul0gHt3I3Q1PzSCtjE/qQ==",
+      "is_binary": false,
+      "is_secret": true
     },
     "stop_loss_perc": {
       "value": "20",

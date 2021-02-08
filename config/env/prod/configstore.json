@@ -362,14 +362,14 @@
       "is_secret": false
     },
     "slack_alerts": {
-      "value": "K9Ie5DC/EIb9KWHYyC5DYWu7Tvp2jwH/0yOQQneY3anXmWdhWRPH8iFbiB2sGHLpSbNXJOQLM+VlYvAYfvgF1AOR0mkuj2cnph8BiyWROdvkigh1T9GCsLd7J+7ktQgjupIHwgI79mrhUXTpQaQgTBgApRCxUxgGoDp5GQ==",
+      "value": "prod_alerts",
       "is_binary": false,
-      "is_secret": true
+      "is_secret": false
     },
     "slack_balance": {
-      "value": "48bun14AjdxcQlNVIUnnW7GRwe7G8P7bzkDooAYuoHHTQiDKlk1W/ty1GYEI0ioJMjGJ+C+ZOVBtyrr7XR7JXNjDT1m/w4M8jkQxTpN4NTlKmIwwQ42OpmtZyb1fJJ/HQq4hKOnlFy4UWRlZzj/8waklY5m6cJpNC2+S16dtLgw=",
+      "value": "prod_balance",
       "is_binary": false,
-      "is_secret": true
+      "is_secret": false
     },
     "slack_longs": {
       "value": "0zn1o3Jm5N7DSkcSv50vfnAbo1ZyRzlPVpUTuaNcMA+VvLVnNaYIQDZYOxdZ5nRDOXHTGSknbEagIAJgt5vSck0iqpyRzKO7ebLUXQX0Tc4v839aAYAvvxbqAXAEDNytPisopX2h044zrWN5lMdupIK46UJ/Oc+gUw9nbA==",
@@ -377,7 +377,12 @@
       "is_secret": true
     },
     "slack_notifications": {
-      "value": "/+bNbEw4t4zEqyA/9j5oEseaKIERc6b4GMBT2dGUxmtwR+vw+EDrEGU9jX+hASCqdm2oLCQg1Ci7Hs0P4qeywVtAaciRXTJZPVnAdWSfiugEkaf4YSSXnlkxj0awLF0pHxleX2ZtOO/op+tjErK0gU24IznWiCusX3J0uQ==",
+      "value": "notifications",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "slack_url": {
+      "value": "OqeH/T5nuy+0wjoPE2ihAHwKGtrFHyrmL3cWV9WZLpcFegWjlzXi6KT6n3/55Uz+L1BjtEKYLWafSbaqR5iiTiaDV7WpRIbPkz5/9PyGfbqerzuMRXJ+ApiuCXe1O2iNFjuMhs+OTkJDnhcGfJmmmyz/fYKkXPkTZlyw9w==",
       "is_binary": false,
       "is_secret": true
     },

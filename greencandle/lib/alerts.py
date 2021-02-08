@@ -68,9 +68,16 @@ def send_slack_message(channel, message):
         return
     host = "unk" if 'HOST' not in os.environ else os.environ['HOST']
     title = "{}_{}".format(host, config.main.name)
-    payload = '{"text":"%s %s"}' % (message, title)
-    webhook = config.slack[channel]
-    requests.post(webhook, data=payload, headers={'Content-Type': 'application/json'})
+    payload = {"username": title,
+               "icon_emoji": ":robot_face:",
+               "channel": channel,
+               "attachments":[
+                   {"fields":[
+                       {"value": message
+                        }]}]}
+
+    webhook = config.slack["url"]
+    requests.post(webhook, data=json.dumps(payload), headers={'Content-Type': 'application/json'})
 
 def send_slack_trade(**kwargs):
     """
@@ -92,25 +99,34 @@ def send_slack_trade(**kwargs):
     host = "unk" if 'HOST' not in os.environ else os.environ['HOST']
     title = "{}_{}".format(host, config.main.name)
     if kwargs.action == 'open':
-        symbol = ':large_green_circle:'
+        color = '#00fc22'
     elif kwargs.action == 'close':
-        symbol = ':large_red_square:'
+        color = '#fc0303' # red
     else:
-        symbol = ':large_orange_diamond:'
+        color = '#ff7f00'
 
-    block = {"blocks": [
-                {"type": "section",
-                 "text": {"type": "mrkdwn",
-                          "text": "{0} {1} {0}".format(symbol, kwargs.event)}},
-                {"type": "section",
-                 "text": {"type": "mrkdwn",
-                          "text": ("• Pair: {0}\n • Price {1}\n"
-                                   "• Percentage: {2}\n • title: {3}"
-                                   "\n\n".format(kwargs.pair,
-                                                 kwargs.price,
-                                                 kwargs.perc,
-                                                 title))}}]}
+    if 'long' in kwargs.event:
+        icon = ':chart_with_upwards_trend:'
+    else:
+        icon = ':chart_with_downwards_trend:'
 
-    webhook = config.slack[kwargs.channel]
+    block = {
+        "username": kwargs.event,
+        "icon_emoji": "{}".format(icon),
+        "channel": config.slack[kwargs.channel],
+        "attachments":[
+            {"color":"{}".format(color),
+             "icon_emoji": "{}".format(icon),
+             "fields":[
+                 {"value": ("• Pair: {0}\n • Price {1}\n"
+                            "• Percentage: {2}\n • title: {3}"
+                            "\n\n".format(kwargs.pair,
+                                          kwargs.price,
+                                          kwargs.perc,
+                                          title)),
+                  "short":"false"
+                 }]}]}
+
+    webhook = config.slack["url"]
     print(block)
     requests.post(webhook, data=json.dumps(block), headers={'Content-Type': 'application/json'})
