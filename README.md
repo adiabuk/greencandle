@@ -11,6 +11,10 @@
 
 # Releases
 
+## 1.9.1
+* Remove new release of cryptography causing built issues
+* Limit scalp prod to 1 concurrent trade
+
 ## 1.9
 * Fix prod scalp
 * Unit tests for TP/SL/TSL
