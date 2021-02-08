@@ -13,6 +13,7 @@ REQUIRED_CONFIG = {'database':['db_host', 'db_user', 'db_password', 'db_database
                    'email': ['email_from', 'email_to', 'email_password', 'email_active'],
                    'redis': ['redis_host', 'redis_port', 'redis_expire', 'redis_expiry_seconds'],
                    'push': ['push_host', 'push_channel', 'push_active'],
+                   'slack': ['url'],
                    'accounts': [],
                    'main': ['logging_level', 'max_trades', 'divisor', 'name', 'open_rule1',
                             'wait_between_trades', 'time_between_trades', 'logging_output',
