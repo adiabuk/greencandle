@@ -70,7 +70,7 @@ def send_slack_message(channel, message):
     title = "{}_{}".format(host, config.main.name)
     payload = {"username": title,
                "icon_emoji": ":robot_face:",
-               "channel": channel,
+               "channel": config.slack[channel],
                "attachments":[
                    {"fields":[
                        {"value": message
