@@ -488,6 +488,12 @@ class Trade():
 
             self.__send_redis_trade(pair=item, current_time=current_time, price=cost,
                                     interval=self.interval, event="BUY")
+            send_gmail_alert("BUY", item, cost)
+            send_push_notif('BUY', item, '%.15f' % float(cost))
+
+            send_slack_trade(channel='longs', event=event, pair=item, action='open', price=cost)
+            self.__send_redis_trade(pair=item, current_time=current_time, price=cost,
+                                    interval=self.interval, event="BUY")
 
     @GET_EXCEPTIONS
     def __close_spot_long(self, sell_list, name=None, drawdowns=None, drawups=None):
