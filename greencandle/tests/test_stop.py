@@ -28,21 +28,25 @@ class TestStopMethods(unittest.TestCase):
 
         # current_high <= subperc(trailing_perc, high_price)
         result = redis._Redis__get_trailing_stop(current_price=100, high_price=500,
+                                                 low_price=0, current_low=0,
                                                  current_high=2, open_price=400)
         self.assertTrue(result)
 
         # current_price <=  subperc(trailing_perc, high_price)
         result = redis._Redis__get_trailing_stop(current_price=1000, high_price=500,
+                                                 low_price=0, current_low=0,
                                                  current_high=2000, open_price=4000)
         self.assertFalse(result)
 
         # current_price <=  subperc(trailing_perc, high_price)
         result = redis._Redis__get_trailing_stop(current_price=90, high_price=500,
+                                                 low_price=0, current_low=0,
                                                  current_high=2000, open_price=4000)
         self.assertTrue(result)
 
         # current_price <=  subperc(trailing_perc, high_price)
         result = redis._Redis__get_trailing_stop(current_price=90, high_price='',
+                                                 low_price=0, current_low=0,
                                                  current_high=2000, open_price=4000)
         print(result) # False
         self.assertFalse(result)
@@ -52,24 +56,28 @@ class TestStopMethods(unittest.TestCase):
         # current_price <=  subperc(trailing_perc, high_price)
         # and current_price > addperc(trailing_perc, high_price)
         result = redis._Redis__get_trailing_stop(current_price=90, high_price=500,
+                                                 low_price=0, current_low=0,
                                                  current_high=2000, open_price=4000)
         self.assertFalse(result)
 
         # current_price <=  subperc(trailing_perc, high_price)
         # and current_price > addperc(trailing_perc, high_price)
         result = redis._Redis__get_trailing_stop(current_price=3000, high_price=500,
+                                                 low_price=0, current_low=0,
                                                  current_high=2000, open_price=4000)
         self.assertFalse(result)
 
         # current_price <=  subperc(trailing_perc, high_price) 498 <= (500-0.1%) ~499.5
         # and current_price > addperc(trailing_start, open_price)
         result = redis._Redis__get_trailing_stop(current_price=498, high_price=500,
+                                                 low_price=0, current_low=0,
                                                  current_high=4000, open_price=200)
         self.assertTrue(result)
 
         # current_price <=  subperc(trailing_perc, high_price) 498 <= (500-0.1%) ~499.5
         # and current_price > addperc(trailing_start, open_price)
         result = redis._Redis__get_trailing_stop(current_price=498, high_price=500,
+                                                 low_price=0, current_low=0,
                                                  current_high=4000, open_price=300)
         self.assertTrue(result)
 
@@ -83,12 +91,14 @@ class TestStopMethods(unittest.TestCase):
         # current_high <=  subperc(trailing_perc, high_price)
         # and current_price > addperc(trailing_start, open_price)
         result = redis._Redis__get_trailing_stop(current_price=498, high_price=500,
+                                                 low_price=0, current_low=0,
                                                  current_high=4000, open_price=300)
         self.assertFalse(result)
 
         # current_high <=  subperc(trailing_perc, high_price)
         # and current_price > addperc(trailing_start, open_price)
         result = redis._Redis__get_trailing_stop(current_price=498, high_price=600,
+                                                 low_price=0, current_low=0,
                                                  current_high=4000, open_price=300)
         self.assertFalse(result)
         #######
@@ -97,6 +107,7 @@ class TestStopMethods(unittest.TestCase):
         # current_high <=  subperc(trailing_perc, high_price)
         # and current_price > addperc(trailing_start, open_price)
         result = redis._Redis__get_trailing_stop(current_price=498, high_price=4000,
+                                                 low_price=0, current_low=0,
                                                  current_high=600, open_price=300)
         self.assertTrue(result)
 
