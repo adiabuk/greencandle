@@ -371,13 +371,13 @@
       "is_binary": false,
       "is_secret": false
     },
-    "slack_longs": {
-      "value": "0zn1o3Jm5N7DSkcSv50vfnAbo1ZyRzlPVpUTuaNcMA+VvLVnNaYIQDZYOxdZ5nRDOXHTGSknbEagIAJgt5vSck0iqpyRzKO7ebLUXQX0Tc4v839aAYAvvxbqAXAEDNytPisopX2h044zrWN5lMdupIK46UJ/Oc+gUw9nbA==",
-      "is_binary": false,
-      "is_secret": true
-    },
     "slack_notifications": {
       "value": "notifications",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "slack_trades": {
+      "value": "prod_trades",
       "is_binary": false,
       "is_secret": false
     },

@@ -371,8 +371,8 @@
       "is_binary": false,
       "is_secret": false
     },
-    "slack_longs": {
-      "value": "stag_longs",
+    "slack_trades": {
+      "value": "stag_trades",
       "is_binary": false,
       "is_secret": false
     },

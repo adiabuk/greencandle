@@ -262,7 +262,7 @@ class Trade():
                                    direction=config.main.trade_direction)
                 send_push_notif('BUY', item, '%.15f' % float(cost))
                 send_gmail_alert('BUY', item, '%.15f' % float(cost))
-                send_slack_trade(channel='longs', event=event, pair=item, action='open',
+                send_slack_trade(channel='trades', event=event, pair=item, action='open',
                                  price=cost)
 
                 self.__send_redis_trade(pair=item, current_time=current_time, price=cost,
@@ -378,7 +378,7 @@ class Trade():
                                                 interval=self.interval, event="BUY")
                         send_push_notif('BUY', item, '%.15f' % float(cost))
                         send_gmail_alert('BUY', item, '%.15f' % float(cost))
-                        send_slack_trade(channel='longs', event=event, pair=item,
+                        send_slack_trade(channel='trades', event=event, pair=item,
                                          action='open', price=cost)
         del dbase
 
@@ -405,7 +405,7 @@ class Trade():
 
             send_gmail_alert("SELL", item, price)
             send_push_notif('SELL', item, '%.15f' % float(price))
-            send_slack_trade(channel='longs', event=event, pair=item, action='close',
+            send_slack_trade(channel='trades', event=event, pair=item, action='close',
                              price=price, perc=perc_inc)
 
             self.logger.info("Closing %s of %s for %.15f %s"
@@ -491,7 +491,7 @@ class Trade():
             send_gmail_alert("BUY", item, cost)
             send_push_notif('BUY', item, '%.15f' % float(cost))
 
-            send_slack_trade(channel='longs', event=event, pair=item, action='open', price=cost)
+            send_slack_trade(channel='trades', event=event, pair=item, action='open', price=cost)
             self.__send_redis_trade(pair=item, current_time=current_time, price=cost,
                                     interval=self.interval, event="BUY")
 
@@ -552,7 +552,7 @@ class Trade():
                                             interval=self.interval, event="SELL")
                     send_gmail_alert("SELL", item, price)
                     send_push_notif('SELL', item, '%.15f' % float(price))
-                    send_slack_trade(channel='longs', event=event, pair=item, action='close',
+                    send_slack_trade(channel='trades', event=event, pair=item, action='close',
                                      price=price, perc=perc_inc)
             else:
                 self.logger.critical("Sell Failed %s:%s" % (name, item))
@@ -579,7 +579,7 @@ class Trade():
 
             send_gmail_alert("SELL", item, price)
             send_push_notif('SELL', item, '%.15f' % float(price))
-            send_slack_trade(channel='longs', event=event, pair=item, action='close',
+            send_slack_trade(channel='trades', event=event, pair=item, action='close',
                              price=price, perc=perc_inc)
             self.logger.info("Selling %s of %s for %.15f %s"
                              % (quantity, item, float(price), base_out))

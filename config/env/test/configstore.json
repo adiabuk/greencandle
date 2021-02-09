@@ -370,7 +370,7 @@
       "is_binary": false,
       "is_secret": false
     },
-    "slack_longs": {
+    "slack_trades": {
       "value": "test",
       "is_binary": false,
       "is_secret": false
