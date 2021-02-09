@@ -118,8 +118,10 @@ def send_slack_trade(**kwargs):
             {"color":"{}".format(color),
              "icon_emoji": "{}".format(icon),
              "fields":[
-                 {"value": ("• Pair: {0}\n • Price {1}\n"
-                            "• Percentage: {2}\n • title: {3}"
+                 {"value": ("• Pair: {0}\n"
+                            "• Price: {1}\n"
+                            "• Percentage: {2}\n"
+                            "• title: {3}\n"
                             "\n\n".format(kwargs.pair,
                                           kwargs.price,
                                           kwargs.perc,
@@ -128,5 +130,4 @@ def send_slack_trade(**kwargs):
                  }]}]}
 
     webhook = config.slack["url"]
-    print(block)
     requests.post(webhook, data=json.dumps(block), headers={'Content-Type': 'application/json'})
