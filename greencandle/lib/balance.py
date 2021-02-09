@@ -20,9 +20,9 @@ class Balance(dict):
     """
     Class to add/retrieve balance to/from mysql db
     """
-    def __init__(self, test, *args, **kwargs):
+    def __init__(self, test):
         self.dbase = Mysql(test=test, interval='1h')
-        super(Balance, self).__init__(*args, **kwargs)
+        super().__init__()
 
     def __del__(self):
         del self.dbase
@@ -130,12 +130,13 @@ class Balance(dict):
         totals_btc = float(binance_btc) + float(phemex_btc)
         totals_usd = float(binance_usd) + float(phemex_usd)
 
-        balances = ["binance USD = {}".format(round(binance_usd, 2)),
-                    "binance BTC = {}".format(round(binance_btc, 5)),
-                    "phemex USD = {}".format(round(phemex_usd, 2)),
-                    "phemex BTC = {}".format(round(phemex_btc, 5)),
-                    "TOTAL USD = {}".format(round(totals_usd, 2)),
-                    "TOTAL BTC = {}".format(round(totals_btc, 5))]
+        balances = ["Binance USD = ${:,.2f}".format(binance_usd),
+                    "Binance BTC = ฿{}".format(round(binance_btc, 5)),
+                    "Phemex USD = ฿{}".format(round(phemex_usd, 2)),
+                    "Phemex USD = ${:,.2f}".format(phemex_usd),
+                    "Phemex BTC = ฿{}".format(round(phemex_btc, 5)),
+                    "TOTAL USD = ${:,.2f}".format(totals_usd),
+                    "TOTAL BTC = ฿{}".format(round(totals_btc, 5))]
 
         bal_str = '\n'.join(balances) + '\n'
         send_slack_message("balance", bal_str)
