@@ -18,7 +18,7 @@ services:
   2ma-btc:
     container_name: 2ma-btc
     hostname: 2ma-btc
-    image: greencandle
+    image: amrox/greencandle
     entrypoint: /docker-entrypoint.sh backend_test -d /data/altcoin_historical/2019/year/ -s -p BNBBTC -i 4h
     logging:
       driver: journald
@@ -49,7 +49,7 @@ services:
       - CONFIG_ENV=test/cron
       - HOST=$HOSTNAME
     hostname: cron
-    image: greencandle
+    image: amrox/greencandle
     restart: on-failure
     entrypoint: /docker-entrypoint.sh cron -f
     links:
@@ -73,7 +73,7 @@ services:
       - CONFIG_ENV=test
       - HOST=$HOSTNAME
     hostname: api
-    image: greencandle
+    image: amrox/greencandle
     restart: on-failure
     entrypoint: /docker-entrypoint-api.sh api --test
     links:
@@ -95,7 +95,7 @@ services:
   webserver:
      container_name: webserver
      hostname: webserver
-     image: webserver
+     image: amrox/webserver
      entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
      healthcheck:
        test: service nginx status || exit 1
@@ -124,7 +124,7 @@ services:
   dashboard:
     container_name: dashboard
     hostname: dashboard
-    image: dashboard
+    image: amrox/dashboard
     healthcheck:
       test: curl --fail 127.1:3030/dashboard/gc || exit 1
       interval: 1m
@@ -147,7 +147,7 @@ services:
   redis-local:
     container_name: redis-local
     hostname: redis-local
-    image: gc-redis
+    image: amrox/gc-redis
     ports:
       - 6379:6379
     restart: on-failure
@@ -162,7 +162,7 @@ services:
   mysql-local:
     container_name: mysql-local
     hostname: mysql-local
-    image: gc-mysql
+    image: amrox/gc-mysql
     ports:
       - 3306:3306
     environment:
