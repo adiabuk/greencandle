@@ -104,11 +104,7 @@ def send_slack_trade(**kwargs):
         color = '#fc0303' # red
     else:
         color = '#ff7f00'
-
-    if 'long' in kwargs.event:
-        icon = ':chart_with_upwards_trend:'
-    else:
-        icon = ':chart_with_downwards_trend:'
+    icon = ":{}:".format(config.main.trade_type)
 
     block = {
         "username": kwargs.event,
