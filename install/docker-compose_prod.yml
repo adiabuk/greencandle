@@ -93,6 +93,7 @@ services:
       - CONFIG_ENV=prod/fe/cron
       - HOST=$HOSTNAME
     image: amrox/greencandle:${TAG}
+    restart: on-failure
     entrypoint: /docker-entrypoint.sh cron -f
     logging:
       driver: journald
@@ -118,6 +119,7 @@ services:
      container_name: fe-webserver
      hostname: fe-webserver
      image: amrox/webserver:${TAG}
+     restart: on-failure
      healthcheck:
        test: service nginx status || exit 1
        interval: 5m
@@ -166,6 +168,7 @@ services:
     container_name : be-2ma-01perc-usdt
     hostname: be-2ma-01perc-usdt
     image: amrox/greencandle:${TAG}
+    restart: on-failure
     entrypoint: /docker-entrypoint.sh backend
     logging:
       driver: journald
@@ -193,6 +196,7 @@ services:
     container_name : be-2ma-01perc-bnb
     hostname: be-2ma-01perc-bnb
     image: amrox/greencandle:${TAG}
+    restart: on-failure
     entrypoint: /docker-entrypoint.sh backend
     logging:
       driver: journald
@@ -220,6 +224,7 @@ services:
     container_name : be-2ma-01perc-btc
     hostname: be-2ma-01perc-btc
     image: amrox/greencandle:${TAG}
+    restart: on-failure
     entrypoint: /docker-entrypoint.sh backend
     logging:
       driver: journald
@@ -247,6 +252,7 @@ services:
     container_name: be-4ma-01perc-eth
     hostname: be-4ma-01perc-eth
     image: amrox/greencandle:${TAG}
+    restart: on-failure
     entrypoint: /docker-entrypoint.sh backend
     logging:
       driver: journald
@@ -274,6 +280,7 @@ services:
     container_name: be-tsi-scalp-btc
     hostname: be-tsi-scalp-btc
     image: amrox/greencandle:${TAG}
+    restart: on-failure
     entrypoint: /docker-entrypoint.sh backend
     logging:
       driver: journald
@@ -301,6 +308,7 @@ services:
     container_name: be-tsi-scalp-usdt
     hostname: be-tsi-scalp-usdt
     image: amrox/greencandle:${TAG}
+    restart: on-failure
     entrypoint: /docker-entrypoint.sh backend
     logging:
       driver: journald
@@ -328,6 +336,7 @@ services:
     container_name: be-margin-usdt
     hostname: be-margin-usdt
     image: amrox/greencandle:${TAG}
+    restart: on-failure
     entrypoint: /docker-entrypoint.sh backend
     logging:
       driver: journald
@@ -355,6 +364,7 @@ services:
     container_name: be-margin-btc
     hostname: be-margin-btc
     image: amrox/greencandle:${TAG}
+    restart: on-failure
     entrypoint: /docker-entrypoint.sh backend
     logging:
       driver: journald
