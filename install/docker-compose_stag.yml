@@ -113,13 +113,11 @@ services:
        - 8888:8888
      links:
        - fe-dashboard:dashboard
-       - fe-cadvisor:cadvisor
        - fe-api:api
        - base-mysql:mysql
        - base-redis:redis
      depends_on:
        - fe-dashboard
-       - fe-cadvisor
        - fe-api
        - base-mysql
        - base-redis
