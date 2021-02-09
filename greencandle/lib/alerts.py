@@ -104,7 +104,7 @@ def send_slack_trade(**kwargs):
         color = '#fc0303' # red
     else:
         color = '#ff7f00'
-    icon = ":{}:".format(config.main.trade_type)
+    icon = ":{}:".format(config.main.trade_direction)
 
     block = {
         "username": kwargs.event,
