@@ -67,8 +67,7 @@ def get_logger(module_name=None):
       Returns:
         logging instance with formatted handler
     """
-    app_name = config.main.name
-    logger = logging.getLogger(app_name)
+    logger = logging.getLogger(module_name)
     if logger.hasHandlers():
         logger.handlers.clear()
 
