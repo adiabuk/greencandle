@@ -229,14 +229,18 @@ class Trade():
 
                 if prod:
                     borrow_result = binance.margin_borrow(base, amount_to_borrow)
-                    self.logger.info(borrow_result)
+                    if "msg" in borrow_result:
+                        self.logger.error(borrow_result)
+                        return
 
+                    self.logger.info(borrow_result)
                     trade_result = binance.margin_order(symbol=item, side=binance.BUY,
                                                         quantity=amt_str,
                                                         order_type=binance.MARKET)
                     if "msg" in trade_result:
                         self.logger.error(trade_result)
-
+                        self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str,
+                                                                         current_base_bal))
                     base_amount = trade_result.get('cummulativeQuoteQty', base_amount)
 
                     prices = []
@@ -323,8 +327,7 @@ class Trade():
             except TypeError:
                 self.logger.critical("Unable to get balance for base %s while trading %s"
                                      % (base, item))
-                self.logger.debug("complete balance dict: %s" % current_base_bal)
-
+                self.logger.critical("complete balance dict: %s" % current_base_bal)
 
             cost = current_price
 
@@ -345,6 +348,8 @@ class Trade():
                                                 order_type=binance.MARKET, test=self.test_trade)
                     if "msg" in result:
                         self.logger.error(result)
+                        self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str,
+                                                                         current_base_bal))
 
                     try:
                         # result empty if test_trade
@@ -593,6 +598,7 @@ class Trade():
 
                 if "msg" in trade_result:
                     self.logger.error(trade_result)
+
                 repay_result = binance.margin_repay(base, borrowed)
                 self.logger.info(repay_result)
 

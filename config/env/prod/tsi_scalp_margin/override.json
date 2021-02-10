@@ -8,6 +8,8 @@
   "immediate_trailing_stop": "false",
   "indicators": "get_moving_averages;EMA;20 get_tsi;tsi;25 get_tsi;signal;25 get_pivot;pivot;1",
   "interval": "15m",
+  "logging_level": "10",
+  "max_trades": "1",
   "open_rule1": "results.current.tsi_25 \u003e results.current.signal_25 and results.previous.tsi_25 \u003c results.previous.signal_25 and close \u003e results.current.pivot_1",
   "production": "true",
   "rate_indicator": "EMA_20",
@@ -16,7 +18,6 @@
   "time_in_trade": "45m",
   "trade_direction": "long",
   "trade_multiplier": "1",
-  "max_trades": "1",
   "trade_type": "margin",
   "trailing_start": "1",
   "trailing_stop_loss_perc": "0.1"
