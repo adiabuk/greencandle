@@ -14,7 +14,7 @@ from pyvirtualdisplay import Display
 
 import plotly.offline as py
 import plotly.graph_objs as go
-import plotly.tools as tls
+from plotly import subplots
 
 from PIL import Image
 from resizeimage import resizeimage
@@ -77,7 +77,7 @@ class Graph():
     def create_graph(self, output_dir='/tmp'):
         """Create graph html file using plotly offline-mode from dataframe object"""
 
-        fig = tls.make_subplots(rows=2, cols=1, shared_xaxes=True, print_grid=False)
+        fig = subplots.make_subplots(rows=2, cols=1, shared_xaxes=True, print_grid=False)
         for name, value in self.data.items():
             row = 1
             col = 1
