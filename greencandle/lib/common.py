@@ -78,7 +78,7 @@ def perc_diff(num1, num2):
     """
     Get percentage difference between 2 numbers
     """
-    return ((float(num2) - float(num1))/float(num1)) * 100
+    return ((float(num2) - float(num1))/ abs(float(num1))) * 100
 
 def convert_to_seconds(string):
     """conver human readable duration to seconds"""
