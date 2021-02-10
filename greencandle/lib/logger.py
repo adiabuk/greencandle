@@ -32,7 +32,7 @@ class AppFilter(logging.Filter):
         super(AppFilter, self).__init__(*args, **kwargs)
 
     def filter(self, record):
-        record.module_name = self.module_name
+        record.app_name = self.module_name
         return True
 
 class NotifyOnCriticalStream(logging.StreamHandler):
@@ -50,6 +50,10 @@ class NotifyOnCriticalJournald(JournaldLogHandler):
     Journald handler to send push notification on error or critical
     """
     def emit(self, record):
+        """
+        Change name from module name to app name from config
+        """
+        record.name = config.main.name
         super().emit(record)
         if record.levelno in (logging.ERROR, logging.CRITICAL):
             send_push_notif(record.msg)
@@ -67,23 +71,25 @@ def get_logger(module_name=None):
       Returns:
         logging instance with formatted handler
     """
-    logger = logging.getLogger(module_name)
+
+    if config.main.logging_output == "journald":
+        name = module_name
+        handler = NotifyOnCriticalJournald()
+        formatter = OneLineFormatter('[%(levelname)s] %(app_name)s %(message)s')
+        handler.setFormatter(formatter)
+    else:
+        name = module_name.split('.')[-1]
+        handler = NotifyOnCriticalStream()
+        formatter = logging.Formatter("%(asctime)s %(levelname)s %(name)s %(message)s",
+                                      "%Y-%m-%d %H:%M:%S")
+        handler.setFormatter(formatter)
+
+    logger = logging.getLogger(name)
     if logger.hasHandlers():
         logger.handlers.clear()
-
     logger.setLevel(int(config.main.logging_level))
     logger.propagate = False
     logger.addFilter(AppFilter(module_name=module_name))
-    if config.main.logging_output == "journald":
-        handler = NotifyOnCriticalJournald()
-        formatter = OneLineFormatter('[%(levelname)s] %(module_name)s %(message)s')
-        handler.setFormatter(formatter)
-    else:
-        #handler = logging.StreamHandler()
-        handler = NotifyOnCriticalStream()
-        formatter = logging.Formatter("%(asctime)s %(levelname)s %(module_name)s %(message)s",
-                                      "%Y-%m-%d %H:%M:%S")
-        handler.setFormatter(formatter)
 
     logger.addHandler(handler)
     return logger
