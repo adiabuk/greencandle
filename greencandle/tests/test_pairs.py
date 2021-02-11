@@ -14,7 +14,8 @@ from greencandle.lib.binance_common import get_binance_klines
 class TestPair(unittest.TestCase):
     """Test executables included in package"""
 
-    def test_pair(self):
+    @staticmethod
+    def test_pair():
         """
         test all trading pairs
         """
@@ -42,5 +43,6 @@ class TestPair(unittest.TestCase):
 
         for pair in set(pairs):
             # Attempt to get data for each unique pair
-            print("Testing pair " + pair)
-            get_binance_klines(pair, '1m',1)
+            if pair !="None":
+                print("Testing pair " + pair)
+                get_binance_klines(pair, '1m',1)
