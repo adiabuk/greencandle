@@ -132,7 +132,6 @@ class Balance(dict):
 
         balances = ["Binance USD = ${:,.2f}".format(binance_usd),
                     "Binance BTC = ฿{}".format(round(binance_btc, 5)),
-                    "Phemex USD = ฿{}".format(round(phemex_usd, 2)),
                     "Phemex USD = ${:,.2f}".format(phemex_usd),
                     "Phemex BTC = ฿{}".format(round(phemex_btc, 5)),
                     "TOTAL USD = ${:,.2f}".format(totals_usd),
