@@ -234,7 +234,7 @@ class Trade():
                 if prod:
                     borrow_result = binance.margin_borrow(base, amount_to_borrow)
                     if "msg" in borrow_result:
-                        self.logger.error(borrow_result)
+                        self.logger.error("Borrow error %s: %s" % (item, borrow_result))
                         return
 
                     self.logger.info(borrow_result)
@@ -242,9 +242,11 @@ class Trade():
                                                         quantity=amt_str,
                                                         order_type=binance.MARKET)
                     if "msg" in trade_result:
-                        self.logger.error(trade_result)
+                        self.logger.error("Trade error %s: %s" % (item, str(trade_result)))
                         self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str,
                                                                          current_base_bal))
+                        return
+
                     base_amount = trade_result.get('cummulativeQuoteQty', base_amount)
 
                     prices = []
@@ -352,12 +354,15 @@ class Trade():
                         self.logger.critical("Need more funds with given step_size")
                         return
 
-                    result = binance.spot_order(symbol=item, side=binance.BUY, quantity=amt_str,
-                                                order_type=binance.MARKET, test=self.test_trade)
-                    if "msg" in result:
-                        self.logger.error(result)
+                    trade_result = binance.spot_order(symbol=item, side=binance.BUY,
+                                                      quantity=amt_str,
+                                                      order_type=binance.MARKET,
+                                                      test=self.test_trade)
+                    if "msg" in trade_result:
+                        self.logger.error("Trade error %s: %s" % (item, str(trade_result)))
                         self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str,
                                                                          current_base_bal))
+                        return
 
                     try:
                         # result empty if test_trade
@@ -377,8 +382,8 @@ class Trade():
                 else:
                     result = True
 
-                if self.test_data or (self.test_trade and not result) or \
-                        (not self.test_trade and 'transactTime' in result):
+                if self.test_data or (self.test_trade and not trade_result) or \
+                        (not self.test_trade and 'transactTime' in trade_result):
                     # only insert into db, if:
                     # 1. we are using test_data
                     # 2. we performed a test trade which was successful - (empty dict)
@@ -429,23 +434,24 @@ class Trade():
                     self.logger.critical("Need more funds with given step_size")
                     return
 
-                result = binance.spot_order(symbol=item, side=binance.SELL, quantity=amt_str,
-                                            order_type=binance.MARKET, test=self.test_trade)
+                trade_result = binance.spot_order(symbol=item, side=binance.SELL, quantity=amt_str,
+                                                  order_type=binance.MARKET, test=self.test_trade)
 
-                if "msg" in result:
-                    self.logger.error(result)
+                if "msg" in trade_result:
+                    self.logger.error("Trade error %s: %s" % (item, trade_result))
+                    return
 
                 prices = []
-                if 'transactTime' in result:
+                if 'transactTime' in trade_result:
                     # Get price from exchange
-                    for fill in result['fills']:
+                    for fill in trade_result['fills']:
                         prices.append(float(fill['price']))
                     new_price = sum(prices) / len(prices)
                     self.logger.info("Current price %s, Fill price: %s" % (price, new_price))
 
 
-            if self.test_data or (self.test_trade and not result) or \
-                    (not self.test_trade and 'transactTime' in result):
+            if self.test_data or (self.test_trade and not trade_result) or \
+                    (not self.test_trade and 'transactTime' in trade_result):
                 if name == "api":
                     name = "%"
 
@@ -546,23 +552,24 @@ class Trade():
                     self.logger.critical("Need more funds with given step_size")
                     return
 
-                result = binance.spot_order(symbol=item, side=binance.SELL, quantity=amt_str,
-                                            order_type=binance.MARKET, test=self.test_trade)
+                trade_result = binance.spot_order(symbol=item, side=binance.SELL, quantity=amt_str,
+                                                  order_type=binance.MARKET, test=self.test_trade)
 
-                if "msg" in result:
-                    self.logger.error(result)
+                if "msg" in trade_result:
+                    self.logger.error("Trade error %s: %s" % (item, trade_result))
+                    return
 
                 prices = []
-                if 'transactTime' in result:
+                if 'transactTime' in trade_result:
                     # Get price from exchange
-                    for fill in result['fills']:
+                    for fill in trade_result['fills']:
                         prices.append(float(fill['price']))
                     new_price = sum(prices) / len(prices)
                     self.logger.info("Current price %s, Fill price: %s" % (price, new_price))
 
 
-            if self.test_data or (self.test_trade and not result) or \
-                    (not self.test_trade and 'transactTime' in result):
+            if self.test_data or (self.test_trade and not trade_result) or \
+                    (not self.test_trade and 'transactTime' in trade_result):
                 if name == "api":
                     name = "%"
 
@@ -621,9 +628,14 @@ class Trade():
                                                     order_type=binance.MARKET)
 
                 if "msg" in trade_result:
-                    self.logger.error(trade_result)
+                    self.logger.error("Trade error %s: %s" % (item, trade_result))
+                    return
 
                 repay_result = binance.margin_repay(base, borrowed)
+                if "msg" in repay_result:
+                    self.logger.error("Repay error %s: %s" % (item, repay_result))
+                    return
+
                 self.logger.info(repay_result)
 
                 prices = []
