@@ -238,6 +238,7 @@ class Trade():
                         return
 
                     self.logger.info(borrow_result)
+
                     trade_result = binance.margin_order(symbol=item, side=binance.BUY,
                                                         quantity=amt_str,
                                                         order_type=binance.MARKET)
@@ -293,17 +294,17 @@ class Trade():
         prices[account]['USDC']['count'] = 1000
         prices[account]['BNB']['count'] = 14
         for base in ['BTC', 'ETH', 'USDT', 'BNB', 'USDC']:
-            result = dbase.fetch_sql_data("select sum(base_out-base_in) from trades "
-                                          "where pair like '%{0}'"
-                                          .format(base), header=False)[0][0]
-            result = float(result) if result else 0
+            db_result = dbase.fetch_sql_data("select sum(base_out-base_in) from trades "
+                                             "where pair like '%{0}'"
+                                             .format(base), header=False)[0][0]
+            db_result = float(db_result) if db_result else 0
             current_trade_values = dbase.fetch_sql_data("select sum(base_in) from trades "
                                                         "where pair like '%{0}' and "
                                                         "base_out is null"
                                                         .format(base), header=False)[0][0]
             current_trade_values = float(current_trade_values) if \
                     current_trade_values else 0
-            prices[account][base]['count'] += result + current_trade_values
+            prices[account][base]['count'] += db_result + current_trade_values
         return prices
 
     @GET_EXCEPTIONS
@@ -366,21 +367,21 @@ class Trade():
 
                     try:
                         # result empty if test_trade
-                        cost = result.get('fills', {})[0].get('price', cost)
+                        cost = trade_result.get('fills', {})[0].get('price', cost)
                     except KeyError:
                         pass
-                    base_amount = result.get('cummulativeQuoteQty', base_amount)
+                    base_amount = trade_result.get('cummulativeQuoteQty', base_amount)
 
                     prices = []
-                    if 'transactTime' in result:
+                    if 'transactTime' in trade_result:
                         # Get price from exchange
-                        for fill in result['fills']:
+                        for fill in trade_result['fills']:
                             prices.append(float(fill['price']))
                         new_cost = sum(prices) / len(prices)
                         self.logger.info("Current price %s, Fill price: %s" % (cost, new_cost))
                         cost = new_cost
                 else:
-                    result = True
+                    trade_result = True
 
                 if self.test_data or (self.test_trade and not trade_result) or \
                         (not self.test_trade and 'transactTime' in trade_result):
@@ -388,10 +389,10 @@ class Trade():
                     # 1. we are using test_data
                     # 2. we performed a test trade which was successful - (empty dict)
                     # 3. we proformed a real trade which was successful - (transactTime in dict)
-                    result = dbase.insert_trade(pair=item, price=cost, date=current_time,
-                                                base_amount=base_amount, quote=amount,
-                                                direction=config.main.trade_direction)
-                    if result:
+                    db_result = dbase.insert_trade(pair=item, price=cost, date=current_time,
+                                                   base_amount=base_amount, quote=amount,
+                                                   direction=config.main.trade_direction)
+                    if db_result:
                         self.__send_redis_trade(pair=item, current_time=current_time, price=cost,
                                                 interval=self.interval, event="BUY")
                         send_push_notif('BUY', item, '%.15f' % float(cost))
@@ -573,13 +574,13 @@ class Trade():
                 if name == "api":
                     name = "%"
 
-                result = dbase.update_trades(pair=item, close_time=current_time,
-                                             close_price=new_price, quote=quantity,
-                                             base_out=base_out, name=name,
-                                             drawdown=drawdowns[item],
-                                             drawup=drawups[item])
+                db_result = dbase.update_trades(pair=item, close_time=current_time,
+                                                close_price=new_price, quote=quantity,
+                                                base_out=base_out, name=name,
+                                                drawdown=drawdowns[item],
+                                                drawup=drawups[item])
 
-                if result:
+                if db_result:
                     self.__send_redis_trade(pair=item, current_time=current_time, price=price,
                                             interval=self.interval, event="SELL")
                     send_gmail_alert("SELL", item, price)
