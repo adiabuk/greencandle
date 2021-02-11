@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-# PYTHON_ARGCOMPLETE_OK
-# pylint: disable=no-member, wrong-import-position, unused-variable,logging-not-lazy
+#pylint:disable=no-member,wrong-import-position,unused-variable,logging-not-lazy,c-extension-no-member
+#PYTHON_ARGCOMPLETE_OK
 
 """
 Get ohlc (Open, High, Low, Close) values from given cryptos

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-#pylint: disable=no-member, wrong-import-position
-# PYTHON_ARGCOMPLETE_OK
+#pylint:disable=no-member,wrong-import-position,c-extension-no-member
+#PYTHON_ARGCOMPLETE_OK
 """
 Run module with test data
 """
