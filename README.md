@@ -11,6 +11,20 @@
 
 # Releases
 
+## 2.0
+* Add margin strategies to prod
+* Re-enable 5MA strategy in prod
+* Add ETH and BNB scalp strategies
+* Better trade notifications with symbols
+* Better formatting for balance notifications
+* More informative alerts for trade failures
+* Fixes for trailing stop loss
+* Scalp strategy enhancements
+* Restart all containers on failure
+* Fix logging reporting wrong module
+* Remove logs not using logging module
+* API enhancements
+
 ## 1.9.1
 * Remove new release of cryptography causing built issues
 * Limit scalp prod to 1 concurrent trade
