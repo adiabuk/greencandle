@@ -66,7 +66,7 @@ def sell():
     global TEST
     pair = request.args.get('pair')
     LOGGER.info("Selling pair %s" % pair)
-    name = config.main.name
+
     current_price = request.args.get('price')
 
     interval = DATA[pair]['interval']
@@ -161,7 +161,12 @@ def get_closed():
     global config
     local_all = {}
     LOGGER.debug("Getting closed trades")
-    pairs = [pair for pair in config.main.pairs.split() if pair not in DATA.keys()]
+    pairs = []
+    for values in config.pairs.values():
+        for value in values.split():
+            if value not in DATA.keys():
+                pairs.append(value)
+
     for pair in pairs:
         config.main.rate_indicator = 'EMA_2'
         interval = '4h'
