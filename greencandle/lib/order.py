@@ -80,7 +80,8 @@ class Trade():
         dbase = Mysql(test=self.test_data, interval=self.interval)
         try:
             last_open_price = dbase.fetch_sql_data("select base_in from trades where "
-                                                   "pair='{0}'".format(item),
+                                                   "pair='{0}' and name={1}".format(item,
+                                                       config.main.name),
                                                    header=False)[-1][-1]
             last_open_price = float(last_open_price) if last_open_price else 0
         except IndexError:
@@ -93,7 +94,7 @@ class Trade():
         self.logger.info('item: %s, proposed: %s, last:%s'
                          % (item, proposed_base_amount, last_open_price))
 
-        if last_open_price < current_base_bal:
+        if  last_open_price and last_open_price < current_base_bal
             base_amount = max(proposed_base_amount, last_open_price)
         else:
             base_amount = proposed_base_amount
