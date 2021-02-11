@@ -15,6 +15,6 @@
   "trade_direction": "long",
   "trade_multiplier": "10",
   "trade_type": "margin",
-  "trailing_start": "1",
+  "trailing_start": "0",
   "trailing_stop_loss_perc": "0.1"
 }
