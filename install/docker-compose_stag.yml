@@ -1,6 +1,23 @@
 version: "3.1"
 services:
 
+  fe-cadvisor:
+    container_name: fe-cadvisor
+    hostname: fe-cadvisor
+    image: gcr.io/google_containers/cadvisor:v0.35.0
+    restart: on-failure
+    volumes:
+      - /:/rootfs
+      - /var/run:/var/run
+      - /sys:/sys
+      - /var/lib/docker:/var/lib/docker
+      - /dev/disk:/dev/disk
+    healthcheck:
+      test: "printf 'GET /healthz HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc localhost 8080"
+      interval: 1m
+      timeout: 2s
+      retries: 5
+
   base-redis:
     container_name: base-redis
     hostname: base-redis
