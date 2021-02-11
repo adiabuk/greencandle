@@ -224,6 +224,10 @@ class Trade():
                 amount_to_use = sub_perc(5, amount_to_borrow)  # use 95% of borrowed funds
 
                 amt_str = get_step_precision(item, amount_to_use)
+                if float(amt_str) <= 0:
+                    self.logger.critical("Need more funds with given step_size")
+                    return
+
                 self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
                                  % (amount_to_borrow, base, base_amount))
 
@@ -344,6 +348,10 @@ class Trade():
                                   % (base_amount, cost, amount))
                 if prod and not self.test_data:
                     amt_str = get_step_precision(item, amount)
+                    if float(amt_str) <= 0:
+                        self.logger.critical("Need more funds with given step_size")
+                        return
+
                     result = binance.spot_order(symbol=item, side=binance.BUY, quantity=amt_str,
                                                 order_type=binance.MARKET, test=self.test_trade)
                     if "msg" in result:
@@ -417,6 +425,10 @@ class Trade():
                              % (quantity, item, float(price), base_out))
             if prod and not self.test_data:
                 amt_str = get_step_precision(item, quantity)
+                if float(amt_str) <= 0:
+                    self.logger.critical("Need more funds with given step_size")
+                    return
+
                 result = binance.spot_order(symbol=item, side=binance.SELL, quantity=amt_str,
                                             order_type=binance.MARKET, test=self.test_trade)
 
@@ -483,6 +495,10 @@ class Trade():
             amount_to_use = sub_perc(5, amount_to_borrow)  # use 95% of borrowed funds
 
             amt_str = get_step_precision(item, amount_to_use)
+            if float(amt_str) <= 0:
+                self.logger.critical("Need more funds with given step_size")
+                return
+
             base_amount = float(amt_str) * float(binance.prices()[item])
 
             dbase.insert_trade(pair=item, price=cost, date=current_time,
@@ -526,6 +542,10 @@ class Trade():
                              % (quantity, item, float(price), base_out))
             if prod and not self.test_data:
                 amt_str = get_step_precision(item, quantity)
+                if float(amt_str) <= 0:
+                    self.logger.critical("Need more funds with given step_size")
+                    return
+
                 result = binance.spot_order(symbol=item, side=binance.SELL, quantity=amt_str,
                                             order_type=binance.MARKET, test=self.test_trade)
 
@@ -592,6 +612,10 @@ class Trade():
             fill_price = price
             if prod:
                 amt_str = get_step_precision(item, quantity)
+                if float(amt_str) <= 0:
+                    self.logger.critical("Need more funds with given step_size")
+                    return
+
                 trade_result = binance.margin_order(symbol=item, side=binance.SELL,
                                                     quantity=amt_str,
                                                     order_type=binance.MARKET)
