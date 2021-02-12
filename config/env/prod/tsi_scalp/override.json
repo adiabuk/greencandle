@@ -11,7 +11,7 @@
   "max_trades": "1",
   "open_rule1": "results.current.tsi_25 \u003e results.current.signal_25 and results.previous.tsi_25 \u003c results.previous.signal_25 and close \u003e results.current.pivot_1 and close \u003c add_perc(5, results.current.EMA_20)",
   "rate_indicator": "tsi_25",
-  "stop_loss_perc": "10",
+  "stop_loss_perc": "3",
   "take_profit_perc": "10",
   "time_in_trade": "45m",
   "trailing_start": "0",
