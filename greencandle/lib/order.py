@@ -94,7 +94,7 @@ class Trade():
         self.logger.info('item: %s, proposed: %s, last:%s'
                          % (item, proposed_base_amount, last_open_price))
 
-        if  last_open_price and last_open_price < current_base_bal
+        if  last_open_price and last_open_price < current_base_bal:
             base_amount = max(proposed_base_amount, last_open_price)
         else:
             base_amount = proposed_base_amount
