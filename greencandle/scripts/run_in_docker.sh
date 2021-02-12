@@ -36,9 +36,9 @@ mkdir -p ${base_dir}
 backend_test -d $data $ARGS -i $INTERVAL -p "$PAIR" &> ${filename}.log
 
 if [[ $ARGS == *"-a"* ]]; then
-  create_graph -d0 -a -i $INTERVAL -o $base_dir
+  create_graph -a -i $INTERVAL -o $base_dir
 else
-  create_graph -d0 -p $PAIR -i $INTERVAL -o ${base_dir}
+  create_graph -p $PAIR -i $INTERVAL -o ${base_dir}
   create_drawdownchart $INTERVAL ${base_dir}/${PAIR}_drawdown_${date}.html
   create_drawupchart $INTERVAL ${base_dir}/${PAIR}_drawup_${date}.html
 fi
