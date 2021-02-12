@@ -593,7 +593,7 @@ class Redis():
 
         elif trailing_stop and open_price:
 
-            if self.test_data and str2bool(config.main.immediate_stop):
+            if self.test_data and str2bool(config.main.immediate_trailing_stop):
                 if config.main.trade_direction == "long":
                     stop_at = sub_perc(trailing_perc, current_high)
                 elif config.main.trade_direction == "short":
