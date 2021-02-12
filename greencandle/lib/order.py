@@ -333,7 +333,7 @@ class Trade():
             except TypeError:
                 self.logger.critical("Unable to get balance for base %s while trading %s"
                                      % (base, item))
-                self.logger.critical("complete balance dict: %s" % current_base_bal)
+                self.logger.critical("complete balance: %s dict: %s" % (prices, current_base_bal))
 
             cost = current_price
 
