@@ -121,6 +121,7 @@ class Redis():
         current_price = current_candle['close']
 
         if event == 'open':
+            self.rm_drawdown(pair)
             current_low = current_price
             current_high = current_price
 
@@ -153,6 +154,7 @@ class Redis():
         current_price = current_candle['close']
 
         if event == 'open':
+            self.rm_drawup(pair)
             current_low = current_price
             current_high = current_price
         self.logger.debug("Calling update_drawup %s" % current_candle['close'])
