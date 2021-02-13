@@ -221,11 +221,6 @@ class Trade():
                 amount_to_borrow = float(base_amount) * float(config.main.multiplier)
                 amount_to_use = sub_perc(5, amount_to_borrow)  # use 95% of borrowed funds
 
-                amt_str = get_step_precision(item, amount_to_use)
-                if float(amt_str) <= 0:
-                    self.logger.critical("Need more funds with given step_size")
-                    return
-
                 self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
                                  % (amount_to_borrow, base, base_amount))
 
@@ -236,9 +231,10 @@ class Trade():
                         return
 
                     self.logger.info(borrow_result)
-
+                    amt_str = get_step_precision(item, amount_to_use/float(current_price))
                     trade_result = binance.margin_order(symbol=item, side=binance.BUY,
-                                                        quantity=amt_str,
+                                                        quantity=amt_str, isolated=False,
+                                                        timeInForce='GTC',
                                                         order_type=binance.MARKET)
                     if "msg" in trade_result:
                         self.logger.error("Trade error %s: %s" % (item, str(trade_result)))
@@ -603,7 +599,7 @@ class Trade():
                 self.logger.critical("Unable to find quantity for %s" % item)
                 return
             price = current_price
-            open_price, _, _, base_in, borrowed = dbase.get_trade_value(item)[0]
+            open_price, quote_in, _, base_in, borrowed = dbase.get_trade_value(item)[0]
             perc_inc = perc_diff(open_price, price)
             base_out = add_perc(perc_inc, base_in)
 
@@ -616,14 +612,10 @@ class Trade():
             base = get_base(item)
             fill_price = price
             if prod:
-                amt_str = get_step_precision(item, quantity)
-                if float(amt_str) <= 0:
-                    self.logger.critical("Need more funds with given step_size")
-                    return
 
                 trade_result = binance.margin_order(symbol=item, side=binance.SELL,
-                                                    quantity=amt_str,
-                                                    order_type=binance.MARKET)
+                                                    quantity=quote_in, isolated=False,
+                                                    timeInForce='GTC', order_type=binance.MARKET)
 
                 if "msg" in trade_result:
                     self.logger.error("Trade error %s: %s" % (item, trade_result))
