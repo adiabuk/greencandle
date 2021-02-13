@@ -14,7 +14,7 @@ from .auth import binance_auth
 from .logger import get_logger, get_decorator
 from .mysql import Mysql
 from .redis_conn import Redis
-from .balance import Balance
+from .binance_accounts import get_binance_values, get_binance_margin
 from .balance_common import get_base, get_step_precision
 from .common import perc_diff, add_perc, sub_perc, AttributeDict
 from .alerts import send_gmail_alert, send_push_notif, send_slack_trade
@@ -196,8 +196,7 @@ class Trade():
         if self.test_data or self.test_trade:
             prices = self.__get_test_balance(dbase, account='margin')
         else:
-            balance = Balance(test=False)
-            prices = balance.get_balance()
+            prices = get_binance_margin()
 
         for item, current_time, current_price, event in buy_list:
             base = get_base(item)
@@ -266,7 +265,7 @@ class Trade():
                     (not self.test_trade and 'transactTime' in trade_result):
 
                 dbase.insert_trade(pair=item, price=cost, date=current_time,
-                                   base_amount=base_amount, quote=amount,
+                                   base_amount=amount_to_use, quote=amt_str,
                                    borrowed=amount_to_borrow,
                                    multiplier=config.main.multiplier,
                                    direction=config.main.trade_direction)
@@ -320,8 +319,7 @@ class Trade():
         if self.test_data or self.test_trade:
             prices = self.__get_test_balance(dbase, account='binance')
         else:
-            balance = Balance(test=False)
-            prices = balance.get_balance()
+            prices = get_binance_values()
 
         for item, current_time, current_price, event in buy_list:
             base = get_base(item)
