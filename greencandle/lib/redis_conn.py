@@ -468,7 +468,7 @@ class Redis():
 
         rehydrated = pickle.loads(zlib.decompress(current[-1]))
         last_rehydrated = pickle.loads(zlib.decompress(previous[-1]))
-
+####results.previous[rate_indicator]
         # variables that can be referenced in config file
         open = float(rehydrated.open)
         high = float(rehydrated.high)
@@ -496,19 +496,24 @@ class Redis():
         # rate of Moving Average increate/decreate based on indicator
         # specified in the rate_indicator config option - best with EMA_500
         rate_indicator = config.main.rate_indicator
+
         perc_rate = float(perc_diff(float(results.previous[rate_indicator]),
                                     float(results.current[rate_indicator]))) \
-                                    if results.previous[rate_indicator] else 0
+                                    if results.current[rate_indicator] and \
+                                    results.previous[rate_indicator] else 0
         rate = float(float(results.current[rate_indicator]) - \
                      float(results.previous[rate_indicator])) \
-                     if results.previous[rate_indicator] else 0
+                     if results.current[rate_indicator] and \
+                     results.previous[rate_indicator] else 0
 
         last_perc_rate = float(perc_diff(float(results.previous1[rate_indicator]),
                                          float(results.previous[rate_indicator]))) \
-                                               if results.previous1[rate_indicator] else 0
+                                               if results.previous[rate_indicator] and \
+                                               results.previous1[rate_indicator] else 0
         last_rate = float(float(results.previous[rate_indicator]) -
                           float(results.previous1[rate_indicator])) \
-                                  if results.previous1[rate_indicator] else 0
+                                  if results.previous[rate_indicator] and \
+                                  results.previous1[rate_indicator] else 0
 
         rules = {'open': [], 'close': []}
         for seq in range(1, 10):
@@ -593,7 +598,8 @@ class Redis():
 
         elif trailing_stop and open_price:
 
-            if self.test_data and str2bool(config.main.immediate_trailing_stop):
+            #if self.test_data and str2bool(config.main.immediate_trailing_stop):
+            if self.test_data and str2bool(config.main.immediate_stop):
                 if config.main.trade_direction == "long":
                     stop_at = sub_perc(trailing_perc, current_high)
                 elif config.main.trade_direction == "short":
