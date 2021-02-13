@@ -11,6 +11,15 @@
 
 # Releases
 
+## 2.0.1
+* use correct trailing stop var in test
+* Ensure drawup/drawdown are wiped on new trade
+* Add more logging to idenitfy balance issue
+* Ensure we don't attempt to buy more than current balance
+* Small change to prod pairs
+* Add scalp stop loss
+* Add 5ma 1tsl to prod
+
 ## 2.0
 * Add margin strategies to prod
 * Re-enable 5MA strategy in prod
