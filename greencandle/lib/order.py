@@ -194,14 +194,14 @@ class Trade():
 
         dbase = Mysql(test=self.test_data, interval=self.interval)
         if self.test_data or self.test_trade:
-            prices = self.__get_test_balance(dbase, account='margin')
+            balance = self.__get_test_balance(dbase, account='margin')
         else:
-            prices = get_binance_margin()
+            balance = get_binance_margin()
 
         for item, current_time, current_price, event in buy_list:
             base = get_base(item)
             try:
-                current_base_bal = prices['margin'][base]['count']
+                current_base_bal = balance['margin'][base]['count']
             except KeyError:
                 current_base_bal = 0
             base_amount = self.amount_to_use(item, current_base_bal)
@@ -280,13 +280,13 @@ class Trade():
         """
         Get and return test balances
         """
-        prices = defaultdict(lambda: defaultdict(defaultdict))
+        balance = defaultdict(lambda: defaultdict(defaultdict))
 
-        prices[account]['BTC']['count'] = 0.15
-        prices[account]['ETH']['count'] = 5.84
-        prices[account]['USDT']['count'] = 1000
-        prices[account]['USDC']['count'] = 1000
-        prices[account]['BNB']['count'] = 14
+        balance[account]['BTC']['count'] = 0.15
+        balance[account]['ETH']['count'] = 5.84
+        balance[account]['USDT']['count'] = 1000
+        balance[account]['USDC']['count'] = 1000
+        balance[account]['BNB']['count'] = 14
         for base in ['BTC', 'ETH', 'USDT', 'BNB', 'USDC']:
             db_result = dbase.fetch_sql_data("select sum(base_out-base_in) from trades "
                                              "where pair like '%{0}'"
@@ -298,8 +298,8 @@ class Trade():
                                                         .format(base), header=False)[0][0]
             current_trade_values = float(current_trade_values) if \
                     current_trade_values else 0
-            prices[account][base]['count'] += db_result + current_trade_values
-        return prices
+            balance[account][base]['count'] += db_result + current_trade_values
+        return balance
 
     @GET_EXCEPTIONS
     def __open_spot_long(self, buy_list):
@@ -313,21 +313,21 @@ class Trade():
 
         dbase = Mysql(test=self.test_data, interval=self.interval)
         if self.test_data or self.test_trade:
-            prices = self.__get_test_balance(dbase, account='binance')
+            balance = self.__get_test_balance(dbase, account='binance')
         else:
-            prices = get_binance_values()
+            balance = get_binance_values()
 
         for item, current_time, current_price, event in buy_list:
             base = get_base(item)
 
             try:
-                current_base_bal = prices['binance'][base]['count']
+                current_base_bal = balance['binance'][base]['count']
             except KeyError:
                 current_base_bal = 0
             except TypeError:
                 self.logger.critical("Unable to get balance for base %s while trading %s"
                                      % (base, item))
-                self.logger.critical("complete balance: %s dict: %s" % (prices, current_base_bal))
+                self.logger.critical("complete balance: %s dict: %s" % (balance, current_base_bal))
 
             cost = current_price
 
