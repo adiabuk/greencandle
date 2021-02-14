@@ -241,7 +241,7 @@ class Trade():
 
                     base_amount = trade_result.get('cummulativeQuoteQty', base_amount)
 
-            fill_price = current_price if self.test_trade or self.tes_data else \
+            fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
 
             if self.test_data or self.test_trade or \
@@ -339,13 +339,13 @@ class Trade():
                                                                          current_base_bal))
                         return
 
-                    fill_price = current_price if self.test_trade or self.tes_data else \
-                            self.__get_fill_price(current_price, trade_result)
                     base_amount = trade_result.get('cummulativeQuoteQty', base_amount)
 
                 else:
                     trade_result = True
 
+                fill_price = current_price if self.test_trade or self.test_data else \
+                        self.__get_fill_price(current_price, trade_result)
                 if self.test_data or self.test_trade or \
                         (not self.test_trade and 'transactTime' in trade_result):
                     # only insert into db, if:
@@ -414,7 +414,7 @@ class Trade():
                     self.logger.error("Trade error %s: %s" % (pair, trade_result))
                     return
 
-            fill_price = current_price if self.test_trade or self.tes_data else \
+            fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
 
             if self.test_data or (self.test_trade and not trade_result) or \
@@ -515,7 +515,7 @@ class Trade():
                     self.logger.error("Trade error %s: %s" % (pair, trade_result))
                     continue
 
-            fill_price = current_price if self.test_trade or self.tes_data else \
+            fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
 
             if self.test_data or self.test_trade or \
@@ -581,7 +581,7 @@ class Trade():
 
                 self.logger.info(repay_result)
 
-            fill_price = current_price if self.test_trade or self.tes_data else \
+            fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
 
             if self.test_data or self.test_trade or \
