@@ -19,7 +19,8 @@ def main():
 
     dbase = Mysql()
 
-    query = "select pair, open_time, round(perc,2) as perc from open_trades order by perc DESC"
+    query = ("select pair, name, open_time, round(perc,2) as perc from "
+             "open_trades order by perc DESC")
     open_trades = dbase.fetch_sql_data(query, header=False)
     output = ""
     for trade in open_trades:
