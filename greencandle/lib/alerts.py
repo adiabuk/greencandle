@@ -98,9 +98,9 @@ def send_slack_trade(**kwargs):
         return
     host = "unk" if 'HOST' not in os.environ else os.environ['HOST']
     title = "{}_{}".format(host, config.main.name)
-    if kwargs.action == 'open':
+    if kwargs.action == 'OPEN':
         color = '#00fc22'
-    elif kwargs.action == 'close':
+    elif kwargs.action == 'CLOSE':
         color = '#fc0303' # red
     else:
         color = '#ff7f00'

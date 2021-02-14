@@ -97,7 +97,7 @@ class Graph():
             elif name == 'event':
                 # dataframe is mutable so we cannot reference exisiting values by hashing
                 # therefore we will substitute buy/sell with and rgb value for red/green
-                event = value.replace('SELL', 'rgb(255,0,0)').replace('BUY', 'rgb(0,255,0)')
+                event = value.replace('CLOSE', 'rgb(255,0,0)').replace('OPEN', 'rgb(0,255,0)')
                 item = go.Scatter(x=pandas.to_datetime(event["date"], unit="ms"),
                                   y=event['current_price'],
                                   name="events",
