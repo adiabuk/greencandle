@@ -111,7 +111,6 @@ class Trade():
         current_trades = dbase.get_trades()
         drain = str2bool(config.main.drain)
         avail_slots = self.max_trades - len(current_trades)
-        main_pairs = config.main.pairs
         self.logger.info("%s buy slots available" % avail_slots)
         if avail_slots <= 0:
             self.logger.warning("Too many trades, skipping")
@@ -124,7 +123,7 @@ class Trade():
         for item in items_list:
             if current_trades and item[0] in current_trades[0]:
                 self.logger.warning("We already have a trade of %s, skipping..." % item)
-            elif item[0] not in main_pairs and not self.test_data:
+            elif item[0] not in config.main.pairs and not self.test_data:
                 self.logger.warning("Pair %s not in main_pairs, skipping..." % item[0])
             else:
                 final_list.append(item)
@@ -315,24 +314,19 @@ class Trade():
                                      % (base, item))
                 self.logger.critical("complete balance: %s dict: %s" % (balance, current_base_bal))
 
-            cost = current_price
-
             base_amount = self.amount_to_use(item, current_base_bal)
-            amount = base_amount / float(cost)
-            if float(cost)*float(amount) >= float(current_base_bal):
+            amount = base_amount / float(current_price)
+            if float(current_price)*float(amount) >= float(current_base_bal):
                 self.logger.critical("Unable to purchase %s of %s, insufficient funds:%s/%s" %
                                      (amount, item, base_amount, current_base_bal))
                 continue
             else:
                 self.logger.info("Buying %s of %s with %s %s"
                                  % (amount, item, base_amount, base))
-                self.logger.debug("amount to buy: %s, cost: %s, amount:%s"
-                                  % (base_amount, cost, amount))
+                self.logger.debug("amount to buy: %s, current_price: %s, amount:%s"
+                                  % (base_amount, current_price, amount))
                 if self.prod and not self.test_data:
                     amt_str = get_step_precision(item, amount)
-                    if float(amt_str) <= 0:
-                        self.logger.critical("Need more funds with given step_size")
-                        return
 
                     trade_result = binance.spot_order(symbol=item, side=binance.BUY,
                                                       quantity=amt_str,
@@ -344,21 +338,10 @@ class Trade():
                                                                          current_base_bal))
                         return
 
-                    try:
-                        # result empty if test_trade
-                        cost = trade_result.get('fills', {})[0].get('price', cost)
-                    except KeyError:
-                        pass
+                    fill_price = current_price if self.test_trade or self.tes_data else \
+                            self.__get_fill_price(current_price, trade_result)
                     base_amount = trade_result.get('cummulativeQuoteQty', base_amount)
 
-                    prices = []
-                    if 'transactTime' in trade_result:
-                        # Get price from exchange
-                        for fill in trade_result['fills']:
-                            prices.append(float(fill['price']))
-                        new_cost = sum(prices) / len(prices)
-                        self.logger.info("Current price %s, Fill price: %s" % (cost, new_cost))
-                        cost = new_cost
                 else:
                     trade_result = True
 
@@ -368,16 +351,17 @@ class Trade():
                     # 1. we are using test_data
                     # 2. we performed a test trade which was successful - (empty dict)
                     # 3. we proformed a real trade which was successful - (transactTime in dict)
-                    db_result = dbase.insert_trade(pair=item, price=cost, date=current_time,
+                    db_result = dbase.insert_trade(pair=item, price=fill_price, date=current_time,
                                                    base_amount=base_amount, quote=amount,
                                                    direction=config.main.trade_direction)
                     if db_result:
-                        self.__send_redis_trade(pair=item, current_time=current_time, price=cost,
-                                                interval=self.interval, event="BUY")
-                        send_push_notif('BUY', item, '%.15f' % float(cost))
-                        send_gmail_alert('BUY', item, '%.15f' % float(cost))
+                        self.__send_redis_trade(pair=item, current_time=current_time,
+                                                price=fill_price, interval=self.interval,
+                                                event="BUY")
+                        send_push_notif('BUY', item, '%.15f' % float(fill_price))
+                        send_gmail_alert('BUY', item, '%.15f' % float(fill_price))
                         send_slack_trade(channel='trades', event=event, pair=item,
-                                         action='open', price=cost)
+                                         action='open', price=fill_price)
         del dbase
 
     def __get_fill_price(self, current_price, trade_result):
@@ -421,9 +405,6 @@ class Trade():
                              % (quantity, item, float(current_price), base_out))
             if self.prod and not self.test_data:
                 amt_str = get_step_precision(item, quantity)
-                if float(amt_str) <= 0:
-                    self.logger.critical("Need more funds with given step_size")
-                    return
 
                 trade_result = binance.spot_order(symbol=item, side=binance.SELL, quantity=amt_str,
                                                   order_type=binance.MARKET, test=self.test_trade)
@@ -486,9 +467,6 @@ class Trade():
             amount_to_use = sub_perc(5, amount_to_borrow)  # use 95% of borrowed funds
 
             amt_str = get_step_precision(item, amount_to_use)
-            if float(amt_str) <= 0:
-                self.logger.critical("Need more funds with given step_size")
-                return
 
             base_amount = float(amt_str) * float(binance.prices()[item])
 
@@ -530,9 +508,6 @@ class Trade():
                              % (quantity, item, float(current_price), base_out))
             if self.prod and not self.test_data:
                 amt_str = get_step_precision(item, quantity)
-                if float(amt_str) <= 0:
-                    self.logger.critical("Need more funds with given step_size")
-                    return
 
                 trade_result = binance.spot_order(symbol=item, side=binance.SELL, quantity=amt_str,
                                                   order_type=binance.MARKET, test=self.test_trade)
