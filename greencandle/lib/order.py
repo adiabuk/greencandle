@@ -242,18 +242,8 @@ class Trade():
 
                     base_amount = trade_result.get('cummulativeQuoteQty', base_amount)
 
-                    prices = []
-                    fill_price = current_price
-
-
-                    if 'transactTime' in trade_result:
-                        # Get price from exchange
-                        for fill in trade_result['fills']:
-                            prices.append(float(fill['price']))
-                        fill_price = sum(prices) / len(prices)
-                        self.logger.info("Current price %s, Fill price: %s"
-                                         % (current_price, fill_price))
-
+            fill_price = current_price if self.test_trade or self.tes_data else \
+                    self.__get_fill_price(current_price, trade_result)
 
             if self.test_data or self.test_trade or \
                     (not self.test_trade and 'transactTime' in trade_result):
@@ -418,7 +408,6 @@ class Trade():
                 self.logger.critical("Unable to find quantity for %s" % item)
                 return
 
-            fill_price = current_price  # for ci env - is overwritten in prod/stag
             buy_price, _, _, base_in, _ = dbase.get_trade_value(item)[0]
             perc_inc = perc_diff(buy_price, current_price)
             base_out = add_perc(perc_inc, base_in)
@@ -443,8 +432,8 @@ class Trade():
                     self.logger.error("Trade error %s: %s" % (item, trade_result))
                     return
 
-                fill_price = self.__get_fill_price(current_price, trade_result)
-
+            fill_price = current_price if self.test_trade or self.tes_data else \
+                    self.__get_fill_price(current_price, trade_result)
 
             if self.test_data or (self.test_trade and not trade_result) or \
                     (not self.test_trade and 'transactTime' in trade_result):
@@ -532,7 +521,6 @@ class Trade():
                 self.logger.critical("Unable to find quantity for %s" % item)
                 return
 
-            fill_price = current_price  # for ci env - is overwritten in prod/stag
             buy_price, _, _, base_in, _ = dbase.get_trade_value(item)[0]
             perc_inc = perc_diff(buy_price, current_price)
             base_out = add_perc(perc_inc, base_in)
@@ -553,7 +541,8 @@ class Trade():
                     self.logger.error("Trade error %s: %s" % (item, trade_result))
                     return
 
-                fill_price = self.__get_fill_price(current_price, trade_result)
+            fill_price = current_price if self.test_trade or self.tes_data else \
+                    self.__get_fill_price(current_price, trade_result)
 
             if self.test_data or self.test_trade or \
                     (not self.test_trade and 'transactTime' in trade_result):
@@ -601,7 +590,6 @@ class Trade():
             self.logger.info("Selling %s of %s for %.15f %s"
                              % (quantity, item, float(current_price), base_out))
             base = get_base(item)
-            fill_price = current_price
             if self.prod:
 
                 trade_result = binance.margin_order(symbol=item, side=binance.SELL,
@@ -619,7 +607,8 @@ class Trade():
 
                 self.logger.info(repay_result)
 
-                fill_price = self.__get_fill_price(current_price, trade_result)
+            fill_price = current_price if self.test_trade or self.tes_data else \
+                    self.__get_fill_price(current_price, trade_result)
 
             if self.test_data or self.test_trade or \
                     (not self.test_trade and 'transactTime' in trade_result):
