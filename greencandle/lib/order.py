@@ -81,8 +81,8 @@ class Trade():
         dbase = Mysql(test=self.test_data, interval=self.interval)
         try:
             last_open_price = dbase.fetch_sql_data("select base_in from trades where "
-                                                   "pair='{0}' and name='{1}'".format(item,
-                                                       config.main.name),
+                                                   "pair='{0}' and name='{1}'"
+                                                   .format(item, config.main.name),
                                                    header=False)[-1][-1]
             last_open_price = float(last_open_price) if last_open_price else 0
         except IndexError:
@@ -316,7 +316,8 @@ class Trade():
 
             base_amount = self.amount_to_use(pair, current_base_bal)
             amount = base_amount / float(current_price)
-            if float(current_price)*float(amount) >= float(current_base_bal):
+
+            if float(current_price) * float(amount) >= float(current_base_bal):
                 self.logger.critical("Unable to purchase %s of %s, insufficient funds:%s/%s" %
                                      (amount, pair, base_amount, current_base_bal))
                 continue

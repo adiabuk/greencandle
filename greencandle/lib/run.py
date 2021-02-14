@@ -23,6 +23,8 @@ from . import config
 LOGGER = get_logger(__name__)
 CHUNK_SIZE = int(config.main.no_of_klines)
 GET_EXCEPTIONS = get_decorator((Exception))
+PAIRS = config.main.pairs.split()
+MAIN_INDICATORS = config.main.indicators.split()
 
 @GET_EXCEPTIONS
 def serial_test(pairs, intervals, data_dir, indicators):
@@ -252,10 +254,9 @@ def prod_initial(interval, test=False):
     """
     prices = binance.prices()
     prices_trunk = {}
-    pairs = config.main.pairs.split()
 
     for key, val in prices.items():
-        if key in pairs:
+        if key in PAIRS:
             prices_trunk[key] = val
 
 
@@ -273,10 +274,9 @@ def prod_initial(interval, test=False):
 
 
     redis = Redis(interval=interval, test=test)
-    main_indicators = config.main.indicators.split()
     if interval == '4h':
         try:
-            last_item = redis.get_items(pairs[0], interval)[-1]
+            last_item = redis.get_items(PAIRS[0], interval)[-1]
             last_epoch = int(int(last_item.decode("utf-8").split(':')[-1])/1000)+1
             current_epoch = time.time()
             time_since_last = current_epoch - last_epoch
@@ -286,10 +286,10 @@ def prod_initial(interval, test=False):
     else:
         no_of_klines = config.main.no_of_klines
 
-    dataframes = get_dataframes(pairs, interval=interval, no_of_klines=no_of_klines)
+    dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=no_of_klines)
     engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, test=test,
                     redis=redis)
-    engine.get_data(localconfig=main_indicators, first_run=True, no_of_klines=no_of_klines)
+    engine.get_data(localconfig=MAIN_INDICATORS, first_run=True, no_of_klines=no_of_klines)
     del redis
 
 @GET_EXCEPTIONS
@@ -297,34 +297,30 @@ def prod_loop(interval, test_trade):
     """
     Loop through collection cycle (PROD)
     """
-    main_indicators = config.main.indicators.split()
-    pairs = config.main.pairs.split()
 
     LOGGER.debug("Performaing prod loop")
-    LOGGER.info("Pairs in config: %s" % pairs)
-    LOGGER.info("Total unique pairs: %s" % len(pairs))
-
-    max_trades = int(config.main.max_trades)
+    LOGGER.info("Pairs in config: %s" % PAIRS)
+    LOGGER.info("Total unique pairs: %s" % len(PAIRS))
 
     LOGGER.info("Starting new cycle")
-    LOGGER.debug("max trades: %s" % max_trades)
+    LOGGER.debug("max trades: %s" % config.main.max_trades)
 
     prices = binance.prices()
     prices_trunk = {}
     for key, val in prices.items():
-        if key in pairs:
+        if key in PAIRS:
             prices_trunk[key] = val
-    dataframes = get_dataframes(pairs, interval=interval)
+    dataframes = get_dataframes(PAIRS, interval=interval)
 
     redis = Redis(interval=interval, test=False)
     engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, redis=redis)
-    engine.get_data(localconfig=main_indicators, first_run=False)
+    engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
     buys = []
     sells = []
     drawdowns = {}
     drawups = {}
-    dataframes = get_dataframes(pairs, interval=interval, no_of_klines=1)
-    for pair in pairs:
+    dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=1)
+    for pair in PAIRS:
         result, event, current_time, current_price, _ = redis.get_action(pair=pair,
                                                                          interval=interval)
         current_candle = dataframes[pair].iloc[-1]
