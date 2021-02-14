@@ -11,6 +11,13 @@
 
 # Releases
 
+## 2.0.2
+* Use pairs tested in staging
+* Cleanup var names and dupe code
+* Lint and consistency fixes
+* Get balance only for exchange/account we are trading
+* Use quote value for margin quantity
+
 ## 2.0.1
 * use correct trailing stop var in test
 * Ensure drawup/drawdown are wiped on new trade
