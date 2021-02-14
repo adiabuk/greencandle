@@ -6,10 +6,10 @@ SCHEDULER.every '30s' do
   db = Mysql2::Client.new(:host => "mysql", :username => "greencandle", :password => "password", :port => 3306, :database => "greencandle" )
   sql = "select round(sum(perc)/(datediff(max(close_time),(select min(open_time) from profit))),2) as average from profit"
 
-  balance_spot_query = "select round(gbp,4) as gbp from balance where coin='TOTALS' and exchange_id=4 order by ctime desc limit 1"
+  balance_spot_query = "select IFNULL(( select round(gbp,4) as gbp from balance where coin='TOTALS' and exchange_id=4 order by ctime desc limit 1),0) as gbp;"
   balance_spot = db.query(balance_spot_query)
 
-  balance_margin_query = "select round(gbp,4) as gbp from balance where coin='TOTALS' and exchange_id=5 order by ctime desc limit 1"
+  balance_margin_query = "select IFNULL(( select round(gbp,4) as gbp from balance where coin='TOTALS' and exchange_id=5 order by ctime desc limit 1),0) as gbp;"
   balance_margin = db.query(balance_margin_query)
   balance = balance_spot.first['gbp'].to_f + balance_margin.first['gbp'].to_f
 
