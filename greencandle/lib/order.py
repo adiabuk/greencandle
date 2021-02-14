@@ -362,7 +362,7 @@ class Trade():
                         send_push_notif('OPEN', pair, '%.15f' % float(fill_price))
                         send_gmail_alert('OPEN', pair, '%.15f' % float(fill_price))
                         send_slack_trade(channel='trades', event=event, pair=pair,
-                                         action='open', price=fill_price)
+                                         action='OPEN', price=fill_price)
         del dbase
 
     def __get_fill_price(self, current_price, trade_result):
