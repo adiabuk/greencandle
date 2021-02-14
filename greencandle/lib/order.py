@@ -240,6 +240,8 @@ class Trade():
                         continue
 
                     base_amount = trade_result.get('cummulativeQuoteQty', base_amount)
+                else:
+                    amt_str = amount_to_use
 
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
@@ -312,7 +314,8 @@ class Trade():
             except TypeError:
                 self.logger.critical("Unable to get balance for base %s while trading %s"
                                      % (base, pair))
-                self.logger.critical("complete balance: %s base_bal: %s" % (balance, current_base_bal))
+                self.logger.critical("complete balance: %s base_bal: %s"
+                                     % (balance, current_base_bal))
 
             base_amount = self.amount_to_use(pair, current_base_bal)
             amount = base_amount / float(current_price)
