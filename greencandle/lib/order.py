@@ -312,7 +312,7 @@ class Trade():
             except TypeError:
                 self.logger.critical("Unable to get balance for base %s while trading %s"
                                      % (base, pair))
-                self.logger.critical("complete balance: %s dict: %s" % (balance, current_base_bal))
+                self.logger.critical("complete balance: %s base_bal: %s" % (balance, current_base_bal))
 
             base_amount = self.amount_to_use(pair, current_base_bal)
             amount = base_amount / float(current_price)
@@ -436,7 +436,7 @@ class Trade():
     @GET_EXCEPTIONS
     def __open_margin_short(self, short_list):
         """
-        bla bla bla
+        open trades with items in short list
         """
         self.logger.info("We have %s potential items to short" % len(short_list))
         drain = str2bool(config.main.drain)
