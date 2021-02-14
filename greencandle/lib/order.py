@@ -35,6 +35,7 @@ class Trade():
         self.test_trade = test_trade
         self.max_trades = int(config.main.max_trades)
         self.divisor = float(config.main.divisor) if config.main.divisor else None
+        self.prod = config.main.production
         account = config.accounts.binance[0]
         binance_auth(account)
 
@@ -190,8 +191,6 @@ class Trade():
         """
         self.logger.info("We have %s potential items to buy" % len(buy_list))
 
-        prod = str2bool(config.main.production)
-
         dbase = Mysql(test=self.test_data, interval=self.interval)
         if self.test_data or self.test_trade:
             balance = self.__get_test_balance(dbase, account='margin')
@@ -205,18 +204,17 @@ class Trade():
             except KeyError:
                 current_base_bal = 0
             base_amount = self.amount_to_use(item, current_base_bal)
-            cost = current_price
 
-            amount = base_amount / float(cost)
-            if float(cost)*float(amount) >= float(current_base_bal):
+            amount = base_amount / float(current_price)
+            if float(current_price)*float(amount) >= float(current_base_bal):
                 self.logger.critical("Unable to purchase %s of %s, insufficient funds:%s/%s" %
                                      (amount, item, base_amount, current_base_bal))
                 continue
             else:
                 self.logger.info("Buying %s of %s with %s %s"
                                  % (amount, item, base_amount, base))
-                self.logger.debug("amount to buy: %s, cost: %s, amount:%s"
-                                  % (base_amount, cost, amount))
+                self.logger.debug("amount to buy: %s, current_price: %s, amount:%s"
+                                  % (base_amount, current_price, amount))
 
                 amount_to_borrow = float(base_amount) * float(config.main.multiplier)
                 amount_to_use = sub_perc(5, amount_to_borrow)  # use 95% of borrowed funds
@@ -224,7 +222,7 @@ class Trade():
                 self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
                                  % (amount_to_borrow, base, base_amount))
 
-                if prod:
+                if self.prod:
                     borrow_result = binance.margin_borrow(base, amount_to_borrow)
                     if "msg" in borrow_result:
                         self.logger.error("Borrow error %s: %s" % (item, borrow_result))
@@ -245,7 +243,7 @@ class Trade():
                     base_amount = trade_result.get('cummulativeQuoteQty', base_amount)
 
                     prices = []
-                    fill_price = cost
+                    fill_price = current_price
 
 
                     if 'transactTime' in trade_result:
@@ -254,23 +252,23 @@ class Trade():
                             prices.append(float(fill['price']))
                         fill_price = sum(prices) / len(prices)
                         self.logger.info("Current price %s, Fill price: %s"
-                                         % (cost, fill_price))
+                                         % (current_price, fill_price))
 
 
             if self.test_data or self.test_trade or \
                     (not self.test_trade and 'transactTime' in trade_result):
 
-                dbase.insert_trade(pair=item, price=cost, date=current_time,
+                dbase.insert_trade(pair=item, price=fill_price, date=current_time,
                                    base_amount=amount_to_use, quote=amt_str,
                                    borrowed=amount_to_borrow,
                                    multiplier=config.main.multiplier,
                                    direction=config.main.trade_direction)
-                send_push_notif('BUY', item, '%.15f' % float(cost))
-                send_gmail_alert('BUY', item, '%.15f' % float(cost))
+                send_push_notif('BUY', item, '%.15f' % float(fill_price))
+                send_gmail_alert('BUY', item, '%.15f' % float(fill_price))
                 send_slack_trade(channel='trades', event=event, pair=item, action='open',
-                                 price=cost)
+                                 price=fill_price)
 
-                self.__send_redis_trade(pair=item, current_time=current_time, price=cost,
+                self.__send_redis_trade(pair=item, current_time=current_time, price=fill_price,
                                         interval=self.interval, event="BUY")
         del dbase
 
@@ -309,8 +307,6 @@ class Trade():
         """
         self.logger.info("We have %s potential items to buy" % len(buy_list))
 
-        prod = str2bool(config.main.production)
-
         dbase = Mysql(test=self.test_data, interval=self.interval)
         if self.test_data or self.test_trade:
             balance = self.__get_test_balance(dbase, account='binance')
@@ -342,7 +338,7 @@ class Trade():
                                  % (amount, item, base_amount, base))
                 self.logger.debug("amount to buy: %s, cost: %s, amount:%s"
                                   % (base_amount, cost, amount))
-                if prod and not self.test_data:
+                if self.prod and not self.test_data:
                     amt_str = get_step_precision(item, amount)
                     if float(amt_str) <= 0:
                         self.logger.critical("Need more funds with given step_size")
@@ -394,13 +390,26 @@ class Trade():
                                          action='open', price=cost)
         del dbase
 
+    def __get_fill_price(self, current_price, trade_result):
+        """
+        Extract and average trade result from exchange output
+        """
+        prices = []
+        if 'transactTime' in trade_result:
+            # Get price from exchange
+            for fill in trade_result['fills']:
+                prices.append(float(fill['price']))
+            fill_price = sum(prices) / len(prices)
+            self.logger.info("Current price %s, Fill price: %s" % (current_price, fill_price))
+            return fill_price
+        return None
+
     @GET_EXCEPTIONS
     def __close_margin_short(self, short_list, name=None, drawdowns=None, drawups=None):
         """
         Sell items in sell_list
         """
 
-        prod = str2bool(config.main.production)
         self.logger.info("We need to close short %s" % short_list)
         dbase = Mysql(test=self.test_data, interval=self.interval)
         for item, current_time, current_price, event in short_list:
@@ -408,21 +417,20 @@ class Trade():
             if not quantity:
                 self.logger.critical("Unable to find quantity for %s" % item)
                 return
-            price = current_price
 
-            new_price = price  # for ci env - is overwritten in prod/stag
+            fill_price = current_price  # for ci env - is overwritten in prod/stag
             buy_price, _, _, base_in, _ = dbase.get_trade_value(item)[0]
-            perc_inc = perc_diff(buy_price, price)
+            perc_inc = perc_diff(buy_price, current_price)
             base_out = add_perc(perc_inc, base_in)
 
-            send_gmail_alert("SELL", item, price)
-            send_push_notif('SELL', item, '%.15f' % float(price))
+            send_gmail_alert("SELL", item, current_price)
+            send_push_notif('SELL', item, '%.15f' % float(current_price))
             send_slack_trade(channel='trades', event=event, pair=item, action='close',
-                             price=price, perc=perc_inc)
+                             price=current_price, perc=perc_inc)
 
             self.logger.info("Closing %s of %s for %.15f %s"
-                             % (quantity, item, float(price), base_out))
-            if prod and not self.test_data:
+                             % (quantity, item, float(current_price), base_out))
+            if self.prod and not self.test_data:
                 amt_str = get_step_precision(item, quantity)
                 if float(amt_str) <= 0:
                     self.logger.critical("Need more funds with given step_size")
@@ -435,13 +443,7 @@ class Trade():
                     self.logger.error("Trade error %s: %s" % (item, trade_result))
                     return
 
-                prices = []
-                if 'transactTime' in trade_result:
-                    # Get price from exchange
-                    for fill in trade_result['fills']:
-                        prices.append(float(fill['price']))
-                    new_price = sum(prices) / len(prices)
-                    self.logger.info("Current price %s, Fill price: %s" % (price, new_price))
+                fill_price = self.__get_fill_price(current_price, trade_result)
 
 
             if self.test_data or (self.test_trade and not trade_result) or \
@@ -450,11 +452,11 @@ class Trade():
                     name = "%"
 
                 dbase.update_trades(pair=item, close_time=current_time,
-                                    close_price=new_price, quote=quantity,
+                                    close_price=fill_price, quote=quantity,
                                     base_out=base_out, name=name, drawdown=drawdowns[item],
                                     drawup=drawups[item])
 
-                self.__send_redis_trade(pair=item, current_time=current_time, price=price,
+                self.__send_redis_trade(pair=item, current_time=current_time, price=fill_price,
                                         interval=self.interval, event="SELL")
             else:
                 self.logger.critical("Sell Failed %s:%s" % (name, item))
@@ -522,7 +524,6 @@ class Trade():
         Sell items in sell_list
         """
 
-        prod = str2bool(config.main.production)
         self.logger.info("We need to sell %s" % sell_list)
         dbase = Mysql(test=self.test_data, interval=self.interval)
         for item, current_time, current_price, event in sell_list:
@@ -530,17 +531,16 @@ class Trade():
             if not quantity:
                 self.logger.critical("Unable to find quantity for %s" % item)
                 return
-            price = current_price
 
-            new_price = price  # for ci env - is overwritten in prod/stag
+            fill_price = current_price  # for ci env - is overwritten in prod/stag
             buy_price, _, _, base_in, _ = dbase.get_trade_value(item)[0]
-            perc_inc = perc_diff(buy_price, price)
+            perc_inc = perc_diff(buy_price, current_price)
             base_out = add_perc(perc_inc, base_in)
 
 
             self.logger.info("Selling %s of %s for %.15f %s"
-                             % (quantity, item, float(price), base_out))
-            if prod and not self.test_data:
+                             % (quantity, item, float(current_price), base_out))
+            if self.prod and not self.test_data:
                 amt_str = get_step_precision(item, quantity)
                 if float(amt_str) <= 0:
                     self.logger.critical("Need more funds with given step_size")
@@ -553,14 +553,7 @@ class Trade():
                     self.logger.error("Trade error %s: %s" % (item, trade_result))
                     return
 
-                prices = []
-                if 'transactTime' in trade_result:
-                    # Get price from exchange
-                    for fill in trade_result['fills']:
-                        prices.append(float(fill['price']))
-                    new_price = sum(prices) / len(prices)
-                    self.logger.info("Current price %s, Fill price: %s" % (price, new_price))
-
+                fill_price = self.__get_fill_price(current_price, trade_result)
 
             if self.test_data or self.test_trade or \
                     (not self.test_trade and 'transactTime' in trade_result):
@@ -568,18 +561,18 @@ class Trade():
                     name = "%"
 
                 db_result = dbase.update_trades(pair=item, close_time=current_time,
-                                                close_price=new_price, quote=quantity,
+                                                close_price=fill_price, quote=quantity,
                                                 base_out=base_out, name=name,
                                                 drawdown=drawdowns[item],
                                                 drawup=drawups[item])
 
                 if db_result:
-                    self.__send_redis_trade(pair=item, current_time=current_time, price=price,
+                    self.__send_redis_trade(pair=item, current_time=current_time, price=fill_price,
                                             interval=self.interval, event="SELL")
-                    send_gmail_alert("SELL", item, price)
-                    send_push_notif('SELL', item, '%.15f' % float(price))
+                    send_gmail_alert("SELL", item, fill_price)
+                    send_push_notif('SELL', item, '%.15f' % float(fill_price))
                     send_slack_trade(channel='trades', event=event, pair=item, action='close',
-                                     price=price, perc=perc_inc)
+                                     price=fill_price, perc=perc_inc)
             else:
                 self.logger.critical("Sell Failed %s:%s" % (name, item))
         del dbase
@@ -590,7 +583,6 @@ class Trade():
         Sell items in sell_list
         """
 
-        prod = str2bool(config.main.production)
         self.logger.info("We need to sell %s" % sell_list)
         dbase = Mysql(test=self.test_data, interval=self.interval)
         for item, current_time, current_price, event in sell_list:
@@ -598,20 +590,19 @@ class Trade():
             if not quantity:
                 self.logger.critical("Unable to find quantity for %s" % item)
                 return
-            price = current_price
             open_price, quote_in, _, base_in, borrowed = dbase.get_trade_value(item)[0]
-            perc_inc = perc_diff(open_price, price)
+            perc_inc = perc_diff(open_price, current_price)
             base_out = add_perc(perc_inc, base_in)
 
-            send_gmail_alert("SELL", item, price)
-            send_push_notif('SELL', item, '%.15f' % float(price))
+            send_gmail_alert("SELL", item, current_price)
+            send_push_notif('SELL', item, '%.15f' % float(current_price))
             send_slack_trade(channel='trades', event=event, pair=item, action='close',
-                             price=price, perc=perc_inc)
+                             price=current_price, perc=perc_inc)
             self.logger.info("Selling %s of %s for %.15f %s"
-                             % (quantity, item, float(price), base_out))
+                             % (quantity, item, float(current_price), base_out))
             base = get_base(item)
-            fill_price = price
-            if prod:
+            fill_price = current_price
+            if self.prod:
 
                 trade_result = binance.margin_order(symbol=item, side=binance.SELL,
                                                     quantity=quote_in, isolated=False,
@@ -628,15 +619,7 @@ class Trade():
 
                 self.logger.info(repay_result)
 
-                prices = []
-
-                if 'transactTime' in trade_result:
-                    # Get price from exchange
-                    for fill in trade_result['fills']:
-                        prices.append(float(fill['price']))
-                    fill_price = sum(prices) / len(prices)
-                    self.logger.info("Current price %s, Fill price: %s" % (price, fill_price))
-
+                fill_price = self.__get_fill_price(current_price, trade_result)
 
             if self.test_data or self.test_trade or \
                     (not self.test_trade and 'transactTime' in trade_result):
@@ -648,7 +631,7 @@ class Trade():
                                     base_out=base_out, name=name, drawdown=drawdowns[item],
                                     drawup=drawups[item])
 
-                self.__send_redis_trade(pair=item, current_time=current_time, price=price,
+                self.__send_redis_trade(pair=item, current_time=current_time, price=fill_price,
                                         interval=self.interval, event="SELL")
             else:
                 self.logger.critical("Sell Failed %s:%s" % (name, item))
