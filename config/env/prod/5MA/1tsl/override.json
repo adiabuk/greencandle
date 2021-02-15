@@ -1,4 +1,5 @@
 {
+  "divisor": "1.6",
   "immediate_take_profit": "true",
   "immediate_trailing_stop": "true",
   "name": "5ma_1tsp",
