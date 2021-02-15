@@ -254,13 +254,12 @@ class Trade():
                                    borrowed=amount_to_borrow,
                                    multiplier=config.main.multiplier,
                                    direction=config.main.trade_direction)
-                send_push_notif('OPEN', pair, '%.15f' % float(fill_price))
-                send_gmail_alert('OPEN', pair, '%.15f' % float(fill_price))
-                send_slack_trade(channel='trades', event=event, pair=pair, action='OPEN',
-                                 price=fill_price)
 
-                self.__send_redis_trade(pair=pair, current_time=current_time, price=fill_price,
-                                        interval=self.interval, event="OPEN")
+                self.__send_notifications(pair=pair, current_time=current_time,
+                                          fill_price=fill_price, interval=self.interval,
+                                          event=event, action='OPEN')
+
+
         del dbase
 
     @staticmethod
@@ -359,14 +358,28 @@ class Trade():
                                                    base_amount=base_amount, quote=amount,
                                                    direction=config.main.trade_direction)
                     if db_result:
-                        self.__send_redis_trade(pair=pair, current_time=current_time,
-                                                price=fill_price, interval=self.interval,
-                                                event="OPEN")
-                        send_push_notif('OPEN', pair, '%.15f' % float(fill_price))
-                        send_gmail_alert('OPEN', pair, '%.15f' % float(fill_price))
-                        send_slack_trade(channel='trades', event=event, pair=pair,
-                                         action='OPEN', price=fill_price)
+                        self.__send_notifications(pair=pair, current_time=current_time,
+                                                  fill_price=fill_price, interval=self.interval,
+                                                  event=event, action='OPEN')
+
         del dbase
+
+    def __send_notifications(self, **kwargs):
+        """
+        """
+        valid_keys = ["pair", "current_time", "fill_price", "event", "action"]
+        kwargs = AttributeDict(kwargs)
+        for key in valid_keys:
+            if key not in valid_keys:
+                raise KeyError("Missing param %s" % key)
+
+        self.__send_redis_trade(pair=kwargs.pair, current_time=kwargs.current_time,
+                                price=kwargs.fill_price, interval=self.interval,
+                                event=kwargs.action)
+        send_push_notif(kwargs.action, kwargs.pair, '%.15f' % float(kwargs.fill_price))
+        send_gmail_alert(kwargs.action, kwargs.pair, '%.15f' % float(kwargs.fill_price))
+        send_slack_trade(channel='trades', event=kwargs.event,
+                         pair=kwargs.pair, action=kwargs.action, price=kwargs.fill_price)
 
     def __get_fill_price(self, current_price, trade_result):
         """
@@ -430,8 +443,9 @@ class Trade():
                                     base_out=base_out, name=name, drawdown=drawdowns[pair],
                                     drawup=drawups[pair])
 
-                self.__send_redis_trade(pair=pair, current_time=current_time, price=fill_price,
-                                        interval=self.interval, event="CLOSE")
+                self.__send_notifications(pair=pair, current_time=current_time,
+                                          fill_price=current_price, interval=self.interval,
+                                          event=event, action='CLOSE')
             else:
                 self.logger.critical("Sell Failed %s:%s" % (name, pair))
         del dbase
@@ -477,15 +491,10 @@ class Trade():
                                multiplier=config.main.multiplier,
                                direction=config.main.trade_direction)
 
-            self.__send_redis_trade(pair=pair, current_time=current_time, price=current_price,
-                                    interval=self.interval, event="OPEN")
-            send_gmail_alert("OPEN", pair, current_price)
-            send_push_notif('OPEN', pair, '%.15f' % float(current_price))
+            self.__send_notifications(pair=pair, current_time=current_time,
+                                      fill_price=current_price, interval=self.interval,
+                                      event=event, action='OPEN')
 
-            send_slack_trade(channel='trades', event=event, pair=pair, action='OPEN',
-                             price=current_price)
-            self.__send_redis_trade(pair=pair, current_time=current_time, price=current_price,
-                                    interval=self.interval, event="OPEN")
 
     @GET_EXCEPTIONS
     def __close_spot_long(self, sell_list, name=None, drawdowns=None, drawups=None):
@@ -533,12 +542,9 @@ class Trade():
                                                 drawup=drawups[pair])
 
                 if db_result:
-                    self.__send_redis_trade(pair=pair, current_time=current_time, price=fill_price,
-                                            interval=self.interval, event="CLOSE")
-                    send_gmail_alert("CLOSE", pair, fill_price)
-                    send_push_notif('CLOSE', pair, '%.15f' % float(fill_price))
-                    send_slack_trade(channel='trades', event=event, pair=pair, action='CLOSE',
-                                     price=fill_price, perc=perc_inc)
+                    self.__send_notifications(pair=pair, current_time=current_time,
+                                              fill_price=fill_price, interval=self.interval,
+                                              event=event, action='CLOSE')
             else:
                 self.logger.critical("Sell Failed %s:%s" % (name, pair))
         del dbase
@@ -597,8 +603,9 @@ class Trade():
                                     base_out=base_out, name=name, drawdown=drawdowns[pair],
                                     drawup=drawups[pair])
 
-                self.__send_redis_trade(pair=pair, current_time=current_time, price=fill_price,
-                                        interval=self.interval, event="CLOSE")
+                self.__send_notifications(pair=pair, current_time=current_time,
+                                          fill_price=fill_price, interval=self.interval,
+                                          event=event, action='CLOSE')
             else:
                 self.logger.critical("Sell Failed %s:%s" % (name, pair))
         del dbase
