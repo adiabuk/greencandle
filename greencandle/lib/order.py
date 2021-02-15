@@ -364,8 +364,9 @@ class Trade():
 
         del dbase
 
-    def __send_notifications(self, **kwargs):
+    def __send_notifications(self, perc=None, **kwargs):
         """
+        Pass given data to trade notification functions
         """
         valid_keys = ["pair", "current_time", "fill_price", "event", "action"]
         kwargs = AttributeDict(kwargs)
@@ -378,7 +379,7 @@ class Trade():
                                 event=kwargs.action)
         send_push_notif(kwargs.action, kwargs.pair, '%.15f' % float(kwargs.fill_price))
         send_gmail_alert(kwargs.action, kwargs.pair, '%.15f' % float(kwargs.fill_price))
-        send_slack_trade(channel='trades', event=kwargs.event,
+        send_slack_trade(channel='trades', event=kwargs.event, perc=perc,
                          pair=kwargs.pair, action=kwargs.action, price=kwargs.fill_price)
 
     def __get_fill_price(self, current_price, trade_result):
@@ -413,11 +414,6 @@ class Trade():
             perc_inc = perc_diff(buy_price, current_price)
             base_out = add_perc(perc_inc, base_in)
 
-            send_gmail_alert("CLOSE", pair, current_price)
-            send_push_notif('CLOSE', pair, '%.15f' % float(current_price))
-            send_slack_trade(channel='trades', event=event, pair=pair, action='CLOSE',
-                             price=current_price, perc=perc_inc)
-
             self.logger.info("Closing %s of %s for %.15f %s"
                              % (quantity, pair, float(current_price), base_out))
             if self.prod and not self.test_data:
@@ -443,7 +439,7 @@ class Trade():
                                     base_out=base_out, name=name, drawdown=drawdowns[pair],
                                     drawup=drawups[pair])
 
-                self.__send_notifications(pair=pair, current_time=current_time,
+                self.__send_notifications(pair=pair, current_time=current_time, perc=perc_inc,
                                           fill_price=current_price, interval=self.interval,
                                           event=event, action='CLOSE')
             else:
@@ -542,7 +538,7 @@ class Trade():
                                                 drawup=drawups[pair])
 
                 if db_result:
-                    self.__send_notifications(pair=pair, current_time=current_time,
+                    self.__send_notifications(pair=pair, current_time=current_time, perc=perc_inc,
                                               fill_price=fill_price, interval=self.interval,
                                               event=event, action='CLOSE')
             else:
@@ -566,10 +562,6 @@ class Trade():
             perc_inc = perc_diff(open_price, current_price)
             base_out = add_perc(perc_inc, base_in)
 
-            send_gmail_alert("CLOSE", pair, current_price)
-            send_push_notif('CLOSE', pair, '%.15f' % float(current_price))
-            send_slack_trade(channel='trades', event=event, pair=pair, action='CLOSE',
-                             price=current_price, perc=perc_inc)
             self.logger.info("Selling %s of %s for %.15f %s"
                              % (quantity, pair, float(current_price), base_out))
             base = get_base(pair)
@@ -603,7 +595,7 @@ class Trade():
                                     base_out=base_out, name=name, drawdown=drawdowns[pair],
                                     drawup=drawups[pair])
 
-                self.__send_notifications(pair=pair, current_time=current_time,
+                self.__send_notifications(pair=pair, current_time=current_time, perc=perc_inc,
                                           fill_price=fill_price, interval=self.interval,
                                           event=event, action='CLOSE')
             else:
