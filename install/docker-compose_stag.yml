@@ -445,3 +445,115 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
+  be-short-btc:
+    container_name: be-short-btc
+    hostname: be-short-btc
+    image: amrox/greencandle:${TAG}
+    restart: on-failure
+    entrypoint: /docker-entrypoint.sh backend --test
+    logging:
+      driver: journald
+    links:
+      - base-mysql:mysql
+      - base-redis:redis
+    depends_on:
+      - base-mysql
+      - base-redis
+    environment:
+      - CONFIG_ENV=stag/tsi_scalp_short/btc
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  be-short-usdt:
+    container_name: be-short-usdt
+    hostname: be-short-usdt
+    image: amrox/greencandle:${TAG}
+    restart: on-failure
+    entrypoint: /docker-entrypoint.sh backend --test
+    logging:
+      driver: journald
+    links:
+      - base-mysql:mysql
+      - base-redis:redis
+    depends_on:
+      - base-mysql
+      - base-redis
+    environment:
+      - CONFIG_ENV=stag/tsi_scalp_short/usdt
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  be-short-eth:
+    container_name: be-short-eth
+    hostname: be-short-eth
+    image: amrox/greencandle:${TAG}
+    restart: on-failure
+    entrypoint: /docker-entrypoint.sh backend --test
+    logging:
+      driver: journald
+    links:
+      - base-mysql:mysql
+      - base-redis:redis
+    depends_on:
+      - base-mysql
+      - base-redis
+    environment:
+      - CONFIG_ENV=stag/tsi_scalp_short/eth
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  be-short-bnb:
+    container_name: be-short-bnb
+    hostname: be-short-bnb
+    image: amrox/greencandle:${TAG}
+    restart: on-failure
+    entrypoint: /docker-entrypoint.sh backend --test
+    logging:
+      driver: journald
+    links:
+      - base-mysql:mysql
+      - base-redis:redis
+    depends_on:
+      - base-mysql
+      - base-redis
+    environment:
+      - CONFIG_ENV=stag/tsi_scalp_short/bnb
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
