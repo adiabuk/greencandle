@@ -231,7 +231,6 @@ class Trade():
                     amt_str = get_step_precision(pair, amount_to_use/float(current_price))
                     trade_result = binance.margin_order(symbol=pair, side=binance.BUY,
                                                         quantity=amt_str, isolated=False,
-                                                        timeInForce='GTC',
                                                         order_type=binance.MARKET)
                     if "msg" in trade_result:
                         self.logger.error("Trade error %s: %s" % (pair, str(trade_result)))
@@ -569,7 +568,7 @@ class Trade():
 
                 trade_result = binance.margin_order(symbol=pair, side=binance.SELL,
                                                     quantity=quote_in, isolated=False,
-                                                    timeInForce='GTC', order_type=binance.MARKET)
+                                                    order_type=binance.MARKET)
 
                 if "msg" in trade_result:
                     self.logger.error("Trade error %s: %s" % (pair, trade_result))
