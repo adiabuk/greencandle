@@ -464,10 +464,13 @@ class Trade():
         for pair, current_time, current_price, event in short_list:
             base = get_base(pair)
 
-            if self.test_data:
-                prices = self.__get_test_balance(dbase, account='margin')
+            if self.test_data or self.test_trade:
+                balance = self.__get_test_balance(dbase, account='margin')
+            else:
+                balance = get_binance_values()
+
             try:
-                current_base_bal = prices['margin'][base]['count']
+                current_base_bal = balance['margin'][base]['count']
             except KeyError:
                 current_base_bal = 0
 
