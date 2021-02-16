@@ -458,9 +458,6 @@ class Trade():
 
         dbase = Mysql(test=self.test_data, interval=self.interval)
 
-        if self.test_trade and not self.test_data:
-            self.logger.error("Unable to perform margin short test without test data")
-
         for pair, current_time, current_price, event in short_list:
             base = get_base(pair)
 
