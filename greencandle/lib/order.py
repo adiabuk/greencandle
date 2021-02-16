@@ -216,7 +216,7 @@ class Trade():
                                   % (base_amount, current_price, amount))
 
                 amount_to_borrow = float(base_amount) * float(config.main.multiplier)
-                amount_to_use = sub_perc(5, amount_to_borrow)  # use 95% of borrowed funds
+                amount_to_use = sub_perc(1, amount_to_borrow)  # use 99% of borrowed funds
 
                 self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
                                  % (amount_to_borrow, base, base_amount))
@@ -474,7 +474,7 @@ class Trade():
             proposed_quote_amount = self.amount_to_use(pair, current_base_bal)
 
             amount_to_borrow = float(proposed_quote_amount) * float(config.main.multiplier)
-            amount_to_use = sub_perc(5, amount_to_borrow)  # use 95% of borrowed funds
+            amount_to_use = sub_perc(1, amount_to_borrow)  # use 99% of borrowed funds
 
             amt_str = get_step_precision(pair, amount_to_use)
 
