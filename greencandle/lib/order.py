@@ -410,7 +410,7 @@ class Trade():
                 return
 
             buy_price, _, _, base_in, _ = dbase.get_trade_value(pair)[0]
-            perc_inc = perc_diff(buy_price, current_price)
+            perc_inc = -(perc_diff(buy_price, current_price))
             base_out = add_perc(perc_inc, base_in)
 
             self.logger.info("Closing %s of %s for %.15f %s"
