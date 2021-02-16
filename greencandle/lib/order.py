@@ -428,7 +428,7 @@ class Trade():
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
 
-            if self.test_data or (self.test_trade and not trade_result) or \
+            if self.test_data or self.test_trade or \
                     (not self.test_trade and 'transactTime' in trade_result):
                 if name == "api":
                     name = "%"
