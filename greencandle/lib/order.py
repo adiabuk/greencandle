@@ -276,9 +276,10 @@ class Trade():
         balance[account]['BNB']['count'] = 14
         for base in ['BTC', 'ETH', 'USDT', 'BNB', 'USDC']:
             db_result = dbase.fetch_sql_data("select sum(base_out-base_in) from trades "
-                                             "where pair like '%{0}'"
-                                             .format(base), header=False)[0][0]
-            db_result = float(db_result) if db_result else 0
+                                             "where pair like '%{0}' and name='{1}'"
+                                             .format(base, config.main.name),
+                                             header=False)[0][0]
+            db_result = float(db_result) if db_result and db_result > 0 else 0
             current_trade_values = dbase.fetch_sql_data("select sum(base_in) from trades "
                                                         "where pair like '%{0}' and "
                                                         "base_out is null"
