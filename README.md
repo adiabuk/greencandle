@@ -11,6 +11,17 @@
 
 # Releases
 
+## 2.1
+* Allow graph module to be backwards compatible with data in redis
+* Create BTC balance graphs as well as USD
+* Use 99% of margin borrowed funds
+* Add short tests
+* Negate perc for short trades in slack
+* Increase equity for 5ma prod
+* Remove timeInForce arg for margin trades
+* Combine trade notifications into single method
+* Add strategy name to open trades notifications
+
 ## 2.0.2
 * Use pairs tested in staging
 * Cleanup var names and dupe code
