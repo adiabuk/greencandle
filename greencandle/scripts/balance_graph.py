@@ -35,17 +35,19 @@ def main():
     delete1 = "delete from balance where ctime in (select * from temp_table)"
 
     # Update balance summary and clean out old balance records
-    update = ("insert into balance_summary (select ctime, sum(usd) as usd from balance where "
-              "coin='TOTALS' and left(ctime,10) != CURDATE() group by ctime)")
+    update = ("insert into balance_summary (select ctime, sum(usd) as usd, sum(btc) as btc "
+              "from balance where coin='TOTALS' and left(ctime,10) != CURDATE() group by ctime)")
 
     delete2 = "delete from balance where left(ctime,10) != CURDATE()"
 
     # Generate OHLC data
-    query = ("select c1.ctime as closeTime, (SELECT c2.usd FROM balance_summary c2 WHERE "
-             "c2.ctime = MIN(c1.ctime) limit 1) AS open, MAX(c1.usd) AS high, MIN(c1.usd) AS low, "
-             "(SELECT c2.usd FROM balance_summary c2 WHERE c2.ctime = MAX(c1.ctime) limit 1) "
+    query = ("select c1.ctime as closeTime, (SELECT c2.{0} FROM balance_summary c2 WHERE "
+             "c2.ctime = MIN(c1.ctime) limit 1) AS open, MAX(c1.{0}) AS high, MIN(c1.{0}) AS low, "
+             "(SELECT c2.{0} FROM balance_summary c2 WHERE c2.ctime = MAX(c1.ctime) limit 1) "
              "AS close FROM balance_summary c1  GROUP BY left(ctime,10) "
              "ORDER BY c1.ctime ASC")
+    btc_query = query.format("btc")
+    usd_query = query.format("usd")
 
     # Run queries
     mysql.run_sql_statement(drop)
@@ -53,18 +55,26 @@ def main():
     mysql.run_sql_statement(delete1)
     mysql.run_sql_statement(drop)
     mysql.run_sql_statement(update)
-    results = mysql.fetch_sql_data(query)
+    usd_results = mysql.fetch_sql_data(usd_query)
+    btc_results = mysql.fetch_sql_data(btc_query)
     mysql.run_sql_statement(delete2)
 
     # Convert results into pandas dataframe using header as column title
-    dframe = pandas.DataFrame(results, columns=results.pop(0))
-    dframe['closeTime'] = pandas.to_datetime(dframe['closeTime']).values.astype(numpy.int64) \
-            // 10**6
+    usd_dframe = pandas.DataFrame(usd_results, columns=usd_results.pop(0))
+    usd_dframe['closeTime'] = pandas.to_datetime(usd_dframe['closeTime']) \
+            .values.astype(numpy.int64) / 10**6
+
+    btc_dframe = pandas.DataFrame(btc_results, columns=btc_results.pop(0))
+    btc_dframe['closeTime'] = pandas.to_datetime(btc_dframe['closeTime']) \
+            .values.astype(numpy.int64) / 10**6
 
     # Generate graph
-    graph = Graph(False, pair="Balance", interval='1d', volume=False)
-    graph.insert_data(dframe)
+    graph = Graph(False, pair="Balance-usd", interval='1d', volume=False)
+    graph.insert_data(usd_dframe)
     graph.create_graph('/data/graphs')
 
+    graph = Graph(False, pair="Balance-btc", interval='1d', volume=False)
+    graph.insert_data(btc_dframe)
+    graph.create_graph('/data/graphs')
 if __name__ == '__main__':
     main()
