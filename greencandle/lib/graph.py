@@ -74,6 +74,15 @@ class Graph():
                 cover = resizeimage.resize_width(im1, 120)
                 cover.save("{0}/{1}_resized.png".format(output_dir, self.filename), image.format)
 
+    @staticmethod
+    def replace_all(text, dic):
+        """
+        Replace text with given dict criteria
+        """
+        for i, j in dic.iteritems():
+            text = text.replace(i, j)
+        return text
+
     def create_graph(self, output_dir='/tmp'):
         """Create graph html file using plotly offline-mode from dataframe object"""
 
@@ -97,12 +106,16 @@ class Graph():
             elif name == 'event':
                 # dataframe is mutable so we cannot reference exisiting values by hashing
                 # therefore we will substitute buy/sell with and rgb value for red/green
-                event = value.replace('CLOSE', 'rgb(255,0,0)').replace('OPEN', 'rgb(0,255,0)')
-                item = go.Scatter(x=pandas.to_datetime(event["date"], unit="ms"),
-                                  y=event['current_price'],
+                replace = {"OPEN": "rgb(0,255,0)", "BUY": "rgb(0,255,0)",
+                           "CLOSE": "rgb(255,0,0)", "SELL": "rgb(255,0,0)"
+                           }
+                value = self.replace_all(value, replace)
+
+                item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
+                                  y=value['current_price'],
                                   name="events",
                                   mode='markers',
-                                  marker=dict(size=16, color=event['result']))
+                                  marker=dict(size=16, color=value['result']))
             elif 'pivot' in name:
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=value['value'],
