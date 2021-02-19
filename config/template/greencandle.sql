@@ -47,7 +47,7 @@ DROP TABLE IF EXISTS `balance_summary`;
 CREATE TABLE `balance_summary` (
   `ctime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `usd` double DEFAULT NULL,
-  `btc` varchar(30) DEFAULT NULL,
+  `btc` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
