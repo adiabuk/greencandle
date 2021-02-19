@@ -11,6 +11,9 @@
 
 # Releases
 
+## 2.1.1
+* Fix DB syntax error
+
 ## 2.1
 * Allow graph module to be backwards compatible with data in redis
 * Create BTC balance graphs as well as USD
