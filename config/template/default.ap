@@ -1,0 +1,27 @@
+server {
+    listen       {{.nginx_port}};
+    server_name  localhost;
+
+    location / {
+      root /var/www/html;
+    }
+
+    location/test {
+
+    keepalive_timeout 1;
+    proxy_read_timeout 1s;
+    proxy_pass http://api:20000/webhook;
+    proxy_intercept_errors on;
+    error_page 404 405 500 502 503 504 =444 @blackhole;
+    }
+
+    location @blackhole {
+      return 444;
+    }
+
+    location @handle_redirects {
+        set $saved_redirect_location '$dashboard';
+        proxy_pass $saved_redirect_location;
+    }
+
+}

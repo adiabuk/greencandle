@@ -557,3 +557,56 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
+  be-backend-api:
+    container_name: backend-api
+    hostname: backend-api
+    image: amrox/greencandle:${TAG}
+    restart: on-failure
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - CONFIG_ENV=stag/tsi_rsi/ustd
+    ports:
+      - 20000:20000
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  fe-apiweb:
+    container_name: fe-apiweb
+    hostname: fe-apiweb
+    image: amrox/webserver:${TAG}
+    restart: on-failure
+    healthcheck:
+      test: service nginx status || exit 1
+      interval: 5m
+      timeout: 5s
+      retries: 5
+    environment:
+      - CONFIG_ENV=stag/tsi_rsi
+      - HOST=$HOSTNAME
+    ports:
+      - 1111:1111
+    links:
+      - be-backend-api:api
+      - base-mysql:mysql
+      - base-redis:redis
+    depends_on:
+      - be-backend-api
+      - base-mysql
+      - base-redis
+    entrypoint: /docker-entrypoint-api2.sh nginx -g 'daemon off;'
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+
+
