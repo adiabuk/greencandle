@@ -6,7 +6,7 @@ server {
       root /var/www/html;
     }
 
-    location/test {
+    location /test {
 
     keepalive_timeout 1;
     proxy_read_timeout 1s;

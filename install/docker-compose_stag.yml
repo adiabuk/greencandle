@@ -566,10 +566,10 @@ services:
     logging:
       driver: journald
     environment:
+      - HOST=$HOSTNAME
       - CONFIG_ENV=stag/tsi_rsi/ustd
     ports:
       - 20000:20000
-      - HOST=$HOSTNAME
     healthcheck:
       test: ls ||exit 1
       interval: 1m
