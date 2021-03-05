@@ -558,8 +558,8 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
   be-backend-api:
-    container_name: backend-api
-    hostname: backend-api
+    container_name: be-backend-api
+    hostname: be-backend-api
     image: amrox/greencandle:${TAG}
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend_api
@@ -567,7 +567,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=stag/tsi_rsi/ustd
+      - CONFIG_ENV=stag/tsi_rsi/usdt
     ports:
       - 20000:20000
     healthcheck:
