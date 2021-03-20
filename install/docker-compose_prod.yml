@@ -164,9 +164,9 @@ services:
     depends_on:
       - base-mysql
 
-  be-2ma-01perc-usdt:
-    container_name : be-2ma-01perc-usdt
-    hostname: be-2ma-01perc-usdt
+  be-5ma-4perc-vol-eth:
+    container_name: be-5ma-4perc-vol-eth
+    hostname: 5ma-4perc-vol-eth
     image: amrox/greencandle:${TAG}
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend
@@ -179,7 +179,7 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=prod/2MA/01perc/usdt
+      - CONFIG_ENV=prod/5MA/4perc/vol/eth
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -248,6 +248,35 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
+  be-5ma-1tsl-btc:
+    container_name: be-5ma-1tsl-btc
+    hostname: be-5ma-1tsl-btc
+    image: amrox/greencandle:${TAG}
+    restart: on-failure
+    entrypoint: /docker-entrypoint.sh backend --test
+    logging:
+      driver: journald
+    links:
+      - base-mysql:mysql
+      - base-redis:redis
+    depends_on:
+      - base-mysql
+      - base-redis
+    environment:
+      - CONFIG_ENV=prod/5MA/1tsl/btc
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+
   be-5ma-1tsl-usdt:
     container_name: be-5ma-1tsl-usdt
     hostname: be-5ma-1tsl-usdt
@@ -303,6 +332,88 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  be-backend-api:
+    container_name: be-backend-api
+    hostname: be-backend-api
+    image: amrox/greencandle:${TAG}
+    restart: on-failure
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=prod/tsi_rsi/usdt
+    ports:
+      - 20000:20000
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  be-5ma-nostop-btc:
+    container_name: be-5ma-nostop-btc
+    hostname: be-5ma-nostop-btc
+    image: amrox/greencandle:${TAG}
+    restart: on-failure
+    entrypoint: /docker-entrypoint.sh backend --test
+    logging:
+      driver: journald
+    links:
+      - base-mysql:mysql
+      - base-redis:redis
+    depends_on:
+      - base-mysql
+      - base-redis
+    environment:
+      - CONFIG_ENV=prod/5MA/nostop/btc
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  be-5ma-nostop-usdt:
+    container_name: be-5ma-nostop-usdt
+    hostname: be-5ma-nostop-usdt
+    image: amrox/greencandle:${TAG}
+    restart: on-failure
+    entrypoint: /docker-entrypoint.sh backend --test
+    logging:
+      driver: journald
+    links:
+      - base-mysql:mysql
+      - base-redis:redis
+    depends_on:
+      - base-mysql
+      - base-redis
+    environment:
+      - CONFIG_ENV=prod/5MA/nostop/usdt
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+
 
   be-tsi-scalp-eth:
     container_name: be-tsi-scalp-eth
