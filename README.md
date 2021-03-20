@@ -11,6 +11,10 @@
 
 # Releases
 
+## 2.2
+* API for receiving trading notifications
+* New trading pairs and strategies based on long-term stag results
+
 ## 2.1.1
 * Fix DB syntax error
 
