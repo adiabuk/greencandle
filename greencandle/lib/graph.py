@@ -79,7 +79,7 @@ class Graph():
         """
         Replace text with given dict criteria
         """
-        for i, j in dic.iteritems():
+        for i, j in dic.items():
             text = text.replace(i, j)
         return text
 
