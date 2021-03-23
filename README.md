@@ -11,6 +11,10 @@
 
 # Releases
 
+## 2.2.1
+* Fix backend api dependencies in prod
+* Fix syntax in graph module
+
 ## 2.2
 * API for receiving trading notifications
 * New trading pairs and strategies based on long-term stag results
