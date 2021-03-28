@@ -282,7 +282,7 @@ services:
     hostname: be-backend-api
     image: amrox/greencandle:${TAG}
     restart: on-failure
-    entrypoint: /docker-entrypoint.sh backend_api
+    entrypoint: /docker-entrypoint.sh backend_api --test
     logging:
       driver: journald
     environment:

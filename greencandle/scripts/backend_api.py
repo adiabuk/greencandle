@@ -12,6 +12,7 @@ config.create_config()
 from greencandle.lib.binance_common import get_current_price
 from greencandle.lib.order import Trade
 
+TEST = bool(len(sys.argv) > 1 and sys.argv[1] == '--test')
 APP = Flask(__name__)
 
 @APP.route('/webhook', methods=['POST'])
@@ -25,7 +26,7 @@ def respond():
     current_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     current_price = get_current_price(pair)
     item = [(pair, current_time, current_price, 'API')]
-    trade = Trade(interval='30m', test_data=True, test_trade=True)
+    trade = Trade(interval=config.main.interval, test_data=False, test_trade=TEST)
     if action == 'buy':
         trade.open_trade(item)
     elif action == 'sell':
