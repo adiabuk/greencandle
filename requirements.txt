@@ -4,7 +4,7 @@ argcomplete>=1.9.3
 coinbase==2.0.6
 configparser==3.5.0
 -e git+https://github.com/adiabuk/Technical-Indicators.git#egg=indicator
--e git+https://github.com/adiabuk/binance.git@0.11#egg=binance
+-e git+https://github.com/adiabuk/binance.git@0.12#egg=binance
 -e git+https://github.com/MicroPyramid/forex-python.git#egg=forex_python
 Flask>=0.12.3
 lib==3.0.0
