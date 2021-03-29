@@ -290,6 +290,12 @@ services:
       - CONFIG_ENV=stag/tsi_rsi/usdt
     ports:
       - 20000:20000
+    links:
+      - base-mysql:mysql
+      - base-redis:redis
+    depends_on:
+      - base-mysql
+      - base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
