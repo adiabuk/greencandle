@@ -11,6 +11,13 @@
 
 # Releases
 
+## 2.2.2
+* Naming of api backend container
+* Fix stag dependencies
+* Enable full prod rsi-tsi api strategy
+* Cleanup
+* Use latest binance module
+
 ## 2.2.1
 * Fix backend api dependencies in prod
 * Fix syntax in graph module
