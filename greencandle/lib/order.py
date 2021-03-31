@@ -222,7 +222,9 @@ class Trade():
                                  % (amount_to_borrow, base, base_amount))
 
                 if self.prod:
-                    borrow_result = binance.margin_borrow(base, amount_to_borrow)
+                    borrow_result = binance.margin_borrow(base, amount_to_borrow,
+                                                          isolated=str2bool(
+                                                              config.main.trade_isolated))
                     if "msg" in borrow_result:
                         self.logger.error("Borrow error %s: %s" % (pair, borrow_result))
                         continue
@@ -230,8 +232,10 @@ class Trade():
                     self.logger.info(borrow_result)
                     amt_str = get_step_precision(pair, amount_to_use/float(current_price))
                     trade_result = binance.margin_order(symbol=pair, side=binance.BUY,
-                                                        quantity=amt_str, isolated=False,
-                                                        order_type=binance.MARKET)
+                                                        quantity=amt_str,
+                                                        order_type=binance.MARKET,
+                                                        isolated=str2bool(
+                                                              config.main.trade_isolated))
                     if "msg" in trade_result:
                         self.logger.error("Trade error %s: %s" % (pair, str(trade_result)))
                         self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str,
@@ -568,14 +572,17 @@ class Trade():
             if self.prod:
 
                 trade_result = binance.margin_order(symbol=pair, side=binance.SELL,
-                                                    quantity=quote_in, isolated=False,
-                                                    order_type=binance.MARKET)
+                                                    quantity=quote_in,
+                                                    order_type=binance.MARKET,
+                                                    isolated=str2bool(
+                                                              config.main.trade_isolated))
 
                 if "msg" in trade_result:
                     self.logger.error("Trade error %s: %s" % (pair, trade_result))
                     continue
 
-                repay_result = binance.margin_repay(base, borrowed)
+                repay_result = binance.margin_repay(base, borrowed,
+                                                    isolated=str2bool(config.main.trade_isolated))
                 if "msg" in repay_result:
                     self.logger.error("Repay error %s: %s" % (pair, repay_result))
                     continue
