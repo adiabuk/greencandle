@@ -371,13 +371,13 @@
       "is_binary": false,
       "is_secret": false
     },
-    "slack_trades": {
-      "value": "stag_trades",
+    "slack_notifications": {
+      "value": "notifications",
       "is_binary": false,
       "is_secret": false
     },
-    "slack_notifications": {
-      "value": "notifications",
+    "slack_trades": {
+      "value": "stag_trades",
       "is_binary": false,
       "is_secret": false
     },
@@ -408,6 +408,11 @@
     },
     "trade_direction": {
       "value": "long",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "trade_isolated": {
+      "value": "false",
       "is_binary": false,
       "is_secret": false
     },

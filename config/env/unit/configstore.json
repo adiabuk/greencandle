@@ -370,12 +370,12 @@
       "is_binary": false,
       "is_secret": false
     },
-    "slack_trades": {
+    "slack_notifications": {
       "value": "test",
       "is_binary": false,
       "is_secret": false
     },
-    "slack_notifications": {
+    "slack_trades": {
       "value": "test",
       "is_binary": false,
       "is_secret": false
@@ -407,6 +407,11 @@
     },
     "trade_direction": {
       "value": "long",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "trade_isolated": {
+      "value": "false",
       "is_binary": false,
       "is_secret": false
     },
