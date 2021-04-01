@@ -11,6 +11,13 @@
 
 # Releases
 
+## 2.2.3
+* Show backend test status in command line
+* Remove test argument from all prod instances
+* Add isolated margin trade to config
+* Enable trading with isolated margin pairs
+* Fix for 5ma prod to only buy at breakout point
+
 ## 2.2.2
 * Naming of api backend container
 * Fix stag dependencies
