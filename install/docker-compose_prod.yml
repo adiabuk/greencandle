@@ -197,7 +197,7 @@ services:
     hostname: be-5ma-1tsl-btc
     image: amrox/greencandle:${TAG}
     restart: on-failure
-    entrypoint: /docker-entrypoint.sh backend --test
+    entrypoint: /docker-entrypoint.sh backend
     logging:
       driver: journald
     links:
@@ -225,7 +225,7 @@ services:
     hostname: be-5ma-1tsl-usdt
     image: amrox/greencandle:${TAG}
     restart: on-failure
-    entrypoint: /docker-entrypoint.sh backend --test
+    entrypoint: /docker-entrypoint.sh backend
     logging:
       driver: journald
     links:
@@ -283,7 +283,7 @@ services:
     hostname: be-5ma-nostop-btc
     image: amrox/greencandle:${TAG}
     restart: on-failure
-    entrypoint: /docker-entrypoint.sh backend --test
+    entrypoint: /docker-entrypoint.sh backend
     logging:
       driver: journald
     links:
@@ -311,7 +311,7 @@ services:
     hostname: be-5ma-nostop-usdt
     image: amrox/greencandle:${TAG}
     restart: on-failure
-    entrypoint: /docker-entrypoint.sh backend --test
+    entrypoint: /docker-entrypoint.sh backend
     logging:
       driver: journald
     links:
