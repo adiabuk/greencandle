@@ -37,8 +37,8 @@ def main():
 
     interval = args.interval if args.interval else str(config.main.interval)
     drain = str2bool(config.main.drain)
-    drain_string = "(draining)" if drain else "(active)"
-    setproctitle.setproctitle("greencandle-backend_{0}{1}".format(interval, drain_string))
+    test_string = "(test)" if args.test else "(live")
+    setproctitle.setproctitle("greencandle-backend_{0}{1}".format(interval, test_string))
 
     minute = {"3m": "0,3,6,9,12,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57",
               "5m": "0,5,10,15,20,25,30,35,40,45,50,55",
