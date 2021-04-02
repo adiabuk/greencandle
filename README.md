@@ -11,6 +11,9 @@
 
 # Releases
 
+## 2.2.4
+* Fix typo
+
 ## 2.2.3
 * Show backend test status in command line
 * Remove test argument from all prod instances
