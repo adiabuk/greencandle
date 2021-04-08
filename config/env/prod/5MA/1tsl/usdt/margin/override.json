@@ -1,0 +1,7 @@
+{
+  "trade_multiplier": "2",
+  "trade_isolated": "true",
+  "trade_type": "margin",
+  "name": "5ma-1tsl-usdt-margin",
+  "max_trades": "10"
+}
