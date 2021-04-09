@@ -240,7 +240,7 @@ class Trade():
                                                         quantity=amt_str,
                                                         order_type=binance.MARKET,
                                                         isolated=str2bool(
-                                                              config.main.trade_isolated))
+                                                              config.main.isolated))
                     if "msg" in trade_result:
                         self.logger.error("Trade error %s: %s" % (pair, str(trade_result)))
                         self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str,
@@ -580,7 +580,7 @@ class Trade():
                                                     quantity=quote_in,
                                                     order_type=binance.MARKET,
                                                     isolated=str2bool(
-                                                              config.main.trade_isolated))
+                                                              config.main.isolated))
 
                 if "msg" in trade_result:
                     self.logger.error("Trade error %s: %s" % (pair, trade_result))
