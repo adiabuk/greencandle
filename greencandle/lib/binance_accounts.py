@@ -19,6 +19,13 @@ LOGGER = get_logger(__name__)
 CURRENCY = CurrencyRates()
 USD2GBP = lambda: CURRENCY.get_rate("USD", "GBP")
 
+def get_binance_isolated():
+    """Get balance for isolated accounts"""
+    for account in config.accounts.binance:
+        binance_auth(account)
+    all_balances = binance.isolated_balances()
+    return all_balances
+
 def get_binance_margin():
     """Get totals for each crypto from binance and convert to USD/GBP"""
 
