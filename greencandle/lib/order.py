@@ -227,9 +227,9 @@ class Trade():
                                  % (amount_to_borrow, base, base_amount))
 
                 if self.prod:
-                    borrow_result = binance.margin_borrow(base, amount_to_borrow,
+                    borrow_result = binance.margin_borrow(symbol=pair, quantity=amount_to_borrow,
                                                           isolated=str2bool(
-                                                              config.main.trade_isolated))
+                                                              config.main.isolated, asset=base))
                     if "msg" in borrow_result:
                         self.logger.error("Borrow error %s: %s" % (pair, borrow_result))
                         continue
@@ -586,8 +586,9 @@ class Trade():
                     self.logger.error("Trade error %s: %s" % (pair, trade_result))
                     continue
 
-                repay_result = binance.margin_repay(base, borrowed,
-                                                    isolated=str2bool(config.main.trade_isolated))
+                repay_result = binance.margin_repay(symbol=pair, quantity=borrowed,
+                                                    isolated=str2bool(config.main.isolated,
+                                                    asset=base))
                 if "msg" in repay_result:
                     self.logger.error("Repay error %s: %s" % (pair, repay_result))
                     continue
