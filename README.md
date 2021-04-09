@@ -11,6 +11,14 @@
 
 # Releases
 
+## 2.3
+* Fix isolated margin balance
+* Get correct balance for long isolated margin trades
+* 5MA trigger fixes
+* Add isolated margin 5MA trades
+* Tweak multiplier and divisor values
+* Fixes to sell-now script
+
 ## 2.2.4
 * Fix typo
 
