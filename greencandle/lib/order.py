@@ -202,7 +202,7 @@ class Trade():
             base = get_base(pair)
             try:
                 if str2bool(config.main.isolated):
-                    current_base_bal = balance[pair][base]
+                    current_base_bal = float(balance[pair][base])
                 else:
                     current_base_bal = balance['margin'][base]['count']
             except KeyError:
