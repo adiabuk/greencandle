@@ -35,7 +35,7 @@ def main():
     sells = []
     trade = Trade(interval=interval, test_data=test_data, test_trade=test_trade)
     sells.append((pair, current_time, current_price, "manual_sell"))
-    trade.close_trade(sells)
+    trade.close_trade(sells, drawdowns={pair:0}, drawups={pair:0})
 
 if __name__ == "__main__":
     main()
