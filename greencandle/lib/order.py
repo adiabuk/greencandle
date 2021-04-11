@@ -228,8 +228,8 @@ class Trade():
 
                 if self.prod:
                     borrow_result = binance.margin_borrow(symbol=pair, quantity=amount_to_borrow,
-                                                          isolated=str2bool(
-                                                              config.main.isolated, asset=base))
+                                                          isolated=str2bool(config.main.isolated),
+                                                          asset=base)
                     if "msg" in borrow_result:
                         self.logger.error("Borrow error %s: %s" % (pair, borrow_result))
                         continue
@@ -240,7 +240,7 @@ class Trade():
                                                         quantity=amt_str,
                                                         order_type=binance.MARKET,
                                                         isolated=str2bool(
-                                                              config.main.isolated))
+                                                            config.main.isolated))
                     if "msg" in trade_result:
                         self.logger.error("Trade error %s: %s" % (pair, str(trade_result)))
                         self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str,
@@ -580,15 +580,15 @@ class Trade():
                                                     quantity=quote_in,
                                                     order_type=binance.MARKET,
                                                     isolated=str2bool(
-                                                              config.main.isolated))
+                                                        config.main.isolated))
 
                 if "msg" in trade_result:
                     self.logger.error("Trade error %s: %s" % (pair, trade_result))
                     continue
 
                 repay_result = binance.margin_repay(symbol=pair, quantity=borrowed,
-                                                    isolated=str2bool(config.main.isolated,
-                                                    asset=base))
+                                                    isolated=str2bool(config.main.isolated),
+                                                    asset=base)
                 if "msg" in repay_result:
                     self.logger.error("Repay error %s: %s" % (pair, repay_result))
                     continue
