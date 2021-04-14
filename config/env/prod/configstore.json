@@ -182,12 +182,12 @@
       "is_secret": false
     },
     "immediate_take_profit": {
-      "value": "true",
+      "value": "false",
       "is_binary": false,
       "is_secret": false
     },
     "immediate_trailing_stop": {
-      "value": "true",
+      "value": "false",
       "is_binary": false,
       "is_secret": false
     },
