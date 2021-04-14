@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-position,no-member
+#pylint: disable=wrong-import-position,no-member,logging-not-lazy
 
 """
 API trading module
@@ -10,19 +10,24 @@ from flask import Flask, request, Response
 from greencandle.lib import config
 config.create_config()
 from greencandle.lib.binance_common import get_current_price
+from greencandle.lib.logger import get_logger
 from greencandle.lib.order import Trade
 
 TEST = bool(len(sys.argv) > 1 and sys.argv[1] == '--test')
 APP = Flask(__name__)
+LOGGER = get_logger(__name__)
 
 @APP.route('/webhook', methods=['POST'])
 def respond():
     """
     Default route to trade
     """
-
+    print("hi")
+    print("pair,action:", request.json)
     pair = request.json['pair']
     action = request.json['action']
+    text = request.json['text']
+    LOGGER.info("Request received: %s %s %s" %(pair, action, text))
     current_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     current_price = get_current_price(pair)
     item = [(pair, current_time, current_price, config.main.name)]
