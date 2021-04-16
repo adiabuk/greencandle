@@ -349,7 +349,7 @@ services:
       - CONFIG_ENV=stag
       - HOST=$HOSTNAME
     ports:
-      - 8080:80
+      - 1080:80
     links:
       - be-backend-api:api
       - base-mysql:mysql
