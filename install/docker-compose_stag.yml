@@ -358,7 +358,7 @@ services:
       - be-backend-api
       - base-mysql
       - base-redis
-    entrypoint: /docker-entrypoint.sh api_router--test
+    entrypoint: /docker-entrypoint.sh api_router --test
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws
