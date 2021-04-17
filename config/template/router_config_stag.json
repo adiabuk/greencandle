@@ -1,0 +1,5 @@
+{"5MA_3h_BTC": ["5ma-btc:20000"],
+"5MA_3h_USDT": ["5ma-usdt:20000"],
+"5MA_3h_ETH": ["5ma-eth:20000"],
+"env_15m_USDT": ["env-usdt:20000"]
+ }
