@@ -368,7 +368,6 @@ services:
       - /root/.aws:/root/.aws
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-
   be-5ma-api-btc:
     container_name: be-5ma-api-btc
     hostname: be-5ma-api-btc
@@ -399,7 +398,6 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-
   be-5ma-api-usdt:
     container_name: be-5ma-api-usdt
     hostname: be-5ma-api-usdt
@@ -429,7 +427,6 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
-
 
   be-5ma-api-eth:
     container_name: be-5ma-api-eth
@@ -490,5 +487,3 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
-
-
