@@ -404,7 +404,7 @@ services:
       - CONFIG_ENV=prod
       - HOST=$HOSTNAME
     ports:
-      - 1080
+      - 1080:1080
     links:
       - be-backend-api:api
       - base-mysql:mysql
