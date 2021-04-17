@@ -429,7 +429,7 @@ services:
       - be-5ma-api-usdt-margin
       - be-5ma-api-eth-margin
       - be-env-api-usdt-margin
-    entrypoint: /docker-entrypoint.sh api_router --test
+    entrypoint: /docker-entrypoint.sh api_router
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws
@@ -440,7 +440,7 @@ services:
     hostname: be-5ma-api-btc
     image: amrox/greencandle:${TAG}
     restart: on-failure
-    entrypoint: /docker-entrypoint.sh backend_api --test
+    entrypoint: /docker-entrypoint.sh backend_api
     logging:
       driver: journald
     environment:
@@ -470,7 +470,7 @@ services:
     hostname: be-5ma-api-usdt
     image: amrox/greencandle:${TAG}
     restart: on-failure
-    entrypoint: /docker-entrypoint.sh backend_api --test
+    entrypoint: /docker-entrypoint.sh backend_api
     logging:
       driver: journald
     environment:
@@ -500,7 +500,7 @@ services:
     hostname: be-5ma-api-eth
     image: amrox/greencandle:${TAG}
     restart: on-failure
-    entrypoint: /docker-entrypoint.sh backend_api --test
+    entrypoint: /docker-entrypoint.sh backend_api
     logging:
       driver: journald
     environment:
@@ -530,7 +530,7 @@ services:
     hostname: be-env-api-usdt
     image: amrox/greencandle:${TAG}
     restart: on-failure
-    entrypoint: /docker-entrypoint.sh backend_api --test
+    entrypoint: /docker-entrypoint.sh backend_api
     logging:
       driver: journald
     environment:
@@ -560,7 +560,7 @@ services:
     hostname: be-5ma-api-btc-margin
     image: amrox/greencandle:${TAG}
     restart: on-failure
-    entrypoint: /docker-entrypoint.sh backend_api --test
+    entrypoint: /docker-entrypoint.sh backend_api
     logging:
       driver: journald
     environment:
@@ -590,7 +590,7 @@ services:
     hostname: be-5ma-api-usdt-margin
     image: amrox/greencandle:${TAG}
     restart: on-failure
-    entrypoint: /docker-entrypoint.sh backend_api --test
+    entrypoint: /docker-entrypoint.sh backend_api
     logging:
       driver: journald
     environment:
@@ -620,7 +620,7 @@ services:
     hostname: be-5ma-api-eth-margin
     image: amrox/greencandle:${TAG}
     restart: on-failure
-    entrypoint: /docker-entrypoint.sh backend_api --test
+    entrypoint: /docker-entrypoint.sh backend_api
     logging:
       driver: journald
     environment:
@@ -650,7 +650,7 @@ services:
     hostname: be-env-api-usdt-margin
     image: amrox/greencandle:${TAG}
     restart: on-failure
-    entrypoint: /docker-entrypoint.sh backend_api --test
+    entrypoint: /docker-entrypoint.sh backend_api
     logging:
       driver: journald
     environment:
