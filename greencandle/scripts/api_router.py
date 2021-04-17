@@ -55,6 +55,6 @@ def main():
         print("API for executing trades")
         sys.exit(0)
 
-    APP.run(debug=True, host='0.0.0.0', port=80, threaded=True)
+    APP.run(debug=True, host='0.0.0.0', port=1080, threaded=True)
 if __name__ == "__main__":
     main()

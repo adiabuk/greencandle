@@ -6,8 +6,8 @@ server {
       root /var/www/html;
     }
 
-    location /test {
-    set $api "api:20000";
+    location /webhook {
+    set $router "router:1080";
     keepalive_timeout 1;
     proxy_read_timeout 1s;
     proxy_pass http://$api/webhook;
