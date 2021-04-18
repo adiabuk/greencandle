@@ -8,6 +8,7 @@
   "name": "api",
   "max_trades": "1000",
   "pairs": "None",
+  "nginx_port": "1111",
   "close_rule1": "results.current.EMA_2 \u003c results.current.EMA_69",
   "close_rule2": "low \u003c results.current.EMA_69",
   "close_rule3": "low \u003c results.current.EMA_55",

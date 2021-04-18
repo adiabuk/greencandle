@@ -318,7 +318,7 @@ services:
       timeout: 5s
       retries: 5
     environment:
-      - CONFIG_ENV=stag/tsi_rsi
+      - CONFIG_ENV=stag/fe
       - HOST=$HOSTNAME
     ports:
       - 1111:1111
