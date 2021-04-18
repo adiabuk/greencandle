@@ -24,7 +24,7 @@ def send_trade(payload, host):
     url = "http://{}/webhook".format(host)
     try:
         LOGGER.info("Calling url:%s" % url)
-        requests.post(url, json=payload,timeout=0.0000000001)
+        requests.post(url, json=payload, timeout=0.0000000001)
     except:
         pass
 
