@@ -11,6 +11,14 @@
 
 # Releases
 
+## 2.4
+* Use API for incoming trades
+* Port/host mappings for API containers
+* Route API traffic to multiple concurrent containers (eg. for margin/alternate exchange)
+* Add sport and margin API containers for long trades
+* Add new methods for calculating isolated margin balance totals
+* Fixes for 5MA strategy SL/TP
+
 ## 2.3
 * Fix isolated margin balance
 * Get correct balance for long isolated margin trades
