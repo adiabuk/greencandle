@@ -14,7 +14,7 @@ from .auth import binance_auth
 from .logger import get_logger, get_decorator
 from .mysql import Mysql
 from .redis_conn import Redis
-from .binance_accounts import get_binance_values, get_binance_margin, get_binance_isolated
+from .binance_accounts import get_binance_values, get_binance_margin, get_current_isolated
 from .balance_common import get_base, get_step_precision
 from .common import perc_diff, add_perc, sub_perc, AttributeDict
 from .alerts import send_gmail_alert, send_push_notif, send_slack_trade
@@ -194,7 +194,7 @@ class Trade():
         if self.test_data or self.test_trade:
             balance = self.__get_test_balance(dbase, account='margin')
         elif str2bool(config.main.isolated):
-            balance = get_binance_isolated()
+            balance = get_current_isolated()
         elif not str2bool(config.main.isolated):
             balance = get_binance_margin()
 

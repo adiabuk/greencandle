@@ -7,7 +7,7 @@ import json
 from requests.exceptions import ReadTimeout
 from greencandle.lib.alerts import send_slack_message
 from . import config
-from .binance_accounts import get_binance_values, get_binance_margin
+from .binance_accounts import get_binance_values, get_binance_margin, get_binance_isolated
 from .coinbase_accounts import get_coinbase_values
 from .phemex_accounts import get_phemex_values
 from .mysql import Mysql
@@ -34,7 +34,7 @@ class Balance(dict):
         self.dbase.insert_balance(prices)
 
     @staticmethod
-    def get_balance(coinbase=False, margin=True, phemex=True):
+    def get_balance(coinbase=False, margin=True, phemex=True, isolated=True):
         """
         get dict of all balances
 
@@ -100,6 +100,9 @@ class Balance(dict):
         if margin:
             margin = get_binance_margin()
             combined_dict.update(margin)
+        if isolated:
+            isolated = get_binance_isolated()
+            combined_dict.update(isolated)
         return combined_dict
 
     @staticmethod
@@ -123,8 +126,10 @@ class Balance(dict):
                 LOGGER.critical("Error: invalid balance entry for %s" % key)
                 return
 
-        binance_usd = bal['margin']['TOTALS']['USD'] + bal['binance']['TOTALS']['USD']
-        binance_btc = bal['margin']['TOTALS']['BTC'] + bal['binance']['TOTALS']['BTC']
+        binance_usd = bal['margin']['TOTALS']['USD'] + bal['binance']['TOTALS']['USD'] + \
+                      bal['isolated']['TOTALS']['USD']
+        binance_btc = bal['margin']['TOTALS']['BTC'] + bal['binance']['TOTALS']['BTC'] + \
+                      bal['isolated']['TOTALS']['BTC']
         phemex_usd = bal['phemex']['TOTALS']['USD']
         phemex_btc = bal['phemex']['TOTALS']['BTC']
         totals_btc = float(binance_btc) + float(phemex_btc)
