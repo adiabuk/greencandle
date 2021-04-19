@@ -34,7 +34,7 @@ def get_binance_isolated():
 
     mydict = lambda: defaultdict(mydict)
     result = mydict()
-    bitcoin_totals = 0
+    bitcoin_total = 0
     gbp_total = 0
     usd_total = 0
     result["isolated"]["TOTALS"]["BTC"] = 0
@@ -45,36 +45,35 @@ def get_binance_isolated():
     prices = binance.prices()
     for key, val in isolated.items():
         for base, amount in val.items():
+            bcoin = 0
+            usd = 0
+            gbp = 0
             if base == "BTC":
                 bcoin = float(amount)
-                bitcoin_totals += float(bcoin)
 
             elif base == "USDT":
                 bcoin = float(amount) / float(prices["BTCUSDT"])
-                bitcoin_totals += bcoin
 
             else:  # other currencies that need converting to BTC
                 try:
                     LOGGER.debug("Converting currency %s" % key)
                     bcoin = float(amount) * float(prices[base+"BTC"])  # value in BTC
-                    bitcoin_totals += bcoin
                 except KeyError:
                     LOGGER.critical("Error: Unable to quantify margin currency: %s" % base)
                     continue
 
-            add_value(key, bcoin)
-
-            usd = bcoin *float(prices["BTCUSDT"])
+            usd = bcoin*float(prices['BTCUSDT'])
             gbp = USD2GBP() * usd
+            bitcoin_total += bcoin
             usd_total += usd
             gbp_total += gbp
             result["isolated"][key]["BTC"] = bcoin
             result["isolated"][key]["USD"] = usd
             result["isolated"][key]["GBP"] = gbp
             result["isolated"][key]["count"] = "N/A"
-    usd_total = bitcoin_totals * float(prices["BTCUSDT"])
-    result["isolated"]["TOTALS"]["BTC"] += bitcoin_totals
-    result["isolated"]["TOTALS"]["USD"] += usd_total
+
+    result["isolated"]["TOTALS"]["BTC"] = bitcoin_total
+    result["isolated"]["TOTALS"]["USD"] = usd_total
     result["isolated"]["TOTALS"]["count"] = "N/A"
     for _ in range(3):
         # Try to get exchange rate 3 times before giving up
@@ -84,12 +83,8 @@ def get_binance_isolated():
             continue
         break
     result["isolated"]["TOTALS"]["GBP"] = gbp_total
-    add_value("USD", usd_total)
-    add_value("GBP", gbp_total)
-
 
     return default_to_regular(result)
-
 
 def get_binance_margin():
     """Get totals for each crypto from binance and convert to USD/GBP"""
@@ -98,7 +93,6 @@ def get_binance_margin():
     result = mydict()
     result["margin"]["TOTALS"]["BTC"] = 0
     result["margin"]["TOTALS"]["USD"] = 0
-
     for account in config.accounts.binance:
 
         binance_auth(account)
