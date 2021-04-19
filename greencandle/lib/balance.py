@@ -82,7 +82,6 @@ class Balance(dict):
         }
 
         """
-
         binance = get_binance_values()
         combined_dict = binance.copy()   # start with binance"s keys and values
 
@@ -117,9 +116,11 @@ class Balance(dict):
             return True
 
 
-    def get_saved_balance(self):
+    def get_saved_balance(self, balance=None):
         """print live balance"""
-        bal = self.get_balance()
+
+        bal = balance if balance else self.get_balance()
+
         for key, val in bal.items():
             result = self.check_balance(val)
             if not result:
