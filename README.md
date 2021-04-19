@@ -11,6 +11,11 @@
 
 # Releases
 
+## 2.4.1
+* Cleanup isolated margin balance code
+* Use newer version of binance module
+* Don't request balance twice when running cron
+
 ## 2.4
 * Use API for incoming trades
 * Port/host mappings for API containers
