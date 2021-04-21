@@ -11,6 +11,12 @@
 
 # Releases
 
+## 2.4.2
+* Fix incorrect config
+* Add env 1m strategy to prod
+* Fix typo in router config
+* Log each deployment to syslog
+
 ## 2.4.1
 * Cleanup isolated margin balance code
 * Use newer version of binance module
