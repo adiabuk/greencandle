@@ -231,7 +231,7 @@ class Trade():
                                                           isolated=str2bool(config.main.isolated),
                                                           asset=base)
                     if "msg" in borrow_result:
-                        self.logger.error("Borrow error %s: %s" % (pair, borrow_result))
+                        self.logger.error("Borrow error-open %s: %s" % (pair, borrow_result))
                         continue
 
                     self.logger.info(borrow_result)
@@ -242,7 +242,7 @@ class Trade():
                                                         isolated=str2bool(
                                                             config.main.isolated))
                     if "msg" in trade_result:
-                        self.logger.error("Trade error %s: %s" % (pair, str(trade_result)))
+                        self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
                         self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str,
                                                                          current_base_bal))
                         continue
@@ -345,7 +345,7 @@ class Trade():
                                                       order_type=binance.MARKET,
                                                       test=self.test_trade)
                     if "msg" in trade_result:
-                        self.logger.error("Trade error %s: %s" % (pair, str(trade_result)))
+                        self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
                         self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str,
                                                                          current_base_bal))
                         return
@@ -432,7 +432,7 @@ class Trade():
                                                   order_type=binance.MARKET, test=self.test_trade)
 
                 if "msg" in trade_result:
-                    self.logger.error("Trade error %s: %s" % (pair, trade_result))
+                    self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
                     return
 
             fill_price = current_price if self.test_trade or self.test_data else \
@@ -529,7 +529,7 @@ class Trade():
                                                   order_type=binance.MARKET, test=self.test_trade)
 
                 if "msg" in trade_result:
-                    self.logger.error("Trade error %s: %s" % (pair, trade_result))
+                    self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
                     continue
 
             fill_price = current_price if self.test_trade or self.test_data else \
@@ -583,14 +583,14 @@ class Trade():
                                                         config.main.isolated))
 
                 if "msg" in trade_result:
-                    self.logger.error("Trade error %s: %s" % (pair, trade_result))
+                    self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
                     continue
 
                 repay_result = binance.margin_repay(symbol=pair, quantity=borrowed,
                                                     isolated=str2bool(config.main.isolated),
                                                     asset=base)
                 if "msg" in repay_result:
-                    self.logger.error("Repay error %s: %s" % (pair, repay_result))
+                    self.logger.error("Repay error-close %s: %s" % (pair, repay_result))
                     continue
 
                 self.logger.info(repay_result)
