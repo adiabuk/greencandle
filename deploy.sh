@@ -66,4 +66,5 @@ docker-compose -f ./install/docker-compose_${env}.yml up -d $fe
 text="Finished deployment $TAG on $HOSTNAME"
 payload=$(get_payload "$text")
 curl -X POST -H "Content-Type: application/json" -d  "$payload"  $url
+logger -t deploy "$TAG successfully deployed"
 
