@@ -2,7 +2,7 @@
 "5MA_3h_USDT": ["5ma-usdt:20000", "5ma-btc-margin:20000"],
 "5MA_3h_ETH": ["5ma-eth:20000", "5ma-eth-margin:20000"],
 "env_15m_USDT": ["env-usdt:20000", "env-usdt-margin:20000"],
-"env_15m_ETH": ["env-eth:20000", "env-eth-margin:20000"],
-"env_1m_BTC" : ["env-1m-btc:20000"],
+"env_15m_ETH": ["env-eth:20000"],
+"env_1m_BTC" : ["env-1m-btc:20000", "env-1m-btc-margin:20000"],
 "env_1m_USDT" : ["env-1m-usdt:20000"]
  }
