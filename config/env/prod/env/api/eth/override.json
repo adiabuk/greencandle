@@ -1,4 +1,5 @@
 {
   "name": "env-api-eth",
-  "pairs": "ETCETH NEOETH"
+  "pairs": "ETCETH NEOETH",
+  "divisor": "2.1"
 }

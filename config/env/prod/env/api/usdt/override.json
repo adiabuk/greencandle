@@ -1,4 +1,5 @@
 {
   "name": "env-api-usdt",
-  "pairs": "ENJUSDT HBARUSDT"
+  "pairs": "ENJUSDT HBARUSDT",
+  "divisor": "2.1"
 }

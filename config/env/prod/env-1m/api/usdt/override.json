@@ -1,4 +1,5 @@
 {
   "name": "env-api-usdt-1m",
-  "pairs": "BCHUSDT WAVESUSDT"
+  "pairs": "BCHUSDT WAVESUSDT",
+  "divisor": "3.1"
 }
