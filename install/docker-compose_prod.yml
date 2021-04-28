@@ -385,7 +385,7 @@ services:
       - be-env-api-eth:env-eth
       - be-5ma-api-btc-margin:5ma-btc-margin
       - be-5ma-api-usdt-margin:5ma-usdt-margin
-      - be-5ma-api-eth-margin:5ma-eth-margin
+      - be-env-api-eth-margin:env-eth-margin
       - be-env-api-usdt-margin:env-usdt-margin
       - be-env-api-1m-usdt:env-1m-usdt
       - be-env-api-1m-btc:env-1m-btc
@@ -401,7 +401,7 @@ services:
       - be-env-api-eth
       - be-5ma-api-btc-margin
       - be-5ma-api-usdt-margin
-      - be-5ma-api-eth-margin
+      - be-env-api-eth-margin
       - be-env-api-usdt-margin
       - be-env-api-1m-usdt
       - be-env-api-1m-btc
