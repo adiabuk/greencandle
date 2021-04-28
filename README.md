@@ -11,6 +11,11 @@
 
 # Releases
 
+## 2.4.3
+* New env 1m strategies
+* Fix divisor value in config for all pairs
+* Additional pairs for all strategies
+
 ## 2.4.2
 * Fix incorrect config
 * Add env 1m strategy to prod
