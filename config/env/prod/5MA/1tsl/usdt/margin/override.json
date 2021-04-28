@@ -1,5 +1,5 @@
 {
-  "trade_multiplier": "2",
+  "trade_multiplier": "3",
   "trade_isolated": "true",
   "trade_type": "margin",
   "name": "5ma-1tsl-usdt-margin",

@@ -4,5 +4,6 @@
   "trade_isolated": "false",
   "trade_type": "margin",
   "max_trades": "10",
-  "trade_multiplier": "1.1"
+  "divisor": "1.1",
+  "trade_multiplier": "3"
 }
