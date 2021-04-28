@@ -28,9 +28,9 @@ def main():
     # temp table we will use to filter out incomplete balance records
     drop = "drop table if exists `temp_table`"
 
-    # There needs to be 3 records for each date representing 3 exchanges
+    # There needs to be 4 records for each date representing 3 exchanges
     clean = ("create table temp_table  as SELECT ctime FROM balance where coin='TOTALS' "
-             "GROUP BY ctime HAVING count(*) <3")
+             "GROUP BY ctime HAVING count(*) <4")
 
     delete1 = "delete from balance where ctime in (select * from temp_table)"
 
