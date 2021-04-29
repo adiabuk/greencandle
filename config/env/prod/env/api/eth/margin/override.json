@@ -1,6 +1,6 @@
 {
   "name": "env-api-eth-margin",
-  "pairs": "ETCETH NEOETH",
+  "pairs": "ETCETH BNBETH",
   "trade_isolated": "true",
   "trade_type": "margin",
   "max_trades": "10",
