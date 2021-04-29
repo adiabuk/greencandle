@@ -66,6 +66,16 @@
       "is_binary": false,
       "is_secret": false
     },
+    "aws_access_key": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "aws_secret_key": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
     "check_interval": {
       "value": "60",
       "is_binary": false,
