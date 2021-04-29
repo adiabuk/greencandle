@@ -488,3 +488,27 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  alert:
+    container_name: alert
+    hostname: alert
+    image: amrox/alert:latest
+    restart: on-failure
+    ports:
+      - 20000
+    healthcheck:
+      test: ls || exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    devices:
+      - /dev/ttyACM0:/dev/ttyACM0
+      - /dev/snd:/dev/snd
+    volumes:
+      - /root/.aws:/root/.aws
+      - /run/dbus/:/run/dbus/
+      - /dev/shm:/dev/shm
+      - /run/user:/run/user
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /var/run/dbus:/var/run/dbu
+      - /etc/localtime:/etc/localtime:ro

@@ -61,6 +61,6 @@ def play_mp3(path):
     subprocess.Popen(['mpg123', '-q', path]).wait()
 
 def main():
-    app.run(debug=True, host='0.0.0.0', port=50000, threaded=True)
+    app.run(debug=True, host='0.0.0.0', port=20000, threaded=True)
 if __name__ == "__main__":
     main()
