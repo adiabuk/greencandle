@@ -496,6 +496,7 @@ services:
     hostname: be-alert
     image: amrox/alert:latest
     restart: on-failure
+    entrypoint: python /install/alert/webhook.py
     ports:
       - 20000
     healthcheck:
