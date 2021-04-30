@@ -6,4 +6,3 @@ RUN apt update && \
     pip install -r ./alert/requirements.txt
 
 CMD ["webhook.py"]
-ENTRYPOINT ["python3"]

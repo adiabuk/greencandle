@@ -352,6 +352,7 @@ services:
     ports:
       - 1080
     links:
+      - be-alert:alert
       - be-backend-api:api
       - base-mysql:mysql
       - base-redis:redis
@@ -360,6 +361,7 @@ services:
       - be-5ma-api-eth:5ma-eth
       - be-env-api-usdt:env-usdt
     depends_on:
+      - be-alert
       - be-backend-api
       - base-mysql
       - base-redis
@@ -489,9 +491,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  alert:
-    container_name: alert
-    hostname: alert
+  be-alert:
+    container_name: be-alert
+    hostname: be-alert
     image: amrox/alert:latest
     restart: on-failure
     ports:
