@@ -496,7 +496,7 @@ services:
     hostname: be-alert
     image: amrox/alert:latest
     restart: on-failure
-    entrypoint: python /install/alert/webhook.py
+    entrypoint: /docker-entrypoint-alert.sh
     ports:
       - 20000
     healthcheck:
@@ -507,6 +507,9 @@ services:
     devices:
       - /dev/ttyACM0:/dev/ttyACM0
       - /dev/snd:/dev/snd
+    environment:
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=stag
     volumes:
       - /root/.aws:/root/.aws
       - /run/dbus/:/run/dbus/
