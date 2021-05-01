@@ -8,6 +8,7 @@ RUN apt update && \
  tar zxvf /tmp/configstore-2.5.0-linux-amd64.tar.gz -C /usr/local/bin && \
  rm -rf /tmp/configstore-2.5.0-linux-amd64.tar.gz && \
   cp install/install/docker-entrypoint-alert.sh / && \
-    cp -rv /install/config /opt/config && \
+  mkdir /opt/output && \
+    cp -rv /install/config /opt/config
 
 CMD ["python", "/install/alert/webhook.py"]

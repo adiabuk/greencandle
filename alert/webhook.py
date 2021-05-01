@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 def get_config():
     parser = ConfigParser(allow_no_value=True)
-    parser.read("/etc/red-alert.ini")
+    parser.read("/etc/alert.ini")
     x = AttributeDict()
     for section in parser.sections():
         x[section] = AttributeDict(parser._sections[section])
