@@ -67,12 +67,12 @@
       "is_secret": false
     },
     "aws_access_key": {
-      "value": "TE151r4j64GReDc7ekS45jr+wtehgPlTQUeAEiKv6br1hcvVHEtFCKqjRvM=",
+      "value": "KvMNglAlY37ucmGGMbYnwXlyx2pinzzoRzbQ7AEeDnKs9Ik+IhUOaPAZoyY=",
       "is_binary": false,
       "is_secret": true
     },
     "aws_secret_key": {
-      "value": "gUlCd71iRgplAjB2zXaaYRKGO5w0JMSuXC97vJ8fA+p9ja7HdrUDvuarWmD37B+JuB6KLKYzCkPue6nR9gdtZqKwN/IHLzSy",
+      "value": "zeLOpecrRTXKfaeuDazsH0l5m3cFGGPkp3xiHG5fN8iLwvyhpBYxYfGOEmqYhubMhharCja9+1wCPCTT/o35IhGKe6M6xnAr",
       "is_binary": false,
       "is_secret": true
     },
