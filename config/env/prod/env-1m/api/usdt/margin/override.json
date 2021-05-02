@@ -1,6 +1,6 @@
 {
   "name": "env-api-usdt-margin-1m",
-  "pairs": "BCHUSDT",
+  "pairs": "BCHUSDT WAVESUSDT",
   "trade_isolated": "false",
   "trade_type": "margin",
   "max_trades": "10",

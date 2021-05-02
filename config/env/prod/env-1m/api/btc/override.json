@@ -1,5 +1,5 @@
 {
   "name": "env-api-btc-1m",
-  "pairs": "BCHBTC",
+  "pairs": "BCHBTC MATICBTC",
   "divisor": "1.1"
 }
