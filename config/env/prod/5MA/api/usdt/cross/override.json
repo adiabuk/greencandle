@@ -1,5 +1,5 @@
 {
-  "name": "5ma-api-usdt-margin",
+  "name": "5ma-api-usdt-cross",
   "pairs": "LINKUSDT BTCUSDT",
   "trade_isolated": "false",
   "trade_type": "margin",

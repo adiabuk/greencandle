@@ -1,5 +1,5 @@
 {
-  "name": "5ma-api-btc-margin",
+  "name": "5ma-api-btc-isolated",
   "pairs": "ETHBTC",
   "trade_isolated": "true",
   "trade_type": "margin",

@@ -1,8 +1,9 @@
 {
-  "name": "env-api-eth-margin",
-  "pairs": "ETCETH BNBETH",
+  "name": "env-api-1m-btc-cross",
+  "pairs": "BCHBTC MATICBTC",
   "trade_isolated": "false",
   "trade_type": "margin",
   "max_trades": "10",
+  "divisor": "1.1",
   "trade_multiplier": "5"
 }

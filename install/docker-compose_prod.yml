@@ -381,32 +381,34 @@ services:
       - be-5ma-api-btc:5ma-btc
       - be-5ma-api-usdt:5ma-usdt
       - be-5ma-api-eth:5ma-eth
+      - be-5ma-api-eth-isolated:5ma-eth-isolated
       - be-env-api-usdt:env-usdt
       - be-env-api-eth:env-eth
-      - be-5ma-api-btc-margin:5ma-btc-margin
-      - be-5ma-api-usdt-margin:5ma-usdt-margin
-      - be-env-api-eth-margin:env-eth-margin
-      - be-env-api-usdt-margin:env-usdt-margin
+      - be-5ma-api-btc-isolated:5ma-btc-isolated
+      - be-5ma-api-usdt-cross:5ma-usdt-cross
+      - be-env-api-eth-cross:env-eth-cross
+      - be-env-api-usdt-isolated:env-usdt-isolated
       - be-env-api-1m-usdt:env-1m-usdt
       - be-env-api-1m-btc:env-1m-btc
-      - be-env-api-1m-btc-margin:env-1m-btc-margin
-      - be-env-api-1m-usdt-margin:env-1m-usdt-margin
+      - be-env-api-1m-btc-cross:env-1m-btc-cross
+      - be-env-api-1m-usdt-cross:env-1m-usdt-cross
     depends_on:
       - base-mysql
       - base-redis
       - be-5ma-api-btc
       - be-5ma-api-usdt
       - be-5ma-api-eth
+      - be-5ma-api-eth-isolated
       - be-env-api-usdt
       - be-env-api-eth
-      - be-5ma-api-btc-margin
-      - be-5ma-api-usdt-margin
-      - be-env-api-eth-margin
-      - be-env-api-usdt-margin
+      - be-5ma-api-btc-isolated
+      - be-5ma-api-usdt-cross
+      - be-env-api-eth-cross
+      - be-env-api-usdt-isolated
       - be-env-api-1m-usdt
       - be-env-api-1m-btc
-      - be-env-api-1m-btc-margin
-      - be-env-api-1m-usdt-margin
+      - be-env-api-1m-btc-cross
+      - be-env-api-1m-usdt-cross
     entrypoint: /docker-entrypoint.sh api_router
     volumes:
       - /data:/data
@@ -454,6 +456,36 @@ services:
     environment:
       - HOST=$HOSTNAME
       - CONFIG_ENV=prod/5MA/api/usdt
+    ports:
+      - 20000
+    links:
+      - base-mysql:mysql
+      - base-redis:redis
+    depends_on:
+      - base-mysql
+      - base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  be-5ma-api-eth-isolated:
+    container_name: be-5ma-api-eth-isolated
+    hostname: be-5ma-api-eth-isolated
+    image: amrox/greencandle:${TAG}
+    restart: on-failure
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=prod/5MA/api/eth/isolated
     ports:
       - 20000
     links:
@@ -533,9 +565,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-5ma-api-btc-margin:
-    container_name: be-5ma-api-btc-margin
-    hostname: be-5ma-api-btc-margin
+  be-5ma-api-btc-isolated:
+    container_name: be-5ma-api-btc-isolated
+    hostname: be-5ma-api-btc-isolated
     image: amrox/greencandle:${TAG}
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend_api
@@ -543,7 +575,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/5MA/api/btc/margin
+      - CONFIG_ENV=prod/5MA/api/btc/isolated
     ports:
       - 20000
     links:
@@ -563,9 +595,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-5ma-api-usdt-margin:
-    container_name: be-5ma-api-usdt-margin
-    hostname: be-5ma-api-usdt-margin
+  be-5ma-api-usdt-cross:
+    container_name: be-5ma-api-usdt-coss
+    hostname: be-5ma-api-usdt-cross
     image: amrox/greencandle:${TAG}
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend_api
@@ -573,7 +605,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/5MA/api/usdt/margin
+      - CONFIG_ENV=prod/5MA/api/usdt/cross
     ports:
       - 20000
     links:
@@ -593,9 +625,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-env-api-usdt-margin:
-    container_name: be-env-api-usdt-margin
-    hostname: be-env-api-usdt-margin
+  be-env-api-usdt-isolated:
+    container_name: be-env-api-usdt-isolated
+    hostname: be-env-api-usdt-isolated
     image: amrox/greencandle:${TAG}
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend_api
@@ -653,9 +685,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-env-api-eth-margin:
-    container_name: be-env-api-eth-margin
-    hostname: be-env-api-eth-margin
+  be-env-api-eth-cross:
+    container_name: be-env-api-eth-cross
+    hostname: be-env-api-eth-cross
     image: amrox/greencandle:${TAG}
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend_api
@@ -743,9 +775,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-env-api-1m-btc-margin:
-    container_name: be-env-api-1m-btc-margin
-    hostname: be-env-api-1m-btc-margin
+  be-env-api-1m-btc-cross:
+    container_name: be-env-api-1m-btc-cross
+    hostname: be-env-api-1m-btc-cross
     image: amrox/greencandle:${TAG}
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend_api
@@ -773,9 +805,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-env-api-1m-usdt-margin:
-    container_name: be-env-api-1m-usdt-margin
-    hostname: be-env-api-1m-usdt-margin
+  be-env-api-1m-usdt-cross:
+    container_name: be-env-api-1m-usdt-cross
+    hostname: be-env-api-1m-usdt-cross
     image: amrox/greencandle:${TAG}
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend_api
@@ -783,7 +815,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env-1m/api/usdt/margin
+      - CONFIG_ENV=prod/env-1m/api/usdt/cross
     ports:
       - 20000
     links:
