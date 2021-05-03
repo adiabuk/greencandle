@@ -11,6 +11,13 @@
 
 # Releases
 
+## 2.5
+* Rename margin strategies to cross or isolated
+* Small fixes to missing containers and trading pairs
+* Add alerting endpoint to staging environment
+* Fixes to balance graph with isolated balance
+* Increase trade margins
+
 ## 2.4.3
 * New env 1m strategies
 * Fix divisor value in config for all pairs
