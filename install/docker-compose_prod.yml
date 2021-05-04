@@ -596,7 +596,7 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
   be-5ma-api-usdt-cross:
-    container_name: be-5ma-api-usdt-coss
+    container_name: be-5ma-api-usdt-cross
     hostname: be-5ma-api-usdt-cross
     image: amrox/greencandle:${TAG}
     restart: on-failure
