@@ -3,6 +3,7 @@ import boto3
 import serial
 import subprocess
 from configparser import ConfigParser
+from datetime import datetime, time
 
 app = Flask(__name__)
 
@@ -57,8 +58,18 @@ def play(data):
     play_mp3('com.mp3')
     play_mp3('speech.mp3')
 
+def in_between(now, start, end):
+    if start <= end:
+        return start <= now < end
+    else: # over midnight e.g., 23:30-04:15
+        return start <= now or now < end
+
+def get_time():
+    return "night" if in_between(datetime.now().time(), time(19), time(10)) else "day"
+
 def play_mp3(path):
-    subprocess.Popen(['mpg123', '-q', path]).wait()
+    volume = '-g10' if get_time()=="night" else '-g100'
+    subprocess.Popen(['mpg123', volume, '-q', path]).wait()
 
 def main():
     app.run(debug=True, host='0.0.0.0', port=20000, threaded=True)
