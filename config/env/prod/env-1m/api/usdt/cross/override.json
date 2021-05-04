@@ -1,6 +1,6 @@
 {
   "name": "env-api-1m-usdt-cross",
-  "pairs": "BCHUSDT WAVESUSDT",
+  "pairs": "MATICUSDT WAVESUSDT",
   "trade_isolated": "false",
   "trade_type": "margin",
   "max_trades": "10",

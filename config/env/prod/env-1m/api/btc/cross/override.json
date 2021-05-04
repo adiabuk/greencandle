@@ -1,6 +1,6 @@
 {
   "name": "env-api-1m-btc-cross",
-  "pairs": "BCHBTC MATICBTC",
+  "pairs": "WAVESBTC MATICBTC",
   "trade_isolated": "false",
   "trade_type": "margin",
   "max_trades": "10",
