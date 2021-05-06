@@ -62,7 +62,7 @@ class Trade():
             try:
                 mepoch = redis.get_items(kwargs.pair, kwargs.interval)[-1].decode().split(':')[-1]
             except IndexError:
-                self.logger.error("Unable to get last epoch time for %s %s" % (kwargs.pair,
+                self.logger.debug("Unable to get last epoch time for %s %s" % (kwargs.pair,
                                                                                kwargs.interval))
                 return
 
