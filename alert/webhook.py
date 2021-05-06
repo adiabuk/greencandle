@@ -1,19 +1,28 @@
-from flask import Flask, request, Response
-import boto3
-import serial
-import subprocess
+#pylint: disable=no-else-return,protected-access,import-error
+
+"""
+API module for listening for JSON POST requests and playing audio alerts and activating alert lights
+"""
+
 from configparser import ConfigParser
 from datetime import datetime, time
+import subprocess
+import boto3
+import serial
+from flask import Flask, request, Response
 
 app = Flask(__name__)
 
 def get_config():
+    """
+    Get alerts config
+    """
     parser = ConfigParser(allow_no_value=True)
     parser.read("/etc/alert.ini")
-    x = AttributeDict()
+    attr_dict = AttributeDict()
     for section in parser.sections():
-        x[section] = AttributeDict(parser._sections[section])
-    return x
+        attr_dict[section] = AttributeDict(parser._sections[section])
+    return attr_dict
 
 class AttributeDict(dict):
     """Access dictionary keys like attributes"""
@@ -26,17 +35,26 @@ class AttributeDict(dict):
 
 @app.route('/webhook', methods=['POST'])
 def respond():
+    """
+    Activate lights and pass json to audio function for parsing
+    """
     print(request.json)
     lights()
     play(request.json)
     return Response(status=200)
 
 def lights(port='/dev/ttyACM0', baud=19200):
+    """
+    Open serial port to activate lights program
+    """
     ser = serial.Serial(port, baud)
     ser.close()
     ser.open()
 
 def play(data):
+    """
+    Play audio beep and spoken text from Amazon Polly
+    """
     config = get_config()
     polly_client = boto3.Session(
         aws_access_key_id=config.main.access_key,
@@ -59,19 +77,33 @@ def play(data):
     play_mp3('speech.mp3')
 
 def in_between(now, start, end):
+    """
+    Check if time is beteen start and end time (nighttime hours)
+    """
     if start <= end:
         return start <= now < end
     else: # over midnight e.g., 23:30-04:15
         return start <= now or now < end
 
 def get_time():
+    """
+    Return day/night string depending on time of day
+    """
     return "night" if in_between(datetime.now().time(), time(19), time(10)) else "day"
 
 def play_mp3(path):
+    """
+    Play beep and downloaded synthesized audio
+    Use 10% volume for out-of-hours alerts, otherwise full volume
+    """
     volume = '-g10' if get_time()=="night" else '-g100'
     subprocess.Popen(['mpg123', volume, '-q', path]).wait()
 
 def main():
+    """
+    Main function
+    start Flask app on port 20000
+    """
     app.run(debug=True, host='0.0.0.0', port=20000, threaded=True)
 if __name__ == "__main__":
     main()
