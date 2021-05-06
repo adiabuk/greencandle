@@ -163,7 +163,7 @@ class Mysql():
         """
         command = ('select quote_in from trades where close_price '
                    'is NULL and `interval` = "{0}" and '
-                   'pair = "{1}"'.format(self.interval, pair))
+                   'pair = "{1}" and name="{2}"'.format(self.interval, pair, config.main.name))
         cur = self.dbase.cursor()
         self.__execute(cur, command)
 
