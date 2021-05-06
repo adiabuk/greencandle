@@ -204,7 +204,10 @@ class Trade():
                 if str2bool(config.main.isolated):
                     current_base_bal = float(balance[pair][base])
                 else:
-                    current_base_bal = balance['margin'][base]['count']
+                    margin_total_usd = balance['margin']['TOTALS']['USD']
+                    current_base_bal = margin_total_usd if base == 'USDT' else \
+                            margin_total_usd / float(binance.prices()[base+"USDT"])
+
             except KeyError:
                 current_base_bal = 0
             base_amount = self.amount_to_use(pair, current_base_bal)

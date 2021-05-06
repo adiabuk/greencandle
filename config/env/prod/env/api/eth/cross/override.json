@@ -1,8 +1,9 @@
 {
   "name": "env-api-eth-cross",
-  "pairs": "ETCETH BNBETH",
+  "pairs": "BNBETH",
   "trade_isolated": "false",
   "trade_type": "margin",
   "max_trades": "10",
-  "trade_multiplier": "5"
+  "trade_multiplier": "5",
+  "divisor":"10"
 }
