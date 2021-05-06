@@ -1,5 +1,6 @@
 {
   "name": "env-api-eth",
   "pairs": "ETCETH NEOETH BNBETH",
-  "divisor": "2.1"
+  "divisor": "3",
+  "max_trades": "2"
 }

@@ -1,5 +1,6 @@
 {
   "name": "env-api-usdt",
   "pairs": "ENJUSDT HBARUSDT",
-  "divisor": "2.1"
+  "divisor": "2.1",
+  "max_trades": "2"
 }
