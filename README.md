@@ -11,6 +11,16 @@
 
 # Releases
 
+## 2.6
+* Decrease volume of alerts down to 10% during out-of-hours
+* Cleanup lint
+* Bug fix with multiple concurrent trades
+* Allow cross margin trades access to total balance when calculating how much to use
+* Remove some pairs from 1m strategy
+* Fixes for max trades per strategy
+* Added small script for quickly retrieving current price of trading pair
+* Suppress meaningless slack alerts
+
 ## 2.5
 * Rename margin strategies to cross or isolated
 * Small fixes to missing containers and trading pairs
