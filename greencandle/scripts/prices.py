@@ -1,8 +1,15 @@
 #!/usr/bin/env python
+"""
+Simple script to get current price of trading pair
+"""
+
 import sys
 from binance import binance
 
 def main():
+    """
+    Main function
+    """
 
     prices = binance.prices()
     if sys.argv[1] == '--help':
