@@ -419,7 +419,7 @@ class Trade():
         for pair, current_time, current_price, event in short_list:
             quantity = dbase.get_quantity(pair)
             if not quantity:
-                self.logger.critical("Unable to find quantity for %s" % pair)
+                self.logger.info("close_margin_short: unable to find quantity for %s" % pair)
                 return
 
             buy_price, _, _, base_in, _ = dbase.get_trade_value(pair)[0]
@@ -515,7 +515,7 @@ class Trade():
         for pair, current_time, current_price, event in sell_list:
             quantity = dbase.get_quantity(pair)
             if not quantity:
-                self.logger.critical("Unable to find quantity for %s" % pair)
+                self.logger.info("close_spot_long: unable to find quantity for %s" % pair)
                 continue
 
             buy_price, _, _, base_in, _ = dbase.get_trade_value(pair)[0]
@@ -568,7 +568,7 @@ class Trade():
         for pair, current_time, current_price, event in sell_list:
             quantity = dbase.get_quantity(pair)
             if not quantity:
-                self.logger.critical("Unable to find quantity for %s" % pair)
+                self.logger.info("close_margin_long: unable to find quantity for %s" % pair)
                 continue
             open_price, quote_in, _, base_in, borrowed = dbase.get_trade_value(pair)[0]
             perc_inc = perc_diff(open_price, current_price)
