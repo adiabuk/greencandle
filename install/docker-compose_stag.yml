@@ -360,11 +360,13 @@ services:
       - be-5ma-api-usdt:5ma-usdt
       - be-5ma-api-eth:5ma-eth
       - be-env-api-usdt:env-usdt
+      - be-has-api-usdt:has-usdt
     depends_on:
       - be-alert
       - be-backend-api
       - base-mysql
       - base-redis
+        be-has-api-usdt
     entrypoint: /docker-entrypoint.sh api_router --test
     volumes:
       - /data:/data
@@ -490,6 +492,37 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  be-has-api-usdt:
+    container_name: be-has-api-usdt
+    hostname: be-has-api-usdt
+    image: amrox/greencandle:${TAG}
+    restart: on-failure
+    entrypoint: /docker-entrypoint.sh backend_api --test
+    logging:
+      driver: journald
+    environment:
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=stag/has/api/usdt
+    ports:
+      - 20000
+    links:
+      - base-mysql:mysql
+      - base-redis:redis
+    depends_on:
+      - base-mysql
+      - base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
 
   be-alert:
     container_name: be-alert
