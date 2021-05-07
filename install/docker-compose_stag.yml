@@ -366,7 +366,7 @@ services:
       - be-backend-api
       - base-mysql
       - base-redis
-        be-has-api-usdt
+      - be-has-api-usdt
     entrypoint: /docker-entrypoint.sh api_router --test
     volumes:
       - /data:/data
