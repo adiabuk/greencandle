@@ -39,8 +39,12 @@ def respond():
         router_config = json.load(json_file)
     print(router_config)
 
-    #for env, host in router_config.items():
-    hosts = router_config[payload["strategy"]]
+    try:
+        hosts = router_config[payload["strategy"]]
+    except TypeError:
+        LOGGER.error("Invalid JSON detected: %s" % payload)
+        return Response(status=500)
+
     for host in hosts:
         send_trade(payload, host)
     print(request.json)
