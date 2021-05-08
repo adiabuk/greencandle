@@ -106,7 +106,7 @@ def get_binance_margin():
             LOGGER.debug('%s %s ' % (str(key), str(all_balances[key]["net"])))
             current_value = float(all_balances[key]["net"])
 
-            if float(current_value) > 0:  # available currency
+            if float(current_value) != 0:  # available currency
                 result["margin"][key]["count"] = current_value
 
                 if key == "BTC":
