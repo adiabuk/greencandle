@@ -44,7 +44,7 @@ curl -O https://www.loggly.com/install/configure-linux.sh
 sudo bash configure-linux.sh -a $subdomain -t $token -u $username -p $password
 
 #curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
-wget "https://www.dropbox.com/sh/l22jyonei087h4o/AADJZi6xGYsn18CSy_hGmQz-a/docker-compose-1.24.1?dl=0" -O /usr/local/bin/docker-compose
+wget "https://www.dropbox.com/sh/l22jyonei087h4o/AADJZi6xGYsn18CSy_hGmQz-a/docker-compose-1.29.1?dl=0" -O /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 echo "export HOSTNAME" >> ~/.bashrc
 

@@ -22,6 +22,7 @@ services:
     container_name: base-redis
     hostname: base-redis
     image: amrox/gc-redis:${TAG}
+    pull_policy: always
     restart: on-failure
     links:
       - base-mysql:mysql
@@ -40,6 +41,7 @@ services:
     container_name: base-mysql
     hostname: base-mysql
     image: amrox/gc-mysql:${TAG}
+    pull_policy: always
     entrypoint: /docker-entrypoint.sh mysqld
     environment:
       - CONFIG_ENV=stag
@@ -65,6 +67,7 @@ services:
     logging:
       driver: journald
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint-api.sh api
     links:
@@ -93,6 +96,7 @@ services:
       - CONFIG_ENV=stag/fe/cron
       - HOST=$HOSTNAME
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh cron -f
     logging:
@@ -116,41 +120,43 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
   fe-webserver:
-     container_name: fe-webserver
-     hostname: fe-webserver
-     image: amrox/webserver:${TAG}
-     restart: on-failure
-     healthcheck:
-       test: service nginx status || exit 1
-       interval: 5m
-       timeout: 5s
-       retries: 5
-     environment:
-       - CONFIG_ENV=stag
-       - HOST=$HOSTNAME
-     ports:
-       - 8888:8888
-     links:
-       - fe-dashboard:dashboard
-       - fe-cadvisor:cadvisor
-       - fe-api:api
-       - base-mysql:mysql
-       - base-redis:redis
-     depends_on:
-       - fe-dashboard
-       - fe-cadvisor
-       - fe-api
-       - base-mysql
-       - base-redis
-     entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
-     volumes:
-       - /data:/data
-       - /root/.aws:/root/.aws
+    container_name: fe-webserver
+    hostname: fe-webserver
+    image: amrox/webserver:${TAG}
+    pull_policy: always
+    restart: on-failure
+    healthcheck:
+      test: service nginx status || exit 1
+      interval: 5m
+      timeout: 5s
+      retries: 5
+    environment:
+      - CONFIG_ENV=stag
+      - HOST=$HOSTNAME
+    ports:
+      - 8888:8888
+    links:
+      - fe-dashboard:dashboard
+      - fe-cadvisor:cadvisor
+      - fe-api:api
+      - base-mysql:mysql
+      - base-redis:redis
+    depends_on:
+      - fe-dashboard
+      - fe-cadvisor
+      - fe-api
+      - base-mysql
+      - base-redis
+    entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
 
   fe-dashboard:
     container_name: fe-dashboard
     hostname: fe-dashboard
     image: amrox/dashboard:${TAG}
+    pull_policy: always
     restart: on-failure
     ports:
       - 8080:3030
@@ -169,6 +175,7 @@ services:
     container_name: be-5ma-nostop-btc
     hostname: be-5ma-nostop-btc
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend --test
     logging:
@@ -197,6 +204,7 @@ services:
     container_name: be-5ma-nostop-usdt
     hostname: be-5ma-nostop-usdt
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend --test
     logging:
@@ -225,6 +233,7 @@ services:
     container_name: be-5ma-1tsl-btc
     hostname: be-5ma-1tsl-btc
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend --test
     logging:
@@ -253,6 +262,7 @@ services:
     container_name: be-5ma-1tsl-usdt
     hostname: be-5ma-1tsl-usdt
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend --test
     logging:
@@ -281,6 +291,7 @@ services:
     container_name: be-backend-api
     hostname: be-backend-api
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend_api --test
     logging:
@@ -311,6 +322,7 @@ services:
     container_name: fe-apiweb
     hostname: fe-apiweb
     image: amrox/webserver:${TAG}
+    pull_policy: always
     restart: on-failure
     healthcheck:
       test: service nginx status || exit 1
@@ -340,6 +352,7 @@ services:
     container_name: be-api-router
     hostname: be-api-router
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     healthcheck:
       test: ls ||exit 1
@@ -377,6 +390,7 @@ services:
     container_name: be-5ma-api-btc
     hostname: be-5ma-api-btc
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend_api --test
     logging:
@@ -407,6 +421,7 @@ services:
     container_name: be-5ma-api-usdt
     hostname: be-5ma-api-usdt
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend_api --test
     logging:
@@ -437,6 +452,7 @@ services:
     container_name: be-5ma-api-eth
     hostname: be-5ma-api-eth
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend_api --test
     logging:
@@ -467,6 +483,7 @@ services:
     container_name: be-env-api-usdt
     hostname: be-env-api-usdt
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend_api --test
     logging:
@@ -497,6 +514,7 @@ services:
     container_name: be-has-api-usdt
     hostname: be-has-api-usdt
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend_api --test
     logging:
@@ -528,6 +546,7 @@ services:
     container_name: be-alert
     hostname: be-alert
     image: amrox/alert:latest
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint-alert.sh
     ports:
