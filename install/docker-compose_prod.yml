@@ -1,4 +1,4 @@
-version: "3.1"
+version: "3.7"
 services:
 
   fe-cadvisor:
@@ -22,6 +22,7 @@ services:
     container_name: base-redis
     hostname: base-redis
     image: amrox/gc-redis:${TAG}
+    pull_policy: always
     restart: on-failure
     links:
       - base-mysql:mysql
@@ -40,6 +41,7 @@ services:
     container_name: base-mysql
     hostname: base-mysql
     image: amrox/gc-mysql:${TAG}
+    pull_policy: always
     entrypoint: /docker-entrypoint.sh mysqld
     environment:
       - CONFIG_ENV=prod
@@ -65,6 +67,7 @@ services:
     logging:
       driver: journald
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint-api.sh api
     links:
@@ -93,6 +96,7 @@ services:
       - CONFIG_ENV=prod/fe/cron
       - HOST=$HOSTNAME
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh cron -f
     logging:
@@ -119,6 +123,7 @@ services:
      container_name: fe-webserver
      hostname: fe-webserver
      image: amrox/webserver:${TAG}
+    pull_policy: always
      restart: on-failure
      healthcheck:
        test: service nginx status || exit 1
@@ -151,6 +156,7 @@ services:
     container_name: fe-dashboard
     hostname: fe-dashboard
     image: amrox/dashboard:${TAG}
+    pull_policy: always
     ports:
       - 8080:3030
     healthcheck:
@@ -168,6 +174,7 @@ services:
     container_name: be-5ma-4perc-vol-eth
     hostname: 5ma-4perc-vol-eth
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend
     logging:
@@ -196,6 +203,7 @@ services:
     container_name: be-5ma-1tsl-btc-margin
     hostname: be-5ma-1tsl-btc-margin
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend
     logging:
@@ -224,6 +232,7 @@ services:
     container_name: be-5ma-1tsl-usdt-margin
     hostname: be-5ma-1tsl-usdt-margin
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend
     logging:
@@ -252,6 +261,7 @@ services:
     container_name: be-5ma-1tsl-btc
     hostname: be-5ma-1tsl-btc
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend
     logging:
@@ -280,6 +290,7 @@ services:
     container_name: be-5ma-1tsl-usdt
     hostname: be-5ma-1tsl-usdt
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend
     logging:
@@ -308,6 +319,7 @@ services:
     container_name: be-5ma-nostop-btc
     hostname: be-5ma-nostop-btc
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend
     logging:
@@ -336,6 +348,7 @@ services:
     container_name: be-5ma-nostop-usdt
     hostname: be-5ma-nostop-usdt
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend
     logging:
@@ -364,6 +377,7 @@ services:
     container_name: be-api-router
     hostname: be-api-router
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     healthcheck:
       test: ls ||exit 1
@@ -419,6 +433,7 @@ services:
     container_name: be-5ma-api-btc
     hostname: be-5ma-api-btc
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
@@ -449,6 +464,7 @@ services:
     container_name: be-5ma-api-usdt
     hostname: be-5ma-api-usdt
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
@@ -479,6 +495,7 @@ services:
     container_name: be-5ma-api-eth-isolated
     hostname: be-5ma-api-eth-isolated
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
@@ -509,6 +526,7 @@ services:
     container_name: be-5ma-api-eth
     hostname: be-5ma-api-eth
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
@@ -539,6 +557,7 @@ services:
     container_name: be-env-api-usdt
     hostname: be-env-api-usdt
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
@@ -569,6 +588,7 @@ services:
     container_name: be-5ma-api-btc-isolated
     hostname: be-5ma-api-btc-isolated
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
@@ -599,6 +619,7 @@ services:
     container_name: be-5ma-api-usdt-cross
     hostname: be-5ma-api-usdt-cross
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
@@ -629,6 +650,7 @@ services:
     container_name: be-env-api-usdt-isolated
     hostname: be-env-api-usdt-isolated
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
@@ -659,6 +681,7 @@ services:
     container_name: be-env-api-eth
     hostname: be-env-api-eth
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
@@ -689,6 +712,7 @@ services:
     container_name: be-env-api-eth-cross
     hostname: be-env-api-eth-cross
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
@@ -719,6 +743,7 @@ services:
     container_name: be-env-api-1m-usdt
     hostname: be-env-api-1m-usdt
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
@@ -749,6 +774,7 @@ services:
     container_name: be-env-api-1m-btc
     hostname: be-env-api-1m-btc
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
@@ -779,6 +805,7 @@ services:
     container_name: be-env-api-1m-btc-cross
     hostname: be-env-api-1m-btc-cross
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
@@ -809,6 +836,7 @@ services:
     container_name: be-env-api-1m-usdt-cross
     hostname: be-env-api-1m-usdt-cross
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
