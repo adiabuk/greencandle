@@ -404,6 +404,8 @@ services:
       - be-env-api-usdt-isolated:env-usdt-isolated
       - be-env-api-1m-usdt:env-1m-usdt
       - be-env-api-1m-btc:env-1m-btc
+      - be-env-api-1m-bnb:env-1m-bnb
+      - be-env-api-1m-eth:env-1m-eth
       - be-env-api-1m-btc-cross:env-1m-btc-cross
       - be-env-api-1m-usdt-cross:env-1m-usdt-cross
     depends_on:
@@ -423,6 +425,8 @@ services:
       - be-env-api-1m-btc
       - be-env-api-1m-btc-cross
       - be-env-api-1m-usdt-cross
+      - be-env-api-1m-bnb
+      - be-env-api-1m-eth
     entrypoint: /docker-entrypoint.sh api_router
     volumes:
       - /data:/data
@@ -844,6 +848,68 @@ services:
     environment:
       - HOST=$HOSTNAME
       - CONFIG_ENV=prod/env-1m/api/usdt/cross
+    ports:
+      - 20000
+    links:
+      - base-mysql:mysql
+      - base-redis:redis
+    depends_on:
+      - base-mysql
+      - base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  be-env-api-1m-bnb:
+    container_name: be-env-api-1m-bnb
+    hostname: be-env-api-1m-bnb
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: on-failure
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=prod/env-1m/api/bnb
+    ports:
+      - 20000
+    links:
+      - base-mysql:mysql
+      - base-redis:redis
+    depends_on:
+      - base-mysql
+      - base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  be-env-api-1m-eth:
+    container_name: be-env-api-1m-eth
+    hostname: be-env-api-1m-eth
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: on-failure
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=prod/env-1m/api/eth
     ports:
       - 20000
     links:
