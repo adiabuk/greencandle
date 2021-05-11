@@ -2,5 +2,5 @@
   "name": "env-api-bnb-1m",
   "pairs": "BCHBNB MATICBNB",
   "divisor": "1.1",
-  "max_trades: "1"
+  "max_trades": "1"
 }
