@@ -123,7 +123,7 @@ services:
      container_name: fe-webserver
      hostname: fe-webserver
      image: amrox/webserver:${TAG}
-    pull_policy: always
+     pull_policy: always
      restart: on-failure
      healthcheck:
        test: service nginx status || exit 1
