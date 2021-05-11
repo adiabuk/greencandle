@@ -11,6 +11,14 @@
 
 # Releases
 
+## 2.6.1
+* Additional pairs for 1m env and 3h 5MA strategies
+* New containers for new base pairs
+* Update docker-compose version
+* Auto-pull all images in docker-compose
+* Correctly calculate spot margin balance by including debt as negative equity
+* Clean alert noice in slack
+
 ## 2.6
 * Decrease volume of alerts down to 10% during out-of-hours
 * Cleanup lint
