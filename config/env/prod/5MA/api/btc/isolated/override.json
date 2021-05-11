@@ -1,6 +1,6 @@
 {
   "name": "5ma-api-btc-isolated",
-  "pairs": "ETHBTC",
+  "pairs": "ETHBTC BNBBTC",
   "trade_isolated": "true",
   "trade_type": "margin",
   "max_trades": "10",
