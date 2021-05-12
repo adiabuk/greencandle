@@ -89,7 +89,7 @@ def get_time():
     """
     Return day/night string depending on time of day
     """
-    return "night" if in_between(datetime.now().time(), time(20), time(09)) else "day"
+    return "night" if in_between(datetime.now().time(), time(20), time(9)) else "day"
 
 def play_mp3(path):
     """
