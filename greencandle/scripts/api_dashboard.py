@@ -30,7 +30,7 @@ def get_pairs():
             command = 'configstore package get {} pairs'.format(env)
             result = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
             #subprocess.run(["ls", "-l", "/dev/null"], capture_output=True)
-            pairs =  result.stdout.read().split()
+            pairs = result.stdout.read().split()
             command = 'configstore package get {} name'.format(env)
             result = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
             name = result.stdout.read().split()
@@ -55,7 +55,7 @@ def divide_chunks(lst, num):
 def charts():
     """Charts for given strategy/config_env"""
     config_env = request.args.get('config_env')
-    groups = list(divide_chunks(get_pairs()[0][config_env],2))
+    groups = list(divide_chunks(get_pairs()[0][config_env], 2))
 
     return render_template('charts.html', groups=groups)
 
@@ -63,7 +63,7 @@ def list_to_dict(rlist):
     """
     Convert colon seperated string list to key/value dict
     """
-    links = dict(map(lambda s : s.split(':'), rlist))
+    links = dict(map(lambda s: s.split(':'), rlist))
     return {v: k for k, v in links.items() if k.startswith("be")}
 
 @APP.route("/forward", methods=['POST', 'GET'])
@@ -99,10 +99,9 @@ def trade():
     """
     pairs, _, names = get_pairs()
 
-    rev_names =  {v: k for k, v in names.items() }
+    rev_names = {v: k for k, v in names.items()}
     with open('/etc/router_config.json', 'r') as json_file:
-        router_config=json.load(json_file)
-
+        router_config = json.load(json_file)
 
     with open("install/docker-compose_prod.yml", 'r') as stream:
         try:
