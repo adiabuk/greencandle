@@ -1,5 +1,5 @@
 {
-  "name": "env-api-eth-1m",
+  "name": "env-api-1m-eth",
   "pairs": "WAVESETH ETCETH",
   "divisor": "1.1",
   "max_trades": "1"
