@@ -179,7 +179,7 @@ DROP TABLE IF EXISTS `trades`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `trades` (
-  `id` id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `open_time` timestamp NULL DEFAULT '0000-00-00 00:00:00',
   `close_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `pair` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
