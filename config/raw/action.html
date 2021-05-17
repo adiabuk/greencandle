@@ -1,0 +1,43 @@
+
+
+{% extends "layout.html" %}
+<meta http-equiv="refresh" content="6">
+{% block content %}
+<table border=0, id="customers">
+   <tr>
+      <th>strategy</th>
+      <th>action</th>
+      {% for strat, pairs in my_dic.items() %}
+   <tr>
+      <td>
+         {{strat}}
+      </td>
+      <td>
+         <table>
+            {% for pair in pairs %}
+            <tr>
+               <td>{{pair}}</td>
+               <td>
+                  <form action="/forward?pair={{pair}}&strategy={{strat}}&action=buy" method="post">
+                     <button name="forwardBtn" type="submit">Buy</button>
+                  </form>
+               </td>
+               <td>
+                  <form action="/forward?pair={{pair}}&strategy={{strat}}&action=sell" method="post">
+                     <button name="forwardBtn" type="submit">Sell</button>
+                  </form>
+               </td>
+               <td>
+                  <button name="button" type="submit">Sell</button>
+               </td>
+            </tr>
+            {% endfor %}
+            <td>
+         </table>
+      </td>
+   </tr>
+   {% endfor %}
+</table>
+{% endblock %}
+
+

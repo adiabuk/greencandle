@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+<meta http-equiv="refresh" content="6">
+{% block content %}
+<table border=0, id="customers">
+   {% for k, v in strats.items() %}
+   <tr>
+      <td class="y_n">
+         <h3>
+            <a target="_blank" href="/charts?config_env={{k}}">{{k}} ({{v}})</a>
+         </h3>
+      </td>
+   </tr>
+   {% endfor %}
+</table>
+{% endblock %}
