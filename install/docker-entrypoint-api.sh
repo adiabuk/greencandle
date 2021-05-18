@@ -21,6 +21,12 @@ if [[ ! -e /installed ]]; then
   cp /opt/output/greencandle.ini /etc/greencandle.ini || true
   mkdir /etc/gcapi
   cp /opt/config/raw/* /etc/gcapi/
+  if [[ "$CONFIG_ENV" == *"stag"* ]]; then
+    cp /opt/output/router_config_stag.json /etc/router_config.json
+  elif [[ "$CONFIG_ENV" == *"prod"* ]]; then
+    cp /opt/output/router_config_prod.json /etc/router_config.json
+  fi
+
   touch /installed
 fi
 exec "$@"
