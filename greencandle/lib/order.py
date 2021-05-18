@@ -234,7 +234,8 @@ class Trade():
                                                           isolated=str2bool(config.main.isolated),
                                                           asset=base)
                     if "msg" in borrow_result:
-                        self.logger.error("Borrow error-open %s: %s" % (pair, borrow_result))
+                        self.logger.error("Borrow error-open %s: %s while trying to borrow %s %s"
+                                          % (pair, borrow_result, amount_to_borrow, base))
                         continue
 
                     self.logger.info(borrow_result)
