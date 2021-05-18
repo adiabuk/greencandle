@@ -196,7 +196,8 @@ CREATE TABLE `trades` (
   `closed_by` varchar(30) DEFAULT NULL,
   `drawdown_perc` varchar(4) DEFAULT NULL,
   `direction` varchar(5) DEFAULT NULL,
-  `drawup_perc` varchar(4) DEFAULT NULL
+  `drawup_perc` varchar(4) DEFAULT NULL,
+  `rate` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
