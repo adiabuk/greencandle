@@ -84,6 +84,7 @@ services:
        - redis-unit:redis
        - dashboard:dashboard
        - api
+       - api:api_dash
      restart: on-failure
      volumes:
        - /data:/data
