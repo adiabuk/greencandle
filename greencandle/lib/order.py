@@ -446,7 +446,6 @@ class Trade():
                     (not self.test_trade and 'transactTime' in trade_result):
                 if name == "api":
                     name = "%"
-
                 dbase.update_trades(pair=pair, close_time=current_time,
                                     close_price=fill_price, quote=quantity,
                                     base_out=base_out, name=name, drawdown=drawdowns[pair],
@@ -544,11 +543,13 @@ class Trade():
                 if name == "api":
                     name = "%"
 
+                base = get_base(pair)
+                rate = binance.prices()[base + 'USDT'] if base != 'USDT' else "1"
                 db_result = dbase.update_trades(pair=pair, close_time=current_time,
                                                 close_price=fill_price, quote=quantity,
                                                 base_out=base_out, name=name,
                                                 drawdown=drawdowns[pair],
-                                                drawup=drawups[pair])
+                                                drawup=drawups[pair], rate=rate)
 
                 if db_result:
                     self.__send_notifications(pair=pair, current_time=current_time, perc=perc_inc,
@@ -607,10 +608,11 @@ class Trade():
                 if name == "api":
                     name = "%"
 
+                rate = binance.prices()[base + 'USDT'] if base != 'USDT' else "1"
                 dbase.update_trades(pair=pair, close_time=current_time,
                                     close_price=fill_price, quote=quantity,
                                     base_out=base_out, name=name, drawdown=drawdowns[pair],
-                                    drawup=drawups[pair])
+                                    drawup=drawups[pair], rate=rate)
 
                 self.__send_notifications(pair=pair, current_time=current_time, perc=perc_inc,
                                           fill_price=fill_price, interval=self.interval,
