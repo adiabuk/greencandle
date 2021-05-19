@@ -226,7 +226,7 @@ class Mysql():
         command = """update trades set close_price={0},close_time="{1}", quote_out="{2}",
         base_out="{3}", closed_by="{6}", drawdown_perc=abs(round({7},1)),
         drawup_perc=abs(round({8},1)), rate="{9}" where close_price is
-        NULL and `interval`="{4}" and pair="{5}" and (name like "{6}" or
+        NULL and `interval`="{4}" and pair="{5}" and (name = "{6}" or
         name like "api") """.format('%.15f' % float(close_price),
                                     close_time,
                                     '%.15f' % float(quote),
