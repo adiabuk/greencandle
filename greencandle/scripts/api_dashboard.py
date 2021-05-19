@@ -4,6 +4,7 @@
 Flask module for manipulating API trades and displaying relevent graphs
 """
 import re
+import os
 import sys
 import json
 import subprocess
@@ -19,7 +20,7 @@ def get_pairs():
     get details from docker_compose, configstore, and router config
     output in reversed JSON format
     """
-    docker_compose = open("install/docker-compose_prod.yml", "r")
+    docker_compose = open("/install/install/docker-compose_{}.yml".format(os.environ['HOST']), "r")
     pairs_dict = {}
     names = {}
     length = defaultdict(int)
@@ -103,7 +104,7 @@ def trade():
     with open('/etc/router_config.json', 'r') as json_file:
         router_config = json.load(json_file)
 
-    with open("install/docker-compose_prod.yml", 'r') as stream:
+    with open("/install/install/docker-compose_{}.yml".format(os.environ['HOST']), "r") as stream:
         try:
             output = (yaml.safe_load(stream))
         except yaml.YAMLError as exc:
