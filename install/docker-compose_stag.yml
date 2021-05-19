@@ -89,37 +89,6 @@ services:
       - /root/.aws:/root/.aws
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  fe-api:
-    container_name: fe-api
-    hostname: fe-api
-    environment:
-      - CONFIG_ENV=stag/fe/api
-      - HOST=$HOSTNAME
-    logging:
-      driver: journald
-    image: amrox/greencandle:${TAG}
-    pull_policy: always
-    restart: on-failure
-    entrypoint: /docker-entrypoint-api.sh api
-    links:
-      - base-mysql:mysql
-      - base-redis:redis
-    ports:
-      - 5000
-    depends_on:
-      - base-mysql
-      - base-redis
-    healthcheck:
-      test: find /var/run/  -mmin -2 -name api 2>&1 |grep -q api || exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    volumes:
-      - /data:/data
-      - /dev/log:/dev/log
-      - /root/.aws:/root/.aws
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
-
   fe-cron:
     container_name: fe-cron
     hostname: fe-cron
@@ -167,41 +136,18 @@ services:
     ports:
       - 8888:8888
     links:
-      - fe-dashboard:dashboard
       - fe-cadvisor:cadvisor
-      - fe-api:api
       - fe-api-dashboard:api_dash
       - base-mysql:mysql
       - base-redis:redis
     depends_on:
-      - fe-dashboard
       - fe-cadvisor
-      - fe-api
       - base-mysql
       - base-redis
     entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws
-
-  fe-dashboard:
-    container_name: fe-dashboard
-    hostname: fe-dashboard
-    image: amrox/dashboard:${TAG}
-    pull_policy: always
-    restart: on-failure
-    ports:
-      - 8080:3030
-    healthcheck:
-      test: curl  --fail 127.1:3030/dashboard/gc || exit 1
-      interval: 10m
-      timeout: 5s
-      retries: 5
-    entrypoint: /run.sh
-    links:
-      - base-mysql:mysql
-    depends_on:
-      - base-mysql
 
   be-5ma-nostop-btc:
     container_name: be-5ma-nostop-btc
