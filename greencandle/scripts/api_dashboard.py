@@ -67,8 +67,8 @@ def list_to_dict(rlist):
     links = dict(map(lambda s: s.split(':'), rlist))
     return {v: k for k, v in links.items() if k.startswith("be")}
 
-@APP.route("/forward", methods=['POST', 'GET'])
-def move_forward():
+@APP.route("/action", methods=['POST', 'GET'])
+def action():
     """
     get buy/sell request
     """
@@ -77,7 +77,7 @@ def move_forward():
     action = request.args.get('action')
 
     send_trade(pair, strategy, action)
-    return action()
+    return trade()
 
 def send_trade(pair, strategy, action):
     """
@@ -117,7 +117,7 @@ def trade():
         for item in short_name:
             name = item.split(':')[0]
             container = links_dict[name]
-            if container.startswith('be-'):
+            if container.startswith('be-') and 'alert' not in container:
                 actual_name = container[3:]
             else:
                 continue

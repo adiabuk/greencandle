@@ -18,13 +18,13 @@
             <tr>
                <td>{{pair}}</td>
                <td>
-                  <form action="/forward?pair={{pair}}&strategy={{strat}}&action=buy" method="post">
-                     <button name="forwardBtn" type="submit">Buy</button>
+                  <form action="/action?pair={{pair}}&strategy={{strat}}&action=buy" method="post">
+                     <button name="actionBtn" type="submit">Buy</button>
                   </form>
                </td>
                <td>
-                  <form action="/forward?pair={{pair}}&strategy={{strat}}&action=sell" method="post">
-                     <button name="forwardBtn" type="submit">Sell</button>
+                  <form action="/action?pair={{pair}}&strategy={{strat}}&action=sell" method="post">
+                     <button name="actionBtn" type="submit">Sell</button>
                   </form>
                </td>
                <td>
