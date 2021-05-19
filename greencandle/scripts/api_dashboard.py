@@ -12,7 +12,7 @@ from collections import defaultdict
 import requests
 import yaml
 from flask import Flask, render_template, request
-APP = Flask(__name__, template_folder="/etc/gcapi", static_url_path='/etc/gcapi/',
+APP = Flask(__name__, template_folder="/etc/gcapi", static_url_path='/',
             static_folder='/etc/gcapi')
 
 def get_pairs():
