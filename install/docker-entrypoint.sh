@@ -16,7 +16,7 @@ if [[ ! -e /installed ]]; then
     cp /opt/output/50x.html /usr/share/nginx/html || true
     echo $HOST > /var/www/html/env.txt || true
     cp /opt/output/{*.html,*.css,*.js,*.jpg} /var/www/html ||true
-    cp /opt/config/raw/main.css /var/www/html || true
+    cp /opt/config/raw/main.css /opt/config/raw/favicon.ico /var/www/html || true
     > /etc/nginx/sites-available/default || true
   fi
 
