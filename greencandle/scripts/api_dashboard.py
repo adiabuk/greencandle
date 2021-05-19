@@ -28,11 +28,11 @@ def get_pairs():
     for line in docker_compose:
         if re.search(pattern, line.strip()) and not line.strip().endswith(('prod', 'api', 'cron')):
             env = line.split('=')[1].strip()
-            command = 'configstore package get {} pairs'.format(env)
+            command = 'configstore package get --basedir /install/config {} pairs'.format(env)
             result = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
             #subprocess.run(["ls", "-l", "/dev/null"], capture_output=True)
             pairs = result.stdout.read().split()
-            command = 'configstore package get {} name'.format(env)
+            command = 'configstore package get --basedir /install/config {} name'.format(env)
             result = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
             name = result.stdout.read().split()
             pairs_dict[env] = [pair.decode('utf-8') for pair in pairs]
