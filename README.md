@@ -11,6 +11,12 @@
 
 # Releases
 
+## 2.7.1
+* Fix mising dashbaord link in prod
+* Get remaining loan amount and current debt for cross calculations
+* Add healthcheck for dashboard
+* Adjust cross margin trade multiplier
+
 ## 2.7
 * New API dashboard for charts and trades
 * New database views for stats and insights
