@@ -35,7 +35,7 @@ def healthcheck():
     Docker healthcheck
     Return 200
     """
-    return flask.Response(status=200)
+    return Response(status=200)
 
 @APP.route('/webhook', methods=['POST'])
 def respond():

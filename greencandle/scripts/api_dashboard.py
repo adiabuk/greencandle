@@ -52,6 +52,14 @@ def divide_chunks(lst, num):
     for i in range(0, len(lst), num):
         yield lst[i:i + num]
 
+@APP.route('/healthcheck', methods=["GET"])
+def healthcheck():
+    """
+    Docker healthcheck
+    Return 200
+    """
+    return Response(status=200)
+
 @APP.route('/charts', methods=["GET"])
 def charts():
     """Charts for given strategy/config_env"""
