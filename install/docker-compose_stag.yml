@@ -73,6 +73,8 @@ services:
     links:
       - base-mysql:mysql
       - base-redis:redis
+      - be-api-router:router
+
     ports:
       - 5000
     depends_on:

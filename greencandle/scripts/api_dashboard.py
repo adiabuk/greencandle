@@ -87,9 +87,9 @@ def send_trade(pair, strategy, action):
                "text": "Manual action from API",
                "action": action,
                "strategy": strategy}
-    url = "https://api-router/webhook"
+    url = "http://router:1080/webhook"
     try:
-        requests.post(url, json=json.dumps(payload), timeout=1)
+        requests.post(url, json=payload, timeout=1)
     except:
         pass
 
