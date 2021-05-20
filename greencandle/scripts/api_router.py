@@ -29,6 +29,14 @@ def send_trade(payload, host):
         pass
 
 
+@APP.route('/healthcheck', methods=["GET"])
+def healthcheck():
+    """
+    Docker healthcheck
+    Return 200
+    """
+    return flask.Response(status=200)
+
 @APP.route('/webhook', methods=['POST'])
 def respond():
     """
