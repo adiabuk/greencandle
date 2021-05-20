@@ -106,6 +106,7 @@ services:
        - 9999:9999
      links:
        - fe-cadvisor:cadvisor
+       - fe-api-dashboard:api_dash
        - base-mysql:mysql
        - base-redis:redis
      depends_on:
