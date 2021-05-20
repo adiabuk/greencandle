@@ -320,6 +320,39 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
+  fe-api-dashboard:
+    container_name: fe-api-dashboard
+    hostname: fe-api-dashboard
+    environment:
+      - CONFIG_ENV=prod/fe/api
+      - HOST=$HOSTNAME
+    logging:
+      driver: journald
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: on-failure
+    entrypoint: /docker-entrypoint-api.sh api_dashboard
+    links:
+      - base-mysql:mysql
+      - base-redis:redis
+      - be-api-router:router
+
+    ports:
+      - 5000
+    depends_on:
+      - base-mysql
+      - base-redis
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name api 2>&1 |grep -q api || exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /dev/log:/dev/log
+      - /root/.aws:/root/.aws
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
   be-api-router:
     container_name: be-api-router
     hostname: be-api-router
