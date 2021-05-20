@@ -5,5 +5,5 @@
   "trade_type": "margin",
   "max_trades": "10",
   "trade_multiplier": "3",
-  "divisor": "10"
+  "divisor": "20"
 }
