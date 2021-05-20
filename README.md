@@ -11,6 +11,18 @@
 
 # Releases
 
+## 2.7
+* New API dashboard for charts and trades
+* New database views for stats and insights
+* Small database and query fixes
+* New isolated containers for 1m BTC and USDT trades
+* Remove old api and dashboard
+* Reduce deploy time now that most trades are through api
+* Fixes due to third party changes to python-forex and ccxt
+* Increase logging for margin borrow failures
+* Add primary key to trades db table
+* Make container name consistent
+
 ## 2.6.1
 * Additional pairs for 1m env and 3h 5MA strategies
 * New containers for new base pairs
