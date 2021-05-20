@@ -3,7 +3,7 @@
 "5MA_3h_ETH": ["5ma-eth:20000", "5ma-eth-isolated:20000"],
 "env_15m_USDT": ["env-usdt:20000", "env-usdt-isolated:20000"],
 "env_15m_ETH": ["env-eth:20000", "env-eth-cross:20000"],
-"env_1m_BTC" : ["env-1m-btc:20000", "env-1m-btc-cross:20000"],
+"env_1m_BTC" : ["env-1m-btc:20000", "env-1m-btc-cross:20000", "env-im-btc-isolated:20000"],
 "env_1m_ETH" : ["env-1m-eth:20000"],
 "env_1m_BNB" : ["env-1m-bnb:20000"],
 "env_1m_USDT" : ["env-1m-usdt:20000", "env-1m-usdt-cross:20000", "env-1m-usdt-isolated:20000"]
