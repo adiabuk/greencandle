@@ -74,18 +74,18 @@ def action():
     """
     pair = request.args.get('pair')
     strategy = request.args.get('strategy')
-    action = request.args.get('action')
+    trade_action = request.args.get('action')
 
-    send_trade(pair, strategy, action)
+    send_trade(pair, strategy, trade_action)
     return trade()
 
-def send_trade(pair, strategy, action):
+def send_trade(pair, strategy, trade_action):
     """
     Create BUY/SELL post request and send to API router
     """
     payload = {"pair": pair,
                "text": "Manual action from API",
-               "action": action,
+               "action": trade_action,
                "strategy": strategy}
     url = "http://router:1080/webhook"
     try:
