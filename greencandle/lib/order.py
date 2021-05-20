@@ -204,7 +204,14 @@ class Trade():
                 if str2bool(config.main.isolated):
                     current_base_bal = float(balance[pair][base])
                 else:
+                    # Get current available to borrow
                     margin_total_usd = binance.get_max_borrow()
+
+                    # Get current debts
+                    for asset, debt in  binance.get_margin_debt():
+                        # add debts to get total allowed to borrow
+                        margin_total_usd += float(debt) if 'USD' in asset else \
+                                float(debt) * float(binance.prices()[debt+'USDT'])
                     current_base_bal = margin_total_usd if base == 'USDT' else \
                             margin_total_usd / float(binance.prices()[base+"USDT"])
 
