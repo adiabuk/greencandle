@@ -42,7 +42,8 @@ def get_phemex_values():
 
         # Get margin account details
         phemex = phemex_auth('swap', account)
-        usd2gbp = lambda: currency.get_rate("USD", "GBP")
+        #usd2gbp = lambda: currency.get_rate("USD", "GBP")
+        usd2gbp = 1.41 # FIXME
         btc = phemex.fetch_balance({'code': 'BTC'})['total']['BTC']
 
         # add spot usdt to usd

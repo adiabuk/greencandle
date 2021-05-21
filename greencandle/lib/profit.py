@@ -96,7 +96,8 @@ def gbp_to_base(gbp, symbol):
     BTC => OMG
     """
 
-    usd = gbp * CURRENCY.get_rate("GBP", "USD")
+    #usd = gbp * CURRENCY.get_rate("GBP", "USD")
+    usd = gbp * 2.84 # FIXME
     btc = usd * float(binance.prices()["BTCUSDT"])
     omg = btc * float(binance.prices()[symbol + "BTC"])
     return format(omg, ".20f")
