@@ -53,7 +53,7 @@ def get_phemex_values():
         #result = mydict()
         bitcoin_ticker = hitbtc.fetch_ticker('BTC/USDT')
         price = bitcoin_ticker['close']
-        gbp = (btc*price) * usd2gbp()
+        gbp = (btc*price) * usd2gbp #FIXME
 
         result["phemex"]["BTC"] = {}
         result["phemex"]["BTC"]["count"] = btc
@@ -65,18 +65,18 @@ def get_phemex_values():
         result["phemex"]["USD"]["USD"] = usd
         result["phemex"]["USD"]["count"] = usd
         result["phemex"]["USD"]["BTC"] = usd / price
-        result["phemex"]["USD"]["GBP"] = usd  * usd2gbp()
+        result["phemex"]["USD"]["GBP"] = usd  * usd2gbp #FIXME
 
         btc_total = btc + (usd/price)
         usd_total = btc_total * price
         result["phemex"]["TOTALS"]["BTC"] += btc_total
         result["phemex"]["TOTALS"]["USD"] += usd_total
         result["phemex"]["TOTALS"]["count"] = "N/A"
-        result["phemex"]["TOTALS"]["GBP"] += usd_total * usd2gbp()
+        result["phemex"]["TOTALS"]["GBP"] += usd_total * usd2gbp # FIXME
 
 
 
         #usd = bcoin *float(prices["BTCUSDT"])
-        gbp = usd2gbp() * usd_total
+        gbp = usd2gbp * usd_total #FIXME
 
     return default_to_regular(result)
