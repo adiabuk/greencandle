@@ -552,7 +552,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/api/usdt
+      - CONFIG_ENV=prod/env/long/15m/usdt
     ports:
       - 20000
     links:
@@ -645,7 +645,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/api/usdt/isolated
+      - CONFIG_ENV=prod/env/long/15m/usdt/isolated
     ports:
       - 20000
     links:
@@ -676,7 +676,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/api/eth
+      - CONFIG_ENV=prod/env/long/15m/eth
     ports:
       - 20000
     links:
@@ -707,7 +707,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/api/eth/cross
+      - CONFIG_ENV=prod/env/long/15m/eth/cross
     ports:
       - 20000
     links:
@@ -738,7 +738,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env-1m/api/usdt
+      - CONFIG_ENV=prod/env/long/1m/usdt
     ports:
       - 20000
     links:
@@ -769,7 +769,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env-1m/api/btc
+      - CONFIG_ENV=prod/env/long/1m/btc
     ports:
       - 20000
     links:
@@ -800,7 +800,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env-1m/api/btc/cross
+      - CONFIG_ENV=prod/env/long/1m/btc/cross
     ports:
       - 20000
     links:
@@ -831,7 +831,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env-1m/api/btc/isolated
+      - CONFIG_ENV=prod/env/long/1m/btc/isolated
     ports:
       - 20000
     links:
@@ -863,7 +863,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env-1m/api/usdt/isolated
+      - CONFIG_ENV=prod/env/long/1m/usdt/isolated
     ports:
       - 20000
     links:
@@ -894,7 +894,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env-1m/api/usdt/cross
+      - CONFIG_ENV=prod/env/long/1m/usdt/cross
     ports:
       - 20000
     links:
@@ -925,7 +925,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env-1m/api/bnb
+      - CONFIG_ENV=prod/env/long/1m/bnb
     ports:
       - 20000
     links:
@@ -956,7 +956,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env-1m/api/eth
+      - CONFIG_ENV=prod/env/long/1m/eth
     ports:
       - 20000
     links:
