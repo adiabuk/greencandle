@@ -354,6 +354,7 @@ services:
       - be-5ma-api-eth:5ma-eth
       - be-env-api-usdt:env-usdt
       - be-has-api-usdt:has-usdt
+      - be-env-1m:env-1m
     depends_on:
       - be-alert
       - be-backend-api
@@ -459,9 +460,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-env-api-usdt:
-    container_name: be-env-api-usdt
-    hostname: be-env-api-usdt
+  be-env-1m:
+    container_name: be-env-1m
+    hostname: be-env-1m
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: on-failure
@@ -470,7 +471,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=stag/env/api/usdt
+      - CONFIG_ENV=stag/env/api
     ports:
       - 20000
     links:
