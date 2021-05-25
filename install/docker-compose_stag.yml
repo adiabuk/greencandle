@@ -352,7 +352,6 @@ services:
       - be-5ma-api-btc:5ma-btc
       - be-5ma-api-usdt:5ma-usdt
       - be-5ma-api-eth:5ma-eth
-      - be-env-api-usdt:env-usdt
       - be-has-api-usdt:has-usdt
       - be-env-1m:env-1m
     depends_on:
