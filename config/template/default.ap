@@ -3,7 +3,12 @@ server {
     server_name  localhost;
 
     location / {
+
+    {{if (eq .name "api")}}
+      return 444;
+    {{else}}
       root /var/www/html;
+    {{end}}
     }
 
     location /webhook {

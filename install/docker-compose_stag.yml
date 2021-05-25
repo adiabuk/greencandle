@@ -310,7 +310,7 @@ services:
       timeout: 5s
       retries: 5
     environment:
-      - CONFIG_ENV=stag/fe
+      - CONFIG_ENV=stag/fe/api
       - HOST=$HOSTNAME
     ports:
       - 1111:1111
