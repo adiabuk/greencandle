@@ -81,7 +81,7 @@ services:
       - base-mysql
       - base-redis
     healthcheck:
-      test: curl -Isf http://127.1:1080/healthcheck
+      test: curl -Isf http://127.1:5000/healthcheck
       interval: 1m
       timeout: 2s
       retries: 5
