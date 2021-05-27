@@ -335,7 +335,7 @@ services:
     pull_policy: always
     restart: on-failure
     healthcheck:
-      test: curl -Isf http://127.1:5000/healthcheck
+      test: curl -Isf http://127.1:1080/healthcheck
       interval: 5m
       timeout: 5s
       retries: 5
