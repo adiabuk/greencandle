@@ -6,12 +6,12 @@ Calculate potential profits from historical data
 
 from __future__ import print_function
 from collections import defaultdict
-from forex_python.converter import CurrencyRates
+from currency_converter import CurrencyConverter
 from binance import binance
 from .mysql import Mysql
 from .common import sub_perc, perc_diff
 
-CURRENCY = CurrencyRates()
+CURRENCY = CurrencyConverter()
 RATE = 0.00014 # GBP to BTC
 FEES = 0.05
 
@@ -96,8 +96,8 @@ def gbp_to_base(gbp, symbol):
     BTC => OMG
     """
 
-    #usd = gbp * CURRENCY.get_rate("GBP", "USD")
-    usd = gbp * 2.84 # FIXME
+    gbp2usd = CURRENCY.convert(1, 'GBP', 'USD')
+    usd = gbp * gbp2usd
     btc = usd * float(binance.prices()["BTCUSDT"])
     omg = btc * float(binance.prices()[symbol + "BTC"])
     return format(omg, ".20f")
