@@ -1,6 +1,0 @@
-{
-  "name": "env_api-1m",
-  "stop_loss_perc": "200",
-  "check_interval": "36000",
-  "interval": "1m"
-}
