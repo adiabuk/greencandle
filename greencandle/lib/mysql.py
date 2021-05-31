@@ -235,7 +235,7 @@ class Mysql():
                                     pair, job_name, drawdown, drawup, rate)
         result = self.__run_sql_query(command)
         if result != 1:
-            self.logger.critical("Query affected %s rows" % result)
+            self.logger.critical("Query affected %s rows: %s" % (result, command))
         return result == 1
 
     def get_active_trades(self):
