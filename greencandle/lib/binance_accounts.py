@@ -76,13 +76,7 @@ def get_binance_isolated():
     result["isolated"]["TOTALS"]["BTC"] = bitcoin_total
     result["isolated"]["TOTALS"]["USD"] = usd_total
     result["isolated"]["TOTALS"]["count"] = "N/A"
-    for _ in range(3):
-        # Try to get exchange rate 3 times before giving up
-        try:
-            gbp_total = USD2GBP * usd_total
-        except RatesNotAvailableError:
-            continue
-        break
+    gbp_total = USD2GBP * usd_total
     result["isolated"]["TOTALS"]["GBP"] = gbp_total
 
     return default_to_regular(result)
@@ -141,13 +135,7 @@ def get_binance_margin():
         result["margin"]["TOTALS"]["BTC"] += bitcoin_totals
         result["margin"]["TOTALS"]["USD"] += usd_total
         result["margin"]["TOTALS"]["count"] = "N/A"
-        for _ in range(3):
-            # Try to get exchange rate 3 times before giving up
-            try:
-                gbp_total = USD2GBP * usd_total
-            except RatesNotAvailableError:
-                continue
-            break
+        gbp_total = USD2GBP * usd_total
         result["margin"]["TOTALS"]["GBP"] = gbp_total
         add_value("USD", usd_total)
         add_value("GBP", gbp_total)
@@ -213,13 +201,7 @@ def get_binance_values():
         result["binance"]["TOTALS"]["BTC"] += bitcoin_totals
         result["binance"]["TOTALS"]["USD"] += usd_total
         result["binance"]["TOTALS"]["count"] = "N/A"
-        for _ in range(3):
-            # Try to get exchange rate 3 times before giving up
-            try:
-                gbp_total = USD2GBP * usd_total
-            except RatesNotAvailableError:
-                continue
-            break
+        gbp_total = USD2GBP * usd_total
         result["binance"]["TOTALS"]["GBP"] = gbp_total
         add_value("USD", usd_total)
         add_value("GBP", gbp_total)
