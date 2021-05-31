@@ -11,6 +11,15 @@
 
 # Releases
 
+## 2.8
+* Use new currency conversion module
+* Merge env 1m and 15m into single top level config
+* Remove pair delisted from binance
+* Update virtualbox spec
+* Fix healthcheck for APIs
+* Add new tests to staging
+* Fixes for amount to use/borrow
+
 ## 2.7.1
 * Fix mising dashbaord link in prod
 * Get remaining loan amount and current debt for cross calculations
