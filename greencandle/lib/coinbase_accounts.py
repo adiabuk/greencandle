@@ -6,7 +6,7 @@ from __future__ import print_function
 import json
 from collections import defaultdict
 from requests.exceptions import ReadTimeout
-from forex_python.converter import CurrencyRates
+from currency_converter import CurrencyConverter
 from .balance_common import default_to_regular
 from .auth import coinbase_auth
 from .timeout import restrict_timeout
@@ -24,7 +24,7 @@ def get_coinbase_values():
     for account in config.accounts.coinbase:
 
         client = coinbase_auth(account)
-        currency = CurrencyRates()
+        currency = CurrencyConverter()
         all_accounts = {}
         with restrict_timeout(5, name="coinbase accounts"):  # allow to run for only 5 seconds
             all_accounts = client.get_accounts()
@@ -47,7 +47,8 @@ def get_coinbase_values():
                 result["coinbase"][data["currency"]]["GBP"] = current_gbp
 
                 # amount in USD
-                current_usd = float(currency.get_rate("GBP", "USD")) * float(current_gbp)
+                gbp2usd=  currency.convert(1, 'GBP', 'USD')
+                current_usd = gbp2usd * float(current_gbp)
                 usd_totals += float(current_usd)
                 result["coinbase"][data["currency"]]["USD"] = current_usd
 
