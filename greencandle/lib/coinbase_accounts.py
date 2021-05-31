@@ -47,7 +47,7 @@ def get_coinbase_values():
                 result["coinbase"][data["currency"]]["GBP"] = current_gbp
 
                 # amount in USD
-                gbp2usd=  currency.convert(1, 'GBP', 'USD')
+                gbp2usd = currency.convert(1, 'GBP', 'USD')
                 current_usd = gbp2usd * float(current_gbp)
                 usd_totals += float(current_usd)
                 result["coinbase"][data["currency"]]["USD"] = current_usd
