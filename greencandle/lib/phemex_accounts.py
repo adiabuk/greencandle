@@ -42,7 +42,7 @@ def get_phemex_values():
 
         # Get margin account details
         phemex = phemex_auth('swap', account)
-        usd2gbp =  c.convert(1, 'USD', 'GBP')
+        usd2gbp = currency.convert(1, 'USD', 'GBP')
         btc = phemex.fetch_balance({'code': 'BTC'})['total']['BTC']
 
         # add spot usdt to usd
