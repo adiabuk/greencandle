@@ -1,6 +1,6 @@
 {
   "name": "env-api-1m-usdt",
   "pairs": "MATICUSDT WAVESUSDT OMGUSDT RLCUSDT EOSUSDT FTMUSDT DASHUSDT",
-  "divisor": "4",
+  "divisor": "1.6",
   "max_trades": "3"
 }
