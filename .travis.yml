@@ -8,7 +8,7 @@ before_script:
 script:
 - configstore package test
 - sudo docker ps
-- echo "$DPWD" | sudo docker login -u "amrox" --password-stdin
+  #- echo "$DPWD" | sudo docker login -u "amrox" --password-stdin
 - sudo configstore package process_templates unit /etc
 - sudo mysqlcheck --host mysql -uroot -ppassword  --databases greencandle
 - cat  config/template/gc-cron |grep -v ^{| sudo crontab -
