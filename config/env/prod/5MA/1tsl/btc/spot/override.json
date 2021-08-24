@@ -1,0 +1,5 @@
+{
+  "name": "5ma-1tsl-btc-spot",
+  "pairs": "ENJBTC PHBBTC",
+  "max_trades": "2"
+}

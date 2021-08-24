@@ -1,6 +1,1 @@
-{
-  "name": "env-api-usdt",
-  "pairs": "ENJUSDT HBARUSDT",
-  "divisor": "1.6",
-  "max_trades": "2"
-}
+{}

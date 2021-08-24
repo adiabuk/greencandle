@@ -134,7 +134,7 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=prod/5MA/4perc/vol/eth
+      - CONFIG_ENV=prod/5MA/4perc/vol/eth/spot
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -221,7 +221,7 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=prod/5MA/1tsl/btc
+      - CONFIG_ENV=prod/5MA/1tsl/btc/spot
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -250,7 +250,7 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=prod/5MA/1tsl/usdt
+      - CONFIG_ENV=prod/5MA/1tsl/usdt/spot
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -279,7 +279,7 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=prod/5MA/nostop/btc
+      - CONFIG_ENV=prod/5MA/nostop/btc/spot
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -308,7 +308,7 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=prod/5MA/nostop/usdt
+      - CONFIG_ENV=prod/5MA/nostop/usdt/spot
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -428,7 +428,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/5MA/api/btc
+      - CONFIG_ENV=prod/5MA/api/btc/spot
     ports:
       - 20000
     links:
@@ -459,7 +459,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/5MA/api/usdt
+      - CONFIG_ENV=prod/5MA/api/usdt/spot
     ports:
       - 20000
     links:
@@ -521,7 +521,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/5MA/api/eth
+      - CONFIG_ENV=prod/5MA/api/eth/spot
     ports:
       - 20000
     links:
@@ -552,7 +552,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/15m/usdt
+      - CONFIG_ENV=prod/env/long/15m/usdt/spot
     ports:
       - 20000
     links:
@@ -676,7 +676,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/15m/eth
+      - CONFIG_ENV=prod/env/long/15m/eth/spot
     ports:
       - 20000
     links:
@@ -738,7 +738,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/1m/usdt
+      - CONFIG_ENV=prod/env/long/1m/usdt/spot
     ports:
       - 20000
     links:
@@ -769,7 +769,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/1m/btc
+      - CONFIG_ENV=prod/env/long/1m/btc/spot
     ports:
       - 20000
     links:
@@ -924,7 +924,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/1m/bnb
+      - CONFIG_ENV=prod/env/long/1m/bnb/spot
     ports:
       - 20000
     links:
@@ -955,7 +955,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/1m/eth
+      - CONFIG_ENV=prod/env/long/1m/eth/spot
     ports:
       - 20000
     links:
