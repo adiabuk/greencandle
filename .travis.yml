@@ -1,6 +1,6 @@
 dist: bionic
 install:
-- echo "$DPWD" | sudo docker login -u "amrox" --password-stdin
+#- echo "$DPWD" | sudo docker login -u "amrox" --password-stdin
 - sudo bash install/bootstrap_dev.sh
 - sudo docker-compose -f ./install/docker-compose_unit.yml up -d mysql-unit redis-unit
 before_script:
