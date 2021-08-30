@@ -17,7 +17,7 @@ from .redis_conn import Redis
 from .binance_accounts import get_binance_values, get_binance_margin, get_current_isolated
 from .balance_common import get_base, get_step_precision
 from .common import perc_diff, add_perc, sub_perc, AttributeDict
-from .alerts import send_gmail_alert, send_push_notif, send_slack_trade
+from .alerts import send_gmail_alert, send_push_notif, send_slack_trade, send_slack_message
 GET_EXCEPTIONS = get_decorator((Exception))
 
 class InvalidTradeError(Exception):
@@ -151,7 +151,7 @@ class Trade():
         else:
             raise InvalidTradeError("Invalid trade type")
 
-    def close_trade(self, items_list, drawdowns=None, drawups=None):
+    def close_trade(self, items_list, drawdowns=None, drawups=None, update_db=True):
         """
         Main close trade method
         Will choose between spot/margin and long/short
@@ -163,7 +163,8 @@ class Trade():
 
         if self.config.main.trade_type == "spot":
             if self.config.main.trade_direction == "long":
-                self.__close_spot_long(items_list, drawdowns=drawdowns, drawups=drawups)
+                self.__close_spot_long(items_list, drawdowns=drawdowns, drawups=drawups,
+                                       update_db=update_db)
             else:
                 raise InvalidTradeError("Invalid trade direction for spot")
 
@@ -276,9 +277,8 @@ class Trade():
 
         del dbase
 
-    @staticmethod
     @GET_EXCEPTIONS
-    def __get_test_balance(dbase, account=None):
+    def __get_test_balance(self, dbase, account=None):
         """
         Get and return test balances
         """
@@ -458,6 +458,7 @@ class Trade():
                                           event=event, action='CLOSE')
             else:
                 self.logger.critical("Sell Failed %s:%s" % (name, pair))
+                send_slack_message("alerts", "Sell Failed %s:%s" % (name, pair))
         del dbase
 
     @GET_EXCEPTIONS
@@ -507,7 +508,7 @@ class Trade():
 
 
     @GET_EXCEPTIONS
-    def __close_spot_long(self, sell_list, name=None, drawdowns=None, drawups=None):
+    def __close_spot_long(self, sell_list, name=None, drawdowns=None, drawups=None, update_db=True):
         """
         Sell items in sell_list
         """
@@ -547,11 +548,14 @@ class Trade():
 
                 base = get_base(pair)
                 rate = binance.prices()[base + 'USDT'] if base != 'USDT' else "1"
-                db_result = dbase.update_trades(pair=pair, close_time=current_time,
-                                                close_price=fill_price, quote=quantity,
-                                                base_out=base_out, name=name,
-                                                drawdown=drawdowns[pair],
-                                                drawup=drawups[pair], rate=rate)
+                if update_db:
+                    db_result = dbase.update_trades(pair=pair, close_time=current_time,
+                                                    close_price=fill_price, quote=quantity,
+                                                    base_out=base_out, name=name,
+                                                    drawdown=drawdowns[pair],
+                                                    drawup=drawups[pair], rate=rate)
+                else:
+                    db_result = True
 
                 if db_result:
                     self.__send_notifications(pair=pair, current_time=current_time, perc=perc_inc,
@@ -559,6 +563,7 @@ class Trade():
                                               event=event, action='CLOSE')
             else:
                 self.logger.critical("Sell Failed %s:%s" % (name, pair))
+                send_slack_message("alerts", "Sell Failed %s:%s" % (name, pair))
         del dbase
 
     @GET_EXCEPTIONS
@@ -621,4 +626,5 @@ class Trade():
                                           event=event, action='CLOSE')
             else:
                 self.logger.critical("Sell Failed %s:%s" % (name, pair))
+                send_slack_message("alerts", "Sell Failed %s:%s" % (name, pair))
         del dbase

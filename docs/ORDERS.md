@@ -3,7 +3,7 @@
 
 ## Items list
 items_list - passed to order.Trade.open_trade | order.Trade.close_trade
-list of tupples containing the following:
+list of tuples containing the following:
 
 * item: *(pair: string) eg BTCUSDT*
 * current_time: *YYYY-MM-DD h:m:s eg 2021-01-24 01:14:59*
