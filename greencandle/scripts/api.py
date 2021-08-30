@@ -70,7 +70,7 @@ def sell():
     current_price = request.args.get('price')
 
     interval = DATA[pair]['interval']
-    trade = Trade(interval=interval, test_data=TEST, test_trade=TEST_TRADE)
+    trade = Trade(interval=interval, test_data=TEST, test_trade=TEST_TRADE, config=config)
 
     current_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     sells = [(pair, current_time, current_price)]
@@ -89,7 +89,7 @@ def buy():
     global TEST
     pair = request.args.get('pair')
     LOGGER.info("Buying pair %s" % pair)
-    trade = Trade(interval='4h', test_data=TEST, test_trade=TEST_TRADE)
+    trade = Trade(interval='4h', test_data=TEST, test_trade=TEST_TRADE, config=config)
     current_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     current_price = get_current_price(pair)
     buys = [(pair, current_time, current_price)]

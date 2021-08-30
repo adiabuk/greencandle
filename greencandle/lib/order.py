@@ -18,7 +18,6 @@ from .binance_accounts import get_binance_values, get_binance_margin, get_curren
 from .balance_common import get_base, get_step_precision
 from .common import perc_diff, add_perc, sub_perc, AttributeDict
 from .alerts import send_gmail_alert, send_push_notif, send_slack_trade
-from . import config
 GET_EXCEPTIONS = get_decorator((Exception))
 
 class InvalidTradeError(Exception):
@@ -29,14 +28,15 @@ class InvalidTradeError(Exception):
 class Trade():
     """Buy & Sell class"""
 
-    def __init__(self, interval=None, test_data=False, test_trade=False):
+    def __init__(self, interval=None, test_data=False, test_trade=False, config=None):
         self.logger = get_logger(__name__)
         self.test_data = test_data
         self.test_trade = test_trade
-        self.max_trades = int(config.main.max_trades)
-        self.divisor = float(config.main.divisor) if config.main.divisor else None
-        self.prod = str2bool(config.main.production)
-        account = config.accounts.binance[0]
+        self.config = config
+        self.max_trades = int(self.config.main.max_trades)
+        self.divisor = float(self.config.main.divisor) if self.config.main.divisor else None
+        self.prod = str2bool(self.config.main.production)
+        account = self.config.accounts.binance[0]
         binance_auth(account)
 
         self.interval = interval
@@ -82,7 +82,7 @@ class Trade():
         try:
             last_open_price = dbase.fetch_sql_data("select base_in from trades where "
                                                    "pair='{0}' and name='{1}'"
-                                                   .format(item, config.main.name),
+                                                   .format(item, self.config.main.name),
                                                    header=False)[-1][-1]
             last_open_price = float(last_open_price) if last_open_price else 0
         except IndexError:
@@ -104,7 +104,7 @@ class Trade():
         """
         dbase = Mysql(test=self.test_data, interval=self.interval)
         current_trades = dbase.get_trades()
-        drain = str2bool(config.main.drain)
+        drain = str2bool(self.config.main.drain)
         avail_slots = self.max_trades - len(current_trades)
         self.logger.info("%s buy slots available" % avail_slots)
         if avail_slots <= 0:
@@ -118,7 +118,7 @@ class Trade():
         for item in items_list:
             if current_trades and item[0] in current_trades[0]:
                 self.logger.warning("We already have a trade of %s, skipping..." % item)
-            elif item[0] not in config.main.pairs and not self.test_data:
+            elif item[0] not in self.config.main.pairs and not self.test_data:
                 self.logger.warning("Pair %s not in main_pairs, skipping..." % item[0])
             else:
                 final_list.append(item)
@@ -134,16 +134,16 @@ class Trade():
             self.logger.warning("No items to open trade with")
             return
 
-        if config.main.trade_type == "spot":
-            if config.main.trade_direction == "long":
+        if self.config.main.trade_type == "spot":
+            if self.config.main.trade_direction == "long":
                 self.__open_spot_long(items_list)
             else:
                 raise InvalidTradeError("Invalid trade direction for spot")
 
-        elif config.main.trade_type == "margin":
-            if config.main.trade_direction == "long":
+        elif self.config.main.trade_type == "margin":
+            if self.config.main.trade_direction == "long":
                 self.__open_margin_long(items_list)
-            elif config.main.trade_direction == "short":
+            elif self.config.main.trade_direction == "short":
                 self.__open_margin_short(items_list)
             else:
                 raise InvalidTradeError("Invalid trade direction")
@@ -161,16 +161,16 @@ class Trade():
             self.logger.warning("No items to close trade with")
             return
 
-        if config.main.trade_type == "spot":
-            if config.main.trade_direction == "long":
+        if self.config.main.trade_type == "spot":
+            if self.config.main.trade_direction == "long":
                 self.__close_spot_long(items_list, drawdowns=drawdowns, drawups=drawups)
             else:
                 raise InvalidTradeError("Invalid trade direction for spot")
 
-        elif config.main.trade_type == "margin":
-            if config.main.trade_direction == "long":
+        elif self.config.main.trade_type == "margin":
+            if self.config.main.trade_direction == "long":
                 self.__close_margin_long(items_list, drawdowns=drawdowns, drawups=drawups)
-            elif config.main.trade_direction == "short":
+            elif self.config.main.trade_direction == "short":
                 self.__close_margin_short(items_list, drawdowns=drawdowns, drawups=drawups)
             else:
                 raise InvalidTradeError("Invalid trade direction")
@@ -188,15 +188,15 @@ class Trade():
         dbase = Mysql(test=self.test_data, interval=self.interval)
         if self.test_data or self.test_trade:
             balance = self.__get_test_balance(dbase, account='margin')
-        elif str2bool(config.main.isolated):
+        elif str2bool(self.config.main.isolated):
             balance = get_current_isolated()
-        elif not str2bool(config.main.isolated):
+        elif not str2bool(self.config.main.isolated):
             balance = get_binance_margin()
 
         for pair, current_time, current_price, event in buy_list:
             base = get_base(pair)
             try:
-                if str2bool(config.main.isolated):
+                if str2bool(self.config.main.isolated):
                     current_base_bal = float(balance[pair][base])
                 else:
                     # Get current available to borrow
@@ -225,7 +225,7 @@ class Trade():
                 self.logger.debug("amount to buy: %s, current_price: %s, amount:%s"
                                   % (base_amount, current_price, amount))
 
-                amount_to_borrow = float(base_amount) * float(config.main.multiplier)
+                amount_to_borrow = float(base_amount) * float(self.config.main.multiplier)
                 amount_to_use = sub_perc(1, amount_to_borrow)  # use 99% of borrowed funds
 
                 self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
@@ -233,7 +233,7 @@ class Trade():
 
                 if self.prod:
                     borrow_result = binance.margin_borrow(symbol=pair, quantity=amount_to_borrow,
-                                                          isolated=str2bool(config.main.isolated),
+                                                          isolated=str2bool(self.config.main.isolated),
                                                           asset=base)
                     if "msg" in borrow_result:
                         self.logger.error("Borrow error-open %s: %s while trying to borrow %s %s"
@@ -246,7 +246,7 @@ class Trade():
                                                         quantity=amt_str,
                                                         order_type=binance.MARKET,
                                                         isolated=str2bool(
-                                                            config.main.isolated))
+                                                            self.config.main.isolated))
                     if "msg" in trade_result:
                         self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
                         self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str,
@@ -266,8 +266,8 @@ class Trade():
                 dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
                                    base_amount=amount_to_use, quote=amt_str,
                                    borrowed=amount_to_borrow,
-                                   multiplier=config.main.multiplier,
-                                   direction=config.main.trade_direction)
+                                   multiplier=self.config.main.multiplier,
+                                   direction=self.config.main.trade_direction)
 
                 self.__send_notifications(pair=pair, current_time=current_time,
                                           fill_price=fill_price, interval=self.interval,
@@ -292,7 +292,7 @@ class Trade():
         for base in ['BTC', 'ETH', 'USDT', 'BNB', 'USDC']:
             db_result = dbase.fetch_sql_data("select sum(base_out-base_in) from trades "
                                              "where pair like '%{0}' and name='{1}'"
-                                             .format(base, config.main.name),
+                                             .format(base, self.config.main.name),
                                              header=False)[0][0]
             db_result = float(db_result) if db_result and db_result > 0 else 0
             current_trade_values = dbase.fetch_sql_data("select sum(base_in) from trades "
@@ -371,7 +371,7 @@ class Trade():
                     # 3. we proformed a real trade which was successful - (transactTime in dict)
                     db_result = dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
                                                    base_amount=base_amount, quote=amount,
-                                                   direction=config.main.trade_direction)
+                                                   direction=self.config.main.trade_direction)
                     if db_result:
                         self.__send_notifications(pair=pair, current_time=current_time,
                                                   fill_price=fill_price, interval=self.interval,
@@ -466,7 +466,7 @@ class Trade():
         open trades with items in short list
         """
         self.logger.info("We have %s potential items to short" % len(short_list))
-        drain = str2bool(config.main.drain)
+        drain = str2bool(self.config.main.drain)
         if drain and not self.test_data:
             self.logger.warning("Skipping Buy as %s is in drain" % self.interval)
             return
@@ -488,7 +488,7 @@ class Trade():
 
             proposed_quote_amount = self.amount_to_use(pair, current_base_bal)
 
-            amount_to_borrow = float(proposed_quote_amount) * float(config.main.multiplier)
+            amount_to_borrow = float(proposed_quote_amount) * float(self.config.main.multiplier)
             amount_to_use = sub_perc(1, amount_to_borrow)  # use 99% of borrowed funds
 
             amt_str = get_step_precision(pair, amount_to_use)
@@ -498,8 +498,8 @@ class Trade():
             dbase.insert_trade(pair=pair, price=current_price, date=current_time,
                                base_amount=base_amount,
                                quote=amt_str, borrowed=amount_to_borrow,
-                               multiplier=config.main.multiplier,
-                               direction=config.main.trade_direction)
+                               multiplier=self.config.main.multiplier,
+                               direction=self.config.main.trade_direction)
 
             self.__send_notifications(pair=pair, current_time=current_time,
                                       fill_price=current_price, interval=self.interval,
@@ -587,14 +587,14 @@ class Trade():
                                                     quantity=quote_in,
                                                     order_type=binance.MARKET,
                                                     isolated=str2bool(
-                                                        config.main.isolated))
+                                                        self.config.main.isolated))
 
                 if "msg" in trade_result:
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
                     continue
 
                 repay_result = binance.margin_repay(symbol=pair, quantity=borrowed,
-                                                    isolated=str2bool(config.main.isolated),
+                                                    isolated=str2bool(self.config.main.isolated),
                                                     asset=base)
                 if "msg" in repay_result:
                     self.logger.error("Repay error-close %s: %s" % (pair, repay_result))
