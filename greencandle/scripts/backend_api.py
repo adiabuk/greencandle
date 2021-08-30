@@ -31,7 +31,7 @@ def respond():
     current_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     current_price = get_current_price(pair)
     item = [(pair, current_time, current_price, config.main.name)]
-    trade = Trade(interval=config.main.interval, test_data=False, test_trade=TEST)
+    trade = Trade(interval=config.main.interval, test_data=False, test_trade=TEST, config=config)
     if action == 'buy':
         trade.open_trade(item)
     elif action == 'sell':

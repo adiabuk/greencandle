@@ -70,7 +70,7 @@ def perform_data(pair, interval, data_dir, indicators):
     prices_trunk = {pair: "0"}
     for beg in range(len(dframe) - CHUNK_SIZE):
         LOGGER.debug("IN LOOP %s " % beg)
-        trade = Trade(interval=interval, test_trade=True, test_data=True)
+        trade = Trade(interval=interval, test_trade=True, test_data=True, config=config)
 
         sells = []
         buys = []
@@ -144,7 +144,7 @@ def parallel_test(pairs, interval, data_dir, indicators):
     dbase = Mysql(test=True, interval=interval)
     dbase.delete_data()
     del dbase
-    trade = Trade(interval=interval, test_trade=True, test_data=True)
+    trade = Trade(interval=interval, test_trade=True, test_data=True, config=config)
     dframes = {}
     sizes = []
     for pair in pairs:
@@ -242,7 +242,7 @@ def prod_int_check(interval, test):
             redis.rm_drawup(pair)
             redis.rm_drawdown(pair)
 
-    trade = Trade(interval=interval, test_trade=test, test_data=False)
+    trade = Trade(interval=interval, test_trade=test, test_data=False, config=config)
     trade.close_trade(sells, drawdowns=drawdowns, drawups=drawups)
     del redis
     del dbase
@@ -340,7 +340,7 @@ def prod_loop(interval, test_trade):
             redis.rm_drawup(pair)
             redis.rm_drawdown(pair)
 
-    trade = Trade(interval=interval, test_trade=test_trade, test_data=False)
+    trade = Trade(interval=interval, test_trade=test_trade, test_data=False, config=config)
     trade.close_trade(sells, drawdowns=drawdowns, drawups=drawups)
     trade.open_trade(buys)
     del engine

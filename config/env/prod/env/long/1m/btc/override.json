@@ -1,6 +1,1 @@
-{
-  "name": "env-api-1m-btc",
-  "pairs": "WAVESBTC MATICBTC EOSBTC DOGEBTC ZENBTC DASHBTC RLCBTC ETCBTC FTMBTC",
-  "divisor": "4",
-  "max_trades": "4"
-}
+{}

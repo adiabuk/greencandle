@@ -118,9 +118,9 @@ services:
        - /data:/data
        - /root/.aws:/root/.aws
 
-  be-5ma-4perc-vol-eth:
-    container_name: be-5ma-4perc-vol-eth
-    hostname: 5ma-4perc-vol-eth
+  be-5ma-4perc-vol-eth-spot:
+    container_name: be-5ma-4perc-vol-eth-spot
+    hostname: 5ma-4perc-vol-eth-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: on-failure
@@ -134,7 +134,7 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=prod/5MA/4perc/vol/eth
+      - CONFIG_ENV=prod/5MA/4perc/vol/eth/spot
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -205,9 +205,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-5ma-1tsl-btc:
-    container_name: be-5ma-1tsl-btc
-    hostname: be-5ma-1tsl-btc
+  be-5ma-1tsl-btc-spot:
+    container_name: be-5ma-1tsl-btc-spot
+    hostname: be-5ma-1tsl-btc-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: on-failure
@@ -221,7 +221,7 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=prod/5MA/1tsl/btc
+      - CONFIG_ENV=prod/5MA/1tsl/btc/spot
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -234,9 +234,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-5ma-1tsl-usdt:
-    container_name: be-5ma-1tsl-usdt
-    hostname: be-5ma-1tsl-usdt
+  be-5ma-1tsl-usdt-spot:
+    container_name: be-5ma-1tsl-usdt-spot
+    hostname: be-5ma-1tsl-usdt-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: on-failure
@@ -250,7 +250,7 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=prod/5MA/1tsl/usdt
+      - CONFIG_ENV=prod/5MA/1tsl/usdt/spot
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -263,9 +263,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-5ma-nostop-btc:
-    container_name: be-5ma-nostop-btc
-    hostname: be-5ma-nostop-btc
+  be-5ma-nostop-btc-spot:
+    container_name: be-5ma-nostop-btc-spot
+    hostname: be-5ma-nostop-btc-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: on-failure
@@ -279,7 +279,7 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=prod/5MA/nostop/btc
+      - CONFIG_ENV=prod/5MA/nostop/btc/spot
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -292,9 +292,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-5ma-nostop-usdt:
-    container_name: be-5ma-nostop-usdt
-    hostname: be-5ma-nostop-usdt
+  be-5ma-nostop-usdt-spot:
+    container_name: be-5ma-nostop-usdt-spot
+    hostname: be-5ma-nostop-usdt-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: on-failure
@@ -308,7 +308,7 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=prod/5MA/nostop/usdt
+      - CONFIG_ENV=prod/5MA/nostop/usdt/spot
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -373,20 +373,20 @@ services:
     links:
       - base-mysql:mysql
       - base-redis:redis
-      - be-5ma-api-btc:5ma-btc
-      - be-5ma-api-usdt:5ma-usdt
-      - be-5ma-api-eth:5ma-eth
+      - be-5ma-api-btc-spot:5ma-btc
+      - be-5ma-api-usdt-spot:5ma-usdt
+      - be-5ma-api-eth-spot:5ma-eth
       - be-5ma-api-eth-isolated:5ma-eth-isolated
-      - be-env-api-usdt:env-usdt
-      - be-env-api-eth:env-eth
+      - be-env-api-usdt-spot:env-usdt
+      - be-env-api-eth-spot:env-eth
       - be-5ma-api-btc-isolated:5ma-btc-isolated
       - be-5ma-api-usdt-cross:5ma-usdt-cross
       - be-env-api-eth-cross:env-eth-cross
       - be-env-api-usdt-isolated:env-usdt-isolated
-      - be-env-api-1m-usdt:env-1m-usdt
-      - be-env-api-1m-btc:env-1m-btc
-      - be-env-api-1m-bnb:env-1m-bnb
-      - be-env-api-1m-eth:env-1m-eth
+      - be-env-api-1m-usdt-spot:env-1m-usdt
+      - be-env-api-1m-btc-spot:env-1m-btc
+      - be-env-api-1m-bnb-spot:env-1m-bnb
+      - be-env-api-1m-eth-spot:env-1m-eth
       - be-env-api-1m-btc-cross:env-1m-btc-cross
       - be-env-api-1m-btc-isolated:env-1m-btc-isolated
       - be-env-api-1m-usdt-cross:env-1m-usdt-cross
@@ -394,32 +394,32 @@ services:
     depends_on:
       - base-mysql
       - base-redis
-      - be-5ma-api-btc
-      - be-5ma-api-usdt
-      - be-5ma-api-eth
+      - be-5ma-api-btc-spot
+      - be-5ma-api-usdt-spot
+      - be-5ma-api-eth-spot
       - be-5ma-api-eth-isolated
-      - be-env-api-usdt
-      - be-env-api-eth
+      - be-env-api-usdt-spot
+      - be-env-api-eth-spot
       - be-5ma-api-btc-isolated
       - be-5ma-api-usdt-cross
       - be-env-api-eth-cross
       - be-env-api-usdt-isolated
-      - be-env-api-1m-usdt
-      - be-env-api-1m-btc
+      - be-env-api-1m-usdt-spot
+      - be-env-api-1m-btc-spot
       - be-env-api-1m-btc-cross
       - be-env-api-1m-usdt-cross
       - be-env-api-1m-usdt-isolated
-      - be-env-api-1m-bnb
-      - be-env-api-1m-eth
+      - be-env-api-1m-bnb-spot
+      - be-env-api-1m-eth-spot
     entrypoint: /docker-entrypoint.sh api_router
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-5ma-api-btc:
-    container_name: be-5ma-api-btc
-    hostname: be-5ma-api-btc
+  be-5ma-api-btc-spot:
+    container_name: be-5ma-api-btc-spot
+    hostname: be-5ma-api-btc-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: on-failure
@@ -428,7 +428,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/5MA/api/btc
+      - CONFIG_ENV=prod/5MA/api/btc/spot
     ports:
       - 20000
     links:
@@ -448,9 +448,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-5ma-api-usdt:
-    container_name: be-5ma-api-usdt
-    hostname: be-5ma-api-usdt
+  be-5ma-api-usdt-spot:
+    container_name: be-5ma-api-usdt-spot
+    hostname: be-5ma-api-usdt-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: on-failure
@@ -459,7 +459,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/5MA/api/usdt
+      - CONFIG_ENV=prod/5MA/api/usdt/spot
     ports:
       - 20000
     links:
@@ -510,9 +510,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-5ma-api-eth:
-    container_name: be-5ma-api-eth
-    hostname: be-5ma-api-eth
+  be-5ma-api-eth-spot:
+    container_name: be-5ma-api-eth-spot
+    hostname: be-5ma-api-eth-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: on-failure
@@ -521,7 +521,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/5MA/api/eth
+      - CONFIG_ENV=prod/5MA/api/eth/spot
     ports:
       - 20000
     links:
@@ -541,9 +541,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-env-api-usdt:
-    container_name: be-env-api-usdt
-    hostname: be-env-api-usdt
+  be-env-api-usdt-spot:
+    container_name: be-env-api-usdt-spot
+    hostname: be-env-api-usdt-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: on-failure
@@ -552,7 +552,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/15m/usdt
+      - CONFIG_ENV=prod/env/long/15m/usdt/spot
     ports:
       - 20000
     links:
@@ -665,9 +665,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-env-api-eth:
-    container_name: be-env-api-eth
-    hostname: be-env-api-eth
+  be-env-api-eth-spot:
+    container_name: be-env-api-eth-spot
+    hostname: be-env-api-eth-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: on-failure
@@ -676,7 +676,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/15m/eth
+      - CONFIG_ENV=prod/env/long/15m/eth/spot
     ports:
       - 20000
     links:
@@ -727,9 +727,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-env-api-1m-usdt:
-    container_name: be-env-api-1m-usdt
-    hostname: be-env-api-1m-usdt
+  be-env-api-1m-usdt-spot:
+    container_name: be-env-api-1m-usdt-spot
+    hostname: be-env-api-1m-usdt-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: on-failure
@@ -738,7 +738,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/1m/usdt
+      - CONFIG_ENV=prod/env/long/1m/usdt/spot
     ports:
       - 20000
     links:
@@ -758,9 +758,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-env-api-1m-btc:
-    container_name: be-env-api-1m-btc
-    hostname: be-env-api-1m-btc
+  be-env-api-1m-btc-spot:
+    container_name: be-env-api-1m-btc-spot
+    hostname: be-env-api-1m-btc-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: on-failure
@@ -769,7 +769,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/1m/btc
+      - CONFIG_ENV=prod/env/long/1m/btc/spot
     ports:
       - 20000
     links:
@@ -851,7 +851,6 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-
   be-env-api-1m-usdt-isolated:
     container_name: be-env-api-1m-usdt-isolated
     hostname: be-env-api-1m-usdt-isolated
@@ -914,9 +913,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-env-api-1m-bnb:
-    container_name: be-env-api-1m-bnb
-    hostname: be-env-api-1m-bnb
+  be-env-api-1m-bnb-spot:
+    container_name: be-env-api-1m-bnb-spot
+    hostname: be-env-api-1m-bnb-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: on-failure
@@ -925,7 +924,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/1m/bnb
+      - CONFIG_ENV=prod/env/long/1m/bnb/spot
     ports:
       - 20000
     links:
@@ -945,9 +944,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-env-api-1m-eth:
-    container_name: be-env-api-1m-eth
-    hostname: be-env-api-1m-eth
+  be-env-api-1m-eth-spot:
+    container_name: be-env-api-1m-eth-spot
+    hostname: be-env-api-1m-eth-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: on-failure
@@ -956,7 +955,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/1m/eth
+      - CONFIG_ENV=prod/env/long/1m/eth/spot
     ports:
       - 20000
     links:
