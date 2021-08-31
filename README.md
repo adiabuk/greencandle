@@ -11,6 +11,15 @@
 
 # Releases
 
+## 2.9
+* Create docker images manually
+* Test open trades periodically through cron
+* Alert on trade close failure
+* Small travis-ci fixes
+* Don't reimport config in order module
+* Rename spot config and containers
+* Increase spot trading volume
+
 ## 2.8
 * Use new currency conversion module
 * Merge env 1m and 15m into single top level config
