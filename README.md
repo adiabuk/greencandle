@@ -11,6 +11,9 @@
 
 # Releases
 
+## 2.9.1
+* Add missing pair for container
+
 ## 2.9
 * Create docker images manually
 * Test open trades periodically through cron
