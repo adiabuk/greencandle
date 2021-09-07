@@ -11,6 +11,9 @@
 
 # Releases
 
+## 2.9.2
+* Bump binance version for correct isolated balances
+
 ## 2.9.1
 * Add missing pair for container
 
