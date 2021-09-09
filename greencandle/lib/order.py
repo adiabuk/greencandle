@@ -117,13 +117,14 @@ class Trade():
         final_list = []
         for item in items_list:
             if current_trades and item[0] in current_trades[0]:
-                self.logger.warning("We already have a trade of %s, skipping..." % item)
+                self.logger.warning("We already have a trade of %s, skipping..." % item[0])
             elif item[0] not in self.config.main.pairs and not self.test_data:
                 self.logger.warning("Pair %s not in main_pairs, skipping..." % item[0])
             else:
                 final_list.append(item)
         return final_list
 
+    @GET_EXCEPTIONS
     def open_trade(self, items_list):
         """
         Main open trade method
@@ -151,6 +152,7 @@ class Trade():
         else:
             raise InvalidTradeError("Invalid trade type")
 
+    @GET_EXCEPTIONS
     def close_trade(self, items_list, drawdowns=None, drawups=None, update_db=True):
         """
         Main close trade method
