@@ -204,7 +204,7 @@ class Trade():
                     margin_total_usd = binance.get_max_borrow()
 
                     # Get current debts
-                    for asset, debt in  binance.get_margin_debt():
+                    for asset, debt in  binance.get_margin_debt().items():
                         # add debts to get total allowed to borrow
                         margin_total_usd += float(debt) if 'USD' in asset else \
                                 float(debt) * float(binance.prices()[debt+'USDT'])
