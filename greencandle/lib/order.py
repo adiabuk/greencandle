@@ -116,7 +116,7 @@ class Trade():
             return []
 
         final_list = []
-        manual = "manual" in self.config.name
+        manual = "manual" in self.config.main.name
         for item in items_list:
             if current_trades and item[0] in current_trades[0]:
                 self.logger.warning("We already have a trade of %s, skipping..." % item[0])
