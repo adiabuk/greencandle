@@ -10,7 +10,7 @@ fi
 if [[ ! -e /installed ]]; then
   configstore package process_templates --ignore-role --basedir /opt/config $CONFIG_ENV /opt/output
   cp /opt/output/alert.ini /etc/alert.ini
-  cp /install/alert/com.mp3 /
+  cp /srv/greencandle/alert/com.mp3 /
   touch /installed
 fi
-exec python /install/alert/webhook.py
+exec python /srv/greencandle/alert/webhook.py

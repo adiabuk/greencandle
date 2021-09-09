@@ -1,14 +1,14 @@
 FROM  python:3.9.2-buster
-ADD . /install
+ADD . /srv/greencandle
 
 RUN apt update && \
     apt-get -y install mpg321 gstreamer-1.0 libgirepository1.0-dev gcc libcairo2-dev pkg-config python3-dev gir1.2-gtk-3.0 && \
-    pip install -r /install/alert/requirements.txt && \
+    pip install -r /srv/greencandle/alert/requirements.txt && \
      wget "https://www.dropbox.com/sh/l22jyonei087h4o/AAChfqr_j4ydTDjILz0Q62Y2a/configstore-2.5.0-linux-amd64.tar.gz?dl=0" -O /tmp/configstore-2.5.0-linux-amd64.tar.gz && \
  tar zxvf /tmp/configstore-2.5.0-linux-amd64.tar.gz -C /usr/local/bin && \
  rm -rf /tmp/configstore-2.5.0-linux-amd64.tar.gz && \
-  cp install/install/docker-entrypoint-alert.sh / && \
+  cp /srv/greencandle/install/docker-entrypoint-alert.sh / && \
   mkdir /opt/output && \
-    cp -rv /install/config /opt/config
+    cp -rv /srv/greencandle/config /opt/config
 
-CMD ["python", "/install/alert/webhook.py"]
+CMD ["python", "/srv/greencandle/alert/webhook.py"]
