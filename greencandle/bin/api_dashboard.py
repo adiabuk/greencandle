@@ -20,7 +20,8 @@ def get_pairs():
     get details from docker_compose, configstore, and router config
     output in reversed JSON format
     """
-    docker_compose = open("/srv/greencandle/install/docker-compose_{}.yml".format(os.environ['HOST']), "r")
+    docker_compose = open("/srv/greencandle/install/docker-compose_{}.yml"
+                          .format(os.environ['HOST']), "r")
     pairs_dict = {}
     names = {}
     length = defaultdict(int)
@@ -28,11 +29,13 @@ def get_pairs():
     for line in docker_compose:
         if re.search(pattern, line.strip()) and not line.strip().endswith(('prod', 'api', 'cron')):
             env = line.split('=')[1].strip()
-            command = 'configstore package get --basedir /srv/greencandle/config {} pairs'.format(env)
+            command = ('configstore package get --basedir /srv/greencandle/config {} pairs'
+                       .format(env))
             result = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
             #subprocess.run(["ls", "-l", "/dev/null"], capture_output=True)
             pairs = result.stdout.read().split()
-            command = 'configstore package get --basedir /srv/greencandle/config {} name'.format(env)
+            command = ('configstore package get --basedir /srv/greencandle/config {} name'
+                       .format(env))
             result = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
             name = result.stdout.read().split()
             pairs_dict[env] = [pair.decode('utf-8') for pair in pairs]
@@ -112,7 +115,8 @@ def trade():
     with open('/etc/router_config.json', 'r') as json_file:
         router_config = json.load(json_file)
 
-    with open("/srv/greencandle/install/docker-compose_{}.yml".format(os.environ['HOST']), "r") as stream:
+    with open(("/srv/greencandle/install/docker-compose_{}.yml"
+              .format(os.environ['HOST']), "r")) as stream:
         try:
             output = (yaml.safe_load(stream))
         except yaml.YAMLError as exc:
