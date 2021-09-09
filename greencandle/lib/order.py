@@ -1,5 +1,6 @@
 #pylint: disable=wrong-import-position,import-error,no-member,logging-not-lazy
 #pylint: disable=wrong-import-order,no-else-return,no-else-break,no-else-continue
+#pylint: disable=too-many-locals
 """
 Test Buy/Sell orders
 """
