@@ -18,7 +18,7 @@ def get_entrypoints():
     """
 
     entrypoints = []
-    files = glob.glob('greencandle/scripts/[!_]*.py')
+    files = glob.glob('greencandle/bin/[!_]*.py')
     for filename in files:
         path = filename.rstrip('.py').replace('/', '.')
         name = path.split('.')[-1]
@@ -28,7 +28,7 @@ def get_entrypoints():
 
 def get_shell_scripts():
     """get list of shell scripts in module"""
-    return glob.glob('greencandle/scripts/[!_]*[!.py]')
+    return glob.glob('greencandle/bin/[!_]*[!.py]')
 
 def get_reqs(req):
     """get requirements and links from requirements.txt"""

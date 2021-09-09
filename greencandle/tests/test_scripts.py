@@ -10,10 +10,10 @@ class TestScripts(unittest.TestCase):
 
     def test_python_scripts(self):
         """
-        test python executables in scripts dir
+        test python executables in bin dir
         """
         entrypoints = []
-        files = glob.glob('greencandle/scripts/[!_]*.py')
+        files = glob.glob('greencandle/bin/[!_]*.py')
         for filename in files:
             path = filename.rstrip('.py').replace('/', '.')
             name = path.split('.')[-1]
