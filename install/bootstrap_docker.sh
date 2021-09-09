@@ -14,7 +14,7 @@ if [ -f /.dockerenv ]; then
       xvfb xauth iceweasel --no-install-recommends
     apt-get clean; apt-get autoclean; rm -rf /var/lib/apt/lists/*
     pip install cython redis-dump-load
-    install_dir=/install
+    install_dir=/srv/greencandle
 else
   echo "I am on a host machine"
 fi
