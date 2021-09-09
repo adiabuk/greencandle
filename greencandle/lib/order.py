@@ -257,6 +257,7 @@ class Trade():
                         continue
 
                     base_amount = trade_result.get('cummulativeQuoteQty', base_amount)
+                    amt_str = trade_result.get('executedQty')
                 else:
                     amt_str = amount_to_use
 
