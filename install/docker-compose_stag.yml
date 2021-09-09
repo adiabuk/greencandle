@@ -345,7 +345,7 @@ services:
     ports:
       - 1080
     links:
-      - be-alert:alert
+      #- be-alert:alert
       - be-backend-api:api
       - base-mysql:mysql
       - base-redis:redis
@@ -356,7 +356,7 @@ services:
       - be-env-1m:env-1m
       - be-manual:manual
     depends_on:
-      - be-alert
+      #- be-alert
       - be-backend-api
       - base-mysql
       - base-redis
@@ -555,31 +555,31 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
 
-  be-alert:
-    container_name: be-alert
-    hostname: be-alert
-    image: amrox/alert:latest
-    pull_policy: always
-    restart: on-failure
-    entrypoint: /docker-entrypoint-alert.sh
-    ports:
-      - 20000
-    healthcheck:
-      test: ls || exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    devices:
-      - /dev/ttyACM0:/dev/ttyACM0
-      - /dev/snd:/dev/snd
-    environment:
-      - HOST=$HOSTNAME
-      - CONFIG_ENV=stag
-    volumes:
-      - /root/.aws:/root/.aws
-      - /run/dbus/:/run/dbus/
-      - /dev/shm:/dev/shm
-      - /run/user:/run/user
-      - /tmp/.X11-unix:/tmp/.X11-unix
-      - /var/run/dbus:/var/run/dbu
-      - /etc/localtime:/etc/localtime:ro
+        #  be-alert:
+        #    container_name: be-alert
+        #    hostname: be-alert
+        #    image: amrox/alert:latest
+        #    pull_policy: always
+        #    restart: on-failure
+        #    entrypoint: /docker-entrypoint-alert.sh
+        #    ports:
+        #      - 20000
+        #    healthcheck:
+        #      test: ls || exit 1
+        #      interval: 1m
+        #      timeout: 2s
+        #      retries: 5
+        #    devices:
+        #      - /dev/ttyACM0:/dev/ttyACM0
+        #      - /dev/snd:/dev/snd
+        #    environment:
+        #      - HOST=$HOSTNAME
+        #      - CONFIG_ENV=stag
+        #    volumes:
+        #      - /root/.aws:/root/.aws
+        #      - /run/dbus/:/run/dbus/
+        #      - /dev/shm:/dev/shm
+        #      - /run/user:/run/user
+        #      - /tmp/.X11-unix:/tmp/.X11-unix
+        #      - /var/run/dbus:/var/run/dbu
+        #      - /etc/localtime:/etc/localtime:ro
