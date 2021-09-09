@@ -4,5 +4,7 @@
 "env_15m_USDT": ["env-usdt:20000"],
 "alert": ["alert:20000"],
 "HAS_1m_USDT": ["has-usdt:20000", "alert:20000"],
+"manual": ["manual:20000"]
 "env-1m": ["env-1m:20000", "alert:20000"]
+
  }
