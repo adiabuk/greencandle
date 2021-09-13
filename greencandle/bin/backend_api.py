@@ -22,20 +22,20 @@ def respond():
     """
     Default route to trade
     """
-    print("hi")
-    print("pair,action:", request.json)
-    pair = request.json['pair']
-    action = request.json['action']
+    print("action:", request.json)
+    pair = request.json['pair'].upper()
+    action = request.json['action'].upper()
     text = request.json['text']
     LOGGER.info("Request received: %s %s %s" %(pair, action, text))
     current_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     current_price = get_current_price(pair)
     item = [(pair, current_time, current_price, config.main.name)]
     trade = Trade(interval=config.main.interval, test_data=False, test_trade=TEST, config=config)
-    if action == 'buy':
+    if action == 'BUY':
         trade.open_trade(item)
-    elif action == 'sell':
+    elif action == 'SELL':
         trade.close_trade(item, drawdowns={pair:0}, drawups={pair:0})
+
     return Response(status=200)
 
 def main():
