@@ -160,15 +160,29 @@ class Trade():
         Main close trade method
         Will choose between spot/margin and long/short
         """
-
+        additional_trades = []
         if not items_list:
             self.logger.warning("No items to close trade with")
             return
+        else:
+
+            for item in items_list:
+                # Number of trades within scope
+                dbase = Mysql(test=self.test_data, interval=self.interval)
+                count = dbase.fetch_sql_data("select count(*) from trades where close_price "
+                                             "is NULL and pair like '%{0}' and name='{1}'"
+                                             .format(item[0], self.config.main.name),
+                                             header=False)[0][0]
+                while (count -1):
+                    additional_trades.append(item)
+                    count -=1
+
+        items_list += additional_trades
 
         if self.config.main.trade_type == "spot":
             if self.config.main.trade_direction == "long":
                 self.__close_spot_long(items_list, drawdowns=drawdowns, drawups=drawups,
-                                       update_db=update_db)
+                                        update_db=update_db)
             else:
                 raise InvalidTradeError("Invalid trade direction for spot")
 
@@ -510,7 +524,6 @@ class Trade():
             self.__send_notifications(pair=pair, current_time=current_time,
                                       fill_price=current_price, interval=self.interval,
                                       event=event, action='OPEN')
-
 
     @GET_EXCEPTIONS
     def __close_spot_long(self, sell_list, name=None, drawdowns=None, drawups=None, update_db=True):

@@ -163,7 +163,9 @@ class Mysql():
         """
         command = ('select quote_in from trades where close_price '
                    'is NULL and `interval` = "{0}" and '
-                   'pair = "{1}" and name="{2}"'.format(self.interval, pair, config.main.name))
+                   'pair = "{1}" and name="{2}" LIMIT 1'
+                   .format(self.interval, pair, config.main.name))
+
         cur = self.dbase.cursor()
         self.__execute(cur, command)
 
@@ -226,7 +228,7 @@ class Mysql():
         command = """update trades set close_price={0},close_time="{1}", quote_out="{2}",
         base_out="{3}", closed_by="{6}", drawdown_perc=abs(round({7},1)),
         drawup_perc=abs(round({8},1)), rate="{9}" where close_price is
-        NULL and `interval`="{4}" and pair="{5}" and (name = "{6}" or
+        NULL and quote_in="{2}" and `interval`="{4}" and pair="{5}" and (name = "{6}" or
         name like "api") """.format('%.15f' % float(close_price),
                                     close_time,
                                     '%.15f' % float(quote),
