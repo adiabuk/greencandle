@@ -116,7 +116,7 @@ class TestRedis(unittest.TestCase):
         self.assertEqual(action[3], 10298.73)
         self.assertEqual(action[4]['buy'], [])
         self.assertEqual(action[4]['sell'], [1])
-        dbase.update_trades("BTCUSDT", "2019-09-07 23:59:59", "10999", "0.03130663")
+        dbase.update_trades("BTCUSDT", "2019-09-07 23:59:59", "10999", "0.03130663", "444")
 
         self.insert_data('random', redis)
         action = redis.get_action('BTCUSDT', '4h')
