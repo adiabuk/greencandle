@@ -230,11 +230,10 @@ class Mysql():
         drawup_perc=abs(round({8},1)), rate="{9}" where close_price is
         NULL and quote_in={2} and `interval`="{4}" and pair="{5}" and (name = "{6}" or
         name like "api") ORDER BY id LIMIT 1""".format('%.15f' % float(close_price),
-                                    close_time,
-                                    quote,
-                                    '%.15f' % float(base_out),
-                                    self.interval,
-                                    pair, job_name, drawdown, drawup, rate)
+                                                       close_time, quote,
+                                                       '%.15f' % float(base_out),
+                                                       self.interval,
+                                                       pair, job_name, drawdown, drawup, rate)
         result = self.__run_sql_query(command)
         if result != 1:
             self.logger.critical("Query affected %s rows: %s" % (result, command))
