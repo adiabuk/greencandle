@@ -4,7 +4,7 @@
 Push/Pull crypto signals and data to mysql
 """
 import MySQLdb
-import binance
+from binance import binance
 from currency_converter import CurrencyConverter
 from . import config
 from .binance_common import get_current_price

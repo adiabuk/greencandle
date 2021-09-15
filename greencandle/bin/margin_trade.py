@@ -6,7 +6,7 @@ Buy and sell instantly using binance margin
 """
 
 import sys
-import binance
+from binance import binance
 from greencandle.lib import config
 from greencandle.lib.balance_common import get_base, get_step_precision
 
