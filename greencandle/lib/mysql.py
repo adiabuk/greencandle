@@ -131,13 +131,11 @@ class Mysql():
         command = """insert into trades (pair, open_time, open_price, base_in, `interval`,
                      quote_in, name, borrowed, multiplier, direction, open_usd_rate, open_gbp_rate)
                      VALUES ("{0}", "{1}", "{2}", "{3}", "{4}", "{5}", "{6}", "{7}", "{8}", "{9}",
-                     "{10}", "{11}" ); """.format(pair,
-                             date,
-                             '%.15f' % float(price),
-                             '%.15f' % float(base_amount),
-                             self.interval,
-                             quote, config.main.name, borrowed, multiplier,
-                             direction, usd_rate, gbp_rate)
+                     "{10}", "{11}" ); """.format(pair, date, '%.15f' % float(price),
+                                                  '%.15f' % float(base_amount),
+                                                  self.interval,
+                                                  quote, config.main.name, borrowed, multiplier,
+                                                  direction, usd_rate, gbp_rate)
         result = self.__run_sql_query(command)
         return result == 1
 
