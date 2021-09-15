@@ -243,7 +243,10 @@ CREATE TABLE `trades` (
   `multiplier` varchar(3) DEFAULT NULL,
   `direction` varchar(30) DEFAULT NULL,
   `drawup_perc` varchar(4) DEFAULT NULL,
-  `rate` varchar(30) DEFAULT NULL,
+  `open_usd_rate` varchar(30) DEFAULT NULL,
+  `open_gbp_rate` varchar(30) DEFAULT NULL,
+  `close_usd_rate` varchar(30) DEFAULT NULL,
+  `close_gbp_rate` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1913 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;

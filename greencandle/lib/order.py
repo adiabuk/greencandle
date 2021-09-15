@@ -173,7 +173,7 @@ class Trade():
                                              "is NULL and pair like '%{0}' and name='{1}'"
                                              .format(item[0], self.config.main.name),
                                              header=False)[0][0]
-                while (count -1):
+                while count -1:
                     additional_trades.append(item)
                     count -=1
 
@@ -287,12 +287,11 @@ class Trade():
                                    base_amount=amount_to_use, quote=amt_str,
                                    borrowed=amount_to_borrow,
                                    multiplier=self.config.main.multiplier,
-                                   direction=self.config.main.trade_direction)
+                                   direction=self.config.main.trade_direction, base=base)
 
                 self.__send_notifications(pair=pair, current_time=current_time,
                                           fill_price=fill_price, interval=self.interval,
                                           event=event, action='OPEN')
-
 
         del dbase
 
@@ -390,7 +389,8 @@ class Trade():
                     # 3. we proformed a real trade which was successful - (transactTime in dict)
                     db_result = dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
                                                    base_amount=base_amount, quote=amount,
-                                                   direction=self.config.main.trade_direction)
+                                                   direction=self.config.main.trade_direction,
+                                                   base=base)
                     if db_result:
                         self.__send_notifications(pair=pair, current_time=current_time,
                                                   fill_price=fill_price, interval=self.interval,
@@ -470,7 +470,7 @@ class Trade():
                 dbase.update_trades(pair=pair, close_time=current_time,
                                     close_price=fill_price, quote=quantity,
                                     base_out=base_out, name=name, drawdown=drawdowns[pair],
-                                    drawup=drawups[pair])
+                                    drawup=drawups[pair], base=get_base(pair))
 
                 self.__send_notifications(pair=pair, current_time=current_time, perc=perc_inc,
                                           fill_price=current_price, interval=self.interval,
@@ -519,7 +519,7 @@ class Trade():
                                base_amount=base_amount,
                                quote=amt_str, borrowed=amount_to_borrow,
                                multiplier=self.config.main.multiplier,
-                               direction=self.config.main.trade_direction)
+                               direction=self.config.main.trade_direction, base=base)
 
             self.__send_notifications(pair=pair, current_time=current_time,
                                       fill_price=current_price, interval=self.interval,
@@ -564,14 +564,12 @@ class Trade():
                 if name == "api":
                     name = "%"
 
-                base = get_base(pair)
-                rate = binance.prices()[base + 'USDT'] if base != 'USDT' else "1"
                 if update_db:
                     db_result = dbase.update_trades(pair=pair, close_time=current_time,
                                                     close_price=fill_price, quote=quantity,
                                                     base_out=base_out, name=name,
                                                     drawdown=drawdowns[pair],
-                                                    drawup=drawups[pair], rate=rate)
+                                                    drawup=drawups[pair], base=get_base(pair))
                 else:
                     db_result = True
 
@@ -633,11 +631,10 @@ class Trade():
                 if name == "api":
                     name = "%"
 
-                rate = binance.prices()[base + 'USDT'] if base != 'USDT' else "1"
                 dbase.update_trades(pair=pair, close_time=current_time,
                                     close_price=fill_price, quote=quantity,
                                     base_out=base_out, name=name, drawdown=drawdowns[pair],
-                                    drawup=drawups[pair], rate=rate)
+                                    drawup=drawups[pair], base=base)
 
                 self.__send_notifications(pair=pair, current_time=current_time, perc=perc_inc,
                                           fill_price=fill_price, interval=self.interval,

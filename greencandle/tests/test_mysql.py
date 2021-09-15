@@ -7,6 +7,8 @@ Unittest file for testing results of a run using downloaded data
 import unittest
 import time
 from greencandle.lib import config
+from greencandle.lib.balance_common import get_base
+from greencandle.lib import config
 config.create_config()
 
 from greencandle.lib.logger import get_logger
@@ -34,11 +36,12 @@ class TestMysql(OrderedTest):
 
         self.date = '2018-05-07 22:44:59'
         self.sell_date = '2018-05-07 22:44:59'
-        self.pair = 'XXXYYY'
+        self.pair = 'BTCUSDT'
         self.open_price = 100
         self.close_price = 500
         base_in = 20
-        self.dbase.insert_trade(self.pair, self.date, self.open_price, base_in, 30)
+        base = get_base(self.pair)
+        self.dbase.insert_trade(self.pair, self.date, self.open_price, base_in, 30, base=base)
         sql = 'select open_time, close_time from trades'
         open_time, close_time = self.dbase.fetch_sql_data(sql)[-1]
         current_time = open_time.strftime("%Y-%m-%d %H:%M:%S")
@@ -49,7 +52,7 @@ class TestMysql(OrderedTest):
         perc_inc = perc_diff(self.open_price, self.close_price)
         base_out = add_perc(perc_inc, base_in)
         self.dbase.update_trades(self.pair, self.sell_date, self.close_price, quote=quote,
-                                 base_out=base_out)
+                                 base_out=base_out, base=base)
         close_time = self.dbase.fetch_sql_data('select close_time from trades')[-1]
         assert close_time is not None
 

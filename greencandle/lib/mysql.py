@@ -4,6 +4,8 @@
 Push/Pull crypto signals and data to mysql
 """
 import MySQLdb
+import binance
+from currency_converter import CurrencyConverter
 from . import config
 from .binance_common import get_current_price
 from .common import AttributeDict
@@ -112,7 +114,7 @@ class Mysql():
 
     @get_exceptions
     def insert_trade(self, pair, date, price, base_amount, quote, borrowed='', multiplier='',
-                     direction=''):
+                     direction='', base=None):
         """
         Insert new trade into DB
         Args:
@@ -125,17 +127,18 @@ class Mysql():
         Returns:
               None
         """
-
+        usd_rate, gbp_rate = self.get_rates(base)
         command = """insert into trades (pair, open_time, open_price, base_in, `interval`,
-                     quote_in, name, borrowed, multiplier, direction) VALUES ("{0}", "{1}",
-                     "{2}", "{3}", "{4}", "{5}", "{6}", "{7}", "{8}", "{9}");
+                     quote_in, name, borrowed, multiplier, direction, open_usd_rate, open_gbp_rate)
+                     VALUES ("{0}", "{1}", "{2}", "{3}", "{4}", "{5}", "{6}", "{7}", "{8}", "{9}"
+                     "{10}" "{11}" );
                   """.format(pair,
                              date,
                              '%.15f' % float(price),
                              '%.15f' % float(base_amount),
                              self.interval,
                              quote, config.main.name, borrowed, multiplier,
-                             direction)
+                             direction, usd_rate, gbp_rate)
         result = self.__run_sql_query(command)
         return result == 1
 
@@ -218,22 +221,35 @@ class Mysql():
         self.__execute(cur, command)
         return cur.fetchall()
 
+    @staticmethod
+    def get_rates(base):
+        """
+        Get current rates
+        return tupple of usd_rate and gbp_rate
+        """
+        currency = CurrencyConverter()
+        usd_rate = binance.prices()[base + 'USDT'] if base != 'USDT' else "1"
+        gbp_rate = currency.convert(usd_rate, 'USD', 'GBP')
+
+        return (usd_rate, gbp_rate)
+
     @get_exceptions
     def update_trades(self, pair, close_time, close_price, quote, base_out,
-                      name=None, drawdown=0, drawup=0, rate=None):
+                      name=None, drawdown=0, drawup=0, base=None):
         """
         Update an existing trade with sell price
         """
+        usd_rate, gbp_rate = self.get_rates(base)
         job_name = name if name else config.main.name
         command = """update trades set close_price={0},close_time="{1}", quote_out="{2}",
         base_out="{3}", closed_by="{6}", drawdown_perc=abs(round({7},1)),
-        drawup_perc=abs(round({8},1)), rate="{9}" where close_price is
+        drawup_perc=abs(round({8},1)), close_usd_rate="{9}", close_gbp_rate="{10}" where close_price is
         NULL and quote_in={2} and `interval`="{4}" and pair="{5}" and (name = "{6}" or
         name like "api") ORDER BY id LIMIT 1""".format('%.15f' % float(close_price),
                                                        close_time, quote,
                                                        '%.15f' % float(base_out),
-                                                       self.interval,
-                                                       pair, job_name, drawdown, drawup, rate)
+                                                       self.interval, pair, job_name, drawdown,
+                                                       drawup, usd_rate, gbp_rate)
         result = self.__run_sql_query(command)
         if result != 1:
             self.logger.critical("Query affected %s rows: %s" % (result, command))
