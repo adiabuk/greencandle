@@ -11,6 +11,17 @@
 
 # Releases
 
+## 2.10
+* Fix broken cross margin trades
+* Improve slack error logging
+* Use amount bought value from exchange
+* Rename /install dir to /srv/greencandle in containers
+* Rename scripts dir to bin
+* Stag container allowed to trade any pair
+* Allow duplicate trades to be closed individually
+* Add json checks to tests
+* Add USD and GBP exchange rates to each buy/sell order in DB
+
 ## 2.9.2
 * Bump binance version for correct isolated balances
 
