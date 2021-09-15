@@ -75,7 +75,7 @@ class TestRedis(unittest.TestCase):
         """
         Test get action method
         """
-        pair = BTCUSDT
+        pair = "BTCUSDT"
         base = get_base(pair)
         redis = Redis(interval="4h", test_data=True, test=True)
         dbase = Mysql(test=True, interval="4h")
