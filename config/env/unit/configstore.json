@@ -311,7 +311,7 @@
       "is_secret": false
     },
     "pairs": {
-      "value": "BNBUSDT BTCUSDT ETHUSDT NEOUSDT LTCUSDT",
+      "value": "BNBUSDT BTCUSDT ETHUSDT NEOUSDT LTCUSDT BNBETH COTIUSDT RCNBNB LRCBTC",
       "is_binary": false,
       "is_secret": false
     },

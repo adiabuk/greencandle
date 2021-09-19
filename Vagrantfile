@@ -14,7 +14,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provider "virtualbox" do |vb, override|
     vb.customize ['modifyvm', :id, '--cpus', ENV['VCPUS'] || 4]
-    vb.customize ['modifyvm', :id, '--memory', ENV['VRAM'] || '4096']
+    vb.customize ['modifyvm', :id, '--memory', ENV['VRAM'] || '5120']
     #vb.customize [ 'guestproperty', 'set', :id, '/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold', 10000 ]
   end
 

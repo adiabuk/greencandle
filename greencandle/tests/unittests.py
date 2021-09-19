@@ -210,6 +210,7 @@ def make_test_case(config_env, pairs, interval, startdate, days, xsum, xmax, xmi
             Step 3 - collect and compare data
             """
             self.logger.info("Comparing mysql data")
+            self.dbase = Mysql(test=True, interval=self.intervals[0])
             db_sum = self.dbase.fetch_sql_data("select sum(perc) from profit", header=False)[0][0]
             db_min = self.dbase.fetch_sql_data("select min(perc) from profit", header=False)[0][0]
             db_max = self.dbase.fetch_sql_data("select max(perc) from profit", header=False)[0][0]
