@@ -115,8 +115,8 @@ def trade():
     with open('/etc/router_config.json', 'r') as json_file:
         router_config = json.load(json_file)
 
-    with open(("/srv/greencandle/install/docker-compose_{}.yml"
-              .format(os.environ['HOST']), "r")) as stream:
+    with open("/srv/greencandle/install/docker-compose_{}.yml"
+              .format(os.environ['HOST']), "r") as stream:
         try:
             output = (yaml.safe_load(stream))
         except yaml.YAMLError as exc:
