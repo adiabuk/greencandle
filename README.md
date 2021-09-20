@@ -11,6 +11,12 @@
 
 # Releases
 
+## 2.10.1
+* Fix API dashboard
+* Fix Memory Leak when selling multiple items
+* Re-enable test-run
+* Update Travis URL
+
 ## 2.10
 * Fix broken cross margin trades
 * Improve slack error logging
