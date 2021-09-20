@@ -167,13 +167,15 @@ class Trade():
         else:
 
             for item in items_list:
+
                 # Number of trades within scope
                 dbase = Mysql(test=self.test_data, interval=self.interval)
                 count = dbase.fetch_sql_data("select count(*) from trades where close_price "
                                              "is NULL and pair like '%{0}' and name='{1}'"
                                              .format(item[0], self.config.main.name),
                                              header=False)[0][0]
-                while count -1:
+
+                while count -1 > 0:
                     additional_trades.append(item)
                     count -=1
 
