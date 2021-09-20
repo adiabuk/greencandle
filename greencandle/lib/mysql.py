@@ -258,17 +258,18 @@ class Mysql():
         """
 
         self.__run_sql_query("delete from open_trades")
-        trades = self.fetch_sql_data("select pair, open_time, open_price, name, `interval` from "
+        trades = self.fetch_sql_data("select pair, open_time, open_price, name, `interval`, "
+                                     "open_usd_rate*base_in as usd_quantity from "
                                      "trades where close_price is NULL or close_price=''", header=False)
         for trade in trades:
             try:
-                pair, open_time, open_price, name, interval = trade
+                pair, open_time, open_price, name, interval, usd_quantity = trade
                 current_price = get_current_price(pair)
                 perc = 100 * (float(current_price) - float(open_price)) / float(open_price)
                 insert = ('insert into open_trades (pair, open_time, open_price, current_price, '
-                          'perc, name, `interval`) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}", '
-                          '"{5}", "{6}")'.format(pair, open_time, open_price, current_price,
-                                                 perc, name, interval))
+                          'perc, name, `interval`, usd_quantity) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}", '
+                          '"{5}", "{6}", "{7}")'.format(pair, open_time, open_price, current_price,
+                                                 perc, name, interval, usd_quantity))
 
                 self.__run_sql_query(insert)
             except ZeroDivisionError:

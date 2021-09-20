@@ -19,10 +19,11 @@ def main():
 
     dbase = Mysql()
 
-    query = ("select pair, name, open_time, round(perc,2) as perc from "
-             "open_trades order by perc DESC")
-    open_trades = dbase.fetch_sql_data(query, header=False)
+    query = ("select pair, name, open_time, round(perc,2) as perc, "
+             "usd_quantity from open_trades order by perc DESC")
+    open_trades = dbase.fetch_sql_data(query, header=True)
     output = ""
+
     for trade in open_trades:
         output += '\t\t'.join([str(item) for item in trade]) + '\n'
     if output:
