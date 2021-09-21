@@ -293,7 +293,7 @@ class Trade():
 
                 self.__send_notifications(pair=pair, current_time=current_time,
                                           fill_price=fill_price, interval=self.interval,
-                                          event=event, action='OPEN')
+                                          event=event, action='OPEN', usd_profit='N/A')
 
         del dbase
 
@@ -396,7 +396,7 @@ class Trade():
                     if db_result:
                         self.__send_notifications(pair=pair, current_time=current_time,
                                                   fill_price=fill_price, interval=self.interval,
-                                                  event=event, action='OPEN')
+                                                  event=event, action='OPEN', usd_profit='N/A')
 
         del dbase
 
@@ -412,7 +412,7 @@ class Trade():
 
         self.__send_redis_trade(pair=kwargs.pair, current_time=kwargs.current_time,
                                 price=kwargs.fill_price, interval=self.interval,
-                                event=kwargs.action)
+                                event=kwargs.action, usd_profit=kwargs.usd_profit)
         send_push_notif(kwargs.action, kwargs.pair, '%.15f' % float(kwargs.fill_price))
         send_gmail_alert(kwargs.action, kwargs.pair, '%.15f' % float(kwargs.fill_price))
         send_slack_trade(channel='trades', event=kwargs.event, perc=perc,
@@ -529,7 +529,7 @@ class Trade():
 
             self.__send_notifications(pair=pair, current_time=current_time,
                                       fill_price=current_price, interval=self.interval,
-                                      event=event, action='OPEN')
+                                      event=event, action='OPEN', usd_profit='N/A')
 
     @GET_EXCEPTIONS
     def __close_spot_long(self, sell_list, name=None, drawdowns=None, drawups=None, update_db=True):
