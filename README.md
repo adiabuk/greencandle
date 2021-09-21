@@ -11,6 +11,12 @@
 
 # Releases
 
+## 2.11
+* Display profit in USD at end of trade
+* More alerting if trade is not made
+* Initial API documentation
+* Fix link to travis UI
+
 ## 2.10.1
 * Fix API dashboard
 * Fix Memory Leak when selling multiple items
