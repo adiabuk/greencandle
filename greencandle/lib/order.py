@@ -177,14 +177,14 @@ class Trade():
 
                 while count -1 > 0:
                     additional_trades.append(item)
-                    count -=1
+                    count -= 1
 
         items_list += additional_trades
 
         if self.config.main.trade_type == "spot":
             if self.config.main.trade_direction == "long":
                 self.__close_spot_long(items_list, drawdowns=drawdowns, drawups=drawups,
-                                        update_db=update_db)
+                                       update_db=update_db)
             else:
                 raise InvalidTradeError("Invalid trade direction for spot")
 
@@ -253,15 +253,15 @@ class Trade():
                                  % (amount_to_borrow, base, base_amount))
 
                 if self.prod:
-                    borrow_result = binance.margin_borrow(symbol=pair, quantity=amount_to_borrow,
-                                                          isolated=str2bool(self.config.main.isolated),
-                                                          asset=base)
-                    if "msg" in borrow_result:
+                    borrow_res = binance.margin_borrow(symbol=pair, quantity=amount_to_borrow,
+                                                       isolated=str2bool(self.config.main.isolated),
+                                                       asset=base)
+                    if "msg" in borrow_res:
                         self.logger.error("Borrow error-open %s: %s while trying to borrow %s %s"
-                                          % (pair, borrow_result, amount_to_borrow, base))
+                                          % (pair, borrow_res, amount_to_borrow, base))
                         continue
 
-                    self.logger.info(borrow_result)
+                    self.logger.info(borrow_res)
                     amt_str = get_step_precision(pair, amount_to_use/float(current_price))
                     trade_result = binance.margin_order(symbol=pair, side=binance.BUY,
                                                         quantity=amt_str,
@@ -404,7 +404,7 @@ class Trade():
         """
         Pass given data to trade notification functions
         """
-        valid_keys = ["pair", "current_time", "fill_price", "event", "action"]
+        valid_keys = ["pair", "current_time", "fill_price", "event", "action", "usd_profit"]
         kwargs = AttributeDict(kwargs)
         for key in valid_keys:
             if key not in valid_keys:
@@ -416,7 +416,8 @@ class Trade():
         send_push_notif(kwargs.action, kwargs.pair, '%.15f' % float(kwargs.fill_price))
         send_gmail_alert(kwargs.action, kwargs.pair, '%.15f' % float(kwargs.fill_price))
         send_slack_trade(channel='trades', event=kwargs.event, perc=perc,
-                         pair=kwargs.pair, action=kwargs.action, price=kwargs.fill_price)
+                         pair=kwargs.pair, action=kwargs.action, price=kwargs.fill_price,
+                         usd_profit=kwargs.usd_profit)
 
     def __get_fill_price(self, current_price, trade_result):
         """
@@ -469,14 +470,17 @@ class Trade():
                     (not self.test_trade and 'transactTime' in trade_result):
                 if name == "api":
                     name = "%"
-                dbase.update_trades(pair=pair, close_time=current_time,
-                                    close_price=fill_price, quote=quantity,
-                                    base_out=base_out, name=name, drawdown=drawdowns[pair],
-                                    drawup=drawups[pair], base=get_base(pair))
-
+                trade_id = dbase.update_trades(pair=pair, close_time=current_time,
+                                               close_price=fill_price, quote=quantity,
+                                               base_out=base_out, name=name,
+                                               drawdown=drawdowns[pair], drawup=drawups[pair],
+                                               base=get_base(pair))
+                profit = dbase.fetch_sql_data("select usd_profit from profit "
+                                              "where id={}".format(trade_id),
+                                              header=False)[0][0]
                 self.__send_notifications(pair=pair, current_time=current_time, perc=perc_inc,
                                           fill_price=current_price, interval=self.interval,
-                                          event=event, action='CLOSE')
+                                          event=event, action='CLOSE', usd_profit=profit)
             else:
                 self.logger.critical("Sell Failed %s:%s" % (name, pair))
                 send_slack_message("alerts", "Sell Failed %s:%s" % (name, pair))
@@ -567,18 +571,17 @@ class Trade():
                     name = "%"
 
                 if update_db:
-                    db_result = dbase.update_trades(pair=pair, close_time=current_time,
-                                                    close_price=fill_price, quote=quantity,
-                                                    base_out=base_out, name=name,
-                                                    drawdown=drawdowns[pair],
-                                                    drawup=drawups[pair], base=get_base(pair))
-                else:
-                    db_result = True
-
-                if db_result:
+                    trade_id = dbase.update_trades(pair=pair, close_time=current_time,
+                                                   close_price=fill_price, quote=quantity,
+                                                   base_out=base_out, name=name,
+                                                   drawdown=drawdowns[pair],
+                                                   drawup=drawups[pair], base=get_base(pair))
+                    profit = dbase.fetch_sql_data("select usd_profit from profit "
+                                                  "where id={}".format(trade_id),
+                                                  header=False)[0][0]
                     self.__send_notifications(pair=pair, current_time=current_time, perc=perc_inc,
                                               fill_price=fill_price, interval=self.interval,
-                                              event=event, action='CLOSE')
+                                              event=event, action='CLOSE', usd_profit=profit)
             else:
                 self.logger.critical("Sell Failed %s:%s" % (name, pair))
                 send_slack_message("alerts", "Sell Failed %s:%s" % (name, pair))
@@ -633,14 +636,18 @@ class Trade():
                 if name == "api":
                     name = "%"
 
-                dbase.update_trades(pair=pair, close_time=current_time,
-                                    close_price=fill_price, quote=quantity,
-                                    base_out=base_out, name=name, drawdown=drawdowns[pair],
-                                    drawup=drawups[pair], base=base)
+                trade_id = dbase.update_trades(pair=pair, close_time=current_time,
+                                               close_price=fill_price, quote=quantity,
+                                               base_out=base_out, name=name,
+                                               drawdown=drawdowns[pair],
+                                               drawup=drawups[pair], base=base)
 
+
+                profit = dbase.fetch_sql_data("select usd_profit from profit "
+                                              "where id={}".format(trade_id), header=False)[0][0]
                 self.__send_notifications(pair=pair, current_time=current_time, perc=perc_inc,
                                           fill_price=fill_price, interval=self.interval,
-                                          event=event, action='CLOSE')
+                                          event=event, action='CLOSE', usd_profit=profit)
             else:
                 self.logger.critical("Sell Failed %s:%s" % (name, pair))
                 send_slack_message("alerts", "Sell Failed %s:%s" % (name, pair))

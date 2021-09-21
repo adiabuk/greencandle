@@ -4,8 +4,8 @@
 Push/Pull crypto signals and data to mysql
 """
 import MySQLdb
-from binance import binance
 from currency_converter import CurrencyConverter
+from binance import binance
 from . import config
 from .binance_common import get_current_price
 from .common import AttributeDict
@@ -238,19 +238,21 @@ class Mysql():
         """
         usd_rate, gbp_rate = self.get_rates(base)
         job_name = name if name else config.main.name
-        command = """update trades set close_price={0},close_time="{1}", quote_out="{2}",
-        base_out="{3}", closed_by="{6}", drawdown_perc=abs(round({7},1)),
+        command = """set uids:=null; update trades set close_price={0},close_time="{1}",
+        quote_out="{2}", base_out="{3}", closed_by="{6}", drawdown_perc=abs(round({7},1)),
         drawup_perc=abs(round({8},1)), close_usd_rate="{9}", close_gbp_rate="{10}" where close_price is
         NULL and quote_in={2} and `interval`="{4}" and pair="{5}" and (name = "{6}" or
-        name like "api") ORDER BY id LIMIT 1""".format('%.15f' % float(close_price),
-                                                       close_time, quote,
-                                                       '%.15f' % float(base_out),
-                                                       self.interval, pair, job_name, drawdown,
-                                                       drawup, usd_rate, gbp_rate)
+        name like "api") and (SELECT @uids:= CONCAT_WS(',', id, @uids) ORDER BY id LIMIT 1""" \
+        .format('%.15f' % float(close_price),
+                close_time, quote,
+                '%.15f' % float(base_out),
+                self.interval, pair, job_name, drawdown,
+                drawup, usd_rate, gbp_rate)
+        self.run_sql_statement("SET @uids := null;")
         result = self.__run_sql_query(command)
         if result != 1:
             self.logger.critical("Query affected %s rows: %s" % (result, command))
-        return result == 1
+        return  self.fetch_sql_data("SELECT @uids;", header=False)[0][0].decode()
 
     def get_active_trades(self):
         """

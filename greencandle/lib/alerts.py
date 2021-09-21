@@ -83,7 +83,7 @@ def send_slack_trade(**kwargs):
     """
     Send trade notification in slack
     """
-    valid_keys = ["channel", "event", "pair", "action", "price", "perc"]
+    valid_keys = ["channel", "event", "pair", "action", "price", "perc", "usd_profit"]
     kwargs = AttributeDict(kwargs)
     for key in valid_keys:
         if key not in kwargs:
@@ -118,10 +118,12 @@ def send_slack_trade(**kwargs):
                             "• Price: {1}\n"
                             "• Percentage: {2}\n"
                             "• title: {3}\n"
+                            "• usd_profit: {4}\n"
                             "\n\n".format(kwargs.pair,
                                           kwargs.price,
                                           kwargs.perc,
-                                          title)),
+                                          title,
+                                          kwargs.usd_profit)),
                   "short":"false"
                  }]}]}
 
