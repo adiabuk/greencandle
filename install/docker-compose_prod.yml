@@ -5,7 +5,7 @@ services:
     container_name: fe-cadvisor
     hostname: fe-cadvisor
     image: gcr.io/google_containers/cadvisor:v0.35.0
-    restart: on-failure
+    restart: always
     volumes:
       - /:/rootfs
       - /var/run:/var/run
@@ -23,7 +23,7 @@ services:
     hostname: base-redis
     image: amrox/gc-redis:${TAG}
     pull_policy: always
-    restart: on-failure
+    restart: always
     links:
       - base-mysql:mysql
     ports:
@@ -46,7 +46,7 @@ services:
     environment:
       - CONFIG_ENV=prod
       - MYSQL_ROOT_PASSWORD=password
-    restart: on-failure
+    restart: always
     ports:
       - 3306:3306
     healthcheck:
@@ -66,7 +66,7 @@ services:
       - HOST=$HOSTNAME
     image: amrox/greencandle:${TAG}
     pull_policy: always
-    restart: on-failure
+    restart: always
     entrypoint: /docker-entrypoint.sh cron -f
     logging:
       driver: journald
@@ -93,7 +93,7 @@ services:
      hostname: fe-webserver
      image: amrox/webserver:${TAG}
      pull_policy: always
-     restart: on-failure
+     restart: always
      healthcheck:
        test: service nginx status || exit 1
        interval: 5m
@@ -123,7 +123,7 @@ services:
     hostname: 5ma-4perc-vol-eth-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
-    restart: on-failure
+    restart: always
     entrypoint: /docker-entrypoint.sh backend
     logging:
       driver: journald
@@ -152,7 +152,7 @@ services:
     hostname: be-5ma-1tsl-btc-margin
     image: amrox/greencandle:${TAG}
     pull_policy: always
-    restart: on-failure
+    restart: always
     entrypoint: /docker-entrypoint.sh backend
     logging:
       driver: journald
@@ -181,7 +181,7 @@ services:
     hostname: be-5ma-1tsl-usdt-margin
     image: amrox/greencandle:${TAG}
     pull_policy: always
-    restart: on-failure
+    restart: always
     entrypoint: /docker-entrypoint.sh backend
     logging:
       driver: journald
@@ -210,7 +210,7 @@ services:
     hostname: be-5ma-1tsl-btc-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
-    restart: on-failure
+    restart: always
     entrypoint: /docker-entrypoint.sh backend
     logging:
       driver: journald
@@ -239,7 +239,7 @@ services:
     hostname: be-5ma-1tsl-usdt-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
-    restart: on-failure
+    restart: always
     entrypoint: /docker-entrypoint.sh backend
     logging:
       driver: journald
@@ -268,7 +268,7 @@ services:
     hostname: be-5ma-nostop-btc-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
-    restart: on-failure
+    restart: always
     entrypoint: /docker-entrypoint.sh backend
     logging:
       driver: journald
@@ -297,7 +297,7 @@ services:
     hostname: be-5ma-nostop-usdt-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
-    restart: on-failure
+    restart: always
     entrypoint: /docker-entrypoint.sh backend
     logging:
       driver: journald
@@ -331,7 +331,7 @@ services:
       driver: journald
     image: amrox/greencandle:${TAG}
     pull_policy: always
-    restart: on-failure
+    restart: always
     entrypoint: /docker-entrypoint-api.sh api_dashboard
     links:
       - base-mysql:mysql
@@ -359,7 +359,7 @@ services:
     hostname: be-api-router
     image: amrox/greencandle:${TAG}
     pull_policy: always
-    restart: on-failure
+    restart: always
     healthcheck:
       test: curl -Isf http://127.1:1080/healthcheck
       interval: 5m
@@ -422,7 +422,7 @@ services:
     hostname: be-5ma-api-btc-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
-    restart: on-failure
+    restart: always
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
       driver: journald
@@ -453,7 +453,7 @@ services:
     hostname: be-5ma-api-usdt-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
-    restart: on-failure
+    restart: always
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
       driver: journald
@@ -484,7 +484,7 @@ services:
     hostname: be-5ma-api-eth-isolated
     image: amrox/greencandle:${TAG}
     pull_policy: always
-    restart: on-failure
+    restart: always
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
       driver: journald
@@ -515,7 +515,7 @@ services:
     hostname: be-5ma-api-eth-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
-    restart: on-failure
+    restart: always
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
       driver: journald
@@ -546,7 +546,7 @@ services:
     hostname: be-env-api-usdt-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
-    restart: on-failure
+    restart: always
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
       driver: journald
@@ -577,7 +577,7 @@ services:
     hostname: be-5ma-api-btc-isolated
     image: amrox/greencandle:${TAG}
     pull_policy: always
-    restart: on-failure
+    restart: always
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
       driver: journald
@@ -608,7 +608,7 @@ services:
     hostname: be-5ma-api-usdt-cross
     image: amrox/greencandle:${TAG}
     pull_policy: always
-    restart: on-failure
+    restart: always
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
       driver: journald
@@ -639,7 +639,7 @@ services:
     hostname: be-env-api-usdt-isolated
     image: amrox/greencandle:${TAG}
     pull_policy: always
-    restart: on-failure
+    restart: always
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
       driver: journald
@@ -670,7 +670,7 @@ services:
     hostname: be-env-api-eth-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
-    restart: on-failure
+    restart: always
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
       driver: journald
@@ -701,7 +701,7 @@ services:
     hostname: be-env-api-eth-cross
     image: amrox/greencandle:${TAG}
     pull_policy: always
-    restart: on-failure
+    restart: always
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
       driver: journald
@@ -732,7 +732,7 @@ services:
     hostname: be-env-api-1m-usdt-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
-    restart: on-failure
+    restart: always
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
       driver: journald
@@ -763,7 +763,7 @@ services:
     hostname: be-env-api-1m-btc-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
-    restart: on-failure
+    restart: always
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
       driver: journald
@@ -794,7 +794,7 @@ services:
     hostname: be-env-api-1m-btc-cross
     image: amrox/greencandle:${TAG}
     pull_policy: always
-    restart: on-failure
+    restart: always
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
       driver: journald
@@ -825,7 +825,7 @@ services:
     hostname: be-env-api-1m-btc-isolated
     image: amrox/greencandle:${TAG}
     pull_policy: always
-    restart: on-failure
+    restart: always
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
       driver: journald
@@ -856,7 +856,7 @@ services:
     hostname: be-env-api-1m-usdt-isolated
     image: amrox/greencandle:${TAG}
     pull_policy: always
-    restart: on-failure
+    restart: always
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
       driver: journald
@@ -887,7 +887,7 @@ services:
     hostname: be-env-api-1m-usdt-cross
     image: amrox/greencandle:${TAG}
     pull_policy: always
-    restart: on-failure
+    restart: always
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
       driver: journald
@@ -918,7 +918,7 @@ services:
     hostname: be-env-api-1m-bnb-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
-    restart: on-failure
+    restart: always
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
       driver: journald
@@ -949,7 +949,7 @@ services:
     hostname: be-env-api-1m-eth-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
-    restart: on-failure
+    restart: always
     entrypoint: /docker-entrypoint.sh backend_api
     logging:
       driver: journald
