@@ -66,6 +66,11 @@
       "is_binary": false,
       "is_secret": false
     },
+    "api_token": {
+      "value": "9eGi9ADoYyUpG4zIB2k0oXhc0kfY7zy3",
+      "is_binary": false,
+      "is_secret": true
+    },
     "aws_access_key": {
       "value": "KvMNglAlY37ucmGGMbYnwXlyx2pinzzoRzbQ7AEeDnKs9Ik+IhUOaPAZoyY=",
       "is_binary": false,
