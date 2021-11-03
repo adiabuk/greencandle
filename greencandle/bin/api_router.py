@@ -16,6 +16,7 @@ from greencandle.lib.logger import get_logger
 TEST = bool(len(sys.argv) > 1 and sys.argv[1] == '--test')
 APP = Flask(__name__)
 LOGGER = get_logger(__name__)
+TOKEN = config.main.api_token
 
 def send_trade(payload, host):
     """
@@ -37,7 +38,7 @@ def healthcheck():
     """
     return Response(status=200)
 
-@APP.route('/webhook', methods=['POST'])
+@APP.route('/{}'.format(TOKEN), methods=['POST'])
 def respond():
     """
     Default route to trade
