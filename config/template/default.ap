@@ -15,7 +15,7 @@ server {
     set $router "router:1080";
     keepalive_timeout 1;
     proxy_read_timeout 1s;
-    proxy_pass http://$router/{{api_token}};
+    proxy_pass http://$router/{{.api_token}};
     proxy_intercept_errors on;
     error_page 404 405 500 502 503 504 =444 @blackhole;
     }
