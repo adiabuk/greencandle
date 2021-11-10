@@ -4,7 +4,7 @@ set -e
 
 if [[ -z $TRAVIS_BRANCH ]]; then
   TAG="latest"
-elif [[ $TRAVIS_BRANCH == "master"]]; then
+elif [[ $TRAVIS_BRANCH == "master" ]]; then
   TAG="latest";
 else
   TAG="release-${TRAVIS_BRANCH}"
