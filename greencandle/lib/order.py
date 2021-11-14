@@ -549,12 +549,13 @@ class Trade():
             perc_inc = perc_diff(buy_price, current_price)
             base_out = add_perc(perc_inc, base_in)
 
+
             self.logger.info("Selling %s of %s for %.15f %s"
                              % (quantity, pair, float(current_price), base_out))
             if self.prod and not self.test_data:
                 amt_str = get_step_precision(pair, quantity)
 
-                trade_result = binance.spot_order(symbol=pair, side=binance.SELL, quantity=base_in,
+                trade_result = binance.spot_order(symbol=pair, side=binance.SELL, quantity=amt_str,
                                                   order_type=binance.MARKET, test=self.test_trade)
 
                 if "msg" in trade_result:
@@ -599,7 +600,7 @@ class Trade():
             if not quantity:
                 self.logger.info("close_margin_long: unable to find quantity for %s" % pair)
                 continue
-            open_price, base_in, _, base_in, borrowed = dbase.get_trade_value(pair)[0]
+            open_price, quote_in, _, base_in, borrowed = dbase.get_trade_value(pair)[0]
             perc_inc = perc_diff(open_price, current_price)
             base_out = add_perc(perc_inc, base_in)
 
@@ -609,7 +610,7 @@ class Trade():
             if self.prod:
 
                 trade_result = binance.margin_order(symbol=pair, side=binance.SELL,
-                                                    quantity=base_in,
+                                                    quantity=quote_in,
                                                     order_type=binance.MARKET,
                                                     isolated=str2bool(
                                                         self.config.main.isolated))
