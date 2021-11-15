@@ -16,7 +16,7 @@ from .logger import get_logger, get_decorator
 from .mysql import Mysql
 from .redis_conn import Redis
 from .binance_accounts import get_binance_values, get_binance_margin, get_current_isolated
-from .balance_common import get_base, get_step_precision
+from .balance_common import get_base, get_quote, get_step_precision
 from .common import perc_diff, add_perc, sub_perc, AttributeDict
 from .alerts import send_gmail_alert, send_push_notif, send_slack_trade, send_slack_message
 GET_EXCEPTIONS = get_decorator((Exception))
@@ -549,10 +549,14 @@ class Trade():
             perc_inc = perc_diff(buy_price, current_price)
             base_out = add_perc(perc_inc, base_in)
 
-
             self.logger.info("Selling %s of %s for %.15f %s"
                              % (quantity, pair, float(current_price), base_out))
             if self.prod and not self.test_data:
+
+                # get amount from exchange
+                ex_quantity = binance.balances()[get_quote(pair)]['free']
+                quantity = ex_quantity if float(ex_quantity) < float(quantity) else quantity
+
                 amt_str = get_step_precision(pair, quantity)
 
                 trade_result = binance.spot_order(symbol=pair, side=binance.SELL, quantity=amt_str,
@@ -600,17 +604,27 @@ class Trade():
             if not quantity:
                 self.logger.info("close_margin_long: unable to find quantity for %s" % pair)
                 continue
-            open_price, quote_in, _, base_in, borrowed = dbase.get_trade_value(pair)[0]
+            open_price, _, _, base_in, borrowed = dbase.get_trade_value(pair)[0]
             perc_inc = perc_diff(open_price, current_price)
             base_out = add_perc(perc_inc, base_in)
 
             self.logger.info("Selling %s of %s for %.15f %s"
                              % (quantity, pair, float(current_price), base_out))
             base = get_base(pair)
+
             if self.prod:
+                # get amount from exchange
+                if 'isolated' in name:
+                    ex_quantity = binance.isolated_balances()[pair][get_quote(pair)]
+                else:
+                    ex_quantity = binance.margin_balances()[get_quote(pair)]
+
+                quantity = ex_quantity if float(ex_quantity) < float(quantity) else quantity
+
+                amt_str = get_step_precision(pair, quantity)
 
                 trade_result = binance.margin_order(symbol=pair, side=binance.SELL,
-                                                    quantity=quote_in,
+                                                    quantity=amt_str,
                                                     order_type=binance.MARKET,
                                                     isolated=str2bool(
                                                         self.config.main.isolated))

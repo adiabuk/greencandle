@@ -21,6 +21,11 @@ def get_base(pair):
     except IndexError:
         return None
 
+def get_quote(pair):
+    """Return quote Currency"""
+    base = get_base(pair)
+    return pair.rstrip(base)
+
 def flatten(flat):
     """
     traverse tree to find flatten-able object
