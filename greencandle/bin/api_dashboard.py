@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=bare-except
+#pylint: disable=bare-except, no-member, wrong-import-position
 """
 Flask module for manipulating API trades and displaying relevent graphs
 """
@@ -14,6 +14,8 @@ import yaml
 from flask import Flask, render_template, request, Response
 APP = Flask(__name__, template_folder="/etc/gcapi", static_url_path='/',
             static_folder='/etc/gcapi')
+from greencandle.lib import config
+config.create_config()
 
 def get_pairs():
     """
@@ -98,7 +100,8 @@ def send_trade(pair, strategy, trade_action):
                "text": "Manual action from API",
                "action": trade_action,
                "strategy": strategy}
-    url = "http://router:1080/webhook"
+    api_token = config.main.api_token
+    url = "http://router:1080/{}".format(api_token)
     try:
         requests.post(url, json=payload, timeout=1)
     except:
