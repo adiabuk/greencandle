@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 
 set -e
-if [[ -z $1 ]]; then
-  TAG=latest
+
+if [[ -z $TRAVIS_BRANCH ]]; then
+  TAG="latest"
+elif [[ $TRAVIS_BRANCH == "master" ]]; then
+  TAG="latest";
 else
-  TAG=$1
+  TAG="release-${TRAVIS_BRANCH}"
 fi
 
 # TODO: alarm image (as)
