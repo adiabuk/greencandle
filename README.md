@@ -11,6 +11,14 @@
 
 # Releases
 
+## 2.12
+* Compare amount with value from exchange when selling
+* Create docker builds after travis tests
+* Use API token for requests from trading view
+* Travis fixes to login to docker again
+* Restart docker containers on all failures
+* Fix buy/borrow amounts for isolated
+
 ## 2.11
 * Display profit in USD at end of trade
 * More alerting if trade is not made
