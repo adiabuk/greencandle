@@ -434,13 +434,14 @@ class Trade():
         return None
 
     @GET_EXCEPTIONS
-    def __close_margin_short(self, short_list, name=None, drawdowns=None, drawups=None):
+    def __close_margin_short(self, short_list, drawdowns=None, drawups=None):
         """
         Sell items in sell_list
         """
 
         self.logger.info("We need to close short %s" % short_list)
         dbase = Mysql(test=self.test_data, interval=self.interval)
+        name = self.config.main.name
         for pair, current_time, current_price, event in short_list:
             quantity = dbase.get_quantity(pair)
             if not quantity:
@@ -532,13 +533,14 @@ class Trade():
                                       event=event, action='OPEN', usd_profit='N/A')
 
     @GET_EXCEPTIONS
-    def __close_spot_long(self, sell_list, name=None, drawdowns=None, drawups=None, update_db=True):
+    def __close_spot_long(self, sell_list, drawdowns=None, drawups=None, update_db=True):
         """
         Sell items in sell_list
         """
 
         self.logger.info("We need to sell %s" % sell_list)
         dbase = Mysql(test=self.test_data, interval=self.interval)
+        name = self.config.main.name
         for pair, current_time, current_price, event in sell_list:
             quantity = dbase.get_quantity(pair)
             if not quantity:
@@ -554,7 +556,7 @@ class Trade():
             if self.prod and not self.test_data:
 
                 # get amount from exchange
-                ex_quantity = binance.balances()[get_quote(pair)]['free']
+                ex_quantity = binance.my_trades(symbol=pair)[0]['qty']
                 quantity = ex_quantity if float(ex_quantity) < float(quantity) else quantity
 
                 amt_str = get_step_precision(pair, quantity)
@@ -592,13 +594,14 @@ class Trade():
         del dbase
 
     @GET_EXCEPTIONS
-    def __close_margin_long(self, sell_list, name=None, drawdowns=None, drawups=None):
+    def __close_margin_long(self, sell_list, drawdowns=None, drawups=None):
         """
         Sell items in sell_list
         """
 
         self.logger.info("We need to sell %s" % sell_list)
         dbase = Mysql(test=self.test_data, interval=self.interval)
+        name = self.config.main.name
         for pair, current_time, current_price, event in sell_list:
             quantity = dbase.get_quantity(pair)
             if not quantity:
@@ -614,11 +617,7 @@ class Trade():
 
             if self.prod:
                 # get amount from exchange
-                if 'isolated' in name:
-                    ex_quantity = binance.isolated_balances()[pair][get_quote(pair)]
-                else:
-                    ex_quantity = binance.margin_balances()[get_quote(pair)]
-
+                ex_quantity = binance.my_margin_trades(pair, 'isolated' in self.config.main.name)[0]['qty']
                 quantity = ex_quantity if float(ex_quantity) < float(quantity) else quantity
 
                 amt_str = get_step_precision(pair, quantity)
