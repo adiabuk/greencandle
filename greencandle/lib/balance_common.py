@@ -13,17 +13,17 @@ def default_to_regular(ddict):
         ddict = {k: default_to_regular(v) for k, v in ddict.items()}
     return ddict
 
-def get_base(pair):
-    """Return BaseCurrency of trading pair"""
-    bases = ['USDT', 'USDC', 'BTC', 'ETH', 'BNB']
+def get_quote(pair):
+    """Return Quote Currency of trading pair"""
+    main = ['USDT', 'USDC', 'BTC', 'ETH', 'BNB']
     try:
-        return list(filter(pair.endswith, bases))[0]
+        return list(filter(pair.endswith, main))[0]
     except IndexError:
         return None
 
-def get_quote(pair):
-    """Return quote Currency"""
-    base = get_base(pair)
+def get_base(pair):
+    """Return base Currency"""
+    base = get_quote(pair)
     return pair.rstrip(base)
 
 def flatten(flat):

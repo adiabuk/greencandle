@@ -8,7 +8,7 @@ Create Excel Spreadsheet with results and analysis of trades
 import sys
 import openpyxl
 from greencandle.lib import config
-from greencandle.lib.balance_common import get_base
+from greencandle.lib.balance_common import get_quote
 config.create_config()
 from greencandle.lib.mysql import Mysql
 
@@ -52,7 +52,7 @@ def main():
                 open_usd_rate, close_usd_rate, open_gbp_rate, close_gbp_rate = result
 
         # open trade
-        from_token = get_base(pair)
+        from_token = get_quote(pair)
         exchange_token = pair.rstrip(from_token)
         try:
             gbp_amount = float(base_in) * float(open_usd_rate) * float(open_gbp_rate)
