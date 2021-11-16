@@ -25,13 +25,13 @@ def main():
         sys.exit(1)
     pair = sys.argv[1]
     side = sys.argv[2]
-    base_amount = 3000
+    quote_amount = 3000
     account = config.accounts.binance[0]
     binance_auth(account)
-    base = get_quote(pair)
+    quote = get_quote(pair)
 
     if side == 'OPEN':
-        result = binance.margin_borrow(base, base_amount)
+        result = binance.margin_borrow(base, quote_amount)
         print("Borrow result: {}".format(result))
         base_amount = 100/float(binance.prices()[pair])
         precise_amount = get_step_precision(pair, base_amount)
@@ -43,7 +43,7 @@ def main():
         result = binance.margin_order(symbol=pair, side='SELL', quantity=precise_amount,
                                       orderType=binance.MARKET)
         print("Sell result: {}".format(result))
-        result = binance.margin_repay(base, base_amount)
+        result = binance.margin_repay(base, quote_amount)
 
         print("Repay result: {}".format(result))
     else:

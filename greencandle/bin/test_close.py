@@ -23,14 +23,14 @@ def main():
     account = config.accounts.binance[0]
     binance_auth(account)
     dbase = Mysql()
-    query = ("select pair, quote_in, name from trades where close_price is NULL")
+    query = ("select pair, base_in, name from trades where close_price is NULL")
 
     open_trades = dbase.fetch_sql_data(query, header=False)
 
     for trade in open_trades:
-        pair, quote_in, name = trade
+        pair, base_in_in, name = trade
         result = binance.spot_order(symbol=pair, side=binance.SELL,
-                                    quantity=get_step_precision(pair, quote_in),
+                                    quantity=get_step_precision(pair, base_in),
                                     order_type=binance.MARKET, test=True)
         print("Testing {} from {}, result: {}".format(pair, name, str(result)))
 
