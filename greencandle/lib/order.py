@@ -472,7 +472,7 @@ class Trade():
                 if name == "api":
                     name = "%"
                 trade_id = dbase.update_trades(pair=pair, close_time=current_time,
-                                               close_price=fill_price, base=quantity,
+                                               close_price=fill_price, base_out=quantity,
                                                quote_out=quote_out, name=name,
                                                drawdown=drawdowns[pair], drawup=drawups[pair],
                                                quote_name=get_quote(pair))
@@ -574,7 +574,7 @@ class Trade():
 
                 if update_db:
                     trade_id = dbase.update_trades(pair=pair, close_time=current_time,
-                                                   close_price=fill_price, base=quantity,
+                                                   close_price=fill_price, base_out=quantity,
                                                    quote_out=quote_out, name=name,
                                                    drawdown=drawdowns[pair],
                                                    drawup=drawups[pair], quote_name=get_quote(pair))
@@ -647,7 +647,7 @@ class Trade():
                     name = "%"
 
                 trade_id = dbase.update_trades(pair=pair, close_time=current_time,
-                                               close_price=fill_price, base=quantity,
+                                               close_price=fill_price, base_out=quantity,
                                                quote_out=quote_out, name=name,
                                                drawdown=drawdowns[pair],
                                                drawup=drawups[pair], quote_name=quote)
