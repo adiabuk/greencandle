@@ -555,10 +555,6 @@ class Trade():
                              % (quantity, pair, float(current_price), base_out))
             if self.prod and not self.test_data:
 
-                # get amount from exchange
-                ex_quantity = binance.my_trades(symbol=pair)[0]['qty']
-                quantity = ex_quantity if float(ex_quantity) < float(quantity) else quantity
-
                 amt_str = get_step_precision(pair, quantity)
 
                 trade_result = binance.spot_order(symbol=pair, side=binance.SELL, quantity=amt_str,
