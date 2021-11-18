@@ -15,6 +15,7 @@ script:
 - cat config/template/*.json|jq
 - sudo greencandle/tests/travis_tests.sh "not docker"
 - sudo greencandle/tests/travis_tests.sh "docker"
+after_success:
 - sudo bash create_images.sh
 notifications:
   slack:
