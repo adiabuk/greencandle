@@ -162,7 +162,7 @@ class Mysql():
         """
         Return quantity for a current open trade
         """
-        command = ('select quote_in from trades where close_price '
+        command = ('select base_in from trades where close_price '
                    'is NULL and `interval` = "{0}" and '
                    'pair = "{1}" and name="{2}" LIMIT 1'
                    .format(self.interval, pair, config.main.name))
