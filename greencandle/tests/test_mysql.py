@@ -6,7 +6,6 @@ Unittest file for testing results of a run using downloaded data
 
 import unittest
 import time
-from greencandle.lib import config
 from greencandle.lib.balance_common import get_quote
 from greencandle.lib import config
 config.create_config()
@@ -14,7 +13,7 @@ config.create_config()
 from greencandle.lib.logger import get_logger
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.common import perc_diff, add_perc
-from .unittests import OrderedTest, run_subprocess
+from .unittests import OrderedTest
 
 LOGGER = get_logger(__name__)
 
@@ -41,7 +40,8 @@ class TestMysql(OrderedTest):
         self.close_price = 500
         quote_in = 20
         quote = get_quote(self.pair)
-        self.dbase.insert_trade(self.pair, self.date, self.open_price, quote_in, 30, quote_name=quote)
+        self.dbase.insert_trade(self.pair, self.date, self.open_price, quote_in, 30,
+                                quote_name=quote)
         sql = 'select open_time, close_time from trades'
         open_time, close_time = self.dbase.fetch_sql_data(sql)[-1]
         current_time = open_time.strftime("%Y-%m-%d %H:%M:%S")
