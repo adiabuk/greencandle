@@ -147,9 +147,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-5ma-1tsl-btc-margin:
-    container_name: be-5ma-1tsl-btc-margin
-    hostname: be-5ma-1tsl-btc-margin
+  be-5ma-1tsl-btc-isolated:
+    container_name: be-5ma-1tsl-btc-isolated
+    hostname: be-5ma-1tsl-btc-isolated
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -163,7 +163,7 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=prod/5MA/1tsl/btc/margin
+      - CONFIG_ENV=prod/5MA/1tsl/btc/isolated
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -176,9 +176,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-5ma-1tsl-usdt-margin:
-    container_name: be-5ma-1tsl-usdt-margin
-    hostname: be-5ma-1tsl-usdt-margin
+  be-5ma-1tsl-usdt-isolated:
+    container_name: be-5ma-1tsl-usdt-isolated
+    hostname: be-5ma-1tsl-usdt-isolated
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -192,7 +192,7 @@ services:
       - base-mysql
       - base-redis
     environment:
-      - CONFIG_ENV=prod/5MA/1tsl/usdt/margin
+      - CONFIG_ENV=prod/5MA/1tsl/usdt/isolated
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/ -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
