@@ -18,14 +18,15 @@ script:
 after_success:
 - sudo bash create_images.sh
 notifications:
+  emails: false
   slack:
     rooms:
-      - secure: NLPQBKmA9zPSR7uHyLexq1RQYNogINxYZ2bmaP9U5qIr4/caJlVQCEDdA7exO1SIrdCABJKzmg/WJPWZdNVAwaJtFIkxOEVT+mXjvJdRK1avKweLk+hitYRCccI3Nx1SeU0wggXJFGQUpWhEHr6zR1/lBwQNC3N1Q46AWp/V7ga7NdP6yBs0CVSENWxOTX2snUKnj1tSZPqN5HpK3LSAhbjIck7YPMc8wv1m0ClhdQ7FjoZJLaBBnSXAzh89q3mumdaQatDmIKp5jjGffngRGey1/RwPIBGJus/SZjJVSw2nBWlnnGFpqxunoYIKYFgSO4zd92QwIoOfLD9oWUrx8J7JHGmxxGr752ZBoNm3AUDkYMRcM5weDQiL3NwKTld1M0+J22sL9j7LtsMO1ogghyUn9jRTnIoY+Le5oUt1ibXlsKKaMxWq3bQ9deJzezvift5K8py0YuvC0et180n2D6UNKFprBxF9Jzxpq67DgcKWvPu+7RCdI6nBewyXSQrkdJ0WZOIfSxsAlyt0XWmZBaENsyNsBaDEWUmuLB4/KIocnux0zYtxagjfftEbCGyhr0uKbBPysOI6v21Elj5lcyVOhQfUxsuGiRDdA+7X6F8UnMEfsjI+Y5O62gRpdunoK+mxTsHT5kx3f2BzfPGjlxJGox453nMQidme42s/QvM=
+      - secure: kEGZ9DvQzpIpcFptJFGcPSECKswJlo09U2Eq8I2ks4cnPc1xxgCiJF1ZTgIwWiZVWkYlCjnVsBqDy75OtD76YHHUi+7r1b3zKPTpVJQY+lf/8Gu4hcstyrT0+gueNWswwkdfxkAlWwIHyIrdTbUfw0hjjO/hW1UDIVn/T8gZ9/KRDpMpo2w6LtvTZ8DeIwlX9oaKlpxquKfDADVXT8TYQALQem+dnWbLKY3V6zMPK+SivTSupvjDP/+5ckn9fT2OEJv2roQ4TnW6QIroWieKL12DPb0GWBbcTVPY2/3IIUPjuKSw/Sip447aCBgS5UPXoegYx61vJ6nMb09vG0DXvFsRiqwuSe4kb3kyD8miyceG+AuVYLV+P4ibYcTBGPAPSNZqBW4+TXrUNLnMObkBB/ThfTGutNupmouk3kjnnlhoPsoOiopo6YuZjmOc1/Jq6BcxZGgz2+hB8lN8u6/lRhM73UtEm/lWo4wvFl+i9n4AL5UccKbBHCBm7Tu14rKXsU0j42WvPN6qpQhIasBuQe2TU5jLKShXJr9rEfI9WXhnyH+MqOTiyrL+MFW8pnyqJKW8aF3HOYVFXCQdx94gWfgbQuaJ8+8lfxjdjHRX1280NziSBVTCN12ofqlrLoBkIac1kltQtgTSIMXvU1tCQUao3LV9VQNW3bEKRF9ZtTU=
     on_success: always
     on_failure: always
     template:
-      - "Repo `%{repository_slug}` *%{result}* build (<%{build_url}|#%{build_number}>) for commit (<%{compare_url}|%{commit}>) on branch `%{branch}`."
-      - "Execution time: *%{duration}*"
+      - "Repo %{repository_slug} %{result} build (<%{build_url}|#%{build_number}>) for commit (<%{compare_url}|%{commit}>) on branch %{branch}."
+      - "Execution time: %{duration}"
       - "Message: %{message}"
 env:
   global:
