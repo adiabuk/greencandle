@@ -11,6 +11,12 @@
 
 # Releases
 
+## 2.13
+* Fixes to isolated close long trades
+* Get correct base amount from exchange
+* Rename remaining non-api containers
+* Add missing api token in dashboard
+
 ## 2.12
 * Compare amount with value from exchange when selling
 * Create docker builds after travis tests
