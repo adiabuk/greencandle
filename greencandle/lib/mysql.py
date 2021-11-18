@@ -176,7 +176,7 @@ class Mysql():
     @get_exceptions
     def get_trade_value(self, pair):
         """
-        Return the value of an open trade for a given trading pair
+        Return details for calculating value of an open trade for a given trading pair
         """
 
         command = ('select open_price, quote_in, open_time, base_in, borrowed from trades '
@@ -262,7 +262,7 @@ class Mysql():
 
         self.__run_sql_query("delete from open_trades")
         trades = self.fetch_sql_data("select pair, open_time, open_price, name, `interval`, "
-                                     "open_usd_rate*base_in as usd_quantity from "
+                                     "open_usd_rate*quote_in as usd_quantity from "
                                      "trades where close_price is NULL or close_price=''",
                                      header=False)
         for trade in trades:
@@ -280,7 +280,6 @@ class Mysql():
             except ZeroDivisionError:
                 self.logger.critical("%s has a zero buy price, unable to calculate percentage"
                                      % pair)
-
 
     @get_exceptions
     def insert_balance(self, balances):

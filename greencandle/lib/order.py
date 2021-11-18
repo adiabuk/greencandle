@@ -448,8 +448,8 @@ class Trade():
                 self.logger.info("close_margin_short: unable to find quantity for %s" % pair)
                 return
 
-            buy_price, quote_in, _, _, _, _ = dbase.get_trade_value(pair)[0]
-            perc_inc = -(perc_diff(buy_price, current_price))
+            open_price, quote_in, _, _, _, _ = dbase.get_trade_value(pair)[0]
+            perc_inc = - (perc_diff(open_price, current_price))
             quote_out = add_perc(perc_inc, quote_in)
 
             self.logger.info("Closing %s of %s for %.15f %s"
@@ -472,7 +472,7 @@ class Trade():
                 if name == "api":
                     name = "%"
                 trade_id = dbase.update_trades(pair=pair, close_time=current_time,
-                                               close_price=fill_price, 
+                                               close_price=fill_price,
                                                quote=quote_out, base_out=quantity, name=name,
                                                drawdown=drawdowns[pair], drawup=drawups[pair],
                                                quote_name=get_quote(pair))
@@ -547,8 +547,8 @@ class Trade():
                 self.logger.info("close_spot_long: unable to find quantity for %s" % pair)
                 continue
 
-            buy_price, quote_in, _, _, _ = dbase.get_trade_value(pair)[0]
-            perc_inc = perc_diff(buy_price, current_price)
+            open_price, quote_in, _, _, _ = dbase.get_trade_value(pair)[0]
+            perc_inc = perc_diff(open_price, current_price)
             quote_out = add_perc(perc_inc, quote_in)
 
             self.logger.info("Selling %s of %s for %.15f %s"
