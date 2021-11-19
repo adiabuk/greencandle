@@ -110,7 +110,7 @@ class TestRedis(unittest.TestCase):
         # Sell rule matched but no item to sell
         self.assertEqual(action[4]['sell'], [1])
 
-        dbase.insert_trade(pair, "2019-09-06 23:59:59", "10647.37", "0.03130663", "333"
+        dbase.insert_trade(pair, "2019-09-06 23:59:59", "10647.37", "0.03130663", "333",
                            quote_name=quote)
 
         action = redis.get_action(pair, '4h')
