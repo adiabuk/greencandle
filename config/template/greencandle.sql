@@ -370,9 +370,7 @@ CREATE TABLE `trades` (
 /*!50001 SET collation_connection      = utf8mb4_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `profit` AS select `trades`.`id` AS `id`,`trades`.`open_time` AS
- * `open_time`,`trades`.`interval` AS `interval`,`trades`.`close_time` AS
-* `close_time`,`trades`.`pair` AS `pair`,`trades`.`name` AS `name`,`trades`.`open_price` AS * `open_price`,`trades`.`close_price` AS `close_price`,(case when (`trades`.`direction` = 'long') * * then (((`trades`.`quote_out` - `trades`.`quote_in`) / `trades`.`quote_in`) * 100) else * (((`trades`.`open_price` - `trades`.`close_price`) / `trades`.`open_price`) * 100) end) AS * `perc`,(case when (`trades`.`direction` = 'long') then (`trades`.`quote_out` - * `trades`.`quote_in`) else (`trades`.`quote_in` - `trades`.`quote_out`) end) AS * `quote_profit`,`trades`.`drawdown_perc` AS `drawdown_perc`,`trades`.`drawup_perc` AS * `drawup_perc`,((`trades`.`quote_out` - `trades`.`quote_in`) * `trades`.`close_usd_rate`) AS `usd_profit` from `trades` */;
+/*!50001 VIEW `profit` AS select `trades`.`id` AS `id`,`trades`.`open_time` AS `open_time`,`trades`.`interval` AS `interval`,`trades`.`close_time` AS `close_time`, `trades`.`pair` AS `pair`,`trades`.`name` AS `name`,`trades`.`open_price` AS `open_price`,`trades`.`close_price` AS `close_price`,(case when (`trades`.`direction` = 'long') then (((`trades`.`quote_out` - `trades`.`quote_in`) / `trades`.`quote_in`) * 100) else (((`trades`.`open_price` - `trades`.`close_price`) / `trades`.`open_price`) * 100) end) AS `perc`,(case when (`trades`.`direction` = 'long') then (`trades`.`quote_out` - `trades`.`quote_in`) else (`trades`.`quote_in` - `trades`.`quote_out`) end) AS `quote_profit`,`trades`.`drawdown_perc` AS `drawdown_perc`,`trades`.`drawup_perc` AS `drawup_perc`,((`trades`.`quote_out` - `trades`.`quote_in`) * `trades`.`close_usd_rate`) AS `usd_profit` from `trades` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
