@@ -1,0 +1,6 @@
+{
+  "name": "5ma-3m_api",
+  "stop_loss_perc": "200",
+  "check_interval": "36000",
+  "interval": "3h"
+}

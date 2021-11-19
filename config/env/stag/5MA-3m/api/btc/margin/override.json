@@ -1,0 +1,8 @@
+{
+  "name": "5ma-3m-api-btc-margin",
+  "pairs": "ETHBTC",
+  "trade_isolated": "true",
+  "trade_type": "margin",
+  "max_trades": "10",
+  "trade_multiplier": "2"
+}
