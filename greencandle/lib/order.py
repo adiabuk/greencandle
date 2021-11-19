@@ -614,8 +614,9 @@ class Trade():
 
             if self.prod:
                 # get amount from exchange
-                ex_quantity = binance.my_margin_trades(pair, str2bool(self.config.main.isolated))[0]['qty']
-                quantity = ex_quantity if float(ex_quantity) < float(quantity) else quantity
+                ex_quan = binance.my_margin_trades(pair,
+                                                   str2bool(self.config.main.isolated))[0]['qty']
+                quantity = ex_quan if float(ex_quan) < float(quantity) else quantity
 
                 amt_str = get_step_precision(pair, quantity)
 

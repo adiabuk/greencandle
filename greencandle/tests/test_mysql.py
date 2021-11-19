@@ -40,8 +40,8 @@ class TestMysql(OrderedTest):
         self.close_price = 500
         quote_in = 20
         quote = get_quote(self.pair)
-        self.dbase.insert_trade(self.pair, self.date, self.open_price, quote_in, 30,
-                                quote_name=quote)
+        self.dbase.insert_trade(self.pair, self.date, self.open_price, quote_amount=quote_in,
+                                base_amount=30, quote_name=quote)
         sql = 'select open_time, close_time from trades'
         open_time, close_time = self.dbase.fetch_sql_data(sql)[-1]
         current_time = open_time.strftime("%Y-%m-%d %H:%M:%S")
