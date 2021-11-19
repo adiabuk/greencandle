@@ -1,5 +1,5 @@
 {
-  "name": "env-api-usdt-margin",
+  "name": "env-api-usdt-isolated",
   "pairs": "ENJUSDT",
   "trade_isolated": "true",
   "trade_type": "margin",

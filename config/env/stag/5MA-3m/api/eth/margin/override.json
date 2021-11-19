@@ -1,5 +1,5 @@
 {
-  "name": "5ma-3m-api-eth-margin",
+  "name": "5ma-3m-api-eth-isolated",
   "pairs": "BNBETH",
   "trade_isolated": "true",
   "trade_type": "margin",
