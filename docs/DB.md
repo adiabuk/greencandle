@@ -50,7 +50,7 @@ View based on trades with calculated perc
 * open_price - *from trades table*
 * close_price - *from trades table*
 * perc - *calulated from trades table (base in/base out) depending on direction (margin)*
-* base_profit - *from trades table from trades table (base in/base out) depending on direction (margin)*
+* quote_profit - *from trades table from trades table (quote in/quote out) depending on direction (margin)*
 * drawdown_perc - *from trades table*
 * drawup_perc - *from trades table*
 

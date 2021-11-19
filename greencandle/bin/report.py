@@ -43,14 +43,14 @@ def main():
                         order by month,perc;",
                "profit-pair": "select pair, sum(perc) as perc from profit where \
                         close_time != '0000-00-00 00:00:00' group by pair;",
-               "trades": "select open_time, close_time, open_price, close_price, base_profit, \
+               "trades": "select open_time, close_time, open_price, close_price, quote_profit, \
                           perc, drawdown_perc from profit;",
                "hours-pair": "select pair, sum(hour(timediff(close_time,open_time))) \
                         as hours from trades where close_time \
                         != '0000-00-00 00:00:00' group by pair",
-               "profit-factor": "select IFNULL((select sum(base_profit) from profit where \
-                                base_profit >0)/-(select sum(base_profit) from profit where \
-                                base_profit <0),100) as profit_factor",
+               "profit-factor": "select IFNULL((select sum(quote_profit) from profit where \
+                                quote_profit >0)/-(select sum(quote_profit) from profit where \
+                                quote_profit <0),100) as profit_factor",
                "buy-hold-return": "select (select open_price from profit order by \
                                    open_time limit 1) \
                                    as first_buy, (select close_price from profit order by \
