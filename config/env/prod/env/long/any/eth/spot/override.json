@@ -1,0 +1,5 @@
+{
+  "name": "env-api-any-eth-spot",
+  "divisor": "1.1",
+  "max_trades": "1"
+}

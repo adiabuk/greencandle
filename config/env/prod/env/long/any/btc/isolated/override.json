@@ -1,0 +1,8 @@
+{
+  "name": "env-api-any-btc-isolated",
+  "trade_isolated": "true",
+  "trade_type": "margin",
+  "max_trades": "10",
+  "divisor": "1",
+  "trade_multiplier": "5"
+}
