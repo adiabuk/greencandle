@@ -5,7 +5,7 @@ import unittest
 import random
 import time
 import pickle
-from greencandle.lib.balance_common import get_base
+from greencandle.lib.balance_common import get_quote
 from greencandle.lib import config
 config.create_config()
 
@@ -76,7 +76,7 @@ class TestRedis(unittest.TestCase):
         Test get action method
         """
         pair = "BTCUSDT"
-        base = get_base(pair)
+        quote = get_quote(pair)
         redis = Redis(interval="4h", test_data=True, test=True)
         dbase = Mysql(test=True, interval="4h")
         redis.clear_all()
@@ -110,7 +110,8 @@ class TestRedis(unittest.TestCase):
         # Sell rule matched but no item to sell
         self.assertEqual(action[4]['sell'], [1])
 
-        dbase.insert_trade(pair, "2019-09-06 23:59:59", "10647.37", "333", "0.03130663", base=base)
+        dbase.insert_trade(pair, "2019-09-06 23:59:59", "10647.37", "0.03130663", "333",
+                           quote_name=quote)
 
         action = redis.get_action(pair, '4h')
         self.assertEqual(action[0], 'CLOSE')
@@ -119,7 +120,9 @@ class TestRedis(unittest.TestCase):
         self.assertEqual(action[3], 10298.73)
         self.assertEqual(action[4]['buy'], [])
         self.assertEqual(action[4]['sell'], [1])
-        dbase.update_trades(pair, "2019-09-07 23:59:59", "10999", "0.03130663", "444", base=base)
+
+        dbase.update_trades(pair, "2019-09-07 23:59:59", "10999", "444", "0.03130663",
+                            quote_name=quote)
 
         self.insert_data('random', redis)
         action = redis.get_action(pair, '4h')

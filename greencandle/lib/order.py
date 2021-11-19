@@ -75,13 +75,13 @@ class Trade():
         redis.redis_conn(kwargs.pair, kwargs.interval, data, mepoch)
         del redis
 
-    def amount_to_use(self, item, current_base_bal):
+    def amount_to_use(self, item, current_quote_bal):
         """
         Figire out how much of current asset to buy based on balance and divisor
         """
         dbase = Mysql(test=self.test_data, interval=self.interval)
         try:
-            last_open_price = dbase.fetch_sql_data("select base_in from trades where "
+            last_open_price = dbase.fetch_sql_data("select quote_in from trades where "
                                                    "pair='{0}' and name='{1}'"
                                                    .format(item, self.config.main.name),
                                                    header=False)[-1][-1]
@@ -90,13 +90,13 @@ class Trade():
             last_open_price = 0
 
         if self.divisor:
-            proposed_base_amount = current_base_bal / self.divisor
+            proposed_quote_amount = current_quote_bal / self.divisor
         else:
-            proposed_base_amount = current_base_bal / (self.max_trades + 1)
+            proposed_quote_amount = current_quote_bal / (self.max_trades + 1)
         self.logger.info('item: %s, proposed: %s, last:%s'
-                         % (item, proposed_base_amount, last_open_price))
+                         % (item, proposed_quote_amount, last_open_price))
 
-        return proposed_base_amount
+        return proposed_quote_amount
 
     def check_pairs(self, items_list):
         """
@@ -202,7 +202,7 @@ class Trade():
     def __open_margin_long(self, buy_list):
         """
         Buy as many items as we can from buy_list depending on max amount of trades, and current
-        balance in base currency
+        balance in quote currency
         """
         self.logger.info("We have %s potential items to buy" % len(buy_list))
 
@@ -215,10 +215,10 @@ class Trade():
             balance = get_binance_margin()
 
         for pair, current_time, current_price, event in buy_list:
-            base = get_base(pair)
+            quote = get_quote(pair)
             try:
                 if str2bool(self.config.main.isolated):
-                    current_base_bal = float(balance[pair][base])
+                    current_quote_bal = float(balance[pair][quote])
                 else:
                     # Get current available to borrow
                     margin_total_usd = binance.get_max_borrow()
@@ -227,38 +227,38 @@ class Trade():
                     for asset, debt in  binance.get_margin_debt().items():
                         # add debts to get total allowed to borrow
                         margin_total_usd += float(debt) if 'USD' in asset else \
-                                float(debt) * float(binance.prices()[debt+'USDT'])
-                    current_base_bal = margin_total_usd if base == 'USDT' else \
-                            margin_total_usd / float(binance.prices()[base+"USDT"])
+                                float(debt) * float(binance.prices()[debt + 'USDT'])
+                    current_quote_bal = margin_total_usd if quote == 'USDT' else \
+                            margin_total_usd / float(binance.prices()[quote + "USDT"])
 
             except KeyError:
-                current_base_bal = 0
-            base_amount = self.amount_to_use(pair, current_base_bal)
+                current_quote_bal = 0
+            quote_amount = self.amount_to_use(pair, current_quote_bal)
 
-            amount = base_amount / float(current_price)
-            if float(current_price)*float(amount) >= float(current_base_bal):
+            amount = quote_amount / float(current_price)
+            if float(current_price) * float(amount) >= float(current_quote_bal):
                 self.logger.critical("Unable to purchase %s of %s, insufficient funds:%s/%s" %
-                                     (amount, pair, base_amount, current_base_bal))
+                                     (amount, pair, quote_amount, current_quote_bal))
                 continue
             else:
                 self.logger.info("Buying %s of %s with %s %s"
-                                 % (amount, pair, base_amount, base))
+                                 % (amount, pair, quote_amount, quote))
                 self.logger.debug("amount to buy: %s, current_price: %s, amount:%s"
-                                  % (base_amount, current_price, amount))
+                                  % (quote_amount, current_price, amount))
 
-                amount_to_borrow = float(base_amount) * float(self.config.main.multiplier)
+                amount_to_borrow = float(quote_amount) * float(self.config.main.multiplier)
                 amount_to_use = sub_perc(1, amount_to_borrow)  # use 99% of borrowed funds
 
                 self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
-                                 % (amount_to_borrow, base, base_amount))
+                                 % (amount_to_borrow, quote, quote_amount))
 
                 if self.prod:
                     borrow_res = binance.margin_borrow(symbol=pair, quantity=amount_to_borrow,
                                                        isolated=str2bool(self.config.main.isolated),
-                                                       asset=base)
+                                                       asset=quote)
                     if "msg" in borrow_res:
                         self.logger.error("Borrow error-open %s: %s while trying to borrow %s %s"
-                                          % (pair, borrow_res, amount_to_borrow, base))
+                                          % (pair, borrow_res, amount_to_borrow, quote))
                         continue
 
                     self.logger.info(borrow_res)
@@ -271,10 +271,10 @@ class Trade():
                     if "msg" in trade_result:
                         self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
                         self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str,
-                                                                         current_base_bal))
+                                                                         current_quote_bal))
                         continue
 
-                    base_amount = trade_result.get('cummulativeQuoteQty', base_amount)
+                    quote_amount = trade_result.get('cummulativeQuoteQty', quote_amount)
                     amt_str = trade_result.get('executedQty')
                 else:
                     amt_str = amount_to_use
@@ -286,10 +286,10 @@ class Trade():
                     (not self.test_trade and 'transactTime' in trade_result):
 
                 dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
-                                   base_amount=amount_to_use, quote=amt_str,
+                                   quote_amount=amount_to_use, base_amount=amt_str,
                                    borrowed=amount_to_borrow,
                                    multiplier=self.config.main.multiplier,
-                                   direction=self.config.main.trade_direction, base=base)
+                                   direction=self.config.main.trade_direction, quote_name=quote)
 
                 self.__send_notifications(pair=pair, current_time=current_time,
                                           fill_price=fill_price, interval=self.interval,
@@ -309,26 +309,26 @@ class Trade():
         balance[account]['USDT']['count'] = 1000
         balance[account]['USDC']['count'] = 1000
         balance[account]['BNB']['count'] = 14
-        for base in ['BTC', 'ETH', 'USDT', 'BNB', 'USDC']:
-            db_result = dbase.fetch_sql_data("select sum(base_out-base_in) from trades "
+        for quote in ['BTC', 'ETH', 'USDT', 'BNB', 'USDC']:
+            db_result = dbase.fetch_sql_data("select sum(quote_out-quote_in) from trades "
                                              "where pair like '%{0}' and name='{1}'"
-                                             .format(base, self.config.main.name),
+                                             .format(quote, self.config.main.name),
                                              header=False)[0][0]
             db_result = float(db_result) if db_result and db_result > 0 else 0
-            current_trade_values = dbase.fetch_sql_data("select sum(base_in) from trades "
+            current_trade_values = dbase.fetch_sql_data("select sum(quote_in) from trades "
                                                         "where pair like '%{0}' and "
-                                                        "base_out is null"
-                                                        .format(base), header=False)[0][0]
+                                                        "quote_out is null"
+                                                        .format(quote), header=False)[0][0]
             current_trade_values = float(current_trade_values) if \
                     current_trade_values else 0
-            balance[account][base]['count'] += db_result + current_trade_values
+            balance[account][quote]['count'] += db_result + current_trade_values
         return balance
 
     @GET_EXCEPTIONS
     def __open_spot_long(self, buy_list):
         """
         Buy as many items as we can from buy_list depending on max amount of trades, and current
-        balance in base currency
+        balance in quote currency
         """
         self.logger.info("We have %s potential items to buy" % len(buy_list))
 
@@ -339,30 +339,30 @@ class Trade():
             balance = get_binance_values()
 
         for pair, current_time, current_price, event in buy_list:
-            base = get_base(pair)
+            quote = get_quote(pair)
 
             try:
-                current_base_bal = balance['binance'][base]['count']
+                current_quote_bal = balance['binance'][quote]['count']
             except KeyError:
-                current_base_bal = 0
+                current_quote_bal = 0
             except TypeError:
-                self.logger.critical("Unable to get balance for base %s while trading %s"
-                                     % (base, pair))
-                self.logger.critical("complete balance: %s base_bal: %s"
-                                     % (balance, current_base_bal))
+                self.logger.critical("Unable to get balance for quote %s while trading %s"
+                                     % (quote, pair))
+                self.logger.critical("complete balance: %s quote_bal: %s"
+                                     % (balance, current_quote_bal))
 
-            base_amount = self.amount_to_use(pair, current_base_bal)
-            amount = base_amount / float(current_price)
+            quote_amount = self.amount_to_use(pair, current_quote_bal)
+            amount = quote_amount / float(current_price)
 
-            if float(current_price) * float(amount) > float(current_base_bal):
+            if float(current_price) * float(amount) > float(current_quote_bal):
                 self.logger.critical("Unable to purchase %s of %s, insufficient funds:%s/%s" %
-                                     (amount, pair, base_amount, current_base_bal))
+                                     (amount, pair, quote_amount, current_quote_bal))
                 continue
             else:
                 self.logger.info("Buying %s of %s with %s %s"
-                                 % (amount, pair, base_amount, base))
+                                 % (amount, pair, quote_amount, quote))
                 self.logger.debug("amount to buy: %s, current_price: %s, amount:%s"
-                                  % (base_amount, current_price, amount))
+                                  % (quote_amount, current_price, amount))
                 if self.prod and not self.test_data:
                     amt_str = get_step_precision(pair, amount)
 
@@ -373,10 +373,10 @@ class Trade():
                     if "msg" in trade_result:
                         self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
                         self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str,
-                                                                         current_base_bal))
+                                                                         current_quote_bal))
                         return
 
-                    base_amount = trade_result.get('cummulativeQuoteQty', base_amount)
+                    quote_amount = trade_result.get('cummulativeQuoteQty', quote_amount)
 
                 else:
                     trade_result = True
@@ -390,9 +390,9 @@ class Trade():
                     # 2. we performed a test trade which was successful - (empty dict)
                     # 3. we proformed a real trade which was successful - (transactTime in dict)
                     db_result = dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
-                                                   base_amount=base_amount, quote=amount,
+                                                   quote_amount=quote_amount, base_amount=amount,
                                                    direction=self.config.main.trade_direction,
-                                                   base=base)
+                                                   quote_name=quote)
                     if db_result:
                         self.__send_notifications(pair=pair, current_time=current_time,
                                                   fill_price=fill_price, interval=self.interval,
@@ -448,12 +448,12 @@ class Trade():
                 self.logger.info("close_margin_short: unable to find quantity for %s" % pair)
                 return
 
-            buy_price, _, _, base_in, _ = dbase.get_trade_value(pair)[0]
-            perc_inc = -(perc_diff(buy_price, current_price))
-            base_out = add_perc(perc_inc, base_in)
+            open_price, quote_in, _, _, _, _ = dbase.get_trade_value(pair)[0]
+            perc_inc = - (perc_diff(open_price, current_price))
+            quote_out = add_perc(perc_inc, quote_in)
 
             self.logger.info("Closing %s of %s for %.15f %s"
-                             % (quantity, pair, float(current_price), base_out))
+                             % (quantity, pair, float(current_price), quote_out))
             if self.prod and not self.test_data:
                 amt_str = get_step_precision(pair, quantity)
 
@@ -472,10 +472,10 @@ class Trade():
                 if name == "api":
                     name = "%"
                 trade_id = dbase.update_trades(pair=pair, close_time=current_time,
-                                               close_price=fill_price, quote=quantity,
-                                               base_out=base_out, name=name,
+                                               close_price=fill_price,
+                                               quote=quote_out, base_out=quantity, name=name,
                                                drawdown=drawdowns[pair], drawup=drawups[pair],
-                                               base=get_base(pair))
+                                               quote_name=get_quote(pair))
                 profit = dbase.fetch_sql_data("select usd_profit from profit "
                                               "where id={}".format(trade_id),
                                               header=False)[0][0]
@@ -523,10 +523,10 @@ class Trade():
             base_amount = float(amt_str) * float(binance.prices()[pair])
 
             dbase.insert_trade(pair=pair, price=current_price, date=current_time,
-                               base_amount=base_amount,
-                               quote=amt_str, borrowed=amount_to_borrow,
+                               quote_amount=base_amount,
+                               base_amount=amt_str, borrowed=amount_to_borrow,
                                multiplier=self.config.main.multiplier,
-                               direction=self.config.main.trade_direction, base=base)
+                               direction=self.config.main.trade_direction, quote_name=base)
 
             self.__send_notifications(pair=pair, current_time=current_time,
                                       fill_price=current_price, interval=self.interval,
@@ -547,12 +547,12 @@ class Trade():
                 self.logger.info("close_spot_long: unable to find quantity for %s" % pair)
                 continue
 
-            buy_price, _, _, base_in, _ = dbase.get_trade_value(pair)[0]
-            perc_inc = perc_diff(buy_price, current_price)
-            base_out = add_perc(perc_inc, base_in)
+            open_price, quote_in, _, _, _ = dbase.get_trade_value(pair)[0]
+            perc_inc = perc_diff(open_price, current_price)
+            quote_out = add_perc(perc_inc, quote_in)
 
             self.logger.info("Selling %s of %s for %.15f %s"
-                             % (quantity, pair, float(current_price), base_out))
+                             % (quantity, pair, float(current_price), quote_out))
             if self.prod and not self.test_data:
 
                 amt_str = get_step_precision(pair, quantity)
@@ -574,10 +574,10 @@ class Trade():
 
                 if update_db:
                     trade_id = dbase.update_trades(pair=pair, close_time=current_time,
-                                                   close_price=fill_price, quote=quantity,
-                                                   base_out=base_out, name=name,
+                                                   close_price=fill_price, quote=quote_out,
+                                                   base_out=quantity, name=name,
                                                    drawdown=drawdowns[pair],
-                                                   drawup=drawups[pair], base=get_base(pair))
+                                                   drawup=drawups[pair], quote_name=get_quote(pair))
                     profit = dbase.fetch_sql_data("select usd_profit from profit "
                                                   "where id={}".format(trade_id),
                                                   header=False)[0][0]
@@ -603,18 +603,20 @@ class Trade():
             if not quantity:
                 self.logger.info("close_margin_long: unable to find quantity for %s" % pair)
                 continue
-            open_price, _, _, base_in, borrowed = dbase.get_trade_value(pair)[0]
+
+            open_price, quote_in, _, _, borrowed = dbase.get_trade_value(pair)[0]
             perc_inc = perc_diff(open_price, current_price)
-            base_out = add_perc(perc_inc, base_in)
+            quote_out = add_perc(perc_inc, quote_in)
 
             self.logger.info("Selling %s of %s for %.15f %s"
-                             % (quantity, pair, float(current_price), base_out))
-            base = get_base(pair)
+                             % (quantity, pair, float(current_price), quote_out))
+            quote = get_base(pair)
 
             if self.prod:
                 # get amount from exchange
-                ex_quantity = binance.my_margin_trades(pair, str2bool(self.config.main.isolated))[0]['qty']
-                quantity = ex_quantity if float(ex_quantity) < float(quantity) else quantity
+                ex_quan = binance.my_margin_trades(pair,
+                                                   str2bool(self.config.main.isolated))[0]['qty']
+                quantity = ex_quan if float(ex_quan) < float(quantity) else quantity
 
                 amt_str = get_step_precision(pair, quantity)
 
@@ -630,7 +632,7 @@ class Trade():
 
                 repay_result = binance.margin_repay(symbol=pair, quantity=borrowed,
                                                     isolated=str2bool(self.config.main.isolated),
-                                                    asset=base)
+                                                    asset=quote)
                 if "msg" in repay_result:
                     self.logger.error("Repay error-close %s: %s" % (pair, repay_result))
                     continue
@@ -646,10 +648,10 @@ class Trade():
                     name = "%"
 
                 trade_id = dbase.update_trades(pair=pair, close_time=current_time,
-                                               close_price=fill_price, quote=quantity,
-                                               base_out=base_out, name=name,
+                                               close_price=fill_price, quote=quote_out,
+                                               base_out=quantity, name=name,
                                                drawdown=drawdowns[pair],
-                                               drawup=drawups[pair], base=base)
+                                               drawup=drawups[pair], quote_name=quote)
 
 
                 profit = dbase.fetch_sql_data("select usd_profit from profit "

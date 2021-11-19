@@ -15,10 +15,19 @@ script:
 - cat config/template/*.json|jq
 - sudo greencandle/tests/travis_tests.sh "not docker"
 - sudo greencandle/tests/travis_tests.sh "docker"
+after_success:
 - sudo bash create_images.sh
 notifications:
+  emails: false
   slack:
-    secure: QCEGE6ncguTVrd6omsYWjDrZty0XVJrf7VLK+sYqJci26H2iDF2PBqiLGibQr6UyPNKFStvAJKurhe6ORLxq8waGopEihfKByPgDksZkvJHvhSQNMjU859uWz4w/YZ1/45iA5REphzh5zQuUl7EM+AzwjsEagZJMHrkDB5NkRRD5i8fgMfLcuddPXAj1RwWjVGPcLmCIzjY9rJLNQBQHRjPOsTHtYStji20JRsqsZP4fNepI1F9eFOdS3ledwqnYdxeESOsa/VPhzpWtUnd1a0s7EwuhFK1E+C5iI+HfRSscewmuJbT6v31UDzScaAo7y5yHd/vjDjLgwfUZr6SFFqFOHxuxGSTQtOLyOM8t0pVZFvBGFSJbBD7QQ2PGw4/C2epmEwb8u+KtpZ4rFVCG9IlqWXtXje0XPl8/lFK0Tc4PAxHUUjnagbf1VrnIwMPYYp/RIwxCs/qbu0BChdZqZdKJIhEkDwUVxEI8UMRojgOMFK+kdsp+jcYlTPH/wghv7+rLAYE02W3x3yebCP+TyJmurdXe689OUob8H8490UWzwmRR5HjtWv6GTEfx03p7VxYxso+CF9KXwNAtKTKORnlIwy8BfYvUHVK7jNI9QMbmZu8vikKqAmfkE58zteKdx6beyX5tR2o7GQv/LwK5ov4JqhCB49UBiNI+9+2WaUo=
+    rooms:
+      - secure: kEGZ9DvQzpIpcFptJFGcPSECKswJlo09U2Eq8I2ks4cnPc1xxgCiJF1ZTgIwWiZVWkYlCjnVsBqDy75OtD76YHHUi+7r1b3zKPTpVJQY+lf/8Gu4hcstyrT0+gueNWswwkdfxkAlWwIHyIrdTbUfw0hjjO/hW1UDIVn/T8gZ9/KRDpMpo2w6LtvTZ8DeIwlX9oaKlpxquKfDADVXT8TYQALQem+dnWbLKY3V6zMPK+SivTSupvjDP/+5ckn9fT2OEJv2roQ4TnW6QIroWieKL12DPb0GWBbcTVPY2/3IIUPjuKSw/Sip447aCBgS5UPXoegYx61vJ6nMb09vG0DXvFsRiqwuSe4kb3kyD8miyceG+AuVYLV+P4ibYcTBGPAPSNZqBW4+TXrUNLnMObkBB/ThfTGutNupmouk3kjnnlhoPsoOiopo6YuZjmOc1/Jq6BcxZGgz2+hB8lN8u6/lRhM73UtEm/lWo4wvFl+i9n4AL5UccKbBHCBm7Tu14rKXsU0j42WvPN6qpQhIasBuQe2TU5jLKShXJr9rEfI9WXhnyH+MqOTiyrL+MFW8pnyqJKW8aF3HOYVFXCQdx94gWfgbQuaJ8+8lfxjdjHRX1280NziSBVTCN12ofqlrLoBkIac1kltQtgTSIMXvU1tCQUao3LV9VQNW3bEKRF9ZtTU=
+    on_success: always
+    on_failure: always
+    template:
+      - "Repo %{repository_slug} %{result} build (<%{build_url}|#%{build_number}>) for commit (<%{compare_url}|%{commit}>) on branch %{branch}."
+      - "Execution time: %{duration}"
+      - "Message: %{message}"
 env:
   global:
     secure: mtCBYIQvXS0q5u6IsaS58Ma5c4Ccl6rbCcdS3L0b1e2i4+CXDjJHh2766mVJPlPPHVhi088Fkjw/Thzvs2YXGaR06nubxkrP0jFyBrOtT/muVfcNyaJCn7XdPA01uZUnouqwVdyrdNJV3vJuuJN9l942sCiQ5s5au1gcQ+xf6YkYR4O5ejWoIja7u7aDBEurzs9XjoZIIHohYhV6y8bERz+02PhUUN9a696nXzbrX+vhw+vGUBOdoNbGWXgtBcN4x2Uwz7EgMpQycKYL9CBzp/KfNq3CIGPf3JvwvCF8gu4h7olssvQ5WoXW2tr10TU6JwhPN2YdRIoedS69zRa09s+Sw964Tk8rTO7hlWrYIxgeA2e+U61lNykq0JX3Q6eGTF8ltK0qAJ4bylwH8wSYytzdZ5fWE0+K0sWvu6+QakH570wHVJoV6fNcNCPfSm4CGJhG2tDlYQYuaZhKo5L8rAXNY+hmo2s6a5oANrR15cIiyE00rxihgyX8qwAbZno4e57MFIIMx7RWSdmCell1tGgR1G095GbN5C9rpklVN5RShSes9WK1eTiGy+5mtEBL4Vbx0A1+kslhOHAIi/my0dmmuKQmMLJAjE6N639EG5gt53jLES3oKW5CBWyHqa9XACSUuRgHg+rpEzj2blohd7C0ldT7fouylDBPqfY0wqg=

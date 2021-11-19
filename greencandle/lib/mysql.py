@@ -113,8 +113,8 @@ class Mysql():
         self.__run_sql_query(command)
 
     @get_exceptions
-    def insert_trade(self, pair, date, price, base_amount, quote, borrowed='', multiplier='',
-                     direction='', base=None):
+    def insert_trade(self, pair, date, price, quote_amount, base_amount, borrowed='', multiplier='',
+                     direction='', quote_name=None):
         """
         Insert new trade into DB
         Args:
@@ -127,14 +127,15 @@ class Mysql():
         Returns:
               None
         """
-        usd_rate, gbp_rate = self.get_rates(base)
+        usd_rate, gbp_rate = self.get_rates(quote_name)
         command = """insert into trades (pair, open_time, open_price, base_in, `interval`,
                      quote_in, name, borrowed, multiplier, direction, open_usd_rate, open_gbp_rate)
                      VALUES ("{0}", "{1}", "{2}", "{3}", "{4}", "{5}", "{6}", "{7}", "{8}", "{9}",
                      "{10}", "{11}" ); """.format(pair, date, '%.15f' % float(price),
                                                   '%.15f' % float(base_amount),
                                                   self.interval,
-                                                  quote, config.main.name, borrowed, multiplier,
+                                                  quote_amount, config.main.name,
+                                                  borrowed, multiplier,
                                                   direction, usd_rate, gbp_rate)
         result = self.__run_sql_query(command)
         return result == 1
@@ -161,7 +162,7 @@ class Mysql():
         """
         Return quantity for a current open trade
         """
-        command = ('select quote_in from trades where close_price '
+        command = ('select base_in from trades where close_price '
                    'is NULL and `interval` = "{0}" and '
                    'pair = "{1}" and name="{2}" LIMIT 1'
                    .format(self.interval, pair, config.main.name))
@@ -175,7 +176,7 @@ class Mysql():
     @get_exceptions
     def get_trade_value(self, pair):
         """
-        Return the value of an open trade for a given trading pair
+        Return details for calculating value of an open trade for a given trading pair
         """
 
         command = ('select open_price, quote_in, open_time, base_in, borrowed from trades '
@@ -219,24 +220,24 @@ class Mysql():
         return cur.fetchall()
 
     @staticmethod
-    def get_rates(base):
+    def get_rates(quote):
         """
         Get current rates
         return tupple of usd_rate and gbp_rate
         """
         currency = CurrencyConverter()
-        usd_rate = binance.prices()[base + 'USDT'] if base != 'USDT' else "1"
+        usd_rate = binance.prices()[quote + 'USDT'] if quote != 'USDT' else "1"
         gbp_rate = currency.convert(usd_rate, 'USD', 'GBP')
 
         return (usd_rate, gbp_rate)
 
     @get_exceptions
     def update_trades(self, pair, close_time, close_price, quote, base_out,
-                      name=None, drawdown=0, drawup=0, base=None):
+                      name=None, drawdown=0, drawup=0, quote_name=None):
         """
         Update an existing trade with sell price
         """
-        usd_rate, gbp_rate = self.get_rates(base)
+        usd_rate, gbp_rate = self.get_rates(quote_name)
         job_name = name if name else config.main.name
         command = """update trades set close_price={0},close_time="{1}",
         quote_out="{2}", base_out="{3}", closed_by="{6}", drawdown_perc=abs(round({7},1)),
@@ -261,7 +262,7 @@ class Mysql():
 
         self.__run_sql_query("delete from open_trades")
         trades = self.fetch_sql_data("select pair, open_time, open_price, name, `interval`, "
-                                     "open_usd_rate*base_in as usd_quantity from "
+                                     "open_usd_rate*quote_in as usd_quantity from "
                                      "trades where close_price is NULL or close_price=''",
                                      header=False)
         for trade in trades:
@@ -279,7 +280,6 @@ class Mysql():
             except ZeroDivisionError:
                 self.logger.critical("%s has a zero buy price, unable to calculate percentage"
                                      % pair)
-
 
     @get_exceptions
     def insert_balance(self, balances):

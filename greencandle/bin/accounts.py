@@ -8,7 +8,7 @@ Create Excel Spreadsheet with results and analysis of trades
 import sys
 import openpyxl
 from greencandle.lib import config
-from greencandle.lib.balance_common import get_base
+from greencandle.lib.balance_common import get_quote, get_base
 config.create_config()
 from greencandle.lib.mysql import Mysql
 
@@ -52,21 +52,21 @@ def main():
                 open_usd_rate, close_usd_rate, open_gbp_rate, close_gbp_rate = result
 
         # open trade
-        from_token = get_base(pair)
-        exchange_token = pair.rstrip(from_token)
+        from_token = get_quote(pair)
+        exchange_token = get_base(pair)
         try:
-            gbp_amount = float(base_in) * float(open_usd_rate) * float(open_gbp_rate)
+            gbp_amount = float(quote_in) * float(open_usd_rate) * float(open_gbp_rate)
         except TypeError:
             gbp_amount = ""
-        agg.append((open_time, from_token, base_in, exchange_token,
-                    quote_in, gbp_amount))
+        agg.append((open_time, from_token, quote_in, exchange_token,
+                    base_in, gbp_amount))
 
         # close trade
         try:
-            gbp_amount = float(base_out) * float(close_usd_rate) * float(close_gbp_rate)
+            gbp_amount = float(quote_out) * float(close_usd_rate) * float(close_gbp_rate)
         except TypeError:
             gbp_amount = ""
-        agg.append((close_time, exchange_token, quote_out, from_token, base_out, gbp_amount))
+        agg.append((close_time, exchange_token, base_out, from_token, quote_out, gbp_amount))
 
     sheet = workbook.create_sheet(title="Orderbook")
     for row_no, row in enumerate(agg):
