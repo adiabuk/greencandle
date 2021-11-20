@@ -43,12 +43,6 @@ docker volume prune -f
 docker-compose -f ./install/docker-compose_${env}.yml pull
 base=$(yq r install/docker-compose_${env}.yml services | grep -v '^ .*' | sed 's/:.*$//'|grep 'base')
 
-FILE=database_change.sql
-if test -f "$FILE"; then
-  mysql --host mysql -uroot -ppassword greencandle < $FILE
-fi
-
-
 be=$(yq r install/docker-compose_${env}.yml services | grep -v '^ .*' | sed 's/:.*$//'|grep 'be')
 fe=$(yq r install/docker-compose_${env}.yml services | grep -v '^ .*' | sed 's/:.*$//'|grep 'fe')
 
