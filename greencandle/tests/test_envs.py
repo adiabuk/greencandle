@@ -24,5 +24,5 @@ class TestEnvs(unittest.TestCase):
                         environments.append(line.split('=')[-1].rstrip())
 
         for env in environments:
-            exit_code = os.system('configstore package ls {}'.format(env))
+            exit_code = os.system('configstore package get {} pairs'.format(env))
             self.assertEqual(exit_code, 0)
