@@ -11,6 +11,16 @@
 
 # Releases
 
+## 2.14
+* Correct quote/base in DB and code
+* Additional test strategies in staging
+* Database changes will be performed manually during release
+* Strategies for trading any pair from dashboard
+* Re-enable travis notifications
+* Create builds automatically after travis tests have passed
+* General cleanup of DB & code
+
+
 ## 2.13
 * Fixes to isolated close long trades
 * Get correct base amount from exchange
