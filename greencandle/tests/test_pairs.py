@@ -43,6 +43,6 @@ class TestPair(unittest.TestCase):
 
         for pair in set(pairs):
             # Attempt to get data for each unique pair
-            if pair !="None":
+            if pair !="None" and pair != 'any':
                 print("Testing pair " + pair)
                 get_binance_klines(pair, '1m',1)
