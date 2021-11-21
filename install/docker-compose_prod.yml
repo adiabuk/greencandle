@@ -1010,7 +1010,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/1m/usdt/spot
+      - CONFIG_ENV=prod/env/long/any/usdt/spot
     ports:
       - 20000
     links:
@@ -1072,7 +1072,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/1m/usdt/isolated
+      - CONFIG_ENV=prod/env/long/any/usdt/isolated
     ports:
       - 20000
     links:
@@ -1103,7 +1103,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/1m/btc/spot
+      - CONFIG_ENV=prod/env/long/any/btc/spot
     ports:
       - 20000
     links:
@@ -1134,7 +1134,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/1m/btc/cross
+      - CONFIG_ENV=prod/env/long/any/btc/cross
     ports:
       - 20000
     links:
@@ -1165,7 +1165,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/1m/btc/isolated
+      - CONFIG_ENV=prod/env/long/any/btc/isolated
     ports:
       - 20000
     links:
@@ -1196,7 +1196,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/1m/bnb/spot
+      - CONFIG_ENV=prod/env/long/any/bnb/spot
     ports:
       - 20000
     links:
@@ -1227,7 +1227,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/1m/bnb/cross
+      - CONFIG_ENV=prod/env/long/any/bnb/cross
     ports:
       - 20000
     links:
@@ -1258,7 +1258,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/1m/bnb/isolated
+      - CONFIG_ENV=prod/env/long/any/bnb/isolated
     ports:
       - 20000
     links:
@@ -1289,7 +1289,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/1m/eth/spot
+      - CONFIG_ENV=prod/env/long/any/eth/spot
     ports:
       - 20000
     links:
@@ -1320,7 +1320,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/1m/eth/cross
+      - CONFIG_ENV=prod/env/long/any/eth/cross
     ports:
       - 20000
     links:
@@ -1351,7 +1351,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/1m/eth/isolated
+      - CONFIG_ENV=prod/env/long/any/eth/isolated
     ports:
       - 20000
     links:

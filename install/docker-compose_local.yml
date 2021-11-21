@@ -29,7 +29,7 @@ services:
       - mysql-local
       - redis-local
     environment:
-      - CONFIG_ENV=test/2MA/BTC
+      - CONFIG_ENV=test/2MA/4h/4perc
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
