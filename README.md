@@ -11,9 +11,6 @@
 
 # Releases
 
-## 2.14.1
-* Fix invalid environment paths
-
 ## 2.14
 * Correct quote/base in DB and code
 * Additional test strategies in staging
