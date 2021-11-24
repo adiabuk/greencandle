@@ -9,6 +9,7 @@ from binance import binance
 import cryptocompare
 from currency_converter import CurrencyConverter
 from .balance_common import default_to_regular
+from .balance_common import get_quote
 from .auth import binance_auth
 from .logger import get_logger
 from . import config
