@@ -8,6 +8,9 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
+           jQuery.get('env.txt', function(data) {
+           document.title = ('Greencandle-' + data);
+           });
             $('#customers td.y_n').each(function() {
                 if ($(this).text() < 0) {
                     $(this).css('background-color', '#f00');

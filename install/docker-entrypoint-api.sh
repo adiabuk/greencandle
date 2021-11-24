@@ -20,6 +20,7 @@ if [[ ! -e /installed ]]; then
   configstore package process_templates --ignore-role --basedir /opt/config $CONFIG_ENV /opt/output
   cp /opt/output/greencandle.ini /etc/greencandle.ini || true
   mkdir /etc/gcapi
+  echo $HOST > /etc/gcapi/env.txt
   cp /opt/config/raw/* /etc/gcapi/
   if [[ "$CONFIG_ENV" == *"stag"* ]]; then
     cp /opt/output/router_config_stag.json /etc/router_config.json

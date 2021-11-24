@@ -474,6 +474,7 @@
         $(document).ready(function() {
             jQuery.get('env.txt', function(data) {
                 $("p").text('Greencandle-' + data);
+                document.title = ('Greencandle-' + data);
             });
         });
     </script>
