@@ -120,7 +120,7 @@ class Trade():
         for item in items_list:
             if current_trades and item[0] in current_trades[0]:
                 self.logger.warning("We already have a trade of %s, skipping..." % item[0])
-            elif item[0] not in self.config.main.pairs and (not self.test_data or not manual):
+            elif not manual and (item[0] not in self.config.main.pairs and not self.test_data):
                 self.logger.error("Pair %s not in main_pairs, skipping..." % item[0])
             else:
                 final_list.append(item)
