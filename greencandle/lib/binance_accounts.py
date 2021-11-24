@@ -44,6 +44,7 @@ def get_binance_isolated():
     isolated = get_current_isolated()
     prices = binance.prices()
     for key, val in isolated.items():
+        quote = get_quote(key)
         for base, amount in val.items():
             bcoin = 0
             usd = 0
@@ -71,7 +72,7 @@ def get_binance_isolated():
             result["isolated"][key]["BTC"] = bcoin
             result["isolated"][key]["USD"] = usd
             result["isolated"][key]["GBP"] = gbp
-            result["isolated"][key]["count"] = "N/A"
+            result["isolated"][key]["count"] = val[quote]
 
     result["isolated"]["TOTALS"]["BTC"] = bitcoin_total
     result["isolated"]["TOTALS"]["USD"] = usd_total
