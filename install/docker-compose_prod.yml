@@ -12,6 +12,7 @@ services:
       - /sys:/sys
       - /var/lib/docker:/var/lib/docker
       - /dev/disk:/dev/disk
+      - /root/.bash_history:/root/.bash_history
     healthcheck:
       test: "printf 'GET /healthz HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc localhost 8080"
       interval: 1m
@@ -36,6 +37,7 @@ services:
     volumes:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.aws:/root/.aws
+      - /root/.bash_history:/root/.bash_history
 
   base-mysql:
     container_name: base-mysql
@@ -57,6 +59,7 @@ services:
     volumes:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.aws:/root/.aws
+      - /root/.bash_history:/root/.bash_history
 
   fe-cron:
     container_name: fe-cron
@@ -87,6 +90,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   fe-webserver:
      container_name: fe-webserver
@@ -117,6 +121,7 @@ services:
      volumes:
        - /data:/data
        - /root/.aws:/root/.aws
+       - /root/.bash_history:/root/.bash_history
 
   be-5ma-4perc-vol-eth-spot:
     container_name: be-5ma-4perc-vol-eth-spot
@@ -146,6 +151,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-5ma-1tsl-btc-isolated:
     container_name: be-5ma-1tsl-btc-isolated
@@ -175,6 +181,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-5ma-1tsl-usdt-isolated:
     container_name: be-5ma-1tsl-usdt-isolated
@@ -204,6 +211,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-5ma-1tsl-btc-spot:
     container_name: be-5ma-1tsl-btc-spot
@@ -233,6 +241,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-5ma-1tsl-usdt-spot:
     container_name: be-5ma-1tsl-usdt-spot
@@ -262,6 +271,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-5ma-nostop-btc-spot:
     container_name: be-5ma-nostop-btc-spot
@@ -291,6 +301,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-5ma-nostop-usdt-spot:
     container_name: be-5ma-nostop-usdt-spot
@@ -320,6 +331,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   fe-api-dashboard:
     container_name: fe-api-dashboard
@@ -353,6 +365,7 @@ services:
       - /dev/log:/dev/log
       - /root/.aws:/root/.aws
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-api-router:
     container_name: be-api-router
@@ -440,6 +453,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-5ma-api-btc-spot:
     container_name: be-5ma-api-btc-spot
@@ -471,6 +485,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-5ma-api-usdt-spot:
     container_name: be-5ma-api-usdt-spot
@@ -502,6 +517,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-5ma-api-eth-isolated:
     container_name: be-5ma-api-eth-isolated
@@ -533,6 +549,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-5ma-api-eth-spot:
     container_name: be-5ma-api-eth-spot
@@ -564,6 +581,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-env-api-usdt-spot:
     container_name: be-env-api-usdt-spot
@@ -595,6 +613,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-5ma-api-btc-isolated:
     container_name: be-5ma-api-btc-isolated
@@ -626,6 +645,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-5ma-api-usdt-cross:
     container_name: be-5ma-api-usdt-cross
@@ -657,6 +677,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-env-api-usdt-isolated:
     container_name: be-env-api-usdt-isolated
@@ -688,6 +709,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-env-api-eth-spot:
     container_name: be-env-api-eth-spot
@@ -719,6 +741,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-env-api-eth-cross:
     container_name: be-env-api-eth-cross
@@ -750,6 +773,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-env-api-1m-usdt-spot:
     container_name: be-env-api-1m-usdt-spot
@@ -781,6 +805,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-env-api-1m-btc-spot:
     container_name: be-env-api-1m-btc-spot
@@ -812,6 +837,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-env-api-1m-btc-cross:
     container_name: be-env-api-1m-btc-cross
@@ -843,6 +869,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-env-api-1m-btc-isolated:
     container_name: be-env-api-1m-btc-isolated
@@ -874,6 +901,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-env-api-1m-usdt-isolated:
     container_name: be-env-api-1m-usdt-isolated
@@ -905,6 +933,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-env-api-1m-usdt-cross:
     container_name: be-env-api-1m-usdt-cross
@@ -936,6 +965,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-env-api-1m-bnb-spot:
     container_name: be-env-api-1m-bnb-spot
@@ -967,6 +997,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-env-api-1m-eth-spot:
     container_name: be-env-api-1m-eth-spot
@@ -998,6 +1029,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-env-api-any-usdt-spot:
     container_name: be-env-api-any-usdt-spot
@@ -1029,6 +1061,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-env-api-any-usdt-cross:
     container_name: be-env-api-any-usdt-cross
@@ -1060,6 +1093,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-env-api-any-usdt-isolated:
     container_name: be-env-api-any-usdt-isolated
@@ -1091,6 +1125,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-env-api-any-btc-spot:
     container_name: be-env-api-any-btc-spot
@@ -1122,6 +1157,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-env-api-any-btc-cross:
     container_name: be-env-api-any-btc-cross
@@ -1153,6 +1189,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-env-api-any-btc-isolated:
     container_name: be-env-api-any-btc-isolated
@@ -1184,6 +1221,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-env-api-any-bnb-spot:
     container_name: be-env-api-any-bnb-spot
@@ -1215,6 +1253,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-env-api-any-bnb-cross:
     container_name: be-env-api-any-bnb-cross
@@ -1246,6 +1285,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-env-api-any-bnb-isolated:
     container_name: be-env-api-any-bnb-isolated
@@ -1277,6 +1317,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-env-api-any-eth-spot:
     container_name: be-env-api-any-eth-spot
@@ -1308,6 +1349,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-env-api-any-eth-cross:
     container_name: be-env-api-any-eth-cross
@@ -1339,6 +1381,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-env-api-any-eth-isolated:
     container_name: be-env-api-any-eth-isolated
@@ -1370,4 +1413,5 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 

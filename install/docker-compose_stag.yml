@@ -36,6 +36,7 @@ services:
     volumes:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.aws:/root/.aws
+      - /root/.bash_history:/root/.bash_history
 
   base-mysql:
     container_name: base-mysql
@@ -57,6 +58,7 @@ services:
     volumes:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.aws:/root/.aws
+      - /root/.bash_history:/root/.bash_history
 
   fe-api-dashboard:
     container_name: fe-api-dashboard
@@ -90,6 +92,7 @@ services:
       - /dev/log:/dev/log
       - /root/.aws:/root/.aws
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   fe-cron:
     container_name: fe-cron
@@ -120,6 +123,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   fe-webserver:
     container_name: fe-webserver
@@ -150,6 +154,7 @@ services:
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws
+      - /root/.bash_history:/root/.bash_history
 
   be-5ma-nostop-btc:
     container_name: be-5ma-nostop-btc
@@ -179,6 +184,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-5ma-nostop-usdt:
     container_name: be-5ma-nostop-usdt
@@ -208,6 +214,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-5ma-1tsl-btc:
     container_name: be-5ma-1tsl-btc
@@ -237,6 +244,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-5ma-1tsl-usdt:
     container_name: be-5ma-1tsl-usdt
@@ -266,6 +274,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-5ma-5m-nostop-btc:
     container_name: be-5ma-5m-nostop-btc
@@ -295,6 +304,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-5ma-5m-nostop-usdt:
     container_name: be-5ma-5m-nostop-usdt
@@ -324,6 +334,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-5ma-5m-1tsl-btc:
     container_name: be-5ma-5m-1tsl-btc
@@ -353,6 +364,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-5ma-5m-1tsl-usdt:
     container_name: be-5ma-5m-1tsl-usdt
@@ -382,6 +394,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-backend-api:
     container_name: be-backend-api
@@ -413,6 +426,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   fe-apiweb:
     container_name: fe-apiweb
@@ -443,6 +457,7 @@ services:
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws
+      - /root/.bash_history:/root/.bash_history
 
   be-api-router:
     container_name: be-api-router
@@ -483,6 +498,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-5ma-api-btc:
     container_name: be-5ma-api-btc
@@ -514,6 +530,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-5ma-api-usdt:
     container_name: be-5ma-api-usdt
@@ -545,6 +562,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-5ma-api-eth:
     container_name: be-5ma-api-eth
@@ -576,6 +594,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-env-1m:
     container_name: be-env-1m
@@ -607,6 +626,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-has-api-usdt:
     container_name: be-has-api-usdt
@@ -638,6 +658,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
   be-any:
     container_name: be-any
@@ -669,6 +690,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
 
 
   be-alert:
@@ -699,3 +721,4 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - /var/run/dbus:/var/run/dbu
       - /etc/localtime:/etc/localtime:ro
+      - /root/.bash_history:/root/.bash_history
