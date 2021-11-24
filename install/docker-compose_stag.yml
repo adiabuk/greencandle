@@ -470,14 +470,14 @@ services:
       - be-5ma-api-eth:5ma-eth
       - be-has-api-usdt:has-usdt
       - be-env-1m:env-1m
-      - be-manual:manual
+      - be-any:any
     depends_on:
       - be-alert
       - be-backend-api
       - base-mysql
       - base-redis
       - be-has-api-usdt
-      - be-manual
+      - be-any
     entrypoint: /docker-entrypoint.sh api_router --test
     volumes:
       - /data:/data
@@ -639,9 +639,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-manual:
-    container_name: be-manual
-    hostname: be-manual
+  be-any:
+    container_name: be-any
+    hostname: be-any
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
