@@ -22,7 +22,7 @@ def send_trade(payload, host):
     """
     send trade to specified host
     """
-    url = "http://{}/webhook".format(host)
+    url = "http://{}:20000/webhook".format(host)
     try:
         LOGGER.info("Calling url:%s" % url)
         requests.post(url, json=payload, timeout=0.0000000001)

@@ -1,5 +1,5 @@
 {
-  "name": "env-api-any-usdt-spot",
+  "name": "api-any-usdt-spot",
   "divisor": "1.6",
   "max_trades": "3"
 }

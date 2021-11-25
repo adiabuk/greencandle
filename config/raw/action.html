@@ -16,20 +16,41 @@
          <table>
             {% for pair in pairs %}
             <tr>
-               <td>{{pair}}</td>
+
+	    {% if "any" in strat %}
+	    
+	       <form action="/action">
+	       <td>
+	         <label for="fname">pair: </label>
+                 <input type="text" id="pair" name="pair">
+	       </td>
+
+	        <input type="hidden" name="strategy" value="{{strat}}" />
+               <td>
+	          <input type="submit" name="action" value="buy">
+
+               </td>
+	       <td>
+		<input type="submit" name="action" value="sell">
+               </td>
+	       </form>
+	    {% else %}
+	        <td>{{pair}}</td>
                <td>
                   <form action="/action?pair={{pair}}&strategy={{strat}}&action=buy" method="post">
                      <button name="actionBtn" type="submit">Buy</button>
                   </form>
                </td>
-               <td
+	       <td>
                   <form action="/action?pair={{pair}}&strategy={{strat}}&action=sell" method="post">
                      <button name="actionBtn" type="submit">Sell</button>
                   </form>
                </td>
+            {% endif %}
+
             </tr>
             {% endfor %}
-            <td>
+            </td>
          </table>
       </td>
    </tr>
