@@ -11,6 +11,15 @@
 
 # Releases
 
+## 2.15
+* Allow any assets to be traded from dashboard
+* Correct strategy/container names
+* Increase redis expiry time
+* Store quote amount to isolated balances
+* Share bash history with containers
+* Add environment to HTML page titles
+* Re-enable alert container and reduce volume
+
 ## 2.14.1
 * Fix invalid environment paths
 
