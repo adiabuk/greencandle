@@ -671,7 +671,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=stag
+      - CONFIG_ENV=stag/any
     ports:
       - 20000
     links:
