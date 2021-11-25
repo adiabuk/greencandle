@@ -2,6 +2,6 @@
 "5MA_3h_USDT": ["5ma-usdt:20000"],
 "5MA_3h_ETH": ["5ma-eth:20000"],
 "HAS_1m_USDT": ["has-usdt:20000"],
-"any": ["be-any:20000", "be-alert:20000"]
+"any": ["any:20000", "alert:20000"]
 
  }
