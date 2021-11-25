@@ -1,5 +1,5 @@
 {
-  "name": "env-api-any-bnb-cross",
+  "name": "api-any-btc-cross",
   "trade_isolated": "false",
   "trade_type": "margin",
   "max_trades": "10",

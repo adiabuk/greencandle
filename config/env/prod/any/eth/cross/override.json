@@ -1,8 +1,8 @@
 {
-  "name": "env-api-any-usdt-cross",
+  "name": "api-any-eth-cross",
   "trade_isolated": "false",
   "trade_type": "margin",
   "max_trades": "10",
-  "trade_multiplier": "5",
-  "divisor": "20"
+  "divisor": "20",
+  "trade_multiplier": "5"
 }

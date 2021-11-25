@@ -1,7 +1,7 @@
-{"5MA_3h_BTC": ["5ma-btc:20000"],
-"5MA_3h_USDT": ["5ma-usdt:20000"],
-"5MA_3h_ETH": ["5ma-eth:20000"],
-"HAS_1m_USDT": ["has-usdt:20000"],
-"any": ["any:20000", "alert:20000"]
+{"5MA_3h_BTC": ["5ma-btc"],
+"5MA_3h_USDT": ["5ma-usdt"],
+"5MA_3h_ETH": ["5ma-eth"],
+"HAS_1m_USDT": ["has-usdt"],
+"any": ["any", "alert"]
 
  }

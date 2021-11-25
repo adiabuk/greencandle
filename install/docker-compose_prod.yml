@@ -404,18 +404,18 @@ services:
       - be-env-api-1m-usdt-spot:env-1m-usdt
       - be-env-api-1m-usdt-cross:env-1m-usdt-cross
       - be-env-api-1m-usdt-isolated:env-1m-usdt-isolated
-      - be-env-api-any-usdt-spot:env-any-usdt
-      - be-env-api-any-usdt-cross:env-any-usdt-cross
-      - be-env-api-any-usdt-isolated:env-any-usdt-isolated
-      - be-env-api-any-btc-spot:env-any-btc
-      - be-env-api-any-btc-cross:env-any-btc-cross
-      - be-env-api-any-btc-isolated:env-any-btc-isolated
-      - be-env-api-any-eth-spot:env-any-eth
-      - be-env-api-any-eth-cross:env-any-eth-cross
-      - be-env-api-any-eth-isolated:env-any-eth-isolated
-      - be-env-api-any-bnb-spot:env-any-bnb
-      - be-env-api-any-bnb-cross:env-any-bnb-cross
-      - be-env-api-any-bnb-isolated:env-any-bnb-isolated
+      - be-api-any-usdt-spot:api-any-usdt-spot
+      - be-api-any-usdt-cross:api-any-usdt-cross
+      - be-api-any-usdt-isolated:api-any-usdt-isolated
+      - be-api-any-btc-spot:api-any-btc-spot
+      - be-api-any-btc-cross:api-any-btc-cross
+      - be-api-any-btc-isolated:api-any-btc-isolated
+      - be-api-any-eth-spot:api-any-eth-spot
+      - be-api-any-eth-cross:api-any-eth-cross
+      - be-api-any-eth-isolated:api-any-eth-isolated
+      - be-api-any-bnb-spot:api-any-bnb-spot
+      - be-api-any-bnb-cross:api-any-bnb-cross
+      - be-api-any-bnb-isolated:api-any-bnb-isolated
     depends_on:
       - base-mysql
       - base-redis
@@ -436,18 +436,18 @@ services:
       - be-env-api-1m-usdt-isolated
       - be-env-api-1m-bnb-spot
       - be-env-api-1m-eth-spot
-      - be-env-api-any-usdt-spot
-      - be-env-api-any-usdt-cross
-      - be-env-api-any-usdt-isolated
-      - be-env-api-any-btc-spot
-      - be-env-api-any-btc-cross
-      - be-env-api-any-btc-isolated
-      - be-env-api-any-eth-spot
-      - be-env-api-any-eth-cross
-      - be-env-api-any-eth-isolated
-      - be-env-api-any-bnb-spot
-      - be-env-api-any-bnb-cross
-      - be-env-api-any-bnb-isolated
+      - be-api-any-usdt-spot
+      - be-api-any-usdt-cross
+      - be-api-any-usdt-isolated
+      - be-api-any-btc-spot
+      - be-api-any-btc-cross
+      - be-api-any-btc-isolated
+      - be-api-any-eth-spot
+      - be-api-any-eth-cross
+      - be-api-any-eth-isolated
+      - be-api-any-bnb-spot
+      - be-api-any-bnb-cross
+      - be-api-any-bnb-isolated
     entrypoint: /docker-entrypoint.sh api_router
     volumes:
       - /data:/data
@@ -1031,9 +1031,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-env-api-any-usdt-spot:
-    container_name: be-env-api-any-usdt-spot
-    hostname: be-env-api-any-usdt-spot
+  be-api-any-usdt-spot:
+    container_name: be-api-any-usdt-spot
+    hostname: be-api-any-usdt-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -1042,7 +1042,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/any/usdt/spot
+      - CONFIG_ENV=prod/any/usdt/spot
     ports:
       - 20000
     links:
@@ -1063,9 +1063,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-env-api-any-usdt-cross:
-    container_name: be-env-api-any-usdt-cross
-    hostname: be-env-api-any-usdt-cross
+  be-api-any-usdt-cross:
+    container_name: be-api-any-usdt-cross
+    hostname: be-api-any-usdt-cross
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -1074,7 +1074,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/1m/usdt/cross
+      - CONFIG_ENV=prod/any/usdt/cross
     ports:
       - 20000
     links:
@@ -1095,9 +1095,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-env-api-any-usdt-isolated:
-    container_name: be-env-api-any-usdt-isolated
-    hostname: be-env-api-any-usdt-isolated
+  be-api-any-usdt-isolated:
+    container_name: be-api-any-usdt-isolated
+    hostname: be-api-any-usdt-isolated
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -1106,7 +1106,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/any/usdt/isolated
+      - CONFIG_ENV=prod/any/usdt/isolated
     ports:
       - 20000
     links:
@@ -1127,9 +1127,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-env-api-any-btc-spot:
-    container_name: be-env-api-any-btc-spot
-    hostname: be-env-api-any-btc-spot
+  be-api-any-btc-spot:
+    container_name: be-api-any-btc-spot
+    hostname: be-api-any-btc-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -1138,7 +1138,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/any/btc/spot
+      - CONFIG_ENV=prod/any/btc/spot
     ports:
       - 20000
     links:
@@ -1159,9 +1159,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-env-api-any-btc-cross:
-    container_name: be-env-api-any-btc-cross
-    hostname: be-env-api-any-btc-cross
+  be-api-any-btc-cross:
+    container_name: be-api-any-btc-cross
+    hostname: be-api-any-btc-cross
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -1170,7 +1170,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/any/btc/cross
+      - CONFIG_ENV=prod/any/btc/cross
     ports:
       - 20000
     links:
@@ -1191,9 +1191,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-env-api-any-btc-isolated:
-    container_name: be-env-api-any-btc-isolated
-    hostname: be-env-api-any-btc-isolated
+  be-api-any-btc-isolated:
+    container_name: be-api-any-btc-isolated
+    hostname: be-api-any-btc-isolated
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -1202,7 +1202,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/any/btc/isolated
+      - CONFIG_ENV=prod/any/btc/isolated
     ports:
       - 20000
     links:
@@ -1223,9 +1223,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-env-api-any-bnb-spot:
-    container_name: be-env-api-any-bnb-spot
-    hostname: be-env-api-any-bnb-spot
+  be-api-any-bnb-spot:
+    container_name: be-api-any-bnb-spot
+    hostname: be-api-any-bnb-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -1234,7 +1234,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/any/bnb/spot
+      - CONFIG_ENV=prod/any/bnb/spot
     ports:
       - 20000
     links:
@@ -1255,9 +1255,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-env-api-any-bnb-cross:
-    container_name: be-env-api-any-bnb-cross
-    hostname: be-env-api-any-bnb-cross
+  be-api-any-bnb-cross:
+    container_name: be-api-any-bnb-cross
+    hostname: be-api-any-bnb-cross
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -1266,7 +1266,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/any/bnb/cross
+      - CONFIG_ENV=prod/any/bnb/cross
     ports:
       - 20000
     links:
@@ -1287,9 +1287,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-env-api-any-bnb-isolated:
-    container_name: be-env-api-any-bnb-isolated
-    hostname: be-env-api-any-bnb-isolated
+  be-api-any-bnb-isolated:
+    container_name: be-api-any-bnb-isolated
+    hostname: be-api-any-bnb-isolated
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -1298,7 +1298,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/any/bnb/isolated
+      - CONFIG_ENV=prod/any/bnb/isolated
     ports:
       - 20000
     links:
@@ -1319,9 +1319,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-env-api-any-eth-spot:
-    container_name: be-env-api-any-eth-spot
-    hostname: be-env-api-any-eth-spot
+  be-api-any-eth-spot:
+    container_name: be-api-any-eth-spot
+    hostname: be-api-any-eth-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -1330,7 +1330,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/any/eth/spot
+      - CONFIG_ENV=prod/any/eth/spot
     ports:
       - 20000
     links:
@@ -1351,9 +1351,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-env-api-any-eth-cross:
-    container_name: be-env-api-any-eth-cross
-    hostname: be-env-api-any-eth-cross
+  be-api-any-eth-cross:
+    container_name: be-api-any-eth-cross
+    hostname: be-api-any-eth-cross
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -1362,7 +1362,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/any/eth/cross
+      - CONFIG_ENV=prod/any/eth/cross
     ports:
       - 20000
     links:
@@ -1383,9 +1383,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-env-api-any-eth-isolated:
-    container_name: be-env-api-any-eth-isolated
-    hostname: be-env-api-any-eth-isolated
+  be-api-any-eth-isolated:
+    container_name: be-api-any-eth-isolated
+    hostname: be-api-any-eth-isolated
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -1394,7 +1394,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/env/long/any/eth/isolated
+      - CONFIG_ENV=prod/any/eth/isolated
     ports:
       - 20000
     links:
