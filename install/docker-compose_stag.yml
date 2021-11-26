@@ -396,41 +396,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-backend-api:
-    container_name: be-backend-api
-    hostname: be-backend-api
-    image: amrox/greencandle:${TAG}
-    pull_policy: always
-    restart: always
-    entrypoint: /docker-entrypoint.sh backend_api --test
-    logging:
-      driver: journald
-    environment:
-      - HOST=$HOSTNAME
-      - CONFIG_ENV=stag/tsi_rsi/usdt
-    ports:
-      - 20000
-    links:
-      - base-mysql:mysql
-      - base-redis:redis
-    depends_on:
-      - base-mysql
-      - base-redis
-    healthcheck:
-      test: ls ||exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    volumes:
-      - /data:/data
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
-      - /root/.bash_history:/root/.bash_history
-
-  fe-apiweb:
-    container_name: fe-apiweb
-    hostname: fe-apiweb
+  fe-api-web:
+    container_name: fe-api-web
+    hostname: fe-api-web
     image: amrox/webserver:${TAG}
     pull_policy: always
     restart: always
@@ -445,12 +413,10 @@ services:
     ports:
       - 1111:1111
     links:
-      - be-backend-api:api
       - be-api-router:router
       - base-mysql:mysql
       - base-redis:redis
     depends_on:
-      - be-backend-api
       - base-mysql
       - base-redis
     entrypoint: /docker-entrypoint-api2.sh nginx -g 'daemon off;'
@@ -477,7 +443,6 @@ services:
       - 1080
     links:
       - be-alert:alert
-      - be-backend-api:api
       - base-mysql:mysql
       - base-redis:redis
       - be-5ma-api-btc:5ma-btc
@@ -488,7 +453,6 @@ services:
       - be-any:any
     depends_on:
       - be-alert
-      - be-backend-api
       - base-mysql
       - base-redis
       - be-has-api-usdt
