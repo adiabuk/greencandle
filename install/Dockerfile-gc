@@ -11,6 +11,10 @@ RUN bash /srv/greencandle/install/bootstrap_docker.sh && \
     cp -rv /srv/greencandle/config /opt/config && \
     chmod +x /docker-entrypoint*.sh
 
+RUN apt-get update \
+   && apt-get install -y vim && \
+   apt-get -y clean && apt-get -y autoclean && apt-get -y autoremove
+
 ARG BRANCH="master"
 ARG COMMIT=""
 ARG DATE=""
