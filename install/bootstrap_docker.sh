@@ -43,7 +43,7 @@ if [[ ! -d /usr/include/ta-lib ]]; then
 
 fi
 
-pip install pip==9.0.1 numpy==1.16.0 ccxt==1.50.10 cryptography==3.3.1
+pip install setuptools-rust pip==9.0.1 numpy==1.16.0 ccxt==1.50.10 cryptography==3.3.1
 [[ ! -d $install_dir ]] && ln -s /home/travis/build/adiabuk/greencandle/ $install_dir
 cd $install_dir
 
