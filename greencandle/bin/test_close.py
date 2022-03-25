@@ -28,7 +28,7 @@ def main():
     open_trades = dbase.fetch_sql_data(query, header=False)
 
     for trade in open_trades:
-        pair, base_in_in, name = trade
+        pair, base_in, name = trade
         result = binance.spot_order(symbol=pair, side=binance.SELL,
                                     quantity=get_step_precision(pair, base_in),
                                     order_type=binance.MARKET, test=True)
