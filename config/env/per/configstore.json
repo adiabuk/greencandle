@@ -1,0 +1,460 @@
+{
+  "version": 3,
+  "region": "eu-west-1",
+  "role": "",
+  "is_insecure": false,
+  "data_key": "AQIDAHh86o+e1l3vhl3F7Gn0lhwL0nWY7Q8sBy8abugAZ50HlgFByZYGyV9NwGy6UkmVEb2oAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMnQc09bFnrB/sDzJoAgEQgDs7H09GPBab3jf9VOE0bF06keLff5e2CuoQr2pOn6WEMWWtyDeWt/+0Afeq6LxxkfomB2Hd59fuUe/fxA==",
+  "master_key_id": "alias/greencandle",
+  "data": {
+    "account1_key": {
+      "value": "urY4cLXQ+NIE7zTQ3UHQ6b4Opo/tECW1ppYnkF5tpvqIchKny7A0Y8VTM/tptl97orLLaUQ+4aCwV8Cuqxg53OpeqeTY9SQPLPgpMRxKy41CoTLmVR+AOrrrp1baxgOZbeJCLXi7DjM=",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "account1_secret": {
+      "value": "eJ3FXkHREKd7p9l1APitouZJ4qzaMIhOvlrY5NRKJg8n2RL7C7POxy2k16n924WBVfyLFjMuB2FiBu7RQEjLWV8AgVRZjujmDEdXl/wmlfbBq5G93XlAZWoNU34rAyW5cfs8GkNgpig=",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "account1_type": {
+      "value": "binance",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account2_key": {
+      "value": "eQQUuQi8hiD+Xr8IUGltSaIqQeuFEW3iwamimApgcRzWtInyZu8DaGOMcNEfaIV2p3GbiT97xT87M+0u+gUyAQ==",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "account2_secret": {
+      "value": "NzjBwBl/MuUsIa5nEZWPksjXd1cE7WQHnhwuw6etptkxxP4XJ3VhnbQ94GpnVFl0VR4HJS3KPpaEO+U324YSwIWgqX8jgeucWhph8fC1Y7tcu2cRF71dsklPdtiWOqh1orAPZixGLaCBwAOqDq5LkL9Fb7VfJpvg2ESQg5lh2jvzZPUQyPJom2EsnZo=",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "account2_type": {
+      "value": "phemex",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account3_key": {
+      "value": "bBBZtu6yMqU7+uYf5H9exghsb3siHmLYVRDdxsijMNJ4Uz9b0dRvuk7RC5+qVBFVQP2RqzlJnffEe+tK2qg5AQ==",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "account3_secret": {
+      "value": "M8GPwaR3ZCGyFre+0P0lntHy53u86SyTNkD4m3qIFfDIoIJ0jLRr5rQHKoTO7iQwWRxccpSbAg6i5tt0IquocP/Kh1njUUG93syuAhx/DlYiumy7f/YuR59PK5+rpIFDiqGMJ80zZwALSUFYkiTH1pDB/6KkcUV4uxFoD5haXJO71l/EK0IXVLlH9ZM=",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "account3_type": {
+      "value": "phemex",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account4_key": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account4_secret": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account4_type": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "api_token": {
+      "value": "i9HPFvdgksHvYRbvgA+6kEDUpHXCSWSWNo3CNgh+Dg/y7ihdnOh1iuz/JGr2mTK/",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "aws_access_key": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "aws_secret_key": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "check_interval": {
+      "value": "60",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "close_rule1": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "close_rule10": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "close_rule2": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "close_rule3": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "close_rule4": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "close_rule5": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "close_rule6": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "close_rule7": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "close_rule8": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "close_rule9": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "db_database": {
+      "value": "greencandle",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "db_host": {
+      "value": "mysql",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "db_password": {
+      "value": "password",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "db_test": {
+      "value": "greencandle_test",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "db_user": {
+      "value": "root",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "divisor": {
+      "value": "3",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "drain": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "email_active": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "email_from": {
+      "value": "a@b.c",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "email_password": {
+      "value": "password",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "email_to": {
+      "value": "a@b.c",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "immediate_stop": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "immediate_take_profit": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "immediate_trailing_stop": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "indicators": {
+      "value": "get_moving_averages;EMA;8 get_moving_averages;EMA;13 get_moving_averages;EMA;21 get_moving_averages;EMA;34 get_moving_averages;EMA;55 get_rsi;RSI;50 get_moving_averages;EMA;200 get_oscillators;STOCHF;14",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "interval": {
+      "value": "4h",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "logging_level": {
+      "value": "20",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "logging_output": {
+      "value": "journald",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "loggly_password": {
+      "value": "uMhOkac1yAzehzUvAnMDf7AJ8fToY8KyDXu2iA==",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "loggly_subdomain": {
+      "value": "Vc0s5srq5Xm6ike+H7baCaILfGN0qlZ1",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "loggly_token": {
+      "value": "48D0Nbi9c20skg64W/sK6uyv3+0pso0dHL0/f7Ga9FYBbYsEougb34YAmilgL4JO4tl9LC+InbsDFQDGtmlO/g==",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "loggly_username": {
+      "value": "sHIEJMiwOnKCaYtlsQ5iib1m24Q6LmHj",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "max_trades": {
+      "value": "1",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "name": {
+      "value": "prod",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "nginx_port": {
+      "value": "9999",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "no_of_klines": {
+      "value": "500",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "open_rule1": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "open_rule10": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "open_rule2": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "open_rule3": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "open_rule4": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "open_rule5": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "open_rule6": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "open_rule7": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "open_rule8": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "open_rule9": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "pairs": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "production": {
+      "value": "true",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "push_active": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "push_channel": {
+      "value": "SdvcRWRXAQ6TQF/cxPqdZEJqSh7O3X/L9cCyuxq0qxQM4p6vUH5wMQ==",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "push_host": {
+      "value": "l3sQHA1Nxd2awwIpvw1hwcaozfcdBjLDu+nzFPE2dy4=",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "rate_indicator": {
+      "value": "EMA_2",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "redis_db": {
+      "value": "0",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "redis_expire": {
+      "value": "true",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "redis_expiry_seconds": {
+      "value": "2073600",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "redis_host": {
+      "value": "redis",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "redis_port": {
+      "value": "6379",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "slack_active": {
+      "value": "true",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "slack_alerts": {
+      "value": "per_alerts",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "slack_balance": {
+      "value": "per_balance",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "slack_notifications": {
+      "value": "notifications",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "slack_trades": {
+      "value": "per_trades",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "slack_url": {
+      "value": "OqeH/T5nuy+0wjoPE2ihAHwKGtrFHyrmL3cWV9WZLpcFegWjlzXi6KT6n3/55Uz+L1BjtEKYLWafSbaqR5iiTiaDV7WpRIbPkz5/9PyGfbqerzuMRXJ+ApiuCXe1O2iNFjuMhs+OTkJDnhcGfJmmmyz/fYKkXPkTZlyw9w==",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "stop_loss_perc": {
+      "value": "20",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "take_profit_perc": {
+      "value": "0",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "time_between_trades": {
+      "value": "3",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "time_in_trade": {
+      "value": "52w",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "trade_direction": {
+      "value": "long",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "trade_isolated": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "trade_multiplier": {
+      "value": "0",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "trade_type": {
+      "value": "spot",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "trailing_start": {
+      "value": "0",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "trailing_stop_loss_perc": {
+      "value": "0",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "wait_between_trades": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    }
+  }
+}

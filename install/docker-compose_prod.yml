@@ -1,9 +1,9 @@
 version: "3.7"
 services:
 
-  fe-cadvisor:
-    container_name: fe-cadvisor
-    hostname: fe-cadvisor
+  gen-fe-cadvisor:
+    container_name: gen-fe-cadvisor
+    hostname: gen-fe-cadvisor
     image: gcr.io/google_containers/cadvisor:v0.35.0
     restart: always
     volumes:
@@ -19,16 +19,16 @@ services:
       timeout: 2s
       retries: 5
 
-  base-redis:
-    container_name: base-redis
-    hostname: base-redis
+  per-base-redis:
+    container_name: per-base-redis
+    hostname: per-base-redis
     image: amrox/gc-redis:${TAG}
     pull_policy: always
     restart: always
     links:
-      - base-mysql:mysql
+      - per-base-mysql:mysql
     ports:
-      - 6379:6379
+      - 6378:6379
     healthcheck:
       test: redis-cli ping
       interval: 1m
@@ -39,9 +39,9 @@ services:
       - /root/.aws:/root/.aws
       - /root/.bash_history:/root/.bash_history
 
-  base-mysql:
-    container_name: base-mysql
-    hostname: base-mysql
+  per-base-mysql:
+    container_name: per-base-mysql
+    hostname: per-base-mysql
     image: amrox/gc-mysql:${TAG}
     pull_policy: always
     entrypoint: /docker-entrypoint.sh mysqld
@@ -50,7 +50,7 @@ services:
       - MYSQL_ROOT_PASSWORD=password
     restart: always
     ports:
-      - 3306:3306
+      - 3305:3306
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
       interval: 1m
@@ -61,9 +61,9 @@ services:
       - /root/.aws:/root/.aws
       - /root/.bash_history:/root/.bash_history
 
-  fe-cron:
-    container_name: fe-cron
-    hostname: fe-cron
+  per-fe-cron:
+    container_name: per-fe-cron
+    hostname: per-fe-cron
     environment:
       - CONFIG_ENV=prod/fe/cron
       - HOST=$HOSTNAME
@@ -74,11 +74,11 @@ services:
     logging:
       driver: journald
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
       interval: 1m
@@ -92,9 +92,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  fe-webserver:
-     container_name: fe-webserver
-     hostname: fe-webserver
+  per-fe-webserver:
+     container_name: per-fe-webserver
+     hostname: per-fe-webserver
      image: amrox/webserver:${TAG}
      pull_policy: always
      restart: always
@@ -107,24 +107,24 @@ services:
        - CONFIG_ENV=prod
        - HOST=$HOSTNAME
      ports:
-       - 9999:9999
+       - 8888:9999
      links:
-       - fe-cadvisor:cadvisor
-       - fe-api-dashboard:api_dash
-       - base-mysql:mysql
-       - base-redis:redis
+       - gen-fe-cadvisor:cadvisor
+       - per-fe-api-dashboard:api_dash
+       - per-base-mysql:mysql
+       - per-base-redis:redis
      depends_on:
-       - fe-cadvisor
-       - base-mysql
-       - base-redis
+       - gen-fe-cadvisor
+       - per-base-mysql
+       - per-base-redis
      entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
      volumes:
        - /data:/data
        - /root/.aws:/root/.aws
        - /root/.bash_history:/root/.bash_history
 
-  be-5ma-4perc-vol-eth-spot:
-    container_name: be-5ma-4perc-vol-eth-spot
+  per-be-5ma-4perc-vol-eth-spot:
+    container_name: per-be-5ma-4perc-vol-eth-spot
     hostname: 5ma-4perc-vol-eth-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
@@ -133,11 +133,11 @@ services:
     logging:
       driver: journald
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     environment:
       - CONFIG_ENV=prod/5MA/4perc/vol/eth/spot
       - HOST=$HOSTNAME
@@ -153,9 +153,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-5ma-1tsl-btc-isolated:
-    container_name: be-5ma-1tsl-btc-isolated
-    hostname: be-5ma-1tsl-btc-isolated
+  per-be-5ma-1tsl-btc-isolated:
+    container_name: per-be-5ma-1tsl-btc-isolated
+    hostname: per-be-5ma-1tsl-btc-isolated
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -163,11 +163,11 @@ services:
     logging:
       driver: journald
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     environment:
       - CONFIG_ENV=prod/5MA/1tsl/btc/isolated
       - HOST=$HOSTNAME
@@ -183,9 +183,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-5ma-1tsl-usdt-isolated:
-    container_name: be-5ma-1tsl-usdt-isolated
-    hostname: be-5ma-1tsl-usdt-isolated
+  per-be-5ma-1tsl-usdt-isolated:
+    container_name: per-be-5ma-1tsl-usdt-isolated
+    hostname: per-be-5ma-1tsl-usdt-isolated
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -193,11 +193,11 @@ services:
     logging:
       driver: journald
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     environment:
       - CONFIG_ENV=prod/5MA/1tsl/usdt/isolated
       - HOST=$HOSTNAME
@@ -213,9 +213,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-5ma-1tsl-btc-spot:
-    container_name: be-5ma-1tsl-btc-spot
-    hostname: be-5ma-1tsl-btc-spot
+  per-be-5ma-1tsl-btc-spot:
+    container_name: per-be-5ma-1tsl-btc-spot
+    hostname: per-be-5ma-1tsl-btc-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -223,11 +223,11 @@ services:
     logging:
       driver: journald
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     environment:
       - CONFIG_ENV=prod/5MA/1tsl/btc/spot
       - HOST=$HOSTNAME
@@ -243,9 +243,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-5ma-1tsl-usdt-spot:
-    container_name: be-5ma-1tsl-usdt-spot
-    hostname: be-5ma-1tsl-usdt-spot
+  per-be-5ma-1tsl-usdt-spot:
+    container_name: per-be-5ma-1tsl-usdt-spot
+    hostname: per-be-5ma-1tsl-usdt-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -253,11 +253,11 @@ services:
     logging:
       driver: journald
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     environment:
       - CONFIG_ENV=prod/5MA/1tsl/usdt/spot
       - HOST=$HOSTNAME
@@ -273,9 +273,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-5ma-nostop-btc-spot:
-    container_name: be-5ma-nostop-btc-spot
-    hostname: be-5ma-nostop-btc-spot
+  per-be-5ma-nostop-btc-spot:
+    container_name: per-be-5ma-nostop-btc-spot
+    hostname: per-be-5ma-nostop-btc-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -283,11 +283,11 @@ services:
     logging:
       driver: journald
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     environment:
       - CONFIG_ENV=prod/5MA/nostop/btc/spot
       - HOST=$HOSTNAME
@@ -303,9 +303,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-5ma-nostop-usdt-spot:
-    container_name: be-5ma-nostop-usdt-spot
-    hostname: be-5ma-nostop-usdt-spot
+  per-be-5ma-nostop-usdt-spot:
+    container_name: per-be-5ma-nostop-usdt-spot
+    hostname: per-be-5ma-nostop-usdt-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -313,11 +313,11 @@ services:
     logging:
       driver: journald
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     environment:
       - CONFIG_ENV=prod/5MA/nostop/usdt/spot
       - HOST=$HOSTNAME
@@ -333,9 +333,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  fe-api-dashboard:
-    container_name: fe-api-dashboard
-    hostname: fe-api-dashboard
+  per-fe-api-dashboard:
+    container_name: per-fe-api-dashboard
+    hostname: per-fe-api-dashboard
     environment:
       - CONFIG_ENV=prod/fe/api
       - HOST=$HOSTNAME
@@ -346,15 +346,14 @@ services:
     restart: always
     entrypoint: /docker-entrypoint-api.sh api_dashboard
     links:
-      - base-mysql:mysql
-      - base-redis:redis
-      - be-api-router:router
-
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+      - per-be-api-router:router
     ports:
       - 5000
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: curl -Isf http://127.1:5000/healthcheck
       interval: 1m
@@ -367,9 +366,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-api-router:
-    container_name: be-api-router
-    hostname: be-api-router
+  per-be-api-router:
+    container_name: per-be-api-router
+    hostname: per-be-api-router
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -384,70 +383,70 @@ services:
     ports:
       - 1080:1080
     links:
-      - base-mysql:mysql
-      - base-redis:redis
-      - be-5ma-api-btc-spot:5ma-btc
-      - be-5ma-api-usdt-spot:5ma-usdt
-      - be-5ma-api-eth-spot:5ma-eth
-      - be-5ma-api-eth-isolated:5ma-eth-isolated
-      - be-env-api-usdt-spot:env-usdt
-      - be-env-api-eth-spot:env-eth
-      - be-5ma-api-btc-isolated:5ma-btc-isolated
-      - be-5ma-api-usdt-cross:5ma-usdt-cross
-      - be-env-api-eth-cross:env-eth-cross
-      - be-env-api-usdt-isolated:env-usdt-isolated
-      - be-env-api-1m-btc-spot:env-1m-btc
-      - be-env-api-1m-bnb-spot:env-1m-bnb
-      - be-env-api-1m-eth-spot:env-1m-eth
-      - be-env-api-1m-btc-cross:env-1m-btc-cross
-      - be-env-api-1m-btc-isolated:env-1m-btc-isolated
-      - be-env-api-1m-usdt-spot:env-1m-usdt
-      - be-env-api-1m-usdt-cross:env-1m-usdt-cross
-      - be-env-api-1m-usdt-isolated:env-1m-usdt-isolated
-      - be-api-any-usdt-spot:api-any-usdt-spot
-      - be-api-any-usdt-cross:api-any-usdt-cross
-      - be-api-any-usdt-isolated:api-any-usdt-isolated
-      - be-api-any-btc-spot:api-any-btc-spot
-      - be-api-any-btc-cross:api-any-btc-cross
-      - be-api-any-btc-isolated:api-any-btc-isolated
-      - be-api-any-eth-spot:api-any-eth-spot
-      - be-api-any-eth-cross:api-any-eth-cross
-      - be-api-any-eth-isolated:api-any-eth-isolated
-      - be-api-any-bnb-spot:api-any-bnb-spot
-      - be-api-any-bnb-cross:api-any-bnb-cross
-      - be-api-any-bnb-isolated:api-any-bnb-isolated
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+      - per-be-5ma-api-btc-spot:5ma-btc
+      - per-be-5ma-api-usdt-spot:5ma-usdt
+      - per-be-5ma-api-eth-spot:5ma-eth
+      - per-be-5ma-api-eth-isolated:5ma-eth-isolated
+      - per-be-env-api-usdt-spot:env-usdt
+      - per-be-env-api-eth-spot:env-eth
+      - per-be-5ma-api-btc-isolated:5ma-btc-isolated
+      - per-be-5ma-api-usdt-cross:5ma-usdt-cross
+      - per-be-env-api-eth-cross:env-eth-cross
+      - per-be-env-api-usdt-isolated:env-usdt-isolated
+      - per-be-env-api-1m-btc-spot:env-1m-btc
+      - per-be-env-api-1m-bnb-spot:env-1m-bnb
+      - per-be-env-api-1m-eth-spot:env-1m-eth
+      - per-be-env-api-1m-btc-cross:env-1m-btc-cross
+      - per-be-env-api-1m-btc-isolated:env-1m-btc-isolated
+      - per-be-env-api-1m-usdt-spot:env-1m-usdt
+      - per-be-env-api-1m-usdt-cross:env-1m-usdt-cross
+      - per-be-env-api-1m-usdt-isolated:env-1m-usdt-isolated
+      - per-be-api-any-usdt-spot:api-any-usdt-spot
+      - per-be-api-any-usdt-cross:api-any-usdt-cross
+      - per-be-api-any-usdt-isolated:api-any-usdt-isolated
+      - per-be-api-any-btc-spot:api-any-btc-spot
+      - per-be-api-any-btc-cross:api-any-btc-cross
+      - per-be-api-any-btc-isolated:api-any-btc-isolated
+      - per-be-api-any-eth-spot:api-any-eth-spot
+      - per-be-api-any-eth-cross:api-any-eth-cross
+      - per-be-api-any-eth-isolated:api-any-eth-isolated
+      - per-be-api-any-bnb-spot:api-any-bnb-spot
+      - per-be-api-any-bnb-cross:api-any-bnb-cross
+      - per-be-api-any-bnb-isolated:api-any-bnb-isolated
     depends_on:
-      - base-mysql
-      - base-redis
-      - be-5ma-api-btc-spot
-      - be-5ma-api-usdt-spot
-      - be-5ma-api-eth-spot
-      - be-5ma-api-eth-isolated
-      - be-env-api-usdt-spot
-      - be-env-api-eth-spot
-      - be-5ma-api-btc-isolated
-      - be-5ma-api-usdt-cross
-      - be-env-api-eth-cross
-      - be-env-api-usdt-isolated
-      - be-env-api-1m-usdt-spot
-      - be-env-api-1m-btc-spot
-      - be-env-api-1m-btc-cross
-      - be-env-api-1m-usdt-cross
-      - be-env-api-1m-usdt-isolated
-      - be-env-api-1m-bnb-spot
-      - be-env-api-1m-eth-spot
-      - be-api-any-usdt-spot
-      - be-api-any-usdt-cross
-      - be-api-any-usdt-isolated
-      - be-api-any-btc-spot
-      - be-api-any-btc-cross
-      - be-api-any-btc-isolated
-      - be-api-any-eth-spot
-      - be-api-any-eth-cross
-      - be-api-any-eth-isolated
-      - be-api-any-bnb-spot
-      - be-api-any-bnb-cross
-      - be-api-any-bnb-isolated
+      - per-base-mysql
+      - per-base-redis
+      - per-be-5ma-api-btc-spot
+      - per-be-5ma-api-usdt-spot
+      - per-be-5ma-api-eth-spot
+      - per-be-5ma-api-eth-isolated
+      - per-be-env-api-usdt-spot
+      - per-be-env-api-eth-spot
+      - per-be-5ma-api-btc-isolated
+      - per-be-5ma-api-usdt-cross
+      - per-be-env-api-eth-cross
+      - per-be-env-api-usdt-isolated
+      - per-be-env-api-1m-usdt-spot
+      - per-be-env-api-1m-btc-spot
+      - per-be-env-api-1m-btc-cross
+      - per-be-env-api-1m-usdt-cross
+      - per-be-env-api-1m-usdt-isolated
+      - per-be-env-api-1m-bnb-spot
+      - per-be-env-api-1m-eth-spot
+      - per-be-api-any-usdt-spot
+      - per-be-api-any-usdt-cross
+      - per-be-api-any-usdt-isolated
+      - per-be-api-any-btc-spot
+      - per-be-api-any-btc-cross
+      - per-be-api-any-btc-isolated
+      - per-be-api-any-eth-spot
+      - per-be-api-any-eth-cross
+      - per-be-api-any-eth-isolated
+      - per-be-api-any-bnb-spot
+      - per-be-api-any-bnb-cross
+      - per-be-api-any-bnb-isolated
     entrypoint: /docker-entrypoint.sh api_router
     volumes:
       - /data:/data
@@ -455,9 +454,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-5ma-api-btc-spot:
-    container_name: be-5ma-api-btc-spot
-    hostname: be-5ma-api-btc-spot
+  per-be-5ma-api-btc-spot:
+    container_name: per-be-5ma-api-btc-spot
+    hostname: per-be-5ma-api-btc-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -470,11 +469,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -487,9 +486,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-5ma-api-usdt-spot:
-    container_name: be-5ma-api-usdt-spot
-    hostname: be-5ma-api-usdt-spot
+  per-be-5ma-api-usdt-spot:
+    container_name: per-be-5ma-api-usdt-spot
+    hostname: per-be-5ma-api-usdt-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -502,11 +501,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -519,9 +518,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-5ma-api-eth-isolated:
-    container_name: be-5ma-api-eth-isolated
-    hostname: be-5ma-api-eth-isolated
+  per-be-5ma-api-eth-isolated:
+    container_name: per-be-5ma-api-eth-isolated
+    hostname: per-be-5ma-api-eth-isolated
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -534,11 +533,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -551,9 +550,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-5ma-api-eth-spot:
-    container_name: be-5ma-api-eth-spot
-    hostname: be-5ma-api-eth-spot
+  per-be-5ma-api-eth-spot:
+    container_name: per-be-5ma-api-eth-spot
+    hostname: per-be-5ma-api-eth-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -566,11 +565,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -583,9 +582,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-env-api-usdt-spot:
-    container_name: be-env-api-usdt-spot
-    hostname: be-env-api-usdt-spot
+  per-be-env-api-usdt-spot:
+    container_name: per-be-env-api-usdt-spot
+    hostname: per-be-env-api-usdt-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -598,11 +597,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -615,9 +614,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-5ma-api-btc-isolated:
-    container_name: be-5ma-api-btc-isolated
-    hostname: be-5ma-api-btc-isolated
+  per-be-5ma-api-btc-isolated:
+    container_name: per-be-5ma-api-btc-isolated
+    hostname: per-be-5ma-api-btc-isolated
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -630,11 +629,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -647,9 +646,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-5ma-api-usdt-cross:
-    container_name: be-5ma-api-usdt-cross
-    hostname: be-5ma-api-usdt-cross
+  per-be-5ma-api-usdt-cross:
+    container_name: per-be-5ma-api-usdt-cross
+    hostname: per-be-5ma-api-usdt-cross
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -662,11 +661,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -679,9 +678,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-env-api-usdt-isolated:
-    container_name: be-env-api-usdt-isolated
-    hostname: be-env-api-usdt-isolated
+  per-be-env-api-usdt-isolated:
+    container_name: per-be-env-api-usdt-isolated
+    hostname: per-be-env-api-usdt-isolated
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -694,11 +693,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -711,9 +710,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-env-api-eth-spot:
-    container_name: be-env-api-eth-spot
-    hostname: be-env-api-eth-spot
+  per-be-env-api-eth-spot:
+    container_name: per-be-env-api-eth-spot
+    hostname: per-be-env-api-eth-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -726,11 +725,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -743,9 +742,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-env-api-eth-cross:
-    container_name: be-env-api-eth-cross
-    hostname: be-env-api-eth-cross
+  per-be-env-api-eth-cross:
+    container_name: per-be-env-api-eth-cross
+    hostname: per-be-env-api-eth-cross
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -758,11 +757,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -775,9 +774,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-env-api-1m-usdt-spot:
-    container_name: be-env-api-1m-usdt-spot
-    hostname: be-env-api-1m-usdt-spot
+  per-be-env-api-1m-usdt-spot:
+    container_name: per-be-env-api-1m-usdt-spot
+    hostname: per-be-env-api-1m-usdt-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -790,11 +789,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -807,9 +806,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-env-api-1m-btc-spot:
-    container_name: be-env-api-1m-btc-spot
-    hostname: be-env-api-1m-btc-spot
+  per-be-env-api-1m-btc-spot:
+    container_name: per-be-env-api-1m-btc-spot
+    hostname: per-be-env-api-1m-btc-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -822,11 +821,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -839,9 +838,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-env-api-1m-btc-cross:
-    container_name: be-env-api-1m-btc-cross
-    hostname: be-env-api-1m-btc-cross
+  per-be-env-api-1m-btc-cross:
+    container_name: per-be-env-api-1m-btc-cross
+    hostname: per-be-env-api-1m-btc-cross
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -854,11 +853,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -871,9 +870,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-env-api-1m-btc-isolated:
-    container_name: be-env-api-1m-btc-isolated
-    hostname: be-env-api-1m-btc-isolated
+  per-be-env-api-1m-btc-isolated:
+    container_name: per-be-env-api-1m-btc-isolated
+    hostname: per-be-env-api-1m-btc-isolated
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -886,11 +885,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -903,9 +902,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-env-api-1m-usdt-isolated:
-    container_name: be-env-api-1m-usdt-isolated
-    hostname: be-env-api-1m-usdt-isolated
+  per-be-env-api-1m-usdt-isolated:
+    container_name: per-be-env-api-1m-usdt-isolated
+    hostname: per-be-env-api-1m-usdt-isolated
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -918,11 +917,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -935,9 +934,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-env-api-1m-usdt-cross:
-    container_name: be-env-api-1m-usdt-cross
-    hostname: be-env-api-1m-usdt-cross
+  per-be-env-api-1m-usdt-cross:
+    container_name: per-be-env-api-1m-usdt-cross
+    hostname: per-be-env-api-1m-usdt-cross
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -950,11 +949,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -967,9 +966,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-env-api-1m-bnb-spot:
-    container_name: be-env-api-1m-bnb-spot
-    hostname: be-env-api-1m-bnb-spot
+  per-be-env-api-1m-bnb-spot:
+    container_name: per-be-env-api-1m-bnb-spot
+    hostname: per-be-env-api-1m-bnb-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -982,11 +981,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -999,9 +998,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-env-api-1m-eth-spot:
-    container_name: be-env-api-1m-eth-spot
-    hostname: be-env-api-1m-eth-spot
+  per-be-env-api-1m-eth-spot:
+    container_name: per-be-env-api-1m-eth-spot
+    hostname: per-be-env-api-1m-eth-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -1014,11 +1013,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -1031,9 +1030,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-api-any-usdt-spot:
-    container_name: be-api-any-usdt-spot
-    hostname: be-api-any-usdt-spot
+  per-be-api-any-usdt-spot:
+    container_name: per-be-api-any-usdt-spot
+    hostname: per-be-api-any-usdt-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -1046,11 +1045,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -1063,9 +1062,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-api-any-usdt-cross:
-    container_name: be-api-any-usdt-cross
-    hostname: be-api-any-usdt-cross
+  per-be-api-any-usdt-cross:
+    container_name: per-be-api-any-usdt-cross
+    hostname: per-be-api-any-usdt-cross
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -1078,11 +1077,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -1095,9 +1094,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-api-any-usdt-isolated:
-    container_name: be-api-any-usdt-isolated
-    hostname: be-api-any-usdt-isolated
+  per-be-api-any-usdt-isolated:
+    container_name: per-be-api-any-usdt-isolated
+    hostname: per-be-api-any-usdt-isolated
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -1110,11 +1109,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -1127,9 +1126,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-api-any-btc-spot:
-    container_name: be-api-any-btc-spot
-    hostname: be-api-any-btc-spot
+  per-be-api-any-btc-spot:
+    container_name: per-be-api-any-btc-spot
+    hostname: per-be-api-any-btc-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -1142,11 +1141,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -1159,9 +1158,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-api-any-btc-cross:
-    container_name: be-api-any-btc-cross
-    hostname: be-api-any-btc-cross
+  per-be-api-any-btc-cross:
+    container_name: per-be-api-any-btc-cross
+    hostname: per-be-api-any-btc-cross
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -1174,11 +1173,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -1191,9 +1190,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-api-any-btc-isolated:
-    container_name: be-api-any-btc-isolated
-    hostname: be-api-any-btc-isolated
+  per-be-api-any-btc-isolated:
+    container_name: per-be-api-any-btc-isolated
+    hostname: per-be-api-any-btc-isolated
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -1206,11 +1205,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -1223,9 +1222,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-api-any-bnb-spot:
-    container_name: be-api-any-bnb-spot
-    hostname: be-api-any-bnb-spot
+  per-be-api-any-bnb-spot:
+    container_name: per-be-api-any-bnb-spot
+    hostname: per-be-api-any-bnb-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -1238,11 +1237,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -1255,9 +1254,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-api-any-bnb-cross:
-    container_name: be-api-any-bnb-cross
-    hostname: be-api-any-bnb-cross
+  per-be-api-any-bnb-cross:
+    container_name: per-be-api-any-bnb-cross
+    hostname: per-be-api-any-bnb-cross
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -1270,11 +1269,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -1287,9 +1286,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-api-any-bnb-isolated:
-    container_name: be-api-any-bnb-isolated
-    hostname: be-api-any-bnb-isolated
+  per-be-api-any-bnb-isolated:
+    container_name: per-be-api-any-bnb-isolated
+    hostname: per-be-api-any-bnb-isolated
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -1302,11 +1301,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -1319,9 +1318,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-api-any-eth-spot:
-    container_name: be-api-any-eth-spot
-    hostname: be-api-any-eth-spot
+  per-be-api-any-eth-spot:
+    container_name: per-be-api-any-eth-spot
+    hostname: per-be-api-any-eth-spot
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -1334,11 +1333,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -1351,9 +1350,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-api-any-eth-cross:
-    container_name: be-api-any-eth-cross
-    hostname: be-api-any-eth-cross
+  per-be-api-any-eth-cross:
+    container_name: per-be-api-any-eth-cross
+    hostname: per-be-api-any-eth-cross
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -1366,11 +1365,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -1383,9 +1382,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-api-any-eth-isolated:
-    container_name: be-api-any-eth-isolated
-    hostname: be-api-any-eth-isolated
+  per-be-api-any-eth-isolated:
+    container_name: per-be-api-any-eth-isolated
+    hostname: per-be-api-any-eth-isolated
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -1398,11 +1397,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - per-base-mysql:mysql
+      - per-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - per-base-mysql
+      - per-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m

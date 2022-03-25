@@ -1,0 +1,9 @@
+{
+  "trade_multiplier": "3",
+  "trade_isolated": "true",
+  "trade_type": "margin",
+  "pairs": "ENJBTC",
+  "name": "5ma-1tsl-btc-isolated",
+  "max_trades": "10",
+  "divisor": "1.1"
+}
