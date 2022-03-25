@@ -26,6 +26,8 @@ if [[ ! -e /installed ]]; then
     cp /opt/output/router_config_stag.json /etc/router_config.json
   elif [[ "$CONFIG_ENV" == *"prod"* ]]; then
     cp /opt/output/router_config_prod.json /etc/router_config.json
+  elif [[ "$CONFIG_ENV" == *"per"* ]]; then
+    cp /opt/output/router_config_per.json /etc/router_config.json
   fi
 
   touch /installed
