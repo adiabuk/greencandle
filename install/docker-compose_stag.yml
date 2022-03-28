@@ -205,11 +205,6 @@ services:
       - be-alert:alert
       - base-mysql:mysql
       - base-redis:redis
-      - be-5ma-api-btc:5ma-btc
-      - be-5ma-api-usdt:5ma-usdt
-      - be-5ma-api-eth:5ma-eth
-      - be-has-api-usdt:has-usdt
-      - be-env-1m:env-1m
       - be-any:any
     depends_on:
       - be-alert
