@@ -310,7 +310,7 @@ class Trade():
         balance[account]['USDC']['count'] = 1000
         balance[account]['GBP']['count'] = 1000
         balance[account]['BNB']['count'] = 14
-        for quote in ['BTC', 'ETH', 'iUSDT', 'BNB', 'USDC', 'GBP']:
+        for quote in ['BTC', 'ETH', 'USDT', 'BNB', 'USDC', 'GBP']:
             db_result = dbase.fetch_sql_data("select sum(quote_out-quote_in) from trades "
                                              "where pair like '%{0}' and name='{1}'"
                                              .format(quote, self.config.main.name),
