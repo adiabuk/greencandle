@@ -1,9 +1,0 @@
-{
-  "divisor": "1.6",
-  "immediate_take_profit": "false",
-  "immediate_trailing_stop": "false",
-  "name": "5ma_1tsp",
-  "take_profit_perc": "10",
-  "trailing_start": "1",
-  "trailing_stop_loss_perc": "1"
-}

@@ -1,6 +1,7 @@
 version: "3.7"
 services:
 
+###### Start Per
   gen-fe-cadvisor:
     container_name: gen-fe-cadvisor
     hostname: gen-fe-cadvisor
@@ -1168,6 +1169,604 @@ services:
     depends_on:
       - per-base-mysql
       - per-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
+
+###### Start Prod
+  prod-base-redis:
+    container_name: prod-base-redis
+    hostname: prod-base-redis
+    image: amrox/gc-redis:${TAG}
+    pull_policy: always
+    restart: always
+    links:
+      - prod-base-mysql:mysql
+    ports:
+      - 6379:6379
+    healthcheck:
+      test: redis-cli ping
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.aws:/root/.aws
+      - /root/.bash_history:/root/.bash_history
+
+  prod-base-mysql:
+    container_name: prod-base-mysql
+    hostname: prod-base-mysql
+    image: amrox/gc-mysql:${TAG}
+    pull_policy: always
+    entrypoint: /docker-entrypoint.sh mysqld
+    environment:
+      - CONFIG_ENV=per
+      - MYSQL_ROOT_PASSWORD=password
+    restart: always
+    ports:
+      - 3306:3306
+    healthcheck:
+      test: echo 'SELECT version();'| mysql -uroot -ppassword
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.aws:/root/.aws
+      - /root/.bash_history:/root/.bash_history
+
+  prod-fe-cron:
+    container_name: prod-fe-cron
+    hostname: prod-fe-cron
+    environment:
+      - CONFIG_ENV=per/fe/cron
+      - HOST=$HOSTNAME
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh cron -f
+    logging:
+      driver: journald
+    links:
+      - prod-base-mysql:mysql
+      - prod-base-redis:redis
+    depends_on:
+      - prod-base-mysql
+      - prod-base-redis
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
+
+  prod-fe-webserver:
+     container_name: prod-fe-webserver
+     hostname: prod-fe-webserver
+     image: amrox/webserver:${TAG}
+     pull_policy: always
+     restart: always
+     healthcheck:
+       test: service nginx status || exit 1
+       interval: 5m
+       timeout: 5s
+       retries: 5
+     environment:
+       - CONFIG_ENV=per
+       - HOST=$HOSTNAME
+     ports:
+       - 9999:9999
+     links:
+       - gen-fe-cadvisor:cadvisor
+       - prod-fe-api-dashboard:api_dash
+       - prod-base-mysql:mysql
+       - prod-base-redis:redis
+     depends_on:
+       - gen-fe-cadvisor
+       - prod-base-mysql
+       - prod-base-redis
+     entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
+     volumes:
+       - /data:/data
+       - /root/.aws:/root/.aws
+       - /root/.bash_history:/root/.bash_history
+
+  prod-fe-api-dashboard:
+    container_name: prod-fe-api-dashboard
+    hostname: prod-fe-api-dashboard
+    environment:
+      - CONFIG_ENV=per/fe/api
+      - HOST=$HOSTNAME
+    logging:
+      driver: journald
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint-api.sh api_dashboard
+    links:
+      - prod-base-mysql:mysql
+      - prod-base-redis:redis
+      - prod-be-api-router:router
+    ports:
+      - 5000
+    depends_on:
+      - prod-base-mysql
+      - prod-base-redis
+    healthcheck:
+      test: curl -Isf http://127.1:5000/healthcheck
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /dev/log:/dev/log
+      - /root/.aws:/root/.aws
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
+
+  prod-be-api-router:
+    container_name: prod-be-api-router
+    hostname: prod-be-api-router
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    healthcheck:
+      test: curl -Isf http://127.1:1080/healthcheck
+      interval: 5m
+      timeout: 5s
+      retries: 5
+    environment:
+      - CONFIG_ENV=per
+      - HOST=$HOSTNAME
+    ports:
+      - 1081:1080
+    links:
+      - prod-base-mysql:mysql
+      - prod-base-redis:redis
+      - prod-be-5ma-api-btc-spot:5ma-btc
+      - prod-be-5ma-api-usdt-spot:5ma-usdt
+      - prod-be-env-api-usdt-spot:env-usdt
+      - prod-be-5ma-api-btc-isolated:5ma-btc-isolated
+      - prod-be-5ma-api-usdt-cross:5ma-usdt-cross
+      - prod-be-env-api-usdt-isolated:env-usdt-isolated
+      - prod-be-env-api-1m-btc-spot:env-1m-btc
+      - prod-be-env-api-1m-btc-cross:env-1m-btc-cross
+      - prod-be-env-api-1m-btc-isolated:env-1m-btc-isolated
+      - prod-be-env-api-1m-usdt-spot:env-1m-usdt
+      - prod-be-env-api-1m-usdt-cross:env-1m-usdt-cross
+      - prod-be-env-api-1m-usdt-isolated:env-1m-usdt-isolated
+      - prod-be-api-any-usdt-spot:api-any-usdt-spot
+      - prod-be-api-any-usdt-cross:api-any-usdt-cross
+      - prod-be-api-any-usdt-isolated:api-any-usdt-isolated
+      - prod-be-api-any-btc-spot:api-any-btc-spot
+      - prod-be-api-any-btc-cross:api-any-btc-cross
+      - prod-be-api-any-btc-isolated:api-any-btc-isolated
+      - prod-be-api-any-eth-spot:api-any-eth-spot
+      - prod-be-api-any-eth-cross:api-any-eth-cross
+      - prod-be-api-any-eth-isolated:api-any-eth-isolated
+      - prod-be-api-any-bnb-spot:api-any-bnb-spot
+      - prod-be-api-any-bnb-cross:api-any-bnb-cross
+      - prod-be-api-any-bnb-isolated:api-any-bnb-isolated
+    depends_on:
+      - prod-base-mysql
+      - prod-base-redis
+      - prod-be-5ma-api-btc-spot
+      - prod-be-5ma-api-usdt-spot
+      - prod-be-env-api-usdt-spot
+      - prod-be-5ma-api-btc-isolated
+      - prod-be-5ma-api-usdt-cross
+      - prod-be-env-api-usdt-isolated
+      - prod-be-env-api-1m-usdt-spot
+      - prod-be-env-api-1m-btc-spot
+      - prod-be-env-api-1m-btc-cross
+      - prod-be-env-api-1m-usdt-cross
+      - prod-be-env-api-1m-usdt-isolated
+      - prod-be-api-any-usdt-spot
+      - prod-be-api-any-usdt-cross
+      - prod-be-api-any-usdt-isolated
+      - prod-be-api-any-btc-spot
+      - prod-be-api-any-btc-cross
+      - prod-be-api-any-btc-isolated
+      - prod-be-api-any-eth-spot
+      - prod-be-api-any-eth-cross
+      - prod-be-api-any-eth-isolated
+      - prod-be-api-any-bnb-spot
+      - prod-be-api-any-bnb-cross
+      - prod-be-api-any-bnb-isolated
+    entrypoint: /docker-entrypoint.sh api_router
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
+
+  prod-be-api-any-usdt-spot:
+    container_name: prod-be-api-any-usdt-spot
+    hostname: prod-be-api-any-usdt-spot
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=per/any/usdt/spot
+    ports:
+      - 20000
+    links:
+      - prod-base-mysql:mysql
+      - prod-base-redis:redis
+    depends_on:
+      - prod-base-mysql
+      - prod-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
+
+  prod-be-api-any-usdt-cross:
+    container_name: prod-be-api-any-usdt-cross
+    hostname: prod-be-api-any-usdt-cross
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=per/any/usdt/cross
+    ports:
+      - 20000
+    links:
+      - prod-base-mysql:mysql
+      - prod-base-redis:redis
+    depends_on:
+      - prod-base-mysql
+      - prod-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
+
+  prod-be-api-any-usdt-isolated:
+    container_name: prod-be-api-any-usdt-isolated
+    hostname: prod-be-api-any-usdt-isolated
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=per/any/usdt/isolated
+    ports:
+      - 20000
+    links:
+      - prod-base-mysql:mysql
+      - prod-base-redis:redis
+    depends_on:
+      - prod-base-mysql
+      - prod-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
+
+  prod-be-api-any-btc-spot:
+    container_name: prod-be-api-any-btc-spot
+    hostname: prod-be-api-any-btc-spot
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=per/any/btc/spot
+    ports:
+      - 20000
+    links:
+      - prod-base-mysql:mysql
+      - prod-base-redis:redis
+    depends_on:
+      - prod-base-mysql
+      - prod-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
+
+  prod-be-api-any-btc-cross:
+    container_name: prod-be-api-any-btc-cross
+    hostname: prod-be-api-any-btc-cross
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=per/any/btc/cross
+    ports:
+      - 20000
+    links:
+      - prod-base-mysql:mysql
+      - prod-base-redis:redis
+    depends_on:
+      - prod-base-mysql
+      - prod-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
+
+  prod-be-api-any-btc-isolated:
+    container_name: prod-be-api-any-btc-isolated
+    hostname: prod-be-api-any-btc-isolated
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=per/any/btc/isolated
+    ports:
+      - 20000
+    links:
+      - prod-base-mysql:mysql
+      - prod-base-redis:redis
+    depends_on:
+      - prod-base-mysql
+      - prod-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
+
+  prod-be-api-any-bnb-spot:
+    container_name: prod-be-api-any-bnb-spot
+    hostname: prod-be-api-any-bnb-spot
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=per/any/bnb/spot
+    ports:
+      - 20000
+    links:
+      - prod-base-mysql:mysql
+      - prod-base-redis:redis
+    depends_on:
+      - prod-base-mysql
+      - prod-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
+
+  prod-be-api-any-bnb-cross:
+    container_name: prod-be-api-any-bnb-cross
+    hostname: prod-be-api-any-bnb-cross
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=per/any/bnb/cross
+    ports:
+      - 20000
+    links:
+      - prod-base-mysql:mysql
+      - prod-base-redis:redis
+    depends_on:
+      - prod-base-mysql
+      - prod-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
+
+  prod-be-api-any-bnb-isolated:
+    container_name: prod-be-api-any-bnb-isolated
+    hostname: prod-be-api-any-bnb-isolated
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=per/any/bnb/isolated
+    ports:
+      - 20000
+    links:
+      - prod-base-mysql:mysql
+      - prod-base-redis:redis
+    depends_on:
+      - prod-base-mysql
+      - prod-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
+
+  prod-be-api-any-eth-spot:
+    container_name: prod-be-api-any-eth-spot
+    hostname: prod-be-api-any-eth-spot
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=per/any/eth/spot
+    ports:
+      - 20000
+    links:
+      - prod-base-mysql:mysql
+      - prod-base-redis:redis
+    depends_on:
+      - prod-base-mysql
+      - prod-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
+
+  prod-be-api-any-eth-cross:
+    container_name: prod-be-api-any-eth-cross
+    hostname: prod-be-api-any-eth-cross
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=per/any/eth/cross
+    ports:
+      - 20000
+    links:
+      - prod-base-mysql:mysql
+      - prod-base-redis:redis
+    depends_on:
+      - prod-base-mysql
+      - prod-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
+
+  prod-be-api-any-eth-isolated:
+    container_name: prod-be-api-any-eth-isolated
+    hostname: prod-be-api-any-eth-isolated
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=per/any/eth/isolated
+    ports:
+      - 20000
+    links:
+      - prod-base-mysql:mysql
+      - prod-base-redis:redis
+    depends_on:
+      - prod-base-mysql
+      - prod-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m

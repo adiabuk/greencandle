@@ -1,9 +1,0 @@
-{
-  "name": "env-api-1m-btc-isolated",
-  "pairs": "WAVESBTC MATICBTC EOSBTC DOGEBTC DASHBTC ETCBTC FTMBTC",
-  "trade_isolated": "true",
-  "trade_type": "margin",
-  "max_trades": "10",
-  "divisor": "1",
-  "trade_multiplier": "5"
-}
