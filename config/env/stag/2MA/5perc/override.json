@@ -1,6 +1,0 @@
-{
-  "stop_loss_perc": "5",
-  "trailing_stop_loss_perc": "10",
-  "trailing_start": "20",
-  "take_profit_perc": "100"
-}
