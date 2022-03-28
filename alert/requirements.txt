@@ -3,6 +3,6 @@ Flask==1.1.2
 playsound==1.2.2
 vext==0.7.4
 pgi==0.0.11.2
-pyserial
-pycairo
-PyGObject
+pyserial==3.5
+pycairo==1.20.1
+PyGObject==3.42.0
