@@ -1,0 +1,16 @@
+{
+  "check_interval": "36000",
+  "close_rule1": "results.current.RSI_14 \u003e70",
+  "close_rule2": "high \u003e results.current.upper_52",
+  "divisor": "3",
+  "immediate_stop": "true",
+  "indicators": "get_hma;HMA;14 get_rsi;RSI;14 get_bb;upper;52,4.3 get_bb;lower;52,4.3 get_bb;middle;52,4.3",
+  "max_trades": "50",
+  "name": "be-bb-4h",
+  "no_of_klines": "52",
+  "open_rule1": "low \u003c results.current.lower_52 and results.current.RSI_14 \u003c 20",
+  "pairs": "BTCUSDT DOGEUSDT DOTUSDT LINKUSDT SHIBUSDT TRXUSDT UNIUSDT VETUSDT LTCUSDT ETCUSDT XRPUSDT",
+  "rate_indicator": "middle_52",
+  "stop_loss_perc": "50",
+  "take_profit_perc": "10"
+}

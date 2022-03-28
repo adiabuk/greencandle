@@ -320,18 +320,18 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-env-1m:
-    container_name: be-env-1m
-    hostname: be-env-1m
+  stag-be-bb-4h:
+    container_name: stag-be-bb-4h
+    hostname: stag-be-bb-4h
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh backend_api --test
+    entrypoint: /docker-entrypoint.sh backend --test
     logging:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=stag/env/api
+      - CONFIG_ENV=stag/bb/4h
     ports:
       - 20000
     links:
@@ -342,7 +342,7 @@ services:
       - base-redis
     healthcheck:
       test: ls ||exit 1
-      interval: 1m
+      interval: 4h
       timeout: 2s
       retries: 5
     volumes:
