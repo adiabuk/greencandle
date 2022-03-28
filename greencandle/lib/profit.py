@@ -87,20 +87,3 @@ def get_recent_profit(interval=None, test=False):
         profit_dict[day] += float(profit_per_trade)  # trade[0] is a date: yyyy-mm-dd
 
     return sum(profits), dict(profit_dict)
-
-def gbp_to_base(gbp, symbol):
-    """
-    50GBP => OMG
-    50GBP => USD
-    USD => BTC
-    BTC => OMG
-    """
-
-    gbp2usd = CURRENCY.convert(1, 'GBP', 'USD')
-    usd = gbp * gbp2usd
-    btc = usd * float(binance.prices()["BTCUSDT"])
-    omg = btc * float(binance.prices()[symbol + "BTC"])
-    return format(omg, ".20f")
-
-if __name__ == "__main__":
-    print(gbp_to_base(50, "OMG"))
