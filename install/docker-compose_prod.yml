@@ -1338,18 +1338,6 @@ services:
     links:
       - prod-base-mysql:mysql
       - prod-base-redis:redis
-      - prod-be-5ma-api-btc-spot:5ma-btc
-      - prod-be-5ma-api-usdt-spot:5ma-usdt
-      - prod-be-env-api-usdt-spot:env-usdt
-      - prod-be-5ma-api-btc-isolated:5ma-btc-isolated
-      - prod-be-5ma-api-usdt-cross:5ma-usdt-cross
-      - prod-be-env-api-usdt-isolated:env-usdt-isolated
-      - prod-be-env-api-1m-btc-spot:env-1m-btc
-      - prod-be-env-api-1m-btc-cross:env-1m-btc-cross
-      - prod-be-env-api-1m-btc-isolated:env-1m-btc-isolated
-      - prod-be-env-api-1m-usdt-spot:env-1m-usdt
-      - prod-be-env-api-1m-usdt-cross:env-1m-usdt-cross
-      - prod-be-env-api-1m-usdt-isolated:env-1m-usdt-isolated
       - prod-be-api-any-usdt-spot:api-any-usdt-spot
       - prod-be-api-any-usdt-cross:api-any-usdt-cross
       - prod-be-api-any-usdt-isolated:api-any-usdt-isolated
@@ -1365,17 +1353,6 @@ services:
     depends_on:
       - prod-base-mysql
       - prod-base-redis
-      - prod-be-5ma-api-btc-spot
-      - prod-be-5ma-api-usdt-spot
-      - prod-be-env-api-usdt-spot
-      - prod-be-5ma-api-btc-isolated
-      - prod-be-5ma-api-usdt-cross
-      - prod-be-env-api-usdt-isolated
-      - prod-be-env-api-1m-usdt-spot
-      - prod-be-env-api-1m-btc-spot
-      - prod-be-env-api-1m-btc-cross
-      - prod-be-env-api-1m-usdt-cross
-      - prod-be-env-api-1m-usdt-isolated
       - prod-be-api-any-usdt-spot
       - prod-be-api-any-usdt-cross
       - prod-be-api-any-usdt-isolated
