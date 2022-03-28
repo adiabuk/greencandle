@@ -1209,7 +1209,7 @@ services:
     pull_policy: always
     entrypoint: /docker-entrypoint.sh mysqld
     environment:
-      - CONFIG_ENV=per
+      - CONFIG_ENV=prod
       - MYSQL_ROOT_PASSWORD=password
     restart: always
     ports:
@@ -1228,7 +1228,7 @@ services:
     container_name: prod-fe-cron
     hostname: prod-fe-cron
     environment:
-      - CONFIG_ENV=per/fe/cron
+      - CONFIG_ENV=prod/fe/cron
       - HOST=$HOSTNAME
     image: amrox/greencandle:${TAG}
     pull_policy: always
@@ -1267,7 +1267,7 @@ services:
        timeout: 5s
        retries: 5
      environment:
-       - CONFIG_ENV=per
+       - CONFIG_ENV=prod
        - HOST=$HOSTNAME
      ports:
        - 9999:9999
@@ -1290,7 +1290,7 @@ services:
     container_name: prod-fe-api-dashboard
     hostname: prod-fe-api-dashboard
     environment:
-      - CONFIG_ENV=per/fe/api
+      - CONFIG_ENV=prod/fe/api
       - HOST=$HOSTNAME
     logging:
       driver: journald
@@ -1331,7 +1331,7 @@ services:
       timeout: 5s
       retries: 5
     environment:
-      - CONFIG_ENV=per
+      - CONFIG_ENV=prod
       - HOST=$HOSTNAME
     ports:
       - 1081:1080
@@ -1383,7 +1383,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=per/any/usdt/spot
+      - CONFIG_ENV=prod/any/usdt/spot
     ports:
       - 20000
     links:
@@ -1415,7 +1415,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=per/any/usdt/cross
+      - CONFIG_ENV=prod/any/usdt/cross
     ports:
       - 20000
     links:
@@ -1447,7 +1447,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=per/any/usdt/isolated
+      - CONFIG_ENV=prod/any/usdt/isolated
     ports:
       - 20000
     links:
@@ -1479,7 +1479,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=per/any/btc/spot
+      - CONFIG_ENV=prod/any/btc/spot
     ports:
       - 20000
     links:
@@ -1511,7 +1511,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=per/any/btc/cross
+      - CONFIG_ENV=prod/any/btc/cross
     ports:
       - 20000
     links:
@@ -1543,7 +1543,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=per/any/btc/isolated
+      - CONFIG_ENV=prod/any/btc/isolated
     ports:
       - 20000
     links:
@@ -1575,7 +1575,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=per/any/bnb/spot
+      - CONFIG_ENV=prod/any/bnb/spot
     ports:
       - 20000
     links:
@@ -1607,7 +1607,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=per/any/bnb/cross
+      - CONFIG_ENV=prod/any/bnb/cross
     ports:
       - 20000
     links:
@@ -1639,7 +1639,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=per/any/bnb/isolated
+      - CONFIG_ENV=prod/any/bnb/isolated
     ports:
       - 20000
     links:
@@ -1671,7 +1671,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=per/any/eth/spot
+      - CONFIG_ENV=prod/any/eth/spot
     ports:
       - 20000
     links:
@@ -1703,7 +1703,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=per/any/eth/cross
+      - CONFIG_ENV=prod/any/eth/cross
     ports:
       - 20000
     links:
@@ -1735,7 +1735,7 @@ services:
       driver: journald
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=per/any/eth/isolated
+      - CONFIG_ENV=prod/any/eth/isolated
     ports:
       - 20000
     links:
