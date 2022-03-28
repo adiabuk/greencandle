@@ -15,7 +15,7 @@ def default_to_regular(ddict):
 
 def get_quote(pair):
     """Return Quote Currency of trading pair"""
-    main = ['USDT', 'USDC', 'BTC', 'ETH', 'BNB']
+    main = ['USDT', 'USDC', 'BTC', 'ETH', 'BNB', 'GBP']
     try:
         return list(filter(pair.endswith, main))[0]
     except IndexError:

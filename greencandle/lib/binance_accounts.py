@@ -55,6 +55,9 @@ def get_binance_isolated():
 
             elif base == "USDT":
                 bcoin = float(amount) / float(prices["BTCUSDT"])
+            
+            elif base == 'GBP':
+                bcoin = float(amount) / float(prices["BTCGBP"])
 
             else:  # other currencies that need converting to BTC
                 try:
@@ -108,11 +111,15 @@ def get_binance_margin():
 
                 if key == "BTC":
                     bcoin = float(current_value)
-                    bitcoin_totals += float(bcoin)
+                    bitcoin_totals += bcoin
 
                 elif key == "USDT":
                     bcoin = float(current_value) / float(prices["BTCUSDT"])
                     bitcoin_totals += bcoin
+
+                elif key == "GBP":
+                    bcoin = float(current_value) / float(prices["BTCGBP"])
+                    bcoin_totals += bcoin
 
                 else:  # other currencies that need converting to BTC
                     try:
