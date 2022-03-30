@@ -274,18 +274,8 @@ def prod_initial(interval, test=False):
 
 
     redis = Redis(interval=interval, test=test)
-    if interval == '4h':
-        try:
-            last_item = redis.get_items(PAIRS[0], interval)[-1]
-            last_epoch = int(int(last_item.decode("utf-8").split(':')[-1])/1000)+1
-            current_epoch = time.time()
-            time_since_last = current_epoch - last_epoch
-            no_of_klines = int(time_since_last / multiplier[interval] + 3)
-        except IndexError:
-            no_of_klines = config.main.no_of_klines
-    else:
-        no_of_klines = config.main.no_of_klines
-
+    no_of_klines = config.main.no_of_klines
+    LOGGER.debug("Getting %s klines" % no_of_klines)
     dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=no_of_klines)
     engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, test=test,
                     redis=redis)
