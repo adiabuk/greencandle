@@ -404,14 +404,10 @@ class Engine(dict):
         """
         func, timeperiod = localconfig  # split tuple
         LOGGER.debug("Getting %s_%s for %s" % (func, timeperiod, pair))
-        dataframe = self.__renamed_dataframe_columns(dataframe)
         scheme = {}
         mine = dataframe.apply(pandas.to_numeric).loc[:index]
+        rsi = talib.RSI(dataframe.close.values.astype(float), timeperiod=int(timeperiod))
 
-        rsi = RSI(mine, base='Close', period=int(timeperiod))
-        df_list = rsi["{0}_{1}".format(func, timeperiod)].tolist()
-        df_list = ["%.1f" % float(x) for x in df_list]
-        scheme["data"] = df_list[-1]
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
 
@@ -420,6 +416,7 @@ class Engine(dict):
         elif not index and not self.test:
             index = -2
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
+        scheme["data"] = rsi[index]
 
         self.schemes.append(scheme)
         LOGGER.debug("Done getting RSI")
