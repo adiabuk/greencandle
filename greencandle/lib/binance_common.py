@@ -178,7 +178,7 @@ def get_dataframe(pair, interval, no_of_klines):
     dataframe = get_binance_klines(pair, interval=interval, limit=int(no_of_klines))
     return dataframe
 
-def get_dataframes(pairs, interval=None, no_of_klines=None):
+def get_dataframes(pairs, interval=None, no_of_klines=None, max_workers=50):
     """
     Get details from binance API
 
@@ -193,7 +193,7 @@ def get_dataframes(pairs, interval=None, no_of_klines=None):
     if not no_of_klines:
         no_of_klines = config.main.no_of_klines
 
-    pool = ThreadPoolExecutor(max_workers=50)
+    pool = ThreadPoolExecutor(max_workers=max_workers)
     dataframe = {}
     results = {}
     for pair in pairs:
