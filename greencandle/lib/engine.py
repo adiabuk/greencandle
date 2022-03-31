@@ -170,6 +170,7 @@ class Engine(dict):
         """
         LOGGER.debug("Getting data")
         for pair in self.pairs:
+            actual_klines = len(self.dataframes[pair])  # Newly listed pairs have less candles
 
             # get indicators supertrend, and API for each trading pair
             with ThreadPoolExecutor(max_workers=100) as pool:
@@ -183,7 +184,7 @@ class Engine(dict):
                     pool.submit(getattr(self, function)(pair, self.dataframes[pair], index=None,
                                                         localconfig=(name, period)))
                     if first_run:
-                        for seq in range(int(no_of_klines) -1):
+                        for seq in range(actual_klines -1):
                             pool.submit(getattr(self, function)(pair, self.dataframes[pair],
                                                                 index=seq,
                                                                 localconfig=(name, period)))
