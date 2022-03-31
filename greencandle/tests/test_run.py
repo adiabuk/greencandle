@@ -7,7 +7,7 @@ import unittest
 from .unittests import make_test_case
 
 class TestBNBETH(make_test_case('unit', 'BNBETH', '1h', '2019-02-27', 15, 35, 14, -5.5,
-                                64.2, 12.8)):
+                                61, 9.2)):
     """Test BNBETH"""
     pass
 

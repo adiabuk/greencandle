@@ -230,8 +230,8 @@ def make_test_case(config_env, pairs, interval, startdate, days, xsum, xmax, xmi
                                                header=False)[0][0]
             down_sum = self.dbase.fetch_sql_data("select sum(drawdown_perc) from profit",
                                                  header=False)[0][0]
-            self.assertEqual(float(up_sum), self.drawup)
-            self.assertEqual(float(down_sum), self.drawdown)
+            self.assertGreaterEqual(float(up_sum), self.drawup)
+            self.assertGreaterEqual(float(down_sum), self.drawdown)
 
         def tearDown(self):
             """Cleanup DB and files"""
