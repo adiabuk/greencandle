@@ -11,6 +11,18 @@
 
 # Releases
 
+## 2.16
+* Fixes to bootstrap scripts
+* Fixes to SQL templates
+* Add per environment to prod deployment
+* Switch prod/per
+* Increase vagrant specs
+* Fixes to RSI indicator and graph
+* Cleanup of old envs
+* Allow trading with GBP quote
+* Allow reducing of concurrent data fetching from exchange
+* Re-retrieve initial data on each new run
+
 ## 2.15
 * Allow any assets to be traded from dashboard
 * Correct strategy/container names
