@@ -407,7 +407,7 @@ class Engine(dict):
         LOGGER.debug("Getting %s_%s for %s" % (func, timeperiod, pair))
         scheme = {}
         mine = dataframe.apply(pandas.to_numeric).loc[:index]
-        rsi = talib.RSI(dataframe.close.values.astype(float), timeperiod=int(timeperiod))
+        rsi = talib.RSI(dataframe.close.values.astype(float) * 100000, timeperiod=int(timeperiod))
 
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
