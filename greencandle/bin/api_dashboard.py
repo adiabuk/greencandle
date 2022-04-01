@@ -124,7 +124,8 @@ def trade():
             output = (yaml.safe_load(stream))
         except yaml.YAMLError as exc:
             print(exc)
-    links_list = output['services']['be-api-router']['links']
+    env = config.main.base_env
+    links_list = output['services']['{}-be-api-router'.format(env)]['links']
     links_dict = list_to_dict(links_list)
 
     my_dic = defaultdict(set)
@@ -132,7 +133,7 @@ def trade():
         for item in short_name:
             name = item.split(':')[0]
             container = links_dict[name]
-            if container.startswith('be-') and 'alert' not in container:
+            if container.startswith('{}-be-'.format(env)) and 'alert' not in container:
                 actual_name = container[3:]
             else:
                 continue
