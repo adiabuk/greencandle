@@ -78,7 +78,7 @@ def list_to_dict(rlist):
     Convert colon seperated string list to key/value dict
     """
     links = dict(map(lambda s: s.split(':'), rlist))
-    return {v: k for k, v in links.items() if k.startswith("be")}
+    return {v: k for k, v in links.items() if "-be-" in k}
 
 @APP.route("/action", methods=['POST', 'GET'])
 def action():
@@ -134,7 +134,7 @@ def trade():
             name = item.split(':')[0]
             container = links_dict[name]
             if container.startswith('{}-be-'.format(env)) and 'alert' not in container:
-                actual_name = container[3:]
+                actual_name = container[7:]  # strip off env and container type from container name
             else:
                 continue
             config_env = rev_names[actual_name]
