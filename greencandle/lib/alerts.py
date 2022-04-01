@@ -66,8 +66,8 @@ def send_slack_message(channel, message):
     """
     if not str2bool(config.slack.slack_active):
         return
-    host = "unk" if 'HOST' not in os.environ else os.environ['HOST']
-    title = "{}_{}".format(host, config.main.name)
+    env = config.main.base_env
+    title = "{}_{}".format(env, config.main.name)
     payload = {"username": title,
                "icon_emoji": ":robot_face:",
                "channel": config.slack[channel],
