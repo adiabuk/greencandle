@@ -7,14 +7,14 @@
   "master_key_id": "alias/greencandle",
   "data": {
     "account1_key": {
-      "value": "urY4cLXQ+NIE7zTQ3UHQ6b4Opo/tECW1ppYnkF5tpvqIchKny7A0Y8VTM/tptl97orLLaUQ+4aCwV8Cuqxg53OpeqeTY9SQPLPgpMRxKy41CoTLmVR+AOrrrp1baxgOZbeJCLXi7DjM=",
+      "value": "",
       "is_binary": false,
-      "is_secret": true
+      "is_secret": false
     },
     "account1_secret": {
-      "value": "eJ3FXkHREKd7p9l1APitouZJ4qzaMIhOvlrY5NRKJg8n2RL7C7POxy2k16n924WBVfyLFjMuB2FiBu7RQEjLWV8AgVRZjujmDEdXl/wmlfbBq5G93XlAZWoNU34rAyW5cfs8GkNgpig=",
+      "value": "",
       "is_binary": false,
-      "is_secret": true
+      "is_secret": false
     },
     "account1_type": {
       "value": "binance",
@@ -22,32 +22,32 @@
       "is_secret": false
     },
     "account2_key": {
-      "value": "eQQUuQi8hiD+Xr8IUGltSaIqQeuFEW3iwamimApgcRzWtInyZu8DaGOMcNEfaIV2p3GbiT97xT87M+0u+gUyAQ==",
+      "value": "",
       "is_binary": false,
-      "is_secret": true
+      "is_secret": false
     },
     "account2_secret": {
-      "value": "NzjBwBl/MuUsIa5nEZWPksjXd1cE7WQHnhwuw6etptkxxP4XJ3VhnbQ94GpnVFl0VR4HJS3KPpaEO+U324YSwIWgqX8jgeucWhph8fC1Y7tcu2cRF71dsklPdtiWOqh1orAPZixGLaCBwAOqDq5LkL9Fb7VfJpvg2ESQg5lh2jvzZPUQyPJom2EsnZo=",
+      "value": "",
       "is_binary": false,
-      "is_secret": true
+      "is_secret": false
     },
     "account2_type": {
-      "value": "phemex",
+      "value": "",
       "is_binary": false,
       "is_secret": false
     },
     "account3_key": {
-      "value": "bBBZtu6yMqU7+uYf5H9exghsb3siHmLYVRDdxsijMNJ4Uz9b0dRvuk7RC5+qVBFVQP2RqzlJnffEe+tK2qg5AQ==",
+      "value": "",
       "is_binary": false,
-      "is_secret": true
+      "is_secret": false
     },
     "account3_secret": {
-      "value": "M8GPwaR3ZCGyFre+0P0lntHy53u86SyTNkD4m3qIFfDIoIJ0jLRr5rQHKoTO7iQwWRxccpSbAg6i5tt0IquocP/Kh1njUUG93syuAhx/DlYiumy7f/YuR59PK5+rpIFDiqGMJ80zZwALSUFYkiTH1pDB/6KkcUV4uxFoD5haXJO71l/EK0IXVLlH9ZM=",
+      "value": "",
       "is_binary": false,
-      "is_secret": true
+      "is_secret": false
     },
     "account3_type": {
-      "value": "phemex",
+      "value": "",
       "is_binary": false,
       "is_secret": false
     },
