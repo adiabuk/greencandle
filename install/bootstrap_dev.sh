@@ -30,7 +30,7 @@ libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl yq
 
 rm -rf /opt/pyenv ||true  # for travisci
 export PYENV_ROOT="/opt/pyenv"
-curl https://pyenv.run | bash
+curl -s -S -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
 
 cat << \EOF >> ~/.bashrc
 export ConEmuDefaultCp=65001
