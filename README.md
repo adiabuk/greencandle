@@ -11,6 +11,12 @@
 
 # Releases
 
+## 2.16.1
+* Fixes to 9e keys
+* Correlate new env names acroos platorm
+* Removal of old api keys
+* Fix for SSL timeout during unit tests
+
 ## 2.16
 * Fixes to bootstrap scripts
 * Fixes to SQL templates
