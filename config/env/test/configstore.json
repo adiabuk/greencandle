@@ -80,6 +80,11 @@
       "is_binary": false,
       "is_secret": false
     },
+    "base_env": {
+      "value": "test",
+      "is_binary": false,
+      "is_secret": false
+    },
     "check_interval": {
       "value": "60",
       "is_binary": false,
