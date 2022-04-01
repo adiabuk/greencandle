@@ -178,8 +178,9 @@ class Graph():
 
         now = datetime.datetime.now()
         date = now.strftime('%Y-%m-%d_%H-%M-%S')
-        self.filename = "{0}/{1}_{2}-{3}.html".format(output_dir, self.pair, date,
-                                                      self.interval)
+        env = config.main.env
+        self.filename = "{0}/{1}_{2}_{3}-{4}.html".format(output_dir, self.pair, env,
+                                                          date, self.interval)
         py.plot(fig, filename=self.filename, auto_open=False)
 
     def insert_data(self, dframe):
