@@ -45,26 +45,26 @@ def get_binance_isolated():
     isolated = get_current_isolated()
     prices = binance.prices()
     for key, val in isolated.items():
-        quote = get_quote(key)
-        for base, amount in val.items():
+        current_quote = get_quote(key)
+        for quote, amount in val.items():
             bcoin = 0
             usd = 0
             gbp = 0
-            if base == "BTC":
+            if quote == "BTC":
                 bcoin = float(amount)
 
-            elif base == "USDT":
+            elif quote == "USDT":
                 bcoin = float(amount) / float(prices["BTCUSDT"])
-            
-            elif base == 'GBP':
+
+            elif quote == 'GBP':
                 bcoin = float(amount) / float(prices["BTCGBP"])
 
             else:  # other currencies that need converting to BTC
                 try:
                     LOGGER.debug("Converting currency %s" % key)
-                    bcoin = float(amount) * float(prices[base+"BTC"])  # value in BTC
+                    bcoin = float(amount) * float(prices[quote+"BTC"])  # value in BTC
                 except KeyError:
-                    LOGGER.critical("Error: Unable to quantify margin currency: %s" % base)
+                    LOGGER.critical("Error: Unable to quantify margin currency: %s" % quote)
                     continue
 
             usd = bcoin*float(prices['BTCUSDT'])
@@ -76,7 +76,7 @@ def get_binance_isolated():
             result["isolated"][key]["BTC"] = bcoin
             result["isolated"][key]["USD"] = usd
             result["isolated"][key]["GBP"] = gbp
-            result["isolated"][key]["count"] = val[quote]
+            result["isolated"][key]["count"] = val[current_quote]
 
     result["isolated"]["TOTALS"]["BTC"] = bitcoin_total
     result["isolated"]["TOTALS"]["USD"] = usd_total
