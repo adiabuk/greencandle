@@ -66,6 +66,11 @@
       "is_binary": false,
       "is_secret": false
     },
+    "api_key": {
+      "value": "aLv1g2gD+l3IwLJN8sDyf+l6kJ+1g8cNt+mJThYglR3Osvy+EeYoGY+EIX4J8i4Q",
+      "is_binary": false,
+      "is_secret": true
+    },
     "api_token": {
       "value": "i9HPFvdgksHvYRbvgA+6kEDUpHXCSWSWNo3CNgh+Dg/y7ihdnOh1iuz/JGr2mTK/",
       "is_binary": false,
