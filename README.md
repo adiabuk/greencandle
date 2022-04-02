@@ -11,6 +11,9 @@
 
 # Releases
 
+## 2.16.2
+* Small var name fix
+
 ## 2.16.1
 * Fixes to 9e keys
 * Correlate new env names acroos platorm
