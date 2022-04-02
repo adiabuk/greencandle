@@ -217,23 +217,12 @@ class Trade():
 
         for pair, current_time, current_price, event in buy_list:
             quote = get_quote(pair)
-            try:
-                if str2bool(self.config.main.isolated):
-                    current_quote_bal = float(balance[pair][quote])
-                else:
-                    # Get current available to borrow
-                    margin_total_usd = binance.get_max_borrow()
+            if str2bool(self.config.main.isolated):
+                current_quote_bal = float(balance[pair][quote])
+            else:
+                # Get current available to borrow
+                current_quote_bal = binance.get_max_borrow()
 
-                    # Get current debts
-                    for asset, debt in  binance.get_margin_debt().items():
-                        # add debts to get total allowed to borrow
-                        margin_total_usd += float(debt) if 'USD' in asset else \
-                                float(debt) * float(binance.prices()[debt + 'USDT'])
-                    current_quote_bal = margin_total_usd if quote == 'USDT' else \
-                            margin_total_usd / float(binance.prices()[quote + "USDT"])
-
-            except KeyError:
-                current_quote_bal = 0
             quote_amount = self.amount_to_use(pair, current_quote_bal)
 
             amount = quote_amount / float(current_price)
