@@ -110,6 +110,7 @@ class Trade():
         self.logger.info("%s buy slots available" % avail_slots)
         if avail_slots <= 0:
             self.logger.warning("Too many trades, skipping")
+            send_slack_message("alerts", "Too many trades, skipping")
             return []
         elif drain and not self.test_data:
             self.logger.warning("%s is in drain, skipping..." % self.interval)
