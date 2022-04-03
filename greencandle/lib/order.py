@@ -220,12 +220,16 @@ class Trade():
             if str2bool(self.config.main.isolated):
                 current_quote_bal = float(balance[pair][quote])
             else:
-                # Get current available to borrow
+                # Get current available to borrow in USD
                 current_quote_bal = binance.get_max_borrow()
 
             quote_amount = self.amount_to_use(pair, current_quote_bal)
+            if 'USD' in get_quote(pair):
+                amount = quote_amount / float(current_price)
+            else:
+                # convert USD into current base
+                amount = amount / binance.prices()[get_base(pair)+'USDT']
 
-            amount = quote_amount / float(current_price)
             if float(current_price) * float(amount) >= float(current_quote_bal):
                 self.logger.critical("Unable to purchase %s of %s, insufficient funds:%s/%s" %
                                      (amount, pair, quote_amount, current_quote_bal))
