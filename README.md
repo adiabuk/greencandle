@@ -11,6 +11,13 @@
 
 # Releases
 
+## 2.17
+* Fix loan calculations for cross margin
+* Fix amount for NOT USDT margin pairs
+* Add env name to logging
+* Ensure all slack alerts contain env name
+* Log to slack when too many open trades for a given container
+
 ## 2.16.2
 * Small var name fix
 
