@@ -6,7 +6,7 @@
   "immediate_stop": "true",
   "indicators": "get_hma;HMA;14 get_rsi;RSI;14 get_bb;upper;52,4.3 get_bb;lower;52,4.3 get_bb;middle;52,4.3",
   "max_trades": "50",
-  "name": "be-bb-4h",
+  "name": "stag-be-bb-4h",
   "no_of_klines": "52",
   "open_rule1": "low \u003c results.current.lower_52 and results.current.RSI_14 \u003c 20",
   "pairs": "BTCUSDT DOGEUSDT DOTUSDT LINKUSDT SHIBUSDT TRXUSDT UNIUSDT VETUSDT LTCUSDT ETCUSDT XRPUSDT",

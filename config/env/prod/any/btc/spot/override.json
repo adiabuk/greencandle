@@ -1,5 +1,5 @@
 {
-  "name": "api-any-btc-spot",
+  "name": "prod-api-any-btc-spot",
   "divisor": "1.6",
   "max_trades": "4"
 }

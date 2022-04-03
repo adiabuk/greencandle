@@ -1,5 +1,5 @@
 {
-  "name": "env-api-1m-btc-cross",
+  "name": "per-env-api-1m-btc-cross",
   "pairs": "WAVESBTC MATICBTC EOSBTC DOGEBTC DASHBTC ETCBTC FTMBTC",
   "trade_isolated": "false",
   "trade_type": "margin",

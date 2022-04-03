@@ -1,5 +1,5 @@
 {
-  "name": "env-api-usdt-spot",
+  "name": "per-env-api-usdt-spot",
   "pairs": "ENJUSDT HBARUSDT",
   "divisor": "1.6",
   "max_trades": "2"

@@ -1,5 +1,5 @@
 {
-  "name": "env-api-1m-usdt-cross",
+  "name": "per-env-api-1m-usdt-cross",
   "pairs": "MATICUSDT WAVESUSDT OMGUSDT EOSUSDT FTMUSDT DASHUSDT",
   "trade_isolated": "false",
   "trade_type": "margin",

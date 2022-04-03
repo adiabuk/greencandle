@@ -1,5 +1,5 @@
 {
-  "name": "env-api-1m-btc-isolated",
+  "name": "per-env-api-1m-btc-isolated",
   "pairs": "WAVESBTC MATICBTC EOSBTC DOGEBTC DASHBTC ETCBTC FTMBTC",
   "trade_isolated": "true",
   "trade_type": "margin",

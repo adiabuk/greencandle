@@ -2,7 +2,7 @@
   "trade_multiplier": "3",
   "trade_isolated": "true",
   "trade_type": "margin",
-  "name": "5ma-1tsl-usdt-isolated",
+  "name": "per-5ma-1tsl-usdt-isolated",
   "max_trades": "10",
   "pairs": "HBARUSDT"
 }

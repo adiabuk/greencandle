@@ -1,5 +1,5 @@
 {
-  "name": "api-any-usdt-isolated",
+  "name": "per-api-any-usdt-isolated",
   "trade_isolated": "true",
   "trade_type": "margin",
   "max_trades": "10",

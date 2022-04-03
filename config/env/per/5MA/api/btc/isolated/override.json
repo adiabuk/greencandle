@@ -1,5 +1,5 @@
 {
-  "name": "5ma-api-btc-isolated",
+  "name": "per-5ma-api-btc-isolated",
   "pairs": "ETHBTC BNBBTC",
   "trade_isolated": "true",
   "trade_type": "margin",

@@ -1,5 +1,5 @@
 {
-  "name": "api-any-usdt-cross",
+  "name": "prod-api-any-usdt-cross",
   "trade_isolated": "false",
   "trade_type": "margin",
   "max_trades": "10",

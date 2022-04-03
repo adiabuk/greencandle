@@ -1,5 +1,5 @@
 {
-  "name": "env-api-1m-btc-spot",
+  "name": "per-env-api-1m-btc-spot",
   "pairs": "WAVESBTC MATICBTC EOSBTC DOGEBTC ZENBTC DASHBTC RLCBTC ETCBTC FTMBTC",
   "divisor": "1.6",
   "max_trades": "4"

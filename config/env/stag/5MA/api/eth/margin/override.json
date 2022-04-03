@@ -1,5 +1,5 @@
 {
-  "name": "5ma-api-eth-isolated",
+  "name": "stag-5ma-api-eth-isolated",
   "pairs": "BNBETH",
   "trade_isolated": "true",
   "trade_type": "margin",
