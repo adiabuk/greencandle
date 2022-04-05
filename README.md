@@ -11,6 +11,15 @@
 
 # Releases
 
+## 2.17.1
+* APi container name fixes
+* fix assocs for staging
+* Assocs unit testing
+* Fix title in WebUI and Slack alerts
+* C9e base dir fix
+* Reduce frequency of test_close cron run
+* Seperate out spot/cross/isolated in API dashboard
+
 ## 2.17
 * Fix loan calculations for cross margin
 * Fix amount for NOT USDT margin pairs
