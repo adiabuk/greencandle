@@ -134,7 +134,7 @@ def trade():
             name = item.split(':')[0]
             container = links_dict[name]
             if container.startswith('{}-be-'.format(env)) and 'alert' not in container:
-                actual_name = container[7:]  # strip off env and container type from container name
+                actual_name = container.replace('-be', '')  # strip off container type
             else:
                 continue
             config_env = rev_names[actual_name]
