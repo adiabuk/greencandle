@@ -1,9 +1,9 @@
 version: "3.1"
 services:
 
-  fe-cadvisor:
-    container_name: fe-cadvisor
-    hostname: fe-cadvisor
+  gen-fe-cadvisor:
+    container_name: gen-fe-cadvisor
+    hostname: gen-fe-cadvisor
     image: gcr.io/google_containers/cadvisor:v0.35.0
     restart: always
     volumes:
@@ -18,9 +18,9 @@ services:
       timeout: 2s
       retries: 5
 
-  base-redis:
-    container_name: base-redis
-    hostname: base-redis
+  stag-base-redis:
+    container_name: stag-base-redis
+    hostname: stag-base-redis
     image: amrox/gc-redis:${TAG}
     pull_policy: always
     restart: always
@@ -38,9 +38,9 @@ services:
       - /root/.aws:/root/.aws
       - /root/.bash_history:/root/.bash_history
 
-  base-mysql:
-    container_name: base-mysql
-    hostname: base-mysql
+  stag-base-mysql:
+    container_name: stag-base-mysql
+    hostname: stag-base-mysql
     image: amrox/gc-mysql:${TAG}
     pull_policy: always
     entrypoint: /docker-entrypoint.sh mysqld
@@ -60,9 +60,9 @@ services:
       - /root/.aws:/root/.aws
       - /root/.bash_history:/root/.bash_history
 
-  fe-api-dashboard:
-    container_name: fe-api-dashboard
-    hostname: fe-api-dashboard
+  stag-fe-api-dashboard:
+    container_name: stag-fe-api-dashboard
+    hostname: stag-fe-api-dashboard
     environment:
       - CONFIG_ENV=stag/fe/api
       - HOST=$HOSTNAME
@@ -73,10 +73,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint-api.sh api_dashboard
     links:
-      - base-mysql:mysql
-      - base-redis:redis
-      - be-api-router:router
-
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
+      - stag-be-api-router:router
     ports:
       - 5000
     depends_on:
@@ -94,9 +93,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  fe-cron:
-    container_name: fe-cron
-    hostname: fe-cron
+  stag-fe-cron:
+    container_name: stag-fe-cron
+    hostname: stag-fe-cron
     environment:
       - CONFIG_ENV=stag/fe/cron
       - HOST=$HOSTNAME
@@ -107,11 +106,11 @@ services:
     logging:
       driver: journald
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - stag-base-mysql
+      - stag-base-redis
     healthcheck:
       test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
       interval: 1m
@@ -125,9 +124,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  fe-webserver:
-    container_name: fe-webserver
-    hostname: fe-webserver
+  stag-fe-webserver:
+    container_name: stag-fe-webserver
+    hostname: stag-fe-webserver
     image: amrox/webserver:${TAG}
     pull_policy: always
     restart: always
@@ -142,23 +141,23 @@ services:
     ports:
       - 8888:8888
     links:
-      - fe-cadvisor:cadvisor
-      - fe-api-dashboard:api_dash
-      - base-mysql:mysql
-      - base-redis:redis
+      - stag-fe-cadvisor:cadvisor
+      - stag-fe-api-dashboard:api_dash
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
     depends_on:
-      - fe-cadvisor
-      - base-mysql
-      - base-redis
+      - stag-fe-cadvisor
+      - istagbase-mysql
+      - stag-base-redis
     entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws
       - /root/.bash_history:/root/.bash_history
 
-  fe-api-web:
-    container_name: fe-api-web
-    hostname: fe-api-web
+  stag-fe-api-web:
+    container_name: stag-fe-api-web
+    hostname: stag-fe-api-web
     image: amrox/webserver:${TAG}
     pull_policy: always
     restart: always
@@ -173,21 +172,21 @@ services:
     ports:
       - 1111:1111
     links:
-      - be-api-router:router
-      - base-mysql:mysql
-      - base-redis:redis
+      - stag-be-api-router:router
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - stag-base-mysql
+      - stag-base-redis
     entrypoint: /docker-entrypoint-api2.sh nginx -g 'daemon off;'
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws
       - /root/.bash_history:/root/.bash_history
 
-  be-api-router:
-    container_name: be-api-router
-    hostname: be-api-router
+  stag-be-api-router:
+    container_name: stag-be-api-router
+    hostname: stag-be-api-router
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -202,15 +201,15 @@ services:
     ports:
       - 1080
     links:
-      - be-alert:alert
-      - base-mysql:mysql
-      - base-redis:redis
-      - be-any:any
+      - stag-be-alert:alert
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
+      - stag-be-any:any
     depends_on:
-      - be-alert
-      - base-mysql
-      - base-redis
-      - be-any
+      - stag-be-alert
+      - stag-base-mysql
+      - stag-base-redis
+      - stag-be-any
     entrypoint: /docker-entrypoint.sh api_router --test
     volumes:
       - /data:/data
@@ -218,9 +217,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-5ma-api-btc:
-    container_name: be-5ma-api-btc
-    hostname: be-5ma-api-btc
+  stag-be-5ma-api-btc:
+    container_name: stag-be-5ma-api-btc
+    hostname: stag-be-5ma-api-btc
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -233,11 +232,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - stag-base-mysql
+      - stag-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -250,9 +249,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-5ma-api-usdt:
-    container_name: be-5ma-api-usdt
-    hostname: be-5ma-api-usdt
+  stag-be-5ma-api-usdt:
+    container_name: stag-be-5ma-api-usdt
+    hostname: stag-be-5ma-api-usdt
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -265,11 +264,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - stag-base-mysql
+      - stag-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -282,9 +281,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-5ma-api-eth:
-    container_name: be-5ma-api-eth
-    hostname: be-5ma-api-eth
+  stag-be-5ma-api-eth:
+    container_name: stag-be-5ma-api-eth
+    hostname: stag-be-5ma-api-eth
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -297,11 +296,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - stag-base-mysql
+      - stag-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -329,11 +328,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - stag-base-mysql
+      - stag-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 4h
@@ -346,9 +345,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-any:
-    container_name: be-any
-    hostname: be-any
+  stag-be-any:
+    container_name: stag-be-any
+    hostname: stag-be-any
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -361,11 +360,11 @@ services:
     ports:
       - 20000
     links:
-      - base-mysql:mysql
-      - base-redis:redis
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
     depends_on:
-      - base-mysql
-      - base-redis
+      - stag-base-mysql
+      - stag-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -378,9 +377,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  be-alert:
-    container_name: be-alert
-    hostname: be-alert
+  stag-be-alert:
+    container_name: stag-be-alert
+    hostname: stag-be-alert
     image: amrox/alert:latest
     pull_policy: always
     restart: always
