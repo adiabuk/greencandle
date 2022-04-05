@@ -30,6 +30,7 @@ def main():
     open_trades = dbase.fetch_sql_data(query, header=False)
     bal = Balance(test=False)
     balances = bal.get_balance()
+    pairs = []
     for trade in open_trades:
         pair, base_in, name = trade
         result = binance.spot_order(symbol=pair, side=binance.SELL,
@@ -49,7 +50,11 @@ def main():
             result2 = True
 
         if result or result2:
-            send_slack_message("alerts", "Issue with open trade: {} {}".format(pair, name))
+            pairs.append("{} ({})".format(pair, name))
+
+    str_pairs = ', '.join(map(str, pairs))
+    if str_pairs:
+        send_slack_message("alerts", "Issues with open trades: {}".format(str_pairs))
 
 if __name__ == '__main__':
     main()
