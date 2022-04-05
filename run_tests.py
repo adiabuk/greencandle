@@ -13,7 +13,7 @@ from greencandle.tests.print_format import SuppressStdoutStderr
 from greencandle.tests.finish import finish_test, create_link
 from greencandle.tests.__init__ import __all__
 from greencandle.tests import test_redis, test_run, test_mysql, test_lint, test_scripts, \
-     test_docker, test_pairs, test_draw, test_stop, test_envs
+     test_docker, test_pairs, test_draw, test_stop, test_envs, test_assocs
 
 # Tuple of tuples
 # (name, module)
