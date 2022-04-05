@@ -14,7 +14,7 @@ if [[ ! -e /installed ]]; then
     cp /opt/output/default.conf /etc/nginx/conf.d/default.conf || true
     cp /opt/output/nginx.conf /etc/nginx/ || true
     cp /opt/output/50x.html /usr/share/nginx/html || true
-    echo $(configstore package get $CONFIG_ENV base_env) > /var/www/html/env.txt || true
+    echo $(configstore package get $CONFIG_ENV base_env --basedir /opt/config) > /var/www/html/env.txt || true
     cp /opt/output/{*.html,*.css,*.js,*.jpg} /var/www/html ||true
     cp /opt/config/raw/main.css /opt/config/raw/favicon.ico /var/www/html || true
     > /etc/nginx/sites-available/default || true
