@@ -27,7 +27,7 @@ class TestAssocs(unittest.TestCase):
                     router_config = json.load(json_file)
 
             with open("/srv/greencandle/install/docker-compose_{}.yml"
-                      .format(host), "r") as stream:
+                      .format(host.lower()), "r") as stream:
                 try:
                     output = (yaml.safe_load(stream))
                 except yaml.YAMLError as exc:
