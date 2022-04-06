@@ -23,7 +23,7 @@ def get_pairs():
     output in reversed JSON format
     """
     docker_compose = open("/srv/greencandle/install/docker-compose_{}.yml"
-                          .format(os.environ['HOST']), "r")
+                          .format(os.environ['HOST'].lower()), "r")
     pairs_dict = {}
     names = {}
     length = defaultdict(int)
@@ -119,7 +119,7 @@ def trade():
         router_config = json.load(json_file)
 
     with open("/srv/greencandle/install/docker-compose_{}.yml"
-              .format(os.environ['HOST']), "r") as stream:
+              .format(os.environ['HOST'].lower()), "r") as stream:
         try:
             output = (yaml.safe_load(stream))
         except yaml.YAMLError as exc:
