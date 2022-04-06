@@ -11,9 +11,6 @@
 
 # Releases
 
-## 2.17.2
-* Small syntax fixes
-
 ## 2.17.1
 * APi container name fixes
 * fix assocs for staging
