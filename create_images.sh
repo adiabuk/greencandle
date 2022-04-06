@@ -10,12 +10,11 @@ else
   TAG="release-${TRAVIS_BRANCH}"
 fi
 
-# TODO: delete dashboard image? (ds)
-docker build -f install/Dockerfile-gc . -t amrox/greencandle:${TAG}
-docker build -f install/Dockerfile-ms . -t amrox/gc-mysql:${TAG}
-docker build -f install/Dockerfile-rs . -t amrox/gc-redis:${TAG}
-docker build -f install/Dockerfile-wb . -t amrox/webserver:${TAG}
-docker build -f install/Dockerfile-as . -t amrox/alert:${TAG}
+ docker image inspect amrox/greencandle:${TAG} || docker build -f install/Dockerfile-gc . -t amrox/greencandle:${TAG}
+ docker image inspect amrox/gc-mysql:${TAG} || docker build -f install/Dockerfile-ms . -t amrox/gc-mysql:${TAG}
+ docker image inspect amrox/gc-redis:${TAG} || docker build -f install/Dockerfile-rs . -t amrox/gc-redis:${TAG}
+ docker image inspect amrox/webserver:${TAG} || docker build -f install/Dockerfile-wb . -t amrox/webserver:${TAG}
+ docker image inspect amrox/alert:${TAG} || docker build -f install/Dockerfile-as . -t amrox/alert:${TAG}
 
 docker push amrox/greencandle:${TAG}
 docker push amrox/gc-mysql:${TAG}
