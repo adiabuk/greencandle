@@ -4,6 +4,7 @@
 Unittest file for testing results of a run using downloaded data
 """
 
+import os
 import unittest
 import time
 from greencandle.lib.balance_common import get_quote
@@ -24,9 +25,11 @@ class TestMysql(OrderedTest):
         Define static instance variables and create redis/mysql objects as well as working test
         directory
         """
+        tag = os.environ['TAG']
         LOGGER.info("Setting up environment")
         for container in ['mysql-unit', 'redis-unit']:
-            command = "docker-compose -f install/docker-compose_unit.yml up -d " + container
+            command = ("TAG=$TAG docker-compose -f install/docker-compose_unit.yml up -d "
+                       + container)
         time.sleep(6)
         self.dbase = Mysql(test=True, interval="1h")
 
