@@ -45,16 +45,16 @@ def main():
                 bal_amount = balances['margin'][get_base(pair)]['count']
             else:
                 bal_amount = balances['binance'][get_base(pair)]['count']
-            result2 = float(base_in) < bal_amount
+            result2 = float(base_in) > bal_amount
         except KeyError:
             result2 = True
 
         if result or result2:
             pairs.append("{} ({})".format(pair, name))
 
-    str_pairs = ', '.join(map(str, pairs))
+    str_pairs = '\n'.join(map(str, pairs))
     if str_pairs:
-        send_slack_message("alerts", "Issues with open trades: {}".format(str_pairs))
+        send_slack_message("alerts", "Issues with open trades:\n {}".format(str_pairs))
 
 if __name__ == '__main__':
     main()
