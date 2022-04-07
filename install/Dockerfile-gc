@@ -6,6 +6,7 @@ LABEL date=${DATE}
 ADD . /srv/greencandle
 RUN bash /srv/greencandle/install/bootstrap_docker.sh && \
     cp /srv/greencandle/install/docker-entrypoint.sh / && \
+    cp /srv/greencandle/install/docker-entrypoint-data.sh / && \
     cp /srv/greencandle/install/docker-entrypoint-api.sh / && \
     cp /srv/greencandle/install/docker-entrypoint-test.sh / && \
     cp -rv /srv/greencandle/config /opt/config && \
