@@ -7,14 +7,14 @@
   "master_key_id": "alias/greencandle",
   "data": {
     "account1_key": {
-      "value": "",
+      "value": "qBXN/UMSUkJq0lE1QcLWpng5IlkJYzXh3X6LHnNtlJdeYMo90Nc7Z1rzcePbO3/uKzSmLHtfwG1bdFpSWLblcUfyQf6GOBqvyF1Y3Rh+IGPEgffyYYSwq1T8l2p6MW+jL9+z62X87HI=",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "account1_secret": {
-      "value": "",
+      "value": "Ad+KERSDf577dB0cDnQwAuQwRzl9TO8tmceEMDlNW2FnqAr2p7j4TH5MvwUsZ7fEywHBQYvojS1+sLTkrOYUkmPdqdYM5FAUvEQfS4f5cidC/TwWOoJJ0vvkuG+oyF0im9Vnku3GKQY=",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "account1_type": {
       "value": "binance",
