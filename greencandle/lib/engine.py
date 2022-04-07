@@ -170,7 +170,7 @@ class Engine(dict):
         """
         LOGGER.debug("Getting data")
         for pair in self.pairs:
-            actual_klines = len(self.dataframes[pair])  # Newly listed pairs have less candles
+            actual_klines = len(self.dataframes[pair]) if not no_of_klines else no_of_klines
 
             # get indicators supertrend, and API for each trading pair
             with ThreadPoolExecutor(max_workers=100) as pool:
