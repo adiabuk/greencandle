@@ -15,19 +15,19 @@ services:
       - /var/lib/docker:/var/lib/docker
       - /dev/disk:/dev/disk
 
-  get_data_4h:
-    container_name: get_data_4h
-    hostname: get_data_4h
+  be-get_data_4h:
+    container_name: be-get_data_4h
+    hostname: be-get_data_4h
     image: amrox/greencandle
     entrypoint: /docker-entrypoint.sh get_data
     logging:
       driver: journald
     links:
-      - mysql-local:mysql
-      - redis-local:redis
+      - base-mysql-local:mysql
+      - base-redis-local:redis
     depends_on:
-      - mysql-local
-      - redis-local
+      - base-mysql-local
+      - base-redis-local
     environment:
       - CONFIG_ENV=test/data/long1
       - HOST=$HOSTNAME
@@ -37,25 +37,24 @@ services:
       timeout: 2s
       retries: 5
     volumes:
-      - ./test:/tmp
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  analyse_data_4h:
-    container_name: analyse_data_4h
-    hostname: analyse_data_4h
+  be-analyse_data_4h:
+    container_name: be-analyse_data_4h
+    hostname: be-analyse_data_4h
     image: amrox/greencandle
     entrypoint: /docker-entrypoint.sh analyse data
     logging:
       driver: journald
     links:
-      - mysql-local:mysql
-      - redis-local:redis
+      - base-mysql-local:mysql
+      - base-redis-local:redis
     depends_on:
-      - mysql-local
-      - redis-local
+      - base-mysql-local
+      - base-redis-local
     environment:
       - CONFIG_ENV=test/data/long1
       - HOST=$HOSTNAME
@@ -65,27 +64,26 @@ services:
       timeout: 2s
       retries: 5
     volumes:
-      - ./test:/tmp
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  cron:
-    container_name: cron
+  fe-cron:
+    container_name: fe-cron
     environment:
       - CONFIG_ENV=test/cron
       - HOST=$HOSTNAME
-    hostname: cron
+    hostname: fe-cron
     image: amrox/greencandle
     restart: always
     entrypoint: /docker-entrypoint.sh cron -f
     links:
-      - mysql-local:mysql
-      - redis-local:redis
+      - base-mysql-local:mysql
+      - base-redis-local:redis
     depends_on:
-      - mysql-local
-      - redis-local
+      - base-mysql-local
+      - base-redis-local
     healthcheck:
       test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
       interval: 1m
@@ -95,23 +93,23 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
 
-  api:
-    container_name: api
+  fe-api:
+    container_name: fe-api
     environment:
       - CONFIG_ENV=test
       - HOST=$HOSTNAME
-    hostname: api
+    hostname: fe-api
     image: amrox/greencandle
     restart: always
     entrypoint: /docker-entrypoint-api.sh api --test
     links:
-      - mysql-local:mysql
-      - redis-local:redis
+      - base-mysql-local:mysql
+      - base-redis-local:redis
     ports:
       - 5000:5000
     depends_on:
-      - mysql-local
-      - redis-local
+      - base-mysql-local
+      - base-redis-local
     healthcheck:
       test: find /var/run/  -mmin -2 -name api 2>&1 |grep -q api || exit 1
       interval: 1m
@@ -120,9 +118,9 @@ services:
     volumes:
       - /data:/data
 
-  webserver:
-     container_name: webserver
-     hostname: webserver
+  fe-webserver:
+     container_name: fe-webserver
+     hostname: fe-webserver
      image: amrox/webserver
      entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
      healthcheck:
@@ -136,22 +134,22 @@ services:
      ports:
        - 7777:7777
      links:
-       - mysql-local:mysql
-       - redis-local:redis
-       - dashboard:dashboard
-       - api
+       - base-mysql-local:mysql
+       - base-redis-local:redis
+       - fe-dashboard:dashboard
+       - fe-api
      restart: always
      volumes:
        - /data:/data
        - /root/.aws:/root/.aws
      depends_on:
       - cadvisor
-      - api
-      - dashboard
+      - fe-api
+      - fe-dashboard
 
-  dashboard:
-    container_name: dashboard
-    hostname: dashboard
+  fe-dashboard:
+    container_name: fe-dashboard
+    hostname: fe-dashboard
     image: amrox/dashboard
     healthcheck:
       test: curl --fail 127.1:3030/dashboard/gc || exit 1
@@ -163,8 +161,8 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh
     links:
-      - mysql-local:mysql
-      - redis-local:redis
+      - base-mysql-local:mysql
+      - base-redis-local:redis
     volumes:
       - /srv/greencandle/dashboard/dashboards:/dashboards
       - /srv/greencandle/dashboard/jobs:/jobs
@@ -172,24 +170,24 @@ services:
       - /srv/greencandle/dashboard/config:/config
       - /srv/greencandle/dashboard/assets:/assets
 
-  redis-local:
-    container_name: redis-local
-    hostname: redis-local
+  base-redis-local:
+    container_name: base-redis-local
+    hostname: base-redis-local
     image: amrox/gc-redis
     ports:
       - 6379:6379
     restart: always
     links:
-      - mysql-local:mysql
+      - base-mysql-local:mysql
     healthcheck:
       test: redis-cli ping
       interval: 1m
       timeout: 2s
       retries: 5
 
-  mysql-local:
-    container_name: mysql-local
-    hostname: mysql-local
+  base-mysql-local:
+    container_name: base-mysql-local
+    hostname: base-mysql-local
     image: amrox/gc-mysql
     ports:
       - 3306:3306
