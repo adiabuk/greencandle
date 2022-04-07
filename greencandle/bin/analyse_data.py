@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 #pylint: disable=wrong-import-position,no-member,logging-not-lazy,import-error,bare-except
 
+"""
+Analyze available data rom redis
+Look for potential buys
+"""
+
 import sys
 from apscheduler.schedulers.blocking import BlockingScheduler
 from greencandle.lib import config
@@ -16,15 +21,13 @@ SCHED = BlockingScheduler()
 
 @SCHED.scheduled_job('cron', minute=MINUTE[config.main.interval],
                      hour=HOUR[config.main.interval], second="30")
-def test_loop():
+def analyse_loop():
     """
     Gather data from redis and analyze
     """
     redis = Redis(interval=config.main.interval, test=False)
-    #engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, redis=redis)
-    #engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
-    #dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=1)
     for pair in PAIRS:
+        LOGGER.debug("Analysing pair: %s" % pair)
         try:
             result, _, _, _, _ = redis.get_action(pair=pair, interval=interval)
             current_candle = dataframes[pair].iloc[-1]
@@ -37,8 +40,7 @@ def test_loop():
                 send_slack_message("notifications", "Buy: %s %s 4h" % (pair, margin))
         except:
             LOGGER.critical("Error with pair %s" % pair)
-
-    #del engine
+    LOGGER.info("End of current loop")
     del redis
 
 def main():
@@ -50,6 +52,9 @@ def main():
     if len(sys.argv) > 1 and  sys.argv[1] == '--help':
         print(usage)
         sys.exit(0)
+    LOGGER.info("Starting Initial loop")
+    analyse_loop()
     SCHED.start()
+
 if __name__ == "__main__":
     main()

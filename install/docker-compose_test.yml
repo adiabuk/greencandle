@@ -46,7 +46,7 @@ services:
     container_name: be-analyse_data_4h
     hostname: be-analyse_data_4h
     image: amrox/greencandle
-    entrypoint: /docker-entrypoint.sh analyse data
+    entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
     links:
