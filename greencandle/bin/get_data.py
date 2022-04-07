@@ -11,7 +11,6 @@ from greencandle.lib.engine import Engine
 from greencandle.lib.run import prod_initial
 from greencandle.lib.binance_common import get_dataframes
 from greencandle.lib.logger import get_logger
-from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.common import HOUR, MINUTE
 
 LOGGER = get_logger(__name__)
@@ -31,7 +30,6 @@ def test_loop(interval=None):
     LOGGER.debug("max trades: %s" % config.main.max_trades)
 
     prices = binance.prices()
-    info = binance.exchange_info()
     prices_trunk = {}
 
     for key, val in prices.items():
@@ -77,6 +75,12 @@ def main():
     """
     Main function
     """
+
+    usage = "Usage: {}".format(sys.argv[0])
+    if len(sys.argv) > 1 and  sys.argv[1] == '--help':
+        print(usage)
+        sys.exit(0)
+
     interval = config.main.interval
     LOGGER.info("Starting initial prod run")
     redis = Redis(interval=interval, test=False)

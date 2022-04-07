@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 #pylint: disable=wrong-import-position,no-member,logging-not-lazy,import-error,bare-except
 
+import sys
 from apscheduler.schedulers.blocking import BlockingScheduler
 from greencandle.lib import config
 config.create_config()
@@ -15,10 +16,11 @@ SCHED = BlockingScheduler()
 
 @SCHED.scheduled_job('cron', minute=MINUTE[config.main.interval],
                      hour=HOUR[config.main.interval], second="30")
-
-
-def test_loop(interval):
-    redis = Redis(interval=interval, test=False)
+def test_loop():
+    """
+    Gather data from redis and analyze
+    """
+    redis = Redis(interval=config.main.interval, test=False)
     #engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, redis=redis)
     #engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
     #dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=1)
@@ -39,17 +41,15 @@ def test_loop(interval):
     #del engine
     del redis
 
-
-def prod_run():
-    """
-    Prod run
-    """
-    interval = config.main.interval
-    LOGGER.info("Starting prod run")
-    test_loop(interval)
-    LOGGER.info("Finished prod run")
-
 def main():
     """
     Main function
     """
+
+    usage = "Usage: {}".format(sys.argv[0])
+    if len(sys.argv) > 1 and  sys.argv[1] == '--help':
+        print(usage)
+        sys.exit(0)
+    SCHED.start()
+if __name__ == "__main__":
+    main()
