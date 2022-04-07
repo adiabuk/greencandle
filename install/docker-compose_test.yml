@@ -15,11 +15,11 @@ services:
       - /var/lib/docker:/var/lib/docker
       - /dev/disk:/dev/disk
 
-  be-get_data_4h_low-rsi:
-    container_name: be-get_data_4h_low-rsi
-    hostname: be-get_data_4h_low-rsi
+  be-analyse_data_4h_low-rsi:
+    container_name: be-analyse_data_4h_low-rsi
+    hostname: be-analyse_data_4h_low-rsi
     image: amrox/greencandle
-    entrypoint: /docker-entrypoint.sh get_data
+    entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
     links:
@@ -42,11 +42,11 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-get_data_4h_very-low-rsi:
-    container_name: be-get_data_4h_very-low-rsi
-    hostname: be-get_data_4h_very-low-rsi
+  be-analyse_data_4h_very-low-rsi:
+    container_name: be-analyse_data_4h_very-low-rsi
+    hostname: be-analyse_data_4h_very-low-rsi
     image: amrox/greencandle
-    entrypoint: /docker-entrypoint.sh get_data
+    entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
     links:
@@ -69,11 +69,11 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-analyse_data_4h:
-    container_name: be-analyse_data_4h
-    hostname: be-analyse_data_4h
+  be-get_data_4h:
+    container_name: be-get_data_4h
+    hostname: be-get_data_4h
     image: amrox/greencandle
-    entrypoint: /docker-entrypoint.sh analyse_data
+    entrypoint: /docker-entrypoint.sh get_data
     logging:
       driver: journald
     links:
