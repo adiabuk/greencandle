@@ -19,6 +19,21 @@ from greencandle.lib.redis_conn import Redis
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.run import serial_test
 
+def get_tag():
+    """
+    Get release tag from environment
+    """
+
+    if not 'TRAVIS_BRANCH' in os.environ:
+        tag = 'latest'
+    elif os.environ['TRAVIS_BRANCH'] == 'master':
+        tag = 'latest'
+    else:
+        tag = 'release-{}'.format(os.environ['TRAVIS_BRANCH'])
+    return tag
+
+
+
 class OrderedTest(unittest.TestCase):
     """
     Custom unittest class which allows test methods to be run sequentially
@@ -92,7 +107,8 @@ def make_docker_case(container, checks=None):
             """Start Instance"""
 
             self.logger.info("Starting instance %s", container)
-            command = "docker-compose -f install/docker-compose_unit.yml up -d " + container
+            command = "TAG={} docker-compose -f install/docker-compose_unit.yml up -d {} ".format(
+                get_tag(), container)
             return_code, out, err = self.run_subprocess(command)
             if err:
                 self.logger.error(err)

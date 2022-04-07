@@ -21,7 +21,7 @@ services:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
     hostname: cron
-    image: greencandle
+    image: amrox/greencandle:${TAG}
     restart: always
     entrypoint: /docker-entrypoint.sh cron -f
     links:
@@ -45,7 +45,7 @@ services:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
     hostname: api
-    image: greencandle
+    image: amrox/greencandle:${TAG}
     restart: always
     entrypoint: /docker-entrypoint-api.sh api --test
     links:
@@ -67,7 +67,7 @@ services:
   webserver:
      container_name: webserver
      hostname: webserver
-     image: webserver
+     image: amrox/webserver:${TAG}
      entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
      healthcheck:
        test: service nginx status || exit 1
@@ -97,7 +97,7 @@ services:
   dashboard:
     container_name: dashboard
     hostname: dashboard
-    image: dashboard
+    image: amrox/dashboard:${TAG}
     healthcheck:
       test: curl --fail 127.1:3030/dashboard/gc || exit 1
       interval: 1m
@@ -120,7 +120,7 @@ services:
   redis-unit:
     container_name: redis-unit
     hostname: redis-unit
-    image: gc-redis
+    image: amrox/gc-redis:${TAG}
     ports:
       - 6379:6379
     restart: always
@@ -135,7 +135,7 @@ services:
   mysql-unit:
     container_name: mysql-unit
     hostname: mysql-unit
-    image: gc-mysql
+    image: amrox/gc-mysql:${TAG}
     ports:
       - 3306:3306
     environment:

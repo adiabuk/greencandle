@@ -13,7 +13,7 @@ config.create_config()
 from greencandle.lib.logger import get_logger
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.common import perc_diff, add_perc
-from .unittests import OrderedTest
+from .unittests import OrderedTest, get_tag
 
 LOGGER = get_logger(__name__)
 
@@ -24,9 +24,11 @@ class TestMysql(OrderedTest):
         Define static instance variables and create redis/mysql objects as well as working test
         directory
         """
+
         LOGGER.info("Setting up environment")
         for container in ['mysql-unit', 'redis-unit']:
-            command = "docker-compose -f install/docker-compose_unit.yml up -d " + container
+            command = ("TAG={} docker-compose -f install/docker-compose_unit.yml up -d {}".format(
+                get_tag, container))
         time.sleep(6)
         self.dbase = Mysql(test=True, interval="1h")
 
