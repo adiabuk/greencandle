@@ -19,7 +19,7 @@ services:
     container_name: be-analyse_data_4h_low-rsi
     hostname: be-analyse_data_4h_low-rsi
     image: amrox/greencandle
-    entrypoint: /docker-entrypoint.sh analyse_data
+    entrypoint: /docker-entrypoint-data.sh analyse_data
     logging:
       driver: journald
     links:
@@ -28,6 +28,9 @@ services:
     depends_on:
       - base-mysql-local
       - base-redis-local
+      - be-get_data_4h
+    links:
+      - be-get_data_4h:data
     environment:
       - CONFIG_ENV=test/data/long1
       - HOST=$HOSTNAME
@@ -46,7 +49,7 @@ services:
     container_name: be-analyse_data_4h_very-low-rsi
     hostname: be-analyse_data_4h_very-low-rsi
     image: amrox/greencandle
-    entrypoint: /docker-entrypoint.sh analyse_data
+    entrypoint: /docker-entrypoint-data.sh analyse_data
     logging:
       driver: journald
     links:
@@ -55,6 +58,9 @@ services:
     depends_on:
       - base-mysql-local
       - base-redis-local
+      - be-get_data_4h
+    links:
+      - be-get_data_4h:data
     environment:
       - CONFIG_ENV=test/data/long2
       - HOST=$HOSTNAME
@@ -76,6 +82,8 @@ services:
     entrypoint: /docker-entrypoint.sh get_data
     logging:
       driver: journald
+    ports:
+      - 5000
     links:
       - base-mysql-local:mysql
       - base-redis-local:redis

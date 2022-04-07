@@ -2,6 +2,7 @@
 #pylint: disable=wrong-import-position,no-member,logging-not-lazy,import-error,bare-except
 
 import sys
+import socket
 from binance import binance
 from apscheduler.schedulers.blocking import BlockingScheduler
 from greencandle.lib import config
@@ -43,22 +44,6 @@ def test_loop(interval=None):
     engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, redis=redis)
     engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
     dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=1)
-    #for pair in PAIRS:
-    #    try:
-    #        result, _, _, _, _ = redis.get_action(pair=pair, interval=interval)
-    #        current_candle = dataframes[pair].iloc[-1]
-    #        redis.update_drawdown(pair, current_candle)
-    #        redis.update_drawup(pair, current_candle)
-
-    #        if result == "OPEN":
-    #            LOGGER.debug("Items to buy")
-    #            margin = "margin" if info[pair]['isMarginTradingAllowed'] else "spot"
-    #            send_slack_message("notifications", "Buy: %s %s 4h" % (pair, margin))
-    #    except:
-    #        LOGGER.critical("Error with pair %s" % pair)
-
-    #del engine
-    #del redis
 
 @SCHED.scheduled_job('cron', minute=MINUTE[config.main.interval],
                      hour=HOUR[config.main.interval], second="30")
@@ -90,12 +75,16 @@ def main():
     LOGGER.info("Finished initial prod run")
     prod_run()
 
+    # open port to tell analyse containers that we are ready
+    sock = socket.socket()
+    sock.bind(("0.0.0.0", 12345))
+    sock.listen(5)
+
     try:
         SCHED.start()
     except KeyboardInterrupt:
         LOGGER.warning("\nExiting on user command...")
         sys.exit(1)
-
 
 if __name__ == '__main__':
     main()
