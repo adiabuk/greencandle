@@ -5,6 +5,26 @@ Common functions that don't belong anywhere else
 from decimal import Decimal
 import numpy
 
+MINUTE = {"3m": "0,3,6,9,12,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57",
+          "5m": "0,5,10,15,20,25,30,35,40,45,50,55",
+          "15m": "0,15,30,45",
+          "30m": "0,30",
+          "1h": "0",
+          "2h": "0",
+          "3h": "0",
+          "4h": "0",
+          }
+
+HOUR = {"3m": "*",
+        "5m": "*",
+        "15m": "*",
+        "30m": "*",
+        "1h": "*",
+        "2h": "0,2,4,6,8,10,12,14,16,18,20,22",
+        "3h": "0,3,6,9,12,15,18,21",
+        "4h": "0,4,8,12,16,20"
+        }
+
 class AttributeDict(dict):
     """Access dictionary keys like attributes"""
     def __getattr__(self, attr):
