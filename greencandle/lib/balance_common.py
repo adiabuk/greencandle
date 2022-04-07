@@ -23,8 +23,8 @@ def get_quote(pair):
 
 def get_base(pair):
     """Return base Currency"""
-    base = get_quote(pair)
-    return pair.rstrip(base)
+    quote = get_quote(pair)
+    return pair.replace(quote,"")
 
 def flatten(flat):
     """
