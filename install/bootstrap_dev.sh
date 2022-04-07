@@ -102,13 +102,13 @@ else
   TAG="release-${TRAVIS_BRANCH}"
 fi
 
-docker build --force-rm --no-cache -f $DIR/Dockerfile-gc . --tag=greencandle:${TAG}
-docker build --force-rm --no-cache -f $DIR/Dockerfile-ms . --tag=gc-mysql:${TAG}
-docker build --force-rm --no-cache -f $DIR/Dockerfile-rs . --tag=gc-redis:${TAG}
-docker build --force-rm --no-cache -f $DIR/Dockerfile-ds . --tag=dashboard:${TAG}
-docker build --force-rm --no-cache -f $DIR/Dockerfile-wb . --tag=webserver:${TAG}
+docker build --force-rm --no-cache -f $DIR/Dockerfile-gc . --tag=amrox/greencandle:${TAG}
+docker build --force-rm --no-cache -f $DIR/Dockerfile-ms . --tag=amrox/gc-mysql:${TAG}
+docker build --force-rm --no-cache -f $DIR/Dockerfile-rs . --tag=amrox/gc-redis:${TAG}
+docker build --force-rm --no-cache -f $DIR/Dockerfile-ds . --tag=amrox/dashboard:${TAG}
+docker build --force-rm --no-cache -f $DIR/Dockerfile-wb . --tag=amrox/webserver:${TAG}
 
-TAG=$TAG docker-compose -f ./docker-compose_unit.yml up -d mysql-unit redis-unit
+TAG=$TAG docker-compose -f $DIR/docker-compose_unit.yml up -d mysql-unit redis-unit
 
 container=$(docker ps|grep mysql|awk {'print $1'})
 
