@@ -135,7 +135,7 @@ services:
   mysql-unit:
     container_name: mysql-unit
     hostname: mysql-unit
-    image: amrox/gc-mysql:{TAG}
+    image: amrox/gc-mysql:${TAG}
     ports:
       - 3306:3306
     environment:
