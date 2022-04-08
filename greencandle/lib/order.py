@@ -228,7 +228,7 @@ class Trade():
                 amount = quote_amount / float(current_price)
             else:
                 # convert USD into current base
-                amount = quote_amount / binance.prices()[get_base(pair)+'USDT']
+                amount = float(quote_amount) / float(binance.prices()[get_base(pair)+'USDT'])
 
             if float(current_price) * float(amount) >= float(current_quote_bal):
                 self.logger.critical("Unable to purchase %s of %s, insufficient funds:%s/%s" %
