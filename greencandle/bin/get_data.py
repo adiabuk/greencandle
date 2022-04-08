@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 #pylint: disable=wrong-import-position,no-member,logging-not-lazy,import-error,bare-except
-
+"""
+Collect OHLC and strategy data for later analysis
+"""
 import sys
 import socket
 from binance import binance
