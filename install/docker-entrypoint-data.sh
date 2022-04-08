@@ -11,6 +11,7 @@ if [[ ! -e /installed ]]; then
   configstore package process_templates --ignore-role --basedir /opt/config $CONFIG_ENV /opt/output
   cp /opt/output/greencandle.ini /etc/greencandle.ini || true
   touch /installed
+fi
 
 mysql=$(awk -F "=" '/db_host/ {print $2}' /etc/greencandle.ini)
 redis=$(awk -F "=" '/redis_host/ {print $2}' /etc/greencandle.ini)
@@ -27,7 +28,7 @@ done
 
 while ! nc -z data 12345; do
   echo Waiting for data;
-  sleep 1
+  sleep 1;
 done
 
 exec "$@"
