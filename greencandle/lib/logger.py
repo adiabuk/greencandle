@@ -1,4 +1,4 @@
-#pylint: disable=no-member,arguments-differ,too-few-public-methods
+#pylint: disable=no-member,arguments-differ,too-few-public-methods,wrong-import-position
 
 """
 Generic logging class for greencandle modules
@@ -8,6 +8,7 @@ import logging
 import traceback
 from systemd.journal import JournaldLogHandler
 from . import config
+config.create_config()
 from .alerts import send_push_notif, send_slack_message
 
 class OneLineFormatter(logging.Formatter):
