@@ -11,6 +11,12 @@
 
 # Releases
 
+## 2.18
+* Working prod api keys
+* Test env with buy alerts
+* Save time during testing by not building images twice
+* Code cleanup/consolidation
+
 ## 2.17.2
 * Small syntax fixes
 
