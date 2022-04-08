@@ -37,9 +37,7 @@ class Trade():
         self.max_trades = int(self.config.main.max_trades)
         self.divisor = float(self.config.main.divisor) if self.config.main.divisor else None
         self.prod = str2bool(self.config.main.production)
-        account = self.config.accounts.binance[0]
-        binance_auth(account)
-
+        self.client = binance_auth()
         self.interval = interval
 
     def __send_redis_trade(self, **kwargs):
@@ -221,7 +219,7 @@ class Trade():
                 current_quote_bal = float(balance[pair][quote])
             else:
                 # Get current available to borrow in USD
-                current_quote_bal = binance.get_max_borrow()
+                current_quote_bal = self.client.get_max_borrow()
 
             quote_amount = self.amount_to_use(pair, current_quote_bal)
             if 'USD' in get_quote(pair):
@@ -247,9 +245,10 @@ class Trade():
                                  % (amount_to_borrow, quote, quote_amount))
 
                 if self.prod:
-                    borrow_res = binance.margin_borrow(symbol=pair, quantity=amount_to_borrow,
-                                                       isolated=str2bool(self.config.main.isolated),
-                                                       asset=quote)
+                    borrow_res = self.client.margin_borrow(
+                        symbol=pair, quantity=amount_to_borrow,
+                        isolated=str2bool(self.config.main.isolated),
+                        asset=quote)
                     if "msg" in borrow_res:
                         self.logger.error("Borrow error-open %s: %s while trying to borrow %s %s"
                                           % (pair, borrow_res, amount_to_borrow, quote))
@@ -257,11 +256,11 @@ class Trade():
 
                     self.logger.info(borrow_res)
                     amt_str = get_step_precision(pair, amount_to_use/float(current_price))
-                    trade_result = binance.margin_order(symbol=pair, side=binance.BUY,
-                                                        quantity=amt_str,
-                                                        order_type=binance.MARKET,
-                                                        isolated=str2bool(
-                                                            self.config.main.isolated))
+                    trade_result = self.client.margin_order(symbol=pair, side=binance.BUY,
+                                                            quantity=amt_str,
+                                                            order_type=binance.MARKET,
+                                                            isolated=str2bool(
+                                                                self.config.main.isolated))
                     if "msg" in trade_result:
                         self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
                         self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str,
@@ -361,10 +360,10 @@ class Trade():
                 if self.prod and not self.test_data:
                     amt_str = get_step_precision(pair, amount)
 
-                    trade_result = binance.spot_order(symbol=pair, side=binance.BUY,
-                                                      quantity=amt_str,
-                                                      order_type=binance.MARKET,
-                                                      test=self.test_trade)
+                    trade_result = self.client.spot_order(symbol=pair, side=binance.BUY,
+                                                          quantity=amt_str,
+                                                          order_type=binance.MARKET,
+                                                          test=self.test_trade)
                     if "msg" in trade_result:
                         self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
                         self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str,
@@ -452,8 +451,9 @@ class Trade():
             if self.prod and not self.test_data:
                 amt_str = get_step_precision(pair, quantity)
 
-                trade_result = binance.spot_order(symbol=pair, side=binance.SELL, quantity=amt_str,
-                                                  order_type=binance.MARKET, test=self.test_trade)
+                trade_result = self.client.spot_order(
+                    symbol=pair, side=binance.SELL, quantity=amt_str,
+                    order_type=binance.MARKET, test=self.test_trade)
 
                 if "msg" in trade_result:
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
@@ -552,8 +552,9 @@ class Trade():
 
                 amt_str = get_step_precision(pair, quantity)
 
-                trade_result = binance.spot_order(symbol=pair, side=binance.SELL, quantity=amt_str,
-                                                  order_type=binance.MARKET, test=self.test_trade)
+                trade_result = self.client.spot_order(
+                    symbol=pair, side=binance.SELL, quantity=amt_str,
+                    order_type=binance.MARKET, test=self.test_trade)
 
                 if "msg" in trade_result:
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
@@ -610,19 +611,20 @@ class Trade():
             if self.prod:
                 amt_str = get_step_precision(pair, quantity)
 
-                trade_result = binance.margin_order(symbol=pair, side=binance.SELL,
-                                                    quantity=amt_str,
-                                                    order_type=binance.MARKET,
-                                                    isolated=str2bool(
-                                                        self.config.main.isolated))
+                trade_result = self.client.margin_order(symbol=pair, side=binance.SELL,
+                                                        quantity=amt_str,
+                                                        order_type=binance.MARKET,
+                                                        isolated=str2bool(
+                                                            self.config.main.isolated))
 
                 if "msg" in trade_result:
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
                     continue
 
-                repay_result = binance.margin_repay(symbol=pair, quantity=borrowed,
-                                                    isolated=str2bool(self.config.main.isolated),
-                                                    asset=quote)
+                repay_result = self.client.margin_repay(
+                    symbol=pair, quantity=borrowed,
+                    isolated=str2bool(self.config.main.isolated),
+                    asset=quote)
                 if "msg" in repay_result:
                     self.logger.error("Repay error-close %s: %s" % (pair, repay_result))
                     continue

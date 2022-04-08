@@ -4,24 +4,27 @@ Helper functions for authernticating with APIs
 """
 
 import os
+from binance.binance import Binance
 from coinbase.wallet.client import Client
 import ccxt
-from binance import binance
+from greencandle.lib import config
 
 HOME_DIR = os.path.expanduser("~")
 
-def binance_auth(account):
+def binance_auth(test=False):
     """
-    Authenticatate with binance API using credentials in $HOME/.binance
+    Authenticatate with binance API using credentials in config
     """
-
-    api_key = account['key']
-    api_secret = account['secret']
-    binance.set(api_key, api_secret)
+    config.create_config()
+    account = config.accounts.binance[0]
+    client = Binance(api_key=account['key'],
+                     secret=account['secret'],
+                     test=test)
+    return client
 
 def coinbase_auth(account):
     """
-    Authenticatate with coinbase API using credentials in $HOME/.coinbase
+    Authenticatate with coinbase API using credentials in config
     Returns: Coinbase authenticated client object
     """
 

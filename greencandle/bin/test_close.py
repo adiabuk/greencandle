@@ -6,10 +6,7 @@ Check current open trades for ability to close
 
 import sys
 from binance import binance
-from greencandle.lib import config
-config.create_config()
 from greencandle.lib.mysql import Mysql
-from greencandle.lib.auth import binance_auth
 from greencandle.lib.balance_common import get_step_precision
 from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.balance_common import get_base
@@ -22,8 +19,6 @@ def main():
         print("Check current open trades for ability to close")
         sys.exit(0)
 
-    account = config.accounts.binance[0]
-    binance_auth(account)
     dbase = Mysql()
     query = ("select pair, base_in, name from trades where close_price is NULL")
 

@@ -22,9 +22,9 @@ USD2GBP = CURRENCY.convert(1, 'USD', 'GBP')
 
 def get_current_isolated():
     """Get balance for isolated accounts"""
-    for account in config.accounts.binance:
-        binance_auth(account)
-    all_balances = binance.isolated_balances()
+
+    client = binance_auth()
+    all_balances = client.isolated_balances()
     return all_balances
 
 def get_binance_isolated():
@@ -93,61 +93,60 @@ def get_binance_margin():
     result = mydict()
     result["margin"]["TOTALS"]["BTC"] = 0
     result["margin"]["TOTALS"]["USD"] = 0
-    for account in config.accounts.binance:
 
-        binance_auth(account)
-        all_balances = binance.margin_balances()
-        prices = binance.prices()
-        bitcoin_totals = 0
-        gbp_total = 0
-        usd_total = 0
+    client = binance_auth()
+    all_balances = client.margin_balances()
+    prices = binance.prices()
+    bitcoin_totals = 0
+    gbp_total = 0
+    usd_total = 0
 
-        for key in all_balances:
-            LOGGER.debug('%s %s ' % (str(key), str(all_balances[key]["net"])))
-            current_value = float(all_balances[key]["net"])
+    for key in all_balances:
+        LOGGER.debug('%s %s ' % (str(key), str(all_balances[key]["net"])))
+        current_value = float(all_balances[key]["net"])
 
-            if float(current_value) != 0:  # available currency
-                result["margin"][key]["count"] = current_value
+        if float(current_value) != 0:  # available currency
+            result["margin"][key]["count"] = current_value
 
-                if key == "BTC":
-                    bcoin = float(current_value)
+            if key == "BTC":
+                bcoin = float(current_value)
+                bitcoin_totals += bcoin
+
+            elif key == "USDT":
+                bcoin = float(current_value) / float(prices["BTCUSDT"])
+                bitcoin_totals += bcoin
+
+            elif key == "GBP":
+                bcoin = float(current_value) / float(prices["BTCGBP"])
+                bcoin_totals += bcoin
+
+            else:  # other currencies that need converting to BTC
+                try:
+                    LOGGER.debug("Converting currency %s" % key)
+                    bcoin = float(current_value) * float(prices[key+"BTC"])  # value in BTC
                     bitcoin_totals += bcoin
+                except KeyError:
+                    LOGGER.critical("Error: Unable to quantify margin currency: %s" % key)
+                    continue
 
-                elif key == "USDT":
-                    bcoin = float(current_value) / float(prices["BTCUSDT"])
-                    bitcoin_totals += bcoin
+            add_value(key, bcoin)
 
-                elif key == "GBP":
-                    bcoin = float(current_value) / float(prices["BTCGBP"])
-                    bcoin_totals += bcoin
+            usd = bcoin *float(prices["BTCUSDT"])
+            gbp = USD2GBP * usd
+            usd_total += usd
+            gbp_total += gbp
+            result["margin"][key]["BTC"] = bcoin
+            result["margin"][key]["USD"] = usd
+            result["margin"][key]["GBP"] = gbp
 
-                else:  # other currencies that need converting to BTC
-                    try:
-                        LOGGER.debug("Converting currency %s" % key)
-                        bcoin = float(current_value) * float(prices[key+"BTC"])  # value in BTC
-                        bitcoin_totals += bcoin
-                    except KeyError:
-                        LOGGER.critical("Error: Unable to quantify margin currency: %s" % key)
-                        continue
-
-                add_value(key, bcoin)
-
-                usd = bcoin *float(prices["BTCUSDT"])
-                gbp = USD2GBP * usd
-                usd_total += usd
-                gbp_total += gbp
-                result["margin"][key]["BTC"] = bcoin
-                result["margin"][key]["USD"] = usd
-                result["margin"][key]["GBP"] = gbp
-
-        usd_total = bitcoin_totals * float(prices["BTCUSDT"])
-        result["margin"]["TOTALS"]["BTC"] += bitcoin_totals
-        result["margin"]["TOTALS"]["USD"] += usd_total
-        result["margin"]["TOTALS"]["count"] = "N/A"
-        gbp_total = USD2GBP * usd_total
-        result["margin"]["TOTALS"]["GBP"] = gbp_total
-        add_value("USD", usd_total)
-        add_value("GBP", gbp_total)
+    usd_total = bitcoin_totals * float(prices["BTCUSDT"])
+    result["margin"]["TOTALS"]["BTC"] += bitcoin_totals
+    result["margin"]["TOTALS"]["USD"] += usd_total
+    result["margin"]["TOTALS"]["count"] = "N/A"
+    gbp_total = USD2GBP * usd_total
+    result["margin"]["TOTALS"]["GBP"] = gbp_total
+    add_value("USD", usd_total)
+    add_value("GBP", gbp_total)
 
     return default_to_regular(result)
 
@@ -159,52 +158,50 @@ def get_binance_values():
     result["binance"]["TOTALS"]["BTC"] = 0
     result["binance"]["TOTALS"]["USD"] = 0
 
-    for account in config.accounts.binance:
+    client = binance_auth()
+    all_balances = client.balances()
+    prices = binance.prices()
+    bitcoin_totals = 0
+    gbp_total = 0
+    usd_total = 0
 
-        binance_auth(account)
-        all_balances = binance.balances()
-        prices = binance.prices()
-        bitcoin_totals = 0
-        gbp_total = 0
-        usd_total = 0
+    for key in all_balances:
+        current_value = float(all_balances[key]["free"]) + float(all_balances[key]["locked"])
 
-        for key in all_balances:
-            current_value = float(all_balances[key]["free"]) + float(all_balances[key]["locked"])
+        if float(current_value) > 0:  # available currency
+            result["binance"][key]["count"] = current_value
 
-            if float(current_value) > 0:  # available currency
-                result["binance"][key]["count"] = current_value
+            if key == "BTC":
+                bcoin = float(current_value)
+                bitcoin_totals += float(bcoin)
 
-                if key == "BTC":
-                    bcoin = float(current_value)
-                    bitcoin_totals += float(bcoin)
+            elif key == "USDT":
+                bcoin = float(current_value) / float(prices["BTCUSDT"])
+                bitcoin_totals += bcoin
+            elif key == "TWT":
+                bcoin = (float(current_value) * cryptocompare.get_price \
+                        ('TWT', curr='USD')['TWT']['USD']) \
+                        / float(prices["BTCUSDT"])
+                bitcoin_totals += bcoin
 
-                elif key == "USDT":
-                    bcoin = float(current_value) / float(prices["BTCUSDT"])
+            else:  # other currencies that need converting to BTC
+                try:
+                    LOGGER.debug("Converting spot currency %s %s" % (key, str(current_value)))
+                    bcoin = float(current_value) * float(prices[key+"BTC"])  # value in BTC
                     bitcoin_totals += bcoin
-                elif key == "TWT":
-                    bcoin = (float(current_value) * cryptocompare.get_price \
-                            ('TWT', curr='USD')['TWT']['USD']) \
-                            / float(prices["BTCUSDT"])
-                    bitcoin_totals += bcoin
+                except KeyError:
+                    LOGGER.critical("Error: Unable to spot quantify currency: %s " % key)
+                    continue
 
-                else:  # other currencies that need converting to BTC
-                    try:
-                        LOGGER.debug("Converting spot currency %s %s" % (key, str(current_value)))
-                        bcoin = float(current_value) * float(prices[key+"BTC"])  # value in BTC
-                        bitcoin_totals += bcoin
-                    except KeyError:
-                        LOGGER.critical("Error: Unable to spot quantify currency: %s " % key)
-                        continue
+            add_value(key, bcoin)
 
-                add_value(key, bcoin)
-
-                usd = bcoin *float(prices["BTCUSDT"])
-                gbp = USD2GBP * usd
-                usd_total += usd
-                gbp_total += gbp
-                result["binance"][key]["BTC"] = bcoin
-                result["binance"][key]["USD"] = usd
-                result["binance"][key]["GBP"] = gbp
+            usd = bcoin *float(prices["BTCUSDT"])
+            gbp = USD2GBP * usd
+            usd_total += usd
+            gbp_total += gbp
+            result["binance"][key]["BTC"] = bcoin
+            result["binance"][key]["USD"] = usd
+            result["binance"][key]["GBP"] = gbp
 
         usd_total = bitcoin_totals * float(prices["BTCUSDT"])
         result["binance"]["TOTALS"]["BTC"] += bitcoin_totals

@@ -1,29 +1,24 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-order
+#pylint: disable=wrong-import-order,no-member
 
 """
-Test authentication to binance using creds in config
+Test authentication to binance
 """
 
 import sys
-from binance import binance
-
-from greencandle.lib import config
 from greencandle.lib.auth import binance_auth
 
 def main():
     """main function"""
 
-    config.create_config()
-    account = config.accounts.binance[0]
-    binance_auth(account)
+    client = binance_auth()
 
     if len(sys.argv) > 1 and sys.argv[1] == '--help':
         print("Test binance authentication using config creds")
         sys.exit(0)
 
     try:
-        binance.balances()
+        client.balances()
         print("Success")
     except ValueError:
         sys.exit("Auth Error")
