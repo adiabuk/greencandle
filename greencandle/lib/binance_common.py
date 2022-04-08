@@ -12,7 +12,7 @@ import time
 import datetime
 from concurrent.futures import ThreadPoolExecutor
 import pandas
-from binance import binance
+from binance.binance import Binance
 
 
 from . import config
@@ -22,7 +22,9 @@ LOGGER = get_logger(__name__)
 
 def get_current_price(pair):
     """Get current price from binance"""
-    prices = binance.prices()
+
+    client = Binance()
+    prices = client.prices()
     return prices[pair]
 
 def get_binance_klines(pair, interval=None, limit=50):
@@ -38,7 +40,8 @@ def get_binance_klines(pair, interval=None, limit=50):
     """
 
     try:
-        raw = binance.klines(pair, interval, limit=limit)
+        client = Binance()
+        raw = client.klines(pair, interval, limit=limit)
     except IndexError:
         LOGGER.critical("Unable to fetch data for " + pair)
         sys.exit(2)
@@ -69,7 +72,8 @@ def get_all_klines(pair, interval=None, start_time=0, no_of_klines=1E1000):
     result = []
 
     while True:
-        current_section = binance.klines(pair, interval, startTime=start_time)
+        client = Binance()
+        current_section = client.klines(pair, interval, startTime=start_time)
         result += current_section
         if len(result) >= no_of_klines:
             # reached maximum

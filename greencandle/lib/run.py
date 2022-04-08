@@ -11,7 +11,7 @@ import pickle
 import gzip
 from concurrent.futures import ThreadPoolExecutor
 from glob import glob
-from binance import binance
+from binance.binance import Binance
 from .engine import Engine
 from .redis_conn import Redis
 from .mysql import Mysql
@@ -252,7 +252,8 @@ def prod_initial(interval, test=False):
     """
     Initial prod run - back-fetching data for tech analysis.
     """
-    prices = binance.prices()
+    client = Binance()
+    prices = client.prices()
     prices_trunk = {}
 
     for key, val in prices.items():
@@ -294,8 +295,8 @@ def prod_loop(interval, test_trade):
 
     LOGGER.info("Starting new cycle")
     LOGGER.debug("max trades: %s" % config.main.max_trades)
-
-    prices = binance.prices()
+    client = Binance()
+    prices = client.prices()
     prices_trunk = {}
     for key, val in prices.items():
         if key in PAIRS:

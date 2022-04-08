@@ -4,14 +4,14 @@ Simple script to get current price of trading pair
 """
 
 import sys
-from binance import binance
+from binance.binance import Binance
 
 def main():
     """
     Main function
     """
-
-    prices = binance.prices()
+    client = Binance()
+    prices = client.prices()
     if sys.argv[1] == '--help':
         print("Usage: {} <pair>".format(sys.argv[0]))
     else:

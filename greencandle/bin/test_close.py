@@ -5,16 +5,16 @@ Check current open trades for ability to close
 """
 
 import sys
-from binance import binance
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.balance_common import get_step_precision
 from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.balance_common import get_base
 from greencandle.lib.balance import Balance
+from greencandle.lib.auth import binance_auth
 
 def main():
     """ Main function """
-
+    client = binance_auth()
     if len(sys.argv) > 1 and sys.argv[1] == '--help':
         print("Check current open trades for ability to close")
         sys.exit(0)
@@ -28,9 +28,9 @@ def main():
     pairs = []
     for trade in open_trades:
         pair, base_in, name = trade
-        result = binance.spot_order(symbol=pair, side=binance.SELL,
-                                    quantity=get_step_precision(pair, base_in),
-                                    order_type=binance.MARKET, test=True)
+        result = client.spot_order(symbol=pair, side=client.SELL,
+                                   quantity=get_step_precision(pair, base_in),
+                                   order_type=client.MARKET, test=True)
         print("Testing {} from {}, result: {}".format(pair, name, str(result)))
         print("comparing amount with available balance...")
         try:

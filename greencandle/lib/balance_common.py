@@ -2,7 +2,7 @@
 
 import math
 from collections import defaultdict
-from binance import binance
+from binance.binance import Binance
 
 def default_to_regular(ddict):
     """
@@ -45,7 +45,8 @@ def get_step_precision(item, amount):
     """
     Get/apply precision required for trading pair from exchange
     """
-    exchange_info = binance.exchange_info()[item]
+    client = Binance()
+    exchange_info = client.exchange_info()[item]
     flat = flatten(exchange_info)
     step_size = float(flat['stepSize'])
     precision = int(round(-math.log(step_size, 10), 0))

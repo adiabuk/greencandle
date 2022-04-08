@@ -9,8 +9,6 @@ from __future__ import print_function
 from collections import defaultdict
 import time
 from str2bool import str2bool
-from binance import binance
-
 from .auth import binance_auth
 from .logger import get_logger, get_decorator
 from .mysql import Mysql
@@ -226,7 +224,7 @@ class Trade():
                 amount = quote_amount / float(current_price)
             else:
                 # convert USD into current base
-                amount = float(quote_amount) / float(binance.prices()[get_base(pair)+'USDT'])
+                amount = float(quote_amount) / float(self.client.prices()[get_base(pair)+'USDT'])
 
             if float(current_price) * float(amount) >= float(current_quote_bal):
                 self.logger.critical("Unable to purchase %s of %s, insufficient funds:%s/%s" %
@@ -256,9 +254,9 @@ class Trade():
 
                     self.logger.info(borrow_res)
                     amt_str = get_step_precision(pair, amount_to_use/float(current_price))
-                    trade_result = self.client.margin_order(symbol=pair, side=binance.BUY,
+                    trade_result = self.client.margin_order(symbol=pair, side=self.client.BUY,
                                                             quantity=amt_str,
-                                                            order_type=binance.MARKET,
+                                                            order_type=self.client.MARKET,
                                                             isolated=str2bool(
                                                                 self.config.main.isolated))
                     if "msg" in trade_result:
@@ -360,9 +358,9 @@ class Trade():
                 if self.prod and not self.test_data:
                     amt_str = get_step_precision(pair, amount)
 
-                    trade_result = self.client.spot_order(symbol=pair, side=binance.BUY,
+                    trade_result = self.client.spot_order(symbol=pair, side=self.client.BUY,
                                                           quantity=amt_str,
-                                                          order_type=binance.MARKET,
+                                                          order_type=self.client.MARKET,
                                                           test=self.test_trade)
                     if "msg" in trade_result:
                         self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
@@ -452,8 +450,8 @@ class Trade():
                 amt_str = get_step_precision(pair, quantity)
 
                 trade_result = self.client.spot_order(
-                    symbol=pair, side=binance.SELL, quantity=amt_str,
-                    order_type=binance.MARKET, test=self.test_trade)
+                    symbol=pair, side=self.client.SELL, quantity=amt_str,
+                    order_type=self.client.MARKET, test=self.test_trade)
 
                 if "msg" in trade_result:
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
@@ -515,7 +513,7 @@ class Trade():
 
             amt_str = get_step_precision(pair, amount_to_use)
 
-            base_amount = float(amt_str) * float(binance.prices()[pair])
+            base_amount = float(amt_str) * float(self.client.prices()[pair])
 
             dbase.insert_trade(pair=pair, price=current_price, date=current_time,
                                quote_amount=base_amount,
@@ -553,8 +551,8 @@ class Trade():
                 amt_str = get_step_precision(pair, quantity)
 
                 trade_result = self.client.spot_order(
-                    symbol=pair, side=binance.SELL, quantity=amt_str,
-                    order_type=binance.MARKET, test=self.test_trade)
+                    symbol=pair, side=self.client.SELL, quantity=amt_str,
+                    order_type=self.client.MARKET, test=self.test_trade)
 
                 if "msg" in trade_result:
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
@@ -611,9 +609,9 @@ class Trade():
             if self.prod:
                 amt_str = get_step_precision(pair, quantity)
 
-                trade_result = self.client.margin_order(symbol=pair, side=binance.SELL,
+                trade_result = self.client.margin_order(symbol=pair, side=self.client.SELL,
                                                         quantity=amt_str,
-                                                        order_type=binance.MARKET,
+                                                        order_type=self.client.MARKET,
                                                         isolated=str2bool(
                                                             self.config.main.isolated))
 

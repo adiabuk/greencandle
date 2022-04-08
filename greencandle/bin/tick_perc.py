@@ -5,10 +5,8 @@
 Get percentage change for single pip
 """
 import sys
-from binance import binance
-from greencandle.lib import config
+from binance.binance import Binance
 from greencandle.lib.common import perc_diff
-config.create_config()
 
 def flatten(flat):
     """
@@ -37,10 +35,10 @@ def main():
         sys.stderr.write("Usage: {} <pair>\n".format(sys.argv[0]))
         sys.exit(1)
 
-
+    client = Binance()
     pair = sys.argv[1]
-    prices = binance.prices()
-    exchange_info = binance.exchange_info()[pair]
+    prices = client.prices()
+    exchange_info = client.exchange_info()[pair]
     flatten(exchange_info)
     price = float(prices[pair])
     tick_size = float(exchange_info['tickSize'])

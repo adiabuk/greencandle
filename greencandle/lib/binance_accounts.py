@@ -5,7 +5,6 @@ Get/Convert Balances from Binance
 """
 
 from collections import defaultdict
-from binance import binance
 import cryptocompare
 from currency_converter import CurrencyConverter
 from .balance_common import default_to_regular
@@ -43,7 +42,8 @@ def get_binance_isolated():
 
 
     isolated = get_current_isolated()
-    prices = binance.prices()
+    client = binance_auth()
+    prices = client.prices()
     for key, val in isolated.items():
         current_quote = get_quote(key)
         for quote, amount in val.items():
@@ -96,7 +96,7 @@ def get_binance_margin():
 
     client = binance_auth()
     all_balances = client.margin_balances()
-    prices = binance.prices()
+    prices = client.prices()
     bitcoin_totals = 0
     gbp_total = 0
     usd_total = 0
@@ -160,7 +160,7 @@ def get_binance_values():
 
     client = binance_auth()
     all_balances = client.balances()
-    prices = binance.prices()
+    prices = client.prices()
     bitcoin_totals = 0
     gbp_total = 0
     usd_total = 0

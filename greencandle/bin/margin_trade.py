@@ -6,7 +6,6 @@ Buy and sell instantly using binance margin
 """
 
 import sys
-from binance import binance
 from greencandle.lib.balance_common import get_quote, get_step_precision
 
 from greencandle.lib.auth import binance_auth
@@ -30,15 +29,15 @@ def main():
     if side == 'OPEN':
         result = client.margin_borrow(quote, quote_amount)
         print("Borrow result: {}".format(result))
-        base_amount = 100/float(binance.prices()[pair])
+        base_amount = 100/float(client.prices()[pair])
         precise_amount = get_step_precision(pair, base_amount)
         result = client.margin_order(symbol=pair, side='BUY', quantity=precise_amount,
-                                     orderType=binance.MARKET)
+                                     orderType=client.MARKET)
 
         print("Buy result: {}".format(result))
     elif side == 'CLOSE':
         result = client.margin_order(symbol=pair, side='SELL', quantity=precise_amount,
-                                     orderType=binance.MARKET)
+                                     orderType=client.MARKET)
         print("Sell result: {}".format(result))
         result = client.margin_repay(quote, quote_amount)
 

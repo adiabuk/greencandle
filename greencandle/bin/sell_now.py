@@ -7,7 +7,7 @@ Sell a particular trade immediately
 
 import sys
 import time
-from binance import binance
+from binance.binance import Binance
 
 from greencandle.lib import config
 config.create_config()
@@ -26,7 +26,8 @@ def main():
     test_trade = bool(len(sys.argv) > 3 and sys.argv[3] == "test")
     test_data = bool(len(sys.argv) > 3 and sys.argv[4] == "test")
     current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
-    current_price = binance.prices()[pair]
+    client = Binance()
+    current_price = client.prices()[pair]
     print(current_time, current_price)
 
     sells = []
