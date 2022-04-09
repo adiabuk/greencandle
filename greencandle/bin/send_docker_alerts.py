@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=ungrouped-imports,wrong-import-position,import-error,wrong-import-order
+#pylint: disable=ungrouped-imports,wrong-import-position,import-error,wrong-import-order,no-member
 
 """
 Get Status of docker containers from docker socket file and send alerts for erroring containers.
@@ -25,11 +25,11 @@ def get_docker_status(docker_socket):
     socket = docker_socket.replace("/", "%2F")
     url = "http+unix://{}/containers/json?all=1".format(socket)
     request = session.get(url)
-
     assert request.status_code == 200
     for container in json.loads(request.content):
         item = (container["Names"], container["Status"])
-        container_list.append(item)
+        if config.main.base_env in item:
+            container_list.append(item)
     return container_list
 
 def main():
