@@ -184,7 +184,7 @@ class Engine(dict):
                     pool.submit(getattr(self, function)(pair, self.dataframes[pair], index=None,
                                                         localconfig=(name, period)))
                     if first_run:
-                        for seq in range(actual_klines -1):
+                        for seq in range(int(actual_klines) -1):
                             pool.submit(getattr(self, function)(pair, self.dataframes[pair],
                                                                 index=seq,
                                                                 localconfig=(name, period)))
