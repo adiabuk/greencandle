@@ -259,6 +259,7 @@ class Trade():
                                                             order_type=self.client.market,
                                                             isolated=str2bool(
                                                                 self.config.main.isolated))
+                    self.logger.info("%s result: %s" %(pair, trade_result))
                     if "msg" in trade_result:
                         self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
                         self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str,
@@ -362,6 +363,8 @@ class Trade():
                                                           quantity=amt_str,
                                                           order_type=self.client.market,
                                                           test=self.test_trade)
+
+                    self.logger.info("%s result: %s" %(pair, trade_result))
                     if "msg" in trade_result:
                         self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
                         self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str,
@@ -453,6 +456,7 @@ class Trade():
                     symbol=pair, side=self.client.sell, quantity=amt_str,
                     order_type=self.client.market, test=self.test_trade)
 
+                self.logger.info("%s result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
                     return
@@ -554,6 +558,7 @@ class Trade():
                     symbol=pair, side=self.client.sell, quantity=amt_str,
                     order_type=self.client.market, test=self.test_trade)
 
+                self.logger.info("%s result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
                     continue
@@ -615,6 +620,7 @@ class Trade():
                                                         isolated=str2bool(
                                                             self.config.main.isolated))
 
+                self.logger.info("%s result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
                     continue
