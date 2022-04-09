@@ -140,8 +140,8 @@ def get_binance_margin():
             result["margin"][key]["GBP"] = gbp
 
     usd_total = bitcoin_totals * float(prices["BTCUSDT"])
-    result["margin"]["TOTALS"]["BTC"] += bitcoin_totals
-    result["margin"]["TOTALS"]["USD"] += usd_total
+    result["margin"]["TOTALS"]["BTC"] = bitcoin_totals
+    result["margin"]["TOTALS"]["USD"] = usd_total
     result["margin"]["TOTALS"]["count"] = "N/A"
     gbp_total = USD2GBP * usd_total
     result["margin"]["TOTALS"]["GBP"] = gbp_total
@@ -204,8 +204,8 @@ def get_binance_values():
             result["binance"][key]["GBP"] = gbp
 
         usd_total = bitcoin_totals * float(prices["BTCUSDT"])
-        result["binance"]["TOTALS"]["BTC"] += bitcoin_totals
-        result["binance"]["TOTALS"]["USD"] += usd_total
+        result["binance"]["TOTALS"]["BTC"] = bitcoin_totals
+        result["binance"]["TOTALS"]["USD"] = usd_total
         result["binance"]["TOTALS"]["count"] = "N/A"
         gbp_total = USD2GBP * usd_total
         result["binance"]["TOTALS"]["GBP"] = gbp_total
