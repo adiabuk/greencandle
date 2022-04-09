@@ -11,6 +11,9 @@
 
 # Releases
 
+## 2.19.1
+* Small type and name fixes
+
 ## 2.19
 * Use latest version of binance to allow testing API
 * Fix cross margin close trade
