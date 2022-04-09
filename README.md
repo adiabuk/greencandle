@@ -11,6 +11,10 @@
 
 # Releases
 
+## 2.19.2
+* Log return dict from exchange after open/close trade
+* Fix critical spot balance bug
+
 ## 2.19.1
 * Small type and name fixes
 
