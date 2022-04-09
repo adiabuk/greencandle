@@ -254,9 +254,9 @@ class Trade():
 
                     self.logger.info(borrow_res)
                     amt_str = get_step_precision(pair, amount_to_use/float(current_price))
-                    trade_result = self.client.margin_order(symbol=pair, side=self.client.BUY,
+                    trade_result = self.client.margin_order(symbol=pair, side=self.client.buy,
                                                             quantity=amt_str,
-                                                            order_type=self.client.MARKET,
+                                                            order_type=self.client.market,
                                                             isolated=str2bool(
                                                                 self.config.main.isolated))
                     if "msg" in trade_result:
@@ -358,9 +358,9 @@ class Trade():
                 if self.prod and not self.test_data:
                     amt_str = get_step_precision(pair, amount)
 
-                    trade_result = self.client.spot_order(symbol=pair, side=self.client.BUY,
+                    trade_result = self.client.spot_order(symbol=pair, side=self.client.buy,
                                                           quantity=amt_str,
-                                                          order_type=self.client.MARKET,
+                                                          order_type=self.client.market,
                                                           test=self.test_trade)
                     if "msg" in trade_result:
                         self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
@@ -450,8 +450,8 @@ class Trade():
                 amt_str = get_step_precision(pair, quantity)
 
                 trade_result = self.client.spot_order(
-                    symbol=pair, side=self.client.SELL, quantity=amt_str,
-                    order_type=self.client.MARKET, test=self.test_trade)
+                    symbol=pair, side=self.client.sell, quantity=amt_str,
+                    order_type=self.client.market, test=self.test_trade)
 
                 if "msg" in trade_result:
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
@@ -551,8 +551,8 @@ class Trade():
                 amt_str = get_step_precision(pair, quantity)
 
                 trade_result = self.client.spot_order(
-                    symbol=pair, side=self.client.SELL, quantity=amt_str,
-                    order_type=self.client.MARKET, test=self.test_trade)
+                    symbol=pair, side=self.client.sell, quantity=amt_str,
+                    order_type=self.client.market, test=self.test_trade)
 
                 if "msg" in trade_result:
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
@@ -609,9 +609,9 @@ class Trade():
             if self.prod:
                 amt_str = get_step_precision(pair, quantity)
 
-                trade_result = self.client.margin_order(symbol=pair, side=self.client.SELL,
+                trade_result = self.client.margin_order(symbol=pair, side=self.client.sell,
                                                         quantity=amt_str,
-                                                        order_type=self.client.MARKET,
+                                                        order_type=self.client.market,
                                                         isolated=str2bool(
                                                             self.config.main.isolated))
 

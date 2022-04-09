@@ -32,12 +32,12 @@ def main():
         base_amount = 100/float(client.prices()[pair])
         precise_amount = get_step_precision(pair, base_amount)
         result = client.margin_order(symbol=pair, side='BUY', quantity=precise_amount,
-                                     order_type=client.MARKET)
+                                     order_type=client.market)
 
         print("Buy result: {}".format(result))
     elif side == 'CLOSE':
         result = client.margin_order(symbol=pair, side='SELL', quantity=precise_amount,
-                                     order_type=client.MARKET)
+                                     order_type=client.market)
         print("Sell result: {}".format(result))
         result = client.margin_repay(quote, quote_amount)
 

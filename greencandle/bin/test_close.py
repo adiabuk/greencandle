@@ -28,9 +28,9 @@ def main():
     pairs = []
     for trade in open_trades:
         pair, base_in, name = trade
-        result = client.spot_order(symbol=pair, side=client.SELL,
+        result = client.spot_order(symbol=pair, side=client.sell,
                                    quantity=get_step_precision(pair, base_in),
-                                   order_type=client.MARKET, test=True)
+                                   order_type=client.market, test=True)
         print("Testing {} from {}, result: {}".format(pair, name, str(result)))
         print("comparing amount with available balance...")
         try:
