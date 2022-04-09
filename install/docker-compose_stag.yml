@@ -25,7 +25,7 @@ services:
     pull_policy: always
     restart: always
     links:
-      - base-mysql:mysql
+      - stag-base-mysql:mysql
     ports:
       - 6379:6379
     healthcheck:
@@ -79,8 +79,8 @@ services:
     ports:
       - 5000
     depends_on:
-      - base-mysql
-      - base-redis
+      - stag-base-mysql
+      - stag-base-redis
     healthcheck:
       test: curl -Isf http://127.1:5000/healthcheck
       interval: 1m
@@ -141,13 +141,13 @@ services:
     ports:
       - 8888:8888
     links:
-      - stag-fe-cadvisor:cadvisor
+      - gen-fe-cadvisor:cadvisor
       - stag-fe-api-dashboard:api_dash
       - stag-base-mysql:mysql
       - stag-base-redis:redis
     depends_on:
-      - stag-fe-cadvisor
-      - istagbase-mysql
+      - gen-fe-cadvisor
+      - stag-base-mysql
       - stag-base-redis
     entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
     volumes:
