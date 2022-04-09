@@ -11,6 +11,10 @@
 
 # Releases
 
+## 2.19
+* Use latest version of binance to allow testing API
+* Fix cross margin close trade
+
 ## 2.18
 * Working prod api keys
 * Test env with buy alerts
