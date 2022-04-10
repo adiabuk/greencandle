@@ -6,7 +6,6 @@ Get/Convert Balances from Binance
 
 from collections import defaultdict
 import cryptocompare
-from currency_converter import CurrencyConverter
 from .balance_common import default_to_regular
 from .balance_common import get_quote
 from .auth import binance_auth
@@ -16,8 +15,12 @@ config.create_config()
 BITCOIN = {}
 LOGGER = get_logger(__name__)
 
-CURRENCY = CurrencyConverter()
-USD2GBP = CURRENCY.convert(1, 'USD', 'GBP')
+def usd2gbp():
+    """
+    Get usd/gbp rate
+    """
+    client = binance_auth()
+    return  1/float(client.prices()['GBPUSD'])
 
 def get_current_isolated():
     """Get balance for isolated accounts"""
@@ -68,7 +71,7 @@ def get_binance_isolated():
                     continue
 
             usd = bcoin*float(prices['BTCUSDT'])
-            gbp = USD2GBP * usd
+            gbp = usd2gbp() * usd
 
             bitcoin_total += bcoin
             usd_total += usd
@@ -81,7 +84,7 @@ def get_binance_isolated():
     result["isolated"]["TOTALS"]["BTC"] = bitcoin_total
     result["isolated"]["TOTALS"]["USD"] = usd_total
     result["isolated"]["TOTALS"]["count"] = "N/A"
-    gbp_total = USD2GBP * usd_total
+    gbp_total = usd2gbp() * usd_total
     result["isolated"]["TOTALS"]["GBP"] = gbp_total
 
     return default_to_regular(result)
@@ -132,7 +135,7 @@ def get_binance_margin():
             add_value(key, bcoin)
 
             usd = bcoin *float(prices["BTCUSDT"])
-            gbp = USD2GBP * usd
+            gbp = usd2gbp() * usd
             usd_total += usd
             gbp_total += gbp
             result["margin"][key]["BTC"] = bcoin
@@ -143,7 +146,7 @@ def get_binance_margin():
     result["margin"]["TOTALS"]["BTC"] = bitcoin_totals
     result["margin"]["TOTALS"]["USD"] = usd_total
     result["margin"]["TOTALS"]["count"] = "N/A"
-    gbp_total = USD2GBP * usd_total
+    gbp_total = usd2gbp() * usd_total
     result["margin"]["TOTALS"]["GBP"] = gbp_total
     add_value("USD", usd_total)
     add_value("GBP", gbp_total)
@@ -196,7 +199,7 @@ def get_binance_values():
             add_value(key, bcoin)
 
             usd = bcoin *float(prices["BTCUSDT"])
-            gbp = USD2GBP * usd
+            gbp = usd2gbp() * usd
             usd_total += usd
             gbp_total += gbp
             result["binance"][key]["BTC"] = bcoin
@@ -207,7 +210,7 @@ def get_binance_values():
         result["binance"]["TOTALS"]["BTC"] = bitcoin_totals
         result["binance"]["TOTALS"]["USD"] = usd_total
         result["binance"]["TOTALS"]["count"] = "N/A"
-        gbp_total = USD2GBP * usd_total
+        gbp_total = usd2gbp() * usd_total
         result["binance"]["TOTALS"]["GBP"] = gbp_total
         add_value("USD", usd_total)
         add_value("GBP", gbp_total)

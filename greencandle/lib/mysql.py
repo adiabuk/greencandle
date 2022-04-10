@@ -5,7 +5,6 @@ Push/Pull crypto signals and data to mysql
 """
 from binance.binance import Binance
 import MySQLdb
-from currency_converter import CurrencyConverter
 from . import config
 from .binance_common import get_current_price
 from .common import AttributeDict
@@ -225,11 +224,9 @@ class Mysql():
         Get current rates
         return tupple of usd_rate and gbp_rate
         """
-        currency = CurrencyConverter()
         client = Binance()
         usd_rate = client.prices()[quote + 'USDT'] if quote != 'USDT' else "1"
-        gbp_rate = currency.convert(usd_rate, 'USD', 'GBP')
-
+        gbp_rate = float(usd_rate)/float(client.prices()['GBPUSDT'])
         return (usd_rate, gbp_rate)
 
     @get_exceptions

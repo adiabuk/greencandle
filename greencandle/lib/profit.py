@@ -6,11 +6,9 @@ Calculate potential profits from historical data
 
 from __future__ import print_function
 from collections import defaultdict
-from currency_converter import CurrencyConverter
 from .mysql import Mysql
 from .common import sub_perc, perc_diff
 
-CURRENCY = CurrencyConverter()
 RATE = 0.00014 # GBP to BTC
 FEES = 0.05
 
