@@ -1,10 +1,9 @@
-#pylint: disable=protected-access,consider-iterating-dictionary,logging-not-lazy
+#pylint: disable=protected-access,consider-iterating-dictionary,logging-not-lazy,no-else-raise
 
 """
 Get values from config file
 """
 from configparser import ConfigParser
-import sys
 import numpy
 from .common import AttributeDict
 
@@ -36,8 +35,6 @@ def create_config():
 
     for section in parser.sections():
         globals()[section] = AttributeDict(parser._sections[section])
-    if not check_config():
-        sys.exit("Missing config")
 
     # sort account details
     for i in range(1, 5):
@@ -67,14 +64,14 @@ def check_config():
         missing_list.extend(list(numpy.setdiff1d(list_2, list_1, assume_unique=True)))
     config = True
     for section in REQUIRED_CONFIG.keys():
-        for key in list(globals()[section]):
+        for key in REQUIRED_CONFIG[section]:
             if globals()[section][key] == '':
                 # delete empty keys
+                missing_section.append(key)
                 globals()[section].pop(key, None)
     if missing_list:
-        print('error, missing config', missing_list)
-        config = False
-    if missing_section:
-        print('error, missing section', missing_section)
-        config = False
-    return config
+        raise AttributeError('error, missing config %s' % missing_list)
+    elif missing_section:
+        raise AttributeError('error, missing section %s' % missing_section)
+    else:
+        return config
