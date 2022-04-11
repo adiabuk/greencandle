@@ -45,6 +45,37 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
+  be-analyse_data_4h_big-change:
+    container_name: be-analyse_data_4h_big-change
+    hostname: be-analyse_data_4h_big-change
+    image: amrox/greencandle
+    entrypoint: /docker-entrypoint-data.sh analyse_data
+    logging:
+      driver: journald
+    links:
+      - base-mysql-local:mysql
+      - base-redis-local:redis
+    depends_on:
+      - base-mysql-local
+      - base-redis-local
+      - be-get_data_4h
+    links:
+      - be-get_data_4h:data
+    environment:
+      - CONFIG_ENV=test/data/long3
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+
   be-analyse_data_4h_very-low-rsi:
     container_name: be-analyse_data_4h_very-low-rsi
     hostname: be-analyse_data_4h_very-low-rsi
