@@ -12,7 +12,7 @@ services:
       - HOST=$HOSTNAME
     volumes:
       - /var/log:/var/log
-      - /var/.aws:/root/.aws
+      - /root/.aws:/root/.aws
     healthcheck:
       test: ls /var/log/syslog
       interval: 1m
