@@ -54,6 +54,7 @@ def main():
         sys.exit(0)
     LOGGER.info("Starting Initial loop")
     analyse_loop()
+    LOGGER.info("Finished Initial loop")
     SCHED.start()
 
 if __name__ == "__main__":
