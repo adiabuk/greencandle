@@ -35,7 +35,7 @@ def create_config():
 
     for section in parser.sections():
         globals()[section] = AttributeDict(parser._sections[section])
-
+    check_config()
     # sort account details
     for i in range(1, 5):
         if 'account{}_type'.format(i) in globals()['accounts']:
@@ -45,6 +45,7 @@ def create_config():
             if account_type not in globals()['accounts']:
                 globals()['accounts'][account_type] = []
             globals()['accounts'][account_type].append({'key':key, 'secret':secret})
+
 
 def check_config():
     """
