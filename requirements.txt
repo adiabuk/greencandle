@@ -3,6 +3,7 @@ APScheduler==3.6.1
 argcomplete>=1.9.3
 coinbase==2.0.6
 configparser==3.5.0
+Babel==2.9.1
 -e git+https://github.com/adiabuk/Technical-Indicators.git#egg=indicator
 -e git+https://github.com/adiabuk/binance.git@0.23#egg=binance
 CurrencyConverter==0.16.1
