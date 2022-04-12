@@ -1,9 +1,12 @@
+#pylint: disable=wrong-import-position
 """
 Follow log files and alert on Error
 """
 import sys
 import time
 import os
+from greencandle.lib import config
+config.create_config()
 from greencandle.lib.alerts import send_slack_message
 
 def follow(thefile):
@@ -27,7 +30,7 @@ def main():
     """
     Main func
     """
-    if sys.argv[1] == '--help':
+    if len(sys.argv) > 1 and sys.argv[1] == '--help':
         print("Usage: {} <pair>".format(sys.argv[0]))
         sys.exit(0)
     logfile = open("/var/log/syslog", "r")
