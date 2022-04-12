@@ -20,9 +20,7 @@ class TestPair(unittest.TestCase):
         test all trading pairs
         """
 
-
-
-        li = []
+        envs = []
         pairs = []
         yamls = ['install/docker-compose_stag.yml', 'install/docker-compose_prod.yml']
 
@@ -32,9 +30,9 @@ class TestPair(unittest.TestCase):
 
             for line in content:
                 if "CONFIG_ENV" in line:
-                    li.append(line.split('=')[-1].strip())
+                    envs.append(line.split('=')[-1].strip())
 
-        for item in li:
+        for item in envs:
             # Extract pairs from each environment except top level
             if '/' in item:
                 extracted = os.popen('configstore package get {} pairs'.format(item)).read().split()
@@ -43,6 +41,6 @@ class TestPair(unittest.TestCase):
 
         for pair in set(pairs):
             # Attempt to get data for each unique pair
-            if pair !="None" and pair != 'any':
+            if pair not in ("None", "any"):
                 print("Testing pair " + pair)
-                get_binance_klines(pair, '1m',1)
+                get_binance_klines(pair, '1m', 1)

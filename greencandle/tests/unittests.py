@@ -1,4 +1,4 @@
-#pylint: disable=wrong-import-position,no-member,broad-except,too-many-instance-attributes
+#pylint: disable=wrong-import-position,no-member,broad-except,too-many-instance-attributes,too-many-arguments
 
 """
 Helper classes and functions for creating and running unittests

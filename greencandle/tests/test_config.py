@@ -1,12 +1,10 @@
 #pylint: disable=wrong-import-position,no-member,protected-access
 """Test environments"""
 
-import json
 import os
-import yaml
 import unittest
+import yaml
 from greencandle.lib import config
-from greencandle.bin.api_dashboard import get_pairs, list_to_dict
 
 class TestConfig(unittest.TestCase):
     """
@@ -23,7 +21,7 @@ class TestConfig(unittest.TestCase):
         for env in base_envs:
             with open("/srv/greencandle/install/docker-compose_{}.yml".format(env), 'r') as stream:
                 output = (yaml.safe_load(stream))
-            for key, val in output['services'].items():
+            for _, val in output['services'].items():
                 try:
                     var = val['environment'][0].split("=")
                     if var[0] == "CONFIG_ENV":
