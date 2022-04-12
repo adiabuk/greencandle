@@ -92,7 +92,7 @@
       "is_secret": false
     },
     "close_rule1": {
-      "value": "",
+      "value": "1\u003c2",
       "is_binary": false,
       "is_secret": false
     },
@@ -272,7 +272,7 @@
       "is_secret": false
     },
     "open_rule1": {
-      "value": "",
+      "value": "1\u003c2",
       "is_binary": false,
       "is_secret": false
     },
@@ -322,7 +322,7 @@
       "is_secret": false
     },
     "pairs": {
-      "value": "",
+      "value": "BTCUSDT",
       "is_binary": false,
       "is_secret": false
     },
