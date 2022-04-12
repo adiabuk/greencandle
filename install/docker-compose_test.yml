@@ -55,12 +55,11 @@ services:
     links:
       - base-mysql-local:mysql
       - base-redis-local:redis
+      - be-get_data_4h:data
     depends_on:
       - base-mysql-local
       - base-redis-local
       - be-get_data_4h
-    links:
-      - be-get_data_4h:data
     environment:
       - CONFIG_ENV=test/data/long3
       - HOST=$HOSTNAME
@@ -86,12 +85,11 @@ services:
     links:
       - base-mysql-local:mysql
       - base-redis-local:redis
+      - be-get_data_4h:data
     depends_on:
       - base-mysql-local
       - base-redis-local
       - be-get_data_4h
-    links:
-      - be-get_data_4h:data
     environment:
       - CONFIG_ENV=test/data/long2
       - HOST=$HOSTNAME
