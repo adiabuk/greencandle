@@ -13,4 +13,4 @@ if [[ ! -e /installed ]]; then
   cp /srv/greencandle/alert/com.mp3 /
   touch /installed
 fi
-exec python /srv/greencandle/alert/webhook.py
+exec python "$@"

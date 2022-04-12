@@ -1,6 +1,24 @@
 version: "3.1"
 services:
 
+  gen-be-logwatch:
+    container_name: gen-be-logwatch
+    hostname: gen-be-logwatch
+    image: amrox/greencandle:${TAG}
+    restart: always
+    entrypoint: logwatch
+    entrypoint: /docker-entrypoint-alert.sh /srv/greencandle/bin/logwatch.py
+    environment:
+      - CONFIG_ENV=stag
+      - HOST=$HOSTNAME
+    volumes:
+      - /var/log:/var/log
+    healthcheck:
+      test: ls /var/log/syslog
+      interval: 1m
+      timeout: 2s
+      retries: 5
+
   gen-fe-cadvisor:
     container_name: gen-fe-cadvisor
     hostname: gen-fe-cadvisor
@@ -383,7 +401,7 @@ services:
     image: amrox/alert:latest
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint-alert.sh
+    entrypoint: /docker-entrypoint-alert.sh /srv/greencandle/alert/webhook.py
     ports:
       - 20000
     healthcheck:
