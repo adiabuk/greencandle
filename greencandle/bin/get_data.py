@@ -5,7 +5,7 @@ Collect OHLC and strategy data for later analysis
 """
 import sys
 import socket
-from binance import binance
+from binance.binance import Binance
 from apscheduler.schedulers.blocking import BlockingScheduler
 from greencandle.lib import config
 config.create_config()
@@ -21,7 +21,7 @@ PAIRS = config.main.pairs.split()
 MAIN_INDICATORS = config.main.indicators.split()
 SCHED = BlockingScheduler()
 
-def test_loop(interval=None):
+def test_loop(interval=None, prices=None):
     """
     Test loop
     """
@@ -32,7 +32,6 @@ def test_loop(interval=None):
     LOGGER.info("Starting new cycle")
     LOGGER.debug("max trades: %s" % config.main.max_trades)
 
-    prices = binance.prices()
     prices_trunk = {}
 
     for key, val in prices.items():
@@ -55,7 +54,9 @@ def prod_run():
     """
     interval = config.main.interval
     LOGGER.info("Starting prod run")
-    test_loop(interval)
+    client = Binance()
+    prices = client.prices()
+    test_loop(interval=interval, prices=prices)
     LOGGER.info("Finished prod run")
 
 def main():
