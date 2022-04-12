@@ -29,7 +29,7 @@ def analyse_loop():
     for pair in PAIRS:
         LOGGER.debug("Analysing pair: %s" % pair)
         try:
-            result, _, _, _, _ = redis.get_action(pair=pair, interval=interval)
+            result, _, _, _, _ = redis.get_action(pair=pair, interval=config.main.interval)
             current_candle = dataframes[pair].iloc[-1]
             redis.update_drawdown(pair, current_candle)
             redis.update_drawup(pair, current_candle)
@@ -38,8 +38,8 @@ def analyse_loop():
                 LOGGER.debug("Items to buy")
                 margin = "margin" if info[pair]['isMarginTradingAllowed'] else "spot"
                 send_slack_message("notifications", "Buy: %s %s 4h" % (pair, margin))
-        except:
-            LOGGER.critical("Error with pair %s" % pair)
+        except Exception as e:
+            LOGGER.critical("Error with pair %s %s" % (pair, str(e)))
     LOGGER.info("End of current loop")
     del redis
 
