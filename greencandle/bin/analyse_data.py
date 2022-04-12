@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-position,no-member,logging-not-lazy,import-error,bare-except
+#pylint: disable=wrong-import-position,wrong-import-order,no-member,logging-not-lazy,import-error,broad-except
 
 """
 Analyze available data rom redis
@@ -14,10 +14,13 @@ from greencandle.lib.redis_conn import Redis
 from greencandle.lib.logger import get_logger
 from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.common import HOUR, MINUTE
+from binance.binance import Binance
+
 LOGGER = get_logger(__name__)
 PAIRS = config.main.pairs.split()
 MAIN_INDICATORS = config.main.indicators.split()
 SCHED = BlockingScheduler()
+INFO = Binance().exchange_info()
 
 @SCHED.scheduled_job('cron', minute=MINUTE[config.main.interval],
                      hour=HOUR[config.main.interval], second="30")
@@ -29,17 +32,14 @@ def analyse_loop():
     for pair in PAIRS:
         LOGGER.debug("Analysing pair: %s" % pair)
         try:
-            result, _, _, _, _ = redis.get_action(pair=pair, interval=config.main.interval)
-            current_candle = dataframes[pair].iloc[-1]
-            redis.update_drawdown(pair, current_candle)
-            redis.update_drawup(pair, current_candle)
+            result = redis.get_action(pair=pair, interval=config.main.interval)[0]
 
             if result == "OPEN":
                 LOGGER.debug("Items to buy")
-                margin = "margin" if info[pair]['isMarginTradingAllowed'] else "spot"
+                margin = "margin" if INFO[pair]['isMarginTradingAllowed'] else "spot"
                 send_slack_message("notifications", "Buy: %s %s 4h" % (pair, margin))
-        except Exception as e:
-            LOGGER.critical("Error with pair %s %s" % (pair, str(e)))
+        except Exception as err_msg:
+            LOGGER.critical("Error with pair %s %s" % (pair, str(err_msg)))
     LOGGER.info("End of current loop")
     del redis
 
