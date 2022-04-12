@@ -8,7 +8,7 @@ services:
     restart: always
     entrypoint: /docker-entrypoint-alert.sh /usr/local/bin/logwatch
     environment:
-      - CONFIG_ENV=stag
+      - CONFIG_ENV=stag/fe/cron
       - HOST=$HOSTNAME
     volumes:
       - /var/log:/var/log
