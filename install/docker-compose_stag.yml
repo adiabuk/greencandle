@@ -6,13 +6,13 @@ services:
     hostname: gen-be-logwatch
     image: amrox/greencandle:${TAG}
     restart: always
-    entrypoint: logwatch
-    entrypoint: /docker-entrypoint-alert.sh /srv/greencandle/bin/logwatch.py
+    entrypoint: /docker-entrypoint-alert.sh /usr/local/bin/logwatch
     environment:
       - CONFIG_ENV=stag
       - HOST=$HOSTNAME
     volumes:
       - /var/log:/var/log
+      - /var/.aws:/root/.aws
     healthcheck:
       test: ls /var/log/syslog
       interval: 1m
