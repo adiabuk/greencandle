@@ -1,20 +1,6 @@
 version: "3.1"
 services:
 
-  cadvisor:
-    container_name: cadvisor
-    hostname: cadvisor
-    image: gcr.io/google_containers/cadvisor:v0.35.0
-    restart: always
-    ports:
-      - 8080:8080
-    volumes:
-      - /:/rootfs
-      - /var/run:/var/run
-      - /sys:/sys
-      - /var/lib/docker:/var/lib/docker
-      - /dev/disk:/dev/disk
-
   cron:
     container_name: cron
     environment:
@@ -93,29 +79,6 @@ services:
       - cadvisor
       - api
       - dashboard
-
-  dashboard:
-    container_name: dashboard
-    hostname: dashboard
-    image: amrox/dashboard:${TAG}
-    healthcheck:
-      test: curl --fail 127.1:3030/dashboard/gc || exit 1
-      interval: 1m
-      timeout: 5s
-      retries: 5
-    ports:
-      - 3030:3030
-    restart: always
-    entrypoint: /docker-entrypoint.sh
-    links:
-      - mysql-unit:mysql
-      - redis-unit:redis
-    volumes:
-      - /srv/greencandle/dashboard/dashboards:/dashboards
-      - /srv/greencandle/dashboard/jobs:/jobs
-      - /srv/greencandle/dashboard/widgets:/widgets
-      - /srv/greencandle/dashboard/config:/config
-      - /srv/greencandle/dashboard/assets:/assets
 
   redis-unit:
     container_name: redis-unit
