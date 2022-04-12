@@ -37,7 +37,7 @@ def main():
     loglines = follow(logfile)    # iterate over the generator
     for line in loglines:
         if "Traceback" in line:
-            send_slack_message("notifications", "String found in logfile")
+            send_slack_message("alerts", "String found in logfile: \"Traceback\"")
 
 if __name__ == '__main__':
     main()
