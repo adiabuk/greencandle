@@ -44,6 +44,9 @@ def analyse_loop():
                 send_slack_message("notifications", "Open: %s %s %s %s" %
                                    (pair_link, config.main.interval,
                                     config.main.trade_direction, margin), emoji=True)
+                LOGGER.info("Trade alert: {} {} {} {}".format(pair, config.main.interval,
+                                                           config.main.trade_direction,
+                                                           margin)
         except Exception as err_msg:
             LOGGER.critical("Error with pair %s %s" % (pair, str(err_msg)))
     LOGGER.info("End of current loop")
