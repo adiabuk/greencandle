@@ -27,6 +27,7 @@ class TestRedis(unittest.TestCase):
         Test putting/getting items to/from redis
         """
         os.system("configstore package process_templates unit /etc")
+        config.create_config()
         redis = Redis(test_data=True, test=True)
         redis.clear_all()
         items = redis.get_items('ABCDEF', '10m')
@@ -78,6 +79,8 @@ class TestRedis(unittest.TestCase):
         Test get action method
         """
         pair = "BTCUSDT"
+        os.system("configstore package process_templates unit /etc")
+        config.create_config()
         quote = get_quote(pair)
         redis = Redis(interval="4h", test_data=True, test=True)
         dbase = Mysql(test=True, interval="4h")
