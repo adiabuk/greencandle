@@ -11,6 +11,17 @@
 
 # Releases
 
+## 2.20
+* Trade alert containers for data collection and analysis
+* logwatch container for alerting on exceptions
+* Cleanup of unit tests
+* Tests for checking all environment config and failing with empty values
+* More logging for trade and trade/loan failures
+* Better checking of available funds to close trade (inc commission)
+* Check if sufficient BNB available for each trade close
+* Check for big recent price drops and alert
+* Switch currency conversion to use binance
+
 ## 2.19.2
 * Log return dict from exchange after open/close trade
 * Fix critical spot balance bug
