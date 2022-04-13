@@ -29,17 +29,5 @@ class TestCron(make_docker_case('cron', checks=[""])):
     """Test cron docker instance"""
     pass
 
-class TestDashboard(make_docker_case('dashboard', checks=["curl http://localhost:3030"])):
-    """Test dashboard docker instance"""
-    pass
-
-class TestWebserver(make_docker_case('webserver', checks=["curl http://localhost:7777"])):
-    """Test webserver docker instance"""
-    pass
-
-class TestCadvisor(make_docker_case('cadvisor', checks=["curl http://localhost:8080"])):
-    """Test cadvisor docker instance"""
-    pass
-
 if __name__ == '__main__':
     unittest.main()
