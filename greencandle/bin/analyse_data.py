@@ -24,7 +24,7 @@ SCHED = BlockingScheduler()
 INFO = Binance().exchange_info()
 GET_EXCEPTIONS = get_decorator((Exception))
 
-@SCHED.scheduled_job('cron', minute=MINUTE[config.main.interval],
+@SCHED.scheduled_job('cron', minute=MINUTE["30m"],
                      hour=HOUR[config.main.interval], second="30")
 def analyse_loop():
     """
@@ -56,7 +56,6 @@ def keepalive():
     Periodically touch file for docker healthcheck
     """
     Path('/var/run/greencandle').touch()
-
 
 def main():
     """
