@@ -331,38 +331,6 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  stag-be-bb-4h:
-    container_name: stag-be-bb-4h
-    hostname: stag-be-bb-4h
-    image: amrox/greencandle:${TAG}
-    pull_policy: always
-    restart: always
-    entrypoint: /docker-entrypoint.sh backend --test
-    logging:
-      driver: journald
-    environment:
-      - HOST=$HOSTNAME
-      - CONFIG_ENV=stag/bb/4h
-    ports:
-      - 20000
-    links:
-      - stag-base-mysql:mysql
-      - stag-base-redis:redis
-    depends_on:
-      - stag-base-mysql
-      - stag-base-redis
-    healthcheck:
-      test: ls ||exit 1
-      interval: 4h
-      timeout: 2s
-      retries: 5
-    volumes:
-      - /data:/data
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
-      - /root/.bash_history:/root/.bash_history
-
   stag-be-any:
     container_name: stag-be-any
     hostname: stag-be-any
