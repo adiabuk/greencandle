@@ -50,36 +50,6 @@ services:
     volumes:
       - /data:/data
 
-  webserver:
-     container_name: webserver
-     hostname: webserver
-     image: amrox/webserver:${TAG}
-     entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
-     healthcheck:
-       test: service nginx status || exit 1
-       interval: 1m
-       timeout: 1s
-       retries: 5
-     environment:
-       - CONFIG_ENV=unit
-       - HOST=$HOSTNAME
-     ports:
-       - 7777:7777
-     links:
-       - mysql-unit:mysql
-       - redis-unit:redis
-       - dashboard:dashboard
-       - api
-       - api:api_dash
-     restart: always
-     volumes:
-       - /data:/data
-       - /root/.aws:/root/.aws
-     depends_on:
-      - cadvisor
-      - api
-      - dashboard
-
   redis-unit:
     container_name: redis-unit
     hostname: redis-unit
