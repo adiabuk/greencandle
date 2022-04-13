@@ -1,5 +1,7 @@
 #pylint: disable=wrong-import-position,no-member
 """Redis tests"""
+
+import os
 import ast
 import unittest
 import random
@@ -24,7 +26,7 @@ class TestRedis(unittest.TestCase):
         """
         Test putting/getting items to/from redis
         """
-
+        os.system("configstore package process_templates unit /etc")
         redis = Redis(test_data=True, test=True)
         redis.clear_all()
         items = redis.get_items('ABCDEF', '10m')
