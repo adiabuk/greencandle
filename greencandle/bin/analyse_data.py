@@ -37,7 +37,9 @@ def analyse_loop():
             if result == "OPEN":
                 LOGGER.debug("Items to buy")
                 margin = "margin" if INFO[pair]['isMarginTradingAllowed'] else "spot"
-                send_slack_message("notifications", "Buy: %s %s 4h" % (pair, margin))
+                pair_link = ("<https://www.tradingview.com/chart/?symbol=BINANCE:{0}|{0}>"
+                             .format(pair))
+                send_slack_message("notifications", "Buy: %s %s 4h" % (pair_link, margin))
         except Exception as err_msg:
             LOGGER.critical("Error with pair %s %s" % (pair, str(err_msg)))
     LOGGER.info("End of current loop")
