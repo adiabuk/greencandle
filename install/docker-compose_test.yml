@@ -104,7 +104,7 @@ services:
       - base-mysql-local
       - base-redis-local
     environment:
-      - CONFIG_ENV=test/data/long1
+      - CONFIG_ENV=test/data/get_data
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
