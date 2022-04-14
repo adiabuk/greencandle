@@ -162,7 +162,9 @@ def get_binance_values():
     result["binance"]["TOTALS"]["USD"] = 0
 
     client = binance_auth()
-    all_balances = client.balances()
+    balances = client.balances()
+    all_balances = {k: v for k, v in balances.items()
+                    if float(v['free']) > 0 or float(v['locked']) > 0}
     prices = client.prices()
     bitcoin_totals = 0
     gbp_total = 0
