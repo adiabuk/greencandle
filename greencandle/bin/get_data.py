@@ -5,6 +5,7 @@ Collect OHLC and strategy data for later analysis
 """
 import sys
 import socket
+from pathlib import Path
 from binance.binance import Binance
 from apscheduler.schedulers.blocking import BlockingScheduler
 from greencandle.lib import config
@@ -13,13 +14,14 @@ from greencandle.lib.redis_conn import Redis
 from greencandle.lib.engine import Engine
 from greencandle.lib.run import prod_initial
 from greencandle.lib.binance_common import get_dataframes
-from greencandle.lib.logger import get_logger
+from greencandle.lib.logger import get_logger, get_decorator
 from greencandle.lib.common import HOUR, MINUTE
 
 LOGGER = get_logger(__name__)
 PAIRS = config.main.pairs.split()
 MAIN_INDICATORS = config.main.indicators.split()
 SCHED = BlockingScheduler()
+GET_EXCEPTIONS = get_decorator((Exception))
 
 def test_loop(interval=None, prices=None):
     """
@@ -45,6 +47,18 @@ def test_loop(interval=None, prices=None):
     engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, redis=redis)
     engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
     dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=1)
+
+
+@GET_EXCEPTIONS
+@SCHED.scheduled_job('interval', seconds=60)
+def keepalive():
+    """
+    Periodically touch file for docker healthcheck
+    """
+    Path('/var/run/greencandle').touch()
+
+
+
 
 @SCHED.scheduled_job('cron', minute=MINUTE[config.main.interval],
                      hour=HOUR[config.main.interval], second="30")

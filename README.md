@@ -14,6 +14,7 @@
 ## 2.20
 * Trade alert containers for data collection and analysis
 * logwatch container for alerting on exceptions
+* Send quote amounts to slack
 * Cleanup of unit tests
 * Tests for checking all environment config and failing with empty values
 * More logging for trade and trade/loan failures

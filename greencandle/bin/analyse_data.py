@@ -10,8 +10,9 @@ import sys
 from apscheduler.schedulers.blocking import BlockingScheduler
 from greencandle.lib import config
 config.create_config()
+from pathlib import Path
 from greencandle.lib.redis_conn import Redis
-from greencandle.lib.logger import get_logger
+from greencandle.lib.logger import get_logger, get_decorator
 from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.common import HOUR, MINUTE
 from binance.binance import Binance
@@ -21,8 +22,9 @@ PAIRS = config.main.pairs.split()
 MAIN_INDICATORS = config.main.indicators.split()
 SCHED = BlockingScheduler()
 INFO = Binance().exchange_info()
+GET_EXCEPTIONS = get_decorator((Exception))
 
-@SCHED.scheduled_job('cron', minute=MINUTE[config.main.interval],
+@SCHED.scheduled_job('cron', minute=MINUTE["30m"],
                      hour=HOUR[config.main.interval], second="30")
 def analyse_loop():
     """
@@ -42,10 +44,21 @@ def analyse_loop():
                 send_slack_message("notifications", "Open: %s %s %s %s" %
                                    (pair_link, config.main.interval,
                                     config.main.trade_direction, margin), emoji=True)
+                LOGGER.info("Trade alert: %s %s %s %s" % (pair, config.main.interval,
+                                                          config.main.trade_direction,
+                                                          margin))
         except Exception as err_msg:
             LOGGER.critical("Error with pair %s %s" % (pair, str(err_msg)))
     LOGGER.info("End of current loop")
     del redis
+
+@GET_EXCEPTIONS
+@SCHED.scheduled_job('interval', seconds=60)
+def keepalive():
+    """
+    Periodically touch file for docker healthcheck
+    """
+    Path('/var/run/greencandle').touch()
 
 def main():
     """
