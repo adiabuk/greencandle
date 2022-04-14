@@ -14,7 +14,7 @@ from pathlib import Path
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.logger import get_logger, get_decorator
 from greencandle.lib.alerts import send_slack_message
-from greencandle.lib.common import HOUR, MINUTE
+from greencandle.lib.common import HOUR, MINUTE, get_link
 from binance.binance import Binance
 
 LOGGER = get_logger(__name__)
@@ -39,10 +39,8 @@ def analyse_loop():
             if result == "OPEN":
                 LOGGER.debug("Items to buy")
                 margin = "margin" if INFO[pair]['isMarginTradingAllowed'] else "spot"
-                pair_link = ("<https://www.tradingview.com/chart/?symbol=BINANCE:{0}|{0}>"
-                             .format(pair))
                 send_slack_message("notifications", "Open: %s %s %s %s" %
-                                   (pair_link, config.main.interval,
+                                   (get_link(pair), config.main.interval,
                                     config.main.trade_direction, margin), emoji=True)
                 LOGGER.info("Trade alert: %s %s %s %s" % (pair, config.main.interval,
                                                           config.main.trade_direction,

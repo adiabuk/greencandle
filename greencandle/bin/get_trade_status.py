@@ -9,6 +9,7 @@ from ..lib import config
 config.create_config()
 from ..lib.mysql import Mysql
 from ..lib.alerts import send_slack_message
+from ..lib.common import get_link
 
 def main():
     """ Main function """
@@ -25,7 +26,7 @@ def main():
     output = ""
 
     for trade in open_trades:
-        output += '\t\t'.join([str(item) for item in trade]) + '\n'
+        output += '\t\t'.join([get_link(item) for item in trade]) + '\n'
     if output:
         send_slack_message('balance', output)
     sys.exit()
