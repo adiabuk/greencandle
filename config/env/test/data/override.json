@@ -10,6 +10,7 @@
   "close_rule8": "",
   "close_rule9": "",
   "indicators": "get_rsi;RSI;14",
+  "interval": "4h",
   "logging_output": "journald",
   "no_of_klines": "50",
   "open_rule1": "",
