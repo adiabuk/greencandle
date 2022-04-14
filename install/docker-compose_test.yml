@@ -1,21 +1,21 @@
 version: "3.1"
 services:
 
-  be-analyse_data_4h_low-rsi:
-    container_name: be-analyse_data_4h_low-rsi
-    hostname: be-analyse_data_4h_low-rsi
+  data-be-analyse_4h_low-rsi:
+    container_name: data-be-analyse_4h_low-rsi
+    hostname: data-be-analyse_4h_low-rsi
     image: amrox/greencandle
     entrypoint: /docker-entrypoint-data.sh analyse_data
     logging:
       driver: journald
     links:
-      - be-get_data_4h:data
-      - base-mysql-local:mysql
-      - base-redis-local:redis
+      - data-be-get_4h:data
+      - data-base-mysql-local:mysql
+      - data-base-redis-local:redis
     depends_on:
-      - base-mysql-local
-      - base-redis-local
-      - be-get_data_4h
+      - data-base-mysql-local
+      - data-base-redis-local
+      - data-be-get_4h
     environment:
       - CONFIG_ENV=test/data/long1
       - HOST=$HOSTNAME
@@ -30,21 +30,21 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-analyse_data_4h_big-change:
-    container_name: be-analyse_data_4h_big-change
-    hostname: be-analyse_data_4h_big-change
+  data-be-analyse_4h_big-change:
+    container_name: data-be-analyse_4h_big-change
+    hostname: data-be-analyse_4h_big-change
     image: amrox/greencandle
     entrypoint: /docker-entrypoint-data.sh analyse_data
     logging:
       driver: journald
     links:
-      - base-mysql-local:mysql
-      - base-redis-local:redis
-      - be-get_data_4h:data
+      - data-base-mysql-local:mysql
+      - data-base-redis-local:redis
+      - data-be-get_4h:data
     depends_on:
-      - base-mysql-local
-      - base-redis-local
-      - be-get_data_4h
+      - data-base-mysql-local
+      - data-base-redis-local
+      - data-be-get_4h
     environment:
       - CONFIG_ENV=test/data/long3
       - HOST=$HOSTNAME
@@ -59,21 +59,21 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-analyse_data_4h_very-low-rsi:
-    container_name: be-analyse_data_4h_very-low-rsi
-    hostname: be-analyse_data_4h_very-low-rsi
+  data-be-analyse_4h_very-low-rsi:
+    container_name: data-be-analyse_4h_very-low-rsi
+    hostname: data-be-analyse_4h_very-low-rsi
     image: amrox/greencandle
     entrypoint: /docker-entrypoint-data.sh analyse_data
     logging:
       driver: journald
     links:
-      - base-mysql-local:mysql
-      - base-redis-local:redis
-      - be-get_data_4h:data
+      - data-base-mysql-local:mysql
+      - data-base-redis-local:redis
+      - data-be-get_4h:data
     depends_on:
-      - base-mysql-local
-      - base-redis-local
-      - be-get_data_4h
+      - data-base-mysql-local
+      - data-base-redis-local
+      - data-be-get_4h
     environment:
       - CONFIG_ENV=test/data/long2
       - HOST=$HOSTNAME
@@ -88,9 +88,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  be-get_data_4h:
-    container_name: be-get_data_4h
-    hostname: be-get_data_4h
+  data-be-get_4h:
+    container_name: data-be-get_4h
+    hostname: data-be-get_4h
     image: amrox/greencandle
     entrypoint: /docker-entrypoint.sh get_data
     logging:
@@ -98,11 +98,11 @@ services:
     ports:
       - 12345
     links:
-      - base-mysql-local:mysql
-      - base-redis-local:redis
+      - data-base-mysql-local:mysql
+      - data-base-redis-local:redis
     depends_on:
-      - base-mysql-local
-      - base-redis-local
+      - data-base-mysql-local
+      - data-base-redis-local
     environment:
       - CONFIG_ENV=test/data/get_data
       - HOST=$HOSTNAME
@@ -117,21 +117,21 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
 
-  fe-cron:
-    container_name: fe-cron
+  data-fe-cron:
+    container_name: data-fe-cron
     environment:
       - CONFIG_ENV=test/cron
       - HOST=$HOSTNAME
-    hostname: fe-cron
+    hostname: data-fe-cron
     image: amrox/greencandle
     restart: always
     entrypoint: /docker-entrypoint.sh cron -f
     links:
-      - base-mysql-local:mysql
-      - base-redis-local:redis
+      - data-base-mysql-local:mysql
+      - data-base-redis-local:redis
     depends_on:
-      - base-mysql-local
-      - base-redis-local
+      - data-base-mysql-local
+      - data-base-redis-local
     healthcheck:
       test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
       interval: 1m
@@ -141,24 +141,24 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
 
-  base-redis-local:
-    container_name: base-redis-local
-    hostname: base-redis-local
+  data-base-redis-local:
+    container_name: data-base-redis-local
+    hostname: data-base-redis-local
     image: amrox/gc-redis
     ports:
       - 6379:6379
     restart: always
     links:
-      - base-mysql-local:mysql
+      - data-base-mysql-local:mysql
     healthcheck:
       test: redis-cli ping
       interval: 1m
       timeout: 2s
       retries: 5
 
-  base-mysql-local:
-    container_name: base-mysql-local
-    hostname: base-mysql-local
+  data-base-mysql-local:
+    container_name: data-base-mysql-local
+    hostname: data-base-mysql-local
     image: amrox/gc-mysql
     ports:
       - 3306:3306
