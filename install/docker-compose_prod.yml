@@ -1,7 +1,6 @@
 version: "3.7"
 services:
 
-###### Start Per
   gen-fe-cadvisor:
     container_name: gen-fe-cadvisor
     hostname: gen-fe-cadvisor
@@ -20,6 +19,25 @@ services:
       timeout: 2s
       retries: 5
 
+  gen-be-logwatch:
+    container_name: gen-be-logwatch
+    hostname: gen-be-logwatch
+    image: amrox/greencandle:${TAG}
+    restart: always
+    entrypoint: /docker-entrypoint-alert.sh /usr/local/bin/logwatch
+    environment:
+      - CONFIG_ENV=prod/fe/cron
+      - HOST=$HOSTNAME
+    volumes:
+      - /var/log:/var/log
+      - /root/.aws:/root/.aws
+    healthcheck:
+      test: ls /var/log/syslog
+      interval: 1m
+      timeout: 2s
+      retries: 5
+
+###### Start Per
   per-base-redis:
     container_name: per-base-redis
     hostname: per-base-redis
