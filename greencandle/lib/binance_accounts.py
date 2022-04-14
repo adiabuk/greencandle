@@ -20,7 +20,7 @@ def usd2gbp():
     Get usd/gbp rate
     """
     client = binance_auth()
-    return  1/float(client.prices()['GBPUSD'])
+    return  1/float(client.prices()['GBPUSDT'])
 
 def get_current_isolated():
     """Get balance for isolated accounts"""
