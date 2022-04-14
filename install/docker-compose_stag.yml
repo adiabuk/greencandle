@@ -392,3 +392,174 @@ services:
       - /var/run/dbus:/var/run/dbu
       - /etc/localtime:/etc/localtime:ro
       - /root/.bash_history:/root/.bash_history
+
+  data-be-analyse_4h_low-rsi:
+    container_name: data-be-analyse_4h_low-rsi
+    hostname: data-be-analyse_4h_low-rsi
+    image: amrox/greencandle
+    entrypoint: /docker-entrypoint-data.sh analyse_data
+    logging:
+      driver: journald
+    links:
+      - data-be-get_4h:data
+      - data-base-mysql-local:mysql
+      - data-base-redis-local:redis
+    depends_on:
+      - data-base-mysql-local
+      - data-base-redis-local
+      - data-be-get_4h
+    environment:
+      - CONFIG_ENV=test/data/long1
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  data-be-analyse_4h_big-change:
+    container_name: data-be-analyse_4h_big-change
+    hostname: data-be-analyse_4h_big-change
+    image: amrox/greencandle
+    entrypoint: /docker-entrypoint-data.sh analyse_data
+    logging:
+      driver: journald
+    links:
+      - data-base-mysql-local:mysql
+      - data-base-redis-local:redis
+      - data-be-get_4h:data
+    depends_on:
+      - data-base-mysql-local
+      - data-base-redis-local
+      - data-be-get_4h
+    environment:
+      - CONFIG_ENV=test/data/long3
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  data-be-analyse_4h_very-low-rsi:
+    container_name: data-be-analyse_4h_very-low-rsi
+    hostname: data-be-analyse_4h_very-low-rsi
+    image: amrox/greencandle
+    entrypoint: /docker-entrypoint-data.sh analyse_data
+    logging:
+      driver: journald
+    links:
+      - data-base-mysql-local:mysql
+      - data-base-redis-local:redis
+      - data-be-get_4h:data
+    depends_on:
+      - data-base-mysql-local
+      - data-base-redis-local
+      - data-be-get_4h
+    environment:
+      - CONFIG_ENV=test/data/long2
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  data-be-get_4h:
+    container_name: data-be-get_4h
+    hostname: data-be-get_4h
+    image: amrox/greencandle
+    entrypoint: /docker-entrypoint.sh get_data
+    logging:
+      driver: journald
+    ports:
+      - 12345
+    links:
+      - data-base-mysql-local:mysql
+      - data-base-redis-local:redis
+    depends_on:
+      - data-base-mysql-local
+      - data-base-redis-local
+    environment:
+      - CONFIG_ENV=test/data/get_data
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+
+  data-fe-cron:
+    container_name: data-fe-cron
+    environment:
+      - CONFIG_ENV=test/cron
+      - HOST=$HOSTNAME
+    hostname: data-fe-cron
+    image: amrox/greencandle
+    restart: always
+    entrypoint: /docker-entrypoint.sh cron -f
+    links:
+      - data-base-mysql-local:mysql
+      - data-base-redis-local:redis
+    depends_on:
+      - data-base-mysql-local
+      - data-base-redis-local
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+
+  data-base-redis-local:
+    container_name: data-base-redis-local
+    hostname: data-base-redis-local
+    image: amrox/gc-redis
+    ports:
+      - 6379
+    restart: always
+    links:
+      - data-base-mysql-local:mysql
+    healthcheck:
+      test: redis-cli ping
+      interval: 1m
+      timeout: 2s
+      retries: 5
+
+  data-base-mysql-local:
+    container_name: data-base-mysql-local
+    hostname: data-base-mysql-local
+    image: amrox/gc-mysql
+    ports:
+      - 3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - CONFIG_ENV=test
+    restart: always
+    healthcheck:
+      test: echo 'SELECT version();'| mysql -uroot -ppassword
+      interval: 1m
+      timeout: 2s
+      retries: 5
