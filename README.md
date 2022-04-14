@@ -11,6 +11,17 @@
 
 # Releases
 
+## 2.20.1
+* Speed up balance iteration by removing zero balance entries before loop
+* Remove various delisted pairs
+* Add data env to staging
+* Name fixes for data env
+* Fix staging alert container
+* Add logwatch to prod
+* Fix binance for currency conversion
+* Analyse data more frequently for collection overlap
+* Add trade alert to log as well as slack notifications
+
 ## 2.20
 * Trade alert containers for data collection and analysis
 * logwatch container for alerting on exceptions
