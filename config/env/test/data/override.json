@@ -13,7 +13,7 @@
   "interval": "4h",
   "logging_output": "journald",
   "no_of_klines": "50",
-  "open_rule1": "",
+  "open_rule1": "1\u003e2",
   "open_rule10": "",
   "open_rule2": "",
   "open_rule3": "",
