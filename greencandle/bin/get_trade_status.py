@@ -26,7 +26,10 @@ def main():
     output = ""
 
     for trade in open_trades:
-        output += '\t\t'.join([get_link(item) for item in trade]) + '\n'
+        quotes = ("BTC", "USDT", "ETH", "BNB")
+        output += '\t\t'.join([get_link(item) if str(item).endswith(quotes) else \
+                str(item) for item in trade]) + '\n'
+
     if output:
         send_slack_message('balance', output)
     sys.exit()
