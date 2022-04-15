@@ -3,7 +3,7 @@
 import math
 from collections import defaultdict
 from greencandle.lib.common import QUOTES
-From binance.binance import Binance
+from binance.binance import Binance
 
 def default_to_regular(ddict):
     """
