@@ -2,7 +2,8 @@
 
 import math
 from collections import defaultdict
-from binance.binance import Binance
+from greencandle.lib.common import QUOTES
+From binance.binance import Binance
 
 def default_to_regular(ddict):
     """
@@ -15,9 +16,8 @@ def default_to_regular(ddict):
 
 def get_quote(pair):
     """Return Quote Currency of trading pair"""
-    main = ['USDT', 'USDC', 'BTC', 'ETH', 'BNB', 'GBP']
     try:
-        return list(filter(pair.endswith, main))[0]
+        return list(filter(pair.endswith, QUOTES))[0]
     except IndexError:
         return None
 

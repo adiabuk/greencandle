@@ -9,7 +9,7 @@ from ..lib import config
 config.create_config()
 from ..lib.mysql import Mysql
 from ..lib.alerts import send_slack_message
-from ..lib.common import get_link
+from ..lib.common import get_link, QUOTES
 
 def main():
     """ Main function """
@@ -26,8 +26,7 @@ def main():
     output = ""
 
     for trade in open_trades:
-        quotes = ("BTC", "USDT", "ETH", "BNB")
-        output += '\t\t'.join([get_link(item) if str(item).endswith(quotes) else \
+        output += '\t\t'.join([get_link(item) if str(item).endswith(QUOTES) else \
                 str(item) for item in trade]) + '\n'
 
     if len(open_trades) > 1:

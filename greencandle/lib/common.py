@@ -5,6 +5,8 @@ Common functions that don't belong anywhere else
 from decimal import Decimal
 import numpy
 
+QUOTES = ("BTC", "USDT", "ETH", "BNB", "GBP")
+
 MINUTE = {"3m": "0,3,6,9,12,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57",
           "5m": "0,5,10,15,20,25,30,35,40,45,50,55",
           "15m": "0,15,30,45",

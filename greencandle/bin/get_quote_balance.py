@@ -9,7 +9,9 @@ from babel.numbers import format_currency
 from greencandle.lib.balance import Balance
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.alerts import send_slack_message
+from greencandle.lib.common import QUOTES
 from greencandle.lib import config
+
 config.create_config()
 
 def format_usd(amount):
@@ -31,10 +33,9 @@ def main():
     phemex = config.accounts.account2_type == 'phemex'
     bal = balances.get_balance(phemex=phemex)
     client = binance_auth()
-    quotes = ['BTC', 'USDT', 'ETH']
     results = ""
     results += "Spot Account:\n"
-    for quote in quotes:
+    for quote in QUOTES:
         try:
             results += "\t{} {} {}\n".format(quote, bal['binance'][quote]['count'],
                                              format_usd(bal['binance'][quote]['USD']))

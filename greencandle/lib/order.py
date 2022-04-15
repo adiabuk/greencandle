@@ -15,7 +15,7 @@ from .mysql import Mysql
 from .redis_conn import Redis
 from .binance_accounts import get_binance_values, get_binance_margin, get_current_isolated
 from .balance_common import get_base, get_quote, get_step_precision
-from .common import perc_diff, add_perc, sub_perc, AttributeDict
+from .common import perc_diff, add_perc, sub_perc, AttributeDict, QUOTES
 from .alerts import send_gmail_alert, send_push_notif, send_slack_trade, send_slack_message
 GET_EXCEPTIONS = get_decorator((Exception))
 
@@ -302,7 +302,7 @@ class Trade():
         balance[account]['USDC']['count'] = 1000
         balance[account]['GBP']['count'] = 1000
         balance[account]['BNB']['count'] = 14
-        for quote in ['BTC', 'ETH', 'USDT', 'BNB', 'USDC', 'GBP']:
+        for quote in QUOTES:
             db_result = dbase.fetch_sql_data("select sum(quote_out-quote_in) from trades "
                                              "where pair like '%{0}' and name='{1}'"
                                              .format(quote, self.config.main.name),
