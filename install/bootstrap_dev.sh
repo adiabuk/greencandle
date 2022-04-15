@@ -1,12 +1,16 @@
 #!/usr/bin/env bash
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 set -xe
+
 
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run as root"
    exit 1
 fi
+
+env
 
 apt-get update
 apt-get -y install software-properties-common
