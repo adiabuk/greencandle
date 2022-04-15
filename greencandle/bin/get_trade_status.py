@@ -30,7 +30,7 @@ def main():
         output += '\t\t'.join([get_link(item) if str(item).endswith(quotes) else \
                 str(item) for item in trade]) + '\n'
 
-    if output:
+    if len(open_trades) > 1:
         send_slack_message('balance', output)
     sys.exit()
 
