@@ -25,7 +25,6 @@ from indicator import SuperTrend, RSI
 from . import config
 
 from .redis_conn import Redis
-from .supres import supres
 from .common import make_float, pipify, pip_calc
 from .binance_common import get_all_klines
 from .logger import get_logger, get_decorator
@@ -50,7 +49,6 @@ class Engine(dict):
         self.redis = redis
         self["hold"] = {}
         self["event"] = {}
-        self.supres = {}
         self.current_time = str(int(time()*1000))
         self.dataframes = {}
         for key, value in dataframes.items():
@@ -222,57 +220,6 @@ class Engine(dict):
 
                 # reset for next loop
                 scheme = {"symbol": pair, "event": "ohlc"}
-
-    @get_exceptions
-    def get_sup_res(self, pair, dataframe, index=None, localconfig=None):
-        """
-        get support & resistance values for current pair
-        Append data to supres instance variable (dict)
-
-        Args:
-              pair: trading pair (eg. XRPBTC)
-              localconfig: indicator config tuple
-        Returns:
-            None
-        """
-
-        func, timeperiod = localconfig  # split tuple
-        LOGGER.info("Getting Support & resistance for %s" % pair)
-
-        close_values = make_float(dataframe.close)[:index]
-        support, resistance = supres(close_values, int(timeperiod))
-        scheme = {}
-        try:
-            value = (pip_calc(support[-1], resistance[-1]))
-        except IndexError:
-            LOGGER.debug("Skipping %s %s %s for support/resistance" %
-                         (pair, str(support), str(resistance)))
-            return None
-
-        cur_to_res = resistance[-1] - close_values[-1]
-        cur_to_sup = close_values[-1] - support[-1]
-        data = {}
-
-        try:
-            scheme["difference"] = pipify(resistance[-1]) - pipify(support[-1])
-        except TypeError as type_error:
-            print("Type error", support[-1], resistance[-1], type_error)
-            return None
-        if func == 'RES':
-            scheme["data"] = str(resistance[-1])
-        elif func == 'SUP':
-            scheme["data"] = str(support[-1])
-        scheme["symbol"] = pair
-        scheme["event"] = "{0}_{1}".format(func, timeperiod)
-
-        if (not index and self.test) or len(self.dataframes[pair]) < 2:
-            index = -1
-        elif not index and not self.test:
-            index = -2
-        scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
-        self.schemes.append(scheme)
-        LOGGER.debug("Done getting Support & resistance")
-        return None
 
     def get_bb(self, pair, dataframe, index=None, localconfig=None):
         """get bollinger bands"""
