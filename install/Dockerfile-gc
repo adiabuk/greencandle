@@ -1,4 +1,4 @@
-FROM amrox/python:3.7.0
+FROM amrox/python:3.7.0-deps
 LABEL branch=${BRANCH}
 LABEL commit=${COMMIT}
 LABEL date=${DATE}
@@ -8,10 +8,6 @@ RUN bash /srv/greencandle/install/bootstrap_docker.sh && \
     cp /srv/greencandle/install/docker-entrypoint*.sh / && \
     cp -rv /srv/greencandle/config /opt/config && \
     chmod +x /docker-entrypoint*.sh
-
-RUN apt-get update \
-   && apt-get install -y vim && \
-   apt-get -y clean && apt-get -y autoclean && apt-get -y autoremove
 
 ARG BRANCH="master"
 ARG COMMIT=""
