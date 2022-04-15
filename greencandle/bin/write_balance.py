@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-position
+#pylint: disable=wrong-import-position,no-member
 
 """
 Get binance balance from API and save to DB
@@ -17,7 +17,8 @@ def main():
         sys.exit(0)
 
     balance = Balance(test=False)
-    prices = balance.get_balance(margin=True, phemex=True)
+    phemex = config.accounts.account2_type == 'phemex'
+    prices = balance.get_balance(margin=True, phemex=phemex)
     balance.save_balance(prices)
     balance.get_saved_balance(prices)
 

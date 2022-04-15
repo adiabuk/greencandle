@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+#pylint: disable=no-member
 """
 Report quote currencies and available trading funds
 """
@@ -8,6 +9,8 @@ from babel.numbers import format_currency
 from greencandle.lib.balance import Balance
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.alerts import send_slack_message
+from greencandle.lib import config
+config.create_config()
 
 def format_usd(amount):
     """
@@ -25,7 +28,8 @@ def main():
 
     balances = Balance(test=False)
 
-    bal = balances.get_balance()
+    phemex = config.accounts.account2_type == 'phemex'
+    bal = balances.get_balance(phemex=phemex)
     client = binance_auth()
     quotes = ['BTC', 'USDT', 'ETH']
     results = ""

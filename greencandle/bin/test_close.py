@@ -6,12 +6,13 @@ Check current open trades for ability to close
 
 import sys
 from greencandle.lib.mysql import Mysql
+from greencandle.lib import config
 from greencandle.lib.balance_common import get_step_precision
 from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.balance_common import get_base, get_quote
 from greencandle.lib.balance import Balance
 from greencandle.lib.auth import binance_auth
-
+config.create_config()
 def main():
     """ Main function """
     client = binance_auth()
@@ -24,7 +25,8 @@ def main():
 
     open_trades = dbase.fetch_sql_data(query, header=False)
     bal = Balance(test=False)
-    balances = bal.get_balance()
+    phemex = config.accounts.account2_type == 'phemex'
+    balances = bal.get_balance(phemex=phemex)
     pairs = []
     prices = client.prices()
     for trade in open_trades:

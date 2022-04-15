@@ -34,7 +34,7 @@ class Balance(dict):
         self.dbase.insert_balance(prices)
 
     @staticmethod
-    def get_balance(coinbase=False, margin=True, phemex=True, isolated=True):
+    def get_balance(coinbase=False, margin=True, phemex=False, isolated=True):
         """
         get dict of all balances
 
@@ -119,7 +119,8 @@ class Balance(dict):
     def get_saved_balance(self, balance=None):
         """print live balance"""
 
-        bal = balance if balance else self.get_balance()
+        phemex = config.accounts.account2_type == 'phemex'
+        bal = balance if balance else self.get_balance(phemex=phemex)
 
         for key, val in bal.items():
             result = self.check_balance(val)
