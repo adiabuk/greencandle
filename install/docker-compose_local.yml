@@ -15,34 +15,6 @@ services:
       - /var/lib/docker:/var/lib/docker
       - /dev/disk:/dev/disk
 
-  2ma-btc:
-    container_name: 2ma-btc
-    hostname: 2ma-btc
-    image: amrox/greencandle
-    entrypoint: /docker-entrypoint.sh backend_test -d /data/altcoin_historical/2019/year/ -s -p BNBBTC -i 4h
-    logging:
-      driver: journald
-    links:
-      - mysql-local:mysql
-      - redis-local:redis
-    depends_on:
-      - mysql-local
-      - redis-local
-    environment:
-      - CONFIG_ENV=test/2MA/4h/4perc
-      - HOST=$HOSTNAME
-    healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    volumes:
-      - ./test:/tmp
-      - /data:/data
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
-
   cron:
     container_name: cron
     environment:
