@@ -105,7 +105,6 @@ fi
 docker build --force-rm --no-cache -f $DIR/Dockerfile-gc . --tag=amrox/greencandle:${TAG}
 docker build --force-rm --no-cache -f $DIR/Dockerfile-ms . --tag=amrox/gc-mysql:${TAG}
 docker build --force-rm --no-cache -f $DIR/Dockerfile-rs . --tag=amrox/gc-redis:${TAG}
-docker build --force-rm --no-cache -f $DIR/Dockerfile-ds . --tag=amrox/dashboard:${TAG}
 docker build --force-rm --no-cache -f $DIR/Dockerfile-wb . --tag=amrox/webserver:${TAG}
 
 TAG=$TAG docker-compose -f $DIR/docker-compose_unit.yml up -d mysql-unit redis-unit

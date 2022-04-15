@@ -110,7 +110,6 @@ services:
      links:
        - mysql-local:mysql
        - redis-local:redis
-       - dashboard:dashboard
        - api
      restart: always
      volumes:
@@ -119,30 +118,6 @@ services:
      depends_on:
       - cadvisor
       - api
-      - dashboard
-
-  dashboard:
-    container_name: dashboard
-    hostname: dashboard
-    image: amrox/dashboard
-    healthcheck:
-      test: curl --fail 127.1:3030/dashboard/gc || exit 1
-      interval: 1m
-      timeout: 5s
-      retries: 5
-    ports:
-      - 3030:3030
-    restart: always
-    entrypoint: /docker-entrypoint.sh
-    links:
-      - mysql-local:mysql
-      - redis-local:redis
-    volumes:
-      - /srv/greencandle/dashboard/dashboards:/dashboards
-      - /srv/greencandle/dashboard/jobs:/jobs
-      - /srv/greencandle/dashboard/widgets:/widgets
-      - /srv/greencandle/dashboard/config:/config
-      - /srv/greencandle/dashboard/assets:/assets
 
   redis-local:
     container_name: redis-local
