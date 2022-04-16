@@ -1,4 +1,4 @@
 {
   "name": "big-drop",
-  "open_rule1": "perc_diff(last_high, low) \u003e 10"
+  "open_rule1": "perc_diff(last_high, low) \u003c -10"
 }
