@@ -95,7 +95,7 @@ def get_logger(module_name=None):
     logger.addHandler(handler)
     return logger
 
-def get_decorator(errors=(Exception,)):
+def exception_catcher(errors=(Exception,)):
     """logging decorator"""
     logger = get_logger(__name__)
     def decorator(func):

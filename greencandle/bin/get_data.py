@@ -14,14 +14,14 @@ from greencandle.lib.redis_conn import Redis
 from greencandle.lib.engine import Engine
 from greencandle.lib.run import prod_initial
 from greencandle.lib.binance_common import get_dataframes
-from greencandle.lib.logger import get_logger, get_decorator
+from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.common import HOUR, MINUTE
 
 LOGGER = get_logger(__name__)
 PAIRS = config.main.pairs.split()
 MAIN_INDICATORS = config.main.indicators.split()
 SCHED = BlockingScheduler()
-GET_EXCEPTIONS = get_decorator((Exception))
+GET_EXCEPTIONS = exception_catcher((Exception))
 
 def test_loop(interval=None, prices=None):
     """

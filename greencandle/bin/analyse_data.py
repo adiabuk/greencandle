@@ -12,7 +12,7 @@ from greencandle.lib import config
 config.create_config()
 from pathlib import Path
 from greencandle.lib.redis_conn import Redis
-from greencandle.lib.logger import get_logger, get_decorator
+from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.common import HOUR, MINUTE, get_link
 from binance.binance import Binance
@@ -22,7 +22,7 @@ PAIRS = config.main.pairs.split()
 MAIN_INDICATORS = config.main.indicators.split()
 SCHED = BlockingScheduler()
 INFO = Binance().exchange_info()
-GET_EXCEPTIONS = get_decorator((Exception))
+GET_EXCEPTIONS = exception_catcher((Exception))
 
 @SCHED.scheduled_job('cron', minute=MINUTE["30m"],
                      hour=HOUR[config.main.interval], second="30")

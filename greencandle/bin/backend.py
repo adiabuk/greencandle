@@ -19,10 +19,10 @@ from ..lib import config
 config.create_config()
 
 from ..lib.graph import Graph
-from ..lib.logger import get_logger, get_decorator
+from ..lib.logger import get_logger, exception_catcher
 from ..lib.run import prod_loop, prod_int_check, prod_initial
 from ..lib.common import HOUR, MINUTE
-GET_EXCEPTIONS = get_decorator((Exception))
+GET_EXCEPTIONS = exception_catcher((Exception))
 LOGGER = get_logger(__name__)
 
 def main():

@@ -27,7 +27,7 @@ from . import config
 from .redis_conn import Redis
 from .common import make_float, pipify, pip_calc
 from .binance_common import get_all_klines
-from .logger import get_logger, get_decorator
+from .logger import get_logger, exception_catcher
 
 LOGGER = get_logger(__name__)
 CROSS_DATA = {}  # data from different time period
@@ -35,7 +35,7 @@ CROSS_DATA = {}  # data from different time period
 class Engine(dict):
     """ Represent events created from data & indicators """
 
-    get_exceptions = get_decorator((Exception))
+    get_exceptions = exception_catcher((Exception))
     def __init__(self, dataframes, prices, interval=None, test=False, redis=None):
         """
         Initialize class

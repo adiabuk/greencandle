@@ -10,14 +10,14 @@ from collections import defaultdict
 import time
 from str2bool import str2bool
 from .auth import binance_auth
-from .logger import get_logger, get_decorator
+from .logger import get_logger, exception_catcher
 from .mysql import Mysql
 from .redis_conn import Redis
 from .binance_accounts import get_binance_values, get_binance_margin, get_current_isolated
 from .balance_common import get_base, get_quote, get_step_precision
 from .common import perc_diff, add_perc, sub_perc, AttributeDict, QUOTES
 from .alerts import send_gmail_alert, send_push_notif, send_slack_trade, send_slack_message
-GET_EXCEPTIONS = get_decorator((Exception))
+GET_EXCEPTIONS = exception_catcher((Exception))
 
 class InvalidTradeError(Exception):
     """

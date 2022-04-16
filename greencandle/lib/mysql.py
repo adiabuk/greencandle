@@ -8,13 +8,13 @@ import MySQLdb
 from . import config
 from .binance_common import get_current_price
 from .common import AttributeDict
-from .logger import get_logger, get_decorator
+from .logger import get_logger, exception_catcher
 
 class Mysql():
     """
     Custom mysql object with methods to store and retrive given data
     """
-    get_exceptions = get_decorator((Exception))
+    get_exceptions = exception_catcher((Exception))
 
     def __init__(self, test=False, interval="15m"):
         self.creds = AttributeDict()
