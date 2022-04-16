@@ -111,7 +111,7 @@ docker build --force-rm --no-cache -f $DIR/Dockerfile-gc . --tag=amrox/greencand
 #docker build --force-rm --no-cache -f $DIR/Dockerfile-rs . --tag=amrox/gc-redis:${TAG}
 #docker build --force-rm --no-cache -f $DIR/Dockerfile-wb . --tag=amrox/webserver:${TAG}
 
-for app in amrox/gc-mysql amrox/gc-redis amrox/alert; do
+for app in amrox/gc-mysql amrox/gc-redis amrox/alert amrox/webserver; do
   docker pull ${app}:latest; docker tag ${app}:latest ${app}:${TAG};
 done
 
