@@ -1,4 +1,4 @@
 {
-  "name": "big-change",
-  "open_rule1": "results.current.RSI_14 \u003c 20"
+  "name": "big-drop",
+  "open_rule1": "perc_diff(last_high, low) \u003e 10"
 }

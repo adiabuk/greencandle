@@ -1,6 +1,31 @@
 version: "3.1"
 services:
 
+  unit:
+    container_name: unit
+    environment:
+      - CONFIG_ENV=unit
+      - HOST=$HOSTNAME
+    hostname: unit
+    image: amrox/greencandle:${TAG}
+    restart: always
+    entrypoint: /docker-entrypoint.sh /srv/greencandle/run_tests.py -v
+    working_dir: /srv/greencandle
+    links:
+      - mysql-unit:mysql
+      - redis-unit:redis
+    depends_on:
+      - mysql-unit
+      - redis-unit
+    healthcheck:
+      test: ls
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+
   cron:
     container_name: cron
     environment:
