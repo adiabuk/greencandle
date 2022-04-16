@@ -11,6 +11,16 @@
 
 # Releases
 
+## 2.21
+* Tradingview links for slack notifications
+* Cleanup slack notifications - don't send when there is no data
+* Don't use Phemex in all environments
+* Cleanup unused code and libs
+* Standardize consolidate code and static vars into common module
+* Speed up unit tests by abstracting into base image and removing repeated code
+* Cleanup de-listed trading pairs
+* Add data analyser in separate environment
+
 ## 2.20.1
 * Speed up balance iteration by removing zero balance entries before loop
 * Remove various delisted pairs
