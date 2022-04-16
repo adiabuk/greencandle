@@ -56,9 +56,6 @@ def keepalive():
     """
     Path('/var/run/greencandle').touch()
 
-
-
-
 @SCHED.scheduled_job('cron', minute=MINUTE[config.main.interval],
                      hour=HOUR[config.main.interval], second="30")
 def prod_run():
@@ -79,7 +76,7 @@ def main():
     * OHLCs
     * Indicators
 
-    This is stored on redis, and analysed by other services later.  
+    This is stored on redis, and analysed by other services later.
     This service runs in a loop and executes periodically depending on timeframe used
     """
 

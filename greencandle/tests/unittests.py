@@ -1,4 +1,4 @@
-#pylint: disable=wrong-import-position,no-member,broad-except,too-many-instance-attributes,too-many-arguments
+#pylint: disable=wrong-import-position,no-member,broad-except,too-many-instance-attributes,too-many-arguments,logging-not-lazy
 
 """
 Helper classes and functions for creating and running unittests
@@ -31,8 +31,6 @@ def get_tag():
     else:
         tag = 'release-{}'.format(os.environ['TRAVIS_BRANCH'])
     return tag
-
-
 
 class OrderedTest(unittest.TestCase):
     """
@@ -79,7 +77,7 @@ def make_docker_case(container, checks=None):
             Run given command using subprocess and return exit code
             """
 
-            self.logger.critical("Running command: %s", command)
+            self.logger.info("Running command: %s" % command)
             process = subprocess.Popen(command, stdout=subprocess.PIPE,
                                        stderr=subprocess.STDOUT, shell=True)
             while process.poll() is None:
@@ -118,8 +116,8 @@ def make_docker_case(container, checks=None):
 
         def step_2(self):
             """Check instance is still running"""
-            self.logger.info("Waiting 2mins")
-            time.sleep(120)
+            self.logger.info("Waiting 1min")
+            time.sleep(60)
             command = 'docker ps --format "{{.Names}}"  -f name=' + container
             return_code, stdout, stderr = self.run_subprocess(command)
             self.assertEqual(return_code, 0)

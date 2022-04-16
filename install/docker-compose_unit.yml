@@ -63,12 +63,12 @@ services:
       - mysql-unit:mysql
       - redis-unit:redis
     ports:
-      - 5000:5000
+      - 20000:20000
     depends_on:
       - mysql-unit
       - redis-unit
     healthcheck:
-      test: find /var/run/  -mmin -2 -name api 2>&1 |grep -q api || exit 1
+      test: ls ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5

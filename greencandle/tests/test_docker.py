@@ -21,7 +21,7 @@ class TestRedis(make_docker_case('redis-unit', checks=["redis-cli ping"])):
     """Test redis docker instance"""
     pass
 
-class TestApi(make_docker_case('api', checks=["curl http://localhost:5000"])):
+class TestApi(make_docker_case('api', checks=["curl http://localhost:20000"])):
     """Test api docker instance"""
     pass
 
