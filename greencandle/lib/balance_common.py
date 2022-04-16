@@ -2,8 +2,8 @@
 
 import math
 from collections import defaultdict
-from greencandle.lib.common import QUOTES
 from binance.binance import Binance
+from greencandle.lib.common import QUOTES
 
 def default_to_regular(ddict):
     """
