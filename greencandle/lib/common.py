@@ -2,6 +2,7 @@
 Common functions that don't belong anywhere else
 """
 
+import sys
 from decimal import Decimal
 import numpy
 
@@ -26,6 +27,14 @@ HOUR = {"3m": "*",
         "3h": "0,3,6,9,12,15,18,21",
         "4h": "0,4,8,12,16,20"
         }
+
+def arg_decorator(func):
+    def inner(*args, **kwargs):
+        if len(sys.argv) > 1 and sys.argv[1] == '--help':
+            print(func.__doc__)
+        sys.exit(0)
+        return func(*args, **kwargs)
+    return inner
 
 class AttributeDict(dict):
     """Access dictionary keys like attributes"""

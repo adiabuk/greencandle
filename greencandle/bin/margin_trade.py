@@ -7,16 +7,14 @@ Buy and sell instantly using binance margin
 
 import sys
 from greencandle.lib.balance_common import get_quote, get_step_precision
-
+from greencandle.lib.common import arg_decorator
 from greencandle.lib.auth import binance_auth
 
+@arg_decorator
 def main():
     """
     Main method
     """
-    if sys.argv[1] == "--help":
-        print("Usage: {} <pair> <side>".format(sys.argv[0]))
-        sys.exit(0)
     if len(sys.argv) < 3:
         print("Usage: {} <pair> <side>".format(sys.argv[0]))
         sys.exit(1)

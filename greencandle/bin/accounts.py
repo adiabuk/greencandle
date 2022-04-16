@@ -9,23 +9,22 @@ import sys
 import openpyxl
 from greencandle.lib import config
 from greencandle.lib.balance_common import get_quote, get_base
+from greencandle.lib.common import arg_decorator
 config.create_config()
 from greencandle.lib.mysql import Mysql
 
+@arg_decorator
 def main():
     """
-    main function
-
     Creates Excel spreadsheet from trades tables with the following columns:
-    ExDate
-    from token
-    from token amount
-    exchange to token
-    to token amount
-    GBP Amount
+    * ExDate
+    * from token
+    * from token amount
+    * exchange to token
+    * to token amount
+    * GBP Amount
 
     Each database row accounts for 2 transactions as there is an open and close
-
     """
 
     if len(sys.argv) > 1 and sys.argv[1] == '--help':

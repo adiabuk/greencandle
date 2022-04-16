@@ -8,6 +8,7 @@ import sys
 import plotly.graph_objs as go
 import plotly.offline as py
 import pandas as pd
+from greencandle.lib.common import arg_decorator
 from greencandle.lib import config
 config.create_config()
 from greencandle.lib.mysql import Mysql
@@ -18,12 +19,13 @@ def usage():
     """
     sys.stderr.write("Usage: {0} <interval> <filename>\n".format(sys.argv[0]))
 
+@arg_decorator
 def main():
-    """Main function"""
-    if len(sys.argv) > 1 and sys.argv[1] == '--help':
-        usage()
-        sys.exit(0)
-    elif len(sys.argv) < 3:
+    """
+    Create drawdown scatter chart
+    """
+
+    if len(sys.argv) < 3:
         usage()
         sys.exit(1)
     interval = sys.argv[1]

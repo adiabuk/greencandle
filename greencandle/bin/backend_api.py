@@ -7,6 +7,7 @@ API trading module
 import sys
 from time import strftime, gmtime
 from flask import Flask, request, Response
+from greencandle.lib.common import arg_decorator
 from greencandle.lib import config
 config.create_config()
 from greencandle.lib.binance_common import get_current_price
@@ -38,15 +39,15 @@ def respond():
 
     return Response(status=200)
 
+@arg_decorator
 def main():
     """
-    main function
-    """
-    if len(sys.argv) > 1 and sys.argv[1] == '--help':
-        print("API for executing trades")
-        sys.exit(0)
+    Receives trade requests from web front-end/API/router and
+    open/close trade as appropriate
 
+    """
 
     APP.run(debug=True, host='0.0.0.0', port=20000, threaded=True)
+
 if __name__ == "__main__":
     main()

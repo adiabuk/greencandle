@@ -7,7 +7,9 @@ import time
 import gzip
 import pickle
 import glob
+from greencandle.lib.common import arg_decorator
 
+@arg_decorator
 def main():
     """
     Print pair and date of first candle close for each pickle

@@ -2,16 +2,13 @@
 #pylint: disable=ungrouped-imports,wrong-import-position,import-error,wrong-import-order,no-member
 
 """
-Get Status of docker containers from docker socket file and send alerts for erroring containers.
-This script requires access to the socket file in /var/run/docker.sock, and config loaded into
-namespace so that alerts can be sent
-Errors will also be printed to STDOUT.
-This script is intended to be run from crontab.
+Check if docker containers are up/healthy, otherwise alert to slack
 """
-import sys
+
 import json
 from greencandle.lib import config
 config.create_config()
+from ..lib.common import arg_decorator
 from greencandle.lib.alerts import send_push_notif, send_slack_message
 
 import requests_unixsocket
@@ -32,12 +29,15 @@ def get_docker_status(docker_socket):
             container_list.append(item)
     return container_list
 
+@arg_decorator
 def main():
-    """main_function"""
-
-    if len(sys.argv) > 1 and sys.argv[1] == '--help':
-        print("Send alerts if docker containers are down")
-        sys.exit(0)
+    """
+    Get Status of docker containers from docker socket file and send alerts for erroring containers.
+    This script requires access to the socket file in /var/run/docker.sock, and config loaded into
+    namespace so that alerts can be sent
+    Errors will also be printed to STDOUT.
+    This script is intended to be run from crontab.
+    """
 
 
     issues = []

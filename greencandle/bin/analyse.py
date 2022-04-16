@@ -4,17 +4,13 @@
 Analise and collate data from Excel reports
 """
 
-import sys
 import glob
 import pandas as pd
+from greencandle.lib.common import arg_decorator
 
-
+@arg_decorator
 def main():
-    """Main function"""
-
-    if len(sys.argv) > 1 and sys.argv[1] == '--help':
-        print("Send alerts if docker containers are down")
-        sys.exit(0)
+    """Analyse available xlsx reports and print perc/par for each file"""
 
     files = glob.glob('*.xlsx')
 

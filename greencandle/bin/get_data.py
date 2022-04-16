@@ -3,7 +3,6 @@
 """
 Collect OHLC and strategy data for later analysis
 """
-import sys
 import socket
 from pathlib import Path
 from binance.binance import Binance
@@ -15,7 +14,7 @@ from greencandle.lib.engine import Engine
 from greencandle.lib.run import prod_initial
 from greencandle.lib.binance_common import get_dataframes
 from greencandle.lib.logger import get_logger, exception_catcher
-from greencandle.lib.common import HOUR, MINUTE
+from greencandle.lib.common import HOUR, MINUTE, arg_decorator
 
 LOGGER = get_logger(__name__)
 PAIRS = config.main.pairs.split()
@@ -73,15 +72,16 @@ def prod_run():
     test_loop(interval=interval, prices=prices)
     LOGGER.info("Finished prod run")
 
+@arg_decorator
 def main():
     """
-    Main function
-    """
+    Collect data:
+    * OHLCs
+    * Indicators
 
-    usage = "Usage: {}".format(sys.argv[0])
-    if len(sys.argv) > 1 and  sys.argv[1] == '--help':
-        print(usage)
-        sys.exit(0)
+    This is stored on redis, and analysed by other services later.  
+    This service runs in a loop and executes periodically depending on timeframe used
+    """
 
     interval = config.main.interval
     LOGGER.info("Starting initial prod run")
@@ -97,11 +97,7 @@ def main():
     sock.bind(("0.0.0.0", 12345))
     sock.listen(5)
 
-    try:
-        SCHED.start()
-    except KeyboardInterrupt:
-        LOGGER.warning("\nExiting on user command...")
-        sys.exit(1)
+    SCHED.start()
 
 if __name__ == '__main__':
     main()

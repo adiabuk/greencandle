@@ -4,20 +4,19 @@
 """
 Check pairs in config are still current
 """
-import sys
 import time
 import datetime
+from greencandle.lib.common import arg_decorator
 from greencandle.lib import config
 config.create_config()
 from greencandle.lib.binance_common import get_dataframes
 
-
+@arg_decorator
 def main():
-    """ Main Function """
-    if len(sys.argv) > 1 and sys.argv[1] == '--help':
-        print("Check if data is downloadable for pair")
-        sys.exit(0)
-
+    """
+    Check pairs are valid by attempting to download a single candle
+    from the exchange
+    """
     now = datetime.datetime.now()
     bad_pairs = []
     for pair in config.main.pairs.split():
@@ -31,5 +30,5 @@ def main():
             print(pair)
             print('no_data')
             bad_pairs.append(pair)
-    if bad_pairs:
-        sys.exit(1)
+
+    print(bad_pairs)

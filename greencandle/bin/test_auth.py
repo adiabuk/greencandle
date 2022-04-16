@@ -6,16 +6,16 @@ Test authentication to binance
 """
 
 import sys
+from greencandle.lib.common import arg_decorator
 from greencandle.lib.auth import binance_auth
 
+@arg_decorator
 def main():
-    """main function"""
+    """
+    Check that authentication succeeds using current config
+    """
 
     client = binance_auth()
-
-    if len(sys.argv) > 1 and sys.argv[1] == '--help':
-        print("Test binance authentication using config creds")
-        sys.exit(0)
 
     try:
         client.balances()

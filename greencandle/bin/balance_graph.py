@@ -5,25 +5,20 @@
 Create OHLC graph using daily balance
 """
 
-import sys
 import numpy
 import pandas
+from greencandle.lib.common import arg_decorator
 from greencandle.lib import config
 config.create_config()
-
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.graph import Graph
 
-
+@arg_decorator
 def main():
     """
-    Main function
+    Create OHLC graph using balance data for BTC and USDT
     """
     mysql = Mysql()
-
-    if len(sys.argv) > 1 and sys.argv[1] == '--help':
-        print("Create OHLC graph using daily balance")
-        sys.exit(0)
 
     # temp table we will use to filter out incomplete balance records
     drop = "drop table if exists `temp_table`"

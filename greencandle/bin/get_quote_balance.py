@@ -4,12 +4,12 @@
 Report quote currencies and available trading funds
 """
 
-import sys
 from babel.numbers import format_currency
 from greencandle.lib.balance import Balance
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.common import QUOTES
+from greencandle.lib.common import arg_decorator
 from greencandle.lib import config
 
 config.create_config()
@@ -20,13 +20,16 @@ def format_usd(amount):
     """
     return str(format_currency(amount, 'USD', locale='en_US'))
 
+@arg_decorator
 def main():
     """
-    Main function
+    Get list of available quote balances from
+    * binance spot
+    * binance cross margin
+    * binance isolated margin
+
+    Format and output to slack
     """
-    if len(sys.argv) > 1 and sys.argv[1] == '--help':
-        print("Usage: {} <pair>".format(sys.argv[0]))
-        sys.exit(0)
 
     balances = Balance(test=False)
 

@@ -9,20 +9,19 @@ import sys
 import glob
 import pandas as pd
 from xlrd.biffh import XLRDError
+from greencandle.lib.common import arg_decorator
 
-
+@arg_decorator
 def main():
     """
-    Main function
+    Extract data from Excel reports
+    Choose from annual, monthly, or factor (profit factor)
+    Results will be outputted to stdout
     """
     files = glob.glob('*.xlsx')
     if len(sys.argv) != 2 or sys.argv[1] not in ("annual", "monthly", "factor", "--help"):
         sys.stderr.write("Usage: {} <annual|monthly|factor>\n".format(sys.argv[0]))
         sys.exit(1)
-    elif sys.argv[1] == '--help':
-        sys.stderr.write("Extract data from Excel reports\n")
-        sys.stderr.write("Usage: {} <annual|monthly>\n".format(sys.argv[0]))
-        sys.exit(0)
 
     output = sys.argv[1]
     year = os.getcwd().split('/')[-1]

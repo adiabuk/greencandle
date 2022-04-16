@@ -4,19 +4,18 @@
 Get details of current trades using mysql and current value from binance
 """
 
-import sys
 from ..lib import config
 config.create_config()
 from ..lib.mysql import Mysql
 from ..lib.alerts import send_slack_message
-from ..lib.common import get_link, QUOTES
+from ..lib.common import get_link, QUOTES, arg_decorator
 
+@arg_decorator
 def main():
-    """ Main function """
-
-    if len(sys.argv) > 1 and sys.argv[1] == '--help':
-        print("Get open trades status")
-        sys.exit(0)
+    """
+    Get list of open trades from DB, and format for output to slack with
+    tradingview links for each trading pair
+    """
 
     dbase = Mysql()
 
@@ -31,7 +30,6 @@ def main():
 
     if len(open_trades) > 1:
         send_slack_message('balance', output)
-    sys.exit()
 
 if __name__ == "__main__":
     main()

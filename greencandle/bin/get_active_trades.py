@@ -5,17 +5,21 @@
 Get details of current trades using mysql and current value from binance
 """
 
-import sys
+from ..lib.common import arg_decorator
 from ..lib import config
 config.create_config()
 
 from ..lib.mysql import Mysql
 
+@arg_decorator
 def main():
-    """ Main function """
-    if len(sys.argv) > 1 and sys.argv[1] == '--help':
-        print("Get list of current trades")
-        sys.exit(0)
+    """
+    Get list of active trades and store in db active_trades table with updated current price
+    Also store amount in USD, and perc
+
+    To be used with cron, to periodically update db
+    """
+
     dbase = Mysql()
     dbase.get_active_trades()
     del dbase

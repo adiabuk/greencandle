@@ -5,16 +5,17 @@
 Get binance balance from API and save to DB
 """
 
-import sys
 from greencandle.lib import config
 config.create_config()
+from greencandle.lib.common import arg_decorator
 from greencandle.lib.balance import Balance
 
+@arg_decorator
 def main():
-    """ Main Function """
-    if len(sys.argv) > 1 and sys.argv[1] == '--help':
-        print("Update database with current binance balance")
-        sys.exit(0)
+    """
+    Get balance from exchange and write to DB
+    Also alert to slack balance channel
+    """
 
     balance = Balance(test=False)
     phemex = config.accounts.account2_type == 'phemex'

@@ -4,21 +4,24 @@
 Check current open trades for ability to close
 """
 
-import sys
 from greencandle.lib.mysql import Mysql
 from greencandle.lib import config
 from greencandle.lib.balance_common import get_step_precision
 from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.balance_common import get_base, get_quote
+from greencandle.lib.common import arg_decorator
 from greencandle.lib.balance import Balance
 from greencandle.lib.auth import binance_auth
 config.create_config()
+
+@arg_decorator
 def main():
-    """ Main function """
+    """
+    Check that we have enough base currency to close the trade
+    and enough BNB to pay for commission costs
+    Alert in slack and to logs
+    """
     client = binance_auth()
-    if len(sys.argv) > 1 and sys.argv[1] == '--help':
-        print("Check current open trades for ability to close")
-        sys.exit(0)
 
     dbase = Mysql()
     query = ("select pair, base_in, quote_in, name from trades where close_price is NULL")
@@ -52,12 +55,13 @@ def main():
 
             # Check if enough BNB in spot
             quote = get_quote(pair)
-            current_price = prices['BNB'+quote]
+            current_price = prices['BNB' + quote]
             bnb_required = (float(quote_in) / float(current_price))/100 *0.1
             bnb_available = bal_amount = balances['binance']['BNB']['count']
 
             if float(bnb_required) > float(bnb_available):
-                print("SHIT reqired:{} available:{}".format(bnb_required, bnb_available))
+                print("Insufficient BNBrequired:{} available:{}".format(bnb_required,
+                                                                        bnb_available))
                 result3 = "True"
                 reason = "BNB not available"
 

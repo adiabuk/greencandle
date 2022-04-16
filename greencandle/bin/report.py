@@ -7,18 +7,18 @@ Create Excel Spreadsheet with results and analysis of trades
 
 import sys
 import openpyxl
+from greencandle.lib.common import arg_decorator
 from greencandle.lib import config
 config.create_config()
 from greencandle.lib.mysql import Mysql
 
+@arg_decorator
 def main():
     """
-    main function
+    Create Excel Spreadsheet with results and analysis of trades
+    Analysis comes from database entries: buy/sell prices as
+    well as drawup/drawdown prices and profits
     """
-
-    if len(sys.argv) > 1 and sys.argv[1] == '--help':
-        print("Generate Excel report from database entries")
-        sys.exit(0)
 
     if len(sys.argv) != 3:
         sys.stderr.write("Usage: report <interval> <filename>\n")

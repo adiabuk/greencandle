@@ -5,7 +5,6 @@ Flask module for manipulating API trades and displaying relevent graphs
 """
 import re
 import os
-import sys
 import json
 import subprocess
 from collections import defaultdict
@@ -14,6 +13,7 @@ import yaml
 from flask import Flask, render_template, request, Response
 APP = Flask(__name__, template_folder="/etc/gcapi", static_url_path='/',
             static_folder='/etc/gcapi')
+from greencandle.lib.common import arg_decorator
 from greencandle.lib import config
 config.create_config()
 
@@ -151,12 +151,10 @@ def menu():
     length = get_pairs()[1]
     return render_template('menu.html', strats=length)
 
+@arg_decorator
 def main():
-    """main func"""
+    """API for interacting with trading system"""
 
-    if len(sys.argv) > 1 and sys.argv[1] == '--help':
-        print("API for interacting with trading system")
-        sys.exit(0)
     APP.run(debug=True, host='0.0.0.0', port=5000, threaded=True)
 
 if __name__ == '__main__':

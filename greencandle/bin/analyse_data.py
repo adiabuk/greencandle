@@ -6,7 +6,6 @@ Analyze available data rom redis
 Look for potential buys
 """
 
-import sys
 from apscheduler.schedulers.blocking import BlockingScheduler
 from greencandle.lib import config
 config.create_config()
@@ -14,7 +13,7 @@ from pathlib import Path
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.alerts import send_slack_message
-from greencandle.lib.common import HOUR, MINUTE, get_link
+from greencandle.lib.common import HOUR, MINUTE, get_link, arg_decorator
 from binance.binance import Binance
 
 LOGGER = get_logger(__name__)
@@ -58,15 +57,12 @@ def keepalive():
     """
     Path('/var/run/greencandle').touch()
 
+@arg_decorator
 def main():
     """
-    Main function
+    Analyse data from redis and alert to slack if there are current buying opportunities
     """
 
-    usage = "Usage: {}".format(sys.argv[0])
-    if len(sys.argv) > 1 and  sys.argv[1] == '--help':
-        print(usage)
-        sys.exit(0)
     LOGGER.info("Starting Initial loop")
     analyse_loop()
     LOGGER.info("Finished Initial loop")

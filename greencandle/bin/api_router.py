@@ -9,6 +9,7 @@ import sys
 import json
 import requests
 from flask import Flask, request, Response
+from greencandle.lib.common import arg_decorator
 from greencandle.lib import config
 config.create_config()
 from greencandle.lib.logger import get_logger
@@ -28,7 +29,6 @@ def send_trade(payload, host):
         requests.post(url, json=payload, timeout=0.0000000001)
     except:
         pass
-
 
 @APP.route('/healthcheck', methods=["GET"])
 def healthcheck():
@@ -60,14 +60,12 @@ def respond():
     LOGGER.info("Request received: %s" %(request.json))
     return Response(status=200)
 
+@arg_decorator
 def main():
     """
-    main function
+    Route trades from api dashboard to one or more containers
+    Config is /etc/router_config.json
     """
-    if len(sys.argv) > 1 and sys.argv[1] == '--help':
-        print("API for executing trades")
-        sys.exit(0)
-
     APP.run(debug=True, host='0.0.0.0', port=1080, threaded=True)
 if __name__ == "__main__":
     main()

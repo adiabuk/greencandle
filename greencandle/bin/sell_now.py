@@ -8,18 +8,21 @@ Sell a particular trade immediately
 import sys
 import time
 from binance.binance import Binance
-
+from greencandle.lib.common import arg_decorator
 from greencandle.lib import config
 config.create_config()
 from greencandle.lib.order import Trade
 
+@arg_decorator
 def main():
-    """ main function """
-
-    if len(sys.argv) > 1 and sys.argv[1] == '--help':
-        print("Sell a particular trade immediately")
+    """
+    Close a long trade immediately
+    Trade must belong to strategy in current config scope/container
+    """
+    if len(sys.argv) < 4:
         print("Usage {} [pair] [interval] [test_trade] [test_data]".format(sys.argv[0]))
-        sys.exit(0)
+        sys.exit(1)
+
     pair = sys.argv[1]
     interval = sys.argv[2]
 
