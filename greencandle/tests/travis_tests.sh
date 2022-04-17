@@ -7,4 +7,4 @@ if [ -d "/opt/pyenv" ]; then
  eval "$(pyenv init -)"
 fi
 
-pytest --rootdir=/srv/greencandle -k "$@"
+pytest -v --rootdir=/srv/greencandle -k "$@"
