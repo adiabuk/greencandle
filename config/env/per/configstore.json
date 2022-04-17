@@ -7,12 +7,12 @@
   "master_key_id": "alias/greencandle",
   "data": {
     "account1_key": {
-      "value": "urY4cLXQ+NIE7zTQ3UHQ6b4Opo/tECW1ppYnkF5tpvqIchKny7A0Y8VTM/tptl97orLLaUQ+4aCwV8Cuqxg53OpeqeTY9SQPLPgpMRxKy41CoTLmVR+AOrrrp1baxgOZbeJCLXi7DjM=",
+      "value": "+HQZMqc+olfCppvOyBt5Ntk3m1z2HTVu4PkVbUxxi6xEfS9mBeOQEcmfFPkDxefYnVq7E9TXFgpwyEokfCqrT9VCsvCLBgS4E4EUgcDnwZL42zt7Tv8HVBok2XLsM5V9nxCrPFML8sg=",
       "is_binary": false,
       "is_secret": true
     },
     "account1_secret": {
-      "value": "eJ3FXkHREKd7p9l1APitouZJ4qzaMIhOvlrY5NRKJg8n2RL7C7POxy2k16n924WBVfyLFjMuB2FiBu7RQEjLWV8AgVRZjujmDEdXl/wmlfbBq5G93XlAZWoNU34rAyW5cfs8GkNgpig=",
+      "value": "bvUBAOQGhRYJlccqJGibe88dD0Sykven320r5HRV7bPUVwVGXK3L8NJFJhDV5gcA8xNg5o+ziwS/SZAdbc6V+Opwhzqbagy6OOiHwSsqf1ZrsKMgfoqImncMDG6BLN7NdcO9hXqsirk=",
       "is_binary": false,
       "is_secret": true
     },
