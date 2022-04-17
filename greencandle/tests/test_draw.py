@@ -1,5 +1,7 @@
 #pylint: disable=wrong-import-position,no-member
 """Redis tests"""
+
+import os
 import unittest
 import pandas as pd
 from greencandle.lib import config
@@ -26,6 +28,7 @@ class TestDraw(unittest.TestCase):
         Test drawdown
         """
 
+        os.system("configstore package process_templates unit /etc")
         pair = 'BTCUSDT'
         redis = Redis(test=True, test_data=True)
         redis.clear_all()
@@ -69,6 +72,7 @@ class TestDraw(unittest.TestCase):
         Test drawup
         """
 
+        os.system("configstore package process_templates unit /etc")
         pair = 'BTCUSDT'
         redis = Redis(test=True, test_data=True)
         redis.clear_all()
