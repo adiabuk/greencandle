@@ -29,6 +29,9 @@ HOUR = {"3m": "*",
         }
 
 def arg_decorator(func):
+    """
+    Add --help arg to simple scripts with text from function docstring
+    """
     def inner(*args, **kwargs):
         if len(sys.argv) > 1 and sys.argv[1] == '--help':
             print(func.__doc__)

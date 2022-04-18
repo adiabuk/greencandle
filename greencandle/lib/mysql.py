@@ -298,7 +298,8 @@ class Mysql():
                                                                     data["USD"], data["count"],
                                                                     coin, exchange))
                 except KeyError:
-                    self.logger.critical(" ".join(["XXX", coin, exchange, "KEYERROR"]))
+                    self.logger.info(" ".join(["Unable to find coin:", coin,
+                                               exchange, "KEYERROR"]))
                     continue
                 except IndexError:
                     self.logger.critical("Index error %s" % exchange)
