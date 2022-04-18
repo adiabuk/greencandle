@@ -30,6 +30,7 @@ class TestDraw(unittest.TestCase):
         """
 
         os.system("configstore package process_templates unit /etc")
+        config.get_config()
         pair = 'BTCUSDT'
         redis = Redis(test=True, test_data=True)
         redis.clear_all()
@@ -79,6 +80,7 @@ class TestDraw(unittest.TestCase):
         """
 
         os.system("configstore package process_templates unit /etc")
+        config.get_config()
         pair = 'BTCUSDT'
         redis = Redis(test=True, test_data=True)
         redis.clear_all()
