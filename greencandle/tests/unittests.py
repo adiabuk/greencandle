@@ -126,6 +126,7 @@ def make_docker_case(container, checks=None):
 
         def step_3(self):
             """Run healthchecks"""
+            time.sleep(120)
             if checks:
                 for check in checks:
                     return_code, _, _ = self.run_subprocess(check)
