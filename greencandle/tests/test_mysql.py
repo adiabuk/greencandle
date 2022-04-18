@@ -29,7 +29,7 @@ class TestMysql(OrderedTest):
         for container in ['mysql-unit', 'redis-unit']:
             command = ("TAG={} docker-compose -f install/docker-compose_unit.yml up -d {}".format(
                 get_tag, container))
-        time.sleep(3)
+        time.sleep(6)
         self.dbase = Mysql(test=True, interval="1h")
 
     def step_1(self):

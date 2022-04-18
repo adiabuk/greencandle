@@ -51,9 +51,10 @@ docker-compose -f ./install/docker-compose_${env}.yml up --remove-orphans -d $ba
 
 for container in $be; do
   docker-compose -f ./install/docker-compose_${env}.yml up -d $container
-  sleep 2
+  sleep 5
 done
 
+sleep 5
 docker-compose -f ./install/docker-compose_${env}.yml up -d $fe
 
 text="Finished deployment $TAG on $HOSTNAME"
