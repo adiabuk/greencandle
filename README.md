@@ -11,6 +11,11 @@
 
 # Releases
 
+## 2.21.1
+* New api keys
+* Unit test fixes
+* Security fixes
+
 ## 2.21
 * Tradingview links for slack notifications
 * Cleanup slack notifications - don't send when there is no data
