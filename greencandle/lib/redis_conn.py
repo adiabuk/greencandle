@@ -220,6 +220,13 @@ class Redis():
         """Return a specific item from redis, given an address and key"""
         return self.conn.hget(address, key)
 
+    def hgetall(self):
+        """
+        Log current redis hashes for debugging unit tests
+        """
+        for key in self.conn.keys():
+            self.logger.critical("%s %s" % (key, self.conn.hgetall(key)))
+
     def get_current(self, item):
         """
         Get the current price and date for given item where item is an address:
