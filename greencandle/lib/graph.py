@@ -51,7 +51,7 @@ class Graph():
                                    executable_path="/usr/local/bin/geckodriver")
         driver.get("file://{0}/{1}".format(output_dir, self.filename))
         driver.save_screenshot("{0}/{1}.png".format(output_dir, self.filename))
-        time.sleep(10)
+        time.sleep(5)
         driver.quit()
         display.stop()
 

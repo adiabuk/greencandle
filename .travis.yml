@@ -3,7 +3,7 @@ install:
 - sudo docker login -u "amrox" -p "$DPWD"
 - sudo bash install/bootstrap_dev.sh
 before_script:
-- sleep 5
+- sleep 0.5
 script:
 - configstore package test
 - sudo docker ps
