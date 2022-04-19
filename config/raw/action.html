@@ -27,23 +27,23 @@
 
 	        <input type="hidden" name="strategy" value="{{strat}}" />
                <td>
-	          <input type="submit" name="action" value="buy">
+	          <input type="submit" name="action" value="open">
 
                </td>
 	       <td>
-		<input type="submit" name="action" value="sell">
+		<input type="submit" name="action" value="close">
                </td>
 	       </form>
 	    {% else %}
 	        <td>{{pair}}</td>
                <td>
-                  <form action="/action?pair={{pair}}&strategy={{strat}}&action=buy" method="post">
-                     <button name="actionBtn" type="submit">Buy</button>
+                  <form action="/action?pair={{pair}}&strategy={{strat}}&action=open" method="post">
+                     <button name="actionBtn" type="submit">Open</button>
                   </form>
                </td>
 	       <td>
-                  <form action="/action?pair={{pair}}&strategy={{strat}}&action=sell" method="post">
-                     <button name="actionBtn" type="submit">Sell</button>
+                  <form action="/action?pair={{pair}}&strategy={{strat}}&action=close" method="post">
+                     <button name="actionBtn" type="submit">Close</button>
                   </form>
                </td>
             {% endif %}

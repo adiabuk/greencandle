@@ -32,9 +32,9 @@ def respond():
     current_price = get_current_price(pair)
     item = [(pair, current_time, current_price, config.main.name)]
     trade = Trade(interval=config.main.interval, test_data=False, test_trade=TEST, config=config)
-    if action == 'BUY':
+    if action == 'OPEN':
         trade.open_trade(item)
-    elif action == 'SELL':
+    elif action == 'CLOSE':
         trade.close_trade(item, drawdowns={pair:0}, drawups={pair:0})
 
     return Response(status=200)
