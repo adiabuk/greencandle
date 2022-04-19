@@ -100,7 +100,7 @@ class Trade():
         dbase = Mysql(test=self.test_data, interval=self.interval)
         current_trades = dbase.get_trades()
         drain = str2bool(self.config.main.drain)
-        avail_slots = self.config.main.max_trades - len(current_trades)
+        avail_slots = int(self.config.main.max_trades) - len(current_trades)
         self.logger.info("%s buy slots available" % avail_slots)
         if avail_slots <= 0:
             self.logger.warning("Too many trades, skipping")
