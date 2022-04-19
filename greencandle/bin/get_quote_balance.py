@@ -4,7 +4,6 @@
 Report quote currencies and available trading funds
 """
 
-from babel.numbers import format_currency
 from greencandle.lib.balance import Balance
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.alerts import send_slack_message
