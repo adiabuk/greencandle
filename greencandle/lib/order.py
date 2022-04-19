@@ -213,7 +213,7 @@ class Trade():
         """
         symbol = get_quote(pair) if self.config.main.trade_direction == 'long' else get_base(pair)
 
-        if self.test_data or self.test_trade():
+        if self.test_data or self.test_trade:
             return self.__get_test_balance(dbase, account=account)
         elif account == 'binance':
             return get_binance_values()['binance'][symbol]['count']
