@@ -113,7 +113,7 @@ class Mysql():
 
     @get_exceptions
     def insert_trade(self, pair, date, price, quote_amount, base_amount, borrowed='', multiplier='',
-                     direction='', quote_name=None):
+                     direction='', symbol_name=None):
         """
         Insert new trade into DB
         Args:
@@ -126,7 +126,7 @@ class Mysql():
         Returns:
               None
         """
-        usd_rate, gbp_rate = self.get_rates(quote_name)
+        usd_rate, gbp_rate = self.get_rates(symbol_name)
         command = """insert into trades (pair, open_time, open_price, base_in, `interval`,
                      quote_in, name, borrowed, multiplier, direction, open_usd_rate, open_gbp_rate)
                      VALUES ("{0}", "{1}", "{2}", "{3}", "{4}", "{5}", "{6}", "{7}", "{8}", "{9}",
@@ -231,11 +231,11 @@ class Mysql():
 
     @get_exceptions
     def update_trades(self, pair, close_time, close_price, quote, base_out,
-                      name=None, drawdown=0, drawup=0, quote_name=None):
+                      name=None, drawdown=0, drawup=0, symbol_name=None):
         """
         Update an existing trade with sell price
         """
-        usd_rate, gbp_rate = self.get_rates(quote_name)
+        usd_rate, gbp_rate = self.get_rates(symbol_name)
         job_name = name if name else config.main.name
         command = """update trades set close_price={0},close_time="{1}",
         quote_out="{2}", base_out="{3}", closed_by="{6}", drawdown_perc=abs(round({7},1)),

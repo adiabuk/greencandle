@@ -13,7 +13,7 @@ from .auth import binance_auth
 from .logger import get_logger, exception_catcher
 from .mysql import Mysql
 from .redis_conn import Redis
-from .binance_accounts import get_binance_values, get_binance_margin, get_current_isolated
+from .binance_accounts import get_binance_values, get_current_isolated
 from .balance_common import get_base, get_quote, get_step_precision
 from .common import perc_diff, add_perc, sub_perc, AttributeDict, QUOTES
 from .alerts import send_gmail_alert, send_push_notif, send_slack_trade, send_slack_message
@@ -32,8 +32,6 @@ class Trade():
         self.test_data = test_data
         self.test_trade = test_trade
         self.config = config
-        self.max_trades = int(self.config.main.max_trades)
-        self.divisor = float(self.config.main.divisor) if self.config.main.divisor else None
         self.prod = str2bool(self.config.main.production)
         self.client = binance_auth()
         self.interval = interval
@@ -82,13 +80,13 @@ class Trade():
                                                    .format(item, self.config.main.name),
                                                    header=False)[-1][-1]
             last_open_price = float(last_open_price) if last_open_price else 0
-        except IndexError:
+        except (IndexError, TypeError):
             last_open_price = 0
 
-        if self.divisor:
-            proposed_quote_amount = current_quote_bal / self.divisor
+        if self.config.main.divisor:
+            proposed_quote_amount = current_quote_bal / self.config.main.divisor
         else:
-            proposed_quote_amount = current_quote_bal / (self.max_trades + 1)
+            proposed_quote_amount = current_quote_bal / (self.config.main.max_trades + 1)
         self.logger.info('item: %s, proposed: %s, last:%s'
                          % (item, proposed_quote_amount, last_open_price))
 
@@ -102,7 +100,7 @@ class Trade():
         dbase = Mysql(test=self.test_data, interval=self.interval)
         current_trades = dbase.get_trades()
         drain = str2bool(self.config.main.drain)
-        avail_slots = self.max_trades - len(current_trades)
+        avail_slots = self.config.main.max_trades - len(current_trades)
         self.logger.info("%s buy slots available" % avail_slots)
         if avail_slots <= 0:
             self.logger.warning("Too many trades, skipping")
@@ -196,45 +194,58 @@ class Trade():
         else:
             raise InvalidTradeError("Invalid trade type")
 
-    def __open_margin_long(self, buy_list):
+    def quote2base(self, amount, pair):
+        """
+        convert quote amount to base amount
+        """
+        return float(amount) / float(self.client.prices()[pair])
+
+    def base2quote(self, amount, pair):
+        """
+        convert base amount to quote amount
+        """
+        return float(amount) * float(self.client.prices()[pair])
+
+    def get_balance(self, dbase, account=None, pair=None):
+        """
+        Choose between spot/cross/isolated/test balances and return
+        retrieved dict
+        """
+        symbol = get_quote(pair) if self.config.main.trade_direction == 'long' else get_base(pair)
+
+        if self.test_data or self.test_trade():
+            return self.__get_test_balance(dbase, account=account)
+        elif account == 'binance':
+            return get_binance_values()['binance'][symbol]['count']
+        elif account == 'margin' and str2bool(self.config.main.isolated):
+            return get_current_isolated()['isolated'][symbol]['count']
+        elif account == 'margin' and not str2bool(self.config.main.isolated):
+            return self.client.get_max_borrow(asset=symbol)
+        else:
+            return None
+
+    def __open_margin_long(self, long_list):
         """
         Buy as many items as we can from buy_list depending on max amount of trades, and current
         balance in quote currency
         """
-        self.logger.info("We have %s potential items to buy" % len(buy_list))
+        self.logger.info("We have %s potential items to long" % len(long_list))
 
         dbase = Mysql(test=self.test_data, interval=self.interval)
-        if self.test_data or self.test_trade:
-            balance = self.__get_test_balance(dbase, account='margin')
-        elif str2bool(self.config.main.isolated):
-            balance = get_current_isolated()
-        elif not str2bool(self.config.main.isolated):
-            balance = get_binance_margin()
 
-        for pair, current_time, current_price, event in buy_list:
+        for pair, current_time, current_price, event in long_list:
+            current_quote_bal = self.get_balance(dbase, account='margin', pair=pair)
             quote = get_quote(pair)
-            if str2bool(self.config.main.isolated):
-                current_quote_bal = float(balance[pair][quote])
-            else:
-                # Get current available to borrow in USD
-                current_quote_bal = self.client.get_max_borrow()
-
             quote_amount = self.amount_to_use(pair, current_quote_bal)
-            if 'USD' in get_quote(pair):
-                amount = quote_amount / float(current_price)
-            else:
-                # convert USD into current base
-                amount = float(quote_amount) / float(self.client.prices()[get_base(pair)+'USDT'])
+            base_amount = self.quote2base(quote_amount, pair)
 
-            if float(current_price) * float(amount) >= float(current_quote_bal):
-                self.logger.critical("Unable to purchase %s of %s, insufficient funds:%s/%s" %
-                                     (amount, pair, quote_amount, current_quote_bal))
+            if quote_amount >= float(current_quote_bal):
+                self.logger.critical("Unable to purchase $%s of %s, insufficient funds:%s/%s" %
+                                     (base_amount, pair, base_amount, current_quote_bal))
                 continue
             else:
-                self.logger.info("Buying %s of %s with %s %s"
-                                 % (amount, pair, quote_amount, quote))
-                self.logger.debug("amount to buy: %s, current_price: %s, amount:%s"
-                                  % (quote_amount, current_price, amount))
+                self.logger.info("Buying %s of %s with %s %s at %s"
+                                 % (base_amount, pair, base_amount, quote, current_price))
 
                 amount_to_borrow = float(quote_amount) * float(self.config.main.multiplier)
                 amount_to_use = sub_perc(1, amount_to_borrow)  # use 99% of borrowed funds
@@ -264,7 +275,6 @@ class Trade():
                         self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
                         self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str,
                                                                          current_quote_bal))
-                        continue
 
                     quote_amount = trade_result.get('cummulativeQuoteQty', quote_amount)
                     amt_str = trade_result.get('executedQty')
@@ -281,7 +291,7 @@ class Trade():
                                    quote_amount=amount_to_use, base_amount=amt_str,
                                    borrowed=amount_to_borrow,
                                    multiplier=self.config.main.multiplier,
-                                   direction=self.config.main.trade_direction, quote_name=quote)
+                                   direction=self.config.main.trade_direction, symbol_name=quote)
 
                 self.__send_notifications(pair=pair, current_time=current_time,
                                           fill_price=fill_price, interval=self.interval,
@@ -326,16 +336,13 @@ class Trade():
         self.logger.info("We have %s potential items to buy" % len(buy_list))
 
         dbase = Mysql(test=self.test_data, interval=self.interval)
-        if self.test_data or self.test_trade:
-            balance = self.__get_test_balance(dbase, account='binance')
-        else:
-            balance = get_binance_values()
 
         for pair, current_time, current_price, event in buy_list:
+            balance = self.get_balance(dbase, 'binance', pair=pair)
             quote = get_quote(pair)
 
             try:
-                current_quote_bal = balance['binance'][quote]['count']
+                current_quote_bal = balance
             except KeyError:
                 current_quote_bal = 0
             except TypeError:
@@ -387,7 +394,7 @@ class Trade():
                     db_result = dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
                                                    quote_amount=quote_amount, base_amount=amount,
                                                    direction=self.config.main.trade_direction,
-                                                   quote_name=quote)
+                                                   symbol_name=quote)
                     if db_result:
                         self.__send_notifications(pair=pair, current_time=current_time,
                                                   fill_price=fill_price, interval=self.interval,
@@ -431,35 +438,50 @@ class Trade():
     @GET_EXCEPTIONS
     def __close_margin_short(self, short_list, drawdowns=None, drawups=None):
         """
-        Sell items in sell_list
+        Buy back items in short_list
         """
 
         self.logger.info("We need to close short %s" % short_list)
         dbase = Mysql(test=self.test_data, interval=self.interval)
         name = self.config.main.name
         for pair, current_time, current_price, event in short_list:
+            base = get_base(pair)
+            quote = get_quote(pair)
             quantity = dbase.get_quantity(pair)
             if not quantity:
                 self.logger.info("close_margin_short: unable to find quantity for %s" % pair)
                 return
 
-            open_price, quote_in, _, _, _, _ = dbase.get_trade_value(pair)[0]
+            open_price, _, quote_in, _, borrowed = dbase.get_trade_value(pair)[0]
             perc_inc = - (perc_diff(open_price, current_price))
             quote_out = add_perc(perc_inc, quote_in)
 
             self.logger.info("Closing %s of %s for %.15f %s"
-                             % (quantity, pair, float(current_price), quote_out))
+                             % (quantity, pair, float(current_price), quantity))
             if self.prod and not self.test_data:
                 amt_str = get_step_precision(pair, quantity)
 
-                trade_result = self.client.spot_order(
-                    symbol=pair, side=self.client.sell, quantity=amt_str,
-                    order_type=self.client.market, test=self.test_trade)
+                trade_result = self.client.margin_order(symbol=pair,
+                                                        side=self.client.buy,
+                                                        quantity=amt_str,
+                                                        order_type=self.client.market,
+                                                        isolated=str2bool(
+                                                            self.config.main.isolated))
 
                 self.logger.info("%s result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
-                    return
+
+                self.logger.info("Trying to repay: %s for pair %s" %(borrowed, pair))
+                repay_result = self.client.margin_repay(
+                    symbol=pair, quantity=borrowed,
+                    isolated=str2bool(self.config.main.isolated),
+                    asset=base)
+                if "msg" in repay_result:
+                    self.logger.error("Repay error-close %s: %s" % (pair, repay_result))
+                    continue
+
+
 
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
@@ -472,7 +494,7 @@ class Trade():
                                                close_price=fill_price,
                                                quote=quote_out, base_out=quantity, name=name,
                                                drawdown=drawdowns[pair], drawup=drawups[pair],
-                                               quote_name=get_quote(pair))
+                                               symbol_name=quote)
                 profit = dbase.fetch_sql_data("select usd_profit from profit "
                                               "where id={}".format(trade_id),
                                               header=False)[0][0]
@@ -482,6 +504,7 @@ class Trade():
             else:
                 self.logger.critical("Sell Failed %s:%s" % (name, pair))
                 send_slack_message("alerts", "Sell Failed %s:%s" % (name, pair))
+
         del dbase
 
     @GET_EXCEPTIONS
@@ -490,44 +513,58 @@ class Trade():
         open trades with items in short list
         """
         self.logger.info("We have %s potential items to short" % len(short_list))
-        drain = str2bool(self.config.main.drain)
-        if drain and not self.test_data:
-            self.logger.warning("Skipping Buy as %s is in drain" % self.interval)
-            return
-
         dbase = Mysql(test=self.test_data, interval=self.interval)
 
         for pair, current_time, current_price, event in short_list:
             base = get_base(pair)
+            current_base_bal = self.get_balance(dbase, account='margin', pair=pair)
 
-            if self.test_data or self.test_trade:
-                balance = self.__get_test_balance(dbase, account='margin')
-            else:
-                balance = get_binance_values()
-
-            try:
-                current_base_bal = balance['margin'][base]['count']
-            except KeyError:
-                current_base_bal = 0
-
-            proposed_quote_amount = self.amount_to_use(pair, current_base_bal)
-
-            amount_to_borrow = float(proposed_quote_amount) * float(self.config.main.multiplier)
+            proposed_base_amount = self.amount_to_use(pair, current_base_bal)
+            amount_to_borrow = float(proposed_base_amount) * float(self.config.main.multiplier)
             amount_to_use = sub_perc(1, amount_to_borrow)  # use 99% of borrowed funds
 
             amt_str = get_step_precision(pair, amount_to_use)
+            quote_amount = self.base2quote(amt_str, pair)
 
-            base_amount = float(amt_str) * float(self.client.prices()[pair])
+            if self.prod:
+                borrow_res = self.client.margin_borrow(
+                    symbol=pair, quantity=amt_str,
+                    isolated=str2bool(self.config.main.isolated),
+                    asset=base)
+                if "msg" in borrow_res:
+                    self.logger.error("Borrow error-open %s: %s while trying to borrow %s %s"
+                                      % (pair, borrow_res, amount_to_borrow, base))
+                    continue
 
-            dbase.insert_trade(pair=pair, price=current_price, date=current_time,
-                               quote_amount=base_amount,
-                               base_amount=amt_str, borrowed=amount_to_borrow,
-                               multiplier=self.config.main.multiplier,
-                               direction=self.config.main.trade_direction, quote_name=base)
+                self.logger.info(borrow_res)
+                trade_result = self.client.margin_order(symbol=pair, side=self.client.sell,
+                                                        quantity=amt_str,
+                                                        order_type=self.client.market,
+                                                        isolated=str2bool(
+                                                            self.config.main.isolated))
+                self.logger.info("%s result: %s" %(pair, trade_result))
+                if "msg" in trade_result:
+                    self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
+                    self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str,
+                                                                     current_base_bal))
 
-            self.__send_notifications(pair=pair, current_time=current_time,
-                                      fill_price=current_price, interval=self.interval,
-                                      event=event, action='OPEN', usd_profit='N/A')
+            else:
+                amt_str = amount_to_use
+            fill_price = current_price if self.test_trade or self.test_data else \
+                    self.__get_fill_price(current_price, trade_result)
+
+            if self.test_data or self.test_trade or \
+                    (not self.test_trade and 'transactTime' in trade_result):
+                dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
+                                   quote_amount=quote_amount,
+                                   base_amount=amt_str, borrowed=amount_to_borrow,
+                                   multiplier=self.config.main.multiplier,
+                                   direction=self.config.main.trade_direction, symbol_name=base)
+
+                self.__send_notifications(pair=pair, current_time=current_time,
+                                          fill_price=current_price, interval=self.interval,
+                                          event=event, action='OPEN', usd_profit='N/A')
+        del dbase
 
     @GET_EXCEPTIONS
     def __close_spot_long(self, sell_list, drawdowns=None, drawups=None, update_db=True):
@@ -575,8 +612,8 @@ class Trade():
                     trade_id = dbase.update_trades(pair=pair, close_time=current_time,
                                                    close_price=fill_price, quote=quote_out,
                                                    base_out=quantity, name=name,
-                                                   drawdown=drawdowns[pair],
-                                                   drawup=drawups[pair], quote_name=get_quote(pair))
+                                                   drawdown=drawdowns[pair], drawup=drawups[pair],
+                                                   symbol_name=get_quote(pair))
                     profit = dbase.fetch_sql_data("select usd_profit from profit "
                                                   "where id={}".format(trade_id),
                                                   header=False)[0][0]
@@ -594,7 +631,7 @@ class Trade():
         Sell items in sell_list
         """
 
-        self.logger.info("We need to sell %s" % sell_list)
+        self.logger.info("We need to close long %s" % sell_list)
         dbase = Mysql(test=self.test_data, interval=self.interval)
         name = self.config.main.name
         for pair, current_time, current_price, event in sell_list:
@@ -609,7 +646,7 @@ class Trade():
 
             self.logger.info("Selling %s of %s for %.15f %s"
                              % (quantity, pair, float(current_price), quote_out))
-            quote = get_base(pair)
+            quote = get_quote(pair)
 
             if self.prod:
                 amt_str = get_step_precision(pair, quantity)
@@ -623,7 +660,6 @@ class Trade():
                 self.logger.info("%s result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
-                    continue
 
                 self.logger.info("Trying to repay: %s for pair %s" %(borrowed, pair))
                 repay_result = self.client.margin_repay(
@@ -647,7 +683,7 @@ class Trade():
                                                close_price=fill_price, quote=quote_out,
                                                base_out=quantity, name=name,
                                                drawdown=drawdowns[pair],
-                                               drawup=drawups[pair], quote_name=quote)
+                                               drawup=drawups[pair], symbol_name=quote)
 
 
                 profit = dbase.fetch_sql_data("select usd_profit from profit "
