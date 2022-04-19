@@ -1,5 +1,5 @@
 {
-  "name": "per-api-any-eth-spot",
+  "name": "per-api-any-eth-spot-long",
   "divisor": "1.1",
   "max_trades": "1"
 }

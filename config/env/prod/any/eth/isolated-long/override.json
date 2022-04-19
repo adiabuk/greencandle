@@ -1,5 +1,5 @@
 {
-  "name": "prod-api-any-eth-isolated",
+  "name": "prod-api-any-eth-isolated-long",
   "trade_isolated": "true",
   "trade_type": "margin",
   "max_trades": "10",
