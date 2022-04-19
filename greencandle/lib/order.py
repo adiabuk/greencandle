@@ -559,7 +559,8 @@ class Trade():
                                    quote_amount=quote_amount,
                                    base_amount=amt_str, borrowed=amount_to_borrow,
                                    multiplier=self.config.main.multiplier,
-                                   direction=self.config.main.trade_direction, symbol_name=base)
+                                   direction=self.config.main.trade_direction,
+                                   symbol_name=get_quote(pair))
 
                 self.__send_notifications(pair=pair, current_time=current_time,
                                           fill_price=current_price, interval=self.interval,
