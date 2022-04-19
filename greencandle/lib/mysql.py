@@ -7,7 +7,7 @@ from binance.binance import Binance
 import MySQLdb
 from . import config
 from .binance_common import get_current_price
-from .common import AttributeDict
+from .common import AttributeDict, format_usd
 from .logger import get_logger, exception_catcher
 
 class Mysql():
@@ -273,7 +273,8 @@ class Mysql():
                           'perc, name, `interval`, usd_quantity) VALUES ("{0}", "{1}", "{2}", '
                           '"{3}", "{4}", "{5}", "{6}", "{7}")'.format(pair, open_time, open_price,
                                                                       current_price, perc, name,
-                                                                      interval, usd_quantity))
+                                                                      interval,
+                                                                      format_usd(usd_quantity)))
 
                 self.__run_sql_query(insert)
             except ZeroDivisionError:

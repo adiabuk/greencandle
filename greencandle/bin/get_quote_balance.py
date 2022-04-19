@@ -8,17 +8,10 @@ from babel.numbers import format_currency
 from greencandle.lib.balance import Balance
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.alerts import send_slack_message
-from greencandle.lib.common import QUOTES
-from greencandle.lib.common import arg_decorator
+from greencandle.lib.common import QUOTES, arg_decorator, format_usd
 from greencandle.lib import config
 
 config.create_config()
-
-def format_usd(amount):
-    """
-    Return formatted USD string, with dollar sign and 2dp
-    """
-    return str(format_currency(amount, 'USD', locale='en_US'))
 
 @arg_decorator
 def main():

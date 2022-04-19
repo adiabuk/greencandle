@@ -4,6 +4,7 @@ Common functions that don't belong anywhere else
 
 import sys
 from decimal import Decimal
+from babel.numbers import format_currency
 import numpy
 
 QUOTES = ("BTC", "USDT", "ETH", "BNB", "GBP")
@@ -27,6 +28,12 @@ HOUR = {"3m": "*",
         "3h": "0,3,6,9,12,15,18,21",
         "4h": "0,4,8,12,16,20"
         }
+
+def format_usd(amount):
+    """
+    Return formatted USD string, with dollar sign and 2dp
+    """
+    return str(format_currency(amount, 'USD', locale='en_US'))
 
 def arg_decorator(func):
     """
