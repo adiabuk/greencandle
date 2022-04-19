@@ -223,11 +223,13 @@ services:
       - stag-base-mysql:mysql
       - stag-base-redis:redis
       - stag-be-any:any
+      - stag-be-any-short:any-short
     depends_on:
       - stag-be-alert
       - stag-base-mysql
       - stag-base-redis
       - stag-be-any
+      - stag-be-any-short
     entrypoint: /docker-entrypoint.sh api_router --test
     volumes:
       - /data:/data
@@ -343,6 +345,38 @@ services:
     environment:
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/any
+    ports:
+      - 20000
+    links:
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
+    depends_on:
+      - stag-base-mysql
+      - stag-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
+
+stag-be-any-short:
+    container_name: stag-be-any-short
+    hostname: stag-be-any-short
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api --test
+    logging:
+      driver: journald
+    environment:
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=stag/any/short
     ports:
       - 20000
     links:

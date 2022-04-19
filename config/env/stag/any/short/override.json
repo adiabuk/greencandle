@@ -1,0 +1,6 @@
+{
+  "name": "stag-any-short",
+  "trade_direction": "short",
+  "trade_multiplier": "1",
+  "trade_type": "margin"
+}

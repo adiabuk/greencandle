@@ -327,7 +327,7 @@
       "is_secret": false
     },
     "production": {
-      "value": "true",
+      "value": "false",
       "is_binary": false,
       "is_secret": false
     },
