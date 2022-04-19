@@ -268,6 +268,7 @@ class Mysql():
                 pair, open_time, open_price, name, interval, usd_quantity = trade
                 current_price = get_current_price(pair)
                 perc = 100 * (float(current_price) - float(open_price)) / float(open_price)
+                perc = - perc if 'short' in name else perc
                 insert = ('insert into open_trades (pair, open_time, open_price, current_price, '
                           'perc, name, `interval`, usd_quantity) VALUES ("{0}", "{1}", "{2}", '
                           '"{3}", "{4}", "{5}", "{6}", "{7}")'.format(pair, open_time, open_price,
