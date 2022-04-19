@@ -214,9 +214,9 @@ class Trade():
         symbol = get_quote(pair) if self.config.main.trade_direction == 'long' else get_base(pair)
 
         if self.test_data or self.test_trade:
-            return self.__get_test_balance(dbase, account=account)
+            return self.__get_test_balance(dbase, account=account)[account][symbol]['count']
         elif account == 'binance':
-            return get_binance_values()['binance'][symbol]['count']
+            return get_binance_values()[account][symbol]['count']
         elif account == 'margin' and str2bool(self.config.main.isolated):
             return get_current_isolated()['isolated'][symbol]['count']
         elif account == 'margin' and not str2bool(self.config.main.isolated):
