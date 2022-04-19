@@ -214,6 +214,10 @@ class Trade():
         symbol = get_quote(pair) if self.config.main.trade_direction == 'long' else get_base(pair)
 
         if self.test_data or self.test_trade:
+            if self.config.main.trade_direction == 'short' and symbol not in \
+                    self.__get_test_balance(dbase, account=account)[account]:
+                # Need a balance for all pairs when test-trading short-margin
+                return 100
             return self.__get_test_balance(dbase, account=account)[account][symbol]['count']
         elif account == 'binance':
             return get_binance_values()[account][symbol]['count']
