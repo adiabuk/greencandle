@@ -365,7 +365,7 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-stag-be-any-short:
+  stag-be-any-short:
     container_name: stag-be-any-short
     hostname: stag-be-any-short
     image: amrox/greencandle:${TAG}
