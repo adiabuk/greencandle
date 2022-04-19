@@ -84,9 +84,9 @@ class Trade():
             last_open_price = 0
 
         if self.config.main.divisor:
-            proposed_quote_amount = current_quote_bal / self.config.main.divisor
+            proposed_quote_amount = current_quote_bal / int(self.config.main.divisor)
         else:
-            proposed_quote_amount = current_quote_bal / (self.config.main.max_trades + 1)
+            proposed_quote_amount = current_quote_bal / (int(self.config.main.max_trades) + 1)
         self.logger.info('item: %s, proposed: %s, last:%s'
                          % (item, proposed_quote_amount, last_open_price))
 
