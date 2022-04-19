@@ -452,7 +452,7 @@ class Trade():
                 self.logger.info("close_margin_short: unable to find quantity for %s" % pair)
                 return
 
-            open_price, _, quote_in, _, borrowed = dbase.get_trade_value(pair)[0]
+            open_price, quote_in, _, _, borrowed = dbase.get_trade_value(pair)[0]
             perc_inc = - (perc_diff(open_price, current_price))
             quote_out = add_perc(perc_inc, quote_in)
 
