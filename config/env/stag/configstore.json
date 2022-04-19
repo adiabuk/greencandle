@@ -7,12 +7,12 @@
   "master_key_id": "alias/greencandle",
   "data": {
     "account1_key": {
-      "value": "B+sansJK+QrVMrHt9M/ZFnJ4DqwVskBgPWums9Zj4jsMSzkAWnfdOcdPGLb8GhMTSTS7TjzXls035sEVO4fKueIhCIGYo6+aCDsw4C8cVhqHGkj2CHaBPVib/wPSwnK6szhiNJnEjrE=",
+      "value": "qNx2dIDBh1QsBduqeYBc7g==",
       "is_binary": false,
       "is_secret": true
     },
     "account1_secret": {
-      "value": "kmcN4yGIRYOYFXZZQlXfj131tagSNXslQsslU2ZkaeAGaWMizXDOwBWpV6YMyAusriz/mmb1gZPDvTZIoB6hAtDfLbXdjREu2hJBhtDowO2a99pxTbxDdYn1u+DU2n5BQJu1MNBbh74=",
+      "value": "n0q4OWTC7HcIoQm1BcoEoQ==",
       "is_binary": false,
       "is_secret": true
     },
