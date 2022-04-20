@@ -4,7 +4,7 @@
 "env_1m_BTC" : ["env-1m-btc", "env-1m-btc-cross", "env-1m-btc-isolated"],
 "env_1m_USDT" : ["env-1m-usdt", "env-1m-usdt-cross", "env-1m-usdt-isolated"],
 "any_USDT_spot_long" : ["per-be-api-any-usdt-spot-long"],
-"anyr_USDT_cross_long" : ["per-be-api-any-usdt-cross-long"],
+"any_USDT_cross_long" : ["per-be-api-any-usdt-cross-long"],
 "any_USDT_isolated_long" : ["per-be-api-any-usdt-isolated-long"],
 "any_BNB_spot_long" : ["per-be-api-any-bnb-spot-long"],
 "any_BNB_cross_long" : ["per-be-api-any-bnb-cross-long"],
