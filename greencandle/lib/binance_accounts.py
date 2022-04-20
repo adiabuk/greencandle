@@ -89,7 +89,7 @@ def get_binance_isolated():
 
     return default_to_regular(result)
 
-def get_binance_margin():
+def get_binance_cross():
     """Get totals for each crypto from binance and convert to USD/GBP"""
 
     mydict = lambda: defaultdict(mydict)
@@ -153,7 +153,7 @@ def get_binance_margin():
 
     return default_to_regular(result)
 
-def get_binance_values():
+def get_binance_spot():
     """Get totals for each crypto from binance and convert to USD/GBP"""
 
     mydict = lambda: defaultdict(mydict)

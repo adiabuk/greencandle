@@ -13,7 +13,7 @@ from .auth import binance_auth
 from .logger import get_logger, exception_catcher
 from .mysql import Mysql
 from .redis_conn import Redis
-from .binance_accounts import get_binance_values, get_current_isolated
+from .binance_accounts import get_binance_spot, get_current_isolated
 from .balance_common import get_base, get_quote, get_step_precision
 from .common import perc_diff, add_perc, sub_perc, AttributeDict, QUOTES
 from .alerts import send_gmail_alert, send_push_notif, send_slack_trade, send_slack_message
@@ -220,7 +220,7 @@ class Trade():
                 return 100
             return self.__get_test_balance(dbase, account=account)[account][symbol]['count']
         elif account == 'binance':
-            return get_binance_values()[account][symbol]['count']
+            return get_binance_spot()[account][symbol]['count']
         elif account == 'margin' and str2bool(self.config.main.isolated):
             return get_current_isolated()['isolated'][symbol]['count']
         elif account == 'margin' and not str2bool(self.config.main.isolated):

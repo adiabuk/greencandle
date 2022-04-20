@@ -7,7 +7,7 @@ import json
 from requests.exceptions import ReadTimeout
 from greencandle.lib.alerts import send_slack_message
 from . import config
-from .binance_accounts import get_binance_values, get_binance_margin, get_binance_isolated
+from .binance_accounts import get_binance_spot, get_binance_cross, get_binance_isolated
 from .coinbase_accounts import get_coinbase_values
 from .phemex_accounts import get_phemex_values
 from .mysql import Mysql
@@ -82,7 +82,7 @@ class Balance(dict):
         }
 
         """
-        binance = get_binance_values()
+        binance = get_binance_spot()
         combined_dict = binance.copy()   # start with binance"s keys and values
 
         if phemex:
@@ -97,7 +97,7 @@ class Balance(dict):
                 coinbase = {}
             combined_dict.update(coinbase)   # modifies z with y"s keys and values & returns None
         if margin:
-            margin = get_binance_margin()
+            margin = get_binance_cross()
             combined_dict.update(margin)
         if isolated:
             isolated = get_binance_isolated()
