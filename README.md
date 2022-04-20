@@ -11,6 +11,15 @@
 
 # Releases
 
+## 3.0
+* Short methods implemented
+* Short API strategies for prod/per/stag/data envs
+* New channel for trade alerts
+* Better layout/formatting for slack notifications
+* Code consolidation
+* Reduce travis build time
+* Cleanup of empty balance alerts
+
 ## 2.21.1
 * New api keys
 * Unit test fixes
