@@ -389,7 +389,7 @@ services:
       - per-be-api-any-usdt-spot-long:per-be-api-any-usdt-spot-long
       - per-be-api-any-usdt-cross-long:per-be-api-any-usdt-cross-long
       - per-be-api-any-usdt-isolated-long:per-be-api-any-usdt-isolated-long
-      - per-be-api-any-btc-spot-long:per-be-api-any-btc-spotb$-long
+      - per-be-api-any-btc-spot-long:per-be-api-any-btc-spot-long
       - per-be-api-any-btc-cross-long:per-be-api-any-btc-cross-long
       - per-be-api-any-btc-isolated-long:per-be-api-any-btc-isolated-long
       - per-be-api-any-eth-spot-long:per-be-api-any-eth-spot-long
@@ -911,7 +911,7 @@ services:
       - 20000
     links:
       - per-base-mysql:mysql
-      - per-base-redis: redis
+      - per-base-redis:redis
     depends_on:
       - per-base-mysql
       - per-base-redis
@@ -1263,7 +1263,7 @@ services:
       - 20000
     links:
       - per-base-mysql:mysql
-      - per-base-redis: redis
+      - per-base-redis:redis
     depends_on:
       - per-base-mysql
       - per-base-redis
