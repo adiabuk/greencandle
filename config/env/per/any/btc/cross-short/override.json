@@ -1,0 +1,9 @@
+{
+  "divisor": "20",
+  "max_trades": "10",
+  "name": "per-api-any-btc-cross-short",
+  "trade_direction": "short",
+  "trade_isolated": "false",
+  "trade_multiplier": "5",
+  "trade_type": "margin"
+}
