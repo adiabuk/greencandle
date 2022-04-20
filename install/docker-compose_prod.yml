@@ -928,7 +928,7 @@ services:
       - /root/.bash_history:/root/.bash_history
 
   per-be-api-any-btc-spot-long:
-    container_name: per- be-api-any-btc-spot-long
+    container_name: per-be-api-any-btc-spot-long
     hostname: per-be-api-any-btc-spot-long
     image: amrox/greencandle:${TAG}
     pull_policy: always
@@ -1387,36 +1387,6 @@ services:
     environment:
       - HOST=$HOSTNAME
       - CONFIG_ENV=per/any/bnb/isolated-short
-    ports:
-      - 20000
-    links:
-      - per-base-mysql:mysql
-      - per-base-redis:redis
-    depends_on:
-      - per-base-mysql
-      - per-base-redis
-    healthcheck:
-      test: ls ||exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    volumes:
-      - /data:/data
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
-      - /root/.bash_history:/root/.bash_history
-    container_name: per-be-api-any-eth-isolated-short
-    hostname: per-be-api-any-eth-isolated-short
-    image: amrox/greencandle:${TAG}
-    pull_policy: always
-    restart: always
-    entrypoint: /docker-entrypoint.sh backend_api
-    logging:
-      driver: journald
-    environment:
-      - HOST=$HOSTNAME
-      - CONFIG_ENV=per/any/eth/isolated-short
     ports:
       - 20000
     links:
