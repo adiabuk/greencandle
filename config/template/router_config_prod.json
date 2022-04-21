@@ -1,10 +1,10 @@
-{"any_USDT_long" : ["api-any-usdt-spot-long", "api-any-usdt-cross-long", "api-any-usdt-isolated-long"],
-"any_BNB_long" : ["api-any-bnb-spot-long", "api-any-bnb-cross-long", "api-any-bnb-isolated-long"],
-"any_BTC_long" : ["api-any-btc-spot-long", "api-any-btc-cross-long", "api-any-btc-isolated-long"],
-"any_ETH_long" : ["api-any-eth-spot-long", "api-any-eth-cross-long", "api-any-eth-isolated-long"],
-"any_USDT_short" : ["api-any-usdt-cross-short", "api-any-usdt-isolated-short"],
-"any_BNB_short" : ["api-any-bnb-cross-short", "api-any-bnb-isolated-short"],
-"any_BTC_short" : ["api-any-btc-cross-short", "api-any-btc-isolated-short"],
-"any_ETH_short" : ["api-any-eth-cross-short", "api-any-eth-isolated-short"]
+{"any_USDT_long" : ["prod-api-any-usdt-spot-long", "prod-api-any-usdt-cross-long", "prod-api-any-usdt-isolated-long"],
+"any_BNB_long" : ["prod-api-any-bnb-spot-long", "prod-api-any-bnb-cross-long", "prod-api-any-bnb-isolated-long"],
+"any_BTC_long" : ["prod-api-any-btc-spot-long", "prod-api-any-btc-cross-long", "prod-api-any-btc-isolated-long"],
+"any_ETH_long" : ["prod-api-any-eth-spot-long", "prod-api-any-eth-cross-long", "prod-api-any-eth-isolated-long"],
+"any_USDT_short" : ["prod-api-any-usdt-cross-short", "prod-api-any-usdt-isolated-short"],
+"any_BNB_short" : ["prod-api-any-bnb-cross-short", "prod-api-any-bnb-isolated-short"],
+"any_BTC_short" : ["prod-api-any-btc-cross-short", "prod-api-any-btc-isolated-short"],
+"any_ETH_short" : ["prod-api-any-eth-cross-short", "prod-api-any-eth-isolated-short"]
 
  }
