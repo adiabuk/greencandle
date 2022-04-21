@@ -20,6 +20,8 @@ def main():
     Check that we have enough base currency to close the trade
     and enough BNB to pay for commission costs
     Alert in slack and to logs
+
+    Usage: test_close
     """
     client = binance_auth()
 

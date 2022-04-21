@@ -21,6 +21,8 @@ def get_pairs():
     """
     get details from docker_compose, configstore, and router config
     output in reversed JSON format
+
+    Usage: api_dashboard
     """
     docker_compose = open("/srv/greencandle/install/docker-compose_{}.yml"
                           .format(os.environ['HOST'].lower()), "r")

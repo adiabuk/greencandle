@@ -27,6 +27,7 @@ LOGGER = get_logger(__name__)
 
 def main():
     """ main function """
+
     parser = argparse.ArgumentParser()
     parser.add_argument("-g", "--graph", action="store_true", default=False)
     parser.add_argument("-j", "--json", action="store_true", default=False)

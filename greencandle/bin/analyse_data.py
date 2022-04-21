@@ -61,6 +61,9 @@ def keepalive():
 def main():
     """
     Analyse data from redis and alert to slack if there are current buying opportunities
+    Required: CONFIG_ENV var and config
+
+    Usage: analyse_data
     """
 
     LOGGER.info("Starting Initial loop")

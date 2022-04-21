@@ -78,6 +78,8 @@ def main():
 
     This is stored on redis, and analysed by other services later.
     This service runs in a loop and executes periodically depending on timeframe used
+
+    Usage: get_data
     """
 
     interval = config.main.interval

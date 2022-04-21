@@ -17,6 +17,8 @@ def main():
     Extract data from Excel reports
     Choose from annual, monthly, or factor (profit factor)
     Results will be outputted to stdout
+
+    Usage: get_excel_details <annual|monthly|factor>
     """
     files = glob.glob('*.xlsx')
     if len(sys.argv) != 2 or sys.argv[1] not in ("annual", "monthly", "factor", "--help"):

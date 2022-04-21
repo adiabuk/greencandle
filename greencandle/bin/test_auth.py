@@ -13,6 +13,8 @@ from greencandle.lib.auth import binance_auth
 def main():
     """
     Check that authentication succeeds using current config
+
+    Usage: test_auth
     """
 
     client = binance_auth()

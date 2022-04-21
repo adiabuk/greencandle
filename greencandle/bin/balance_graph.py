@@ -17,6 +17,9 @@ from greencandle.lib.graph import Graph
 def main():
     """
     Create OHLC graph using balance data for BTC and USDT
+    Will create graph in current directory based on data in DB
+
+    Usage: balance_graph
     """
     mysql = Mysql()
 

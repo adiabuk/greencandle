@@ -10,7 +10,12 @@ from greencandle.lib.common import arg_decorator
 
 @arg_decorator
 def main():
-    """Analyse available xlsx reports and print perc/par for each file"""
+    """
+    Analyse available xlsx reports and print perc/par for each file
+    Ensure current directory contains xlsx analysis output
+
+    Usage: analyse
+    """
 
     files = glob.glob('*.xlsx')
 

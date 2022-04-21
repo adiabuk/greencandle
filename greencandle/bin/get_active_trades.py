@@ -18,6 +18,8 @@ def main():
     Also store amount in USD, and perc
 
     To be used with cron, to periodically update db
+
+    Usage: get_active_trades
     """
 
     dbase = Mysql()

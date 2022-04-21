@@ -25,11 +25,9 @@ def main():
     * GBP Amount
 
     Each database row accounts for 2 transactions as there is an open and close
-    """
 
-    if len(sys.argv) > 1 and sys.argv[1] == '--help':
-        print("Generate Excel accounting report from database entries")
-        sys.exit(0)
+    Usage: accounts <filename>
+    """
 
     if len(sys.argv) != 2:
         sys.stderr.write("Usage: accounts <filename>\n")

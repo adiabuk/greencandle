@@ -21,6 +21,8 @@ def main():
     * binance isolated margin
 
     Format and output to slack
+
+    Usage: get_quote_balance
     """
 
     balances = Balance(test=False)

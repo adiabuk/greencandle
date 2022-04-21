@@ -65,6 +65,8 @@ def main():
     """
     Route trades from api dashboard to one or more containers
     Config is /etc/router_config.json
+
+    Usage: api_router
     """
     APP.run(debug=True, host='0.0.0.0', port=1080, threaded=True)
 if __name__ == "__main__":

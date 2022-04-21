@@ -23,6 +23,8 @@ def usage():
 def main():
     """
     Create drawdown scatter chart
+
+    Usage: create_drawupchart <interval> <filename>
     """
 
     if len(sys.argv) < 3:

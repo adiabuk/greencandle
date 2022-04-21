@@ -28,11 +28,12 @@ def follow(thefile):
 
 def main():
     """
-    Main func
+    Tail syslog of current host and alert on unhandled traceback events
+    Ensure /var/log/syslog is shared with docker container
+
+    Usage: logwatch
     """
-    if len(sys.argv) > 1 and sys.argv[1] == '--help':
-        print("Usage: {} <pair>".format(sys.argv[0]))
-        sys.exit(0)
+
     logfile = open("/var/log/syslog", "r")
     loglines = follow(logfile)    # iterate over the generator
     for line in loglines:

@@ -15,6 +15,8 @@ def main():
     """
     Get balance from exchange and write to DB
     Also alert to slack balance channel
+
+    Usage: write_balance
     """
 
     balance = Balance(test=False)

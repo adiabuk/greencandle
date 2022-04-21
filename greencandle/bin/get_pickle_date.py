@@ -14,6 +14,8 @@ def main():
     """
     Print pair and date of first candle close for each pickle
     data file in the current directory in gzip format
+
+    Usage: get_pickle_data
     """
     for filename in glob.glob('*.gz'):
 

@@ -18,6 +18,8 @@ def main():
     Create Excel Spreadsheet with results and analysis of trades
     Analysis comes from database entries: buy/sell prices as
     well as drawup/drawdown prices and profits
+
+    Usage: report <interval> <filename>
     """
 
     if len(sys.argv) != 3:

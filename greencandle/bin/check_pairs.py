@@ -15,7 +15,9 @@ from greencandle.lib.binance_common import get_dataframes
 def main():
     """
     Check pairs are valid by attempting to download a single candle
-    from the exchange
+    from the exchange - uses pairs defined in config
+
+    Usage: check_pairs
     """
     now = datetime.datetime.now()
     bad_pairs = []

@@ -37,6 +37,8 @@ def main():
     namespace so that alerts can be sent
     Errors will also be printed to STDOUT.
     This script is intended to be run from crontab.
+
+    Usage: send_docker_alerts
     """
 
 

@@ -24,6 +24,7 @@ def main():
     """
     Run test for all pairs and intervals defined in config
     """
+
     setproctitle.setproctitle("greencandle-test")
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--interval")

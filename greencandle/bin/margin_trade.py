@@ -13,7 +13,9 @@ from greencandle.lib.auth import binance_auth
 @arg_decorator
 def main():
     """
-    Main method
+    Script for testing margin long trades
+
+    Usage: margin_trade <pair> <side>
     """
     if len(sys.argv) < 3:
         print("Usage: {} <pair> <side>".format(sys.argv[0]))

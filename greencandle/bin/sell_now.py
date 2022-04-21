@@ -18,6 +18,8 @@ def main():
     """
     Close a long trade immediately
     Trade must belong to strategy in current config scope/container
+
+    Usage: sell_now <pair> <interval> <test_trade> <test_data>
     """
     if len(sys.argv) < 4:
         print("Usage {} [pair] [interval] [test_trade] [test_data]".format(sys.argv[0]))

@@ -44,7 +44,8 @@ def main():
     """
     Receives trade requests from web front-end/API/router and
     open/close trade as appropriate
-
+    
+    Usage: backend_api
     """
 
     APP.run(debug=True, host='0.0.0.0', port=20000, threaded=True)
