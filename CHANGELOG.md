@@ -1,6 +1,9 @@
 
 # Releases
 
+## 3.0.2
+* Typos and bug fixes
+
 ## 3.0.1
 * docker compose bug fixes
 * move releases to changelog file
