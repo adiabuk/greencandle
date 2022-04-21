@@ -367,7 +367,7 @@ services:
       timeout: 5s
       retries: 5
     environment:
-      - CONFIG_ENV=per
+      - CONFIG_ENV=per/fe/api
       - HOST=$HOSTNAME
     ports:
       - 1080:1080
@@ -1500,7 +1500,7 @@ services:
     pull_policy: always
     entrypoint: /docker-entrypoint.sh mysqld
     environment:
-      - CONFIG_ENV=prod
+      - CONFIG_ENV=prod/fe
       - MYSQL_ROOT_PASSWORD=password
     restart: always
     ports:
@@ -1558,7 +1558,7 @@ services:
        timeout: 5s
        retries: 5
      environment:
-       - CONFIG_ENV=prod
+       - CONFIG_ENV=prod/fe
        - HOST=$HOSTNAME
      ports:
        - 9999:9999
@@ -1622,7 +1622,7 @@ services:
       timeout: 5s
       retries: 5
     environment:
-      - CONFIG_ENV=prod
+      - CONFIG_ENV=prod/fe/api
       - HOST=$HOSTNAME
     ports:
       - 1081:1080
