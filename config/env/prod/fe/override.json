@@ -3,7 +3,7 @@
   "open_rule2": "results.current.EMA_8 \u003e results.current.EMA_13 and results.current.EMA_13 \u003e results.current.EMA_21 and results.current.EMA_21 \u003e results.current.EMA_55 and close \u003e last_close",
   "open_rule3": "results.current.EMA_8 \u003e results.current.EMA_13 and results.current.EMA_13 \u003e results.current.EMA_21 and results.current.EMA_21 \u003e results.current.EMA_55 and results.current.EMA_55 \u003e results.current.EMA_100",
   "indicators": "get_moving_averages;EMA;2 get_moving_averages;EMA;69 get_moving_averages;EMA;8 get_moving_averages;EMA;13 get_moving_averages;EMA;21 get_moving_averages;EMA;55 get_moving_averages;EMA;100",
-  "name": "prod-api",
+  "name": "prod-fe",
   "pairs": "None",
   "close_rule1": "results.current.EMA_2 \u003c results.current.EMA_69",
   "close_rule2": "low \u003c results.current.EMA_69",
