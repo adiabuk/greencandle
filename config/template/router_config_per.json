@@ -19,7 +19,7 @@
 "any_BNB_long" : ["per-be-api-any-bnb-spot-long", "per-be-api-any-bnb-cross-long", "per-be-api-any-bnb-isolated-long"],
 "any_BTC_long" : ["per-be-api-any-btc-spot-long", "per-be-api-any-btc-cross-long", "per-be-api-any-btc-isolated-long"],
 "any_ETH_long" : ["per-be-api-any-eth-spot-long", "per-be-api-any-eth-cross-long", "per-be-api-any-eth-isolated-long"],
-"anyr_USDT_cross_short" : ["per-be-api-any-usdt-cross-short"],
+"any_USDT_cross_short" : ["per-be-api-any-usdt-cross-short"],
 "any_USDT_isolated_short" : ["per-be-api-any-usdt-isolated-short"],
 "any_BNB_cross_short" : ["per-be-api-any-bnb-cross-short"],
 "any_BNB_isolated_short" : ["per-be-api-any-bnb-isolated-short"],
