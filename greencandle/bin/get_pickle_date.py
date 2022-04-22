@@ -20,8 +20,8 @@ def main():
     for filename in glob.glob('*.gz'):
 
         with gzip.open(filename, 'rb') as handle:
-            dframe = pickle.load(handle)
             try:
+                dframe = pickle.load(handle)
                 date = time.strftime("%Y-%m-%d", time.gmtime(int(dframe.iloc[0].closeTime)/1000))
             except Exception:
                 print("skipping {}".format(filename))
