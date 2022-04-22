@@ -14,7 +14,7 @@ from ..lib.common import get_link, QUOTES, arg_decorator
 def main():
     """
     Get list of open trades from DB, and format for output to slack with
-    tradingview links for each trading pair - 
+    tradingview links for each trading pair -
     for periodic invocation from cron
 
     Usage: get_trade_status
