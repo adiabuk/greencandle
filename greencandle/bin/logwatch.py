@@ -2,12 +2,12 @@
 """
 Follow log files and alert on Error
 """
-import sys
 import time
 import os
 from greencandle.lib import config
 config.create_config()
 from greencandle.lib.alerts import send_slack_message
+from greencandle.lib.common import arg_decorator
 
 def follow(thefile):
     """
@@ -26,6 +26,7 @@ def follow(thefile):
 
         yield line
 
+@arg_decorator
 def main():
     """
     Tail syslog of current host and alert on unhandled traceback events
