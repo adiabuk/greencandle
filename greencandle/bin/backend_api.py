@@ -44,7 +44,7 @@ def main():
     """
     Receives trade requests from web front-end/API/router and
     open/close trade as appropriate
-    
+
     Usage: backend_api
     """
 
