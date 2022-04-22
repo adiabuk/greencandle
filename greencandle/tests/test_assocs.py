@@ -12,6 +12,36 @@ class TestAssocs(unittest.TestCase):
     """
     Test all assocs in docker-compose and config
     """
+
+    def test_router_config(self):
+        """
+        Ensure all envs in router configs exist
+        """
+
+        envs = (('per', 'PROD'), ('prod', 'PROD'), ('stag', 'STAG'))
+        for env, host in envs:
+            with open('/srv/greencandle/config/template/router_config_{}.json'.format(env),
+                      'r') as json_file:
+                router_config = json.load(json_file)
+            with open("/srv/greencandle/install/docker-compose_{}.yml"
+                      .format(host.lower()), "r") as stream:
+                try:
+                    output = (yaml.safe_load(stream))
+                except yaml.YAMLError as exc:
+                    print(exc)
+            print("Testing " + env)
+            links_list = output['services']['{}-be-api-router'.format(env)]['links']
+            service_list = [item.split(":")[-1] for item in links_list]
+
+            router_config = [v for k, v in router_config.items()]
+            router_config_flat_list = [item for sublist in router_config for item in sublist]
+
+            for item in router_config_flat_list:
+                self.assertIn(item, service_list)
+
+
+
+
     @staticmethod
     def test_assocs():
         """
