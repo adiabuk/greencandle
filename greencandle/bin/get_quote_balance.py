@@ -40,9 +40,13 @@ def main():
         except KeyError:  # Zero Balance
             continue
 
+
+    bnb_debt = bal['margin']['BNB']['count']
+    usd_debt = bnb_debt * float(client.prices()['BNBUSDT'])
+
     results += "Cross Margin Account:\n"
     results += "\tAvailable: " + format_usd(client.get_max_borrow())+"\n"
-
+    results += "\tBNB debt:{} {}\n".format(bnb_debt, format_usd(usd_debt))
     results += "Isolated Margin Account:\n"
     count = 0
     for key, val in bal['isolated'].items():
