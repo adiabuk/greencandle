@@ -532,7 +532,7 @@ class Trade():
 
             if self.prod:
                 borrow_res = self.client.margin_borrow(
-                    symbol=pair, quantity=amt_str,
+                    symbol=pair, quantity=amt_to_borrow,
                     isolated=str2bool(self.config.main.isolated),
                     asset=base)
                 if "msg" in borrow_res:
