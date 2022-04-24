@@ -3,7 +3,7 @@
 """
 Collect OHLC and strategy data for later analysis
 """
-import socket
+import os
 from pathlib import Path
 from binance.binance import Binance
 from apscheduler.schedulers.blocking import BlockingScheduler
@@ -64,9 +64,11 @@ def prod_run():
     """
     interval = config.main.interval
     LOGGER.info("Starting prod run")
+    os.remove('/var/run/gc-data')
     client = Binance()
     prices = client.prices()
     test_loop(interval=interval, prices=prices)
+    Path('/var/run/gc-data').touch()
     LOGGER.info("Finished prod run")
 
 @arg_decorator
@@ -87,14 +89,11 @@ def main():
     redis = Redis(interval=interval, test=False)
     redis.clear_all()
     del redis
+    os.remove('/var/run/gc-data')
     prod_initial(interval) # initial run, before scheduling begins
+    Path('/var/run/gc-data').touch()
     LOGGER.info("Finished initial prod run")
     prod_run()
-
-    # open port to tell analyse containers that we are ready
-    sock = socket.socket()
-    sock.bind(("0.0.0.0", 12345))
-    sock.listen(5)
 
     SCHED.start()
 

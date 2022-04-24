@@ -26,9 +26,5 @@ while ! nc -z $redis 6379; do
   sleep 1;
 done
 
-while ! nc -z data 12345; do
-  echo Waiting for data;
-  sleep 1;
-done
 echo "Done waiting for services...."
 exec "$@"

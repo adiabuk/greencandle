@@ -5,7 +5,7 @@
 Analyze available data rom redis
 Look for potential buys
 """
-
+import time
 from apscheduler.schedulers.blocking import BlockingScheduler
 from greencandle.lib import config
 config.create_config()
@@ -29,6 +29,13 @@ def analyse_loop():
     """
     Gather data from redis and analyze
     """
+
+    my_file = Path('/var/run/gc-data')
+    while not my_file.is_file():
+        # file exists
+        LOGGER.info("Waiting for data collection to complete...")
+        time.sleep(30)
+
     redis = Redis(interval=config.main.interval, test=False)
     for pair in PAIRS:
         LOGGER.debug("Analysing pair: %s" % pair)
