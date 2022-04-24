@@ -475,15 +475,16 @@ class Trade():
                 self.logger.info("%s result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
+                    continue
 
                 self.logger.info("Trying to repay: %s for pair %s" %(borrowed, pair))
+
                 repay_result = self.client.margin_repay(
                     symbol=pair, quantity=borrowed,
                     isolated=str2bool(self.config.main.isolated),
                     asset=base)
                 if "msg" in repay_result:
                     self.logger.error("Repay error-close %s: %s" % (pair, repay_result))
-                    continue
 
 
 
@@ -532,7 +533,7 @@ class Trade():
 
             if self.prod:
                 borrow_res = self.client.margin_borrow(
-                    symbol=pair, quantity=amt_to_borrow,
+                    symbol=pair, quantity=amount_to_borrow,
                     isolated=str2bool(self.config.main.isolated),
                     asset=base)
                 if "msg" in borrow_res:
@@ -665,6 +666,7 @@ class Trade():
                 self.logger.info("%s result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
+                    continue
 
                 self.logger.info("Trying to repay: %s for pair %s" %(borrowed, pair))
                 repay_result = self.client.margin_repay(
@@ -673,7 +675,6 @@ class Trade():
                     asset=quote)
                 if "msg" in repay_result:
                     self.logger.error("Repay error-close %s: %s" % (pair, repay_result))
-                    continue
 
                 self.logger.info(repay_result)
 
