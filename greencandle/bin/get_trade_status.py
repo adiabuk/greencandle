@@ -30,7 +30,7 @@ def main():
     for trade in open_trades:
         output += "" if "name" in trade[1]  else (":short: " if "short" in trade[1] else ":long: ")
         output += '   '.join([get_link(item) if str(item).endswith(QUOTES) else \
-                str(item).replace("-api-any","") for item in trade]) + '\n'
+                str(item).replace("-api-any", "") for item in trade]) + '\n'
 
     if len(open_trades) > 1:
         send_slack_message('balance', output)
