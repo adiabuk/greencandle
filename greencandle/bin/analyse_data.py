@@ -23,7 +23,7 @@ SCHED = BlockingScheduler()
 INFO = Binance().exchange_info()
 GET_EXCEPTIONS = exception_catcher((Exception))
 
-@SCHED.scheduled_job('cron', minute=MINUTE["30m"],
+@SCHED.scheduled_job('cron', minute="5",
                      hour=HOUR[config.main.interval], second="30")
 def analyse_loop():
     """
