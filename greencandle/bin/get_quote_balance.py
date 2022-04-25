@@ -42,7 +42,7 @@ def main():
 
     try:
         bnb_debt = bal['margin']['BNB']['count']
-        usd_debt = bnb_debt * float(client.prices()['BNBUSDT'])
+        usd_debt = bnb_debt * float(client.prices()['BNBUSDT']) if bnb_debt < 0 else 0
     except KeyError:
         bnb_debt = 0
 
