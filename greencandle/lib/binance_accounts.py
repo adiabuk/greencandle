@@ -183,6 +183,9 @@ def get_binance_spot():
             elif key == "USDT":
                 bcoin = float(current_value) / float(prices["BTCUSDT"])
                 bitcoin_totals += bcoin
+            elif key == "GBP":
+                bcoin = float(current_value) / float(prices["BTCGBP"])
+                bitcoin_totals += bcoin
             elif key == "TWT":
                 bcoin = (float(current_value) * cryptocompare.get_price \
                         ('TWT', curr='USD')['TWT']['USD']) \
@@ -195,7 +198,7 @@ def get_binance_spot():
                     bcoin = float(current_value) * float(prices[key+"BTC"])  # value in BTC
                     bitcoin_totals += bcoin
                 except KeyError:
-                    LOGGER.critical("Error: Unable to spot quantify currency: %s " % key)
+                    LOGGER.critical("Error: Unable to quantify spot currency: %s " % key)
                     continue
 
             add_value(key, bcoin)
