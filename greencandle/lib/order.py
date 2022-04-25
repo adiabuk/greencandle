@@ -13,7 +13,7 @@ from .auth import binance_auth
 from .logger import get_logger, exception_catcher
 from .mysql import Mysql
 from .redis_conn import Redis
-from .binance_accounts import get_binance_spot, get_current_isolated
+from .binance_accounts import get_binance_spot, get_current_isolated, base2quote, quote2base
 from .balance_common import get_base, get_quote, get_step_precision
 from .common import perc_diff, add_perc, sub_perc, AttributeDict, QUOTES
 from .alerts import send_gmail_alert, send_push_notif, send_slack_trade, send_slack_message
@@ -193,19 +193,6 @@ class Trade():
 
         else:
             raise InvalidTradeError("Invalid trade type")
-
-    def quote2base(self, amount, pair):
-        """
-        convert quote amount to base amount
-        """
-        return float(amount) / float(self.client.prices()[pair])
-
-    def base2quote(self, amount, pair):
-        """
-        convert base amount to quote amount
-        """
-        return float(amount) * float(self.client.prices()[pair])
-
     def get_balance(self, dbase, account=None, pair=None):
         """
         Choose between spot/cross/isolated/test balances and return
@@ -241,7 +228,7 @@ class Trade():
             current_quote_bal = self.get_balance(dbase, account='margin', pair=pair)
             quote = get_quote(pair)
             quote_amount = self.amount_to_use(pair, current_quote_bal)
-            base_amount = self.quote2base(quote_amount, pair)
+            base_amount = quote2base(quote_amount, pair)
 
             if quote_amount >= float(current_quote_bal):
                 self.logger.critical("Unable to purchase $%s of %s, insufficient funds:%s/%s" %
@@ -529,7 +516,7 @@ class Trade():
             amount_to_use = sub_perc(1, amount_to_borrow)  # use 99% of borrowed funds
 
             amt_str = get_step_precision(pair, amount_to_use)
-            quote_amount = self.base2quote(amt_str, pair)
+            quote_amount = base2quote(amt_str, pair)
 
             if self.prod:
                 borrow_res = self.client.margin_borrow(

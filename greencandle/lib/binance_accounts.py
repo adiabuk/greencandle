@@ -15,6 +15,20 @@ config.create_config()
 BITCOIN = {}
 LOGGER = get_logger(__name__)
 
+def quote2base(amount, pair):
+    """
+    convert quote amount to base amount
+    """
+    client = binance_auth()
+    return float(amount) / float(client.prices()[pair])
+
+def base2quote(amount, pair):
+    """
+    convert base amount to quote amount
+    """
+    client = binance_auth()
+    return float(amount) * float(client.prices()[pair])
+
 def usd2gbp():
     """
     Get usd/gbp rate
