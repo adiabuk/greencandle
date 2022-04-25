@@ -64,7 +64,8 @@ def prod_run():
     """
     interval = config.main.interval
     LOGGER.info("Starting prod run")
-    os.remove('/var/run/gc-data')
+    if os.path.exists('/var/run/gc-data'):
+        os.remove('/var/run/gc-data')
     client = Binance()
     prices = client.prices()
     test_loop(interval=interval, prices=prices)
