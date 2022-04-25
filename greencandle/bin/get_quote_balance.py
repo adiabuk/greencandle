@@ -40,9 +40,11 @@ def main():
         except KeyError:  # Zero Balance
             continue
 
-
-    bnb_debt = bal['margin']['BNB']['count']
-    usd_debt = bnb_debt * float(client.prices()['BNBUSDT'])
+    try:
+        bnb_debt = bal['margin']['BNB']['count']
+        usd_debt = bnb_debt * float(client.prices()['BNBUSDT'])
+    except KeyError:
+        bnb_debt = 0
 
     results += "Cross Margin Account:\n"
     results += "\tAvailable: " + format_usd(client.get_max_borrow())+"\n"
