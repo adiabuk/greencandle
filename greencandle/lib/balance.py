@@ -125,7 +125,7 @@ class Balance(dict):
         for key, val in bal.items():
             result = self.check_balance(val)
             if not result:
-                LOGGER.into("Error: invalid balance entry for %s" % key)
+                LOGGER.info("Error: invalid balance entry for %s" % key)
                 return
 
         binance_usd = bal['margin']['TOTALS']['USD'] + bal['binance']['TOTALS']['USD'] + \
