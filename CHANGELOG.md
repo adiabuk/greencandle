@@ -1,6 +1,15 @@
 
 # Releases
 
+## 3.1
+* Fixes and tests for Api Router links/assocs
+* Fix USD profit in DB for short trades
+* Display BNB debt in balance notification
+* Reformatting of slack notifications
+* Use docker volume to wait for fresh data to analyse
+* Still update the DB when we fail to repay loan
+* Borrow full amount for short trades but only use 99%
+
 ## 3.0.2
 * Typos and bug fixes
 
