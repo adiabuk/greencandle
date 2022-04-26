@@ -1,6 +1,11 @@
 
 # Releases
 
+## 3.2
+* Speed up & scale data analysis
+* Fixes for BNB cross account debts
+* Allow converting to/from GBP as trade asset
+
 ## 3.1
 * Fixes and tests for Api Router links/assocs
 * Fix USD profit in DB for short trades
