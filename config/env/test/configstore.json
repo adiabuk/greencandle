@@ -6,14 +6,14 @@
   "data_key": "OfvuQJ0Cis1CvnFV2KTTYv3WCPKXOIord3OBDc0kwcU=",
   "data": {
     "account1_key": {
-      "value": "test",
+      "value": "LyI9lcbbt+XYnv8JYQU3M3FBkyUKHuXZ9B0MQn5pSwzMtT+Pb47zM4hTunO6iUJU9Jv+EusAT/gm0CWfWRePR6LwkNcjLoBpeUyKO/2t66JuZNHqz5yP4N7+gEJ+Zw20llE+f8N74bo=",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "account1_secret": {
-      "value": "test",
+      "value": "ImtEYSn0Jd4U91WlXKE+5fN5tW+LYLyRAy/BWAF0inn4W8kiNUP5EaMsx8u0E6MpTlDXt4k0ESMWVF64AeQMd/OcWOOESMFKbLOCm7TsyXusJhRT4OH5HYn7l03ew7CZaRK42SwcfPA=",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "account1_type": {
       "value": "binance",
