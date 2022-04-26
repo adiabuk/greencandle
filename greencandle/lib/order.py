@@ -206,7 +206,10 @@ class Trade():
                 return 100
             return self.__get_test_balance(dbase, account=account)[account][symbol]['count']
         elif account == 'binance':
-            return get_binance_spot()[account][symbol]['count']
+            try:
+                return get_binance_spot()[account][symbol]['count']
+            except KeyError:
+                return 0
         elif account == 'margin' and str2bool(self.config.main.isolated):
             return get_current_isolated()['isolated'][symbol]['count']
         elif account == 'margin' and not str2bool(self.config.main.isolated):
