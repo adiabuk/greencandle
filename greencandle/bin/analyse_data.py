@@ -14,13 +14,12 @@ from greencandle.lib.redis_conn import Redis
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.common import HOUR, get_link, arg_decorator
-from binance.binance import Binance
+from greencandle.lib.auth import binance_auth
 
 LOGGER = get_logger(__name__)
 PAIRS = config.main.pairs.split()
 MAIN_INDICATORS = config.main.indicators.split()
 SCHED = BlockingScheduler()
-INFO = Binance().exchange_info()
 GET_EXCEPTIONS = exception_catcher((Exception))
 
 @SCHED.scheduled_job('cron', minute="5",
@@ -29,8 +28,11 @@ def analyse_loop():
     """
     Gather data from redis and analyze
     """
-
+    client = binance_auth()
+    isolated = client.get_isolated_margin_pairs()
+    cross = client.get_cross_margin_pairs()
     my_file = Path('/var/run/gc-data')
+
     while not my_file.is_file():
         # file exists
         LOGGER.info("Waiting for data collection to complete...")
@@ -38,19 +40,32 @@ def analyse_loop():
 
     redis = Redis(interval=config.main.interval, test=False)
     for pair in PAIRS:
+        supported = ""
+        if config.main.trade_direction != "short":
+            supported += "spot "
+        else:
+            # don't analyse if we are
+            continue
+        supported += "isolated " if pair in isolated else ""
+        supported += "cross " if pair in cross else ""
+
+        if not supported.strip():
+            # don't analyse pair if spot/isolated/cross not supported
+            continue
+
         LOGGER.debug("Analysing pair: %s" % pair)
         try:
             result = redis.get_action(pair=pair, interval=config.main.interval)[0]
 
             if result == "OPEN":
                 LOGGER.debug("Items to buy")
-                margin = "margin" if INFO[pair]['isMarginTradingAllowed'] else "spot"
-                send_slack_message("notifications", "Open: %s %s %s %s" %
+                send_slack_message("notifications", "Open: %s %s %s (%s)" %
                                    (get_link(pair), config.main.interval,
-                                    config.main.trade_direction, margin), emoji=True)
-                LOGGER.info("Trade alert: %s %s %s %s" % (pair, config.main.interval,
-                                                          config.main.trade_direction,
-                                                          margin))
+                                    config.main.trade_direction, supported.strip()),
+                                   emoji=True)
+                LOGGER.info("Trade alert: %s %s %s (%s)" % (pair, config.main.interval,
+                                                            config.main.trade_direction,
+                                                            supported.strip()))
         except Exception as err_msg:
             LOGGER.critical("Error with pair %s %s" % (pair, str(err_msg)))
     LOGGER.info("End of current loop")
