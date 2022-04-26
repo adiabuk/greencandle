@@ -69,15 +69,14 @@ class Trade():
         redis.redis_conn(kwargs.pair, kwargs.interval, data, mepoch)
         del redis
 
-    def amount_to_use(self, item, current_quote_bal):
+    def amount_to_use(self, current_quote_bal):
         """
         Figire out how much of current asset to buy based on balance and divisor
         """
         dbase = Mysql(test=self.test_data, interval=self.interval)
         try:
             last_open_price = dbase.fetch_sql_data("select quote_in from trades where "
-                                                   "pair='{0}' and name='{1}'"
-                                                   .format(item, self.config.main.name),
+                                                   "name='{1}'" .format(self.config.main.name),
                                                    header=False)[-1][-1]
             last_open_price = float(last_open_price) if last_open_price else 0
         except (IndexError, TypeError):
@@ -87,8 +86,8 @@ class Trade():
             proposed_quote_amount = current_quote_bal / float(self.config.main.divisor)
         else:
             proposed_quote_amount = current_quote_bal / (int(self.config.main.max_trades) + 1)
-        self.logger.info('item: %s, proposed: %s, last:%s'
-                         % (item, proposed_quote_amount, last_open_price))
+        self.logger.info('proposed: %s, last:%s'
+                         % (proposed_quote_amount, last_open_price))
 
         return proposed_quote_amount
 
@@ -227,7 +226,7 @@ class Trade():
         for pair, current_time, current_price, event in long_list:
             current_quote_bal = self.get_balance(dbase, account='margin', pair=pair)
             quote = get_quote(pair)
-            quote_amount = self.amount_to_use(pair, current_quote_bal)
+            quote_amount = self.amount_to_use(current_quote_bal)
             base_amount = quote2base(quote_amount, pair)
 
             if quote_amount >= float(current_quote_bal):
@@ -342,7 +341,7 @@ class Trade():
                 self.logger.critical("complete balance: %s quote_bal: %s"
                                      % (balance, current_quote_bal))
 
-            quote_amount = self.amount_to_use(pair, current_quote_bal)
+            quote_amount = self.amount_to_use(current_quote_bal)
             amount = quote_amount / float(current_price)
 
             if float(current_price) * float(amount) > float(current_quote_bal):
@@ -511,7 +510,7 @@ class Trade():
             base = get_base(pair)
             current_base_bal = self.get_balance(dbase, account='margin', pair=pair)
 
-            proposed_base_amount = self.amount_to_use(pair, current_base_bal)
+            proposed_base_amount = self.amount_to_use(current_base_bal)
             amount_to_borrow = float(proposed_base_amount) * float(self.config.main.multiplier)
             amount_to_use = sub_perc(1, amount_to_borrow)  # use 99% of borrowed funds
 
