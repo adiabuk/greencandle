@@ -34,12 +34,15 @@ def main():
     interval = sys.argv[1]
 
     dbase = Mysql(interval=interval)
-    data = dbase.fetch_sql_data("select perc, drawup_perc, drawdown_perc from profit",
-                                header=False)
+
     if not sys.argv[3] in ("up", "down"):
         usage()
 
     field = "draw" + sys.argv[3]
+
+    data = dbase.fetch_sql_data("select perc, {}_perc from profit".format(field),
+                                header=False)
+
 
 
     dframe = pd.DataFrame.from_records(data, columns=("perc", field))
@@ -54,6 +57,7 @@ def main():
     fig.update_layout(title_text="{} Scatter -{}".format(field, filename))
 
     py.plot(fig, filename=filename, auto_open=False)
+    print("Done creating {} chart as {}".format(field, filename))
 
 
 if __name__ == '__main__':
