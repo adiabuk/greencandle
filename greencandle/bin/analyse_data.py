@@ -13,7 +13,7 @@ from pathlib import Path
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.alerts import send_slack_message
-from greencandle.lib.common import HOUR, MINUTE, get_link, arg_decorator
+from greencandle.lib.common import HOUR, get_link, arg_decorator
 from binance.binance import Binance
 
 LOGGER = get_logger(__name__)

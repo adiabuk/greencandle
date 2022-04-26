@@ -11,6 +11,7 @@ from greencandle.lib import config
 config.create_config()
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.engine import Engine
+from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.run import prod_initial
 from greencandle.lib.binance_common import get_dataframes
 from greencandle.lib.logger import get_logger, exception_catcher
@@ -70,6 +71,7 @@ def prod_run():
     prices = client.prices()
     test_loop(interval=interval, prices=prices)
     Path('/var/run/gc-data').touch()
+    send_slack_message("notifications", "-"*100)
     LOGGER.info("Finished prod run")
 
 @arg_decorator
