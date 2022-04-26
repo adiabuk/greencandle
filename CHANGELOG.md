@@ -1,6 +1,15 @@
 
 # Releases
 
+## 3.3
+* Try to increase next trade in same strategy
+* Cleanup drawdown/drawup tools into single script
+* Catch balance exception when cross account not available
+* Show when next iteration of analysis begins is slack
+* add API key for staging for API and light alert
+* Use max_borrow from binance for balances
+* Show list of supported trades in analysis alerts
+
 ## 3.2
 * Speed up & scale data analysis
 * Fixes for BNB cross account debts
