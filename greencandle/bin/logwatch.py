@@ -4,6 +4,7 @@ Follow log files and alert on Error
 """
 import time
 import os
+import docker
 from greencandle.lib import config
 config.create_config()
 from greencandle.lib.alerts import send_slack_message
@@ -34,12 +35,18 @@ def main():
 
     Usage: logwatch
     """
-
+    client = docker.from_env()
     logfile = open("/var/log/syslog", "r")
     loglines = follow(logfile)    # iterate over the generator
     for line in loglines:
         if "Traceback" in line:
-            send_slack_message("alerts", "String found in logfile: \"Traceback\"")
+            container_id = line.split()[4]
+            match = container_id[0:container_id.find('[')]
+            try:
+                name = client.containers.get(match).name
+            except docker.errors.NotFound:
+                name = "unknown"
+            send_slack_message("alerts", "Unhandled exception found in %s container" % name)
 
 if __name__ == '__main__':
     main()
