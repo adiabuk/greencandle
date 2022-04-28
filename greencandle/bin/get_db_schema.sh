@@ -2,13 +2,14 @@
 
 function usage () {
   cat << EOF
-Usage: $0 [-g|-p] -f <filename>
+Usage: $0 [-g|-p] -f <filename> -P <port>
 
 Add and retrieve mysql db schema without data
 
   -g    Get schema
   -p    Put schema
   -f    filename
+  -P    port
   -h    Show this message
 
 EOF
@@ -16,7 +17,7 @@ EOF
   exit 1
 }
 
-while getopts "hgpf:" opt; do
+while getopts "hgpP:f:" opt; do
   case $opt in
     g)
       GET=true
@@ -30,6 +31,9 @@ while getopts "hgpf:" opt; do
     f)
       FILENAME=$OPTARG
       DIRNAME=$(dirname $FILENAME)
+      ;;
+    P)
+      PORT=$OPTARG
       ;;
     \?)
       printf 'invald option\n\n'
@@ -48,8 +52,8 @@ elif [[ -z $GET && -z $PUT ]]; then
   usage
 
 elif [[ -n $GET ]]; then
-  mysqldump --protocol=tcp -u root -ppassword --no-data greencandle > $FILENAME
-  mysqldump --protocol=tcp -u root -ppassword greencandle exchange >> $FILENAME
+  mysqldump --protocol=tcp -P $PORT -u root -ppassword --no-data greencandle > $FILENAME
+  mysqldump --protocol=tcp -P $PORT -u root -ppassword greencandle exchange >> $FILENAME
 elif [[ -n $PUT ]]; then
-  mysql --protocol=tcp -u root -ppassword greencandle < $FILENAME
+  mysql --protocol=tcp -P $PORT -u root -ppassword greencandle < $FILENAME
 fi
