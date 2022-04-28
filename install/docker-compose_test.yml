@@ -1,6 +1,25 @@
 version: "3.1"
 services:
 
+  gen-be-logwatch:
+    container_name: gen-be-logwatch
+    hostname: gen-be-logwatch
+    image: amrox/greencandle:${TAG}
+    restart: always
+    entrypoint: /docker-entrypoint-alert.sh /usr/local/bin/logwatch
+    environment:
+      - CONFIG_ENV=data/cron
+      - HOST=$HOSTNAME
+    volumes:
+      - /var/log:/var/log
+      - /root/.aws:/root/.aws
+      - /var/run/docker.sock:/var/run/docker.sock
+    healthcheck:
+      test: ls /var/log/syslog
+      interval: 1m
+      timeout: 2s
+      retries: 5
+
   data-be-analyse_4h_high-rsi:
     container_name: data-be-analyse_4h_high-rsi
     hostname: data-be-analyse_4h_high-rsi
