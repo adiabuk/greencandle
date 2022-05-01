@@ -13,7 +13,7 @@ pipeline {
             echo "hello world"
             ./setup.py install --user
          '''
-    }
+
       }
     }
     stage("test") {
