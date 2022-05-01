@@ -8,11 +8,7 @@ pipeline {
 
       steps {
         echo 'building app'
-        bash '''
-            #!/bin/bash
-            echo "hello world"
-            ./setup.py install --user
-         '''
+        sh "./setup.py install --user"
 
       }
     }
