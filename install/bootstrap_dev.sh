@@ -13,7 +13,7 @@ fi
 env
 
 apt-get update
-apt-get -y install software-properties-common
+apt-get -y install software-properties-common gnupg
 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys CC86BB64
 add-apt-repository ppa:rmescandon/yq -y
 
@@ -21,7 +21,7 @@ add-apt-repository ppa:rmescandon/yq -y
 apt-get -y update
 apt-get -y install docker.io netcat ntpdate mysql-client screen atop jq iotop ntp awscli vim \
     wget make git mysql-client libmysqlclient-dev python3-dev xvfb firefox redis-tools \
-    cron bsdmainutils libssl-dev gcc libsystemd-dev libjpeg-dev zlib1g-dev
+    cron bsdmainutils libssl-dev gcc libsystemd-dev libjpeg-dev zlib1g-dev wget
 #curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 wget "https://www.dropbox.com/s/ge7b2rf9e0gqepp/docker-compose-1.29.1?dl=0" -O /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
