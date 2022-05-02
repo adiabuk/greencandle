@@ -25,6 +25,7 @@ environment {
 
       steps {
         parallel(
+          ansiColor('xterm'){
           "assocs": {
           echo "testing assocs"
           sh "./run_tests.py -v -t assocs"
@@ -46,7 +47,7 @@ environment {
           echo "testing envs"
           sh "./run_tests.py -v -t config"
           })
-
+      }
       }
     }
 
