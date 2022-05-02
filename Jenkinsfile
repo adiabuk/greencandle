@@ -3,6 +3,7 @@ pipeline {
   agent any
   environment {
     PATH = "/home/jenkins/.local/bin:${env.PATH}"
+    DOCKER_HOST = 'tcp://172.17.0.1:2375'
   }
 
   stages {
