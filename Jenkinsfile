@@ -27,32 +27,32 @@ pipeline {
         parallel(
           "assocs": {
             echo "testing assocs"
-            ansiColor('xterm') {
+            ansiColor('vga') {
               sh "./run_tests.py -v -t assocs"
             }
           },
           "pairs": {
             echo "testing pairs"
-            ansiColor('xterm') {
+            ansiColor('vga') {
               sh "./run_tests.py -v -t pairs"
             }
           },
           "scripts": {
             echo "testing scripts"
             sh "echo $PATH"
-            ansiColor('xterm') {
+            ansiColor('vga') {
               sh "./run_tests.py -v -t scripts"
             }
           },
           "lint": {
             echo "testing lint"
-            ansiColor('xterm') {
+            ansiColor('vga') {
               sh "./run_tests.py -v -t lint"
             }
           },
           "config": {
             echo "testing envs"
-            ansiColor('xterm') {
+            ansiColor('vga') {
               sh "./run_tests.py -v -t config"
             }
           })
