@@ -25,7 +25,8 @@ pipeline {
         docker.image('mysql:5').withRun('-e "MYSQL_ROOT_PASSWORD=my-secret-pw"') { c ->
         docker.image('mysql:5').inside("--link ${c.id}:db") {
           /* Wait until mysql service is up */
-          sh 'while ! mysqladmin ping -hdb --silent; do sleep 1; done'
+          //sh 'while ! mysqladmin ping -hdb --silent; do sleep 1; done'
+          sh "pwd"
         }
         docker.image('centos:7').inside("--link ${c.id}:db") {
           /*
