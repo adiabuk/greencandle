@@ -33,6 +33,7 @@ pipeline {
           },
           "scripts": {
           echo "testing scripts"
+          sh "echo $PATH"
           sh "./run_tests.py -v -t scripts"
           },
           "lint": {
