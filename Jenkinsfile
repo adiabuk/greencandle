@@ -18,23 +18,23 @@ pipeline {
         parallel(
           "assocs": {
           echo "testing assocs"
-          sh "./run_tests.sh -v -t assocs"
+          sh "./run_tests.py -v -t assocs"
           },
           "pairs": {
           echo "testing pairs"
-          sh "./run_tests.sh -v -t pairs"
+          sh "./run_tests.py -v -t pairs"
           },
           "scripts": {
           echo "testing scripts"
-          sh "./run_tests.sh -v -t scripts"
+          sh "./run_tests.py -v -t scripts"
           },
           "lint": {
           echo "testing lint"
-          sh "./run_tests.sh -v -t lint"
+          sh "./run_tests.py -v -t lint"
           },
           "config": {
           echo "testing envs"
-          sh "./run_tests.sh -v -t config"
+          sh "./run_tests.py -v -t config"
           })
 
       }
