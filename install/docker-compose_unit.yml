@@ -2,12 +2,15 @@ version: "3.1"
 services:
 
   unit:
+    build:
+      context: .
+      dockerfile: Dockerfile-ms
     container_name: unit
     environment:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
     hostname: unit
-    image: amrox/greencandle:${TAG}
+    image: greencandle.local
     restart: always
     entrypoint: tail -f /dev/null
     working_dir: /srv/greencandle
@@ -28,11 +31,14 @@ services:
 
   cron:
     container_name: cron
+    build:
+      context: .
+      dockerfile: Dockerfile-ms
     environment:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
     hostname: cron
-    image: amrox/greencandle:${TAG}
+    image: greencandle.local
     restart: always
     entrypoint: /docker-entrypoint.sh cron -f
     links:
@@ -52,11 +58,14 @@ services:
 
   api:
     container_name: api
+    build:
+      context: .
+      dockerfile: Dockerfile-ms
     environment:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
     hostname: api
-    image: amrox/greencandle:${TAG}
+    image: greencandle.local
     restart: always
     entrypoint: /docker-entrypoint-api.sh backend_api
     links:
@@ -78,7 +87,10 @@ services:
   redis-unit:
     container_name: redis-unit
     hostname: redis-unit
-    image: amrox/gc-redis:${TAG}
+    build:
+      context: .
+      dockerfile: Dockerfile-rs
+    image: redis.local
     ports:
       - 6379
     restart: always
@@ -93,7 +105,10 @@ services:
   mysql-unit:
     container_name: mysql-unit
     hostname: mysql-unit
-    image: amrox/gc-mysql:${TAG}
+    build:
+      context: .
+      dockerfile: Dockerfile-ms
+    image: mysql.local
     ports:
       - 3306
     environment:
