@@ -16,6 +16,14 @@ pipeline {
 
       steps {
         echo 'testing app'
+        parallel(
+          "lint": {
+          echo "testing lint"
+          },
+          "config": {
+          echo "testing config"
+          })
+
       }
     }
 
