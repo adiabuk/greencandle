@@ -21,6 +21,7 @@ pipeline {
         echo "preparing env"
         sh "sudo configstore package process_templates unit /etc"
         sh "sudo ln -s `pwd` /srv/greencandle"
+        script {
         docker.image('mysql:5').withRun('-e "MYSQL_ROOT_PASSWORD=my-secret-pw"') { c ->
         docker.image('mysql:5').inside("--link ${c.id}:db") {
           /* Wait until mysql service is up */
@@ -33,7 +34,7 @@ pipeline {
            */
           sh 'make check'
         }
-  }
+  }}
 
       }
     }
