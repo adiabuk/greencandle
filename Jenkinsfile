@@ -34,6 +34,7 @@ pipeline {
           "scripts": {
           echo "testing scripts"
           sh "echo $PATH"
+          sh "sleep 1000"
           sh "./run_tests.py -v -t scripts"
           },
           "lint": {
