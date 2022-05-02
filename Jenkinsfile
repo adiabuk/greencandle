@@ -4,6 +4,7 @@ pipeline {
   environment {
     PATH = "/home/jenkins/.local/bin:${env.PATH}"
   }
+
   stages {
 
     stage("build") {
@@ -19,6 +20,11 @@ pipeline {
         echo "preparing env"
         sh "sudo configstore package process_templates unit /etc"
         sh "sudo ln -s `pwd` /srv/greencandle"
+        script {
+          docker.image('amrox/gc-mysql').withRun(' -p 3306:3306'){ c->
+          sh 'while ! mysqladmin ping -h0.0.0.0 --silent; do sleep 1; done'
+          }
+        }
       }
     }
     stage("test") {
