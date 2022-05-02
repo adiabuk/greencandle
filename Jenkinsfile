@@ -15,7 +15,6 @@ pipeline {
     stage("test") {
 
       steps {
-        echo 'testing app'
         parallel(
           "lint": {
           echo "testing lint"
