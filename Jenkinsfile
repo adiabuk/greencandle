@@ -1,7 +1,7 @@
 pipeline {
 
   agent any
-environment {
+  environment {
     PATH = "/home/jenkins/.local/bin:${env.PATH}"
   }
   stages {
@@ -26,34 +26,35 @@ environment {
       steps {
         parallel(
           "assocs": {
-          echo "testing assocs"
-          ansiColor('xterm'){
-          sh "./run_tests.py -v -t assocs"}
+            echo "testing assocs"
+            ansiColor('xterm') {
+              sh "./run_tests.py -v -t assocs"
+            }
           },
           "pairs": {
-          echo "testing pairs"
-          ansiColor('xterm'){
-          sh "./run_tests.py -v -t pairs"
-          }
+            echo "testing pairs"
+            ansiColor('xterm') {
+              sh "./run_tests.py -v -t pairs"
+            }
           },
           "scripts": {
-          echo "testing scripts"
-          sh "echo $PATH"
-          ansiColor('xterm'){
-          sh "./run_tests.py -v -t scripts"
-          }
+            echo "testing scripts"
+            sh "echo $PATH"
+            ansiColor('xterm') {
+              sh "./run_tests.py -v -t scripts"
+            }
           },
           "lint": {
-          echo "testing lint"
-          ansiColor('xterm'){
-          sh "./run_tests.py -v -t lint"
-          }
+            echo "testing lint"
+            ansiColor('xterm') {
+              sh "./run_tests.py -v -t lint"
+            }
           },
           "config": {
-          echo "testing envs"
-          ansiColor('xterm'){
-          sh "./run_tests.py -v -t config"
-          }
+            echo "testing envs"
+            ansiColor('xterm') {
+              sh "./run_tests.py -v -t config"
+            }
           })
 
       }
@@ -66,10 +67,6 @@ environment {
       }
     }
 
-
   }
 
-
-
 }
-
