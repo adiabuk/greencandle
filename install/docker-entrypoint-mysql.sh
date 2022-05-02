@@ -17,6 +17,8 @@ shopt -s nullglob
 # if command starts with an option, prepend mysqld
 if [ "${1:0:1}" = '-' ]; then
 	set -- mysqld "$@"
+elif [ -z "$@" ]; then
+  set -- mysqld "$@"
 fi
 
 # skip setup if they want an option that stops mysqld
@@ -200,6 +202,4 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 	fi
 fi
 
-app=$@
-[[ -z $app ]] && app=mysqld
-exec "$app"
+exec "$@"
