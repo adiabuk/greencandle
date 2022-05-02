@@ -16,13 +16,25 @@ pipeline {
 
       steps {
         parallel(
+          "assocs": {
+          echo "testing assocs"
+          sh "./run_tests.sh -v -t assocs"
+          },
+          "pairs": {
+          echo "testing pairs"
+          sh "./run_tests.sh -v -t pairs"
+          },
+          "scripts": {
+          echo "testing scripts"
+          sh "./run_tests.sh -v -t scripts"
+          },
           "lint": {
           echo "testing lint"
-          sh "sleep 500"
+          sh "./run_tests.sh -v -t lint"
           },
           "config": {
-          echo "testing config"
-          sh "sleep 1000"
+          echo "testing envs"
+          sh "./run_tests.sh -v -t config"
           })
 
       }
