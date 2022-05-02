@@ -12,6 +12,12 @@ pipeline {
 
       }
     }
+    stage("prepare") {
+      steps {
+        echo "preparing env"
+        sh "configstore package process_templates unit /etc"
+      }
+    }
     stage("test") {
 
       steps {
