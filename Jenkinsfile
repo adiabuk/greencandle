@@ -16,6 +16,7 @@ pipeline {
       steps {
         echo "preparing env"
         sh "sudo configstore package process_templates unit /etc"
+        sh "sudo ln -s `pwd` /srv/greencandle"
       }
     }
     stage("test") {
