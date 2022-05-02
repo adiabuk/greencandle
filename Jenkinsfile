@@ -17,6 +17,7 @@ pipeline {
         echo "preparing env"
         sh "sudo configstore package process_templates unit /etc"
         sh "sudo ln -s `pwd` /srv/greencandle"
+        sh "export PATH=/home/jenkins.local/bin:$PATH"
       }
     }
     stage("test") {
@@ -34,7 +35,6 @@ pipeline {
           "scripts": {
           echo "testing scripts"
           sh "echo $PATH"
-          sh "sleep 1000"
           sh "./run_tests.py -v -t scripts"
           },
           "lint": {
