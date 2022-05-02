@@ -18,9 +18,11 @@ pipeline {
         parallel(
           "lint": {
           echo "testing lint"
+          sh "sleep 500"
           },
           "config": {
           echo "testing config"
+          sh "sleep 1000"
           })
 
       }
