@@ -1,7 +1,9 @@
 pipeline {
 
   agent any
-
+environment {
+    PATH = "/home/jenkins/.local/bin:${env.PATH}"
+  }
   stages {
 
     stage("build") {
@@ -17,7 +19,6 @@ pipeline {
         echo "preparing env"
         sh "sudo configstore package process_templates unit /etc"
         sh "sudo ln -s `pwd` /srv/greencandle"
-        sh "export PATH=/home/jenkins.local/bin:$PATH"
       }
     }
     stage("test") {
