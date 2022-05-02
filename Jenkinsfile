@@ -21,11 +21,20 @@ pipeline {
         echo "preparing env"
         sh "sudo configstore package process_templates unit /etc"
         sh "sudo ln -s `pwd` /srv/greencandle"
-        script {
-          docker.image('amrox/gc-mysql').withRun(' -p 33060:3306'){ c->
-          sh 'while ! mysqladmin ping -h0.0.0.0 --silent; do sleep 1; done'
-          }
+        docker.image('mysql:5').withRun('-e "MYSQL_ROOT_PASSWORD=my-secret-pw"') { c ->
+        docker.image('mysql:5').inside("--link ${c.id}:db") {
+          /* Wait until mysql service is up */
+          sh 'while ! mysqladmin ping -hdb --silent; do sleep 1; done'
         }
+        docker.image('centos:7').inside("--link ${c.id}:db") {
+          /*
+           * Run some tests which require MySQL, and assume that it is
+           * available on the host name `db`
+           */
+          sh 'make check'
+        }
+  }
+
       }
     }
     stage("test") {
