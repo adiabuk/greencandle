@@ -37,8 +37,6 @@ pipeline {
           "mysql": {
             echo "testing mysql"
             ansiColor('Vga') {
-                  build job: 'docker-pipe2', parameters: [[$class: 'StringParameterValue', name:
-                  'version', value: "jenkins_test]]
                   build job: 'docker-pipe2', parameters: [string(name: 'version',
                   value:'jenkins_test'), string(name:'test', value: "mysql")]
             }
