@@ -41,6 +41,34 @@ pipeline {
                   value:'jenkins_test'), string(name:'test', value: "mysql")]
             }
           },
+          "redis": {
+            echo "testing redis"
+            ansiColor('Vga') {
+                  build job: 'docker-pipe2', parameters: [string(name: 'version',
+                  value:'jenkins_test'), string(name:'test', value: "redis")]
+            }
+          },
+          "docker": {
+            echo "testing docker"
+            ansiColor('Vga') {
+                  build job: 'docker-pipe2', parameters: [string(name: 'version',
+                  value:'jenkins_test'), string(name:'test', value: "docker")]
+            }
+          },
+          "stop": {
+            echo "testing stop"
+            ansiColor('Vga') {
+                  build job: 'docker-pipe2', parameters: [string(name: 'version',
+                  value:'jenkins_test'), string(name:'test', value: "stop")]
+            }
+          },
+          "draw": {
+            echo "testing draw"
+            ansiColor('Vga') {
+                  build job: 'docker-pipe2', parameters: [string(name: 'version',
+                  value:'jenkins_test'), string(name:'test', value: "draw")]
+            }
+          },
           "pairs": {
             echo "testing pairs"
             ansiColor('vga') {
