@@ -1,38 +1,44 @@
 version: "3.1"
 services:
 
-  #  unit:
-  #    container_name: unit
-  #    environment:
-  #      - CONFIG_ENV=unit
-  #      - HOST=$HOSTNAME
-  #    hostname: unit
-  #    image: amrox/greencandle:${TAG}
-  #    restart: always
-  #    entrypoint: /docker-entrypoint.sh /srv/greencandle/run_tests.py -v
-  #    working_dir: /srv/greencandle
-  #    links:
-  #      - mysql-unit:mysql
-  #      - redis-unit:redis
-  #    depends_on:
-  #      - mysql-unit
-  #      - redis-unit
-  #    healthcheck:
-  #      test: ls
-  #      interval: 1m
-  #      timeout: 2s
-  #      retries: 5
-  #    volumes:
-  #      - /data:/data
-  #      - /root/.aws:/root/.aws
+  unit:
+    build:
+      context: .
+      dockerfile: install/Dockerfile-ms
+    container_name: unit
+    environment:
+      - CONFIG_ENV=unit
+      - HOST=$HOSTNAME
+    hostname: unit
+    image: greencandle.local
+    restart: always
+    entrypoint: tail -f /dev/null
+    working_dir: /srv/greencandle
+    links:
+      - mysql-unit:mysql
+      - redis-unit:redis
+    depends_on:
+      - mysql-unit
+      - redis-unit
+    healthcheck:
+      test: ls
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
 
   cron:
     container_name: cron
+    build:
+      context: .
+      dockerfile: install/Dockerfile-ms
     environment:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
     hostname: cron
-    image: amrox/greencandle:${TAG}
+    image: greencandle.local
     restart: always
     entrypoint: /docker-entrypoint.sh cron -f
     links:
@@ -52,18 +58,21 @@ services:
 
   api:
     container_name: api
+    build:
+      context: .
+      dockerfile: install/Dockerfile-ms
     environment:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
     hostname: api
-    image: amrox/greencandle:${TAG}
+    image: greencandle.local
     restart: always
     entrypoint: /docker-entrypoint-api.sh backend_api
     links:
       - mysql-unit:mysql
       - redis-unit:redis
     ports:
-      - 20000:20000
+      - 20000
     depends_on:
       - mysql-unit
       - redis-unit
@@ -78,9 +87,12 @@ services:
   redis-unit:
     container_name: redis-unit
     hostname: redis-unit
-    image: amrox/gc-redis:${TAG}
+    build:
+      context: .
+      dockerfile: install/Dockerfile-rs
+    image: redis.local
     ports:
-      - 6379:6379
+      - 6379
     restart: always
     links:
       - mysql-unit:mysql
@@ -93,9 +105,12 @@ services:
   mysql-unit:
     container_name: mysql-unit
     hostname: mysql-unit
-    image: amrox/gc-mysql:${TAG}
+    build:
+      context: .
+      dockerfile: install/Dockerfile-ms
+    image: mysql.local
     ports:
-      - 3306:3306
+      - 3306
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - CONFIG_ENV=unit
