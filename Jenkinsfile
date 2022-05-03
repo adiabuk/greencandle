@@ -106,5 +106,12 @@ pipeline {
     }
 
   }
-
+  post {
+    success {
+      slackSend color: "good", message: env.BRANCH_NAME + " has passed tests"
+    }
+    failure {
+      slackSend color: "bad", message: env.BRANCH_NAME + " has failed tests"
+    }
+  }
 }
