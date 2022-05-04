@@ -108,6 +108,34 @@ pipeline {
               value:'jenkins_test'), string(name:'app', value: "greencandle")]
             }
           }
+          ),
+          "mysql": {
+            ansiColor('vga') {
+              build job: 'docker-build', parameters: [string(name: 'version',
+              value:'jenkins_test'), string(name:'app', value: "mysql")]
+            }
+          }
+          ),
+          "redis": {
+            ansiColor('vga') {
+              build job: 'docker-build', parameters: [string(name: 'version',
+              value:'jenkins_test'), string(name:'app', value: "redis")]
+            }
+          }
+          ),
+          "web": {
+            ansiColor('vga') {
+              build job: 'docker-build', parameters: [string(name: 'version',
+              value:'jenkins_test'), string(name:'app', value: "web")]
+            }
+          }
+          ),
+          "alert": {
+            ansiColor('vga') {
+              build job: 'docker-build', parameters: [string(name: 'version',
+              value:'jenkins_test'), string(name:'app', value: "alert")]
+            }
+          }
           )
 
     }
