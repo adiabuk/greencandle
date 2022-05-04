@@ -1,147 +1,147 @@
 pipeline {
 
-  agent any
-  environment {
-    PATH = "/home/jenkins/.local/bin:${env.PATH}"
-    DOCKER_HOST = 'tcp://172.17.0.1:2375'
-  }
-
-  stages {
-
-    stage("build") {
-
-      steps {
-        sh "env"
-        echo 'building app'
-        sh "./setup.py install --user"
-      }
-    }
-    stage("prepare") {
-      steps {
-        echo "preparing env"
-        sh "sudo configstore package process_templates unit /etc"
-        sh "sudo ln -s `pwd` /srv/greencandle"
-
-      }
-    }
-    stage("test") {
-
-      steps {
-        parallel(
-          "assocs": {
-            echo "testing assocs"
-            ansiColor('vga') {
-              sh "./run_tests.py -v -t assocs"
-            }
-          },
-          "mysql": {
-            echo "testing mysql"
-            ansiColor('Vga') {
-                  build job: 'docker-tests', parameters: [string(name: 'version',
-                  value:env.GIT_BRANCH), string(name:'test', value: "mysql")]
-            }
-          },
-          "redis": {
-            echo "testing redis"
-            ansiColor('Vga') {
-                  build job: 'docker-tests', parameters: [string(name: 'version',
-                  value:env.GIT_BRANCH), string(name:'test', value: "redis")]
-            }
-          },
-          "docker": {
-            echo "testing docker"
-            ansiColor('Vga') {
-                  build job: 'docker-tests', parameters: [string(name: 'version',
-                  value:env.GIT_BRANCH), string(name:'test', value: "docker")]
-            }
-          },
-          "stop": {
-            echo "testing stop"
-            ansiColor('Vga') {
-                  build job: 'docker-tests', parameters: [string(name: 'version',
-                  value:env.GIT_BRANCH), string(name:'test', value: "stop")]
-            }
-          },
-          "draw": {
-            echo "testing draw"
-            ansiColor('Vga') {
-                  build job: 'docker-tests', parameters: [string(name: 'version',
-                  value:env.GIT_BRANCH), string(name:'test', value: "draw")]
-            }
-          },
-          "pairs": {
-            echo "testing pairs"
-            ansiColor('vga') {
-              sh "./run_tests.py -v -t pairs"
-            }
-          },
-          "scripts": {
-            echo "testing scripts"
-            sh "echo $PATH"
-            ansiColor('vga') {
-              sh "./run_tests.py -v -t scripts"
-            }
-          },
-          "lint": {
-            echo "testing lint"
-            ansiColor('vga') {
-              sh "./run_tests.py -v -t lint"
-            }
-          },
-          "config": {
-            echo "testing envs"
-            ansiColor('vga') {
-              sh "./run_tests.py -v -t config"
-            }
-          })
-
-      }
+    agent any
+    environment {
+        PATH = "/home/jenkins/.local/bin:${env.PATH}"
+        DOCKER_HOST = 'tcp://172.17.0.1:2375'
     }
 
-    stage("deploy") {
+    stages {
 
-      steps {
-        parallel(
-          "greencandle": {
-            ansiColor('vga') {
-              build job: 'docker-build', parameters: [string(name: 'version',
-              value:env.GIT_BRANCH), string(name:'app', value: "greencandle")]
+        stage("build") {
+
+            steps {
+                sh "env"
+                echo 'building app'
+                sh "./setup.py install --user"
             }
-          },
-          "mysql": {
-            ansiColor('vga') {
-              build job: 'docker-build', parameters: [string(name: 'version',
-              value:env.GIT_BRANCH), string(name:'app', value: "mysql")]
+        }
+        stage("prepare") {
+            steps {
+                echo "preparing env"
+                sh "sudo configstore package process_templates unit /etc"
+                sh "sudo ln -s `pwd` /srv/greencandle"
+
             }
-          },
-          "redis": {
-            ansiColor('vga') {
-              build job: 'docker-build', parameters: [string(name: 'version',
-              value:env.GIT_BRANCH), string(name:'app', value: "redis")]
+        }
+        stage("test") {
+
+            steps {
+                parallel(
+                    "assocs": {
+                        echo "testing assocs"
+                        ansiColor('vga') {
+                            sh "./run_tests.py -v -t assocs"
+                        }
+                    },
+                    "mysql": {
+                        echo "testing mysql"
+                        ansiColor('Vga') {
+                            build job: 'docker-tests', parameters: [string(name: 'version',
+                                value: env.GIT_BRANCH), string(name: 'test', value: "mysql")]
+                        }
+                    },
+                    "redis": {
+                        echo "testing redis"
+                        ansiColor('Vga') {
+                            build job: 'docker-tests', parameters: [string(name: 'version',
+                                value: env.GIT_BRANCH), string(name: 'test', value: "redis")]
+                        }
+                    },
+                    "docker": {
+                        echo "testing docker"
+                        ansiColor('Vga') {
+                            build job: 'docker-tests', parameters: [string(name: 'version',
+                                value: env.GIT_BRANCH), string(name: 'test', value: "docker")]
+                        }
+                    },
+                    "stop": {
+                        echo "testing stop"
+                        ansiColor('Vga') {
+                            build job: 'docker-tests', parameters: [string(name: 'version',
+                                value: env.GIT_BRANCH), string(name: 'test', value: "stop")]
+                        }
+                    },
+                    "draw": {
+                        echo "testing draw"
+                        ansiColor('Vga') {
+                            build job: 'docker-tests', parameters: [string(name: 'version',
+                                value: env.GIT_BRANCH), string(name: 'test', value: "draw")]
+                        }
+                    },
+                    "pairs": {
+                        echo "testing pairs"
+                        ansiColor('vga') {
+                            sh "./run_tests.py -v -t pairs"
+                        }
+                    },
+                    "scripts": {
+                        echo "testing scripts"
+                        sh "echo $PATH"
+                        ansiColor('vga') {
+                            sh "./run_tests.py -v -t scripts"
+                        }
+                    },
+                    "lint": {
+                        echo "testing lint"
+                        ansiColor('vga') {
+                            sh "./run_tests.py -v -t lint"
+                        }
+                    },
+                    "config": {
+                        echo "testing envs"
+                        ansiColor('vga') {
+                            sh "./run_tests.py -v -t config"
+                        }
+                    })
+
             }
-          },
-          "web": {
-            ansiColor('vga') {
-              build job: 'docker-build', parameters: [string(name: 'version',
-              value:env.GIT_BRANCH), string(name:'app', value: "web")]
+        }
+
+        stage("deploy") {
+
+            steps {
+                parallel(
+                    "greencandle": {
+                        ansiColor('vga') {
+                            build job: 'docker-build', parameters: [string(name: 'version',
+                                value: env.GIT_BRANCH), string(name: 'app', value: "greencandle")]
+                        }
+                    },
+                    "mysql": {
+                        ansiColor('vga') {
+                            build job: 'docker-build', parameters: [string(name: 'version',
+                                value: env.GIT_BRANCH), string(name: 'app', value: "mysql")]
+                        }
+                    },
+                    "redis": {
+                        ansiColor('vga') {
+                            build job: 'docker-build', parameters: [string(name: 'version',
+                                value: env.GIT_BRANCH), string(name: 'app', value: "redis")]
+                        }
+                    },
+                    "web": {
+                        ansiColor('vga') {
+                            build job: 'docker-build', parameters: [string(name: 'version',
+                                value: env.GIT_BRANCH), string(name: 'app', value: "web")]
+                        }
+                    },
+                    "alert": {
+                        ansiColor('vga') {
+                            build job: 'docker-build', parameters: [string(name: 'version',
+                                value: env.GIT_BRANCH), string(name: 'app', value: "alert")]
+                        }
+                    }
+                )
             }
-          },
-          "alert": {
-            ansiColor('vga') {
-              build job: 'docker-build', parameters: [string(name: 'version',
-              value:env.GIT_BRANCH), string(name:'app', value: "alert")]
-            }
-          }
-          )
+        }
     }
-}
-  }
-  post {
-    success {
-      slackSend color: "good", message: env.BRANCH_NAME + " has passed tests"
+    post {
+        success {
+            slackSend color: "good", message: env.BRANCH_NAME + " has passed tests"
+        }
+        failure {
+            slackSend color: "bad", message: env.BRANCH_NAME + " has failed tests"
+        }
     }
-    failure {
-      slackSend color: "bad", message: env.BRANCH_NAME + " has failed tests"
-    }
-  }
 }
