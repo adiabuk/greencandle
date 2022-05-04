@@ -8,4 +8,3 @@ RUN [ ! -f /usr/local/bin/configstore ] && \
     -O /tmp/configstore-2.5.0-linux-amd64.tar.gz && \
     tar zxvf /tmp/configstore-2.5.0-linux-amd64.tar.gz -C /usr/local/bin && \
     rm -rf /tmp/configstore-2.5.0-linux-amd64.tar.gz
-RUN mkdir /opt/output
