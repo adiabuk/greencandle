@@ -101,8 +101,15 @@ pipeline {
     stage("deploy") {
 
       steps {
-        echo 'deploy app'
-      }
+        parallel(
+          "greencandle": {
+            ansiColor('vga') {
+              build job: 'docker-build', parameters: [string(name: 'version',
+              value:'jenkins_test'), string(name:'app', value: "greencandle")]
+            }
+          }
+          )
+
     }
 
   }
