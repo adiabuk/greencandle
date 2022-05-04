@@ -1,4 +1,4 @@
-FROM amrox/python:3.7.0-deps
+FROM amrox/python:3.7.0-new
 LABEL branch=${BRANCH}
 LABEL commit=${COMMIT}
 LABEL date=${DATE}
