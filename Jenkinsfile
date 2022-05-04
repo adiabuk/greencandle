@@ -38,35 +38,35 @@ pipeline {
             echo "testing mysql"
             ansiColor('Vga') {
                   build job: 'docker-tests', parameters: [string(name: 'version',
-                  value:'jenkins_test'), string(name:'test', value: "mysql")]
+                  value:env.GIT_BRANCH), string(name:'test', value: "mysql")]
             }
           },
           "redis": {
             echo "testing redis"
             ansiColor('Vga') {
                   build job: 'docker-tests', parameters: [string(name: 'version',
-                  value:'jenkins_test'), string(name:'test', value: "redis")]
+                  value:env.GIT_BRANCH), string(name:'test', value: "redis")]
             }
           },
           "docker": {
             echo "testing docker"
             ansiColor('Vga') {
                   build job: 'docker-tests', parameters: [string(name: 'version',
-                  value:'jenkins_test'), string(name:'test', value: "docker")]
+                  value:env.GIT_BRANCH), string(name:'test', value: "docker")]
             }
           },
           "stop": {
             echo "testing stop"
             ansiColor('Vga') {
                   build job: 'docker-tests', parameters: [string(name: 'version',
-                  value:'jenkins_test'), string(name:'test', value: "stop")]
+                  value:env.GIT_BRANCH), string(name:'test', value: "stop")]
             }
           },
           "draw": {
             echo "testing draw"
             ansiColor('Vga') {
                   build job: 'docker-tests', parameters: [string(name: 'version',
-                  value:'jenkins_test'), string(name:'test', value: "draw")]
+                  value:env.GIT_BRANCH), string(name:'test', value: "draw")]
             }
           },
           "pairs": {
@@ -105,31 +105,31 @@ pipeline {
           "greencandle": {
             ansiColor('vga') {
               build job: 'docker-build', parameters: [string(name: 'version',
-              value:'jenkins_test'), string(name:'app', value: "greencandle")]
+              value:env.GIT_BRANCH), string(name:'app', value: "greencandle")]
             }
           },
           "mysql": {
             ansiColor('vga') {
               build job: 'docker-build', parameters: [string(name: 'version',
-              value:'jenkins_test'), string(name:'app', value: "mysql")]
+              value:env.GIT_BRANCH), string(name:'app', value: "mysql")]
             }
           },
           "redis": {
             ansiColor('vga') {
               build job: 'docker-build', parameters: [string(name: 'version',
-              value:'jenkins_test'), string(name:'app', value: "redis")]
+              value:env.GIT_BRANCH), string(name:'app', value: "redis")]
             }
           },
           "web": {
             ansiColor('vga') {
               build job: 'docker-build', parameters: [string(name: 'version',
-              value:'jenkins_test'), string(name:'app', value: "web")]
+              value:env.GIT_BRANCH), string(name:'app', value: "web")]
             }
           },
           "alert": {
             ansiColor('vga') {
               build job: 'docker-build', parameters: [string(name: 'version',
-              value:'jenkins_test'), string(name:'app', value: "alert")]
+              value:env.GIT_BRANCH), string(name:'app', value: "alert")]
             }
           }
           )
