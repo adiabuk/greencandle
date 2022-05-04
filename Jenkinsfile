@@ -11,9 +11,9 @@ pipeline {
     stage("build") {
 
       steps {
+        sh "env"
         echo 'building app'
         sh "./setup.py install --user"
-
       }
     }
     stage("prepare") {
