@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: install/Dockerfile-gc
-    container_name: unit-${BUILD_ID}
+    container_name: unit-runner-${BUILD_ID}
     environment:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
