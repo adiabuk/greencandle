@@ -1,10 +1,10 @@
 version: "3.1"
 services:
 
-  unit:
+  unit-runner:
     build:
       context: .
-      dockerfile: install/Dockerfile-ms
+      dockerfile: install/Dockerfile-gc
     container_name: unit-${BUILD_ID}
     environment:
       - CONFIG_ENV=unit
