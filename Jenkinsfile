@@ -111,7 +111,7 @@ pipeline {
           )
 
     }
-
+}
   }
   post {
     success {
