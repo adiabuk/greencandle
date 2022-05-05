@@ -35,7 +35,12 @@ pipeline {
                     "assocs": {
                         echo "testing assocs"
                         ansiColor('vga') {
-                            sh "./run_tests.py -v -t assocs"
+                            build job: 'docker-tests', parameters:
+                            [string(name: 'version', value: env.GIT_BRANCH),
+                             string(name: 'test', value: "assocs"),
+                             string(name: 'image_id', value: env.BUILD_ID)
+                             ]
+
                         }
                     },
                     "mysql": {
