@@ -10,7 +10,7 @@ services:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
     hostname: unit
-    image: greencandle-${BUILD_ID}
+    image: greencandle-${image_id}
     restart: always
     entrypoint: tail -f /dev/null
     working_dir: /srv/greencandle
@@ -38,7 +38,7 @@ services:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
     hostname: cron
-    image: greencandle-${BUILD_ID}
+    image: greencandle-${image_id}
     restart: always
     entrypoint: /docker-entrypoint.sh cron -f
     links:
@@ -65,7 +65,7 @@ services:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
     hostname: api
-    image: greencandle-${BUILD_ID}
+    image: greencandle-${image_id}
     restart: always
     entrypoint: /docker-entrypoint-api.sh backend_api
     links:
@@ -90,7 +90,7 @@ services:
     build:
       context: .
       dockerfile: install/Dockerfile-rs
-    image: redis-${BUILD_ID}
+    image: redis-${image_id}
     ports:
       - 6379
     restart: always
@@ -108,7 +108,7 @@ services:
     build:
       context: .
       dockerfile: install/Dockerfile-ms
-    image: mysql-${BUILD_ID}
+    image: mysql-${image_id}
     ports:
       - 3306
     environment:
