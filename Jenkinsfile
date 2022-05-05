@@ -44,7 +44,7 @@ pipeline {
                             build job: 'docker-tests', parameters:
                             [string(name: 'version', value: env.GIT_BRANCH),
                              string(name: 'test', value: "mysql"),
-                             string(name: 'id', value: env.BUILD_ID)
+                             string(name: 'image_id', value: env.BUILD_ID)
                              ]
                         }
                     },
@@ -54,7 +54,7 @@ pipeline {
                             build job: 'docker-tests', parameters:
                             [string(name: 'version', value: env.GIT_BRANCH),
                              string(name: 'test', value: "redis"),
-                             string(name: 'id', value: env.BUILD_ID)
+                             string(name: 'image_id', value: env.BUILD_ID)
                              ]
                         }
                     },
@@ -64,7 +64,7 @@ pipeline {
                             build job: 'docker-tests', parameters:
                             [string(name: 'version', value: env.GIT_BRANCH),
                              string(name: 'test', value: "docker"),
-                             string(name: 'id', value: env.BUILD_ID)
+                             string(name: 'image_id', value: env.BUILD_ID)
                              ]
                         }
                     },
@@ -74,7 +74,7 @@ pipeline {
                             build job: 'docker-tests', parameters:
                             [string(name: 'version', value: env.GIT_BRANCH),
                              string(name: 'test', value: "stop"),
-                             string(name: 'id', value: env.BUILD_ID)
+                             string(name: 'image_id', value: env.BUILD_ID)
                              ]
                         }
                     },
@@ -84,7 +84,7 @@ pipeline {
                             build job: 'docker-tests', parameters:
                             [string(name: 'version', value: env.GIT_BRANCH),
                              string(name: 'test', value: "draw"),
-                             string(name: 'id', value: env.BUILD_ID)
+                             string(name: 'image_id', value: env.BUILD_ID)
                              ]
                         }
                     },
@@ -95,7 +95,7 @@ pipeline {
                             build job: 'docker-tests', parameters:
                             [string(name: 'version', value: env.GIT_BRANCH),
                              string(name: 'test', value: "pairs"),
-                             string(name: 'id', value: env.BUILD_ID)
+                             string(name: 'image_id', value: env.BUILD_ID)
                              ]
 
                         }
@@ -108,7 +108,7 @@ pipeline {
                             build job: 'docker-tests', parameters:
                             [string(name: 'version', value: env.GIT_BRANCH),
                              string(name: 'test', value: "scripts"),
-                             string(name: 'id', value: env.BUILD_ID)
+                             string(name: 'image_id', value: env.BUILD_ID)
                              ]
 
                         }
@@ -120,7 +120,7 @@ pipeline {
                             build job: 'docker-tests', parameters:
                             [string(name: 'version', value: env.GIT_BRANCH),
                              string(name: 'test', value: "lint"),
-                             string(name: 'id', value: env.BUILD_ID)
+                             string(name: 'image_id', value: env.BUILD_ID)
                              ]
 
                         }
@@ -132,7 +132,7 @@ pipeline {
                             build job: 'docker-tests', parameters:
                             [string(name: 'version', value: env.GIT_BRANCH),
                              string(name: 'test', value: "config"),
-                             string(name: 'id', value: env.BUILD_ID)
+                             string(name: 'image_id', value: env.BUILD_ID)
                              ]
 
                         }
