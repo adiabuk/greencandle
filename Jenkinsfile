@@ -201,10 +201,10 @@ pipeline {
     }
     post {
         success {
-            slackSend color: "good", message: env.BRANCH_NAME + " has passed tests"
+            slackSend color: "good", message: "branch ${env.BRANCH_NAME} completed successfully after ${currentBuild.durationString}"
         }
         failure {
-            slackSend color: "bad", message: env.BRANCH_NAME + " has failed tests"
+            slackSend color: "bad", message: "branch ${env.BRANCH_NAME} failed after ${currentBuild.durationString}"
         }
     }
 }
