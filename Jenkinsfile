@@ -105,6 +105,7 @@ pipeline {
                         sh "echo $PATH"
                         ansiColor('vga') {
                             //sh "./run_tests.py -v -t scripts"
+                            build job: 'docker-tests', parameters:
                             [string(name: 'version', value: env.GIT_BRANCH),
                              string(name: 'test', value: "scripts"),
                              string(name: 'id', value: env.BUILD_ID)
@@ -116,6 +117,7 @@ pipeline {
                         echo "testing lint"
                         ansiColor('vga') {
                             //sh "./run_tests.py -v -t lint"
+                            build job: 'docker-tests', parameters:
                             [string(name: 'version', value: env.GIT_BRANCH),
                              string(name: 'test', value: "lint"),
                              string(name: 'id', value: env.BUILD_ID)
@@ -127,6 +129,7 @@ pipeline {
                         echo "testing envs"
                         ansiColor('vga') {
                             //sh "./run_tests.py -v -t config"
+                            build job: 'docker-tests', parameters:
                             [string(name: 'version', value: env.GIT_BRANCH),
                              string(name: 'test', value: "config"),
                              string(name: 'id', value: env.BUILD_ID)
