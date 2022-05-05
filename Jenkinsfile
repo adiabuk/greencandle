@@ -16,7 +16,7 @@ pipeline {
                 echo 'building apps'
                 //sh "./setup.py install --user"
                 ansiColor('vga') {
-                  sh 'cd greencandle; docker-compose -f docker-compose_jenkins.yml -p $BUILD_ID build'
+                  sh 'docker-compose -f docker-compose_jenkins.yml -p $BUILD_ID build'
                         }
             }
         }
