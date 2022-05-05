@@ -147,32 +147,47 @@ pipeline {
                 parallel(
                     "greencandle": {
                         ansiColor('vga') {
-                            build job: 'docker-build', parameters: [string(name: 'version',
-                                value: env.GIT_BRANCH), string(name: 'app', value: "greencandle")]
+                            build job: 'docker-build', parameters:
+                            [string(name: 'version', value: env.GIT_BRANCH),
+                            string(name: 'app', value: "greencandle"),
+                            string(name: 'image_id', value: env.BUILD_ID)
+                            ]
                         }
                     },
                     "mysql": {
                         ansiColor('vga') {
-                            build job: 'docker-build', parameters: [string(name: 'version',
-                                value: env.GIT_BRANCH), string(name: 'app', value: "mysql")]
+                            build job: 'docker-build', parameters:
+                            [string(name: 'version', value: env.GIT_BRANCH),
+                            string(name: 'app', value: "mysql"),
+                            string(name: 'image_id', value: env.BUILD_ID)
+                            ]
                         }
                     },
                     "redis": {
                         ansiColor('vga') {
-                            build job: 'docker-build', parameters: [string(name: 'version',
-                                value: env.GIT_BRANCH), string(name: 'app', value: "redis")]
+                            build job: 'docker-build', parameters:
+                            [string(name: 'version', value: env.GIT_BRANCH),
+                            string(name: 'app', value: "redis"),
+                            string(name: 'image_id', value: env.BUILD_ID)
+                            ]
                         }
                     },
                     "web": {
                         ansiColor('vga') {
-                            build job: 'docker-build', parameters: [string(name: 'version',
-                                value: env.GIT_BRANCH), string(name: 'app', value: "web")]
+                            build job: 'docker-build', parameters:
+                            [string(name: 'version', value: env.GIT_BRANCH),
+                            string(name: 'app', value: "web"),
+                            string(name: 'image_id', value: env.BUILD_ID)
+                            ]
                         }
                     },
                     "alert": {
                         ansiColor('vga') {
-                            build job: 'docker-build', parameters: [string(name: 'version',
-                                value: env.GIT_BRANCH), string(name: 'app', value: "alert")]
+                            build job: 'docker-build', parameters:
+                            [string(name: 'version', value: env.GIT_BRANCH),
+                            string(name: 'app', value: "alert"),
+                            string(name: 'image_id', value: env.BUILD_ID)
+                            ]
                         }
                     }
                 )
