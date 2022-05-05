@@ -120,3 +120,35 @@ services:
       interval: 1m
       timeout: 2s
       retries: 5
+
+  alert-unit:
+    container_name: alert-unit-${BUILD_ID}
+    hostname: alert-unit
+    build:
+      context: .
+      dockerfile: install/Dockerfile-as
+    image: alert-${image_id}
+    environment:
+      - CONFIG_ENV=unit
+    restart: always
+    healthcheck:
+      test: ls
+      interval: 1m
+      timeout: 2s
+      retries: 5
+
+  web-unit:
+    container_name: web-unit-${BUILD_ID}
+    hostname: web-unit
+    build:
+      context: .
+      dockerfile: install/Dockerfile-wb
+    image: wb-${image_id}
+    environment:
+      - CONFIG_ENV=unit
+    restart: always
+    healthcheck:
+      test: ls
+      interval: 1m
+      timeout: 2s
+      retries: 5
