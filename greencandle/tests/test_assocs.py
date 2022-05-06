@@ -52,7 +52,7 @@ class TestAssocs(unittest.TestCase):
             os.environ['HOST'] = host
             names = get_pairs()[-1]
             rev_names = {v: k for k, v in names.items()}
-            with open('template/router_config_{}.json'.format(env),
+            with open('config/template/router_config_{}.json'.format(env),
                       'r') as json_file:
                 router_config = json.load(json_file)
 
