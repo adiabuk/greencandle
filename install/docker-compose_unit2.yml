@@ -1,0 +1,81 @@
+version: "3.1"
+services:
+  cron:
+    container_name: cron
+    environment:
+      - CONFIG_ENV=unit
+      - HOST=$HOSTNAME
+    hostname: cron
+    image: amrox/greencandle:${TAG}
+    restart: always
+    entrypoint: /docker-entrypoint.sh cron -f
+    links:
+      - mysql-unit:mysql
+      - redis-unit:redis
+    depends_on:
+      - mysql-unit
+      - redis-unit
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+
+  api:
+    container_name: api
+    environment:
+      - CONFIG_ENV=unit
+      - HOST=$HOSTNAME
+    hostname: api
+    image: amrox/greencandle:${TAG}
+    restart: always
+    entrypoint: /docker-entrypoint-api.sh backend_api
+    links:
+      - mysql-unit:mysql
+      - redis-unit:redis
+    ports:
+      - 20000
+    depends_on:
+      - mysql-unit
+      - redis-unit
+    healthcheck:
+      test: nc -z 127.1 20000
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+
+  redis-unit:
+    container_name: redis-unit
+    hostname: redis-unit
+    image: amrox/gc-redis:${TAG}
+    ports:
+      - 6379
+    restart: always
+    links:
+      - mysql-unit:mysql
+    healthcheck:
+      test: redis-cli ping
+      interval: 1m
+      timeout: 2s
+      retries: 5
+
+  mysql-unit:
+    container_name: mysql-unit
+    hostname: mysql-unit
+    image: amrox/gc-mysql:${TAG}
+    ports:
+      - 3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - CONFIG_ENV=unit
+    restart: always
+    healthcheck:
+      test: echo 'SELECT version();'| mysql -uroot -ppassword
+      interval: 1m
+      timeout: 2s
+      retries: 5

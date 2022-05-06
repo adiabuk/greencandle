@@ -71,6 +71,12 @@ def make_docker_case(container, checks=None):
         """
         Test given docker instance with given check commands
         """
+        def __init__(self, *args, **kwargs):
+            super(DockerRun, self).__init__(*args, **kwargs)
+            if 'TRAVIS_BRANCH' in os.environ:
+                self.compose_file = 'install/docker-compose_unit.yml'
+            else:
+                self.compose_file = 'install/docker-compose_unit2.yml'
 
         def run_subprocess(self, command):
             """
@@ -96,16 +102,16 @@ def make_docker_case(container, checks=None):
 
         def tearDown(self):
             self.logger.info("Cleanup up docker instances")
-            command = ("TAG={} docker-compose -f install/docker-compose_unit.yml down --rmi all"
-                       .format(get_tag()))
+            command = ("TAG={} docker-compose -f {} down --rmi all"
+                       .format(get_tag(), self.compose_file))
             self.run_subprocess(command)
 
         def step_1(self):
             """Start Instance"""
 
             self.logger.info("Starting instance %s", container)
-            command = "TAG={} docker-compose -f install/docker-compose_unit.yml up -d {} ".format(
-                get_tag(), container)
+            command = "TAG={} docker-compose -f {}  up -d {} ".format(
+                get_tag(), self.compose_file, container)
             return_code, out, err = self.run_subprocess(command)
             if err:
                 self.logger.error(err)
