@@ -15,7 +15,7 @@ class TestEnvs(unittest.TestCase):
         Scrape environments from CONFIG_ENV vars in docker compose file and test
         """
         environments = []
-        files = glob.glob('/srv/greencandle/install/docker-compose*')
+        files = glob.glob('install/docker-compose*')
         for file in files:
             with open(file, 'r') as compose_file:
                 lines = compose_file.readlines()
