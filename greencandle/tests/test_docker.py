@@ -11,8 +11,8 @@ from greencandle.lib.logger import get_logger
 from .unittests import make_docker_case
 LOGGER = get_logger(__name__)
 
-class TestMysql(make_docker_case('mysql-unit', checks=["echo 'SELECT version();'| "
-                                                       "mysql --protocol=tcp -uroot -ppassword"]
+class TestMysql(make_docker_case('mysql-unit', checks=["bash -c \"echo 'SELECT version();'| "
+                                                       "mysql --protocol=tcp -uroot -ppassword \""]
                                  )):
     """Test mysql docker instance"""
     pass

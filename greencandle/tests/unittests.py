@@ -118,25 +118,30 @@ def make_docker_case(container, checks=None):
             elif out:
                 self.logger.info(out)
             self.assertEqual(return_code, 0)
-            self.logger.info("Waiting 2mins")
-            time.sleep(120)
+            self.logger.info("Waiting 0.5mins")
+            time.sleep(30)
 
         def step_2(self):
             """Check instance is still running"""
             command = 'docker ps --format "{{.Names}}"  -f name=' + container +'$'
+            print("running: " + command)
             return_code, stdout, stderr = self.run_subprocess(command)
             self.assertEqual(return_code, 0)
             self.assertIn(container, stdout)
             self.assertEqual(stderr, "")
 
-        def step_3(self):
+        def step_4(self):
             """Run healthchecks"""
             if checks:
                 for check in checks:
-                    return_code, _, _ = self.run_subprocess(check)
+                    command = "docker exec {} {}".format(container, check)
+                    print("Running: " + command)
+                    return_code, stdout, stderr = self.run_subprocess(command)
+                    print("stdout: {}. stderr: {}".format(stdout, stderr))
+
                     self.assertEqual(return_code, 0)
 
-        def step_4(self):
+        def step_3(self):
             """check health status"""
             command = 'docker ps --format "{{.Status}}"  -f name=' + container
             stdout = self.run_subprocess(command)[1]

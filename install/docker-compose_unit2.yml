@@ -17,7 +17,7 @@ services:
       - redis-unit
     healthcheck:
       test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
-      interval: 1m
+      interval: 5s
       timeout: 2s
       retries: 5
     volumes:
@@ -43,7 +43,7 @@ services:
       - redis-unit
     healthcheck:
       test: nc -z 127.1 20000
-      interval: 1m
+      interval: 5s
       timeout: 2s
       retries: 5
     volumes:
@@ -60,7 +60,7 @@ services:
       - mysql-unit:mysql
     healthcheck:
       test: redis-cli ping
-      interval: 1m
+      interval: 5s
       timeout: 2s
       retries: 5
 
@@ -76,6 +76,6 @@ services:
     restart: always
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
-      interval: 1m
+      interval: 5s
       timeout: 2s
-      retries: 5
+      retries: 10
