@@ -130,7 +130,7 @@ def make_docker_case(container, checks=None):
             self.assertIn(container, stdout)
             self.assertEqual(stderr, "")
 
-        def step_4(self):
+        def step_3(self):
             """Run healthchecks"""
             if checks:
                 for check in checks:
@@ -141,7 +141,7 @@ def make_docker_case(container, checks=None):
 
                     self.assertEqual(return_code, 0)
 
-        def step_3(self):
+        def step_4(self):
             """check health status"""
             command = 'docker ps --format "{{.Status}}"  -f name=' + container
             stdout = self.run_subprocess(command)[1]

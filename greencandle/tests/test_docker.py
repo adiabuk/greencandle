@@ -21,11 +21,11 @@ class TestRedis(make_docker_case('redis-unit', checks=["redis-cli ping"])):
     """Test redis docker instance"""
     pass
 
-class TestApi(make_docker_case('api', checks=[""])):
+class TestApi(make_docker_case('api', checks=["ls"])):
     """Test api docker instance"""
     pass
 
-class TestCron(make_docker_case('cron', checks=[""])):
+class TestCron(make_docker_case('cron', checks=["crontab -l"])):
     """Test cron docker instance"""
     pass
 
