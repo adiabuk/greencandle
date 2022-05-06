@@ -43,8 +43,8 @@ services:
       - redis-unit
     healthcheck:
       test: nc -z 127.1 20000
-      interval: 5s
-      timeout: 2s
+      interval: 10s
+      timeout: 3s
       retries: 5
     volumes:
       - /data:/data
