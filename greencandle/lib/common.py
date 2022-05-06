@@ -42,7 +42,7 @@ def arg_decorator(func):
     def inner(*args, **kwargs):
         if len(sys.argv) > 1 and sys.argv[1] == '--help':
             print(func.__doc__)
-            sys.exit(999)
+            sys.exit(0)
         return func(*args, **kwargs)
     return inner
 
