@@ -126,7 +126,7 @@ def make_docker_case(container, checks=None):
             command = 'docker ps --format "{{.Names}}"  -f name=' + container
             return_code, stdout, stderr = self.run_subprocess(command)
             self.assertEqual(return_code, 0)
-            self.assertEqual(stdout, container)
+            self.assertIn(container, stdout)
             self.assertEqual(stderr, "")
 
         def step_3(self):
