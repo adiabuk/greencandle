@@ -123,7 +123,7 @@ def make_docker_case(container, checks=None):
             """Check instance is still running"""
             self.logger.info("Waiting 2mins")
             time.sleep(120)
-            command = 'docker ps --format "{{.Names}}"  -f name=' + container
+            command = 'docker ps --format "{{.Names}}"  -f name=' + container +'$'
             return_code, stdout, stderr = self.run_subprocess(command)
             self.assertEqual(return_code, 0)
             self.assertIn(container, stdout)
