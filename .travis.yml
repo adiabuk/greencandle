@@ -12,6 +12,8 @@ script:
 - sudo mysqlcheck --host mysql -uroot -ppassword  --databases greencandle
 - cat  config/template/gc-cron |grep -v ^{| sudo crontab -
 - cat config/template/*.json|jq
+- pwd
+- env
 - sudo greencandle/tests/travis_tests.sh "not docker"
 - sudo greencandle/tests/travis_tests.sh "docker"
 after_success:
