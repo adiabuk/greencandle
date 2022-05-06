@@ -96,8 +96,8 @@ def make_docker_case(container, checks=None):
 
         def tearDown(self):
             self.logger.info("Cleanup up docker instances")
-            command = "TAG={} docker-compose -f install/docker-compose_unit.yml down --rmi
-            all".format(get_tag())
+            command = ("TAG={} docker-compose -f install/docker-compose_unit.yml down --rmi all"
+                       .format(get_tag()))
             self.run_subprocess(command)
 
         def step_1(self):
