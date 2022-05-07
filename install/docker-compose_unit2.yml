@@ -57,8 +57,6 @@ services:
     ports:
       - 6379
     restart: always
-    links:
-      - mysql-unit:mysql
     healthcheck:
       test: redis-cli ping
       interval: 5s
