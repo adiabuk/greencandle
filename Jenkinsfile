@@ -53,8 +53,8 @@ pipeline {
                              ]
                         }
                     },
-                    "docker-mysql": {
-                        echo "testing docker-mysql"
+                    "docker_mysql": {
+                        echo "testing docker_mysql"
                         ansiColor('Vga') {
                             build job: 'unit-tests', parameters:
                             [string(name: 'version', value: env.GIT_BRANCH),
@@ -63,8 +63,8 @@ pipeline {
                              ]
                         }
                     },
-                    "docker-redis": {
-                                    echo "testing docker-redis"
+                    "docker_redis": {
+                                    echo "testing docker_redis"
                                     ansiColor('Vga') {
                                         build job: 'unit-tests', parameters:
                                         [string(name: 'version', value: env.GIT_BRANCH),
@@ -73,8 +73,8 @@ pipeline {
                                          ]
                                     }
                                 },
-                    "docker-cron": {
-                                    echo "testing docker-cron"
+                    "docker_cron": {
+                                    echo "testing docker_cron"
                                     ansiColor('Vga') {
                                         build job: 'unit-tests', parameters:
                                         [string(name: 'version', value: env.GIT_BRANCH),
@@ -83,8 +83,8 @@ pipeline {
                                          ]
                                       }
                       },
-                    "docker-api": {
-                                    echo "testing docker-api"
+                    "docker_api": {
+                                    echo "testing docker_api"
                                     ansiColor('Vga') {
                                         build job: 'unit-tests', parameters:
                                         [string(name: 'version', value: env.GIT_BRANCH),
