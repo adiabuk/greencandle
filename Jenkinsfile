@@ -8,9 +8,7 @@ pipeline {
     }
 
     stages {
-
         stage("build docker images") {
-
             steps {
                 sh "env"
                 echo 'building apps'
@@ -19,6 +17,7 @@ pipeline {
                         }
             }
         }
+
         stage("run unittests") {
             steps {
                 parallel(
@@ -212,6 +211,7 @@ pipeline {
             }
         }
     }
+
     post {
         success {
             slackSend color: "good", message: "branch ${env.BRANCH_NAME} completed successfully after ${currentBuild.durationString}"
