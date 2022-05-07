@@ -7,15 +7,9 @@ services:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
     hostname: cron
-    image: amrox/greencandle:${TAG}
+    image: greencandle-${image_id}
     restart: always
     entrypoint: /docker-entrypoint.sh cron -f
-    links:
-      - mysql-unit:mysql
-      - redis-unit:redis
-    depends_on:
-      - mysql-unit
-      - redis-unit
     healthcheck:
       test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
       interval: 5s
@@ -31,19 +25,13 @@ services:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
     hostname: api
-    image: amrox/greencandle:${TAG}
+    image: greencandle-${image_id}
     restart: always
-    entrypoint: /docker-entrypoint-api.sh backend_api
-    links:
-      - mysql-unit:mysql
-      - redis-unit:redis
+    entrypoint: bash -c "cd /srv/greencandle;configstore package process_templates unit /etc;backend_api"
     ports:
       - 20000
-    depends_on:
-      - mysql-unit
-      - redis-unit
     healthcheck:
-      test: curl --fail http://127.1:20000/healthcheck || exit 1
+      test: nc -z 127.1 20000 || exit 1
       interval: 5s
       timeout: 10s
       retries: 5
@@ -53,7 +41,8 @@ services:
   redis-unit:
     container_name: redis-unit-${BUILD_ID}
     hostname: redis-unit
-    image: amrox/gc-redis:${TAG}
+    image: redis-${image_id}
+    entrypoint: redis-server
     ports:
       - 6379
     restart: always
@@ -66,7 +55,7 @@ services:
   mysql-unit:
     container_name: mysql-unit-${BUILD_ID}
     hostname: mysql-unit
-    image: amrox/gc-mysql:${TAG}
+    image: mysql-${image_id}
     ports:
       - 3306
     environment:

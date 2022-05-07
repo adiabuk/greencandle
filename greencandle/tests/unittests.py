@@ -119,8 +119,8 @@ def make_docker_case(container, checks=None):
             elif out:
                 self.logger.info(out)
             self.assertEqual(return_code, 0)
-            self.logger.info("Waiting 1.5min")
-            time.sleep(90)
+            self.logger.info("Waiting 1min")
+            time.sleep(60)
 
         def step_2(self):
             """Check instance is still running"""
