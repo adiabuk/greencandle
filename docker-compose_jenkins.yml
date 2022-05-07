@@ -9,6 +9,7 @@ services:
     environment:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
+      - BUILD_ID=$BUILD_ID
     hostname: unit
     image: greencandle-${image_id}
     restart: always
