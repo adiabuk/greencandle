@@ -24,7 +24,7 @@ pipeline {
                     "assocs": {
                         echo "testing assocs"
                         ansiColor('vga') {
-                            build job: 'docker-tests', parameters:
+                            build job: 'unit-tests', parameters:
                             [string(name: 'version', value: env.GIT_BRANCH),
                              string(name: 'test', value: "assocs"),
                              string(name: 'image_id', value: env.BUILD_ID)
@@ -35,7 +35,7 @@ pipeline {
                     "mysql": {
                         echo "testing mysql"
                         ansiColor('Vga') {
-                            build job: 'docker-tests', parameters:
+                            build job: 'unit-tests', parameters:
                             [string(name: 'version', value: env.GIT_BRANCH),
                              string(name: 'test', value: "mysql"),
                              string(name: 'image_id', value: env.BUILD_ID)
@@ -45,7 +45,7 @@ pipeline {
                     "redis": {
                         echo "testing redis"
                         ansiColor('Vga') {
-                            build job: 'docker-tests', parameters:
+                            build job: 'unit-tests', parameters:
                             [string(name: 'version', value: env.GIT_BRANCH),
                              string(name: 'test', value: "redis"),
                              string(name: 'image_id', value: env.BUILD_ID)
@@ -55,108 +55,109 @@ pipeline {
                     "docker-mysql": {
                         echo "testing docker-mysql"
                         ansiColor('Vga') {
-                            build job: 'docker-tests', parameters:
+                            build job: 'unit-tests', parameters:
                             [string(name: 'version', value: env.GIT_BRANCH),
                              string(name: 'test', value: "docker_mysql"),
                              string(name: 'image_id', value: env.BUILD_ID)
                              ]
                         }
                     },
-		    "docker-redis": {
-                        echo "testing docker-redis"
-                        ansiColor('Vga') {
-                            build job: 'docker-tests', parameters:
-                            [string(name: 'version', value: env.GIT_BRANCH),
-                             string(name: 'test', value: "docker_redis"),
-                             string(name: 'image_id', value: env.BUILD_ID)
-                             ]
-                        }
-                    },
-		    "docker-cron": {
-                        echo "testing docker-cron"
-                        ansiColor('Vga') {
-                            build job: 'docker-tests', parameters:
-                            [string(name: 'version', value: env.GIT_BRANCH),
-                             string(name: 'test', value: "docker_cron"),
-                             string(name: 'image_id', value: env.BUILD_ID)
-                             ]
-                        }
-                    },
-		    "docker-api": {
-                        echo "testing docker-api"
-                        ansiColor('Vga') {
-                            build job: 'docker-tests', parameters:
-                            [string(name: 'version', value: env.GIT_BRANCH),
-                             string(name: 'test', value: "docker_api"),
-                             string(name: 'image_id', value: env.BUILD_ID)
-                             ]
-                        }
-                    },
-                    "stop": {
-                        echo "testing stop"
-                        ansiColor('Vga') {
-                            build job: 'docker-tests', parameters:
-                            [string(name: 'version', value: env.GIT_BRANCH),
-                             string(name: 'test', value: "stop"),
-                             string(name: 'image_id', value: env.BUILD_ID)
-                             ]
-                        }
-                    },
-                    "draw": {
-                        echo "testing draw"
-                        ansiColor('Vga') {
-                            build job: 'docker-tests', parameters:
-                            [string(name: 'version', value: env.GIT_BRANCH),
-                             string(name: 'test', value: "draw"),
-                             string(name: 'image_id', value: env.BUILD_ID)
-                             ]
-                        }
-                    },
-                    "pairs": {
-                        echo "testing pairs"
-                        ansiColor('vga') {
-                            build job: 'docker-tests', parameters:
-                            [string(name: 'version', value: env.GIT_BRANCH),
-                             string(name: 'test', value: "pairs"),
-                             string(name: 'image_id', value: env.BUILD_ID)
-                             ]
+                    "docker-redis": {
+                                    echo "testing docker-redis"
+                                    ansiColor('Vga') {
+                                        build job: 'unit-tests', parameters:
+                                        [string(name: 'version', value: env.GIT_BRANCH),
+                                         string(name: 'test', value: "docker_redis"),
+                                         string(name: 'image_id', value: env.BUILD_ID)
+                                         ]
+                                    }
+                                },
+                    "docker-cron": {
+                                    echo "testing docker-cron"
+                                    ansiColor('Vga') {
+                                        build job: 'unit-tests', parameters:
+                                        [string(name: 'version', value: env.GIT_BRANCH),
+                                         string(name: 'test', value: "docker_cron"),
+                                         string(name: 'image_id', value: env.BUILD_ID)
+                                         ]
+                                      }
+                      },
+                    "docker-api": {
+                                    echo "testing docker-api"
+                                    ansiColor('Vga') {
+                                        build job: 'unit-tests', parameters:
+                                        [string(name: 'version', value: env.GIT_BRANCH),
+                                         string(name: 'test', value: "docker_api"),
+                                         string(name: 'image_id', value: env.BUILD_ID)
+                                         ]
+                                    }
+                                },
+                      "stop": {
+                          echo "testing stop"
+                          ansiColor('Vga') {
+                              build job: 'unit-tests', parameters:
+                              [string(name: 'version', value: env.GIT_BRANCH),
+                               string(name: 'test', value: "stop"),
+                               string(name: 'image_id', value: env.BUILD_ID)
+                               ]
+                          }
+                      },
+                      "draw": {
+                          echo "testing draw"
+                          ansiColor('Vga') {
+                              build job: 'unit-tests', parameters:
+                              [string(name: 'version', value: env.GIT_BRANCH),
+                               string(name: 'test', value: "draw"),
+                               string(name: 'image_id', value: env.BUILD_ID)
+                               ]
+                          }
+                      },
+                      "pairs": {
+                          echo "testing pairs"
+                          ansiColor('vga') {
+                              build job: 'unit-tests', parameters:
+                              [string(name: 'version', value: env.GIT_BRANCH),
+                               string(name: 'test', value: "pairs"),
+                               string(name: 'image_id', value: env.BUILD_ID)
+                               ]
 
-                        }
-                    },
-                    "scripts": {
-                        echo "testing scripts"
-                        ansiColor('vga') {
-                            build job: 'docker-tests', parameters:
-                            [string(name: 'version', value: env.GIT_BRANCH),
-                             string(name: 'test', value: "scripts"),
-                             string(name: 'image_id', value: env.BUILD_ID)
-                             ]
+                          }
+                      },
+                      "scripts": {
+                          echo "testing scripts"
+                          ansiColor('vga') {
+                              build job: 'unit-tests', parameters:
+                              [string(name: 'version', value: env.GIT_BRANCH),
+                               string(name: 'test', value: "scripts"),
+                               string(name: 'image_id', value: env.BUILD_ID)
+                               ]
 
-                        }
-                    },
-                    "lint": {
-                        echo "testing lint"
-                        ansiColor('vga') {
-                            build job: 'docker-tests', parameters:
-                            [string(name: 'version', value: env.GIT_BRANCH),
-                             string(name: 'test', value: "lint"),
-                             string(name: 'image_id', value: env.BUILD_ID)
-                             ]
+                          }
+                      },
+                      "lint": {
+                          echo "testing lint"
+                          ansiColor('vga') {
+                              build job: 'unit-tests', parameters:
+                              [string(name: 'version', value: env.GIT_BRANCH),
+                               string(name: 'test', value: "lint"),
+                               string(name: 'image_id', value: env.BUILD_ID)
+                               ]
 
-                        }
-                    },
-                    "config": {
-                        echo "testing envs"
-                        ansiColor('vga') {
-                            build job: 'docker-tests', parameters:
-                            [string(name: 'version', value: env.GIT_BRANCH),
-                             string(name: 'test', value: "config"),
-                             string(name: 'image_id', value: env.BUILD_ID)
-                             ]
+                          }
+                      },
+                      "config": {
+                          echo "testing envs"
+                          ansiColor('vga') {
+                              build job: 'unit-tests', parameters:
+                              [string(name: 'version', value: env.GIT_BRANCH),
+                               string(name: 'test', value: "config"),
+                               string(name: 'image_id', value: env.BUILD_ID)
+                               ]
 
-                        }
-                    })
-            }
+                          }
+                      }
+                  )
+             }
         }
 
         stage("Push to registry") {
