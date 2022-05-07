@@ -216,11 +216,11 @@ pipeline {
 
     post {
         success {
-            slackSend color: "good", message: "Repo: ${env.GIT_REPO_NAME}\nCommit: ${env.GIT_COMMIT:0:7}\nBranch: ${env.GIT_BRANCH}\nExecution time: ${currentBuild.durationString}\nCurrent result: ${currentBuild.currentResult}"
+            slackSend color: "good", message: "Repo: ${env.GIT_REPO_NAME}\nCommit: ${GIT_COMMIT:0:7}\nBranch: ${env.GIT_BRANCH}\nExecution time: ${currentBuild.durationString}\nCurrent result: ${currentBuild.currentResult}"
 
         }
         failure {
-            slackSend color: "danger", message: "Repo: ${env.GIT_REPO_NAME}\nCommit: ${env.GIT_COMMIT:0:7}\nBranch: ${env.GIT_BRANCH}\nExecution time: ${currentBuild.durationString}\nCurrent result: ${currentBuild.currentResult}"
+            slackSend color: "danger", message: "Repo: ${env.GIT_REPO_NAME}\nCommit: ${GIT_COMMIT:0:7}\nBranch: ${env.GIT_BRANCH}\nExecution time: ${currentBuild.durationString}\nCurrent result: ${currentBuild.currentResult}"
         }
         always {
             sh 'docker-compose -f docker-compose_jenkins.yml -p $BUILD_ID down --rmi all'
