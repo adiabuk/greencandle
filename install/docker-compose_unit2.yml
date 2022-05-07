@@ -43,7 +43,7 @@ services:
       - mysql-unit
       - redis-unit
     healthcheck:
-      test: nc -z 127.1 20000
+      test: curl --fail http://127.1:20000/healthcheck || exit 1
       interval: 5s
       timeout: 10s
       retries: 5
