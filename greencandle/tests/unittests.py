@@ -104,7 +104,7 @@ def make_docker_case(container, checks=None):
         def tearDown(self):
             self.logger.info("Cleanup up docker instances")
             command = ("TAG={} docker-compose -f {} -p {} down --rmi all"
-                       .format(get_tag(), ID, self.compose_file))
+                       .format(get_tag(), self.compose_file, ID))
             self.run_subprocess(command)
 
         def step_1(self):
