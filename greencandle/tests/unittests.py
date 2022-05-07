@@ -100,7 +100,6 @@ def make_docker_case(container, checks=None):
 
         def setUp(self):
             self.logger = get_logger(__name__)
-            self.tearDown()
 
         def tearDown(self):
             self.logger.info("Cleanup up docker instances")
