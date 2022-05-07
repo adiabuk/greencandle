@@ -7,6 +7,7 @@ pipeline {
         image_id = "${env.BUILD_ID}"
         GIT_REPO_NAME = env.GIT_URL.replaceFirst(/^.*?(?::\/\/.*?\/|:)(.*).git$/, '$1')
         SHORT_COMMIT = "${GIT_COMMIT[0..7]}"
+        image_id = "${env.BUILD_ID}"
     }
 
     stages {
