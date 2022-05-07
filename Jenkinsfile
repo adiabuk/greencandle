@@ -229,7 +229,7 @@ pipeline {
             slackSend color: "good", message: "branch ${env.BRANCH_NAME} completed successfully after ${currentBuild.durationString}"
         }
         failure {
-            slackSend color: "bad", message: "branch ${env.BRANCH_NAME} failed after ${currentBuild.durationString}"
+            slackSend color: "danger", message: "branch ${env.BRANCH_NAME} failed after ${currentBuild.durationString}"
         }
         always {
             sh 'docker-compose -f docker-compose_jenkins.yml -p $BUILD_ID down --rmi all'
