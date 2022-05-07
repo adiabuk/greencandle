@@ -19,7 +19,6 @@ from greencandle.lib.redis_conn import Redis
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.run import serial_test
 
-ID = os.environ['BUILD_ID']
 
 def get_tag():
     """
@@ -80,6 +79,8 @@ def make_docker_case(container, checks=None):
             else:
                 self.compose_file = 'install/docker-compose_unit2.yml'
 
+            self.build_id = os.environ['BUILD_ID']
+
         def run_subprocess(self, command):
             """
             Run given command using subprocess and return exit code
@@ -104,7 +105,7 @@ def make_docker_case(container, checks=None):
         def tearDown(self):
             self.logger.info("Cleanup up docker instances")
             command = ("TAG={} docker-compose -f {} -p {} down --rmi all"
-                       .format(get_tag(), self.compose_file, ID))
+                       .format(get_tag(), self.compose_file, self.build_id))
             self.run_subprocess(command)
 
         def step_1(self):
@@ -112,7 +113,7 @@ def make_docker_case(container, checks=None):
 
             self.logger.info("Starting instance %s", container)
             command = "TAG={} docker-compose -f {} -p {}  up -d {} ".format(
-                get_tag(), self.compose_file, ID, container)
+                get_tag(), self.compose_file, self.build_id, container)
             return_code, out, err = self.run_subprocess(command)
             if err:
                 self.logger.error(err)
@@ -124,7 +125,8 @@ def make_docker_case(container, checks=None):
 
         def step_2(self):
             """Check instance is still running"""
-            command = 'docker ps --format "{{.Names}}"  -f name=' + container +'-{}'.format(ID)
+            command = ('docker ps --format "{{.Names}}"  -f name=' + container
+                       +'-{}'.format(self.build_id))
             print("running: " + command)
             return_code, stdout, stderr = self.run_subprocess(command)
             self.assertEqual(return_code, 0)
@@ -135,7 +137,7 @@ def make_docker_case(container, checks=None):
             """Run healthchecks"""
             if checks:
                 for check in checks:
-                    command = "docker exec {} {}".format(container+'-'+ID, check)
+                    command = "docker exec {} {}".format(container+'-'+self.build_id, check)
                     print("Running: " + command)
                     return_code, stdout, stderr = self.run_subprocess(command)
                     print("stdout: {}. stderr: {}".format(stdout, stderr))
@@ -144,7 +146,8 @@ def make_docker_case(container, checks=None):
 
         def step_4(self):
             """check health status"""
-            command = 'docker ps --format "{{.Status}}"  -f name=' + container + "-{}".format(ID)
+            command = ('docker ps --format "{{.Status}}"  -f name=' + container +
+                       "-{}".format(self.build_id))
             stdout = self.run_subprocess(command)[1]
             self.assertIn("healthy", stdout)
             self.assertNotIn("unhealthy", stdout)
