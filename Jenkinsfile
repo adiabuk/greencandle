@@ -14,7 +14,6 @@ pipeline {
             steps {
                 sh "env"
                 echo 'building apps'
-                //sh "./setup.py install --user"
                 ansiColor('vga') {
                   sh 'docker-compose -f docker-compose_jenkins.yml -p $BUILD_ID build'
                         }
@@ -96,7 +95,6 @@ pipeline {
                     "pairs": {
                         echo "testing pairs"
                         ansiColor('vga') {
-                            //sh "./run_tests.py -v -t pairs"
                             build job: 'docker-tests', parameters:
                             [string(name: 'version', value: env.GIT_BRANCH),
                              string(name: 'test', value: "pairs"),
@@ -109,7 +107,6 @@ pipeline {
                         echo "testing scripts"
                         sh "echo $PATH"
                         ansiColor('vga') {
-                            //sh "./run_tests.py -v -t scripts"
                             build job: 'docker-tests', parameters:
                             [string(name: 'version', value: env.GIT_BRANCH),
                              string(name: 'test', value: "scripts"),
@@ -121,7 +118,6 @@ pipeline {
                     "lint": {
                         echo "testing lint"
                         ansiColor('vga') {
-                            //sh "./run_tests.py -v -t lint"
                             build job: 'docker-tests', parameters:
                             [string(name: 'version', value: env.GIT_BRANCH),
                              string(name: 'test', value: "lint"),
@@ -133,7 +129,6 @@ pipeline {
                     "config": {
                         echo "testing envs"
                         ansiColor('vga') {
-                            //sh "./run_tests.py -v -t config"
                             build job: 'docker-tests', parameters:
                             [string(name: 'version', value: env.GIT_BRANCH),
                              string(name: 'test', value: "config"),
@@ -205,6 +200,9 @@ pipeline {
         }
         failure {
             slackSend color: "bad", message: "branch ${env.BRANCH_NAME} failed after ${currentBuild.durationString}"
+        }
+        always {
+            sh 'docker-compose -f docker-compose_jenkins.yml -p $BUILD_ID down --rmi all'
         }
     }
 }
