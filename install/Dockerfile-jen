@@ -16,10 +16,11 @@ RUN apt-get update \
   && cd /usr/local/bin \
   && ln -s /usr/bin/python3 python \
   && pip3 install --upgrade pip
+
 RUN apt-get install -y libcurl4-gnutls-dev librtmp-dev
 RUN apt-get install -y docker.io netcat ntpdate default-mysql-client screen atop jq iotop ntp awscli vim
 RUN apt-get install -y make build-essential libssl-dev zlib1g-dev sudo
-RUN apt-get install -y wget make git default-libmysqlclient-dev python3-dev xvfb iceweasel redis-tools cron bsdmainutils libssl-dev gcc libsystemd-dev libjpeg-dev zlib1g-dev wget gitpython
+RUN apt-get install -y wget make git default-libmysqlclient-dev python3-dev xvfb iceweasel redis-tools cron bsdmainutils libssl-dev gcc libsystemd-dev libjpeg-dev zlib1g-dev wget
 RUN wget "https://www.dropbox.com/s/ge7b2rf9e0gqepp/docker-compose-1.29.1?dl=0" -O /usr/local/bin/docker-compose
 RUN chmod +x /usr/local/bin/docker-compose
 RUN wget "https://www.dropbox.com/sh/l22jyonei087h4o/AAChfqr_j4ydTDjILz0Q62Y2a/configstore-2.5.0-linux-amd64.tar.gz?dl=0" -O /tmp/configstore-2.5.0-linux-amd64.tar.gz
@@ -28,13 +29,9 @@ RUN rm -rf /tmp/configstore-2.5.0-linux-amd64.tar.gz
 
 RUN wget "https://www.dropbox.com/sh/l22jyonei087h4o/AABz_MIHb3a8ZPWv0gbhkDAia/ta-lib-0.4.0-src.tar.gz?dl=0" -O /tmp/ta-lib-0.4.0-src.tar.gz
 RUN tar zxvf /tmp/ta-lib-0.4.0-src.tar.gz -C /tmp
-RUN cd /tmp/ta-lib; /tmp/ta-lib/configure --prefix=/usr &&  make && make install
-
-RUN cd - && rm -rf /tmp/ta-lib
-RUN pip install setuptools-rust setuptools==45.1.0 pip==9.0.1 numpy==1.16.0 ccxt==1.50.10 cryptography==3.3.1 pytest==6.0.1 redis-dump-load gitpython ta-lib==0.4.14
+RUN cd /tmp/ta-lib; /tmp/ta-lib/configure --prefix=/usr &&  make && make install; cd - && rm -rf /tmp/ta-lib
+RUN pip install setuptools-rust setuptools==45.1.0 pip==9.0.1 ccxt==1.50.10 pytest==6.0.1 redis-dump-load
 RUN echo "jenkins ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-RUN mkdir ~jenkins/greencandle
-RUN git clone https://github.com/adiabuk/greencandle.git ~jenkins/greencandle
-RUN ln -s ~/jenkins/greencandle /srv/greencandle
+RUN mkdir ~jenkins/greencandle && git clone https://github.com/adiabuk/greencandle.git ~jenkins/greencandle && ln -s ~/jenkins/greencandle /srv/greencandle
 RUN cd /srv/greencandle; python setup.py install
 
