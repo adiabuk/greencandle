@@ -18,7 +18,7 @@ services:
     healthcheck:
       test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
       interval: 5s
-      timeout: 2s
+      timeout: 10s
       retries: 5
     volumes:
       - /data:/data
