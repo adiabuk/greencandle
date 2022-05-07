@@ -11,22 +11,8 @@ from greencandle.lib.logger import get_logger
 from .unittests import make_docker_case
 LOGGER = get_logger(__name__)
 
-class TestMysql(make_docker_case('mysql-unit', checks=["bash -c \"echo 'SELECT version();'| "
-                                                       "mysql --protocol=tcp -uroot -ppassword \""]
-                                 )):
-    """Test mysql docker instance"""
-    pass
-
 class TestRedis(make_docker_case('redis-unit', checks=["redis-cli ping"])):
     """Test redis docker instance"""
-    pass
-
-class TestApi(make_docker_case('api', checks=["ls"])):
-    """Test api docker instance"""
-    pass
-
-class TestCron(make_docker_case('cron', checks=["crontab -l"])):
-    """Test cron docker instance"""
     pass
 
 if __name__ == '__main__':

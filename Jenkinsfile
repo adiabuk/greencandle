@@ -62,12 +62,42 @@ pipeline {
                              ]
                         }
                     },
-                    "docker": {
-                        echo "testing docker"
+                    "docker-mysql": {
+                        echo "testing docker-mysql"
                         ansiColor('Vga') {
                             build job: 'docker-tests', parameters:
                             [string(name: 'version', value: env.GIT_BRANCH),
-                             string(name: 'test', value: "docker"),
+                             string(name: 'test', value: "docker_mysql"),
+                             string(name: 'image_id', value: env.BUILD_ID)
+                             ]
+                        }
+                    },
+		    "docker-redis": {
+                        echo "testing docker-redis"
+                        ansiColor('Vga') {
+                            build job: 'docker-tests', parameters:
+                            [string(name: 'version', value: env.GIT_BRANCH),
+                             string(name: 'test', value: "docker_redis"),
+                             string(name: 'image_id', value: env.BUILD_ID)
+                             ]
+                        }
+                    },
+		    "docker-cron": {
+                        echo "testing docker-cron"
+                        ansiColor('Vga') {
+                            build job: 'docker-tests', parameters:
+                            [string(name: 'version', value: env.GIT_BRANCH),
+                             string(name: 'test', value: "docker_cron"),
+                             string(name: 'image_id', value: env.BUILD_ID)
+                             ]
+                        }
+                    },
+		    "docker-api": {
+                        echo "testing docker-api"
+                        ansiColor('Vga') {
+                            build job: 'docker-tests', parameters:
+                            [string(name: 'version', value: env.GIT_BRANCH),
+                             string(name: 'test', value: "docker_api"),
                              string(name: 'image_id', value: env.BUILD_ID)
                              ]
                         }
