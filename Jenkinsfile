@@ -5,7 +5,7 @@ pipeline {
         PATH = "/home/jenkins/.local/bin:${env.PATH}"
         DOCKER_HOST = 'tcp://172.17.0.1:2375'
         image_id = "${env.BUILD_ID}"
-        GIT_REPO_NAME = env.GIT_URL.replaceFirst(^.*?(?::\/\/.*?\/|:)(.*).git$, '$1')
+        GIT_REPO_NAME = env.GIT_URL.replaceFirst(/^.*?(?::\/\/.*?\/|:)(.*).git$/, '$1')
     }
 
     stages {
