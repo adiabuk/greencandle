@@ -9,7 +9,7 @@ pipeline {
 
     stages {
 
-        stage("build") {
+        stage("build docker images") {
 
             steps {
                 sh "env"
@@ -19,16 +19,7 @@ pipeline {
                         }
             }
         }
-        stage("prepare") {
-            steps {
-                echo "preparing env"
-                sh "sudo configstore package process_templates unit /etc"
-                sh "sudo ln -s `pwd` /srv/greencandle"
-
-            }
-        }
-        stage("test") {
-
+        stage("run unittests") {
             steps {
                 parallel(
                     "assocs": {
@@ -135,7 +126,6 @@ pipeline {
                     },
                     "scripts": {
                         echo "testing scripts"
-                        sh "echo $PATH"
                         ansiColor('vga') {
                             build job: 'docker-tests', parameters:
                             [string(name: 'version', value: env.GIT_BRANCH),
@@ -167,12 +157,10 @@ pipeline {
 
                         }
                     })
-
             }
         }
 
-        stage("deploy") {
-
+        stage("Push to registry") {
             steps {
                 parallel(
                     "greencandle": {
