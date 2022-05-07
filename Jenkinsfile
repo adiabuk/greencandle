@@ -6,6 +6,7 @@ pipeline {
         DOCKER_HOST = 'tcp://172.17.0.1:2375'
         image_id = "${env.BUILD_ID}"
         GIT_REPO_NAME = env.GIT_URL.replaceFirst(/^.*?(?::\/\/.*?\/|:)(.*).git$/, '$1')
+        SHORT_COMMIT = "${GIT_COMMIT[0..7]}"
     }
 
     stages {
@@ -216,11 +217,11 @@ pipeline {
 
     post {
         success {
-            slackSend color: "good", message: "Repo: ${env.GIT_REPO_NAME}\nCommit: ${GIT_COMMIT:0:7}\nBranch: ${env.GIT_BRANCH}\nExecution time: ${currentBuild.durationString}\nCurrent result: ${currentBuild.currentResult}"
+            slackSend color: "good", message: "Repo: ${env.GIT_REPO_NAME}\nCommit: ${SHORT_COMMIT}\nBranch: ${env.GIT_BRANCH}\nExecution time: ${currentBuild.durationString}\nCurrent result: ${currentBuild.currentResult}"
 
         }
         failure {
-            slackSend color: "danger", message: "Repo: ${env.GIT_REPO_NAME}\nCommit: ${GIT_COMMIT:0:7}\nBranch: ${env.GIT_BRANCH}\nExecution time: ${currentBuild.durationString}\nCurrent result: ${currentBuild.currentResult}"
+            slackSend color: "danger", message: "Repo: ${env.GIT_REPO_NAME}\nCommit: ${SHORT_COMMIT}\nBranch: ${env.GIT_BRANCH}\nExecution time: ${currentBuild.durationString}\nCurrent result: ${currentBuild.currentResult}"
         }
         always {
             sh 'docker-compose -f docker-compose_jenkins.yml -p $BUILD_ID down --rmi all'
