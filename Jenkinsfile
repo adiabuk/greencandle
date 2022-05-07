@@ -15,7 +15,7 @@ pipeline {
                 sh "env"
                 echo 'building apps'
                 ansiColor('vga') {
-                  sh 'docker-compose -f docker-compose_jenkins.yml -p $BUILD_ID build'
+                    sh 'docker-compose -f docker-compose_jenkins.yml -p $BUILD_ID build'
                         }
             }
         }

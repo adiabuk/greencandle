@@ -3,6 +3,9 @@ services:
 
   cron:
     container_name: cron-${BUILD_ID}
+    build:
+      context: .
+      dockerfile: install/Dockerfile-gc
     environment:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
@@ -21,6 +24,9 @@ services:
 
   api:
     container_name: api-${BUILD_ID}
+    build:
+      context: .
+      dockerfile: install/Dockerfile-gc
     environment:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
@@ -39,6 +45,9 @@ services:
       - /data:/data
 
   redis-unit:
+    build:
+      context: .
+      dockerfile: install/Dockerfile-rs
     container_name: redis-unit-${BUILD_ID}
     hostname: redis-unit
     image: redis-${image_id}
@@ -53,6 +62,9 @@ services:
       retries: 5
 
   mysql-unit:
+    build:
+      context: .
+      dockerfile: install/Dockerfile-ms
     container_name: mysql-unit-${BUILD_ID}
     hostname: mysql-unit
     image: mysql-${image_id}
