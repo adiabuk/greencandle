@@ -125,7 +125,7 @@ def make_docker_case(container, checks=None):
 
         def step_2(self):
             """Check instance is still running"""
-            command = 'docker ps --format "{{.Names}}"  -f name=' + container +'$'
+            command = 'docker ps --format "{{.Names}}"  -f name=' + container +'-{}'.format(ID)
             print("running: " + command)
             return_code, stdout, stderr = self.run_subprocess(command)
             self.assertEqual(return_code, 0)
@@ -136,7 +136,7 @@ def make_docker_case(container, checks=None):
             """Run healthchecks"""
             if checks:
                 for check in checks:
-                    command = "docker exec {} {}".format(container, check)
+                    command = "docker exec {} {}".format(container+'-'+ID, check)
                     print("Running: " + command)
                     return_code, stdout, stderr = self.run_subprocess(command)
                     print("stdout: {}. stderr: {}".format(stdout, stderr))
@@ -145,12 +145,11 @@ def make_docker_case(container, checks=None):
 
         def step_4(self):
             """check health status"""
-            command = 'docker ps --format "{{.Status}}"  -f name=' + container
+            command = 'docker ps --format "{{.Status}}"  -f name=' + container + "-{}".format(ID)
             stdout = self.run_subprocess(command)[1]
             self.assertIn("healthy", stdout)
             self.assertNotIn("unhealthy", stdout)
             self.assertNotIn("starting", stdout)
-
 
     return DockerRun
 
