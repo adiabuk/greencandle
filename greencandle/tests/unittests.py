@@ -19,6 +19,8 @@ from greencandle.lib.redis_conn import Redis
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.run import serial_test
 
+ID = os.environ['BUILD_ID']
+
 def get_tag():
     """
     Get release tag from environment
@@ -102,16 +104,16 @@ def make_docker_case(container, checks=None):
 
         def tearDown(self):
             self.logger.info("Cleanup up docker instances")
-            command = ("TAG={} docker-compose -f {} down --rmi all"
-                       .format(get_tag(), self.compose_file))
+            command = ("TAG={} docker-compose -f {} -p {} down --rmi all"
+                       .format(get_tag(), ID, self.compose_file))
             self.run_subprocess(command)
 
         def step_1(self):
             """Start Instance"""
 
             self.logger.info("Starting instance %s", container)
-            command = "TAG={} docker-compose -f {}  up -d {} ".format(
-                get_tag(), self.compose_file, container)
+            command = "TAG={} docker-compose -f {} -p {}  up -d {} ".format(
+                get_tag(), self.compose_file, ID, container)
             return_code, out, err = self.run_subprocess(command)
             if err:
                 self.logger.error(err)
