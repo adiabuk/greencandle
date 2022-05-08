@@ -1,4 +1,4 @@
-FROM jenkins/jnlp-slave:latest
+FROM amrox/jnlp-slave:latest
 
 USER root
 
