@@ -157,7 +157,16 @@ def make_docker_case(container, checks=None):
             """check health status"""
             command = ('docker ps --format "{{.Status}}"  -f name=' + container +
                        "-{}".format(self.build_id))
-            stdout = self.run_subprocess(command)[1]
+            for num in range(1, 11):
+                print("running: {} attempt:{}".format(command, num))
+                stdout = self.run_subprocess(command)[1]
+                print("stdout: {}".format(stdout))
+
+                if "unhealthy" not in stdout and "starting" not in stdout:
+                    break
+                else:
+                    time.sleep(10)
+
             self.assertIn("healthy", stdout)
             self.assertNotIn("unhealthy", stdout)
             self.assertNotIn("starting", stdout)
