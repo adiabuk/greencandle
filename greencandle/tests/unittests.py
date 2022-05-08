@@ -75,7 +75,7 @@ def make_docker_case(container, checks=None):
         def __init__(self, *args, **kwargs):
             super(DockerRun, self).__init__(*args, **kwargs)
             if 'TRAVIS_BRANCH' in os.environ:
-                self.compose_file = 'install/docker-compose_unit.yml'
+                self.compose_file = 'install/docker-compose_unit2.yml'
             else:
                 self.compose_file = 'install/docker-compose_unit2.yml'
 
