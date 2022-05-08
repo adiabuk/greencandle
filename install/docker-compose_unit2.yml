@@ -12,7 +12,7 @@ services:
     hostname: cron
     image: greencandle-${image_id}
     restart: always
-    entrypoint: /docker-entrypoint.sh cron -f
+    entrypoint: bash -c "cd /srv/greencandle;configstore package process_templates unit /opt/output;crontab /opt/output/gc-cron;cron -f"
     healthcheck:
       test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
       interval: 5s
