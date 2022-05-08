@@ -1,8 +1,10 @@
 FROM  amrox/python:3.9.2-buster-new
 ADD ./alert /srv/alert
 ADD ./config /opt/config
+ADD ./install /opt/install
 
 RUN pip install -r /srv/alert/requirements.txt
 RUN mkdir /opt/output
+RUN  cp /opt/install/docker-entrypoint-alert.sh /
 
 CMD ["python", "/srv/greencandle/alert/webhook.py"]
