@@ -9,6 +9,8 @@ pipeline {
         SHORT_COMMIT = "${GIT_COMMIT[0..7]}"
     }
 
+    options { disableConcurrentBuilds() }
+
     stages {
         stage("build docker images") {
             steps {
