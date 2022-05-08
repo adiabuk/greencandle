@@ -115,6 +115,16 @@ pipeline {
                                ]
                           }
                       },
+                      "run": {
+                          echo "testing run"
+                          ansiColor('Vga') {
+                              build job: 'unit-tests', parameters:
+                              [string(name: 'version', value: env.GIT_BRANCH),
+                               string(name: 'test', value: "run"),
+                               string(name: 'image_id', value: env.BUILD_ID)
+                               ]
+                          }
+                      },
                       "pairs": {
                           echo "testing pairs"
                           ansiColor('vga') {
