@@ -25,12 +25,12 @@ def get_tag():
     Get release tag from environment
     """
 
-    if not 'TRAVIS_BRANCH' in os.environ:
+    if not 'GIT_BRANCH' in os.environ:
         tag = 'latest'
-    elif os.environ['TRAVIS_BRANCH'] == 'master':
+    elif os.environ['GIT_BRANCH'] == 'master':
         tag = 'latest'
     else:
-        tag = 'release-{}'.format(os.environ['TRAVIS_BRANCH'])
+        tag = 'release-{}'.format(os.environ['GIT_BRANCH'])
     return tag
 
 class OrderedTest(unittest.TestCase):
@@ -74,12 +74,8 @@ def make_docker_case(container, checks=None):
         """
         def __init__(self, *args, **kwargs):
             super(DockerRun, self).__init__(*args, **kwargs)
-            if 'TRAVIS_BRANCH' in os.environ:
-                self.compose_file = 'install/docker-compose_unit2.yml'
-                self.build_id = 1
-            else:
-                self.compose_file = 'install/docker-compose_unit2.yml'
-                self.build_id = os.environ['BUILD_ID']
+            self.compose_file = 'install/docker-compose_unit2.yml'
+            self.build_id = os.environ['BUILD_ID']
 
         def run_subprocess(self, command):
             """

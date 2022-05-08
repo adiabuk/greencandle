@@ -32,7 +32,6 @@ apt-get install -y make build-essential libssl-dev zlib1g-dev \
 libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
 libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl yq
 
-rm -rf /opt/pyenv ||true  # for travisci
 export PYENV_ROOT="/opt/pyenv"
 curl -s -S -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
 
@@ -98,12 +97,12 @@ echo "127.0.0.1    mysql" >> /etc/hosts
 echo "127.0.0.1    redis" >> /etc/hosts
 
 # Build Images
-if [[ -z $TRAVIS_BRANCH ]]; then
+if [[ -z $GIT_BRANCH ]]; then
   TAG="latest"
-elif [[ $TRAVIS_BRANCH == "master" ]]; then
+elif [[ $GIT_BRANCH == "master" ]]; then
   TAG="latest";
 else
-  TAG="release-${TRAVIS_BRANCH}"
+  TAG="release-${GIT_BRANCH}"
 fi
 
 docker build --force-rm --no-cache -f $DIR/Dockerfile-gc . --tag=amrox/greencandle:${TAG}
@@ -126,7 +125,6 @@ mkdir -p /data/{mysql,config,graphs,reports}
 
 # Install outside docker
 install_dir=/srv/greencandle
-[[ ! -d $install_dir ]] && ln -s /home/travis/build/adiabuk/greencandle/ $install_dir
 cd $install_dir
 pip install setuptools-rust setuptools==45.1.0 pip==9.0.1 numpy==1.16.0 ccxt==1.50.10 cryptography==3.3.1
 

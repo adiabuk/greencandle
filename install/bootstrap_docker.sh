@@ -7,14 +7,7 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-if [ -f /.dockerenv ]; then
-    echo "I'm inside matrix ;(";
-    install_dir=/srv/greencandle
-else
-  echo "I am on a host machine"
-fi
-
-[[ ! -d $install_dir ]] && ln -s /home/travis/build/adiabuk/greencandle/ $install_dir
+install_dir=/srv/greencandle
 cd $install_dir
 
 python ./setup.py install
