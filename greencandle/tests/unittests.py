@@ -1,4 +1,4 @@
-#pylint: disable=wrong-import-position,no-member,broad-except,too-many-instance-attributes,too-many-arguments,logging-not-lazy
+#pylint: disable=wrong-import-position,no-member,broad-except,too-many-instance-attributes,too-many-arguments,logging-not-lazy,no-else-break
 
 """
 Helper classes and functions for creating and running unittests
@@ -116,15 +116,21 @@ def make_docker_case(container, checks=None):
             elif out:
                 self.logger.info(out)
             self.assertEqual(return_code, 0)
-            self.logger.info("Waiting 1min")
-            time.sleep(60)
 
         def step_2(self):
             """Check instance is still running"""
             command = ('docker ps --format "{{.Names}}"  -f name=' + container
                        +'-{}'.format(self.build_id))
-            print("running: " + command)
-            return_code, stdout, stderr = self.run_subprocess(command)
+
+            for num in range(1, 11):
+                # try 10 times before giving up
+                print("running: {} attempt:{}".format(command, num))
+                return_code, stdout, stderr = self.run_subprocess(command)
+                if return_code == 0:
+                    break
+                else:
+                    time.sleep(10)
+
             self.assertEqual(return_code, 0)
             self.assertIn(container, stdout)
             self.assertEqual(stderr, "")
@@ -133,10 +139,17 @@ def make_docker_case(container, checks=None):
             """Run healthchecks"""
             if checks:
                 for check in checks:
-                    command = "docker exec {} {}".format(container+'-'+self.build_id, check)
-                    print("Running: " + command)
-                    return_code, stdout, stderr = self.run_subprocess(command)
-                    print("stdout: {}. stderr: {}".format(stdout, stderr))
+                    for num in range(1, 11):
+
+                        command = "docker exec {} {}".format(container+'-'+self.build_id, check)
+                        print("running: {} attempt:{}".format(command, num))
+                        return_code, stdout, stderr = self.run_subprocess(command)
+
+                        print("stdout: {}. stderr: {}".format(stdout, stderr))
+                        if return_code == 0:
+                            break
+                        else:
+                            time.sleep(10)
 
                     self.assertEqual(return_code, 0)
 
