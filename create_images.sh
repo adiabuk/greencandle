@@ -2,12 +2,12 @@
 
 set -e
 
-if [[ -z $TRAVIS_BRANCH ]]; then
+if [[ -z $GIT_BRANCH ]]; then
   TAG="latest"
-elif [[ $TRAVIS_BRANCH == "master" ]]; then
+elif [[ $GIT_BRANCH == "master" ]]; then
   TAG="latest";
 else
-  TAG="release-${TRAVIS_BRANCH}"
+  TAG="release-${GIT_BRANCH}"
 fi
 
  docker image inspect amrox/greencandle:${TAG} || docker build -f install/Dockerfile-gc . -t amrox/greencandle:${TAG}

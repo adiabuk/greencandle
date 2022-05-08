@@ -12,7 +12,11 @@ import sys
 import textwrap
 import time
 
-ROWS, COLUMNS = os.popen('stty size', 'r').read().split()
+try:
+    ROWS, COLUMNS = os.popen('stty size', 'r').read().split()
+except ValueError:
+    ROWS = 50
+    COLUMNS = 100
 
 class SuppressStdoutStderr():
     """

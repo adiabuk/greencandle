@@ -1,0 +1,155 @@
+version: "3.1"
+services:
+
+  unit-runner:
+    build:
+      context: .
+      dockerfile: install/Dockerfile-gc
+    container_name: unit-runner-${BUILD_ID}
+    environment:
+      - CONFIG_ENV=unit
+      - HOST=$HOSTNAME
+      - BUILD_ID=$BUILD_ID
+    hostname: unit
+    image: greencandle-${image_id}
+    restart: always
+    entrypoint: tail -f /dev/null
+    working_dir: /srv/greencandle
+    links:
+      - mysql-unit:mysql
+      - redis-unit:redis
+    depends_on:
+      - mysql-unit
+      - redis-unit
+    healthcheck:
+      test: ls
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+
+  cron:
+    container_name: cron-${BUILD_ID}
+    build:
+      context: .
+      dockerfile: install/Dockerfile-ms
+    environment:
+      - CONFIG_ENV=unit
+      - HOST=$HOSTNAME
+    hostname: cron
+    image: greencandle-${image_id}
+    restart: always
+    entrypoint: /docker-entrypoint.sh cron -f
+    links:
+      - mysql-unit:mysql
+      - redis-unit:redis
+    depends_on:
+      - mysql-unit
+      - redis-unit
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+
+  api:
+    container_name: api-${BUILD_ID}
+    build:
+      context: .
+      dockerfile: install/Dockerfile-gc
+    environment:
+      - CONFIG_ENV=unit
+      - HOST=$HOSTNAME
+    hostname: api
+    image: greencandle-${image_id}
+    restart: always
+    entrypoint: /docker-entrypoint-api.sh backend_api
+    links:
+      - mysql-unit:mysql
+      - redis-unit:redis
+    ports:
+      - 20000
+    depends_on:
+      - mysql-unit
+      - redis-unit
+    healthcheck:
+      test: nc -z 127.1 20000
+      interval: 10s
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+
+  redis-unit:
+    container_name: redis-unit-${BUILD_ID}
+    hostname: redis-unit
+    build:
+      context: .
+      dockerfile: install/Dockerfile-rs
+    image: redis-${image_id}
+    ports:
+      - 6379
+    restart: always
+    links:
+      - mysql-unit:mysql
+    healthcheck:
+      test: redis-cli ping
+      interval: 1m
+      timeout: 2s
+      retries: 5
+
+  mysql-unit:
+    container_name: mysql-unit-${BUILD_ID}
+    hostname: mysql-unit
+    build:
+      context: .
+      dockerfile: install/Dockerfile-ms
+    image: mysql-${image_id}
+    ports:
+      - 3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - CONFIG_ENV=unit
+    restart: always
+    healthcheck:
+      test: echo 'SELECT version();'| mysql -uroot -ppassword
+      interval: 1m
+      timeout: 2s
+      retries: 5
+
+  alert-unit:
+    container_name: alert-unit-${BUILD_ID}
+    hostname: alert-unit
+    build:
+      context: .
+      dockerfile: install/Dockerfile-as
+    image: alert-${image_id}
+    environment:
+      - CONFIG_ENV=unit
+    restart: always
+    healthcheck:
+      test: ls
+      interval: 1m
+      timeout: 2s
+      retries: 5
+
+  web-unit:
+    container_name: web-unit-${BUILD_ID}
+    hostname: web-unit
+    build:
+      context: .
+      dockerfile: install/Dockerfile-wb
+    image: web-${image_id}
+    environment:
+      - CONFIG_ENV=unit
+    restart: always
+    healthcheck:
+      test: ls
+      interval: 1m
+      timeout: 2s
+      retries: 5

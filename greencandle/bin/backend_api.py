@@ -39,6 +39,14 @@ def respond():
 
     return Response(status=200)
 
+@APP.route('/healthcheck', methods=["GET"])
+def healthcheck():
+    """
+    Docker healthcheck
+    Return 200
+    """
+    return Response(status=200)
+
 @arg_decorator
 def main():
     """

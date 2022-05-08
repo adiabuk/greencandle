@@ -19,7 +19,7 @@ class TestConfig(unittest.TestCase):
         final_envs = set()
         failed = set()
         for env in base_envs:
-            with open("/srv/greencandle/install/docker-compose_{}.yml".format(env), 'r') as stream:
+            with open("install/docker-compose_{}.yml".format(env), 'r') as stream:
                 output = (yaml.safe_load(stream))
             for _, val in output['services'].items():
                 try:

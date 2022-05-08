@@ -1,5 +1,6 @@
 # minute hour day_of_month month day_of_week command
 
+@reboot /usr/bin/touch /var/run/cron > /proc/1/fd/1 2>/proc/1/fd/2 # healthcheck
 * * * * * /usr/bin/touch /var/run/cron > /proc/1/fd/1 2>/proc/1/fd/2 # healthcheck
 0 0 * * * /usr/bin/mysqldump --host mysql --all-databases -u{{.db_user}} -p{{.db_password}} | gzip > /data/mysql/backup_{{.base_env}}_$(date +"\%Y-\%m-\%d").sql.gz 2>/proc/1/fd/2
 21 00 * * *  /usr/local/bin/balance_graph > /proc/1/fd/1 2>/proc/1/fd/2

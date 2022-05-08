@@ -19,17 +19,18 @@ from greencandle.lib.redis_conn import Redis
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.run import serial_test
 
+
 def get_tag():
     """
     Get release tag from environment
     """
 
-    if not 'TRAVIS_BRANCH' in os.environ:
+    if not 'GIT_BRANCH' in os.environ:
         tag = 'latest'
-    elif os.environ['TRAVIS_BRANCH'] == 'master':
+    elif os.environ['GIT_BRANCH'] == 'master':
         tag = 'latest'
     else:
-        tag = 'release-{}'.format(os.environ['TRAVIS_BRANCH'])
+        tag = 'release-{}'.format(os.environ['GIT_BRANCH'])
     return tag
 
 class OrderedTest(unittest.TestCase):
@@ -71,6 +72,10 @@ def make_docker_case(container, checks=None):
         """
         Test given docker instance with given check commands
         """
+        def __init__(self, *args, **kwargs):
+            super(DockerRun, self).__init__(*args, **kwargs)
+            self.compose_file = 'install/docker-compose_unit2.yml'
+            self.build_id = os.environ['BUILD_ID']
 
         def run_subprocess(self, command):
             """
@@ -92,54 +97,57 @@ def make_docker_case(container, checks=None):
 
         def setUp(self):
             self.logger = get_logger(__name__)
-            self.tearDown()
 
         def tearDown(self):
             self.logger.info("Cleanup up docker instances")
-            command = "docker stop `docker ps -a -q`"
-            self.run_subprocess(command)
-            command = "docker rm `docker ps -a -q`"
+            command = ("TAG={} docker-compose -f {} -p {} down"
+                       .format(get_tag(), self.compose_file, self.build_id))
             self.run_subprocess(command)
 
         def step_1(self):
             """Start Instance"""
 
             self.logger.info("Starting instance %s", container)
-            command = "TAG={} docker-compose -f install/docker-compose_unit.yml up -d {} ".format(
-                get_tag(), container)
+            command = "TAG={} docker-compose -f {} -p {}  up -d {} ".format(
+                get_tag(), self.compose_file, self.build_id, container)
             return_code, out, err = self.run_subprocess(command)
             if err:
                 self.logger.error(err)
             elif out:
                 self.logger.info(out)
             self.assertEqual(return_code, 0)
+            self.logger.info("Waiting 1min")
+            time.sleep(60)
 
         def step_2(self):
             """Check instance is still running"""
-            self.logger.info("Waiting 2mins")
-            time.sleep(120)
-            command = 'docker ps --format "{{.Names}}"  -f name=' + container
+            command = ('docker ps --format "{{.Names}}"  -f name=' + container
+                       +'-{}'.format(self.build_id))
+            print("running: " + command)
             return_code, stdout, stderr = self.run_subprocess(command)
             self.assertEqual(return_code, 0)
-            self.assertEqual(stdout, container)
+            self.assertIn(container, stdout)
             self.assertEqual(stderr, "")
 
         def step_3(self):
             """Run healthchecks"""
-            time.sleep(120)
             if checks:
                 for check in checks:
-                    return_code, _, _ = self.run_subprocess(check)
+                    command = "docker exec {} {}".format(container+'-'+self.build_id, check)
+                    print("Running: " + command)
+                    return_code, stdout, stderr = self.run_subprocess(command)
+                    print("stdout: {}. stderr: {}".format(stdout, stderr))
+
                     self.assertEqual(return_code, 0)
 
         def step_4(self):
             """check health status"""
-            command = 'docker ps --format "{{.Status}}"  -f name=' + container
+            command = ('docker ps --format "{{.Status}}"  -f name=' + container +
+                       "-{}".format(self.build_id))
             stdout = self.run_subprocess(command)[1]
             self.assertIn("healthy", stdout)
             self.assertNotIn("unhealthy", stdout)
             self.assertNotIn("starting", stdout)
-
 
     return DockerRun
 

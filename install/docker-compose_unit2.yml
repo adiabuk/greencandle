@@ -1,0 +1,81 @@
+version: "3.1"
+services:
+
+  cron:
+    container_name: cron-${BUILD_ID}
+    build:
+      context: .
+      dockerfile: Dockerfile-gc
+    environment:
+      - CONFIG_ENV=unit
+      - HOST=$HOSTNAME
+    hostname: cron
+    image: greencandle-${image_id}
+    restart: always
+    entrypoint: bash -c "cd /srv/greencandle;configstore package process_templates unit /opt/output;crontab /opt/output/gc-cron;cron -f"
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
+      interval: 5s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+
+  api:
+    container_name: api-${BUILD_ID}
+    build:
+      context: .
+      dockerfile: Dockerfile-gc
+    environment:
+      - CONFIG_ENV=unit
+      - HOST=$HOSTNAME
+    hostname: api
+    image: greencandle-${image_id}
+    restart: always
+    entrypoint: bash -c "cd /srv/greencandle;configstore package process_templates unit /etc;backend_api"
+    ports:
+      - 20000
+    healthcheck:
+      test: nc -z 127.1 20000 || exit 1
+      interval: 5s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+
+  redis-unit:
+    build:
+      context: .
+      dockerfile: Dockerfile-rs
+    container_name: redis-unit-${BUILD_ID}
+    hostname: redis-unit
+    image: redis-${image_id}
+    entrypoint: redis-server
+    ports:
+      - 6379
+    restart: always
+    healthcheck:
+      test: redis-cli ping
+      interval: 5s
+      timeout: 2s
+      retries: 5
+
+  mysql-unit:
+    build:
+      context: .
+      dockerfile: Dockerfile-ms
+    container_name: mysql-unit-${BUILD_ID}
+    hostname: mysql-unit
+    image: mysql-${image_id}
+    ports:
+      - 3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - CONFIG_ENV=unit
+    restart: always
+    healthcheck:
+      test: echo 'SELECT version();'| mysql -uroot -ppassword
+      interval: 5s
+      timeout: 2s
+      retries: 10
