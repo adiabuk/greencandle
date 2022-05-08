@@ -76,10 +76,10 @@ def make_docker_case(container, checks=None):
             super(DockerRun, self).__init__(*args, **kwargs)
             if 'TRAVIS_BRANCH' in os.environ:
                 self.compose_file = 'install/docker-compose_unit2.yml'
+                self.build_id = 1
             else:
                 self.compose_file = 'install/docker-compose_unit2.yml'
-
-            self.build_id = os.environ['BUILD_ID']
+                self.build_id = os.environ['BUILD_ID']
 
         def run_subprocess(self, command):
             """
