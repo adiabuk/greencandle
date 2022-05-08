@@ -14,7 +14,7 @@ pipeline {
             steps {
                 sh "env"
                 echo 'building apps'
-                sh "ln -s . /srv/greencandle"
+                sh "sudo ln -s . /srv/greencandle"
                 ansiColor('vga') {
                     sh 'docker-compose -f docker-compose_jenkins.yml -p $BUILD_ID build'
                         }
