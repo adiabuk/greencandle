@@ -3,7 +3,7 @@ pipeline {
     agent any
     environment {
         PATH = "/home/jenkins/.local/bin:${env.PATH}"
-        DOCKER_HOST = 'tcp://172.17.0.1:2375'
+        DOCKER_HOST = "unix:///var/run/docker.sock"
         image_id = "${env.BUILD_ID}"
         GIT_REPO_NAME = env.GIT_URL.replaceFirst(/^.*?(?::\/\/.*?\/|:)(.*).git$/, '$1')
         SHORT_COMMIT = "${GIT_COMMIT[0..7]}"
