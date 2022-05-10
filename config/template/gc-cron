@@ -16,12 +16,13 @@
 {{if eq .production "true"}}
 32 *  * * * HOST=prod /usr/local/bin/write_balance > /proc/1/fd/1 2>/proc/1/fd/2
 33 * * * * HOST=prod /usr/local/bin/get_quote_balance > /proc/1/fd/1 2>/proc/1/fd/2
-
 */10 * * * *  sleep 60; HOST=prod /usr/local/bin/get_trade_status > /proc/1/fd/1 2>/proc/1/fd/2
 05 * * * *  sleep 120; HOST=prod /usr/local/bin/test_close > /proc/1/fd/1 2>/proc/1/fd/2
 0 * * * *  HOST=prod /usr/local/bin/send_docker_alerts
-{{else if eq .production "false"}}
+
+{{else if and (ne .base_env "unit") (eq .production "false") }}
 30 * * * *  HOST=stag /usr/local/bin/get_mysql_status > /proc/1/fd/1 2>/proc/1/fd/2
 */10 * * * *  sleep 60; HOST=stag /usr/local/bin/get_trade_status > /proc/1/fd/1 2>/proc/1/fd/2
 0 * * * *  HOST=stag /usr/local/bin/send_docker_alerts
+
 {{end}}
