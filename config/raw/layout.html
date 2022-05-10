@@ -9,6 +9,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
            jQuery.get('env.txt', function(data) {
+           $("span").text('Greencandle-' + data);
            document.title = ('Greencandle-' + data);
            });
             $('#customers td.y_n').each(function() {
@@ -25,7 +26,7 @@
 
     <header>
         <div class="container">
-            <h1 class="logo">Greencandle</h1>
+          <h1 class="logo"><span>Greencandle</span></h1>
             <strong><nav>
       <ul class="menu">
         <li><a href="/" target="_blank">Main Page</a></li>
