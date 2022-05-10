@@ -26,6 +26,16 @@ pipeline {
         stage("run unittests") {
             steps {
                 parallel(
+                    "run": {
+                        echo "testing run"
+                        ansiColor('Vga') {
+                            build job: 'unit-tests', parameters: [string(name: 'version', value: env.GIT_BRANCH),
+                                string(name: 'test', value: "run"),
+                                string(name: 'commit', value: env.GIT_COMMIT),
+                                string(name: 'image_id', value: env.BUILD_ID)
+                            ]
+                        }
+                    },
                     "assocs": {
                         echo "testing assocs"
                         ansiColor('vga') {
@@ -112,16 +122,6 @@ pipeline {
                         ansiColor('Vga') {
                             build job: 'unit-tests', parameters: [string(name: 'version', value: env.GIT_BRANCH),
                                 string(name: 'test', value: "draw"),
-                                string(name: 'commit', value: env.GIT_COMMIT),
-                                string(name: 'image_id', value: env.BUILD_ID)
-                            ]
-                        }
-                    },
-                    "run": {
-                        echo "testing run"
-                        ansiColor('Vga') {
-                            build job: 'unit-tests', parameters: [string(name: 'version', value: env.GIT_BRANCH),
-                                string(name: 'test', value: "run"),
                                 string(name: 'commit', value: env.GIT_COMMIT),
                                 string(name: 'image_id', value: env.BUILD_ID)
                             ]
