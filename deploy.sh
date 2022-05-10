@@ -29,10 +29,6 @@ echo "version: $version";
 
 export TAG=$version
 export HOSTNAME=$env
-url=$(configstore package get $env slack_url)
-text="Starting deployment $TAG on $HOSTNAME"
-payload=$(get_payload "$text")
-curl -X POST -H "Content-Type: application/json" -d  "$payload"  $url
 git pull
 
 # Stop existing fe and be containers
@@ -59,6 +55,5 @@ docker-compose -f ./install/docker-compose_${env}.yml up -d $fe
 
 text="Finished deployment $TAG on $HOSTNAME"
 payload=$(get_payload "$text")
-curl -X POST -H "Content-Type: application/json" -d  "$payload"  $url
 logger -t deploy "$TAG successfully deployed"
 
