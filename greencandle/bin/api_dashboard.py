@@ -10,7 +10,7 @@ import subprocess
 from collections import defaultdict
 import requests
 import yaml
-from flask import Flask, render_template, request, Response
+from flask import Flask, render_template, request, Response, redirect, url_for
 APP = Flask(__name__, template_folder="/etc/gcapi", static_url_path='/',
             static_folder='/etc/gcapi')
 from greencandle.lib.common import arg_decorator
@@ -92,7 +92,7 @@ def action():
     trade_action = request.args.get('action')
 
     send_trade(pair, strategy, trade_action)
-    return trade()
+    return redirect(url_for('trade'))
 
 def send_trade(pair, strategy, trade_action):
     """
