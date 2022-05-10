@@ -225,11 +225,10 @@ pipeline {
 
     post {
         success {
-            slackSend color: "good", message: "Repo: ${env.GIT_REPO_NAME}\nCommit: ${SHORT_COMMIT}\nBranch: ${env.GIT_BRANCH}\nExecution time: ${currentBuild.durationString.replace(' and counting', '')}\nURL: (<${env.BUILD_URL}|Open>)\nCurrent result: ${currentBuild.currentResult}"
+            slackSend color: "good", message: "Repo: ${env.GIT_REPO_NAME}\nResult: ${currentBuild.currentResult}\nCommit: ${SHORT_COMMIT}\nBranch: ${env.GIT_BRANCH}\nExecution time: ${currentBuild.durationString.replace(' and counting', '')}\nURL: (<${env.BUILD_URL}|Open>)"
 
         }
-        failure {
-            slackSend color: "danger", message: "Repo: ${env.GIT_REPO_NAME}\nCommit: ${SHORT_COMMIT}\nBranch: ${env.GIT_BRANCH}\nExecution time: ${currentBuild.durationString.replace(' and counting', '')}\nURL: (<${env.BUILD_URL}|Open>)\nCurrent result: ${currentBuild.currentResult}"
+        failure { slackSend color: "danger", message: "Repo: ${env.GIT_REPO_NAME}\nResult: ${currentBuild.currentResult}\nCommit: ${SHORT_COMMIT}\nBranch: ${env.GIT_BRANCH}\nExecution time: ${currentBuild.durationString.replace(' and counting', '')}\nURL: (<${env.BUILD_URL}|Open>)"
         }
         always {
             sh 'docker-compose -f docker-compose_jenkins.yml -p $BUILD_ID down --rmi all'
