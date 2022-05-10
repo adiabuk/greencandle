@@ -211,7 +211,7 @@
       "is_secret": false
     },
     "indicators": {
-      "value": "get_rsi;RSI;14",
+      "value": "get_rsi;RSI;14 get_bb;upper;20,2 get_bb;lower;20,2 get_bb;middle;20,2",
       "is_binary": false,
       "is_secret": false
     },

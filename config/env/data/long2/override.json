@@ -1,4 +1,4 @@
 {
   "name": "very-low-rsi",
-  "open_rule1": "results.current.RSI_14 \u003c 20"
+  "open_rule1": "results.current.RSI_14 \u003c 20 and low \u003c results.current.lower_20"
 }
