@@ -218,7 +218,7 @@ services:
       - CONFIG_ENV=stag
       - HOST=$HOSTNAME
     ports:
-      - 1080
+      - 1080:1080
     links:
       - stag-be-alert:alert
       - stag-base-mysql:mysql
