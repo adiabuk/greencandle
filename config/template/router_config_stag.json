@@ -1,4 +1,5 @@
 {
 "any": ["any", "alert"],
-"any-short": ["any-short", "alert"]
+"any-short": ["any-short", "alert"],
+"alert": ["alert"]
  }
