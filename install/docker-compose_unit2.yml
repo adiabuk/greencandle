@@ -48,7 +48,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-rs
-    container_name: redis-unit-${BUILD_ID}
+    container_name: gc-redis-unit-${BUILD_ID}
     hostname: redis-unit
     image: redis-${image_id}
     entrypoint: redis-server
@@ -67,7 +67,7 @@ services:
       dockerfile: Dockerfile-ms
     container_name: mysql-unit-${BUILD_ID}
     hostname: mysql-unit
-    image: mysql-${image_id}
+    image: gc-mysql-${image_id}
     ports:
       - 3306
     environment:
