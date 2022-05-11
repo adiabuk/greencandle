@@ -48,7 +48,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-rs
-    container_name: gc-redis-unit-${BUILD_ID}
+    container_name: redis-unit-${BUILD_ID}
     hostname: redis-unit
     image: gc-redis-${image_id}
     entrypoint: redis-server
