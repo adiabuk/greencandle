@@ -26,11 +26,21 @@ pipeline {
         stage("run unittests") {
             steps {
                 parallel(
-                    "run": {
-                        echo "testing run"
+                    "run1": {
+                        echo "testing run1"
                         ansiColor('Vga') {
                             build job: 'unit-tests', parameters: [string(name: 'version', value: env.GIT_BRANCH),
-                                string(name: 'test', value: "run"),
+                                string(name: 'test', value: "run1"),
+                                string(name: 'commit', value: env.GIT_COMMIT),
+                                string(name: 'image_id', value: env.BUILD_ID)
+                            ]
+                        }
+                    },
+                    "run2": {
+                        echo "testing run2"
+                        ansiColor('Vga') {
+                            build job: 'unit-tests', parameters: [string(name: 'version', value: env.GIT_BRANCH),
+                                string(name: 'test', value: "run2"),
                                 string(name: 'commit', value: env.GIT_COMMIT),
                                 string(name: 'image_id', value: env.BUILD_ID)
                             ]
