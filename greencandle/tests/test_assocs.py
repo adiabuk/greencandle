@@ -37,7 +37,9 @@ class TestAssocs(unittest.TestCase):
             router_config_flat_list = [item for sublist in router_config for item in sublist]
 
             for item in router_config_flat_list:
-                self.assertIn(item, service_list)
+                if env != 'stag' and item != 'alert':
+                    # alert uses hosts file in non-stag envs
+                    self.assertIn(item, service_list)
 
 
 
