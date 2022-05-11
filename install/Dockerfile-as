@@ -7,4 +7,4 @@ RUN pip install -r /srv/alert/requirements.txt
 RUN mkdir /opt/output
 RUN  cp /opt/install/docker-entrypoint-alert.sh /
 
-CMD ["python", "/srv/greencandle/alert/webhook.py"]
+CMD ["python", "/srv/alert/webhook.py"]

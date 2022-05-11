@@ -404,7 +404,7 @@ services:
     image: amrox/alert:latest
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint-alert.sh /srv/greencandle/alert/webhook.py
+    entrypoint: /docker-entrypoint-alert.sh /srv/alert/webhook.py
     ports:
       - 20000
     healthcheck:
