@@ -199,7 +199,7 @@ pipeline {
                     "mysql": {
                         ansiColor('vga') {
                             build job: 'docker-build', parameters: [string(name: 'version', value: env.GIT_BRANCH),
-                                string(name: 'app', value: "mysql"),
+                                string(name: 'app', value: "gc-mysql"),
                                 string(name: 'image_id', value: env.BUILD_ID)
                             ]
                         }
@@ -207,7 +207,7 @@ pipeline {
                     "redis": {
                         ansiColor('vga') {
                             build job: 'docker-build', parameters: [string(name: 'version', value: env.GIT_BRANCH),
-                                string(name: 'app', value: "redis"),
+                                string(name: 'app', value: "gc-redis"),
                                 string(name: 'image_id', value: env.BUILD_ID)
                             ]
                         }
@@ -215,7 +215,7 @@ pipeline {
                     "web": {
                         ansiColor('vga') {
                             build job: 'docker-build', parameters: [string(name: 'version', value: env.GIT_BRANCH),
-                                string(name: 'app', value: "web"),
+                                string(name: 'app', value: "webserver"),
                                 string(name: 'image_id', value: env.BUILD_ID)
                             ]
                         }
