@@ -29,7 +29,6 @@ echo "version: $version";
 
 export TAG=$version
 export HOSTNAME=$env
-git pull
 
 # Stop existing fe and be containers
 docker ps --filter name=^fe-* --filter name=^be-* -q | xargs docker stop || true
