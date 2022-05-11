@@ -6,7 +6,7 @@ services:
     hostname: gen-be-logwatch
     image: amrox/greencandle:${TAG}
     restart: always
-    entrypoint: /docker-entrypoint-alert.sh /usr/local/bin/logwatch
+    entrypoint: /docker-entrypoint-logwatch.sh /usr/local/bin/logwatch
     environment:
       - CONFIG_ENV=data/cron
       - HOST=$HOSTNAME
