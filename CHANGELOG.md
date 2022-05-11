@@ -1,6 +1,22 @@
 
 # Releases
 
+## 3.4
+* Transition to homegrown Jenkins and deprecate Travis CI
+* Reinstate audio and visual alerts
+* Link alerts to per and prod environments
+* Improve data env strategies
+* Splitting of large unit tests for concurrency
+* Stop debug logs on data env
+* Better test logging
+* Add static libraries to base images to reduce deploy/test time
+* Add container name to exception alert
+* Add logwatch to data env
+* Fix monthly profit db view
+* Add weekly profit db view
+* Add more visibility of environments in UI to avoid confusion
+* Rewrite URL after open/close trade to avoid dupe command sent to api
+
 ## 3.3
 * Try to increase next trade in same strategy
 * Cleanup drawdown/drawup tools into single script
