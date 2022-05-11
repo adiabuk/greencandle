@@ -91,7 +91,7 @@ services:
     build:
       context: .
       dockerfile: install/Dockerfile-rs
-    image: redis-${image_id}
+    image: gc-redis-${image_id}
     ports:
       - 6379
     restart: always
@@ -109,7 +109,7 @@ services:
     build:
       context: .
       dockerfile: install/Dockerfile-ms
-    image: mysql-${image_id}
+    image: gc-mysql-${image_id}
     ports:
       - 3306
     environment:
@@ -144,7 +144,7 @@ services:
     build:
       context: .
       dockerfile: install/Dockerfile-wb
-    image: web-${image_id}
+    image: webserver-${image_id}
     environment:
       - CONFIG_ENV=unit
     restart: always
