@@ -50,7 +50,7 @@ services:
       dockerfile: Dockerfile-rs
     container_name: gc-redis-unit-${BUILD_ID}
     hostname: redis-unit
-    image: redis-${image_id}
+    image: gc-redis-${image_id}
     entrypoint: redis-server
     ports:
       - 6379
