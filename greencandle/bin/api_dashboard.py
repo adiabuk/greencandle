@@ -134,7 +134,12 @@ def trade():
     for strat, short_name in router_config.items():
         for item in short_name:
             name = item.split(':')[0]
-            container = links_dict[name]
+            if name == 'alert':
+                # use same format for alert redirection
+                container = "{}-be-alert".format(env)
+            else:
+                container = links_dict[name]
+
             if container.startswith('{}-be-'.format(env)) and 'alert' not in container:
                 actual_name = container.replace('-be', '')  # strip off container type
             else:

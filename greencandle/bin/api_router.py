@@ -55,6 +55,11 @@ def respond():
         return Response(status=500)
 
     for host in hosts:
+        if host == 'alert':
+            # change strategy
+            # so we don't create an infinate API loop
+            payload[strategy] = 'alert'
+
         send_trade(payload, host)
     print(request.json)
     LOGGER.info("Request received: %s" %(request.json))
