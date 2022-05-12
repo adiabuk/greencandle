@@ -88,6 +88,7 @@ class Graph():
 
         fig = subplots.make_subplots(rows=2, cols=1, shared_xaxes=True, print_grid=False)
         for name, value in self.data.items():
+            print(name)
             row = 1
             col = 1
             if name == 'ohlc':
@@ -123,7 +124,7 @@ class Graph():
                                   mode='markers')
 
                 # add rsi graph in second subply (below) if it exists
-            elif 'RSI' in name or 'signal' in name:
+            elif 'RSI' in name or 'signal' in name or 'STX' in name:
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=value['value'],
                                   name=name)

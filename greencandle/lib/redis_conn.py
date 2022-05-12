@@ -267,7 +267,7 @@ class Redis():
                                      format(float(kwargs.perc_rate), ".4f"),
                                      kwargs.open_price, kwargs.close_price, kwargs.current_time))
 
-        if kwargs.event == "Hold":
+        if kwargs.event == "HOLD":
             self.logger.debug("%s, %s" % (message, kwargs.current))
         else:
             self.logger.info("%s, %s" % (message, kwargs.current))

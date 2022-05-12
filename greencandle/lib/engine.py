@@ -650,7 +650,7 @@ class Engine(dict):
 
         scheme["data"] = self.get_supertrend_direction(df_list[-1])[0]
         scheme["symbol"] = pair
-        scheme["event"] = "Supertrend_{0},{1}".format(timeframe, multiplier)
+        scheme["event"] = "STX_{0}".format(timeframe, multiplier)
 
         if (not index and self.test) or len(self.dataframes[pair]) < 2:
             index = -1
