@@ -58,7 +58,7 @@ def respond():
         if host == 'alert':
             # change strategy
             # so we don't create an infinate API loop
-            payload[strategy] = 'alert'
+            payload['strategy'] = 'alert'
 
         send_trade(payload, host)
     print(request.json)
