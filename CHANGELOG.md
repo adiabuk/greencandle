@@ -1,6 +1,9 @@
 
 # Releases
 
+## 3.4.1
+* Deployment and image bugfixes
+
 ## 3.4
 * Transition to homegrown Jenkins and deprecate Travis CI
 * Reinstate audio and visual alerts
