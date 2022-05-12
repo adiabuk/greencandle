@@ -99,7 +99,7 @@ def send_trade(pair, strategy, trade_action):
     Create BUY/SELL post request and send to API router
     """
     payload = {"pair": pair,
-               "text": "Manual action from API",
+               "text": "Manual {} action from API".format(trade_action),
                "action": trade_action,
                "strategy": strategy}
     api_token = config.main.api_token

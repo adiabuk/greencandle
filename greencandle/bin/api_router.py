@@ -60,6 +60,19 @@ def respond():
             # so we don't create an infinate API loop
             payload['strategy'] = 'alert'
 
+            # add environment name to text
+            env = config.main.base_env
+            try:
+                environment = {"per": "personal",
+                               "prod": "production",
+                               "stag": "staging",
+                               "test":"testing",
+                               "data":"data"}[env]
+            except KeyError:
+                environment = "unknown"
+            payload['text'] += '...{} environment'.format(environment)
+
+
         send_trade(payload, host)
     print(request.json)
     LOGGER.info("Request received: %s" %(request.json))
