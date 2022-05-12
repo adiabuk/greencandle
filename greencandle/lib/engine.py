@@ -646,9 +646,9 @@ class Engine(dict):
         mine = dataframe.apply(pandas.to_numeric).loc[:index]
         timeframe, multiplier = timef.split(',')
         supertrend = SuperTrend(mine, int(timeframe), int(multiplier))
-        df_list = supertrend["STX_{0}_{1}".format(timeframe, multiplier)].tolist()
-
-        scheme["data"] = self.get_supertrend_direction(df_list[-1])[0]
+        df_list = supertrend["ST_{0}_{1}".format(timeframe, multiplier)].tolist()
+        #print("AMROX " + str(df_list))
+        scheme["data"] = df_list[-1]
         scheme["symbol"] = pair
         scheme["event"] = "STX_{0}".format(timeframe, multiplier)
 
