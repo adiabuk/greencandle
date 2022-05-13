@@ -162,17 +162,17 @@ class TestStopMethods(unittest.TestCase):
 
         # current_high > addperc(profit_perc, open_price)  10%
         result = redis._Redis__get_take_profit(current_price=200, current_high=500,
-                                               open_price=20)
+                                               open_price=20, pair='BTCUSDT')
         self.assertTrue(result)
 
         # current_high > addperc(profit_perc, open_price)  10%
         result = redis._Redis__get_take_profit(current_price=10, current_high=500,
-                                               open_price=20)
+                                               open_price=20, pair='BTCUSDT')
         self.assertTrue(result)
 
         # current_high > addperc(profit_perc, open_price)  10%
         result = redis._Redis__get_take_profit(current_price=10, current_high=1,
-                                               open_price=20)
+                                               open_price=20, pair='BTCUSDT')
         self.assertFalse(result)
 
         config_env = 'unit/scalp/alt'
@@ -183,10 +183,10 @@ class TestStopMethods(unittest.TestCase):
 
         # current_price > addperc(profit_perc, open_price)  10%
         result = redis._Redis__get_take_profit(current_price=10, current_high=1,
-                                               open_price=20)
+                                               open_price=20, pair='BTCUSDT')
         self.assertFalse(result)
 
         # current_price > addperc(profit_perc, open_price)  10%
         result = redis._Redis__get_take_profit(current_price=100, current_high=1,
-                                               open_price=20)
+                                               open_price=20, pair='BTCUSDT')
         self.assertTrue(result)
