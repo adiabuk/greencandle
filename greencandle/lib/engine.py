@@ -390,10 +390,8 @@ class Engine(dict):
         mine = dataframe.apply(pandas.to_numeric).loc[:index]
         rsi = talib.RSI(dataframe.close.values.astype(float) * 100000, timeperiod=int(timeperiod))
         rsinp = rsi[numpy.logical_not(numpy.isnan(rsi))]
-        stochrsi = talib.STOCH(rsinp, rsinp, rsinp, timeperiod, k_period, d_period)
+        stochrsi = talib.STOCH(rsinp, rsinp, rsinp, int(timeperiod), int(k_period), int(d_period))
 
-        LOGGER.debug('AMROX fastk' + str(stochrsi[0][-1]))
-        LOGGER.debug('AMROX fastd' + str(stochrsi[1][-1]))
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
 
@@ -408,10 +406,6 @@ class Engine(dict):
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
         scheme["data"] = stochrsi[0][index], stochrsi[1][index]
         self.schemes.append(scheme)
-
-        #scheme["event"] = "{0}_fastd_{1}".format(func, timeperiod)
-        #scheme["data"] = stochrsi[1][-1]
-        #self.schemes.append(scheme)
 
         LOGGER.debug("Done getting STOCHRSI")
 
