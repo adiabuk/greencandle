@@ -249,9 +249,14 @@ class Redis():
     def __get_result(self, item, indicator):
         """Retrive decoded OHLC data from redis"""
         try:
-            return float(ast.literal_eval(self.get_item(item, indicator).decode())['result'])
-        except (TypeError, AttributeError):
+            result = ast.literal_eval(self.get_item(item, indicator).decode())['result']
+        except AttributeError:
             return None
+
+        try:
+            return float(result)
+        except TypeError:
+            return result
 
     def __log_event(self, **kwargs):
         """Send event data to logger"""

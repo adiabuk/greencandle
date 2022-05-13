@@ -18,6 +18,7 @@ from decimal import Decimal
 import pickle
 import zlib
 import pandas
+import numpy
 import talib
 import pandas_ta as ta
 from indicator import SuperTrend, RSI
@@ -368,6 +369,51 @@ class Engine(dict):
 
         self.schemes.append(scheme)
         LOGGER.debug("Done getting RSI")
+
+    @get_exceptions
+    def get_stochrsi(self, pair, dataframe, index=None, localconfig=None):
+        """
+        get Stochastic RSI values for given pair
+        Append current Stochastic RSI data to instance variable
+
+        Args:
+              pair: trading pair (eg. XRPBTC)
+              localconfig: indicator config tuple
+        Returns:
+            None
+
+        """
+        func, details = localconfig  # split tuple
+        timeperiod, k_period, d_period = details.split(',')
+        LOGGER.debug("Getting %s_%s for %s" % (func, timeperiod, pair))
+        scheme = {}
+        mine = dataframe.apply(pandas.to_numeric).loc[:index]
+        rsi = talib.RSI(dataframe.close.values.astype(float) * 100000, timeperiod=int(timeperiod))
+        rsinp = rsi[numpy.logical_not(numpy.isnan(rsi))]
+        stochrsi = talib.STOCH(rsinp, rsinp, rsinp, timeperiod, k_period, d_period)
+
+        LOGGER.debug('AMROX fastk' + str(stochrsi[0][-1]))
+        LOGGER.debug('AMROX fastd' + str(stochrsi[1][-1]))
+        scheme["symbol"] = pair
+        scheme["event"] = "{0}_{1}".format(func, timeperiod)
+
+        if (not index and self.test) or len(self.dataframes[pair]) < 2:
+            index = -1
+        elif not index and not self.test:
+            index = -2
+        scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
+
+        #scheme["data"] = stochrsi[index][0]
+
+        scheme["event"] = "{0}_{1}".format(func, timeperiod)
+        scheme["data"] = stochrsi[0][index], stochrsi[1][index]
+        self.schemes.append(scheme)
+
+        #scheme["event"] = "{0}_fastd_{1}".format(func, timeperiod)
+        #scheme["data"] = stochrsi[1][-1]
+        #self.schemes.append(scheme)
+
+        LOGGER.debug("Done getting STOCHRSI")
 
     @get_exceptions
     def get_envelope(self, pair, dataframe, index=None, localconfig=None):

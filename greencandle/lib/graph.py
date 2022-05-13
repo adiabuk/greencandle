@@ -88,9 +88,9 @@ class Graph():
 
         fig = subplots.make_subplots(rows=2, cols=1, shared_xaxes=True, print_grid=False)
         for name, value in self.data.items():
-            print(name)
             row = 1
             col = 1
+            #item2 = False
             if name == 'ohlc':
                 if value.empty:  # empty dataframe:
                     print('Unable to find ohlc data for {0}, passing...'.format(self.pair))
@@ -124,19 +124,25 @@ class Graph():
                                   mode='markers')
 
                 # add rsi graph in second subply (below) if it exists
-            elif 'RSI' in name or 'signal' in name:
+            elif ('RSI' in name or 'signal' in name) and "STOCH" not in name:
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=value['value'],
                                   name=name)
                 row = 2
-                # add tsi graph in second subply (below) if it exists
+                # add rsi graph in second subply (below) if it exists
 
-
-            elif 'STOCHF' in name:
-                item = go.Bar(x=pandas.to_datetime(value["date"], unit="ms"),
-                              y=value['value'],
-                              name=name)
+            elif 'STOCH' in name:
+                # add stochrsi graph in second subply (below) if it exists
                 row = 2
+                value['k'], value['d'] = zip(*value.value)
+                item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
+                                  y=value['k'],
+                                  name=name+'-k')
+                item2 = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
+                                  y=value['d'],
+                                  name=name+'-d')
+                fig.append_trace(item2, row, col)
+
 
             elif 'SHOOTINGSTAR' in name or 'SPINNINGTOP' in name:
                 item = go.Bar(x=pandas.to_datetime(value["date"], unit="ms"),
