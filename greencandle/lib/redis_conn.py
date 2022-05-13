@@ -108,6 +108,30 @@ class Redis():
             drawdown = 0
         return drawdown
 
+    def update_on_entry(self, pair, name, value):
+        """
+        Update key/value for storing profit/stoploss from figures derived at trade entry
+        """
+        key = "{}-{}-{}".format(pair, name, config.main.name)
+        self.conn.set(key, value)
+
+    def get_on_entry(self, pair, name):
+        """
+        fetch key/value set on trade entry
+        """
+        key = "{}-{}-{}".format(pair, name, config.main.name)
+        return self.conn.get(key)
+
+    def rm_on_entry(self, pair, name):
+        """
+        Remove key/value pair set at trade entry
+        This is normally done on trade exit
+        """
+        key = "{}-{}-{}".format(pair, name, config.main.name)
+        return self.conn.delete(key)
+
+
+
     def update_drawdown(self, pair, current_candle, event=None):
         """
         Update minimum price for current asset.  Create redis record if it doesn't exist.
@@ -281,8 +305,10 @@ class Redis():
         """
         Check if price between intervals and sell if matches stop_loss or take_profit rules
         """
-        stop_loss_perc = float(config.main.stop_loss_perc)
-        take_profit_perc = float(config.main.take_profit_perc)
+
+        stop_loss_perc = float(self.get_on_entry(pair, 'stop_loss_perc'))
+        take_profit_perc = float(self.get_on_entry(pair, 'take_profit_perc'))
+
         current_price = current_candle.close
         current_high = current_candle.high
         current_low = current_candle.low
@@ -291,9 +317,9 @@ class Redis():
         high_price = self.get_drawup(pair)['price']
         low_price = self.get_drawdown(pair)
 
-        stop_loss_rule = self.__get_stop_loss(current_price, current_low, open_price)
+        stop_loss_rule = self.__get_stop_loss(current_price, current_low, open_price, pair)
 
-        take_profit_rule = self.__get_take_profit(current_price, current_high, open_price)
+        take_profit_rule = self.__get_take_profit(current_price, current_high, open_price, pair)
 
         trailing_stop = self.__get_trailing_stop(current_price, high_price, low_price, current_high,
                                                  current_low, open_price)
@@ -361,12 +387,13 @@ class Redis():
                              "open_price: %s" % (high_price, current_price, open_price))
         return result
 
-    def __get_take_profit(self, current_price, current_high, open_price):
+    def __get_take_profit(self, current_price, current_high, open_price, pair):
         """
         Check if we have reached take profit
         return True/False
         """
-        profit_perc = float(config.main.take_profit_perc)
+
+        profit_perc = float(self.get_on_entry(pair, 'take_profit_perc'))
 
         if profit_perc <= 0:
             return False
@@ -393,13 +420,14 @@ class Redis():
                              "open_price: %s" % (current_high, current_price, open_price))
         return result
 
-    def __get_stop_loss(self, current_price, current_low, open_price):
+    def __get_stop_loss(self, current_price, current_low, open_price, pair):
         """
         Check if we have reached stop loss
         return True/False
         """
         direction = config.main.trade_direction
-        stop_perc = float(config.main.stop_loss_perc)
+
+        stop_perc = float(self.get_on_entry(pair, 'stop_loss_perc'))
         immediate = str2bool(config.main.immediate_stop)
 
         if not open_price:
@@ -445,8 +473,8 @@ class Redis():
                                 previous1=AttributeDict(), previous2=AttributeDict(),
                                 previous3=AttributeDict())
 
-        stop_loss_perc = float(config.main.stop_loss_perc)
-        take_profit_perc = float(config.main.take_profit_perc)
+        stop_loss_perc = float(self.get_on_entry(pair, 'stop_loss_perc'))
+        take_profit_perc = float(self.get_on_entry(pair, 'take_profit_perc'))
 
         try:
             previous3, previous2, previous1, previous, current = \
@@ -578,8 +606,8 @@ class Redis():
         trailing_stop = self.__get_trailing_stop(current_price, high_price, low_price,
                                                  current_high, current_low, open_price)
         take_profit_rule = self.__get_take_profit(current_price, current_high,
-                                                  open_price)
-        stop_loss_rule = self.__get_stop_loss(current_price, current_low, open_price)
+                                                  open_price, pair)
+        stop_loss_rule = self.__get_stop_loss(current_price, current_low, open_price, pair)
 
         if any(rules['open']) and not able_to_buy:
             self.logger.info("Unable to buy %s due to time_between_trades" % pair)
@@ -641,6 +669,10 @@ class Redis():
         # if we match any buy rules are NOT in a trade and sell rules don't match
         elif any(rules['open']) and not open_price and able_to_buy and not both:
 
+            # set stop_loss and #take_profit
+            self.update_on_entry(pair, 'take_profit_perc', eval(config.main.take_profit_perc))
+            self.update_on_entry(pair, 'stop_loss_perc', eval(config.main.stop_loss_perc))
+
             # delete and re-store high price
             self.logger.debug("Close: %s, Previous Close: %s, >: %s" %
                               (close, last_close, close > last_close))
@@ -664,5 +696,9 @@ class Redis():
         self.logger.info('%s sell Rules matched: %s' % (pair, winning_sell))
         self.logger.info('%s buy Rules matched: %s' % (pair, winning_buy))
         del dbase
+        if result == 'CLOSE':
+            self.rm_on_entry(pair, 'take_profit_perc')
+            self.rm_on_entry(pair, 'stop_loss_perc')
+
         return (result, event, current_time, current_price, {'sell':winning_sell,
                                                              'buy': winning_buy})
