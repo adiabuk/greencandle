@@ -139,8 +139,8 @@ class Graph():
                                   y=value['k'],
                                   name=name+'-k')
                 item2 = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
-                                  y=value['d'],
-                                  name=name+'-d')
+                                   y=value['d'],
+                                   name=name+'-d')
                 fig.append_trace(item2, row, col)
 
 
