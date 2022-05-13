@@ -123,12 +123,12 @@ class TestStopMethods(unittest.TestCase):
 
         # current_low < open_price - stop_perc 10%
         result = redis._Redis__get_stop_loss(current_price=100, current_low=100,
-                                             open_price=400)
+                                             open_price=400, pair='BTCUSDT')
         self.assertTrue(result)
 
         # current_low < open_price - stop_perc 10%
         result = redis._Redis__get_stop_loss(current_price=359, current_low=500,
-                                             open_price=400)
+                                             open_price=400, pair='BTCUSDT')
         self.assertFalse(result)
 
         config_env = 'unit/scalp/alt'
@@ -137,17 +137,17 @@ class TestStopMethods(unittest.TestCase):
 
         # current_price < open_price - stop_perc 10%
         result = redis._Redis__get_stop_loss(current_price=364, current_low=500,
-                                             open_price=400)
+                                             open_price=400, pair='BTCUSDT')
         self.assertFalse(result)
 
         # current_price < open_price - stop_perc 10%
         result = redis._Redis__get_stop_loss(current_price=200, current_low=500,
-                                             open_price=400)
+                                             open_price=400, pair='BTCUSDT')
         self.assertTrue(result)
 
         # no open price - return False
         result = redis._Redis__get_stop_loss(current_price=200, current_low=500,
-                                             open_price='')
+                                             open_price='', pair='BTCUSDT')
         self.assertFalse(result)
 
     def test_long_take_profit(self):
