@@ -136,6 +136,8 @@ class TestStopMethods(unittest.TestCase):
         # turn off immediate stop - changes check to current_price
 
         # current_price < open_price - stop_perc 10%
+        redis.update_on_entry('BTCUSDT', 'take_profit_perc', config.main.take_profit_perc)
+        redis.update_on_entry('BTCUSDT', 'stop_loss_perc', config.main.stop_loss_perc)
         result = redis._Redis__get_stop_loss(current_price=364, current_low=500,
                                              open_price=400, pair='BTCUSDT')
         self.assertFalse(result)
