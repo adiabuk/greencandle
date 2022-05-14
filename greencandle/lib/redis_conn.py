@@ -397,7 +397,7 @@ class Redis():
         if profit_perc:
             profit_perc = float(profit_perc)
         else:
-            profit_perc = float(config.main.take_profit_perc)
+            profit_perc = 0
 
         if profit_perc <= 0:
             return False
@@ -435,7 +435,8 @@ class Redis():
         if stop_perc:
             stop_perc = float(stop_perc)
         else:
-            stop_perc = float(config.main.stop_loss_perc)
+            stop_perc = 0
+
         immediate = str2bool(config.main.immediate_stop)
 
         if not open_price:
@@ -488,12 +489,12 @@ class Redis():
         if stop_loss_perc:
             stop_loss_perc = float(stop_loss_perc)
         else:
-            stop_loss_perc = float(config.main.stop_loss_perc)
+            stop_loss_perc = 0
 
         if take_profit_perc:
             take_profit_perc = float(take_profit_perc)
         else:
-            take_profit_perc = float(config.main.take_profit_perc)
+            take_profit_perc = 0
 
         try:
             previous3, previous2, previous1, previous, current = \

@@ -380,7 +380,7 @@ class Engine(dict):
               pair: trading pair (eg. XRPBTC)
               localconfig: indicator config tuple
         Returns:
-            None
+            k,d
 
         """
         func, details = localconfig  # split tuple
