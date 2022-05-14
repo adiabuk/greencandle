@@ -393,7 +393,11 @@ class Redis():
         return True/False
         """
 
-        profit_perc = float(self.get_on_entry(pair, 'take_profit_perc'))
+        profit_perc = self.get_on_entry(pair, 'take_profit_perc')
+        if profit_perc:
+            profit_perc = float(profit_perc)
+        else:
+            profit_perc = float(config.main.take_profit_perc)
 
         if profit_perc <= 0:
             return False
@@ -427,7 +431,11 @@ class Redis():
         """
         direction = config.main.trade_direction
 
-        stop_perc = float(self.get_on_entry(pair, 'stop_loss_perc'))
+        stop_perc = self.get_on_entry(pair, 'stop_loss_perc')
+        if stop_perc:
+            stop_perc = float(stop_perc)
+        else:
+            stop_perc = float(config.main.stop_loss_perc)
         immediate = str2bool(config.main.immediate_stop)
 
         if not open_price:
@@ -473,8 +481,19 @@ class Redis():
                                 previous1=AttributeDict(), previous2=AttributeDict(),
                                 previous3=AttributeDict())
 
-        stop_loss_perc = float(self.get_on_entry(pair, 'stop_loss_perc'))
-        take_profit_perc = float(self.get_on_entry(pair, 'take_profit_perc'))
+
+        stop_loss_perc = self.get_on_entry(pair, 'stop_loss_perc')
+        take_profit_perc = self.get_on_entry(pair, 'take_profit_perc')
+
+        if stop_loss_perc:
+            stop_perc = float(stop_perc)
+        else:
+            stop_perc = float(config.main.stop_loss_perc)
+
+        if take_profit_perc:
+            stop_perc = float(take_profit_perc)
+        else:
+            stop_perc = float(config.main.take_profit_perc)
 
         try:
             previous3, previous2, previous1, previous, current = \
