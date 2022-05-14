@@ -486,14 +486,14 @@ class Redis():
         take_profit_perc = self.get_on_entry(pair, 'take_profit_perc')
 
         if stop_loss_perc:
-            stop_perc = float(stop_perc)
+            stop_loss_perc = float(stop_loss_perc)
         else:
-            stop_perc = float(config.main.stop_loss_perc)
+            stop_loss_perc = float(config.main.stop_loss_perc)
 
         if take_profit_perc:
-            stop_perc = float(take_profit_perc)
+            take_profit_perc = float(take_profit_perc)
         else:
-            stop_perc = float(config.main.take_profit_perc)
+            take_profit_perc = float(config.main.take_profit_perc)
 
         try:
             previous3, previous2, previous1, previous, current = \
