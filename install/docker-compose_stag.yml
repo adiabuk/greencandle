@@ -223,13 +223,13 @@ services:
       - stag-be-alert:alert
       - stag-base-mysql:mysql
       - stag-base-redis:redis
-      - stag-be-any:any
+      - stag-be-any-long:any-long
       - stag-be-any-short:any-short
     depends_on:
       - stag-be-alert
       - stag-base-mysql
       - stag-base-redis
-      - stag-be-any
+      - stag-be-any-long
       - stag-be-any-short
     entrypoint: /docker-entrypoint.sh api_router --test
     volumes:
@@ -334,9 +334,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  stag-be-any:
-    container_name: stag-be-any
-    hostname: stag-be-any
+  stag-be-any-long:
+    container_name: stag-be-any-long
+    hostname: stag-be-any-long
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
