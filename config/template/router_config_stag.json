@@ -1,5 +1,6 @@
 {
 "any-long": ["any-long", "alert"],
 "any-short": ["any-short", "alert"],
-"alert": ["alert"]
+"alert": ["alert"],
+"any-long-short": ["any-long", "any-short", "alert"]
  }

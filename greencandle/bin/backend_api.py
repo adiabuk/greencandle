@@ -32,6 +32,16 @@ def respond():
     current_price = get_current_price(pair)
     item = [(pair, current_time, current_price, config.main.name)]
     trade = Trade(interval=config.main.interval, test_data=False, test_trade=TEST, config=config)
+
+    try:
+        if (config.main.trade_direction == 'long' and float(action) > 0) or \
+              (config.main.trade_direction == 'short' and float(action) < 0):
+            action = 'OPEN'
+        else:
+            action = 'CLOSE'
+    except ValueError:
+        pass
+
     if action == 'OPEN':
         trade.open_trade(item)
     elif action == 'CLOSE':
