@@ -20,7 +20,6 @@
 0 0 * * * /usr/bin/mysqldump --host mysql --all-databases -u{{.db_user}} -p{{.db_password}} | gzip > /data/mysql/backup_{{.base_env}}_$(date +"\%Y-\%m-\%d").sql.gz 2>/proc/1/fd/2
 
 {{else if and (ne .base_env "unit") (eq .production "false") }}
-30 * * * *  HOST=stag /usr/local/bin/get_mysql_status > /proc/1/fd/1 2>/proc/1/fd/2
 */10 * * * *  sleep 60; HOST=stag /usr/local/bin/get_trade_status > /proc/1/fd/1 2>/proc/1/fd/2
 0 * * * *  HOST=stag /usr/local/bin/send_docker_alerts
 */5 * * * * sleep 5; /usr/local/bin/get_active_trades > /proc/1/fd/1 2>/proc/1/fd/2
