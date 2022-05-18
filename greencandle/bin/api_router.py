@@ -13,6 +13,7 @@ from greencandle.lib.common import arg_decorator
 from greencandle.lib import config
 config.create_config()
 from greencandle.lib.logger import get_logger
+from greencandle.lib.mysql import Mysql
 
 TEST = bool(len(sys.argv) > 1 and sys.argv[1] == '--test')
 APP = Flask(__name__)
@@ -76,6 +77,8 @@ def respond():
         send_trade(payload, host)
     print(request.json)
     LOGGER.info("Request received: %s" %(request.json))
+    mysql = Mysql()
+    mysql.insert_api(**request.json)
     return Response(status=200)
 
 @arg_decorator

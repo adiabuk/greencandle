@@ -139,6 +139,20 @@ class Mysql():
         result = self.__run_sql_query(command)
         return result == 1
 
+    def insert_api_trade(self, **kwargs):
+        """
+        archive data received from api-router
+        """
+        kwargs = AttributeDict(kwargs)
+        command = """insert into api_requests (pair, text, action, price, strategy) VALUES
+                     ('{0}', '{1}', '{2}', '{3}', '{4}')""".format(kwargs.pair,
+                                                                   kwargs.text,
+                                                                   kwargs.action,
+                                                                   kwargs.price,
+                                                                   kwargs.strategy)
+        result = self.__run_sql_query(command)
+        return result == 1
+
 
     @get_exceptions
     def get_recent_high(self, pair, date, months, max_perc):
