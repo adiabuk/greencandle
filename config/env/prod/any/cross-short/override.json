@@ -1,7 +1,7 @@
 {
   "divisor": "20",
   "max_trades": "10",
-  "name": "prod-api-any-btc-cross-short",
+  "name": "prod-api-any-cross-short",
   "trade_direction": "short",
   "trade_isolated": "false",
   "trade_multiplier": "5",

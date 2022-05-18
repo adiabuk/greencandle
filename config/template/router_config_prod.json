@@ -1,4 +1,4 @@
-{"any_USDT_long" : ["prod-be-api-any-usdt-spot-long", "prod-be-api-any-usdt-cross-long", "prod-be-api-any-usdt-isolated-long", "alert"],
+{
 "any_long" : ["prod-be-api-any-spot-long", "prod-be-api-any-cross-long", "prod-be-api-any-isolated-long", "alert"],
 "any_short" : ["prod-be-api-any-cross-short", "prod-be-api-any-isolated-short", "alert"],
 "alert": ["alert"]
