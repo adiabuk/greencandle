@@ -1,5 +1,5 @@
 {
-  "name": "per-api-any-bnb-isolated-long",
+  "name": "per-api-any-isolated-long",
   "trade_isolated": "true",
   "trade_type": "margin",
   "max_trades": "10",

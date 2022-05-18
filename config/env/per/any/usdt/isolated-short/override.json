@@ -1,9 +1,0 @@
-{
-  "divisor": "1",
-  "max_trades": "10",
-  "name": "per-api-any-usdt-isolated-short",
-  "trade_direction": "short",
-  "trade_isolated": "true",
-  "trade_multiplier": "5",
-  "trade_type": "margin"
-}

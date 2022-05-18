@@ -1,7 +1,7 @@
 {
   "divisor": "1",
   "max_trades": "10",
-  "name": "per-api-any-eth-isolated-short",
+  "name": "per-api-any-isolated-short",
   "trade_direction": "short",
   "trade_isolated": "true",
   "trade_multiplier": "5",
