@@ -18,7 +18,7 @@
             <tr>
 
 	    {% if "any" in strat %}
-	    
+         {% if "long-short" not in strat %}
 	       <form action="/action">
 	       <td>
 	         <label for="fname">pair: </label>
@@ -34,6 +34,7 @@
 		<input type="submit" name="action" value="close">
                </td>
 	       </form>
+         {% endif %}
 	    {% else %}
 	        <td>{{pair}}</td>
                <td>
