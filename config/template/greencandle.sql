@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 5.7.37, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.38, for Linux (x86_64)
 --
 -- Host: localhost    Database: greencandle
 -- ------------------------------------------------------
@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `accounts`;
 /*!50001 DROP VIEW IF EXISTS `accounts`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `accounts` AS SELECT
+/*!50001 CREATE VIEW `accounts` AS SELECT 
  1 AS `open_time`,
  1 AS `close_time`,
  1 AS `open_price`,
@@ -38,6 +38,25 @@ SET character_set_client = utf8;
  1 AS `quote_in`,
  1 AS `amount`*/;
 SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `api_requests`
+--
+
+DROP TABLE IF EXISTS `api_requests`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `api_requests` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` datetime DEFAULT CURRENT_TIMESTAMP,
+  `pair` varchar(30) DEFAULT NULL,
+  `text` varchar(100) DEFAULT NULL,
+  `action` varchar(30) DEFAULT NULL,
+  `price` varchar(30) DEFAULT NULL,
+  `strategy` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `balance`
@@ -83,7 +102,7 @@ DROP TABLE IF EXISTS `daily_profit`;
 /*!50001 DROP VIEW IF EXISTS `daily_profit`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `daily_profit` AS SELECT
+/*!50001 CREATE VIEW `daily_profit` AS SELECT 
  1 AS `date`,
  1 AS `perc`,
  1 AS `usd_profit`,
@@ -98,7 +117,7 @@ DROP TABLE IF EXISTS `daily_profit_16.01.21`;
 /*!50001 DROP VIEW IF EXISTS `daily_profit_16.01.21`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `daily_profit_16.01.21` AS SELECT
+/*!50001 CREATE VIEW `daily_profit_16.01.21` AS SELECT 
  1 AS `date`,
  1 AS `profit_16.01.21`,
  1 AS `perc`*/;
@@ -112,7 +131,7 @@ DROP TABLE IF EXISTS `daily_profit_by_base_pair`;
 /*!50001 DROP VIEW IF EXISTS `daily_profit_by_base_pair`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `daily_profit_by_base_pair` AS SELECT
+/*!50001 CREATE VIEW `daily_profit_by_base_pair` AS SELECT 
  1 AS `base_pair`,
  1 AS `date`,
  1 AS `perc`,
@@ -143,7 +162,7 @@ DROP TABLE IF EXISTS `hour_balance`;
 /*!50001 DROP VIEW IF EXISTS `hour_balance`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `hour_balance` AS SELECT
+/*!50001 CREATE VIEW `hour_balance` AS SELECT 
  1 AS `exchange_id`,
  1 AS `usd1`,
  1 AS `coin`,
@@ -165,7 +184,7 @@ DROP TABLE IF EXISTS `monthly_profit`;
 /*!50001 DROP VIEW IF EXISTS `monthly_profit`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `monthly_profit` AS SELECT
+/*!50001 CREATE VIEW `monthly_profit` AS SELECT 
  1 AS `date`,
  1 AS `usd_profit`,
  1 AS `perc`,
@@ -199,7 +218,7 @@ DROP TABLE IF EXISTS `profit`;
 /*!50001 DROP VIEW IF EXISTS `profit`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profit` AS SELECT
+/*!50001 CREATE VIEW `profit` AS SELECT 
  1 AS `id`,
  1 AS `open_time`,
  1 AS `interval`,
@@ -223,7 +242,7 @@ DROP TABLE IF EXISTS `profit_16.01.21`;
 /*!50001 DROP VIEW IF EXISTS `profit_16.01.21`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profit_16.01.21` AS SELECT
+/*!50001 CREATE VIEW `profit_16.01.21` AS SELECT 
  1 AS `open_time`,
  1 AS `interval`,
  1 AS `close_time`,
@@ -243,7 +262,7 @@ DROP TABLE IF EXISTS `profitable`;
 /*!50001 DROP VIEW IF EXISTS `profitable`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profitable` AS SELECT
+/*!50001 CREATE VIEW `profitable` AS SELECT 
  1 AS `pair`,
  1 AS `total`,
  1 AS `profit`,
@@ -263,7 +282,7 @@ DROP TABLE IF EXISTS `profitable_16.01.21`;
 /*!50001 DROP VIEW IF EXISTS `profitable_16.01.21`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profitable_16.01.21` AS SELECT
+/*!50001 CREATE VIEW `profitable_16.01.21` AS SELECT 
  1 AS `pair`,
  1 AS `total`,
  1 AS `profit_16.01.21`,
@@ -339,7 +358,7 @@ DROP TABLE IF EXISTS `weekly_profit`;
 /*!50001 DROP VIEW IF EXISTS `weekly_profit`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `weekly_profit` AS SELECT
+/*!50001 CREATE VIEW `weekly_profit` AS SELECT 
  1 AS `week_name`,
  1 AS `YEAR(close_time)`,
  1 AS `WEEK(close_time)`,
@@ -542,7 +561,7 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET collation_connection      = utf8mb4_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `weekly_profit` AS select concat(year(`profit`.`close_time`),'/',week(`profit`.`close_time`)) AS `week_name`,year(`profit`.`close_time`) AS `YEAR(close_time)`,week(`profit`.`close_time`) AS `WEEK(close_time)`,count(0) AS `COUNT(*)`,left(`profit`.`close_time`,7) AS `date`,sum(`profit`.`usd_profit`) AS `usd_profit`,sum(`profit`.`perc`) AS `perc` from `profit` group by concat(year(`profit`.`close_time`),'/',week(`profit`.`close_time`)) order by year(`profit`.`close_time`) desc,week(`profit`.`close_time`) desc */;
+/*!50001 VIEW `weekly_profit` AS select concat(year(`profit`.`close_time`),'/',week(`profit`.`close_time`,)) AS `week_name`,year(`profit`.`close_time`) AS `YEAR(close_time)`,week(`profit`.`close_time`,) AS `WEEK(close_time)`,count(0) AS `COUNT(*)`,left(`profit`.`close_time`,7) AS `date`,sum(`profit`.`usd_profit`) AS `usd_profit`,sum(`profit`.`perc`) AS `perc` from `profit` group by concat(year(`profit`.`close_time`),'/',week(`profit`.`close_time`,)) order by year(`profit`.`close_time`) desc,week(`profit`.`close_time`,) desc */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -556,8 +575,8 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-28 23:14:34
--- MySQL dump 10.13  Distrib 5.7.37, for Linux (x86_64)
+-- Dump completed on 2022-05-19 10:25:45
+-- MySQL dump 10.13  Distrib 5.7.38, for Linux (x86_64)
 --
 -- Host: localhost    Database: greencandle
 -- ------------------------------------------------------
@@ -607,4 +626,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-28 23:14:34
+-- Dump completed on 2022-05-19 10:25:45
