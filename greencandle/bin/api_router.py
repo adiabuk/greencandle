@@ -49,7 +49,7 @@ def respond():
         router_config = json.load(json_file)
 
     try:
-        hosts = router_config[payload["strategy"]]
+        hosts = router_config[payload["strategy"].strip()]
     except TypeError:
         LOGGER.error("Invalid JSON detected: %s" % payload)
         return Response(status=500)
