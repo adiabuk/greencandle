@@ -78,7 +78,7 @@ def respond():
     print(request.json)
     LOGGER.info("Request received: %s" %(request.json))
     mysql = Mysql()
-    mysql.insert_api(**request.json)
+    mysql.insert_api_trade(**request.json)
     return Response(status=200)
 
 @arg_decorator
