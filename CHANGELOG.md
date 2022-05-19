@@ -1,6 +1,18 @@
 
 # Releases
 
+# 3.5
+* Alert redirection from all envs
+* add Supertrend and StochRSI indicators
+* Add environment name to audio alert
+* Have variable SL/TP based on entry conditions
+* Remove old 5ma/env istrategy environments
+* Allow code to decide to go long/short basied on float action
+* Log all api requests to local db of given environment
+* Add all router assocs from personal env into prod env
+* Minor bugfixes
+* Lint & layout fixes
+
 ## 3.4.1
 * Deployment and image bugfixes
 
