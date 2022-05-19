@@ -197,18 +197,6 @@ services:
     links:
       - per-base-mysql:mysql
       - per-base-redis:redis
-      - per-be-5ma-api-btc-spot:5ma-btc
-      - per-be-5ma-api-usdt-spot:5ma-usdt
-      - per-be-env-api-usdt-spot:env-usdt
-      - per-be-5ma-api-btc-isolated:5ma-btc-isolated
-      - per-be-5ma-api-usdt-cross:5ma-usdt-cross
-      - per-be-env-api-usdt-isolated:env-usdt-isolated
-      - per-be-env-api-1m-btc-spot:env-1m-btc
-      - per-be-env-api-1m-btc-cross:env-1m-btc-cross
-      - per-be-env-api-1m-btc-isolated:env-1m-btc-isolated
-      - per-be-env-api-1m-usdt-spot:env-1m-usdt
-      - per-be-env-api-1m-usdt-cross:env-1m-usdt-cross
-      - per-be-env-api-1m-usdt-isolated:env-1m-usdt-isolated
       - per-be-api-any-spot-long:per-be-api-any-spot-long
       - per-be-api-any-cross-long:per-be-api-any-cross-long
       - per-be-api-any-isolated-long:per-be-api-any-isolated-long
@@ -217,17 +205,6 @@ services:
     depends_on:
       - per-base-mysql
       - per-base-redis
-      - per-be-5ma-api-btc-spot
-      - per-be-5ma-api-usdt-spot
-      - per-be-env-api-usdt-spot
-      - per-be-5ma-api-btc-isolated
-      - per-be-5ma-api-usdt-cross
-      - per-be-env-api-usdt-isolated
-      - per-be-env-api-1m-usdt-spot
-      - per-be-env-api-1m-btc-spot
-      - per-be-env-api-1m-btc-cross
-      - per-be-env-api-1m-usdt-cross
-      - per-be-env-api-1m-usdt-isolated
       - per-be-api-any-spot-long
       - per-be-api-any-cross-long
       - per-be-api-any-isolated-long
