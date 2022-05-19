@@ -56,7 +56,7 @@ def respond():
         return Response(status=500)
 
     for host in hosts:
-        if host == 'alert':
+        if host == 'alert' and 'edited' not in payload:
             # change strategy
             # so we don't create an infinate API loop
             payload['strategy'] = 'alert'
@@ -72,6 +72,7 @@ def respond():
             except KeyError:
                 environment = "unknown"
             payload['text'] += '...{} environment'.format(environment)
+            payload['edited'] = "yes"
 
 
         send_trade(payload, host)
