@@ -47,6 +47,7 @@ def main():
         usd_debt = bnb_debt * float(client.prices()['BNBUSDT']) if bnb_debt < 0 else 0
     except KeyError:
         bnb_debt = 0
+        usd_debt = 0
 
     results += "Cross Margin Account:\n"
     results += "\tAvailable: " + format_usd(client.get_max_borrow())+"\n"
