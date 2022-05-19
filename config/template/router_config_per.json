@@ -1,8 +1,4 @@
-{"5MA_3h_BTC": ["5ma-btc", "5ma-btc-isolated", "alert"],
-"5MA_3h_USDT": ["5ma-usdt", "5ma-usdt-cross", "alert"],
-"env_15m_USDT": ["env-usdt", "env-usdt-isolated", "alert"],
-"env_1m_BTC" : ["env-1m-btc", "env-1m-btc-cross", "env-1m-btc-isolated", "alert"],
-"env_1m_USDT" : ["env-1m-usdt", "env-1m-usdt-cross", "env-1m-usdt-isolated", "alert"],
+{
 "any_spot_long" : ["per-be-api-any-spot-long", "alert"],
 "any_cross_long" : ["per-be-api-any-cross-long", "alert"],
 "any_isolated_long" : ["per-be-api-any-isolated-long", "alert"],
