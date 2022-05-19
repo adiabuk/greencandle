@@ -55,7 +55,7 @@ class Engine(dict):
         for key, value in dataframes.items():
             # Cleanout false datapoints
             value['closeTime'] = value['closeTime'].astype(str)
-            self.dataframes[key] = value[value.closeTime.str.endswith('99999')]
+            self.dataframes[key] = value[value.closeTime.str.endswith('999')]
         self.schemes = []
         super().__init__()
         LOGGER.debug("Finished fetching raw data")
