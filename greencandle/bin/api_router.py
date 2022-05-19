@@ -47,7 +47,6 @@ def respond():
     payload = request.json
     with open('/etc/router_config.json') as json_file:
         router_config = json.load(json_file)
-    print(router_config)
 
     try:
         hosts = router_config[payload["strategy"]]
@@ -76,7 +75,6 @@ def respond():
 
 
         send_trade(payload, host)
-    print(request.json)
     LOGGER.info("Request received: %s" %(request.json))
     mysql = Mysql()
     mysql.insert_api_trade(**request.json)
