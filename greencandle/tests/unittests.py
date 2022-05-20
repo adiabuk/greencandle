@@ -139,7 +139,7 @@ def make_docker_case(container, checks=None):
             """Run healthchecks"""
             if checks:
                 for check in checks:
-                    for num in range(1, 11):
+                    for num in range(1, 21):
 
                         command = "docker exec {} {}".format(container+'-'+self.build_id, check)
                         print("running: {} attempt:{}".format(command, num))
