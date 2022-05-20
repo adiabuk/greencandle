@@ -2,13 +2,6 @@
 
 set -e
 
-function get_payload() {
-  payload='{"text": "'${1}'", "channel": "notifications", "username": "deploy-bot",
-            "content": "shit", "icon_emoji": ":rocket:", }'
-  echo $payload
-}
-
-
 while getopts e:v: flag
 do
     case "${flag}" in
@@ -52,7 +45,5 @@ done
 sleep 5
 docker-compose -f ./install/docker-compose_${env}.yml up -d $fe
 
-text="Finished deployment $TAG on $HOSTNAME"
-payload=$(get_payload "$text")
 logger -t deploy "$TAG successfully deployed"
 
