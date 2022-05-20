@@ -31,8 +31,8 @@ export TAG=$version
 export HOSTNAME=$env
 
 # Stop existing fe and be containers
-docker ps --filter name=^fe-* --filter name=^be-* -q | xargs docker stop || true
-docker ps --filter name=^fe-* -q | xargs docker rm || true
+docker ps --filter name=fe-* --filter name=be-* -q | xargs docker stop || true
+docker ps --filter name=fe-* --filter name=be-* -q | xargs docker rm || true
 docker volume prune -f
 
 docker-compose -f ./install/docker-compose_${env}.yml pull
