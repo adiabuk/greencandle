@@ -20,8 +20,8 @@ class TestAssocs(unittest.TestCase):
 
         envs = (('per', 'PROD'), ('prod', 'PROD'), ('stag', 'STAG'))
         for env, host in envs:
-            with open('config/template/router_config_{}.json'.format(env),
-                      'r') as json_file:
+            os.system("configstore package process_templates {} /tmp".format(env))
+            with open('/tmp/router_config.json', 'r') as json_file:
                 router_config = json.load(json_file)
             with open("install/docker-compose_{}.yml"
                       .format(host.lower()), "r") as stream:
@@ -51,11 +51,11 @@ class TestAssocs(unittest.TestCase):
         """
         envs = (('per', 'PROD'), ('prod', 'PROD'), ('stag', 'STAG'))
         for env, host in envs:
+            os.system("configstore package process_templates {} /tmp".format(env))
             os.environ['HOST'] = host
             names = get_pairs()[-1]
             rev_names = {v: k for k, v in names.items()}
-            with open('config/template/router_config_{}.json'.format(env),
-                      'r') as json_file:
+            with open('/tmp/router_config.json', 'r') as json_file:
                 router_config = json.load(json_file)
 
             with open("install/docker-compose_{}.yml"
