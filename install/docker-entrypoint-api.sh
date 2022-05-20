@@ -22,14 +22,6 @@ if [[ ! -e /installed ]]; then
   mkdir -p /etc/gcapi /var/www/html ||true
   echo $(configstore package get $CONFIG_ENV base_env --basedir /opt/config) > /var/www/html/env.txt
   cp /opt/config/raw/* /etc/gcapi/
-  if [[ "$CONFIG_ENV" == *"stag"* ]]; then
-    cp /opt/output/router_config_stag.json /etc/router_config.json
-  elif [[ "$CONFIG_ENV" == *"prod"* ]]; then
-    cp /opt/output/router_config_prod.json /etc/router_config.json
-  elif [[ "$CONFIG_ENV" == *"per"* ]]; then
-    cp /opt/output/router_config_per.json /etc/router_config.json
-  fi
-
   touch /installed
 fi
 exec "$@"

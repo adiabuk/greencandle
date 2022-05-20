@@ -21,15 +21,6 @@ if [[ ! -e /installed ]]; then
   fi
 
   crontab /opt/output/gc-cron || true
-  if [[ "$HOSTNAME" == *"router"* ]]; then
-    if [[ "$CONFIG_ENV" == *"stag"* ]]; then
-      cp /opt/output/router_config_stag.json /etc/router_config.json
-    elif [[ "$CONFIG_ENV" == *"prod"* ]]; then
-      cp /opt/output/router_config_prod.json /etc/router_config.json
-    elif [[ "$CONFIG_ENV" == *"per"* ]]; then
-      cp /opt/output/router_config_per.json /etc/router_config.json
-    fi
-  fi
   touch /installed
 fi
 
