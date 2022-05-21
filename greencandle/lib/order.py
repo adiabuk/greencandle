@@ -308,15 +308,26 @@ class Trade():
 
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
+            commission_dict = {} if self.test_trade or self.test_data or 'fills' not in \
+                    trade_result else self.__get_commission(trade_result)
 
             if self.test_data or self.test_trade or \
                     (not self.test_trade and 'transactTime' in trade_result):
+
+                try:
+                    base_comm = commission_dict[get_base(pair)]
+                    amt_str = float(amt_str) - base_comm
+                    amt_str = sub_perc(0.1, amt_str)
+                except (KeyError, TypeError):  # Empty dict, or no commission for base
+                    pass
+
 
                 dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
                                    quote_amount=amount_to_use, base_amount=amt_str,
                                    borrowed=amount_to_borrow,
                                    multiplier=self.config.main.multiplier,
-                                   direction=self.config.main.trade_direction, symbol_name=quote)
+                                   direction=self.config.main.trade_direction,
+                                   symbol_name=quote, commission=str(commission_dict))
 
                 self.__send_notifications(pair=pair, current_time=current_time,
                                           fill_price=fill_price, interval=self.interval,
@@ -404,6 +415,8 @@ class Trade():
                         return
 
                     quote_amount = trade_result.get('cummulativeQuoteQty', quote_amount)
+                    commission_dict = {} if self.test_trade or self.test_data or 'fills' not in \
+                        trade_result else self.__get_commission(trade_result)
 
                 else:
                     trade_result = True
@@ -416,10 +429,20 @@ class Trade():
                     # 1. we are using test_data
                     # 2. we performed a test trade which was successful - (empty dict)
                     # 3. we proformed a real trade which was successful - (transactTime in dict)
+
+
+                    try:
+                        base_comm = commission_dict[get_base(pair)]
+                        amt_str = float(amt_str) - base_comm
+                        amt_str = sub_perc(0.1, amt_str)
+                    except (KeyError, TypeError):  # Empty dict, or no commission for base
+                        pass
+
                     db_result = dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
                                                    quote_amount=quote_amount, base_amount=amount,
                                                    direction=self.config.main.trade_direction,
-                                                   symbol_name=quote)
+                                                   symbol_name=quote,
+                                                   commission=str(commission_dict))
                     if db_result:
                         self.__send_notifications(pair=pair, current_time=current_time,
                                                   fill_price=fill_price, interval=self.interval,
@@ -459,6 +482,23 @@ class Trade():
             self.logger.info("Current price %s, Fill price: %s" % (current_price, fill_price))
             return fill_price
         return None
+
+    @staticmethod
+    def __get_commission(trade_result):
+        """
+        Extract and collate commission from trade result dict
+
+        """
+
+        if 'fills' in trade_result:
+            comm = defaultdict(float)
+            for fill in trade_result['fills']:
+                comm[fill['commissionAsset']] += float(fill['commission'])
+        else:
+            comm = {}
+
+        return comm
+
 
     @GET_EXCEPTIONS
     def __close_margin_short(self, short_list, drawdowns=None, drawups=None):
@@ -581,15 +621,27 @@ class Trade():
                 amt_str = amount_to_use
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
+            commission_dict = {} if self.test_trade or self.test_data or 'fills' not in \
+                    trade_result else self.__get_commission(trade_result)
 
             if self.test_data or self.test_trade or \
                     (not self.test_trade and 'transactTime' in trade_result):
+
+                try:
+                    base_comm = commission_dict[get_quote(pair)]
+                    amt_str = float(amt_str) - base_comm
+                    amt_str = sub_perc(0.1, amt_str)
+                except (KeyError, TypeError):  # Empty dict, or no commission for base
+                    pass
+
+
                 dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
                                    quote_amount=quote_amount,
                                    base_amount=amt_str, borrowed=amount_to_borrow,
                                    multiplier=self.config.main.multiplier,
                                    direction=self.config.main.trade_direction,
-                                   symbol_name=get_quote(pair))
+                                   symbol_name=get_quote(pair),
+                                   commission=str(commission_dict))
 
                 self.__send_notifications(pair=pair, current_time=current_time,
                                           fill_price=current_price, interval=self.interval,
