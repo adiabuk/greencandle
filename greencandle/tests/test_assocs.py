@@ -20,7 +20,7 @@ class TestAssocs(unittest.TestCase):
 
         envs = (('per', 'PROD'), ('prod', 'PROD'), ('stag', 'STAG'))
         for env, host in envs:
-            os.system("configstore package process_templates {} /tmp".format(env))
+            os.system("sudo configstore package process_templates {} /tmp".format(env))
             with open('/tmp/router_config.json', 'r') as json_file:
                 router_config = json.load(json_file)
             with open("install/docker-compose_{}.yml"
@@ -41,9 +41,6 @@ class TestAssocs(unittest.TestCase):
                     # alert uses hosts file in non-stag envs
                     self.assertIn(item, service_list)
 
-
-
-
     @staticmethod
     def test_assocs():
         """
@@ -51,7 +48,7 @@ class TestAssocs(unittest.TestCase):
         """
         envs = (('per', 'PROD'), ('prod', 'PROD'), ('stag', 'STAG'))
         for env, host in envs:
-            os.system("configstore package process_templates {} /tmp".format(env))
+            os.system("sudo configstore package process_templates {} /tmp".format(env))
             os.environ['HOST'] = host
             names = get_pairs()[-1]
             rev_names = {v: k for k, v in names.items()}
