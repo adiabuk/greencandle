@@ -193,10 +193,13 @@ class Trade():
         else:
             raise InvalidTradeError("Invalid trade type")
 
-    def get_borrowed(self, mode, pair, symbol):
+    def get_borrowed(self, pair, symbol):
         """
         get amount borrowed from exchange for both cross and isolated modes
         """
+
+        mode = 'isolated' if self.config.main.isolated else 'cross'
+
         if mode == 'cross':
             details = self.client.get_cross_margin_details()
             for item in details['userAssets']:
@@ -204,6 +207,7 @@ class Trade():
                     return float(item['borrowed'])
                 else:
                     return 0
+
         elif mode == 'isolated':
             details = self.client.get_isolated_margin_details(pair)
             if details['assets'][0]['quoteAsset']['asset'] == symbol:
@@ -494,6 +498,9 @@ class Trade():
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
                     continue
 
+                actual_borrowed = self.get_borrowed(pair=pair, symbol=base)
+                borrowed = actual_borrowed if borrowed > actual_borrowed else borrowed
+
                 self.logger.info("Trying to repay: %s for pair %s" %(borrowed, pair))
 
                 repay_result = self.client.margin_repay(
@@ -685,6 +692,8 @@ class Trade():
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
                     continue
 
+                actual_borrowed = self.get_borrowed(pair=pair, symbol=quote)
+                borrowed = actual_borrowed if borrowed > actual_borrowed else borrowed
                 self.logger.info("Trying to repay: %s for pair %s" %(borrowed, pair))
                 repay_result = self.client.margin_repay(
                     symbol=pair, quantity=borrowed,
