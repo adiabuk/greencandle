@@ -129,8 +129,8 @@ class Mysql():
         usd_rate, gbp_rate = self.get_rates(symbol_name)
         command = """insert into trades (pair, open_time, open_price, base_in, `interval`,
                      quote_in, name, borrowed, multiplier, direction, open_usd_rate, open_gbp_rate,
-                     open_commission) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}", "{5}", "{6}",
-                     "{7}", "{8}", "{9}", "{10}", "{11}, "{12}");
+                     comm_open) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}", "{5}", "{6}", "{7}",
+                     "{8}", "{9}", "{10}", "{11}", "{12}");
                    """.format(pair, date, '%.15f' % float(price), '%.15f' % float(base_amount),
                               self.interval, quote_amount, config.main.name, borrowed,
                               multiplier, direction, usd_rate, gbp_rate, commission)

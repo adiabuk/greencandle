@@ -415,14 +415,14 @@ class Trade():
                         return
 
                     quote_amount = trade_result.get('cummulativeQuoteQty', quote_amount)
-                    commission_dict = {} if self.test_trade or self.test_data or 'fills' not in \
-                        trade_result else self.__get_commission(trade_result)
 
                 else:
                     trade_result = True
 
                 fill_price = current_price if self.test_trade or self.test_data else \
                         self.__get_fill_price(current_price, trade_result)
+                commission_dict = {} if self.test_trade or self.test_data or 'fills' not in \
+                    trade_result else self.__get_commission(trade_result)
                 if self.test_data or self.test_trade or \
                         (not self.test_trade and 'transactTime' in trade_result):
                     # only insert into db, if:
