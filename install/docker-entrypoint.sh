@@ -9,7 +9,8 @@ fi
 
 if [[ ! -e /installed ]]; then
   configstore package process_templates --ignore-role --basedir /opt/config $CONFIG_ENV /opt/output
-  cp /opt/output/greencandle.ini /etc/greencandle.ini || true
+  cp /opt/output/greencandle.ini /etc/
+  cp /opt/output/router-config.json /etc
   if [[ "$HOSTNAME" == *"webserver"* ]]; then
     cp /opt/output/default.conf /etc/nginx/conf.d/default.conf || true
     cp /opt/output/nginx.conf /etc/nginx/ || true
