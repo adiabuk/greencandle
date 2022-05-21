@@ -193,6 +193,29 @@ class Trade():
         else:
             raise InvalidTradeError("Invalid trade type")
 
+    def get_borrowed(self, mode, pair, symbol):
+        """
+        get amount borrowed from exchange for both cross and isolated modes
+        """
+        if mode == 'cross':
+            details = self.client.get_cross_margin_details()
+            for item in details['userAssets']:
+                if item['asset'] == symbol:
+                    return float(item['borrowed'])
+                else:
+                    return 0
+        elif mode == 'isolated':
+            details = self.client.get_isolated_margin_details(pair)
+            if details['assets'][0]['quoteAsset']['asset'] == symbol:
+                return float(details['assets'][0]['quoteAsset']['borrowed'])
+            elif details['assets'][0]['baseAsset']['asset'] == symbol:
+                return float(details['assets'][0]['baseAsset']['borrowed'])
+            else:
+                return 0
+        else:
+            return 0
+
+
     def get_balance(self, dbase, account=None, pair=None):
         """
         Choose between spot/cross/isolated/test balances and return
