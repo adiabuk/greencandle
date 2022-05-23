@@ -253,7 +253,7 @@ class Mysql():
         command = """update trades set close_price={0},close_time="{1}",
         quote_out="{2}", base_out="{3}", closed_by="{6}", drawdown_perc=abs(round({7},1)),
         drawup_perc=abs(round({8},1)), close_usd_rate="{9}", close_gbp_rate="{10}",
-        commission="{11}" where close_price is
+        comm_close="{11}" where close_price is
         NULL and `interval`="{4}" and pair="{5}" and (name = "{6}" or
         name like "api") and (SELECT @uids:= CONCAT_WS(",", id, @uids)) ORDER BY id LIMIT 1""" \
         .format('%.15f' % float(close_price),
