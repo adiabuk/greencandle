@@ -54,6 +54,8 @@ elif [[ -z $GET && -z $PUT ]]; then
 elif [[ -n $GET ]]; then
   mysqldump --protocol=tcp -P $PORT -u root -ppassword --no-data greencandle > $FILENAME
   mysqldump --protocol=tcp -P $PORT -u root -ppassword greencandle exchange >> $FILENAME
+  sed -i 's/,)/)/g' $FILENAME
+
 elif [[ -n $PUT ]]; then
   mysql --protocol=tcp -P $PORT -u root -ppassword greencandle < $FILENAME
 fi
