@@ -1,0 +1,6 @@
+{
+  "name": "stag-any-spot-long",
+  "trade_direction": "long",
+  "trade_multiplier": "1",
+  "trade_type": "spot"
+}
