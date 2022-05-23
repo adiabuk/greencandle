@@ -506,7 +506,7 @@ class Trade():
         Buy back items in short_list
         """
 
-        self.logger.info("We need to close short %s" % short_list)
+        self.logger.info("We need to close margin short %s" % short_list)
         dbase = Mysql(test=self.test_data, interval=self.interval)
         name = self.config.main.name
         for pair, current_time, current_price, event in short_list:
@@ -657,7 +657,7 @@ class Trade():
         Sell items in sell_list
         """
 
-        self.logger.info("We need to sell %s" % sell_list)
+        self.logger.info("We need to close spot long %s" % sell_list)
         dbase = Mysql(test=self.test_data, interval=self.interval)
         name = self.config.main.name
         for pair, current_time, current_price, event in sell_list:
@@ -719,7 +719,7 @@ class Trade():
         Sell items in sell_list
         """
 
-        self.logger.info("We need to close long %s" % sell_list)
+        self.logger.info("We need to close margin long %s" % sell_list)
         dbase = Mysql(test=self.test_data, interval=self.interval)
         name = self.config.main.name
         for pair, current_time, current_price, event in sell_list:
