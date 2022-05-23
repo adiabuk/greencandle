@@ -244,7 +244,7 @@ class Mysql():
 
     @get_exceptions
     def update_trades(self, pair, close_time, close_price, quote, base_out,
-                      name=None, drawdown=0, drawup=0, symbol_name=None):
+                      name=None, drawdown=0, drawup=0, symbol_name=None, commission=None):
         """
         Update an existing trade with sell price
         """
@@ -252,14 +252,15 @@ class Mysql():
         job_name = name if name else config.main.name
         command = """update trades set close_price={0},close_time="{1}",
         quote_out="{2}", base_out="{3}", closed_by="{6}", drawdown_perc=abs(round({7},1)),
-        drawup_perc=abs(round({8},1)), close_usd_rate="{9}", close_gbp_rate="{10}" where close_price is
+        drawup_perc=abs(round({8},1)), close_usd_rate="{9}", close_gbp_rate="{10}",
+        commission="{11}" where close_price is
         NULL and `interval`="{4}" and pair="{5}" and (name = "{6}" or
         name like "api") and (SELECT @uids:= CONCAT_WS(",", id, @uids)) ORDER BY id LIMIT 1""" \
         .format('%.15f' % float(close_price),
                 close_time, quote,
                 '%.15f' % float(base_out),
                 self.interval, pair, job_name, drawdown,
-                drawup, usd_rate, gbp_rate)
+                drawup, usd_rate, gbp_rate, str(commission))
         self.__run_sql_query("SET @uids := null;")
         result = self.__run_sql_query(command)
         if result != 1:

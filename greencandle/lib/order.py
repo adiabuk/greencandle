@@ -554,6 +554,8 @@ class Trade():
 
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
+            commission_dict = {} if self.test_trade or self.test_data or 'fills' not in \
+                    trade_result else self.__get_commission(trade_result)
 
             if self.test_data or self.test_trade or \
                     (not self.test_trade and 'transactTime' in trade_result):
@@ -563,7 +565,8 @@ class Trade():
                                                close_price=fill_price,
                                                quote=quote_out, base_out=quantity, name=name,
                                                drawdown=drawdowns[pair], drawup=drawups[pair],
-                                               symbol_name=quote)
+                                               symbol_name=quote,
+                                               commission=commission_dict)
                 profit = dbase.fetch_sql_data("select usd_profit from profit "
                                               "where id={}".format(trade_id),
                                               header=False)[0][0]
@@ -682,6 +685,8 @@ class Trade():
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
                     continue
 
+            commission_dict = {} if self.test_trade or self.test_data or 'fills' not in \
+                    trade_result else self.__get_commission(trade_result)
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
 
@@ -695,7 +700,8 @@ class Trade():
                                                    close_price=fill_price, quote=quote_out,
                                                    base_out=quantity, name=name,
                                                    drawdown=drawdowns[pair], drawup=drawups[pair],
-                                                   symbol_name=get_quote(pair))
+                                                   symbol_name=get_quote(pair),
+                                                   commission=commission_dict)
                     profit = dbase.fetch_sql_data("select usd_profit from profit "
                                                   "where id={}".format(trade_id),
                                                   header=False)[0][0]
@@ -758,6 +764,8 @@ class Trade():
 
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
+            commission_dict = {} if self.test_trade or self.test_data or 'fills' not in \
+                trade_result else self.__get_commission(trade_result)
 
             if self.test_data or self.test_trade or not self.test_trade:
                 if name == "api":
@@ -767,7 +775,8 @@ class Trade():
                                                close_price=fill_price, quote=quote_out,
                                                base_out=quantity, name=name,
                                                drawdown=drawdowns[pair],
-                                               drawup=drawups[pair], symbol_name=quote)
+                                               drawup=drawups[pair], symbol_name=quote,
+                                               commission=commission_dict)
 
 
                 profit = dbase.fetch_sql_data("select usd_profit from profit "
