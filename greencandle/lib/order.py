@@ -541,15 +541,18 @@ class Trade():
                 actual_borrowed = self.get_borrowed(pair=pair, symbol=base)
                 borrowed = actual_borrowed if borrowed > actual_borrowed else borrowed
 
-                self.logger.info("Trying to repay: %s %s for pair %s" %(borrowed, base, pair))
+                if float(borrowed) > 0:
+                    self.logger.info("Trying to repay: %s %s for pair %s" %(borrowed, base, pair))
+                    repay_result = self.client.margin_repay(
+                        symbol=pair, quantity=borrowed,
+                        isolated=str2bool(self.config.main.isolated),
+                        asset=base)
+                    if "msg" in repay_result:
+                        self.logger.error("Repay error-close %s: %s" % (pair, repay_result))
 
-                repay_result = self.client.margin_repay(
-                    symbol=pair, quantity=borrowed,
-                    isolated=str2bool(self.config.main.isolated),
-                    asset=base)
-                if "msg" in repay_result:
-                    self.logger.error("Repay error-close %s: %s" % (pair, repay_result))
-
+                    self.logger.info("Repay result for %s: %s" % (pair, repay_result))
+                else:
+                    self.logger.info("No borrowed funds to repay for %s" % pair)
 
 
             fill_price = current_price if self.test_trade or self.test_data else \
@@ -752,15 +755,20 @@ class Trade():
 
                 actual_borrowed = self.get_borrowed(pair=pair, symbol=quote)
                 borrowed = actual_borrowed if borrowed > actual_borrowed else borrowed
-                self.logger.info("Trying to repay: %s %s for pair %s" %(borrowed, quote, pair))
-                repay_result = self.client.margin_repay(
-                    symbol=pair, quantity=borrowed,
-                    isolated=str2bool(self.config.main.isolated),
-                    asset=quote)
-                if "msg" in repay_result:
-                    self.logger.error("Repay error-close %s: %s" % (pair, repay_result))
 
-                self.logger.info(repay_result)
+
+                if float(borrowed) > 0:
+                    self.logger.info("Trying to repay: %s %s for pair %s" %(borrowed, quote, pair))
+                    repay_result = self.client.margin_repay(
+                        symbol=pair, quantity=borrowed,
+                        isolated=str2bool(self.config.main.isolated),
+                        asset=quote)
+                    if "msg" in repay_result:
+                        self.logger.error("Repay error-close %s: %s" % (pair, repay_result))
+
+                    self.logger.info("Repay result for %s: %s" % (pair, repay_result))
+                else:
+                    self.logger.info("No borrowed funds to repay for %s" % pair)
 
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
