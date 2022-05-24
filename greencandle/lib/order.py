@@ -522,7 +522,7 @@ class Trade():
 
             open_price, quote_in, _, _, borrowed = dbase.get_trade_value(pair)[0]
             perc_inc = - (perc_diff(open_price, current_price))
-            quote_out = add_perc(perc_inc, quote_in)
+            quote_out = sub_perc(perc_inc, quote_in)
 
             self.logger.info("Closing %s of %s for %.15f %s"
                              % (quantity, pair, float(current_price), quantity))
@@ -600,7 +600,6 @@ class Trade():
             proposed_base_amount = self.amount_to_use(current_base_bal)
             amount_to_borrow = float(proposed_base_amount) * float(self.config.main.multiplier)
             amount_to_use = sub_perc(1, amount_to_borrow)  # use 99% of borrowed funds
-
             amt_str = get_step_precision(pair, amount_to_use)
             quote_amount = base2quote(amt_str, pair)
 
