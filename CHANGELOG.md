@@ -1,6 +1,10 @@
 
 # Releases
 
+# 3.6.1
+* Fix comparison type
+* Fix API config location
+
 # 3.6
 * Fix for lower timeframe timestamps being truncated
 * Consolidate router configs into a single template
