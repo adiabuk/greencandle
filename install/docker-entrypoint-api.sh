@@ -19,6 +19,7 @@ done
 if [[ ! -e /installed ]]; then
   configstore package process_templates --ignore-role --basedir /opt/config $CONFIG_ENV /opt/output
   cp /opt/output/greencandle.ini /etc/greencandle.ini || true
+  cp /opt/output/router-config.json /etc || true
   mkdir -p /etc/gcapi /var/www/html ||true
   echo $(configstore package get $CONFIG_ENV base_env --basedir /opt/config) > /var/www/html/env.txt
   cp /opt/config/raw/* /etc/gcapi/
