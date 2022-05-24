@@ -12,7 +12,7 @@ import requests
 import notify_run
 from str2bool import str2bool
 from . import config
-from .common import AttributeDict
+from .common import AttributeDict, sub_perc, format_usd
 
 
 def send_gmail_alert(action, pair, price):
@@ -90,9 +90,17 @@ def send_slack_trade(**kwargs):
             kwargs[key] = "N/A"
     try:
         kwargs['price'] = str(kwargs['price']).rstrip("0")
-        kwargs['perc'] = "%.2f" % (kwargs['perc'])
+        kwargs['perc'] = "%.4f" % (kwargs['perc'])
+        commission = 0.2 if float(kwargs['perc']) > 0 else -0.2
+        kwargs['net_perc'] = str("%.4f" % sub_perc(commission, float(kwargs['perc']))) + "%"
+        kwargs['net_profit'] = format_usd(sub_perc(commission, float(kwargs['usd_profit'])))
+        kwargs['usd_profit'] = format_usd(kwargs['usd_profit'])
+        kwargs['perc'] = str(kwargs['perc']) + "%"
+
     except TypeError:
-        pass
+        kwargs['net_perc'] = 'N/A'
+        kwargs['net_profit'] = 'N/A'
+
 
     if not str2bool(config.slack.slack_active):
         return
@@ -115,14 +123,18 @@ def send_slack_trade(**kwargs):
              "fields":[
                  {"value": ("• Pair: {0}\n"
                             "• Price: {1}\n"
-                            "• Percentage: {2}\n"
-                            "• title: {3}\n"
+                            "• title: {2}\n"
+                            "• Percentage: {3}\n"
                             "• usd_profit: {4}\n"
+                            "• Net perc: {5}\n"
+                            "• Net usd_profit: {6}\n"
                             "\n\n".format(kwargs.pair,
                                           kwargs.price,
-                                          kwargs.perc,
                                           title,
-                                          kwargs.usd_profit)),
+                                          kwargs.perc,
+                                          kwargs.usd_profit,
+                                          kwargs.net_perc,
+                                          kwargs.net_profit)),
                   "short":"false"
                  }]}]}
 

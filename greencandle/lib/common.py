@@ -3,7 +3,7 @@ Common functions that don't belong anywhere else
 """
 
 import sys
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from babel.numbers import format_currency
 import numpy
 
@@ -33,7 +33,10 @@ def format_usd(amount):
     """
     Return formatted USD string, with dollar sign and 2dp
     """
-    return str(format_currency(amount, 'USD', locale='en_US'))
+    try:
+        return str(format_currency(amount, 'USD', locale='en_US'))
+    except InvalidOperation:
+        return "N/A"
 
 def arg_decorator(func):
     """
