@@ -126,6 +126,9 @@ class Trade():
         Main open trade method
         Will choose between spot/margin and long/short
         """
+        if self.config.main.trade_type == "margin" and float(self.config.main.multiplier) < 1:
+            raise RuntimeError("multiplier needs to be more than 1 for margin trades")
+
         items_list = self.check_pairs(items_list)
         if not items_list:
             self.logger.warning("No items to open trade with")
