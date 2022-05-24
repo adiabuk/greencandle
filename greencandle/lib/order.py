@@ -542,7 +542,7 @@ class Trade():
                     continue
 
                 actual_borrowed = self.get_borrowed(pair=pair, symbol=base)
-                borrowed = actual_borrowed if borrowed > actual_borrowed else borrowed
+                borrowed = actual_borrowed if float(borrowed) > float(actual_borrowed) else borrowed
 
                 if float(borrowed) > 0:
                     self.logger.info("Trying to repay: %s %s for pair %s" %(borrowed, base, pair))
@@ -757,7 +757,7 @@ class Trade():
                     continue
 
                 actual_borrowed = self.get_borrowed(pair=pair, symbol=quote)
-                borrowed = actual_borrowed if borrowed > actual_borrowed else borrowed
+                borrowed = actual_borrowed if float(borrowed) > float(actual_borrowed) else borrowed
 
 
                 if float(borrowed) > 0:
