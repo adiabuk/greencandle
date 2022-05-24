@@ -112,7 +112,7 @@ class Trade():
         final_list = []
         manual = "any" in self.config.main.name
         for item in items_list:
-            if current_trades and item[0] in current_trades[0]:
+            if current_trades and [trade for trade in current_trades if item[0] in trade]:
                 self.logger.warning("We already have a trade of %s, skipping..." % item[0])
             elif not manual and (item[0] not in self.config.main.pairs and not self.test_data):
                 self.logger.error("Pair %s not in main_pairs, skipping..." % item[0])
@@ -665,6 +665,7 @@ class Trade():
         name = self.config.main.name
         for pair, current_time, current_price, event in sell_list:
             quantity = dbase.get_quantity(pair)
+
             if not quantity:
                 self.logger.info("close_spot_long: unable to find quantity for %s" % pair)
                 continue
