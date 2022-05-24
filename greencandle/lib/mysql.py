@@ -112,8 +112,8 @@ class Mysql():
         self.__run_sql_query(command)
 
     @get_exceptions
-    def insert_trade(self, pair, date, price, quote_amount, base_amount, borrowed='', multiplier='',
-                     direction='', symbol_name=None, commission=None):
+    def insert_trade(self, pair, date, price, quote_amount, base_amount, borrowed='0',
+                     multiplier='0', direction='', symbol_name=None, commission=None):
         """
         Insert new trade into DB
         Args:
