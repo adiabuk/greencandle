@@ -1,6 +1,19 @@
 
 # Releases
 
+# 3.6
+* Fix for lower timeframe timestamps being truncated
+* Consolidate router configs into a single template
+* Remove backups from gc cron
+* Get owed borrowed amount from exchange before repaying
+* Deduct commission from amount held on trade-open
+* Log commission data to DB
+* Fix for incompatibility issue between mysql version and dump tool
+* Add default value for borrowed amount/multiplier for all trades
+* Check for borrowed amount before attempting to repay it
+* Fix profit amount for short trades
+* Show profit/perc net of commission in notifications
+
 # 3.5
 * Alert redirection from all envs
 * add Supertrend and StochRSI indicators
