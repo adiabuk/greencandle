@@ -92,7 +92,7 @@ def send_slack_trade(**kwargs):
         kwargs['price'] = str(kwargs['price']).rstrip("0")
         kwargs['perc'] = "%.4f" % (kwargs['perc'])
         commission = 0.2 if float(kwargs['perc']) > 0 else -0.2
-        kwargs['net_perc'] = str("%.4f" % sub_perc(commission, float(kwargs['perc']))) + "%"
+        kwargs['net_perc'] = str("%.4f" %  float(kwargs['perc']) - commission + "%"
         kwargs['net_profit'] = format_usd(sub_perc(commission, float(kwargs['usd_profit'])))
         kwargs['usd_profit'] = format_usd(kwargs['usd_profit'])
         kwargs['perc'] = str(kwargs['perc']) + "%"
