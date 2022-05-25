@@ -80,7 +80,7 @@ def respond():
     try:
         mysql.insert_api_trade(**request.json)
     except KeyError:
-        logger.error("Missing required field in json: %s" % str(request.json))
+        LOGGER.error("Missing required field in json: %s" % str(request.json))
 
     return Response(status=200)
 
