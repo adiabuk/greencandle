@@ -77,7 +77,11 @@ def respond():
         send_trade(payload, host)
     LOGGER.info("Request received: %s" %(request.json))
     mysql = Mysql()
-    mysql.insert_api_trade(**request.json)
+    try:
+        mysql.insert_api_trade(**request.json)
+    except KeyError:
+        logger.error("Missing required field in json: %s" % str(request.json))
+
     return Response(status=200)
 
 @arg_decorator
