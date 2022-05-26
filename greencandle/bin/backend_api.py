@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-position,no-member,logging-not-lazy
+#pylint: disable=wrong-import-position,no-member,logging-not-lazy,eval-used
 
 """
 API trading module
@@ -8,14 +8,15 @@ import sys
 from time import strftime, gmtime
 import atexit
 from flask import Flask, request, Response
+from apscheduler.schedulers.background import BackgroundScheduler
 from greencandle.lib.common import arg_decorator
 from greencandle.lib import config
 config.create_config()
 from greencandle.lib.binance_common import get_current_price
 from greencandle.lib.run import prod_int_check
+from greencandle.lib.redis_conn import Redis
 from greencandle.lib.logger import get_logger
 from greencandle.lib.order import Trade
-from apscheduler.schedulers.background import BackgroundScheduler
 
 
 TEST = bool(len(sys.argv) > 1 and sys.argv[1] == '--test')
