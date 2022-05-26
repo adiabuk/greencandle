@@ -20,6 +20,7 @@ fi
 echo "env: $env";
 echo "version: $version";
 
+export HOST_IP=$(ip -4 addr show docker0 | grep -Po 'inet \K[\d.]+')
 export TAG=$version
 export HOSTNAME=$env
 
