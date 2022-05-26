@@ -91,7 +91,7 @@
       "is_secret": false
     },
     "close_rule1": {
-      "value": "",
+      "value": "None",
       "is_binary": false,
       "is_secret": false
     },
@@ -211,7 +211,7 @@
       "is_secret": false
     },
     "indicators": {
-      "value": "",
+      "value": "None",
       "is_binary": false,
       "is_secret": false
     },
@@ -271,7 +271,7 @@
       "is_secret": false
     },
     "open_rule1": {
-      "value": "",
+      "value": "None",
       "is_binary": false,
       "is_secret": false
     },
@@ -321,7 +321,7 @@
       "is_secret": false
     },
     "pairs": {
-      "value": "",
+      "value": "BTCUSDT",
       "is_binary": false,
       "is_secret": false
     },

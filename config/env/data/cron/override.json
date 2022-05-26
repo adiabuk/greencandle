@@ -1,10 +1,7 @@
 {
-  "close_rule1": "None",
   "divisor": "3",
-  "indicators": "None",
   "logging_level": "50",
   "name": "cron",
-  "open_rule1": "None",
   "pairs": "BTCUSDT",
   "rate_indicator": "1"
 }
