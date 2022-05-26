@@ -249,12 +249,12 @@ services:
     environment:
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/5MA/api/btc
+      - DOCKER_HOST=$(ip -4 addr show docker0 | grep -Po 'inet \K[\d.]+')
     ports:
       - 20000
     links:
       - stag-base-mysql:mysql
       - stag-base-redis:redis
-      - stag-be-api-router:router
     depends_on:
       - stag-base-mysql
       - stag-base-redis
@@ -282,12 +282,12 @@ services:
     environment:
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/5MA/api/usdt
+      - DOCKER_HOST=$(ip -4 addr show docker0 | grep -Po 'inet \K[\d.]+')
     ports:
       - 20000
     links:
       - stag-base-mysql:mysql
       - stag-base-redis:redis
-      - stag-be-api-router:router
     depends_on:
       - stag-base-mysql
       - stag-base-redis
@@ -315,6 +315,7 @@ services:
     environment:
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/5MA/api/eth
+      - DOCKER_HOST=$(ip -4 addr show docker0 | grep -Po 'inet \K[\d.]+')
     ports:
       - 20000
     links:
@@ -347,12 +348,12 @@ services:
     environment:
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/any/spot
+      - DOCKER_HOST=$(ip -4 addr show docker0 | grep -Po 'inet \K[\d.]+')
     ports:
       - 20000
     links:
       - stag-base-mysql:mysql
       - stag-base-redis:redis
-      - stag-be-api-router:router
     depends_on:
       - stag-base-mysql
       - stag-base-redis
@@ -380,12 +381,12 @@ services:
     environment:
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/any
+      - DOCKER_HOST=$(ip -4 addr show docker0 | grep -Po 'inet \K[\d.]+')
     ports:
       - 20000
     links:
       - stag-base-mysql:mysql
       - stag-base-redis:redis
-      - stag-be-api-router:router
     depends_on:
       - stag-base-mysql
       - stag-base-redis
@@ -413,12 +414,12 @@ services:
     environment:
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/any/short
+      - DOCKER_HOST=$(ip -4 addr show docker0 | grep -Po 'inet \K[\d.]+')
     ports:
       - 20000
     links:
       - stag-base-mysql:mysql
       - stag-base-redis:redis
-      - stag-be-api-router:router
     depends_on:
       - stag-base-mysql
       - stag-base-redis
