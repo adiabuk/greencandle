@@ -81,7 +81,7 @@
       "is_secret": false
     },
     "base_env": {
-      "value": "test",
+      "value": "data",
       "is_binary": false,
       "is_secret": false
     },
