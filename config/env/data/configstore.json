@@ -91,7 +91,7 @@
       "is_secret": false
     },
     "close_rule1": {
-      "value": "1\u003e2",
+      "value": "",
       "is_binary": false,
       "is_secret": false
     },
@@ -211,7 +211,7 @@
       "is_secret": false
     },
     "indicators": {
-      "value": "get_rsi;RSI;14 get_bb;upper;20,2 get_bb;lower;20,2 get_bb;middle;20,2",
+      "value": "",
       "is_binary": false,
       "is_secret": false
     },
@@ -271,7 +271,7 @@
       "is_secret": false
     },
     "open_rule1": {
-      "value": "1\u003e2",
+      "value": "",
       "is_binary": false,
       "is_secret": false
     },
@@ -346,7 +346,7 @@
       "is_secret": false
     },
     "rate_indicator": {
-      "value": "RSI_14",
+      "value": "",
       "is_binary": false,
       "is_secret": false
     },

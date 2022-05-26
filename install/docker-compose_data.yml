@@ -36,7 +36,7 @@ services:
       - data-base-redis-local
       - data-be-get_4h
     environment:
-      - CONFIG_ENV=data/short1
+      - CONFIG_ENV=data/4h/short1
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -65,7 +65,7 @@ services:
       - data-base-redis-local
       - data-be-get_4h
     environment:
-      - CONFIG_ENV=data/short3
+      - CONFIG_ENV=data/4h/short3
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -94,7 +94,7 @@ services:
       - data-base-redis-local
       - data-be-get_4h
     environment:
-      - CONFIG_ENV=data/short2
+      - CONFIG_ENV=data/4h/short2
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -123,7 +123,7 @@ services:
       - data-base-redis-local
       - data-be-get_4h
     environment:
-      - CONFIG_ENV=data/long1
+      - CONFIG_ENV=data/4h/long1
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -152,7 +152,7 @@ services:
       - data-base-redis-local
       - data-be-get_4h
     environment:
-      - CONFIG_ENV=data/long3
+      - CONFIG_ENV=data/4h/long3
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -181,7 +181,7 @@ services:
       - data-base-redis-local
       - data-be-get_4h
     environment:
-      - CONFIG_ENV=data/long2
+      - CONFIG_ENV=data/4h/long2
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -208,7 +208,7 @@ services:
       - data-base-mysql-local
       - data-base-redis-local
     environment:
-      - CONFIG_ENV=data/get_data
+      - CONFIG_ENV=data/4h/get_data
       - HOST=$HOSTNAME
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
