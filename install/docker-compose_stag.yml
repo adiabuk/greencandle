@@ -230,8 +230,6 @@ services:
       - stag-be-alert
       - stag-base-mysql
       - stag-base-redis
-      - stag-be-any-long
-      - stag-be-any-short
     entrypoint: /docker-entrypoint.sh api_router --test
     volumes:
       - /data:/data
