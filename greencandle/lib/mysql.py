@@ -147,7 +147,7 @@ class Mysql():
                      ('{0}', '{1}', '{2}', '{3}', '{4}')""".format(kwargs.pair,
                                                                    kwargs.text,
                                                                    kwargs.action,
-                                                                   kwargs.price,
+                                                                   kwargs.get('price', 'N/A'),
                                                                    kwargs.strategy)
         result = self.__run_sql_query(command)
         return result == 1
