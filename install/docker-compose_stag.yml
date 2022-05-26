@@ -256,6 +256,7 @@ services:
     links:
       - stag-base-mysql:mysql
       - stag-base-redis:redis
+      - stag-be-api-router:router
     depends_on:
       - stag-base-mysql
       - stag-base-redis
@@ -288,6 +289,7 @@ services:
     links:
       - stag-base-mysql:mysql
       - stag-base-redis:redis
+      - stag-be-api-router:router
     depends_on:
       - stag-base-mysql
       - stag-base-redis
@@ -352,6 +354,7 @@ services:
     links:
       - stag-base-mysql:mysql
       - stag-base-redis:redis
+      - stag-be-api-router:router
     depends_on:
       - stag-base-mysql
       - stag-base-redis
@@ -384,6 +387,7 @@ services:
     links:
       - stag-base-mysql:mysql
       - stag-base-redis:redis
+      - stag-be-api-router:router
     depends_on:
       - stag-base-mysql
       - stag-base-redis
@@ -416,6 +420,7 @@ services:
     links:
       - stag-base-mysql:mysql
       - stag-base-redis:redis
+      - stag-be-api-router:router
     depends_on:
       - stag-base-mysql
       - stag-base-redis

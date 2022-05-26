@@ -11,6 +11,7 @@ import pickle
 import gzip
 from concurrent.futures import ThreadPoolExecutor
 from glob import glob
+import requests
 from binance.binance import Binance
 from .engine import Engine
 from .redis_conn import Redis
@@ -212,7 +213,7 @@ def parallel_test(pairs, interval, data_dir, indicators):
     print(get_recent_profit(True, interval))
 
 @GET_EXCEPTIONS
-def prod_int_check(interval, test):
+def prod_int_check(interval, test, alert=False):
     """Check price between candles for slippage below stoploss"""
     dbase = Mysql(test=False, interval=interval)
     current_trades = dbase.get_trades()
@@ -241,6 +242,12 @@ def prod_int_check(interval, test):
             drawups[pair] = redis.get_drawup(pair)['perc']
             redis.rm_drawup(pair)
             redis.rm_drawdown(pair)
+            if alert:
+                payload = {"pair":pair, "host":"alert",
+                           "text": "Closing API trade according to TP/SL rules",
+                           "strategy": config.main.name, "action":"close", "edited":True}
+                url = "http://router:1080/webhook"
+                requests.post(url, json=payload, timeout=1)
 
     trade = Trade(interval=interval, test_trade=test, test_data=False, config=config)
     trade.close_trade(sells, drawdowns=drawdowns, drawups=drawups)

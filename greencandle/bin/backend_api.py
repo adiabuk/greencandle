@@ -6,13 +6,17 @@ API trading module
 """
 import sys
 from time import strftime, gmtime
+import atexit
 from flask import Flask, request, Response
 from greencandle.lib.common import arg_decorator
 from greencandle.lib import config
 config.create_config()
 from greencandle.lib.binance_common import get_current_price
+from greencandle.lib.run import prod_int_check
 from greencandle.lib.logger import get_logger
 from greencandle.lib.order import Trade
+from apscheduler.schedulers.background import BackgroundScheduler
+
 
 TEST = bool(len(sys.argv) > 1 and sys.argv[1] == '--test')
 APP = Flask(__name__)
@@ -57,6 +61,13 @@ def healthcheck():
     """
     return Response(status=200)
 
+def intermittent_check():
+    """
+    Check for SL/TP
+    """
+    prod_int_check(config.main.interval, True, alert=True)
+
+
 @arg_decorator
 def main():
     """
@@ -66,7 +77,13 @@ def main():
     Usage: backend_api
     """
 
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(func=intermittent_check, trigger="interval", seconds=60)
+    scheduler.start()
     APP.run(debug=True, host='0.0.0.0', port=20000, threaded=True)
+
+    # Shut down the scheduler when exiting the app
+    atexit.register(scheduler.shutdown)
 
 if __name__ == "__main__":
     main()
