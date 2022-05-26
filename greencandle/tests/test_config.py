@@ -15,7 +15,7 @@ class TestConfig(unittest.TestCase):
         """
         Scrape environments from CONFIG_ENV vars in docker compose file and test
         """
-        base_envs = ["prod", "stag", "test", "unit"]
+        base_envs = ["prod", "stag", "data", "unit"]
         final_envs = set()
         failed = set()
         for env in base_envs:
