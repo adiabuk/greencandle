@@ -1,4 +1,6 @@
 {
   "name": "stag-any-long",
-  "pairs": "any"
+  "pairs": "any",
+  "stop_loss_perc": "0.7",
+  "take_profit_perc": "1.2"
 }
