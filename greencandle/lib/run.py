@@ -1,4 +1,4 @@
-#pylint: disable=no-member, logging-not-lazy
+#pylint: disable=no-member, logging-not-lazy, broad-except
 
 """
 Perform run for test & prod
@@ -243,11 +243,15 @@ def prod_int_check(interval, test, alert=False):
             redis.rm_drawup(pair)
             redis.rm_drawdown(pair)
             if alert:
-                payload = {"pair":pair, "host":"alert",
+                payload = {"pair":pair, "strategy":"alert",
                            "text": "Closing API trade according to TP/SL rules",
-                           "strategy": config.main.name, "action":"close", "edited":True}
-                url = "http://router:1080/webhook"
-                requests.post(url, json=payload, timeout=1)
+                           "action":"close"}
+                host = os.environ['HOST_IP']
+                url = "http://{}:1080/{}".format(host, config.main.api_token)
+                try:
+                    requests.post(url, json=payload, timeout=1)
+                except Exception:
+                    pass
 
     trade = Trade(interval=interval, test_trade=test, test_data=False, config=config)
     trade.close_trade(sells, drawdowns=drawdowns, drawups=drawups)

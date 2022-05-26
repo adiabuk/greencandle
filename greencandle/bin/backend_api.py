@@ -48,8 +48,15 @@ def respond():
 
     if action == 'OPEN':
         trade.open_trade(item)
+        redis = Redis(interval=config.main.interval, test=False, test_data=False)
+        redis.update_on_entry(item[0][0], 'take_profit_perc', eval(config.main.take_profit_perc))
+        redis.update_on_entry(item[0][0], 'stop_loss_perc', eval(config.main.stop_loss_perc))
+
     elif action == 'CLOSE':
         trade.close_trade(item, drawdowns={pair:0}, drawups={pair:0})
+        redis = Redis(interval=config.main.interval, test=False, test_data=False)
+        redis.rm_on_entry(item[0][0], 'take_profit_perc')
+        redis.rm_on_entry(item[0][0], 'stop_loss_perc')
 
     return Response(status=200)
 
@@ -66,7 +73,6 @@ def intermittent_check():
     Check for SL/TP
     """
     prod_int_check(config.main.interval, True, alert=True)
-
 
 @arg_decorator
 def main():
