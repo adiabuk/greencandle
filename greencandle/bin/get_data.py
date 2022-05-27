@@ -65,12 +65,12 @@ def prod_run():
     """
     interval = config.main.interval
     LOGGER.info("Starting prod run")
-    if os.path.exists('/var/run/gc-data'):
-        os.remove('/var/run/gc-data')
+    if os.path.exists('/var/run/gc-data-{}'.format(config.main.interval)):
+        os.remove('/var/run/gc-data-{}'.format(config.main.interval))
     client = Binance()
     prices = client.prices()
     test_loop(interval=interval, prices=prices)
-    Path('/var/run/gc-data').touch()
+    Path('/var/run/gc-data-{}'.format(config.main.interval)).touch()
     send_slack_message("notifications", "-"*100)
     LOGGER.info("Finished prod run")
 
@@ -92,10 +92,10 @@ def main():
     redis = Redis(interval=interval, test=False)
     redis.clear_all()
     del redis
-    if os.path.exists('/var/run/gc-data'):
-        os.remove('/var/run/gc-data')
+    if os.path.exists('/var/run/gc-data-{}'.format(config.main.interval)):
+        os.remove('/var/run/gc-data-{}'.format(config.main.interval))
     prod_initial(interval) # initial run, before scheduling begins
-    Path('/var/run/gc-data').touch()
+    Path('/var/run/gc-data-{}'.format(config.main.interval)).touch()
     LOGGER.info("Finished initial prod run")
     prod_run()
 

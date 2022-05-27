@@ -31,7 +31,7 @@ def analyse_loop():
     client = binance_auth()
     isolated = client.get_isolated_margin_pairs()
     cross = client.get_cross_margin_pairs()
-    run_file = Path('/var/run/gc-data')
+    run_file = Path('/var/run/gc-data-{}'.format(config.main.interval))
 
     while not run_file.is_file():
         # file exists

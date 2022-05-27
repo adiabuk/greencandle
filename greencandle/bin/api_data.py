@@ -32,7 +32,7 @@ def analyse_loop():
     """
     Gather data from redis and analyze
     """
-    run_file = Path('/var/run/gc-data')
+    run_file = Path('/var/run/gc-data-{}'.format(config.main.interval))
 
     while not run_file.is_file():
         # file exists
@@ -55,8 +55,6 @@ def analyse_loop():
             LOGGER.critical("Error with pair %s %s" % (pair, str(err_msg)))
     LOGGER.info("End of current loop")
     del redis
-
-
 
 @APP.route('/long', methods=["GET"])
 def trade():
