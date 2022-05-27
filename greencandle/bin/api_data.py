@@ -58,7 +58,7 @@ def analyse_loop():
 
 
 
-@APP.route('long', methods=["GET"])
+@APP.route('/long', methods=["GET"])
 def trade():
     """
     Buy/sell actions for API trades
@@ -73,7 +73,10 @@ def trade():
 
 @arg_decorator
 def main():
-    """API for interacting with trading system"""
+    """
+    API for determining entrypoint for given pair 
+    according to buy/sell rules.
+    """
 
     scheduler = BackgroundScheduler()
     scheduler.add_job(func=analyse_loop, trigger="interval", seconds=300)
