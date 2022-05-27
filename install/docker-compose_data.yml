@@ -5,6 +5,7 @@ services:
     container_name: gen-be-logwatch
     hostname: gen-be-logwatch
     image: amrox/greencandle:${TAG}
+    pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint-logwatch.sh /usr/local/bin/logwatch
     environment:
@@ -24,6 +25,7 @@ services:
     container_name: data-be-analyse_4h_high-rsi
     hostname: data-be-analyse_4h_high-rsi
     image: amrox/greencandle
+    pull_policy: always
     entrypoint: /docker-entrypoint-data.sh analyse_data
     logging:
       driver: journald
@@ -53,6 +55,7 @@ services:
     container_name: data-be-analyse_4h_big-change
     hostname: data-be-analyse_4h_big-change
     image: amrox/greencandle
+    pull_policy: always
     entrypoint: /docker-entrypoint-data.sh analyse_data
     logging:
       driver: journald
@@ -82,6 +85,7 @@ services:
     container_name: data-be-analyse_4h_very-high-rsi
     hostname: data-be-analyse_4h_very-high-rsi
     image: amrox/greencandle
+    pull_policy: always
     entrypoint: /docker-entrypoint-data.sh analyse_data
     logging:
       driver: journald
@@ -111,6 +115,7 @@ services:
     container_name: data-be-analyse_4h_low-rsi
     hostname: data-be-analyse_4h_low-rsi
     image: amrox/greencandle
+    pull_policy: always
     entrypoint: /docker-entrypoint-data.sh analyse_data
     logging:
       driver: journald
@@ -140,6 +145,7 @@ services:
     container_name: data-be-analyse_4h_big-drop
     hostname: data-be-analyse_4h_big-drop
     image: amrox/greencandle
+    pull_policy: always
     entrypoint: /docker-entrypoint-data.sh analyse_data
     logging:
       driver: journald
@@ -169,6 +175,7 @@ services:
     container_name: data-be-analyse_4h_very-low-rsi
     hostname: data-be-analyse_4h_very-low-rsi
     image: amrox/greencandle
+    pull_policy: always
     entrypoint: /docker-entrypoint-data.sh analyse_data
     logging:
       driver: journald
@@ -198,6 +205,7 @@ services:
     container_name: data-be-get_5m
     hostname: data-be-get_5m
     image: amrox/greencandle
+    pull_policy: always
     entrypoint: /docker-entrypoint.sh get_data
     logging:
       driver: journald
@@ -226,6 +234,7 @@ services:
     container_name: data-be-get_4h
     hostname: data-be-get_4h
     image: amrox/greencandle
+    pull_policy: always
     entrypoint: /docker-entrypoint.sh get_data
     logging:
       driver: journald
@@ -256,6 +265,7 @@ services:
       - HOST=$HOSTNAME
     hostname: data-fe-cron
     image: amrox/greencandle
+    pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh cron -f
     links:
@@ -277,6 +287,7 @@ services:
     container_name: data-base-redis-local
     hostname: data-base-redis-local
     image: amrox/gc-redis
+    pull_policy: always
     ports:
       - 6379:6379
     restart: always
@@ -292,6 +303,7 @@ services:
     container_name: data-base-mysql-local
     hostname: data-base-mysql-local
     image: amrox/gc-mysql
+    pull_policy: always
     ports:
       - 3306:3306
     environment:
