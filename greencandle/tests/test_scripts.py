@@ -20,7 +20,7 @@ class TestScripts(unittest.TestCase):
             string = "{0}={1}:main".format(name, path)
             entrypoints.append(string)
             print("Running {}".format(name))
-            result = check_call(['ls -l' '/usr/local/bin/' + name], stdout=DEVNULL, stderr=STDOUT)
+            result = check_call(['ls', '-l' '/usr/local/bin/' + name], stdout=DEVNULL, stderr=STDOUT)
             check_call([name, '--help'], stdout=DEVNULL, stderr=STDOUT)
             self.assertEqual(result, 0)
         return entrypoints
