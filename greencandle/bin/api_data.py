@@ -43,12 +43,12 @@ def analyse_loop():
     for pair in PAIRS:
         LOGGER.debug("Analysing pair: %s" % pair)
         try:
-            result = redis.get_action(pair=pair, interval=config.main.interval)[0]
+            result = redis.get_action(pair=pair, interval=config.main.interval)[4]
 
-            if result == "OPEN":
+            if result['buy'] and not result['sell']:
                 LONG.add(pair)
                 SHORT.discard(pair)
-            elif result == "CLOSE":
+            elif result['sell'] and not result['buy']:
                 SHORT.add(pair)
                 LONG.discard(pair)
         except Exception as err_msg:
@@ -72,7 +72,7 @@ def trade():
 @arg_decorator
 def main():
     """
-    API for determining entrypoint for given pair 
+    API for determining entrypoint for given pair
     according to buy/sell rules.
     """
 
