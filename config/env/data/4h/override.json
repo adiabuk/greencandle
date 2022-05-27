@@ -3,5 +3,7 @@
   "indicators": "get_rsi;RSI;14 get_bb;upper;20,2 get_bb;lower;20,2 get_bb;middle;20,2",
   "open_rule1": "results.current.EMA_50 \u003c results.current.EMA_100",
   "pairs": "ETHBTC",
+  "interval": "4h",
+  "no_of_klines": "50",
   "rate_indicator": "RSI_14"
 }

@@ -1,4 +1,6 @@
 {
   "indicators": "get_moving_averages;EMA;200",
+  "interval": "5m",
+  "no_of_klines": "200",
   "rate_indicator": "EMA_200"
 }
