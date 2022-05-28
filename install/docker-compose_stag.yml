@@ -349,6 +349,7 @@ services:
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/any/spot
       - HOST_IP=$HOST_IP
+      - get_trend="true"
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -384,6 +385,7 @@ services:
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/any
       - HOST_IP=$HOST_IP
+      - get_trend="true"
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -419,6 +421,7 @@ services:
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/any/short
       - HOST_IP=$HOST_IP
+      - get_trend="true"
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
