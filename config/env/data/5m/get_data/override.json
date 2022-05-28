@@ -1,5 +1,6 @@
 {
   "close_rule1": "close \u003c results.current.EMA_200",
+  "name": "get_data_5m",
   "open_rule1": "close \u003e results.current.EMA_200",
-  "name": "get_data_5m"
+  "slack_active": "false"
 }
