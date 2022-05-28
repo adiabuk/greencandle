@@ -229,6 +229,35 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
+  data-be-trend_5m:
+    container_name: data-be-trend_5m
+    hostname: data-be-trend_5m
+    image: amrox/greencandle
+    pull_policy: always
+    entrypoint: /docker-entrypoint.sh api_data
+    logging:
+      driver: journald
+    links:
+      - data-base-mysql-local:mysql
+      - data-base-redis-local:redis
+    depends_on:
+      - data-base-mysql-local
+      - data-base-redis-local
+    environment:
+      - CONFIG_ENV=data/5m/trend
+      - HOST=$HOSTNAME
+    ports:
+      - 6000:6000
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
 
   data-be-get_4h:
     container_name: data-be-get_4h
