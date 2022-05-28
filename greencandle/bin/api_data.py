@@ -56,16 +56,16 @@ def analyse_loop():
     LOGGER.info("End of current loop")
     del redis
 
-@APP.route('/long', methods=["GET"])
-def trade():
+@APP.route('/get_trend', methods=["GET"])
+def get_trend():
     """
     Buy/sell actions for API trades
     """
     pair = request.args.get('pair')
     if pair in LONG:
-        return "LONG"
+        return "long"
     elif pair in SHORT:
-        return "SHORT"
+        return "short"
     else:
         return "Invalid Pair"
 

@@ -4,9 +4,11 @@
 """
 API trading module
 """
+import os
 import sys
 from time import strftime, gmtime
 import atexit
+import requests
 from flask import Flask, request, Response
 from apscheduler.schedulers.background import BackgroundScheduler
 from greencandle.lib.common import arg_decorator
@@ -17,7 +19,7 @@ from greencandle.lib.run import prod_int_check
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.logger import get_logger
 from greencandle.lib.order import Trade
-
+from greencandle.lib.alerts import send_slack_message
 
 TEST = bool(len(sys.argv) > 1 and sys.argv[1] == '--test')
 APP = Flask(__name__)
@@ -48,6 +50,15 @@ def respond():
         pass
 
     if action == 'OPEN':
+
+        if 'get_trend' in os.environ:
+            url = "http://trend:6000/get_trend?pair={}".format(pair)
+            req = requests.get(url, timeout=1)
+            trend = req.text.trim()
+            if trend != config.main.trade_direction:
+                send_slack_message("alerts",
+                                   "Skipping {} trade due to wrong trade direction".format(pair))
+
         trade.open_trade(item)
         redis = Redis(interval=config.main.interval, test=False, test_data=False)
         redis.update_on_entry(item[0][0], 'take_profit_perc', eval(config.main.take_profit_perc))
