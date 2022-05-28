@@ -350,7 +350,7 @@ services:
       - CONFIG_ENV=stag/any/spot
       - HOST_IP=$HOST_IP
     extra_hosts:
-      - trend: "10.8.0.101"
+      - "trend:10.8.0.101"
     ports:
       - 20000
     links:
@@ -385,7 +385,7 @@ services:
       - CONFIG_ENV=stag/any
       - HOST_IP=$HOST_IP
     extra_hosts:
-      - trend: "10.8.0.101"
+      - "trend:10.8.0.101"
     ports:
       - 20000
     links:
@@ -420,7 +420,7 @@ services:
       - CONFIG_ENV=stag/any/short
       - HOST_IP=$HOST_IP
     extra_hosts:
-      - trend: "10.8.0.101"
+      - "trend:10.8.0.101"
     ports:
       - 20000
     links:
