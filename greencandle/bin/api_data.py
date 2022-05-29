@@ -6,6 +6,7 @@ Flask module for manipulating API trades and displaying relevent graphs
 import atexit
 import time
 from pathlib import Path
+from collections import defaultdict
 from flask import Flask, request, Response
 from apscheduler.schedulers.background import BackgroundScheduler
 from greencandle.lib import config
@@ -15,6 +16,7 @@ from greencandle.lib.logger import get_logger
 config.create_config()
 LONG = set()
 SHORT = set()
+ALL = defaultdict(dict)
 PAIRS = config.main.pairs.split()
 LOGGER = get_logger(__name__)
 APP = Flask(__name__, template_folder="/etc/gcapi", static_url_path='/',
@@ -43,18 +45,29 @@ def analyse_loop():
     for pair in PAIRS:
         LOGGER.debug("Analysing pair: %s" % pair)
         try:
-            result = redis.get_action(pair=pair, interval=config.main.interval)[4]
+            result = redis.get_action(pair=pair, interval=config.main.interval)
 
-            if result['buy'] and not result['sell']:
+            ALL[pair]['date'] = result[2]
+            if result[4]['buy'] and not result[4]['sell']:
                 LONG.add(pair)
                 SHORT.discard(pair)
-            elif result['sell'] and not result['buy']:
+                ALL[pair]['action'] = 'buy'
+            elif result[4]['sell'] and not result[4]['buy']:
                 SHORT.add(pair)
                 LONG.discard(pair)
+                ALL[pair]['action'] = 'sell'
+
         except Exception as err_msg:
             LOGGER.critical("Error with pair %s %s" % (pair, str(err_msg)))
     LOGGER.info("End of current loop")
     del redis
+
+@APP.route('/get_data', methods=["GET"])
+def get_data():
+    """
+    Get data for all pairs including date last updated
+    """
+    return ALL
 
 @APP.route('/get_trend', methods=["GET"])
 def get_trend():
