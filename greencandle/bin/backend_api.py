@@ -11,7 +11,7 @@ import atexit
 import requests
 from flask import Flask, request, Response
 from apscheduler.schedulers.background import BackgroundScheduler
-from greencandle.lib.common import arg_decorator
+from greencandle.lib.common import arg_decorator, get_link
 from greencandle.lib import config
 config.create_config()
 from greencandle.lib.binance_common import get_current_price
@@ -57,7 +57,8 @@ def respond():
             trend = req.text.strip()
             if trend != config.main.trade_direction:
                 send_slack_message("alerts",
-                                   "Skipping {} trade due to wrong trade direction".format(pair))
+                                   "Skipping {} trade due to wrong trade direction"
+                                   .format(get_link(pair)))
 
         trade.open_trade(item)
         redis = Redis(interval=config.main.interval, test=False, test_data=False)
