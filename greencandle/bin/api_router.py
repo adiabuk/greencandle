@@ -73,7 +73,7 @@ def respond():
             payload['text'] += '...{} environment'.format(environment)
             payload['edited'] = "yes"
 
-        strategy['pair'] = strategy['pair'].lower()
+        payload['pair'] = payload['pair'].lower()
         send_trade(payload, host)
     LOGGER.info("Request received: %s" %(request.json))
     mysql = Mysql()
