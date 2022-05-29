@@ -1,5 +1,5 @@
 {
-  "name": "very-high-rsi",
+  "name": "very-high-rsi_4h",
   "open_rule1": "results.current.RSI_14 \u003e 80",
   "trade_direction": "short"
 }
