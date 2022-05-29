@@ -23,4 +23,9 @@
 0 * * * *  HOST=stag /usr/local/bin/send_docker_alerts
 */5 * * * * sleep 5; /usr/local/bin/get_active_trades > /proc/1/fd/1 2>/proc/1/fd/2
 
+{{else if .base_env "data"}}
+@hourly /usr/local/bin/create_graph -i 5m -o /data/graphs -a
+@daily /usr/local/bin/create_graph -i 4h -o /data/graphs -a
+
+
 {{end}}
