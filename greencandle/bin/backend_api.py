@@ -59,6 +59,7 @@ def respond():
                 send_slack_message("alerts",
                                    "Skipping {} trade due to wrong trade direction"
                                    .format(get_link(pair)))
+                return Response(status=200)
 
         trade.open_trade(item)
         redis = Redis(interval=config.main.interval, test=False, test_data=False)
