@@ -20,8 +20,8 @@ import zlib
 import pandas
 import numpy
 import pandas_ta as ta
-from indicator import SuperTrend, RSI
 import talib
+from indicator import SuperTrend, RSI
 
 from . import config
 
@@ -653,7 +653,7 @@ class Engine(dict):
         df_list = supertrend["ST_{0}_{1}".format(timeframe, multiplier)].tolist()
         scheme["data"] = df_list[-1]
         scheme["symbol"] = pair
-        scheme["event"] = "STX_{0}".format(timeframe, multiplier)
+        scheme["event"] = "STX_{0}".format(timeframe)
 
         index = -1
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
