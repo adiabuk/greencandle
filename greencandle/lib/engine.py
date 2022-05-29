@@ -19,8 +19,8 @@ import pickle
 import zlib
 import pandas
 import numpy
-import pandas_ta as ta
 import talib
+import pandas_ta as ta
 from indicator import SuperTrend, RSI
 
 from . import config
@@ -258,6 +258,7 @@ class Engine(dict):
             scheme["symbol"] = pair
             scheme["event"] = "{0}_{1}".format(func, timeframe)
 
+            if (not index and self.test) or len(self.dataframes[pair]) < 2:
             index = -1
             scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
@@ -277,6 +278,7 @@ class Engine(dict):
         LOGGER.debug("Getting pivot points for %s" % pair)
         global CROSS_DATA
         func, timeperiod = localconfig
+        if (not index and self.test) or len(self.dataframes[pair]) < 2:
         index = -1
         scheme = {}
         scheme["close_time"] = str(dataframe.iloc[index]["closeTime"])
@@ -308,6 +310,7 @@ class Engine(dict):
         Get TSI osscilator
         """
         LOGGER.debug("Getting TSI oscillator for %s" % pair)
+        if (not index and self.test) or len(self.dataframes[pair]) < 2:
         index = -1
 
         func, timeperiod = localconfig
@@ -350,6 +353,7 @@ class Engine(dict):
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
 
+        if (not index and self.test) or len(self.dataframes[pair]) < 2:
         index = -1
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
         scheme["data"] = rsi[index]
@@ -382,6 +386,7 @@ class Engine(dict):
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
 
+        if (not index and self.test) or len(self.dataframes[pair]) < 2:
         index = -1
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
@@ -417,6 +422,7 @@ class Engine(dict):
             scheme["symbol"] = pair
             scheme["event"] = func + "_" + str(timeperiod)
 
+            if (not index and self.test) or len(self.dataframes[pair]) < 2:
             index = -1
             scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
@@ -449,6 +455,7 @@ class Engine(dict):
             scheme["symbol"] = pair
             scheme["event"] = func+"_"+str(timeperiod)
 
+            if (not index and self.test) or len(self.dataframes[pair]) < 2:
             index = -1
             scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
@@ -469,6 +476,7 @@ class Engine(dict):
         scheme = {}
         try:
             scheme["symbol"] = pair
+            if (not index and self.test) or len(self.dataframes[pair]) < 2:
             index = -1
             scheme["data"] = str(self.dataframes[pair].iloc[index]["volume"])
             scheme["event"] = "volume"
@@ -518,6 +526,7 @@ class Engine(dict):
             scheme["symbol"] = pair
 
             scheme["event"] = func + "_" + str(timeperiod)
+            if (not index and self.test) or len(self.dataframes[pair]) < 2:
             index = -1
 
             scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
@@ -579,6 +588,7 @@ class Engine(dict):
             scheme["symbol"] = pair
             scheme["event"] = '{}_{}'.format(func, timeperiod)
 
+            if (not index and self.test) or len(self.dataframes[pair]) < 2:
             index = -1
             scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
@@ -621,6 +631,7 @@ class Engine(dict):
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
 
+        if (not index and self.test) or len(self.dataframes[pair]) < 2:
         index = -1
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
@@ -655,6 +666,7 @@ class Engine(dict):
         scheme["symbol"] = pair
         scheme["event"] = "STX_{0}".format(timeframe)
 
+        if (not index and self.test) or len(self.dataframes[pair]) < 2:
         index = -1
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
