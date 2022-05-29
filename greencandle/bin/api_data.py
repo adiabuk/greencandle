@@ -66,6 +66,8 @@ def get_trend():
         return "long"
     elif pair in SHORT:
         return "short"
+    elif not pair:
+        return {"long": list(LONG), "short": list(SHORT)}
     else:
         return "Invalid Pair"
 
