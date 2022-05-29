@@ -1,4 +1,4 @@
-#pylint: disable=no-member,consider-iterating-dictionary,broad-except,logging-not-lazy,unused-import
+pylint: disable=no-member,consider-iterating-dictionary,broad-except,logging-not-lazy,unused-import
 #pylint: disable=unused-variable,possibly-unused-variable,redefined-builtin,global-statement
 
 """
@@ -202,7 +202,7 @@ class Engine(dict):
         scheme["symbol"] = pair
         # Unless we are in test mode, use the second to last data row as the previous one is still
         # being constructed and contains incomplete data
-        location = -1 if (self.test or len(self.dataframes[pair]) < 2) else -2
+        location = -1
 
         # compress and pickle current dataframe for redis storage
         # dont get most recent one, as it may not be complete
@@ -259,9 +259,7 @@ class Engine(dict):
             scheme["event"] = "{0}_{1}".format(func, timeframe)
 
             if (not index and self.test) or len(self.dataframes[pair]) < 2:
-                index = -1
-            elif not index and not self.test:
-                index = -2
+            index = -1
             scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
             self.schemes.append(scheme)
@@ -281,10 +279,7 @@ class Engine(dict):
         global CROSS_DATA
         func, timeperiod = localconfig
         if (not index and self.test) or len(self.dataframes[pair]) < 2:
-            index = -1
-        elif not index and not self.test:
-            index = -2
-        # Get current date:
+        index = -1
         scheme = {}
         scheme["close_time"] = str(dataframe.iloc[index]["closeTime"])
 
@@ -316,9 +311,7 @@ class Engine(dict):
         """
         LOGGER.debug("Getting TSI oscillator for %s" % pair)
         if (not index and self.test) or len(self.dataframes[pair]) < 2:
-            index = -1
-        elif not index and not self.test:
-            index = -2
+        index = -1
 
         func, timeperiod = localconfig
         tsi = ta.smi(dataframe.close.astype(float), fast=13, slow=25, signal=13)
@@ -361,9 +354,7 @@ class Engine(dict):
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
 
         if (not index and self.test) or len(self.dataframes[pair]) < 2:
-            index = -1
-        elif not index and not self.test:
-            index = -2
+        index = -1
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
         scheme["data"] = rsi[index]
 
@@ -396,12 +387,8 @@ class Engine(dict):
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
 
         if (not index and self.test) or len(self.dataframes[pair]) < 2:
-            index = -1
-        elif not index and not self.test:
-            index = -2
+        index = -1
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
-
-        #scheme["data"] = stochrsi[index][0]
 
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
         scheme["data"] = stochrsi[0][index], stochrsi[1][index]
@@ -436,9 +423,7 @@ class Engine(dict):
             scheme["event"] = func + "_" + str(timeperiod)
 
             if (not index and self.test) or len(self.dataframes[pair]) < 2:
-                index = -1
-            elif not index and not self.test:
-                index = -2
+            index = -1
             scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
             self.schemes.append(scheme)
@@ -471,9 +456,7 @@ class Engine(dict):
             scheme["event"] = func+"_"+str(timeperiod)
 
             if (not index and self.test) or len(self.dataframes[pair]) < 2:
-                index = -1
-            elif not index and not self.test:
-                index = -2
+            index = -1
             scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
             self.schemes.append(scheme)
@@ -494,9 +477,7 @@ class Engine(dict):
         try:
             scheme["symbol"] = pair
             if (not index and self.test) or len(self.dataframes[pair]) < 2:
-                index = -1
-            elif not index and not self.test:
-                index = -2
+            index = -1
             scheme["data"] = str(self.dataframes[pair].iloc[index]["volume"])
             scheme["event"] = "volume"
             scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
@@ -546,9 +527,7 @@ class Engine(dict):
 
             scheme["event"] = func + "_" + str(timeperiod)
             if (not index and self.test) or len(self.dataframes[pair]) < 2:
-                index = -1
-            elif not index and not self.test:
-                index = -2
+            index = -1
 
             scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
             self.schemes.append(scheme)
@@ -610,9 +589,7 @@ class Engine(dict):
             scheme["event"] = '{}_{}'.format(func, timeperiod)
 
             if (not index and self.test) or len(self.dataframes[pair]) < 2:
-                index = -1
-            elif not index and not self.test:
-                index = -2
+            index = -1
             scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
             self.schemes.append(scheme)
@@ -655,9 +632,7 @@ class Engine(dict):
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
 
         if (not index and self.test) or len(self.dataframes[pair]) < 2:
-            index = -1
-        elif not index and not self.test:
-            index = -2
+        index = -1
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
         self.schemes.append(scheme)
@@ -687,15 +662,12 @@ class Engine(dict):
         timeframe, multiplier = timef.split(',')
         supertrend = SuperTrend(mine, int(timeframe), int(multiplier))
         df_list = supertrend["ST_{0}_{1}".format(timeframe, multiplier)].tolist()
-        #print("AMROX " + str(df_list))
         scheme["data"] = df_list[-1]
         scheme["symbol"] = pair
         scheme["event"] = "STX_{0}".format(timeframe, multiplier)
 
         if (not index and self.test) or len(self.dataframes[pair]) < 2:
-            index = -1
-        elif not index and not self.test:
-            index = -2
+        index = -1
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
         self.schemes.append(scheme)
