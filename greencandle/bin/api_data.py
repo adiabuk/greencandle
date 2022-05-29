@@ -79,7 +79,7 @@ def main():
     """
 
     scheduler = BackgroundScheduler()
-    scheduler.add_job(func=analyse_loop, trigger="interval", seconds=300)
+    scheduler.add_job(func=analyse_loop, trigger="interval", seconds=config.main.check_interval)
     scheduler.start()
     APP.run(debug=True, host='0.0.0.0', port=6000, threaded=True)
 
