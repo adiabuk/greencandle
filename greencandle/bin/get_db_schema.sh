@@ -2,7 +2,7 @@
 
 function usage () {
   cat << EOF
-Usage: $0 [-g|-p] -f <filename> -P <port>
+Usage: $0 [-g|-p] -f <filename> -P <port> -H <hostname>
 
 Add and retrieve mysql db schema without data
 
@@ -10,6 +10,7 @@ Add and retrieve mysql db schema without data
   -p    Put schema
   -f    filename
   -P    port
+  -H    hostname
   -h    Show this message
 
 EOF
@@ -17,7 +18,7 @@ EOF
   exit 1
 }
 
-while getopts "hgpP:f:" opt; do
+while getopts "hgpP:H:f:" opt; do
   case $opt in
     g)
       GET=true
@@ -35,15 +36,20 @@ while getopts "hgpP:f:" opt; do
     P)
       PORT=$OPTARG
       ;;
+    H)
+      HOSTNAME=$OPTARG
+      ;;
     \?)
       printf 'invald option\n\n'
     esac
 
 done
+[[ -z $HOSTNAME ]] && HOSTNAME=localhost
 
 if [[ -z $FILENAME ]]; then
   printf 'Missing filename\n\n'
   usage
+
 elif [[ -n $GET && -n $PUT ]]; then
   printf 'Specify put or get not both\n'
   usage
@@ -52,10 +58,10 @@ elif [[ -z $GET && -z $PUT ]]; then
   usage
 
 elif [[ -n $GET ]]; then
-  mysqldump --protocol=tcp -P $PORT -u root -ppassword --no-data greencandle > $FILENAME
-  mysqldump --protocol=tcp -P $PORT -u root -ppassword greencandle exchange >> $FILENAME
+  mysqldump --protocol=tcp -h $HOSTNAME -P $PORT -u root -ppassword --no-data greencandle > $FILENAME
+  mysqldump --protocol=tcp -h $HOSTNAME -P $PORT -u root -ppassword greencandle exchange >> $FILENAME
   sed -i 's/,)/)/g' $FILENAME
 
 elif [[ -n $PUT ]]; then
-  mysql --protocol=tcp -P $PORT -u root -ppassword greencandle < $FILENAME
+  mysql --protocol=tcp -h $HOSTNAME -P $PORT -u root -ppassword greencandle < $FILENAME
 fi
