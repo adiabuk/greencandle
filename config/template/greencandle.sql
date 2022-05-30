@@ -55,7 +55,7 @@ CREATE TABLE `api_requests` (
   `price` varchar(30) DEFAULT NULL,
   `strategy` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=553 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=556 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -139,28 +139,6 @@ CREATE TABLE `exchange` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Temporary table structure for view `hour_balance`
---
-
-DROP TABLE IF EXISTS `hour_balance`;
-/*!50001 DROP VIEW IF EXISTS `hour_balance`*/;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-/*!50001 CREATE VIEW `hour_balance` AS SELECT 
- 1 AS `exchange_id`,
- 1 AS `usd1`,
- 1 AS `coin`,
- 1 AS `ctime1`,
- 1 AS `ctime2`,
- 1 AS `usd2`,
- 1 AS `USD_diff`,
- 1 AS `GBP_diff`,
- 1 AS `COUNT_diff`,
- 1 AS `perc_change`,
- 1 AS `BTC_diff`*/;
-SET character_set_client = @saved_cs_client;
 
 --
 -- Temporary table structure for view `hourly_profit`
@@ -290,7 +268,7 @@ CREATE TABLE `trades` (
   `comm_open` varchar(255) DEFAULT NULL,
   `comm_close` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=107 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -361,24 +339,6 @@ SET character_set_client = @saved_cs_client;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
 /*!50001 VIEW `daily_profit_by_base_pair` AS select (case when (`profit`.`pair` like '%BTC') then 'BTC' when (`profit`.`pair` like '%BNB') then 'BNB' when (`profit`.`pair` like '%ETH') then 'ETH' when (`profit`.`pair` like '%USDT') then 'USDT' end) AS `base_pair`,left(`profit`.`close_time`,10) AS `date`,sum(`profit`.`perc`) AS `perc`,group_concat(distinct `profit`.`pair` separator ' ') AS `pairs`,count(0) AS `count`,(case when (`profit`.`pair` like '%BTC') then (sum(`profit`.`quote_profit`) * 50730.01000000) when (`profit`.`pair` like '%BNB') then (sum(`profit`.`quote_profit`) * 606.24000000) when (`profit`.`pair` like '%ETH') then (sum(`profit`.`quote_profit`) * 4083.72000000) when (`profit`.`pair` like '%USDT') then sum(`profit`.`quote_profit`) end) AS `usd_profit` from `profit` where (not((`profit`.`close_time` like '%0000-00-00%'))) group by left(`profit`.`close_time`,10),right(`profit`.`pair`,3) order by `profit`.`close_time` desc */;
-/*!50001 SET character_set_client      = @saved_cs_client */;
-/*!50001 SET character_set_results     = @saved_cs_results */;
-/*!50001 SET collation_connection      = @saved_col_connection */;
-
---
--- Final view structure for view `hour_balance`
---
-
-/*!50001 DROP VIEW IF EXISTS `hour_balance`*/;
-/*!50001 SET @saved_cs_client          = @@character_set_client */;
-/*!50001 SET @saved_cs_results         = @@character_set_results */;
-/*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8 */;
-/*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_general_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `hour_balance` AS select `tt1`.`exchange_id` AS `exchange_id`,`tt1`.`usd` AS `usd1`,`tt1`.`coin` AS `coin`,`tt1`.`ctime` AS `ctime1`,`tt2`.`ctime` AS `ctime2`,`tt2`.`usd` AS `usd2`,(`tt1`.`usd` - `tt2`.`usd`) AS `USD_diff`,(`tt1`.`gbp` - `tt2`.`gbp`) AS `GBP_diff`,(`tt1`.`count` - `tt2`.`count`) AS `COUNT_diff`,(((`tt1`.`btc` - `tt2`.`btc`) / `tt1`.`btc`) * 100) AS `perc_change`,(`tt1`.`btc` - `tt2`.`btc`) AS `BTC_diff` from (`balance` `tt1` left join `balance` `tt2` on(((`tt1`.`coin` = `tt2`.`coin`) and (`tt1`.`exchange_id` = `tt2`.`exchange_id`)))) where ((`tt1`.`ctime` > (now() - interval 20 minute)) and (`tt2`.`ctime` < (now() - interval 45 minute)) and (`tt2`.`ctime` > (now() - interval 90 minute))) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -482,7 +442,7 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-30 13:13:02
+-- Dump completed on 2022-05-30 13:26:08
 -- MySQL dump 10.13  Distrib 5.7.38, for Linux (x86_64)
 --
 -- Host: 10.8.0.104    Database: greencandle
@@ -533,4 +493,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-30 13:13:03
+-- Dump completed on 2022-05-30 13:26:09
