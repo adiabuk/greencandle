@@ -4,6 +4,7 @@ Functions for sending alerts
 """
 
 import os
+import sys
 import json
 import smtplib
 from email.mime.multipart import MIMEMultipart
@@ -13,6 +14,7 @@ import notify_run
 from str2bool import str2bool
 from . import config
 from .common import AttributeDict, sub_perc, format_usd, get_link
+
 
 def send_gmail_alert(action, pair, price):
     """
@@ -87,12 +89,13 @@ def send_slack_trade(**kwargs):
     for key in valid_keys:
         if key not in kwargs:
             kwargs[key] = "N/A"
+    sys.stderr.write("AMROX!!!!")
     try:
         kwargs['price'] = str(kwargs['price']).rstrip("0")
         kwargs['perc'] = "%.4f" % (kwargs['perc'])
         commission = 0.2 if float(kwargs['perc']) > 0 else -0.2
-        kwargs['net_perc'] = str("%.4f" %  float(kwargs['perc']) - commission) + "%"
-        kwargs['net_profit'] = format_usd(sub_perc(commission, float(kwargs['usd_profit'])))
+        kwargs['net_perc'] = str(float("%.4f" %  float(kwargs['perc'])) - float(commission)) + "%"
+        kwargs['net_profit'] = format_usd(sub_perc(float(commission), float(kwargs['usd_profit'])))
         kwargs['usd_profit'] = format_usd(kwargs['usd_profit'])
         kwargs['perc'] = str(kwargs['perc']) + "%"
 
