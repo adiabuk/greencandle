@@ -55,7 +55,7 @@ CREATE TABLE `api_requests` (
   `price` varchar(30) DEFAULT NULL,
   `strategy` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=556 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=557 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -104,9 +104,10 @@ SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 /*!50001 CREATE VIEW `daily_profit` AS SELECT 
  1 AS `date`,
- 1 AS `perc`,
+ 1 AS `total_perc`,
+ 1 AS `avg_perc`,
  1 AS `usd_profit`,
- 1 AS `count(*)`*/;
+ 1 AS `count`*/;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -320,7 +321,7 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET collation_connection      = utf8mb4_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `daily_profit` AS select left(`profit`.`close_time`,10) AS `date`,sum(`profit`.`perc`) AS `perc`,sum(`profit`.`usd_profit`) AS `usd_profit`,count(0) AS `count(*)` from `profit` where (`profit`.`perc` is not null) group by left(`profit`.`close_time`,10) order by left(`profit`.`close_time`,10) desc */;
+/*!50001 VIEW `daily_profit` AS select left(`profit`.`close_time`,10) AS `date`,sum(`profit`.`perc`) AS `total_perc`,avg(`profit`.`perc`) AS `avg_perc`,sum(`profit`.`usd_profit`) AS `usd_profit`,count(0) AS `count` from `profit` where (`profit`.`perc` is not null) group by left(`profit`.`close_time`,10) order by left(`profit`.`close_time`,10) desc */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -442,7 +443,7 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-30 13:26:08
+-- Dump completed on 2022-05-30 13:49:32
 -- MySQL dump 10.13  Distrib 5.7.38, for Linux (x86_64)
 --
 -- Host: 10.8.0.104    Database: greencandle
@@ -493,4 +494,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-30 13:26:09
+-- Dump completed on 2022-05-30 13:49:34
