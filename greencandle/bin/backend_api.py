@@ -55,7 +55,7 @@ def respond():
             url = "http://trend:6000/get_trend?pair={}".format(pair)
             req = requests.get(url, timeout=1)
             trend = req.text.strip()
-            if trend != config.main.trade_direction:
+            if trend != config.main.trade_direction and "manual" not in request.json:
                 send_slack_message("alerts",
                                    "Skipping {} trade due to wrong trade direction"
                                    .format(get_link(pair)))
