@@ -201,7 +201,7 @@ class Trade():
         get amount borrowed from exchange for both cross and isolated modes
         """
 
-        mode = 'isolated' if self.config.main.isolated else 'cross'
+        mode = 'isolated' if str2bool(self.config.main.isolated) else 'cross'
 
         if mode == 'cross':
             details = self.client.get_cross_margin_details()
