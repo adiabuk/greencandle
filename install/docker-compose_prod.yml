@@ -202,6 +202,8 @@ services:
       - per-be-api-any-isolated-long:per-be-api-any-isolated-long
       - per-be-api-any-cross-short:per-be-api-any-cross-short
       - per-be-api-any-isolated-short:per-be-api-any-isolated-short
+      - per-be-api-inw-cross-long:per-be-api-inw-cross-long
+      - per-be-api-inw-cross-short:per-be-api-inw-cross-short
     depends_on:
       - per-base-mysql
       - per-base-redis
@@ -227,38 +229,6 @@ services:
     environment:
       - HOST=$HOSTNAME
       - CONFIG_ENV=per/any/spot-long
-    ports:
-      - 20000
-    links:
-      - per-base-mysql:mysql
-      - per-base-redis:redis
-    depends_on:
-      - per-base-mysql
-      - per-base-redis
-    healthcheck:
-      test: ls ||exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    volumes:
-      - /data:/data
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
-      - /root/.bash_history:/root/.bash_history
-
-  per-be-api-any-cross-long:
-    container_name: per-be-api-any-cross-long
-    hostname: per-be-api-any-cross-long
-    image: amrox/greencandle:${TAG}
-    pull_policy: always
-    restart: always
-    entrypoint: /docker-entrypoint.sh backend_api
-    logging:
-      driver: journald
-    environment:
-      - HOST=$HOSTNAME
-      - CONFIG_ENV=per/any/cross-long
     ports:
       - 20000
     links:
@@ -311,6 +281,38 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
+  per-be-api-any-cross-long:
+    container_name: per-be-api-any-cross-long
+    hostname: per-be-api-any-cross-long
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=per/any/cross-long
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
+
   per-be-api-any-cross-short:
     container_name: per-be-api-any-cross-short
     hostname: per-be-api-any-cross-short
@@ -323,6 +325,76 @@ services:
     environment:
       - HOST=$HOSTNAME
       - CONFIG_ENV=per/any/cross-short
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-inw-cross-long:
+    container_name: per-be-api-inw-cross-long
+    hostname: per-be-api-inw-cross-long
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=per/inw/cross-long
+      - get_trend="true"
+    extra_hosts:
+      - "trend:10.8.0.101"
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-inw-cross-short:
+    container_name: per-be-api-inw-cross-short
+    hostname: per-be-api-inw-cross-short
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=per/inw/cross-short
+      - get_trend="true"
+    extra_hosts:
+      - "trend:10.8.0.101"
     ports:
       - 20000
     links:
