@@ -1,6 +1,26 @@
 
 # Releases
 
+# 3.7
+* Fixes for collecting API commission data
+* Rename data env
+* Fix Null values in DB
+* Restructure data c9e envs
+* Add data containers for determining trend
+* Allow all envs to determine trend via API alls
+* Repurpose "any" envs for INW API strategy
+* Prod envs for INW API strategies
+* Keep images on test failure for debugging
+* Add debugging router for API trend
+* All pairs in slack notifications are now TV links
+* Create graphs for data env pairs using cron
+* Allow manual trades to go through even if against current trend
+* Fix NET perc/profit in slack notifications
+* Add hourly profit view
+* Use cron to notify of profit earned in previous hour
+* Remove old DB tables and views
+* add hostname arg to db schema script
+
 # 3.6.1
 * Fix comparison type
 * Fix API config location
