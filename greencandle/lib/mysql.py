@@ -3,6 +3,7 @@
 """
 Push/Pull crypto signals and data to mysql
 """
+import datetime
 from binance.binance import Binance
 import MySQLdb
 from . import config
@@ -294,6 +295,26 @@ class Mysql():
             except ZeroDivisionError:
                 self.logger.critical("%s has a zero buy price, unable to calculate percentage"
                                      % pair)
+
+    @get_exceptions
+    def get_last_hour_profit(self):
+        """
+        Get profit for the last completed hour
+        """
+        hour_ago = datetime.datetime.now() - datetime.timedelta(hours=1)
+        date = hour_ago.strftime("%Y-%m-%d")
+        hour = hour_ago.strftime("%H")
+
+        cur = self.dbase.cursor()
+        command = ('select COALESCE(total_perc,0) total_perc, COALESCE(avg_perc,0) avg_perc, '
+                   'COALESCE(usd_profit,0) usd_profit, hour, count(0) from hourly_profit where '
+                   'date="{0}" and hour="{1}"'.format(date, hour))
+
+        result = self.fetch_sql_data(command, header=False)
+        output = list(result[0])
+        output = output[:3]
+        output.append(hour)
+        return output  # returns total_perc, avg_perc, usd_profit + hour in list
 
     @get_exceptions
     def insert_balance(self, balances):
