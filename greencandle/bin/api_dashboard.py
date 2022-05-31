@@ -90,9 +90,13 @@ def action():
     pair = request.args.get('pair')
     strategy = request.args.get('strategy')
     trade_action = request.args.get('action')
-
+    close = request.args.get('close')
     send_trade(pair, strategy, trade_action)
-    return redirect(url_for('trade'))
+
+    if close:
+        return '<button type="button" onclick="window.close()">Close Tab</button>'
+    else:
+        return redirect(url_for('trade'))
 
 def send_trade(pair, strategy, trade_action):
     """

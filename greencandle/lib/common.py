@@ -2,6 +2,7 @@
 Common functions that don't belong anywhere else
 """
 
+import os
 import sys
 from decimal import Decimal, InvalidOperation
 from babel.numbers import format_currency
@@ -134,3 +135,9 @@ def get_tv_link(pair):
     Return Tradingview hyperlink for slack notifications
     """
     return "<https://www.tradingview.com/chart/?symbol=BINANCE:{0}|{0}>".format(pair)
+
+def get_trade_link(pair, strategy, action, string):
+    """Get trade link for forced trade"""
+    url = os.environ('VPN_IP') + ":" + os.environ('GC_PORT')
+    return ("<https://{0}/action?pair={1}&strategy={2}&action={3}"
+            "&close=true|{4}>".format(url, pair, strategy, action, string))

@@ -225,6 +225,8 @@ services:
     logging:
       driver: journald
     environment:
+      - VPN_IP=$VPN_IP
+      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=per/any/spot-long
     ports:
@@ -257,6 +259,8 @@ services:
     logging:
       driver: journald
     environment:
+      - VPN_IP=$VPN_IP
+      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=per/any/isolated-long
     ports:
@@ -289,6 +293,8 @@ services:
     logging:
       driver: journald
     environment:
+      - VPN_IP=$VPN_IP
+      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=per/any/cross-long
     ports:
@@ -321,6 +327,8 @@ services:
     logging:
       driver: journald
     environment:
+      - VPN_IP=$VPN_IP
+      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=per/any/cross-short
     ports:
@@ -353,6 +361,8 @@ services:
     logging:
       driver: journald
     environment:
+      - VPN_IP=$VPN_IP
+      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=per/inw/cross-long
       - get_trend="true"
@@ -389,6 +399,8 @@ services:
     logging:
       driver: journald
     environment:
+      - VPN_IP=$VPN_IP
+      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=per/inw/cross-short
       - get_trend="true"
@@ -425,6 +437,8 @@ services:
     logging:
       driver: journald
     environment:
+      - VPN_IP=$VPN_IP
+      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=per/any/isolated-short
     ports:
@@ -636,6 +650,8 @@ services:
     logging:
       driver: journald
     environment:
+      - VPN_IP=$VPN_IP
+      - GC_PORT=9999
       - HOST=$HOSTNAME
       - CONFIG_ENV=prod/any/spot-long
     ports:
@@ -668,6 +684,8 @@ services:
     logging:
       driver: journald
     environment:
+      - VPN_IP=$VPN_IP
+      - GC_PORT=9999
       - HOST=$HOSTNAME
       - CONFIG_ENV=prod/any/cross-long
     ports:
@@ -700,6 +718,8 @@ services:
     logging:
       driver: journald
     environment:
+      - VPN_IP=$VPN_IP
+      - GC_PORT=9999
       - HOST=$HOSTNAME
       - CONFIG_ENV=prod/any/isolated-long
     ports:
@@ -732,6 +752,8 @@ services:
     logging:
       driver: journald
     environment:
+      - VPN_IP=$VPN_IP
+      - GC_PORT=9999
       - HOST=$HOSTNAME
       - CONFIG_ENV=prod/any/cross-short
     ports:
@@ -764,6 +786,8 @@ services:
     logging:
       driver: journald
     environment:
+      - VPN_IP=$VPN_IP
+      - GC_PORT=9999
       - HOST=$HOSTNAME
       - CONFIG_ENV=prod/any/isolated-short
     ports:

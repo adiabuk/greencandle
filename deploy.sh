@@ -23,6 +23,7 @@ echo "version: $version";
 export HOST_IP=$(ip -4 addr show docker0 | grep -Po 'inet \K[\d.]+')
 export TAG=$version
 export HOSTNAME=$env
+export VPN_IP=$(ip -4 addr show tun0 | grep -Po 'inet \K[\d.]+')
 
 # Stop existing fe and be containers
 docker ps --filter name=fe-* --filter name=be-* -q | xargs docker stop || true
