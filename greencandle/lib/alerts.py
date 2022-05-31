@@ -13,7 +13,7 @@ import requests
 import notify_run
 from str2bool import str2bool
 from . import config
-from .common import AttributeDict, sub_perc, format_usd, get_link
+from .common import AttributeDict, sub_perc, format_usd, get_tv_link
 
 
 def send_gmail_alert(action, pair, price):
@@ -130,7 +130,7 @@ def send_slack_trade(**kwargs):
                             "• usd_profit: {4}\n"
                             "• Net perc: {5}\n"
                             "• Net usd_profit: {6}\n"
-                            "\n\n".format(get_link(kwargs.pair),
+                            "\n\n".format(get_tv_link(kwargs.pair),
                                           kwargs.price,
                                           title,
                                           kwargs.perc,

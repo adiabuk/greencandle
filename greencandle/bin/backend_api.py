@@ -11,7 +11,7 @@ import atexit
 import requests
 from flask import Flask, request, Response
 from apscheduler.schedulers.background import BackgroundScheduler
-from greencandle.lib.common import arg_decorator, get_link
+from greencandle.lib.common import arg_decorator, get_tv_link
 from greencandle.lib import config
 config.create_config()
 from greencandle.lib.binance_common import get_current_price
@@ -58,7 +58,7 @@ def respond():
             if trend != config.main.trade_direction and "manual" not in request.json:
                 send_slack_message("alerts",
                                    "Skipping {} trade due to wrong trade direction"
-                                   .format(get_link(pair)))
+                                   .format(get_tv_link(pair)))
                 return Response(status=200)
 
         trade.open_trade(item)

@@ -129,7 +129,7 @@ def convert_to_seconds(string):
     seconds_per_unit = {"s": 1, "m": 60, "h": 3600, "d": 86400, "w": 604800}
     return int(string[:-1]) * seconds_per_unit[string[-1]]
 
-def get_link(pair):
+def get_tv_link(pair):
     """
     Return Tradingview hyperlink for slack notifications
     """

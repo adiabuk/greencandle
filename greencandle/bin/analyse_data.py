@@ -13,7 +13,7 @@ from pathlib import Path
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.alerts import send_slack_message
-from greencandle.lib.common import HOUR, get_link, arg_decorator
+from greencandle.lib.common import HOUR, get_tv_link, arg_decorator
 from greencandle.lib.auth import binance_auth
 
 LOGGER = get_logger(__name__)
@@ -60,7 +60,7 @@ def analyse_loop():
             if result == "OPEN":
                 LOGGER.debug("Items to buy")
                 send_slack_message("notifications", "Open: %s %s %s (%s)" %
-                                   (get_link(pair), config.main.interval,
+                                   (get_tv_link(pair), config.main.interval,
                                     config.main.trade_direction, supported.strip()),
                                    emoji=True)
                 LOGGER.info("Trade alert: %s %s %s (%s)" % (pair, config.main.interval,
