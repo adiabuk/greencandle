@@ -1,6 +1,12 @@
 
 # Releases
 
+# 3.7.1
+* Don't check TL/SL for all api containers, unless enabled
+* hourly cron to run just after the hour
+* minor code cleanup and exception handling
+* Only get profit in prod/per/stag environments
+
 # 3.7
 * Fixes for collecting API commission data
 * Rename data env
