@@ -96,14 +96,17 @@ def main():
 
     Usage: backend_api
     """
+    if "intermittent" in os.environ:
+        scheduler = BackgroundScheduler()
+        scheduler.add_job(func=intermittent_check, trigger="interval", seconds=60)
+        scheduler.start()
 
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(func=intermittent_check, trigger="interval", seconds=60)
-    scheduler.start()
     APP.run(debug=True, host='0.0.0.0', port=20000, threaded=True)
 
-    # Shut down the scheduler when exiting the app
-    atexit.register(scheduler.shutdown)
+
+    if "intermittent" in os.environ:
+        # Shut down the scheduler when exiting the app
+        atexit.register(scheduler.shutdown)
 
 if __name__ == "__main__":
     main()
