@@ -53,6 +53,9 @@ def respond():
     except TypeError:
         LOGGER.error("Invalid JSON detected: %s" % payload)
         return Response(status=500)
+    except KeyError:
+        Logger.error("Invalid strategy %s" % payload["strategy"])
+        return Response(status=500)
 
     for host in hosts:
         if host == 'alert' and 'edited' not in payload:
