@@ -2,5 +2,6 @@
   "indicators": "get_moving_averages;EMA;200",
   "interval": "5m",
   "no_of_klines": "200",
+  "pairs": "BTCUSDT ETHUSDT ETHBTC BNBETH XRPUSDT ADAUSDT SOLBNB SOLBTC DOGEUSDT DOTUSDT BNBUSDT ENJUSDT ENJBTC",
   "rate_indicator": "EMA_200"
 }

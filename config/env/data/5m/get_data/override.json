@@ -2,6 +2,5 @@
   "close_rule1": "close \u003c results.current.EMA_200",
   "name": "get_data_5m",
   "open_rule1": "close \u003e results.current.EMA_200",
-  "pairs": "BTCUSDT ETHUSDT ETHBTC BNBETH XRPUSDT ADAUSDT SOLBNB SOLBTC DOGEUSDT DOTUSDT BNBUSDT",
   "slack_active": "false"
 }
