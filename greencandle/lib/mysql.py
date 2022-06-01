@@ -268,6 +268,15 @@ class Mysql():
             self.logger.critical("Query affected %s rows: %s" % (result, command))
         return  self.fetch_sql_data("SELECT @uids;", header=False)[0][0].decode()
 
+    @get_exceptions
+    def get_todays_profit(self):
+        """
+        Get today's profit perc so far
+        Returns float
+        """
+        command = 'select total_perc from daily_profit LIMIT 1'
+        return self.fetch_sql_data(command, header=False)[0][0]
+
     def get_active_trades(self):
         """
         Get current active trades and store in active_trades table with current price
@@ -305,7 +314,6 @@ class Mysql():
         date = hour_ago.strftime("%Y-%m-%d")
         hour = hour_ago.strftime("%H")
 
-        cur = self.dbase.cursor()
         command = ('select COALESCE(total_perc,0) total_perc, COALESCE(avg_perc,0) avg_perc, '
                    'COALESCE(usd_profit,0) usd_profit, hour, count(0) from hourly_profit where '
                    'date="{0}" and hour="{1}"'.format(date, hour))
