@@ -20,7 +20,7 @@ def main():
                "Total perc: {1:.2f}%\n"
                "Average perc: {2:.2f}%\n"
                "USD profit: {3}\n"
-               "Today's profit: {4.2f}%".format(hour, total_perc, avg_perc,
+               "Today's profit: {4:.2f}%".format(hour, total_perc, avg_perc,
                                                 format_usd(usd_profit), todays_perc))
     send_slack_message('balance', message)
 
