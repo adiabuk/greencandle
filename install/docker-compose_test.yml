@@ -209,6 +209,8 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    extra_hosts:
+      - "alert:10.8.0.1"
     healthcheck:
       test: curl -Isf http://127.1:1080/healthcheck
       interval: 5m
@@ -220,14 +222,12 @@ services:
     ports:
       - 1080:1080
     links:
-      - test-be-alert:alert
       - test-base-mysql:mysql
       - test-base-redis:redis
       - test-be-any-long:any-long
       - test-be-any-short:any-short
       - test-be-any-spot-long:any-spot-long
     depends_on:
-      - test-be-alert
       - test-base-mysql
       - test-base-redis
     entrypoint: /docker-entrypoint.sh api_router --test
@@ -457,34 +457,4 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
-      - /root/.bash_history:/root/.bash_history
-
-  test-be-alert:
-    container_name: test-be-alert
-    hostname: test-be-alert
-    image: amrox/alert:latest
-    pull_policy: always
-    restart: always
-    entrypoint: /docker-entrypoint-alert.sh /srv/alert/webhook.py
-    ports:
-      - 20000
-    healthcheck:
-      test: ls || exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    devices:
-      - /dev/ttyACM0:/dev/ttyACM0
-      - /dev/snd:/dev/snd
-    environment:
-      - HOST=$HOSTNAME
-      - CONFIG_ENV=test
-    volumes:
-      - /root/.aws:/root/.aws
-      - /run/dbus/:/run/dbus/
-      - /dev/shm:/dev/shm
-      - /run/user:/run/user
-      - /tmp/.X11-unix:/tmp/.X11-unix
-      - /var/run/dbus:/var/run/dbu
-      - /etc/localtime:/etc/localtime:ro
       - /root/.bash_history:/root/.bash_history
