@@ -37,7 +37,9 @@ def respond():
     LOGGER.info("Request received: %s %s %s" %(pair, action, text))
     current_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     current_price = get_current_price(pair)
-    item = [(pair, current_time, current_price, config.main.name)]
+
+    title = config.main.name + "-manual" if "manual" in request.json else config.main.name
+    item = [(pair, current_time, current_price, title)]
     trade = Trade(interval=config.main.interval, test_data=False, test_trade=TEST, config=config)
 
     try:
