@@ -4,7 +4,6 @@ Functions for sending alerts
 """
 
 import os
-import sys
 import json
 import smtplib
 from email.mime.multipart import MIMEMultipart
@@ -13,7 +12,7 @@ import requests
 import notify_run
 from str2bool import str2bool
 from . import config
-from .common import AttributeDict, sub_perc, format_usd, get_tv_link
+from .common import AttributeDict, sub_perc, format_usd, get_tv_link, get_trade_link
 
 
 def send_gmail_alert(action, pair, price):
@@ -108,10 +107,14 @@ def send_slack_trade(**kwargs):
     title = config.main.name
     if kwargs.action == 'OPEN':
         color = '#00fc22'
+        close_string = "• Close: {0}\n".format(get_trade_link(kwargs.pair, config.main.name,
+                                                              'close', 'close now'))
     elif kwargs.action == 'CLOSE':
         color = '#fc0303' # red
+        close_string = ""
     else:
         color = '#ff7f00'
+        close_string = ""
     icon = ":{}:".format(config.main.trade_direction)
 
     block = {
@@ -129,13 +132,16 @@ def send_slack_trade(**kwargs):
                             "• usd_profit: {4}\n"
                             "• Net perc: {5}\n"
                             "• Net usd_profit: {6}\n"
+                            "{7}"
                             "\n\n".format(get_tv_link(kwargs.pair),
                                           kwargs.price,
                                           title,
                                           kwargs.perc,
                                           kwargs.usd_profit,
                                           kwargs.net_perc,
-                                          kwargs.net_profit)),
+                                          kwargs.net_profit,
+                                          close_string
+                                          )),
                   "short":"false"
                  }]}]}
 
