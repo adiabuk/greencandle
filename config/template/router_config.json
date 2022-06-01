@@ -6,6 +6,14 @@
 "any-long-short": ["any-long", "any-short", "alert"],
 "any-long-spot": ["any-spot-long", "alert"]
 }
+{{else if eq .base_env "test"}}
+{
+"any-long": ["any-long", "alert"],
+"any-short": ["any-short", "alert"],
+"alert": ["alert"],
+"any-long-short": ["any-long", "any-short", "alert"],
+"any-long-spot": ["any-spot-long", "alert"]
+}
 {{else if eq .base_env "prod"}}
 {
 "any_spot_long" : ["prod-be-api-any-spot-long", "alert"],

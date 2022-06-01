@@ -22,7 +22,8 @@ class TestPair(unittest.TestCase):
 
         envs = []
         pairs = []
-        yamls = ['install/docker-compose_stag.yml', 'install/docker-compose_prod.yml']
+        yamls = ['install/docker-compose_stag.yml', 'install/docker-compose_prod.yml',
+                 'install/docker-compose_test.yml', 'install/docker-compose_data.yml']
 
         for env in yamls:
             # Extract all config_envs from yaml files

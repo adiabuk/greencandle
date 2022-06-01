@@ -1,17 +1,18 @@
 {
   "version": 3,
-  "region": "",
+  "region": "eu-west-1",
   "role": "",
-  "is_insecure": true,
-  "data_key": "OfvuQJ0Cis1CvnFV2KTTYv3WCPKXOIord3OBDc0kwcU=",
+  "is_insecure": false,
+  "data_key": "AQIDAHh86o+e1l3vhl3F7Gn0lhwL0nWY7Q8sBy8abugAZ50HlgFByZYGyV9NwGy6UkmVEb2oAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMnQc09bFnrB/sDzJoAgEQgDs7H09GPBab3jf9VOE0bF06keLff5e2CuoQr2pOn6WEMWWtyDeWt/+0Afeq6LxxkfomB2Hd59fuUe/fxA==",
+  "master_key_id": "alias/greencandle",
   "data": {
     "account1_key": {
-      "value": "LyI9lcbbt+XYnv8JYQU3M3FBkyUKHuXZ9B0MQn5pSwzMtT+Pb47zM4hTunO6iUJU9Jv+EusAT/gm0CWfWRePR6LwkNcjLoBpeUyKO/2t66JuZNHqz5yP4N7+gEJ+Zw20llE+f8N74bo=",
+      "value": "qNx2dIDBh1QsBduqeYBc7g==",
       "is_binary": false,
       "is_secret": true
     },
     "account1_secret": {
-      "value": "ImtEYSn0Jd4U91WlXKE+5fN5tW+LYLyRAy/BWAF0inn4W8kiNUP5EaMsx8u0E6MpTlDXt4k0ESMWVF64AeQMd/OcWOOESMFKbLOCm7TsyXusJhRT4OH5HYn7l03ew7CZaRK42SwcfPA=",
+      "value": "n0q4OWTC7HcIoQm1BcoEoQ==",
       "is_binary": false,
       "is_secret": true
     },
@@ -66,19 +67,19 @@
       "is_secret": false
     },
     "api_token": {
-      "value": "gAYOpGKVTkTXaJyOIkcgBz3DT+NHOl+q",
+      "value": "lfy831FKvTvy4qZF9i4YFIbdv4WqqemgfwlAX4P7lXnLRa4hDUpZQ1hpz68lTiv8",
       "is_binary": false,
       "is_secret": true
     },
     "aws_access_key": {
-      "value": "",
+      "value": "KvMNglAlY37ucmGGMbYnwXlyx2pinzzoRzbQ7AEeDnKs9Ik+IhUOaPAZoyY=",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "aws_secret_key": {
-      "value": "",
+      "value": "zeLOpecrRTXKfaeuDazsH0l5m3cFGGPkp3xiHG5fN8iLwvyhpBYxYfGOEmqYhubMhharCja9+1wCPCTT/o35IhGKe6M6xnAr",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "base_env": {
       "value": "test",
@@ -166,7 +167,7 @@
       "is_secret": false
     },
     "divisor": {
-      "value": "2",
+      "value": "3",
       "is_binary": false,
       "is_secret": false
     },
@@ -211,12 +212,12 @@
       "is_secret": false
     },
     "indicators": {
-      "value": "get_moving_averages;EMA;8 get_moving_averages;EMA;13 get_moving_averages;EMA;21 get_moving_averages;EMA;34 get_moving_averages;EMA;55 get_rsi;RSI;48 get_moving_averages;EMA;200 get_oscillators;STOCHF;14",
+      "value": "get_moving_averages;EMA;8 get_moving_averages;EMA;13 get_moving_averages;EMA;21 get_moving_averages;EMA;34 get_moving_averages;EMA;55 get_rsi;RSI;50 get_moving_averages;EMA;200 get_oscillators;STOCHF;14",
       "is_binary": false,
       "is_secret": false
     },
     "interval": {
-      "value": "1h",
+      "value": "4h",
       "is_binary": false,
       "is_secret": false
     },
@@ -226,32 +227,32 @@
       "is_secret": false
     },
     "logging_output": {
-      "value": "stdout",
+      "value": "journald",
       "is_binary": false,
       "is_secret": false
     },
     "loggly_password": {
-      "value": "",
+      "value": "uMhOkac1yAzehzUvAnMDf7AJ8fToY8KyDXu2iA==",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "loggly_subdomain": {
-      "value": "",
+      "value": "Vc0s5srq5Xm6ike+H7baCaILfGN0qlZ1",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "loggly_token": {
-      "value": "",
+      "value": "48D0Nbi9c20skg64W/sK6uyv3+0pso0dHL0/f7Ga9FYBbYsEougb34YAmilgL4JO4tl9LC+InbsDFQDGtmlO/g==",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "loggly_username": {
-      "value": "",
+      "value": "sHIEJMiwOnKCaYtlsQ5iib1m24Q6LmHj",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "max_trades": {
-      "value": "50",
+      "value": "10",
       "is_binary": false,
       "is_secret": false
     },
@@ -261,7 +262,7 @@
       "is_secret": false
     },
     "nginx_port": {
-      "value": "7777",
+      "value": "8888",
       "is_binary": false,
       "is_secret": false
     },
@@ -321,7 +322,7 @@
       "is_secret": false
     },
     "pairs": {
-      "value": "ETHBTC LTCBTC BNBBTC NEOBTC QTUMETH EOSETH SNTETH BNTETH GASBTC BNBETH BTCUSDT ETHUSDT OAXETH WTCBTC WTCETH LRCBTC LRCETH QTUMBTC YOYOBTC OMGBTC OMGETH ZRXBTC ZRXETH STRATBTC STRATETH SNGLSBTC SNGLSETH KNCBTC KNCETH FUNBTC FUNETH SNMBTC NEOETH IOTABTC IOTAETH LINKBTC LINKETH XVGBTC XVGETH SALTBTC SALTETH MDABTC MTLBTC MTLETH SUBBTC SUBETH EOSBTC SNTBTC ETCETH ETCBTC MTHBTC MTHETH ENGETH DNTBTC ZECBTC ZECETH BNTBTC ASTBTC ASTETH DASHBTC DASHETH OAXBTC BTGBTC BTGETH EVXBTC REQBTC REQETH VIBBTC VIBETH TRXBTC TRXETH POWRBTC POWRETH ARKBTC ARKETH XRPBTC XRPETH MODBTC MODETH ENJBTC ENJETH STORJBTC STORJETH BNBUSDT KMDBTC KMDETH NULSBNB RCNBTC NULSBTC RDNBTC XMRBTC XMRETH WTCBNB DLTBTC AMBBTC AMBETH BATBTC BATETH BATBNB BCPTBTC BCPTETH BCPTBNB ARNBTC GVTBTC GVTETH CDTBTC CDTETH GXSBTC GXSETH NEOUSDT NEOBNB POEBTC POEETH QSPBTC QSPETH QSPBNB BTSBTC BTSETH BTSBNB XZCBTC XZCETH XZCBNB LSKBTC LSKETH LSKBNB TNTBTC TNTETH FUELBTC MANABTC MANAETH BCDBTC BCDETH DGDBTC IOTABNB ADXBTC ADXETH ADXBNB ADABTC PPTBTC PPTETH CMTBTC CMTETH CMTBNB XLMBTC XLMETH XLMBNB CNDBTC CNDBNB WABIBTC WABIBNB LTCETH LTCUSDT LTCBNB TNBBTC TNBETH WAVESBTC WAVESETH WAVESBNB GTOBTC GTOETH GTOBNB ICXBTC ICXETH ICXBNB OSTBTC OSTETH OSTBNB ELFBTC ELFETH AIONBTC AIONETH AIONBNB NEBLBTC NEBLBNB BRDBTC BRDETH BRDBNB MCOBNB EDOBTC EDOETH WINGSBTC WINGSETH NAVBTC NAVETH NAVBNB LUNETH APPCBTC APPCETH VIBEBTC RLCBTC RLCETH RLCBNB INSBTC PIVXBTC PIVXBNB IOSTBTC IOSTETH STEEMBTC STEEMETH STEEMBNB NANOBTC NANOETH VIABTC BLZBTC BLZETH BLZBNB AEBTC AEETH AEBNB NCASHBTC NCASHETH NCASHBNB POABTC POAETH POABNB ZILBTC ZILETH ZILBNB ONTBTC ONTETH ONTBNB STORMBTC STORMETH STORMBNB QTUMBNB QTUMUSDT XEMBTC XEMETH XEMBNB WANBTC WANETH WANBNB WPRBTC WPRETH QLCBTC QLCETH SYSBTC SYSETH SYSBNB QLCBNB GRSBTC GRSETH ADAUSDT ADABNB CLOAKBTC CLOAKETH GNTBTC GNTETH GNTBNB LOOMBTC LOOMETH LOOMBNB XRPUSDT REPBTC REPBNB TUSDBTC TUSDETH TUSDBNB ZENBTC ZENETH ZENBNB SKYBTC SKYETH SKYBNB EOSUSDT EOSBNB CVCBTC CVCETH CVCBNB THETABTC THETAETH THETABNB XRPBNB TUSDUSDT IOTAUSDT XLMUSDT IOTXBTC IOTXETH QKCBTC QKCETH AGIBTC AGIETH AGIBNB NXSBTC NXSETH NXSBNB ENJBNB DATABTC DATAETH ONTUSDT TRXBNB TRXUSDT ETCUSDT ETCBNB ICXUSDT SCBTC SCETH NPXSBTC KEYBTC KEYETH NASBTC NASETH NASBNB MFTBTC MFTETH MFTBNB DENTBTC DENTETH ARDRBTC ARDRETH ARDRBNB NULSUSDT HOTBTC HOTETH VETBTC VETETH VETUSDT VETBNB DOCKBTC DOCKETH POLYBTC POLYBNB PHXBTC PHXETH PHXBNB HCBTC HCETH GOBTC GOBNB PAXBTC PAXBNB PAXUSDT PAXETH RVNBTC DCRBTC DCRBNB USDCBNB MITHBTC MITHBNB BCHABCBTC BCHSVBTC BCHABCUSDT BCHSVUSDT RENBTC RENBNB USDCUSDT LINKUSDT WAVESUSDT BTTBTC BTTBNB BTTUSDT USDSUSDT ONGBNB ONGBTC ONGUSDT HOTBNB HOTUSDT ZILUSDT ZRXBNB ZRXUSDT FETBNB FETBTC FETUSDT BATUSDT XMRBNB XMRUSDT ZECBNB ZECUSDT  IOSTUSDT CELRBNB CELRBTC CELRUSDT DASHBNB DASHUSDT NANOUSDT OMGBNB OMGUSDT THETAUSDT ENJUSDT MITHUSDT MATICBNB MATICBTC MATICUSDT ATOMBNB ATOMBTC ATOMUSDT PHBBNB PHBBTC TFUELBNB TFUELBTC TFUELUSDT ONEBNB ONEBTC ONEUSDT FTMBNB FTMBTC FTMUSDT BTCBBTC ALGOBNB ALGOBTC ALGOUSDT USDSBUSDT GTOUSDT ERDBNB ERDBTC ERDUSDT DOGEBNB DOGEBTC DOGEUSDT DUSKBNB DUSKBTC DUSKUSDT ANKRBNB ANKRBTC ANKRUSDT WINBNB WINBTC WINUSDT COSBNB COSBTC COSUSDT COCOSBNB COCOSBTC COCOSUSDT MTLUSDT TOMOBNB TOMOBTC TOMOUSDT PERLBNB PERLBTC PERLUSDT DENTUSDT MFTUSDT KEYUSDT STORMUSDT DOCKUSDT WANUSDT FUNUSDT CVCUSDT CHZBNB CHZBTC CHZUSDT BANDBNB BANDBTC BANDUSDT BUSDUSDT BEAMBNB BEAMBTC BEAMUSDT XTZBNB XTZBTC XTZUSDT RENUSDT RVNUSDT HCUSDT HBARBNB HBARBTC HBARUSDT NKNBNB NKNBTC NKNUSDT STXBNB STXBTC STXUSDT KAVABNB KAVABTC KAVAUSDT ARPABNB ARPABTC ARPAUSDT",
+      "value": "BTCUSDT",
       "is_binary": false,
       "is_secret": false
     },
@@ -336,17 +337,17 @@
       "is_secret": false
     },
     "push_channel": {
-      "value": "x",
+      "value": "SdvcRWRXAQ6TQF/cxPqdZEJqSh7O3X/L9cCyuxq0qxQM4p6vUH5wMQ==",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "push_host": {
-      "value": "x",
+      "value": "l3sQHA1Nxd2awwIpvw1hwcaozfcdBjLDu+nzFPE2dy4=",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "rate_indicator": {
-      "value": "EMA_200",
+      "value": "EMA_2",
       "is_binary": false,
       "is_secret": false
     },
@@ -356,12 +357,12 @@
       "is_secret": false
     },
     "redis_expire": {
-      "value": "false",
+      "value": "true",
       "is_binary": false,
       "is_secret": false
     },
     "redis_expiry_seconds": {
-      "value": "1036800",
+      "value": "2073600",
       "is_binary": false,
       "is_secret": false
     },
@@ -376,32 +377,32 @@
       "is_secret": false
     },
     "slack_active": {
-      "value": "false",
+      "value": "true",
       "is_binary": false,
       "is_secret": false
     },
     "slack_alerts": {
-      "value": "test",
+      "value": "test_alerts",
       "is_binary": false,
       "is_secret": false
     },
     "slack_balance": {
-      "value": "test",
+      "value": "test_balance",
       "is_binary": false,
       "is_secret": false
     },
     "slack_notifications": {
-      "value": "test",
+      "value": "notifications",
       "is_binary": false,
       "is_secret": false
     },
     "slack_trades": {
-      "value": "test",
+      "value": "test_trades",
       "is_binary": false,
       "is_secret": false
     },
     "slack_url": {
-      "value": "Qxzp/GmOAAk645WCu5oHoQ1wbBeSmGYEz5YACHaIdxEVDqRiLVYkpoqtqVxKrdjXpf6ydSyndcP7UnyksGBGl6IbGNJKrOGQxnOtgjr0wgwD5YvCAH+8EjmWE5o0iql18/H5GL1dAI0NNOY5LplCGveJG/15X51XOYjyng==",
+      "value": "JjjJlaICdGkH79MaRthWrVZrZ3Q/N7spoGCjDcq7XVjZfn2S6Yd8zhHdhT9YR+BTa4RbyAfbzEAm1gLo6jake/B9okYU72SlIqZBWzCuf6B+FUu/GrTzGh+iURI5krjxHlsV7Sx82/yyhlBCb2kvf6gQezM5RVC2gxUYCQ==",
       "is_binary": false,
       "is_secret": true
     },
@@ -416,7 +417,7 @@
       "is_secret": false
     },
     "time_between_trades": {
-      "value": "3h",
+      "value": "3",
       "is_binary": false,
       "is_secret": false
     },

@@ -1,0 +1,8 @@
+{
+  "immediate_take_profit": "true",
+  "immediate_trailing_stop": "true",
+  "name": "test-5ma_1tsp",
+  "take_profit_perc": "10",
+  "trailing_start": "1",
+  "trailing_stop_loss_perc": "1"
+}
