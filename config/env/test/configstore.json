@@ -382,12 +382,12 @@
       "is_secret": false
     },
     "slack_alerts": {
-      "value": "test_alerts",
+      "value": "test",
       "is_binary": false,
       "is_secret": false
     },
     "slack_balance": {
-      "value": "test_balance",
+      "value": "test",
       "is_binary": false,
       "is_secret": false
     },
@@ -397,7 +397,7 @@
       "is_secret": false
     },
     "slack_trades": {
-      "value": "test_trades",
+      "value": "test",
       "is_binary": false,
       "is_secret": false
     },
