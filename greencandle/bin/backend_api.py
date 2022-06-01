@@ -58,12 +58,10 @@ def respond():
             if trend != config.main.trade_direction and "manual" not in request.json:
                 trade_link = get_trade_link(pair, request.json['strategy'], request.json['action'],
                                             "Force trade")
-
-                send_slack_message("trades",
-                                   "Skipping {0} trade due to wrong trade direction ({1})"
-                                   .format(get_tv_link(pair), trade_link))
-                LOGGER.info("Skipping {0} trade due to wrong trade direction ({1})"
-                            .format(get_tv_link(pair), trade_link))
+                message = ("Skipping {0} trade due to wrong trade direction ({1})"
+                           .format(get_tv_link(pair), trade_link))
+                send_slack_message("trades", message)
+                LOGGER.info(message)
                 return Response(status=200)
 
         trade.open_trade(item)
