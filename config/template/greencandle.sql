@@ -55,7 +55,7 @@ CREATE TABLE `api_requests` (
   `price` varchar(30) DEFAULT NULL,
   `strategy` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=557 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=829 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -237,6 +237,22 @@ SET character_set_client = utf8;
 SET character_set_client = @saved_cs_client;
 
 --
+-- Temporary table structure for view `profitable_hours`
+--
+
+DROP TABLE IF EXISTS `profitable_hours`;
+/*!50001 DROP VIEW IF EXISTS `profitable_hours`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `profitable_hours` AS SELECT 
+ 1 AS `hour`,
+ 1 AS `hour_perc`,
+ 1 AS `total_count`,
+ 1 AS `num_profit`,
+ 1 AS `num_loss`*/;
+SET character_set_client = @saved_cs_client;
+
+--
 -- Table structure for table `trades`
 --
 
@@ -269,7 +285,7 @@ CREATE TABLE `trades` (
   `comm_open` varchar(255) DEFAULT NULL,
   `comm_close` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=164 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -417,6 +433,24 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET collation_connection      = @saved_col_connection */;
 
 --
+-- Final view structure for view `profitable_hours`
+--
+
+/*!50001 DROP VIEW IF EXISTS `profitable_hours`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `profitable_hours` AS select `hourly_profit`.`hour` AS `hour`,sum(`hourly_profit`.`total_perc`) AS `hour_perc`,count(0) AS `total_count`,sum((case when (`hourly_profit`.`total_perc` > 0) then 1 else 0 end)) AS `num_profit`,sum((case when (`hourly_profit`.`total_perc` < 0) then 1 else 0 end)) AS `num_loss` from `hourly_profit` group by `hourly_profit`.`hour` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
 -- Final view structure for view `weekly_profit`
 --
 
@@ -443,7 +477,7 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-30 13:49:32
+-- Dump completed on 2022-06-01 15:40:29
 -- MySQL dump 10.13  Distrib 5.7.38, for Linux (x86_64)
 --
 -- Host: 10.8.0.104    Database: greencandle
@@ -494,4 +528,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-30 13:49:34
+-- Dump completed on 2022-06-01 15:40:31
