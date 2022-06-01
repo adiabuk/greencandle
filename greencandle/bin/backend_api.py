@@ -62,6 +62,8 @@ def respond():
                 send_slack_message("trades",
                                    "Skipping {0} trade due to wrong trade direction ({1})"
                                    .format(get_tv_link(pair), trade_link))
+                LOGGER.info("Skipping {0} trade due to wrong trade direction ({1})"
+                            .format(get_tv_link(pair), trade_link))
                 return Response(status=200)
 
         trade.open_trade(item)

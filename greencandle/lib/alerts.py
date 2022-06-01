@@ -89,7 +89,6 @@ def send_slack_trade(**kwargs):
     for key in valid_keys:
         if key not in kwargs:
             kwargs[key] = "N/A"
-    sys.stderr.write("AMROX!!!!")
     try:
         kwargs['price'] = str(kwargs['price']).rstrip("0")
         kwargs['perc'] = "%.4f" % (kwargs['perc'])
