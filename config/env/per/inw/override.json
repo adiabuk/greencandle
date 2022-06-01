@@ -7,7 +7,7 @@
   "trade_multiplier": "5",
   "no_of_klines": "200",
   "open_rule1": "1\u003c2",
-  "pairs": "BTCUSDT ETHUSDT ETHBTC BNBETH XRPUSDT ADAUSDT SOLBNB SOLBTC DOGEUSDT DOTUSDT BNBUSDT",
+  "pairs": "BTCUSDT ETHUSDT ETHBTC BNBETH XRPUSDT ADAUSDT SOLBNB SOLBTC DOGEUSDT DOTUSDT BNBUSDT ENJUSDT ENJBTC",
   "rate_indicator": "EMA_200",
   "stop_loss_perc": "0.7",
   "take_profit_perc": "1.2",
