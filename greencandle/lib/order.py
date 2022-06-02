@@ -50,7 +50,7 @@ class Trade():
         time_range = (start.strip(), end.strip())
         if time_range[1] < time_range[0]:
             return time_str >= time_range[0] or time_str <= time_range[1]
-        return time_range[0] <= time <= time_range[1]
+        return time_range[0] <= time_str <= time_range[1]
 
 
     def __send_redis_trade(self, **kwargs):
@@ -123,7 +123,8 @@ class Trade():
             send_slack_message("alerts", "Too many trades, skipping")
             return []
         elif drain and self.is_in_drain() and not self.test_data:
-            self.logger.warning("%s is in drain, skipping..." % self.interval)
+            self.logger.warning("strategy is in drain, skipping..." % self.interval)
+            send_slack_message("alerts", "strategy is in drain, skipping")
             return []
 
         final_list = []
