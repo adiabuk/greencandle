@@ -11,10 +11,9 @@ import argparse
 import sys
 from pathlib import Path
 import argcomplete
-import setproctitle
 
 from apscheduler.schedulers.blocking import BlockingScheduler
-from str2bool import str2bool
+import setproctitle
 from ..lib import config
 config.create_config()
 
@@ -37,7 +36,6 @@ def main():
     args = parser.parse_args()
 
     interval = args.interval if args.interval else str(config.main.interval)
-    drain = str2bool(config.main.drain)
     test_string = "(test)" if args.test else "(live)"
     setproctitle.setproctitle("greencandle-backend_{0}{1}".format(interval, test_string))
     sched = BlockingScheduler()
