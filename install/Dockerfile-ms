@@ -1,4 +1,4 @@
-FROM amrox/mariadb:10.1.24-new
+FROM amrox/mariadb:10.8-new
 
 LABEL branch=${BRANCH}
 LABEL commit=${COMMIT}
