@@ -26,6 +26,7 @@ services:
     hostname: data-be-analyse_4h_high-rsi
     image: amrox/greencandle
     pull_policy: always
+    restart: always
     entrypoint: /docker-entrypoint-data.sh analyse_data
     logging:
       driver: journald
@@ -56,6 +57,7 @@ services:
     hostname: data-be-analyse_4h_big-change
     image: amrox/greencandle
     pull_policy: always
+    restart: always
     entrypoint: /docker-entrypoint-data.sh analyse_data
     logging:
       driver: journald
@@ -86,6 +88,7 @@ services:
     hostname: data-be-analyse_4h_very-high-rsi
     image: amrox/greencandle
     pull_policy: always
+    restart: always
     entrypoint: /docker-entrypoint-data.sh analyse_data
     logging:
       driver: journald
@@ -116,6 +119,7 @@ services:
     hostname: data-be-analyse_4h_low-rsi
     image: amrox/greencandle
     pull_policy: always
+    restart: always
     entrypoint: /docker-entrypoint-data.sh analyse_data
     logging:
       driver: journald
@@ -146,6 +150,7 @@ services:
     hostname: data-be-analyse_4h_big-drop
     image: amrox/greencandle
     pull_policy: always
+    restart: always
     entrypoint: /docker-entrypoint-data.sh analyse_data
     logging:
       driver: journald
@@ -176,6 +181,7 @@ services:
     hostname: data-be-analyse_4h_very-low-rsi
     image: amrox/greencandle
     pull_policy: always
+    restart: always
     entrypoint: /docker-entrypoint-data.sh analyse_data
     logging:
       driver: journald
@@ -206,6 +212,7 @@ services:
     hostname: data-be-get_5m
     image: amrox/greencandle
     pull_policy: always
+    restart: always
     entrypoint: /docker-entrypoint.sh get_data
     logging:
       driver: journald
@@ -234,6 +241,7 @@ services:
     hostname: data-be-trend_5m
     image: amrox/greencandle
     pull_policy: always
+    restart: always
     entrypoint: /docker-entrypoint.sh api_data
     logging:
       driver: journald
@@ -264,6 +272,7 @@ services:
     hostname: data-be-get_4h
     image: amrox/greencandle
     pull_policy: always
+    restart: always
     entrypoint: /docker-entrypoint.sh get_data
     logging:
       driver: journald
@@ -317,6 +326,7 @@ services:
     hostname: data-base-redis-local
     image: amrox/gc-redis
     pull_policy: always
+    restart: always
     ports:
       - 6379:6379
     restart: always
@@ -333,12 +343,12 @@ services:
     hostname: data-base-mysql-local
     image: amrox/gc-mysql
     pull_policy: always
+    restart: always
     ports:
       - 3306:3306
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - CONFIG_ENV=data
-    restart: always
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
       interval: 1m
