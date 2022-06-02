@@ -1,3 +1,4 @@
+#pylint: disable=no-member
 """
 Common functions that don't belong anywhere else
 """

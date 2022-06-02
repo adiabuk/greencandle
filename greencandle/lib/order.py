@@ -8,6 +8,8 @@ Test Buy/Sell orders
 from __future__ import print_function
 from collections import defaultdict
 import time
+import datetime
+import re
 from str2bool import str2bool
 from .auth import binance_auth
 from .logger import get_logger, exception_catcher
@@ -17,6 +19,7 @@ from .binance_accounts import get_binance_spot, base2quote, quote2base
 from .balance_common import get_base, get_quote, get_step_precision
 from .common import perc_diff, add_perc, sub_perc, AttributeDict, QUOTES
 from .alerts import send_gmail_alert, send_push_notif, send_slack_trade, send_slack_message
+
 GET_EXCEPTIONS = exception_catcher((Exception))
 
 class InvalidTradeError(Exception):
@@ -35,6 +38,20 @@ class Trade():
         self.prod = str2bool(self.config.main.production)
         self.client = binance_auth()
         self.interval = interval
+
+    def is_in_drain(self):
+        """
+        Check if current scope is in drain given date range, and current time
+        """
+        currentime = datetime.datetime.now()
+        time_str = currentime.strftime('%H:%M')
+        raw_range = self.config.main.drain_range.strip()
+        start, end = re.findall(r"\d\d:\d\d\s?-\s?\d\d:\d\d", raw_range)[0].split('-')
+        time_range = (start.strip(), end.strip)
+        if time_range[1] < time_range[0]:
+            return time_str >= time_range[0] or time_str <= time_range[1]
+        return time_range[0] <= time <= time_range[1]
+
 
     def __send_redis_trade(self, **kwargs):
         """
@@ -105,7 +122,7 @@ class Trade():
             self.logger.warning("Too many trades, skipping")
             send_slack_message("alerts", "Too many trades, skipping")
             return []
-        elif drain and not self.test_data:
+        elif drain and self.is_in_drain() and not self.test_data:
             self.logger.warning("%s is in drain, skipping..." % self.interval)
             return []
 
