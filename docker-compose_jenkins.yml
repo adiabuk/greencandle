@@ -105,6 +105,7 @@ services:
 
   mysql-unit:
     container_name: mysql-unit-${BUILD_ID}
+    entrypoint: /docker-entrypoint.sh mysqld
     hostname: mysql-unit
     build:
       context: .

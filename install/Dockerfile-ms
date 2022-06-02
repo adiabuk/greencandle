@@ -19,6 +19,9 @@ ENV MYSQL_DATABASE=greencandle
 ENV COMMIT_SHA=${COMMIT}
 ENV VERSION=${BRANCH}
 ENV BUILD_DATE=${DATE}
+ENTRYPOINT ["docker-entrypoint.sh"]
 
+EXPOSE 3306
+CMD ["mariadbd"]
 
 
