@@ -47,7 +47,7 @@ class Trade():
         time_str = currentime.strftime('%H:%M')
         raw_range = self.config.main.drain_range.strip()
         start, end = re.findall(r"\d\d:\d\d\s?-\s?\d\d:\d\d", raw_range)[0].split('-')
-        time_range = (start.strip(), end.strip)
+        time_range = (start.strip(), end.strip())
         if time_range[1] < time_range[0]:
             return time_str >= time_range[0] or time_str <= time_range[1]
         return time_range[0] <= time <= time_range[1]
