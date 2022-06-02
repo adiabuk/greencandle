@@ -1,6 +1,21 @@
 
 # Releases
 
+# 3.8
+* Link to override skipped api trade
+* Log skipped details
+* Get hourly profit and notify slack after each hour
+* Fixes for percentage calculation and formatting
+* Cleanup of old trading pairs
+* New view to get profit aggregated profit per hour for all available days
+* Change slack title if trade action was initiated manually
+* New INW trading pairs
+* Use long-short combined strategy for TV API link
+* Various code cleanups
+* New test environment
+* Time period for drain-mode
+* Set strategic downtime/drain for per env
+
 # 3.7.1
 * Don't check TL/SL for all api containers, unless enabled
 * hourly cron to run just after the hour
