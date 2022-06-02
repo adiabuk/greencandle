@@ -32,11 +32,11 @@ be=$(yq r install/docker-compose_${env}.yml services | grep -v '^ .*' | sed 's/:
 fe=$(yq r install/docker-compose_${env}.yml services | grep -v '^ .*' | sed 's/:.*$//'|grep 'fe')
 
 # Stop existing fe and be containers
-docker stop $fe $be
-docker rm $fe $be
+docker stop $fe $be || true
+docker rm $fe $be || true
 docker volume prune -f
 
-docker-compose -f ./install/docker-compose_${env}.yml up --remove-orphans -d $base
+docker-compose -f ./install/docker-compose_${env}.yml up -d $base
 
 for container in $be; do
   docker-compose -f ./install/docker-compose_${env}.yml up -d $container
