@@ -58,8 +58,8 @@ elif [[ -z $GET && -z $PUT ]]; then
   usage
 
 elif [[ -n $GET ]]; then
-  mysqldump --protocol=tcp -h $HOSTNAME -P $PORT -u root -ppassword --no-data greencandle > $FILENAME
-  mysqldump --protocol=tcp -h $HOSTNAME -P $PORT -u root -ppassword greencandle exchange >> $FILENAME
+  mysqldump --column-statistics=0 --protocol=tcp -h $HOSTNAME -P $PORT -u root -ppassword --no-data greencandle > $FILENAME
+  mysqldump --column-statistics=0 --protocol=tcp -h $HOSTNAME -P $PORT -u root -ppassword greencandle exchange >> $FILENAME
   sed -i 's/,)/)/g' $FILENAME
 
 elif [[ -n $PUT ]]; then
