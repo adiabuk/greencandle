@@ -40,3 +40,10 @@ create view profitable_by_date as select date(`profit`.`close_time`) as `date`,c
 drop view if exists weekly_profit;
 create VIEW `weekly_profit` AS select concat(year(`profit`.`close_time`),'/',week(`profit`.`close_time`)) AS `week_name`,year(`profit`.`close_time`) AS `YEAR(close_time)`,week(`profit`.`close_time`) AS `WEEK(close_time)`,count(0) AS `COUNT(*)`,left(`profit`.`close_time`,7) AS `date`,sum(`profit`.`usd_profit`) AS `usd_profit`,sum(`profit`.`perc`) AS `perc` from `profit` where week(close_time) is not null group by concat(year(`profit`.`close_time`),'/',week(`profit`.`close_time`)) order by year(`profit`.`close_time`) desc,week(`profit`.`close_time`) desc;
 
+-- table naming convention
+rename TABLE daily_profit to profit_daily;
+rename TABLE hourly_profit to profit_hourly;
+rename TABLE weekly_profit to profit_weekly;
+rename TABLE daily_profit_by_base_pair to profit_daily_by_base_pair;
+rename TABLE monthly_profit to profit_monthly;
+
