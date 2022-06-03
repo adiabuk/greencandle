@@ -32,11 +32,11 @@ services:
       driver: journald
     links:
       - data-be-get_4h:data
-      - data-base-mysql-local:mysql
-      - data-base-redis-local:redis
+      - data-base-mysql:mysql
+      - data-base-redis:redis
     depends_on:
-      - data-base-mysql-local
-      - data-base-redis-local
+      - data-base-mysql
+      - data-base-redis
       - data-be-get_4h
     environment:
       - CONFIG_ENV=data/4h/short1
@@ -62,12 +62,12 @@ services:
     logging:
       driver: journald
     links:
-      - data-base-mysql-local:mysql
-      - data-base-redis-local:redis
+      - data-base-mysql:mysql
+      - data-base-redis:redis
       - data-be-get_4h:data
     depends_on:
-      - data-base-mysql-local
-      - data-base-redis-local
+      - data-base-mysql
+      - data-base-redis
       - data-be-get_4h
     environment:
       - CONFIG_ENV=data/4h/short3
@@ -93,12 +93,12 @@ services:
     logging:
       driver: journald
     links:
-      - data-base-mysql-local:mysql
-      - data-base-redis-local:redis
+      - data-base-mysql:mysql
+      - data-base-redis:redis
       - data-be-get_4h:data
     depends_on:
-      - data-base-mysql-local
-      - data-base-redis-local
+      - data-base-mysql
+      - data-base-redis
       - data-be-get_4h
     environment:
       - CONFIG_ENV=data/4h/short2
@@ -125,11 +125,11 @@ services:
       driver: journald
     links:
       - data-be-get_4h:data
-      - data-base-mysql-local:mysql
-      - data-base-redis-local:redis
+      - data-base-mysql:mysql
+      - data-base-redis:redis
     depends_on:
-      - data-base-mysql-local
-      - data-base-redis-local
+      - data-base-mysql
+      - data-base-redis
       - data-be-get_4h
     environment:
       - CONFIG_ENV=data/4h/long1
@@ -155,12 +155,12 @@ services:
     logging:
       driver: journald
     links:
-      - data-base-mysql-local:mysql
-      - data-base-redis-local:redis
+      - data-base-mysql:mysql
+      - data-base-redis:redis
       - data-be-get_4h:data
     depends_on:
-      - data-base-mysql-local
-      - data-base-redis-local
+      - data-base-mysql
+      - data-base-redis
       - data-be-get_4h
     environment:
       - CONFIG_ENV=data/4h/long3
@@ -186,12 +186,12 @@ services:
     logging:
       driver: journald
     links:
-      - data-base-mysql-local:mysql
-      - data-base-redis-local:redis
+      - data-base-mysql:mysql
+      - data-base-redis:redis
       - data-be-get_4h:data
     depends_on:
-      - data-base-mysql-local
-      - data-base-redis-local
+      - data-base-mysql
+      - data-base-redis
       - data-be-get_4h
     environment:
       - CONFIG_ENV=data/4h/long2
@@ -217,11 +217,11 @@ services:
     logging:
       driver: journald
     links:
-      - data-base-mysql-local:mysql
-      - data-base-redis-local:redis
+      - data-base-mysql:mysql
+      - data-base-redis:redis
     depends_on:
-      - data-base-mysql-local
-      - data-base-redis-local
+      - data-base-mysql
+      - data-base-redis
     environment:
       - CONFIG_ENV=data/5m/get_data
       - HOST=$HOSTNAME
@@ -246,11 +246,11 @@ services:
     logging:
       driver: journald
     links:
-      - data-base-mysql-local:mysql
-      - data-base-redis-local:redis
+      - data-base-mysql:mysql
+      - data-base-redis:redis
     depends_on:
-      - data-base-mysql-local
-      - data-base-redis-local
+      - data-base-mysql
+      - data-base-redis
     environment:
       - CONFIG_ENV=data/5m/trend
       - HOST=$HOSTNAME
@@ -277,11 +277,11 @@ services:
     logging:
       driver: journald
     links:
-      - data-base-mysql-local:mysql
-      - data-base-redis-local:redis
+      - data-base-mysql:mysql
+      - data-base-redis:redis
     depends_on:
-      - data-base-mysql-local
-      - data-base-redis-local
+      - data-base-mysql
+      - data-base-redis
     environment:
       - CONFIG_ENV=data/4h/get_data
       - HOST=$HOSTNAME
@@ -307,11 +307,11 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh cron -f
     links:
-      - data-base-mysql-local:mysql
-      - data-base-redis-local:redis
+      - data-base-mysql:mysql
+      - data-base-redis:redis
     depends_on:
-      - data-base-mysql-local
-      - data-base-redis-local
+      - data-base-mysql
+      - data-base-redis
     healthcheck:
       test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
       interval: 1m
@@ -321,9 +321,9 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
 
-  data-base-redis-local:
-    container_name: data-base-redis-local
-    hostname: data-base-redis-local
+  data-base-redis:
+    container_name: data-base-redis
+    hostname: data-base-redis
     image: amrox/gc-redis
     pull_policy: always
     restart: always
@@ -331,16 +331,16 @@ services:
       - 6379:6379
     restart: always
     links:
-      - data-base-mysql-local:mysql
+      - data-base-mysql:mysql
     healthcheck:
       test: redis-cli ping
       interval: 1m
       timeout: 2s
       retries: 5
 
-  data-base-mysql-local:
-    container_name: data-base-mysql-local
-    hostname: data-base-mysql-local
+  data-base-mysql:
+    container_name: data-base-mysql
+    hostname: data-base-mysql
     image: amrox/gc-mysql
     pull_policy: always
     restart: always
