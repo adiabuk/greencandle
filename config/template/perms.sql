@@ -1,4 +1,5 @@
 CREATE USER 'greencandle'@'%' IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON *.* TO 'greencandle'@'%' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
 SET GLOBAL sql_mode = 'NO_ENGINE_SUBSTITUTION';
 SET GLOBAL max_connections = 1000;
