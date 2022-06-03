@@ -1,6 +1,10 @@
 
 # Releases
 
+# 3.9.1
+* Fix for DB view referencing non-existent views
+* Updated DB schema
+
 # 3.9
 * Upgrade Mariadb to 10.8
 * Cleanup data environment container names
