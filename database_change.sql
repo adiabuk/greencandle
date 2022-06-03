@@ -47,3 +47,7 @@ rename TABLE weekly_profit to profit_weekly;
 rename TABLE daily_profit_by_base_pair to profit_daily_by_base_pair;
 rename TABLE monthly_profit to profit_monthly;
 
+-- fix profitable-hours
+drop view if exists profitable_hours;
+create view profitable_hours as select hour, sum(total_perc) as hour_perc, count(*) as total_count, sum((case when (`total_perc` > 0) then 1 else 0 end)) as num_profit,
+sum((case when (`total_perc` < 0) then 1 else 0 end)) as num_loss from profit_hourly group by hour;
