@@ -1,6 +1,15 @@
 
 # Releases
 
+# 3.9
+* Upgrade Mariadb to 10.8
+* Cleanup data environment container names
+* Add new views for profit over different timeframes
+* Cleanup view names
+* Cleanup for views displaying null entries
+* add waves pairs to staging/data
+* Fix for hourly profit cron
+
 # 3.8
 * Link to override skipped api trade
 * Log skipped details
