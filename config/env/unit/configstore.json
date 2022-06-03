@@ -161,7 +161,7 @@
       "is_secret": false
     },
     "db_user": {
-      "value": "root",
+      "value": "greencandle",
       "is_binary": false,
       "is_secret": false
     },
