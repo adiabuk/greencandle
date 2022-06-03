@@ -1,13 +1,13 @@
--- MySQL dump 10.13  Distrib 5.7.38, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.29, for Linux (x86_64)
 --
--- Host: 10.8.0.104    Database: greencandle
+-- Host: 10.8.0.101    Database: greencandle
 -- ------------------------------------------------------
--- Server version	5.5.5-10.1.24-MariaDB-1~jessie
+-- Server version	5.5.5-10.8.3-MariaDB-1:10.8.3+maria~jammy
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -16,13 +16,13 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Temporary table structure for view `accounts`
+-- Temporary view structure for view `accounts`
 --
 
 DROP TABLE IF EXISTS `accounts`;
 /*!50001 DROP VIEW IF EXISTS `accounts`*/;
 SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!50503 SET character_set_client = utf8mb4 */;
 /*!50001 CREATE VIEW `accounts` AS SELECT 
  1 AS `open_time`,
  1 AS `close_time`,
@@ -45,10 +45,10 @@ SET character_set_client = @saved_cs_client;
 
 DROP TABLE IF EXISTS `api_requests`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `api_requests` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `date` datetime DEFAULT CURRENT_TIMESTAMP,
+  `date` datetime DEFAULT current_timestamp(),
   `pair` varchar(30) DEFAULT NULL,
   `text` varchar(100) DEFAULT NULL,
   `action` varchar(30) DEFAULT NULL,
@@ -64,10 +64,10 @@ CREATE TABLE `api_requests` (
 
 DROP TABLE IF EXISTS `balance`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `balance` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `ctime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `ctime` timestamp NULL DEFAULT current_timestamp(),
   `exchange_id` int(11) unsigned NOT NULL,
   `gbp` varchar(30) DEFAULT NULL,
   `btc` varchar(30) DEFAULT NULL,
@@ -86,46 +86,13 @@ CREATE TABLE `balance` (
 
 DROP TABLE IF EXISTS `balance_summary`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `balance_summary` (
-  `ctime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `ctime` timestamp NULL DEFAULT current_timestamp(),
   `usd` double DEFAULT NULL,
   `btc` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Temporary table structure for view `daily_profit`
---
-
-DROP TABLE IF EXISTS `daily_profit`;
-/*!50001 DROP VIEW IF EXISTS `daily_profit`*/;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-/*!50001 CREATE VIEW `daily_profit` AS SELECT 
- 1 AS `date`,
- 1 AS `total_perc`,
- 1 AS `avg_perc`,
- 1 AS `usd_profit`,
- 1 AS `count`*/;
-SET character_set_client = @saved_cs_client;
-
---
--- Temporary table structure for view `daily_profit_by_base_pair`
---
-
-DROP TABLE IF EXISTS `daily_profit_by_base_pair`;
-/*!50001 DROP VIEW IF EXISTS `daily_profit_by_base_pair`*/;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-/*!50001 CREATE VIEW `daily_profit_by_base_pair` AS SELECT 
- 1 AS `base_pair`,
- 1 AS `date`,
- 1 AS `perc`,
- 1 AS `pairs`,
- 1 AS `count`,
- 1 AS `usd_profit`*/;
-SET character_set_client = @saved_cs_client;
 
 --
 -- Table structure for table `exchange`
@@ -133,7 +100,7 @@ SET character_set_client = @saved_cs_client;
 
 DROP TABLE IF EXISTS `exchange`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `exchange` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(10) DEFAULT NULL,
@@ -142,44 +109,12 @@ CREATE TABLE `exchange` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Temporary table structure for view `hourly_profit`
---
-
-DROP TABLE IF EXISTS `hourly_profit`;
-/*!50001 DROP VIEW IF EXISTS `hourly_profit`*/;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-/*!50001 CREATE VIEW `hourly_profit` AS SELECT 
- 1 AS `date`,
- 1 AS `hour`,
- 1 AS `total_perc`,
- 1 AS `avg_perc`,
- 1 AS `usd_profit`,
- 1 AS `num_trades`*/;
-SET character_set_client = @saved_cs_client;
-
---
--- Temporary table structure for view `monthly_profit`
---
-
-DROP TABLE IF EXISTS `monthly_profit`;
-/*!50001 DROP VIEW IF EXISTS `monthly_profit`*/;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-/*!50001 CREATE VIEW `monthly_profit` AS SELECT 
- 1 AS `date`,
- 1 AS `usd_profit`,
- 1 AS `perc`,
- 1 AS `count(*)`*/;
-SET character_set_client = @saved_cs_client;
-
---
 -- Table structure for table `open_trades`
 --
 
 DROP TABLE IF EXISTS `open_trades`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `open_trades` (
   `pair` varchar(30) DEFAULT NULL,
   `open_price` varchar(30) DEFAULT NULL,
@@ -193,13 +128,13 @@ CREATE TABLE `open_trades` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Temporary table structure for view `profit`
+-- Temporary view structure for view `profit`
 --
 
 DROP TABLE IF EXISTS `profit`;
 /*!50001 DROP VIEW IF EXISTS `profit`*/;
 SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!50503 SET character_set_client = utf8mb4 */;
 /*!50001 CREATE VIEW `profit` AS SELECT 
  1 AS `id`,
  1 AS `open_time`,
@@ -217,14 +152,97 @@ SET character_set_client = utf8;
 SET character_set_client = @saved_cs_client;
 
 --
--- Temporary table structure for view `profitable`
+-- Temporary view structure for view `profit_daily`
 --
 
-DROP TABLE IF EXISTS `profitable`;
-/*!50001 DROP VIEW IF EXISTS `profitable`*/;
+DROP TABLE IF EXISTS `profit_daily`;
+/*!50001 DROP VIEW IF EXISTS `profit_daily`*/;
 SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profitable` AS SELECT 
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `profit_daily` AS SELECT 
+ 1 AS `date`,
+ 1 AS `total_perc`,
+ 1 AS `avg_perc`,
+ 1 AS `usd_profit`,
+ 1 AS `count`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary view structure for view `profit_daily_by_base_pair`
+--
+
+DROP TABLE IF EXISTS `profit_daily_by_base_pair`;
+/*!50001 DROP VIEW IF EXISTS `profit_daily_by_base_pair`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `profit_daily_by_base_pair` AS SELECT 
+ 1 AS `base_pair`,
+ 1 AS `date`,
+ 1 AS `perc`,
+ 1 AS `pairs`,
+ 1 AS `count`,
+ 1 AS `usd_profit`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary view structure for view `profit_hourly`
+--
+
+DROP TABLE IF EXISTS `profit_hourly`;
+/*!50001 DROP VIEW IF EXISTS `profit_hourly`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `profit_hourly` AS SELECT 
+ 1 AS `date`,
+ 1 AS `hour`,
+ 1 AS `total_perc`,
+ 1 AS `avg_perc`,
+ 1 AS `usd_profit`,
+ 1 AS `num_trades`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary view structure for view `profit_monthly`
+--
+
+DROP TABLE IF EXISTS `profit_monthly`;
+/*!50001 DROP VIEW IF EXISTS `profit_monthly`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `profit_monthly` AS SELECT 
+ 1 AS `date`,
+ 1 AS `usd_profit`,
+ 1 AS `perc`,
+ 1 AS `count(*)`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary view structure for view `profit_weekly`
+--
+
+DROP TABLE IF EXISTS `profit_weekly`;
+/*!50001 DROP VIEW IF EXISTS `profit_weekly`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `profit_weekly` AS SELECT 
+ 1 AS `week_name`,
+ 1 AS `YEAR(close_time)`,
+ 1 AS `WEEK(close_time)`,
+ 1 AS `COUNT(*)`,
+ 1 AS `date`,
+ 1 AS `usd_profit`,
+ 1 AS `perc`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary view structure for view `profitable_all`
+--
+
+DROP TABLE IF EXISTS `profitable_all`;
+/*!50001 DROP VIEW IF EXISTS `profitable_all`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `profitable_all` AS SELECT 
  1 AS `pair`,
  1 AS `total`,
  1 AS `profit`,
@@ -237,13 +255,33 @@ SET character_set_client = utf8;
 SET character_set_client = @saved_cs_client;
 
 --
--- Temporary table structure for view `profitable_hours`
+-- Temporary view structure for view `profitable_by_date`
+--
+
+DROP TABLE IF EXISTS `profitable_by_date`;
+/*!50001 DROP VIEW IF EXISTS `profitable_by_date`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `profitable_by_date` AS SELECT 
+ 1 AS `date`,
+ 1 AS `total`,
+ 1 AS `profit`,
+ 1 AS `loss`,
+ 1 AS `perc_profitable`,
+ 1 AS `perc`,
+ 1 AS `per_trade`,
+ 1 AS `max(perc)`,
+ 1 AS `min(perc)`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary view structure for view `profitable_hours`
 --
 
 DROP TABLE IF EXISTS `profitable_hours`;
 /*!50001 DROP VIEW IF EXISTS `profitable_hours`*/;
 SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!50503 SET character_set_client = utf8mb4 */;
 /*!50001 CREATE VIEW `profitable_hours` AS SELECT 
  1 AS `hour`,
  1 AS `hour_perc`,
@@ -253,12 +291,88 @@ SET character_set_client = utf8;
 SET character_set_client = @saved_cs_client;
 
 --
+-- Temporary view structure for view `profitable_month`
+--
+
+DROP TABLE IF EXISTS `profitable_month`;
+/*!50001 DROP VIEW IF EXISTS `profitable_month`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `profitable_month` AS SELECT 
+ 1 AS `pair`,
+ 1 AS `total`,
+ 1 AS `profit`,
+ 1 AS `loss`,
+ 1 AS `perc_profitable`,
+ 1 AS `perc`,
+ 1 AS `per_trade`,
+ 1 AS `max(perc)`,
+ 1 AS `min(perc)`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary view structure for view `profitable_today`
+--
+
+DROP TABLE IF EXISTS `profitable_today`;
+/*!50001 DROP VIEW IF EXISTS `profitable_today`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `profitable_today` AS SELECT 
+ 1 AS `pair`,
+ 1 AS `total`,
+ 1 AS `profit`,
+ 1 AS `loss`,
+ 1 AS `perc_profitable`,
+ 1 AS `perc`,
+ 1 AS `per_trade`,
+ 1 AS `max(perc)`,
+ 1 AS `min(perc)`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary view structure for view `profitable_totals`
+--
+
+DROP TABLE IF EXISTS `profitable_totals`;
+/*!50001 DROP VIEW IF EXISTS `profitable_totals`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `profitable_totals` AS SELECT 
+ 1 AS `table_name`,
+ 1 AS `perc_profitable`,
+ 1 AS `total_perc`,
+ 1 AS `avg_perc`,
+ 1 AS `count`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary view structure for view `profitable_week`
+--
+
+DROP TABLE IF EXISTS `profitable_week`;
+/*!50001 DROP VIEW IF EXISTS `profitable_week`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `profitable_week` AS SELECT 
+ 1 AS `pair`,
+ 1 AS `total`,
+ 1 AS `profit`,
+ 1 AS `loss`,
+ 1 AS `perc_profitable`,
+ 1 AS `perc`,
+ 1 AS `per_trade`,
+ 1 AS `max(perc)`,
+ 1 AS `min(perc)`*/;
+SET character_set_client = @saved_cs_client;
+
+--
 -- Table structure for table `trades`
 --
 
 DROP TABLE IF EXISTS `trades`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `trades` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `open_time` timestamp NULL DEFAULT '0000-00-00 00:00:00',
@@ -285,26 +399,8 @@ CREATE TABLE `trades` (
   `comm_open` varchar(255) DEFAULT NULL,
   `comm_close` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=164 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=219 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Temporary table structure for view `weekly_profit`
---
-
-DROP TABLE IF EXISTS `weekly_profit`;
-/*!50001 DROP VIEW IF EXISTS `weekly_profit`*/;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-/*!50001 CREATE VIEW `weekly_profit` AS SELECT 
- 1 AS `week_name`,
- 1 AS `YEAR(close_time)`,
- 1 AS `WEEK(close_time)`,
- 1 AS `COUNT(*)`,
- 1 AS `date`,
- 1 AS `usd_profit`,
- 1 AS `perc`*/;
-SET character_set_client = @saved_cs_client;
 
 --
 -- Final view structure for view `accounts`
@@ -319,79 +415,7 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET collation_connection      = utf8mb4_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `accounts` AS select `p`.`open_time` AS `open_time`,`t`.`close_time` AS `close_time`,`t`.`open_price` AS `open_price`,`t`.`close_price` AS `close_price`,`p`.`perc` AS `perc`,`t`.`borrowed` AS `borrowed`,`p`.`quote_profit` AS `profit`,`t`.`pair` AS `pair`,(case when (`t`.`pair` like '%BTC') then 'BTC' when (`t`.`pair` like '%BNB') then 'BNB' when (`t`.`pair` like '%ETH') then 'ETH' when (`t`.`pair` like '%USDT') then 'USDT' end) AS `quote_pair`,`t`.`name` AS `name`,`t`.`base_out` AS `quote_out`,`t`.`base_in` AS `quote_in`,`t`.`quote_in` AS `amount` from (`trades` `t` join `profit` `p`) where ((`p`.`id` = `t`.`id`) and (`t`.`close_price` is not null)) */;
-/*!50001 SET character_set_client      = @saved_cs_client */;
-/*!50001 SET character_set_results     = @saved_cs_results */;
-/*!50001 SET collation_connection      = @saved_col_connection */;
-
---
--- Final view structure for view `daily_profit`
---
-
-/*!50001 DROP VIEW IF EXISTS `daily_profit`*/;
-/*!50001 SET @saved_cs_client          = @@character_set_client */;
-/*!50001 SET @saved_cs_results         = @@character_set_results */;
-/*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8mb4 */;
-/*!50001 SET character_set_results     = utf8mb4 */;
-/*!50001 SET collation_connection      = utf8mb4_general_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `daily_profit` AS select left(`profit`.`close_time`,10) AS `date`,sum(`profit`.`perc`) AS `total_perc`,avg(`profit`.`perc`) AS `avg_perc`,sum(`profit`.`usd_profit`) AS `usd_profit`,count(0) AS `count` from `profit` where (`profit`.`perc` is not null) group by left(`profit`.`close_time`,10) order by left(`profit`.`close_time`,10) desc */;
-/*!50001 SET character_set_client      = @saved_cs_client */;
-/*!50001 SET character_set_results     = @saved_cs_results */;
-/*!50001 SET collation_connection      = @saved_col_connection */;
-
---
--- Final view structure for view `daily_profit_by_base_pair`
---
-
-/*!50001 DROP VIEW IF EXISTS `daily_profit_by_base_pair`*/;
-/*!50001 SET @saved_cs_client          = @@character_set_client */;
-/*!50001 SET @saved_cs_results         = @@character_set_results */;
-/*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8mb4 */;
-/*!50001 SET character_set_results     = utf8mb4 */;
-/*!50001 SET collation_connection      = utf8mb4_general_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `daily_profit_by_base_pair` AS select (case when (`profit`.`pair` like '%BTC') then 'BTC' when (`profit`.`pair` like '%BNB') then 'BNB' when (`profit`.`pair` like '%ETH') then 'ETH' when (`profit`.`pair` like '%USDT') then 'USDT' end) AS `base_pair`,left(`profit`.`close_time`,10) AS `date`,sum(`profit`.`perc`) AS `perc`,group_concat(distinct `profit`.`pair` separator ' ') AS `pairs`,count(0) AS `count`,(case when (`profit`.`pair` like '%BTC') then (sum(`profit`.`quote_profit`) * 50730.01000000) when (`profit`.`pair` like '%BNB') then (sum(`profit`.`quote_profit`) * 606.24000000) when (`profit`.`pair` like '%ETH') then (sum(`profit`.`quote_profit`) * 4083.72000000) when (`profit`.`pair` like '%USDT') then sum(`profit`.`quote_profit`) end) AS `usd_profit` from `profit` where (not((`profit`.`close_time` like '%0000-00-00%'))) group by left(`profit`.`close_time`,10),right(`profit`.`pair`,3) order by `profit`.`close_time` desc */;
-/*!50001 SET character_set_client      = @saved_cs_client */;
-/*!50001 SET character_set_results     = @saved_cs_results */;
-/*!50001 SET collation_connection      = @saved_col_connection */;
-
---
--- Final view structure for view `hourly_profit`
---
-
-/*!50001 DROP VIEW IF EXISTS `hourly_profit`*/;
-/*!50001 SET @saved_cs_client          = @@character_set_client */;
-/*!50001 SET @saved_cs_results         = @@character_set_results */;
-/*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8mb4 */;
-/*!50001 SET character_set_results     = utf8mb4 */;
-/*!50001 SET collation_connection      = utf8mb4_general_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `hourly_profit` AS select date_format(`profit`.`close_time`,'%Y-%m-%d') AS `date`,date_format(`profit`.`close_time`,'%H') AS `hour`,sum(`profit`.`perc`) AS `total_perc`,avg(`profit`.`perc`) AS `avg_perc`,sum(`profit`.`usd_profit`) AS `usd_profit`,count(0) AS `num_trades` from `profit` where (year(`profit`.`close_time`) <> 0) group by hour(`profit`.`close_time`),dayofmonth(`profit`.`close_time`),month(`profit`.`close_time`),year(`profit`.`close_time`) order by `profit`.`close_time` desc */;
-/*!50001 SET character_set_client      = @saved_cs_client */;
-/*!50001 SET character_set_results     = @saved_cs_results */;
-/*!50001 SET collation_connection      = @saved_col_connection */;
-
---
--- Final view structure for view `monthly_profit`
---
-
-/*!50001 DROP VIEW IF EXISTS `monthly_profit`*/;
-/*!50001 SET @saved_cs_client          = @@character_set_client */;
-/*!50001 SET @saved_cs_results         = @@character_set_results */;
-/*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8mb4 */;
-/*!50001 SET character_set_results     = utf8mb4 */;
-/*!50001 SET collation_connection      = utf8mb4_general_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `monthly_profit` AS select left(`profit`.`close_time`,7) AS `date`,sum(`profit`.`usd_profit`) AS `usd_profit`,sum(`profit`.`perc`) AS `perc`,count(0) AS `count(*)` from `profit` where (`profit`.`perc` is not null) group by left(`profit`.`close_time`,7) order by left(`profit`.`close_time`,7) desc,sum(`profit`.`quote_profit`) */;
+/*!50001 VIEW `accounts` AS select `p`.`open_time` AS `open_time`,`t`.`close_time` AS `close_time`,`t`.`open_price` AS `open_price`,`t`.`close_price` AS `close_price`,`p`.`perc` AS `perc`,`t`.`borrowed` AS `borrowed`,`p`.`quote_profit` AS `profit`,`t`.`pair` AS `pair`,case when `t`.`pair` like '%BTC' then 'BTC' when `t`.`pair` like '%BNB' then 'BNB' when `t`.`pair` like '%ETH' then 'ETH' when `t`.`pair` like '%USDT' then 'USDT' end AS `quote_pair`,`t`.`name` AS `name`,`t`.`base_out` AS `quote_out`,`t`.`base_in` AS `quote_in`,`t`.`quote_in` AS `amount` from (`trades` `t` join `profit` `p`) where `p`.`id` = `t`.`id` and `t`.`close_price` is not null */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -409,16 +433,16 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET collation_connection      = utf8mb4_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `profit` AS select `trades`.`id` AS `id`,`trades`.`open_time` AS `open_time`,`trades`.`interval` AS `interval`,`trades`.`close_time` AS `close_time`,`trades`.`pair` AS `pair`,`trades`.`name` AS `name`,`trades`.`open_price` AS `open_price`,`trades`.`close_price` AS `close_price`,(case when (`trades`.`direction` = 'long') then (((`trades`.`quote_out` - `trades`.`quote_in`) / `trades`.`quote_in`) * 100) else (((`trades`.`open_price` - `trades`.`close_price`) / `trades`.`open_price`) * 100) end) AS `perc`,(case when (`trades`.`direction` = 'long') then (`trades`.`quote_out` - `trades`.`quote_in`) else (`trades`.`quote_in` - `trades`.`quote_out`) end) AS `quote_profit`,`trades`.`drawdown_perc` AS `drawdown_perc`,`trades`.`drawup_perc` AS `drawup_perc`,(case when (`trades`.`direction` = 'long') then ((`trades`.`quote_out` - `trades`.`quote_in`) * `trades`.`close_usd_rate`) else ((`trades`.`quote_in` - `trades`.`quote_out`) * `trades`.`close_usd_rate`) end) AS `usd_profit` from `trades` */;
+/*!50001 VIEW `profit` AS select `trades`.`id` AS `id`,`trades`.`open_time` AS `open_time`,`trades`.`interval` AS `interval`,`trades`.`close_time` AS `close_time`,`trades`.`pair` AS `pair`,`trades`.`name` AS `name`,`trades`.`open_price` AS `open_price`,`trades`.`close_price` AS `close_price`,case when `trades`.`direction` = 'long' then (`trades`.`quote_out` - `trades`.`quote_in`) / `trades`.`quote_in` * 100 else (`trades`.`open_price` - `trades`.`close_price`) / `trades`.`open_price` * 100 end AS `perc`,case when `trades`.`direction` = 'long' then `trades`.`quote_out` - `trades`.`quote_in` else `trades`.`quote_in` - `trades`.`quote_out` end AS `quote_profit`,`trades`.`drawdown_perc` AS `drawdown_perc`,`trades`.`drawup_perc` AS `drawup_perc`,case when `trades`.`direction` = 'long' then (`trades`.`quote_out` - `trades`.`quote_in`) * `trades`.`close_usd_rate` else (`trades`.`quote_in` - `trades`.`quote_out`) * `trades`.`close_usd_rate` end AS `usd_profit` from `trades` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
 
 --
--- Final view structure for view `profitable`
+-- Final view structure for view `profit_daily`
 --
 
-/*!50001 DROP VIEW IF EXISTS `profitable`*/;
+/*!50001 DROP VIEW IF EXISTS `profit_daily`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
@@ -427,7 +451,115 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET collation_connection      = utf8mb4_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `profitable` AS select `profit`.`pair` AS `pair`,count(0) AS `total`,sum((case when (`profit`.`perc` > 0) then 1 else 0 end)) AS `profit`,sum((case when (`profit`.`perc` < 0) then 1 else 0 end)) AS `loss`,((sum((case when (`profit`.`perc` > 0) then 1 else 0 end)) / count(0)) * 100) AS `perc_profitable`,sum(`profit`.`perc`) AS `perc`,(sum(`profit`.`perc`) / count(0)) AS `per_trade`,max(`profit`.`perc`) AS `max(perc)`,min(`profit`.`perc`) AS `min(perc)` from `profit` where (month(`profit`.`close_time`) = month(curdate())) group by `profit`.`pair` order by ((sum((case when (`profit`.`perc` > 0) then 1 else 0 end)) / count(0)) * 100) desc */;
+/*!50001 VIEW `profit_daily` AS select left(`profit`.`close_time`,10) AS `date`,sum(`profit`.`perc`) AS `total_perc`,avg(`profit`.`perc`) AS `avg_perc`,sum(`profit`.`usd_profit`) AS `usd_profit`,count(0) AS `count` from `profit` where `profit`.`perc` is not null group by left(`profit`.`close_time`,10) order by left(`profit`.`close_time`,10) desc */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `profit_daily_by_base_pair`
+--
+
+/*!50001 DROP VIEW IF EXISTS `profit_daily_by_base_pair`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `profit_daily_by_base_pair` AS select case when `profit`.`pair` like '%BTC' then 'BTC' when `profit`.`pair` like '%BNB' then 'BNB' when `profit`.`pair` like '%ETH' then 'ETH' when `profit`.`pair` like '%USDT' then 'USDT' end AS `base_pair`,left(`profit`.`close_time`,10) AS `date`,sum(`profit`.`perc`) AS `perc`,group_concat(distinct `profit`.`pair` separator ' ') AS `pairs`,count(0) AS `count`,case when `profit`.`pair` like '%BTC' then sum(`profit`.`quote_profit`) * 50730.01000000 when `profit`.`pair` like '%BNB' then sum(`profit`.`quote_profit`) * 606.24000000 when `profit`.`pair` like '%ETH' then sum(`profit`.`quote_profit`) * 4083.72000000 when `profit`.`pair` like '%USDT' then sum(`profit`.`quote_profit`) end AS `usd_profit` from `profit` where `profit`.`close_time`  not like '%0000-00-00%' group by left(`profit`.`close_time`,10),right(`profit`.`pair`,3) order by `profit`.`close_time` desc */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `profit_hourly`
+--
+
+/*!50001 DROP VIEW IF EXISTS `profit_hourly`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `profit_hourly` AS select date_format(`profit`.`close_time`,'%Y-%m-%d') AS `date`,date_format(`profit`.`close_time`,'%H') AS `hour`,sum(`profit`.`perc`) AS `total_perc`,avg(`profit`.`perc`) AS `avg_perc`,sum(`profit`.`usd_profit`) AS `usd_profit`,count(0) AS `num_trades` from `profit` where year(`profit`.`close_time`) <> 0 group by hour(`profit`.`close_time`),dayofmonth(`profit`.`close_time`),month(`profit`.`close_time`),year(`profit`.`close_time`) order by `profit`.`close_time` desc */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `profit_monthly`
+--
+
+/*!50001 DROP VIEW IF EXISTS `profit_monthly`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `profit_monthly` AS select left(`profit`.`close_time`,7) AS `date`,sum(`profit`.`usd_profit`) AS `usd_profit`,sum(`profit`.`perc`) AS `perc`,count(0) AS `count(*)` from `profit` where `profit`.`perc` is not null group by left(`profit`.`close_time`,7) order by left(`profit`.`close_time`,7) desc,sum(`profit`.`quote_profit`) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `profit_weekly`
+--
+
+/*!50001 DROP VIEW IF EXISTS `profit_weekly`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `profit_weekly` AS select concat(year(`profit`.`close_time`),'/',week(`profit`.`close_time`)) AS `week_name`,year(`profit`.`close_time`) AS `YEAR(close_time)`,week(`profit`.`close_time`) AS `WEEK(close_time)`,count(0) AS `COUNT(*)`,left(`profit`.`close_time`,7) AS `date`,sum(`profit`.`usd_profit`) AS `usd_profit`,sum(`profit`.`perc`) AS `perc` from `profit` where week(`profit`.`close_time`) is not null group by concat(year(`profit`.`close_time`),'/',week(`profit`.`close_time`)) order by year(`profit`.`close_time`) desc,week(`profit`.`close_time`) desc */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `profitable_all`
+--
+
+/*!50001 DROP VIEW IF EXISTS `profitable_all`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `profitable_all` AS select `profit`.`pair` AS `pair`,count(0) AS `total`,sum(case when `profit`.`perc` > 0 then 1 else 0 end) AS `profit`,sum(case when `profit`.`perc` < 0 then 1 else 0 end) AS `loss`,sum(case when `profit`.`perc` > 0 then 1 else 0 end) / count(0) * 100 AS `perc_profitable`,sum(`profit`.`perc`) AS `perc`,sum(`profit`.`perc`) / count(0) AS `per_trade`,max(`profit`.`perc`) AS `max(perc)`,min(`profit`.`perc`) AS `min(perc)` from `profit` where `profit`.`pair` is not null group by `profit`.`pair` order by sum(case when `profit`.`perc` > 0 then 1 else 0 end) / count(0) * 100 desc */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `profitable_by_date`
+--
+
+/*!50001 DROP VIEW IF EXISTS `profitable_by_date`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `profitable_by_date` AS select cast(`profit`.`close_time` as date) AS `date`,count(0) AS `total`,sum(case when `profit`.`perc` > 0 then 1 else 0 end) AS `profit`,sum(case when `profit`.`perc` < 0 then 1 else 0 end) AS `loss`,sum(case when `profit`.`perc` > 0 then 1 else 0 end) / count(0) * 100 AS `perc_profitable`,sum(`profit`.`perc`) AS `perc`,sum(`profit`.`perc`) / count(0) AS `per_trade`,max(`profit`.`perc`) AS `max(perc)`,min(`profit`.`perc`) AS `min(perc)` from `profit` where `profit`.`pair` is not null and cast(`profit`.`close_time` as date) <> '0000-00-00' group by cast(`profit`.`close_time` as date) order by sum(case when `profit`.`perc` > 0 then 1 else 0 end) / count(0) * 100 desc */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -445,16 +577,16 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET collation_connection      = utf8mb4_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `profitable_hours` AS select `hourly_profit`.`hour` AS `hour`,sum(`hourly_profit`.`total_perc`) AS `hour_perc`,count(0) AS `total_count`,sum((case when (`hourly_profit`.`total_perc` > 0) then 1 else 0 end)) AS `num_profit`,sum((case when (`hourly_profit`.`total_perc` < 0) then 1 else 0 end)) AS `num_loss` from `hourly_profit` group by `hourly_profit`.`hour` */;
+/*!50001 VIEW `profitable_hours` AS select `profit_hourly`.`hour` AS `hour`,sum(`profit_hourly`.`total_perc`) AS `hour_perc`,count(0) AS `total_count`,sum(case when `profit_hourly`.`total_perc` > 0 then 1 else 0 end) AS `num_profit`,sum(case when `profit_hourly`.`total_perc` < 0 then 1 else 0 end) AS `num_loss` from `profit_hourly` group by `profit_hourly`.`hour` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
 
 --
--- Final view structure for view `weekly_profit`
+-- Final view structure for view `profitable_month`
 --
 
-/*!50001 DROP VIEW IF EXISTS `weekly_profit`*/;
+/*!50001 DROP VIEW IF EXISTS `profitable_month`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
@@ -463,7 +595,61 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET collation_connection      = utf8mb4_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `weekly_profit` AS select concat(year(`profit`.`close_time`),'/',week(`profit`.`close_time`)) AS `week_name`,year(`profit`.`close_time`) AS `YEAR(close_time)`,week(`profit`.`close_time`) AS `WEEK(close_time)`,count(0) AS `COUNT(*)`,left(`profit`.`close_time`,7) AS `date`,sum(`profit`.`usd_profit`) AS `usd_profit`,sum(`profit`.`perc`) AS `perc` from `profit` group by concat(year(`profit`.`close_time`),'/',week(`profit`.`close_time`)) order by year(`profit`.`close_time`) desc,week(`profit`.`close_time`) desc */;
+/*!50001 VIEW `profitable_month` AS select `profit`.`pair` AS `pair`,count(0) AS `total`,sum(case when `profit`.`perc` > 0 then 1 else 0 end) AS `profit`,sum(case when `profit`.`perc` < 0 then 1 else 0 end) AS `loss`,sum(case when `profit`.`perc` > 0 then 1 else 0 end) / count(0) * 100 AS `perc_profitable`,sum(`profit`.`perc`) AS `perc`,sum(`profit`.`perc`) / count(0) AS `per_trade`,max(`profit`.`perc`) AS `max(perc)`,min(`profit`.`perc`) AS `min(perc)` from `profit` where month(`profit`.`close_time`) = month(curdate()) group by `profit`.`pair` order by sum(case when `profit`.`perc` > 0 then 1 else 0 end) / count(0) * 100 desc */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `profitable_today`
+--
+
+/*!50001 DROP VIEW IF EXISTS `profitable_today`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `profitable_today` AS select `profit`.`pair` AS `pair`,count(0) AS `total`,sum(case when `profit`.`perc` > 0 then 1 else 0 end) AS `profit`,sum(case when `profit`.`perc` < 0 then 1 else 0 end) AS `loss`,sum(case when `profit`.`perc` > 0 then 1 else 0 end) / count(0) * 100 AS `perc_profitable`,sum(`profit`.`perc`) AS `perc`,sum(`profit`.`perc`) / count(0) AS `per_trade`,max(`profit`.`perc`) AS `max(perc)`,min(`profit`.`perc`) AS `min(perc)` from `profit` where cast(`profit`.`close_time` as date) = cast(curdate() as date) group by `profit`.`pair` order by sum(case when `profit`.`perc` > 0 then 1 else 0 end) / count(0) * 100 desc */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `profitable_totals`
+--
+
+/*!50001 DROP VIEW IF EXISTS `profitable_totals`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `profitable_totals` AS select `x`.`table_name` AS `table_name`,`x`.`perc_profitable` AS `perc_profitable`,`x`.`total_perc` AS `total_perc`,`x`.`avg_perc` AS `avg_perc`,`x`.`count` AS `count` from (select 'today' AS `table_name`,avg(`profitable_today`.`perc_profitable`) AS `perc_profitable`,sum(`profitable_today`.`perc`) AS `total_perc`,avg(`profitable_today`.`perc`) AS `avg_perc`,count(0) AS `count` from `profitable_today` union select 'month' AS `table_name`,avg(`profitable_month`.`perc_profitable`) AS `perc_profitable`,sum(`profitable_month`.`perc`) AS `total_perc`,avg(`profitable_month`.`perc`) AS `avg_perc`,count(0) AS `count` from `profitable_month` union select 'week' AS `table_name`,avg(`profitable_week`.`perc_profitable`) AS `perc_profitable`,sum(`profitable_week`.`perc`) AS `total_perc`,avg(`profitable_week`.`perc`) AS `avg_perc`,count(0) AS `count` from `profitable_week` union select 'all' AS `table_name`,avg(`profitable_all`.`perc_profitable`) AS `perc_profitable`,sum(`profitable_all`.`perc`) AS `total_perc`,avg(`profitable_all`.`perc`) AS `avg_perc`,count(0) AS `count` from `profitable_all`) `x` group by `x`.`table_name` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `profitable_week`
+--
+
+/*!50001 DROP VIEW IF EXISTS `profitable_week`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `profitable_week` AS select `profit`.`pair` AS `pair`,count(0) AS `total`,sum(case when `profit`.`perc` > 0 then 1 else 0 end) AS `profit`,sum(case when `profit`.`perc` < 0 then 1 else 0 end) AS `loss`,sum(case when `profit`.`perc` > 0 then 1 else 0 end) / count(0) * 100 AS `perc_profitable`,sum(`profit`.`perc`) AS `perc`,sum(`profit`.`perc`) / count(0) AS `per_trade`,max(`profit`.`perc`) AS `max(perc)`,min(`profit`.`perc`) AS `min(perc)` from `profit` where week(`profit`.`close_time`) = week(curdate()) and year(`profit`.`close_time`) = year(curdate()) group by `profit`.`pair` order by sum(case when `profit`.`perc` > 0 then 1 else 0 end) / count(0) * 100 desc */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -477,17 +663,17 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-06-01 15:40:29
--- MySQL dump 10.13  Distrib 5.7.38, for Linux (x86_64)
+-- Dump completed on 2022-06-03 22:22:19
+-- MySQL dump 10.13  Distrib 8.0.29, for Linux (x86_64)
 --
--- Host: 10.8.0.104    Database: greencandle
+-- Host: 10.8.0.101    Database: greencandle
 -- ------------------------------------------------------
--- Server version	5.5.5-10.1.24-MariaDB-1~jessie
+-- Server version	5.5.5-10.8.3-MariaDB-1:10.8.3+maria~jammy
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -501,7 +687,7 @@ SET character_set_client = @saved_cs_client;
 
 DROP TABLE IF EXISTS `exchange`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `exchange` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(10) DEFAULT NULL,
@@ -528,4 +714,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-06-01 15:40:31
+-- Dump completed on 2022-06-03 22:22:20
