@@ -62,6 +62,7 @@ services:
     hostname: stag-base-mysql
     image: amrox/gc-mysql:${TAG}
     pull_policy: always
+    entrypoint: /docker-entrypoint.sh mysqld
     environment:
       - CONFIG_ENV=stag
       - MYSQL_ROOT_PASSWORD=password

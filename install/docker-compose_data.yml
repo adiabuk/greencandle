@@ -344,6 +344,7 @@ services:
     image: amrox/gc-mysql
     pull_policy: always
     restart: always
+    entrypoint: /docker-entrypoint.sh mysqld
     ports:
       - 3306:3306
     environment:
