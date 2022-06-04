@@ -315,7 +315,7 @@ class Mysql():
         hour = hour_ago.strftime("%H")
 
         command = ('select COALESCE(total_perc,0) total_perc, COALESCE(avg_perc,0) avg_perc, '
-                   'COALESCE(usd_profit,0) usd_profit, hour, count(0) from hourly_profit where '
+                   'COALESCE(usd_profit,0) usd_profit, hour, count(0) from profit_hourly where '
                    'date="{0}" and hour="{1}"'.format(date, hour))
 
         result = self.fetch_sql_data(command, header=False)
