@@ -13,7 +13,7 @@ lib==3.0.0
 mysqlclient==2.1.0
 oauth==1.0.1
 pandas==1.0.1
-numpy==1.16.0
+numpy==1.21.0
 Pillow>=6.2.2
 plotly==4.1.1
 python_resize_image==1.1.11
