@@ -6,16 +6,13 @@ Check that all trading pairs used in various configs exist and have data
 
 import os
 import unittest
-from greencandle.lib import config
-config.create_config()
-from greencandle.lib.binance_common import get_binance_klines
+from binance.binance import Binance
 
 
 class TestPair(unittest.TestCase):
     """Test executables included in package"""
 
-    @staticmethod
-    def test_pair():
+    def test_pair(self):
         """
         test all trading pairs
         """
@@ -39,9 +36,11 @@ class TestPair(unittest.TestCase):
                 extracted = os.popen('configstore package get {} pairs'.format(item)).read().split()
                 pairs.extend(extracted)
 
-
+        client = Binance()
+        info = client.exchange_info()
         for pair in set(pairs):
             # Attempt to get data for each unique pair
             if pair not in ("None", "any"):
                 print("Testing pair " + pair)
-                get_binance_klines(pair, '1m', 1)
+                self.assertIn(pair, info)
+                self.assertEqual(info[pair]['status'], 'TRADING')
