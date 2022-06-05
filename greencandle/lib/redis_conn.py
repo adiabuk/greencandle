@@ -8,13 +8,13 @@ import ast
 import time
 import zlib
 import pickle
-from datetime import datetime
+from datetime import datetime, timedelta
 import redis
 from str2bool import str2bool
 from .mysql import Mysql
 from .logger import get_logger
 from . import config
-from .common import add_perc, sub_perc, AttributeDict, perc_diff, convert_to_seconds
+from .common import add_perc, sub_perc, AttributeDict, perc_diff, convert_to_seconds, TF2MIN
 
 class Redis():
     """
@@ -77,6 +77,8 @@ class Redis():
             drawup = perc_diff(orig_price, max_price)
         except TypeError:
             drawup = 0
+        self.logger.info("Getting drawup orig_price: %s,  max_price: %s, drawup: %s"
+                         % (orig_price, max_price, drawup))
         return {'price':max_price, 'perc': drawup}
 
     def rm_drawup(self, pair):
@@ -106,6 +108,8 @@ class Redis():
             drawdown = perc_diff(orig_price, min_price)
         except TypeError:
             drawdown = 0
+        self.logger.info("Getting drawdown orig_price: %s,  min_price: %s, drawdown: %s"
+                         % (orig_price, min_price, drawdown))
         return drawdown
 
     def update_on_entry(self, pair, name, value):
@@ -130,7 +134,20 @@ class Redis():
         key = "{}-{}-{}".format(pair, name, config.main.name)
         return self.conn.delete(key)
 
-    def update_drawdown(self, pair, current_candle, event=None):
+    def in_current_candle(self, open_time):
+        """
+        Check we are still within the current candle
+        If open_time + min(interval) is in the future
+        """
+        if not open_time:
+            return False
+        else:
+            timestamp = datetime.strptime(open_time, '%Y-%m-%d %H:%M:%S')
+            current_time = datetime.now()
+            future_time = timestamp + timedelta(minutes=TF2MIN[self.config.main.interval])
+        return bool(future_time > current_time)
+
+    def update_drawdown(self, pair, current_candle, event=None, open_time=None):
         """
         Update minimum price for current asset.  Create redis record if it doesn't exist.
         """
@@ -152,19 +169,21 @@ class Redis():
 
         if config.main.trade_direction == 'long':
             # if min price already exists and current price is lower, or there is no min price yet.
+            price = current_price if self.in_current_candle(open_time) else current_low
 
-            if (min_price and float(current_low) < float(min_price)) or \
+            if (min_price and float(price) < float(min_price)) or \
                     (not min_price and event == 'open'):
 
-                data = {"min_price": current_low, "orig_price": orig_price}
+                data = {"min_price": price, "orig_price": orig_price}
                 self.__add_price(key, data)
         elif config.main.trade_direction == 'short':
-            if (min_price and float(current_high) > float(min_price)) or \
+            price = current_price if self.in_current_candle(open_time) else current_high
+            if (min_price and float(price) > float(min_price)) or \
                     (not min_price and event == 'open'):
-                data = {"min_price": current_high, "orig_price": orig_price}
+                data = {"min_price": price, "orig_price": orig_price}
                 self.__add_price(key, data)
 
-    def update_drawup(self, pair, current_candle, event=None):
+    def update_drawup(self, pair, current_candle, event=None, open_time=None):
         """
         Update minimum price for current asset.  Create redis record if it doesn't exist.
         """
@@ -183,15 +202,17 @@ class Redis():
         if not orig_price:
             orig_price = current_price
         if config.main.trade_direction == 'long':
-            if (max_price and float(current_high) > float(max_price)) or \
+            price = current_price if self.in_current_candle(open_time) else current_high
+            if (max_price and float(price) > float(max_price)) or \
                     (not max_price and event == 'open'):
 
-                data = {"max_price": current_high, "orig_price": orig_price}
+                data = {"max_price": price, "orig_price": orig_price}
                 self.__add_price(key, data)
         elif config.main.trade_direction == 'short':
-            if (max_price and float(current_low) < float(max_price)) or \
+            price = current_price if self.in_current_candle(open_time) else current_low
+            if (max_price and float(price) < float(max_price)) or \
                     (not max_price and event == 'open'):
-                data = {"max_price": current_low, "orig_price": orig_price}
+                data = {"max_price": price, "orig_price": orig_price}
                 self.__add_price(key, data)
 
     def redis_conn(self, pair, interval, data, now):

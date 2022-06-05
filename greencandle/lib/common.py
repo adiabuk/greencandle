@@ -31,6 +31,16 @@ HOUR = {"3m": "*",
         "4h": "0,4,8,12,16,20"
         }
 
+TF2MIN = {"3m": 3,
+          "5m": 5,
+          "15m": 15,
+          "30m": 30,
+          "1h": 60,
+          "2h": 120,
+          "3h": 180,
+          "4h": 240
+          }
+
 def format_usd(amount):
     """
     Return formatted USD string, with dollar sign and 2dp
