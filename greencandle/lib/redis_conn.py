@@ -130,8 +130,6 @@ class Redis():
         key = "{}-{}-{}".format(pair, name, config.main.name)
         return self.conn.delete(key)
 
-
-
     def update_drawdown(self, pair, current_candle, event=None):
         """
         Update minimum price for current asset.  Create redis record if it doesn't exist.
@@ -185,15 +183,15 @@ class Redis():
         if not orig_price:
             orig_price = current_price
         if config.main.trade_direction == 'long':
-            if (max_price and float(current_price) > float(max_price)) or \
+            if (max_price and float(current_high) > float(max_price)) or \
                     (not max_price and event == 'open'):
 
-                data = {"max_price": current_price, "orig_price": orig_price}
+                data = {"max_price": current_high, "orig_price": orig_price}
                 self.__add_price(key, data)
         elif config.main.trade_direction == 'short':
             if (max_price and float(current_low) < float(max_price)) or \
                     (not max_price and event == 'open'):
-                data = {"max_price": current_high, "orig_price": orig_price}
+                data = {"max_price": current_low, "orig_price": orig_price}
                 self.__add_price(key, data)
 
     def redis_conn(self, pair, interval, data, now):
