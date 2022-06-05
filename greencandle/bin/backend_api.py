@@ -78,7 +78,7 @@ def respond():
     elif action == 'CLOSE':
         redis = Redis(interval=config.main.interval, test=False, test_data=False)
         drawdown = redis.get_drawdown(pair)
-        drawup = redis.get_drawup(pair['perc'])
+        drawup = redis.get_drawup(pair)['perc']
         trade.close_trade(item, drawdowns={pair:drawdown}, drawups={pair:drawup})
         redis.rm_on_entry(item[0][0], 'take_profit_perc')
         redis.rm_on_entry(item[0][0], 'stop_loss_perc')
