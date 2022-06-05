@@ -55,7 +55,12 @@ def respond():
 
         if 'get_trend' in os.environ:
             url = "http://trend:6000/get_trend?pair={}".format(pair)
-            req = requests.get(url, timeout=1)
+            try:
+                req = requests.get(url, timeout=1)
+            except Exception:
+                LOGGER.error("Unable to get trend from %s" % url)
+                return Response(status=500)
+
             trend = req.text.strip()
             if trend != config.main.trade_direction and "manual" not in request.json:
                 trade_link = get_trade_link(pair, request.json['strategy'], request.json['action'],
