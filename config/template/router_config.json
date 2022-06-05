@@ -4,7 +4,7 @@
 "any-short": ["any-short", "alert"],
 "alert": ["alert"],
 "any-long-short": ["any-long", "any-short", "alert"],
-"any-long-spot": ["any-spot-long", "alert"]
+"any-spot-long": ["any-spot-long", "alert"]
 }
 {{else if eq .base_env "test"}}
 {
@@ -12,7 +12,7 @@
 "any-short": ["any-short", "alert"],
 "alert": ["alert"],
 "any-long-short": ["any-long", "any-short", "alert"],
-"any-long-spot": ["any-spot-long", "alert"]
+"any-spot-long": ["any-spot-long", "alert"]
 }
 {{else if eq .base_env "prod"}}
 {
