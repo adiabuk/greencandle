@@ -27,7 +27,7 @@ services:
     links:
       - test-base-mysql:mysql
     ports:
-      - 6379
+      - 6378:6379
     healthcheck:
       test: redis-cli ping
       interval: 1m
