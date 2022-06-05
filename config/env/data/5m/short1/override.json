@@ -1,0 +1,5 @@
+{
+  "name": "high-rsi_5m",
+  "open_rule1": "results.current.RSI_14 \u003e 70",
+  "trade_direction": "short"
+}

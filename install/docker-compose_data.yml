@@ -207,6 +207,192 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
+  data-be-analyse_5m_high-rsi:
+    container_name: data-be-analyse_5m_high-rsi
+    hostname: data-be-analyse_5m_high-rsi
+    image: amrox/greencandle
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint-data.sh analyse_data
+    logging:
+      driver: journald
+    links:
+      - data-be-get_5m:data
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_5m
+    environment:
+      - CONFIG_ENV=data/5m/short1
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-analyse_5m_big-change:
+    container_name: data-be-analyse_5m_big-change
+    hostname: data-be-analyse_5m_big-change
+    image: amrox/greencandle
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint-data.sh analyse_data
+    logging:
+      driver: journald
+    links:
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+      - data-be-get_5m:data
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_5m
+    environment:
+      - CONFIG_ENV=data/5m/short3
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-analyse_5m_very-high-rsi:
+    container_name: data-be-analyse_5m_very-high-rsi
+    hostname: data-be-analyse_5m_very-high-rsi
+    image: amrox/greencandle
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint-data.sh analyse_data
+    logging:
+      driver: journald
+    links:
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+      - data-be-get_5m:data
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_5m
+    environment:
+      - CONFIG_ENV=data/5m/short2
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-analyse_5m_low-rsi:
+    container_name: data-be-analyse_5m_low-rsi
+    hostname: data-be-analyse_5m_low-rsi
+    image: amrox/greencandle
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint-data.sh analyse_data
+    logging:
+      driver: journald
+    links:
+      - data-be-get_5m:data
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_5m
+    environment:
+      - CONFIG_ENV=data/5m/long1
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-analyse_5m_big-drop:
+    container_name: data-be-analyse_5m_big-drop
+    hostname: data-be-analyse_5m_big-drop
+    image: amrox/greencandle
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint-data.sh analyse_data
+    logging:
+      driver: journald
+    links:
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+      - data-be-get_5m:data
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_5m
+    environment:
+      - CONFIG_ENV=data/5m/long3
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-analyse_5m_very-low-rsi:
+    container_name: data-be-analyse_5m_very-low-rsi
+    hostname: data-be-analyse_5m_very-low-rsi
+    image: amrox/greencandle
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint-data.sh analyse_data
+    logging:
+      driver: journald
+    links:
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+      - data-be-get_5m:data
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_5m
+    environment:
+      - CONFIG_ENV=data/5m/long2
+      - HOST=$HOSTNAME
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
   data-be-get_5m:
     container_name: data-be-get_5m
     hostname: data-be-get_5m
