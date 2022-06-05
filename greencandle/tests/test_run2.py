@@ -7,7 +7,7 @@ import unittest
 from .unittests import make_test_case
 
 class TestCOTIUSDT(make_test_case('unit/scalp', 'COTIUSDT', '15m', '2020-03-01', 10, 31, 6, -0.39,
-                                  27.2, 46.1)):
+                                  27.2, 46.0)):
     """test COTIUSDT scalp with ST/TP/TSL"""
     pass
 
