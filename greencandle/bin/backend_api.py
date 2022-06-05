@@ -14,7 +14,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from greencandle.lib.common import arg_decorator, get_tv_link, get_trade_link
 from greencandle.lib import config
 config.create_config()
-from greencandle.lib.binance_common import get_current_price
+from greencandle.lib.binance_common import get_current_price, get_dataframes
 from greencandle.lib.run import prod_int_check
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.logger import get_logger
@@ -70,12 +70,20 @@ def respond():
         redis = Redis(interval=config.main.interval, test=False, test_data=False)
         redis.update_on_entry(item[0][0], 'take_profit_perc', eval(config.main.take_profit_perc))
         redis.update_on_entry(item[0][0], 'stop_loss_perc', eval(config.main.stop_loss_perc))
+        dataframes = get_dataframes([pair], interval=config.main.interval, no_of_klines=1)
+        current_candle = dataframes[pair].iloc[-1]
+        redis.update_drawdown(pair, current_candle, event="open")
+        redis.update_drawup(pair, current_candle, event="open")
 
     elif action == 'CLOSE':
-        trade.close_trade(item, drawdowns={pair:0}, drawups={pair:0})
+        drawdown = redis.get_drawdown(pair)
+        drawup = redis.get_drawup(pair['perc'])
+        trade.close_trade(item, drawdowns={pair:drawdown}, drawups={pair:drawup})
         redis = Redis(interval=config.main.interval, test=False, test_data=False)
         redis.rm_on_entry(item[0][0], 'take_profit_perc')
         redis.rm_on_entry(item[0][0], 'stop_loss_perc')
+        redis.rm_drawup(pair)
+        redis.rm_drawdown(pair)
 
     return Response(status=200)
 
