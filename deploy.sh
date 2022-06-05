@@ -34,7 +34,6 @@ fe=$(yq r install/docker-compose_${env}.yml services | grep -v '^ .*' | sed 's/:
 # Stop existing fe and be containers
 docker stop $fe $be || true
 docker rm $fe $be || true
-docker volume prune -f
 
 docker-compose -f ./install/docker-compose_${env}.yml up -d $base
 
