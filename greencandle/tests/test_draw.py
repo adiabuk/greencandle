@@ -3,8 +3,8 @@
 
 import os
 import unittest
-import pandas as pd
 import time
+import pandas as pd
 from greencandle.lib import config
 config.create_config()
 
@@ -97,21 +97,21 @@ class TestDraw(unittest.TestCase):
         self.assertEqual(abs(redis.get_drawup(pair)['perc']), 0)
 
         time.sleep(1)
-        # Close price equal to opening price, no change in drawup
-        data = {'closeTime':  [3], 'open': [100], 'high': [200], 'low': [300], 'close': [100]}
+        # High price equal to opening price, no change in drawup
+        data = {'closeTime':  [3], 'open': [100], 'high': [100], 'low': [300], 'close': [100]}
         redis.update_drawup(pair, self.create_series(data))
         self.assertEqual(abs(redis.get_drawup(pair)['perc']), 0)
 
         time.sleep(1)
-        # Double initial price
-        data = {'closeTime':  [4], 'open': [200], 'high': [300], 'low': [500], 'close': [200]}
+        # Double initial price (high)
+        data = {'closeTime':  [4], 'open': [200], 'high': [200], 'low': [500], 'close': [200]}
         redis.update_drawup(pair, self.create_series(data))
         self.assertEqual(float(redis.get_drawup(pair)['price']), 200)
         self.assertEqual(abs(redis.get_drawup(pair)['perc']), 100)
 
         time.sleep(1)
         # ?
-        data = {'closeTime':  [4], 'open': [800], 'high': [300], 'low': [500], 'close': [500]}
+        data = {'closeTime':  [4], 'open': [800], 'high': [500], 'low': [500], 'close': [300]}
         redis.update_drawup(pair, self.create_series(data))
         self.assertEqual(abs(redis.get_drawup(pair)['perc']), 400)
 
