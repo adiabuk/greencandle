@@ -142,9 +142,8 @@ class Redis():
         if not open_time:
             return False
         else:
-            timestamp = datetime.strptime(open_time, '%Y-%m-%d %H:%M:%S')
             current_time = datetime.now()
-            future_time = timestamp + timedelta(minutes=TF2MIN[self.config.main.interval])
+            future_time = open_time + timedelta(minutes=TF2MIN[self.config.main.interval])
         return bool(future_time > current_time)
 
     def update_drawdown(self, pair, current_candle, event=None, open_time=None):
