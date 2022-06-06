@@ -1,2 +1,18 @@
--- Version 3.11
+-- Version 3.10.1
+
+DROP VIEW if exists profit;
+CREATE VIEW `profit` AS select `trades`.`id` AS `id`, DAYNAME(open_time) as day, `trades`.`open_time` AS `open_time`,`trades`.`interval` AS `interval`,`trades`.`close_time` AS `close_time`,`trades`.`pair` AS `pair`,`trades`.`name` AS `name`,`trades`.`open_price` AS `open_price`,`trades`.`close_price` AS `close_price`,case when `trades`.`direction` = 'long' then (`trades`.`quote_out` - `trades`.`quote_in`) / `trades`.`quote_in` * 100 else (`trades`.`open_price` - `trades`.`close_price`) / `trades`.`open_price` * 100 end AS `perc`,case when `trades`.`direction` = 'long' then `trades`.`quote_out` - `trades`.`quote_in` else `trades`.`quote_in` - `trades`.`quote_out` end AS `quote_profit`,`trades`.`drawdown_perc` AS `drawdown_perc`,`trades`.`drawup_perc` AS `drawup_perc`,case when `trades`.`direction` = 'long' then (`trades`.`quote_out` - `trades`.`quote_in`) * `trades`.`close_usd_rate` else (`trades`.`quote_in` - `trades`.`quote_out`) * `trades`.`close_usd_rate` end AS `usd_profit` from `trades`;
+
+
+DROP VIEW if exists profit_daily;
+CREATE VIEW `profit_daily` AS select left(`profit`.`close_time`,10) AS `date`, DAYNAME(close_time) as day, sum(`profit`.`perc`) AS `total_perc`,avg(`profit`.`perc`) AS `avg_perc`,sum(`profit`.`usd_profit`) AS `usd_profit`,count(0) AS `count` from `profit` where `profit`.`perc` is not null group by left(`profit`.`close_time`,10) order by left(`profit`.`close_time`,10) desc;
+
+DROP VIEW if exists profit_daily_by_base_pair;
+CREATE VIEW `profit_daily_by_quote_pair` AS select case when `profit`.`pair` like '%BTC' then 'BTC' when `profit`.`pair` like '%BNB' then 'BNB' when `profit`.`pair` like '%ETH' then 'ETH' when `profit`.`pair` like '%USDT' then 'USDT' end AS `quote_pair`,left(`profit`.`close_time`,10) AS `date`, DAYNAME(close_time) as day, sum(`profit`.`perc`) AS `perc`,group_concat(distinct `profit`.`pair` separator ' ') AS `pairs`,count(0) AS `count`,case when `profit`.`pair` like '%BTC' then sum(`profit`.`quote_profit`) * 50730.01000000 when `profit`.`pair` like '%BNB' then sum(`profit`.`quote_profit`) * 606.24000000 when `profit`.`pair` like '%ETH' then sum(`profit`.`quote_profit`) * 4083.72000000 when `profit`.`pair` like '%USDT' then sum(`profit`.`quote_profit`) end AS `usd_profit` from `profit` where `profit`.`close_time`  not like '%0000-00-00%' group by left(`profit`.`close_time`,10),right(`profit`.`pair`,3) order by `profit`.`close_time` desc;
+
+DROP VIEW if exists profit_hourly;
+CREATE VIEW `profit_hourly` AS select date_format(`profit`.`close_time`,'%Y-%m-%d') AS `date`,DAYNAME(close_time) as day, date_format(`profit`.`close_time`,'%H') AS `hour`,sum(`profit`.`perc`) AS `total_perc`,avg(`profit`.`perc`) AS `avg_perc`,sum(`profit`.`usd_profit`) AS `usd_profit`,count(0) AS `num_trades` from `profit` where year(`profit`.`close_time`) <> 0 group by hour(`profit`.`close_time`),dayofmonth(`profit`.`close_time`),month(`profit`.`close_time`),year(`profit`.`close_time`) order by `profit`.`close_time` desc;
+
+DROP VIEW if exists profitable_by_date;
+CREATE VIEW `profitable_by_date` AS select cast(`profit`.`close_time` as date) AS `date`, DAYNAME(close_time) as day, count(0) AS `total`,sum(case when `profit`.`perc` > 0 then 1 else 0 end) AS `profit`,sum(case when `profit`.`perc` < 0 then 1 else 0 end) AS `loss`,sum(case when `profit`.`perc` > 0 then 1 else 0 end) / count(0) * 100 AS `perc_profitable`,sum(`profit`.`perc`) AS `perc`,sum(`profit`.`perc`) / count(0) AS `per_trade`,max(`profit`.`perc`) AS `max(perc)`,min(`profit`.`perc`) AS `min(perc)` from `profit` where `profit`.`pair` is not null and cast(`profit`.`close_time` as date) <> '0000-00-00' group by cast(`profit`.`close_time` as date) order by sum(case when `profit`.`perc` > 0 then 1 else 0 end) / count(0) * 100 desc;
 
