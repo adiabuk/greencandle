@@ -1,6 +1,18 @@
 
 # Releases
 
+# 3.10
+* Upgrade mysql client to match server
+* Cleanup mysql config
+* Speed up pair tests and remove old pairs
+* add static port mapping for redis test env
+* Add drawup/drawdown to API trades
+* Use current price for draw up/down if within current candle otherwise use high/low
+* Add 5m analysis to data env
+* Don't prune docker after deployment as it affects other environments being deployed
+* Fix SQL container in local (unit) environment
+* Fix bug with hourly profit notifications
+
 # 3.9.1
 * Fix for DB view referencing non-existent views
 * Updated DB schema
