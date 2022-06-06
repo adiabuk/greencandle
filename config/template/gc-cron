@@ -23,7 +23,7 @@
 */10 * * * *  sleep 60; HOST=stag /usr/local/bin/get_trade_status > /proc/1/fd/1 2>/proc/1/fd/2
 0 * * * *  HOST=stag /usr/local/bin/send_docker_alerts
 */5 * * * * sleep 5; /usr/local/bin/get_active_trades > /proc/1/fd/1 2>/proc/1/fd/2
-03 * * * * /usr/local/bin/get_hour_profit.py > /proc/1/fd/1 2>/proc/1/fd/2
+03 * * * * /usr/local/bin/get_hour_profit > /proc/1/fd/1 2>/proc/1/fd/2
 
 {{else if eq .base_env "data"}}
 @hourly /usr/local/bin/create_graph -i 5m -o /data/graphs -a
