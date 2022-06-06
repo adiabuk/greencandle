@@ -62,7 +62,9 @@ def analyse_loop():
                 send_slack_message("notifications", "Open: %s %s %s (%s)" %
                                    (get_tv_link(pair), config.main.interval,
                                     config.main.trade_direction, supported.strip()),
-                                   emoji=True)
+                                   emoji=True, icon=':{0}-{1}:'.format(config.main.interval,
+                                                                       config.main.trade_direction))
+
                 LOGGER.info("Trade alert: %s %s %s (%s)" % (pair, config.main.interval,
                                                             config.main.trade_direction,
                                                             supported.strip()))

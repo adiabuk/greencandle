@@ -61,11 +61,12 @@ def send_push_notif(*args):
     notify.endpoint = 'https://{0}/{1}'.format(host, channel)
     notify.send(text)
 
-def send_slack_message(channel, message, emoji=None):
+def send_slack_message(channel, message, emoji=None, icon=None):
     """
     Send notification using slack api
     """
-    icon = ":{}:".format(config.main.trade_direction) if emoji else ":robot_face:"
+    if not icon:
+        icon = ":{}:".format(config.main.trade_direction) if emoji else ":robot_face:"
 
     if not str2bool(config.slack.slack_active):
         return
