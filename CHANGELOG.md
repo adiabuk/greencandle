@@ -1,6 +1,10 @@
 
 # Releases
 
+# 3.10.1
+* Fixes to hourly profit cron and query
+* Add Day-of-week to db views
+
 # 3.10
 * Upgrade mysql client to match server
 * Cleanup mysql config
