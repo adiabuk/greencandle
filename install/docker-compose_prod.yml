@@ -190,6 +190,7 @@ services:
     environment:
       - CONFIG_ENV=per/fe/api
       - HOST=$HOSTNAME
+      - HOST_IP=$HOST_IP
     ports:
       - 1080:1080
     links:
@@ -367,6 +368,7 @@ services:
       - CONFIG_ENV=per/inw/cross-long
       - get_trend="true"
       - intermittent="true"
+      - HOST_IP=$HOST_IP
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -405,6 +407,7 @@ services:
       - CONFIG_ENV=per/inw/cross-short
       - get_trend="true"
       - intermittent="true"
+      - HOST_IP=$HOST_IP
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
