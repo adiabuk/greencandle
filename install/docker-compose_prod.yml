@@ -212,7 +212,7 @@ services:
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   per-be-api-any-spot-long:
@@ -637,7 +637,7 @@ services:
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   prod-be-api-any-spot-long:

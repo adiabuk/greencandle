@@ -7,6 +7,7 @@ API routing module
 
 import sys
 import json
+from pathlib import Path
 import requests
 from flask import Flask, request, Response
 from greencandle.lib.common import arg_decorator
@@ -56,6 +57,11 @@ def respond():
     except KeyError:
         LOGGER.error("Invalid strategy %s" % payload["strategy"])
         return Response(status=500)
+
+    if payload["strategy"] == "route":
+        Path('/var/run/router-{}'.format(config.main.base_env)).touch()
+        return Response(status=200)
+
 
     for host in hosts:
         if host == 'alert' and 'edited' not in payload:
