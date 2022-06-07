@@ -1,6 +1,11 @@
 
 # Releases
 
+# 3.11
+* Add API route checks
+* Custom emojis for opportunities channel notifications
+* Cleanup strategy names
+
 # 3.10.1
 * Fixes to hourly profit cron and query
 * Add Day-of-week to db views
