@@ -447,11 +447,16 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh logtailer
+    environment:
+      - CONFIG_ENV=test
+    entrypoint: /docker-entrypoint-api.sh logtailer
     logging:
       driver: journald
     ports:
       - 2222:2222
+    links:
+      - test-base-mysql:mysql
+      - test-base-redis:redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m

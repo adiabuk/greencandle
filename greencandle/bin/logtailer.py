@@ -8,12 +8,12 @@ import time
 from flask import Flask, render_template
 from greencandle.lib.common import arg_decorator
 
-APP = Flask(__name__, template_folder=".")
+APP = Flask(__name__, template_folder="/etc/gcapi")
 
 @APP.route('/')
 def index():
     """default route"""
-    return render_template('index.html')
+    return render_template('log.html')
 
 @APP.route('/stream')
 def stream():
