@@ -74,7 +74,7 @@ def make_docker_case(container, checks=None):
         """
         def __init__(self, *args, **kwargs):
             super(DockerRun, self).__init__(*args, **kwargs)
-            self.compose_file = 'install/docker-compose_unit2.yml'
+            self.compose_file = 'install/docker-compose_unit.yml'
             self.build_id = os.environ['BUILD_ID']
 
         def run_subprocess(self, command):

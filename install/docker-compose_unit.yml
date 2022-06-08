@@ -2,82 +2,80 @@ version: "3.1"
 services:
 
   cron:
-    container_name: cron
+    container_name: cron-${BUILD_ID}
+    build:
+      context: .
+      dockerfile: Dockerfile-gc
     environment:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
     hostname: cron
-    image: amrox/greencandle:${TAG}
+    image: greencandle-${image_id}
     restart: always
-    entrypoint: /docker-entrypoint.sh cron -f
-    links:
-      - mysql-unit:mysql
-      - redis-unit:redis
-    depends_on:
-      - mysql-unit
-      - redis-unit
+    entrypoint: bash -c "cd /srv/greencandle;configstore package process_templates unit /opt/output; cp /opt/output/greencandle.ini /etc;crontab /opt/output/gc-cron;cron -f"
     healthcheck:
       test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
-      interval: 1m
-      timeout: 2s
+      interval: 5s
+      timeout: 10s
       retries: 5
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws
 
   api:
-    container_name: api
+    container_name: api-${BUILD_ID}
+    build:
+      context: .
+      dockerfile: Dockerfile-gc
     environment:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
     hostname: api
-    image: amrox/greencandle:${TAG}
+    image: greencandle-${image_id}
     restart: always
-    entrypoint: /docker-entrypoint-api.sh backend_api
-    links:
-      - mysql-unit:mysql
-      - redis-unit:redis
+    entrypoint: bash -c "cd /srv/greencandle;configstore package process_templates unit /etc;backend_api"
     ports:
-      - 20000:20000
-    depends_on:
-      - mysql-unit
-      - redis-unit
+      - 20000
     healthcheck:
-      test: nc -z 127.1 20000
-      interval: 1m
-      timeout: 2s
+      test: nc -z 127.1 20000 || exit 1
+      interval: 5s
+      timeout: 10s
       retries: 5
     volumes:
       - /data:/data
 
   redis-unit:
-    container_name: redis-unit
+    build:
+      context: .
+      dockerfile: Dockerfile-rs
+    container_name: redis-unit-${BUILD_ID}
     hostname: redis-unit
-    image: amrox/gc-redis:${TAG}
+    image: gc-redis-${image_id}
+    entrypoint: redis-server
     ports:
-      - 6379:6379
+      - 6379
     restart: always
-    links:
-      - mysql-unit:mysql
     healthcheck:
       test: redis-cli ping
-      interval: 1m
+      interval: 5s
       timeout: 2s
       retries: 5
 
   mysql-unit:
-    container_name: mysql-unit
+    build:
+      context: .
+      dockerfile: Dockerfile-ms
+    container_name: mysql-unit-${BUILD_ID}
     hostname: mysql-unit
-    image: amrox/gc-mysql:${TAG}
+    image: gc-mysql-${image_id}
     ports:
-      - 3306:3306
-    entrypoint: /docker-entrypoint.sh mysqld
+      - 3306
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - CONFIG_ENV=unit
     restart: always
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
-      interval: 1m
+      interval: 5s
       timeout: 2s
-      retries: 5
+      retries: 10
