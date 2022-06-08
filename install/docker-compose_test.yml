@@ -402,9 +402,9 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
-  test-be-any-long:
-    container_name: test-be-any-long
-    hostname: test-be-any-long
+  test-be-any-short:
+    container_name: test-be-any-short
+    hostname: test-be-any-short
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -415,7 +415,7 @@ services:
       - VPN_IP=$VPN_IP
       - GC_PORT=8888
       - HOST=$HOSTNAME
-      - CONFIG_ENV=test/any
+      - CONFIG_ENV=test/any/short
       - HOST_IP=$HOST_IP
       - get_trend="true"
       - intermittent="true"
