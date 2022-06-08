@@ -11,7 +11,6 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 env
-
 apt-get update
 apt-get -y install software-properties-common gnupg dirmngr ca-certificates apt-transport-https
 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys CC86BB64
@@ -59,7 +58,6 @@ pyenv global 3.7.0
 chmod o+w /opt/pyenv/shims /opt/pyenv/versions
 
 if [[ ! -f /usr/local/bin/configstore ]]; then
-    #wget https://github.com/motns/configstore/releases/download/v2.5.0/configstore-2.5.0-linux-amd64.tar.gz -P /tmp
     wget "https://www.dropbox.com/sh/l22jyonei087h4o/AAChfqr_j4ydTDjILz0Q62Y2a/configstore-2.5.0-linux-amd64.tar.gz?dl=0" -O /tmp/configstore-2.5.0-linux-amd64.tar.gz
     tar zxvf /tmp/configstore-2.5.0-linux-amd64.tar.gz -C /usr/local/bin
     rm -rf /tmp/configstore-2.5.0-linux-amd64.tar.gz
