@@ -43,16 +43,15 @@ def analyse_loop():
         supported = ""
         if config.main.trade_direction != "short":
             supported += "spot "
-        else:
-            # don't analyse if we are
-            continue
+
         supported += "isolated " if pair in isolated else ""
         supported += "cross " if pair in cross else ""
 
         if not supported.strip():
             # don't analyse pair if spot/isolated/cross not supported
+i
             continue
-
+ 
         LOGGER.debug("Analysing pair: %s" % pair)
         try:
             result = redis.get_action(pair=pair, interval=config.main.interval)[0]
