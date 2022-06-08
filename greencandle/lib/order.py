@@ -123,7 +123,7 @@ class Trade():
             send_slack_message("alerts", "Too many trades, skipping")
             return []
         elif drain and self.is_in_drain() and not self.test_data:
-            self.logger.warning("strategy is in drain, skipping..." % self.interval)
+            self.logger.warning("strategy is in drain, skipping...")
             send_slack_message("alerts", "strategy is in drain, skipping")
             return []
 
