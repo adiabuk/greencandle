@@ -402,6 +402,45 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
+  test-be-any-long:
+    container_name: test-be-any-long
+    hostname: test-be-any-long
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api --test
+    logging:
+      driver: journald
+    environment:
+      - VPN_IP=$VPN_IP
+      - GC_PORT=8888
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=test/any
+      - HOST_IP=$HOST_IP
+      - get_trend="true"
+      - intermittent="true"
+    extra_hosts:
+      - "trend:10.8.0.101"
+    ports:
+      - 20000
+    links:
+      - test-base-mysql:mysql
+      - test-base-redis:redis
+    depends_on:
+      - test-base-mysql
+      - test-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
+
   test-be-logtailer:
     container_name: test-be-logtailer
     hostname: test-be-logtailer
