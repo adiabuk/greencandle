@@ -3,7 +3,7 @@ services:
 
   unit-runner:
     build:
-      context: .
+      context: ..
       dockerfile: install/Dockerfile-gc
     container_name: unit-runner-${BUILD_ID}
     environment:
@@ -33,7 +33,7 @@ services:
   cron:
     container_name: cron-${BUILD_ID}
     build:
-      context: .
+      context: ..
       dockerfile: install/Dockerfile-ms
     environment:
       - CONFIG_ENV=unit
@@ -60,7 +60,7 @@ services:
   api:
     container_name: api-${BUILD_ID}
     build:
-      context: .
+      context: ..
       dockerfile: install/Dockerfile-gc
     environment:
       - CONFIG_ENV=unit
@@ -89,7 +89,7 @@ services:
     container_name: redis-unit-${BUILD_ID}
     hostname: redis-unit
     build:
-      context: .
+      context: ..
       dockerfile: install/Dockerfile-rs
     image: gc-redis-${image_id}
     ports:
@@ -108,7 +108,7 @@ services:
     entrypoint: /docker-entrypoint.sh mysqld
     hostname: mysql-unit
     build:
-      context: .
+      context: ..
       dockerfile: install/Dockerfile-ms
     image: gc-mysql-${image_id}
     ports:
@@ -127,7 +127,7 @@ services:
     container_name: alert-unit-${BUILD_ID}
     hostname: alert-unit
     build:
-      context: .
+      context: ..
       dockerfile: install/Dockerfile-as
     image: alert-${image_id}
     environment:
@@ -143,7 +143,7 @@ services:
     container_name: web-unit-${BUILD_ID}
     hostname: web-unit
     build:
-      context: .
+      context: ..
       dockerfile: install/Dockerfile-wb
     image: webserver-${image_id}
     environment:
