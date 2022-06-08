@@ -49,9 +49,8 @@ def analyse_loop():
 
         if not supported.strip():
             # don't analyse pair if spot/isolated/cross not supported
-i
             continue
- 
+
         LOGGER.debug("Analysing pair: %s" % pair)
         try:
             result = redis.get_action(pair=pair, interval=config.main.interval)[0]
@@ -61,9 +60,7 @@ i
                 send_slack_message("notifications", "Open: %s %s %s (%s)" %
                                    (get_tv_link(pair), config.main.interval,
                                     config.main.trade_direction, supported.strip()),
-                                   emoji=True, icon=':{0}-{1}:'.format(config.main.interval,
-                                                                       config.main.trade_direction))
-
+                                   emoji=True)
                 LOGGER.info("Trade alert: %s %s %s (%s)" % (pair, config.main.interval,
                                                             config.main.trade_direction,
                                                             supported.strip()))
