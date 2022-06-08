@@ -1,6 +1,12 @@
 
 # Releases
 
+# 3.11.1
+* Fix cron entry for hourly profit
+* Add HOST_IP var to per containers
+* fix close-now link on trade-open notifications
+* Minor syntax fix
+
 # 3.11
 * Add API route checks
 * Custom emojis for opportunities channel notifications
