@@ -18,6 +18,7 @@ pipeline {
                 echo 'building apps'
                 sh "sudo ln -s . /srv/greencandle"
                 ansiColor('vga') {
+                    sh 'ls'
                     sh 'docker-compose -f install/docker-compose_jenkins.yml -p $BUILD_ID build'
                 }
             }
