@@ -35,14 +35,6 @@ wget "https://www.dropbox.com/sh/l22jyonei087h4o/AAChfqr_j4ydTDjILz0Q62Y2a/confi
 tar zxvf /tmp/configstore-2.5.0-linux-amd64.tar.gz -C /usr/local/bin
 rm -rf /tmp/configstore-2.5.0-linux-amd64.tar.gz
 
-subdomain=$(configstore package get prod loggly_subdomain)
-token=$(configstore package get prod loggly_token)
-username=$(configstore package get prod loggly_username)
-password=$(configstore package get prod loggly_password)
-
-curl -O https://www.loggly.com/install/configure-linux.sh
-sudo bash configure-linux.sh -a $subdomain -t $token -u $username -p $password
-
 #curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 wget "https://www.dropbox.com/s/ge7b2rf9e0gqepp/docker-compose-1.29.1?dl=0" -O /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose

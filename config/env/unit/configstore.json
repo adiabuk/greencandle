@@ -235,26 +235,6 @@
       "is_binary": false,
       "is_secret": false
     },
-    "loggly_password": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "loggly_subdomain": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "loggly_token": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "loggly_username": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
     "max_trades": {
       "value": "2",
       "is_binary": false,

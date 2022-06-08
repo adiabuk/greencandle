@@ -236,26 +236,6 @@
       "is_binary": false,
       "is_secret": false
     },
-    "loggly_password": {
-      "value": "uMhOkac1yAzehzUvAnMDf7AJ8fToY8KyDXu2iA==",
-      "is_binary": false,
-      "is_secret": true
-    },
-    "loggly_subdomain": {
-      "value": "Vc0s5srq5Xm6ike+H7baCaILfGN0qlZ1",
-      "is_binary": false,
-      "is_secret": true
-    },
-    "loggly_token": {
-      "value": "48D0Nbi9c20skg64W/sK6uyv3+0pso0dHL0/f7Ga9FYBbYsEougb34YAmilgL4JO4tl9LC+InbsDFQDGtmlO/g==",
-      "is_binary": false,
-      "is_secret": true
-    },
-    "loggly_username": {
-      "value": "sHIEJMiwOnKCaYtlsQ5iib1m24Q6LmHj",
-      "is_binary": false,
-      "is_secret": true
-    },
     "max_trades": {
       "value": "10",
       "is_binary": false,
