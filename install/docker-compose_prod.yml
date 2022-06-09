@@ -37,6 +37,35 @@ services:
       retries: 5
 
 ###### Start Per
+
+  per-be-logtailer:
+    container_name: per-be-logtailer
+    hostname: per-be-logtailer
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    environment:
+      - CONFIG_ENV=per
+    entrypoint: /docker-entrypoint-api.sh logtailer
+    logging:
+      driver: journald
+    ports:
+      - 2222:2222
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /var/log/syslog:/var/log/syslog
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
+
   per-base-redis:
     container_name: per-base-redis
     hostname: per-base-redis
@@ -465,6 +494,34 @@ services:
       - /root/.bash_history:/root/.bash_history
 
 ###### Start Prod
+
+  prod-be-logtailer:
+    container_name: prod-be-logtailer
+    hostname: prod-be-logtailer
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    environment:
+      - CONFIG_ENV=prod
+    entrypoint: /docker-entrypoint-api.sh logtailer
+    logging:
+      driver: journald
+    ports:
+      - 2222:2222
+    links:
+      - prod-base-mysql:mysql
+      - prod-base-redis:redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /var/log/syslog:/var/log/syslog
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
   prod-base-redis:
     container_name: prod-base-redis
     hostname: prod-base-redis
