@@ -352,7 +352,8 @@ class Trade():
 
                 self.__send_notifications(pair=pair, current_time=current_time,
                                           fill_price=fill_price, interval=self.interval,
-                                          event=event, action='OPEN', usd_profit='N/A')
+                                          event=event, action='OPEN', usd_profit='N/A',
+                                          quote=amount_to_use)
 
         del dbase
 
@@ -467,7 +468,8 @@ class Trade():
                     if db_result:
                         self.__send_notifications(pair=pair, current_time=current_time,
                                                   fill_price=fill_price, interval=self.interval,
-                                                  event=event, action='OPEN', usd_profit='N/A')
+                                                  event=event, action='OPEN', usd_profit='N/A',
+                                                  quote=quote_amount)
 
         del dbase
 
@@ -475,7 +477,8 @@ class Trade():
         """
         Pass given data to trade notification functions
         """
-        valid_keys = ["pair", "current_time", "fill_price", "event", "action", "usd_profit"]
+        valid_keys = ["pair", "current_time", "fill_price", "event", "action", "usd_profit",
+                      "quote"]
         kwargs = AttributeDict(kwargs)
         for key in valid_keys:
             if key not in valid_keys:
@@ -484,11 +487,12 @@ class Trade():
         self.__send_redis_trade(pair=kwargs.pair, current_time=kwargs.current_time,
                                 price=kwargs.fill_price, interval=self.interval,
                                 event=kwargs.action, usd_profit=kwargs.usd_profit)
+
         send_push_notif(kwargs.action, kwargs.pair, '%.15f' % float(kwargs.fill_price))
         send_gmail_alert(kwargs.action, kwargs.pair, '%.15f' % float(kwargs.fill_price))
         send_slack_trade(channel='trades', event=kwargs.event, perc=perc,
                          pair=kwargs.pair, action=kwargs.action, price=kwargs.fill_price,
-                         usd_profit=kwargs.usd_profit)
+                         usd_profit=kwargs.usd_profit, quote=kwargs.quote)
 
     def __get_fill_price(self, current_price, trade_result):
         """
@@ -596,7 +600,8 @@ class Trade():
                                               header=False)[0][0]
                 self.__send_notifications(pair=pair, current_time=current_time, perc=perc_inc,
                                           fill_price=current_price, interval=self.interval,
-                                          event=event, action='CLOSE', usd_profit=profit)
+                                          event=event, action='CLOSE', usd_profit=profit,
+                                          quote=quote_out)
             else:
                 self.logger.critical("Sell Failed %s:%s" % (name, pair))
                 send_slack_message("alerts", "Sell Failed %s:%s" % (name, pair))
@@ -671,7 +676,8 @@ class Trade():
 
                 self.__send_notifications(pair=pair, current_time=current_time,
                                           fill_price=current_price, interval=self.interval,
-                                          event=event, action='OPEN', usd_profit='N/A')
+                                          event=event, action='OPEN', usd_profit='N/A',
+                                          quote=quote_amount)
         del dbase
 
     @GET_EXCEPTIONS
@@ -731,7 +737,8 @@ class Trade():
                                                   header=False)[0][0]
                     self.__send_notifications(pair=pair, current_time=current_time, perc=perc_inc,
                                               fill_price=fill_price, interval=self.interval,
-                                              event=event, action='CLOSE', usd_profit=profit)
+                                              event=event, action='CLOSE', usd_profit=profit,
+                                              quote=quote_out)
             else:
                 self.logger.critical("Sell Failed %s:%s" % (name, pair))
                 send_slack_message("alerts", "Sell Failed %s:%s" % (name, pair))
@@ -812,7 +819,8 @@ class Trade():
                                               "where id={}".format(trade_id), header=False)[0][0]
                 self.__send_notifications(pair=pair, current_time=current_time, perc=perc_inc,
                                           fill_price=fill_price, interval=self.interval,
-                                          event=event, action='CLOSE', usd_profit=profit)
+                                          event=event, action='CLOSE', usd_profit=profit,
+                                          quote=quote_out)
             else:
                 self.logger.critical("Sell Failed %s:%s" % (name, pair))
                 send_slack_message("alerts", "Sell Failed %s:%s" % (name, pair))

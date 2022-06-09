@@ -85,7 +85,7 @@ def send_slack_trade(**kwargs):
     """
     Send trade notification in slack
     """
-    valid_keys = ["channel", "event", "pair", "action", "price", "perc", "usd_profit"]
+    valid_keys = ["channel", "event", "pair", "action", "price", "perc", "usd_profit", "quote"]
     kwargs = AttributeDict(kwargs)
     for key in valid_keys:
         if key not in kwargs:
@@ -98,6 +98,8 @@ def send_slack_trade(**kwargs):
         kwargs['net_profit'] = format_usd(sub_perc(float(commission), float(kwargs['usd_profit'])))
         kwargs['usd_profit'] = format_usd(kwargs['usd_profit'])
         kwargs['perc'] = str(kwargs['perc']) + "%"
+        kwargs['quote'] = "%.4f" % (kwargs['quote'])
+
 
     except TypeError:
         kwargs['net_perc'] = 'N/A'
@@ -112,12 +114,16 @@ def send_slack_trade(**kwargs):
         strat = re.findall(r"-([\s\S]*)$", config.main.name)[0].replace('api-', '')
         close_string = "• Close: {0}\n".format(get_trade_link(kwargs.pair, strat,
                                                               'close', 'close now'))
+        quote_string = "• Quote in:{0}".format(kwargs.quote)
     elif kwargs.action == 'CLOSE':
         color = '#fc0303' # red
         close_string = ""
+        quote_string = "• Quote out:{0}".format(kwargs.quote)
     else:
         color = '#ff7f00'
         close_string = ""
+        quote_string = ""
+
     icon = ":{}:".format(config.main.trade_direction)
 
     block = {
@@ -136,6 +142,7 @@ def send_slack_trade(**kwargs):
                             "• Net perc: {5}\n"
                             "• Net usd_profit: {6}\n"
                             "{7}"
+                            "{8}"
                             "\n\n".format(get_tv_link(kwargs.pair),
                                           kwargs.price,
                                           title,
@@ -143,7 +150,8 @@ def send_slack_trade(**kwargs):
                                           kwargs.usd_profit,
                                           kwargs.net_perc,
                                           kwargs.net_profit,
-                                          close_string
+                                          close_string,
+                                          quote_string
                                           )),
                   "short":"false"
                  }]}]}
