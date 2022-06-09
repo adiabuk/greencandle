@@ -1,3 +1,5 @@
+{% extends "layout.html" %}
+{% block content %}
 <pre id="output"></pre>
 <script>
     var output = document.getElementById('output');
@@ -6,8 +8,8 @@
     xhr.open('GET', '{{ url_for('stream') }}');
     xhr.send();
 
-    setInterval(function() {
+    l(function() {
         output.textContent = xhr.responseText;
     }, 1000);
 </script>
-
+{% endblock %}
