@@ -274,8 +274,9 @@ class Mysql():
         Get today's profit perc so far
         Returns float
         """
-        command = 'select total_perc from profit_daily LIMIT 1'
-        return self.fetch_sql_data(command, header=False)[0][0]
+        command = 'select avg_perc, total_perc from profit_daily LIMIT 1'
+        row = self.fetch_sql_data(command, header=False)
+        return row[0] if row else (None, None)
 
     def get_active_trades(self):
         """
