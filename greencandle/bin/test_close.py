@@ -68,9 +68,9 @@ def main():
                 reason = "BNB not available"
 
 
-        except KeyError:
+        except KeyError as ke:
             result2 = True
-            reason = "Unable to get balance"
+            reason = "Unable to get balance: {}".format(str(ke))
         if result or result2 or result3:
             pairs.append("{} ({}): {}".format(pair, name, reason))
 
