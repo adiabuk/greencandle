@@ -12,7 +12,7 @@ import git
 BASE_DIR = os.getcwd().split('netgenius', 1)[0]+'netgenius'
 sys.path.append(BASE_DIR)
 
-from greencandle.lib.print_format import  print_status_line
+from greencandle.tests.print_format import  print_status_line
 
 def finish_test(results=None):
     """ Start tests """
