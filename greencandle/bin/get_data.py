@@ -41,7 +41,7 @@ def test_loop(interval=None, prices=None):
             prices_trunk[key] = val
     LOGGER.info("Getting dataframes for all pairs")
     dataframes = get_dataframes(PAIRS, interval=interval, max_workers=1)
-    LOGGER.info("Done getting dataframes")
+    LOGGER.debug("Done getting dataframes")
 
     redis = Redis(interval=interval, test=False)
     engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, redis=redis)

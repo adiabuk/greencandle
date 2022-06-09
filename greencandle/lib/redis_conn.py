@@ -77,8 +77,8 @@ class Redis():
             drawup = perc_diff(orig_price, max_price)
         except TypeError:
             drawup = 0
-        self.logger.info("Getting drawup orig_price: %s,  max_price: %s, drawup: %s"
-                         % (orig_price, max_price, drawup))
+        self.logger.debug("Getting drawup orig_price: %s,  max_price: %s, drawup: %s"
+                          % (orig_price, max_price, drawup))
         return {'price':max_price, 'perc': drawup}
 
     def rm_drawup(self, pair):
@@ -108,8 +108,8 @@ class Redis():
             drawdown = perc_diff(orig_price, min_price)
         except TypeError:
             drawdown = 0
-        self.logger.info("Getting drawdown orig_price: %s,  min_price: %s, drawdown: %s"
-                         % (orig_price, min_price, drawdown))
+        self.logger.debug("Getting drawdown orig_price: %s,  min_price: %s, drawdown: %s"
+                          % (orig_price, min_price, drawdown))
         return drawdown
 
     def update_on_entry(self, pair, name, value):
@@ -134,7 +134,8 @@ class Redis():
         key = "{}-{}-{}".format(pair, name, config.main.name)
         return self.conn.delete(key)
 
-    def in_current_candle(self, open_time):
+    @staticmethod
+    def in_current_candle(open_time):
         """
         Check we are still within the current candle
         If open_time + min(interval) is in the future
@@ -731,8 +732,14 @@ class Redis():
 
         winning_sell = self.__get_rules(rules, 'close')
         winning_buy = self.__get_rules(rules, 'open')
-        self.logger.info('%s sell Rules matched: %s' % (pair, winning_sell))
-        self.logger.info('%s buy Rules matched: %s' % (pair, winning_buy))
+        if winning_sell:
+            self.logger.info('%s sell Rules matched: %s' % (pair, winning_sell))
+        else:
+            self.logger.debug('%s sell Rules matched: %s' % (pair, winning_sell))
+        if winning_buy:
+            self.logger.info('%s buy Rules matched: %s' % (pair, winning_buy))
+        else:
+            self.logger.debug('%s buy Rules matched: %s' % (pair, winning_buy))
         del dbase
         if result == 'CLOSE':
             self.rm_on_entry(pair, 'take_profit_perc')
