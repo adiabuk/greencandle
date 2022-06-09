@@ -64,7 +64,6 @@ class Mysql():
         cur = self.dbase.cursor()
         self.__execute(cur, command)
 
-
     @get_exceptions
     def fetch_sql_data(self, query, header=True):
         """"
@@ -153,7 +152,6 @@ class Mysql():
         result = self.__run_sql_query(command)
         return result == 1
 
-
     @get_exceptions
     def get_recent_high(self, pair, date, months, max_perc):
         """
@@ -239,7 +237,7 @@ class Mysql():
         return tupple of usd_rate and gbp_rate
         """
         client = Binance()
-        usd_rate = client.prices()[quote + 'USDT'] if quote != 'USDT' else "1"
+        usd_rate = client.prices()[quote + 'USDT'] if quote != 'USDT' else 1
         gbp_rate = float(usd_rate)/float(client.prices()['GBPUSDT'])
         return (usd_rate, gbp_rate)
 
@@ -274,7 +272,7 @@ class Mysql():
         Get today's profit perc so far
         Returns float
         """
-        command = 'select avg_perc, total_perc from profit_daily LIMIT 1'
+        command = 'select avg_perc, total_perc from profit_daily where date(date) = date(NOW())'
         row = self.fetch_sql_data(command, header=False)
         return row[0] if row else (None, None)
 

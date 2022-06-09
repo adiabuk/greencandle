@@ -6,6 +6,7 @@ Unittest file for testing results of a run using downloaded data
 
 import unittest
 import time
+from datetime import datetime
 from greencandle.lib.balance_common import get_quote
 from greencandle.lib import config
 config.create_config()
@@ -31,6 +32,54 @@ class TestMysql(OrderedTest):
                 get_tag, container))
         time.sleep(6)
         self.dbase = Mysql(test=True, interval="1h")
+        self.dbase.delete_data()
+
+    def step2(self):
+        """
+        Test methods
+        """
+        pair = "XXXYYY"
+        date = "2020-10-10"
+        months = 12
+        max_perc = 20
+        recent_high = self.dbase.get_recent_high(pair, date, months, max_perc)
+        print(recent_high)
+        self.assertFalse(recent_high)
+        quantity = self.dbase.get_quantity(pair)
+        self.assertIsNone(quantity)
+        value = self.dbase.get_trade_value(pair)
+        self.assertIs(len(value), 0)
+        last_trades = self.dbase.get_last_trades()
+        self.assertIs(len(last_trades), 0)
+        open_trades = self.dbase.get_trades()
+        self.assertIs(len(open_trades), 0)
+        rates = self.dbase.get_rates('USDT')
+        self.assertIs(len(rates), 2)
+        self.assertIs(rates[0], 1)
+        self.assertIsInstance(rates[0], int)
+        self.assertIsInstance(rates[1], float)
+        today = self.dbase.get_todays_profit()
+        self.assertIs(len(today), 2)
+        self.assertIs(today[0], None)
+        self.assertIs(today[1], None)
+        self.dbase.get_active_trades()   # No exception
+        self.dbase.insert_trade('XXXUSDT', '2016-01-02 13:23', 0, 0, 0, 0, 0,
+                                'short', 'USDT', 0)
+        last_hour_profit = self.dbase.get_last_hour_profit()
+        self.assertIs(len(last_hour_profit), 4)
+        self.assertIsInstance(last_hour_profit[0], float)
+        self.assertIsInstance(last_hour_profit[1], float)
+        self.assertIsInstance(last_hour_profit[2], float)
+        self.assertIsInstance(last_hour_profit[3], str)
+
+        now = datetime.now()
+        time_tupple = now.timetuple()
+        hour = time_tupple[3]
+        last_hour = str(hour - 1)
+        self.assertEquals(last_hour_profit[3], last_hour)
+
+
+
 
     def step_1(self):
         """Check insert and update trades"""
