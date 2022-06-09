@@ -45,6 +45,7 @@ while getopts "hgpP:H:f:" opt; do
 
 done
 [[ -z $HOSTNAME ]] && HOSTNAME=localhost
+DB="greencandle"
 
 if [[ -z $FILENAME ]]; then
   printf 'Missing filename\n\n'
@@ -58,10 +59,19 @@ elif [[ -z $GET && -z $PUT ]]; then
   usage
 
 elif [[ -n $GET ]]; then
-  mysqldump --column-statistics=0 --protocol=tcp -h $HOSTNAME -P $PORT -u root -ppassword --no-data greencandle > $FILENAME
-  mysqldump --column-statistics=0 --protocol=tcp -h $HOSTNAME -P $PORT -u root -ppassword greencandle exchange >> $FILENAME
+  str="show tables from $DB where Tables_in_${DB} like 'bak-%' or Tables_in_$DB like 'tmp-%';"
+  TABLES=$(echo $str | mysql -N --protocol=tcp -h $HOSTNAME -P $PORT -uroot -ppassword|tr '\n' ' ')
+  IGNORE_TABLES=""
+
+  for table in `echo $TABLES`; do
+    IGNORE_TABLES="$IGNORE_TABLES --ignore_table=${DB}.${table}"
+  done
+  echo "Ignoring tables $TABLES"
+  mysqldump --column-statistics=0 --protocol=tcp -h $HOSTNAME -P $PORT -u root -ppassword --no-data $DB $IGNORE_TABLES  > $FILENAME
+  mysqldump --column-statistics=0 --protocol=tcp -h $HOSTNAME -P $PORT -u root -ppassword $DB exchange >> $FILENAME
   sed -i 's/,)/)/g' $FILENAME
 
 elif [[ -n $PUT ]]; then
-  mysql --protocol=tcp -h $HOSTNAME -P $PORT -u root -ppassword greencandle < $FILENAME
+  mysql --protocol=tcp -h $HOSTNAME -P $PORT -u root -ppassword $DB < $FILENAME
 fi
+echo Done
