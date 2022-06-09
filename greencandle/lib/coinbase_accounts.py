@@ -7,10 +7,10 @@ import json
 from collections import defaultdict
 from requests.exceptions import ReadTimeout
 from currency_converter import CurrencyConverter
-from .balance_common import default_to_regular
-from .auth import coinbase_auth
-from .timeout import restrict_timeout
-from . import config
+from greencandle.lib.balance_common import default_to_regular
+from greencandle.lib.auth import coinbase_auth
+from greencandle.lib.timeout import restrict_timeout
+from greencandle.lib import config
 config.create_config()
 
 def get_coinbase_values():

@@ -18,10 +18,10 @@ from plotly import subplots
 
 from PIL import Image
 from resizeimage import resizeimage
-from . import config
-from .redis_conn import Redis
+from greencandle.lib import config
+from greencandle.lib.redis_conn import Redis
 
-from .logger import get_logger
+from greencandle.lib.logger import get_logger
 
 LOGGER = get_logger(__name__)
 

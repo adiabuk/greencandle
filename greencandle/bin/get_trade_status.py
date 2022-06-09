@@ -4,11 +4,11 @@
 Get details of current trades using mysql and current value from binance
 """
 
-from ..lib import config
+from greencandle.lib import config
 config.create_config()
-from ..lib.mysql import Mysql
-from ..lib.alerts import send_slack_message
-from ..lib.common import get_tv_link, QUOTES, arg_decorator
+from greencandle.lib.mysql import Mysql
+from greencandle.lib.alerts import send_slack_message
+from greencandle.lib.common import get_tv_link, QUOTES, arg_decorator
 
 @arg_decorator
 def main():

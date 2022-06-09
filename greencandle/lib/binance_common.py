@@ -15,8 +15,8 @@ import pandas
 from binance.binance import Binance
 
 
-from . import config
-from .logger import get_logger
+from greencandle.lib import config
+from greencandle.lib.logger import get_logger
 
 LOGGER = get_logger(__name__)
 

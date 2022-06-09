@@ -12,8 +12,8 @@ from email.mime.text import MIMEText
 import requests
 import notify_run
 from str2bool import str2bool
-from . import config
-from .common import AttributeDict, sub_perc, format_usd, get_tv_link, get_trade_link
+from greencandle.lib import config
+from greencandle.lib.common import AttributeDict, sub_perc, format_usd, get_tv_link, get_trade_link
 
 
 def send_gmail_alert(action, pair, price):

@@ -6,10 +6,10 @@ Get/Convert Balances from Phemex
 
 from collections import defaultdict
 from currency_converter import CurrencyConverter
-from .balance_common import default_to_regular
-from .auth import phemex_auth
-from .logger import get_logger
-from . import config
+from greencandle.lib.balance_common import default_to_regular
+from greencandle.lib.auth import phemex_auth
+from greencandle.lib.logger import get_logger
+from greencandle.lib import config
 import ccxt
 config.create_config()
 BITCOIN = {}

@@ -6,11 +6,10 @@ Get/Convert Balances from Binance
 
 from collections import defaultdict
 import cryptocompare
-from .balance_common import default_to_regular
-from .balance_common import get_quote
-from .auth import binance_auth
-from .logger import get_logger
-from . import config
+from greencandle.lib.balance_common import default_to_regular, get_quote
+from greencandle.lib.auth import binance_auth
+from greencandle.lib.logger import get_logger
+from greencandle.lib import config
 config.create_config()
 BITCOIN = {}
 LOGGER = get_logger(__name__)

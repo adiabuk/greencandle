@@ -11,14 +11,14 @@ import time
 import datetime
 import re
 from str2bool import str2bool
-from .auth import binance_auth
-from .logger import get_logger, exception_catcher
-from .mysql import Mysql
-from .redis_conn import Redis
-from .binance_accounts import get_binance_spot, base2quote, quote2base
-from .balance_common import get_base, get_quote, get_step_precision
-from .common import perc_diff, add_perc, sub_perc, AttributeDict, QUOTES
-from .alerts import send_gmail_alert, send_push_notif, send_slack_trade, send_slack_message
+from greencandle.lib.auth import binance_auth
+from greencandle.lib.logger import get_logger, exception_catcher
+from greencandle.lib.mysql import Mysql
+from greencandle.lib.redis_conn import Redis
+from greencandle.lib.binance_accounts import get_binance_spot, base2quote, quote2base
+from greencandle.lib.balance_common import get_base, get_quote, get_step_precision
+from greencandle.lib.common import perc_diff, add_perc, sub_perc, AttributeDict, QUOTES
+from greencandle.lib.alerts import send_gmail_alert, send_push_notif, send_slack_trade, send_slack_message
 
 GET_EXCEPTIONS = exception_catcher((Exception))
 
@@ -51,7 +51,6 @@ class Trade():
         if time_range[1] < time_range[0]:
             return time_str >= time_range[0] or time_str <= time_range[1]
         return time_range[0] <= time_str <= time_range[1]
-
 
     def __send_redis_trade(self, **kwargs):
         """
@@ -239,7 +238,6 @@ class Trade():
                 return 0
         else:
             return 0
-
 
     def get_balance(self, dbase, account=None, pair=None):
         """
@@ -523,7 +521,6 @@ class Trade():
             comm = {}
 
         return comm
-
 
     @GET_EXCEPTIONS
     def __close_margin_short(self, short_list, drawdowns=None, drawups=None):

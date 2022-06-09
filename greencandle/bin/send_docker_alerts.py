@@ -8,7 +8,7 @@ Check if docker containers are up/healthy, otherwise alert to slack
 import json
 from greencandle.lib import config
 config.create_config()
-from ..lib.common import arg_decorator
+from greencandle.lib.common import arg_decorator
 from greencandle.lib.alerts import send_push_notif, send_slack_message
 
 import requests_unixsocket

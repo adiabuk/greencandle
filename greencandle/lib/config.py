@@ -5,7 +5,7 @@ Get values from config file
 """
 from configparser import ConfigParser
 import numpy
-from .common import AttributeDict
+from greencandle.lib.common import AttributeDict
 
 
 REQUIRED_CONFIG = {'database':['db_host', 'db_user', 'db_password', 'db_database'],
@@ -45,7 +45,6 @@ def create_config():
             if account_type not in globals()['accounts']:
                 globals()['accounts'][account_type] = []
             globals()['accounts'][account_type].append({'key':key, 'secret':secret})
-
 
 def check_config():
     """

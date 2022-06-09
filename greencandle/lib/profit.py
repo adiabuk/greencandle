@@ -6,8 +6,8 @@ Calculate potential profits from historical data
 
 from __future__ import print_function
 from collections import defaultdict
-from .mysql import Mysql
-from .common import sub_perc, perc_diff
+from greencandle.lib.mysql import Mysql
+from greencandle.lib.common import sub_perc, perc_diff
 
 RATE = 0.00014 # GBP to BTC
 FEES = 0.05

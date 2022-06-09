@@ -7,9 +7,9 @@ Generic logging class for greencandle modules
 import logging
 import traceback
 from systemd.journal import JournaldLogHandler
-from . import config
+from greencandle.lib import config
 config.create_config()
-from .alerts import send_push_notif, send_slack_message
+from greencandle.lib.alerts import send_push_notif, send_slack_message
 
 class OneLineFormatter(logging.Formatter):
     """logging formatter for exceptions"""

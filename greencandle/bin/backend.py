@@ -14,13 +14,13 @@ import argcomplete
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 import setproctitle
-from ..lib import config
+from greencandle.lib import config
 config.create_config()
 
-from ..lib.graph import Graph
-from ..lib.logger import get_logger, exception_catcher
-from ..lib.run import prod_loop, prod_int_check, prod_initial
-from ..lib.common import HOUR, MINUTE
+from greencandle.lib.graph import Graph
+from greencandle.lib.logger import get_logger, exception_catcher
+from greencandle.lib.run import prod_loop, prod_int_check, prod_initial
+from greencandle.lib.common import HOUR, MINUTE
 GET_EXCEPTIONS = exception_catcher((Exception))
 LOGGER = get_logger(__name__)
 

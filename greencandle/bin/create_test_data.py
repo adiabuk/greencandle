@@ -10,9 +10,9 @@ Save as a pandas dataframe in a pickle file
 import argparse
 import argcomplete
 
-from ..lib import config
+from greencandle.lib import config
 config.create_config()
-from ..lib.binance_common import get_data
+from greencandle.lib.binance_common import get_data
 
 def main():
     """ Main function """

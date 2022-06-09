@@ -10,12 +10,12 @@ import argparse
 import argcomplete
 import setproctitle
 
-from ..lib import config
+from greencandle.lib import config
 # config is required before loading other modules as it is global
 config.create_config()
 
-from ..lib.logger import get_logger, exception_catcher
-from ..lib.run import serial_test, parallel_test
+from greencandle.lib.logger import get_logger, exception_catcher
+from greencandle.lib.run import serial_test, parallel_test
 
 LOGGER = get_logger(__name__)
 GET_EXCEPTIONS = exception_catcher((Exception))

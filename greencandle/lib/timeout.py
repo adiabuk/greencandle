@@ -6,7 +6,7 @@ Custom Exception for timeout
 
 import signal
 from contextlib import contextmanager
-from .logger import get_logger
+from greencandle.lib.logger import get_logger
 
 LOGGER = get_logger(__name__)
 

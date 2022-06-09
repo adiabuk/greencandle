@@ -6,12 +6,12 @@ from __future__ import print_function
 import json
 from requests.exceptions import ReadTimeout
 from greencandle.lib.alerts import send_slack_message
-from . import config
-from .binance_accounts import get_binance_spot, get_binance_cross, get_binance_isolated
-from .coinbase_accounts import get_coinbase_values
-from .phemex_accounts import get_phemex_values
-from .mysql import Mysql
-from .logger import get_logger
+from greencandle.lib import config
+from greencandle.lib.binance_accounts import get_binance_spot, get_binance_cross, get_binance_isolated
+from greencandle.lib.coinbase_accounts import get_coinbase_values
+from greencandle.lib.phemex_accounts import get_phemex_values
+from greencandle.lib.mysql import Mysql
+from greencandle.lib.logger import get_logger
 
 config.create_config()
 LOGGER = get_logger(__name__)

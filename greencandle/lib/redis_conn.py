@@ -11,10 +11,11 @@ import pickle
 from datetime import datetime, timedelta
 import redis
 from str2bool import str2bool
-from .mysql import Mysql
-from .logger import get_logger
-from . import config
-from .common import add_perc, sub_perc, AttributeDict, perc_diff, convert_to_seconds, TF2MIN
+from greencandle.lib.mysql import Mysql
+from greencandle.lib.logger import get_logger
+from greencandle.lib import config
+from greencandle.lib.common import add_perc, sub_perc, AttributeDict, \
+        perc_diff, convert_to_seconds, TF2MIN
 
 class Redis():
     """

@@ -23,12 +23,12 @@ import talib
 import pandas_ta as ta
 from indicator import SuperTrend, RSI
 
-from . import config
+from greencandle.lib import config
 
-from .redis_conn import Redis
-from .common import make_float, pipify, pip_calc
-from .binance_common import get_all_klines
-from .logger import get_logger, exception_catcher
+from greencandle.lib.redis_conn import Redis
+from greencandle.lib.common import make_float, pipify, pip_calc
+from greencandle.lib.binance_common import get_all_klines
+from greencandle.lib.logger import get_logger, exception_catcher
 
 LOGGER = get_logger(__name__)
 CROSS_DATA = {}  # data from different time period
