@@ -72,7 +72,7 @@ def play(data):
     file.write(response['AudioStream'].read())
     print(text)
     file.close()
-
+    play_mp3('250ms-silence.mp3')
     play_mp3('com.mp3')
     play_mp3('speech.mp3')
 
