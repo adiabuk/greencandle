@@ -9,8 +9,8 @@ fi
 
 if [[ ! -e /installed ]]; then
   configstore package process_templates --ignore-role --basedir /opt/config $CONFIG_ENV /opt/output
-  cp /opt/output/greencandle.ini /etc/
-  cp /opt/output/router_config.json /etc
+  cp /opt/output/greencandle.ini /opt/output/router_config.json /opt/output/alert.ini /etc
+
   if [[ "$HOSTNAME" == *"webserver"* ]]; then
     cp /opt/output/default.conf /etc/nginx/conf.d/default.conf || true
     cp /opt/output/nginx.conf /etc/nginx/ || true
@@ -20,22 +20,27 @@ if [[ ! -e /installed ]]; then
     cp /opt/config/raw/main.css /opt/config/raw/favicon.ico /var/www/html || true
     > /etc/nginx/sites-available/default || true
   fi
+  elif [[ "$HOSTNAME" == *"cron"* ]]; then
+    crontab /opt/output/gc-cron
+  elif [[ "$HOSTNAME" == *"alert"* ]]; then
+    cp /srv/alert/com.mp3 /srv/alert/250ms-silence.mp3 /
+  fi
 
-  crontab /opt/output/gc-cron || true
   touch /installed
+
+if [[ $DB == true ]]; then
+  mysql=$(awk -F "=" '/db_host/ {print $2}' /etc/greencandle.ini)
+  redis=$(awk -F "=" '/redis_host/ {print $2}' /etc/greencandle.ini)
+
+  while ! nc -z $mysql 3306; do
+    echo Waiting for mysql;
+    sleep 1;
+  done
+
+  while ! nc -z $redis 6379; do
+    echo Waiting for redis;
+    sleep 1;
+  done
 fi
-
-mysql=$(awk -F "=" '/db_host/ {print $2}' /etc/greencandle.ini)
-redis=$(awk -F "=" '/redis_host/ {print $2}' /etc/greencandle.ini)
-
-while ! nc -z $mysql 3306; do
-  echo Waiting for mysql;
-  sleep 1;
-done
-
-while ! nc -z $redis 6379; do
-  echo Waiting for redis;
-  sleep 1;
-done
 
 exec "$@"

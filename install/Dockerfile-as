@@ -5,6 +5,6 @@ ADD ./install /opt/install
 
 RUN pip install -r /srv/alert/requirements.txt
 RUN mkdir /opt/output
-RUN  cp /opt/install/docker-entrypoint-alert.sh /
+RUN  cp /opt/install/docker-entrypoint.sh /
 
 CMD ["python", "/srv/alert/webhook.py"]

@@ -7,7 +7,7 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint-logwatch.sh /usr/local/bin/logwatch
+    entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
     environment:
       - CONFIG_ENV=data/cron
       - HOST=$HOSTNAME

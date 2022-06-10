@@ -6,7 +6,7 @@ services:
     hostname: gen-be-logwatch
     image: amrox/greencandle:${TAG}
     restart: always
-    entrypoint: /docker-entrypoint-logwatch.sh /usr/local/bin/logwatch
+    entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
     environment:
       - CONFIG_ENV=stag/fe/cron
       - HOST=$HOSTNAME
@@ -508,7 +508,7 @@ services:
     image: amrox/alert:latest
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint-alert.sh /srv/alert/webhook.py
+    entrypoint: /docker-entrypoint.sh /srv/alert/webhook.py
     ports:
       - 20000
     healthcheck:
