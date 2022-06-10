@@ -47,6 +47,7 @@ if [[ $DB == true ]]; then
     echo Waiting for redis;
     sleep 1;
   done
+  echo "Done waiting for DB services"
 fi
 
 exec "$@"
