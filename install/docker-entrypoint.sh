@@ -15,11 +15,17 @@ if [[ ! -e /installed ]]; then
     cp /opt/output/default.conf /etc/nginx/conf.d/default.conf
     cp /opt/output/nginx.conf /etc/nginx/
     cp /opt/output/50x.html /usr/share/nginx/html
+    mkdir -p /var/www/html
     echo $(configstore package get $CONFIG_ENV base_env --basedir /opt/config) > /var/www/html/env.txt
     cp /opt/output/{*.html,*.css,*.js,*.jpg} /var/www/html
     cp /opt/config/raw/main.css /opt/config/raw/favicon.ico /var/www/html || true
     > /etc/nginx/sites-available/default
-  fi
+
+  elif [[ "$HOSTNAME" == *"api"* ]]; then
+    mkdir -p /etc/gcapi /var/www/html
+    echo $(configstore package get $CONFIG_ENV base_env --basedir /opt/config) > /var/www/html/env.txt
+    cp /opt/config/raw/* /etc/gcapi/
+
   elif [[ "$HOSTNAME" == *"cron"* ]]; then
     crontab /opt/output/gc-cron
   elif [[ "$HOSTNAME" == *"alert"* ]]; then

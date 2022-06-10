@@ -27,7 +27,7 @@ services:
     environment:
       - CONFIG_ENV=test
       - DB=false
-    entrypoint: /docker-entrypoint-api.sh logtailer
+    entrypoint: /docker-entrypoint.sh logtailer
     logging:
       driver: journald
     ports:
@@ -101,7 +101,7 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint-api.sh api_dashboard
+    entrypoint: /docker-entrypoint.sh api_dashboard
     links:
       - test-base-mysql:mysql
       - test-base-redis:redis

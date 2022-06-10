@@ -71,7 +71,7 @@ services:
     hostname: api
     image: greencandle-${image_id}
     restart: always
-    entrypoint: /docker-entrypoint-api.sh backend_api
+    entrypoint: /docker-entrypoint.sh backend_api
     links:
       - mysql-unit:mysql
       - redis-unit:redis
