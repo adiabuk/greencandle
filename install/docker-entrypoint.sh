@@ -18,7 +18,7 @@ if [[ ! -e /installed ]]; then
     mkdir -p /var/www/html
     echo $(configstore package get $CONFIG_ENV base_env --basedir /opt/config) > /var/www/html/env.txt
     cp /opt/output/{*.html,*.css,*.js,*.jpg} /var/www/html
-    cp /opt/config/raw/main.css /opt/config/raw/favicon.ico /var/www/html || true
+    cp /opt/config/raw/main.css /opt/config/raw/50x.html /opt/config/raw/favicon.ico /var/www/html
     > /etc/nginx/sites-available/default
 
   elif [[ "$HOSTNAME" == *"api"* ]]; then
