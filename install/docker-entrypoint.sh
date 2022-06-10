@@ -28,11 +28,15 @@ if [[ ! -e /installed ]]; then
 
   elif [[ "$HOSTNAME" == *"cron"* ]]; then
     crontab /opt/output/gc-cron
+
   elif [[ "$HOSTNAME" == *"alert"* ]]; then
     cp /srv/alert/com.mp3 /srv/alert/250ms-silence.mp3 /
+
   fi
 
   touch /installed
+
+fi
 
 if [[ $DB == true ]]; then
   mysql=$(awk -F "=" '/db_host/ {print $2}' /etc/greencandle.ini)
