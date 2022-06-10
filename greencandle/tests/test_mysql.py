@@ -34,6 +34,32 @@ class TestMysql(OrderedTest):
         self.dbase = Mysql(test=True, interval="1h")
         self.dbase.delete_data()
 
+    def step_1(self):
+        """Check insert and update trades"""
+
+        self.date = '2018-05-07 22:44:59'
+        self.sell_date = '2018-05-07 22:44:59'
+        self.pair = 'BTCUSDT'
+        self.open_price = 100
+        self.close_price = 500
+        quote_in = 20
+        quote = get_quote(self.pair)
+        self.dbase.insert_trade(self.pair, self.date, self.open_price, quote_amount=quote_in,
+                                base_amount=30, symbol_name=quote)
+        sql = 'select open_time, close_time from trades'
+        open_time, close_time = self.dbase.fetch_sql_data(sql)[-1]
+        current_time = open_time.strftime("%Y-%m-%d %H:%M:%S")
+        assert current_time == self.date
+        assert close_time is None
+
+        base_in = self.dbase.get_quantity(self.pair)
+        perc_inc = perc_diff(self.open_price, self.close_price)
+        base_out = add_perc(perc_inc, base_in)
+        self.dbase.update_trades(self.pair, self.sell_date, self.close_price, quote=quote_in,
+                                 base_out=base_out, symbol_name=quote)
+        close_time = self.dbase.fetch_sql_data('select close_time from trades')[-1]
+        assert close_time is not None
+
     def step2(self):
         """
         Test methods
@@ -43,7 +69,6 @@ class TestMysql(OrderedTest):
         months = 12
         max_perc = 20
         recent_high = self.dbase.get_recent_high(pair, date, months, max_perc)
-        print(recent_high)
         self.assertFalse(recent_high)
         quantity = self.dbase.get_quantity(pair)
         self.assertIsNone(quantity)
@@ -76,36 +101,8 @@ class TestMysql(OrderedTest):
         time_tupple = now.timetuple()
         hour = time_tupple[3]
         last_hour = str(hour - 1)
-        self.assertEquals(last_hour_profit[3], last_hour)
+        self.assertEquals(last_hour_profit[3].strip("0"), last_hour.strip("0"))
 
-
-
-
-    def step_1(self):
-        """Check insert and update trades"""
-
-        self.date = '2018-05-07 22:44:59'
-        self.sell_date = '2018-05-07 22:44:59'
-        self.pair = 'BTCUSDT'
-        self.open_price = 100
-        self.close_price = 500
-        quote_in = 20
-        quote = get_quote(self.pair)
-        self.dbase.insert_trade(self.pair, self.date, self.open_price, quote_amount=quote_in,
-                                base_amount=30, symbol_name=quote)
-        sql = 'select open_time, close_time from trades'
-        open_time, close_time = self.dbase.fetch_sql_data(sql)[-1]
-        current_time = open_time.strftime("%Y-%m-%d %H:%M:%S")
-        assert current_time == self.date
-        assert close_time is None
-
-        base_in = self.dbase.get_quantity(self.pair)
-        perc_inc = perc_diff(self.open_price, self.close_price)
-        base_out = add_perc(perc_inc, base_in)
-        self.dbase.update_trades(self.pair, self.sell_date, self.close_price, quote=quote_in,
-                                 base_out=base_out, symbol_name=quote)
-        close_time = self.dbase.fetch_sql_data('select close_time from trades')[-1]
-        assert close_time is not None
 
     def tearDown(self):
         del self.dbase
