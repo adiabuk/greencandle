@@ -1,6 +1,11 @@
 
 # Releases
 
+# 3.12.1
+* Only 1 log tailer per server linked to all environments with a UI
+* Reduce INFO logging
+* Better log streaming
+
 # 3.12
 * Cleanup docker-compose files
 * Fix short notifications in data env
