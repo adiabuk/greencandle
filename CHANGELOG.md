@@ -1,6 +1,17 @@
 
 # Releases
 
+# 3.12
+* Cleanup docker-compose files
+* Fix short notifications in data env
+* Tail logs in Web UI
+* Remove old logging
+* Fix alert sound
+* Add average profit to hourly notifications
+* Add more mysql unit tests
+* Remove all python relative imports
+* Align trades table field type
+
 # 3.11.1
 * Fix cron entry for hourly profit
 * Add HOST_IP var to per containers
