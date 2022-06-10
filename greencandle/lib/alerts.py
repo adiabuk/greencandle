@@ -114,11 +114,11 @@ def send_slack_trade(**kwargs):
         strat = re.findall(r"-([\s\S]*)$", config.main.name)[0].replace('api-', '')
         close_string = "• Close: {0}\n".format(get_trade_link(kwargs.pair, strat,
                                                               'close', 'close now'))
-        quote_string = "• Quote in: %.4f" % (kwargs.quote)
+        quote_string = "• Quote in: %.4f" % float(kwargs.quote)
     elif kwargs.action == 'CLOSE':
         color = '#fc0303' # red
         close_string = ""
-        quote_string = "• Quote out: %.4f" % (kwargs.quote)
+        quote_string = "• Quote out: %.4f" % float(kwargs.quote)
     else:
         color = '#ff7f00'
         close_string = ""
