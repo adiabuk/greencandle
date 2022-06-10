@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 #pylint: disable=bare-except, no-member, wrong-import-position
+#pylint: disable=invalid-name  #FIXME
 """
 Flask module for manipulating API trades and displaying relevent graphs
 """
@@ -11,12 +12,21 @@ from collections import defaultdict
 import requests
 import yaml
 from flask import Flask, render_template, request, Response, redirect, url_for
+from flask_login import LoginManager, login_required
 APP = Flask(__name__, template_folder="/etc/gcapi", static_url_path='/',
             static_folder='/etc/gcapi')
 from greencandle.lib.common import arg_decorator
 from greencandle.lib import config
+from greencandle.lib.flask_auth import load_user, login as loginx, logout as logoutx
 config.create_config()
 
+LOGIN_MANAGER = LoginManager()
+LOGIN_MANAGER.init_app(APP)
+LOGIN_MANAGER.login_view = "login"
+APP.config['SECRET_KEY'] = 'shit'
+load_user = LOGIN_MANAGER.user_loader(load_user)
+login = APP.route("/login", methods=["GET", "POST"])(loginx)
+login = APP.route("/logout", methods=["GET", "POST"])(logoutx)
 def get_pairs():
     """
     get details from docker_compose, configstore, and router config
@@ -60,6 +70,7 @@ def divide_chunks(lst, num):
         yield lst[i:i + num]
 
 @APP.route('/healthcheck', methods=["GET"])
+@login_required
 def healthcheck():
     """
     Docker healthcheck
@@ -68,6 +79,7 @@ def healthcheck():
     return Response(status=200)
 
 @APP.route('/charts', methods=["GET"])
+@login_required
 def charts():
     """Charts for given strategy/config_env"""
     config_env = request.args.get('config_env')
@@ -82,6 +94,7 @@ def list_to_dict(rlist):
     links = dict(map(lambda s: s.split(':'), rlist))
     return {v: k for k, v in links.items() if "-be-" in k}
 
+@login_required
 @APP.route("/action", methods=['POST', 'GET'])
 def action():
     """
@@ -115,6 +128,7 @@ def send_trade(pair, strategy, trade_action):
         pass
 
 @APP.route('/trade', methods=["GET"])
+@login_required
 def trade():
     """
     Buy/sell actions for API trades
@@ -156,6 +170,7 @@ def trade():
     return render_template('action.html', my_dic=my_dic)
 
 @APP.route('/menu', methods=["GET"])
+@login_required
 def menu():
     """
     Menu of strategies
