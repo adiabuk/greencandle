@@ -11,14 +11,14 @@ if [[ ! -e /installed ]]; then
   configstore package process_templates --ignore-role --basedir /opt/config $CONFIG_ENV /opt/output
   cp /opt/output/greencandle.ini /opt/output/router_config.json /opt/output/alert.ini /etc
 
-  if [[ "$HOSTNAME" == *"webserver"* ]]; then
-    cp /opt/output/default.conf /etc/nginx/conf.d/default.conf || true
-    cp /opt/output/nginx.conf /etc/nginx/ || true
-    cp /opt/output/50x.html /usr/share/nginx/html || true
-    echo $(configstore package get $CONFIG_ENV base_env --basedir /opt/config) > /var/www/html/env.txt || true
-    cp /opt/output/{*.html,*.css,*.js,*.jpg} /var/www/html ||true
+  if [[ "$HOSTNAME" == *"web"* ]]; then
+    cp /opt/output/default.conf /etc/nginx/conf.d/default.conf
+    cp /opt/output/nginx.conf /etc/nginx/
+    cp /opt/output/50x.html /usr/share/nginx/html
+    echo $(configstore package get $CONFIG_ENV base_env --basedir /opt/config) > /var/www/html/env.txt
+    cp /opt/output/{*.html,*.css,*.js,*.jpg} /var/www/html
     cp /opt/config/raw/main.css /opt/config/raw/favicon.ico /var/www/html || true
-    > /etc/nginx/sites-available/default || true
+    > /etc/nginx/sites-available/default
   fi
   elif [[ "$HOSTNAME" == *"cron"* ]]; then
     crontab /opt/output/gc-cron

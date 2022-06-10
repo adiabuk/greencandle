@@ -212,7 +212,7 @@ services:
     depends_on:
       - test-base-mysql
       - test-base-redis
-    entrypoint: /docker-entrypoint-api2.sh nginx -g 'daemon off;'
+    entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws

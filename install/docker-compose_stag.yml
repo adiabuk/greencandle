@@ -233,7 +233,7 @@ services:
     depends_on:
       - stag-base-mysql
       - stag-base-redis
-    entrypoint: /docker-entrypoint-api2.sh nginx -g 'daemon off;'
+    entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws

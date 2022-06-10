@@ -7,7 +7,6 @@ LABEL host=${HOST}
 
 RUN mkdir /opt/output
 COPY install/docker-entrypoint.sh /
-COPY install/docker-entrypoint-api2.sh /
 COPY config /opt/config
 RUN chmod +x /docker-entrypoint.sh
 
