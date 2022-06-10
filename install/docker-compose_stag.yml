@@ -37,6 +37,34 @@ services:
       timeout: 2s
       retries: 5
 
+  gen-be-logtailer:
+    container_name: gen-be-logtailer
+    hostname: gen-be-logtailer
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    environment:
+      - CONFIG_ENV=stag
+    entrypoint: /docker-entrypoint-api.sh logtailer
+    logging:
+      driver: journald
+    ports:
+      - 2222:2222
+    links:
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /var/log/syslog:/var/log/syslog
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
+
   stag-base-redis:
     container_name: stag-base-redis
     hostname: stag-base-redis
@@ -164,7 +192,7 @@ services:
       - stag-fe-api-dashboard:api_dash
       - stag-base-mysql:mysql
       - stag-base-redis:redis
-      - stag-be-logtailer:logs
+      - gen-be-logtailer:logs
     depends_on:
       - gen-fe-cadvisor
       - stag-base-mysql
@@ -488,60 +516,4 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - /var/run/dbus:/var/run/dbu
       - /etc/localtime:/etc/localtime:ro
-      - /root/.bash_history:/root/.bash_history
-
-  stag-be-logtailer:
-    container_name: stag-be-logtailer
-    hostname: stag-be-logtailer
-    image: amrox/greencandle:${TAG}
-    pull_policy: always
-    restart: always
-    environment:
-      - CONFIG_ENV=stag
-    entrypoint: /docker-entrypoint-api.sh logtailer
-    logging:
-      driver: journald
-    ports:
-      - 2222:2222
-    links:
-      - stag-base-mysql:mysql
-      - stag-base-redis:redis
-    healthcheck:
-      test: ls ||exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    volumes:
-      - /var/log/syslog:/var/log/syslog
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
-      - /root/.bash_history:/root/.bash_history
-
-  stag-be-logtailer:
-    container_name: stag-be-logtailer
-    hostname: stag-be-logtailer
-    image: amrox/greencandle:${TAG}
-    pull_policy: always
-    restart: always
-    environment:
-      - CONFIG_ENV=test
-    entrypoint: /docker-entrypoint-api.sh logtailer
-    logging:
-      driver: journald
-    ports:
-      - 2222:2222
-    links:
-      - stag-base-mysql:mysql
-      - stag-base-redis:redis
-    healthcheck:
-      test: ls ||exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    volumes:
-      - /var/log/syslog:/var/log/syslog
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
