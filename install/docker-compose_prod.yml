@@ -160,6 +160,7 @@ services:
        - per-fe-api-dashboard:api_dash
        - per-base-mysql:mysql
        - per-base-redis:redis
+       - per-be-logtailer:logs
      depends_on:
        - gen-fe-cadvisor
        - per-base-mysql
@@ -522,6 +523,7 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
+
   prod-base-redis:
     container_name: prod-base-redis
     hostname: prod-base-redis
@@ -616,6 +618,7 @@ services:
        - prod-fe-api-dashboard:api_dash
        - prod-base-mysql:mysql
        - prod-base-redis:redis
+       - prod-be-logtailer:logs
      depends_on:
        - gen-fe-cadvisor
        - prod-base-mysql
