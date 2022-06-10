@@ -27,6 +27,7 @@ services:
     environment:
       - CONFIG_ENV=prod/fe/cron
       - HOST=$HOSTNAME
+      - DB=false
     volumes:
       - /var/log:/var/log
       - /root/.aws:/root/.aws
@@ -45,6 +46,7 @@ services:
     restart: always
     environment:
       - CONFIG_ENV=prod
+      - DB=false
     entrypoint: /docker-entrypoint-api.sh logtailer
     logging:
       driver: journald
@@ -95,6 +97,7 @@ services:
     environment:
       - CONFIG_ENV=per
       - MYSQL_ROOT_PASSWORD=password
+      - DB=true
     restart: always
     ports:
       - 3305:3306
@@ -114,6 +117,7 @@ services:
     environment:
       - CONFIG_ENV=per/fe/cron
       - HOST=$HOSTNAME
+      - DB=true
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -153,6 +157,7 @@ services:
      environment:
        - CONFIG_ENV=per
        - HOST=$HOSTNAME
+       - DB=false
      ports:
        - 8888:9999
      links:
@@ -177,6 +182,7 @@ services:
     environment:
       - CONFIG_ENV=per/fe/api
       - HOST=$HOSTNAME
+      - DB=true
     logging:
       driver: journald
     image: amrox/greencandle:${TAG}
@@ -221,6 +227,7 @@ services:
       - CONFIG_ENV=per/fe/api
       - HOST=$HOSTNAME
       - HOST_IP=$HOST_IP
+      - DB=true
     ports:
       - 1080:1080
     links:
@@ -260,6 +267,7 @@ services:
       - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=per/any/spot-long
+      - DB=true
     ports:
       - 20000
     links:
@@ -294,6 +302,7 @@ services:
       - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=per/any/isolated-long
+      - DB=true
     ports:
       - 20000
     links:
@@ -328,6 +337,7 @@ services:
       - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=per/any/cross-long
+      - DB=true
     ports:
       - 20000
     links:
@@ -362,6 +372,7 @@ services:
       - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=per/any/cross-short
+      - DB=true
     ports:
       - 20000
     links:
@@ -399,6 +410,7 @@ services:
       - get_trend="true"
       - intermittent="true"
       - HOST_IP=$HOST_IP
+      - DB=true
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -438,6 +450,7 @@ services:
       - get_trend="true"
       - intermittent="true"
       - HOST_IP=$HOST_IP
+      - DB=true
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -474,6 +487,7 @@ services:
       - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=per/any/isolated-short
+      - DB=true
     ports:
       - 20000
     links:
@@ -524,6 +538,7 @@ services:
     environment:
       - CONFIG_ENV=prod/fe
       - MYSQL_ROOT_PASSWORD=password
+      - DB=true
     restart: always
     ports:
       - 3306:3306
@@ -543,6 +558,7 @@ services:
     environment:
       - CONFIG_ENV=prod/fe/cron
       - HOST=$HOSTNAME
+      - DB=true
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -582,6 +598,7 @@ services:
      environment:
        - CONFIG_ENV=prod/fe
        - HOST=$HOSTNAME
+       - DB=false
      ports:
        - 9999:9999
      links:
@@ -606,6 +623,7 @@ services:
     environment:
       - CONFIG_ENV=prod/fe/api
       - HOST=$HOSTNAME
+      - DB=true
     logging:
       driver: journald
     image: amrox/greencandle:${TAG}
@@ -649,6 +667,7 @@ services:
     environment:
       - CONFIG_ENV=prod/fe/api
       - HOST=$HOSTNAME
+      - DB=true
     ports:
       - 1081:1080
     links:
@@ -688,6 +707,7 @@ services:
       - GC_PORT=9999
       - HOST=$HOSTNAME
       - CONFIG_ENV=prod/any/spot-long
+      - DB=true
     ports:
       - 20000
     links:
@@ -722,6 +742,7 @@ services:
       - GC_PORT=9999
       - HOST=$HOSTNAME
       - CONFIG_ENV=prod/any/cross-long
+      - DB=true
     ports:
       - 20000
     links:
@@ -756,6 +777,7 @@ services:
       - GC_PORT=9999
       - HOST=$HOSTNAME
       - CONFIG_ENV=prod/any/isolated-long
+      - DB=true
     ports:
       - 20000
     links:
@@ -790,6 +812,7 @@ services:
       - GC_PORT=9999
       - HOST=$HOSTNAME
       - CONFIG_ENV=prod/any/cross-short
+      - DB=true
     ports:
       - 20000
     links:
@@ -824,6 +847,7 @@ services:
       - GC_PORT=9999
       - HOST=$HOSTNAME
       - CONFIG_ENV=prod/any/isolated-short
+      - DB=true
     ports:
       - 20000
     links:

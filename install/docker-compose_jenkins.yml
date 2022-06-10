@@ -10,6 +10,7 @@ services:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
       - BUILD_ID=$BUILD_ID
+      - DB=true
     hostname: unit
     image: greencandle-${image_id}
     restart: always
@@ -34,10 +35,11 @@ services:
     container_name: cron-${BUILD_ID}
     build:
       context: ..
-      dockerfile: install/Dockerfile-ms
+      dockerfile: install/Dockerfile-gc
     environment:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
+      - DB=true
     hostname: cron
     image: greencandle-${image_id}
     restart: always
@@ -65,6 +67,7 @@ services:
     environment:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
+      - DB=true
     hostname: api
     image: greencandle-${image_id}
     restart: always
@@ -116,6 +119,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - CONFIG_ENV=unit
+      - DB=true
     restart: always
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
@@ -132,6 +136,7 @@ services:
     image: alert-${image_id}
     environment:
       - CONFIG_ENV=unit
+      - DB=false
     restart: always
     healthcheck:
       test: ls
@@ -148,6 +153,7 @@ services:
     image: webserver-${image_id}
     environment:
       - CONFIG_ENV=unit
+      - DB=false
     restart: always
     healthcheck:
       test: ls

@@ -11,6 +11,7 @@ services:
     environment:
       - CONFIG_ENV=data/cron
       - HOST=$HOSTNAME
+      - DB=false
     volumes:
       - /var/log:/var/log
       - /root/.aws:/root/.aws
@@ -41,6 +42,7 @@ services:
     environment:
       - CONFIG_ENV=data/4h/short1
       - HOST=$HOSTNAME
+      - DB=true
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
@@ -72,6 +74,7 @@ services:
     environment:
       - CONFIG_ENV=data/4h/short3
       - HOST=$HOSTNAME
+      - DB=true
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
@@ -103,6 +106,7 @@ services:
     environment:
       - CONFIG_ENV=data/4h/short2
       - HOST=$HOSTNAME
+      - DB=true
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
@@ -134,6 +138,7 @@ services:
     environment:
       - CONFIG_ENV=data/4h/long1
       - HOST=$HOSTNAME
+      - DB=true
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
@@ -165,6 +170,7 @@ services:
     environment:
       - CONFIG_ENV=data/4h/long3
       - HOST=$HOSTNAME
+      - DB=true
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
@@ -196,6 +202,7 @@ services:
     environment:
       - CONFIG_ENV=data/4h/long2
       - HOST=$HOSTNAME
+      - DB=true
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
@@ -227,6 +234,7 @@ services:
     environment:
       - CONFIG_ENV=data/5m/short1
       - HOST=$HOSTNAME
+      - DB=true
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
@@ -258,6 +266,7 @@ services:
     environment:
       - CONFIG_ENV=data/5m/short3
       - HOST=$HOSTNAME
+      - DB=true
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
@@ -289,6 +298,7 @@ services:
     environment:
       - CONFIG_ENV=data/5m/short2
       - HOST=$HOSTNAME
+      - DB=true
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
@@ -320,6 +330,7 @@ services:
     environment:
       - CONFIG_ENV=data/5m/long1
       - HOST=$HOSTNAME
+      - DB=true
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
@@ -351,6 +362,7 @@ services:
     environment:
       - CONFIG_ENV=data/5m/long3
       - HOST=$HOSTNAME
+      - DB=true
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
@@ -382,6 +394,7 @@ services:
     environment:
       - CONFIG_ENV=data/5m/long2
       - HOST=$HOSTNAME
+      - DB=true
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
@@ -411,6 +424,7 @@ services:
     environment:
       - CONFIG_ENV=data/5m/get_data
       - HOST=$HOSTNAME
+      - DB=true
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
@@ -440,6 +454,7 @@ services:
     environment:
       - CONFIG_ENV=data/5m/trend
       - HOST=$HOSTNAME
+      - DB=true
     ports:
       - 6000:6000
     healthcheck:
@@ -471,6 +486,7 @@ services:
     environment:
       - CONFIG_ENV=data/4h/get_data
       - HOST=$HOSTNAME
+      - DB=true
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
@@ -487,6 +503,7 @@ services:
     environment:
       - CONFIG_ENV=data/cron
       - HOST=$HOSTNAME
+      - DB=true
     hostname: data-fe-cron
     image: amrox/greencandle
     pull_policy: always
@@ -536,6 +553,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - CONFIG_ENV=data
+      - DB=true
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
       interval: 1m

@@ -26,6 +26,7 @@ services:
     restart: always
     environment:
       - CONFIG_ENV=test
+      - DB=false
     entrypoint: /docker-entrypoint-api.sh logtailer
     logging:
       driver: journald
@@ -74,6 +75,7 @@ services:
     environment:
       - CONFIG_ENV=test
       - MYSQL_ROOT_PASSWORD=password
+      - DB=true
     restart: always
     ports:
       - 3305:3306
@@ -93,6 +95,7 @@ services:
     environment:
       - CONFIG_ENV=test/fe/api
       - HOST=$HOSTNAME
+      - DB=true
     logging:
       driver: journald
     image: amrox/greencandle:${TAG}
@@ -126,6 +129,7 @@ services:
     environment:
       - CONFIG_ENV=test/fe/cron
       - HOST=$HOSTNAME
+      - DB=true
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -165,6 +169,7 @@ services:
     environment:
       - CONFIG_ENV=test
       - HOST=$HOSTNAME
+      - DB=false
     ports:
       - 8888:8888
     links:
@@ -197,6 +202,7 @@ services:
     environment:
       - CONFIG_ENV=test/fe/api
       - HOST=$HOSTNAME
+      - DB=false
     ports:
       - 1111:1111
     links:
@@ -228,6 +234,7 @@ services:
     environment:
       - CONFIG_ENV=test
       - HOST=$HOSTNAME
+      - DB=true
     ports:
       - 1080:1080
     links:
@@ -261,6 +268,7 @@ services:
       - HOST_IP=$HOST_IP
       - VPN_IP=$VPN_IP
       - GC_PORT=8888
+      - DB=true
     ports:
       - 20000
     links:
@@ -296,6 +304,7 @@ services:
       - HOST=$HOSTNAME
       - CONFIG_ENV=test/5MA/api/usdt
       - HOST_IP=$HOST_IP
+      - DB=true
     ports:
       - 20000
     links:
@@ -331,6 +340,7 @@ services:
       - HOST=$HOSTNAME
       - CONFIG_ENV=test/5MA/api/eth
       - HOST_IP=$HOST_IP
+      - DB=true
     ports:
       - 20000
     links:
@@ -368,6 +378,7 @@ services:
       - HOST_IP=$HOST_IP
       - get_trend="true"
       - intermittent="true"
+      - DB=true
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -407,6 +418,7 @@ services:
       - HOST_IP=$HOST_IP
       - get_trend="true"
       - intermittent="true"
+      - DB=true
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -446,6 +458,7 @@ services:
       - HOST_IP=$HOST_IP
       - get_trend="true"
       - intermittent="true"
+      - DB=true
     extra_hosts:
       - "trend:10.8.0.101"
     ports:

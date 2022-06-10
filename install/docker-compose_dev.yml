@@ -6,6 +6,7 @@ services:
     environment:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
+      - DB=true
     hostname: cron
     image: amrox/greencandle:${TAG}
     restart: always
@@ -30,6 +31,7 @@ services:
     environment:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
+      - DB=true
     hostname: api
     image: amrox/greencandle:${TAG}
     restart: always
@@ -75,6 +77,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - CONFIG_ENV=unit
+      - DB=true
     restart: always
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
