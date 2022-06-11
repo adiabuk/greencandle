@@ -8,9 +8,9 @@ from flask_login import UserMixin, login_user, logout_user
 from cryptography.fernet import Fernet
 from greencandle.lib import config
 config.create_config()
-auth = config.main.flask_auth.encode()
+auth = config.web.flask_auth.encode()
 #key = Fernet.generate_key()
-key = config.main.auth_key.encode()
+key = config.web.auth_key.encode()
 fernet = Fernet(key)
 #https://www.geeksforgeeks.org/how-to-encrypt-and-decrypt-strings-in-python/
 user, passw = fernet.decrypt(auth).decode().split(':')

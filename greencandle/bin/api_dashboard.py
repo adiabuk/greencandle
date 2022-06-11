@@ -121,7 +121,7 @@ def send_trade(pair, strategy, trade_action):
                "action": trade_action,
                "strategy": strategy,
                "manual": True}
-    api_token = config.main.api_token
+    api_token = config.web.api_token
     url = "http://router:1080/{}".format(api_token)
     try:
         requests.post(url, json=payload, timeout=1)

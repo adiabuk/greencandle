@@ -19,7 +19,7 @@ from greencandle.lib.mysql import Mysql
 TEST = bool(len(sys.argv) > 1 and sys.argv[1] == '--test')
 APP = Flask(__name__)
 LOGGER = get_logger(__name__)
-TOKEN = config.main.api_token
+TOKEN = config.web.api_token
 
 def send_trade(payload, host):
     """

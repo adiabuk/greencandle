@@ -249,7 +249,7 @@ def prod_int_check(interval, test, alert=False):
                            "text": "Closing API trade according to TP/SL rules",
                            "action":"close"}
                 host = os.environ['HOST_IP']
-                url = "http://{}:1080/{}".format(host, config.main.api_token)
+                url = "http://{}:1080/{}".format(host, config.web.api_token)
                 try:
                     requests.post(url, json=payload, timeout=1)
                 except Exception:
