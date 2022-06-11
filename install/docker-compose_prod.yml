@@ -1,4 +1,4 @@
-%s/gen-be-logtailer-api/gen-be-logtailer-api-apiversion: "3.7"
+version: "3.7"
 services:
 
 ###### Start Gen
