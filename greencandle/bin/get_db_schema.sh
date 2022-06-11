@@ -59,7 +59,7 @@ elif [[ -z $GET && -z $PUT ]]; then
   usage
 
 elif [[ -n $GET ]]; then
-  str="show tables from $DB where Tables_in_${DB} like 'bak-%' or Tables_in_$DB like 'tmp-%';"
+  str="show tables from $DB where Tables_in_${DB} like 'bak_%' or Tables_in_$DB like 'tmp_%';"
   TABLES=$(echo $str | mysql -N --protocol=tcp -h $HOSTNAME -P $PORT -uroot -ppassword|tr '\n' ' ')
   IGNORE_TABLES=""
 
