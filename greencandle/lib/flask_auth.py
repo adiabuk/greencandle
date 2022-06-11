@@ -9,7 +9,8 @@ from cryptography.fernet import Fernet
 from greencandle.lib import config
 config.create_config()
 auth = config.main.flask_auth.encode()
-key = Fernet.generate_key()
+#key = Fernet.generate_key()
+key = config.main.auth_key.encode()
 fernet = Fernet(key)
 #https://www.geeksforgeeks.org/how-to-encrypt-and-decrypt-strings-in-python/
 user, passw = fernet.decrypt(auth).decode().split(':')

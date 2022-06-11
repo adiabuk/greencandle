@@ -71,6 +71,11 @@
       "is_binary": false,
       "is_secret": true
     },
+    "auth_key": {
+      "value": "u29K9Nov3Y7xJIgQ7xhWS7/BHBlGbx3vCEyS/u7ZI07Edyw3JTwtoZs6ji409VnPog/T3sAxQ7PYXZpklS7e6eG4rJMw9UIWtIKJSQ==",
+      "is_binary": true,
+      "is_secret": true
+    },
     "aws_access_key": {
       "value": "",
       "is_binary": false,
