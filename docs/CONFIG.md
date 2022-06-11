@@ -65,6 +65,6 @@
 * **take_profit_perc** *Take profit percentage - disabled if 0 or less*
 * **trailing_stop_loss_perc** *Trailing stop loss percentage from maximum value since open - disabled if 0 or less*
 * **indicators** *List of indicators and values - see seperate doc*
-* **open_rule{1-10}** *Rules to open trade - see seperate doc*
-* **close_rule{1-10}** *Rules to close trade - see seperate doc*
+* **open_rule{1-3}** *Rules to open trade - see seperate doc*
+* **close_rule{1-3}** *Rules to close trade - see seperate doc*
 * **rate_indicator** *indicator to use for tracking slope increase/decrease*

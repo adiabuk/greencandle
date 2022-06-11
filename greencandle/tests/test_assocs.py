@@ -48,6 +48,7 @@ class TestAssocs(unittest.TestCase):
         """
         envs = (('per', 'PROD'), ('prod', 'PROD'), ('stag', 'STAG'))
         for env, host in envs:
+            print("processing env {}".format(env))
             os.system("sudo configstore package process_templates {} /tmp".format(env))
             os.environ['HOST'] = host
             names = get_pairs()[-1]

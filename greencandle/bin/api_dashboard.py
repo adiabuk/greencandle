@@ -28,6 +28,7 @@ APP.config['SECRET_KEY'] = os.environ['SECRET_KEY'] if 'SECRET_KEY' in os.enviro
 load_user = LOGIN_MANAGER.user_loader(load_user)
 login = APP.route("/login", methods=["GET", "POST"])(loginx)
 login = APP.route("/logout", methods=["GET", "POST"])(logoutx)
+
 def get_pairs():
     """
     get details from docker_compose, configstore, and router config
@@ -47,7 +48,6 @@ def get_pairs():
             command = ('configstore package get --basedir /srv/greencandle/config {} pairs'
                        .format(env))
             result = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
-            #subprocess.run(["ls", "-l", "/dev/null"], capture_output=True)
             pairs = result.stdout.read().split()
             command = ('configstore package get --basedir /srv/greencandle/config {} name'
                        .format(env))
