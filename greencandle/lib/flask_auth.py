@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-else-return,invalid-overridden-method
+#pylint: disable=no-else-return,invalid-overridden-method,invalid-name,no-self-use
 """
 Libraries for adding auth to all Flask api modules
 """
@@ -14,12 +14,11 @@ class User(UserMixin):
     """
 
     def __init__(self, username):
-
-        self.username = username
+        self.id = username
         self.password = USERS_DB[username]
 
     def __repr__(self):
-        return "%s/%s" % (self.username, self.password)
+        return "%s/%s" % (self.id, self.password)
 
     def is_active(self):
         return True
@@ -57,7 +56,6 @@ def logout():
 def page_not_found(_):
     """404 page"""
     return Response('<p>Login failed</p>')
-
 
 def load_user(userid):
     """load user"""
