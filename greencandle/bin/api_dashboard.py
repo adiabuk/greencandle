@@ -23,7 +23,8 @@ config.create_config()
 LOGIN_MANAGER = LoginManager()
 LOGIN_MANAGER.init_app(APP)
 LOGIN_MANAGER.login_view = "login"
-APP.config['SECRET_KEY'] = os.environ['SECRET_KEY']
+APP.config['SECRET_KEY'] = os.environ['SECRET_KEY'] if 'SECRET_KEY' in os.environ else \
+        os.urandom(12).hex()
 load_user = LOGIN_MANAGER.user_loader(load_user)
 login = APP.route("/login", methods=["GET", "POST"])(loginx)
 login = APP.route("/logout", methods=["GET", "POST"])(logoutx)
