@@ -4,7 +4,7 @@
 Libraries for adding auth to all Flask api modules
 """
 
-from flask import request, redirect, abort, Response
+from flask import request, redirect, abort, render_template
 from flask_login import UserMixin, login_user, logout_user
 
 # silly user model
@@ -21,6 +21,7 @@ class User(UserMixin):
         return "%s/%s" % (self.id, self.password)
 
     def is_active(self):
+        """if logged in"""
         return True
 
 #users database (used dictionary just as an example)
@@ -40,22 +41,16 @@ def login():
         else:
             return abort(401)
     else:
-        return Response('''
-        <form action="" method="post">
-            <p><input type=text name=username>
-            <p><input type=password name=password>
-            <p><input type=submit value=Login>
-        </form>
-        ''')
+        return render_template('login.html')
 
 def logout():
     """logout page"""
     logout_user()
-    return Response('<p>Logged out</p>')
+    return render_template('logout.html')
 
 def page_not_found(_):
     """404 page"""
-    return Response('<p>Login failed</p>')
+    return render_template('failed.html')
 
 def load_user(userid):
     """load user"""
