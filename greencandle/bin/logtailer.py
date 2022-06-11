@@ -9,7 +9,7 @@ from flask import Flask, render_template
 from greencandle.lib.common import arg_decorator
 
 APP = Flask(__name__, template_folder="/etc/gcapi", static_url_path='/',
-            static_folder='/var/www/html')
+            static_folder='/etc/gcapi')
 
 @APP.route('/')
 def index():
