@@ -13,7 +13,11 @@ if [[ ! -e /installed ]]; then
 
   if [[ "$HOSTNAME" == *"web"* ]]; then
     cp /opt/output/default.conf /etc/nginx/conf.d/default.conf
-    cp /opt/output/nginx.conf /etc/nginx/
+    if [[ "$HOSTNAME" == *"webserver"* ]]; then
+      cp /opt/output/nginx.conf /etc/nginx/
+    else
+      cp /opt/output/default.ap /etc/nginx/conf.d/default.conf
+    fi
     mkdir -p /var/www/html
     echo $(configstore package get $CONFIG_ENV base_env --basedir /opt/config) > /var/www/html/env.txt
     cp /opt/output/{*.html,*.css,*.js,*.jpg} /var/www/html
