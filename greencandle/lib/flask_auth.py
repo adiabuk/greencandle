@@ -1,17 +1,25 @@
+#!/usr/bin/env python
+#pylint: disable=no-else-return,invalid-overridden-method
+"""
+Libraries for adding auth to all Flask api modules
+"""
 
 from flask import request, redirect, abort, Response
 from flask_login import UserMixin, login_user, logout_user
 
 # silly user model
 class User(UserMixin):
+    """
+    User object
+    """
 
     def __init__(self, username):
 
-        self.id = username
+        self.username = username
         self.password = USERS_DB[username]
 
     def __repr__(self):
-        return "%s/%s" % (self.id, self.password)
+        return "%s/%s" % (self.username, self.password)
 
     def is_active(self):
         return True
@@ -23,6 +31,7 @@ USERS_DB = {'user1':'pass1',
             }
 
 def login():
+    """login page"""
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -41,12 +50,15 @@ def login():
         ''')
 
 def logout():
+    """logout page"""
     logout_user()
     return Response('<p>Logged out</p>')
 
 def page_not_found(_):
+    """404 page"""
     return Response('<p>Login failed</p>')
 
 
 def load_user(userid):
+    """load user"""
     return User(userid)
