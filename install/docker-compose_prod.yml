@@ -1,4 +1,4 @@
-version: "3.7"
+%s/gen-be-logtailer-api/gen-be-logtailer-api-apiversion: "3.7"
 services:
 
 ###### Start Gen
@@ -38,9 +38,9 @@ services:
       timeout: 2s
       retries: 5
 
-  gen-be-logtailer:
-    container_name: gen-be-logtailer
-    hostname: gen-be-logtailer
+  gen-be-logtailer-api:
+    container_name: gen-be-logtailer-api
+    hostname: gen-be-logtailer-api
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -165,7 +165,7 @@ services:
        - per-fe-api-dashboard:api_dash
        - per-base-mysql:mysql
        - per-base-redis:redis
-       - gen-be-logtailer:logs
+       - gen-be-logtailer-api:logs
      depends_on:
        - gen-fe-cadvisor
        - per-base-mysql
@@ -606,7 +606,7 @@ services:
        - prod-fe-api-dashboard:api_dash
        - prod-base-mysql:mysql
        - prod-base-redis:redis
-       - gen-be-logtailer:logs
+       - gen-be-logtailer-api:logs
      depends_on:
        - gen-fe-cadvisor
        - prod-base-mysql
