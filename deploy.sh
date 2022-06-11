@@ -24,6 +24,7 @@ export HOST_IP=$(ip -4 addr show docker0 | grep -Po 'inet \K[\d.]+')
 export TAG=$version
 export HOSTNAME=$env
 export VPN_IP=$(ip -4 addr show tun0 | grep -Po 'inet \K[\d.]+')
+export SECRET_KEY=$(hexdump -vn16 -e'4/4 "%08X" 1 "\n"' /dev/urandom)
 
 docker-compose -f ./install/docker-compose_${env}.yml pull
 base=$(yq r install/docker-compose_${env}.yml services | grep -v '^ .*' | sed 's/:.*$//'|grep 'base')

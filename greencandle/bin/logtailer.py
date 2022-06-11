@@ -15,7 +15,7 @@ APP = Flask(__name__, template_folder="/etc/gcapi", static_url_path='/',
 LOGIN_MANAGER = LoginManager()
 LOGIN_MANAGER.init_app(APP)
 LOGIN_MANAGER.login_view = "login"
-APP.config['SECRET_KEY'] = 'shit'
+APP.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 load_user = LOGIN_MANAGER.user_loader(load_user)
 login = APP.route("/login", methods=["GET", "POST"])(loginx)
 login = APP.route("/logout", methods=["GET", "POST"])(logoutx)

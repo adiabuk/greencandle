@@ -27,6 +27,7 @@ services:
     environment:
       - CONFIG_ENV=test
       - DB=false
+      - SECRET_KEY=$SECRET_KEY
     entrypoint: /docker-entrypoint.sh logtailer
     logging:
       driver: journald
@@ -46,6 +47,7 @@ services:
       - /dev/log:/dev/log
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
+
   test-base-redis:
     container_name: test-base-redis
     hostname: test-base-redis
@@ -96,6 +98,7 @@ services:
       - CONFIG_ENV=test/fe/api
       - HOST=$HOSTNAME
       - DB=true
+      - SECRET_KEY=$SECRET_KEY
     logging:
       driver: journald
     image: amrox/greencandle:${TAG}

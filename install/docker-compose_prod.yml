@@ -47,6 +47,7 @@ services:
     environment:
       - CONFIG_ENV=prod
       - DB=false
+      - SECRET_KEY=$SECRET_KEY
     entrypoint: /docker-entrypoint.sh logtailer
     logging:
       driver: journald
@@ -183,6 +184,7 @@ services:
       - CONFIG_ENV=per/fe/api
       - HOST=$HOSTNAME
       - DB=true
+      - SECRET_KEY=$SECRET_KEY
     logging:
       driver: journald
     image: amrox/greencandle:${TAG}
@@ -624,6 +626,7 @@ services:
       - CONFIG_ENV=prod/fe/api
       - HOST=$HOSTNAME
       - DB=true
+      - SECRET_KEY=$SECRET_KEY
     logging:
       driver: journald
     image: amrox/greencandle:${TAG}

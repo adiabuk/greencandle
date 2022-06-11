@@ -47,6 +47,7 @@ services:
     environment:
       - CONFIG_ENV=stag
       - DB=false
+      - SECRET_KEY=$SECRET_KEY
     entrypoint: /docker-entrypoint.sh logtailer
     logging:
       driver: journald
@@ -117,6 +118,7 @@ services:
       - CONFIG_ENV=stag/fe/api
       - HOST=$HOSTNAME
       - DB=true
+      - SECRET_KEY=$SECRET_KEY
     logging:
       driver: journald
     image: amrox/greencandle:${TAG}
