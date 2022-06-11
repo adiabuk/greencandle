@@ -201,6 +201,11 @@
       "is_binary": false,
       "is_secret": false
     },
+    "flask_auth": {
+      "value": "nurqf6klsBcW08xewJs+biROT7jVs4amQpHiGz1iUXpSsXe3zc0HH59bAd99GlVSUuoDmucIolaUHeEcNb4W2P08vflvrTlHQQqFqM7zwD4/44XCubAIeZNWMFB51OSWAUoqvNgbeXCOjNLx6vUTM4HVPnvr1HLrnipkOqam2DHj51htSNZzBzzf/MKzapM+KpalXyucH2E=",
+      "is_binary": true,
+      "is_secret": true
+    },
     "immediate_stop": {
       "value": "false",
       "is_binary": false,

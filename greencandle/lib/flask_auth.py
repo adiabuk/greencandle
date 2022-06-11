@@ -1,13 +1,20 @@
 #!/usr/bin/env python
-#pylint: disable=no-else-return,invalid-overridden-method,invalid-name,no-self-use
+#pylint: disable=no-else-return,invalid-overridden-method,invalid-name,no-self-use,no-member
 """
 Libraries for adding auth to all Flask api modules
 """
-
 from flask import request, redirect, abort, render_template
 from flask_login import UserMixin, login_user, logout_user
+from cryptography.fernet import Fernet
+from greencandle.lib import config
+config.create_config()
+auth = config.main.flask_auth.encode()
+key = Fernet.generate_key()
+fernet = Fernet(key)
+#https://www.geeksforgeeks.org/how-to-encrypt-and-decrypt-strings-in-python/
+user, passw = fernet.decrypt(auth).decode().split(':')
+USERS_DB = {user:passw}
 
-# silly user model
 class User(UserMixin):
     """
     User object
@@ -23,12 +30,6 @@ class User(UserMixin):
     def is_active(self):
         """if logged in"""
         return True
-
-#users database (used dictionary just as an example)
-USERS_DB = {'user1':'pass1',
-            'user2': 'pass2',
-            'user3' : 'pass3'
-            }
 
 def login():
     """login page"""
