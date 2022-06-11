@@ -100,47 +100,12 @@
       "is_binary": false,
       "is_secret": false
     },
-    "close_rule10": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
     "close_rule2": {
       "value": "",
       "is_binary": false,
       "is_secret": false
     },
     "close_rule3": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "close_rule4": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "close_rule5": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "close_rule6": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "close_rule7": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "close_rule8": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "close_rule9": {
       "value": "",
       "is_binary": false,
       "is_secret": false
@@ -270,47 +235,12 @@
       "is_binary": false,
       "is_secret": false
     },
-    "open_rule10": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
     "open_rule2": {
       "value": "",
       "is_binary": false,
       "is_secret": false
     },
     "open_rule3": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "open_rule4": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "open_rule5": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "open_rule6": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "open_rule7": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "open_rule8": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "open_rule9": {
       "value": "",
       "is_binary": false,
       "is_secret": false
