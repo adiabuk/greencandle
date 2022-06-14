@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-position,no-member,logging-not-lazy,eval-used
+#pylint: disable=wrong-import-position,no-member,logging-not-lazy,eval-used,broad-except
 
 """
 API trading module
