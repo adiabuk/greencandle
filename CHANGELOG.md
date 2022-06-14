@@ -1,6 +1,16 @@
 
 # Releases
 
+# 3.13
+* add IWN containers for prod env
+* add 2nd trend (1h) to INW - all envs
+* Fix table/view names
+* Add authentication to flask API views
+* Web UI improvements
+* Consolidate entryfile scripts
+* different entrypoint actions for web-api and webserver containers
+* Increase and balance out test balances
+
 # 3.12.1
 * Only 1 log tailer per server linked to all environments with a UI
 * Reduce INFO logging
