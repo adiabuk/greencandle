@@ -28,6 +28,10 @@
 "any-long-short": ["prod-be-api-any-cross-short", "prod-be-api-any-isolated-short", "prod-be-api-any-spot-long", "prod-be-api-any-cross-long", "prod-be-api-any-isolated-long", "alert"],
 "any-isolated-long-short": ["prod-be-api-any-isolated-short", "prod-be-api-any-isolated-long", "alert"],
 "any-cross-long-short": ["prod-be-api-any-cross-short", "prod-be-api-any-cross-long", "alert"],
+"inw-cross-long": ["prod-be-api-inw-cross-long", "alert"],
+"inw-cross-short": ["prod-be-api-inw-cross-short", "alert"],
+"inw-cross-long-short":["prod-be-api-inw-cross-long", "prod-be-api-inw-cross-short", "alert"],
+
 "alert" : ["alert"],
 "route": []
 }
