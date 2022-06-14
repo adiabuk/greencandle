@@ -36,9 +36,6 @@ def main():
         user, passw = fernet.decrypt(auth_raw).decode().split(':')
         #user, passw =  fernet.decrypt(auth).split(":")
         print(user, passw)
-    else:
-        print("Invalid args")
-        sys.exit(1)
 
 if __name__ == '__main__':
     main()
