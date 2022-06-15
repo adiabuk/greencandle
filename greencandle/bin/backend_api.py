@@ -54,7 +54,7 @@ def respond():
     if action == 'OPEN':
 
         if 'get_trend' in os.environ:
-            url = "http://trend:6000/get_trend?pair={}".format(pair)
+            url = "http://trend:6001/get_trend?pair={}".format(pair)
             try:
                 req = requests.get(url, timeout=1)
             except Exception:
