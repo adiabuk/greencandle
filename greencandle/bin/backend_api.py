@@ -55,17 +55,14 @@ def respond():
 
         if 'get_trend' in os.environ:
             url = "http://trend:6000/get_trend?pair={}".format(pair)
-            url2 = "http://trend:6001/get_trend?pair={}".format(pair)
             try:
                 req = requests.get(url, timeout=1)
-                req2 = requests.get(url2, timeout=1)
             except Exception:
                 LOGGER.error("Unable to get trend from %s" % url)
                 return Response(status=500)
 
             trend = req.text.strip()
-            trend2 = req2.text.strip()
-            if trend != trend2 != config.main.trade_direction and "manual" not in request.json:
+            if trend != config.main.trade_direction and "manual" not in request.json:
                 trade_link = get_trade_link(pair, request.json['strategy'], request.json['action'],
                                             "Force trade")
                 message = ("Skipping {0} trade due to wrong trade direction ({1})"
