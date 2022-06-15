@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #pylint: disable=no-else-return,protected-access,import-error
 
 """
@@ -8,10 +9,10 @@ from configparser import ConfigParser
 from datetime import datetime, time
 import subprocess
 import boto3
-import serial
 from flask import Flask, request, Response
+import serial
 
-app = Flask(__name__)
+APP = Flask(__name__)
 
 def get_config():
     """
@@ -33,7 +34,7 @@ class AttributeDict(dict):
     def __del_attr__(self, attr):
         self.pop(attr, None)
 
-@app.route('/webhook', methods=['POST'])
+@APP.route('/webhook', methods=['POST'])
 def respond():
     """
     Activate lights and pass json to audio function for parsing
@@ -67,7 +68,7 @@ def play(data):
                                               OutputFormat='mp3',
                                               SampleRate='24000',
                                               Engine="neural",
-                                              Text = text)
+                                              Text=text)
     file = open('speech.mp3', 'wb')
     file.write(response['AudioStream'].read())
     print(text)
@@ -96,14 +97,14 @@ def play_mp3(path):
     Play beep and downloaded synthesized audio
     Use 5% volume for out-of-hours alerts, otherwise 10% volume
     """
-    volume = '-g5' if get_time()=="night" else '-g15'
+    volume = '-g5' if get_time() == "night" else '-g15'
     subprocess.Popen(['mpg123', volume, '-q', path]).wait()
 
 def main():
     """
     Main function
-    start Flask app on port 20000
+    start Flask APP on port 20000
     """
-    app.run(debug=True, host='0.0.0.0', port=20000, threaded=True)
+    APP.run(debug=True, host='0.0.0.0', port=20000, threaded=True)
 if __name__ == "__main__":
     main()
