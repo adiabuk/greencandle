@@ -293,7 +293,7 @@ services:
       - GC_PORT=8888
       - DB=true
     ports:
-      - 20000
+      - 20000:20000
     links:
       - stag-base-mysql:mysql
       - stag-base-redis:redis
