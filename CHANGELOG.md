@@ -1,6 +1,11 @@
 
 # Releases
 
+# 3.14
+* Change of creds
+* Fix red alert container not starting
+* Use only a single trend indicator for api trades
+
 # 3.13
 * add IWN containers for prod env
 * add 2nd trend (1h) to INW - all envs
