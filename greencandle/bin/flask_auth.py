@@ -34,7 +34,6 @@ def main():
     elif sys.argv[1] == "decrypt":
         auth_raw = config.web.flask_auth.encode()
         user, passw = fernet.decrypt(auth_raw).decode().split(':')
-        #user, passw =  fernet.decrypt(auth).split(":")
         print(user, passw)
 
 if __name__ == '__main__':

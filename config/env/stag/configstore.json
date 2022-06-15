@@ -172,8 +172,8 @@
       "is_secret": false
     },
     "flask_auth": {
-      "value": "ivWkUxJp+sT+y4/nNmSyfBzUYXwlW98fwdKZh3kbhYPJ/gjAJOPg40y8+15ASvBEZegurvNzRFDZjovRq5G3n8GfJ+4ARTaQP1fTRfCdKOylMaUMv96n/+X/xtgrSqGlRI7aUwnvCZuhCj5HA0YexKspVKGTsOwLlwMId0wZlygkn7RJGZJE2wTnOiVAt8WBQ5iJI/1a5dk=",
-      "is_binary": true,
+      "value": "sFd36ZfbPzj+rfA7Jc4oSHT7g7iDYWE3tAobPWeRbPnXq0Xq6GwiTUn3tzwwR6A04MYY5L/ZNBSCrEaPP9SkVTFddVEJA7VDTUhLwuPtw1toT6hBICQzG7GIXgt6MUV5lnT02hwxhVdx7Ft+A6tdrt1rADO6YoItA6yjUUJmI0pFExt7Y2bfEeXcIZwWHD0CGDFPVu+NK7QCydFkl5W3oSn9qTe49Mla7U4SM9HLOIY=",
+      "is_binary": false,
       "is_secret": true
     },
     "immediate_stop": {
