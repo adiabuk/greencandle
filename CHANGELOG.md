@@ -1,6 +1,15 @@
 
 # Releases
 
+# 3.15
+* Fix get_borrowed function to not exit look pre-maturely
+* Extra logging for short borrowing
+* red alert api to listen on host port for monitoring
+* Fix for LDBUSD
+* Allow for zero balance on spot and phemex
+* Tweak testing balances
+* Remove delisted testing pairs
+
 # 3.14
 * Change of creds
 * Fix red alert container not starting
