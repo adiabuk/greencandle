@@ -18,7 +18,8 @@ from greencandle.lib.redis_conn import Redis
 from greencandle.lib.binance_accounts import get_binance_spot, base2quote, quote2base
 from greencandle.lib.balance_common import get_base, get_quote, get_step_precision
 from greencandle.lib.common import perc_diff, add_perc, sub_perc, AttributeDict, QUOTES
-from greencandle.lib.alerts import send_gmail_alert, send_push_notif, send_slack_trade, send_slack_message
+from greencandle.lib.alerts import send_gmail_alert, send_push_notif, send_slack_trade, \
+        send_slack_message
 
 GET_EXCEPTIONS = exception_catcher((Exception))
 
@@ -623,6 +624,8 @@ class Trade():
             amt_str = get_step_precision(pair, amount_to_use)
             quote_amount = base2quote(amt_str, pair)
 
+            self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
+                             % (amount_to_borrow, base, quote_amount))
             if self.prod:
                 borrow_res = self.client.margin_borrow(
                     symbol=pair, quantity=amount_to_borrow,
