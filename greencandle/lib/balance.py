@@ -7,7 +7,8 @@ import json
 from requests.exceptions import ReadTimeout
 from greencandle.lib.alerts import send_slack_message
 from greencandle.lib import config
-from greencandle.lib.binance_accounts import get_binance_spot, get_binance_cross, get_binance_isolated
+from greencandle.lib.binance_accounts import get_binance_spot, get_binance_cross, \
+        get_binance_isolated
 from greencandle.lib.coinbase_accounts import get_coinbase_values
 from greencandle.lib.phemex_accounts import get_phemex_values
 from greencandle.lib.mysql import Mysql
@@ -132,8 +133,12 @@ class Balance(dict):
                       bal['isolated']['TOTALS']['USD']
         binance_btc = bal['margin']['TOTALS']['BTC'] + bal['binance']['TOTALS']['BTC'] + \
                       bal['isolated']['TOTALS']['BTC']
-        phemex_usd = bal['phemex']['TOTALS']['USD']
-        phemex_btc = bal['phemex']['TOTALS']['BTC']
+        if phemex:
+            phemex_usd = bal['phemex']['TOTALS']['USD']
+            phemex_btc = bal['phemex']['TOTALS']['BTC']
+        else:
+            phemex_btc = 0
+            phemex_usd = 0
         totals_btc = float(binance_btc) + float(phemex_btc)
         totals_usd = float(binance_usd) + float(phemex_usd)
 
