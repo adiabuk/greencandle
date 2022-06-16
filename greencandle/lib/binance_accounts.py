@@ -192,8 +192,7 @@ def get_binance_spot():
             if key == "BTC":
                 bcoin = float(current_value)
                 bitcoin_totals += float(bcoin)
-
-            elif key == "USDT":
+            elif key == "USDT" or key == "LDBUSD":  # LDBUSD is USD savings
                 bcoin = float(current_value) / float(prices["BTCUSDT"])
                 bitcoin_totals += bcoin
             elif key == "GBP":
