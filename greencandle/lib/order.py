@@ -362,12 +362,12 @@ class Trade():
         """
         balance = defaultdict(lambda: defaultdict(defaultdict))
 
-        balance[account]['BTC']['count'] = 3.5
-        balance[account]['ETH']['count'] = 6.4
+        balance[account]['BTC']['count'] = 0.47
+        balance[account]['ETH']['count'] = 8.92
         balance[account]['USDT']['count'] = 10000
         balance[account]['USDC']['count'] = 10000
         balance[account]['GBP']['count'] = 10000
-        balance[account]['BNB']['count'] = 30.6
+        balance[account]['BNB']['count'] = 46.06
         for quote in QUOTES:
             db_result = dbase.fetch_sql_data("select sum(quote_out-quote_in) from trades "
                                              "where pair like '%{0}' and name='{1}'"
