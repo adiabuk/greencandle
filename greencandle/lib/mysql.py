@@ -198,7 +198,7 @@ class Mysql():
         cur = self.dbase.cursor()
         self.__execute(cur, command)
 
-        row = [(item[0], item[1], item[2], item[3], item[4]) for item in cur.fetchall()]
+        row = [(item[0], item[1], item[2], item[3], item[4], item[5]) for item in cur.fetchall()]
         return row
 
     @get_exceptions
