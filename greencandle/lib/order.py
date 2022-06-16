@@ -226,8 +226,7 @@ class Trade():
             for item in details['userAssets']:
                 if item['asset'] == symbol:
                     return float(item['borrowed'])
-                else:
-                    return 0
+            return 0
 
         elif mode == 'isolated':
             details = self.client.get_isolated_margin_details(pair)
