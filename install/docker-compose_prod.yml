@@ -884,7 +884,7 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - GC_PORT=8888
+      - GC_PORT=9999
       - HOST=$HOSTNAME
       - CONFIG_ENV=prod/inw/cross-long
       - get_trend="true"
@@ -924,7 +924,7 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - GC_PORT=8888
+      - GC_PORT=9999
       - HOST=$HOSTNAME
       - CONFIG_ENV=prod/inw/cross-short
       - get_trend="true"
