@@ -55,7 +55,7 @@ CREATE TABLE `api_requests` (
   `price` varchar(30) DEFAULT NULL,
   `strategy` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=842 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=881 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -394,6 +394,7 @@ CREATE TABLE `trades` (
   `closed_by` varchar(30) DEFAULT NULL,
   `drawdown_perc` varchar(4) DEFAULT NULL,
   `borrowed` varchar(30) DEFAULT '0',
+  `borrowed_usd` varchar(30) DEFAULT NULL,
   `multiplier` varchar(3) DEFAULT '0',
   `direction` varchar(30) DEFAULT NULL,
   `drawup_perc` varchar(4) DEFAULT NULL,
@@ -404,7 +405,7 @@ CREATE TABLE `trades` (
   `comm_open` varchar(255) DEFAULT NULL,
   `comm_close` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=224 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=332 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -668,7 +669,7 @@ CREATE TABLE `trades` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-06-06 10:39:27
+-- Dump completed on 2022-06-16 21:49:10
 -- MySQL dump 10.13  Distrib 8.0.29, for Linux (x86_64)
 --
 -- Host: 10.8.0.101    Database: greencandle
@@ -719,4 +720,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-06-06 10:39:29
+-- Dump completed on 2022-06-16 21:49:11
