@@ -563,7 +563,7 @@ class Redis():
         dbase = Mysql(test=self.test, interval=interval)
         try:
             # function returns an empty list if no results so cannot get first element
-            open_price, _, open_time, _, _ = dbase.get_trade_value(pair)[0]
+            open_price, _, open_time, _, _, _ = dbase.get_trade_value(pair)[0]
         except IndexError:
             open_price = None
             open_time = None

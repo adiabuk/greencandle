@@ -113,7 +113,8 @@ class Mysql():
 
     @get_exceptions
     def insert_trade(self, pair, date, price, quote_amount, base_amount, borrowed='0',
-                     multiplier='0', direction='', symbol_name=None, commission=None):
+                     borrowed_usd=0, multiplier='0', direction='', symbol_name=None,
+                     commission=None):
         """
         Insert new trade into DB
         Args:
@@ -128,12 +129,13 @@ class Mysql():
         """
         usd_rate, gbp_rate = self.get_rates(symbol_name)
         command = """insert into trades (pair, open_time, open_price, base_in, `interval`,
-                     quote_in, name, borrowed, multiplier, direction, open_usd_rate, open_gbp_rate,
+                     quote_in, name, borrowed, borrowed_usd, multiplier, direction, open_usd_rate, open_gbp_rate,
                      comm_open) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}", "{5}", "{6}", "{7}",
-                     "{8}", "{9}", "{10}", "{11}", "{12}");
+                     "{8}", "{9}", "{10}", "{11}", "{12}", "{13}");
                    """.format(pair, date, '%.15f' % float(price), '%.15f' % float(base_amount),
                               self.interval, quote_amount, config.main.name, borrowed,
-                              multiplier, direction, usd_rate, gbp_rate, commission)
+                              borrowed_usd, multiplier, direction, usd_rate, gbp_rate,
+                              commission)
 
         result = self.__run_sql_query(command)
         return result == 1
@@ -190,8 +192,8 @@ class Mysql():
         Return details for calculating value of an open trade for a given trading pair
         """
 
-        command = ('select open_price, quote_in, open_time, base_in, borrowed from trades '
-                   'where close_price is NULL and `interval` = "{0}" and '
+        command = ('select open_price, quote_in, open_time, base_in, borrowed, borrowed_usd '
+                   'from trades where close_price is NULL and `interval` = "{0}" and '
                    'pair = "{1}" and name ="{2}"'.format(self.interval, pair, config.main.name))
         cur = self.dbase.cursor()
         self.__execute(cur, command)

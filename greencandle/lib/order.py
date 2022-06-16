@@ -260,9 +260,14 @@ class Trade():
                 return 0
 
         elif account == 'margin' and str2bool(self.config.main.isolated):
-            return self.client.get_max_borrow(asset=symbol, isolated_pair=pair)
+            #get borrowed
+            name = self.config.main.name.strip(self.config.main.name.split('-')[-1]).strip('-')
+            borrowed = dbase.get_current_borrowed(name)
+            max_borrow = self.client.get_max_borrow(asset=symbol, isolated_pair=pair)
+            return float(borrowed) + float(max_borrow)
 
         elif account == 'margin' and not str2bool(self.config.main.isolated):
+            # FIXME: get borrowed
             return self.client.get_max_borrow(asset=symbol)
 
         else:
@@ -293,6 +298,9 @@ class Trade():
 
                 amount_to_borrow = float(quote_amount) * float(self.config.main.multiplier)
                 amount_to_use = sub_perc(1, amount_to_borrow)  # use 99% of borrowed funds
+
+                borrowed_usd = amount_to_borrow if quote == 'USDT' else \
+                        base2quote(borrowed_usd, quote + 'USDT')
 
                 self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
                                  % (amount_to_borrow, quote, quote_amount))
@@ -344,6 +352,7 @@ class Trade():
                 dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
                                    quote_amount=amount_to_use, base_amount=amt_str,
                                    borrowed=amount_to_borrow,
+                                   borrowed_usd=borrowed_usd,
                                    multiplier=self.config.main.multiplier,
                                    direction=self.config.main.trade_direction,
                                    symbol_name=quote, commission=str(commission_dict))
@@ -539,7 +548,7 @@ class Trade():
                 self.logger.info("close_margin_short: unable to find quantity for %s" % pair)
                 return
 
-            open_price, quote_in, _, _, borrowed = dbase.get_trade_value(pair)[0]
+            open_price, quote_in, _, _, borrowed, _, = dbase.get_trade_value(pair)[0]
             perc_inc = - (perc_diff(open_price, current_price))
             quote_out = sub_perc(perc_inc, quote_in)
 
@@ -619,6 +628,9 @@ class Trade():
 
             proposed_base_amount = self.amount_to_use(current_base_bal)
             amount_to_borrow = float(proposed_base_amount) * float(self.config.main.multiplier)
+            borrowed_usd = amount_to_borrow if base == 'USDT' else \
+                    base2quote(borrowed_usd, base+'USDT')
+
             amount_to_use = sub_perc(1, amount_to_borrow)  # use 99% of borrowed funds
             amt_str = get_step_precision(pair, amount_to_use)
             quote_amount = base2quote(amt_str, pair)
@@ -668,6 +680,7 @@ class Trade():
                 dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
                                    quote_amount=quote_amount,
                                    base_amount=amt_str, borrowed=amount_to_borrow,
+                                   borrowed_usd=borrowed_usd,
                                    multiplier=self.config.main.multiplier,
                                    direction=self.config.main.trade_direction,
                                    symbol_name=get_quote(pair),
@@ -695,7 +708,7 @@ class Trade():
                 self.logger.info("close_spot_long: unable to find quantity for %s" % pair)
                 continue
 
-            open_price, quote_in, _, _, _ = dbase.get_trade_value(pair)[0]
+            open_price, quote_in, _, _, _, _ = dbase.get_trade_value(pair)[0]
             perc_inc = perc_diff(open_price, current_price)
             quote_out = add_perc(perc_inc, quote_in)
 
@@ -758,7 +771,7 @@ class Trade():
                 self.logger.info("close_margin_long: unable to find quantity for %s" % pair)
                 continue
 
-            open_price, quote_in, _, _, borrowed = dbase.get_trade_value(pair)[0]
+            open_price, quote_in, _, _, borrowed, _, = dbase.get_trade_value(pair)[0]
             perc_inc = perc_diff(open_price, current_price)
             quote_out = add_perc(perc_inc, quote_in)
 

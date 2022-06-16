@@ -225,7 +225,7 @@ def prod_int_check(interval, test, alert=False):
     drawups = {}
     for trade in current_trades:
         pair = trade[0]
-        open_price, _, open_time, _, _ = dbase.get_trade_value(pair)[0]
+        open_price, _, open_time, _, _, _ = dbase.get_trade_value(pair)[0]
         dataframes = get_dataframes([pair], interval=interval, no_of_klines=1)
         current_candle = dataframes[pair].iloc[-1]
 

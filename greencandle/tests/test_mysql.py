@@ -88,7 +88,7 @@ class TestMysql(OrderedTest):
         self.assertIs(today[0], None)
         self.assertIs(today[1], None)
         self.dbase.get_active_trades()   # No exception
-        self.dbase.insert_trade('XXXUSDT', '2016-01-02 13:23', 0, 0, 0, 0, 0,
+        self.dbase.insert_trade('XXXUSDT', '2016-01-02 13:23', 0, 0, 0, 0, 0, 0,
                                 'short', 'USDT', 0)
         last_hour_profit = self.dbase.get_last_hour_profit()
         self.assertIs(len(last_hour_profit), 4)
