@@ -1,6 +1,11 @@
 
 # Releases
 
+# 3.17
+* Only repay what we actually have when closing margin trades
+* Try to repay all debts periodcally
+* Wait a couple more seconds before marking docker-compose redis/mysql unhealthy
+
 # 3.16
 * Add drain hours to production
 * Fix Sell-now link using wrong port for production
