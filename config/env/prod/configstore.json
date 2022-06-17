@@ -147,7 +147,7 @@
       "is_secret": false
     },
     "drain_range": {
-      "value": "00:00 - 00:00",
+      "value": "00:30-08:00",
       "is_binary": false,
       "is_secret": false
     },
