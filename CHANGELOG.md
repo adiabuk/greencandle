@@ -1,6 +1,12 @@
 
 # Releases
 
+# 3.16
+* Add drain hours to production
+* Fix Sell-now link using wrong port for production
+* When calculating amount to borrow, also use amount already borrowed in the same short/long
+  strategy
+
 # 3.15
 * Fix get_borrowed function to not exit look pre-maturely
 * Extra logging for short borrowing
