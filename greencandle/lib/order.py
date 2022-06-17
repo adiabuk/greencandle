@@ -224,8 +224,12 @@ class Trade():
         if mode == 'cross':
             details = self.client.get_cross_margin_details()
             for item in details['userAssets']:
-                if item['asset'] == symbol:
-                    return float(item['borrowed'])
+                ####################################
+                borrowed = float(item['borrowed'])
+                free = float(item['free'])
+                asset = item['asset']
+                if asset == symbol:
+                    return borrowed if borrowed <= free else free
             return 0
 
         elif mode == 'isolated':
