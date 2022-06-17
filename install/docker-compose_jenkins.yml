@@ -102,8 +102,8 @@ services:
       - mysql-unit:mysql
     healthcheck:
       test: redis-cli ping
-      interval: 1m
-      timeout: 2s
+      interval: 10s
+      timeout: 5s
       retries: 5
 
   mysql-unit:
@@ -123,8 +123,8 @@ services:
     restart: always
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
-      interval: 1m
-      timeout: 2s
+      interval: 10s
+      timeout: 5s
       retries: 5
 
   alert-unit:

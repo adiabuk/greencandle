@@ -60,7 +60,7 @@ services:
     healthcheck:
       test: redis-cli ping
       interval: 5s
-      timeout: 2s
+      timeout: 5s
       retries: 5
 
   mysql-unit:
@@ -80,5 +80,5 @@ services:
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
       interval: 5s
-      timeout: 2s
+      timeout: 5s
       retries: 10
