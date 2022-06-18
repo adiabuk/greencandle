@@ -128,7 +128,7 @@ def sub_perc(perc, num):
     Returns:
         total: num - perc%
     """
-    num = -(num) if num<0 else num
+    perc = -(perc) if num<0 else perc
     return float(num) * (1 - float(perc)/100)
 
 def perc_diff(num1, num2):
