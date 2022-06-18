@@ -121,6 +121,7 @@ CREATE TABLE `open_trades` (
   `open_time` varchar(30) DEFAULT NULL,
   `current_price` varchar(30) DEFAULT NULL,
   `perc` varchar(30) DEFAULT NULL,
+  `net_perc` varchar(30) DEFAULT NULL,
   `name` varchar(30) DEFAULT NULL,
   `interval` varchar(3) DEFAULT NULL,
   `usd_quantity` varchar(30) DEFAULT NULL
@@ -669,7 +670,7 @@ CREATE TABLE `trades` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-06-16 21:49:10
+-- Dump completed on 2022-06-18 12:04:19
 -- MySQL dump 10.13  Distrib 8.0.29, for Linux (x86_64)
 --
 -- Host: 10.8.0.101    Database: greencandle
@@ -720,4 +721,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-06-16 21:49:11
+-- Dump completed on 2022-06-18 12:04:20
