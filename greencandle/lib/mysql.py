@@ -8,7 +8,7 @@ from binance.binance import Binance
 import MySQLdb
 from greencandle.lib import config
 from greencandle.lib.binance_common import get_current_price
-from greencandle.lib.common import AttributeDict, format_usd, sub_perc
+from greencandle.lib.common import AttributeDict, format_usd
 from greencandle.lib.logger import get_logger, exception_catcher
 
 class Mysql():
@@ -294,7 +294,7 @@ class Mysql():
                 current_price = get_current_price(pair)
                 perc = 100 * (float(current_price) - float(open_price)) / float(open_price)
                 perc = - perc if 'short' in name else perc
-                net_perc = sub_perc(0.2, perc)
+                net_perc = perc - 0.2
                 insert = ('insert into open_trades (pair, open_time, open_price, current_price, '
                           'perc, net_perc, name, `interval`, usd_quantity) VALUES ("{0}", '
                           '"{1}", "{2}", "{3}", "{4}", "{5}", "{6}", "{7}", "{8}")'
