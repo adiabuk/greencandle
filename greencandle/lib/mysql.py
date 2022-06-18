@@ -278,6 +278,34 @@ class Mysql():
         row = self.fetch_sql_data(command, header=False)
         return row[0] if row else (None, None)
 
+    def get_active_trades(self):
+        """
+        Get current active trades and store in active_trades table with current price
+        """
+
+        self.__run_sql_query("delete from open_trades")
+        trades = self.fetch_sql_data("select pair, open_time, open_price, name, `interval`, "
+                                     "open_usd_rate*quote_in as usd_quantity from "
+                                     "trades where close_price is NULL or close_price=''",
+                                     header=False)
+        for trade in trades:
+            try:
+                pair, open_time, open_price, name, interval, usd_quantity = trade
+                current_price = get_current_price(pair)
+                perc = 100 * (float(current_price) - float(open_price)) / float(open_price)
+                perc = - perc if 'short' in name else perc
+                insert = ('insert into open_trades (pair, open_time, open_price, current_price, '
+                          'perc, name, `interval`, usd_quantity) VALUES ("{0}", "{1}", "{2}", '
+                          '"{3}", "{4}", "{5}", "{6}", "{7}")'.format(pair, open_time, open_price,
+                                                                      current_price, perc, name,
+                                                                      interval,
+                                                                      format_usd(usd_quantity)))
+
+                self.__run_sql_query(insert)
+            except ZeroDivisionError:
+                self.logger.critical("%s has a zero buy price, unable to calculate percentage"
+                                     % pair)
+
     @get_exceptions
     def get_last_hour_profit(self):
         """
