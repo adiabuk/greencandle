@@ -69,7 +69,7 @@ def get_binance_isolated():
             if quote == "BTC":
                 bcoin = float(amount)
 
-            elif quote == "USDT":
+            elif "USD" in quote:
                 bcoin = float(amount) / float(prices["BTCUSDT"])
 
             elif quote == 'GBP':
