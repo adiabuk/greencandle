@@ -15,7 +15,8 @@ from greencandle.lib.auth import binance_auth
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.redis_conn import Redis
-from greencandle.lib.binance_accounts import get_binance_spot, base2quote, quote2base
+from greencandle.lib.binance_accounts import get_binance_spot, get_binance_cross, base2quote, \
+        quote2base
 from greencandle.lib.balance_common import get_base, get_quote, get_step_precision
 from greencandle.lib.common import perc_diff, add_perc, sub_perc, AttributeDict, QUOTES
 from greencandle.lib.alerts import send_gmail_alert, send_push_notif, send_slack_trade, \
@@ -252,7 +253,7 @@ class Trade():
         test_balances = self.__get_test_balance(dbase, account=account)[account]
         if self.test_data or self.test_trade:
             if self.config.main.trade_direction == 'short' and symbol not in test_balances:
-                usd = test_balances['usd']['count']
+                usd = test_balances['USDT']['count']
                 return quote2base(usd, symbol +'USDT')
             return test_balances[symbol]['count']
 
@@ -270,8 +271,15 @@ class Trade():
             return float(borrowed) + float(max_borrow)
 
         elif account == 'margin' and not str2bool(self.config.main.isolated):
-            # FIXME: get borrowed
-            return self.client.get_max_borrow(asset=symbol)
+
+            borrowed = dbase.get_current_borrowed(name)
+            max_borrow = self.client.get_max_borrow(asset=symbol)
+            try:
+                additional = get_binance_cross()[symbol]['count']
+            except KeyError:
+                additional = 0
+            additional = 0 if float(additional) < 0 else additional
+            return (float(borrowed) + float(max_borrow)), additional
 
         else:
             return None
@@ -286,7 +294,8 @@ class Trade():
         dbase = Mysql(test=self.test_data, interval=self.interval)
 
         for pair, current_time, current_price, event in long_list:
-            current_quote_bal = self.get_balance(dbase, account='margin', pair=pair)
+            current_quote_bal, additional_bal = self.get_balance(dbase, account='margin',
+                                                                 pair=pair)
             quote = get_quote(pair)
             quote_amount = self.amount_to_use(current_quote_bal)
             base_amount = quote2base(quote_amount, pair)
