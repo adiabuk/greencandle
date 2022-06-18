@@ -1,6 +1,9 @@
 
 # Releases
 
+# 3.17.1
+* Fix usd_amount calculation
+
 # 3.17
 * Only repay what we actually have when closing margin trades
 * Try to repay all debts periodcally
