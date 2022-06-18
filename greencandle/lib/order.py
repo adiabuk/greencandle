@@ -304,7 +304,7 @@ class Trade():
                 amount_to_use = sub_perc(1, amount_to_borrow)  # use 99% of borrowed funds
 
                 borrowed_usd = amount_to_borrow if quote == 'USDT' else \
-                        base2quote(borrowed_usd, quote + 'USDT')
+                        base2quote(amount_to_borrow, quote + 'USDT')
 
                 self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
                                  % (amount_to_borrow, quote, quote_amount))
@@ -633,7 +633,7 @@ class Trade():
             proposed_base_amount = self.amount_to_use(current_base_bal)
             amount_to_borrow = float(proposed_base_amount) * float(self.config.main.multiplier)
             borrowed_usd = amount_to_borrow if base == 'USDT' else \
-                    base2quote(borrowed_usd, base+'USDT')
+                    base2quote(amount_to_borrow, base+'USDT')
 
             amount_to_use = sub_perc(1, amount_to_borrow)  # use 99% of borrowed funds
             amt_str = get_step_precision(pair, amount_to_use)
