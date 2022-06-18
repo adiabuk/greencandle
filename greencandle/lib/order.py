@@ -306,6 +306,10 @@ class Trade():
                 borrowed_usd = amount_to_borrow if quote == 'USDT' else \
                         base2quote(amount_to_borrow, quote + 'USDT')
 
+                if float(amount_to_borrow) == 0:
+                    self.logger.critical("Insufficient funds to borrow for %s" % pair)
+                    continue
+
                 self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
                                  % (amount_to_borrow, quote, quote_amount))
 
@@ -638,6 +642,10 @@ class Trade():
             amount_to_use = sub_perc(1, amount_to_borrow)  # use 99% of borrowed funds
             amt_str = get_step_precision(pair, amount_to_use)
             quote_amount = base2quote(amt_str, pair)
+
+            if float(amount_to_borrow) == 0:
+                self.logger.critical("Insufficient funds to borrow for %s" % pair)
+                continue
 
             self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
                              % (amount_to_borrow, base, quote_amount))
