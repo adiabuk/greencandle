@@ -249,13 +249,12 @@ class Trade():
         retrieved dict
         """
         symbol = get_quote(pair) if self.config.main.trade_direction == 'long' else get_base(pair)
-
+        test_balances = self.__get_test_balance(dbase, account=account)[account]
         if self.test_data or self.test_trade:
-            if self.config.main.trade_direction == 'short' and symbol not in \
-                    self.__get_test_balance(dbase, account=account)[account]:
-                # Need a balance for all pairs when test-trading short-margin
-                return 100
-            return self.__get_test_balance(dbase, account=account)[account][symbol]['count']
+            if self.config.main.trade_direction == 'short' and symbol not in test_balances:
+                usd = test_balances['usd']['count']
+                return quote2base(usd, symbol +'USDT')
+            return test_balances[symbol]['count']
 
         elif account == 'binance':
             try:
