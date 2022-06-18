@@ -252,7 +252,7 @@ class Trade():
         test_balances = self.__get_test_balance(dbase, account=account)[account]
         if self.test_data or self.test_trade:
             if self.config.main.trade_direction == 'short' and symbol not in test_balances:
-                usd = test_balances['usd']['count']
+                usd = test_balances['USDT']['count']
                 return quote2base(usd, symbol +'USDT')
             return test_balances[symbol]['count']
 
