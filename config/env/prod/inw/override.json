@@ -1,9 +1,9 @@
 {
   "close_rule1": "1\u003c2",
-  "divisor": "20",
+  "divisor": "15",
   "indicators": "get_moving_averages;EMA;200",
   "interval": "5m",
-  "max_trades": "5",
+  "max_trades": "3",
   "trade_multiplier": "5",
   "no_of_klines": "200",
   "open_rule1": "1\u003c2",
