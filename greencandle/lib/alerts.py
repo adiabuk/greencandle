@@ -100,11 +100,11 @@ def send_slack_trade(**kwargs):
         kwargs['usd_profit'] = format_usd(kwargs['usd_profit'])
         kwargs['perc'] = str(kwargs['perc']) + "%"
         kwargs['quote'] = "%.4f" % (kwargs['quote'])
-        kwargs['usd_quote'] = format_usd(kwargs['usd_quote'])
 
     except TypeError:
         kwargs['net_perc'] = 'N/A'
         kwargs['net_profit'] = 'N/A'
+        kwargs['usd_quote'] = format_usd(kwargs['usd_quote'])
 
     if not str2bool(config.slack.slack_active):
         return
