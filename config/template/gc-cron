@@ -28,6 +28,7 @@
 
 {{else if eq .base_env "data"}}
 @hourly /usr/local/bin/create_graph -i 5m -o /data/graphs -a
+@hourly /usr/local/bin/create_graph -i 1h -o /data/graphs -a
 @daily /usr/local/bin/create_graph -i 4h -o /data/graphs -a
 
 
