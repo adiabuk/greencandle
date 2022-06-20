@@ -16,7 +16,6 @@ from greencandle.lib import config
 from greencandle.lib.balance_common import get_base
 from greencandle.lib.common import AttributeDict, format_usd, get_tv_link, get_trade_link
 
-
 def send_gmail_alert(action, pair, price):
     """
     Send email alert using gmail
@@ -96,7 +95,8 @@ def send_slack_trade(**kwargs):
         kwargs['perc'] = "%.4f" % (kwargs['perc'])
         commission = 0.2
         kwargs['net_perc'] = "%.4f" % float(float(kwargs['perc']) - float(commission)) + "%"
-        kwargs['net_profit'] = float(kwargs['usd_profit']) - ((float(kwargs.usd_quote) /100) * 0.2)
+        kwargs['net_profit'] = format_usd(float(kwargs['usd_profit']) - ((float(kwargs.usd_quote)
+            /100) * 0.2))
         kwargs['usd_profit'] = format_usd(kwargs['usd_profit'])
         kwargs['perc'] = str(kwargs['perc']) + "%"
         kwargs['quote'] = "%.4f" % (kwargs['quote'])
@@ -114,11 +114,11 @@ def send_slack_trade(**kwargs):
         strat = re.findall(r"-([\s\S]*)$", config.main.name)[0].replace('api-', '')
         close_string = "• Close: {0}\n".format(get_trade_link(kwargs.pair, strat,
                                                               'close', 'close now'))
-        quote_string = "• Quote in: %.4f" % float(kwargs.quote)
+        quote_string = "• Quote in: %.4f\n" % float(kwargs.quote)
     elif kwargs.action == 'CLOSE':
         color = '#fc0303' # red
         close_string = ""
-        quote_string = "• Quote out: %.4f" % float(kwargs.quote)
+        quote_string = "• Quote out: %.4f\n" % float(kwargs.quote)
     else:
         color = '#ff7f00'
         close_string = ""
@@ -144,17 +144,17 @@ def send_slack_trade(**kwargs):
                             "{7}"
                             "{8}"
                             "• USD quote: {9}\n"
-                            "\n\n".format(get_tv_link(kwargs.pair),
-                                          kwargs.price,
-                                          title,
-                                          kwargs.perc,
-                                          kwargs.usd_profit,
-                                          kwargs.net_perc,
-                                          kwargs.net_profit,
-                                          close_string,
-                                          quote_string,
-                                          kwargs.usd_quote
-                                          )),
+                            "\n".format(get_tv_link(kwargs.pair),
+                                        kwargs.price,
+                                        title,
+                                        kwargs.perc,
+                                        kwargs.usd_profit,
+                                        kwargs.net_perc,
+                                        kwargs.net_profit,
+                                        close_string,
+                                        quote_string,
+                                        kwargs.usd_quote
+                                        )),
                   "short":"false"
                  }]}]}
 
