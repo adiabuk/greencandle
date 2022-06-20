@@ -1,0 +1,5 @@
+{
+  "stop_loss_perc": "3.5",
+  "take_profit_perc": "5",
+  "trade_isolated": "false"
+}

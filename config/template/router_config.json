@@ -20,6 +20,10 @@
 {
 "any-spot-long" : ["prod-be-api-any-spot-long", "alert"],
 "any-cross-long" : ["prod-be-api-any-cross-long", "alert"],
+"any-2p-cross-long" : ["prod-be-api-any-2p-cross-long", "alert"],
+"any-5p-cross-long" : ["prod-be-api-any-5p-cross-long", "alert"],
+"any-2p-cross-short" : ["prod-be-api-any-2p-cross-short", "alert"],
+"any-5p-cross-short" : ["prod-be-api-any-5p-cross-short", "alert"],
 "any-isolated-long" : ["prod-be-api-any-isolated-long", "alert"],
 "any-long" : ["prod-be-api-any-spot-long", "prod-be-api-any-cross-long", "prod-be-api-any-isolated-long", "alert"],
 "any-cross-short" : ["prod-be-api-any-cross-short", "alert"],
@@ -39,6 +43,10 @@
 {
 "any-spot-long" : ["per-be-api-any-spot-long", "alert"],
 "any-cross-long" : ["per-be-api-any-cross-long", "alert"],
+"any-2p-cross-long" : ["per-be-api-any-2p-cross-long", "alert"],
+"any-5p-cross-long" : ["per-be-api-any-5p-cross-long", "alert"],
+"any-2p-cross-short" : ["per-be-api-any-2p-cross-short", "alert"],
+"any-5p-cross-short" : ["per-be-api-any-5p-cross-short", "alert"],
 "any-isolated-long" : ["per-be-api-any-isolated-long", "alert"],
 "any-long" : ["per-be-api-any-spot-long", "per-be-api-any-cross-long", "per-be-api-any-isolated-long", "alert"],
 "any-cross-short" : ["per-be-api-any-cross-short", "alert"],
