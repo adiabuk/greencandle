@@ -1,7 +1,11 @@
 
 # Releases
 
-#3.18
+# 3.18.1
+* Fix usd quote gving base figure
+* Fix Formatting of usd_quote and avail BNB
+
+# 3.18
 * Calculate net perc and add to DB/trade alerts
 * New db schema for modified view
 * Only try to borrow funds if we have sufficient available
@@ -17,6 +21,7 @@
 * Cron script to repay as many debts as possible - hourly
 * Minor code cleanup
 * Enforce specific version of yq on all environments
+* Tweak prod env INW trade settings
 
 # 3.17.1
 * Fix usd_amount calculation
