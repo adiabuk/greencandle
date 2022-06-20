@@ -504,9 +504,11 @@ class Trade():
 
         send_push_notif(kwargs.action, kwargs.pair, '%.15f' % float(kwargs.fill_price))
         send_gmail_alert(kwargs.action, kwargs.pair, '%.15f' % float(kwargs.fill_price))
+        usd_quote = kwargs.quote if 'USD' in kwargs.pair else \
+                base2quote(kwargs.quote, get_base(kwargs.pair)+'USDT')
         send_slack_trade(channel='trades', event=kwargs.event, perc=perc,
                          pair=kwargs.pair, action=kwargs.action, price=kwargs.fill_price,
-                         usd_profit=kwargs.usd_profit, quote=kwargs.quote)
+                         usd_profit=kwargs.usd_profit, quote=kwargs.quote, usd_quote=usd_quote)
 
     def __get_fill_price(self, current_price, trade_result):
         """

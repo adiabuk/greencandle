@@ -13,7 +13,6 @@ import requests
 import notify_run
 from str2bool import str2bool
 from greencandle.lib import config
-from greencandle.lib.binance_accounts import base2quote
 from greencandle.lib.balance_common import get_base
 from greencandle.lib.common import AttributeDict, format_usd, get_tv_link, get_trade_link
 
@@ -97,12 +96,11 @@ def send_slack_trade(**kwargs):
         kwargs['perc'] = "%.4f" % (kwargs['perc'])
         commission = 0.2
         kwargs['net_perc'] = "%.4f" % float(float(kwargs['perc']) - float(commission)) + "%"
-        usd = kwargs.quote if "USD" in kwargs.pair else base2quote(kwargs.quote,
-                                                                   get_base(kwargs.pair)+"USDT")
-        kwargs['net_profit'] = float(kwargs['usd_profit']) - ((float(usd) /100) * 0.2)
+        kwargs['net_profit'] = float(kwargs['usd_profit']) - ((float(kwargs.usd_quote) /100) * 0.2)
         kwargs['usd_profit'] = format_usd(kwargs['usd_profit'])
         kwargs['perc'] = str(kwargs['perc']) + "%"
         kwargs['quote'] = "%.4f" % (kwargs['quote'])
+        kwargs['usd_quote'] = format_usd(kwargs['usd_quote'])
 
     except TypeError:
         kwargs['net_perc'] = 'N/A'
@@ -145,6 +143,7 @@ def send_slack_trade(**kwargs):
                             "• Net usd_profit: {6}\n"
                             "{7}"
                             "{8}"
+                            "• USD quote: {9}\n"
                             "\n\n".format(get_tv_link(kwargs.pair),
                                           kwargs.price,
                                           title,
@@ -153,7 +152,8 @@ def send_slack_trade(**kwargs):
                                           kwargs.net_perc,
                                           kwargs.net_profit,
                                           close_string,
-                                          quote_string
+                                          quote_string,
+                                          usd_quote
                                           )),
                   "short":"false"
                  }]}]}
