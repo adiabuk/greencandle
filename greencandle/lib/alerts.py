@@ -153,7 +153,7 @@ def send_slack_trade(**kwargs):
                                           kwargs.net_profit,
                                           close_string,
                                           quote_string,
-                                          usd_quote
+                                          kwargs.usd_quote
                                           )),
                   "short":"false"
                  }]}]}
