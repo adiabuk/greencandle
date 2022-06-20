@@ -51,7 +51,7 @@ def main():
 
     results += "Cross Margin Account:\n"
     results += "\tAvailable: " + format_usd(client.get_max_borrow())+"\n"
-    results += "\tBNB debt:{} {}\n".format(bnb_debt, format_usd(usd_debt))
+    results += "\tBNB debt: {} {}\n".format(bnb_debt, format_usd(usd_debt))
     results += "Isolated Margin Account:\n"
     count = 0
 
