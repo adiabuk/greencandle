@@ -112,6 +112,38 @@ services:
       - /root/.aws:/root/.aws
       - /root/.bash_history:/root/.bash_history
 
+  per-be-manual:
+    container_name: per-be-manual
+    hostname: per-be-manual
+    environment:
+      - CONFIG_ENV=per/be/manual
+      - HOST=$HOSTNAME
+      - DB=true
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: tail -f /dev/null
+    logging:
+      driver: journald
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: ls || exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
+
   per-fe-cron:
     container_name: per-fe-cron
     hostname: per-fe-cron
@@ -703,6 +735,38 @@ services:
     volumes:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.aws:/root/.aws
+      - /root/.bash_history:/root/.bash_history
+
+  prod-be-manual:
+    container_name: prod-be-manual
+    hostname: prod-be-manual
+    environment:
+      - CONFIG_ENV=prod/be/manual
+      - HOST=$HOSTNAME
+      - DB=true
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: tail -f /dev/null
+    logging:
+      driver: journald
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: ls || exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
   prod-fe-cron:

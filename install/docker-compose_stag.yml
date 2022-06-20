@@ -146,6 +146,38 @@ services:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
+  stag-be-manual:
+    container_name: stag-be-manual
+    hostname: stag-be-manual
+    environment:
+      - CONFIG_ENV=stag/be/manual
+      - HOST=$HOSTNAME
+      - DB=true
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: tail -f /dev/null
+    logging:
+      driver: journald
+    links:
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
+    depends_on:
+      - stag-base-mysql
+      - stag-base-redis
+    healthcheck:
+      test: ls || exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
+
   stag-fe-cron:
     container_name: stag-fe-cron
     hostname: stag-fe-cron

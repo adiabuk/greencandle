@@ -1,0 +1,5 @@
+{
+  "logging_output": "stdout",
+  "name": "per-manual",
+  "slack_active": "false"
+}
