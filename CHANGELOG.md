@@ -1,6 +1,23 @@
 
 # Releases
 
+#3.18
+* Calculate net perc and add to DB/trade alerts
+* New db schema for modified view
+* Only try to borrow funds if we have sufficient available
+* Fix for LBUSD
+* Support BUSD in sport and margin
+* Fix for data graphs not being created
+* Add 1h data graphs to cron
+* Container for running manual commands with no alerts/journald logging
+* Add no "any" strategies with 2% and 5% TP for per and prod envs
+* Cmd line script to get GBP & USD exchange rates for a given quote symbol
+* Fix broken authentication for /action api route
+* Include current borrowed amount(s) before calculating borrow amount for next trade
+* Cron script to repay as many debts as possible - hourly
+* Minor code cleanup
+* Enforce specific version of yq on all environments
+
 # 3.17.1
 * Fix usd_amount calculation
 
