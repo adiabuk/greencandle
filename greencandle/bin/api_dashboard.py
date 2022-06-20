@@ -95,8 +95,8 @@ def list_to_dict(rlist):
     links = dict(map(lambda s: s.split(':'), rlist))
     return {v: k for k, v in links.items() if "-be-" in k}
 
-@login_required
 @APP.route("/action", methods=['POST', 'GET'])
+@login_required
 def action():
     """
     get buy/sell request
