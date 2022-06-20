@@ -14,7 +14,6 @@ env
 apt-get update
 apt-get -y install software-properties-common gnupg dirmngr ca-certificates apt-transport-https
 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys CC86BB64
-add-apt-repository ppa:rmescandon/yq -y
 
 # Setup local env
 apt-get -y update
@@ -25,13 +24,16 @@ apt-get -y install docker.io netcat ntpdate mysql-client screen atop jq iotop nt
 curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | sudo bash -s -- --mariadb-server-version=10.8
 
 wget "https://www.dropbox.com/s/ge7b2rf9e0gqepp/docker-compose-1.29.1?dl=0" -O /usr/local/bin/docker-compose
-chmod +x /usr/local/bin/docker-compose
+
+wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/3.0.0-beta/yq_linux_amd64
+
+chmod +x /usr/local/bin/docker-compose /usr/local/bin/yq
 echo "export HOSTNAME" >> ~/.bashrc
 
 # Install Python 3.7.0 with pyenv
 apt-get install -y make build-essential libssl-dev zlib1g-dev \
 libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
-libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl yq
+libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl
 
 export PYENV_ROOT="/opt/pyenv"
 curl -s -S -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash

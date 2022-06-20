@@ -10,11 +10,10 @@ fi
 apt-get update
 apt-get install software-properties-common
 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys CC86BB64
-add-apt-repository ppa:rmescandon/yq -y
 
 # Setup local env
 apt-get -y update
-apt-get -y install docker.io ntpdate mysql-client screen atop jq iotop ntp awscli vim atop htop automake autotools-dev fuse g++ git libcurl4-gnutls-dev libfuse-dev libssl-dev libxml2-dev make pkg-config yq bsdmainutils
+apt-get -y install docker.io ntpdate mysql-client screen atop jq iotop ntp awscli vim atop htop automake autotools-dev fuse g++ git libcurl4-gnutls-dev libfuse-dev libssl-dev libxml2-dev make pkg-config bsdmainutils
 apt autoremove --purge -y snapd emacs
 apt-get dist-upgrade -y
 apt-get clean; apt-get autoclean; rm -rf /var/lib/apt/lists/*
@@ -35,7 +34,10 @@ tar zxvf /tmp/configstore-2.5.0-linux-amd64.tar.gz -C /usr/local/bin
 rm -rf /tmp/configstore-2.5.0-linux-amd64.tar.gz
 
 wget "https://www.dropbox.com/s/ge7b2rf9e0gqepp/docker-compose-1.29.1?dl=0" -O /usr/local/bin/docker-compose
-chmod +x /usr/local/bin/docker-compose
+
+wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/3.0.0-beta/yq_linux_amd64
+chmod +x /usr/local/bin/docker-compose /usr/local/bin/yq
+
 echo "export HOSTNAME" >> ~/.bashrc
 
 cat > /etc/docker/daemon.json << EOF
