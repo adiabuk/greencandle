@@ -13,7 +13,9 @@ import requests
 import notify_run
 from str2bool import str2bool
 from greencandle.lib import config
-from greencandle.lib.common import AttributeDict, sub_perc, format_usd, get_tv_link, get_trade_link
+from greencandle.lib.binance_accounts import base2quote
+from greencandle.lib.balance_common import get_base
+from greencandle.lib.common import AttributeDict, format_usd, get_tv_link, get_trade_link
 
 
 def send_gmail_alert(action, pair, price):
@@ -95,7 +97,8 @@ def send_slack_trade(**kwargs):
         kwargs['perc'] = "%.4f" % (kwargs['perc'])
         commission = 0.2
         kwargs['net_perc'] = "%.4f" % float(float(kwargs['perc']) - float(commission)) + "%"
-        usd = quote if "USD" in kwargs.pair else base2quote(quote, get_base(kwargs.pair)+"USDT") 
+        usd = kwargs.quote if "USD" in kwargs.pair else base2quote(kwargs.quote,
+                                                                   get_base(kwargs.pair)+"USDT")
         kwargs['net_profit'] = float(kwargs['usd_profit']) - ((float(usd) /100) * 0.2)
         kwargs['usd_profit'] = format_usd(kwargs['usd_profit'])
         kwargs['perc'] = str(kwargs['perc']) + "%"
