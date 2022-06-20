@@ -95,8 +95,8 @@ def send_slack_trade(**kwargs):
         kwargs['perc'] = "%.4f" % (kwargs['perc'])
         commission = 0.2
         kwargs['net_perc'] = "%.4f" % float(float(kwargs['perc']) - float(commission)) + "%"
-        kwargs['net_profit'] = format_usd(sub_perc(float(commission), float(kwargs['usd_profit'])))
-        kwargs['net_profit'] = format_usd(float(kwargs['usd_profit']) - ((float(quote) /100) * 0.2))
+        usd = quote if "USD" in kwargs.pair else base2quote(quote, get_base(kwargs.pair)+"USDT") 
+        kwargs['net_profit'] = float(kwargs['usd_profit']) - ((float(usd) /100) * 0.2)
         kwargs['usd_profit'] = format_usd(kwargs['usd_profit'])
         kwargs['perc'] = str(kwargs['perc']) + "%"
         kwargs['quote'] = "%.4f" % (kwargs['quote'])
