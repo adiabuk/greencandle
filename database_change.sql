@@ -1,3 +1,2 @@
--- Version 3.18
+-- Version 3.19
 
-ALTER TABLE open_trades ADD COLUMN net_perc varchar(30) after perc;
