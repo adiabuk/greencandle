@@ -35,6 +35,8 @@ if [[ ! -e /installed ]]; then
   elif [[ "$HOSTNAME" == *"alert"* ]]; then
     cp /srv/alert/com.mp3 /srv/alert/250ms-silence.mp3 /
 
+  elif [[ "$HOSTNAME" == *"manual"* ]]; then
+    pip install ipython
   fi
 
   touch /installed
