@@ -297,6 +297,9 @@ services:
       - stag-be-any-long:any-long
       - stag-be-any-short:any-short
       - stag-be-any-spot-long:any-spot-long
+      - stag-be-any-tsl-long:any-tsl-long
+      - stag-be-any-tsl-short:any-tsl-short
+      - stag-be-any-tsl-spot-long:any-tsl-spot-long
     depends_on:
       - stag-be-alert
       - stag-base-mysql
@@ -510,6 +513,126 @@ services:
       - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/any/short
+      - HOST_IP=$HOST_IP
+      - get_trend="true"
+      - intermittent="true"
+      - DB=true
+    extra_hosts:
+      - "trend:10.8.0.101"
+    ports:
+      - 20000
+    links:
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
+    depends_on:
+      - stag-base-mysql
+      - stag-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
+
+  stag-be-any-tsl-spot-long:
+    container_name: stag-be-any-tsl-spot-long
+    hostname: stag-be-any-tsl-spot-long
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api --test
+    logging:
+      driver: journald
+    environment:
+      - VPN_IP=$VPN_IP
+      - GC_PORT=8888
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=stag/any/spot/tsl
+      - HOST_IP=$HOST_IP
+      - get_trend="true"
+      - intermittent="true"
+      - DB=true
+    extra_hosts:
+      - "trend:10.8.0.101"
+    ports:
+      - 20000
+    links:
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
+    depends_on:
+      - stag-base-mysql
+      - stag-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
+
+  stag-be-any-tsl-long:
+    container_name: stag-be-any-tsl-long
+    hostname: stag-be-any-tsl-long
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api --test
+    logging:
+      driver: journald
+    environment:
+      - VPN_IP=$VPN_IP
+      - GC_PORT=8888
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=stag/any/long/tsl
+      - HOST_IP=$HOST_IP
+      - get_trend="true"
+      - intermittent="true"
+      - DB=true
+    extra_hosts:
+      - "trend:10.8.0.101"
+    ports:
+      - 20000
+    links:
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
+    depends_on:
+      - stag-base-mysql
+      - stag-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.bash_history:/root/.bash_history
+
+  stag-be-any-tsl-short:
+    container_name: stag-be-any-tsl-short
+    hostname: stag-be-any-tsl-short
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api --test
+    logging:
+      driver: journald
+    environment:
+      - VPN_IP=$VPN_IP
+      - GC_PORT=8888
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=stag/any/short/tsl
       - HOST_IP=$HOST_IP
       - get_trend="true"
       - intermittent="true"
