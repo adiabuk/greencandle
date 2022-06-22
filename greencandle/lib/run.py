@@ -244,6 +244,8 @@ def prod_int_check(interval, test, alert=False):
             drawups[pair] = redis.get_drawup(pair)['perc']
             redis.rm_drawup(pair)
             redis.rm_drawdown(pair)
+            redis.rm_on_entry(pair, "take_profit_perc")
+            redis.rm_on_entry(pair, "stop_loss_perc")
             if alert:
                 payload = {"pair":pair, "strategy":"alert",
                            "text": "Closing API trade according to TP/SL rules",
