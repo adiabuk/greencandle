@@ -469,7 +469,7 @@ services:
       - VPN_IP=$VPN_IP
       - GC_PORT=8888
       - HOST=$HOSTNAME
-      - CONFIG_ENV=stag/any
+      - CONFIG_ENV=stag/any/long
       - HOST_IP=$HOST_IP
       - get_trend="true"
       - intermittent="true"
