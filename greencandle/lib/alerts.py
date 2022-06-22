@@ -139,21 +139,21 @@ def send_slack_trade(**kwargs):
                             "• title: {2}\n"
                             "• Percentage: {3}\n"
                             "• usd_profit: {4}\n"
-                            "• Net perc: {5}\n"
-                            "• Net usd_profit: {6}\n"
-                            "{7}"
-                            "{8}"
-                            "• USD quote: {9}\n"
+                            "{5}"
+                            "{6}"
+                            "• USD quote: {7}\n"
+                            "• Net perc: {8}\n"
+                            "• Net usd_profit: {9}\n"
                             "\n".format(get_tv_link(kwargs.pair),
                                         kwargs.price,
                                         title,
                                         kwargs.perc,
                                         kwargs.usd_profit,
-                                        kwargs.net_perc,
-                                        kwargs.net_profit,
                                         close_string,
                                         quote_string,
-                                        kwargs.usd_quote
+                                        kwargs.usd_quote,
+                                        kwargs.net_perc,
+                                        kwargs.net_profit
                                         )),
                   "short":"false"
                  }]}]}
