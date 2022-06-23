@@ -242,10 +242,6 @@ def prod_int_check(interval, test, alert=False):
             sells.append((pair, current_time, current_price, event))
             drawdowns[pair] = redis.get_drawdown(pair)
             drawups[pair] = redis.get_drawup(pair)['perc']
-            redis.rm_drawup(pair)
-            redis.rm_drawdown(pair)
-            redis.rm_on_entry(pair, "take_profit_perc")
-            redis.rm_on_entry(pair, "stop_loss_perc")
             if alert:
                 payload = {"pair":pair, "strategy":"alert",
                            "text": "Closing API trade according to TP/SL rules",
@@ -259,6 +255,11 @@ def prod_int_check(interval, test, alert=False):
 
     trade = Trade(interval=interval, test_trade=test, test_data=False, config=config)
     trade.close_trade(sells, drawdowns=drawdowns, drawups=drawups)
+
+    redis.rm_drawup(pair)
+    redis.rm_drawdown(pair)
+    redis.rm_on_entry(pair, "take_profit_perc")
+    redis.rm_on_entry(pair, "stop_loss_perc")
     del redis
     del dbase
 
