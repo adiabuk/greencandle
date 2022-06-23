@@ -751,11 +751,11 @@ services:
     logging:
       driver: journald
     links:
-      - per-base-mysql:mysql
-      - per-base-redis:redis
+      - prod-base-mysql:mysql
+      - prod-base-redis:redis
     depends_on:
-      - per-base-mysql
-      - per-base-redis
+      - prod-base-mysql
+      - prod-base-redis
     healthcheck:
       test: ls || exit 1
       interval: 1m
