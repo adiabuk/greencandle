@@ -35,7 +35,7 @@ RUN echo "jenkins ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 RUN git clone https://github.com/adiabuk/greencandle.git ~jenkins/greencandle && ln -s ~jenkins/greencandle /srv/greencandle
 RUN cd /srv/greencandle; python setup.py install
 RUN rm -rf /srv/greencandle ~jenkins/greencandle
-RUN configstore package process_templates unit /etc
 RUN cp -r /var/jenkins_home/.aws  /root
 RUN cp -r /var/jenkins_home/.aws  /home/jenkins
 RUN chown -R jenkins.jenkins /home/jenkins/.aws
+RUN configstore package process_templates unit /etc --basedir /srv/greencandle
