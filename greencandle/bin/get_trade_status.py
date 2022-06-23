@@ -23,7 +23,7 @@ def main():
     dbase = Mysql()
 
     query = ('select pair, name, open_time, concat(round(perc,2), " (", round(net_perc,2), ")") '
-             'as perc, usd_quantity from open_trades order by perc DESC')
+             'as perc, usd_quantity from open_trades order by perc +0 DESC')
 
     open_trades = dbase.fetch_sql_data(query, header=True)
     output = ""
