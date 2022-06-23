@@ -7,4 +7,11 @@ RUN pip install -r /srv/alert/requirements.txt
 RUN mkdir /opt/output
 RUN  cp /opt/install/docker-entrypoint.sh /
 
+ARG BRANCH
+ARG COMMIT
+ARG DATE
+ENV COMMIT_SHA=$COMMIT
+ENV VERSION=$BRANCH
+ENV BUILD_DATE=$DATE
+
 CMD ["python", "/srv/alert/webhook.py"]

@@ -1,17 +1,15 @@
 FROM amrox/nginx:stable-new
 
-LABEL branch=${BRANCH}
-LABEL commit=${COMMIT}
-LABEL date=${DATE}
-LABEL host=${HOST}
-
 RUN mkdir /opt/output
 COPY install/docker-entrypoint.sh /
 COPY config /opt/config
 RUN chmod +x /docker-entrypoint.sh
 
-ENV COMMIT_SHA=${COMMIT}
-ENV VERSION=${BRANCH}
-ENV BUILD_DATE=${DATE}
+ARG BRANCH
+ARG COMMIT
+ARG DATE
+ENV COMMIT_SHA=$COMMIT
+ENV VERSION=$BRANCH
+ENV BUILD_DATE=$DATE
 
 CMD ['/docker-entrypoint.sh nginx -g 'daemon off;']

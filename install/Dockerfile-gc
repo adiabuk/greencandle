@@ -1,7 +1,4 @@
 FROM amrox/python:3.7.0-new
-LABEL branch=${BRANCH}
-LABEL commit=${COMMIT}
-LABEL date=${DATE}
 
 ADD . /srv/greencandle
 RUN bash /srv/greencandle/install/bootstrap_docker.sh && \
@@ -9,13 +6,11 @@ RUN bash /srv/greencandle/install/bootstrap_docker.sh && \
     cp -rv /srv/greencandle/config /opt/config && \
     chmod +x /docker-entrypoint*.sh
 
-ARG BRANCH="master"
-ARG COMMIT=""
-ARG DATE=""
-
-# Now set it as an env var
-ENV COMMIT_SHA=${COMMIT}
-ENV VERSION=${BRANCH}
-ENV BUILD_DATE=${DATE}
+ARG BRANCH
+ARG COMMIT
+ARG DATE
+ENV COMMIT_SHA=$COMMIT
+ENV VERSION=$BRANCH
+ENV BUILD_DATE=$DATE
 
 CMD ["/docker-entrypoint.sh"]
