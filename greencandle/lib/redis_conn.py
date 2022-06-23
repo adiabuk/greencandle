@@ -325,9 +325,12 @@ class Redis():
         """
         Check if price between intervals and sell if matches stop_loss or take_profit rules
         """
-
-        stop_loss_perc = float(self.get_on_entry(pair, 'stop_loss_perc'))
-        take_profit_perc = float(self.get_on_entry(pair, 'take_profit_perc'))
+        try:
+            stop_loss_perc = float(self.get_on_entry(pair, 'stop_loss_perc'))
+            take_profit_perc = float(self.get_on_entry(pair, 'take_profit_perc'))
+        except TypeError:
+            self.logger.critical("Unable to get TP/SL for %s" % pair)
+            raise
 
         current_price = current_candle.close
         current_high = current_candle.high
