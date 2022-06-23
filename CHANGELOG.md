@@ -1,6 +1,14 @@
 
 # Releases
 
+# 3.19
+* Add C9e environment and install ipython to manual containers
+* Add staging containers with trailing stop loss
+* Reformat profit notif
+* Remove SL/TP from redis when stopped out or taken profit
+* Fix ordering of trades in stus notifications
+* Fix calculations of TP and SL
+
 # 3.18.1
 * Fix usd quote gving base figure
 * Fix Formatting of usd_quote and avail BNB
