@@ -10,6 +10,7 @@ from greencandle.lib import config
 config.create_config()
 from greencandle.lib.common import arg_decorator
 from greencandle.lib.balance import Balance
+from greencandle.lib.alerts import send_slack_message
 
 @arg_decorator
 def main():
