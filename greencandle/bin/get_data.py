@@ -28,8 +28,8 @@ def test_loop(interval=None, prices=None):
     Test loop
     """
     LOGGER.debug("Performaing prod loop")
-    LOGGER.info("Pairs in config: %s" % PAIRS)
-    LOGGER.info("Total unique pairs: %s" % len(PAIRS))
+    LOGGER.debug("Pairs in config: %s" % PAIRS)
+    LOGGER.debug("Total unique pairs: %s" % len(PAIRS))
 
     LOGGER.info("Starting new cycle")
     LOGGER.debug("max trades: %s" % config.main.max_trades)
@@ -39,7 +39,7 @@ def test_loop(interval=None, prices=None):
     for key, val in prices.items():
         if key in PAIRS:
             prices_trunk[key] = val
-    LOGGER.info("Getting dataframes for all pairs")
+    LOGGER.debug("Getting dataframes for all pairs")
     dataframes = get_dataframes(PAIRS, interval=interval, max_workers=1)
     LOGGER.debug("Done getting dataframes")
 
