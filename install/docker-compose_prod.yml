@@ -208,6 +208,7 @@ services:
        - /data:/data
        - /root/.aws:/root/.aws
        - /root/.bash_history:/root/.bash_history
+       - /var/log/test_deploy.txt:/var/www/test_deploy.txt
 
   per-fe-api-dashboard:
     container_name: per-fe-api-dashboard
@@ -833,6 +834,7 @@ services:
        - /data:/data
        - /root/.aws:/root/.aws
        - /root/.bash_history:/root/.bash_history
+       - /var/log/prod_deploy.txt:/var/www/prod_deploy.txt
 
   prod-fe-api-dashboard:
     container_name: prod-fe-api-dashboard
