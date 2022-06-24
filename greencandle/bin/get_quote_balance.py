@@ -4,6 +4,7 @@
 Report quote currencies and available trading funds
 """
 
+import sys
 from greencandle.lib.balance import Balance
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.alerts import send_slack_message
@@ -67,7 +68,6 @@ def main():
 
     if count == 0:
         results += "\tNone available"
-    send_slack_message('balance', results)
-
+    send_slack_message('balance', results, name=sys.argv[0].split('/')[-1])
 if __name__ == "__main__":
     main()

@@ -150,4 +150,4 @@ class Balance(dict):
                     "TOTAL BTC = ฿{}".format(round(totals_btc, 5))]
 
         bal_str = '\n'.join(balances) + '\n'
-        send_slack_message("balance", bal_str)
+        return bal_str

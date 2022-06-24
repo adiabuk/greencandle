@@ -4,6 +4,7 @@
 Get details of current trades using mysql and current value from binance
 """
 
+import sys
 from greencandle.lib import config
 config.create_config()
 from greencandle.lib.mysql import Mysql
@@ -34,7 +35,6 @@ def main():
                 str(item).replace("-api-any", "") for item in trade]) + '\n'
 
     if len(open_trades) > 1:
-        send_slack_message('balance', output)
-
+        send_slack_message('balance', output, name=sys.argv[0].split('/')[-1])
 if __name__ == "__main__":
     main()

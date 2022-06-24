@@ -60,7 +60,7 @@ def send_push_notif(*args):
     notify.endpoint = 'https://{0}/{1}'.format(host, channel)
     notify.send(text)
 
-def send_slack_message(channel, message, emoji=None, icon=None):
+def send_slack_message(channel, message, emoji=None, icon=None, name=None):
     """
     Send notification using slack api
     """
@@ -69,7 +69,8 @@ def send_slack_message(channel, message, emoji=None, icon=None):
 
     if not str2bool(config.slack.slack_active):
         return
-    payload = {"username": config.main.name,
+    name = name if name else config.main.name
+    payload = {"username": name,
                "icon_emoji": icon,
                "channel": config.slack[channel],
                "attachments":[
