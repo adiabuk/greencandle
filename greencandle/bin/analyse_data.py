@@ -13,7 +13,7 @@ from pathlib import Path
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.alerts import send_slack_message
-from greencandle.lib.common import HOUR, get_tv_link, arg_decorator
+from greencandle.lib.common import HOUR, MINUTE, get_tv_link, arg_decorator
 from greencandle.lib.auth import binance_auth
 
 LOGGER = get_logger(__name__)
@@ -22,8 +22,8 @@ MAIN_INDICATORS = config.main.indicators.split()
 SCHED = BlockingScheduler()
 GET_EXCEPTIONS = exception_catcher((Exception))
 
-@SCHED.scheduled_job('cron', minute="5",
-                     hour=HOUR[config.main.interval], second="30")
+@SCHED.scheduled_job('cron', minute=MINUTE[config.main.interval],
+                     hour=HOUR[config.main.interval], second="32")
 def analyse_loop():
     """
     Gather data from redis and analyze
