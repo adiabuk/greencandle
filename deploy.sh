@@ -45,4 +45,7 @@ done
 
 docker-compose -f ./install/docker-compose_${env}.yml up -d $fe
 
+# log tag, env short commit sha, and date to log file
+echo "$TAG,$env,$SHORT_COMMIT,`date`" > /var/log/${env}_deploy.txt
 logger -t deploy "$TAG successfully deployed"
+
