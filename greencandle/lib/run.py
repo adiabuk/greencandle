@@ -220,10 +220,11 @@ def prod_int_check(interval, test, alert=False):
     current_trades = dbase.get_trades()
     redis = Redis(interval=interval, test=False)
     current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
-    sells = []
-    drawdowns = {}
-    drawups = {}
+
     for trade in current_trades:
+        sells = []
+        drawdowns = {}
+        drawups = {}
         pair = trade[0]
         open_price, _, open_time, _, _, _ = dbase.get_trade_value(pair)[0]
         dataframes = get_dataframes([pair], interval=interval, no_of_klines=1)
@@ -253,13 +254,13 @@ def prod_int_check(interval, test, alert=False):
                 except Exception:
                     pass
 
-    trade = Trade(interval=interval, test_trade=test, test_data=False, config=config)
-    trade.close_trade(sells, drawdowns=drawdowns, drawups=drawups)
+            trade = Trade(interval=interval, test_trade=test, test_data=False, config=config)
+            trade.close_trade(sells, drawdowns=drawdowns, drawups=drawups)
 
-    redis.rm_drawup(pair)
-    redis.rm_drawdown(pair)
-    redis.rm_on_entry(pair, "take_profit_perc")
-    redis.rm_on_entry(pair, "stop_loss_perc")
+            redis.rm_drawup(pair)
+            redis.rm_drawdown(pair)
+            redis.rm_on_entry(pair, "take_profit_perc")
+            redis.rm_on_entry(pair, "stop_loss_perc")
     del redis
     del dbase
 
