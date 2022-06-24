@@ -223,6 +223,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /root/.bash_history:/root/.bash_history
+      - /var/log/test_deploy.txt /var/www/test_deploy.txt
 
   test-fe-api-web:
     container_name: test-fe-api-web
