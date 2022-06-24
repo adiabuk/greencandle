@@ -1,6 +1,12 @@
 
 # Releases
 
+# 3.20
+* Avoid exception loop by removing redis entries before trade closes
+* Display pair from SL/TP exception and re-raise
+* Fix prod containers referencing per deps
+* Add Build information to docker images as env vars
+
 # 3.19
 * Add C9e environment and install ipython to manual containers
 * Add staging containers with trailing stop loss
