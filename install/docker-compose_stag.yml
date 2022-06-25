@@ -205,7 +205,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run:/var/run
+      - /var/run/docker.sock:/var/run/docker.sock
       - /root/.bash_history:/root/.bash_history
 
   stag-fe-webserver:

@@ -170,7 +170,7 @@ services:
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws
-      - /var/run:/var/run
+      - /var/run/docker.sock:/var/run/docker.sock
       - /dev/log:/dev/log
       - /root/.bash_history:/root/.bash_history
 
@@ -795,7 +795,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run:/var/run
+      - /var/run/docker.sock:/var/run/docker.sock
       - /root/.bash_history:/root/.bash_history
 
   prod-fe-webserver:
