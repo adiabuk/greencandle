@@ -50,10 +50,11 @@ class Trade():
         raw_range = self.config.main.drain_range.strip()
         start, end = re.findall(r"\d\d:\d\d\s?-\s?\d\d:\d\d", raw_range)[0].split('-')
         time_range = (start.strip(), end.strip())
+        drain = str2bool(self.config.main.drain)
         manual_drain = Path('/var/run/{}_drain'.format(self.config.main.base_env)).is_file()
         if time_range[1] < time_range[0]:
             return time_str >= time_range[0] or time_str <= time_range[1]
-        return time_range[0] <= time_str <= time_range[1] or manual_drain
+        return (drain and time_range[0] <= time_str <= time_range[1]) or manual_drain
 
     def __send_redis_trade(self, **kwargs):
         """
@@ -117,14 +118,13 @@ class Trade():
         """
         dbase = Mysql(test=self.test_data, interval=self.interval)
         current_trades = dbase.get_trades()
-        drain = str2bool(self.config.main.drain)
         avail_slots = int(self.config.main.max_trades) - len(current_trades)
         self.logger.info("%s buy slots available" % avail_slots)
         if avail_slots <= 0:
             self.logger.warning("Too many trades, skipping")
             send_slack_message("alerts", "Too many trades, skipping")
             return []
-        elif drain and self.is_in_drain() and not self.test_data:
+        elif self.is_in_drain() and not self.test_data:
             self.logger.warning("strategy is in drain, skipping...")
             send_slack_message("alerts", "strategy is in drain, skipping")
             return []
