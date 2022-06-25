@@ -240,7 +240,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /root/.bash_history:/root/.bash_history
-      - /var/log/test_deploy.txt:/var/www/test_deploy.txt
+      - /var/run:/var/run
 
   stag-fe-api-web:
     container_name: stag-fe-api-web
