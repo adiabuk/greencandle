@@ -1,6 +1,14 @@
 
 # Releases
 
+# 3.21
+* Balance slack notifications have title of script
+* Log details of deployment to file for later collection
+* Downgrade some INFO logs in data info to DEBUG
+* Allow TSL staging to go to 0.4 before closing position
+* Drain file, for immediately stopping all new trades
+* Allow data analysis to happen immediately after collection
+
 # 3.20
 * Avoid exception loop by removing redis entries before trade closes
 * Display pair from SL/TP exception and re-raise
