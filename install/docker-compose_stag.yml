@@ -107,7 +107,7 @@ services:
       timeout: 2s
       retries: 5
     volumes:
-      - /var/run:/var/run
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.aws:/root/.aws
       - /root/.bash_history:/root/.bash_history
 
