@@ -11,6 +11,7 @@ import time
 import datetime
 import re
 from str2bool import str2bool
+from pathlib import Path
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.mysql import Mysql
@@ -49,9 +50,10 @@ class Trade():
         raw_range = self.config.main.drain_range.strip()
         start, end = re.findall(r"\d\d:\d\d\s?-\s?\d\d:\d\d", raw_range)[0].split('-')
         time_range = (start.strip(), end.strip())
+        manual_drain = Path('/var/run/drain').is_file()
         if time_range[1] < time_range[0]:
             return time_str >= time_range[0] or time_str <= time_range[1]
-        return time_range[0] <= time_str <= time_range[1]
+        return time_range[0] <= time_str <= time_range[1] or manual_drain
 
     def __send_redis_trade(self, **kwargs):
         """

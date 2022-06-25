@@ -45,7 +45,7 @@ services:
       - /var/log/syslog:/var/log/syslog
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   test-base-redis:
@@ -64,7 +64,7 @@ services:
       timeout: 2s
       retries: 5
     volumes:
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.aws:/root/.aws
       - /root/.bash_history:/root/.bash_history
 
@@ -87,7 +87,7 @@ services:
       timeout: 2s
       retries: 5
     volumes:
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.aws:/root/.aws
       - /root/.bash_history:/root/.bash_history
 
@@ -123,7 +123,7 @@ services:
       - /data:/data
       - /dev/log:/dev/log
       - /root/.aws:/root/.aws
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   test-be-manual:
@@ -155,7 +155,7 @@ services:
       - /root/.aws:/root/.aws
       - /var/run/docker.sock:/var/run/docker.sock
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   test-fe-cron:
@@ -185,9 +185,8 @@ services:
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws
-      - /var/run/docker.sock:/var/run/docker.sock
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   test-fe-webserver:
@@ -322,7 +321,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   test-be-5ma-api-usdt:
@@ -358,7 +357,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   test-be-5ma-api-eth:
@@ -394,7 +393,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   test-be-any-spot-long:
@@ -434,7 +433,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   test-be-any-long:
@@ -474,7 +473,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   test-be-any-short:
@@ -514,6 +513,6 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
