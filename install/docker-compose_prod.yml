@@ -31,7 +31,7 @@ services:
     volumes:
       - /var/log:/var/log
       - /root/.aws:/root/.aws
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run:/var/run
     healthcheck:
       test: ls /var/log/syslog
       interval: 1m
@@ -65,7 +65,7 @@ services:
       - /var/log/syslog:/var/log/syslog
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
 ###### Start Per
@@ -85,7 +85,7 @@ services:
       timeout: 2s
       retries: 5
     volumes:
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.aws:/root/.aws
       - /root/.bash_history:/root/.bash_history
 
@@ -108,7 +108,7 @@ services:
       timeout: 2s
       retries: 5
     volumes:
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.aws:/root/.aws
       - /root/.bash_history:/root/.bash_history
 
@@ -139,9 +139,8 @@ services:
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run:/var/run
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
   per-fe-cron:
@@ -171,9 +170,8 @@ services:
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run:/var/run
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
       - /root/.bash_history:/root/.bash_history
 
   per-fe-webserver:
@@ -242,7 +240,7 @@ services:
       - /data:/data
       - /dev/log:/dev/log
       - /root/.aws:/root/.aws
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   per-be-api-router:
@@ -324,7 +322,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   per-be-api-any-isolated-long:
@@ -359,7 +357,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   per-be-api-any-cross-long:
@@ -394,7 +392,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   per-be-api-any-cross-short:
@@ -429,7 +427,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   per-be-api-inw-cross-long:
@@ -469,7 +467,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   per-be-api-inw-cross-short:
@@ -509,7 +507,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   per-be-api-any-isolated-short:
@@ -544,7 +542,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   per-be-api-any-2p-cross-long:
@@ -581,7 +579,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   per-be-api-any-2p-cross-short:
@@ -618,7 +616,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   per-be-api-any-5p-cross-long:
@@ -655,7 +653,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   per-be-api-any-5p-cross-short:
@@ -692,7 +690,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 ###### Start Prod
   prod-base-redis:
@@ -711,7 +709,7 @@ services:
       timeout: 2s
       retries: 5
     volumes:
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.aws:/root/.aws
       - /root/.bash_history:/root/.bash_history
 
@@ -734,7 +732,7 @@ services:
       timeout: 2s
       retries: 5
     volumes:
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.aws:/root/.aws
       - /root/.bash_history:/root/.bash_history
 
@@ -765,9 +763,8 @@ services:
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws
-      - /var/run/docker.sock:/var/run/docker.sock
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   prod-fe-cron:
@@ -797,9 +794,8 @@ services:
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws
-      - /var/run/docker.sock:/var/run/docker.sock
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   prod-fe-webserver:
@@ -868,7 +864,7 @@ services:
       - /data:/data
       - /dev/log:/dev/log
       - /root/.aws:/root/.aws
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   prod-be-api-router:
@@ -951,7 +947,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   prod-be-api-any-cross-long:
@@ -986,7 +982,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   prod-be-api-any-isolated-long:
@@ -1021,7 +1017,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   prod-be-api-any-cross-short:
@@ -1056,7 +1052,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   prod-be-api-any-isolated-short:
@@ -1091,7 +1087,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   prod-be-api-inw-cross-long:
@@ -1131,7 +1127,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   prod-be-api-inw-cross-short:
@@ -1171,7 +1167,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   prod-be-api-any-2p-cross-long:
@@ -1208,7 +1204,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   prod-be-api-any-2p-cross-short:
@@ -1245,7 +1241,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   prod-be-api-any-5p-cross-long:
@@ -1282,7 +1278,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
   prod-be-api-any-5p-cross-short:
@@ -1319,5 +1315,5 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
