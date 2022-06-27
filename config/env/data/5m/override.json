@@ -2,6 +2,5 @@
   "indicators": "get_moving_averages;EMA;200 get_rsi;RSI;14 get_bb;upper;20,2 get_bb;lower;20,2 get_bb;middle;20,2",
   "interval": "5m",
   "no_of_klines": "200",
-  "pairs": "BTCUSDT ETHUSDT ETHBTC BNBETH XRPUSDT ADAUSDT SOLBNB SOLBTC DOGEUSDT DOTUSDT BNBUSDT ENJUSDT ENJBTC WAVESBTC WAVESUSDT WAVESETH WAVESBNB",
   "rate_indicator": "EMA_200"
 }
