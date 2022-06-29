@@ -442,7 +442,7 @@ services:
     image: amrox/greencandle
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh api_data
+    entrypoint: /docker-entrypoint.sh api_values
     logging:
       driver: journald
     links:
