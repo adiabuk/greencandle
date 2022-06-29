@@ -5,7 +5,6 @@
 
 @reboot echo C.UTF-8 > /etc/default/locale
 0 3 * * 1 /bin/ls -1t /data/mysql| tail -n +31 | /usr/bin/xargs -d '\n' /bin/rm -f > /proc/1/fd/1 2>/proc/1/fd/2
-30 * * * * /usr/bin/find /data/graphs -type f -mtime +1 -delete > /proc/1/fd/1 2>/proc/1/fd/2
 
 {{if eq .production "true"}}
 32 *  * * * HOST=prod /usr/local/bin/write_balance > /proc/1/fd/1 2>/proc/1/fd/2
@@ -19,17 +18,20 @@
 @reboot /usr/local/bin/report 4h /data/reports/report_{{.base_env}}_$(date +"\%Y-\%m-\%d").xlsx > /proc/1/fd/1 2>/proc/1/fd/2
 03 * * * * /usr/local/bin/get_hour_profit > /proc/1/fd/1 2>/proc/1/fd/2
 @hourly repay_debts > /proc/1/fd/1 2>/proc/1/fd/2
+30 * * * * /usr/bin/find /data/graphs -type f -mtime +1 -delete > /proc/1/fd/1 2>/proc/1/fd/2
 
 {{else if eq .base_env "stag" }}
 */10 * * * *  sleep 60; HOST=stag /usr/local/bin/get_trade_status > /proc/1/fd/1 2>/proc/1/fd/2
 0 * * * *  HOST=stag /usr/local/bin/send_docker_alerts
 */5 * * * * sleep 5; /usr/local/bin/get_active_trades > /proc/1/fd/1 2>/proc/1/fd/2
 03 * * * * /usr/local/bin/get_hour_profit > /proc/1/fd/1 2>/proc/1/fd/2
+30 * * * * /usr/bin/find /data/graphs -type f -mtime +1 -delete > /proc/1/fd/1 2>/proc/1/fd/2
 
 {{else if eq .base_env "data"}}
 @hourly /usr/local/bin/create_graph -i 5m -o /data/graphs -a
 @hourly /usr/local/bin/create_graph -i 1h -o /data/graphs -a
 @daily /usr/local/bin/create_graph -i 4h -o /data/graphs -a
+30 * * * * /usr/bin/find /data/graphs -type f -mmin +360 -delete > /proc/1/fd/1 2>/proc/1/fd/2
 
 
 {{end}}
