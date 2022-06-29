@@ -290,7 +290,7 @@ class Redis():
 
         return data["current_price"], data["date"], data['result']
 
-    def __get_result(self, item, indicator):
+    def get_result(self, item, indicator):
         """Retrive decoded OHLC data from redis"""
         try:
             result = ast.literal_eval(self.get_item(item, indicator).decode())['result']
@@ -539,11 +539,11 @@ class Redis():
             ind_list.append(ind)
 
         for indicator in ind_list:
-            results['current'][indicator] = self.__get_result(current, indicator)
-            results['previous'][indicator] = self.__get_result(previous, indicator)
-            results['previous1'][indicator] = self.__get_result(previous1, indicator)
-            results['previous2'][indicator] = self.__get_result(previous2, indicator)
-            results['previous3'][indicator] = self.__get_result(previous3, indicator)
+            results['current'][indicator] = self.get_result(current, indicator)
+            results['previous'][indicator] = self.get_result(previous, indicator)
+            results['previous1'][indicator] = self.get_result(previous1, indicator)
+            results['previous2'][indicator] = self.get_result(previous2, indicator)
+            results['previous3'][indicator] = self.get_result(previous3, indicator)
         items = self.get_items(pair, self.interval)
         current = self.get_current(items[-1])
         previous = self.get_current(items[-2])

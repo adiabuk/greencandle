@@ -84,6 +84,20 @@ def get_trend():
     else:
         return "Invalid Pair"
 
+@APP.route('/get_value', methods=["POST"])
+def get_value():
+    """
+    Get result of indicator for given pair/timeframe within current scope/server
+    works accross multiple timeframes
+
+    Returns result of redis query
+    """
+    payload = request.json
+    redis = Redis(interval=config.main.interval, test=False)
+    item = redis.get_items(payload['pair'], payload['interval'])[-1]
+    result = redis.get_result(item, payload['indicator'])
+    return result
+
 @arg_decorator
 def main():
     """
