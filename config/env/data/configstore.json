@@ -271,7 +271,7 @@
       "is_secret": false
     },
     "rate_indicator": {
-      "value": "",
+      "value": "None",
       "is_binary": false,
       "is_secret": false
     },
