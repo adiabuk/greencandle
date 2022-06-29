@@ -1,10 +1,10 @@
 {{if eq .base_env "stag"}}
 {
-"any-long": ["any-long", "any-tsl-long", "alert"],
-"any-short": ["any-short", "any-tsl-short", "alert"],
+"any-long": ["any-long", "any-tsl-long"],
+"any-short": ["any-short", "any-tsl-short"],
 "alert": ["alert"],
-"any-long-short": ["any-long", "any-short", "any-tsl-short", "any-tsl-long", "alert"],
-"any-spot-long": ["any-spot-long", "any-tsl-spot-long", "alert"],
+"any-long-short": ["any-long", "any-short", "any-tsl-short", "any-tsl-long"],
+"any-spot-long": ["any-spot-long", "any-tsl-spot-long"],
 "route": []
 }
 {{else if eq .base_env "test"}}
