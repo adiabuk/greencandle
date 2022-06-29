@@ -89,9 +89,6 @@ def main():
 
     interval = config.main.interval
     LOGGER.info("Starting initial prod run")
-    redis = Redis(interval=interval, test=False)
-    redis.clear_all()
-    del redis
     if os.path.exists('/var/run/gc-data-{}'.format(config.main.interval)):
         os.remove('/var/run/gc-data-{}'.format(config.main.interval))
     prod_initial(interval) # initial run, before scheduling begins
