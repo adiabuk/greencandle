@@ -206,6 +206,13 @@ class Engine(dict):
 
         # compress and pickle current dataframe for redis storage
         # dont get most recent one, as it may not be complete
+        try:
+            close = float(self.dataframes[pair].iloc[location]["close"])
+            if close <= 0:
+                LOGGER.critical("Zero size dataframe found")
+        except Exception as ex:
+            LOGGER.critical("None-float dataframe found")
+
         scheme['data'] = zlib.compress(pickle.dumps(self.dataframes[pair].iloc[location]))
         scheme["event"] = "ohlc"
         scheme["close_time"] = str(self.dataframes[pair].iloc[location]["closeTime"])
