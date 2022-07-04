@@ -666,7 +666,7 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh /srv/alert/webhook.py
     ports:
-      - 20000
+      - 30000:20000
     healthcheck:
       test: ls || exit 1
       interval: 1m
