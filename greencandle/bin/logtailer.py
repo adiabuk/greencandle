@@ -46,7 +46,7 @@ def stream():
 @arg_decorator
 def main():
     """Web interface for current host syslog"""
-    APP.run(debug=True, host='0.0.0.0', port=2222, threaded=True)
+    APP.run(debug=True, host='0.0.0.0', port=2000, threaded=True)
 
 if __name__ == '__main__':
     main()

@@ -52,7 +52,7 @@ services:
     logging:
       driver: journald
     ports:
-      - 2222:2222
+      - 2000:2000
     links:
       - prod-base-mysql:mysql
       - prod-base-redis:redis

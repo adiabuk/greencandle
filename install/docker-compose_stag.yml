@@ -52,7 +52,7 @@ services:
     logging:
       driver: journald
     ports:
-      - 2222:2222
+      - 2000:2000
     links:
       - stag-base-mysql:mysql
       - stag-base-redis:redis
