@@ -43,7 +43,7 @@ def test_loop(interval=None, prices=None):
     dataframes = get_dataframes(PAIRS, interval=interval, max_workers=1)
     LOGGER.debug("Done getting dataframes")
 
-    redis = Redis(interval=interval, test=False)
+    redis = Redis()
     engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, redis=redis)
     engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
     dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=1)

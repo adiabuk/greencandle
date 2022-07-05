@@ -198,7 +198,7 @@ class Graph():
 
     def get_data(self):
         """Fetch data from redis"""
-        redis = Redis(test=self.test)
+        redis = Redis()
         list_of_series = []
         index = redis.get_items(self.pair, self.interval)
 

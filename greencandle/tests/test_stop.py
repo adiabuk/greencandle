@@ -24,7 +24,7 @@ class TestStopMethods(unittest.TestCase):
         config_env = 'unit/scalp'
         os.system("configstore package process_templates {} /etc".format(config_env))
         config.create_config()
-        redis = Redis(test=True, test_data=True)
+        redis = Redis(test_data=True)
 
         # current_high <= subperc(trailing_perc, high_price)
         result = redis._Redis__get_trailing_stop(current_price=100, high_price=500,
@@ -52,7 +52,7 @@ class TestStopMethods(unittest.TestCase):
         self.assertFalse(result)
 
 
-        redis = Redis(test=True, test_data=False)
+        redis = Redis(test_data=False)
         # current_price <=  subperc(trailing_perc, high_price)
         # and current_price > addperc(trailing_perc, high_price)
         result = redis._Redis__get_trailing_stop(current_price=90, high_price=500,
@@ -86,7 +86,7 @@ class TestStopMethods(unittest.TestCase):
 
         config.create_config()
         #changes  check to current_high (from current_price)
-        redis = Redis(test=True, test_data=True)
+        redis = Redis(test_data=True)
 
         # current_high <=  subperc(trailing_perc, high_price)
         # and current_price > addperc(trailing_start, open_price)
@@ -119,7 +119,7 @@ class TestStopMethods(unittest.TestCase):
         config_env = 'unit/scalp'
         os.system("configstore package process_templates {} /etc".format(config_env))
         config.create_config()
-        redis = Redis(test=True, test_data=True)
+        redis = Redis(test_data=True)
 
         # current_low < open_price - stop_perc 10%
         result = redis._Redis__get_stop_loss(current_price=100, current_low=100,
@@ -132,7 +132,7 @@ class TestStopMethods(unittest.TestCase):
         self.assertFalse(result)
 
         config_env = 'unit/scalp/alt'
-        redis = Redis(test=True, test_data=False)
+        redis = Redis(test_data=False)
         # turn off immediate stop - changes check to current_price
 
         # current_price < open_price - stop_perc 10%
@@ -160,7 +160,7 @@ class TestStopMethods(unittest.TestCase):
         config_env = 'unit/scalp'
         os.system("configstore package process_templates {} /etc".format(config_env))
         config.create_config()
-        redis = Redis(test=True, test_data=True)
+        redis = Redis(test_data=True)
 
         # current_high > addperc(profit_perc, open_price)  10%
         result = redis._Redis__get_take_profit(current_price=200, current_high=500,
@@ -180,7 +180,7 @@ class TestStopMethods(unittest.TestCase):
         config_env = 'unit/scalp/alt'
         os.system("configstore package process_templates {} /etc".format(config_env))
         config.create_config()
-        redis = Redis(test=True, test_data=False)
+        redis = Redis(test_data=False)
         # turn off immediate take profit- changes check to current_price
 
         # current_price > addperc(profit_perc, open_price)  10%

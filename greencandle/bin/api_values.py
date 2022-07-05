@@ -35,7 +35,7 @@ def get_value():
     Returns result of redis query
     """
     payload = request.json
-    redis = Redis(interval=config.main.interval, test=False)
+    redis = Redis()
     item = redis.get_items(payload['pair'], payload['interval'])[-1]
     result = redis.get_result(item, payload['indicator'])
     return result

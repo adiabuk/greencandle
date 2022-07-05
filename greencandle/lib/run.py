@@ -40,7 +40,7 @@ def serial_test(pairs, intervals, data_dir, indicators):
             dbase = Mysql(test=True, interval=interval)
             dbase.delete_data()
             del dbase
-            redis = Redis(interval=interval, test=True, test_data=True)
+            redis = Redis(test_data=True)
             redis.clear_all()
             del redis
 
@@ -52,7 +52,7 @@ def serial_test(pairs, intervals, data_dir, indicators):
 def perform_data(pair, interval, data_dir, indicators):
     """Serial test loop"""
     LOGGER.debug("Serial run %s %s" % (pair, interval))
-    redis = Redis(interval=interval, test=True, test_data=True)
+    redis = Redis(test_data=True)
     try:
         filename = glob("{0}/{1}_{2}.p*".format(data_dir, pair, interval))[0]
     except IndexError:
@@ -141,7 +141,7 @@ def parallel_test(pairs, interval, data_dir, indicators):
     Do test with parallel data
     """
     LOGGER.info("Performaing parallel run %s" % interval)
-    redis = Redis(interval=interval, test=True, test_data=True)
+    redis = Redis(test_data=True)
     redis.clear_all()
     dbase = Mysql(test=True, interval=interval)
     dbase.delete_data()
@@ -218,7 +218,7 @@ def prod_int_check(interval, test, alert=False):
     """Check price between candles for slippage below stoploss"""
     dbase = Mysql(test=False, interval=interval)
     current_trades = dbase.get_trades()
-    redis = Redis(interval=interval, test=False)
+    redis = Redis(test=False)
     current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
 
     for trade in current_trades:
@@ -290,7 +290,7 @@ def prod_initial(interval, test=False):
                  }
 
 
-    redis = Redis(interval=interval, test=test)
+    redis = Redis(test=test)
     no_of_klines = config.main.no_of_klines
     LOGGER.debug("Getting %s klines" % no_of_klines)
     dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=no_of_klines)
@@ -319,7 +319,7 @@ def prod_loop(interval, test_trade):
             prices_trunk[key] = val
     dataframes = get_dataframes(PAIRS, interval=interval)
 
-    redis = Redis(interval=interval, test=False)
+    redis = Redis(test=False)
     engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, redis=redis)
     engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
     buys = []

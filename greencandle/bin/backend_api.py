@@ -72,7 +72,7 @@ def respond():
                 return Response(status=200)
 
         trade.open_trade(item)
-        redis = Redis(interval=config.main.interval, test=False, test_data=False)
+        redis = Redis()
         redis.update_on_entry(item[0][0], 'take_profit_perc', eval(config.main.take_profit_perc))
         redis.update_on_entry(item[0][0], 'stop_loss_perc', eval(config.main.stop_loss_perc))
         dataframes = get_dataframes([pair], interval=config.main.interval, no_of_klines=1)
@@ -81,7 +81,7 @@ def respond():
         redis.update_drawup(pair, current_candle, event="open")
 
     elif action == 'CLOSE':
-        redis = Redis(interval=config.main.interval, test=False, test_data=False)
+        redis = Redis()
         drawdown = redis.get_drawdown(pair)
         drawup = redis.get_drawup(pair)['perc']
         trade.close_trade(item, drawdowns={pair:drawdown}, drawups={pair:drawup})

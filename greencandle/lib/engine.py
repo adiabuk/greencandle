@@ -19,13 +19,11 @@ import pickle
 import zlib
 import pandas
 import numpy
-import talib
 import pandas_ta as ta
 from indicator import SuperTrend, RSI
+import talib
 
 from greencandle.lib import config
-
-from greencandle.lib.redis_conn import Redis
 from greencandle.lib.common import make_float, pipify, pip_calc
 from greencandle.lib.binance_common import get_all_klines
 from greencandle.lib.logger import get_logger, exception_catcher

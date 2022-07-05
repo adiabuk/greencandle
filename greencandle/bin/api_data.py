@@ -41,7 +41,7 @@ def analyse_loop():
         LOGGER.info("Waiting for data collection to complete...")
         time.sleep(30)
 
-    redis = Redis(interval=config.main.interval, test=False)
+    redis = Redis()
     for pair in PAIRS:
         LOGGER.debug("Analysing pair: %s" % pair)
         try:

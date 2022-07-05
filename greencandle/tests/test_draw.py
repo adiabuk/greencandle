@@ -32,7 +32,7 @@ class TestDraw(unittest.TestCase):
         os.system("configstore package process_templates unit /etc")
         config.create_config()
         pair = 'BTCUSDT'
-        redis = Redis(test=True, test_data=True)
+        redis = Redis(test_data=True)
         redis.clear_all()
 
         # Initial data - no intial drawdown
@@ -82,7 +82,7 @@ class TestDraw(unittest.TestCase):
         os.system("configstore package process_templates unit /etc")
         config.create_config()
         pair = 'BTCUSDT'
-        redis = Redis(test=True, test_data=True)
+        redis = Redis(test_data=True)
         redis.clear_all()
 
         # Initial data - no intial drawup

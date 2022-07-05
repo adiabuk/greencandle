@@ -28,7 +28,7 @@ class TestRedis(unittest.TestCase):
         """
         os.system("configstore package process_templates unit /etc")
         config.create_config()
-        redis = Redis(test_data=True, test=True)
+        redis = Redis(test_data=True)
         redis.clear_all()
         items = redis.get_items('ABCDEF', '10m')
         self.assertEqual(len(items), 0)
@@ -82,7 +82,7 @@ class TestRedis(unittest.TestCase):
         os.system("configstore package process_templates unit /etc")
         config.create_config()
         quote = get_quote(pair)
-        redis = Redis(interval="4h", test_data=True, test=True)
+        redis = Redis(test_data=True)
         dbase = Mysql(test=True, interval="4h")
         redis.clear_all()
         dbase.delete_data()
