@@ -1,6 +1,16 @@
 
 # Releases
 
+# 3.22
+* Security improvements
+* Port changes to avoid conflicts
+* Disable alerts for stag environment
+* Don't wipe data env before starting up
+* Cleanup of graphs
+* Cleanup of pairs for lower timeframes
+* Add StochRSI to 5m data strategy
+* Move deployment info to /var/run
+
 # 3.21
 * Balance slack notifications have title of script
 * Log details of deployment to file for later collection
