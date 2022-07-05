@@ -72,7 +72,7 @@ class TestRedis(unittest.TestCase):
             decoded = loaded_obj[i][b'ohlc'].decode("UTF-8")
             mydata = ast.literal_eval(decoded)
             date = mydata['date']
-            redis.redis_conn('BTCUSDT', '4h', loaded_obj[i], date)
+            redis.redis_conn('BTCUSDT', '1h', loaded_obj[i], date)
 
     def test_get_action(self):
         """
@@ -83,10 +83,10 @@ class TestRedis(unittest.TestCase):
         config.create_config()
         quote = get_quote(pair)
         redis = Redis(test_data=True)
-        dbase = Mysql(test=True, interval="4h")
+        dbase = Mysql(test=True, interval="1h")
         redis.clear_all()
         dbase.delete_data()
-        action = redis.get_action(pair, '4h')
+        action = redis.get_action(pair, '1h')
         self.assertEqual(action[0], 'HOLD')
         self.assertEqual(action[1], 'Not enough data')
         self.assertEqual(action[2], 0)
@@ -97,7 +97,7 @@ class TestRedis(unittest.TestCase):
         dbase.delete_data()
 
         self.insert_data('buy', redis)
-        action = redis.get_action(pair, '4h')
+        action = redis.get_action(pair, '1h')
         self.assertEqual(action[0], 'OPEN')
         self.assertEqual(action[1], 'long_spot_NormalOPEN')
         self.assertEqual(action[2], '2019-09-03 19:59:59')
@@ -106,7 +106,7 @@ class TestRedis(unittest.TestCase):
         self.assertEqual(action[4]['sell'], [])
 
         self.insert_data('sell', redis)
-        action = redis.get_action(pair, '4h')
+        action = redis.get_action(pair, '1h')
         self.assertEqual(action[0], 'NOITEM')
         self.assertEqual(action[1], 'long_spot_NOITEM')
         self.assertEqual(action[2], '2019-09-06 23:59:59')
@@ -118,7 +118,7 @@ class TestRedis(unittest.TestCase):
         dbase.insert_trade(pair, "2019-09-06 23:59:59", "10647.37", "0.03130663", "333",
                            symbol_name=quote)
 
-        action = redis.get_action(pair, '4h')
+        action = redis.get_action(pair, '1h')
         self.assertEqual(action[0], 'CLOSE')
         self.assertEqual(action[1], 'long_spot_NormalCLOSE')
         self.assertEqual(action[2], '2019-09-06 23:59:59')
@@ -130,7 +130,7 @@ class TestRedis(unittest.TestCase):
                             symbol_name=quote)
 
         self.insert_data('random', redis)
-        action = redis.get_action(pair, '4h')
+        action = redis.get_action(pair, '1h')
         self.assertEqual(action[0], 'NOITEM')
         self.assertEqual(action[1], 'long_spot_NOITEM')
         self.assertEqual(action[2], '2019-09-16 19:59:59')
