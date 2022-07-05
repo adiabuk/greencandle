@@ -562,7 +562,7 @@ class Redis():
         last_low = float(last_rehydrated.low)
         last_close = float(last_rehydrated.close)
         last_trades = float(last_rehydrated.numTrades)
-        dbase = Mysql(test=self.test, interval=interval)
+        dbase = Mysql(test=self.test_data, interval=interval)
         try:
             # function returns an empty list if no results so cannot get first element
             open_price, _, open_time, _, _, _ = dbase.get_trade_value(pair)[0]
@@ -680,7 +680,6 @@ class Redis():
 
         elif trailing_stop and open_price:
 
-            #if self.test_data and str2bool(config.main.immediate_trailing_stop):
             if self.test_data and str2bool(config.main.immediate_stop):
                 if config.main.trade_direction == "long":
                     stop_at = sub_perc(trailing_perc, current_high)
