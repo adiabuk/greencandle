@@ -218,7 +218,7 @@ def prod_int_check(interval, test, alert=False):
     """Check price between candles for slippage below stoploss"""
     dbase = Mysql(test=False, interval=interval)
     current_trades = dbase.get_trades()
-    redis = Redis(test=False)
+    redis = Redis()
     current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
 
     for trade in current_trades:
@@ -290,7 +290,7 @@ def prod_initial(interval, test=False):
                  }
 
 
-    redis = Redis(test=test)
+    redis = Redis()
     no_of_klines = config.main.no_of_klines
     LOGGER.debug("Getting %s klines" % no_of_klines)
     dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=no_of_klines)
@@ -319,7 +319,7 @@ def prod_loop(interval, test_trade):
             prices_trunk[key] = val
     dataframes = get_dataframes(PAIRS, interval=interval)
 
-    redis = Redis(test=False)
+    redis = Redis()
     engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, redis=redis)
     engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
     buys = []
