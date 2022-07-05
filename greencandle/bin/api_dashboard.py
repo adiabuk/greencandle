@@ -29,6 +29,8 @@ load_user = LOGIN_MANAGER.user_loader(load_user)
 login = APP.route("/login", methods=["GET", "POST"])(loginx)
 login = APP.route("/logout", methods=["GET", "POST"])(logoutx)
 
+SCRIPTS = ["write_balance", "get_quote_balance", "get_active_trades", "get_trade_status",
+           "get_hour_profit"]
 def get_pairs():
     """
     get details from docker_compose, configstore, and router config
@@ -78,6 +80,24 @@ def healthcheck():
     Return 200
     """
     return Response(status=200)
+
+@APP.route('/commands', methods=["GET"])
+@login_required
+def commands():
+    """Run commands locally"""
+    return render_template('commands.html', scripts=SCRIPTS)
+
+@APP.route('/run', methods=["POST"])
+@login_required
+def run():
+    """
+    Run command from web
+    """
+    command = request.args.get('command')
+    if command.strip() in SCRIPTS:
+        return subprocess.Popen(command, shell=True, stdout=subprocess.PIPE).stdout.read()
+    return None
+
 
 @APP.route('/charts', methods=["GET"])
 @login_required

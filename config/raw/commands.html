@@ -1,0 +1,14 @@
+<html>
+
+<body>
+
+<div>
+{% for script in scripts %}
+Run {{ script }}
+<form action="/run?command={{script}}" method="post">
+  <button name="actionBtn" type="submit">Run</button>
+</form>
+{% endfor %}
+</div>
+</body>
+</html>
