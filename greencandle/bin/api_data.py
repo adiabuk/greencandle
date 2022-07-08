@@ -84,6 +84,18 @@ def get_trend():
     else:
         return "Invalid Pair"
 
+@APP.route('/get_stoch', methods=["GET"])
+def get_stoch():
+    """
+    Return stochastic values for given pair
+    """
+    pair = request.args.get('pair')
+    redis = Redis()
+    items = redis.get_items(pair, config.main.interval)[-2:]
+    result1 = redis.get_item(items[0], 'STOCHRSI_14')
+    result2 = redis.get_item(items[1], 'STOCHRSI_14')
+    return (result1, result2)
+
 @arg_decorator
 def main():
     """
