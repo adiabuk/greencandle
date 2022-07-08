@@ -92,7 +92,7 @@ def commands():
 @login_required
 def example():
     """Load page in an iframe"""
-    page="example.com"
+    page = "example.com"
     return render_template('iframe.html', page=page)
 
 
