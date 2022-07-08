@@ -240,7 +240,8 @@ class Redis():
         for item, value in data.items():
             response = self.conn.hset(key, item, value)
 
-        if expiry:
+        expire = str2bool(config.redis.redis_expire)
+        if expire:
             self.conn.expire(key, expiry)
 
         return response
