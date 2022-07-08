@@ -31,6 +31,7 @@ login = APP.route("/logout", methods=["GET", "POST"])(logoutx)
 
 SCRIPTS = ["write_balance", "get_quote_balance", "get_active_trades", "get_trade_status",
            "get_hour_profit"]
+
 def get_pairs():
     """
     get details from docker_compose, configstore, and router config
@@ -86,6 +87,14 @@ def healthcheck():
 def commands():
     """Run commands locally"""
     return render_template('commands.html', scripts=SCRIPTS)
+
+@APP.route('/example', methods=["GET"])
+@login_required
+def example():
+    """Load page in an iframe"""
+    page="example.com"
+    return render_template('iframe.html', page=page)
+
 
 @APP.route('/run', methods=["POST"])
 @login_required
