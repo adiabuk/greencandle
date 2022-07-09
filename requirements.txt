@@ -40,3 +40,4 @@ cryptocompare==0.7.3
 pandas_ta==0.2.23b0
 pyyaml==5.4.1
 gitpython
+browsepy
