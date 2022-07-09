@@ -4,6 +4,7 @@ Filesystem interface
 """
 
 import browsepy
+from greencandle.lib.common import arg_decorator
 
 browsepy.app.config.update(
     APPLICATION_ROOT="/data",
@@ -11,6 +12,7 @@ browsepy.app.config.update(
     directory_start="/data"
 )
 
+@arg_decorator
 def main():
     """
     Web UI for browsing /data dir
