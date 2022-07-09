@@ -88,13 +88,25 @@ def commands():
     """Run commands locally"""
     return render_template('commands.html', scripts=SCRIPTS)
 
+@APP.route('/internal', methods=["GET"])
+@login_required
+def interal():
+    """Load internal page"""
+    page = request.args.get('page')
+    resp = requests.get(f'{page}')
+    excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
+    headers = [(name, value) for (name, value) in  resp.raw.headers.items() if name.lower()
+               not in excluded_headers]
+    response = Response(resp.content, resp.status_code, headers)
+    return render_template('internal.html', page=response)
+
+
 @APP.route('/iframe', methods=["GET"])
 @login_required
 def example():
     """Load page in an iframe"""
     page = request.args.get('page')
     return render_template('iframe.html', page=page)
-
 
 @APP.route('/run', methods=["POST"])
 @login_required
