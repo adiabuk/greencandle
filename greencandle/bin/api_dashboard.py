@@ -88,11 +88,11 @@ def commands():
     """Run commands locally"""
     return render_template('commands.html', scripts=SCRIPTS)
 
-@APP.route('/example', methods=["GET"])
+@APP.route('/iframe', methods=["GET"])
 @login_required
 def example():
     """Load page in an iframe"""
-    page = "example.com"
+    page = request.args.get('page')
     return render_template('iframe.html', page=page)
 
 
