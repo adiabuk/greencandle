@@ -91,6 +91,22 @@ services:
       - /root/.aws:/root/.aws
       - /root/.bash_history:/root/.bash_history
 
+  test-fe-api-filesystem:
+    container_name: test-fe-api-filesystem
+    hostname: test-fe-api-filesystem
+    environment:
+      - CONFIG_ENV=test/fe/api
+      - HOST=$HOSTNAME
+      - SECRET_KEY=$SECRET_KEY
+    logging:
+      driver: journald
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh filesystem_api
+    ports:
+      - 6000
+
   test-fe-api-dashboard:
     container_name: test-fe-api-dashboard
     hostname: test-fe-api-dashboard
@@ -109,6 +125,8 @@ services:
       - test-base-mysql:mysql
       - test-base-redis:redis
       - test-be-api-router:router
+      - test-fe-api-filesystem:filesystem
+
     ports:
       - 5000
     depends_on:
