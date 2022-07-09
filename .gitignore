@@ -1,8 +1,9 @@
+/log
 .DS_Store
 *.swp
 *.swo
 *.swn
-.**.html*
+./*.html
 src
 notes.txt
 .~*
