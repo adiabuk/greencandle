@@ -798,11 +798,11 @@ services:
     logging:
       driver: journald
     links:
-      - test-base-mysql:mysql
-      - test-base-redis:redis
+      - data-base-mysql:mysql
+      - data-base-redis:redis
     depends_on:
-      - test-base-mysql
-      - test-base-redis
+      - data-base-mysql
+      - data-base-redis
     healthcheck:
       test: ls || exit 1
       interval: 1m
