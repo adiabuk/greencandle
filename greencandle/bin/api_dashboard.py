@@ -224,7 +224,7 @@ def menu():
 def main():
     """API for interacting with trading system"""
 
-    APP.run(debug=True, host='0.0.0.0', port=5000, threaded=True)
+    APP.run(debug=False, host='0.0.0.0', port=5000, threaded=True)
 
 if __name__ == '__main__':
     main()

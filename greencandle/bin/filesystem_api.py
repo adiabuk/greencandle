@@ -17,7 +17,7 @@ def main():
     """
     Web UI for browsing /data dir
     """
-    browsepy.app.run(host='0.0.0.0', port=6000, debug=True, threaded=True)
+    browsepy.app.run(host='0.0.0.0', port=6000, debug=False, threaded=True)
 
 if __name__ == '__main__':
     main()

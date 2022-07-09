@@ -119,7 +119,7 @@ def main():
         scheduler.add_job(func=intermittent_check, trigger="interval", seconds=60)
         scheduler.start()
 
-    APP.run(debug=True, host='0.0.0.0', port=20000, threaded=True)
+    APP.run(debug=False, host='0.0.0.0', port=20000, threaded=True)
 
 
     if "intermittent" in os.environ:
