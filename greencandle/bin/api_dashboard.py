@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-#pylint: disable=bare-except, no-member, wrong-import-position
-#pylint: disable=invalid-name  #FIXME
+#pylint: disable=bare-except, no-member, wrong-import-position,no-else-return
+
 """
 Flask module for manipulating API trades and displaying relevent graphs
 """
@@ -25,9 +25,9 @@ LOGIN_MANAGER.init_app(APP)
 LOGIN_MANAGER.login_view = "login"
 APP.config['SECRET_KEY'] = os.environ['SECRET_KEY'] if 'SECRET_KEY' in os.environ else \
         os.urandom(12).hex()
-load_user = LOGIN_MANAGER.user_loader(load_user)
-login = APP.route("/login", methods=["GET", "POST"])(loginx)
-login = APP.route("/logout", methods=["GET", "POST"])(logoutx)
+LOAD_USER = LOGIN_MANAGER.user_loader(load_user)
+LOGIN = APP.route("/login", methods=["GET", "POST"])(loginx)
+LOGIN = APP.route("/logout", methods=["GET", "POST"])(logoutx)
 
 SCRIPTS = ["write_balance", "get_quote_balance", "get_active_trades", "get_trade_status",
            "get_hour_profit"]
@@ -94,10 +94,6 @@ def interal():
     """Load internal page"""
     page = "http://" + request.args.get('page')
     resp = requests.get(f'{page}')
-    excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
-    headers = [(name, value) for (name, value) in  resp.raw.headers.items() if name.lower()
-               not in excluded_headers]
-    response = Response(resp.content, resp.status_code, headers)
     return render_template('internal.html', page=resp.content.decode())
 
 
