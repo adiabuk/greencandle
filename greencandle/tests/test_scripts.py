@@ -15,7 +15,7 @@ class TestScripts(unittest.TestCase):
         entrypoints = []
         files = glob.glob('greencandle/bin/[!_]*.py')
         for filename in files:
-            path = filename.rstrip('.py').replace('/', '.')
+            path = filename.split('.')[0].replace('/', '.')
             name = path.split('.')[-1]
             string = "{0}={1}:main".format(name, path)
             entrypoints.append(string)
