@@ -18,6 +18,9 @@ Vagrant.configure("2") do |config|
     vb.customize ['modifyvm', :id, '--memory', ENV['VRAM'] || '8096']
     #vb.customize [ 'guestproperty', 'set', :id, '/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold', 10000 ]
   end
+  if Vagrant.has_plugin?("vagrant-timezone")
+   config.timezone.value = :host
+  end
 
   # Bootstrap machine
   config.vm.provision :shell, :inline => "cd /srv/greencandle;bash install/bootstrap_dev.sh"
