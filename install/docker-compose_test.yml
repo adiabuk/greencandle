@@ -148,6 +148,40 @@ services:
       - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
+  test-fe-api-proxy:
+    container_name: test-fe-api-proxy
+    hostname: test-fe-api-proxy
+    environment:
+      - CONFIG_ENV=test/fe/api
+      - HOST=$HOSTNAME
+      - SECRET_KEY=$SECRET_KEY
+    logging:
+      driver: journald
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh api_prox
+    links:
+      - test-be-api-router:router
+      - test-fe-api-filesystem:filesystem
+    ports:
+      - 5000
+    depends_on:
+      - test-base-mysql
+      - test-base-redis
+    healthcheck:
+      test: curl -Isf http://127.1:5000/healthcheck
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /dev/log:/dev/log
+      - /root/.aws:/root/.aws
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history
+
+
   test-be-manual:
     container_name: test-be-manual
     hostname: test-be-manual
