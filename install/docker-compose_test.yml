@@ -131,6 +131,7 @@ services:
       - test-base-redis:redis
       - test-be-api-router:router
       - test-fe-api-filesystem:filesystem
+      - test-fe-api-proxy:proxy
     ports:
       - 5000
     depends_on:
