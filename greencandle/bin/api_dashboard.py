@@ -92,13 +92,13 @@ def commands():
 @login_required
 def interal():
     """Load internal page"""
-    page = request.args.get('page')
+    page = "http://" + request.args.get('page')
     resp = requests.get(f'{page}')
     excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
     headers = [(name, value) for (name, value) in  resp.raw.headers.items() if name.lower()
                not in excluded_headers]
     response = Response(resp.content, resp.status_code, headers)
-    return render_template('internal.html', page=response)
+    return render_template('internal.html', page=resp.content.decode())
 
 
 @APP.route('/iframe', methods=["GET"])
