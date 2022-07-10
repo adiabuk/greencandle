@@ -160,7 +160,7 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh api_prox
+    entrypoint: /docker-entrypoint.sh api_proxy
     links:
       - test-be-api-router:router
       - test-fe-api-filesystem:filesystem
