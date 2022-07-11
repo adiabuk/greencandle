@@ -1,14 +1,13 @@
-<html>
-
-<body>
-
+{% extends "layout.html" %}
+{% block content %}
 <div>
+	<h1> Commands </h1>
 {% for script in scripts %}
 Run {{ script }}
 <form action="/run?command={{script}}" method="post">
   <button name="actionBtn" type="submit">Run</button>
 </form>
+  <hr>
 {% endfor %}
 </div>
-</body>
-</html>
+{% endblock %}
