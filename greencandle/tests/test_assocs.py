@@ -18,7 +18,7 @@ class TestAssocs(unittest.TestCase):
         Ensure all envs in router configs exist
         """
 
-        envs = (('per', 'PROD'), ('prod', 'PROD'), ('stag', 'STAG'))
+        envs = (('per', 'PER'), ('prod', 'PROD'), ('stag', 'STAG'))
         for env, host in envs:
             os.system("sudo configstore package process_templates {} /tmp".format(env))
             with open('/tmp/router_config.json', 'r') as json_file:
