@@ -269,6 +269,7 @@ services:
       - gen-be-logtailer-api:logs
       - test-base-mysql:mysql
       - test-base-redis:redis
+      - test-fe-api-proxy:proxy
     depends_on:
       - gen-fe-cadvisor
       - test-base-mysql
