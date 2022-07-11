@@ -222,7 +222,7 @@
       "is_secret": false
     },
     "nginx_port": {
-      "value": "9999",
+      "value": "8888",
       "is_binary": false,
       "is_secret": false
     },
