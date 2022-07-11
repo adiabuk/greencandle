@@ -261,7 +261,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     ports:
-      - 1081:1080
+      - 1080:1080
     links:
       - prod-base-mysql:mysql
       - prod-base-redis:redis
