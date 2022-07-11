@@ -96,7 +96,6 @@ def interal():
     resp = requests.get(f'{page}')
     return render_template('internal.html', page=resp.content.decode())
 
-
 @APP.route('/iframe', methods=["GET"])
 @login_required
 def example():
@@ -114,7 +113,6 @@ def run():
     if command.strip() in SCRIPTS:
         subprocess.Popen(command, shell=True, stdout=subprocess.PIPE).stdout.read()
     return redirect(url_for('commands'))
-
 
 @APP.route('/charts', methods=["GET"])
 @login_required

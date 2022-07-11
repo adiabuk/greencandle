@@ -15,6 +15,7 @@ APP = Flask(__name__, static_url_path='/not_static')
 @APP.route('/static', methods=['GET'])
 @APP.route('/filesystem', methods=['GET'])
 @APP.route('/browse', methods=['GET'])
+@APP.route('/open', methods=['GET'])
 def proxy(path="/"):
     """
     capture all proxy routes
@@ -22,7 +23,7 @@ def proxy(path="/"):
     site_name = "http://filesystem:6000"
     path = '/' if path == 'filesystem' else path
     if request.method == 'GET':
-        resp = requests.get(f'{site_name}{path}')
+        resp = requests.get(f'{site_name}/{path}')
         excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding',
                             'connection']
         headers = [(name, value) for (name, value) in  resp.raw.headers.items()
