@@ -36,6 +36,7 @@ if [[ ! -e /installed ]]; then
     cp /srv/alert/com.mp3 /srv/alert/250ms-silence.mp3 /
 
   elif [[ "$HOSTNAME" == *"manual"* ]]; then
+    easy_install pip
     pip install ipython
   fi
 
