@@ -1,0 +1,695 @@
+version: "3.7"
+services:
+
+###### Start Gen
+  gen-fe-cadvisor:
+    container_name: gen-fe-cadvisor
+    hostname: gen-fe-cadvisor
+    image: gcr.io/google_containers/cadvisor:v0.35.0
+    restart: always
+    volumes:
+      - /:/rootfs
+      - /var/run:/var/run
+      - /sys:/sys
+      - /var/lib/docker:/var/lib/docker
+      - /dev/disk:/dev/disk
+      - /root/.bash_history:/root/.bash_history
+    healthcheck:
+      timeout: 2s
+      retries: 5
+
+  gen-be-logwatch:
+    container_name: gen-be-logwatch
+    hostname: gen-be-logwatch
+    image: amrox/greencandle:${TAG}
+    restart: always
+    entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
+    environment:
+      - CONFIG_ENV=per/fe/cron
+      - HOST=$HOSTNAME
+      - DB=false
+    volumes:
+      - /var/log:/var/log
+      - /root/.aws:/root/.aws
+      - /var/run:/var/run
+    healthcheck:
+      test: ls /var/log/syslog
+      interval: 1m
+      timeout: 2s
+      retries: 5
+
+  gen-be-logtailer-api:
+    container_name: gen-be-logtailer-api
+    hostname: gen-be-logtailer-api
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    environment:
+      - CONFIG_ENV=per
+      - DB=false
+      - SECRET_KEY=$SECRET_KEY
+    entrypoint: /docker-entrypoint.sh logtailer
+    logging:
+      driver: journald
+    ports:
+      - 2000:2000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /var/log/syslog:/var/log/syslog
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history
+
+###### Start Per
+  per-base-redis:
+    container_name: per-base-redis
+    hostname: per-base-redis
+    image: amrox/gc-redis:${TAG}
+    pull_policy: always
+    restart: always
+    links:
+      - per-base-mysql:mysql
+    ports:
+      - 6379:6379
+    healthcheck:
+      test: redis-cli ping
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /var/run:/var/run
+      - /root/.aws:/root/.aws
+      - /root/.bash_history:/root/.bash_history
+
+  per-base-mysql:
+    container_name: per-base-mysql
+    hostname: per-base-mysql
+    image: amrox/gc-mysql:${TAG}
+    pull_policy: always
+    entrypoint: /docker-entrypoint.sh mysqld
+    environment:
+      - CONFIG_ENV=per
+      - MYSQL_ROOT_PASSWORD=password
+      - DB=true
+    restart: always
+    ports:
+      - 3306:3306
+    healthcheck:
+      test: echo 'SELECT version();'| mysql -uroot -ppassword
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.aws:/root/.aws
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-manual:
+    container_name: per-be-manual
+    hostname: per-be-manual
+    environment:
+      - CONFIG_ENV=per/be/manual
+      - HOST=$HOSTNAME
+      - DB=true
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh tail -f /dev/null
+    logging:
+      driver: journald
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: ls || exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /var/run:/var/run
+      - /dev/log:/dev/log
+      - /root/.bash_history:/root/.bash_history
+
+  per-fe-cron:
+    container_name: per-fe-cron
+    hostname: per-fe-cron
+    environment:
+      - CONFIG_ENV=per/fe/cron
+      - HOST=$HOSTNAME
+      - DB=true
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh cron -f
+    logging:
+      driver: journald
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /dev/log:/dev/log
+      - /root/.bash_history:/root/.bash_history
+
+  per-fe-webserver:
+     container_name: per-fe-webserver
+     hostname: per-fe-webserver
+     image: amrox/webserver:${TAG}
+     pull_policy: always
+     restart: always
+     healthcheck:
+       test: service nginx status || exit 1
+       interval: 5m
+       timeout: 5s
+       retries: 5
+     environment:
+       - CONFIG_ENV=per
+       - HOST=$HOSTNAME
+       - DB=false
+     ports:
+       - 8888:8888
+     links:
+       - gen-fe-cadvisor:cadvisor
+       - per-fe-api-dashboard:api_dash
+       - per-base-mysql:mysql
+       - per-base-redis:redis
+       - gen-be-logtailer-api:logs
+     depends_on:
+       - gen-fe-cadvisor
+       - per-base-mysql
+       - per-base-redis
+     entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
+     volumes:
+       - /data:/data
+       - /root/.aws:/root/.aws
+       - /root/.bash_history:/root/.bash_history
+       - /var/run:/var/run
+
+  per-fe-api-dashboard:
+    container_name: per-fe-api-dashboard
+    hostname: per-fe-api-dashboard
+    environment:
+      - CONFIG_ENV=per/fe/api
+      - HOST=$HOSTNAME
+      - DB=true
+      - SECRET_KEY=$SECRET_KEY
+    logging:
+      driver: journald
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh api_dashboard
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+      - per-be-api-router:router
+    ports:
+      - 5000
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: curl -Isf http://127.1:5000/healthcheck
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /dev/log:/dev/log
+      - /root/.aws:/root/.aws
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-router:
+    container_name: per-be-api-router
+    hostname: per-be-api-router
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    extra_hosts:
+      - "alert:172.31.15.59"
+    healthcheck:
+      test: curl -Isf http://127.1:1080/healthcheck
+      interval: 5m
+      timeout: 5s
+      retries: 5
+    environment:
+      - CONFIG_ENV=per/fe/api
+      - HOST=$HOSTNAME
+      - HOST_IP=$HOST_IP
+      - DB=true
+    ports:
+      - 1080:1080
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+      - per-be-api-any-spot-long:per-be-api-any-spot-long
+      - per-be-api-any-cross-long:per-be-api-any-cross-long
+      - per-be-api-any-isolated-long:per-be-api-any-isolated-long
+      - per-be-api-any-cross-short:per-be-api-any-cross-short
+      - per-be-api-any-isolated-short:per-be-api-any-isolated-short
+      - per-be-api-inw-cross-long:per-be-api-inw-cross-long
+      - per-be-api-inw-cross-short:per-be-api-inw-cross-short
+      - per-be-api-any-2p-cross-long:per-be-api-any-2p-cross-long
+      - per-be-api-any-2p-cross-short:per-be-api-any-2p-cross-short
+      - per-be-api-any-5p-cross-long:per-be-api-any-5p-cross-long
+      - per-be-api-any-5p-cross-short:per-be-api-any-5p-cross-short
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+      - per-be-api-any-spot-long
+      - per-be-api-any-cross-long
+      - per-be-api-any-isolated-long
+    entrypoint: /docker-entrypoint.sh api_router
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any-spot-long:
+    container_name: per-be-api-any-spot-long
+    hostname: per-be-api-any-spot-long
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - VPN_IP=$VPN_IP
+      - GC_PORT=8888
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=per/any/spot-long
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any-isolated-long:
+    container_name: per-be-api-any-isolated-long
+    hostname: per-be-api-any-isolated-long
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - VPN_IP=$VPN_IP
+      - GC_PORT=8888
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=per/any/isolated-long
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any-cross-long:
+    container_name: per-be-api-any-cross-long
+    hostname: per-be-api-any-cross-long
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - VPN_IP=$VPN_IP
+      - GC_PORT=8888
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=per/any/cross-long
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any-cross-short:
+    container_name: per-be-api-any-cross-short
+    hostname: per-be-api-any-cross-short
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - VPN_IP=$VPN_IP
+      - GC_PORT=8888
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=per/any/cross-short
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-inw-cross-long:
+    container_name: per-be-api-inw-cross-long
+    hostname: per-be-api-inw-cross-long
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - VPN_IP=$VPN_IP
+      - GC_PORT=8888
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=per/inw/cross-long
+      - get_trend="true"
+      - intermittent="true"
+      - HOST_IP=$HOST_IP
+      - DB=true
+    extra_hosts:
+      - "trend:10.8.0.101"
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-inw-cross-short:
+    container_name: per-be-api-inw-cross-short
+    hostname: per-be-api-inw-cross-short
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - VPN_IP=$VPN_IP
+      - GC_PORT=8888
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=per/inw/cross-short
+      - get_trend="true"
+      - intermittent="true"
+      - HOST_IP=$HOST_IP
+      - DB=true
+    extra_hosts:
+      - "trend:10.8.0.101"
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any-isolated-short:
+    container_name: per-be-api-any-isolated-short
+    hostname: per-be-api-any-isolated-short
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - VPN_IP=$VPN_IP
+      - GC_PORT=8888
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=per/any/isolated-short
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any-2p-cross-long:
+    container_name: per-be-api-any-2p-cross-long
+    hostname: per-be-api-any-2p-cross-long
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - VPN_IP=$VPN_IP
+      - GC_PORT=9999
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=per/any/2p/cross-long
+      - get_trend="true"
+      - intermittent="true"
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any-2p-cross-short:
+    container_name: per-be-api-any-2p-cross-short
+    hostname: per-be-api-any-2p-cross-short
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - VPN_IP=$VPN_IP
+      - GC_PORT=9999
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=per/any/2p/cross-short
+      - get_trend="true"
+      - intermittent="true"
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any-5p-cross-long:
+    container_name: per-be-api-any-5p-cross-long
+    hostname: per-be-api-any-5p-cross-long
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - VPN_IP=$VPN_IP
+      - GC_PORT=9999
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=per/any/5p/cross-long
+      - get_trend="true"
+      - intermittent="true"
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any-5p-cross-short:
+    container_name: per-be-api-any-5p-cross-short
+    hostname: per-be-api-any-5p-cross-short
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend_api
+    logging:
+      driver: journald
+    environment:
+      - VPN_IP=$VPN_IP
+      - GC_PORT=9999
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=per/any/5p/cross-short
+      - get_trend="true"
+      - intermittent="true"
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history
+
