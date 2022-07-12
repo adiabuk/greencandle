@@ -885,7 +885,7 @@ services:
     pull_policy: always
     restart: always
     healthcheck:
-      data: service nginx status || exit 1
+      test: service nginx status || exit 1
       interval: 5m
       timeout: 5s
       retries: 5
@@ -932,7 +932,7 @@ services:
       - data-base-mysql
       - data-base-redis
     healthcheck:
-      data: curl -Isf http://127.1:5000/healthcheck
+      test: curl -Isf http://127.1:5000/healthcheck
       interval: 1m
       timeout: 2s
       retries: 5
