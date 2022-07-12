@@ -877,3 +877,68 @@ services:
       interval: 1m
       timeout: 2s
       retries: 5
+
+  data-fe-webserver:
+    container_name: data-fe-webserver
+    hostname: data-fe-webserver
+    image: amrox/webserver:${TAG}
+    pull_policy: always
+    restart: always
+    healthcheck:
+      data: service nginx status || exit 1
+      interval: 5m
+      timeout: 5s
+      retries: 5
+    environment:
+      - CONFIG_ENV=data
+      - HOST=$HOSTNAME
+      - DB=false
+    ports:
+      - 8889:8888
+    links:
+      - data-fe-api-dashboard:api_dash
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+    entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /root/.bash_history:/root/.bash_history
+      - /var/run:/var/run
+
+  data-fe-api-dashboard:
+    container_name: data-fe-api-dashboard
+    hostname: data-fe-api-dashboard
+    environment:
+      - CONFIG_ENV=data
+      - HOST=$HOSTNAME
+      - DB=true
+      - SECRET_KEY=$SECRET_KEY
+    logging:
+      driver: journald
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh api_dashboard
+    links:
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    ports:
+      - 5000
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+    healthcheck:
+      data: curl -Isf http://127.1:5000/healthcheck
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /dev/log:/dev/log
+      - /root/.aws:/root/.aws
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history
