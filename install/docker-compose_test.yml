@@ -170,11 +170,6 @@ services:
     depends_on:
       - test-base-mysql
       - test-base-redis
-    healthcheck:
-      test: curl -Isf http://127.1:5000/healthcheck
-      interval: 1m
-      timeout: 2s
-      retries: 5
     volumes:
       - /data:/data
       - /dev/log:/dev/log
