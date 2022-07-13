@@ -1,6 +1,19 @@
 
 # Releases
 
+# 3.23
+* Allow running of balance cron commands from UI
+* Use open_time for graphs to match tradingview
+* Display versions of each environment and add to UI
+* Password protect all Flask API pages
+* Use flask for traversing data dir
+* Reduce number of redis entries in data env
+* Cleanup outdated redis entries periodically
+* Fix vagrant dev env ntp sync
+* Add proxy container to allow access to internet containers
+* Show UI pages in iframe
+* Separate out prod/per environments onto different servers
+
 # 3.22
 * Security improvements
 * Port changes to avoid conflicts
