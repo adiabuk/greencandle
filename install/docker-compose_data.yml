@@ -897,6 +897,8 @@ services:
       - 8889:8888
     links:
       - data-fe-api-dashboard:api_dash
+      - data-fe-api-dashboard:logs
+      - data-fe-api-dashboard:cadvisor
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
