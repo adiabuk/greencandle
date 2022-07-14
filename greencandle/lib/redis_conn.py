@@ -285,7 +285,7 @@ class Redis():
          each item in the list contains PAIR:interval:epoch (in milliseconds)
         """
         key = "{}:{}".format(pair, interval)
-        return sorted([item.decode() for item in list( self.conn.hgetall(key).keys())])
+        return sorted([item.decode() for item in list(self.conn.hgetall(key).keys())])
         #AMROX
         #return sorted(list(self.conn.scan_iter("{0}:{1}:*".format(pair, interval))))
 
@@ -295,7 +295,8 @@ class Redis():
         #address = now
         # key = EMA_8     .......   need pair, interval
         if pair:
-            return ast.literal_eval(self.conn.hget("{}:{}".format(pair, interval), address).decode())[key]
+            return ast.literal_eval(self.conn.hget("{}:{}".format(pair, interval), \
+                    address).decode())[key]
 
         return self.conn.hget(address, key)
 
@@ -564,11 +565,16 @@ class Redis():
             ind_list.append(ind)
 
         for indicator in ind_list:
-            results['current'][indicator] = self.get_result(current, indicator, pair, self.interval)
-            results['previous'][indicator] = self.get_result(previous, indicator, pair, self.interval)
-            results['previous1'][indicator] = self.get_result(previous1, indicator, pair, self.interval)
-            results['previous2'][indicator] = self.get_result(previous2, indicator, pair, self.interval)
-            results['previous3'][indicator] = self.get_result(previous3, indicator, pair, self.interval)
+            results['current'][indicator] = self.get_result(current, indicator,
+                                                            pair, self.interval)
+            results['previous'][indicator] = self.get_result(previous, indicator,
+                                                             pair, self.interval)
+            results['previous1'][indicator] = self.get_result(previous1, indicator,
+                                                              pair, self.interval)
+            results['previous2'][indicator] = self.get_result(previous2, indicator,
+                                                              pair, self.interval)
+            results['previous3'][indicator] = self.get_result(previous3, indicator,
+                                                              pair, self.interval)
         items = self.get_items(pair, self.interval)
         name = "{}:{}".format(pair, self.interval)
         current = self.get_current(name, items[-1])

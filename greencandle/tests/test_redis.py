@@ -67,18 +67,22 @@ class TestRedis(unittest.TestCase):
         with open('greencandle/tests/{}.p'.format(name), 'rb') as handle:
             loaded_obj = pickle.load(handle)
 
-        datas = ["data1", "data2", "data3", "data4", "data5", "data6"]
         for i in loaded_obj.keys():
             #loaded_obj[i] = {k.decode('utf8'): v.decode('utf8') for k, v in loaded_obj[i].items()}
-            loaded_obj[i] = { k.decode() if isinstance(k, bytes) else k: v.decode() if isinstance(v, bytes) else v for k, v in loaded_obj[i].items()}
-            loaded_obj[i] = ast.literal_eval(loaded_obj[i]) if isinstance(loaded_obj[i], str) else loaded_obj[i]
+            loaded_obj[i] = {k.decode() if isinstance(k, bytes) else k: v.decode() \
+                    if isinstance(v, bytes) else v for k, v in loaded_obj[i].items()}
+            loaded_obj[i] = ast.literal_eval(loaded_obj[i]) if isinstance(loaded_obj[i], str) \
+                    else loaded_obj[i]
             print(loaded_obj[i]['ohlc'])
             for j in loaded_obj[i].keys():
 
-                loaded_obj[i][j] = ast.literal_eval(loaded_obj[i][j]) if isinstance(loaded_obj[i][j], str) else loaded_obj[i][j]
+                loaded_obj[i][j] = ast.literal_eval(loaded_obj[i][j]) if \
+                        isinstance(loaded_obj[i][j], str) else loaded_obj[i][j]
                 print(loaded_obj[i][j])
 
-                loaded_obj[i][j] = { k.decode() if isinstance(k, bytes) else k: v.decode() if isinstance(v, bytes) and k != 'result' else v for k, v in loaded_obj[i][j].items()}
+                loaded_obj[i][j] = {k.decode() if isinstance(k, bytes) else k: v.decode() if \
+                        isinstance(v, bytes) and k != 'result' else v for k, v \
+                        in loaded_obj[i][j].items()}
             print("HERE!!!!!!")
 
             date = loaded_obj[i]['ohlc']['date']
