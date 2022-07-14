@@ -235,22 +235,42 @@ class Redis():
         """
 
         self.logger.debug("Adding to Redis: %s %s %s" % (interval, list(data.keys()), now))
-        key = "{0}:{1}:{2}".format(pair, interval, now)
+        #key = "{0}:{1}:{2}".format(pair, interval, now)
+        key = "{0}:{1}".format(pair, interval)
         expiry = int(config.redis.redis_expiry_seconds)
 
         # closing time, 1 ms before next candle
-        if not key.endswith("999"): # closing time, 1 ms before next candle
+        if not str(now).endswith("999"): # closing time, 1 ms before next candle
             self.logger.critical("Invalid time submitted to redis %s.  Skipping " % key)
             return None
 
         for item, value in data.items():
-            response = self.conn.hset(key, item, value)
+
+            dict = {now: {item: value}}
+            b = self.conn.hmget(key, now)[0]
+            if b:
+                self.logger.critical("AMROX GETTING HERRE!!!!!!!")
+                dict = {item:value}
+                dict.update(ast.literal_eval(b.decode()))
+                result = self.conn.hmset(key, {now: dict})
+                self.logger.critical("AMROX5 %s" %dict)
+                self.logger.critical("AMROX6 %s" %b)
+
+            else:
+                response = self.conn.hmset(key, dict)
+                    # key = pair:interval
+                    # item = ohlc etc
+                    # now: miliepoch
+                    # value = {dict}
+
+            #response = self.conn.hset(key, item, value)
 
         expire = str2bool(config.redis.redis_expire)
         if expire:
             self.conn.expire(key, expiry)
 
-        return response
+        #return response
+        return True #FIXME
 
     def get_items(self, pair, interval):
         """
@@ -264,11 +284,22 @@ class Redis():
 
          each item in the list contains PAIR:interval:epoch (in milliseconds)
         """
-        return sorted(list(self.conn.scan_iter("{0}:{1}:*".format(pair, interval))))
+        key = "{}:{}".format(pair, interval)
+        return sorted([item.decode() for item in list( self.conn.hgetall(key).keys())])
+        #AMROX
+        #return sorted(list(self.conn.scan_iter("{0}:{1}:*".format(pair, interval))))
 
-    def get_item(self, address, key):
+    def get_item(self, address, key, pair=None, interval=None):
         """Return a specific item from redis, given an address and key"""
+        self.logger.critical("AMROX2 %s %s" %(address, key))
+        #address = now
+        # key = EMA_8     .......   need pair, interval
+        if pair:
+            return ast.literal_eval(self.conn.hget("{}:{}".format(pair, interval), address).decode())[key]
+
         return self.conn.hget(address, key)
+
+        #return self.conn.hget('BNBETH:1h','1653875999999')
 
     def hgetall(self):
         """
@@ -277,7 +308,7 @@ class Redis():
         for key in self.conn.keys():
             self.logger.critical("%s %s" % (key, self.conn.hgetall(key)))
 
-    def get_current(self, item):
+    def get_current(self, name, item):
         """
         Get the current price and date for given item where item is an address:
         eg.  b"XRPBTC:15m:1520871299999"
@@ -286,20 +317,22 @@ class Redis():
         Returns:
             a tuple of current_price and current_date
         """
-
-        byte = self.conn.hget(item, "ohlc")
+        self.logger.critical("AMROX8 %s" % item)
+        #byte = self.conn.hget(item, "ohlc")
+        byte = self.conn.hget(name, item)
         try:
-            data = ast.literal_eval(byte.decode("UTF-8"))
+            data = ast.literal_eval(byte.decode("UTF-8"))['ohlc']
         except AttributeError:
             self.logger.error("No Data for item %s" % item)
             return None, None
 
         return data["current_price"], data["date"], data['result']
 
-    def get_result(self, item, indicator):
+    def get_result(self, item, indicator, pair=None, interval=None):
         """Retrive decoded OHLC data from redis"""
         try:
-            result = ast.literal_eval(self.get_item(item, indicator).decode())['result']
+            self.logger.critical("AMROX9 %s %s %s %s"  %(item, indicator, pair, interval))
+            result = self.get_item(item, indicator, pair, interval)['result']
         except AttributeError:
             return None
 
@@ -531,14 +564,15 @@ class Redis():
             ind_list.append(ind)
 
         for indicator in ind_list:
-            results['current'][indicator] = self.get_result(current, indicator)
-            results['previous'][indicator] = self.get_result(previous, indicator)
-            results['previous1'][indicator] = self.get_result(previous1, indicator)
-            results['previous2'][indicator] = self.get_result(previous2, indicator)
-            results['previous3'][indicator] = self.get_result(previous3, indicator)
+            results['current'][indicator] = self.get_result(current, indicator, pair, self.interval)
+            results['previous'][indicator] = self.get_result(previous, indicator, pair, self.interval)
+            results['previous1'][indicator] = self.get_result(previous1, indicator, pair, self.interval)
+            results['previous2'][indicator] = self.get_result(previous2, indicator, pair, self.interval)
+            results['previous3'][indicator] = self.get_result(previous3, indicator, pair, self.interval)
         items = self.get_items(pair, self.interval)
-        current = self.get_current(items[-1])
-        previous = self.get_current(items[-2])
+        name = "{}:{}".format(pair, self.interval)
+        current = self.get_current(name, items[-1])
+        previous = self.get_current(name, items[-2])
         current_epoch = float(current[1]) / 1000
 
         rehydrated = pickle.loads(zlib.decompress(current[-1]))
