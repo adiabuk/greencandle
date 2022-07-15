@@ -216,6 +216,9 @@ class Graph():
                     result_list[ind] = ast.literal_eval(redis.get_item(index_item, ind).decode())
                 except AttributeError:
                     pass
+                except ValueError:
+                    result_list[int] = redis.get_item(index_item, ind).decode()
+
             try:
                 result_list['ohlc'] = ast.literal_eval(redis.get_item(index_item,
                                                                       'ohlc').decode())['result']
