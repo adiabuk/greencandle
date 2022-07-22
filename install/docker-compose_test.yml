@@ -464,7 +464,6 @@ services:
       - HOST=$HOSTNAME
       - CONFIG_ENV=test/any/spot
       - HOST_IP=$HOST_IP
-      - get_trend="true"
       - intermittent="true"
       - DB=true
     extra_hosts:
@@ -504,7 +503,6 @@ services:
       - HOST=$HOSTNAME
       - CONFIG_ENV=test/any
       - HOST_IP=$HOST_IP
-      - get_trend="true"
       - intermittent="true"
       - DB=true
     extra_hosts:
@@ -544,7 +542,6 @@ services:
       - HOST=$HOSTNAME
       - CONFIG_ENV=test/any/short
       - HOST_IP=$HOST_IP
-      - get_trend="true"
       - intermittent="true"
       - DB=true
     extra_hosts:
