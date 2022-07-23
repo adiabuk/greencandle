@@ -27,7 +27,7 @@ LOGGER = get_logger(__name__)
 
 class Graph():
     """class for creating graph html and images"""
-    def __init__(self, test=False, pair='ETHBTC', interval='1m', volume=True):
+    def __init__(self, test=False, pair='ETHBTC', interval='1m', volume=False):
         self.test = test
         self.pair = pair
         self.interval = interval
