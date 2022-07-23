@@ -1,6 +1,6 @@
 {
   "name": "test-any-long",
   "pairs": "any",
-  "stop_loss_perc": "0.7",
-  "take_profit_perc": "1.2"
+  "stop_loss_perc": "18",
+  "take_profit_perc": "40"
 }
