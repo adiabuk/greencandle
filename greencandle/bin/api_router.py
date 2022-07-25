@@ -72,11 +72,11 @@ def respond():
             # add environment name to text
             env = config.main.base_env
             try:
-                environment = {"per": "personal",
+                environment = {"per":  "personal",
                                "prod": "production",
                                "stag": "staging",
-                               "test":"testing",
-                               "data":"data"}[env]
+                               "test": "testing",
+                               "data": "data"}[env]
             except KeyError:
                 environment = "unknown"
             payload['text'] += '...{} environment'.format(environment)
