@@ -668,7 +668,7 @@ services:
     ports:
       - 30000:20000
     healthcheck:
-      test: curl -Isf http://127.1:20000/healthcheck
+      test: ls || exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -684,7 +684,6 @@ services:
       - /run/dbus/:/run/dbus/
       - /dev/shm:/dev/shm
       - /run/user:/run/user
-      - /var/run:/var/run
       - /tmp/.X11-unix:/tmp/.X11-unix
       - /etc/localtime:/etc/localtime:ro
       - /root/.bash_history:/root/.bash_history

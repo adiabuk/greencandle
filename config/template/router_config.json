@@ -20,10 +20,6 @@
 {
 "any-spot-long" : ["prod-be-api-any-spot-long"],
 "any-cross-long" : ["prod-be-api-any-cross-long"],
-"any-2p-cross-long" : ["prod-be-api-any-2p-cross-long"],
-"any-5p-cross-long" : ["prod-be-api-any-5p-cross-long"],
-"any-2p-cross-short" : ["prod-be-api-any-2p-cross-short"],
-"any-5p-cross-short" : ["prod-be-api-any-5p-cross-short"],
 "any-isolated-long" : ["prod-be-api-any-isolated-long"],
 "any-long" : ["prod-be-api-any-spot-long", "prod-be-api-any-cross-long", "prod-be-api-any-isolated-long"],
 "any-cross-short" : ["prod-be-api-any-cross-short"],
@@ -32,9 +28,7 @@
 "any-long-short": ["prod-be-api-any-cross-short", "prod-be-api-any-isolated-short", "prod-be-api-any-spot-long", "prod-be-api-any-cross-long", "prod-be-api-any-isolated-long"],
 "any-isolated-long-short": ["prod-be-api-any-isolated-short", "prod-be-api-any-isolated-long"],
 "any-cross-long-short": ["prod-be-api-any-cross-short", "prod-be-api-any-cross-long"],
-"inw-cross-long": ["prod-be-api-inw-cross-long"],
-"inw-cross-short": ["prod-be-api-inw-cross-short"],
-"inw-cross-long-short":["prod-be-api-inw-cross-long", "prod-be-api-inw-cross-short"],
+"stochrsi-cross-long-short": ["prod-be-api-stochrsi-cross-short", "prod-be-api-stochrsi-cross-long"],
 "alert" : ["alert"],
 "route": []
 }

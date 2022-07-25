@@ -270,12 +270,8 @@ services:
       - prod-be-api-any-isolated-long:prod-be-api-any-isolated-long
       - prod-be-api-any-cross-short:prod-be-api-any-cross-short
       - prod-be-api-any-isolated-short:prod-be-api-any-isolated-short
-      - prod-be-api-inw-cross-long:prod-be-api-inw-cross-long
-      - prod-be-api-inw-cross-short:prod-be-api-inw-cross-short
-      - prod-be-api-any-2p-cross-long:prod-be-api-any-2p-cross-long
-      - prod-be-api-any-2p-cross-short:prod-be-api-any-2p-cross-short
-      - prod-be-api-any-5p-cross-long:prod-be-api-any-5p-cross-long
-      - prod-be-api-any-5p-cross-short:prod-be-api-any-5p-cross-short
+      - prod-be-api-stochrsi-cross-short:prod-be-api-stochrsi-cross-short
+      - prod-be-api-stochrsi-cross-long:prod-be-api-stochrsi-cross-long
     depends_on:
       - prod-base-mysql
       - prod-base-redis
@@ -466,9 +462,9 @@ services:
       - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
-  prod-be-api-inw-cross-long:
-    container_name: prod-be-api-inw-cross-long
-    hostname: prod-be-api-inw-cross-long
+  prod-be-api-stochrsi-cross-short:
+    container_name: prod-be-api-stochrsi-cross-short
+    hostname: prod-be-api-stochrsi-cross-short
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -479,8 +475,7 @@ services:
       - VPN_IP=$VPN_IP
       - GC_PORT=9999
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/inw/cross-long
-      - get_trend="true"
+      - CONFIG_ENV=prod/be/crossrsi/cross-short
       - intermittent="true"
       - HOST_IP=$HOST_IP
       - DB=true
@@ -506,9 +501,9 @@ services:
       - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
-  prod-be-api-inw-cross-short:
-    container_name: prod-be-api-inw-cross-short
-    hostname: prod-be-api-inw-cross-short
+  prod-be-api-stochrsi-cross-long:
+    container_name: prod-be-api-stochrsi-cross-long
+    hostname: prod-be-api-stochrsi-cross-long
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -519,161 +514,12 @@ services:
       - VPN_IP=$VPN_IP
       - GC_PORT=9999
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/inw/cross-short
-      - get_trend="true"
+      - CONFIG_ENV=prod/be/crossrsi/cross-long
       - intermittent="true"
       - HOST_IP=$HOST_IP
       - DB=true
     extra_hosts:
       - "trend:10.8.0.101"
-    ports:
-      - 20000
-    links:
-      - prod-base-mysql:mysql
-      - prod-base-redis:redis
-    depends_on:
-      - prod-base-mysql
-      - prod-base-redis
-    healthcheck:
-      test: ls ||exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    volumes:
-      - /data:/data
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run:/var/run
-      - /root/.bash_history:/root/.bash_history
-
-  prod-be-api-any-2p-cross-long:
-    container_name: prod-be-api-any-2p-cross-long
-    hostname: prod-be-api-any-2p-cross-long
-    image: amrox/greencandle:${TAG}
-    pull_policy: always
-    restart: always
-    entrypoint: /docker-entrypoint.sh backend_api
-    logging:
-      driver: journald
-    environment:
-      - VPN_IP=$VPN_IP
-      - GC_PORT=9999
-      - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/any/2p/cross-long
-      - get_trend="true"
-      - intermittent="true"
-      - DB=true
-    ports:
-      - 20000
-    links:
-      - prod-base-mysql:mysql
-      - prod-base-redis:redis
-    depends_on:
-      - prod-base-mysql
-      - prod-base-redis
-    healthcheck:
-      test: ls ||exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    volumes:
-      - /data:/data
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run:/var/run
-      - /root/.bash_history:/root/.bash_history
-
-  prod-be-api-any-2p-cross-short:
-    container_name: prod-be-api-any-2p-cross-short
-    hostname: prod-be-api-any-2p-cross-short
-    image: amrox/greencandle:${TAG}
-    pull_policy: always
-    restart: always
-    entrypoint: /docker-entrypoint.sh backend_api
-    logging:
-      driver: journald
-    environment:
-      - VPN_IP=$VPN_IP
-      - GC_PORT=9999
-      - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/any/2p/cross-short
-      - get_trend="true"
-      - intermittent="true"
-      - DB=true
-    ports:
-      - 20000
-    links:
-      - prod-base-mysql:mysql
-      - prod-base-redis:redis
-    depends_on:
-      - prod-base-mysql
-      - prod-base-redis
-    healthcheck:
-      test: ls ||exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    volumes:
-      - /data:/data
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run:/var/run
-      - /root/.bash_history:/root/.bash_history
-
-  prod-be-api-any-5p-cross-long:
-    container_name: prod-be-api-any-5p-cross-long
-    hostname: prod-be-api-any-5p-cross-long
-    image: amrox/greencandle:${TAG}
-    pull_policy: always
-    restart: always
-    entrypoint: /docker-entrypoint.sh backend_api
-    logging:
-      driver: journald
-    environment:
-      - VPN_IP=$VPN_IP
-      - GC_PORT=9999
-      - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/any/5p/cross-long
-      - get_trend="true"
-      - intermittent="true"
-      - DB=true
-    ports:
-      - 20000
-    links:
-      - prod-base-mysql:mysql
-      - prod-base-redis:redis
-    depends_on:
-      - prod-base-mysql
-      - prod-base-redis
-    healthcheck:
-      test: ls ||exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    volumes:
-      - /data:/data
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run:/var/run
-      - /root/.bash_history:/root/.bash_history
-
-  prod-be-api-any-5p-cross-short:
-    container_name: prod-be-api-any-5p-cross-short
-    hostname: prod-be-api-any-5p-cross-short
-    image: amrox/greencandle:${TAG}
-    pull_policy: always
-    restart: always
-    entrypoint: /docker-entrypoint.sh backend_api
-    logging:
-      driver: journald
-    environment:
-      - VPN_IP=$VPN_IP
-      - GC_PORT=9999
-      - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/any/5p/cross-short
-      - get_trend="true"
-      - intermittent="true"
-      - DB=true
     ports:
       - 20000
     links:
