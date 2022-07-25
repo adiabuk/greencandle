@@ -668,7 +668,7 @@ services:
     ports:
       - 30000:20000
     healthcheck:
-      test: ls || exit 1
+      test: curl -Isf http://127.1:20000/healthcheck
       interval: 1m
       timeout: 2s
       retries: 5

@@ -48,6 +48,15 @@ def respond():
     play(request.json)
     return Response(status=200)
 
+@APP.route('/healthcheck', methods=["GET"])
+def healthcheck():
+    """
+    Docker healthcheck
+    Return 200
+    """
+    return Response(status=200)
+
+
 def lights(port='/dev/ttyACM0', baud=19200):
     """
     Open serial port to activate lights program
