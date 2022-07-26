@@ -132,3 +132,4 @@ pip install setuptools-rust setuptools==45.1.0 pip==9.0.1 numpy==1.16.0 ccxt==1.
 
 python ./setup.py install
 pip install pytest==6.0.1 redis-dump-load gitpython
+ln -sf /usr/share/zoneinfo/Etc/UTC /etc/localtime
