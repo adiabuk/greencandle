@@ -1,1 +1,11 @@
-{}
+{
+  "divisor": "2",
+  "immediate_stop": "true",
+  "immediate_take_profit": "true",
+  "interval": "5m",
+  "max_trades": "2",
+  "stop_loss_perc": "18",
+  "take_profit_perc": "40",
+  "trade_multiplier": "0",
+  "trade_type": "cross"
+}

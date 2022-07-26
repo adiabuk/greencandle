@@ -1,3 +1,5 @@
 {
-  "name": "crossrsi-short"
+  "name": "crossrsi-short",
+  "pairs": "WAVESUSDT ANCUSDT",
+  "trade_direction": "short"
 }
