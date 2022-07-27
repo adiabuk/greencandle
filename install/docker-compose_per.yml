@@ -297,7 +297,7 @@ services:
       - VPN_IP=$VPN_IP
       - GC_PORT=8888
       - HOST=$HOSTNAME
-      - CONFIG_ENV=per/any/spot-long
+      - CONFIG_ENV=per/be/any/spot-long
       - DB=true
     ports:
       - 20000
@@ -332,7 +332,7 @@ services:
       - VPN_IP=$VPN_IP
       - GC_PORT=8888
       - HOST=$HOSTNAME
-      - CONFIG_ENV=per/any/isolated-long
+      - CONFIG_ENV=per/be/any/isolated-long
       - DB=true
     ports:
       - 20000
@@ -367,7 +367,7 @@ services:
       - VPN_IP=$VPN_IP
       - GC_PORT=8888
       - HOST=$HOSTNAME
-      - CONFIG_ENV=per/any/cross-long
+      - CONFIG_ENV=per/be/any/cross-long
       - DB=true
     ports:
       - 20000
@@ -402,7 +402,7 @@ services:
       - VPN_IP=$VPN_IP
       - GC_PORT=8888
       - HOST=$HOSTNAME
-      - CONFIG_ENV=per/any/cross-short
+      - CONFIG_ENV=per/be/any/cross-short
       - DB=true
     ports:
       - 20000
@@ -437,7 +437,7 @@ services:
       - VPN_IP=$VPN_IP
       - GC_PORT=8888
       - HOST=$HOSTNAME
-      - CONFIG_ENV=per/any/isolated-short
+      - CONFIG_ENV=per/be/any/isolated-short
       - DB=true
     ports:
       - 20000
