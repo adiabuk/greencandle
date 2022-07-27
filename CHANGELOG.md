@@ -1,6 +1,24 @@
 
 # Releases
 
+# 3.24
+* New keys for data env
+* Fix Setuptools in manual containers
+* Env changes in test env for short-term tests
+* Move TSI to bottom graph pane
+* Make volume graph opt-in
+* Disable trade alerts for some environments
+* Add healthchecks for alert container
+* Allow container to be disabled
+* New prod containers for stochRSI strategy
+* Cleanout old strategies from all envs
+* Set timezone to UTC during bootstrap
+* Fix DB schema tool not preserving views
+* Recreate DB views
+* Add net values to DB views
+* Allow specifying table/view name when creating drawdown/drawup charts
+* Mysql procedure to deduct percentage (commission)
+
 # 3.23
 * Allow running of balance cron commands from UI
 * Use open_time for graphs to match tradingview
