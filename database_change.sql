@@ -2,6 +2,11 @@
 
 use greencandle;
 
+DROP FUNCTION IF EXISTS REMOVE_PERCENT;
+CREATE FUNCTION REMOVE_PERCENT(amount decimal(10,2),perc decimal(10,2))
+RETURNS decimal(10,2)
+RETURN amount - (amount*perc/100);
+
 drop table if exists accounts;
 drop view if exists accounts;
 create view accounts as
