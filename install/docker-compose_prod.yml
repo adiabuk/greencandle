@@ -300,7 +300,7 @@ services:
       - VPN_IP=$VPN_IP
       - GC_PORT=9999
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/any/spot-long
+      - CONFIG_ENV=prod/be/any/spot-long
       - DB=true
     ports:
       - 20000
@@ -335,7 +335,7 @@ services:
       - VPN_IP=$VPN_IP
       - GC_PORT=9999
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/any/cross-long
+      - CONFIG_ENV=prod/any/any/cross-long
       - DB=true
     ports:
       - 20000
@@ -370,7 +370,7 @@ services:
       - VPN_IP=$VPN_IP
       - GC_PORT=9999
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/any/isolated-long
+      - CONFIG_ENV=prod/be/any/isolated-long
       - DB=true
     ports:
       - 20000
@@ -405,7 +405,7 @@ services:
       - VPN_IP=$VPN_IP
       - GC_PORT=9999
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/any/cross-short
+      - CONFIG_ENV=prod/be/any/cross-short
       - DB=true
     ports:
       - 20000
@@ -440,7 +440,7 @@ services:
       - VPN_IP=$VPN_IP
       - GC_PORT=9999
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/any/isolated-short
+      - CONFIG_ENV=prod/be/any/isolated-short
       - DB=true
     ports:
       - 20000
