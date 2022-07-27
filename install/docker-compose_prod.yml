@@ -335,7 +335,7 @@ services:
       - VPN_IP=$VPN_IP
       - GC_PORT=9999
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/any/any/cross-long
+      - CONFIG_ENV=prod/be/any/cross-long
       - DB=true
     ports:
       - 20000
