@@ -18,7 +18,7 @@ def usage():
     """
     print command usage
     """
-    sys.stderr.write("Usage: {0} <interval> <filename> up|down\n".format(sys.argv[0]))
+    sys.stderr.write("Usage: {0} <interval> <filename> up|down [table]\n".format(sys.argv[0]))
     sys.exit(1)
 
 @arg_decorator
@@ -37,10 +37,14 @@ def main():
 
     if not sys.argv[3] in ("up", "down"):
         usage()
+    try:
+        table = sys.argv[4]
+    except IndexError:
+        table = "profit"
 
     field = "draw" + sys.argv[3]
 
-    data = dbase.fetch_sql_data("select perc, {}_perc from profit".format(field),
+    data = dbase.fetch_sql_data("select perc, {}_perc from {}".format(field, table),
                                 header=False)
 
 
