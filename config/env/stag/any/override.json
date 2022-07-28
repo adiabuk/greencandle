@@ -1,5 +1,6 @@
 {
   "pairs": "any",
+  "trade_multiplier": "1",
   "stop_loss_perc": "0.7",
   "take_profit_perc": "1.2"
 }
