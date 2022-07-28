@@ -1,6 +1,14 @@
 
 # Releases
 
+# 3.25
+* Fix balance graphs
+* Website formatting for mobile screens
+* Add path to repay cron script
+* Fix DB percent function for negative values
+* Tweak config for prod strategy
+* Ensure non-prod containers use same config for short vs long
+
 # 3.24
 * New keys for data env
 * Fix Setuptools in manual containers
