@@ -7,5 +7,5 @@
   "stop_loss_perc": "999",
   "take_profit_perc": "999",
   "trade_multiplier": "1",
-  "trade_type": "cross"
+  "trade_type": "margin"
 }
