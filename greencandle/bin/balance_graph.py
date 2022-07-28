@@ -39,7 +39,7 @@ def main():
     delete2 = "delete from balance where left(ctime,10) != CURDATE()"
 
     # Generate OHLC data
-    query = ("select c1.ctime as closeTime, (SELECT c2.{0} FROM balance_summary c2 WHERE "
+    query = ("select c1.ctime as openTime, (SELECT c2.{0} FROM balance_summary c2 WHERE "
              "c2.ctime = MIN(c1.ctime) limit 1) AS open, MAX(c1.{0}) AS high, MIN(c1.{0}) AS low, "
              "(SELECT c2.{0} FROM balance_summary c2 WHERE c2.ctime = MAX(c1.ctime) limit 1) "
              "AS close FROM balance_summary c1  GROUP BY left(ctime,10) "
@@ -59,11 +59,11 @@ def main():
 
     # Convert results into pandas dataframe using header as column title
     usd_dframe = pandas.DataFrame(usd_results, columns=usd_results.pop(0))
-    usd_dframe['closeTime'] = pandas.to_datetime(usd_dframe['closeTime']) \
+    usd_dframe['openTime'] = pandas.to_datetime(usd_dframe['openTime']) \
             .values.astype(numpy.int64) / 10**6
 
     btc_dframe = pandas.DataFrame(btc_results, columns=btc_results.pop(0))
-    btc_dframe['closeTime'] = pandas.to_datetime(btc_dframe['closeTime']) \
+    btc_dframe['openTime'] = pandas.to_datetime(btc_dframe['openTime']) \
             .values.astype(numpy.int64) / 10**6
 
     # Generate graph
