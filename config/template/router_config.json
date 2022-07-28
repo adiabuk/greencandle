@@ -14,6 +14,7 @@
 "alert": ["alert"],
 "any-long-short": ["any-long", "any-short", "alert"],
 "any-spot-long": ["any-spot-long", "alert"],
+"inw-cross-long-short": ["inw-short", "inw-short", "alert"],
 "route": []
 }
 {{else if eq .base_env "prod"}}
