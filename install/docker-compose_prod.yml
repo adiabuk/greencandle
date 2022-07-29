@@ -197,6 +197,7 @@ services:
        - prod-base-mysql:mysql
        - prod-base-redis:redis
        - gen-be-logtailer-api:logs
+       - prod-fe-api-proxy:proxy
      depends_on:
        - gen-fe-cadvisor
        - prod-base-mysql
@@ -207,6 +208,55 @@ services:
        - /root/.aws:/root/.aws
        - /root/.bash_history:/root/.bash_history
        - /var/run:/var/run
+
+  prod-fe-api-proxy:
+    container_name: prod-fe-api-proxy
+    hostname: prod-fe-api-proxy
+    environment:
+      - CONFIG_ENV=prod/fe/api
+      - HOST=$HOSTNAME
+      - SECRET_KEY=$SECRET_KEY
+    logging:
+      driver: journald
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh api_proxy
+    links:
+      - prod-be-api-router:router
+      - prod-fe-api-filesystem:filesystem
+    ports:
+      - 5000
+    depends_on:
+      - prod-base-mysql
+      - prod-base-redis
+    volumes:
+      - /data:/data
+      - /dev/log:/dev/log
+      - /root/.aws:/root/.aws
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history
+
+  prod-fe-api-filesystem:
+    container_name: prod-fe-api-filesystem
+    hostname: prod-fe-api-filesystem
+    environment:
+      - CONFIG_ENV=prod/fe/api
+      - HOST=$HOSTNAME
+      - SECRET_KEY=$SECRET_KEY
+    logging:
+      driver: journald
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh filesystem_api
+    ports:
+      - 6000
+    volumes:
+      - /data:/data
+      - /dev/log:/dev/log
+      - /root/.aws:/root/.aws
+      - /var/run:/var/run
 
   prod-fe-api-dashboard:
     container_name: prod-fe-api-dashboard

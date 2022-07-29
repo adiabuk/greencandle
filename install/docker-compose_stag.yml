@@ -231,6 +231,7 @@ services:
       - stag-base-mysql:mysql
       - stag-base-redis:redis
       - gen-be-logtailer-api:logs
+      - stag-fe-api-proxy:proxy
     depends_on:
       - gen-fe-cadvisor
       - stag-base-mysql
@@ -240,6 +241,55 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /root/.bash_history:/root/.bash_history
+      - /var/run:/var/run
+
+  stag-fe-api-proxy:
+    container_name: stag-fe-api-proxy
+    hostname: stag-fe-api-proxy
+    environment:
+      - CONFIG_ENV=stag/fe/api
+      - HOST=$HOSTNAME
+      - SECRET_KEY=$SECRET_KEY
+    logging:
+      driver: journald
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh api_proxy
+    links:
+      - stag-be-api-router:router
+      - stag-fe-api-filesystem:filesystem
+    ports:
+      - 5000
+    depends_on:
+      - stag-base-mysql
+      - stag-base-redis
+    volumes:
+      - /data:/data
+      - /dev/log:/dev/log
+      - /root/.aws:/root/.aws
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history
+
+  stag-fe-api-filesystem:
+    container_name: stag-fe-api-filesystem
+    hostname: stag-fe-api-filesystem
+    environment:
+      - CONFIG_ENV=stag/fe/api
+      - HOST=$HOSTNAME
+      - SECRET_KEY=$SECRET_KEY
+    logging:
+      driver: journald
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh filesystem_api
+    ports:
+      - 6000
+    volumes:
+      - /data:/data
+      - /dev/log:/dev/log
+      - /root/.aws:/root/.aws
       - /var/run:/var/run
 
   stag-fe-api-web:

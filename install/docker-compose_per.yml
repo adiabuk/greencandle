@@ -197,6 +197,7 @@ services:
        - per-base-mysql:mysql
        - per-base-redis:redis
        - gen-be-logtailer-api:logs
+       - per-fe-api-proxy:proxy
      depends_on:
        - gen-fe-cadvisor
        - per-base-mysql
@@ -207,6 +208,55 @@ services:
        - /root/.aws:/root/.aws
        - /root/.bash_history:/root/.bash_history
        - /var/run:/var/run
+
+  per-fe-api-proxy:
+    container_name: per-fe-api-proxy
+    hostname: per-fe-api-proxy
+    environment:
+      - CONFIG_ENV=per/fe/api
+      - HOST=$HOSTNAME
+      - SECRET_KEY=$SECRET_KEY
+    logging:
+      driver: journald
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh api_proxy
+    links:
+      - per-be-api-router:router
+      - per-fe-api-filesystem:filesystem
+    ports:
+      - 5000
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    volumes:
+      - /data:/data
+      - /dev/log:/dev/log
+      - /root/.aws:/root/.aws
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history
+
+  per-fe-api-filesystem:
+    container_name: per-fe-api-filesystem
+    hostname: per-fe-api-filesystem
+    environment:
+      - CONFIG_ENV=per/fe/api
+      - HOST=$HOSTNAME
+      - SECRET_KEY=$SECRET_KEY
+    logging:
+      driver: journald
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh filesystem_api
+    ports:
+      - 6000
+    volumes:
+      - /data:/data
+      - /dev/log:/dev/log
+      - /root/.aws:/root/.aws
+      - /var/run:/var/run
 
   per-fe-api-dashboard:
     container_name: per-fe-api-dashboard
