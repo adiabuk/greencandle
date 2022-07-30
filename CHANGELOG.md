@@ -1,6 +1,11 @@
 
 # Releases
 
+# 3.26
+* New INW strategy for test env
+* Config fixes
+* Add Filesystem and proxy containers to all environments
+
 # 3.25
 * Fix balance graphs
 * Website formatting for mobile screens
