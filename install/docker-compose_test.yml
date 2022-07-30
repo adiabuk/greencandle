@@ -376,6 +376,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run:/var/run
+      - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
   test-be-5ma-api-usdt:
@@ -412,6 +413,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run:/var/run
+      - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
   test-be-5ma-api-eth:
@@ -448,6 +450,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run:/var/run
+      - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
   test-be-any-spot-long:
@@ -487,6 +490,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run:/var/run
+      - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
   test-be-any-long:
@@ -526,6 +530,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run:/var/run
+      - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
   test-be-any-short:
@@ -565,6 +570,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run:/var/run
+      - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
   test-be-inw-short:
@@ -604,6 +610,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run:/var/run
+      - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
   test-be-inw-long:
@@ -643,5 +650,6 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run:/var/run
+      - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 

@@ -367,6 +367,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run:/var/run
+      - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
   per-be-api-any-isolated-long:
@@ -402,6 +403,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run:/var/run
+      - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
   per-be-api-any-cross-long:
@@ -437,6 +439,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run:/var/run
+      - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
   per-be-api-any-cross-short:
@@ -472,6 +475,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run:/var/run
+      - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
   per-be-api-any-isolated-short:
@@ -507,5 +511,6 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run:/var/run
+      - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 

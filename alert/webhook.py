@@ -40,7 +40,7 @@ def respond():
     """
     Activate lights and pass json to audio function for parsing
     """
-    if Path('/var/run/alert_drain').is_file():
+    if Path('/var/local/alert_drain').is_file():
         print("Skipping alert")
         return Response(status=500)
     print(request.json)
