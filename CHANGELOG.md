@@ -1,6 +1,9 @@
 
 # Releases
 
+# 3.26.1
+* Fix to not upgrade werkzeug to latest
+
 # 3.26
 * New INW strategy for test env
 * Config fixes
