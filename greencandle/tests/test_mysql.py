@@ -91,7 +91,7 @@ class TestMysql(OrderedTest):
         self.dbase.insert_trade('XXXUSDT', '2016-01-02 13:23', 0, 0, 0, 0, 0, 0,
                                 'short', 'USDT', 0)
         last_hour_profit = self.dbase.get_last_hour_profit()
-        self.assertIs(len(last_hour_profit), 4)
+        self.assertIs(len(last_hour_profit), 8)
         self.assertIsInstance(last_hour_profit[0], float)
         self.assertIsInstance(last_hour_profit[1], float)
         self.assertIsInstance(last_hour_profit[2], float)

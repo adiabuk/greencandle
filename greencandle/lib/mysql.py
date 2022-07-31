@@ -278,7 +278,7 @@ class Mysql():
                    'from profit_daily where date(date) = date(NOW())')
 
         row = self.fetch_sql_data(command, header=False)
-        return row[0] if row else (None, None, None, None)
+        return row[0] if row else [None] * 4
 
     def get_active_trades(self):
         """
@@ -328,6 +328,7 @@ class Mysql():
 
         result = self.fetch_sql_data(command, header=False)
         output = list(result[0])
+        return list(result[0]) if result else [None] * 8
         output = output[:3]
         output.append(hour)
         # returns total_perc, total_net_perc, avg_perc, avg_net_perc, usd_profit, usd_net_profit
