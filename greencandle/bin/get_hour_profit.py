@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+#pylint: disable=unbalanced-tuple-unpacking
+
 """
 Get profit from prvious hour and send to slack
 """
