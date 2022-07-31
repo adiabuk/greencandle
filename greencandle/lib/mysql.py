@@ -319,15 +319,17 @@ class Mysql():
         date = hour_ago.strftime("%Y-%m-%d")
         hour = hour_ago.strftime("%H")
 
-        command = ('select COALESCE(total_perc,0) total_perc, COALESCE(notal_net_perc,0) '
-                   'total_net_perc, COALESCE(avg_perc,0) avg_perc, '
+        command = ('select COALESCE(total_perc,0) total_perc, '
+                   'COALESCE(total_net_perc,0) total_net_perc, '
+                   'COALESCE(avg_perc,0) avg_perc, '
                    'COALESCE(avg_net_perc,0) avg_net_perc, '
-                   'COALESCE(usd_profit,0) usd_profit, COALESE(usd_net_profit,0) usd_net_profit, '
-                   'count(0) from profit_hourly where '
+                   'COALESCE(usd_profit,0) usd_profit, '
+                   'COALESCE(usd_net_profit,0) usd_net_profit '
+                   'from profit_hourly where '
                    'date="{0}" and hour="{1}"'.format(date, hour))
-
+        print(command)
         result = self.fetch_sql_data(command, header=False)
-        output = list(result[0]) if result else [None] * 7
+        output = list(result[0]) if result else [None] * 6
         output.append(hour)
         # returns total_perc, total_net_perc, avg_perc, avg_net_perc, usd_profit, usd_net_profit
         # + hour in list
