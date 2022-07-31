@@ -278,7 +278,7 @@ class Mysql():
                   'from profit_daily where date(date) = date(NOW())')
 
         row = self.fetch_sql_data(command, header=False)
-        return row[0] if row else (None, None)
+        return row[0] if row else (None, None, None, None)
 
     def get_active_trades(self):
         """
