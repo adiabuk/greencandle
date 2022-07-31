@@ -15,7 +15,7 @@ def main():
     Usage: get_hour_balance
     """
     mysql = Mysql()
-    total_perc, total_net_perc, avg_perc, avg_net_perc, usd_profit, usd_net_profit, hour \
+    total_perc, total_net_perc, avg_perc, avg_net_perc, usd_profit, usd_net_profit, _, hour \
             = mysql.get_last_hour_profit()
 
     todays_avg, todays_net_avg, todays_total, todays_net_total = mysql.get_todays_profit()
