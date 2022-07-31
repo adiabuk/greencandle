@@ -26,7 +26,7 @@ def main():
                    .format(hour, total_perc, avg_perc, format_usd(usd_profit),
                            todays_avg, todays_total))
 
-        send_slack_message('balance', message)
+        send_slack_message('balance', message, name=sys.argv[0].split('/')[-1])
 
 if __name__ == "__main__":
     main()
