@@ -274,7 +274,9 @@ class Mysql():
         Get today's profit perc so far
         Returns float
         """
-        command = 'select avg_perc, total_perc from profit_daily where date(date) = date(NOW())'
+        command = ('select avg_perc, avg_net_perc, total_perc, total_net_perc '
+                  'from profit_daily where date(date) = date(NOW())')
+
         row = self.fetch_sql_data(command, header=False)
         return row[0] if row else (None, None)
 
@@ -317,15 +319,20 @@ class Mysql():
         date = hour_ago.strftime("%Y-%m-%d")
         hour = hour_ago.strftime("%H")
 
-        command = ('select COALESCE(total_perc,0) total_perc, COALESCE(avg_perc,0) avg_perc, '
-                   'COALESCE(usd_profit,0) usd_profit, hour, count(0) from profit_hourly where '
+        command = ('select COALESCE(total_perc,0) total_perc, COALESCE(notal_net_perc,0) '
+                   'total_net_perc, COALESCE(avg_perc,0) avg_perc, '
+                   'COALESCE(avg_net_perc,0) avg_net_perc, '
+                   'COALESCE(usd_profit,0) usd_profit, COALESE(usd_net_profit,0) usd_net_profit, '
+                   'hour, count(0) from profit_hourly where '
                    'date="{0}" and hour="{1}"'.format(date, hour))
 
         result = self.fetch_sql_data(command, header=False)
         output = list(result[0])
         output = output[:3]
         output.append(hour)
-        return output  # returns total_perc, avg_perc, usd_profit + hour in list
+        # returns total_perc, total_net_perc, avg_perc, avg_net_perc, usd_profit, usd_net_profit
+        # + hour in list
+        return output
 
     @get_exceptions
     def insert_balance(self, balances):

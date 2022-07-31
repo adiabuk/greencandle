@@ -14,17 +14,21 @@ def main():
     Usage: get_hour_balance
     """
     mysql = Mysql()
-    total_perc, avg_perc, usd_profit, hour = mysql.get_last_hour_profit()
-    todays_avg, todays_total = mysql.get_todays_profit()
+    total_perc, total_net_perc, avg_perc, avg_net_perc, usd_profit, usd_net_profit, hour \
+            = mysql.get_last_hour_profit()
+
+    todays_avg, todays_net_avg, todays_total, todays_net_total = mysql.get_todays_profit()
+
     if todays_total:
         message = ("Profit for Hour {0}\n"
-                   "Total perc: {1:.2f}%\n"
-                   "Average perc: {2:.2f}%\n"
-                   "USD profit: {3}\n"
-                   "Today's avg profit: {4:.2f}%\n"
-                   "Today's total profit: {5:.2f}%\n"
-                   .format(hour, total_perc, avg_perc, format_usd(usd_profit),
-                           todays_avg, todays_total))
+                   "Total perc: {1:.2f}%({2:.2f}%)\n"
+                   "Average perc: {3:.2f}%(4:.2f}%)\n"
+                   "USD profit: {5}({6})\n"
+                   "Today's avg profit: {7:.2f}%(8:.2f}%)\n"
+                   "Today's total profit: {9:.2f}%({10:.2f}%)\n"
+                   .format(hour, total_perc, total_net_perc, avg_perc, avg_net_perc,
+                           format_usd(usd_profit), format_usd_net_profit,
+                           todays_avg, todays_net_avg, todays_total, todays_net_total))
 
         send_slack_message('balance', message, name=sys.argv[0].split('/')[-1])
 
