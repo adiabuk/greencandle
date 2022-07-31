@@ -275,7 +275,7 @@ class Mysql():
         Returns float
         """
         command = ('select avg_perc, avg_net_perc, total_perc, total_net_perc '
-                  'from profit_daily where date(date) = date(NOW())')
+                   'from profit_daily where date(date) = date(NOW())')
 
         row = self.fetch_sql_data(command, header=False)
         return row[0] if row else (None, None, None, None)
