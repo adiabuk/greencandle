@@ -372,7 +372,6 @@ services:
     environment:
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/5MA/api/btc
-      - HOST_IP=$HOST_IP
       - VPN_IP=$VPN_IP
       - GC_PORT=8888
       - DB=true
@@ -411,7 +410,6 @@ services:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/5MA/api/usdt
-      - HOST_IP=$HOST_IP
       - DB=true
     ports:
       - 20000
@@ -448,7 +446,6 @@ services:
       - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/5MA/api/eth
-      - HOST_IP=$HOST_IP
       - DB=true
     ports:
       - 20000
@@ -485,7 +482,6 @@ services:
       - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/any/spot
-      - HOST_IP=$HOST_IP
       - get_trend="true"
       - intermittent="true"
       - DB=true
@@ -526,7 +522,6 @@ services:
       - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/any/long
-      - HOST_IP=$HOST_IP
       - get_trend="true"
       - intermittent="true"
       - DB=true
@@ -567,7 +562,6 @@ services:
       - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/any/short
-      - HOST_IP=$HOST_IP
       - get_trend="true"
       - intermittent="true"
       - DB=true
@@ -608,7 +602,6 @@ services:
       - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/any/spot/tsl
-      - HOST_IP=$HOST_IP
       - get_trend="true"
       - intermittent="true"
       - DB=true
@@ -649,7 +642,6 @@ services:
       - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/any/long/tsl
-      - HOST_IP=$HOST_IP
       - get_trend="true"
       - intermittent="true"
       - DB=true
@@ -690,7 +682,6 @@ services:
       - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/any/short/tsl
-      - HOST_IP=$HOST_IP
       - get_trend="true"
       - intermittent="true"
       - DB=true

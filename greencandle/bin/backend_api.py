@@ -105,7 +105,8 @@ def intermittent_check():
     """
     Check for SL/TP
     """
-    prod_int_check(config.main.interval, True, alert=True)
+    alert bool('HOST_IP' in in os.environ
+    prod_int_check(config.main.interval, True, alert=alert)
 
 @arg_decorator
 def main():
