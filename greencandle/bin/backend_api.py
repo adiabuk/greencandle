@@ -75,7 +75,8 @@ def respond():
         redis = Redis()
         redis.update_on_entry(item[0][0], 'take_profit_perc', eval(config.main.take_profit_perc))
         redis.update_on_entry(item[0][0], 'stop_loss_perc', eval(config.main.stop_loss_perc))
-        dataframes = get_dataframes([pair], interval=config.main.interval, no_of_klines=1)
+        interval = "1m" if config.main.interval.endswith("s") else config.main.interval
+        dataframes = get_dataframes([pair], interval=interval, no_of_klines=1)
         current_candle = dataframes[pair].iloc[-1]
         redis.update_drawdown(pair, current_candle, event="open")
         redis.update_drawup(pair, current_candle, event="open")
