@@ -329,7 +329,7 @@ class Mysql():
                    'date="{0}" and hour="{1}"'.format(date, hour))
         print(command)
         result = self.fetch_sql_data(command, header=False)
-        output = list(result[0]) if result else [None] * 6
+        output = [float(item) for item in result[0]] if result else [None] * 6
         output.append(hour)
         # returns total_perc, total_net_perc, avg_perc, avg_net_perc, usd_profit, usd_net_profit
         # + hour in list

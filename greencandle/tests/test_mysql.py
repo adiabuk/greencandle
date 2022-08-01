@@ -88,8 +88,14 @@ class TestMysql(OrderedTest):
         self.assertIs(today[0], None)
         self.assertIs(today[1], None)
         self.dbase.get_active_trades()   # No exception
-        self.dbase.insert_trade('XXXUSDT', '2016-01-02 13:23', 0, 0, 0, 0, 0, 0,
+        date1 = datetime.datetime.now() - datetime.timedelta(minutes=15).strftime("%Y-%m-%d "
+                                                                                  "%H:%M:%S")
+        date2 = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        self.dbase.insert_trade('XXXUSDT', date1, 0, 0, 0, 0, 0, 0,
                                 'short', 'USDT', 0)
+        self.dbase.update_trades('XXXUSDT', date2, 0.2, 0.2, 0.2, 'strategy', 0, 0, 'BNB', 0)
+
         last_hour_profit = self.dbase.get_last_hour_profit()
         self.assertIs(len(last_hour_profit), 7)
         self.assertIsInstance(last_hour_profit[0], float)
