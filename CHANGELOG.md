@@ -1,6 +1,14 @@
 
 # Releases
 
+# 3.27
+* Move drain files to persistent dir
+* Retry Binance requests which time out
+* Add direction/strategy name to db view grouping
+* Recreate some DB views
+* Add net values to hourly profit notifications and set title
+* Disable audio alert where var is undefined
+
 # 3.26.1
 * Fix to not upgrade werkzeug to latest
 
