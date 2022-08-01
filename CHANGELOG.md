@@ -1,6 +1,9 @@
 
 # Releases
 
+# 3.27.1
+* Fix syntax error
+
 # 3.27
 * Move drain files to persistent dir
 * Retry Binance requests which time out
