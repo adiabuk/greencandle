@@ -6,7 +6,7 @@ Unittest file for testing results of a run using downloaded data
 
 import unittest
 import time
-from datetime import datetime
+import datetime
 from greencandle.lib.balance_common import get_quote
 from greencandle.lib import config
 config.create_config()
@@ -88,13 +88,13 @@ class TestMysql(OrderedTest):
         self.assertIs(today[0], None)
         self.assertIs(today[1], None)
         self.dbase.get_active_trades()   # No exception
-        date1 = datetime.datetime.now() - datetime.timedelta(minutes=15).strftime("%Y-%m-%d "
-                                                                                  "%H:%M:%S")
-        date2 = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-        self.dbase.insert_trade('XXXUSDT', date1, 0, 0, 0, 0, 0, 0,
-                                'short', 'USDT', 0)
-        self.dbase.update_trades('XXXUSDT', date2, 0.2, 0.2, 0.2, 'strategy', 0, 0, 'BNB', 0)
+        date1 = (datetime.datetime.now() - datetime.timedelta(minutes=15, hours=1)).strftime("%Y-%m-%d "
+                                                                                    "%H:%M:%S")
+        date2 = (datetime.datetime.now() - datetime.timedelta(hours=1)).strftime("%Y-%m-%d "
+                                                                                 "%H:%M:%S")
+        print(date1, date2)
+        self.dbase.insert_trade('XXXUSDT', date1, 0, 0, 0, 0, 0, 0, 'short', 'USDT', 0)
+        self.dbase.update_trades('XXXUSDT', date2, 0.2, 0.2, 0.2, 'test', 0, 0, 'BNB', 0)
 
         last_hour_profit = self.dbase.get_last_hour_profit()
         self.assertIs(len(last_hour_profit), 7)
@@ -103,15 +103,10 @@ class TestMysql(OrderedTest):
         self.assertIsInstance(last_hour_profit[2], float)
         self.assertIsInstance(last_hour_profit[-1], str)
 
-        now = datetime.now()
+        now = datetime.datetime.now()
         time_tupple = now.timetuple()
         hour = time_tupple[3]
         last_hour = str(hour - 1)
-        self.assertEquals(last_hour_profit[3].strip("0"), last_hour.strip("0"))
-
-
-    def tearDown(self):
-        del self.dbase
-
+        self.assertEquals(last_hour_profit[3],0)
 if __name__ == '__main__':
     unittest.main()
