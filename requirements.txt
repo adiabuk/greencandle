@@ -7,7 +7,7 @@ Babel==2.9.1
 -e git+https://github.com/adiabuk/Technical-Indicators.git#egg=indicator
 -e git+https://github.com/adiabuk/binance.git@0.28#egg=binance
 CurrencyConverter==0.16.1
-Flask>=0.12.3
+Flask>=2.1.2
 Flask-Login==0.6.1
 docker==5.0.3
 lib==3.0.0
@@ -41,4 +41,4 @@ pandas_ta==0.2.23b0
 pyyaml==5.4.1
 gitpython
 browsepy
-werkzeug==2.1.2
+werkzeug==2.2.0
