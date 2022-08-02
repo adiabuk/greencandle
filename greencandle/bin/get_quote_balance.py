@@ -44,15 +44,28 @@ def main():
             continue
 
     try:
-        bnb_debt = bal['margin']['BNB']['count'] if bal['margin']['BNB']['count'] < 0 else 0
-        usd_debt = bnb_debt * float(client.prices()['BNBUSDT']) if bnb_debt < 0 else 0
+        details = client.get_cross_margin_details()
+        debts = {}
+        free = {}
+        for item in details['userAssets']:
+            debt = float(item['borrowed']) + float(item['interest'])
+            if debt > 0:
+                debts[item['asset']] = debt
+            if float(item['free']) > 0:
+                free[item['asset']] = float(item['free'])
+
     except KeyError:
-        bnb_debt = 0
-        usd_debt = 0
+        pass
 
     results += "Cross Margin Account:\n"
-    results += "\tAvailable: " + format_usd(client.get_max_borrow())+"\n"
-    results += "\tBNB debt: {} {}\n".format(bnb_debt, format_usd(usd_debt))
+    results += "\tAvailable to borrow: " + format_usd(client.get_max_borrow())+"\n"
+    for key, val in debts.items():
+        usd_debt = val if 'USD' in key else base2quote(val, key+'USDT')
+        results += "\t{} debt: {} ({})\n".format(key, "{:.5f}".format(val), format_usd(usd_debt))
+    for key, val in free.items():
+        usd_debt = val if 'USD' in key else base2quote(val, key+'USDT')
+        results += "\t{} free: {} ({})\n".format(key, "{:.5f}".format(val), format_usd(usd_debt))
+
     results += "Isolated Margin Account:\n"
     count = 0
 
