@@ -43,19 +43,15 @@ def main():
         except KeyError:  # Zero Balance
             continue
 
-    try:
-        details = client.get_cross_margin_details()
-        debts = {}
-        free = {}
-        for item in details['userAssets']:
-            debt = float(item['borrowed']) + float(item['interest'])
-            if debt > 0:
-                debts[item['asset']] = debt
-            if float(item['free']) > 0:
-                free[item['asset']] = float(item['free'])
-
-    except KeyError:
-        pass
+    details = client.get_cross_margin_details()
+    debts = {}
+    free = {}
+    for item in details['userAssets']:
+        debt = float(item['borrowed']) + float(item['interest'])
+        if debt > 0:
+            debts[item['asset']] = debt
+        if float(item['free']) > 0:
+            free[item['asset']] = float(item['free'])
 
     results += "Cross Margin Account:\n"
     results += "\tAvailable to borrow: " + format_usd(client.get_max_borrow())+"\n"
