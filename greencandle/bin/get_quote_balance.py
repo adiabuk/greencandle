@@ -59,9 +59,15 @@ def main():
 
     results += "Cross Margin Account:\n"
     results += "\tAvailable to borrow: " + format_usd(client.get_max_borrow())+"\n"
+    usd_debts_total = 0
     for key, val in debts.items():
         usd_debt = val if 'USD' in key else base2quote(val, key+'USDT')
         results += "\t{} debt: {} ({})\n".format(key, "{:.5f}".format(val), format_usd(usd_debt))
+        usd_debts_total += usd_debt
+    if usd_debts_total > 0:
+        results += "\tTotal debts: " + format_usd(usd_dets_total)+"\n"
+
+
     for key, val in free.items():
         usd_debt = val if 'USD' in key else base2quote(val, key+'USDT')
         results += "\t{} free: {} ({})\n".format(key, "{:.5f}".format(val), format_usd(usd_debt))
