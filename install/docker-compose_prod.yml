@@ -276,6 +276,8 @@ services:
       - prod-base-mysql:mysql
       - prod-base-redis:redis
       - prod-be-api-router:router
+      - prod-fe-api-filesystem:filesystem
+      - prod-fe-api-proxy:proxy
     ports:
       - 5000
     depends_on:

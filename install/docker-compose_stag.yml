@@ -129,6 +129,8 @@ services:
       - stag-base-mysql:mysql
       - stag-base-redis:redis
       - stag-be-api-router:router
+      - stag-fe-api-filesystem:filesystem
+      - stag-fe-api-proxy:proxy
     ports:
       - 5000
     depends_on:

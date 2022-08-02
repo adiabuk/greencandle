@@ -276,6 +276,8 @@ services:
       - per-base-mysql:mysql
       - per-base-redis:redis
       - per-be-api-router:router
+      - per-fe-api-filesystem:filesystem
+      - per-fe-api-proxy:proxy
     ports:
       - 5000
     depends_on:
