@@ -1,6 +1,12 @@
 
 # Releases
 
+# 3.28
+* Add selenium tests
+* Update Jenkins image to include python selenium deps
+* Update Flask-Login to use updated version of Werkzeug
+* Add dep links for proxy/filesystem containers
+
 # 3.27.1
 * Fix syntax error
 
@@ -11,6 +17,7 @@
 * Recreate some DB views
 * Add net values to hourly profit notifications and set title
 * Disable audio alert where var is undefined
+* Hack to support 1s intervals although binance doesn't support below 1m
 
 # 3.26.1
 * Fix to not upgrade werkzeug to latest
