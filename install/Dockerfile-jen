@@ -26,7 +26,9 @@ RUN chmod +x /usr/local/bin/docker-compose
 RUN wget "https://www.dropbox.com/sh/l22jyonei087h4o/AAChfqr_j4ydTDjILz0Q62Y2a/configstore-2.5.0-linux-amd64.tar.gz?dl=0" -O /tmp/configstore-2.5.0-linux-amd64.tar.gz
 RUN tar zxvf /tmp/configstore-2.5.0-linux-amd64.tar.gz -C /usr/local/bin
 RUN rm -rf /tmp/configstore-2.5.0-linux-amd64.tar.gz
-
+RUN wget "https://www.dropbox.com/sh/l22jyonei087h4o/AAAVa_B_sDXtWZu17RzazsA2a/geckodriver-v0.26.0-linux64.tar.gz?dl=0" -O /tmp/geckodriver-v0.26.0-linux64.tar.gz
+RUN tar zxvf /tmp/geckodriver-v0.26.0-linux64.tar.gz -C /usr/local/bin
+RUN rm -rf /tmp/geckodriver-v0.26.0-linux64.tar.gz
 RUN wget "https://www.dropbox.com/sh/l22jyonei087h4o/AABz_MIHb3a8ZPWv0gbhkDAia/ta-lib-0.4.0-src.tar.gz?dl=0" -O /tmp/ta-lib-0.4.0-src.tar.gz
 RUN tar zxvf /tmp/ta-lib-0.4.0-src.tar.gz -C /tmp
 RUN cd /tmp/ta-lib; /tmp/ta-lib/configure --prefix=/usr &&  make && make install; cd - && rm -rf /tmp/ta-lib
