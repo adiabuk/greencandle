@@ -532,7 +532,7 @@ services:
       - VPN_IP=$VPN_IP
       - GC_PORT=9999
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/be/crossrsi/cross-short
+      - CONFIG_ENV=prod/be/stochrsi/cross-short
       - intermittent="true"
       - HOST_IP=$HOST_IP
       - DB=true
@@ -572,7 +572,7 @@ services:
       - VPN_IP=$VPN_IP
       - GC_PORT=9999
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/be/crossrsi/cross-long
+      - CONFIG_ENV=prod/be/stochrsi/cross-long
       - intermittent="true"
       - HOST_IP=$HOST_IP
       - DB=true
