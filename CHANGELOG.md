@@ -1,6 +1,12 @@
 
 # Releases
 
+# 3.29
+* Add full list of debts and free assets in X-margin notifications
+* Add total debt in X-margin
+* Add BCHUSDT to prod trades
+* Cleanup prod environment container names
+
 # 3.28
 * Add selenium tests
 * Update Jenkins image to include python selenium deps
