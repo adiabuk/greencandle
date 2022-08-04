@@ -398,7 +398,8 @@ class Trade():
                                                         .format(quote), header=False)[0][0]
             current_trade_values = float(current_trade_values) if \
                     current_trade_values else 0
-            balance[account][quote]['count'] += db_result + current_trade_values
+            balance[account][quote]['count'] = max(db_result, current_trade_values,
+                                                   balance[account][quote]['count'])
         return balance
 
     @GET_EXCEPTIONS
