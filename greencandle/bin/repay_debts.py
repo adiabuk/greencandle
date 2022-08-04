@@ -27,8 +27,8 @@ def main():
         free = float(item['free'])
         owed = borrowed + interest
 
-        if owed > 0:
-            to_pay = owed if owed <= free else 0
+        if owed > 0 and free > 0:
+            to_pay = owed if owed <= free else free
             if to_pay == 0:
                 continue
             logger.info("Attempting to pay off %s of %s" % (to_pay, symbol))
