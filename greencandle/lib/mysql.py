@@ -256,17 +256,16 @@ class Mysql():
         drawup_perc=abs(round({8},1)), close_usd_rate="{9}", close_gbp_rate="{10}",
         comm_close="{11}" where close_price is
         NULL and `interval`="{4}" and pair="{5}" and (name = "{6}" or
-        name like "api") and (SELECT @uids:= CONCAT_WS(",", id, @uids)) ORDER BY id LIMIT 1""" \
+        name like "api") and ORDER BY id LIMIT 1""" \
         .format('%.15f' % float(close_price),
                 close_time, quote,
                 '%.15f' % float(base_out),
                 self.interval, pair, job_name, drawdown,
                 drawup, usd_rate, gbp_rate, str(commission))
-        self.__run_sql_query("SET @uids := null;")
         result = self.__run_sql_query(command)
         if result != 1:
             self.logger.critical("Query affected %s rows: %s" % (result, command))
-        return  self.fetch_sql_data("SELECT @uids;", header=False)[0][0].decode()
+        return result
 
     @get_exceptions
     def get_todays_profit(self):
