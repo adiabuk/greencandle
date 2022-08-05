@@ -555,12 +555,16 @@ class Trade():
         for pair, current_time, current_price, event in short_list:
             base = get_base(pair)
             quote = get_quote(pair)
-            quantity = dbase.get_quantity(pair)
-            if not quantity:
-                self.logger.info("close_margin_short: unable to find quantity for %s" % pair)
-                return
 
             open_price, quote_in, _, _, borrowed, _, = dbase.get_trade_value(pair)[0]
+
+            # Quantity of base_asset we can buy back based on current price
+            quantity = quote2base(quote_in, pair)
+
+            if not quantity:
+                self.logger.info("close_margin_short: unable to get quantity for %s" % pair)
+                return
+
             perc_inc = - (perc_diff(open_price, current_price))
             quote_out = sub_perc(perc_inc, quote_in)
 
