@@ -3,7 +3,7 @@
 """
 Check current open trades for ability to close
 """
-
+import sys
 from greencandle.lib.mysql import Mysql
 from greencandle.lib import config
 from greencandle.lib.balance_common import get_step_precision
@@ -11,6 +11,7 @@ from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.balance_common import get_base, get_quote
 from greencandle.lib.common import arg_decorator
 from greencandle.lib.balance import Balance
+from greencandle.lib.binance_accounts import quote2base
 from greencandle.lib.auth import binance_auth
 config.create_config()
 
@@ -48,7 +49,11 @@ def main():
             if 'isolated' in name:
                 bal_amount = balances['isolated'][pair][get_base(pair)]
             elif 'cross' in name:
-                bal_amount = balances['margin'][get_base(pair)]['count']
+                if 'long' in name:
+                    bal_amount = balances['margin'][get_base(pair)]['count']
+                else:
+                    bal_amount = quote2base(quote_in, pair)
+
             else:
                 bal_amount = balances['binance'][get_base(pair)]['count']
             if float(base_in) > bal_amount:
@@ -68,15 +73,16 @@ def main():
                 reason = "BNB not available"
 
 
-        except KeyError as ke:
+        except KeyError as key_err:
             result2 = True
-            reason = "Unable to get balance: {}".format(str(ke))
+            reason = "Unable to get balance: {}".format(str(key_err))
         if result or result2 or result3:
             pairs.append("{} ({}): {}".format(pair, name, reason))
 
     str_pairs = '\n'.join(map(str, pairs))
     if str_pairs:
-        send_slack_message("alerts", "Issues with open trades:\n {}".format(str_pairs))
+        send_slack_message("alerts", "Issues with open trades:\n {}".format(str_pairs),
+                           name=sys.argv[0].split('/')[-1])
 
 if __name__ == '__main__':
     main()
