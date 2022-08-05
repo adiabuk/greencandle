@@ -1,6 +1,13 @@
 
 # Releases
 
+# 3.30
+* Fix for test balances incrementally increasing
+* UID fox for db trades table inserts/updates
+* Fix for debts not periodically being paid off
+* Use re-calculated amount when closing short trades
+* Fix Short trade amount notifications giving false positives
+
 # 3.29
 * Add full list of debts and free assets in X-margin notifications
 * Add total debt in X-margin
