@@ -2,6 +2,8 @@
 {
 "any-long": ["any-long", "any-tsl-long"],
 "any-short": ["any-short", "any-tsl-short"],
+"any2-long": ["any2-long"],
+"any2-short": ["any2-short"],
 "alert": ["alert"],
 "any-long-short": ["any-long", "any-short", "any-tsl-short", "any-tsl-long"],
 "any-spot-long": ["any-spot-long", "any-tsl-spot-long"],
