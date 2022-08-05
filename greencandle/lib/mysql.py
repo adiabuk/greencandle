@@ -256,7 +256,7 @@ class Mysql():
         drawup_perc=abs(round({8},1)), close_usd_rate="{9}", close_gbp_rate="{10}",
         comm_close="{11}" where close_price is
         NULL and `interval`="{4}" and pair="{5}" and (name = "{6}" or
-        name like "api") and ORDER BY id LIMIT 1""" \
+        name like "api") ORDER BY id LIMIT 1""" \
         .format('%.15f' % float(close_price),
                 close_time, quote,
                 '%.15f' % float(base_out),
