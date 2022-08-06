@@ -618,9 +618,9 @@ class Trade():
                                     symbol_name=quote,
                                     commission=commission_dict)
 
-                profit = dbase.fetch_sql_data("select usd_profit from profit "
-                                              "where pair='{}' closed_by='{}' "
-                                              "order by id desc limit 1".format(pair, name),
+                profit = dbase.fetch_sql_data("select p.usd_profit from trades t, profit p where "
+                                              "p.id=t.id and t.pair='{}' and t.closed_by='{}' "
+                                              "order by t.id desc limit 1".format(pair, name),
                                               header=False)[0][0]
 
                 self.__send_notifications(pair=pair, current_time=current_time, perc=perc_inc,
@@ -768,9 +768,10 @@ class Trade():
                                         symbol_name=get_quote(pair),
                                         commission=commission_dict)
 
-                    profit = dbase.fetch_sql_data("select usd_profit from profit "
-                                                  "where pair='{}' closed_by='{}' "
-                                                  "order by id desc limit 1".format(pair, name),
+                    profit = dbase.fetch_sql_data("select p.usd_profit from trades t, "
+                                                  "profit p where p.id=t.id and t.pair='{}' "
+                                                  "and t.closed_by='{}' order by t.id desc "
+                                                  "limit 1".format(pair, name),
                                                   header=False)[0][0]
 
                     self.__send_notifications(pair=pair, current_time=current_time, perc=perc_inc,
@@ -852,9 +853,10 @@ class Trade():
                                     drawup=drawups[pair], symbol_name=quote,
                                     commission=commission_dict)
 
-                profit = dbase.fetch_sql_data("select usd_profit from profit "
-                                              "where pair='{}' closed_by='{}' "
-                                              "order by id desc limit 1".format(pair, name),
+                profit = dbase.fetch_sql_data("select p.usd_profit from trades t, "
+                                              "profit p where p.id=t.id and t.pair='{}' "
+                                              "and t.closed_by='{}' order by t.id desc "
+                                              "limit 1".format(pair, name),
                                               header=False)[0][0]
 
                 self.__send_notifications(pair=pair, current_time=current_time, perc=perc_inc,
