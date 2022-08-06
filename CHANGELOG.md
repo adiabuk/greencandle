@@ -1,6 +1,10 @@
 
 # Releases
 
+# 3.30.1
+* Fix trade closes to use name and pair for fetching profit
+* Move deployment state file to /var/local persistent director
+
 # 3.30
 * Fix for test balances incrementally increasing
 * UID fox for db trades table inserts/updates
