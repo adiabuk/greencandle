@@ -274,6 +274,7 @@ services:
       - /root/.aws:/root/.aws
       - /root/.bash_history:/root/.bash_history
       - /var/run:/var/run
+      - /var/local:/var/local
 
   test-fe-api-web:
     container_name: test-fe-api-web

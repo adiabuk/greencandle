@@ -244,6 +244,7 @@ services:
       - /root/.aws:/root/.aws
       - /root/.bash_history:/root/.bash_history
       - /var/run:/var/run
+      - /var/local:/var/local
 
   stag-fe-api-proxy:
     container_name: stag-fe-api-proxy

@@ -208,6 +208,7 @@ services:
        - /root/.aws:/root/.aws
        - /root/.bash_history:/root/.bash_history
        - /var/run:/var/run
+       - /var/local:/var/local
 
   prod-fe-api-proxy:
     container_name: prod-fe-api-proxy

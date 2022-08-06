@@ -48,5 +48,5 @@ docker-compose -f ./install/docker-compose_${env}.yml up -d $fe
 export COMMIT=`docker exec ${env}-fe-cron  bash -c 'echo "$COMMIT_SHA"'`
 
 # log tag, env short commit sha, and date to log file
-echo "$TAG,$env,$COMMIT,`date`" > /var/run/${env}_deploy.txt
+echo "$TAG,$env,$COMMIT,`date`" > /var/local/${env}_deploy.txt
 
