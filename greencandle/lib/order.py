@@ -611,15 +611,18 @@ class Trade():
                     (not self.test_trade and 'transactTime' in trade_result):
                 if name == "api":
                     name = "%"
-                trade_id = dbase.update_trades(pair=pair, close_time=current_time,
-                                               close_price=fill_price,
-                                               quote=quote_out, base_out=quantity, name=name,
-                                               drawdown=drawdowns[pair], drawup=drawups[pair],
-                                               symbol_name=quote,
-                                               commission=commission_dict)
+                dbase.update_trades(pair=pair, close_time=current_time,
+                                    close_price=fill_price,
+                                    quote=quote_out, base_out=quantity, name=name,
+                                    drawdown=drawdowns[pair], drawup=drawups[pair],
+                                    symbol_name=quote,
+                                    commission=commission_dict)
+
                 profit = dbase.fetch_sql_data("select usd_profit from profit "
-                                              "where id={}".format(trade_id),
+                                              "where pair='{}' closed_by='{}' "
+                                              "order by id desc limit 1".format(pair, name),
                                               header=False)[0][0]
+
                 self.__send_notifications(pair=pair, current_time=current_time, perc=perc_inc,
                                           fill_price=current_price, interval=self.interval,
                                           event=event, action='CLOSE', usd_profit=profit,
@@ -758,15 +761,18 @@ class Trade():
                     name = "%"
 
                 if update_db:
-                    trade_id = dbase.update_trades(pair=pair, close_time=current_time,
-                                                   close_price=fill_price, quote=quote_out,
-                                                   base_out=quantity, name=name,
-                                                   drawdown=drawdowns[pair], drawup=drawups[pair],
-                                                   symbol_name=get_quote(pair),
-                                                   commission=commission_dict)
+                    dbase.update_trades(pair=pair, close_time=current_time,
+                                        close_price=fill_price, quote=quote_out,
+                                        base_out=quantity, name=name,
+                                        drawdown=drawdowns[pair], drawup=drawups[pair],
+                                        symbol_name=get_quote(pair),
+                                        commission=commission_dict)
+
                     profit = dbase.fetch_sql_data("select usd_profit from profit "
-                                                  "where id={}".format(trade_id),
+                                                  "where pair='{}' closed_by='{}' "
+                                                  "order by id desc limit 1".format(pair, name),
                                                   header=False)[0][0]
+
                     self.__send_notifications(pair=pair, current_time=current_time, perc=perc_inc,
                                               fill_price=fill_price, interval=self.interval,
                                               event=event, action='CLOSE', usd_profit=profit,
@@ -839,16 +845,18 @@ class Trade():
                 if name == "api":
                     name = "%"
 
-                trade_id = dbase.update_trades(pair=pair, close_time=current_time,
-                                               close_price=fill_price, quote=quote_out,
-                                               base_out=quantity, name=name,
-                                               drawdown=drawdowns[pair],
-                                               drawup=drawups[pair], symbol_name=quote,
-                                               commission=commission_dict)
-
+                dbase.update_trades(pair=pair, close_time=current_time,
+                                    close_price=fill_price, quote=quote_out,
+                                    base_out=quantity, name=name,
+                                    drawdown=drawdowns[pair],
+                                    drawup=drawups[pair], symbol_name=quote,
+                                    commission=commission_dict)
 
                 profit = dbase.fetch_sql_data("select usd_profit from profit "
-                                              "where id={}".format(trade_id), header=False)[0][0]
+                                              "where pair='{}' closed_by='{}' "
+                                              "order by id desc limit 1".format(pair, name),
+                                              header=False)[0][0]
+
                 self.__send_notifications(pair=pair, current_time=current_time, perc=perc_inc,
                                           fill_price=fill_price, interval=self.interval,
                                           event=event, action='CLOSE', usd_profit=profit,
