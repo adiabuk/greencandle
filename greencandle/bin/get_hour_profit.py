@@ -23,7 +23,7 @@ def main():
 
     todays_avg, todays_net_avg, todays_total, todays_net_total = mysql.get_todays_profit()
 
-    if todays_total:
+    if avg_perc:
         message = ("Profit for Hour {0}\n"
                    "Total perc: {1:.2f}%({2:.2f}%)\n"
                    "Average perc: {3:.2f}%({4:.2f}%)\n"
