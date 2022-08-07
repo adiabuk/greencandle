@@ -126,7 +126,7 @@ class TestGc(unittest.TestCase):
 
   def tearDown(self):
     # 39 | close |  |
-    self.driver.save_screenshot("failure.png")
+    self.driver.save_screenshot("/tmp/failure.png")
     self.driver.close()
     #self.driver.quit()
     self.display.stop()
