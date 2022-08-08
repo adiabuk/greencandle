@@ -68,7 +68,7 @@ elif [[ -n $GET ]]; then
   done
   echo "Ignoring tables $TABLES"
   mysqldump --protocol=tcp -h $HOSTNAME -P $PORT -u root -ppassword --no-data $DB $IGNORE_TABLES --routines  > $FILENAME
-  mysqldump --protocol=tcp -h $HOSTNAME -P $PORT -u root -ppassword $DB exchange >> $FILENAME
+  mysqldump --protocol=tcp -h $HOSTNAME -P $PORT -u root -ppassword $DB variables exchange >> $FILENAME
   sed -i 's/,)/)/g' $FILENAME
 
 elif [[ -n $PUT ]]; then
