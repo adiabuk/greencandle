@@ -199,7 +199,7 @@ class Mysql():
         self.__execute(cur, command)
 
         row = [(item[0], item[1], item[2], item[3], item[4], item[5]) for item in cur.fetchall()]
-        return row
+        return row if row else [[None] * 6]
 
     @get_exceptions
     def get_last_trades(self):
