@@ -1,6 +1,6 @@
--- MySQL dump 10.13  Distrib 5.7.38, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.39, for Linux (x86_64)
 --
--- Host: 10.8.0.101    Database: greencandle
+-- Host: 10.8.0.104    Database: greencandle
 -- ------------------------------------------------------
 -- Server version	5.5.5-10.8.3-MariaDB-1:10.8.3+maria~jammy
 
@@ -55,7 +55,7 @@ CREATE TABLE `api_requests` (
   `price` varchar(30) DEFAULT NULL,
   `strategy` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1267 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=17705 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -149,8 +149,7 @@ SET character_set_client = utf8;
  1 AS `perc`,
  1 AS `net_perc`,
  1 AS `quote_profit`,
- 1 AS `drawdown_perc`,
- 1 AS `drawup_perc`,
+ 1 AS `quote_net_profit`,
  1 AS `usd_profit`,
  1 AS `usd_net_profit`*/;
 SET character_set_client = @saved_cs_client;
@@ -434,7 +433,7 @@ DROP TABLE IF EXISTS `trades`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `trades` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL DEFAULT 0,
   `open_time` timestamp NULL DEFAULT '0000-00-00 00:00:00',
   `close_time` timestamp NULL DEFAULT '0000-00-00 00:00:00',
   `pair` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -447,25 +446,67 @@ CREATE TABLE `trades` (
   `quote_out` varchar(30) DEFAULT NULL,
   `name` varchar(30) DEFAULT NULL,
   `closed_by` varchar(30) DEFAULT NULL,
-  `drawdown_perc` varchar(4) DEFAULT NULL,
+  `drawdown_perc` varchar(10) DEFAULT NULL,
+  `drawup_perc` varchar(10) DEFAULT NULL,
   `borrowed` varchar(30) DEFAULT '0',
   `borrowed_usd` varchar(30) DEFAULT NULL,
   `multiplier` varchar(3) DEFAULT '0',
   `direction` varchar(30) DEFAULT NULL,
-  `drawup_perc` varchar(4) DEFAULT NULL,
   `open_usd_rate` varchar(30) DEFAULT NULL,
   `open_gbp_rate` varchar(30) DEFAULT NULL,
   `close_usd_rate` varchar(30) DEFAULT NULL,
   `close_gbp_rate` varchar(30) DEFAULT NULL,
   `comm_open` varchar(255) DEFAULT NULL,
-  `comm_close` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=511 DEFAULT CHARSET=latin1;
+  `comm_close` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping routines for database 'greencandle'
 --
+/*!50003 DROP FUNCTION IF EXISTS `ADD_PERCENT` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`%` FUNCTION `ADD_PERCENT`(amount decimal(10,2),perc decimal(10,2)) RETURNS decimal(10,2)
+RETURN IF(amount > 0, amount + (amount*perc/100), amount - (amount*perc/100)) ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `PERC_DIFF` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`%` FUNCTION `PERC_DIFF`(direction varchar(30),
+money_in varchar(30),
+money_out varchar(30)
+) RETURNS decimal(10,6)
+RETURN
+
+CASE WHEN money_out = 0 or money_in=0
+   THEN NULL
+ELSE
+ IF(direction = "long", (money_out-money_in)/money_in *100,  (money_in-money_out)/money_in *100 )
+ END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP FUNCTION IF EXISTS `REMOVE_PERCENT` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -476,7 +517,7 @@ CREATE TABLE `trades` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`%` FUNCTION `REMOVE_PERCENT`(amount decimal(10,2),perc decimal(10,2)) RETURNS decimal(10,2)
+CREATE DEFINER=`root`@`%` FUNCTION `REMOVE_PERCENT`(amount varchar(30),perc varchar(30)) RETURNS varchar(30) CHARSET latin1
 RETURN IF(amount > 0, amount - (amount*perc/100), amount + (amount*perc/100)) ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -515,7 +556,7 @@ DELIMITER ;
 /*!50001 SET collation_connection      = utf8mb4_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `profit` AS select `trades`.`id` AS `id`,dayname(`trades`.`open_time`) AS `day`,`trades`.`open_time` AS `open_time`,`trades`.`interval` AS `interval`,`trades`.`close_time` AS `close_time`,`trades`.`pair` AS `pair`,`trades`.`name` AS `name`,`trades`.`open_price` AS `open_price`,`trades`.`close_price` AS `close_price`,case when `trades`.`direction` = 'long' then (`trades`.`quote_out` - `trades`.`quote_in`) / `trades`.`quote_in` * 100 else (`trades`.`open_price` - `trades`.`close_price`) / `trades`.`open_price` * 100 end AS `perc`,case when `trades`.`direction` = 'long' then (`trades`.`quote_out` - `trades`.`quote_in`) / `trades`.`quote_in` * 100 - 0.2 else (`trades`.`open_price` - `trades`.`close_price`) / `trades`.`open_price` * 100 - 0.2 end AS `net_perc`,case when `trades`.`direction` = 'long' then `trades`.`quote_out` - `trades`.`quote_in` else `trades`.`quote_in` - `trades`.`quote_out` end AS `quote_profit`,`trades`.`drawdown_perc` AS `drawdown_perc`,`trades`.`drawup_perc` AS `drawup_perc`,case when `trades`.`direction` = 'long' then (`trades`.`quote_out` - `trades`.`quote_in`) * `trades`.`close_usd_rate` else (`trades`.`quote_in` - `trades`.`quote_out`) * `trades`.`close_usd_rate` end AS `usd_profit`,case when `trades`.`direction` = 'long' then `REMOVE_PERCENT`((`trades`.`quote_out` - `trades`.`quote_in`) * `trades`.`close_usd_rate`,0.2) else `REMOVE_PERCENT`((`trades`.`quote_in` - `trades`.`quote_out`) * `trades`.`close_usd_rate`,0.2) end AS `usd_net_profit` from `trades` */;
+/*!50001 VIEW `profit` AS select `trades`.`id` AS `id`,dayname(`trades`.`open_time`) AS `day`,`trades`.`open_time` AS `open_time`,`trades`.`interval` AS `interval`,`trades`.`close_time` AS `close_time`,`trades`.`pair` AS `pair`,`trades`.`name` AS `name`,`trades`.`open_price` AS `open_price`,`trades`.`close_price` AS `close_price`,`PERC_DIFF`(`trades`.`direction`,`trades`.`open_price`,`trades`.`close_price`) AS `perc`,`PERC_DIFF`(`trades`.`direction`,`trades`.`open_price`,`trades`.`close_price`) - 0.2 AS `net_perc`,case when `trades`.`direction` = 'long' then `trades`.`quote_out` - `trades`.`quote_in` else `trades`.`quote_in` - `trades`.`quote_out` end AS `quote_profit`,case when `trades`.`direction` = 'long' then `trades`.`quote_out` - `add_percent`(`trades`.`quote_in`,0.2) else `remove_percent`(`trades`.`quote_in`,0.2) - `trades`.`quote_out` end AS `quote_net_profit`,case when `trades`.`direction` = 'long' then (`trades`.`quote_out` - `trades`.`quote_in`) * `trades`.`close_usd_rate` else (`trades`.`quote_in` - `trades`.`quote_out`) * `trades`.`close_usd_rate` end AS `usd_profit`,case when `trades`.`direction` = 'long' then (`trades`.`quote_out` - `add_percent`(`trades`.`quote_in`,0.2)) * `trades`.`close_usd_rate` else (`remove_percent`(`trades`.`quote_in`,0.2) - `trades`.`quote_out`) * `trades`.`close_usd_rate` end AS `usd_net_profit` from `trades` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -745,10 +786,10 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-07-31  0:38:17
--- MySQL dump 10.13  Distrib 5.7.38, for Linux (x86_64)
+-- Dump completed on 2022-08-08 20:31:12
+-- MySQL dump 10.13  Distrib 5.7.39, for Linux (x86_64)
 --
--- Host: 10.8.0.101    Database: greencandle
+-- Host: 10.8.0.104    Database: greencandle
 -- ------------------------------------------------------
 -- Server version	5.5.5-10.8.3-MariaDB-1:10.8.3+maria~jammy
 
@@ -796,4 +837,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-07-31  0:38:19
+-- Dump completed on 2022-08-08 20:31:13
