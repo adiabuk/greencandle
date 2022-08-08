@@ -62,8 +62,8 @@ class TestGc(unittest.TestCase):
     self.driver.find_element(By.CSS_SELECTOR, ".hamburger:nth-child(3)").click()
     # 14 | click | css=li:nth-child(3) > a |
     self.driver.find_element(By.CSS_SELECTOR, "li:nth-child(3) > a").click()
-    # 15 | click | css=form:nth-child(8) > button |
-    self.driver.find_element(By.CSS_SELECTOR, "form:nth-child(8) > button").click()
+    # 15 | click | css=form:nth-child(7) > button |
+    self.driver.find_element(By.CSS_SELECTOR, "form:nth-child(7) > button").click()
     # 16 | click | linkText=Main Page |
     self.driver.find_element(By.LINK_TEXT, "Main Page").click()
     # 17 | click | css=.hamburger:nth-child(3) |
