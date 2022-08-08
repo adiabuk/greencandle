@@ -1,6 +1,19 @@
 
 # Releases
 
+# 3.31
+* Fix error when trying to close a trade which isn't open
+* Allow Jenkins to pick up screenshot from selenium tests
+* Trim down personal environment
+* Remove now redundant GC_PORT var and hard code value
+* Add 4h stag env for further testing
+* Separate route for long/short testing env
+* Check for profit in last hour before sending out notif
+* Fix db test running out of sequence
+* Use db functions to create derived profit/perc data
+* Add single commission var in db table/function
+* Fix DB method not returning same sized tuple when no data
+
 # 3.30.1
 * Fix trade closes to use name and pair for fetching profit
 * Move deployment state file to /var/local persistent director
