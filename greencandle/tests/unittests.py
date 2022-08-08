@@ -58,8 +58,9 @@ class OrderedTest(unittest.TestCase):
         """
         Run test steps in sequence
         """
-        for _, step in self._steps():
+        for name, step in self._steps():
             try:
+                print("step", name)
                 step()
             except Exception as exc:
                 self.fail("{} failed ({}: {})".format(step, type(exc), exc))

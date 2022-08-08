@@ -37,6 +37,7 @@ class TestMysql(OrderedTest):
     def step_1(self):
         """Check insert and update trades"""
 
+        LOGGER.info("Step 1")
         self.date = '2018-05-07 22:44:59'
         self.sell_date = '2018-05-07 22:44:59'
         self.pair = 'BTCUSDT'
@@ -44,6 +45,7 @@ class TestMysql(OrderedTest):
         self.close_price = 500
         quote_in = 20
         quote = get_quote(self.pair)
+        LOGGER.info("Inserting trade")
         self.dbase.insert_trade(self.pair, self.date, self.open_price, quote_amount=quote_in,
                                 base_amount=30, symbol_name=quote)
         sql = 'select open_time, close_time from trades'
@@ -60,10 +62,11 @@ class TestMysql(OrderedTest):
         close_time = self.dbase.fetch_sql_data('select close_time from trades')[-1]
         assert close_time is not None
 
-    def step2(self):
+    def step_2(self):
         """
         Test methods
         """
+        LOGGER.info("Step 2")
         pair = "XXXYYY"
         date = "2020-10-10"
         months = 12
@@ -73,9 +76,9 @@ class TestMysql(OrderedTest):
         quantity = self.dbase.get_quantity(pair)
         self.assertIsNone(quantity)
         value = self.dbase.get_trade_value(pair)
-        self.assertIs(len(value), 0)
+        self.assertIs(len(value), 1)
         last_trades = self.dbase.get_last_trades()
-        self.assertIs(len(last_trades), 0)
+        self.assertIs(len(last_trades), 1)
         open_trades = self.dbase.get_trades()
         self.assertIs(len(open_trades), 0)
         rates = self.dbase.get_rates('USDT')
@@ -108,5 +111,6 @@ class TestMysql(OrderedTest):
         hour = time_tupple[3]
         last_hour = str(hour - 1)
         self.assertEquals(last_hour_profit[3],0)
+
 if __name__ == '__main__':
     unittest.main()
