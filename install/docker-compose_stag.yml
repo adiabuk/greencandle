@@ -380,7 +380,6 @@ services:
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/5MA/api/btc
       - VPN_IP=$VPN_IP
-      - GC_PORT=8888
       - DB=true
     ports:
       - 20000:20000
@@ -413,7 +412,6 @@ services:
     logging:
       driver: journald
     environment:
-      - GC_PORT=8888
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/5MA/api/usdt
@@ -450,7 +448,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/5MA/api/eth
       - DB=true
@@ -486,7 +483,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/any/spot
       - get_trend="true"
@@ -526,7 +522,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/any/long
       - get_trend="true"
@@ -566,7 +561,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/any2/short/4h
       - HOST_IP=$HOST_IP
@@ -606,7 +600,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/any2/long/4h
       - intermittent="true"
@@ -646,7 +639,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/any2/short
       - get_trend="true"
@@ -686,7 +678,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/any2/long
       - get_trend="true"
@@ -726,7 +717,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/any/short
       - get_trend="true"
@@ -766,7 +756,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/any/spot/tsl
       - get_trend="true"
@@ -806,7 +795,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/any/long/tsl
       - get_trend="true"
@@ -846,7 +834,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/any/short/tsl
       - get_trend="true"

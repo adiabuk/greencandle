@@ -357,7 +357,6 @@ services:
       - CONFIG_ENV=test/5MA/api/btc
       - HOST_IP=$HOST_IP
       - VPN_IP=$VPN_IP
-      - GC_PORT=8888
       - DB=true
     ports:
       - 20000
@@ -390,7 +389,6 @@ services:
     logging:
       driver: journald
     environment:
-      - GC_PORT=8888
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
       - CONFIG_ENV=test/5MA/api/usdt
@@ -428,7 +426,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=test/5MA/api/eth
       - HOST_IP=$HOST_IP
@@ -465,7 +462,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=test/any/spot
       - HOST_IP=$HOST_IP
@@ -505,7 +501,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=test/any
       - HOST_IP=$HOST_IP
@@ -545,7 +540,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=test/any/short
       - HOST_IP=$HOST_IP
@@ -585,7 +579,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=test/be/inwcoin/cross-short
       - HOST_IP=$HOST_IP
@@ -625,7 +618,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=test/be/inwcoin/cross-long
       - HOST_IP=$HOST_IP

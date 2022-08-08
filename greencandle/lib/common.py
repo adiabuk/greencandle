@@ -150,6 +150,6 @@ def get_tv_link(pair):
 
 def get_trade_link(pair, strategy, action, string):
     """Get trade link for forced trade"""
-    url = os.environ['VPN_IP'] + ":" + os.environ['GC_PORT']
+    url = os.environ['VPN_IP'] + ":8888"
     return ("<http://{0}/action?pair={1}&strategy={2}&action={3}"
             "&close=true|{4}>".format(url, pair, strategy, action, string))

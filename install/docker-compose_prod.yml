@@ -351,7 +351,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=prod/be/any/spot-long
       - DB=true
@@ -387,7 +386,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=prod/be/any/cross-long
       - DB=true
@@ -423,7 +421,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=prod/be/any/isolated-long
       - DB=true
@@ -459,7 +456,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=prod/be/any/cross-short
       - DB=true
@@ -495,7 +491,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=prod/be/any/isolated-short
       - DB=true
@@ -531,7 +526,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=prod/be/stochrsi/cross-short
       - intermittent="true"
@@ -571,7 +565,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - GC_PORT=8888
       - HOST=$HOSTNAME
       - CONFIG_ENV=prod/be/stochrsi/cross-long
       - intermittent="true"
