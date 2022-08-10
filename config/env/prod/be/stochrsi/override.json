@@ -1,9 +1,9 @@
 {
-  "divisor": "3",
+  "divisor": "2",
   "immediate_stop": "true",
   "immediate_take_profit": "true",
   "interval": "5m",
-  "max_trades": "3",
+  "max_trades": "2",
   "stop_loss_perc": "999",
   "take_profit_perc": "999",
   "trade_multiplier": "1",
