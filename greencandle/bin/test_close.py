@@ -4,6 +4,7 @@
 Check current open trades for ability to close
 """
 import sys
+from str2bool import str2bool
 from greencandle.lib.mysql import Mysql
 from greencandle.lib import config
 from greencandle.lib.balance_common import get_step_precision
@@ -60,11 +61,13 @@ def main():
                 result2 = True
                 reason = "Not enough base amount"
 
-            # Check if enough BNB in spot
+            # Check if enough BNB
             quote = get_quote(pair)
             current_price = prices['BNB' + quote]
             bnb_required = (float(quote_in) / float(current_price))/100 *0.1
-            bnb_available = bal_amount = balances['binance']['BNB']['count']
+            production = str2bool(config.main.production)
+            account = 'margin' if 'cross' in name and not production else 'binance'
+            bnb_available = bal_amount = balances[account]['BNB']['count']
 
             if float(bnb_required) > float(bnb_available):
                 print("Insufficient BNBrequired:{} available:{}".format(bnb_required,
