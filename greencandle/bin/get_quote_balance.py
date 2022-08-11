@@ -78,7 +78,7 @@ def main():
             usd = max_borrow if 'USD' in quote else base2quote(max_borrow, quote+'USDT')
 
             if usd > 0:
-                results += "\tAvailable: " + format_usd(usd)+"\n"
+                results += "\tAvailable to borrow {}: {}\n".format(pair,format_usd(usd))
                 count += 1
 
     if count == 0:
