@@ -66,7 +66,7 @@ def main():
             current_price = prices['BNB' + quote]
             bnb_required = (float(quote_in) / float(current_price))/100 *0.1
             production = str2bool(config.main.production)
-            account = 'margin' if 'cross' in name and not production else 'binance'
+            account = 'binance' if not production or not 'cross' in name else 'margin'
             bnb_available = bal_amount = balances[account]['BNB']['count']
 
             if float(bnb_required) > float(bnb_available):
