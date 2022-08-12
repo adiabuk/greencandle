@@ -16,7 +16,8 @@ from greencandle.lib.auth import binance_auth
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.redis_conn import Redis
-from greencandle.lib.binance_accounts import get_binance_spot, base2quote, quote2base
+from greencandle.lib.binance_accounts import get_binance_spot, get_binance_cross, \
+    get_binance_isolated, base2quote, quote2base
 from greencandle.lib.balance_common import get_base, get_quote, get_step_precision
 from greencandle.lib.common import perc_diff, add_perc, sub_perc, AttributeDict, QUOTES
 from greencandle.lib.alerts import send_gmail_alert, send_push_notif, send_slack_trade, \
@@ -95,19 +96,20 @@ class Trade():
         """
         dbase = Mysql(test=self.test_data, interval=self.interval)
         try:
-            last_open_price = dbase.fetch_sql_data("select quote_in from trades where "
-                                                   "name='{1}'" .format(self.config.main.name),
-                                                   header=False)[-1][-1]
-            last_open_price = float(last_open_price) if last_open_price else 0
+            last_open_amt = dbase.fetch_sql_data("select quote_in from trades where "
+                                                 "name='{1}'" .format(self.config.main.name),
+                                                 header=False)[-1][-1]
+            last_open_amt = float(last_open_amt) if last_open_amt else 0
+
         except (IndexError, TypeError):
-            last_open_price = 0
+            last_open_amt = 0
 
         if self.config.main.divisor:
             proposed_quote_amount = current_quote_bal / float(self.config.main.divisor)
         else:
             proposed_quote_amount = current_quote_bal / (int(self.config.main.max_trades) + 1)
         self.logger.info('proposed: %s, last:%s'
-                         % (proposed_quote_amount, last_open_price))
+                         % (proposed_quote_amount, last_open_amt))
 
         return proposed_quote_amount
 
@@ -263,23 +265,59 @@ class Trade():
 
         elif account == 'binance':
             try:
-                return get_binance_spot()[account][symbol]['count']
+                return float(get_binance_spot()[account][symbol]['count'])
             except KeyError:
                 return 0
 
         elif account == 'margin' and str2bool(self.config.main.isolated):
-            #get borrowed
-            name = self.config.main.name.strip(self.config.main.name.split('-')[-1]).strip('-')
-            borrowed = dbase.get_current_borrowed(name)
-            max_borrow = self.client.get_max_borrow(asset=symbol, isolated_pair=pair)
-            return float(borrowed) + float(max_borrow)
+            try:
+                return float(get_binance_isolated()['isolated'][pair][symbol])
+            except KeyError:
+                return 0
 
         elif account == 'margin' and not str2bool(self.config.main.isolated):
-            # FIXME: get borrowed
-            return self.client.get_max_borrow(asset=symbol)
+            return float(get_binance_cross()[account][symbol]['count'])
 
         else:
-            return None
+            return 0
+
+    def get_amount_to_borrow(self, pair, dbase):
+        """
+        Get amount to borrow based on pair, and trade direction
+        """
+        if str2bool(self.config.main.isolated):
+            name = self.config.main.name.strip(self.config.main.name.split('-')[-1]).strip('-')
+            borrowed = dbase.get_current_borrowed(name)
+            symbol = get_quote(pair) if self.config.main.trade_direction == "long" else \
+                    get_base(pair)
+            max_borrow = self.client.get_max_borrow(asset=symbol, isolated_pair=pair)
+            return float(borrowed) + float(max_borrow)
+        else:
+            strategy = self.config.main.name.split('-')[2]
+            rows = dbase.get_current_borrowed(strategy, "cross")
+            borrowed_usd = 0
+            for (current_pair, amt, direction) in rows:
+                base = get_base(current_pair)
+                quote = get_quote(current_pair)
+                if direction == "long":
+                    if "USD" in quote:
+                        borrowed_usd += float(amt)
+                    else:
+                        borrowed_usd += base2quote(amt, quote+"USDT")
+                if direction == "short":
+                    if "USD" in base:
+                        borrowed_usd += float(amt)
+                    else:
+                        borrowed_usd += base2quote(amt, base+"USDT")
+            total = borrowed_usd + self.client.get_max_borrow()
+            if self.config.trade_direction == "short":
+                return quote2base(total, base+"USDT")  #what is base?
+            else:
+                if "USD" in quote:
+                    return total
+                else:
+                    return quote2base(amt, quote+"USDT")
+
 
     def __open_margin_long(self, long_list):
         """

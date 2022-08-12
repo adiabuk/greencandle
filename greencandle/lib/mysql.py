@@ -354,6 +354,23 @@ class Mysql():
         return output
 
     @get_exceptions
+    def get_current_borrowed(self, strategy, account):
+        """
+        Get amount borrowed in current scope
+        """
+        command = ('select pair, borrowed, direction from trades '
+                   'where name like "%{0}%" and name like "%{1}%" '
+                   'and close_price is NULL'.format(strategy, account))
+
+        cur = self.dbase.cursor()
+        self.__execute(cur, command)
+
+        rows = cur.fetchall()
+        return rows if rows else ()
+
+
+
+    @get_exceptions
     def insert_balance(self, balances):
         """
         Insert balance in GBP/BTC/USD into balance table for coinbase & binance
