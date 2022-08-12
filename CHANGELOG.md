@@ -1,6 +1,14 @@
 
 # Releases
 
+# 3.32
+* Add repay_depts command to commands UI
+* Ignore empty spot balance when fetching quote balances
+* Add stag strategies
+* Use DB commission table/function in profit view
+* Display pair for each non-empty isolated balance
+* Don't check BNB in spot account for cross account
+
 # 3.31
 * Fix error when trying to close a trade which isn't open
 * Allow Jenkins to pick up screenshot from selenium tests
