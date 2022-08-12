@@ -93,6 +93,7 @@ def get_binance_isolated():
             result["isolated"][key]["USD"] = usd
             result["isolated"][key]["GBP"] = gbp
             result["isolated"][key]["count"] = val[current_quote]
+            result["isolated"][key][quote] = amount
 
     result["isolated"]["TOTALS"]["BTC"] = bitcoin_total
     result["isolated"]["TOTALS"]["USD"] = usd_total
