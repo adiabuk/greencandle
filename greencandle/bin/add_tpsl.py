@@ -3,11 +3,12 @@
 Add missing SL and TP to redis
 """
 import sys
+from greencandle.lib.common import arg_decorator
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib import config
 
 
-
+@arg_decorator
 def main():
     """
     Force adding of SL and TP to redis for given pair
