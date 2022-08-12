@@ -641,7 +641,6 @@ services:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/any2/short
-      - get_trend="true"
       - intermittent="true"
       - DB=true
     extra_hosts:
@@ -680,7 +679,6 @@ services:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/any2/long
-      - get_trend="true"
       - intermittent="true"
       - DB=true
     extra_hosts:
