@@ -5,7 +5,6 @@
 Test Buy/Sell orders
 """
 
-from __future__ import print_function
 from collections import defaultdict
 import time
 import datetime
@@ -288,17 +287,45 @@ class Trade():
         orig_base = get_base(pair)
         orig_quote = get_quote(pair)
         if str2bool(self.config.main.isolated):
-            name = self.config.main.name.strip(self.config.main.name.split('-')[-1]).strip('-')
-            borrowed = dbase.get_current_borrowed(name)
+            strategy = self.config.main.name.split('-')[2]
+            rows = dbase.get_current_borrowed(strategy, "isolated")
+            borrowed_usd = 0
+            for (current_pair, amt, direction) in list(rows):
+                base = get_base(current_pair)
+                quote = get_quote(current_pair)
+                if direction == "long":
+                    if "USD" in quote:
+                        borrowed_usd += float(amt)
+                    else:
+                        borrowed_usd += base2quote(amt, quote+"USDT")
+                if direction == "short":
+                    if "USD" in base:
+                        borrowed_usd += float(amt)
+                    else:
+                        borrowed_usd += base2quote(amt, base+"USDT")
+
+
             symbol = get_quote(pair) if self.config.main.trade_direction == "long" else \
                     get_base(pair)
             max_borrow = self.client.get_max_borrow(asset=symbol, isolated_pair=pair)
-            return (float(borrowed) + float(max_borrow)) / float(self.config.main.divisor)
+
+            total = (float(borrowed_usd) + float(max_borrow))
+            if self.config.main.trade_direction == "long":
+                if "USD" in orig_quote:
+                    return total / float(self.config.main.divisor)
+                else:
+                    return quote2base(amt, quote+"USDT") / float(self.config.main.divisor)
+
+            else:
+                total_base =  quote2base(total, orig_base+"USDT")
+                return total_base / float(self.config.main.divisor)
+
         else:
             strategy = self.config.main.name.split('-')[2]
+
             rows = dbase.get_current_borrowed(strategy, "cross")
             borrowed_usd = 0
-            for (current_pair, amt, direction) in rows:
+            for (current_pair, amt, direction) in list(rows):
                 base = get_base(current_pair)
                 quote = get_quote(current_pair)
                 if direction == "long":
@@ -318,11 +345,11 @@ class Trade():
                 return total_base / float(self.config.main.divisor)
 
             else:
-                if "USD" in quote:
+                if "USD" in orig_quote:
+
                     return total / float(self.config.main.divisor)
                 else:
-                    return quote2base(amt, quote+"USDT") /self.config.main.divisor
-
+                    return quote2base(amt, quote+"USDT") / float(self.config.main.divisor)
 
     def __open_margin_long(self, long_list):
         """
