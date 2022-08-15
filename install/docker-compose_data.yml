@@ -22,38 +22,6 @@ services:
       timeout: 2s
       retries: 5
 
-  data-be-analyse_4h_high-rsi:
-    container_name: data-be-analyse_4h_high-rsi
-    hostname: data-be-analyse_4h_high-rsi
-    image: amrox/greencandle
-    pull_policy: always
-    restart: always
-    entrypoint: /docker-entrypoint.sh analyse_data
-    logging:
-      driver: journald
-    links:
-      - data-be-get_4h:data
-      - data-base-mysql:mysql
-      - data-base-redis:redis
-    depends_on:
-      - data-base-mysql
-      - data-base-redis
-      - data-be-get_4h
-    environment:
-      - CONFIG_ENV=data/4h/short1
-      - HOST=$HOSTNAME
-      - DB=true
-    healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    volumes:
-      - /data:/data
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run/:/var/run
-
   data-be-analyse_4h_big-change:
     container_name: data-be-analyse_4h_big-change
     hostname: data-be-analyse_4h_big-change
@@ -169,38 +137,6 @@ services:
       - data-be-get_4h
     environment:
       - CONFIG_ENV=data/4h/long2
-      - HOST=$HOSTNAME
-      - DB=true
-    healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    volumes:
-      - /data:/data
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run/:/var/run
-
-  data-be-analyse_5m_high-rsi:
-    container_name: data-be-analyse_5m_high-rsi
-    hostname: data-be-analyse_5m_high-rsi
-    image: amrox/greencandle
-    pull_policy: always
-    restart: always
-    entrypoint: /docker-entrypoint.sh analyse_data
-    logging:
-      driver: journald
-    links:
-      - data-be-get_5m:data
-      - data-base-mysql:mysql
-      - data-base-redis:redis
-    depends_on:
-      - data-base-mysql
-      - data-base-redis
-      - data-be-get_5m
-    environment:
-      - CONFIG_ENV=data/5m/short1
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
@@ -425,38 +361,6 @@ services:
       - DB=true
     ports:
       - 6000:6000
-    healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    volumes:
-      - /data:/data
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run/:/var/run
-
-  data-be-analyse_1h_high-rsi:
-    container_name: data-be-analyse_1h_high-rsi
-    hostname: data-be-analyse_1h_high-rsi
-    image: amrox/greencandle
-    pull_policy: always
-    restart: always
-    entrypoint: /docker-entrypoint.sh analyse_data
-    logging:
-      driver: journald
-    links:
-      - data-be-get_1h:data
-      - data-base-mysql:mysql
-      - data-base-redis:redis
-    depends_on:
-      - data-base-mysql
-      - data-base-redis
-      - data-be-get_1h
-    environment:
-      - CONFIG_ENV=data/1h/short1
-      - HOST=$HOSTNAME
-      - DB=true
     healthcheck:
       test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
