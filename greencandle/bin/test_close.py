@@ -57,7 +57,11 @@ def main():
 
             else:
                 bal_amount = balances['binance'][get_base(pair)]['count']
-            if float(base_in) > sub_perc(dbase.get_complete_commission()/2, bal_amount):
+
+            if "long" in name and sub_perc(dbase.get_complete_commission(), float(base_in)) > bal_amount:
+                result2 = True
+                reason = "Not enough base amount"
+            elif "short" in name and quote2base(quote_in, pair) < bal_amount:
                 result2 = True
                 reason = "Not enough base amount"
 
