@@ -10,7 +10,7 @@ from greencandle.lib import config
 from greencandle.lib.balance_common import get_step_precision
 from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.balance_common import get_base, get_quote
-from greencandle.lib.common import arg_decorator
+from greencandle.lib.common import arg_decorator, sub_perc
 from greencandle.lib.balance import Balance
 from greencandle.lib.binance_accounts import quote2base
 from greencandle.lib.auth import binance_auth
@@ -57,14 +57,15 @@ def main():
 
             else:
                 bal_amount = balances['binance'][get_base(pair)]['count']
-            if float(base_in) > bal_amount:
+            if float(base_in) > sub_perc(dbase.get_complete_commission()/2, bal_amount):
                 result2 = True
                 reason = "Not enough base amount"
 
             # Check if enough BNB
             quote = get_quote(pair)
             current_price = prices['BNB' + quote]
-            bnb_required = (float(quote_in) / float(current_price))/100 *0.1
+            bnb_required = (float(quote_in) / float(current_price))/100 * \
+                    (dbase.get_complete_commission()/2)
             production = str2bool(config.main.production)
             account = 'binance' if not production or not 'cross' in name else 'margin'
             bnb_available = bal_amount = balances[account]['BNB']['count']

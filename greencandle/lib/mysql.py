@@ -171,6 +171,20 @@ class Mysql():
         return bool(cur.fetchall())
 
     @get_exceptions
+    def get_complete_commission(self):
+        """
+        Get commission value for open and close trade
+        """
+        command = ('select commission()')
+
+        cur = self.dbase.cursor()
+        self.__execute(cur, command)
+
+        row = [item[0] for item in cur.fetchall()]
+        return float(row[0]) if row else None # There should only be one row, so return first item
+
+
+    @get_exceptions
     def get_quantity(self, pair):
         """
         Return quantity for a current open trade
