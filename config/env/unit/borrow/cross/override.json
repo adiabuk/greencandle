@@ -1,0 +1,7 @@
+{
+  "immediate_stop": "false",
+  "trade_type": "margin",
+  "trade_isolated": "false",
+  "name": "xxx-api-stochrsi-cross-long",
+  "trade_direction": "long"
+}
