@@ -309,7 +309,7 @@ class Mysql():
                 current_price = get_current_price(pair)
                 perc = 100 * (float(current_price) - float(open_price)) / float(open_price)
                 perc = - perc if 'short' in name else perc
-                net_perc = perc - 0.2
+                net_perc = perc - float(self.get_complete_commission())
                 insert = ('insert into open_trades (pair, open_time, open_price, current_price, '
                           'perc, net_perc, name, `interval`, usd_quantity) VALUES ("{0}", '
                           '"{1}", "{2}", "{3}", "{4}", "{5}", "{6}", "{7}", "{8}")'
