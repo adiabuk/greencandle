@@ -39,7 +39,7 @@ class Balance(dict):
         """
         Return placeholder empty dict to keep DB row numbers in sync between balance writes
         """
-        return {strategy: {'TOTALS': {'BTC': 0, 'USD': 0}}}
+        return {strategy: {'TOTALS': {'BTC': 0, 'USD': 0, 'GBP': 0, 'count': 'N/A'}}}
 
     def get_balance(self, coinbase=False, margin=True, phemex=False, isolated=True):
         """
@@ -50,7 +50,7 @@ class Balance(dict):
 
         Returns:
             dict of balances for each coin owned in binance (spot/margin)
-            and coinbase
+            and coinbase/phemex
 
             Example structure is as follows:
             {

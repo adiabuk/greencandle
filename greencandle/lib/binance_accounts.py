@@ -55,6 +55,8 @@ def get_binance_isolated():
     usd_total = 0
     result["isolated"]["TOTALS"]["BTC"] = 0
     result["isolated"]["TOTALS"]["USD"] = 0
+    result["isolated"]["TOTALS"]["GBP"] = 0
+    result["isolated"]["TOTALS"]["isolated"] = 0
 
 
     isolated = get_current_isolated()
@@ -110,6 +112,8 @@ def get_binance_cross():
     result = mydict()
     result["margin"]["TOTALS"]["BTC"] = 0
     result["margin"]["TOTALS"]["USD"] = 0
+    result["margin"]["TOTALS"]["GBP"] = 0
+    result["margin"]["TOTALS"]["count"] = 0
 
     client = binance_auth()
     all_balances = client.margin_balances()
@@ -174,6 +178,8 @@ def get_binance_spot():
     result = mydict()
     result["binance"]["TOTALS"]["BTC"] = 0
     result["binance"]["TOTALS"]["USD"] = 0
+    result["binance"]["TOTALS"]["GBP"] = 0
+    result["binance"]["TOTALS"]["count"] = 0
 
     client = binance_auth()
     balances = client.balances()
