@@ -83,7 +83,7 @@ class Mysql():
         return output
 
     @get_exceptions
-    def __run_sql_query(self, query, id=False):
+    def __run_sql_query(self, query, get_id=False):
         """
         Run a given mysql query (INSERT)
         Args:
@@ -94,7 +94,7 @@ class Mysql():
         cur = self.dbase.cursor()
         try:
             self.__execute(cur, query)
-            return cur.lastrowid if id else cur.rowcount
+            return cur.lastrowid if get_id else cur.rowcount
         except NameError as exc:
             self.logger.critical("One or more expected variables not passed to DB %s" % exc)
         except Exception:
@@ -137,7 +137,7 @@ class Mysql():
                               borrowed_usd, multiplier, direction, usd_rate, gbp_rate,
                               commission)
 
-        result = self.__run_sql_query(command, id=True)
+        result = self.__run_sql_query(command, get_id=True)
 
         return result
 
