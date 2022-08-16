@@ -266,21 +266,25 @@ class Mysql():
         """
         usd_rate, gbp_rate = self.get_rates(symbol_name)
         job_name = name if name else config.main.name
+        query = """select id from trades where close_price is NULL and `interval`="{0}"
+                   and pair="{1}" and (name="{2}" or name like "api") ORDER BY ID ASC LIMIT 1
+                """.format(self.interval, pair, job_name)
+        try:
+            trade_id = self.fetch_sql_data(query, header=False)[0][0]
+        except IndexError:
+            raise RuntimeError("No open trade matching criteria to close")
+#interval,pair,job_name
         command = """update trades set close_price={0},close_time="{1}",
-        quote_out="{2}", base_out="{3}", closed_by="{6}", drawdown_perc=abs(round({7},1)),
-        drawup_perc=abs(round({8},1)), close_usd_rate="{9}", close_gbp_rate="{10}",
-        comm_close="{11}" where close_price is
-        NULL and `interval`="{4}" and pair="{5}" and (name = "{6}" or
-        name like "api") ORDER BY id LIMIT 1""" \
-        .format('%.15f' % float(close_price),
-                close_time, quote,
-                '%.15f' % float(base_out),
-                self.interval, pair, job_name, drawdown,
-                drawup, usd_rate, gbp_rate, str(commission))
-        result = self.__run_sql_query(command)
-        if result != 1:
-            self.logger.critical("Query affected %s rows: %s" % (result, command))
-        return result
+        quote_out="{2}", base_out="{3}", closed_by="{4}", drawdown_perc=abs(round({5},1)),
+        drawup_perc=abs(round({6},1)), close_usd_rate="{7}", close_gbp_rate="{8}",
+        comm_close="{9}" where id = "{10}"
+        """.format('%.15f' % float(close_price), close_time, quote,
+                   '%.15f' % float(base_out), job_name,
+                   drawdown, drawup, usd_rate, gbp_rate, str(commission), trade_id)
+
+        self.__run_sql_query(command)
+
+        return trade_id
 
     @get_exceptions
     def get_todays_profit(self):
