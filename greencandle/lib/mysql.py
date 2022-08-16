@@ -273,7 +273,7 @@ class Mysql():
             trade_id = self.fetch_sql_data(query, header=False)[0][0]
         except IndexError:
             raise RuntimeError("No open trade matching criteria to close")
-#interval,pair,job_name
+
         command = """update trades set close_price={0},close_time="{1}",
         quote_out="{2}", base_out="{3}", closed_by="{4}", drawdown_perc=abs(round({5},1)),
         drawup_perc=abs(round({6},1)), close_usd_rate="{7}", close_gbp_rate="{8}",
