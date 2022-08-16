@@ -50,7 +50,7 @@ class Mysql():
     @get_exceptions
     def __execute(self, cur, command):
         """
-        Execute query on MYSQL DB - if fail, then try reconnecting and retry the operation
+        Execute query on MYSQL DB
         """
         self.logger.debug("Running Mysql command: %s" % command)
         cur.execute(command)
@@ -83,7 +83,7 @@ class Mysql():
         return output
 
     @get_exceptions
-    def __run_sql_query(self, query):
+    def __run_sql_query(self, query, id=False):
         """
         Run a given mysql query (INSERT)
         Args:
@@ -94,7 +94,7 @@ class Mysql():
         cur = self.dbase.cursor()
         try:
             self.__execute(cur, query)
-            return cur.rowcount
+            return cur.lastrowid if id else cur.rowcount
         except NameError as exc:
             self.logger.critical("One or more expected variables not passed to DB %s" % exc)
         except Exception:
@@ -131,14 +131,15 @@ class Mysql():
         command = """insert into trades (pair, open_time, open_price, base_in, `interval`,
                      quote_in, name, borrowed, borrowed_usd, multiplier, direction, open_usd_rate, open_gbp_rate,
                      comm_open) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}", "{5}", "{6}", "{7}",
-                     "{8}", "{9}", "{10}", "{11}", "{12}", "{13}");
+                     "{8}", "{9}", "{10}", "{11}", "{12}", "{13}")
                    """.format(pair, date, '%.15f' % float(price), '%.15f' % float(base_amount),
                               self.interval, quote_amount, config.main.name, borrowed,
                               borrowed_usd, multiplier, direction, usd_rate, gbp_rate,
                               commission)
 
-        result = self.__run_sql_query(command)
-        return result == 1
+        result = self.__run_sql_query(command, id=True)
+
+        return result
 
     def insert_api_trade(self, **kwargs):
         """
