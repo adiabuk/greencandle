@@ -35,7 +35,13 @@ class Balance(dict):
         self.dbase.insert_balance(prices)
 
     @staticmethod
-    def get_balance(coinbase=False, margin=True, phemex=False, isolated=True):
+    def get_empty_values(strategy):
+        """
+        Return placeholder empty dict to keep DB row numbers in sync between balance writes
+        """
+        return {strategy: {'TOTALS': {'BTC': 0, 'USD': 0}}}
+
+    def get_balance(self, coinbase=False, margin=True, phemex=False, isolated=True):
         """
         get dict of all balances
 
@@ -89,6 +95,9 @@ class Balance(dict):
         if phemex:
             phemex = get_phemex_values()
             combined_dict.update(phemex)
+        else:
+            phemex = self.get_empty_values('phemex')
+            combined_dict.update(phemex)
 
         if coinbase:
             try:
@@ -97,12 +106,24 @@ class Balance(dict):
                 LOGGER.critical("Unable to get coinbase balance")
                 coinbase = {}
             combined_dict.update(coinbase)   # modifies z with y"s keys and values & returns None
+        else:
+            coinbase = self.get_empty_values('coinbase')
+            combined_dict.update(coinbase)
+
         if margin:
             margin = get_binance_cross()
             combined_dict.update(margin)
+        else:
+            margin = self.get_empty_values('margin')
+            combined_dict.update(margin)
+
         if isolated:
             isolated = get_binance_isolated()
             combined_dict.update(isolated)
+        else:
+            isolated = self.get_empty_values('isolated')
+            combined_dict.update(isolated)
+
         return combined_dict
 
     @staticmethod
