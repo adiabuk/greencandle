@@ -33,10 +33,13 @@ wget "https://www.dropbox.com/sh/l22jyonei087h4o/AAChfqr_j4ydTDjILz0Q62Y2a/confi
 tar zxvf /tmp/configstore-2.5.0-linux-amd64.tar.gz -C /usr/local/bin
 rm -rf /tmp/configstore-2.5.0-linux-amd64.tar.gz
 
-wget "https://www.dropbox.com/s/ge7b2rf9e0gqepp/docker-compose-1.29.1?dl=0" -O /usr/local/bin/docker-compose
+mkdir -p /usr/lib/docker/cli-plugins
+# download the CLI into the plugins directory
+curl -sSL https://github.com/docker/compose/releases/download/v2.9.0/docker-compose-linux-x86_64 -o /usr/lib/docker/cli-plugins/docker-compose
+# make the CLI executable
+chmod +x /usr/lib/docker/cli-plugins/docker-compose
 
 wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/3.0.0-beta/yq_linux_amd64
-chmod +x /usr/local/bin/docker-compose /usr/local/bin/yq
 
 echo "export HOSTNAME" >> ~/.bashrc
 
