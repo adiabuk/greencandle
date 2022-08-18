@@ -19,8 +19,7 @@ apt-key adv --keyserver keyserver.ubuntu.com --recv-keys CC86BB64
 apt-get -y update
 apt-get -y install docker.io netcat ntpdate mysql-client screen atop jq iotop ntp awscli vim \
     wget make git mysql-client libmysqlclient-dev python3-dev xvfb firefox redis-tools \
-    cron bsdmainutils libssl-dev gcc libsystemd-dev libjpeg-dev zlib1g-dev wget bsdmainutils \
-    iptables-persistent
+    cron bsdmainutils libssl-dev gcc libsystemd-dev libjpeg-dev zlib1g-dev wget bsdmainutils
 
 curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | sudo bash -s -- --mariadb-server-version=10.8
 
