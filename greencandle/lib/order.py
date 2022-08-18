@@ -557,7 +557,8 @@ class Trade():
             quote = get_quote(pair)
 
             open_price, quote_in, _, _, borrowed, _, = dbase.get_trade_value(pair)[0]
-
+            if not open_price:
+                return
             # Quantity of base_asset we can buy back based on current price
             quantity = quote2base(quote_in, pair)
 
@@ -732,6 +733,9 @@ class Trade():
                 continue
 
             open_price, quote_in, _, _, _, _ = dbase.get_trade_value(pair)[0]
+            if not open_price:
+                return
+
             perc_inc = perc_diff(open_price, current_price)
             quote_out = add_perc(perc_inc, quote_in)
 
@@ -799,6 +803,9 @@ class Trade():
                 continue
 
             open_price, quote_in, _, _, borrowed, _, = dbase.get_trade_value(pair)[0]
+            if not open_price:
+                return
+
             perc_inc = perc_diff(open_price, current_price)
             quote_out = add_perc(perc_inc, quote_in)
 
