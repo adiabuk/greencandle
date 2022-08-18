@@ -1,6 +1,22 @@
 
 # Releases
 
+# 3.33
+* Changes to test trades
+* Method to manually restore TP/SL in redis
+* Get asset information in isolated margin account
+* Increase thresholds for opportunity containers for less alerts
+* Ensure all data containers have matching indicators
+* Remove unused stochrsi indicator from opportunities
+* Remove high-rsi containers, keeping very-high rsi
+* Commission var/function held in DB from variables table
+* Use commission var in DB views when creating open_trades table
+* Fix short trade notification amounts
+* Fix ID from trades table not auto incrementing in some envs
+* Return ID of inserted or updated trade
+* Ensure we check all accounts for a balance so we have a consistent number of rows returned
+* Always check we have an open trade to close before attempting any calculations with NULL values
+
 # 3.32
 * Add repay_depts command to commands UI
 * Ignore empty spot balance when fetching quote balances
