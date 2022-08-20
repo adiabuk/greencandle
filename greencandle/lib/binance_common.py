@@ -17,6 +17,7 @@ from binance.binance import Binance
 
 from greencandle.lib import config
 from greencandle.lib.logger import get_logger
+from greencandle.lib.common import epoch2date
 
 LOGGER = get_logger(__name__)
 
@@ -71,14 +72,13 @@ def get_all_klines(pair, interval=None, start_time=0, no_of_klines=1E1000):
     """
 
     result = []
-
     while True:
         client = Binance()
         current_section = client.klines(pair, interval, startTime=start_time)
         result += current_section
         if len(result) >= no_of_klines:
             # reached maximum
-            print("Reached maximum")
+            print("Reached maximum number of candles")
             break
 
         # Start time becomes 1 more than start time of last entry, +1, so that we don"t duplicate
@@ -90,6 +90,12 @@ def get_all_klines(pair, interval=None, start_time=0, no_of_klines=1E1000):
         if len(current_section) < 500:
             # Break out of while true loop as we have exhausted possible entries
             break
+    first_candle = result[0]['openTime']/1000
+    last_candle = result[-1]['openTime']/1000
+
+    start = epoch2date(first_candle)
+    end = epoch2date(last_candle)
+    print("Start: {}\nEnd: {}\n".format(start, end))
 
     return result[:no_of_klines] if no_of_klines != float("inf") else result
 
@@ -124,6 +130,7 @@ def get_data(startdate, intervals, pairs, days, outputdir, extra):
             filename = "{0}/{1}_{2}.p".format(outputdir.rstrip('/'), pair, interval)
             print("Using filename:", filename)
             if os.path.exists(filename) or os.path.exists(filename + '.gz'):
+                print("File already exists, skipping....\n")
                 continue
 
 
