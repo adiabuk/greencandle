@@ -137,7 +137,7 @@ class Engine(dict):
 
 
             # close time might be in the future if we run between open/close
-            if epoch2date(close_time/1000, formatted=False) > datetime.now():
+            if epoch2date(int(close_time)/1000, formatted=False) > datetime.now():
                 continue
 
             result = None if (isinstance(scheme["data"], float) and
