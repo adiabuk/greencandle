@@ -7,7 +7,7 @@ Redis cleanup-script
 
 import datetime
 from greencandle.lib.redis_conn import Redis
-from greencandle.lib.common import arg_decorator
+from greencandle.lib.common import arg_decorator, epoch2date
 from greencandle.lib import config
 @arg_decorator
 def main():
@@ -34,13 +34,12 @@ def main():
             max_date = datetime.datetime.today() - datetime.timedelta(days=days)
             for item in items:
                 epoch = float(item.decode().split(':')[-1])/1000.0
-                dtime = datetime.datetime.fromtimestamp(epoch)
+                dtime = epoch2date(epoch, formatted=False)
 
                 if dtime < max_date:
                     print("deleting {}".format(item.decode()))
                     count += 1
                     redis.conn.delete(item)
-                #print(time, dtime<max_date)
     print("Deleted {} keys".format(count))
 
 

@@ -5,6 +5,7 @@ Common functions that don't belong anywhere else
 
 import os
 import sys
+import datetime
 from decimal import Decimal, InvalidOperation
 from babel.numbers import format_currency
 import numpy
@@ -141,6 +142,14 @@ def convert_to_seconds(string):
     """conver human readable duration to seconds"""
     seconds_per_unit = {"s": 1, "m": 60, "h": 3600, "d": 86400, "w": 604800}
     return int(string[:-1]) * seconds_per_unit[string[-1]]
+
+def epoch2date(epoch, use_spaces=True, formatted=True):
+    """
+    Convert epoch to human readable formatted string
+    """
+    format_str = '%Y-%m-%d %H:%M:%S' if use_spaces else '%Y-%m-%d_%H-%M-%S'
+    time_stamp = datetime.datetime.fromtimestamp(epoch)
+    return time_stamp.strftime(format_str) if formatted else datetime
 
 def get_tv_link(pair):
     """

@@ -24,7 +24,7 @@ from indicator import SuperTrend, RSI
 import talib
 
 from greencandle.lib import config
-from greencandle.lib.common import make_float, pipify, pip_calc
+from greencandle.lib.common import make_float, pipify, pip_calc, epoch2date
 from greencandle.lib.binance_common import get_all_klines
 from greencandle.lib.logger import get_logger, exception_catcher
 
@@ -137,7 +137,7 @@ class Engine(dict):
 
 
             # close time might be in the future if we run between open/close
-            if datetime.fromtimestamp(int(close_time)/1000) > datetime.now():
+            if epoch2date(close_time/1000, formatted=False) > datetime.now():
                 continue
 
             result = None if (isinstance(scheme["data"], float) and

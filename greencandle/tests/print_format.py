@@ -80,13 +80,6 @@ def print_banner(text, length=48, char='-'):
     print(textwrap.fill(dedented_text, width=length))
     print_line(length, char)
 
-def get_date_stamp():
-    """ Return string timestamp for use in filenames """
-    epoch = time.time()
-    date_stamp = datetime.datetime.fromtimestamp(epoch).strftime('%Y-%m-%d_'
-                                                                 '%H-%M-%S')
-    return date_stamp
-
 def print_status_line(strings, exit_code):
     """
     print given string along with colored OK / FAILED message on the right
