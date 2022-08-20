@@ -33,7 +33,7 @@ def get_binance_klines(pair, interval=None, limit=50):
 
     Args:
         pair: trading pair (eg. XRPBTC)
-        interval: Interval of each candlestick (eg. 1m, 3m, 15m, 1d etc)
+        interval: Interval of each candl estick (eg. 1m, 3m, 15m, 1d etc)
 
     Returns:
         pandas dataframe containing klines for given pair
@@ -41,6 +41,7 @@ def get_binance_klines(pair, interval=None, limit=50):
 
     try:
         client = Binance()
+        interval = "1m" if interval.endswith("s") else interval
         raw = client.klines(pair, interval, limit=limit)
     except IndexError:
         LOGGER.critical("Unable to fetch data for " + pair)
