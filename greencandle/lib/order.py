@@ -152,7 +152,7 @@ class Trade():
         items_list = self.check_pairs(items_list)
         if not items_list:
             self.logger.warning("No items to open trade with")
-            return
+            return False
 
         if self.config.main.trade_type == "spot":
             if self.config.main.trade_direction == "long":
@@ -170,6 +170,7 @@ class Trade():
 
         else:
             raise InvalidTradeError("Invalid trade type")
+        return True
 
     @GET_EXCEPTIONS
     def close_trade(self, items_list, drawdowns=None, drawups=None, update_db=True):
@@ -180,7 +181,7 @@ class Trade():
         additional_trades = []
         if not items_list:
             self.logger.warning("No items to close trade with")
-            return
+            return False
         else:
 
             for item in items_list:
@@ -200,21 +201,23 @@ class Trade():
 
         if self.config.main.trade_type == "spot":
             if self.config.main.trade_direction == "long":
-                self.__close_spot_long(items_list, drawdowns=drawdowns, drawups=drawups,
-                                       update_db=update_db)
+                result = self.__close_spot_long(items_list, drawdowns=drawdowns, drawups=drawups,
+                                                update_db=update_db)
             else:
                 raise InvalidTradeError("Invalid trade direction for spot")
 
         elif self.config.main.trade_type == "margin":
             if self.config.main.trade_direction == "long":
-                self.__close_margin_long(items_list, drawdowns=drawdowns, drawups=drawups)
+                result = self.__close_margin_long(items_list, drawdowns=drawdowns, drawups=drawups)
             elif self.config.main.trade_direction == "short":
-                self.__close_margin_short(items_list, drawdowns=drawdowns, drawups=drawups)
+                result = self.__close_margin_short(items_list, drawdowns=drawdowns, drawups=drawups)
             else:
                 raise InvalidTradeError("Invalid trade direction")
 
         else:
             raise InvalidTradeError("Invalid trade type")
+
+        return result
 
     def get_borrowed(self, pair, symbol):
         """
@@ -296,7 +299,7 @@ class Trade():
             if quote_amount >= float(current_quote_bal):
                 self.logger.critical("Unable to purchase $%s of %s, insufficient funds:%s/%s" %
                                      (base_amount, pair, base_amount, current_quote_bal))
-                continue
+                return False
             else:
                 self.logger.info("Buying %s of %s with %s %s at %s"
                                  % (base_amount, pair, base_amount, quote, current_price))
@@ -309,7 +312,7 @@ class Trade():
 
                 if float(amount_to_borrow) == 0:
                     self.logger.critical("Insufficient funds to borrow for %s" % pair)
-                    continue
+                    return False
 
                 self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
                                  % (amount_to_borrow, quote, quote_amount))
@@ -322,7 +325,7 @@ class Trade():
                     if "msg" in borrow_res:
                         self.logger.error("Borrow error-open %s: %s while trying to borrow %s %s"
                                           % (pair, borrow_res, amount_to_borrow, quote))
-                        continue
+                        return False
 
                     self.logger.info(borrow_res)
                     amt_str = get_step_precision(pair, amount_to_use/float(current_price))
@@ -336,6 +339,7 @@ class Trade():
                         self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
                         self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str,
                                                                          current_quote_bal))
+                        return False
 
                     quote_amount = trade_result.get('cummulativeQuoteQty', quote_amount)
                     amt_str = trade_result.get('executedQty')
@@ -372,6 +376,7 @@ class Trade():
                                           quote=amount_to_use)
 
         del dbase
+        return True
 
     @GET_EXCEPTIONS
     def __get_test_balance(self, dbase, account=None):
@@ -425,6 +430,7 @@ class Trade():
                                      % (quote, pair))
                 self.logger.critical("complete balance: %s quote_bal: %s"
                                      % (balance, current_quote_bal))
+                return False
 
             quote_amount = self.amount_to_use(current_quote_bal)
             amount = quote_amount / float(current_price)
@@ -451,7 +457,7 @@ class Trade():
                         self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
                         self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str,
                                                                          current_quote_bal))
-                        return
+                        return False
 
                     quote_amount = trade_result.get('cummulativeQuoteQty', quote_amount)
 
@@ -489,6 +495,7 @@ class Trade():
                                                   quote=quote_amount)
 
         del dbase
+        return True
 
     def __send_notifications(self, perc=None, **kwargs):
         """
@@ -558,13 +565,13 @@ class Trade():
 
             open_price, quote_in, _, _, borrowed, _, = dbase.get_trade_value(pair)[0]
             if not open_price:
-                return
+                return False
             # Quantity of base_asset we can buy back based on current price
             quantity = quote2base(quote_in, pair)
 
             if not quantity:
                 self.logger.info("close_margin_short: unable to get quantity for %s" % pair)
-                return
+                return False
 
             perc_inc = - (perc_diff(open_price, current_price))
             quote_out = sub_perc(perc_inc, quote_in)
@@ -584,7 +591,7 @@ class Trade():
                 self.logger.info("%s result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
-                    continue
+                    return False
 
                 actual_borrowed = self.get_borrowed(pair=pair, symbol=base)
                 borrowed = actual_borrowed if float(borrowed) > float(actual_borrowed) else borrowed
@@ -633,6 +640,7 @@ class Trade():
                 send_slack_message("alerts", "Sell Failed %s:%s" % (name, pair))
 
         del dbase
+        return True
 
     @GET_EXCEPTIONS
     def __open_margin_short(self, short_list):
@@ -657,7 +665,7 @@ class Trade():
 
             if float(amount_to_borrow) == 0:
                 self.logger.critical("Insufficient funds to borrow for %s" % pair)
-                continue
+                return False
 
             self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
                              % (amount_to_borrow, base, quote_amount))
@@ -669,7 +677,7 @@ class Trade():
                 if "msg" in borrow_res:
                     self.logger.error("Borrow error-open %s: %s while trying to borrow %s %s"
                                       % (pair, borrow_res, amount_to_borrow, base))
-                    continue
+                    return False
 
                 self.logger.info(borrow_res)
                 trade_result = self.client.margin_order(symbol=pair, side=self.client.sell,
@@ -682,6 +690,7 @@ class Trade():
                     self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
                     self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str,
                                                                      current_base_bal))
+                    return False
 
             else:
                 amt_str = amount_to_use
@@ -715,6 +724,7 @@ class Trade():
                                           event=event, action='OPEN', usd_profit='N/A',
                                           quote=quote_amount)
         del dbase
+        return True
 
     @GET_EXCEPTIONS
     def __close_spot_long(self, sell_list, drawdowns=None, drawups=None, update_db=True):
@@ -734,7 +744,7 @@ class Trade():
 
             open_price, quote_in, _, _, _, _ = dbase.get_trade_value(pair)[0]
             if not open_price:
-                return
+                return False
 
             perc_inc = perc_diff(open_price, current_price)
             quote_out = add_perc(perc_inc, quote_in)
@@ -752,7 +762,7 @@ class Trade():
                 self.logger.info("%s result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
-                    continue
+                    return False
 
             commission_dict = {} if self.test_trade or self.test_data or 'fills' not in \
                     trade_result else self.__get_commission(trade_result)
@@ -785,7 +795,9 @@ class Trade():
             else:
                 self.logger.critical("Sell Failed %s:%s" % (name, pair))
                 send_slack_message("alerts", "Sell Failed %s:%s" % (name, pair))
+                return False
         del dbase
+        return True
 
     @GET_EXCEPTIONS
     def __close_margin_long(self, sell_list, drawdowns=None, drawups=None):
@@ -800,11 +812,11 @@ class Trade():
             quantity = dbase.get_quantity(pair)
             if not quantity:
                 self.logger.info("close_margin_long: unable to find quantity for %s" % pair)
-                continue
+                return False
 
             open_price, quote_in, _, _, borrowed, _, = dbase.get_trade_value(pair)[0]
             if not open_price:
-                return
+                return False
 
             perc_inc = perc_diff(open_price, current_price)
             quote_out = add_perc(perc_inc, quote_in)
@@ -825,11 +837,10 @@ class Trade():
                 self.logger.info("%s result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
-                    continue
+                    return False
 
                 actual_borrowed = self.get_borrowed(pair=pair, symbol=quote)
                 borrowed = actual_borrowed if float(borrowed) > float(actual_borrowed) else borrowed
-
 
                 if float(borrowed) > 0:
                     self.logger.info("Trying to repay: %s %s for pair %s" %(borrowed, quote, pair))
@@ -873,4 +884,7 @@ class Trade():
             else:
                 self.logger.critical("Sell Failed %s:%s" % (name, pair))
                 send_slack_message("alerts", "Sell Failed %s:%s" % (name, pair))
+                return False
+
         del dbase
+        return True
