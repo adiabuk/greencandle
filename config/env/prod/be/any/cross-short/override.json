@@ -1,9 +1,9 @@
 {
-  "divisor": "20",
-  "max_trades": "10",
+  "divisor": "2",
+  "max_trades": "2",
   "name": "prod-api-any-cross-short",
   "trade_direction": "short",
   "trade_isolated": "false",
-  "trade_multiplier": "5",
+  "trade_multiplier": "1",
   "trade_type": "margin"
 }

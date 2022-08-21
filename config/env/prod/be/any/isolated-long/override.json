@@ -2,7 +2,7 @@
   "name": "prod-api-any-isolated-long",
   "trade_isolated": "true",
   "trade_type": "margin",
-  "max_trades": "10",
-  "divisor": "1",
-  "trade_multiplier": "5"
+  "max_trades": "2",
+  "divisor": "2",
+  "trade_multiplier": "1"
 }

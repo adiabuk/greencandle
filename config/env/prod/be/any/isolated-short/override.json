@@ -1,9 +1,9 @@
 {
-  "divisor": "1",
-  "max_trades": "10",
+  "divisor": "2",
+  "max_trades": "2",
   "name": "prod-api-any-isolated-short",
   "trade_direction": "short",
   "trade_isolated": "true",
-  "trade_multiplier": "5",
+  "trade_multiplier": "1",
   "trade_type": "margin"
 }
