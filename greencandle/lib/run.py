@@ -334,6 +334,7 @@ def prod_loop(interval, test_trade):
             redis.update_drawdown(pair, current_candle, event='open')
             redis.update_drawup(pair, current_candle, event='open')
             buys.append((pair, current_time, current_price, event))
+
         if result == "CLOSE":
             LOGGER.debug("Items to sell")
             sells.append((pair, current_time, current_price, event))
@@ -342,8 +343,9 @@ def prod_loop(interval, test_trade):
             redis.rm_drawup(pair)
             redis.rm_drawdown(pair)
 
-    trade = Trade(interval=interval, test_trade=test_trade, test_data=False, config=config)
-    trade.close_trade(sells, drawdowns=drawdowns, drawups=drawups)
-    trade.open_trade(buys)
+    for trade in sells:
+        trade.close_trade(trade, drawdowns=drawdowns, drawups=drawups)
+    for trade in buys:
+        trade.open_trade(trade)
     del engine
     del redis
