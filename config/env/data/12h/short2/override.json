@@ -1,0 +1,5 @@
+{
+  "name": "very-high-rsi_12h",
+  "open_rule1": "results.current.RSI_14 \u003e 80 and high \u003e results.current.upper_20",
+  "trade_direction": "short"
+}
