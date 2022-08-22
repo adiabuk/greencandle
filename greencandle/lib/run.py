@@ -108,6 +108,8 @@ def perform_data(pair, interval, data_dir, indicators):
             if trade_result:
                 redis.update_drawdown(pair, current_candle, event='open')
                 redis.update_drawup(pair, current_candle, event='open')
+            else:
+                LOGGER.info("Unable to open trade")
 
         elif result == "CLOSE":
             sells.append((pair, current_time, current_price, event))
@@ -119,6 +121,8 @@ def perform_data(pair, interval, data_dir, indicators):
             if trade_result:
                 redis.rm_drawup(pair)
                 redis.rm_drawdown(pair)
+            else:
+                LOGGER.info("Unable to close trade")
 
     LOGGER.info("Selling remaining item")
     sells = []
