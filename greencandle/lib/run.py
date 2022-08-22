@@ -112,7 +112,8 @@ def perform_data(pair, interval, data_dir, indicators):
         elif result == "CLOSE":
             sells.append((pair, current_time, current_price, event))
             LOGGER.debug("Items to sell: %s" % sells)
-            trade_result = trade.close_trade(sells, drawdowns={pair:drawdown}, drawups={pair:drawup})
+            trade_result = trade.close_trade(sells, drawdowns={pair:drawdown},
+                                             drawups={pair:drawup})
             if trade_result:
                 drawdown = redis.get_drawdown(pair)
                 drawup = redis.get_drawup(pair)['perc']
@@ -279,19 +280,6 @@ def prod_initial(interval, test=False):
     for key, val in prices.items():
         if key in PAIRS:
             prices_trunk[key] = val
-
-    # Number of klines for a given number of seconds
-    multiplier = {'1d': 3600 * 24,
-                  '4h': 3600 * 4,
-                  '2h': 3600 * 2,
-                  '1h': 3600,
-                  '30m': 3600 / 2,
-                  '15m': 3600 / 4,
-                  '5m': 3600 / 12,
-                  '3m': 3600 / 20,
-                  '1m': 3600 / 60
-                 }
-
 
     redis = Redis()
     no_of_klines = config.main.no_of_klines
