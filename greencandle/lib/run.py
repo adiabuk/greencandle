@@ -102,20 +102,22 @@ def perform_data(pair, interval, data_dir, indicators):
         redis.update_drawup(pair, current_candle)
 
         if result == "OPEN":
-            redis.update_drawdown(pair, current_candle, event='open')
-            redis.update_drawup(pair, current_candle, event='open')
             buys.append((pair, current_time, current_price, event))
             LOGGER.debug("Items to buy: %s" % buys)
-            trade.open_trade(buys)
+            trade_result = trade.open_trade(buys)
+            if trade_result:
+                redis.update_drawdown(pair, current_candle, event='open')
+                redis.update_drawup(pair, current_candle, event='open')
 
         elif result == "CLOSE":
             sells.append((pair, current_time, current_price, event))
             LOGGER.debug("Items to sell: %s" % sells)
-            drawdown = redis.get_drawdown(pair)
-            drawup = redis.get_drawup(pair)['perc']
-            redis.rm_drawup(pair)
-            redis.rm_drawdown(pair)
-            trade.close_trade(sells, drawdowns={pair:drawdown}, drawups={pair:drawup})
+            trade_result = trade.close_trade(sells, drawdowns={pair:drawdown}, drawups={pair:drawup})
+            if trade_result:
+                drawdown = redis.get_drawdown(pair)
+                drawup = redis.get_drawup(pair)['perc']
+                redis.rm_drawup(pair)
+                redis.rm_drawdown(pair)
 
     LOGGER.info("Selling remaining item")
     sells = []
@@ -126,12 +128,13 @@ def perform_data(pair, interval, data_dir, indicators):
         redis.update_drawdown(pair, current_candle)
         redis.update_drawup(pair, current_candle)
 
-        drawdown = redis.get_drawdown(pair)
-        drawup = redis.get_drawup(pair)['perc']
-        redis.rm_drawup(pair)
-        redis.rm_drawdown(pair)
+        trade_result = trade.close_trade(sells, drawdowns={pair:drawdown}, drawups={pair:drawup})
+        if trade_result:
+            drawdown = redis.get_drawdown(pair)
+            drawup = redis.get_drawup(pair)['perc']
+            redis.rm_drawup(pair)
+            redis.rm_drawdown(pair)
 
-        trade.close_trade(sells, drawdowns={pair:drawdown}, drawups={pair:drawup})
 
     del redis
     del dbase

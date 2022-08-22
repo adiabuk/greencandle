@@ -71,25 +71,29 @@ def respond():
                 LOGGER.info(message)
                 return Response(status=200)
 
-        trade.open_trade(item)
-        redis = Redis()
-        redis.update_on_entry(item[0][0], 'take_profit_perc', eval(config.main.take_profit_perc))
-        redis.update_on_entry(item[0][0], 'stop_loss_perc', eval(config.main.stop_loss_perc))
-        interval = "1m" if config.main.interval.endswith("s") else config.main.interval
-        dataframes = get_dataframes([pair], interval=interval, no_of_klines=1)
-        current_candle = dataframes[pair].iloc[-1]
-        redis.update_drawdown(pair, current_candle, event="open")
-        redis.update_drawup(pair, current_candle, event="open")
+        result = trade.open_trade(item)
+        if result:
+            redis = Redis()
+            redis.update_on_entry(item[0][0], 'take_profit_perc',
+                                  eval(config.main.take_profit_perc))
+            redis.update_on_entry(item[0][0], 'stop_loss_perc',
+                                  eval(config.main.stop_loss_perc))
+            interval = "1m" if config.main.interval.endswith("s") else config.main.interval
+            dataframes = get_dataframes([pair], interval=interval, no_of_klines=1)
+            current_candle = dataframes[pair].iloc[-1]
+            redis.update_drawdown(pair, current_candle, event="open")
+            redis.update_drawup(pair, current_candle, event="open")
 
     elif action == 'CLOSE':
-        redis = Redis()
         drawdown = redis.get_drawdown(pair)
         drawup = redis.get_drawup(pair)['perc']
-        trade.close_trade(item, drawdowns={pair:drawdown}, drawups={pair:drawup})
-        redis.rm_on_entry(item[0][0], 'take_profit_perc')
-        redis.rm_on_entry(item[0][0], 'stop_loss_perc')
-        redis.rm_drawup(pair)
-        redis.rm_drawdown(pair)
+        result = trade.close_trade(item, drawdowns={pair:drawdown}, drawups={pair:drawup})
+        if result:
+            redis = Redis()
+            redis.rm_on_entry(item[0][0], 'take_profit_perc')
+            redis.rm_on_entry(item[0][0], 'stop_loss_perc')
+            redis.rm_drawup(pair)
+            redis.rm_drawdown(pair)
 
     return Response(status=200)
 
