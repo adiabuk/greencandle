@@ -112,11 +112,11 @@ def perform_data(pair, interval, data_dir, indicators):
         elif result == "CLOSE":
             sells.append((pair, current_time, current_price, event))
             LOGGER.debug("Items to sell: %s" % sells)
+            drawdown = redis.get_drawdown(pair)
+            drawup = redis.get_drawup(pair)['perc']
             trade_result = trade.close_trade(sells, drawdowns={pair:drawdown},
                                              drawups={pair:drawup})
             if trade_result:
-                drawdown = redis.get_drawdown(pair)
-                drawup = redis.get_drawup(pair)['perc']
                 redis.rm_drawup(pair)
                 redis.rm_drawdown(pair)
 
