@@ -460,15 +460,15 @@ class Trade():
         dbase = Mysql(test=self.test_data, interval=self.interval)
 
         for pair, current_time, current_price, event in buy_list:
-            quote_balance = self.get_balance(dbase, 'binance', pair=pair)
+            quote_amount = self.get_balance(dbase, 'binance', pair=pair)
             quote = get_quote(pair)
 
-            if quote_balance <= 0:
+            if quote_amount <= 0:
                 self.logger.critical("Unable to get balance %s for quote %s while trading %s"
-                                     % (quote_balance, quote, pair))
+                                     % (quote_amount, quote, pair))
                 return False
 
-            amount = quote2base(quote_balance, pair)
+            amount = quote2base(quote_amount, pair)
 
             self.logger.info("Buying %s of %s with %s %s"
                              % (amount, pair, quote_amount, quote))
@@ -485,7 +485,7 @@ class Trade():
                 self.logger.info("%s result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
                     self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
-                    self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str, quote_balance))
+                    self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str, quote_amount))
                     return False
 
                 quote_amount = trade_result.get('cummulativeQuoteQty', quote_amount)
