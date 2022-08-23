@@ -222,18 +222,17 @@ class Trade():
     def get_borrowed(self, pair, symbol):
         """
         get amount borrowed from exchange for both cross and isolated modes
+        for a particular pair/direction
         """
 
         if self.mode == 'cross':
             details = self.client.get_cross_margin_details()
             for item in details['userAssets']:
-                ####################################
                 borrowed = float(item['borrowed'])
                 free = float(item['free'])
                 asset = item['asset']
                 if asset == symbol:
                     return borrowed if borrowed <= free else free
-            return 0
 
         elif self.mode == 'isolated':
             details = self.client.get_isolated_margin_details(pair)
@@ -241,10 +240,7 @@ class Trade():
                 return float(details['assets'][0]['quoteAsset']['borrowed'])
             elif details['assets'][0]['baseAsset']['asset'] == symbol:
                 return float(details['assets'][0]['baseAsset']['borrowed'])
-            else:
-                return 0
-        else:
-            return 0
+        return 0
 
 
     def get_balance(self, dbase, account=None, pair=None):
