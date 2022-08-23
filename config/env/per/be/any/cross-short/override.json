@@ -4,6 +4,5 @@
   "name": "per-api-any-cross-short",
   "trade_direction": "short",
   "trade_isolated": "false",
-  "trade_multiplier": "5",
   "trade_type": "margin"
 }

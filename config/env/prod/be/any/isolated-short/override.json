@@ -4,6 +4,5 @@
   "name": "prod-api-any-isolated-short",
   "trade_direction": "short",
   "trade_isolated": "true",
-  "trade_multiplier": "1",
   "trade_type": "margin"
 }

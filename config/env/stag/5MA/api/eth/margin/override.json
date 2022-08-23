@@ -1,8 +1,7 @@
 {
+  "max_trades": "10",
   "name": "stag-5ma-api-eth-isolated",
   "pairs": "BNBETH",
   "trade_isolated": "true",
-  "trade_type": "margin",
-  "max_trades": "10",
-  "trade_multiplier": "2"
+  "trade_type": "margin"
 }

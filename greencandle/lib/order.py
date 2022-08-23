@@ -40,6 +40,7 @@ class Trade():
         self.prod = str2bool(self.config.main.production)
         self.client = binance_auth()
         self.interval = interval
+        self.mode = 'isolated' if str2bool(self.config.main.isolated) else 'cross'
 
     def is_in_drain(self):
         """
@@ -147,8 +148,6 @@ class Trade():
         Main open trade method
         Will choose between spot/margin and long/short
         """
-        if self.config.main.trade_type == "margin" and float(self.config.main.multiplier) < 1:
-            raise RuntimeError("multiplier needs to be more than 1 for margin trades")
 
         items_list = self.check_pairs(items_list)
         if not items_list:
@@ -225,9 +224,7 @@ class Trade():
         get amount borrowed from exchange for both cross and isolated modes
         """
 
-        mode = 'isolated' if str2bool(self.config.main.isolated) else 'cross'
-
-        if mode == 'cross':
+        if self.mode == 'cross':
             details = self.client.get_cross_margin_details()
             for item in details['userAssets']:
                 ####################################
@@ -238,7 +235,7 @@ class Trade():
                     return borrowed if borrowed <= free else free
             return 0
 
-        elif mode == 'isolated':
+        elif self.mode == 'isolated':
             details = self.client.get_isolated_margin_details(pair)
             if details['assets'][0]['quoteAsset']['asset'] == symbol:
                 return float(details['assets'][0]['quoteAsset']['borrowed'])
@@ -249,6 +246,7 @@ class Trade():
         else:
             return 0
 
+
     def get_balance(self, dbase, account=None, pair=None):
         """
         Choose between spot/cross/isolated/test balances and return
@@ -256,29 +254,32 @@ class Trade():
         """
         symbol = get_quote(pair) if self.config.main.trade_direction == 'long' else get_base(pair)
         test_balances = self.__get_test_balance(dbase, account=account)[account]
+        final = 0
         if self.test_data or self.test_trade:
             if self.config.main.trade_direction == 'short' and symbol not in test_balances:
                 usd = test_balances['USDT']['count']
-                return quote2base(usd, symbol +'USDT')
-            return test_balances[symbol]['count']
+                return quote2base(usd, symbol +'USDT') / float(self.config.main.divisor)
+            return test_balances[symbol]['count'] / float(self.config.main.divisor)
 
         elif account == 'binance':
             try:
-                return float(get_binance_spot()[account][symbol]['count'])
+                final = float(get_binance_spot()[account][symbol]['count']) \
+                        / float(self.config.main.divisor)
             except KeyError:
-                return 0
+                pass
 
-        elif account == 'margin' and str2bool(self.config.main.isolated):
+        elif account == 'margin' and self.mode == 'isolated':
             try:
-                return float(get_binance_isolated()['isolated'][pair][symbol])
+                final = float(get_binance_isolated()['isolated'][pair][symbol]) \
+                        / float(self.config.main.divisor)
             except KeyError:
-                return 0
+                pass
 
-        elif account == 'margin' and not str2bool(self.config.main.isolated):
-            return float(get_binance_cross()[account][symbol]['count'])
+        elif account == 'margin' and self.mode == 'cross':
+            final = float(get_binance_cross()[account][symbol]['count']) \
+                    / float(self.config.main.divisor)
 
-        else:
-            return 0
+        return sub_perc(1, final) if final else 0
 
     def get_amount_to_borrow(self, pair, dbase):
         """
@@ -286,70 +287,48 @@ class Trade():
         """
         orig_base = get_base(pair)
         orig_quote = get_quote(pair)
-        if str2bool(self.config.main.isolated):
-            strategy = self.config.main.name.split('-')[2]
-            rows = dbase.get_current_borrowed(strategy, "isolated")
-            borrowed_usd = 0
-            for (current_pair, amt, direction) in list(rows):
-                base = get_base(current_pair)
-                quote = get_quote(current_pair)
-                if direction == "long":
-                    if "USD" in quote:
-                        borrowed_usd += float(amt)
-                    else:
-                        borrowed_usd += base2quote(amt, quote+"USDT")
-                if direction == "short":
-                    if "USD" in base:
-                        borrowed_usd += float(amt)
-                    else:
-                        borrowed_usd += base2quote(amt, base+"USDT")
+        orig_direction = self.config.main.trade_direction
 
+        # if isolated strategy
+        # get current borrowed
+        strategy = self.config.main.name.split('-')[2]
+        rows = dbase.get_current_borrowed(strategy, self.mode)
+        borrowed_usd = 0
+        # go through open trades
+        for (current_pair, amt, direction) in list(rows):
+            base = get_base(current_pair)
+            quote = get_quote(current_pair)
+            if direction == "long":
+                borrowed_usd += float(amt) if 'USD' in quote else base2quote(amt, quote+"USDT")
+            elif direction == "short":
+                borrowed_usd += float(amt) if 'USD' in base else base2quote(amt, base+"USDT")
+            # get aggregated total borrowed in USD
 
-            symbol = get_quote(pair) if self.config.main.trade_direction == "long" else \
-                    get_base(pair)
-            max_borrow = self.client.get_max_borrow(asset=symbol, isolated_pair=pair)
-
-            total = (float(borrowed_usd) + float(max_borrow))
-            if self.config.main.trade_direction == "long":
-                if "USD" in orig_quote:
-                    return total / float(self.config.main.divisor)
-                else:
-                    return quote2base(amt, quote+"USDT") / float(self.config.main.divisor)
-
-            else:
-                total_base =  quote2base(total, orig_base+"USDT")
-                return total_base / float(self.config.main.divisor)
-
+        # get (addiontal) amount we can borrow
+        if self.mode == 'isolated':
+            asset = orig_quote if orig_direction == 'long' else orig_base
+            max_borrow = self.client.get_max_borrow(asset=asset, isolated_pair=pair)
+            borrow_usd = max_borrow if 'USD' in asset else base2quote(max_borrow, asset+'USDT')
         else:
-            strategy = self.config.main.name.split('-')[2]
+            # cross always returns USD
+            borrow_usd = self.client.get_max_borrow()
 
-            rows = dbase.get_current_borrowed(strategy, "cross")
-            borrowed_usd = 0
-            for (current_pair, amt, direction) in list(rows):
-                base = get_base(current_pair)
-                quote = get_quote(current_pair)
-                if direction == "long":
-                    if "USD" in quote:
-                        borrowed_usd += float(amt)
-                    else:
-                        borrowed_usd += base2quote(amt, quote+"USDT")
-                if direction == "short":
-                    if "USD" in base:
-                        borrowed_usd += float(amt)
-                    else:
-                        borrowed_usd += base2quote(amt, base+"USDT")
 
-            total = borrowed_usd + self.client.get_max_borrow()
-            if self.config.main.trade_direction == "short":
-                total_base =  quote2base(total, orig_base+"USDT")
-                return total_base / float(self.config.main.divisor)
+        # sum of total borrowed and total borrowable
+        total = (float(borrowed_usd) + float(borrow_usd))
 
+        # divide total by divisor
+        # convert to quote asset if not USDT
+        if self.config.main.trade_direction == "long":
+            if "USD" in orig_quote:
+                return total / float(self.config.main.divisor)
             else:
-                if "USD" in orig_quote:
+                return quote2base(total, quote+"USDT") / float(self.config.main.divisor)
 
-                    return total / float(self.config.main.divisor)
-                else:
-                    return quote2base(amt, quote+"USDT") / float(self.config.main.divisor)
+        #convert to base asset if we are short
+        else:
+            total_base = quote2base(total, orig_base+"USDT")
+            return total_base / float(self.config.main.divisor)
 
     def __open_margin_long(self, long_list):
         """
@@ -361,60 +340,57 @@ class Trade():
         dbase = Mysql(test=self.test_data, interval=self.interval)
 
         for pair, current_time, current_price, event in long_list:
+            amount_to_borrow = self.get_amount_to_borrow(pair, dbase)
             current_quote_bal = self.get_balance(dbase, account='margin', pair=pair)
             quote = get_quote(pair)
             quote_amount = self.amount_to_use(current_quote_bal)
-            base_amount = quote2base(quote_amount, pair)
+            #base_amount = quote2base(quote_amount, pair)
 
-            if quote_amount >= float(current_quote_bal):
-                self.logger.critical("Unable to purchase $%s of %s, insufficient funds:%s/%s" %
-                                     (base_amount, pair, base_amount, current_quote_bal))
+
+            borrowed_usd = amount_to_borrow if quote == 'USDT' else \
+                    base2quote(amount_to_borrow, quote + 'USDT')
+
+            if float(amount_to_borrow) <= 0:
+                self.logger.critical("Insufficient funds to borrow for %s" % pair)
                 return False
-            else:
-                self.logger.info("Buying %s of %s with %s %s at %s"
-                                 % (base_amount, pair, base_amount, quote, current_price))
 
-                amount_to_borrow = float(quote_amount) * float(self.config.main.multiplier)
-                amount_to_use = sub_perc(1, amount_to_borrow)  # use 99% of borrowed funds
+            self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
+                             % (amount_to_borrow, quote, quote_amount))
 
-                borrowed_usd = amount_to_borrow if quote == 'USDT' else \
-                        base2quote(amount_to_borrow, quote + 'USDT')
+            # amt in base
+            base_to_use = quote2base(quote_amount + amount_to_borrow, pair)
 
-                if float(amount_to_borrow) == 0:
-                    self.logger.critical("Insufficient funds to borrow for %s" % pair)
+            self.logger.info("Buying %s of %s with %s %s at %s"
+                             % (base_to_use, pair, quote_amount+amount_to_borrow,
+                                quote, current_price))
+            if self.prod:
+                borrow_res = self.client.margin_borrow(
+                    symbol=pair, quantity=amount_to_borrow,
+                    isolated=str2bool(self.config.main.isolated),
+                    asset=quote)
+                if "msg" in borrow_res:
+                    self.logger.error("Borrow error-open %s: %s while trying to borrow %s %s"
+                                      % (pair, borrow_res, amount_to_borrow, quote))
                     return False
 
-                self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
-                                 % (amount_to_borrow, quote, quote_amount))
+                self.logger.info(borrow_res)
+                amt_str = get_step_precision(pair, base_to_use)
+                trade_result = self.client.margin_order(symbol=pair, side=self.client.buy,
+                                                        quantity=amt_str,
+                                                        order_type=self.client.market,
+                                                        isolated=str2bool(
+                                                            self.config.main.isolated))
+                self.logger.info("%s result: %s" %(pair, trade_result))
+                if "msg" in trade_result:
+                    self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
+                    self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str,
+                                                                     current_quote_bal))
+                    return False
 
-                if self.prod:
-                    borrow_res = self.client.margin_borrow(
-                        symbol=pair, quantity=amount_to_borrow,
-                        isolated=str2bool(self.config.main.isolated),
-                        asset=quote)
-                    if "msg" in borrow_res:
-                        self.logger.error("Borrow error-open %s: %s while trying to borrow %s %s"
-                                          % (pair, borrow_res, amount_to_borrow, quote))
-                        return False
-
-                    self.logger.info(borrow_res)
-                    amt_str = get_step_precision(pair, amount_to_use/float(current_price))
-                    trade_result = self.client.margin_order(symbol=pair, side=self.client.buy,
-                                                            quantity=amt_str,
-                                                            order_type=self.client.market,
-                                                            isolated=str2bool(
-                                                                self.config.main.isolated))
-                    self.logger.info("%s result: %s" %(pair, trade_result))
-                    if "msg" in trade_result:
-                        self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
-                        self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str,
-                                                                         current_quote_bal))
-                        return False
-
-                    quote_amount = trade_result.get('cummulativeQuoteQty', quote_amount)
-                    amt_str = trade_result.get('executedQty')
-                else:
-                    amt_str = amount_to_use
+                quote_amount = trade_result.get('cummulativeQuoteQty', quote_amount)
+                amt_str = trade_result.get('executedQty')
+            else: # not prod
+                amt_str = base_to_use
 
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
@@ -427,23 +403,23 @@ class Trade():
                 try:
                     base_comm = commission_dict[get_base(pair)]
                     amt_str = float(amt_str) - base_comm
-                    amt_str = sub_perc(0.1, amt_str)
+                    amt_str = sub_perc(dbase.get_complete_commission()/2, amt_str)
                 except (KeyError, TypeError):  # Empty dict, or no commission for base
                     pass
 
 
                 dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
-                                   quote_amount=amount_to_use, base_amount=amt_str,
+                                   quote_amount=quote_amount+amount_to_borrow, base_amount=amt_str,
                                    borrowed=amount_to_borrow,
                                    borrowed_usd=borrowed_usd,
-                                   multiplier=self.config.main.multiplier,
+                                   divisor=self.config.main.divisor,
                                    direction=self.config.main.trade_direction,
                                    symbol_name=quote, commission=str(commission_dict))
 
                 self.__send_notifications(pair=pair, current_time=current_time,
                                           fill_price=fill_price, interval=self.interval,
                                           event=event, action='OPEN', usd_profit='N/A',
-                                          quote=amount_to_use)
+                                          quote=quote_amount+amount_to_borrow)
 
         del dbase
         return True
@@ -488,81 +464,67 @@ class Trade():
         dbase = Mysql(test=self.test_data, interval=self.interval)
 
         for pair, current_time, current_price, event in buy_list:
-            balance = self.get_balance(dbase, 'binance', pair=pair)
+            quote_balance = self.get_balance(dbase, 'binance', pair=pair)
             quote = get_quote(pair)
 
-            try:
-                current_quote_bal = balance
-            except KeyError:
-                current_quote_bal = 0
-            except TypeError:
-                self.logger.critical("Unable to get balance for quote %s while trading %s"
-                                     % (quote, pair))
-                self.logger.critical("complete balance: %s quote_bal: %s"
-                                     % (balance, current_quote_bal))
+            if quote_balance <= 0:
+                self.logger.critical("Unable to get balance %s for quote %s while trading %s"
+                                     % (quote_balance, quote, pair))
                 return False
 
-            quote_amount = self.amount_to_use(current_quote_bal)
-            amount = quote_amount / float(current_price)
+            amount = quote2base(quote_balance, pair)
 
-            if float(current_price) * float(amount) > float(current_quote_bal):
-                self.logger.critical("Unable to purchase %s of %s, insufficient funds:%s/%s" %
-                                     (amount, pair, quote_amount, current_quote_bal))
-                continue
+            self.logger.info("Buying %s of %s with %s %s"
+                             % (amount, pair, quote_amount, quote))
+            self.logger.debug("amount to buy: %s, current_price: %s, amount:%s"
+                              % (quote_amount, current_price, amount))
+            if self.prod and not self.test_data:
+                amt_str = get_step_precision(pair, amount)
+
+                trade_result = self.client.spot_order(symbol=pair, side=self.client.buy,
+                                                      quantity=amt_str,
+                                                      order_type=self.client.market,
+                                                      test=self.test_trade)
+
+                self.logger.info("%s result: %s" %(pair, trade_result))
+                if "msg" in trade_result:
+                    self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
+                    self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str, quote_balance))
+                    return False
+
+                quote_amount = trade_result.get('cummulativeQuoteQty', quote_amount)
+
             else:
-                self.logger.info("Buying %s of %s with %s %s"
-                                 % (amount, pair, quote_amount, quote))
-                self.logger.debug("amount to buy: %s, current_price: %s, amount:%s"
-                                  % (quote_amount, current_price, amount))
-                if self.prod and not self.test_data:
-                    amt_str = get_step_precision(pair, amount)
+                trade_result = True
 
-                    trade_result = self.client.spot_order(symbol=pair, side=self.client.buy,
-                                                          quantity=amt_str,
-                                                          order_type=self.client.market,
-                                                          test=self.test_trade)
+            fill_price = current_price if self.test_trade or self.test_data else \
+                    self.__get_fill_price(current_price, trade_result)
+            commission_dict = {} if self.test_trade or self.test_data or 'fills' not in \
+                trade_result else self.__get_commission(trade_result)
+            if self.test_data or self.test_trade or \
+                    (not self.test_trade and 'transactTime' in trade_result):
+                # only insert into db, if:
+                # 1. we are using test_data
+                # 2. we performed a test trade which was successful - (empty dict)
+                # 3. we proformed a real trade which was successful - (transactTime in dict)
 
-                    self.logger.info("%s result: %s" %(pair, trade_result))
-                    if "msg" in trade_result:
-                        self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
-                        self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str,
-                                                                         current_quote_bal))
-                        return False
+                try:
+                    base_comm = commission_dict[get_base(pair)]
+                    amt_str = float(amt_str) - base_comm
+                    amt_str = sub_perc(dbase.get_complete_commission()/2, amt_str)
+                except (KeyError, TypeError):  # Empty dict, or no commission for base
+                    pass
 
-                    quote_amount = trade_result.get('cummulativeQuoteQty', quote_amount)
-
-                else:
-                    trade_result = True
-
-                fill_price = current_price if self.test_trade or self.test_data else \
-                        self.__get_fill_price(current_price, trade_result)
-                commission_dict = {} if self.test_trade or self.test_data or 'fills' not in \
-                    trade_result else self.__get_commission(trade_result)
-                if self.test_data or self.test_trade or \
-                        (not self.test_trade and 'transactTime' in trade_result):
-                    # only insert into db, if:
-                    # 1. we are using test_data
-                    # 2. we performed a test trade which was successful - (empty dict)
-                    # 3. we proformed a real trade which was successful - (transactTime in dict)
-
-
-                    try:
-                        base_comm = commission_dict[get_base(pair)]
-                        amt_str = float(amt_str) - base_comm
-                        amt_str = sub_perc(0.1, amt_str)
-                    except (KeyError, TypeError):  # Empty dict, or no commission for base
-                        pass
-
-                    db_result = dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
-                                                   quote_amount=quote_amount, base_amount=amount,
-                                                   direction=self.config.main.trade_direction,
-                                                   symbol_name=quote,
-                                                   commission=str(commission_dict))
-                    if db_result:
-                        self.__send_notifications(pair=pair, current_time=current_time,
-                                                  fill_price=fill_price, interval=self.interval,
-                                                  event=event, action='OPEN', usd_profit='N/A',
-                                                  quote=quote_amount)
+                db_result = dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
+                                               quote_amount=quote_amount, base_amount=amount,
+                                               direction=self.config.main.trade_direction,
+                                               symbol_name=quote,
+                                               commission=str(commission_dict))
+                if db_result:
+                    self.__send_notifications(pair=pair, current_time=current_time,
+                                              fill_price=fill_price, interval=self.interval,
+                                              event=event, action='OPEN', usd_profit='N/A',
+                                              quote=quote_amount)
 
         del dbase
         return True
@@ -724,22 +686,17 @@ class Trade():
             base = get_base(pair)
             current_base_bal = self.get_balance(dbase, account='margin', pair=pair)
 
-            proposed_base_amount = self.amount_to_use(current_base_bal)
-            amount_to_borrow = float(proposed_base_amount) * float(self.config.main.multiplier)
+            current_quote_bal = self.get_balance(dbase, account='margin', pair=pair)
+            amount_to_borrow = self.get_amount_to_borrow(pair, dbase)
             borrowed_usd = amount_to_borrow if base == 'USDT' else \
                     base2quote(amount_to_borrow, base+'USDT')
-
-            amount_to_use = sub_perc(1, amount_to_borrow)  # use 99% of borrowed funds
-            amt_str = get_step_precision(pair, amount_to_use)
-            quote_amount = base2quote(amt_str, pair)
-
-            if float(amount_to_borrow) == 0:
-                self.logger.critical("Insufficient funds to borrow for %s" % pair)
-                return False
+            borrowed_quote = base2quote(float(amount_to_borrow), pair)
+            quote_amount = get_step_precision(pair, borrowed_quote + current_quote_bal)
 
             self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
                              % (amount_to_borrow, base, quote_amount))
             if self.prod:
+                amt_str = quote_amount
                 borrow_res = self.client.margin_borrow(
                     symbol=pair, quantity=amount_to_borrow,
                     isolated=str2bool(self.config.main.isolated),
@@ -763,7 +720,7 @@ class Trade():
                     return False
 
             else:
-                amt_str = amount_to_use
+                amt_str = quote_amount
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
             commission_dict = {} if self.test_trade or self.test_data or 'fills' not in \
@@ -775,16 +732,15 @@ class Trade():
                 try:
                     base_comm = commission_dict[get_quote(pair)]
                     amt_str = float(amt_str) - base_comm
-                    amt_str = sub_perc(0.1, amt_str)
+                    amt_str = sub_perc(dbase.get_complete_commission()/2, amt_str)
                 except (KeyError, TypeError):  # Empty dict, or no commission for base
                     pass
-
 
                 dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
                                    quote_amount=quote_amount,
                                    base_amount=amt_str, borrowed=amount_to_borrow,
                                    borrowed_usd=borrowed_usd,
-                                   multiplier=self.config.main.multiplier,
+                                   divisor=self.config.main.divisor,
                                    direction=self.config.main.trade_direction,
                                    symbol_name=get_quote(pair),
                                    commission=str(commission_dict))

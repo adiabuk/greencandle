@@ -2,6 +2,5 @@
   "name": "test-any-long",
   "pairs": "any",
   "stop_loss_perc": "18",
-  "trade_multiplier": "1",
   "take_profit_perc": "40"
 }

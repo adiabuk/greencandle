@@ -113,7 +113,7 @@ class Mysql():
 
     @get_exceptions
     def insert_trade(self, pair, date, price, quote_amount, base_amount, borrowed='0',
-                     borrowed_usd=0, multiplier='0', direction='', symbol_name=None,
+                     borrowed_usd=0, divisor='0', direction='', symbol_name=None,
                      commission=None):
         """
         Insert new trade into DB
@@ -129,12 +129,12 @@ class Mysql():
         """
         usd_rate, gbp_rate = self.get_rates(symbol_name)
         command = """insert into trades (pair, open_time, open_price, base_in, `interval`,
-                     quote_in, name, borrowed, borrowed_usd, multiplier, direction, open_usd_rate, open_gbp_rate,
-                     comm_open) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}", "{5}", "{6}", "{7}",
-                     "{8}", "{9}", "{10}", "{11}", "{12}", "{13}")
+                     quote_in, name, borrowed, borrowed_usd, divisor, direction, open_usd_rate,
+                     open_gbp_rate, comm_open) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}", "{5}",
+                     "{6}", "{7}", "{8}", "{9}", "{10}", "{11}", "{12}", "{13}")
                    """.format(pair, date, '%.15f' % float(price), '%.15f' % float(base_amount),
                               self.interval, quote_amount, config.main.name, borrowed,
-                              borrowed_usd, multiplier, direction, usd_rate, gbp_rate,
+                              borrowed_usd, divisor, direction, usd_rate, gbp_rate,
                               commission)
 
         result = self.__run_sql_query(command, get_id=True)
@@ -367,8 +367,6 @@ class Mysql():
 
         rows = cur.fetchall()
         return rows if rows else ()
-
-
 
     @get_exceptions
     def insert_balance(self, balances):

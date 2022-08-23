@@ -6,6 +6,5 @@
   "max_trades": "2",
   "stop_loss_perc": "999",
   "take_profit_perc": "999",
-  "trade_multiplier": "1",
   "trade_type": "margin"
 }
