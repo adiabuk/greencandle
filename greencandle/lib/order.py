@@ -345,14 +345,6 @@ class Trade():
 
             borrowed_usd = amount_to_borrow if quote == 'USDT' else \
                     base2quote(amount_to_borrow, quote + 'USDT')
-
-            if float(amount_to_borrow) <= 0:
-                self.logger.critical("Insufficient funds to borrow for %s" % pair)
-                return False
-
-            self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
-                             % (amount_to_borrow, quote, quote_amount))
-
             # amt in base
             base_to_use = quote2base(quote_amount + amount_to_borrow, pair)
 
@@ -360,6 +352,15 @@ class Trade():
                              % (base_to_use, pair, quote_amount+amount_to_borrow,
                                 quote, current_price))
             if self.prod:
+
+                if float(amount_to_borrow) <= 0:
+                    self.logger.critical("Insufficient funds to borrow for %s" % pair)
+                    return False
+
+                self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
+                                 % (amount_to_borrow, quote, quote_amount))
+
+
                 borrow_res = self.client.margin_borrow(
                     symbol=pair, quantity=amount_to_borrow,
                     isolated=str2bool(self.config.main.isolated),
@@ -689,9 +690,9 @@ class Trade():
             borrowed_quote = base2quote(float(amount_to_borrow), pair)
             quote_amount = get_step_precision(pair, borrowed_quote + current_quote_bal)
 
-            self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
-                             % (amount_to_borrow, base, quote_amount))
             if self.prod:
+                self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
+                                 % (amount_to_borrow, base, quote_amount))
                 amt_str = quote_amount
                 borrow_res = self.client.margin_borrow(
                     symbol=pair, quantity=amount_to_borrow,
