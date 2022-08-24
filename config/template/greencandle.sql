@@ -916,7 +916,7 @@ CREATE TABLE `variables` (
 
 LOCK TABLES `variables` WRITE;
 /*!40000 ALTER TABLE `variables` DISABLE KEYS */;
-INSERT INTO `variables` VALUES ('commission','0.2');
+INSERT INTO `variables` VALUES ('commission','0.15');
 /*!40000 ALTER TABLE `variables` ENABLE KEYS */;
 UNLOCK TABLES;
 
