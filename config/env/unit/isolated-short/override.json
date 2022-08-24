@@ -1,0 +1,8 @@
+{
+  "divisor": "2",
+  "trade_isolated": "true",
+  "name": "unit-be-unit-any-isolated-short",
+  "logging_level": "20",
+  "trade_direction": "short",
+  "trade_type": "margin"
+}
