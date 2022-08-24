@@ -9,4 +9,5 @@ RETURN IF(amount > 0, amount + (amount*perc/100), amount - (amount*perc/100));
 ALTER TABLE trades RENAME multiplier TO divisor;
 
 ALTER TABLE trades MODIFY COLUMN name varchar(40);
+ALTER TABLE trades MODIFY COLUMN closed_by varchar(40);
 
