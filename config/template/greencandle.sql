@@ -122,7 +122,7 @@ CREATE TABLE `open_trades` (
   `current_price` varchar(30) DEFAULT NULL,
   `perc` varchar(30) DEFAULT NULL,
   `net_perc` varchar(30) DEFAULT NULL,
-  `name` varchar(30) DEFAULT NULL,
+  `name` varchar(40) DEFAULT NULL,
   `interval` varchar(3) DEFAULT NULL,
   `usd_quantity` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

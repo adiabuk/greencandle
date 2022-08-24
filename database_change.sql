@@ -7,3 +7,6 @@ CREATE FUNCTION `ADD_PERCENT`(amount DOUBLE,perc decimal(10,2)) RETURNS DOUBLE
 RETURN IF(amount > 0, amount + (amount*perc/100), amount - (amount*perc/100));
 
 ALTER TABLE trades RENAME multiplier TO divisor;
+
+ALTER TABLE trades MODIFY COLUMN name varchar(40);
+
