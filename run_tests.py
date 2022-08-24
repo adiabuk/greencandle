@@ -14,7 +14,7 @@ from greencandle.tests.finish import finish_test, create_link
 from greencandle.tests.__init__ import __all__
 from greencandle.tests import test_redis, test_run1, test_run2, test_mysql, test_lint, \
      test_scripts, test_docker_mysql, test_docker_redis, test_docker_api, test_docker_cron, \
-     test_pairs, test_draw, test_stop, test_envs, test_assocs, test_config
+     test_pairs, test_draw, test_stop, test_envs, test_assocs, test_config, test_borrowed
 
 # Tuple of tuples
 # (name, module)
