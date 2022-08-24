@@ -181,7 +181,7 @@ pipeline {
                             ]
 
                         }
-                    }
+                    },
                     "borrowed": {
                         echo "testing borrow"
                         ansiColor('vga') {
