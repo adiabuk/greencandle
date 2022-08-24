@@ -319,7 +319,7 @@ class Trade():
             if "USD" in orig_quote:
                 return total / float(self.config.main.divisor)
             else:
-                return quote2base(total, quote+"USDT") / float(self.config.main.divisor)
+                return quote2base(total, orig_quote+"USDT") / float(self.config.main.divisor)
 
         #convert to base asset if we are short
         else:
