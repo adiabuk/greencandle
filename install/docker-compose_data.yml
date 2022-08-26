@@ -150,6 +150,36 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
+  data-be-get_1d:
+    container_name: data-be-get_1d
+    hostname: data-be-get_1d
+    image: amrox/greencandle
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh get_data
+    logging:
+      driver: journald
+    links:
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+    environment:
+      - CONFIG_ENV=data/1d/get_data
+      - HOST=$HOSTNAME
+      - DB=true
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
   data-be-analyse_12h_big-change:
     container_name: data-be-analyse_12h_big-change
     hostname: data-be-analyse_12h_big-change
@@ -265,6 +295,36 @@ services:
       - data-be-get_12h
     environment:
       - CONFIG_ENV=data/12h/long2
+      - HOST=$HOSTNAME
+      - DB=true
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-get_12h:
+    container_name: data-be-get_12h
+    hostname: data-be-get_12h
+    image: amrox/greencandle
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh get_data
+    logging:
+      driver: journald
+    links:
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+    environment:
+      - CONFIG_ENV=data/12h/get_data
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
