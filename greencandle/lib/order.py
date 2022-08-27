@@ -45,6 +45,8 @@ class Trade():
     def is_in_drain(self):
         """
         Check if current scope is in drain given date range, and current time
+        Drain time is set in config (drain/drain_range)
+        or by the existance of /var/local/{env}_drain file
         """
         currentime = datetime.datetime.now()
         time_str = currentime.strftime('%H:%M')
@@ -93,6 +95,7 @@ class Trade():
     def amount_to_use(self, current_quote_bal):
         """
         Figire out how much of current asset to buy based on balance and divisor
+        Returns quote value / divisor (or max_trade+1 if no divisor available)
         """
         dbase = Mysql(test=self.test_data, interval=self.interval)
         try:
@@ -242,7 +245,6 @@ class Trade():
                 return float(details['assets'][0]['baseAsset']['borrowed'])
         return 0
 
-
     def get_balance(self, dbase, account=None, pair=None):
         """
         Choose between spot/cross/isolated/test balances and return
@@ -254,32 +256,32 @@ class Trade():
         if self.test_data or self.test_trade:
             if self.config.main.trade_direction == 'short' and symbol not in test_balances:
                 usd = test_balances['USDT']['count']
-                return quote2base(usd, symbol +'USDT') / float(self.config.main.divisor)
-            return test_balances[symbol]['count'] / float(self.config.main.divisor)
+                final = quote2base(usd, symbol +'USDT')
+            else:
+                final = test_balances[symbol]['count']
 
         elif account == 'binance':
             try:
-                final = float(get_binance_spot()[account][symbol]['count']) \
-                        / float(self.config.main.divisor)
+                final = float(get_binance_spot()[account][symbol]['count'])
             except KeyError:
                 pass
 
         elif account == 'margin' and self.mode == 'isolated':
             try:
-                final = float(get_binance_isolated()['isolated'][pair][symbol]) \
-                        / float(self.config.main.divisor)
+                final = float(get_binance_isolated()['isolated'][pair][symbol])
             except KeyError:
                 pass
 
         elif account == 'margin' and self.mode == 'cross':
-            final = float(get_binance_cross()[account][symbol]['count']) \
-                    / float(self.config.main.divisor)
+            final = float(get_binance_cross()[account][symbol]['count'])
 
-        return sub_perc(1, final) if final else 0
+        # Use 99% of amount determined by divisor
+        return sub_perc(1, final / float(self.config.main.divisor)) if final else 0
 
     def get_amount_to_borrow(self, pair, dbase):
         """
         Get amount to borrow based on pair, and trade direction
+        divide by divisor and return in the symbol we need to borrow
         """
         orig_base = get_base(pair)
         orig_quote = get_quote(pair)
@@ -309,7 +311,6 @@ class Trade():
             # cross always returns USD
             borrow_usd = self.client.get_max_borrow()
 
-
         # sum of total borrowed and total borrowable
         total = (float(borrowed_usd) + float(borrow_usd))
 
@@ -317,14 +318,16 @@ class Trade():
         # convert to quote asset if not USDT
         if self.config.main.trade_direction == "long":
             if "USD" in orig_quote:
-                return total / float(self.config.main.divisor)
+                final = total
             else:
-                return quote2base(total, orig_quote+"USDT") / float(self.config.main.divisor)
+                final = quote2base(total, orig_quote+"USDT")
 
         #convert to base asset if we are short
         else:
-            total_base = quote2base(total, orig_base+"USDT")
-            return total_base / float(self.config.main.divisor)
+            final = quote2base(total, orig_base+"USDT")
+
+        # Use 99% of amount determined by divisor
+        return sub_perc(1, final / float(self.config.main.divisor))
 
     def __open_margin_long(self, long_list):
         """
@@ -339,9 +342,6 @@ class Trade():
             amount_to_borrow = self.get_amount_to_borrow(pair, dbase)
             current_quote_bal = self.get_balance(dbase, account='margin', pair=pair)
             quote = get_quote(pair)
-            quote_amount = self.amount_to_use(current_quote_bal)
-            #base_amount = quote2base(quote_amount, pair)
-
 
             borrowed_usd = amount_to_borrow if quote == 'USDT' else \
                     base2quote(amount_to_borrow, quote + 'USDT')
