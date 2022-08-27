@@ -31,7 +31,7 @@ def main():
                    "Today's avg profit: {7:.2f}% ({8:.2f}%)\n"
                    "Today's total profit: {9:.2f}% ({10:.2f}%)\n"
                    .format(hour, total_perc, total_net_perc, avg_perc, avg_net_perc,
-                           format_usd(usd_profit),  format_usd(usd_net_profit),
+                           format_usd(usd_profit), format_usd(usd_net_profit),
                            todays_avg, todays_net_avg, todays_total, todays_net_total))
 
         send_slack_message('balance', message, name=sys.argv[0].split('/')[-1])
