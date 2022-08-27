@@ -1,0 +1,4 @@
+{
+  "name": "low-rsi_15m",
+  "open_rule1": "results.current.RSI_14 \u003c 30 and low \u003c results.current.lower_20"
+}
