@@ -71,7 +71,6 @@ def prod_run():
     prices = client.prices()
     test_loop(interval=interval, prices=prices)
     Path('/var/run/gc-data-{}'.format(config.main.interval)).touch()
-    send_slack_message("notifications", "-"*100)
     LOGGER.info("Finished prod run")
 
 @arg_decorator
