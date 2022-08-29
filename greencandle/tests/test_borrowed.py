@@ -12,6 +12,7 @@ from unittest.mock import patch
 from greencandle.lib import config
 config.create_config()
 
+from greencandle.lib.common import sub_perc
 from greencandle.lib.order import Trade
 
 
@@ -42,7 +43,7 @@ class TestBorrow(unittest.TestCase):
             amt = trade.get_amount_to_borrow(pair, instance)
 
         self.assertEqual(config.main.trade_direction, "long")
-        self.assertEqual(amt, (5000+20)/3)
+        self.assertEqual(amt, sub_perc(1, (5000+20)/3))
 
     def test_cross_long2(self):
         """
@@ -65,7 +66,7 @@ class TestBorrow(unittest.TestCase):
             amt = trade.get_amount_to_borrow(pair, instance)
 
         self.assertEqual(config.main.trade_direction, "long")
-        self.assertEqual(amt, (5000+2)/3)
+        self.assertEqual(amt, sub_perc(1, (5000+2)/3))
 
     def test_cross_long3(self):
         """
@@ -88,7 +89,7 @@ class TestBorrow(unittest.TestCase):
             amt = trade.get_amount_to_borrow(pair, instance)
 
         self.assertEqual(config.main.trade_direction, "long")
-        self.assertEqual(amt, (5000+20)/3)
+        self.assertEqual(amt, sub_perc(1, (5000+20)/3))
 
     def test_cross_long4(self):
         """
@@ -112,7 +113,7 @@ class TestBorrow(unittest.TestCase):
                 amt = trade.get_amount_to_borrow(pair, instance)
 
         self.assertEqual(config.main.trade_direction, "long")
-        self.assertEqual(amt, 20/3) # FIXME - this should be 5000 more
+        self.assertEqual(amt, sub_perc(1, 20/3)) # FIXME - this should be 5000 more
 
 
     def test_cross_long5(self):
@@ -136,7 +137,7 @@ class TestBorrow(unittest.TestCase):
             amt = trade.get_amount_to_borrow(pair, instance)
 
         self.assertEqual(config.main.trade_direction, "long")
-        self.assertEqual(amt, (5000+20)/10)
+        self.assertEqual(amt, sub_perc(1, (5000+20)/10))
 
 
     def test_cross_short(self):
@@ -161,7 +162,7 @@ class TestBorrow(unittest.TestCase):
                 amt = trade.get_amount_to_borrow(pair, instance)
 
         self.assertEqual(config.main.trade_direction, "short")
-        self.assertEqual(amt, (20)/10)
+        self.assertEqual(amt, sub_perc(1, (20)/10))
 
     def test_isolated_long(self):
         """
@@ -184,7 +185,7 @@ class TestBorrow(unittest.TestCase):
             amt = trade.get_amount_to_borrow(pair, instance)
 
         self.assertEqual(config.main.trade_direction, "long")
-        self.assertEqual(amt, (5000+20)/3)
+        self.assertEqual(amt, sub_perc(1, (5000+20)/3))
 
     def test_isolated_long2(self):
         """
@@ -207,7 +208,7 @@ class TestBorrow(unittest.TestCase):
             amt = trade.get_amount_to_borrow(pair, instance)
 
         self.assertEqual(config.main.trade_direction, "long")
-        self.assertEqual(amt, (5000+2)/3)
+        self.assertEqual(amt, sub_perc(1, (5000+2)/3))
 
     def test_isolated_long3(self):
         """
@@ -230,7 +231,7 @@ class TestBorrow(unittest.TestCase):
             amt = trade.get_amount_to_borrow(pair, instance)
 
         self.assertEqual(config.main.trade_direction, "long")
-        self.assertEqual(amt, (5000+20)/3)
+        self.assertEqual(amt, sub_perc(1, (5000+20)/3))
 
     def test_isolated_long4(self):
         """
@@ -254,7 +255,7 @@ class TestBorrow(unittest.TestCase):
                 amt = trade.get_amount_to_borrow(pair, instance)
 
         self.assertEqual(config.main.trade_direction, "long")
-        self.assertEqual(amt, (20)/3)
+        self.assertEqual(amt, sub_perc(1, (20)/3))
 
 
     def test_isolated_long5(self):
@@ -278,7 +279,7 @@ class TestBorrow(unittest.TestCase):
             amt = trade.get_amount_to_borrow(pair, instance)
 
         self.assertEqual(config.main.trade_direction, "long")
-        self.assertEqual(amt, (5000+20)/10)
+        self.assertEqual(amt, sub_perc(1, (5000+20)/10))
 
 
     def test_isolated_short(self):
@@ -303,7 +304,7 @@ class TestBorrow(unittest.TestCase):
                 amt = trade.get_amount_to_borrow(pair, instance)
 
         self.assertEqual(config.main.trade_direction, "short")
-        self.assertEqual(amt, (20)/10)
+        self.assertEqual(amt, sub_perc(1, (20)/10))
 
 if __name__ == '__main__':
     unittest.main(verbosity=6)
