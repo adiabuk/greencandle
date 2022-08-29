@@ -11,3 +11,26 @@ ALTER TABLE trades RENAME multiplier TO divisor;
 ALTER TABLE trades MODIFY COLUMN name varchar(40);
 ALTER TABLE trades MODIFY COLUMN closed_by varchar(40);
 
+create view accounts2 as select
+    id,
+    open_time,
+    close_time,
+    pair,
+    perc as gross_profit_perc,
+    net_perc as net_profit_perc,
+
+    -- usd_profit
+    case when direction = 'long' then
+(quote_out-quote_in) * close_usd_rate else (quote_in-quote_out) * close_usd_rate end AS `usd_gross_profit`,
+
+    case when direction = 'long' then
+(quote_out-quote_in) * close_gbp_rate else (quote_in-quote_out) * close_gbp_rate end AS `gbp_gross_profit`,
+
+
+   -- usd-net-profit
+case when direction = 'long' then (quote_out - add_percent(quote_in,`commission`())) * close_usd_rate else (remove_percent(quote_in,`commission`()) - quote_out)    * close_usd_rate end AS usd_net_profit,
+
+case when direction = 'long' then (quote_out - add_percent(quote_in,`commission`())) * close_gbp_rate else (remove_percent(quote_in,`commission`()) - quote_out)    * close_gbp_rate end AS gbp_net_profit
+
+    from profit;
+
