@@ -382,7 +382,7 @@ class Trade():
 
 
                 dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
-                                   quote_amount=quote_amount+amount_to_borrow, base_amount=amt_str,
+                                   quote_amount=current_quote_bal+amount_to_borrow, base_amount=amt_str,
                                    borrowed=amount_to_borrow,
                                    borrowed_usd=borrowed_usd,
                                    divisor=self.config.main.divisor,
@@ -392,7 +392,7 @@ class Trade():
                 self.__send_notifications(pair=pair, current_time=current_time,
                                           fill_price=fill_price, interval=self.interval,
                                           event=event, action='OPEN', usd_profit='N/A',
-                                          quote=quote_amount+amount_to_borrow)
+                                          quote=current_quote_bal+amount_to_borrow)
 
         del dbase
         return True
