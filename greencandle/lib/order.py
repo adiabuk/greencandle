@@ -92,30 +92,6 @@ class Trade():
         redis.redis_conn(kwargs.pair, kwargs.interval, data, mepoch)
         del redis
 
-    def amount_to_use(self, current_quote_bal):
-        """
-        Figire out how much of current asset to buy based on balance and divisor
-        Returns quote value / divisor (or max_trade+1 if no divisor available)
-        """
-        dbase = Mysql(test=self.test_data, interval=self.interval)
-        try:
-            last_open_amt = dbase.fetch_sql_data("select quote_in from trades where "
-                                                 "name='{1}'" .format(self.config.main.name),
-                                                 header=False)[-1][-1]
-            last_open_amt = float(last_open_amt) if last_open_amt else 0
-
-        except (IndexError, TypeError):
-            last_open_amt = 0
-
-        if self.config.main.divisor:
-            proposed_quote_amount = current_quote_bal / float(self.config.main.divisor)
-        else:
-            proposed_quote_amount = current_quote_bal / (int(self.config.main.max_trades) + 1)
-        self.logger.info('proposed: %s, last:%s'
-                         % (proposed_quote_amount, last_open_amt))
-
-        return proposed_quote_amount
-
     def check_pairs(self, items_list):
         """
         Check we can trade which each of given trading pairs
