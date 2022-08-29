@@ -322,10 +322,10 @@ class Trade():
             borrowed_usd = amount_to_borrow if quote == 'USDT' else \
                     base2quote(amount_to_borrow, quote + 'USDT')
             # amt in base
-            base_to_use = quote2base(quote_amount + amount_to_borrow, pair)
+            base_to_use = quote2base(current_quote_bal + amount_to_borrow, pair)
 
             self.logger.info("Buying %s of %s with %s %s at %s"
-                             % (base_to_use, pair, quote_amount+amount_to_borrow,
+                             % (base_to_use, pair, current_quote_bal+amount_to_borrow,
                                 quote, current_price))
             if self.prod:
 
@@ -334,7 +334,7 @@ class Trade():
                     return False
 
                 self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
-                                 % (amount_to_borrow, quote, quote_amount))
+                                 % (amount_to_borrow, quote, current_quote_bal))
 
 
                 borrow_res = self.client.margin_borrow(
