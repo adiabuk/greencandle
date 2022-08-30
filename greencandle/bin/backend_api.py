@@ -51,6 +51,7 @@ def respond():
     except ValueError:
         pass
 
+    redis = Redis()
     if action == 'OPEN':
 
         if 'get_trend' in os.environ:
@@ -73,7 +74,6 @@ def respond():
 
         result = trade.open_trade(item)
         if result:
-            redis = Redis()
             redis.update_on_entry(item[0][0], 'take_profit_perc',
                                   eval(config.main.take_profit_perc))
             redis.update_on_entry(item[0][0], 'stop_loss_perc',
