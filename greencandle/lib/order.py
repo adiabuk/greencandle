@@ -208,10 +208,9 @@ class Trade():
             details = self.client.get_cross_margin_details()
             for item in details['userAssets']:
                 borrowed = float(item['borrowed'])
-                free = float(item['free'])
                 asset = item['asset']
                 if asset == symbol:
-                    return borrowed if borrowed <= free else free
+                    return borrowed if borrowed <= free else 0
 
         elif self.mode == 'isolated':
             details = self.client.get_isolated_margin_details(pair)
@@ -382,10 +381,9 @@ class Trade():
 
 
                 dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
-                                   quote_amount=current_quote_bal+amount_to_borrow, base_amount=amt_str,
-                                   borrowed=amount_to_borrow,
-                                   borrowed_usd=borrowed_usd,
-                                   divisor=self.config.main.divisor,
+                                   quote_amount=current_quote_bal+amount_to_borrow,
+                                   base_amount=amt_str, borrowed=amount_to_borrow,
+                                   borrowed_usd=borrowed_usd, divisor=self.config.main.divisor,
                                    direction=self.config.main.trade_direction,
                                    symbol_name=quote, commission=str(commission_dict))
 
