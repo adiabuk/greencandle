@@ -210,7 +210,7 @@ class Trade():
                 borrowed = float(item['borrowed'])
                 asset = item['asset']
                 if asset == symbol:
-                    return borrowed if borrowed <= free else 0
+                    return borrowed if borrowed else 0
 
         elif self.mode == 'isolated':
             details = self.client.get_isolated_margin_details(pair)
