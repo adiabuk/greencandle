@@ -1,6 +1,6 @@
 {
-  "divisor": "2",
-  "max_trades": "2",
+  "divisor": "1",
+  "max_trades": "1",
   "name": "prod-api-any-isolated-short",
   "trade_direction": "short",
   "trade_isolated": "true",
