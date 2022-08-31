@@ -219,7 +219,7 @@ class Trade():
                 return float(details['assets'][0]['baseAsset']['borrowed'])
         return 0
 
-    def get_balance_to_uses(self, dbase, account=None, pair=None):
+    def get_balance_to_use(self, dbase, account=None, pair=None):
         """
         Choose between spot/cross/isolated/test balances
         Retrive dict and return appropriate value
