@@ -1,6 +1,31 @@
 
 # Releases
 
+# 4.0
+* Upgrade all envs to docker-compose 2.x
+* Hack to use 1m timeframe from < 1m specified due to binance limitations
+* Helper function for converting epoch to string/time object
+* Print start date of downloaded test data
+* Only calculate profit when trade is closed
+* Return False if trade operation has failed and check when returned
+* Don't truncate DB amounts when calculating percentage
+* Add more commands to GC commands UI
+* Only send a single trade to trades module for open/close operation
+* Script to populate missing DB rates
+* Script to open graphs in browser
+* Add 12h, 1h, and 15m to date env
+* Remove low volume 5m pairs from data env
+* Unit tests for borrow method
+* More run unit tests for cross/isoolated long/short
+* Cleanup return statements
+* Longer varchar in DB for new naming scheme
+* Add new accounts query to DB as view
+* Deprecate multiplier config item and use divisor
+* For Cross/Isolated margin use borrowable amount and available amount
+* Deprecate amount_to_use method and add functionality to other methods
+* Don't use free amount when calculating amount to borrow
+* Separate out prod and per cron tables
+
 # 3.33
 * Changes to test trades
 * Method to manually restore TP/SL in redis
