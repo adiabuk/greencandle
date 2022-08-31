@@ -40,7 +40,6 @@ class Trade():
         self.prod = str2bool(self.config.main.production)
         self.client = binance_auth()
         self.interval = interval
-        self.mode = 'isolated' if str2bool(self.config.main.isolated) else 'cross'
 
     def is_in_drain(self):
         """
@@ -204,7 +203,7 @@ class Trade():
         for a particular pair/direction
         """
 
-        if self.mode == 'cross':
+        if not str2bool(self.config.main.isolated):
             details = self.client.get_cross_margin_details()
             for item in details['userAssets']:
                 borrowed = float(item['borrowed'])
@@ -212,7 +211,7 @@ class Trade():
                 if asset == symbol:
                     return borrowed if borrowed else 0
 
-        elif self.mode == 'isolated':
+        elif str2bool(self.config.main.isolated):
             details = self.client.get_isolated_margin_details(pair)
             if details['assets'][0]['quoteAsset']['asset'] == symbol:
                 return float(details['assets'][0]['quoteAsset']['borrowed'])
@@ -220,10 +219,12 @@ class Trade():
                 return float(details['assets'][0]['baseAsset']['borrowed'])
         return 0
 
-    def get_balance(self, dbase, account=None, pair=None):
+    def get_balance_to_uses(self, dbase, account=None, pair=None):
         """
-        Choose between spot/cross/isolated/test balances and return
-        retrieved dict
+        Choose between spot/cross/isolated/test balances
+        Retrive dict and return appropriate value
+        Only return 99% of the value
+        Returns: float in base if short, or quote if long
         """
         symbol = get_quote(pair) if self.config.main.trade_direction == 'long' else get_base(pair)
         test_balances = self.__get_test_balance(dbase, account=account)[account]
@@ -241,13 +242,13 @@ class Trade():
             except KeyError:
                 pass
 
-        elif account == 'margin' and self.mode == 'isolated':
+        elif account == 'margin' and str2bool(self.config.main.isolated):
             try:
                 final = float(get_binance_isolated()['isolated'][pair][symbol])
             except KeyError:
                 pass
 
-        elif account == 'margin' and self.mode == 'cross':
+        elif account == 'margin' and not str2bool(self.config.main.isolated):
             final = float(get_binance_cross()[account][symbol]['count'])
 
         # Use 99% of amount determined by divisor
@@ -257,6 +258,8 @@ class Trade():
         """
         Get amount to borrow based on pair, and trade direction
         divide by divisor and return in the symbol we need to borrow
+        Only return 99% of the value
+        Returns: float in base if short, or quote if long
         """
         orig_base = get_base(pair)
         orig_quote = get_quote(pair)
@@ -265,7 +268,8 @@ class Trade():
         # if isolated strategy
         # get current borrowed
         strategy = self.config.main.name.split('-')[2]
-        rows = dbase.get_current_borrowed(strategy, self.mode)
+        mode = "isolated" if str2bool(self.config.main.isolated) else "cross"
+        rows = dbase.get_current_borrowed(strategy, mode)
         borrowed_usd = 0
         # go through open trades
         for (current_pair, amt, direction) in list(rows):
@@ -278,7 +282,7 @@ class Trade():
             # get aggregated total borrowed in USD
 
         # get (addiontal) amount we can borrow
-        if self.mode == 'isolated':
+        if str2bool(self.config.main.isolated):
             asset = orig_quote if orig_direction == 'long' else orig_base
             max_borrow = self.client.get_max_borrow(asset=asset, isolated_pair=pair)
             borrow_usd = max_borrow if 'USD' in asset else base2quote(max_borrow, asset+'USDT')
@@ -306,8 +310,8 @@ class Trade():
 
     def __open_margin_long(self, long_list):
         """
-        Buy as many items as we can from buy_list depending on max amount of trades, and current
-        balance in quote currency
+        Get item details and attempt to trade according to config
+        Returns True|False
         """
         self.logger.info("We have %s potential items to long" % len(long_list))
 
@@ -315,7 +319,7 @@ class Trade():
 
         for pair, current_time, current_price, event in long_list:
             amount_to_borrow = self.get_amount_to_borrow(pair, dbase)
-            current_quote_bal = self.get_balance(dbase, account='margin', pair=pair)
+            current_quote_bal = self.get_balance_to_use(dbase, account='margin', pair=pair)
             quote = get_quote(pair)
 
             borrowed_usd = amount_to_borrow if quote == 'USDT' else \
@@ -398,7 +402,7 @@ class Trade():
     @GET_EXCEPTIONS
     def __get_test_balance(self, dbase, account=None):
         """
-        Get and return test balances
+        Get and return test balance dict in the same format as binance
         """
         balance = defaultdict(lambda: defaultdict(defaultdict))
 
@@ -427,15 +431,15 @@ class Trade():
     @GET_EXCEPTIONS
     def __open_spot_long(self, buy_list):
         """
-        Buy as many items as we can from buy_list depending on max amount of trades, and current
-        balance in quote currency
+        Get item details and attempt to trade according to config
+        Returns True|False
         """
         self.logger.info("We have %s potential items to buy" % len(buy_list))
 
         dbase = Mysql(test=self.test_data, interval=self.interval)
 
         for pair, current_time, current_price, event in buy_list:
-            quote_amount = self.get_balance(dbase, 'binance', pair=pair)
+            quote_amount = self.get_balance_to_used(dbase, 'binance', pair=pair)
             quote = get_quote(pair)
 
             if quote_amount <= 0:
@@ -556,7 +560,8 @@ class Trade():
     @GET_EXCEPTIONS
     def __close_margin_short(self, short_list, drawdowns=None, drawups=None):
         """
-        Buy back items in short_list
+        Get item details and attempt to close margin short trade according to config
+        Returns True|False
         """
 
         self.logger.info("We need to close margin short %s" % short_list)
@@ -648,16 +653,17 @@ class Trade():
     @GET_EXCEPTIONS
     def __open_margin_short(self, short_list):
         """
-        open trades with items in short list
+        Get item details and attempt to open margin short trade according to config
+        Returns True|False
         """
         self.logger.info("We have %s potential items to short" % len(short_list))
         dbase = Mysql(test=self.test_data, interval=self.interval)
 
         for pair, current_time, current_price, event in short_list:
             base = get_base(pair)
-            current_base_bal = self.get_balance(dbase, account='margin', pair=pair)
+            current_base_bal = self.get_balance_to_use(dbase, account='margin', pair=pair)
 
-            current_quote_bal = self.get_balance(dbase, account='margin', pair=pair)
+            current_quote_bal = self.get_balance_to_use(dbase, account='margin', pair=pair)
             amount_to_borrow = self.get_amount_to_borrow(pair, dbase)
             borrowed_usd = amount_to_borrow if base == 'USDT' else \
                     base2quote(amount_to_borrow, base+'USDT')
@@ -726,7 +732,8 @@ class Trade():
     @GET_EXCEPTIONS
     def __close_spot_long(self, sell_list, drawdowns=None, drawups=None, update_db=True):
         """
-        Sell items in sell_list
+        Get item details and attempt to close spot trade according to config
+        Returns True|False
         """
 
         self.logger.info("We need to close spot long %s" % sell_list)
@@ -799,7 +806,8 @@ class Trade():
     @GET_EXCEPTIONS
     def __close_margin_long(self, sell_list, drawdowns=None, drawups=None):
         """
-        Sell items in sell_list
+        Get item details and attempt to close margin long trade according to config
+        Returns True|False
         """
 
         self.logger.info("We need to close margin long %s" % sell_list)
