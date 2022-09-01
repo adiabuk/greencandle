@@ -1,6 +1,13 @@
 
 # Releases
 
+# 4.1
+* Order module cleanup and comments
+* Fix short to use base amt in trade, not quote
+* Fix isolated to use entire amount with only 1 concurrent trade
+* Debug alert for loan repayment errors
+* More logging when trade open fails
+
 # 4.0
 * Upgrade all envs to docker-compose 2.x
 * Hack to use 1m timeframe from < 1m specified due to binance limitations
