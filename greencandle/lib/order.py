@@ -439,7 +439,7 @@ class Trade():
         dbase = Mysql(test=self.test_data, interval=self.interval)
 
         for pair, current_time, current_price, event in buy_list:
-            quote_amount = self.get_balance_to_used(dbase, 'binance', pair=pair)
+            quote_amount = self.get_balance_to_use(dbase, 'binance', pair=pair)
             quote = get_quote(pair)
 
             if quote_amount <= 0:
