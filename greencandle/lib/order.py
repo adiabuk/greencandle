@@ -612,6 +612,9 @@ class Trade():
                         asset=base)
                     if "msg" in repay_result:
                         self.logger.error("Repay error-close %s: %s" % (pair, repay_result))
+                        self.logger.error("Params: %s, %s, %s %s" % (pair, borrowed,
+                                                                     self.config.main.isolated,
+                                                                     base))
 
                     self.logger.info("Repay result for %s: %s" % (pair, repay_result))
                 else:
@@ -855,7 +858,9 @@ class Trade():
                         asset=quote)
                     if "msg" in repay_result:
                         self.logger.error("Repay error-close %s: %s" % (pair, repay_result))
-
+                        self.logger.error("Params: %s, %s, %s %s" % (pair, borrowed,
+                                                                     self.config.main.isolated,
+                                                                     base))
                     self.logger.info("Repay result for %s: %s" % (pair, repay_result))
                 else:
                     self.logger.info("No borrowed funds to repay for %s" % pair)
