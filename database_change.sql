@@ -1,6 +1,6 @@
 # 4.0
 
-ALTER TABLE trades RENAME multiplier TO divisor;
+ALTER TABLE trades RENAME COLUMN multiplier TO divisor;
 
 ALTER TABLE trades MODIFY COLUMN name varchar(40);
 ALTER TABLE trades MODIFY COLUMN closed_by varchar(40);
