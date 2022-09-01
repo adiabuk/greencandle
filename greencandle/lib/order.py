@@ -666,17 +666,17 @@ class Trade():
             base = get_base(pair)
             current_base_bal = self.get_balance_to_use(dbase, account='margin', pair=pair)
 
-            current_quote_bal = self.get_balance_to_use(dbase, account='margin', pair=pair)
             amount_to_borrow = self.get_amount_to_borrow(pair, dbase)
             borrowed_usd = amount_to_borrow if base == 'USDT' else \
                     base2quote(amount_to_borrow, base+'USDT')
-            borrowed_quote = base2quote(float(amount_to_borrow), pair)
-            quote_amount = get_step_precision(pair, borrowed_quote + current_quote_bal)
+
+            total_base_amount = get_step_precision(pair, amount_to_borrow + current_base_bal)
+            total_quote_amount = base2quote(total_base_amount, pair)
 
             if self.prod:
                 self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
-                                 % (amount_to_borrow, base, quote_amount))
-                amt_str = quote_amount
+                                 % (amount_to_borrow, base, total_base_amount))
+                amt_str = total_base_amount
                 borrow_res = self.client.margin_borrow(
                     symbol=pair, quantity=amount_to_borrow,
                     isolated=str2bool(self.config.main.isolated),
@@ -700,7 +700,7 @@ class Trade():
                     return False
 
             else:
-                amt_str = quote_amount
+                amt_str = total_base_amount
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
             commission_dict = {} if self.test_trade or self.test_data or 'fills' not in \
@@ -717,7 +717,7 @@ class Trade():
                     pass
 
                 dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
-                                   quote_amount=quote_amount,
+                                   quote_amount=total_quote_amount,
                                    base_amount=amt_str, borrowed=amount_to_borrow,
                                    borrowed_usd=borrowed_usd,
                                    divisor=self.config.main.divisor,
@@ -728,7 +728,7 @@ class Trade():
                 self.__send_notifications(pair=pair, current_time=current_time,
                                           fill_price=current_price, interval=self.interval,
                                           event=event, action='OPEN', usd_profit='N/A',
-                                          quote=quote_amount)
+                                          quote=total_quote_amount)
         del dbase
         return True
 
@@ -860,7 +860,7 @@ class Trade():
                         self.logger.error("Repay error-close %s: %s" % (pair, repay_result))
                         self.logger.error("Params: %s, %s, %s %s" % (pair, borrowed,
                                                                      self.config.main.isolated,
-                                                                     base))
+                                                                     quote))
                     self.logger.info("Repay result for %s: %s" % (pair, repay_result))
                 else:
                     self.logger.info("No borrowed funds to repay for %s" % pair)
