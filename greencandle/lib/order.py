@@ -325,7 +325,8 @@ class Trade():
             borrowed_usd = amount_to_borrow if quote == 'USDT' else \
                     base2quote(amount_to_borrow, quote + 'USDT')
             # amt in base
-            base_to_use = quote2base(current_quote_bal + amount_to_borrow, pair)
+            quote_to_use = current_quote_bal + amount_to_borrow
+            base_to_use = quote2base(quote_to_use, pair)
 
             self.logger.info("Buying %s of %s with %s %s at %s"
                              % (base_to_use, pair, current_quote_bal+amount_to_borrow,
@@ -359,8 +360,10 @@ class Trade():
                 self.logger.info("%s result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
                     self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
-                    self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str,
-                                                                     current_quote_bal))
+                    self.logger.error("Vars: base quantity:%s, quote_quantity: %s quote bal:%s, "
+                                      "quote_borrowed: %s"
+                                      % (amt_str, quote_to_use, current_quote_bal,
+                                         amount_to_borrow))
                     return False
 
                 quote_amount = trade_result.get('cummulativeQuoteQty', quote_amount)
@@ -695,8 +698,8 @@ class Trade():
                 self.logger.info("%s result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
                     self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
-                    self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str,
-                                                                     current_base_bal))
+                    self.logger.error("Vars: quantity:%s, bal:%s, borrowed: %s"
+                                      % (amt_str, current_base_bal, amount_to_borrow))
                     return False
 
             else:
