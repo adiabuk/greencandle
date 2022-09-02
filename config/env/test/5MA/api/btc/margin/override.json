@@ -1,7 +1,0 @@
-{
-  "max_trades": "10",
-  "name": "test-5ma-api-btc-isolated",
-  "pairs": "ETHBTC",
-  "trade_isolated": "true",
-  "trade_type": "margin"
-}

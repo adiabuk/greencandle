@@ -1,7 +1,0 @@
-{
-  "max_trades": "10",
-  "name": "test-5ma-api-usdt-isolated",
-  "pairs": "LINKUSDT BTCUSDT",
-  "trade_isolated": "true",
-  "trade_type": "margin"
-}
