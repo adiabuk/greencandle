@@ -1,6 +1,9 @@
 
 # Releases
 
+# 4.1.1
+* Fix margin long open
+
 # 4.1
 * Order module cleanup and comments
 * Fix short to use base amt in trade, not quote
