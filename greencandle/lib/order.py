@@ -610,7 +610,7 @@ class Trade():
                 if float(borrowed) > 0:
                     self.logger.info("Trying to repay: %s %s for pair %s" %(borrowed, base, pair))
                     repay_result = self.client.margin_repay(
-                        symbol=pair, quantity=borrowed,
+                        symbol=pair, quantity=float(borrowed),
                         isolated=str2bool(self.config.main.isolated),
                         asset=base)
                     if "msg" in repay_result:
@@ -856,7 +856,7 @@ class Trade():
                 if float(borrowed) > 0:
                     self.logger.info("Trying to repay: %s %s for pair %s" %(borrowed, quote, pair))
                     repay_result = self.client.margin_repay(
-                        symbol=pair, quantity=borrowed,
+                        symbol=pair, quantity=float(borrowed),
                         isolated=str2bool(self.config.main.isolated),
                         asset=quote)
                     if "msg" in repay_result:
