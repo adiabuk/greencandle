@@ -379,7 +379,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
-      - CONFIG_ENV=stag/any/spot
+      - CONFIG_ENV=stag/be/any/spot
       - get_trend="true"
       - intermittent="true"
       - DB=true
@@ -418,7 +418,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
-      - CONFIG_ENV=stag/any/long
+      - CONFIG_ENV=stag/be/any/long
       - get_trend="true"
       - intermittent="true"
       - DB=true
@@ -457,7 +457,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
-      - CONFIG_ENV=stag/any2/short/4h
+      - CONFIG_ENV=stag/be/any2/short/4h
       - HOST_IP=$HOST_IP
       - intermittent="true"
       - DB=true
@@ -496,7 +496,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
-      - CONFIG_ENV=stag/any2/long/4h
+      - CONFIG_ENV=stag/be/any2/long/4h
       - intermittent="true"
       - HOST_IP=$HOST_IP
       - DB=true
@@ -535,7 +535,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
-      - CONFIG_ENV=stag/any2/short
+      - CONFIG_ENV=stag/be/any2/short
       - intermittent="true"
       - DB=true
     extra_hosts:
@@ -573,7 +573,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
-      - CONFIG_ENV=stag/any2/long
+      - CONFIG_ENV=stag/be/any2/long
       - intermittent="true"
       - DB=true
     extra_hosts:
@@ -611,7 +611,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
-      - CONFIG_ENV=stag/any/short
+      - CONFIG_ENV=stag/be/any/short
       - get_trend="true"
       - intermittent="true"
       - DB=true
@@ -650,7 +650,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
-      - CONFIG_ENV=stag/any/spot/tsl
+      - CONFIG_ENV=stag/be/any/spot/tsl
       - get_trend="true"
       - intermittent="true"
       - DB=true
@@ -689,7 +689,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
-      - CONFIG_ENV=stag/any/long/tsl
+      - CONFIG_ENV=stag/be/any/long/tsl
       - get_trend="true"
       - intermittent="true"
       - DB=true
@@ -728,7 +728,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
-      - CONFIG_ENV=stag/any/short/tsl
+      - CONFIG_ENV=stag/be/any/short/tsl
       - get_trend="true"
       - intermittent="true"
       - DB=true
