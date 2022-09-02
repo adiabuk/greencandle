@@ -328,11 +328,11 @@ services:
     links:
       - test-base-mysql:mysql
       - test-base-redis:redis
-      - test-be-any-long:any-long
-      - test-be-any-short:any-short
-      - test-be-inw-long:inw-long
-      - test-be-inw-short:inw-short
-      - test-be-any-spot-long:any-spot-long
+      - test-be-api-any-cross-long:any-long
+      - test-be-api-any-cross-short:any-short
+      - test-be-api-inw-cross-long:inw-long
+      - test-be-api-inw-cross-short:inw-short
+      - test-be-api-any-spot-long:any-spot-long
     depends_on:
       - test-base-mysql
       - test-base-redis
@@ -343,9 +343,9 @@ services:
       - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
-  test-be-any-spot-long:
-    container_name: test-be-any-spot-long
-    hostname: test-be-any-spot-long
+  test-be-api-any-spot-long:
+    container_name: test-be-api-any-spot-long
+    hostname: test-be-api-any-spot-long
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -382,9 +382,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  test-be-any-long:
-    container_name: test-be-any-long
-    hostname: test-be-any-long
+  test-be-api-any-cross-long:
+    container_name: test-be-api-any-cross-long
+    hostname: test-be-api-any-cross-long
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -421,9 +421,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  test-be-any-short:
-    container_name: test-be-any-short
-    hostname: test-be-any-short
+  test-be-api-any-cross-short:
+    container_name: test-be-api-any-cross-short
+    hostname: test-be-api-any-cross-short
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -460,9 +460,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  test-be-inw-short:
-    container_name: test-be-inw-short
-    hostname: test-be-inw-short
+  test-be-api-inw-cross-short:
+    container_name: test-be-api-inw-cross-short
+    hostname: test-be-api-inw-cross-short
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -499,9 +499,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  test-be-inw-long:
-    container_name: test-be-inw-long
-    hostname: test-be-inw-long
+  test-be-api-inw-cross-long:
+    container_name: test-be-api-inw-cross-long
+    hostname: test-be-api-inw-cross-long
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always

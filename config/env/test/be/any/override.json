@@ -1,5 +1,5 @@
 {
-  "name": "test-any-long",
+  "name": "test-api-any-cross-long",
   "pairs": "any",
   "stop_loss_perc": "18",
   "take_profit_perc": "40"
