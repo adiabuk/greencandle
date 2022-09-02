@@ -366,7 +366,7 @@ class Trade():
                                          amount_to_borrow))
                     return False
 
-                quote_amount = trade_result.get('cummulativeQuoteQty', quote_amount)
+                quote_to_use = trade_result.get('cummulativeQuoteQty', quote_to_use)
                 amt_str = trade_result.get('executedQty')
             else: # not prod
                 amt_str = base_to_use
@@ -388,16 +388,16 @@ class Trade():
 
 
                 dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
-                                   quote_amount=current_quote_bal+amount_to_borrow,
-                                   base_amount=amt_str, borrowed=amount_to_borrow,
-                                   borrowed_usd=borrowed_usd, divisor=self.config.main.divisor,
+                                   quote_amount=quote_to_use, base_amount=amt_str,
+                                   borrowed=amount_to_borrow, borrowed_usd=borrowed_usd,
+                                   divisor=self.config.main.divisor,
                                    direction=self.config.main.trade_direction,
                                    symbol_name=quote, commission=str(commission_dict))
 
                 self.__send_notifications(pair=pair, current_time=current_time,
                                           fill_price=fill_price, interval=self.interval,
                                           event=event, action='OPEN', usd_profit='N/A',
-                                          quote=current_quote_bal+amount_to_borrow)
+                                          quote=quote_to_use)
 
         del dbase
         return True
