@@ -346,16 +346,16 @@ services:
       - stag-be-alert:alert
       - stag-base-mysql:mysql
       - stag-base-redis:redis
-      - stag-be-any-long:any-long
-      - stag-be-any-short:any-short
-      - stag-be-any2-long:any2-long
-      - stag-be-any2-short:any2-short
-      - stag-be-any2-4h-long:any2-4h-long
-      - stag-be-any2-4h-short:any2-4h-short
-      - stag-be-any-spot-long:any-spot-long
-      - stag-be-any-tsl-long:any-tsl-long
-      - stag-be-any-tsl-short:any-tsl-short
-      - stag-be-any-tsl-spot-long:any-tsl-spot-long
+      - stag-be-api-any-cross-long:any-long
+      - stag-be-api-any-cross-short:any-short
+      - stag-be-api-any2-cross-long:any2-long
+      - stag-be-api-any2-cross-short:any2-short
+      - stag-be-api-any2-4h-cross-long:any2-4h-long
+      - stag-be-api-any2-4h-cross-short:any2-4h-short
+      - stag-be-api-any-tsl-cross-long:any-tsl-long
+      - stag-be-api-any-tsl-cross-short:any-tsl-short
+      - stag-be-api-any-spot-long:any-spot-long
+      - stag-be-api-any-tsl-spot-long:any-tsl-spot-long
     depends_on:
       - stag-be-alert
       - stag-base-mysql
@@ -367,9 +367,9 @@ services:
       - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
-  stag-be-any-spot-long:
-    container_name: stag-be-any-spot-long
-    hostname: stag-be-any-spot-long
+  stag-be-api-any-spot-long:
+    container_name: stag-be-api-any-spot-long
+    hostname: stag-be-api-any-spot-long
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -406,9 +406,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  stag-be-any-long:
-    container_name: stag-be-any-long
-    hostname: stag-be-any-long
+  stag-be-api-any-cross-long:
+    container_name: stag-be-api-any-cross-long
+    hostname: stag-be-api-any-cross-long
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -445,9 +445,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  stag-be-any2-4h-short:
-    container_name: stag-be-any2-4h-short
-    hostname: stag-be-any2-4h-short
+  stag-be-api-any2-4h-cross-short:
+    container_name: stag-be-api-any2-4h-cross-short
+    hostname: stag-be-api-any2-4h-cross-short
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -484,9 +484,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  stag-be-any2-4h-long:
-    container_name: stag-be-any2-4h-long
-    hostname: stag-be-any2-4h-long
+  stag-be-api-any2-4h-cross-long:
+    container_name: stag-be-api-any2-4h-cross-long
+    hostname: stag-be-api-any2-4h-cross-long
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -523,9 +523,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  stag-be-any2-short:
-    container_name: stag-be-any2-short
-    hostname: stag-be-any2-short
+  stag-be-api-any2-cross-short:
+    container_name: stag-be-api-any2-cross-short
+    hostname: stag-be-api-any2-cross-short
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -561,9 +561,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  stag-be-any2-long:
-    container_name: stag-be-any2-long
-    hostname: stag-be-any2-long
+  stag-be-api-any2-cross-long:
+    container_name: stag-be-api-any2-cross-long
+    hostname: stag-be-api-any2-cross-long
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -599,9 +599,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  stag-be-any-short:
-    container_name: stag-be-any-short
-    hostname: stag-be-any-short
+  stag-be-api-any-cross-short:
+    container_name: stag-be-api-any-cross-short
+    hostname: stag-be-api-any-cross-short
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -638,9 +638,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  stag-be-any-tsl-spot-long:
-    container_name: stag-be-any-tsl-spot-long
-    hostname: stag-be-any-tsl-spot-long
+  stag-be-api-any-tsl-spot-long:
+    container_name: stag-be-api-any-tsl-spot-long
+    hostname: stag-be-api-any-tsl-spot-long
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -677,9 +677,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  stag-be-any-tsl-long:
-    container_name: stag-be-any-tsl-long
-    hostname: stag-be-any-tsl-long
+  stag-be-api-any-tsl-cross-long:
+    container_name: stag-be-api-any-tsl-cross-long
+    hostname: stag-be-api-any-tsl-cross-long
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -716,9 +716,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  stag-be-any-tsl-short:
-    container_name: stag-be-any-tsl-short
-    hostname: stag-be-any-tsl-short
+  stag-be-api-any-tsl-cross-short:
+    container_name: stag-be-api-any-tsl-cross-short
+    hostname: stag-be-api-any-tsl-cross-short
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always

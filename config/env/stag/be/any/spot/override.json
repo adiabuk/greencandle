@@ -1,5 +1,5 @@
 {
-  "name": "stag-any-spot-long",
+  "name": "stag-api-any-spot-long",
   "trade_direction": "long",
   "trade_type": "spot"
 }
