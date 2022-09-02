@@ -34,6 +34,9 @@ def respond():
     pair = request.json['pair'].upper()
     action = request.json['action'].upper()
     text = request.json['text']
+    if not pair:
+        return Response(status=200)
+
     LOGGER.info("Request received: %s %s %s" %(pair, action, text))
     current_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     current_price = get_current_price(pair)
