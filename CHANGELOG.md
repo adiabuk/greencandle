@@ -1,6 +1,15 @@
 
 # Releases
 
+# 4.2
+* Cleanup old strategies/containers
+* Use correct strategy naming convention
+* Fix loan repayment not correctly truncating amount
+* Assume zero balance if key not found in margin short
+* Stop prod automatic debt repayments
+* Collect and store order id for each trade open/close in production
+* General cleanup
+
 # 4.1.1
 * Fix margin long open
 
