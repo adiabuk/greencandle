@@ -249,7 +249,10 @@ class Trade():
                 pass
 
         elif account == 'margin' and not str2bool(self.config.main.isolated):
-            final = float(get_binance_cross()[account][symbol]['count'])
+            try:
+                final = float(get_binance_cross()[account][symbol]['count'])
+            except KeyError:
+                pass
 
         # Use 99% of amount determined by divisor
         return sub_perc(1, final / float(self.config.main.divisor)) if final else 0
