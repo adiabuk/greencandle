@@ -20,8 +20,8 @@ import zlib
 import pandas
 import numpy
 import pandas_ta as ta
-from indicator import SuperTrend, RSI
 import talib
+from indicator import SuperTrend, RSI
 
 from greencandle.lib import config
 from greencandle.lib.common import make_float, pipify, pip_calc, epoch2date

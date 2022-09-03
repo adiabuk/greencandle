@@ -295,7 +295,7 @@ def prod_initial(interval, test=False):
     del redis
 
 @GET_EXCEPTIONS
-def prod_loop(interval, test_trade):
+def prod_loop(interval):
     """
     Loop through collection cycle (PROD)
     """
