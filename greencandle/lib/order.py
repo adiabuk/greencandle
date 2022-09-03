@@ -370,9 +370,11 @@ class Trade():
                     return False
 
                 quote_to_use = trade_result.get('cummulativeQuoteQty', quote_to_use)
+                order_id = trade_result.get('orderId')
                 amt_str = trade_result.get('executedQty')
             else: # not prod
                 amt_str = base_to_use
+                order_id = 0
 
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
@@ -395,7 +397,8 @@ class Trade():
                                    borrowed=amount_to_borrow, borrowed_usd=borrowed_usd,
                                    divisor=self.config.main.divisor,
                                    direction=self.config.main.trade_direction,
-                                   symbol_name=quote, commission=str(commission_dict))
+                                   symbol_name=quote, commission=str(commission_dict),
+                                   order_id=order_id)
 
                 self.__send_notifications(pair=pair, current_time=current_time,
                                           fill_price=fill_price, interval=self.interval,
@@ -474,9 +477,11 @@ class Trade():
                     return False
 
                 quote_amount = trade_result.get('cummulativeQuoteQty', quote_amount)
+                order_id = trade_result.get('orderId')
 
             else:
                 trade_result = True
+                order_id = 0
 
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
@@ -499,8 +504,8 @@ class Trade():
                 db_result = dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
                                                quote_amount=quote_amount, base_amount=amount,
                                                direction=self.config.main.trade_direction,
-                                               symbol_name=quote,
-                                               commission=str(commission_dict))
+                                               symbol_name=quote, commission=str(commission_dict),
+                                               order_id=order_id)
                 if db_result:
                     self.__send_notifications(pair=pair, current_time=current_time,
                                               fill_price=fill_price, interval=self.interval,
@@ -602,6 +607,7 @@ class Trade():
                                                         isolated=str2bool(
                                                             self.config.main.isolated))
 
+                order_id = trade_result.get('orderId')
                 self.logger.info("%s result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
@@ -626,11 +632,14 @@ class Trade():
                 else:
                     self.logger.info("No borrowed funds to repay for %s" % pair)
 
+            else:
+                order_id = 0
 
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
             commission_dict = {} if self.test_trade or self.test_data or 'fills' not in \
                     trade_result else self.__get_commission(trade_result)
+
 
             if self.test_data or self.test_trade or \
                     (not self.test_trade and 'transactTime' in trade_result):
@@ -640,8 +649,8 @@ class Trade():
                                     close_price=fill_price,
                                     quote=quote_out, base_out=quantity, name=name,
                                     drawdown=drawdowns[pair], drawup=drawups[pair],
-                                    symbol_name=quote,
-                                    commission=commission_dict)
+                                    symbol_name=quote, commission=commission_dict,
+                                    order_id=order_id)
 
                 profit = dbase.fetch_sql_data("select p.usd_profit from trades t, profit p where "
                                               "p.id=t.id and t.pair='{}' and t.closed_by='{}' "
@@ -698,6 +707,7 @@ class Trade():
                                                         order_type=self.client.market,
                                                         isolated=str2bool(
                                                             self.config.main.isolated))
+                order_id = trade_result.get('orderId')
                 self.logger.info("%s result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
                     self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
@@ -707,6 +717,7 @@ class Trade():
 
             else:
                 amt_str = total_base_amount
+                order_id = 0
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
             commission_dict = {} if self.test_trade or self.test_data or 'fills' not in \
@@ -728,8 +739,8 @@ class Trade():
                                    borrowed_usd=borrowed_usd,
                                    divisor=self.config.main.divisor,
                                    direction=self.config.main.trade_direction,
-                                   symbol_name=get_quote(pair),
-                                   commission=str(commission_dict))
+                                   symbol_name=get_quote(pair), commission=str(commission_dict),
+                                   order_id=order_id)
 
                 self.__send_notifications(pair=pair, current_time=current_time,
                                           fill_price=current_price, interval=self.interval,
@@ -772,10 +783,13 @@ class Trade():
                     symbol=pair, side=self.client.sell, quantity=amt_str,
                     order_type=self.client.market, test=self.test_trade)
 
+                order_id = trade_result.get('orderId')
                 self.logger.info("%s result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
                     return False
+            else:
+                order_id = 0
 
             commission_dict = {} if self.test_trade or self.test_data or 'fills' not in \
                     trade_result else self.__get_commission(trade_result)
@@ -792,8 +806,8 @@ class Trade():
                                         close_price=fill_price, quote=quote_out,
                                         base_out=quantity, name=name,
                                         drawdown=drawdowns[pair], drawup=drawups[pair],
-                                        symbol_name=get_quote(pair),
-                                        commission=commission_dict)
+                                        symbol_name=get_quote(pair), commission=commission_dict,
+                                        order_id=order_id)
 
                     profit = dbase.fetch_sql_data("select p.usd_profit from trades t, "
                                                   "profit p where p.id=t.id and t.pair='{}' "
@@ -848,6 +862,7 @@ class Trade():
                                                         isolated=str2bool(
                                                             self.config.main.isolated))
 
+                order_id = trade_result.get('orderId')
                 self.logger.info("%s result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
@@ -870,6 +885,8 @@ class Trade():
                     self.logger.info("Repay result for %s: %s" % (pair, repay_result))
                 else:
                     self.logger.info("No borrowed funds to repay for %s" % pair)
+            else:
+                order_id = 0
 
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
@@ -885,7 +902,7 @@ class Trade():
                                     base_out=quantity, name=name,
                                     drawdown=drawdowns[pair],
                                     drawup=drawups[pair], symbol_name=quote,
-                                    commission=commission_dict)
+                                    commission=commission_dict, order_id=order_id)
 
                 profit = dbase.fetch_sql_data("select p.usd_profit from trades t, "
                                               "profit p where p.id=t.id and t.pair='{}' "

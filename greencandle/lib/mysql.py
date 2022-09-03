@@ -114,7 +114,7 @@ class Mysql():
     @get_exceptions
     def insert_trade(self, pair, date, price, quote_amount, base_amount, borrowed='0',
                      borrowed_usd=0, divisor='0', direction='', symbol_name=None,
-                     commission=None):
+                     commission=None, order_id=0):
         """
         Insert new trade into DB
         Args:
@@ -130,12 +130,13 @@ class Mysql():
         usd_rate, gbp_rate = self.get_rates(symbol_name)
         command = """insert into trades (pair, open_time, open_price, base_in, `interval`,
                      quote_in, name, borrowed, borrowed_usd, divisor, direction, open_usd_rate,
-                     open_gbp_rate, comm_open) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}", "{5}",
-                     "{6}", "{7}", "{8}", "{9}", "{10}", "{11}", "{12}", "{13}")
+                     open_gbp_rate, comm_open, open_order_id) VALUES ("{0}", "{1}", "{2}", "{3}",
+                     "{4}", "{5}", "{6}", "{7}", "{8}", "{9}", "{10}", "{11}", "{12}", "{13}",
+                     "{14}")
                    """.format(pair, date, '%.15f' % float(price), '%.15f' % float(base_amount),
                               self.interval, quote_amount, config.main.name, borrowed,
                               borrowed_usd, divisor, direction, usd_rate, gbp_rate,
-                              commission)
+                              commission, order_id)
 
         result = self.__run_sql_query(command, get_id=True)
 
@@ -260,7 +261,8 @@ class Mysql():
 
     @get_exceptions
     def update_trades(self, pair, close_time, close_price, quote, base_out,
-                      name=None, drawdown=0, drawup=0, symbol_name=None, commission=None):
+                      name=None, drawdown=0, drawup=0, symbol_name=None, commission=None,
+                      order_id=0):
         """
         Update an existing trade with sell price
         """
@@ -277,10 +279,10 @@ class Mysql():
         command = """update trades set close_price={0},close_time="{1}",
         quote_out="{2}", base_out="{3}", closed_by="{4}", drawdown_perc=abs(round({5},1)),
         drawup_perc=abs(round({6},1)), close_usd_rate="{7}", close_gbp_rate="{8}",
-        comm_close="{9}" where id = "{10}"
+        comm_close="{9}", close_order_id="{10}" where id = "{11}"
         """.format('%.15f' % float(close_price), close_time, quote,
                    '%.15f' % float(base_out), job_name,
-                   drawdown, drawup, usd_rate, gbp_rate, str(commission), trade_id)
+                   drawdown, drawup, usd_rate, gbp_rate, str(commission), order_id, trade_id)
 
         self.__run_sql_query(command)
 
