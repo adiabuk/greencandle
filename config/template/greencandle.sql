@@ -523,6 +523,8 @@ CREATE TABLE `trades` (
   `close_gbp_rate` varchar(30) DEFAULT NULL,
   `comm_open` varchar(255) DEFAULT NULL,
   `comm_close` varchar(255) DEFAULT NULL,
+  `open_order_id` int(11) DEFAULT NULL,
+  `close_order_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2800 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -918,7 +920,7 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-08-29 14:42:52
+-- Dump completed on 2022-09-03 16:36:11
 -- MySQL dump 10.13  Distrib 5.7.39, for Linux (x86_64)
 --
 -- Host: localhost    Database: greencandle
@@ -992,4 +994,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-08-29 14:42:52
+-- Dump completed on 2022-09-03 16:36:11
