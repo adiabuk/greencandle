@@ -378,15 +378,12 @@ class Trade():
 
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
-            commission_dict = {} if self.test_trade or self.test_data or 'fills' not in \
-                    trade_result else self.__get_commission(trade_result)
+            commission_usd = self.__get_commission(trade_result)
 
             if self.test_data or self.test_trade or \
                     (not self.test_trade and 'transactTime' in trade_result):
 
                 try:
-                    base_comm = commission_dict[get_base(pair)]
-                    amt_str = float(amt_str) - base_comm
                     amt_str = sub_perc(dbase.get_complete_commission()/2, amt_str)
                 except (KeyError, TypeError):  # Empty dict, or no commission for base
                     pass
@@ -397,7 +394,7 @@ class Trade():
                                    borrowed=amount_to_borrow, borrowed_usd=borrowed_usd,
                                    divisor=self.config.main.divisor,
                                    direction=self.config.main.trade_direction,
-                                   symbol_name=quote, commission=str(commission_dict),
+                                   symbol_name=quote, commission=str(commission_usd),
                                    order_id=order_id)
 
                 self.__send_notifications(pair=pair, current_time=current_time,
@@ -485,8 +482,8 @@ class Trade():
 
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
-            commission_dict = {} if self.test_trade or self.test_data or 'fills' not in \
-                trade_result else self.__get_commission(trade_result)
+            commission_usd = self.__get_commission(trade_result)
+
             if self.test_data or self.test_trade or \
                     (not self.test_trade and 'transactTime' in trade_result):
                 # only insert into db, if:
@@ -495,8 +492,6 @@ class Trade():
                 # 3. we proformed a real trade which was successful - (transactTime in dict)
 
                 try:
-                    base_comm = commission_dict[get_base(pair)]
-                    amt_str = float(amt_str) - base_comm
                     amt_str = sub_perc(dbase.get_complete_commission()/2, amt_str)
                 except (KeyError, TypeError):  # Empty dict, or no commission for base
                     pass
@@ -504,7 +499,7 @@ class Trade():
                 db_result = dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
                                                quote_amount=quote_amount, base_amount=amount,
                                                direction=self.config.main.trade_direction,
-                                               symbol_name=quote, commission=str(commission_dict),
+                                               symbol_name=quote, commission=str(commission_usd),
                                                order_id=order_id)
                 if db_result:
                     self.__send_notifications(pair=pair, current_time=current_time,
@@ -552,21 +547,22 @@ class Trade():
             return fill_price
         return None
 
-    @staticmethod
-    def __get_commission(trade_result):
+    def __get_commission(self, trade_result):
         """
         Extract and collate commission from trade result dict
 
         """
-
-        if 'fills' in trade_result:
-            comm = defaultdict(float)
+        usd_total = 0
+        if 'fills' in trade_result and not(self.test_trade or self.test_data):
             for fill in trade_result['fills']:
-                comm[fill['commissionAsset']] += float(fill['commission'])
-        else:
-            comm = {}
+                if 'USD' in fill['commissionAsset']:
+                    usd_total += fill['commission']
+                else:
+                    # convert to usd
+                    usd_total += base2quote(float(fill['commission']),
+                                            fill['commissionAsset']+'USDT')
+        return usd_total
 
-        return comm
 
     @GET_EXCEPTIONS
     def __close_margin_short(self, short_list, drawdowns=None, drawups=None):
@@ -637,8 +633,7 @@ class Trade():
 
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
-            commission_dict = {} if self.test_trade or self.test_data or 'fills' not in \
-                    trade_result else self.__get_commission(trade_result)
+            commission_usd = self.__get_commission(trade_result)
 
 
             if self.test_data or self.test_trade or \
@@ -649,7 +644,7 @@ class Trade():
                                     close_price=fill_price,
                                     quote=quote_out, base_out=quantity, name=name,
                                     drawdown=drawdowns[pair], drawup=drawups[pair],
-                                    symbol_name=quote, commission=commission_dict,
+                                    symbol_name=quote, commission=commission_usd,
                                     order_id=order_id)
 
                 profit = dbase.fetch_sql_data("select p.usd_profit from trades t, profit p where "
@@ -720,15 +715,12 @@ class Trade():
                 order_id = 0
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
-            commission_dict = {} if self.test_trade or self.test_data or 'fills' not in \
-                    trade_result else self.__get_commission(trade_result)
+            commission_usd = self.__get_commission(trade_result)
 
             if self.test_data or self.test_trade or \
                     (not self.test_trade and 'transactTime' in trade_result):
 
                 try:
-                    base_comm = commission_dict[get_quote(pair)]
-                    amt_str = float(amt_str) - base_comm
                     amt_str = sub_perc(dbase.get_complete_commission()/2, amt_str)
                 except (KeyError, TypeError):  # Empty dict, or no commission for base
                     pass
@@ -739,7 +731,7 @@ class Trade():
                                    borrowed_usd=borrowed_usd,
                                    divisor=self.config.main.divisor,
                                    direction=self.config.main.trade_direction,
-                                   symbol_name=get_quote(pair), commission=str(commission_dict),
+                                   symbol_name=get_quote(pair), commission=str(commission_usd),
                                    order_id=order_id)
 
                 self.__send_notifications(pair=pair, current_time=current_time,
@@ -791,8 +783,7 @@ class Trade():
             else:
                 order_id = 0
 
-            commission_dict = {} if self.test_trade or self.test_data or 'fills' not in \
-                    trade_result else self.__get_commission(trade_result)
+            commission_usd = self.__get_commission(trade_result)
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
 
@@ -806,7 +797,7 @@ class Trade():
                                         close_price=fill_price, quote=quote_out,
                                         base_out=quantity, name=name,
                                         drawdown=drawdowns[pair], drawup=drawups[pair],
-                                        symbol_name=get_quote(pair), commission=commission_dict,
+                                        symbol_name=get_quote(pair), commission=commission_usd,
                                         order_id=order_id)
 
                     profit = dbase.fetch_sql_data("select p.usd_profit from trades t, "
@@ -890,8 +881,7 @@ class Trade():
 
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
-            commission_dict = {} if self.test_trade or self.test_data or 'fills' not in \
-                trade_result else self.__get_commission(trade_result)
+            commission_usd = self.__get_commission(trade_result)
 
             if self.test_data or self.test_trade or not self.test_trade:
                 if name == "api":
@@ -902,7 +892,7 @@ class Trade():
                                     base_out=quantity, name=name,
                                     drawdown=drawdowns[pair],
                                     drawup=drawups[pair], symbol_name=quote,
-                                    commission=commission_dict, order_id=order_id)
+                                    commission=commission_usd, order_id=order_id)
 
                 profit = dbase.fetch_sql_data("select p.usd_profit from trades t, "
                                               "profit p where p.id=t.id and t.pair='{}' "
