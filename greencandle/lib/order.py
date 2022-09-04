@@ -490,6 +490,7 @@ class Trade():
                 # 1. we are using test_data
                 # 2. we performed a test trade which was successful - (empty dict)
                 # 3. we proformed a real trade which was successful - (transactTime in dict)
+                amt_str = amount
 
                 try:
                     amt_str = sub_perc(dbase.get_complete_commission()/2, amt_str)
