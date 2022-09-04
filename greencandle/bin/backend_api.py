@@ -35,11 +35,17 @@ def respond():
     action = request.json['action'].upper()
     text = request.json['text']
     if not pair:
+        send_slack_message("alerts", "Missing pair for api trade")
         return Response(status=200)
 
     LOGGER.info("Request received: %s %s %s" %(pair, action, text))
     current_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-    current_price = get_current_price(pair)
+    try:
+        current_price = get_current_price(pair)
+    except KeyError:
+        message = "Unable to get price for {}".format(pair)
+        send_slack_message("alerts", message)
+        return Response(status=200)
 
     title = config.main.name + "-manual" if "manual" in request.json else config.main.name
     item = [(pair, current_time, current_price, title)]
@@ -47,7 +53,7 @@ def respond():
 
     try:
         if (config.main.trade_direction == 'long' and float(action) > 0) or \
-              (config.main.trade_direction == 'short' and float(action) < 0):
+           (config.main.trade_direction == 'short' and float(action) < 0):
             action = 'OPEN'
         else:
             action = 'CLOSE'
