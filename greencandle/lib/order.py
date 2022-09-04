@@ -378,7 +378,7 @@ class Trade():
 
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
-            commission_usd = self.__get_commission(trade_result)
+            commission_usd = self.__get_commission(trade_result) if self.prod else 0
 
             if self.test_data or self.test_trade or \
                     (not self.test_trade and 'transactTime' in trade_result):
@@ -482,7 +482,7 @@ class Trade():
 
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
-            commission_usd = self.__get_commission(trade_result)
+            commission_usd = self.__get_commission(trade_result) if self.prod else 0
 
             if self.test_data or self.test_trade or \
                     (not self.test_trade and 'transactTime' in trade_result):
@@ -633,7 +633,7 @@ class Trade():
 
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
-            commission_usd = self.__get_commission(trade_result)
+            commission_usd = self.__get_commission(trade_result) if self.prod else 0
 
 
             if self.test_data or self.test_trade or \
@@ -715,7 +715,7 @@ class Trade():
                 order_id = 0
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
-            commission_usd = self.__get_commission(trade_result)
+            commission_usd = self.__get_commission(trade_result) if self.prod else 0
 
             if self.test_data or self.test_trade or \
                     (not self.test_trade and 'transactTime' in trade_result):
@@ -783,7 +783,7 @@ class Trade():
             else:
                 order_id = 0
 
-            commission_usd = self.__get_commission(trade_result)
+            commission_usd = self.__get_commission(trade_result) if self.prod else 0
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
 
@@ -881,7 +881,7 @@ class Trade():
 
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
-            commission_usd = self.__get_commission(trade_result)
+            commission_usd = self.__get_commission(trade_result) if self.prod else 0
 
             if self.test_data or self.test_trade or not self.test_trade:
                 if name == "api":
