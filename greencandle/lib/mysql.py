@@ -185,7 +185,6 @@ class Mysql():
         row = [item[0] for item in cur.fetchall()]
         return float(row[0]) if row else None # There should only be one row, so return first item
 
-
     @get_exceptions
     def get_quantity(self, pair):
         """
