@@ -1,5 +1,5 @@
 {
-  "divisor": "1",
+  "divisor": "1.5",
   "max_trades": "1",
   "name": "prod-api-any-isolated-short",
   "trade_direction": "short",
