@@ -76,6 +76,7 @@ services:
       - MYSQL_ROOT_PASSWORD=password
       - CONFIG_ENV=unit
       - DB=true
+    entrypoint: /docker-entrypoint.sh mysqld
     restart: always
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
