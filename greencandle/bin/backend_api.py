@@ -83,10 +83,14 @@ def respond():
 
         result = trade.open_trade(item)
         if result:
-            redis.update_on_entry(item[0][0], 'take_profit_perc',
-                                  eval(config.main.take_profit_perc))
-            redis.update_on_entry(item[0][0], 'stop_loss_perc',
-                                  eval(config.main.stop_loss_perc))
+            take_profit = float(request.json['tp']) if 'tp' in request.json else \
+                eval(config.main.take_profit_perc)
+            stop_loss = float(request.json['sl']) if 'sl' in request.json else \
+                eval(config.main.stop_loss_perc)
+
+            redis.update_on_entry(item[0][0], 'take_profit_perc', take_profit)
+            redis.update_on_entry(item[0][0], 'stop_loss_perc', stop_loss)
+
             interval = "1m" if config.main.interval.endswith("s") else config.main.interval
             dataframes = get_dataframes([pair], interval=interval, no_of_klines=1)
             current_candle = dataframes[pair].iloc[-1]
