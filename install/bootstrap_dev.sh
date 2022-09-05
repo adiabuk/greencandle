@@ -86,7 +86,9 @@ cat > /etc/docker/daemon.json << EOF
   "raw-logs": true,
   "log-opts": {
     "syslog-facility": "local1",
-    "tag": "{{.Name}}"
+    "tag": "{{.Name}}",
+    "max-size": "10m",
+    "max-file: "3"
   }
 }
 EOF
