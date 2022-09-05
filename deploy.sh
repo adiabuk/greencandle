@@ -31,8 +31,8 @@ base=$(yq r install/docker-compose_${env}.yml services | grep -v '^ .*' | sed 's
 
 be=$(yq r install/docker-compose_${env}.yml services | grep -v '^ .*' | sed 's/:.*$//'|grep 'be')
 fe=$(yq r install/docker-compose_${env}.yml services | grep -v '^ .*' | sed 's/:.*$//'|grep 'fe')
-all_be=$(docker ps | grep test|awk {'print $NF'}|grep ${env}.*be)
-all_fe=$(docker ps | grep test|awk {'print $NF'}|grep ${env}.*fe)
+all_be=$(docker ps | grep $env |awk {'print $NF'}|grep ${env}.*be)
+all_fe=$(docker ps | grep $env |awk {'print $NF'}|grep ${env}.*fe)
 
 # Stop existing fe and be containers
 docker stop $all_fe $all_be || true
@@ -51,4 +51,4 @@ export COMMIT=`docker exec ${env}-fe-cron  bash -c 'echo "$COMMIT_SHA"'`
 
 # log tag, env short commit sha, and date to log file
 echo "$TAG,$env,$COMMIT,`date`" > /var/local/${env}_deploy.txt
-
+echo DONE
