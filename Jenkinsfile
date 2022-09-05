@@ -20,7 +20,7 @@ pipeline {
                 ansiColor('vga') {
                     sh 'ls'
                     sh 'docker-compose -f install/docker-compose_jenkins.yml -p $BUILD_ID build --build-arg BRANCH=$GIT_BRANCH --build-arg COMMIT=$SHORT_COMMIT --build-arg DATE="$(date)"'
-                    sh 'image_id=BUILD_ID docker-compose -f install/docker-compose_unit.yml -p $BUILD_ID build'
+                    sh 'image_id=$BUILD_ID docker-compose -f install/docker-compose_unit.yml -p $BUILD_ID build'
                 }
             }
         }
