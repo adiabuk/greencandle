@@ -20,7 +20,6 @@ pipeline {
                 ansiColor('vga') {
                     sh 'ls'
                     sh 'docker-compose -f install/docker-compose_jenkins.yml -p $BUILD_ID build --build-arg BRANCH=$GIT_BRANCH --build-arg COMMIT=$SHORT_COMMIT --build-arg DATE="$(date)"'
-                    //sh 'image_id=$BUILD_ID docker-compose -f install/docker-compose_unit.yml -p $BUILD_ID build'
                 }
             }
         }
@@ -41,7 +40,8 @@ pipeline {
                 parallel(
                     "greencandle": {
                         ansiColor('vga') {
-                            build job: 'docker-build', parameters: [string(name: 'version', value: env.GIT_BRANCH),
+                            build job: 'docker-build', parameters: [
+                                string(name: 'version', value: env.GIT_BRANCH),
                                 string(name: 'app', value: "greencandle"),
                                 string(name: 'image_id', value: env.BUILD_ID)
                             ]
@@ -49,7 +49,8 @@ pipeline {
                     },
                     "mysql": {
                         ansiColor('vga') {
-                            build job: 'docker-build', parameters: [string(name: 'version', value: env.GIT_BRANCH),
+                            build job: 'docker-build', parameters: [
+                                string(name: 'version', value: env.GIT_BRANCH),
                                 string(name: 'app', value: "gc-mysql"),
                                 string(name: 'image_id', value: env.BUILD_ID)
                             ]
@@ -57,7 +58,8 @@ pipeline {
                     },
                     "redis": {
                         ansiColor('vga') {
-                            build job: 'docker-build', parameters: [string(name: 'version', value: env.GIT_BRANCH),
+                            build job: 'docker-build', parameters: [
+                                string(name: 'version', value: env.GIT_BRANCH),
                                 string(name: 'app', value: "gc-redis"),
                                 string(name: 'image_id', value: env.BUILD_ID)
                             ]
@@ -65,7 +67,8 @@ pipeline {
                     },
                     "web": {
                         ansiColor('vga') {
-                            build job: 'docker-build', parameters: [string(name: 'version', value: env.GIT_BRANCH),
+                            build job: 'docker-build', parameters: [
+                                string(name: 'version', value: env.GIT_BRANCH),
                                 string(name: 'app', value: "webserver"),
                                 string(name: 'image_id', value: env.BUILD_ID)
                             ]
@@ -73,7 +76,8 @@ pipeline {
                     },
                     "alert": {
                         ansiColor('vga') {
-                            build job: 'docker-build', parameters: [string(name: 'version', value: env.GIT_BRANCH),
+                            build job: 'docker-build', parameters: [
+                                string(name: 'version', value: env.GIT_BRANCH),
                                 string(name: 'app', value: "alert"),
                                 string(name: 'image_id', value: env.BUILD_ID)
                             ]
