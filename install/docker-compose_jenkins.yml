@@ -144,7 +144,7 @@ services:
     build:
       context: ..
       dockerfile: install/Dockerfile-wb
-    image: web-${image_id}
+    image: webserver-${image_id}
     environment:
       - CONFIG_ENV=unit
     restart: always
