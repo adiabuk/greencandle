@@ -20,6 +20,7 @@ pipeline {
                 ansiColor('vga') {
                     sh 'ls'
                     sh 'docker-compose -f install/docker-compose_jenkins.yml -p $BUILD_ID build --build-arg BRANCH=$GIT_BRANCH --build-arg COMMIT=$SHORT_COMMIT --build-arg DATE="$(date)"'
+                    sh 'image_id=BUILD_ID docker-compose -f install/docker-compose_unit.yml -p $BUILD_ID build'
                 }
             }
         }
@@ -27,6 +28,16 @@ pipeline {
         stage("run unittests") {
             steps {
                 parallel(
+                    "docker_mysql": {
+                        echo "testing docker_mysql"
+                        ansiColor('Vga') {
+                            build job: 'unit-tests', parameters: [string(name: 'version', value: env.GIT_BRANCH),
+                                string(name: 'test', value: "docker_mysql"),
+                                string(name: 'commit', value: env.GIT_COMMIT),
+                                string(name: 'image_id', value: env.BUILD_ID)
+                            ]
+                        }
+                    },
                     "run1": {
                         echo "testing run1"
                         ansiColor('Vga') {
@@ -83,16 +94,6 @@ pipeline {
                         ansiColor('Vga') {
                             build job: 'unit-tests', parameters: [string(name: 'version', value: env.GIT_BRANCH),
                                 string(name: 'test', value: "redis"),
-                                string(name: 'commit', value: env.GIT_COMMIT),
-                                string(name: 'image_id', value: env.BUILD_ID)
-                            ]
-                        }
-                    },
-                    "docker_mysql": {
-                        echo "testing docker_mysql"
-                        ansiColor('Vga') {
-                            build job: 'unit-tests', parameters: [string(name: 'version', value: env.GIT_BRANCH),
-                                string(name: 'test', value: "docker_mysql"),
                                 string(name: 'commit', value: env.GIT_COMMIT),
                                 string(name: 'image_id', value: env.BUILD_ID)
                             ]
