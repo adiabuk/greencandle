@@ -533,8 +533,8 @@ class Trade():
         send_slack_trade(channel='trades', event=kwargs.event, perc=perc,
                          pair=kwargs.pair, action=kwargs.action, price=kwargs.fill_price,
                          usd_profit=kwargs.usd_profit, quote=kwargs.quote, usd_quote=usd_quote)
-hkjhkjbkjbkinkjbkjj
-                      def __get_fill_price(self, current_price, trade_result):
+
+    def __get_fill_price(self, current_price, trade_result):
         """
         Extract and average trade result from exchange output
         """
