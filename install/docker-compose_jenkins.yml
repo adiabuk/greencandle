@@ -5,12 +5,11 @@ services:
     build:
       context: ..
       dockerfile: install/Dockerfile-gc
-    container_name: unit-runner-${BUILD_ID}
+    container_name: unit-runner-${test}
     environment:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
-      - BUILD_ID=$BUILD_ID
-      - DB=true
+      - BUILD_ID=$test
     hostname: unit
     image: greencandle-${image_id}
     restart: always
@@ -32,14 +31,13 @@ services:
       - /root/.aws:/root/.aws
 
   cron:
-    container_name: cron-${BUILD_ID}
+    container_name: cron-${test}
     build:
       context: ..
-      dockerfile: install/Dockerfile-gc
+      dockerfile: install/Dockerfile-ms
     environment:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
-      - DB=true
     hostname: cron
     image: greencandle-${image_id}
     restart: always
@@ -60,18 +58,17 @@ services:
       - /root/.aws:/root/.aws
 
   api:
-    container_name: api-${BUILD_ID}
+    container_name: api-${test}
     build:
       context: ..
       dockerfile: install/Dockerfile-gc
     environment:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
-      - DB=true
     hostname: api
     image: greencandle-${image_id}
     restart: always
-    entrypoint: /docker-entrypoint.sh backend_api
+    entrypoint: /docker-entrypoint-api.sh backend_api
     links:
       - mysql-unit:mysql
       - redis-unit:redis
@@ -89,12 +86,12 @@ services:
       - /data:/data
 
   redis-unit:
-    container_name: redis-unit-${BUILD_ID}
+    container_name: redis-unit-${test}
     hostname: redis-unit
     build:
       context: ..
       dockerfile: install/Dockerfile-rs
-    image: gc-redis-${image_id}
+    image: redis-${image_id}
     ports:
       - 6379
     restart: always
@@ -102,33 +99,31 @@ services:
       - mysql-unit:mysql
     healthcheck:
       test: redis-cli ping
-      interval: 10s
-      timeout: 5s
+      interval: 1m
+      timeout: 2s
       retries: 5
 
   mysql-unit:
-    container_name: mysql-unit-${BUILD_ID}
-    entrypoint: /docker-entrypoint.sh mysqld
+    container_name: mysql-unit-${test}
     hostname: mysql-unit
     build:
       context: ..
       dockerfile: install/Dockerfile-ms
-    image: gc-mysql-${image_id}
+    image: mysql-${image_id}
     ports:
       - 3306
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - CONFIG_ENV=unit
-      - DB=true
     restart: always
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
-      interval: 10s
-      timeout: 5s
+      interval: 1m
+      timeout: 2s
       retries: 5
 
   alert-unit:
-    container_name: alert-unit-${BUILD_ID}
+    container_name: alert-unit-${test}
     hostname: alert-unit
     build:
       context: ..
@@ -136,7 +131,6 @@ services:
     image: alert-${image_id}
     environment:
       - CONFIG_ENV=unit
-      - DB=false
     restart: always
     healthcheck:
       test: ls
@@ -145,15 +139,14 @@ services:
       retries: 5
 
   web-unit:
-    container_name: web-unit-${BUILD_ID}
+    container_name: web-unit-${test}
     hostname: web-unit
     build:
       context: ..
       dockerfile: install/Dockerfile-wb
-    image: webserver-${image_id}
+    image: web-${image_id}
     environment:
       - CONFIG_ENV=unit
-      - DB=false
     restart: always
     healthcheck:
       test: ls
