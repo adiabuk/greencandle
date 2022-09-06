@@ -39,7 +39,7 @@ pipeline {
             steps {
                 echo "pushing all"
                 ansiColor('vga') {
-                    build job 'all-push', parameters:
+                    build job: 'all-push', parameters:
                     [string(name: 'version', value: env.GIT_BRANCH),
                      #string(name: 'app', value: "greencandle"),
                      string(name: 'image_id', value: env.BUILD_ID)
