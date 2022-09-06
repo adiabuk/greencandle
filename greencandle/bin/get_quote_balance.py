@@ -86,7 +86,6 @@ def get_cross_margin_details(client=None):
         results += "\t{} free: {} ({})\n".format(key, "{:.5f}".format(val), format_usd(usd_debt))
     return results
 
-
 def get_isolated_margin_details(bal=None, client=None):
     """
     Get isolated margin quote amounts from db + exchange and return formatted string
@@ -132,10 +131,13 @@ def get_isolated_margin_details(bal=None, client=None):
 
             if iso_debt_usd > 0:
                 results += "\tTotal debts: " + format_usd(iso_debt_usd)+"\n"
-            results += "\t{} free: {} ({})\n".format(get_base(pair), base_free,
-                                                     format_usd(base_free_usd))
-            results += "\t{} free: {} ({})\n".format(get_quote(pair), quote_free,
-                                                     format_usd(quote_free_usd))
+
+            if base_free > 0:
+                results += "\t{} free: {} ({})\n".format(get_base(pair), base_free,
+                                                         format_usd(base_free_usd))
+            if quote_free > 0:
+                results += "\t{} free: {} ({})\n".format(get_quote(pair), quote_free,
+                                                         format_usd(quote_free_usd))
 
     if count == 0:
         results += "\tNone available"
