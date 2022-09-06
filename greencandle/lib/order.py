@@ -249,7 +249,7 @@ class Trade():
 
         elif account == 'margin' and not str2bool(self.config.main.isolated):
             try:
-                final = float(self.client.cross_free()[symbol])
+                final = float(self.client.cross_free()[symbol]['net'])
             except KeyError:
                 pass
 
