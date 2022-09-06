@@ -29,6 +29,7 @@ pipeline {
                 ansiColor('vga') {
                     build job: 'all-tests', parameters:
                     [string(name: 'version', value: env.GIT_BRANCH),
+                     string(name: 'commit', value: env.GIT_COMMIT),
                      string(name: 'image_id', value: env.BUILD_ID)
                      ]
                 }
@@ -41,6 +42,7 @@ pipeline {
                 ansiColor('vga') {
                     build job: 'all-push', parameters:
                     [string(name: 'version', value: env.GIT_BRANCH),
+                     string(name: 'commit', value: env.GIT_COMMIT),
                      string(name: 'image_id', value: env.BUILD_ID)
                      ]
                 }
