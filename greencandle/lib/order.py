@@ -15,8 +15,7 @@ from greencandle.lib.auth import binance_auth
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.redis_conn import Redis
-from greencandle.lib.binance_accounts import get_binance_spot, get_binance_cross, \
-    get_binance_isolated, base2quote, quote2base
+from greencandle.lib.binance_accounts import get_binance_spot, base2quote, quote2base
 from greencandle.lib.balance_common import get_base, get_quote, get_step_precision
 from greencandle.lib.common import perc_diff, add_perc, sub_perc, AttributeDict, QUOTES
 from greencandle.lib.alerts import send_gmail_alert, send_push_notif, send_slack_trade, \
@@ -244,13 +243,13 @@ class Trade():
 
         elif account == 'margin' and str2bool(self.config.main.isolated):
             try:
-                final = float(get_binance_isolated()['isolated'][pair][symbol])
+                final = float(self.client.isolated_free()[pair][symbol])
             except KeyError:
                 pass
 
         elif account == 'margin' and not str2bool(self.config.main.isolated):
             try:
-                final = float(get_binance_cross()[account][symbol]['count'])
+                final = float(self.client.cross_free()[symbol])
             except KeyError:
                 pass
 
