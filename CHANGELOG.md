@@ -1,6 +1,23 @@
 
 # Releases
 
+# 4.3
+* Fix deployment to kill all be/fe containers for starting new ones
+* Get converted USD commission from dict before storing
+* don't use everything in isolated account
+* Don't try to get commission in non-prod envs
+* Syntax and var fixes
+* Fix for int too large for db
+* Better alerting for invalid pair from API
+* Add 15m trend to data env
+* Allow specifying TP/SL through API
+* Speed up jenkins test/build/docker push by combining containers
+* Fixes to docker compose files
+* Don't fail deployment if no be/fe containers to kill
+* Use commit hash when running unit tests and creating images
+* Get free amount from exchange, not net from DB
+
+
 # 4.2
 * Cleanup old strategies/containers
 * Use correct strategy naming convention
