@@ -268,11 +268,9 @@ class Trade():
         orig_quote = get_quote(pair)
         orig_direction = self.config.main.trade_direction
 
-        # if isolated strategy
         # get current borrowed
-        strategy = self.config.main.name.split('-')[2]
         mode = "isolated" if str2bool(self.config.main.isolated) else "cross"
-        rows = dbase.get_current_borrowed(strategy, mode)
+        rows = dbase.get_current_borrowed(pair if mode == 'isolated' else '', mode)
         borrowed_usd = 0
         # go through open trades
         for (current_pair, amt, direction) in list(rows):

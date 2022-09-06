@@ -360,8 +360,8 @@ class Mysql():
         Get amount borrowed in current scope
         """
         command = ('select pair, borrowed, direction from trades '
-                   'where name like "%{0}%" and name like "%{1}%" '
-                   'and close_price is NULL'.format(strategy, account))
+                   'where pair like "%{0}%" and name like "%{1}%" '
+                   'and close_price is NULL'.format(pair, account))
 
         cur = self.dbase.cursor()
         self.__execute(cur, command)
