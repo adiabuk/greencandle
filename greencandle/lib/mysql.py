@@ -355,7 +355,7 @@ class Mysql():
         return output
 
     @get_exceptions
-    def get_current_borrowed(self, strategy, account):
+    def get_current_borrowed(self, pair, account):
         """
         Get amount borrowed in current scope
         """
