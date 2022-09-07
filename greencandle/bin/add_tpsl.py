@@ -12,14 +12,21 @@ from greencandle.lib import config
 def main():
     """
     Force adding of SL and TP to redis for given pair
+    Usage: add_tpsl <pair> [<take_profit> <stop_loss>]
     """
 
     config.create_config()
     redis = Redis()
     pair = sys.argv[1]
+    if len(sys.argv) == 4:
+        take_profit = sys.argv[2]
+        stop_loss = sys.argv[3]
+    else:
+        take_profit = config.main.take_profit_perc
+        stop_loss = config.main.stop_loss_perc
 
-    redis.update_on_entry(pair, 'stop_loss_perc', config.main.stop_loss_perc)
-    redis.update_on_entry(pair, 'take_profit_perc', config.main.take_profit_perc)
+    redis.update_on_entry(pair, 'take_profit_perc', take_profit)
+    redis.update_on_entry(pair, 'stop_loss_perc', stop_loss)
 
 if __name__ == '__main__':
     main()
