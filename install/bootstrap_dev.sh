@@ -122,7 +122,7 @@ for app in amrox/gc-mysql amrox/gc-redis amrox/alert amrox/webserver; do
 done
 
 
-TAG=$TAG docker compose -f $DIR/docker-compose_dev.yml up -d mysql-unit redis-unit
+TAG=$TAG docker-compose -f $DIR/docker-compose_dev.yml up -d mysql-unit redis-unit
 
 container=$(docker ps|grep mysql|awk {'print $1'})
 
