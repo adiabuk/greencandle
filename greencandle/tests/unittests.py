@@ -76,7 +76,7 @@ def make_docker_case(container, checks=None):
         def __init__(self, *args, **kwargs):
             super(DockerRun, self).__init__(*args, **kwargs)
             self.compose_file = 'install/docker-compose_unit.yml'
-            self.build_id = os.environ['test']
+            self.build_id = os.environ['id']
 
         def run_subprocess(self, command):
             """
@@ -236,8 +236,12 @@ def make_test_case(config_env, pairs, interval, startdate, days, xsum, xmax, xmi
             """
 
             self.logger.info("Getting test data")
+            print(self.startdate, self.intervals, self.pairs, self.days, self.outputdir)
+            print("hello")
+            #time.sleep(999)
             get_data(self.startdate, self.intervals, self.pairs, self.days, self.outputdir,
                      extra=200)
+
             filename = self.outputdir + '/' + self.pairs[0]+ '_' + self.intervals[0] + '.p'
             self.logger.info("Filename: %s", filename)
             assert os.path.exists(filename) == 1
