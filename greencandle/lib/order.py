@@ -103,10 +103,6 @@ class Trade():
             self.logger.warning("Too many trades, skipping")
             send_slack_message("alerts", "Too many trades, skipping")
             return []
-        elif self.is_in_drain() and not self.test_data:
-            self.logger.warning("strategy is in drain, skipping...")
-            send_slack_message("alerts", "strategy is in drain, skipping")
-            return []
 
         final_list = []
         manual = "any" in self.config.main.name
@@ -115,6 +111,11 @@ class Trade():
                 self.logger.warning("We already have a trade of %s, skipping..." % item[0])
             elif not manual and (item[0] not in self.config.main.pairs and not self.test_data):
                 self.logger.error("Pair %s not in main_pairs, skipping..." % item[0])
+            elif self.is_in_drain() and not self.test_data:
+                self.logger.warning("strategy is in drain for pair %s, skipping..." % item[0])
+                send_slack_message("alerts", "strategy is in drain, skipping")
+                return []
+
             else:
                 final_list.append(item)
         return final_list
