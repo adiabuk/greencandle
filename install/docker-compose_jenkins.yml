@@ -5,7 +5,7 @@ services:
     build:
       context: ..
       dockerfile: install/Dockerfile-gc
-    container_name: unit-runner-${test}
+    container_name: unit-runner-$id
     environment:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
@@ -32,7 +32,7 @@ services:
       - /root/.aws:/root/.aws
 
   cron:
-    container_name: cron-${test}
+    container_name: cron-$id
     build:
       context: ..
       dockerfile: install/Dockerfile-ms
@@ -59,7 +59,7 @@ services:
       - /root/.aws:/root/.aws
 
   api:
-    container_name: api-${test}
+    container_name: api-$id
     build:
       context: ..
       dockerfile: install/Dockerfile-gc
@@ -87,7 +87,7 @@ services:
       - /data:/data
 
   redis-unit:
-    container_name: redis-unit-${test}
+    container_name: redis-unit-$id
     hostname: redis-unit
     build:
       context: ..
@@ -105,7 +105,7 @@ services:
       retries: 5
 
   mysql-unit:
-    container_name: mysql-unit-${test}
+    container_name: mysql-unit-$id
     hostname: mysql-unit
     build:
       context: ..
@@ -124,7 +124,7 @@ services:
       retries: 5
 
   alert-unit:
-    container_name: alert-unit-${test}
+    container_name: alert-unit-$id
     hostname: alert-unit
     build:
       context: ..
@@ -140,7 +140,7 @@ services:
       retries: 5
 
   web-unit:
-    container_name: web-unit-${test}
+    container_name: web-unit-$id
     hostname: web-unit
     build:
       context: ..
