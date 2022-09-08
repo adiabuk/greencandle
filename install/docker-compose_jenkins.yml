@@ -11,6 +11,8 @@ services:
       - HOST=$HOSTNAME
       - BUILD_ID=$id
       - DB=true
+      - id=$id
+      - test=$test
     hostname: unit
     image: greencandle-${image_id}
     restart: always
