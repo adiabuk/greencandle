@@ -10,6 +10,7 @@ services:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
       - BUILD_ID=$test
+      - DB=true
     hostname: unit
     image: greencandle-${image_id}
     restart: always
