@@ -9,7 +9,7 @@ services:
     environment:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
-      - BUILD_ID=$test
+      - BUILD_ID=$id
       - DB=true
     hostname: unit
     image: greencandle-${image_id}
