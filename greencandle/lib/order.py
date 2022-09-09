@@ -555,7 +555,7 @@ class Trade():
         if 'fills' in trade_result and not(self.test_trade or self.test_data):
             for fill in trade_result['fills']:
                 if 'USD' in fill['commissionAsset']:
-                    usd_total += fill['commission']
+                    usd_total += float(fill['commission'])
                 else:
                     # convert to usd
                     usd_total += base2quote(float(fill['commission']),
