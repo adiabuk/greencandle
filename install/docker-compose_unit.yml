@@ -10,6 +10,7 @@ services:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
       - DB=true
+      - id=$id
     hostname: cron
     image: greencandle-${image_id}
     restart: always
@@ -32,6 +33,7 @@ services:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
       - DB=true
+      - id=$id
     hostname: api
     image: greencandle-${image_id}
     restart: always
@@ -51,6 +53,8 @@ services:
       context: ..
       dockerfile: install/Dockerfile-rs
     container_name: redis-unit-${test}
+    environment:
+      - id=$id
     hostname: redis-unit
     image: gc-redis-${image_id}
     entrypoint: redis-server
@@ -76,6 +80,7 @@ services:
       - MYSQL_ROOT_PASSWORD=password
       - CONFIG_ENV=unit
       - DB=true
+      - id=$id
     entrypoint: /docker-entrypoint.sh mysqld
     restart: always
     healthcheck:
