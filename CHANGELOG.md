@@ -1,6 +1,14 @@
 
 # Releases
 
+# 4.4
+* Cleanup isolated alerts - don't print if balance < 0
+* Allow manual overriding TP & SL for existing trades
+* Various fixes for streamlining and speeding up jenkins unittests
+* Docs for running local tests
+* Fix for calculating actual commission used from exchange data
+* Remove a further 1% from amount of margin to open trade with before applying step-precision
+
 # 4.3
 * Fix deployment to kill all be/fe containers for starting new ones
 * Get converted USD commission from dict before storing
