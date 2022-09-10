@@ -341,7 +341,6 @@ class Trade():
                 self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
                                  % (amount_to_borrow, quote, current_quote_bal))
 
-
                 borrow_res = self.client.margin_borrow(
                     symbol=pair, quantity=amount_to_borrow,
                     isolated=str2bool(self.config.main.isolated),
@@ -352,7 +351,7 @@ class Trade():
                     return False
 
                 self.logger.info(borrow_res)
-                amt_str = get_step_precision(pair, base_to_use)
+                amt_str = get_step_precision(pair, sub_perc(1, base_to_use))
                 trade_result = self.client.margin_order(symbol=pair, side=self.client.buy,
                                                         quantity=amt_str,
                                                         order_type=self.client.market,
@@ -562,7 +561,6 @@ class Trade():
                                             fill['commissionAsset']+'USDT')
         return usd_total
 
-
     @GET_EXCEPTIONS
     def __close_margin_short(self, short_list, drawdowns=None, drawups=None):
         """
@@ -679,7 +677,8 @@ class Trade():
             borrowed_usd = amount_to_borrow if base == 'USDT' else \
                     base2quote(amount_to_borrow, base+'USDT')
 
-            total_base_amount = get_step_precision(pair, amount_to_borrow + current_base_bal)
+            total_base_amount = get_step_precision(pair, sub_perc(1, amount_to_borrow +
+                                                                  current_base_bal))
             total_quote_amount = base2quote(total_base_amount, pair)
 
             if self.prod:
