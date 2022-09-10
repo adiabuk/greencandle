@@ -2,7 +2,7 @@ version: "3.1"
 services:
 
   cron:
-    container_name: cron-${test}
+    container_name: cron-${id}
     build:
       context: ..
       dockerfile: install/Dockerfile-gc
@@ -25,7 +25,7 @@ services:
       - /root/.aws:/root/.aws
 
   api:
-    container_name: api-${test}
+    container_name: api-${id}
     build:
       context: ..
       dockerfile: install/Dockerfile-gc
@@ -52,7 +52,7 @@ services:
     build:
       context: ..
       dockerfile: install/Dockerfile-rs
-    container_name: redis-unit-${test}
+    container_name: redis-unit-${id}
     environment:
       - id=$id
     hostname: redis-unit
@@ -71,7 +71,7 @@ services:
     build:
       context: ..
       dockerfile: install/Dockerfile-ms
-    container_name: mysql-unit-${test}
+    container_name: mysql-unit-${id}
     hostname: mysql-unit
     image: gc-mysql-${image_id}
     ports:
