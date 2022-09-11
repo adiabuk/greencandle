@@ -49,10 +49,14 @@ pipeline {
     }
 
     post {
+        all {
+            sh """
+            docker-compose -f install/docker-compose_jenkins.yml -p $BUILD_ID down --rmi all
+            docker network prune -f
+            """
+        }
         success {
             slackSend color: "good", message: "Repo: ${env.GIT_REPO_NAME}\nResult: ${currentBuild.currentResult}\nCommit: ${SHORT_COMMIT}\nBranch: ${env.GIT_BRANCH}\nExecution time: ${currentBuild.durationString.replace(' and counting', '')}\nURL: (<${env.BUILD_URL}|Open>)"
-            sh 'docker-compose -f install/docker-compose_jenkins.yml -p $BUILD_ID down --rmi all'
-            sh 'docker network prune -f'
         }
         failure { slackSend color: "danger", message: "Repo: ${env.GIT_REPO_NAME}\nResult: ${currentBuild.currentResult}\nCommit: ${SHORT_COMMIT}\nBranch: ${env.GIT_BRANCH}\nExecution time: ${currentBuild.durationString.replace(' and counting', '')}\nURL: (<${env.BUILD_URL}|Open>)"
         }
