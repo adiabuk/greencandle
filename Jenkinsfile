@@ -49,7 +49,7 @@ pipeline {
     }
 
     post {
-        allways {
+        always {
             sh """
             docker-compose -f install/docker-compose_jenkins.yml -p $BUILD_ID down --rmi all
             docker network prune -f
