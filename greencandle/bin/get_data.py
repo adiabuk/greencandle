@@ -5,8 +5,8 @@ Collect OHLC and strategy data for later analysis
 """
 import os
 from pathlib import Path
-from binance.binance import Binance
 from apscheduler.schedulers.blocking import BlockingScheduler
+from binance.binance import Binance
 from greencandle.lib import config
 config.create_config()
 from greencandle.lib.redis_conn import Redis
