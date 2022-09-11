@@ -11,14 +11,15 @@ from greencandle.lib import config
 
 HOME_DIR = os.path.expanduser("~")
 
-def binance_auth():
+def binance_auth(endpoint="https://api.binance.com"):
     """
     Authenticatate with binance API using credentials in config
     """
     config.create_config()
     account = config.accounts.binance[0]
     client = Binance(api_key=account['key'],
-                     secret=account['secret'])
+                     secret=account['secret'],
+                     endpoint=endpoint)
     return client
 
 def coinbase_auth(account):

@@ -37,3 +37,11 @@ class TestConfig(unittest.TestCase):
                 failed.add(env)
         if failed:
             self.fail("The following envs have missing config: {}".format(failed))
+
+    def test_config2(self):
+        """
+        Run configstore pakcage test and ensure it exits with code 0
+        """
+        exit_code = os.system("configstore package test")
+        self.assertEqual(exit_code, 0)
+

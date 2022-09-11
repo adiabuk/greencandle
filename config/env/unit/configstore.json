@@ -5,6 +5,11 @@
   "is_insecure": true,
   "data_key": "OfvuQJ0Cis1CvnFV2KTTYv3WCPKXOIord3OBDc0kwcU=",
   "data": {
+    "account1_endpoint": {
+      "value": "https://api.binance.com",
+      "is_binary": false,
+      "is_secret": false
+    },
     "account1_key": {
       "value": "test",
       "is_binary": false,
@@ -17,6 +22,11 @@
     },
     "account1_type": {
       "value": "binance",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account2_endpoint": {
+      "value": "",
       "is_binary": false,
       "is_secret": false
     },
@@ -35,6 +45,11 @@
       "is_binary": false,
       "is_secret": false
     },
+    "account3_endpoint": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
     "account3_key": {
       "value": "",
       "is_binary": false,
@@ -46,6 +61,11 @@
       "is_secret": false
     },
     "account3_type": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account4_endpoint": {
       "value": "",
       "is_binary": false,
       "is_secret": false

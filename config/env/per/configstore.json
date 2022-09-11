@@ -6,6 +6,11 @@
   "data_key": "AQIDAHh86o+e1l3vhl3F7Gn0lhwL0nWY7Q8sBy8abugAZ50HlgFByZYGyV9NwGy6UkmVEb2oAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMnQc09bFnrB/sDzJoAgEQgDs7H09GPBab3jf9VOE0bF06keLff5e2CuoQr2pOn6WEMWWtyDeWt/+0Afeq6LxxkfomB2Hd59fuUe/fxA==",
   "master_key_id": "alias/greencandle",
   "data": {
+    "account1_endpoint": {
+      "value": "https://api.binance.com",
+      "is_binary": false,
+      "is_secret": false
+    },
     "account1_key": {
       "value": "+HQZMqc+olfCppvOyBt5Ntk3m1z2HTVu4PkVbUxxi6xEfS9mBeOQEcmfFPkDxefYnVq7E9TXFgpwyEokfCqrT9VCsvCLBgS4E4EUgcDnwZL42zt7Tv8HVBok2XLsM5V9nxCrPFML8sg=",
       "is_binary": false,
@@ -18,6 +23,11 @@
     },
     "account1_type": {
       "value": "binance",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account2_endpoint": {
+      "value": "",
       "is_binary": false,
       "is_secret": false
     },
@@ -36,6 +46,11 @@
       "is_binary": false,
       "is_secret": false
     },
+    "account3_endpoint": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
     "account3_key": {
       "value": "bBBZtu6yMqU7+uYf5H9exghsb3siHmLYVRDdxsijMNJ4Uz9b0dRvuk7RC5+qVBFVQP2RqzlJnffEe+tK2qg5AQ==",
       "is_binary": false,
@@ -48,6 +63,11 @@
     },
     "account3_type": {
       "value": "phemex",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account4_endpoint": {
+      "value": "",
       "is_binary": false,
       "is_secret": false
     },
