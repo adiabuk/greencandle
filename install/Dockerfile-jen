@@ -23,8 +23,7 @@ RUN apt-get install -y make build-essential libssl-dev zlib1g-dev sudo
 RUN apt-get install -y wget make git default-libmysqlclient-dev python3-dev xvfb iceweasel redis-tools cron bsdmainutils libssl-dev gcc libsystemd-dev libjpeg-dev zlib1g-dev wget
 
 RUN mkdir -p /usr/lib/docker/cli-plugins
-RUN curl -sSL https://github.com/docker/compose/releases/download/v2.9.0/docker-compose-linux-x86_64
--o /usr/local/bin/docker-compose
+RUN curl -sSL https://github.com/docker/compose/releases/download/v2.9.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
 RUN chmod +x /usr/local/bin/docker-compose
 
 RUN wget "https://www.dropbox.com/sh/l22jyonei087h4o/AAChfqr_j4ydTDjILz0Q62Y2a/configstore-2.5.0-linux-amd64.tar.gz?dl=0" -O /tmp/configstore-2.5.0-linux-amd64.tar.gz
