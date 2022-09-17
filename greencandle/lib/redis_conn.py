@@ -122,9 +122,15 @@ class Redis():
     def get_on_entry(self, pair, name):
         """
         fetch key/value set on trade entry
+        If no value exists, retrieve default from config
+        Returns float
         """
         key = "{}-{}-{}".format(pair, name, config.main.name)
-        return self.conn.get(key)
+        value = self.conn.get(key)
+        try:
+            return float(value.decode())
+        except AttributeError:
+            return float(config.main[name])
 
     def rm_on_entry(self, pair, name):
         """
@@ -325,12 +331,8 @@ class Redis():
         """
         Check if price between intervals and sell if matches stop_loss or take_profit rules
         """
-        try:
-            stop_loss_perc = float(self.get_on_entry(pair, 'stop_loss_perc'))
-            take_profit_perc = float(self.get_on_entry(pair, 'take_profit_perc'))
-        except TypeError:
-            self.logger.critical("Unable to get TP/SL for %s" % pair)
-            raise
+        stop_loss_perc = self.get_on_entry(pair, 'stop_loss_perc')
+        take_profit_perc = self.get_on_entry(pair, 'take_profit_perc')
 
         current_price = current_candle.close
         current_high = current_candle.high
@@ -417,13 +419,6 @@ class Redis():
         """
 
         profit_perc = self.get_on_entry(pair, 'take_profit_perc')
-        if profit_perc:
-            profit_perc = float(profit_perc)
-        else:
-            profit_perc = 0
-
-        if profit_perc <= 0:
-            return False
         direction = config.main.trade_direction
         immediate = str2bool(config.main.immediate_take_profit)
 
@@ -455,11 +450,6 @@ class Redis():
         direction = config.main.trade_direction
 
         stop_perc = self.get_on_entry(pair, 'stop_loss_perc')
-        if stop_perc:
-            stop_perc = float(stop_perc)
-        else:
-            stop_perc = 0
-
         immediate = str2bool(config.main.immediate_stop)
 
         if not open_price:
