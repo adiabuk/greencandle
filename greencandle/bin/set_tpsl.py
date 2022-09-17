@@ -1,6 +1,6 @@
 #pylint: disable=no-member
 """
-Add missing SL and TP to redis
+Set SL and TP in redis
 """
 import sys
 from greencandle.lib.common import arg_decorator
@@ -12,7 +12,8 @@ from greencandle.lib import config
 def main():
     """
     Force adding of SL and TP to redis for given pair
-    Usage: add_tpsl <pair> [<take_profit> <stop_loss>]
+    Execute without values to use defaults in config
+    Usage: set_tpsl <pair> [<take_profit> <stop_loss>]
     """
 
     config.create_config()
