@@ -12,7 +12,7 @@ from greencandle.lib import config
 def main():
     """
     Retrieve TP and SL from redis for given pair
-    Usage: get_tpsl <pair> 
+    Usage: get_tpsl <pair>
     """
 
     config.create_config()
@@ -20,7 +20,7 @@ def main():
     pair = sys.argv[1]
     take_profit = redis.get_on_entry(pair, 'take_profit_perc')
     stop_loss = redis.get_on_entry(pair, 'stop_loss_perc')
-    
+
     print("TP: {}\nSL: {}".format(take_profit, stop_loss))
 
 if __name__ == '__main__':
