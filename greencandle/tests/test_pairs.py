@@ -7,6 +7,7 @@ Check that all trading pairs used in various configs exist and have data
 import os
 import unittest
 from binance.binance import Binance
+from str2bool import str2bool
 
 
 class TestPair(unittest.TestCase):
@@ -36,7 +37,7 @@ class TestPair(unittest.TestCase):
                 extracted = os.popen('configstore package get {} pairs'.format(item)).read().split()
                 pairs.extend(extracted)
 
-        client = Binance()
+        client = Binance(debug=str2bool(config.accounts.account_debug))
         info = client.exchange_info()
         for pair in set(pairs):
             if pair not in ("None", "any"):

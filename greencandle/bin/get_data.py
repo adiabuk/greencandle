@@ -15,6 +15,7 @@ from greencandle.lib.run import prod_initial
 from greencandle.lib.binance_common import get_dataframes
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.common import HOUR, MINUTE, arg_decorator
+from str2bool import str2bool
 
 LOGGER = get_logger(__name__)
 PAIRS = config.main.pairs.split()
@@ -66,7 +67,7 @@ def prod_run():
     LOGGER.info("Starting prod run")
     if os.path.exists('/var/run/gc-data-{}'.format(config.main.interval)):
         os.remove('/var/run/gc-data-{}'.format(config.main.interval))
-    client = Binance()
+    client = Binance(debug=str2bool(config.accounts.account_debug))
     prices = client.prices()
     test_loop(interval=interval, prices=prices)
     Path('/var/run/gc-data-{}'.format(config.main.interval)).touch()

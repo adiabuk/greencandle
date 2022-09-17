@@ -13,7 +13,7 @@ import datetime
 from concurrent.futures import ThreadPoolExecutor
 import pandas
 from binance.binance import Binance
-
+from str2bool import str2bool
 
 from greencandle.lib import config
 from greencandle.lib.logger import get_logger
@@ -24,7 +24,7 @@ LOGGER = get_logger(__name__)
 def get_current_price(pair):
     """Get current price from binance"""
 
-    client = Binance()
+    client = Binance(debug=str2bool(config.accounts.account_debug))
     prices = client.prices()
     return prices[pair]
 
@@ -41,7 +41,7 @@ def get_binance_klines(pair, interval=None, limit=50):
     """
 
     try:
-        client = Binance()
+        client = Binance(debug=str2bool(config.accounts.account_debug))
         interval = "1m" if interval.endswith("s") else interval
         raw = client.klines(pair, interval, limit=limit)
     except IndexError:
@@ -73,7 +73,7 @@ def get_all_klines(pair, interval=None, start_time=0, no_of_klines=1E1000):
 
     result = []
     while True:
-        client = Binance()
+        client = Binance(debug=str2bool(config.accounts.account_debug))
         current_section = client.klines(pair, interval, startTime=start_time)
         result += current_section
         if len(result) >= no_of_klines:

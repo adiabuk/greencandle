@@ -86,6 +86,11 @@
       "is_binary": false,
       "is_secret": false
     },
+    "account_debug": {
+      "value": "False",
+      "is_binary": false,
+      "is_secret": false
+    },
     "api_token": {
       "value": "cysqm6cQuAw78fJtqfcVrXVygREE0LGVTYl6ZQkMv/nxxPpG150gNdPGZDfsw442",
       "is_binary": false,

@@ -10,6 +10,7 @@ from greencandle.lib import config
 from greencandle.lib.binance_common import get_current_price
 from greencandle.lib.common import AttributeDict, format_usd
 from greencandle.lib.logger import get_logger, exception_catcher
+from str2bool import str2bool
 
 class Mysql():
     """
@@ -253,7 +254,7 @@ class Mysql():
         Get current rates
         return tupple of usd_rate and gbp_rate
         """
-        client = Binance()
+        client = Binance(debug=str2bool(config.accounts.account_debug))
         usd_rate = client.prices()[quote + 'USDT'] if quote != 'USDT' else 1
         gbp_rate = float(usd_rate)/float(client.prices()['GBPUSDT'])
         return (usd_rate, gbp_rate)

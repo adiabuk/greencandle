@@ -13,6 +13,7 @@ from concurrent.futures import ThreadPoolExecutor
 from glob import glob
 import requests
 from binance.binance import Binance
+from str2bool import str2bool
 from greencandle.lib.engine import Engine
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.mysql import Mysql
@@ -277,7 +278,7 @@ def prod_initial(interval, test=False):
     """
     Initial prod run - back-fetching data for tech analysis.
     """
-    client = Binance()
+    client = Binance(debug=str2bool(config.accounts.account_debug))
     prices = client.prices()
     prices_trunk = {}
 
@@ -306,7 +307,7 @@ def prod_loop(interval):
 
     LOGGER.info("Starting new cycle")
     LOGGER.debug("max trades: %s" % config.main.max_trades)
-    client = Binance()
+    client = Binance(debug=str2bool(config.accounts.account_debug))
     prices = client.prices()
     prices_trunk = {}
     for key, val in prices.items():
