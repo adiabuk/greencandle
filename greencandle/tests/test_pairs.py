@@ -8,7 +8,8 @@ import os
 import unittest
 from binance.binance import Binance
 from str2bool import str2bool
-
+from greencandle.lib import config
+config.create_config()
 
 class TestPair(unittest.TestCase):
     """Test executables included in package"""
