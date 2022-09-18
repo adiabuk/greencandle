@@ -419,6 +419,8 @@ class Redis():
         """
 
         profit_perc = self.get_on_entry(pair, 'take_profit_perc')
+        if profit_perc <= 0:
+            return False
         direction = config.main.trade_direction
         immediate = str2bool(config.main.immediate_take_profit)
 
