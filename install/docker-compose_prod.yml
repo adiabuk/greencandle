@@ -353,6 +353,7 @@ services:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
       - CONFIG_ENV=prod/be/any/spot-long
+      - intermittent="true"
       - DB=true
     ports:
       - 20000
@@ -387,6 +388,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
+      - intermittent="true"
       - CONFIG_ENV=prod/be/any/cross-long
       - DB=true
     ports:
@@ -422,6 +424,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
+      - intermittent="true"
       - CONFIG_ENV=prod/be/any/isolated-long
       - DB=true
     ports:
@@ -457,6 +460,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
+      - intermittent="true"
       - CONFIG_ENV=prod/be/any/cross-short
       - DB=true
     ports:
@@ -492,6 +496,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
+      - intermittent="true"
       - CONFIG_ENV=prod/be/any/isolated-short
       - DB=true
     ports:
