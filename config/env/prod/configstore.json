@@ -87,7 +87,7 @@
       "is_secret": false
     },
     "account_debug": {
-      "value": "False",
+      "value": "True",
       "is_binary": false,
       "is_secret": false
     },
