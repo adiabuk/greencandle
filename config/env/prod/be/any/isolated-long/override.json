@@ -1,6 +1,6 @@
 {
-  "divisor": "1.5",
-  "max_trades": "1",
+  "divisor": "1.4",
+  "max_trades": "999",
   "name": "prod-api-any-isolated-long",
   "trade_isolated": "true",
   "trade_type": "margin"
