@@ -1,6 +1,17 @@
 
 # Releases
 
+# 4.5
+* Add more pairs for analysis in data env
+* Allow specifying binance api endpoint from config
+* Cleanup docker after jenkins success/falure to conserve networks
+* Updated version of jenkins slave image
+* Fix setuptools pip in gc image
+* Allow infinite isolated trades
+* Enable intermittent checks in all prod trade containers
+* Temporarily enable binance debug mode to get mock data
+* Fix cron test image using mysql image causing intermittent failures
+
 # 4.4
 * Cleanup isolated alerts - don't print if balance < 0
 * Allow manual overriding TP & SL for existing trades
