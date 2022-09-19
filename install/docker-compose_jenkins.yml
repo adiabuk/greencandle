@@ -37,7 +37,7 @@ services:
     container_name: cron-$id
     build:
       context: ..
-      dockerfile: install/Dockerfile-ms
+      dockerfile: install/Dockerfile-gc
     environment:
       - CONFIG_ENV=unit
       - HOST=$HOSTNAME
