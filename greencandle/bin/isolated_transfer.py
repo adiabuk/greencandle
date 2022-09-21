@@ -21,9 +21,9 @@ def main():
     quote = get_quote(pair)
     base = get_base(pair)
 
-    for symbol in quote, base:
-        print("Transferring {} {} for pair:{}".format(symbol, direction, pair))
-        result = client.transfer_isolated(pair, symbol, direction)
+    for asset in quote, base:
+        print("Transferring {} {} for pair:{}".format(asset, direction, pair))
+        result = client.transfer_isolated(symbol=pair, asset=asset, direction=direction)
         print("Result: {}".format(result))
 
 
