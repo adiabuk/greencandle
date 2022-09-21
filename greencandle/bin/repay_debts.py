@@ -39,18 +39,19 @@ def main():
     for item in isolated_details['assets']:
         symbol = item['symbol']
         for side in ["quoteAsset", "baseAsset"]:
-             borrowed = float(item[side]['borrowed'])
-             free = float(item[side]['free'])
-             asset = item[side]['asset']
-             if borrowed > 0 and free > 0:
-                 to_pay = borrowed if borrowed < free else free
-                 if to_pay == 0:
-                     continue
-                 logger.info("Attempting to pay off Isolated %s of %s %s" % (to_pay, asset, symbol))
-                 result = client.margin_repay(symbol=symbol, asset=asset, quantity=to_pay, isolated=True)
-                 logger.info("Repay result for %s %s: %s" % (symbol, asset, result))
-
-
+            borrowed = float(item[side]['borrowed'])
+            free = float(item[side]['free'])
+            asset = item[side]['asset']
+            if borrowed > 0 and free > 0:
+                to_pay = borrowed if borrowed < free else free
+                if to_pay == 0:
+                    continue
+                logger.info("Attempting to pay off Isolated %s of %s %s" % (to_pay, asset, symbol))
+                result = client.margin_repay(symbol=symbol,
+                                             asset=asset,
+                                             quantity=to_pay,
+                                             isolated=True)
+                logger.info("Repay result for %s %s: %s" % (symbol, asset, result))
 
 if __name__ == '__main__':
     main()
