@@ -40,14 +40,12 @@ def test_loop(interval=None, prices=None):
         if key in PAIRS:
             prices_trunk[key] = val
     LOGGER.debug("Getting dataframes for all pairs")
-    dataframes = get_dataframes(PAIRS, interval=interval, max_workers=1)
+    dataframes = get_dataframes(PAIRS, interval=interval, max_workers=1, no_of_klines=1)
     LOGGER.debug("Done getting dataframes")
 
     redis = Redis()
-    engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, redis=redis)
+    engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, redis=redis, test=True)
     engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
-    dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=1)
-
 
 @GET_EXCEPTIONS
 @SCHED.scheduled_job('interval', seconds=60)
@@ -90,7 +88,7 @@ def main():
     LOGGER.info("Starting initial prod run")
     if os.path.exists('/var/run/gc-data-{}'.format(config.main.interval)):
         os.remove('/var/run/gc-data-{}'.format(config.main.interval))
-    prod_initial(interval) # initial run, before scheduling begins
+    prod_initial(interval, test=True) # initial run, before scheduling begins
     Path('/var/run/gc-data-{}'.format(config.main.interval)).touch()
     LOGGER.info("Finished initial prod run")
     prod_run()
