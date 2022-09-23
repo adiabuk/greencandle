@@ -40,7 +40,7 @@ def test_loop(interval=None, prices=None):
         if key in PAIRS:
             prices_trunk[key] = val
     LOGGER.debug("Getting dataframes for all pairs")
-    dataframes = get_dataframes(PAIRS, interval=interval, max_workers=1, no_of_klines=1)
+    dataframes = get_dataframes(PAIRS, interval=interval, max_workers=1)
     LOGGER.debug("Done getting dataframes")
 
     redis = Redis()
