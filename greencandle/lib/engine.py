@@ -138,7 +138,6 @@ class Engine(dict):
 
             # close time might be in the future if we run between open/close
             if epoch2date(int(close_time)/1000, formatted=False) > datetime.now() and not self.test:
-                LOGGER.debug("AMROX - skipping future date")
                 continue
 
             result = None if (isinstance(scheme["data"], float) and
@@ -357,19 +356,19 @@ class Engine(dict):
             None
 
         """
+        if (not index and self.test) or len(self.dataframes[pair]) < 2:
+            index = -1
+        elif not index and not self.test:
+            index = -2
+
         func, timeperiod = localconfig  # split tuple
         LOGGER.debug("Getting %s_%s for %s" % (func, timeperiod, pair))
         scheme = {}
         mine = dataframe.apply(pandas.to_numeric).loc[:index]
         rsi = talib.RSI(dataframe.close.values.astype(float) * 100000, timeperiod=int(timeperiod))
-
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
 
-        if (not index and self.test) or len(self.dataframes[pair]) < 2:
-            index = -1
-        elif not index and not self.test:
-            index = -2
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
         scheme["data"] = rsi[index]
 
@@ -693,7 +692,6 @@ class Engine(dict):
         timeframe, multiplier = timef.split(',')
         supertrend = SuperTrend(mine, int(timeframe), int(multiplier))
         df_list = supertrend["ST_{0}_{1}".format(timeframe, multiplier)].tolist()
-        #print("AMROX " + str(df_list))
         scheme["data"] = df_list[-1]
         scheme["symbol"] = pair
         scheme["event"] = "STX_{0}".format(timeframe)
