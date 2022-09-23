@@ -35,8 +35,8 @@ all_be=$(docker ps | grep $env |awk {'print $NF'}|grep ${env}.*be) || true
 all_fe=$(docker ps | grep $env |awk {'print $NF'}|grep ${env}.*fe) || true
 
 # Stop existing fe and be containers
-[[ -z "$all_be $all_fe" ]] && true || docker stop $all_fe $all_be
-[[ -z "$all_be $all_fe" ]] && true || docker rm $all_fe $all_be
+docker stop $all_fe $all_be || true
+docker rm $all_fe $all_be || true
 
 docker compose -f ./install/docker-compose_${env}.yml up -d $base
 
