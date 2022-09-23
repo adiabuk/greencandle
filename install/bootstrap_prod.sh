@@ -18,6 +18,8 @@ apt autoremove --purge -y snapd emacs
 apt-get dist-upgrade -y
 apt-get clean; apt-get autoclean; rm -rf /var/lib/apt/lists/*
 update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+sed -i '/*.emerg/ s/./#&/' /etc/rsyslog.d/50-default.conf
+echo "ForwardToWall=no" >> /etc/systemd/journald.conf
 
 cd /tmp
 git clone https://github.com/s3fs-fuse/s3fs-fuse.git
