@@ -34,7 +34,7 @@ def analyse_loop():
     run_file = Path('/var/run/gc-data-{}'.format(config.main.interval))
 
     while not run_file.is_file():
-        # file exists
+        # file doesn't exist
         LOGGER.info("Waiting for data collection to complete...")
         time.sleep(30)
 
