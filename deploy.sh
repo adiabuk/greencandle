@@ -41,7 +41,7 @@ all_fe=$(docker ps | grep $env |awk {'print $NF'}|grep ${env}.*fe) || true
 docker compose -f ./install/docker-compose_${env}.yml up -d $base
 
 for container in $be; do
-  docker compose -f ./ins tall/docker-compose_${env}.yml up -d $container
+  docker compose -f ./install/docker-compose_${env}.yml up -d $container
   sleep 5
 done
 
