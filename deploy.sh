@@ -31,7 +31,7 @@ base=$(yq r install/docker-compose_${env}.yml services | grep -v '^ .*' | sed 's
 
 be=$(yq r install/docker-compose_${env}.yml services | grep -v '^ .*' | sed 's/:.*$//'|grep 'be')
 fe=$(yq r install/docker-compose_${env}.yml services | grep -v '^ .*' | sed 's/:.*$//'|grep 'fe')
-all_be=$(docker ps | grep $env |awk {'print $NF'}|grep ${env}.*be)
+all_be=$(docker ps | grep $env |awk {'print $NF'}|grep ${env}.*be) || true
 all_fe=$(docker ps | grep $env |awk {'print $NF'}|grep ${env}.*fe) || true
 
 # Stop existing fe and be containers
