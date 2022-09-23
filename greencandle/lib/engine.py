@@ -209,7 +209,7 @@ class Engine(dict):
             if close <= 0:
                 LOGGER.critical("Zero size dataframe found")
         except Exception as ex:
-            LOGGER.critical("None-float dataframe found")
+            LOGGER.critical("Non-float dataframe found")
 
         scheme['data'] = zlib.compress(pickle.dumps(self.dataframes[pair].iloc[location]))
         scheme["event"] = "ohlc"

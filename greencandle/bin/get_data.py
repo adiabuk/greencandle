@@ -40,7 +40,7 @@ def test_loop(interval=None, prices=None):
         if key in PAIRS:
             prices_trunk[key] = val
     LOGGER.debug("Getting dataframes for all pairs")
-    dataframes = get_dataframes(PAIRS, interval=interval, max_workers=1)
+    dataframes = get_dataframes(PAIRS, interval=interval, max_workers=1, no_of_klines=1)
     LOGGER.debug("Done getting dataframes")
 
     redis = Redis()
@@ -89,6 +89,7 @@ def main():
     if os.path.exists('/var/run/gc-data-{}'.format(config.main.interval)):
         os.remove('/var/run/gc-data-{}'.format(config.main.interval))
     prod_initial(interval, test=True) # initial run, before scheduling begins
+    prod_run()
     Path('/var/run/gc-data-{}'.format(config.main.interval)).touch()
     LOGGER.info("Finished initial prod run")
     prod_run()
