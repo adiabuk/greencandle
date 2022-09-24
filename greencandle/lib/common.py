@@ -1,4 +1,4 @@
-#pylint: disable=no-member
+#pylint: disable=no-member,no-else-return
 """
 Common functions that don't belong anywhere else
 """
@@ -157,11 +157,15 @@ def epoch2date(epoch, use_spaces=True, formatted=True):
     time_stamp = datetime.datetime.fromtimestamp(epoch)
     return time_stamp.strftime(format_str) if formatted else time_stamp
 
-def get_tv_link(pair):
+def get_tv_link(pair, interval=None):
     """
     Return Tradingview hyperlink for slack notifications
     """
-    return "<https://www.tradingview.com/chart/?symbol=BINANCE:{0}|{0}>".format(pair)
+    if interval:
+        return ("<https://www.tradingview.com/chart/?symbol=BINANCE:{0}&interval={1}|{0}>"
+                .format(pair, interval.upper()))
+    else:
+        return "<https://www.tradingview.com/chart/?symbol=BINANCE:{0}|{0}>".format(pair)
 
 def get_trade_link(pair, strategy, action, string):
     """Get trade link for forced trade"""

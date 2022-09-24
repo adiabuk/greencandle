@@ -37,7 +37,7 @@ def analyse_loop():
         # file doesn't exist
         LOGGER.info("Waiting for data collection to complete...")
         time.sleep(30)
-
+    interval = config.main.interval
     redis = Redis()
     for pair in PAIRS:
         supported = ""
@@ -53,17 +53,17 @@ def analyse_loop():
 
         LOGGER.debug("Analysing pair: %s" % pair)
         try:
-            result = redis.get_action(pair=pair, interval=config.main.interval)[0]
+            result = redis.get_action(pair=pair, interval=interval)[0]
 
             if result == "OPEN":
                 LOGGER.debug("Items to buy")
                 send_slack_message("notifications", "Open: %s %s %s (%s)" %
-                                   (get_tv_link(pair), config.main.interval,
+                                   (get_tv_link(pair, interval), interval,
                                     config.main.trade_direction, supported.strip()),
-                                   emoji=True, icon=':{0}-{1}:'.format(config.main.interval,
+                                   emoji=True, icon=':{0}-{1}:'.format(interval,
                                                                        config.main.trade_direction))
 
-                LOGGER.info("Trade alert: %s %s %s (%s)" % (pair, config.main.interval,
+                LOGGER.info("Trade alert: %s %s %s (%s)" % (pair, interval,
                                                             config.main.trade_direction,
                                                             supported.strip()))
         except Exception as err_msg:
