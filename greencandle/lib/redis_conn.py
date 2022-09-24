@@ -543,7 +543,7 @@ class Redis():
 
         rehydrated = pickle.loads(zlib.decompress(current[-1]))
         last_rehydrated = pickle.loads(zlib.decompress(previous[-1]))
-####results.previous[rate_indicator]
+
         # variables that can be referenced in config file
         open = float(rehydrated.open)
         high = float(rehydrated.high)
@@ -603,8 +603,9 @@ class Redis():
                     try:
                         rules[rule].append(eval(current_config))
                     except (TypeError, KeyError) as error:
-                        self.logger.warning("Unable to eval config rule: %s_rule: %s %s" %
-                                            (rule, current_config, error))
+                        self.logger.warning("Unable to eval config rule for pair %s: %s_rule: %s"
+                                            "%s current: %s" % (pair, rule, current_config,
+                                                                error, current))
                         continue
         close_timeout = False
         able_to_buy = True
