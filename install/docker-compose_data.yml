@@ -1208,7 +1208,7 @@ services:
       - HOST=$HOSTNAME
       - DB=false
     ports:
-      - 8889:8888
+      - 7777:7777
     links:
       - data-fe-api-dashboard:api_dash
       - data-fe-api-dashboard:logs
