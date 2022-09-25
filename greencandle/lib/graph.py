@@ -214,6 +214,8 @@ class Graph():
             for ind in ind_list:
                 try:
                     result_list[ind] = ast.literal_eval(redis.get_item(index_item, ind).decode())
+                    result_list[ind] = ast.literal_eval(redis.get_item('{}:{}'.format(self.pair,
+                        self.interval), index_item).decode())[ind]
                 except AttributeError:
                     pass
                 except ValueError:
