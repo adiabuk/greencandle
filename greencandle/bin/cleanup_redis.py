@@ -33,13 +33,13 @@ def main():
             items = redis.get_items(pair, interval)
             max_date = datetime.datetime.today() - datetime.timedelta(days=days)
             for item in items:
-                epoch = float(item.decode().split(':')[-1])/1000.0
+                epoch = float(item)/1000.0
                 dtime = epoch2date(epoch, formatted=False)
 
                 if dtime < max_date:
-                    print("deleting {}".format(item.decode()))
+                    print("deleting {}".format(item))
                     count += 1
-                    redis.conn.delete(item)
+                    redis.conn.hdel("{}:{}".format(pair, interval), item)
     print("Deleted {} keys".format(count))
 
 
