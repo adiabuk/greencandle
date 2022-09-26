@@ -6,6 +6,7 @@ Analyze available data rom redis
 Look for potential buys
 """
 import time
+from datetime import datetime
 from apscheduler.schedulers.blocking import BlockingScheduler
 from greencandle.lib import config
 config.create_config()
@@ -57,9 +58,11 @@ def analyse_loop():
 
             if result == "OPEN":
                 LOGGER.debug("Items to buy")
-                send_slack_message("notifications", "Open: %s %s %s (%s)" %
+                now = datetime.now()
+                current_time = now.strftime("%H:%M:%S") + " UTC"
+                send_slack_message("notifications", "Open: %s %s %s (%s) - %s" %
                                    (get_tv_link(pair, interval), interval,
-                                    config.main.trade_direction, supported.strip()),
+                                    config.main.trade_direction, supported.strip(), current_time),
                                    emoji=True, icon=':{0}-{1}:'.format(interval,
                                                                        config.main.trade_direction))
 
