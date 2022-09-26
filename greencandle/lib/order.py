@@ -292,26 +292,34 @@ class Trade():
         else:
             # cross always returns USD
             max_borrow_usd = self.client.get_max_borrow()
-
         # sum of total borrowed and total borrowable
         total = (float(borrowed_usd) + float(max_borrow_usd))
 
         # divide total by divisor
         # convert to quote asset if not USDT
-        total = sub_perc(10, total) if float(total) > float(max_borrow_usd) else total
 
         if self.config.main.trade_direction == "long":
             if "USD" in orig_quote:
-                final = total
+                final = sub_perc(1, total / float(self.config.main.divisor))
             else:
-                final = quote2base(total, orig_quote+"USDT")
+                final = sub_perc(1, quote2base(total, orig_quote+"USDT") /
+                                 float(self.config.main.divisor))
 
         #convert to base asset if we are short
         else:
-            final = quote2base(total, orig_base+"USDT")
+            #final = quote2base(total, orig_base+"USDT")
+            final = sub_perc(1, quote2base(total, orig_quote+"USDT") /
+                             float(self.config.main.divisor))
 
         # Use 99% of amount determined by divisor
-        return sub_perc(1, final / float(self.config.main.divisor))
+        # and check if we have exceeded max_borrable amount
+        if orig_quote == 'USDT' and final > max_borrow_usd:
+            return sub_perc(10, max_borrow_usd)
+
+        elif orig_quote != 'USDT' and base2quote(final, orig_quote+'USDT') > max_borrow_usd:
+            return quote2base(sub_perc(10, max_borrow_usd), orig_quote+'USDT')
+        else:
+            return final
 
     def __open_margin_long(self, long_list):
         """
