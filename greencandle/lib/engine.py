@@ -259,7 +259,7 @@ class Engine(dict):
             results['upper'] = 0
             results['middle'] = 0
             results['lower'] = 0
-            LOGGER.warning("Overall Exception getting bollinger bands: %s" % exc)
+            LOGGER.warning("Overall Exception getting bollinger bands: %s seq: %s" % (exc, index))
         trigger = None
         scheme = {}
         try:
