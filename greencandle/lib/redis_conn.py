@@ -317,10 +317,9 @@ class Redis():
         """
         #self.logger.debug("AMROX8 %s" % item)
         #byte = self.conn.hget(item, "ohlc")
-        self.logger.critical("AMROX %s, %s" % (name, item))
         byte = self.conn.hget(name, item)
 
-        self.logger.critical("AMROX %s "% (byte))
+        #self.logger.critical("AMROX %s "% (byte))
         try:
             data = ast.literal_eval(byte.decode("UTF-8"))['ohlc']
         except AttributeError:

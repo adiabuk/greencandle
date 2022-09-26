@@ -44,7 +44,8 @@ def test_loop(interval=None, prices=None):
     LOGGER.debug("Done getting dataframes")
 
     redis = Redis()
-    engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, redis=redis, test=True)
+    engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval,
+                    redis=redis, test=True)
     engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
 
 @GET_EXCEPTIONS
@@ -63,12 +64,10 @@ def prod_run():
     """
     interval = config.main.interval
     LOGGER.info("Starting prod run")
-    if os.path.exists('/var/run/gc-data-{}'.format(config.main.interval)):
-        os.remove('/var/run/gc-data-{}'.format(config.main.interval))
+    if os.path.exists('/var/run/gc-data-{}'.format(interval)):
+        os.remove('/var/run/gc-data-{}'.format(interval))
     client = Binance(debug=str2bool(config.accounts.account_debug))
-    prices = client.prices()
-    test_loop(interval=interval, prices=prices)
-    Path('/var/run/gc-data-{}'.format(config.main.interval)).touch()
+    Path('/var/run/gc-data-{}'.format(interval)).touch()
     LOGGER.info("Finished prod run")
 
 @arg_decorator
@@ -86,11 +85,11 @@ def main():
 
     interval = config.main.interval
     LOGGER.info("Starting initial prod run")
-    if os.path.exists('/var/run/gc-data-{}'.format(config.main.interval)):
-        os.remove('/var/run/gc-data-{}'.format(config.main.interval))
+    if os.path.exists('/var/run/gc-data-{}'.format(interval)):
+        os.remove('/var/run/gc-data-{}'.format(interval))
     prod_initial(interval, test=True) # initial run, before scheduling begins
     prod_run()
-    Path('/var/run/gc-data-{}'.format(config.main.interval)).touch()
+    Path('/var/run/gc-data-{}'.format(interval)).touch()
     LOGGER.info("Finished initial prod run")
     prod_run()
 

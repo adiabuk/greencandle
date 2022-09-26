@@ -235,7 +235,6 @@ class Engine(dict):
         elif index == None and not self.test:
             index = -2
         close_time = str(self.dataframes[pair].iloc[index]["closeTime"])
-        LOGGER.debug('AMROX787 %s %s' % (index, close_time))
         LOGGER.debug("Getting bollinger bands for %s - %s" % (pair, close_time))
         klines = self.__make_data_tupple(dataframe.iloc[:index])
         func, timef = localconfig  # split tuple
