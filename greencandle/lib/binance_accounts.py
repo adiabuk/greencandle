@@ -213,6 +213,7 @@ def get_binance_spot():
 
             else:  # other currencies that need converting to BTC
                 try:
+                    key = "ETH" if key == "ETHW" else key
                     LOGGER.debug("Converting spot currency %s %s" % (key, str(current_value)))
                     bcoin = float(current_value) * float(prices[key+"BTC"])  # value in BTC
                     bitcoin_totals += bcoin
