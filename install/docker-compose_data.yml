@@ -25,7 +25,7 @@ services:
   data-be-analyse_15m_big-change:
     container_name: data-be-analyse_15m_big-change
     hostname: data-be-analyse_15m_big-change
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -57,7 +57,7 @@ services:
   data-be-analyse_15m_very-high-rsi:
     container_name: data-be-analyse_15m_very-high-rsi
     hostname: data-be-analyse_15m_very-high-rsi
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -89,7 +89,7 @@ services:
   data-be-analyse_15m_big-drop:
     container_name: data-be-analyse_15m_big-drop
     hostname: data-be-analyse_15m_big-drop
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -121,7 +121,7 @@ services:
   data-be-analyse_15m_very-low-rsi:
     container_name: data-be-analyse_15m_very-low-rsi
     hostname: data-be-analyse_15m_very-low-rsi
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -153,7 +153,7 @@ services:
   data-be-get_15m:
     container_name: data-be-get_15m
     hostname: data-be-get_15m
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -183,7 +183,7 @@ services:
   data-be-analyse_1d_big-change:
     container_name: data-be-analyse_1d_big-change
     hostname: data-be-analyse_1d_big-change
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -215,7 +215,7 @@ services:
   data-be-analyse_1d_very-high-rsi:
     container_name: data-be-analyse_1d_very-high-rsi
     hostname: data-be-analyse_1d_very-high-rsi
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -247,7 +247,7 @@ services:
   data-be-analyse_1d_big-drop:
     container_name: data-be-analyse_1d_big-drop
     hostname: data-be-analyse_1d_big-drop
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -279,7 +279,7 @@ services:
   data-be-analyse_1d_very-low-rsi:
     container_name: data-be-analyse_1d_very-low-rsi
     hostname: data-be-analyse_1d_very-low-rsi
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -311,7 +311,7 @@ services:
   data-be-get_1d:
     container_name: data-be-get_1d
     hostname: data-be-get_1d
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -341,7 +341,7 @@ services:
   data-be-analyse_12h_big-change:
     container_name: data-be-analyse_12h_big-change
     hostname: data-be-analyse_12h_big-change
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -373,7 +373,7 @@ services:
   data-be-analyse_12h_very-high-rsi:
     container_name: data-be-analyse_12h_very-high-rsi
     hostname: data-be-analyse_12h_very-high-rsi
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -405,7 +405,7 @@ services:
   data-be-analyse_12h_big-drop:
     container_name: data-be-analyse_12h_big-drop
     hostname: data-be-analyse_12h_big-drop
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -437,7 +437,7 @@ services:
   data-be-analyse_12h_very-low-rsi:
     container_name: data-be-analyse_12h_very-low-rsi
     hostname: data-be-analyse_12h_very-low-rsi
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -469,7 +469,7 @@ services:
   data-be-get_12h:
     container_name: data-be-get_12h
     hostname: data-be-get_12h
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -499,7 +499,7 @@ services:
   data-be-analyse_4h_big-change:
     container_name: data-be-analyse_4h_big-change
     hostname: data-be-analyse_4h_big-change
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -531,7 +531,7 @@ services:
   data-be-analyse_4h_very-high-rsi:
     container_name: data-be-analyse_4h_very-high-rsi
     hostname: data-be-analyse_4h_very-high-rsi
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -563,7 +563,7 @@ services:
   data-be-analyse_4h_big-drop:
     container_name: data-be-analyse_4h_big-drop
     hostname: data-be-analyse_4h_big-drop
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -595,7 +595,7 @@ services:
   data-be-analyse_4h_very-low-rsi:
     container_name: data-be-analyse_4h_very-low-rsi
     hostname: data-be-analyse_4h_very-low-rsi
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -627,7 +627,7 @@ services:
   data-be-analyse_5m_big-change:
     container_name: data-be-analyse_5m_big-change
     hostname: data-be-analyse_5m_big-change
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -659,7 +659,7 @@ services:
   data-be-analyse_5m_very-high-rsi:
     container_name: data-be-analyse_5m_very-high-rsi
     hostname: data-be-analyse_5m_very-high-rsi
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -691,7 +691,7 @@ services:
   data-be-analyse_5m_big-drop:
     container_name: data-be-analyse_5m_big-drop
     hostname: data-be-analyse_5m_big-drop
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -723,7 +723,7 @@ services:
   data-be-analyse_5m_very-low-rsi:
     container_name: data-be-analyse_5m_very-low-rsi
     hostname: data-be-analyse_5m_very-low-rsi
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -755,7 +755,7 @@ services:
   data-be-get_5m:
     container_name: data-be-get_5m
     hostname: data-be-get_5m
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -785,7 +785,7 @@ services:
   data-be-value:
     container_name: data-be-value
     hostname: data-be-value
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh api_values
@@ -817,7 +817,7 @@ services:
   data-be-trend_15m:
     container_name: data-be-trend_15m
     hostname: data-be-trend_15m
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh api_data
@@ -849,7 +849,7 @@ services:
   data-be-trend_5m:
     container_name: data-be-trend_5m
     hostname: data-be-trend_5m
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh api_data
@@ -881,7 +881,7 @@ services:
   data-be-analyse_1h_big-change:
     container_name: data-be-analyse_1h_big-change
     hostname: data-be-analyse_1h_big-change
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -913,7 +913,7 @@ services:
   data-be-analyse_1h_very-high-rsi:
     container_name: data-be-analyse_1h_very-high-rsi
     hostname: data-be-analyse_1h_very-high-rsi
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -945,7 +945,7 @@ services:
   data-be-analyse_1h_big-drop:
     container_name: data-be-analyse_1h_big-drop
     hostname: data-be-analyse_1h_big-drop
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -977,7 +977,7 @@ services:
   data-be-analyse_1h_very-low-rsi:
     container_name: data-be-analyse_1h_very-low-rsi
     hostname: data-be-analyse_1h_very-low-rsi
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -1009,7 +1009,7 @@ services:
   data-be-get_1h:
     container_name: data-be-get_1h
     hostname: data-be-get_1h
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -1039,7 +1039,7 @@ services:
   data-be-trend_1h:
     container_name: data-be-trend_1h
     hostname: data-be-trend_1h
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh api_data
@@ -1071,7 +1071,7 @@ services:
   data-be-get_4h:
     container_name: data-be-get_4h
     hostname: data-be-get_4h
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -1137,7 +1137,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     hostname: data-fe-cron
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh cron -f
@@ -1159,7 +1159,7 @@ services:
   data-base-redis:
     container_name: data-base-redis
     hostname: data-base-redis
-    image: amrox/gc-redis
+    image: amrox/gc-redis:${TAG}
     pull_policy: always
     restart: always
     ports:
@@ -1176,7 +1176,7 @@ services:
   data-base-mysql:
     container_name: data-base-mysql
     hostname: data-base-mysql
-    image: amrox/gc-mysql
+    image: amrox/gc-mysql:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh mysqld
