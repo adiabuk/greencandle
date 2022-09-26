@@ -204,6 +204,7 @@ class Trade():
         """
 
         if not str2bool(self.config.main.isolated):
+            # if we are attempting a cross trade
             details = self.client.get_cross_margin_details()
             for item in details['userAssets']:
                 borrowed = float(item['borrowed'])
@@ -212,6 +213,7 @@ class Trade():
                     return borrowed if borrowed else 0
 
         elif str2bool(self.config.main.isolated):
+            # if we are attempting an isolated trade
             details = self.client.get_isolated_margin_details(pair)
             if details['assets'][0]['quoteAsset']['asset'] == symbol:
                 return float(details['assets'][0]['quoteAsset']['borrowed'])
@@ -286,16 +288,18 @@ class Trade():
         if str2bool(self.config.main.isolated):
             asset = orig_quote if orig_direction == 'long' else orig_base
             max_borrow = self.client.get_max_borrow(asset=asset, isolated_pair=pair)
-            borrow_usd = max_borrow if 'USD' in asset else base2quote(max_borrow, asset+'USDT')
+            max_borrow_usd = max_borrow if 'USD' in asset else base2quote(max_borrow, asset+'USDT')
         else:
             # cross always returns USD
-            borrow_usd = self.client.get_max_borrow()
+            max_borrow_usd = self.client.get_max_borrow()
 
         # sum of total borrowed and total borrowable
-        total = (float(borrowed_usd) + float(borrow_usd))
+        total = (float(borrowed_usd) + float(max_borrow_usd))
 
         # divide total by divisor
         # convert to quote asset if not USDT
+        total = sub_perc(10, total) if float(total) > float(max_borrow_usd) else total
+
         if self.config.main.trade_direction == "long":
             if "USD" in orig_quote:
                 final = total
