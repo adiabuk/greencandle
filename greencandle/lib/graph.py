@@ -213,16 +213,22 @@ class Graph():
             result_list = {}
             for ind in ind_list:
                 try:
-                    result_list[ind] = ast.literal_eval(redis.get_item(index_item, ind).decode())
+                    result_list[ind] = ast.literal_eval(redis.get_item('{}:{}'.format(
+                        self.pair, self.interval), index_item).decode())[ind]
                 except AttributeError:
                     pass
+                except KeyError:
+                    continue
                 except ValueError:
                     result_list[int] = redis.get_item(index_item, ind).decode()
 
             try:
-                result_list['ohlc'] = ast.literal_eval(redis.get_item(index_item,
-                                                                      'ohlc').decode())['result']
+                result_list['ohlc'] = redis.get_current('{}:{}'.format(
+                    self.pair, self.interval), index_item)[-1]
             except AttributeError as error:
+                print('xxxxxxxx')
+                print(index_item)
+                print(redis.get_current('{}:{}'.format(self.pair, self.interval), index_item))
                 LOGGER.error("Error, unable to find ohlc data for %s %s %s"
                              % (index_item, ind, error))
             try:

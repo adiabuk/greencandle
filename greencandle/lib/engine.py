@@ -1,11 +1,10 @@
 #pylint: disable=no-member,consider-iterating-dictionary,broad-except,logging-not-lazy,unused-import
-#pylint: disable=unused-variable,possibly-unused-variable,redefined-builtin,global-statement
+#pylint: disable=unused-variable,possibly-unused-variable,redefined-builtin,global-statement,singleton-comparison
 
 """
 Module for collecting price data and creating TA results
 """
 
-from __future__ import print_function
 import json
 import math
 import sys
@@ -188,20 +187,33 @@ class Engine(dict):
 
                 pool.shutdown(wait=True)
 
-            self.__send_ohlcs(pair, first_run=first_run)
+            self.__send_ohlcs(pair, first_run=first_run, no_of_klines=no_of_klines)
         self.__add_schemes()
 
         LOGGER.debug("Done getting data")
         return self
 
-    def __send_ohlcs(self, pair, first_run):
+    def __send_ohlcs(self, pair, first_run, no_of_klines=None):
         """Send ohcls data to redis"""
         scheme = {}
         scheme["symbol"] = pair
         # Unless we are in test mode, use the second to last data row as the previous one is still
         # being constructed and contains incomplete data
-        location = -1 if (self.test or len(self.dataframes[pair]) < 2) else -2
 
+        self.schemes.append(scheme)
+        actual_klines = len(self.dataframes[pair]) if not no_of_klines else no_of_klines
+        if first_run:
+            for seq in range(int(actual_klines) -1):
+                LOGGER.debug("Getting initial sequence number %s" % seq)
+                scheme['data'] = zlib.compress(pickle.dumps(self.dataframes[pair].iloc[seq]))
+                scheme["event"] = "ohlc"
+                scheme["close_time"] = str(self.dataframes[pair].iloc[seq]["closeTime"])
+                self.schemes.append(scheme)
+
+                # reset for next loop
+                scheme = {"symbol": pair, "event": "ohlc"}
+
+        location = -1 if (self.test or len(self.dataframes[pair]) < 2) else -2
         # compress and pickle current dataframe for redis storage
         # dont get most recent one, as it may not be complete
         try:
@@ -214,23 +226,17 @@ class Engine(dict):
         scheme['data'] = zlib.compress(pickle.dumps(self.dataframes[pair].iloc[location]))
         scheme["event"] = "ohlc"
         scheme["close_time"] = str(self.dataframes[pair].iloc[location]["closeTime"])
-
         self.schemes.append(scheme)
-        if first_run:
-            for seq in range(len(self.dataframes[pair]) -1):
-                LOGGER.debug("Getting initial sequence number %s" % seq)
-                scheme['data'] = zlib.compress(pickle.dumps(self.dataframes[pair].iloc[seq]))
-                scheme["event"] = "ohlc"
-                scheme["close_time"] = str(self.dataframes[pair].iloc[seq]["closeTime"])
-                self.schemes.append(scheme)
 
-                # reset for next loop
-                scheme = {"symbol": pair, "event": "ohlc"}
 
     def get_bb(self, pair, dataframe, index=None, localconfig=None):
         """get bollinger bands"""
-
-        LOGGER.debug("Getting bollinger bands for %s" % pair)
+        if (index == None and self.test) or len(self.dataframes[pair]) < 2:
+            index = -1
+        elif index == None and not self.test:
+            index = -2
+        close_time = str(self.dataframes[pair].iloc[index]["closeTime"])
+        LOGGER.debug("Getting bollinger bands for %s - %s" % (pair, close_time))
         klines = self.__make_data_tupple(dataframe.iloc[:index])
         func, timef = localconfig  # split tuple
         timeframe, multiplier = timef.split(',')
@@ -253,7 +259,7 @@ class Engine(dict):
             results['upper'] = 0
             results['middle'] = 0
             results['lower'] = 0
-            LOGGER.warning("Overall Exception getting bollinger bands: %s" % exc)
+            LOGGER.warning("Overall Exception getting bollinger bands: %s seq: %s" % (exc, index))
         trigger = None
         scheme = {}
         try:
@@ -262,12 +268,7 @@ class Engine(dict):
             scheme["data"] = results[func]
             scheme["symbol"] = pair
             scheme["event"] = "{0}_{1}".format(func, timeframe)
-
-            if (not index and self.test) or len(self.dataframes[pair]) < 2:
-                index = -1
-            elif not index and not self.test:
-                index = -2
-            scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
+            scheme["close_time"] = close_time
 
             self.schemes.append(scheme)
 
@@ -285,9 +286,9 @@ class Engine(dict):
         LOGGER.debug("Getting pivot points for %s" % pair)
         global CROSS_DATA
         func, timeperiod = localconfig
-        if (not index and self.test) or len(self.dataframes[pair]) < 2:
+        if (index == None and self.test) or len(self.dataframes[pair]) < 2:
             index = -1
-        elif not index and not self.test:
+        elif index == None and not self.test:
             index = -2
         # Get current date:
         scheme = {}
@@ -320,9 +321,9 @@ class Engine(dict):
         Get TSI osscilator
         """
         LOGGER.debug("Getting TSI oscillator for %s" % pair)
-        if (not index and self.test) or len(self.dataframes[pair]) < 2:
+        if (index == None and self.test) or len(self.dataframes[pair]) < 2:
             index = -1
-        elif not index and not self.test:
+        elif index == None and not self.test:
             index = -2
 
         func, timeperiod = localconfig
@@ -356,9 +357,9 @@ class Engine(dict):
             None
 
         """
-        if (not index and self.test) or len(self.dataframes[pair]) < 2:
+        if (index == None and self.test) or len(self.dataframes[pair]) < 2:
             index = -1
-        elif not index and not self.test:
+        elif index == None and not self.test:
             index = -2
 
         func, timeperiod = localconfig  # split tuple
@@ -400,9 +401,9 @@ class Engine(dict):
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
 
-        if (not index and self.test) or len(self.dataframes[pair]) < 2:
+        if (index == None and self.test) or len(self.dataframes[pair]) < 2:
             index = -1
-        elif not index and not self.test:
+        elif index == None and not self.test:
             index = -2
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
@@ -440,9 +441,9 @@ class Engine(dict):
             scheme["symbol"] = pair
             scheme["event"] = func + "_" + str(timeperiod)
 
-            if (not index and self.test) or len(self.dataframes[pair]) < 2:
+            if (index == None and self.test) or len(self.dataframes[pair]) < 2:
                 index = -1
-            elif not index and not self.test:
+            elif index == None and not self.test:
                 index = -2
             scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
@@ -475,9 +476,9 @@ class Engine(dict):
             scheme["symbol"] = pair
             scheme["event"] = func+"_"+str(timeperiod)
 
-            if (not index and self.test) or len(self.dataframes[pair]) < 2:
+            if (index == None and self.test) or len(self.dataframes[pair]) < 2:
                 index = -1
-            elif not index and not self.test:
+            elif index == None and not self.test:
                 index = -2
             scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
@@ -498,9 +499,9 @@ class Engine(dict):
         scheme = {}
         try:
             scheme["symbol"] = pair
-            if (not index and self.test) or len(self.dataframes[pair]) < 2:
+            if (index == None and self.test) or len(self.dataframes[pair]) < 2:
                 index = -1
-            elif not index and not self.test:
+            elif index == None and not self.test:
                 index = -2
             scheme["data"] = str(self.dataframes[pair].iloc[index]["volume"])
             scheme["event"] = "volume"
@@ -550,9 +551,9 @@ class Engine(dict):
             scheme["symbol"] = pair
 
             scheme["event"] = func + "_" + str(timeperiod)
-            if (not index and self.test) or len(self.dataframes[pair]) < 2:
+            if (index == None and self.test) or len(self.dataframes[pair]) < 2:
                 index = -1
-            elif not index and not self.test:
+            elif index == None and not self.test:
                 index = -2
 
             scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
@@ -614,9 +615,9 @@ class Engine(dict):
             scheme["symbol"] = pair
             scheme["event"] = '{}_{}'.format(func, timeperiod)
 
-            if (not index and self.test) or len(self.dataframes[pair]) < 2:
+            if (index == None and self.test) or len(self.dataframes[pair]) < 2:
                 index = -1
-            elif not index and not self.test:
+            elif index == None and not self.test:
                 index = -2
             scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
@@ -659,9 +660,9 @@ class Engine(dict):
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
 
-        if (not index and self.test) or len(self.dataframes[pair]) < 2:
+        if (index == None and self.test) or len(self.dataframes[pair]) < 2:
             index = -1
-        elif not index and not self.test:
+        elif index == None and not self.test:
             index = -2
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
@@ -696,10 +697,12 @@ class Engine(dict):
         scheme["symbol"] = pair
         scheme["event"] = "STX_{0}".format(timeframe)
 
-        if (not index and self.test) or len(self.dataframes[pair]) < 2:
+        if (index == None and self.test) or len(self.dataframes[pair]) < 2:
             index = -1
-        elif not index and not self.test:
+        elif index == None and not self.test:
             index = -2
+
+
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
         self.schemes.append(scheme)

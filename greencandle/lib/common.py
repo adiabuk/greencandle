@@ -12,14 +12,14 @@ import numpy
 
 QUOTES = ("BTC", "USDT", "ETH", "BNB", "GBP")
 
-MINUTE = {"3m": "0,3,6,9,12,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57",
-          "5m": "0,5,10,15,20,25,30,35,40,45,50,55",
-          "15m": "0,15,30,45",
-          "30m": "0,30",
-          "1h": "0",
-          "2h": "0",
-          "3h": "0",
-          "4h": "0",
+MINUTE = {"3m": "*",
+          "5m": "*",
+          "15m": "0,5,10,15,20,25,30,35,40,45,50,55",
+          "30m": "0,10,20,30,40,50",
+          "1h": "0,10,20,30,40,50",
+          "2h": "0,10,20,30,40,50",
+          "3h": "0,10,20,30,40,50",
+          "4h": "0,30",
           "12h": "0",
           "1d": "0",
           }
@@ -29,11 +29,11 @@ HOUR = {"3m": "*",
         "15m": "*",
         "30m": "*",
         "1h": "*",
-        "2h": "0,2,4,6,8,10,12,14,16,18,20,22",
-        "3h": "0,3,6,9,12,15,18,21",
-        "4h": "0,4,8,12,16,20",
-        "12h": "0,6,12",
-        "1d": "0,12"
+        "2h": "*",
+        "3h": "*",
+        "4h": "*",
+        "12h": "*",
+        "1d": "*"
         }
 
 TF2MIN = {"1s": 1,
@@ -162,8 +162,9 @@ def get_tv_link(pair, interval=None):
     Return Tradingview hyperlink for slack notifications
     """
     if interval:
+        interval = interval.replace('m', 'min').upper()
         return ("<https://www.tradingview.com/chart/?symbol=BINANCE:{0}&interval={1}|{0}>"
-                .format(pair, interval.upper()))
+                .format(pair, interval))
     else:
         return "<https://www.tradingview.com/chart/?symbol=BINANCE:{0}|{0}>".format(pair)
 

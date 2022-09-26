@@ -40,12 +40,13 @@ docker rm $all_fe $all_be || true
 
 docker compose -f ./install/docker-compose_${env}.yml up -d $base
 
+docker compose -f ./install/docker-compose_${env}.yml up -d $fe
+
 for container in $be; do
   docker compose -f ./install/docker-compose_${env}.yml up -d $container
   sleep 5
 done
 
-docker compose -f ./install/docker-compose_${env}.yml up -d $fe
 
 export COMMIT=`docker exec ${env}-fe-cron  bash -c 'echo "$COMMIT_SHA"'`
 

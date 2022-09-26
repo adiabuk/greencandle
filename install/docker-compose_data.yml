@@ -9,6 +9,7 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/cron
       - HOST=$HOSTNAME
       - DB=false
@@ -25,7 +26,7 @@ services:
   data-be-analyse_15m_big-change:
     container_name: data-be-analyse_15m_big-change
     hostname: data-be-analyse_15m_big-change
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -40,6 +41,7 @@ services:
       - data-base-redis
       - data-be-get_15m
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/15m/short3
       - HOST=$HOSTNAME
       - DB=true
@@ -57,7 +59,7 @@ services:
   data-be-analyse_15m_very-high-rsi:
     container_name: data-be-analyse_15m_very-high-rsi
     hostname: data-be-analyse_15m_very-high-rsi
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -72,6 +74,7 @@ services:
       - data-base-redis
       - data-be-get_15m
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/15m/short2
       - HOST=$HOSTNAME
       - DB=true
@@ -89,7 +92,7 @@ services:
   data-be-analyse_15m_big-drop:
     container_name: data-be-analyse_15m_big-drop
     hostname: data-be-analyse_15m_big-drop
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -104,6 +107,7 @@ services:
       - data-base-redis
       - data-be-get_15m
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/15m/long3
       - HOST=$HOSTNAME
       - DB=true
@@ -121,7 +125,7 @@ services:
   data-be-analyse_15m_very-low-rsi:
     container_name: data-be-analyse_15m_very-low-rsi
     hostname: data-be-analyse_15m_very-low-rsi
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -136,6 +140,7 @@ services:
       - data-base-redis
       - data-be-get_15m
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/15m/long2
       - HOST=$HOSTNAME
       - DB=true
@@ -153,7 +158,7 @@ services:
   data-be-get_15m:
     container_name: data-be-get_15m
     hostname: data-be-get_15m
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -166,6 +171,7 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/15m/get_data
       - HOST=$HOSTNAME
       - DB=true
@@ -183,7 +189,7 @@ services:
   data-be-analyse_1d_big-change:
     container_name: data-be-analyse_1d_big-change
     hostname: data-be-analyse_1d_big-change
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -198,6 +204,7 @@ services:
       - data-base-redis
       - data-be-get_1d
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/1d/short3
       - HOST=$HOSTNAME
       - DB=true
@@ -215,7 +222,7 @@ services:
   data-be-analyse_1d_very-high-rsi:
     container_name: data-be-analyse_1d_very-high-rsi
     hostname: data-be-analyse_1d_very-high-rsi
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -230,6 +237,7 @@ services:
       - data-base-redis
       - data-be-get_1d
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/1d/short2
       - HOST=$HOSTNAME
       - DB=true
@@ -247,7 +255,7 @@ services:
   data-be-analyse_1d_big-drop:
     container_name: data-be-analyse_1d_big-drop
     hostname: data-be-analyse_1d_big-drop
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -262,6 +270,7 @@ services:
       - data-base-redis
       - data-be-get_1d
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/1d/long3
       - HOST=$HOSTNAME
       - DB=true
@@ -279,7 +288,7 @@ services:
   data-be-analyse_1d_very-low-rsi:
     container_name: data-be-analyse_1d_very-low-rsi
     hostname: data-be-analyse_1d_very-low-rsi
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -294,6 +303,7 @@ services:
       - data-base-redis
       - data-be-get_1d
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/1d/long2
       - HOST=$HOSTNAME
       - DB=true
@@ -311,7 +321,7 @@ services:
   data-be-get_1d:
     container_name: data-be-get_1d
     hostname: data-be-get_1d
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -324,6 +334,7 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/1d/get_data
       - HOST=$HOSTNAME
       - DB=true
@@ -341,7 +352,7 @@ services:
   data-be-analyse_12h_big-change:
     container_name: data-be-analyse_12h_big-change
     hostname: data-be-analyse_12h_big-change
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -356,6 +367,7 @@ services:
       - data-base-redis
       - data-be-get_12h
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/12h/short3
       - HOST=$HOSTNAME
       - DB=true
@@ -373,7 +385,7 @@ services:
   data-be-analyse_12h_very-high-rsi:
     container_name: data-be-analyse_12h_very-high-rsi
     hostname: data-be-analyse_12h_very-high-rsi
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -388,6 +400,7 @@ services:
       - data-base-redis
       - data-be-get_12h
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/12h/short2
       - HOST=$HOSTNAME
       - DB=true
@@ -405,7 +418,7 @@ services:
   data-be-analyse_12h_big-drop:
     container_name: data-be-analyse_12h_big-drop
     hostname: data-be-analyse_12h_big-drop
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -420,6 +433,7 @@ services:
       - data-base-redis
       - data-be-get_12h
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/12h/long3
       - HOST=$HOSTNAME
       - DB=true
@@ -437,7 +451,7 @@ services:
   data-be-analyse_12h_very-low-rsi:
     container_name: data-be-analyse_12h_very-low-rsi
     hostname: data-be-analyse_12h_very-low-rsi
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -452,6 +466,7 @@ services:
       - data-base-redis
       - data-be-get_12h
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/12h/long2
       - HOST=$HOSTNAME
       - DB=true
@@ -469,7 +484,7 @@ services:
   data-be-get_12h:
     container_name: data-be-get_12h
     hostname: data-be-get_12h
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -482,6 +497,7 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/12h/get_data
       - HOST=$HOSTNAME
       - DB=true
@@ -499,7 +515,7 @@ services:
   data-be-analyse_4h_big-change:
     container_name: data-be-analyse_4h_big-change
     hostname: data-be-analyse_4h_big-change
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -514,6 +530,7 @@ services:
       - data-base-redis
       - data-be-get_4h
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/4h/short3
       - HOST=$HOSTNAME
       - DB=true
@@ -531,7 +548,7 @@ services:
   data-be-analyse_4h_very-high-rsi:
     container_name: data-be-analyse_4h_very-high-rsi
     hostname: data-be-analyse_4h_very-high-rsi
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -546,6 +563,7 @@ services:
       - data-base-redis
       - data-be-get_4h
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/4h/short2
       - HOST=$HOSTNAME
       - DB=true
@@ -563,7 +581,7 @@ services:
   data-be-analyse_4h_big-drop:
     container_name: data-be-analyse_4h_big-drop
     hostname: data-be-analyse_4h_big-drop
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -578,6 +596,7 @@ services:
       - data-base-redis
       - data-be-get_4h
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/4h/long3
       - HOST=$HOSTNAME
       - DB=true
@@ -595,7 +614,7 @@ services:
   data-be-analyse_4h_very-low-rsi:
     container_name: data-be-analyse_4h_very-low-rsi
     hostname: data-be-analyse_4h_very-low-rsi
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -610,6 +629,7 @@ services:
       - data-base-redis
       - data-be-get_4h
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/4h/long2
       - HOST=$HOSTNAME
       - DB=true
@@ -627,7 +647,7 @@ services:
   data-be-analyse_5m_big-change:
     container_name: data-be-analyse_5m_big-change
     hostname: data-be-analyse_5m_big-change
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -642,6 +662,7 @@ services:
       - data-base-redis
       - data-be-get_5m
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/5m/short3
       - HOST=$HOSTNAME
       - DB=true
@@ -659,7 +680,7 @@ services:
   data-be-analyse_5m_very-high-rsi:
     container_name: data-be-analyse_5m_very-high-rsi
     hostname: data-be-analyse_5m_very-high-rsi
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -674,6 +695,7 @@ services:
       - data-base-redis
       - data-be-get_5m
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/5m/short2
       - HOST=$HOSTNAME
       - DB=true
@@ -691,7 +713,7 @@ services:
   data-be-analyse_5m_big-drop:
     container_name: data-be-analyse_5m_big-drop
     hostname: data-be-analyse_5m_big-drop
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -706,6 +728,7 @@ services:
       - data-base-redis
       - data-be-get_5m
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/5m/long3
       - HOST=$HOSTNAME
       - DB=true
@@ -723,7 +746,7 @@ services:
   data-be-analyse_5m_very-low-rsi:
     container_name: data-be-analyse_5m_very-low-rsi
     hostname: data-be-analyse_5m_very-low-rsi
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -738,6 +761,7 @@ services:
       - data-base-redis
       - data-be-get_5m
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/5m/long2
       - HOST=$HOSTNAME
       - DB=true
@@ -755,7 +779,7 @@ services:
   data-be-get_5m:
     container_name: data-be-get_5m
     hostname: data-be-get_5m
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -768,6 +792,7 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/5m/get_data
       - HOST=$HOSTNAME
       - DB=true
@@ -785,7 +810,7 @@ services:
   data-be-value:
     container_name: data-be-value
     hostname: data-be-value
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh api_values
@@ -798,6 +823,7 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data
       - HOST=$HOSTNAME
       - DB=true
@@ -817,7 +843,7 @@ services:
   data-be-trend_15m:
     container_name: data-be-trend_15m
     hostname: data-be-trend_15m
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh api_data
@@ -830,6 +856,7 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/15m/trend
       - HOST=$HOSTNAME
       - DB=true
@@ -849,7 +876,7 @@ services:
   data-be-trend_5m:
     container_name: data-be-trend_5m
     hostname: data-be-trend_5m
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh api_data
@@ -862,6 +889,7 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/5m/trend
       - HOST=$HOSTNAME
       - DB=true
@@ -881,7 +909,7 @@ services:
   data-be-analyse_1h_big-change:
     container_name: data-be-analyse_1h_big-change
     hostname: data-be-analyse_1h_big-change
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -896,6 +924,7 @@ services:
       - data-base-redis
       - data-be-get_1h
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/1h/short3
       - HOST=$HOSTNAME
       - DB=true
@@ -913,7 +942,7 @@ services:
   data-be-analyse_1h_very-high-rsi:
     container_name: data-be-analyse_1h_very-high-rsi
     hostname: data-be-analyse_1h_very-high-rsi
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -928,6 +957,7 @@ services:
       - data-base-redis
       - data-be-get_1h
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/1h/short2
       - HOST=$HOSTNAME
       - DB=true
@@ -945,7 +975,7 @@ services:
   data-be-analyse_1h_big-drop:
     container_name: data-be-analyse_1h_big-drop
     hostname: data-be-analyse_1h_big-drop
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -960,6 +990,7 @@ services:
       - data-base-redis
       - data-be-get_1h
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/1h/long3
       - HOST=$HOSTNAME
       - DB=true
@@ -977,7 +1008,7 @@ services:
   data-be-analyse_1h_very-low-rsi:
     container_name: data-be-analyse_1h_very-low-rsi
     hostname: data-be-analyse_1h_very-low-rsi
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -992,6 +1023,7 @@ services:
       - data-base-redis
       - data-be-get_1h
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/1h/long2
       - HOST=$HOSTNAME
       - DB=true
@@ -1009,7 +1041,7 @@ services:
   data-be-get_1h:
     container_name: data-be-get_1h
     hostname: data-be-get_1h
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -1022,6 +1054,7 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/1h/get_data
       - HOST=$HOSTNAME
       - DB=true
@@ -1039,7 +1072,7 @@ services:
   data-be-trend_1h:
     container_name: data-be-trend_1h
     hostname: data-be-trend_1h
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh api_data
@@ -1052,6 +1085,7 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/1h/trend
       - HOST=$HOSTNAME
       - DB=true
@@ -1071,7 +1105,7 @@ services:
   data-be-get_4h:
     container_name: data-be-get_4h
     hostname: data-be-get_4h
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -1084,6 +1118,7 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/4h/get_data
       - HOST=$HOSTNAME
       - DB=true
@@ -1102,6 +1137,7 @@ services:
     container_name: data-be-manual
     hostname: data-be-manual
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/manual
       - HOST=$HOSTNAME
       - DB=true
@@ -1133,11 +1169,12 @@ services:
   data-fe-cron:
     container_name: data-fe-cron
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/cron
       - HOST=$HOSTNAME
       - DB=true
     hostname: data-fe-cron
-    image: amrox/greencandle
+    image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh cron -f
@@ -1159,7 +1196,7 @@ services:
   data-base-redis:
     container_name: data-base-redis
     hostname: data-base-redis
-    image: amrox/gc-redis
+    image: amrox/gc-redis:${TAG}
     pull_policy: always
     restart: always
     ports:
@@ -1176,13 +1213,14 @@ services:
   data-base-mysql:
     container_name: data-base-mysql
     hostname: data-base-mysql
-    image: amrox/gc-mysql
+    image: amrox/gc-mysql:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh mysqld
     ports:
       - 3306:3306
     environment:
+      - VPN_IP=$VPN_IP
       - MYSQL_ROOT_PASSWORD=password
       - CONFIG_ENV=data
       - DB=true
@@ -1204,11 +1242,12 @@ services:
       timeout: 5s
       retries: 5
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data
       - HOST=$HOSTNAME
       - DB=false
     ports:
-      - 8889:8888
+      - 7777:7777
     links:
       - data-fe-api-dashboard:api_dash
       - data-fe-api-dashboard:logs
@@ -1229,6 +1268,7 @@ services:
     container_name: data-fe-api-dashboard
     hostname: data-fe-api-dashboard
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data
       - HOST=$HOSTNAME
       - DB=true

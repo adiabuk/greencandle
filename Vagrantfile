@@ -1,6 +1,5 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "generic/ubuntu2004"
-
   config.disksize.size = '50GB'
   config.vm.network :forwarded_port, guest: 22, host: 2222, id: "ssh", auto_correct: true
   config.vm.network "forwarded_port", guest: 6379, host: 63790, auto_correct: true
@@ -19,7 +18,7 @@ Vagrant.configure("2") do |config|
     #vb.customize [ 'guestproperty', 'set', :id, '/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold', 10000 ]
   end
   if Vagrant.has_plugin?("vagrant-timezone")
-   config.timezone.value = :host
+   config.timezone.value = "UTC"
   end
 
   # Bootstrap machine
