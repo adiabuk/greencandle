@@ -5,7 +5,6 @@
 Module for collecting price data and creating TA results
 """
 
-from __future__ import print_function
 import json
 import math
 import sys
@@ -137,7 +136,6 @@ class Engine(dict):
 
 
             # close time might be in the future if we run between open/close
-
             if epoch2date(int(close_time)/1000, formatted=False) > datetime.now() and not self.test:
                 continue
 
@@ -201,19 +199,6 @@ class Engine(dict):
         scheme["symbol"] = pair
         # Unless we are in test mode, use the second to last data row as the previous one is still
         # being constructed and contains incomplete data
-        location = -1 if (self.test or len(self.dataframes[pair]) < 2) else -2
-        # compress and pickle current dataframe for redis storage
-        # dont get most recent one, as it may not be complete
-        try:
-            close = float(self.dataframes[pair].iloc[location]["close"])
-            if close <= 0:
-                LOGGER.critical("Zero size dataframe found")
-        except Exception as ex:
-            LOGGER.critical("Non-float dataframe found")
-
-        scheme['data'] = zlib.compress(pickle.dumps(self.dataframes[pair].iloc[location]))
-        scheme["event"] = "ohlc"
-        scheme["close_time"] = str(self.dataframes[pair].iloc[location]["closeTime"])
 
         self.schemes.append(scheme)
         actual_klines = len(self.dataframes[pair]) if not no_of_klines else no_of_klines
@@ -227,6 +212,22 @@ class Engine(dict):
 
                 # reset for next loop
                 scheme = {"symbol": pair, "event": "ohlc"}
+
+        location = -1 if (self.test or len(self.dataframes[pair]) < 2) else -2
+        # compress and pickle current dataframe for redis storage
+        # dont get most recent one, as it may not be complete
+        try:
+            close = float(self.dataframes[pair].iloc[location]["close"])
+            if close <= 0:
+                LOGGER.critical("Zero size dataframe found")
+        except Exception as ex:
+            LOGGER.critical("Non-float dataframe found")
+
+        scheme['data'] = zlib.compress(pickle.dumps(self.dataframes[pair].iloc[location]))
+        scheme["event"] = "ohlc"
+        scheme["close_time"] = str(self.dataframes[pair].iloc[location]["closeTime"])
+        self.schemes.append(scheme)
+
 
     def get_bb(self, pair, dataframe, index=None, localconfig=None):
         """get bollinger bands"""
@@ -700,6 +701,8 @@ class Engine(dict):
             index = -1
         elif index == None and not self.test:
             index = -2
+
+
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
         self.schemes.append(scheme)

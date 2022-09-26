@@ -235,15 +235,13 @@ class Redis():
         """
 
         self.logger.debug("Adding to Redis: %s %s %s" % (interval, list(data.keys()), now))
-        #key = "{0}:{1}:{2}".format(pair, interval, now)
+
         key = "{0}:{1}".format(pair, interval)
         expiry = int(config.redis.redis_expiry_seconds)
-
         # closing time, 1 ms before next candle
         if not str(now).endswith("999"): # closing time, 1 ms before next candle
             self.logger.critical("Invalid time submitted to redis %s.  Skipping " % key)
             return None
-
         for item, value in data.items():
 
             dict = {now: {item: value}}
@@ -259,8 +257,6 @@ class Redis():
                     # item = ohlc etc
                     # now: miliepoch
                     # value = {dict}
-
-            #response = self.conn.hset(key, item, value)
 
         expire = str2bool(config.redis.redis_expire)
         if expire:
