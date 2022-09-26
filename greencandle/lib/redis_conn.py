@@ -249,12 +249,9 @@ class Redis():
             dict = {now: {item: value}}
             b = self.conn.hmget(key, now)[0]
             if b:
-                self.logger.debug("AMROX GETTING HERRE!!!!!!!")
                 dict = {item:value}
                 dict.update(ast.literal_eval(b.decode()))
                 result = self.conn.hmset(key, {now: dict})
-                self.logger.debug("AMROX5 %s" %dict)
-                self.logger.debug("AMROX6 %s" %b)
 
             else:
                 response = self.conn.hmset(key, dict)
@@ -291,7 +288,7 @@ class Redis():
 
     def get_item(self, address, key, pair=None, interval=None):
         """Return a specific item from redis, given an address and key"""
-        self.logger.debug("AMROX2 %s %s" %(address, key))
+        #AMROX
         #address = now
         # key = EMA_8     .......   need pair, interval
         if pair:
@@ -318,9 +315,12 @@ class Redis():
         Returns:
             a tuple of current_price and current_date
         """
-        self.logger.debug("AMROX8 %s" % item)
+        #self.logger.debug("AMROX8 %s" % item)
         #byte = self.conn.hget(item, "ohlc")
+        self.logger.critical("AMROX %s, %s" % (name, item))
         byte = self.conn.hget(name, item)
+
+        self.logger.critical("AMROX %s "% (byte))
         try:
             data = ast.literal_eval(byte.decode("UTF-8"))['ohlc']
         except AttributeError:
@@ -332,7 +332,6 @@ class Redis():
     def get_result(self, item, indicator, pair=None, interval=None):
         """Retrive decoded OHLC data from redis"""
         try:
-            self.logger.debug("AMROX9 %s %s %s %s"  %(item, indicator, pair, interval))
             result = self.get_item(item, indicator, pair, interval)['result']
         except AttributeError:
             return None
