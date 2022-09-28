@@ -181,6 +181,8 @@ class Engine(dict):
                                                         localconfig=(name, period)))
                     if first_run:
                         for seq in range(int(actual_klines) -1):
+                            if seq >= len(self.dataframes[pair]):
+                                continue
                             pool.submit(getattr(self, function)(pair, self.dataframes[pair],
                                                                 index=seq,
                                                                 localconfig=(name, period)))
@@ -204,6 +206,8 @@ class Engine(dict):
         actual_klines = len(self.dataframes[pair]) if not no_of_klines else no_of_klines
         if first_run:
             for seq in range(int(actual_klines) -1):
+                if seq >= len(self.dataframes[pair]):
+                    continue
                 LOGGER.debug("Getting initial sequence number %s" % seq)
                 scheme['data'] = zlib.compress(pickle.dumps(self.dataframes[pair].iloc[seq]))
                 scheme["event"] = "ohlc"
