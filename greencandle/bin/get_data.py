@@ -66,7 +66,11 @@ def prod_run():
     LOGGER.info("Starting prod run")
     if os.path.exists('/var/run/gc-data-{}'.format(interval)):
         os.remove('/var/run/gc-data-{}'.format(interval))
+
     client = Binance(debug=str2bool(config.accounts.account_debug))
+    prices = client.prices()
+    test_loop(interval=interval, prices=prices)
+
     Path('/var/run/gc-data-{}'.format(interval)).touch()
     LOGGER.info("Finished prod run")
 
