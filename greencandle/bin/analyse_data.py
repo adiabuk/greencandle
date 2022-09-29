@@ -60,11 +60,12 @@ def analyse_loop():
                 LOGGER.debug("Items to buy")
                 now = datetime.now()
                 current_time = now.strftime("%H:%M:%S") + " UTC"
-                send_slack_message("notifications", "Open: %s %s %s (%s) - %s" %
+                current_price = client.prices()[pair]
+                send_slack_message("notifications", "Open: %s %s %s (%s) - %s Current: %s" %
                                    (get_tv_link(pair, interval), interval,
-                                    config.main.trade_direction, supported.strip(), current_time),
-                                   emoji=True, icon=':{0}-{1}:'.format(interval,
-                                                                       config.main.trade_direction))
+                                    config.main.trade_direction, supported.strip(), current_time,
+                                    current_price), emoji=True,
+                                   icon=':{0}-{1}:'.format(interval, config.main.trade_direction))
 
                 LOGGER.info("Trade alert: %s %s %s (%s)" % (pair, interval,
                                                             config.main.trade_direction,
