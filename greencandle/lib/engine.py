@@ -361,15 +361,17 @@ class Engine(dict):
             None
 
         """
-        if (index == None and self.test) or len(self.dataframes[pair]) < 2:
-            index = -1
-        elif index == None and not self.test:
-            index = -2
 
         func, timeperiod = localconfig  # split tuple
         LOGGER.debug("Getting %s_%s for %s" % (func, timeperiod, pair))
         scheme = {}
         mine = dataframe.apply(pandas.to_numeric).loc[:index]
+
+        if (not index and self.test) or len(self.dataframes[pair]) < 2:
+                index = -1
+        elif not index and not self.test:
+            index = -1
+
         rsi = talib.RSI(dataframe.close.values.astype(float) * 100000, timeperiod=int(timeperiod))
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
@@ -555,9 +557,10 @@ class Engine(dict):
             scheme["symbol"] = pair
 
             scheme["event"] = func + "_" + str(timeperiod)
-            if (index == None and self.test) or len(self.dataframes[pair]) < 2:
+
+            if (not index and self.test) or len(self.dataframes[pair]) < 2:
                 index = -1
-            elif index == None and not self.test:
+            elif not index and not self.test:
                 index = -2
 
             scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
