@@ -638,8 +638,7 @@ class Redis():
                         rules[rule].append(eval(current_config))
                     except (TypeError, KeyError) as error:
                         self.logger.warning("Unable to eval config rule for pair %s: %s_rule: %s"
-                                            "%s current: %s" % (pair, rule, current_config,
-                                                                error, current))
+                                            "%s" % (pair, rule, current_config, error))
                         continue
         close_timeout = False
         able_to_buy = True
