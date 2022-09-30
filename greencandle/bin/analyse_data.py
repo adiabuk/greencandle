@@ -8,6 +8,7 @@ Look for potential buys
 import time
 from datetime import datetime
 from apscheduler.schedulers.blocking import BlockingScheduler
+from collections import defaultdict
 from greencandle.lib import config
 config.create_config()
 from pathlib import Path
@@ -22,6 +23,7 @@ PAIRS = config.main.pairs.split()
 MAIN_INDICATORS = config.main.indicators.split()
 SCHED = BlockingScheduler()
 GET_EXCEPTIONS = exception_catcher((Exception))
+TRIGGERED = defaultdict(dict)
 
 @SCHED.scheduled_job('cron', minute=MINUTE[config.main.interval],
                      hour=HOUR[config.main.interval], second="32")
@@ -61,6 +63,18 @@ def analyse_loop():
                 now = datetime.now()
                 current_time = now.strftime("%H:%M:%S") + " UTC"
                 current_price = client.prices()[pair]
+
+                # Only alert on a given pair once per hour
+                # for each strategy
+                if pair in TRIGGERED:
+                    diff = now - TRIGGERED['pair']
+                    diff_in_hours = diff.total_seconds() / 3600
+                if diff_in_hours < 1:
+                    LOGGER.debug("Skipping notification for %s %s as recently triggered"
+                                 % (pair, interval))
+                    continue
+
+                TRIGGERED['pair'] = now
                 send_slack_message("notifications", "Open: %s %s %s (%s) - %s Current: %s" %
                                    (get_tv_link(pair, interval), interval,
                                     config.main.trade_direction, supported.strip(), current_time,
