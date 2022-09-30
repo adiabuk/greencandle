@@ -90,7 +90,6 @@ class Graph():
         for name, value in self.data.items():
             row = 1
             col = 1
-            #item2 = False
             if name == 'ohlc':
                 if value.empty:  # empty dataframe:
                     print('Unable to find ohlc data for {0}, passing...'.format(self.pair))
@@ -123,7 +122,7 @@ class Graph():
                                   name=name,
                                   mode='markers')
 
-                # add rsi graph in second subply (below) if it exists
+            # add rsi graph in second subply (below) if it exists
             elif ('RSI' in name or 'signal' in name or 'tsi' in name) and "STOCH" not in name:
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=value['value'],
