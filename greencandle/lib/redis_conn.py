@@ -47,6 +47,7 @@ class Redis():
         self.conn = redis.StrictRedis(connection_pool=pool)
 
     def __del__(self):
+        """destroy instance"""
         del self.conn
 
     def clear_all(self):
@@ -262,20 +263,19 @@ class Redis():
         if expire:
             self.conn.expire(key, expiry)
 
-        #return response
-        return True #FIXME
+        return True
 
     def get_items(self, pair, interval):
         """
-        Get sorted list of keys for a trading pair/interval
+        Get sorted list of available keys for a given trading pair/interval
         eg.
-         b"XRPBTC:15m:1520869499999",
-         b"XRPBTC:15m:1520870399999",
-         b"XRPBTC:15m:1520871299999",
-         b"XRPBTC:15m:1520872199999",
+         "1520869499999",
+         "1520870399999",
+         "1520871299999",
+         "1520872199999",
          ...
 
-         each item in the list contains PAIR:interval:epoch (in milliseconds)
+         each item in the list is a key to the hash containing data for that given period
         """
         key = "{}:{}".format(pair, interval)
         return sorted([item.decode() for item in list(self.conn.hgetall(key).keys())])
@@ -314,8 +314,16 @@ class Redis():
         return data["current_price"], data["date"], data['result']
 
     def get_result(self, item, indicator, pair=None, interval=None):
-        """Retrive decoded OHLC data from redis"""
+        """
+        Retrive result of a particular indicator for given item (mepoch)
+        args:
+          item: mepoch
+          indicator: eg. EMA_200
+          pair
+          interval
+        """
         try:
+            self.logger.debug("Running get_result %s %s %s %s" %(item, indicator, pair, interval))
             result = self.get_item(item, indicator, pair, interval)['result']
         except AttributeError:
             return None
@@ -370,19 +378,19 @@ class Redis():
 
         if trailing_stop and open_price:
             result = "CLOSE"
-            event = self.get_event("TrailingStopIntermittent" + result)
+            event = self.get_event_str("TrailingStopIntermittent" + result)
 
         elif stop_loss_rule and open_price:
             result = "CLOSE"
-            event = self.get_event("StopIntermittent" + result)
+            event = self.get_event_str("StopIntermittent" + result)
 
         elif take_profit_rule and open_price:
             result = "CLOSE"
-            event = self.get_event("TakeProfitIntermittent" + result)
+            event = self.get_event_str("TakeProfitIntermittent" + result)
 
         else:
             result = "HOLD"
-            event = self.get_event(result)
+            event = self.get_event_str(result)
 
         self.__log_event(event=event, rate=0, perc_rate=0,
                          open_price=open_price, close_price=current_price,
@@ -500,7 +508,7 @@ class Redis():
         return winning
 
     @staticmethod
-    def get_event(action):
+    def get_event_str(action):
         """
         Return trade string for use in logs & notifications
         """
@@ -509,11 +517,22 @@ class Redis():
         return "{}_{}_{}".format(trade_direction, trade_type, action)
 
     def get_action(self, pair, interval):
-        """Determine if we are in a BUY/HOLD/SELL situration for a specific pair and interval"""
+        """
+        Determine if we are in a BUY/HOLD/SELL/NOITEM state for a specific pair and interval
+        Will retrieve the current and previous 4 elements from redis and run open/close rules, as
+        well as assessing stop_loss and take_profit status
+        Retruns: tupple of dicts containing data
+        eg
+          ('NOITEM',                 -- status
+           'long_spot_NOITEM',       -- status name
+           '2022-09-30 16:09:59',    -- current date/time stamp
+           0.068467,                 -- current price of asset
+           {'sell': [], 'buy': []})  -- matched buy/sell rules
+        """
+
         results = AttributeDict(current=AttributeDict(), previous=AttributeDict(),
                                 previous1=AttributeDict(), previous2=AttributeDict(),
                                 previous3=AttributeDict())
-
 
         stop_loss_perc = self.get_on_entry(pair, 'stop_loss_perc')
         take_profit_perc = self.get_on_entry(pair, 'take_profit_perc')
@@ -693,7 +712,7 @@ class Redis():
                     stop_at = sub_perc(stop_loss_perc, open_price)
                     current_price = stop_at
             result = 'CLOSE'
-            event = self.get_event("StopLoss" + result)
+            event = self.get_event_str("StopLoss" + result)
 
         elif trailing_stop and open_price:
 
@@ -704,7 +723,7 @@ class Redis():
                     stop_at = add_perc(trailing_perc, current_low)
                 current_price = stop_at
             result = 'CLOSE'
-            event = self.get_event("TrailingStopLoss" + result)
+            event = self.get_event_str("TrailingStopLoss" + result)
         # if we match take_profit rule and are in a trade
         elif take_profit_rule and open_price:
             if self.test_data and str2bool(config.main.immediate_stop):
@@ -712,17 +731,17 @@ class Redis():
                 current_price = stop_at
 
             result = 'CLOSE'
-            event = self.get_event("TakeProfit" + result)
+            event = self.get_event_str("TakeProfit" + result)
 
         elif close_timeout:
             result = 'CLOSE'
-            event = self.get_event("TimeOut" + result)
+            event = self.get_event_str("TimeOut" + result)
 
         # if we match any sell rules, are in a trade and no buy rules match
         elif any(rules['close']) and open_price and not both:
 
             result = 'CLOSE'
-            event = self.get_event("Normal" + result)
+            event = self.get_event_str("Normal" + result)
 
         # if we match any buy rules are NOT in a trade and sell rules don't match
         elif any(rules['open']) and not open_price and able_to_buy and not both:
@@ -736,14 +755,14 @@ class Redis():
                               (close, last_close, close > last_close))
 
             result = 'OPEN'
-            event = self.get_event("Normal" + result)
+            event = self.get_event_str("Normal" + result)
 
         elif open_price:
             result = 'HOLD'
-            event = self.get_event(result)
+            event = self.get_event_str(result)
         else:
             result = 'NOITEM'
-            event = self.get_event(result)
+            event = self.get_event_str(result)
 
         self.__log_event(event=event, rate=rate, perc_rate=perc_rate,
                          open_price=open_price, close_price=current_price,

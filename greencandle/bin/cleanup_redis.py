@@ -9,6 +9,7 @@ import datetime
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.common import arg_decorator, epoch2date
 from greencandle.lib import config
+
 @arg_decorator
 def main():
     """
