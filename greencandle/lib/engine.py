@@ -19,8 +19,8 @@ import zlib
 import pandas
 import numpy
 import pandas_ta as ta
-import talib
 from indicator import SuperTrend, RSI
+import talib
 
 from greencandle.lib import config
 from greencandle.lib.common import make_float, pipify, pip_calc, epoch2date
@@ -143,8 +143,7 @@ class Engine(dict):
                               math.isnan(scheme["data"]))  else scheme["data"]
             try:
                 data = {scheme["event"]:{"result": result},
-                                         "current_price": format(float(current_price), ".20f")
-                                         }
+                        "current_price": format(float(current_price), ".20f")}
 
                 self.redis.redis_conn(pair, self.interval, data, close_time)
 
@@ -368,7 +367,7 @@ class Engine(dict):
         mine = dataframe.apply(pandas.to_numeric).loc[:index]
 
         if (not index and self.test) or len(self.dataframes[pair]) < 2:
-                index = -1
+            index = -1
         elif not index and not self.test:
             index = -1
 
