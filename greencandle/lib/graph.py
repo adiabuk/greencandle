@@ -225,9 +225,6 @@ class Graph():
                 result_list['ohlc'] = redis.get_current('{}:{}'.format(
                     self.pair, self.interval), index_item)[-1]
             except AttributeError as error:
-                print('xxxxxxxx')
-                print(index_item)
-                print(redis.get_current('{}:{}'.format(self.pair, self.interval), index_item))
                 LOGGER.error("Error, unable to find ohlc data for %s %s %s"
                              % (index_item, ind, error))
             try:
