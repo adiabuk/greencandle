@@ -710,6 +710,39 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
+  data-be-analyse_5m_high-rsi:
+    container_name: data-be-analyse_5m_high-rsi
+    hostname: data-be-analyse_5m_high-rsi
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh analyse_data
+    logging:
+      driver: journald
+    links:
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+      - data-be-get_5m:data
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_5m
+    environment:
+      - VPN_IP=$VPN_IP
+      - CONFIG_ENV=data/5m/short1
+      - HOST=$HOSTNAME
+      - DB=true
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
   data-be-analyse_5m_big-drop:
     container_name: data-be-analyse_5m_big-drop
     hostname: data-be-analyse_5m_big-drop
@@ -775,6 +808,40 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/:/var/run
+
+  data-be-analyse_5m_low-rsi:
+    container_name: data-be-analyse_5m_low-rsi
+    hostname: data-be-analyse_5m_low-rsi
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh analyse_data
+    logging:
+      driver: journald
+    links:
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+      - data-be-get_5m:data
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_5m
+    environment:
+      - VPN_IP=$VPN_IP
+      - CONFIG_ENV=data/5m/long1
+      - HOST=$HOSTNAME
+      - DB=true
+    healthcheck:
+      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
 
   data-be-get_5m:
     container_name: data-be-get_5m
