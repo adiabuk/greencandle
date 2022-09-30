@@ -279,21 +279,13 @@ class Redis():
         """
         key = "{}:{}".format(pair, interval)
         return sorted([item.decode() for item in list(self.conn.hgetall(key).keys())])
-        #AMROX
-        #return sorted(list(self.conn.scan_iter("{0}:{1}:*".format(pair, interval))))
 
     def get_item(self, address, key, pair=None, interval=None):
         """Return a specific item from redis, given an address and key"""
-        #AMROX
-        #address = now
-        # key = EMA_8     .......   need pair, interval
         if pair:
             return ast.literal_eval(self.conn.hget("{}:{}".format(pair, interval), \
                     address).decode())[key]
-
         return self.conn.hget(address, key)
-
-        #return self.conn.hget('BNBETH:1h','1653875999999')
 
     def hgetall(self):
         """
@@ -311,11 +303,8 @@ class Redis():
         Returns:
             a tuple of current_price and current_date
         """
-        #self.logger.debug("AMROX8 %s" % item)
-        #byte = self.conn.hget(item, "ohlc")
         byte = self.conn.hget(name, item)
 
-        #self.logger.critical("AMROX %s "% (byte))
         try:
             data = ast.literal_eval(byte.decode("UTF-8"))['ohlc']
         except AttributeError:
