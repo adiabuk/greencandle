@@ -142,10 +142,10 @@ class Engine(dict):
             result = None if (isinstance(scheme["data"], float) and
                               math.isnan(scheme["data"]))  else scheme["data"]
             try:
-                data = {scheme["event"]:{"result": result,
-                                         "current_price": format(float(current_price), ".20f"),
-                                         "date": close_time,
+                data = {scheme["event"]:{"result": result},
+                                         "current_price": format(float(current_price), ".20f")
                                          }}
+
                 self.redis.redis_conn(pair, self.interval, data, close_time)
 
             except Exception as exc:
