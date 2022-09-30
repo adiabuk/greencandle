@@ -260,9 +260,9 @@ class Engine(dict):
             results['lower'] = lower[-1]/100000
 
         except Exception as exc:
-            results['upper'] = 0
-            results['middle'] = 0
-            results['lower'] = 0
+            results['upper'] = None
+            results['middle'] = None
+            results['lower'] = None
             LOGGER.warning("Overall Exception getting bollinger bands: %s seq: %s" % (exc, index))
         trigger = None
         scheme = {}
