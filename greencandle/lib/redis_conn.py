@@ -296,8 +296,9 @@ class Redis():
 
     def get_current(self, name, item):
         """
-        Get the current price and date for given item where item is an address:
-        eg.  b"XRPBTC:15m:1520871299999"
+        Get the current price and data for given item where name is an address:
+        eg.  "XRPBTC:15m"
+        and item is an mepoch eg. "1520871299999"
         All items within a group should have the same date and price, as they relate to the same
         data - so we pick an indicator at random (EMA) to reference in the JSON that is stored.
         Returns:
@@ -310,8 +311,8 @@ class Redis():
         except AttributeError:
             self.logger.error("No Data for item %s" % item)
             return None, None
-
-        return data["current_price"], data["date"], data['result']
+        current_price = ast.literal_eval(self.get_item(name, item).decode())['current_price']
+        return current_price, item, data['result']
 
     def get_result(self, item, indicator, pair=None, interval=None):
         """
