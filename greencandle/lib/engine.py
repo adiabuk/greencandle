@@ -144,7 +144,7 @@ class Engine(dict):
             try:
                 data = {scheme["event"]:{"result": result},
                                          "current_price": format(float(current_price), ".20f")
-                                         }}
+                                         }
 
                 self.redis.redis_conn(pair, self.interval, data, close_time)
 
