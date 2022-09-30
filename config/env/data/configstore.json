@@ -121,7 +121,7 @@
       "is_secret": false
     },
     "close_rule1": {
-      "value": "None",
+      "value": "",
       "is_binary": false,
       "is_secret": false
     },
