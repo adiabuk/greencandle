@@ -311,7 +311,10 @@ class Redis():
         except AttributeError:
             self.logger.error("No Data for item %s" % item)
             return None, None
-        current_price = ast.literal_eval(self.get_item(name, item).decode())['current_price']
+        try:
+            current_price = ast.literal_eval(self.get_item(name, item).decode())['current_price']
+        except KeyError:
+            current_price = None
         return current_price, item, data['result']
 
     def get_result(self, item, indicator, pair=None, interval=None):
