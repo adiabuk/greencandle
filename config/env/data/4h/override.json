@@ -2,6 +2,5 @@
   "indicators": "get_rsi;RSI;14 get_bb;upper;20,2 get_bb;lower;20,2 get_bb;middle;20,2 get_moving_averages;EMA;50 get_moving_averages;EMA;100",
   "interval": "4h",
   "open_rule1": "results.current.EMA_50 \u003c results.current.EMA_100",
-  "rate_indicator": "RSI_14",
-  "redis_expiry_seconds": "86400"
+  "rate_indicator": "RSI_14"
 }

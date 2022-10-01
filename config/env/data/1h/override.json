@@ -1,6 +1,5 @@
 {
   "indicators": "get_moving_averages;EMA;200 get_rsi;RSI;14 get_bb;upper;20,2 get_bb;lower;20,2 get_bb;middle;20,2",
   "interval": "1h",
-  "rate_indicator": "EMA_200",
-  "redis_expiry_seconds": "86400"
+  "rate_indicator": "EMA_200"
 }
