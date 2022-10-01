@@ -46,7 +46,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -79,7 +79,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -112,7 +112,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -145,7 +145,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -176,7 +176,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -209,7 +209,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -242,7 +242,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -275,7 +275,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -308,7 +308,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -339,7 +339,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -372,7 +372,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -405,7 +405,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -438,7 +438,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -471,7 +471,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -502,7 +502,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -535,7 +535,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -568,7 +568,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -601,7 +601,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -634,7 +634,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -667,7 +667,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -700,7 +700,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -733,7 +733,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -766,7 +766,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -799,7 +799,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -832,7 +832,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -841,7 +841,6 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/:/var/run
-
 
   data-be-get_5m:
     container_name: data-be-get_5m
@@ -864,7 +863,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -897,7 +896,7 @@ services:
     ports:
       - 6003:6000
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -930,7 +929,7 @@ services:
     ports:
       - 6002:6000
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -963,7 +962,7 @@ services:
     ports:
       - 6000:6000
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -996,7 +995,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -1029,7 +1028,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -1062,7 +1061,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -1095,7 +1094,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -1126,7 +1125,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -1159,7 +1158,7 @@ services:
     ports:
       - 6001:6000
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -1190,7 +1189,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/run/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -1252,7 +1251,7 @@ services:
       - data-base-mysql
       - data-base-redis
     healthcheck:
-      test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
+      test: find /var/local/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5

@@ -95,7 +95,7 @@ def keepalive():
     """
     Periodically touch file for docker healthcheck
     """
-    Path('/var/run/greencandle').touch()
+    Path('/var/local/greencandle').touch()
 
 @arg_decorator
 def main():
