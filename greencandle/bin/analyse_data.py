@@ -69,10 +69,10 @@ def analyse_loop():
                 if pair in TRIGGERED:
                     diff = now - TRIGGERED['pair']
                     diff_in_hours = diff.total_seconds() / 3600
-                if diff_in_hours < 1:
-                    LOGGER.debug("Skipping notification for %s %s as recently triggered"
-                                 % (pair, interval))
-                    continue
+                    if diff_in_hours < 1:
+                        LOGGER.debug("Skipping notification for %s %s as recently triggered"
+                                     % (pair, interval))
+                        continue
 
                 TRIGGERED['pair'] = now
                 send_slack_message("notifications", "Open: %s %s %s (%s) - %s Current: %s" %
