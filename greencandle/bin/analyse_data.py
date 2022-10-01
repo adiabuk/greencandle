@@ -73,6 +73,8 @@ def analyse_loop():
                         LOGGER.debug("Skipping notification for %s %s as recently triggered"
                                      % (pair, interval))
                         continue
+                    else:
+                        LOGGER.debug("Triggering alert: last alert %s hours ago" % diff_in_hours)
 
                 TRIGGERED['pair'] = now
                 send_slack_message("notifications", "Open: %s %s %s (%s) - %s Current: %s" %
