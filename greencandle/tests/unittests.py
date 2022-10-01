@@ -18,7 +18,7 @@ from greencandle.lib.logger import get_logger
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.run import serial_test
-
+from greencandle.lib.graph import Graph
 
 def get_tag():
     """
@@ -282,6 +282,14 @@ def make_test_case(config_env, pairs, interval, startdate, days, xsum, xmax, xmi
                                                  header=False)[0][0]
             self.assertGreaterEqual(float(up_sum), self.drawup)
             self.assertGreaterEqual(float(down_sum), self.drawdown)
+
+        def step_5(self):
+            """
+            Step 5 - Create graphs
+            """
+            self.logger.info("Creating graph")
+            graph = Graph(test=False, pair=self.pairs[0], interval=self.intervals[0], volume=False)
+            graph.create_graph(output_dir=self.outputdir)
 
         def tearDown(self):
             """Cleanup DB and files"""
