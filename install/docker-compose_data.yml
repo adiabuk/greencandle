@@ -1320,6 +1320,7 @@ services:
       - data-fe-api-dashboard:cadvisor
       - data-base-mysql:mysql
       - data-base-redis:redis
+      - data-fe-api-proxy:proxy
     depends_on:
       - data-base-mysql
       - data-base-redis
@@ -1329,6 +1330,34 @@ services:
       - /root/.aws:/root/.aws
       - /root/.bash_history:/root/.bash_history
       - /var/run:/var/run
+
+  data-fe-api-proxy:
+    container_name: data-fe-api-proxy
+    hostname: data-fe-api-proxy
+    environment:
+      - CONFIG_ENV=data/fe/api
+      - HOST=$HOSTNAME
+      - SECRET_KEY=$SECRET_KEY
+    logging:
+      driver: journald
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh api_proxy
+    links:
+      - data-be-api-router:router
+      - data-fe-api-filesystem:filesystem
+    ports:
+      - 5000
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+    volumes:
+      - /data:/data
+      - /dev/log:/dev/log
+      - /root/.aws:/root/.aws
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history
 
   data-fe-api-dashboard:
     container_name: data-fe-api-dashboard
