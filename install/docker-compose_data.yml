@@ -1335,7 +1335,7 @@ services:
     container_name: data-fe-api-proxy
     hostname: data-fe-api-proxy
     environment:
-      - CONFIG_ENV=data/fe/api
+      - CONFIG_ENV=data
       - HOST=$HOSTNAME
       - SECRET_KEY=$SECRET_KEY
     logging:
@@ -1373,7 +1373,7 @@ services:
       timeout: 5s
       retries: 5
     environment:
-      - CONFIG_ENV=data/fe/api
+      - CONFIG_ENV=data
       - HOST=$HOSTNAME
       - DB=true
     ports:
@@ -1391,12 +1391,11 @@ services:
       - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
-
   data-fe-api-filesystem:
     container_name: data-fe-api-filesystem
     hostname: data-fe-api-filesystem
     environment:
-      - CONFIG_ENV=data/fe/api
+      - CONFIG_ENV=data
       - HOST=$HOSTNAME
       - SECRET_KEY=$SECRET_KEY
     logging:
@@ -1412,7 +1411,6 @@ services:
       - /dev/log:/dev/log
       - /root/.aws:/root/.aws
       - /var/run:/var/run
-
 
   data-fe-api-dashboard:
     container_name: data-fe-api-dashboard
