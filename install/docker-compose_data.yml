@@ -1377,7 +1377,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     ports:
-      - 1080:1080
+      - 1081:1080
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
