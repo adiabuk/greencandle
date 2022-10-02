@@ -289,6 +289,7 @@ def make_test_case(config_env, pairs, interval, startdate, days, xsum, xmax, xmi
             """
             self.logger.info("Creating graph")
             graph = Graph(test=False, pair=self.pairs[0], interval=self.intervals[0], volume=False)
+            graph.get_data()
             graph.create_graph(output_dir=self.outputdir)
 
         def tearDown(self):
