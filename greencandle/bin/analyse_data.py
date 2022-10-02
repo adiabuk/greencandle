@@ -8,7 +8,6 @@ Look for potential buys
 import time
 from datetime import datetime
 from apscheduler.schedulers.blocking import BlockingScheduler
-from collections import defaultdict
 from greencandle.lib import config
 config.create_config()
 from pathlib import Path
@@ -23,7 +22,7 @@ PAIRS = config.main.pairs.split()
 MAIN_INDICATORS = config.main.indicators.split()
 SCHED = BlockingScheduler()
 GET_EXCEPTIONS = exception_catcher((Exception))
-TRIGGERED = defaultdict(dict)
+TRIGGERED = {}
 
 @SCHED.scheduled_job('cron', minute=MINUTE[config.main.interval],
                      hour=HOUR[config.main.interval], second="32")
@@ -73,8 +72,7 @@ def analyse_loop():
                         LOGGER.debug("Skipping notification for %s %s as recently triggered"
                                      % (pair, interval))
                         continue
-                    else:
-                        LOGGER.debug("Triggering alert: last alert %s hours ago" % diff_in_hours)
+                    LOGGER.debug("Triggering alert: last alert %s hours ago" % diff_in_hours)
 
                 TRIGGERED['pair'] = now
                 send_slack_message("notifications", "Open: %s %s %s (%s) - %s Current: %s" %
