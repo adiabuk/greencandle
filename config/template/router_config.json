@@ -41,6 +41,11 @@
 "alert" : ["alert"],
 "route": []
 }
+{{else if eq .base_env "data"}}
+{
+"alert": ["alert"],
+"route": []
+}
 {{else if eq .base_env "per"}}
 {
 "any-spot-long" : ["per-be-api-any-spot-long"],
