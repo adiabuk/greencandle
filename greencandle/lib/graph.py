@@ -87,6 +87,7 @@ class Graph():
         """Create graph html file using plotly offline-mode from dataframe object"""
 
         fig = subplots.make_subplots(rows=2, cols=1, shared_xaxes=True, print_grid=False)
+
         for name, value in self.data.items():
             row = 1
             col = 1
@@ -221,29 +222,35 @@ class Graph():
                 except ValueError:
                     result_list[int] = redis.get_item(index_item, ind).decode()
 
-            try:
-                result_list['ohlc'] = redis.get_current('{}:{}'.format(
-                    self.pair, self.interval), index_item)[-1]
+            result_list['current_price'] = ast.literal_eval(
+                redis.get_item('{}:{}'.format(self.pair, self.interval),
+                               index_item).decode())['current_price']
+            try:  #ohlc
+                result_list['ohlc'] = redis.get_current('{}:{}'.format(self.pair,
+                                                                       self.interval),
+                                                        index_item)[-1]
             except AttributeError as error:
                 LOGGER.error("Error, unable to find ohlc data for %s %s %s"
                              % (index_item, ind, error))
-            try:
-                result_list['event'] = ast.literal_eval(redis.get_item(index_item,
-                                                                       'event').decode())
+            try:  # event
+                result_list['event'] = ast.literal_eval(
+                    redis.get_item('{}:{}'.format(self.pair, self.interval),
+                                   index_item).decode())['event']
             except AttributeError:  # no event for this time period, so skip
                 pass
             rehydrated = pickle.loads(zlib.decompress(result_list['ohlc']))
             list_of_series.append(rehydrated)
             for ind in ind_list:
-                try:
+                try:  # event
                     list_of_results[ind].append((result_list[ind]['result'],
-                                                 result_list[ind]['date']))
+                                                 index_item))
                 except KeyError:
                     pass
-            try:
+
+            try:  # add event
                 list_of_results['event'].append((result_list['event']['result'],
-                                                 result_list['event']['current_price'],
-                                                 result_list['event']['date']))
+                                                 index_item))
+                print("AMROX", result_list['result'], result_list['current_price'], index_item)
             except KeyError:
                 pass
         dataframes = {}
