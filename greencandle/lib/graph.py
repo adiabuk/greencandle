@@ -111,12 +111,11 @@ class Graph():
                            "CLOSE": "rgb(255,0,0)", "SELL": "rgb(255,0,0)"
                            }
                 value = self.replace_all(value, replace)
-
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=value['current_price'],
                                   name="events",
                                   mode='markers',
-                                  marker=dict(size=16, color=value))
+                                  marker=dict(size=16, color=value['result']))
             elif 'pivot' in name:
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=value['value'],
@@ -244,7 +243,7 @@ class Graph():
                     pass
 
             try:  # add event
-                list_of_results['event'].append((result_list['event'],
+                list_of_results['event'].append((result_list['event']['result'],
                                                  result_list['current_price'],
                                                  index_item))
             except KeyError:
