@@ -116,7 +116,7 @@ class Graph():
                                   y=value['current_price'],
                                   name="events",
                                   mode='markers',
-                                  marker=dict(size=16, color=value['result']))
+                                  marker=dict(size=16, color=value))
             elif 'pivot' in name:
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=value['value'],
@@ -238,13 +238,13 @@ class Graph():
             list_of_series.append(rehydrated)
             for ind in ind_list:
                 try:  # event
-                    list_of_results[ind].append((result_list[ind]['result'],
+                    list_of_results[ind].append((result_list[ind],
                                                  result_list['current_price'], index_item))
                 except KeyError:
                     pass
 
             try:  # add event
-                list_of_results['event'].append((result_list['event']['result'],
+                list_of_results['event'].append((result_list['event'],
                                                  result_list['current_price'],
                                                  index_item))
             except KeyError:

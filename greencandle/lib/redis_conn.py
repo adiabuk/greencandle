@@ -315,7 +315,7 @@ class Redis():
             current_price = ast.literal_eval(self.get_item(name, item).decode())['current_price']
         except KeyError:
             current_price = None
-        return current_price, item, data['result']
+        return current_price, item, data
 
     def get_result(self, item, indicator, pair=None, interval=None):
         """
@@ -328,7 +328,7 @@ class Redis():
         """
         try:
             self.logger.debug("Running get_result %s %s %s %s" %(item, indicator, pair, interval))
-            result = self.get_item(item, indicator, pair, interval)['result']
+            result = self.get_item(item, indicator, pair, interval)
         except AttributeError:
             return None
 
