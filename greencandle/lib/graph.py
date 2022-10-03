@@ -134,14 +134,10 @@ class Graph():
             elif 'STOCH' in name:
                 # add stochrsi graph in second subply (below) if it exists
                 row = 2
-                value['k'], value['d'] = zip(*value.value)
+                value['k'] = value.value
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=value['k'],
                                   name=name+'-k')
-                item2 = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
-                                   y=value['d'],
-                                   name=name+'-d')
-                fig.append_trace(item2, row, col)
 
 
             elif 'SHOOTINGSTAR' in name or 'SPINNINGTOP' in name:
@@ -236,21 +232,21 @@ class Graph():
                 result_list['event'] = ast.literal_eval(
                     redis.get_item('{}:{}'.format(self.pair, self.interval),
                                    index_item).decode())['event']
-            except AttributeError:  # no event for this time period, so skip
+            except KeyError:  # no event for this time period, so skip
                 pass
             rehydrated = pickle.loads(zlib.decompress(result_list['ohlc']))
             list_of_series.append(rehydrated)
             for ind in ind_list:
                 try:  # event
                     list_of_results[ind].append((result_list[ind]['result'],
-                                                 index_item))
+                                                 result_list['current_price'], index_item))
                 except KeyError:
                     pass
 
             try:  # add event
                 list_of_results['event'].append((result_list['event']['result'],
+                                                 result_list['current_price'],
                                                  index_item))
-                print("AMROX", result_list['result'], result_list['current_price'], index_item)
             except KeyError:
                 pass
         dataframes = {}
@@ -259,5 +255,7 @@ class Graph():
         dataframes['event'] = pandas.DataFrame(list_of_results['event'],
                                                columns=['result', 'current_price', 'date'])
         for ind in ind_list:
-            dataframes[ind] = pandas.DataFrame(list_of_results[ind], columns=['value', 'date'])
+            dataframes[ind] = pandas.DataFrame(list_of_results[ind], columns=['value',
+                                                                              'current_price',
+                                                                              'date'])
         self.data = dataframes
