@@ -1,6 +1,35 @@
 
 # Releases
 
+# 4.6
+* Get details of all isolated margin pairs
+* Script to transfer funds to/from isolated and spot
+* Allow partial last candle in data env to catch signals earlier
+* Reduce number of initial candles in data env
+* Cleanup and reduce logging
+* Consolidate redis data into pair:interval keys
+* Remove duplication of date and current price in redis
+* Don't stop deployment if no fe or be containers already running
+* Deprecate expiration of redis rows due to consolidation of data
+* Add new redis cleanup script for data expiry for use in cron
+* Remove old unit redis unit tests covered by other tests
+* New redis docs
+* Fix data web port and add filesystem/router containers
+* Check borrowable amount is less than what we intend to borrow
+* Fix new ETHW coin errors
+* Don't use updated version of pyopenssl
+* Remove recently retired trading pairs
+* Add current price and UTC time to data trade notifications
+* Create graphs for all data timeframes
+* Check data results more frequently
+* Keep graphs for up to 2 days
+* Don't set indicator value to zero if no value
+* Don't trigger the same trade notifications more than once per hour
+* Restore low/high RSI data containers
+* Ensure data healthchecks are not shared and are stored locally
+* Increase data logging verbosity to debug
+* Create graphs in unittest runs
+
 # 4.5
 * Add more pairs for analysis in data env
 * Allow specifying binance api endpoint from config
