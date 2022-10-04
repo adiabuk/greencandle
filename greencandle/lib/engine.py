@@ -310,8 +310,7 @@ class Engine(dict):
             CROSS_DATA[key] = get_all_klines(pair, '1d', get_data_for, 3)
 
         klines = CROSS_DATA[key]
-        result = result = (float(klines[0]['high']) + float(klines[0]['low']) + \
-                           float(klines[0]['close']))/3
+        result = (float(klines[0]['high']) + float(klines[0]['low']) + float(klines[0]['close']))/3
         scheme["data"] = result
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
