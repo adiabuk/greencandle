@@ -53,7 +53,6 @@ services:
       - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
-
   data-be-analyse_15m_big-change:
     container_name: data-be-analyse_15m_big-change
     hostname: data-be-analyse_15m_big-change
