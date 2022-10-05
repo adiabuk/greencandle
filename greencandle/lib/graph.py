@@ -79,6 +79,7 @@ class Graph():
         """
         Replace text with given dict criteria
         """
+        LOGGER.debug("Replace event data with colours")
         for i, j in dic.items():
             text = text.replace(i, j)
         return text
@@ -92,6 +93,7 @@ class Graph():
             row = 1
             col = 1
             if name == 'ohlc':
+                LOGGER.debug("Creating OHLC graph")
                 if value.empty:  # empty dataframe:
                     print('Unable to find ohlc data for {0}, passing...'.format(self.pair))
                     return
@@ -105,6 +107,7 @@ class Graph():
 
 
             elif name == 'event':
+                LOGGER.debug("Creating event graph")
                 # dataframe is mutable so we cannot reference exisiting values by hashing
                 # therefore we will substitute buy/sell with and rgb value for red/green
                 replace = {"OPEN": "rgb(0,255,0)", "BUY": "rgb(0,255,0)",
@@ -117,6 +120,7 @@ class Graph():
                                   mode='markers',
                                   marker=dict(size=16, color=value['result']))
             elif 'pivot' in name:
+                LOGGER.debug("Creating pivot graph")
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=value['value'],
                                   name=name,
@@ -124,6 +128,7 @@ class Graph():
 
             # add rsi graph in second subply (below) if it exists
             elif ('RSI' in name or 'signal' in name or 'tsi' in name) and "STOCH" not in name:
+                LOGGER.debug("Creating RSI graph")
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=value['value'],
                                   name=name)
@@ -132,6 +137,7 @@ class Graph():
 
             elif 'STOCH' in name:
                 # add stochrsi graph in second subply (below) if it exists
+                LOGGER.debug("Creating STOCH graph")
                 row = 2
                 value['k'] = value.value
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
@@ -140,18 +146,21 @@ class Graph():
 
 
             elif 'SHOOTINGSTAR' in name or 'SPINNINGTOP' in name:
+                LOGGER.debug("Creating shootingstar/spinningtop graph")
                 item = go.Bar(x=pandas.to_datetime(value["date"], unit="ms"),
                               y=value['value'],
                               name=name)
                 row = 2
 
             elif 'Sup_Res' in name:
+                LOGGER.debug("Creating sup/res graph")
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=value['value'],
                                   mode='markers',
                                   name="Resistance")
 
             else:
+                LOGGER.debug("Creating other graph")
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=value['value'],
                                   name=name)
@@ -178,17 +187,20 @@ class Graph():
                 row = 2
                 fig.append_trace(item, row, col)
 
+        LOGGER.debug("Generating graph file")
         now = datetime.datetime.now()
         date = now.strftime('%Y-%m-%d_%H-%M-%S')
         env = config.main.base_env
         self.filename = "{0}/{1}_{2}_{3}-{4}.html".format(output_dir, self.pair, env,
                                                           date, self.interval)
         py.plot(fig, filename=self.filename, auto_open=False)
+        LOGGER.debug("Done")
 
     def insert_data(self, dframe):
         """
         insert ohlc data for creating graphs
         """
+        LOGGER.debug("Inserting OHLC data info var")
         self.data = {'ohlc': dframe}
 
     def get_data(self):
@@ -208,15 +220,19 @@ class Graph():
             result_list = {}
             for ind in ind_list:
                 try:
+                    LOGGER.debug("Getting Data for %s" % ind)
                     result_list[ind] = ast.literal_eval(redis.get_item('{}:{}'.format(
                         self.pair, self.interval), index_item).decode())[ind]
                 except AttributeError:
                     pass
                 except KeyError:
+                    LOGGER.debug("No indicator data for %s" % ind)
                     continue
                 except ValueError:
+                    LOGGER.debug("Value Error while getting %s" % ind)
                     result_list[int] = redis.get_item(index_item, ind).decode()
 
+            LOGGER.debug("Getting current prices")
             result_list['current_price'] = ast.literal_eval(
                 redis.get_item('{}:{}'.format(self.pair, self.interval),
                                index_item).decode())['current_price']
@@ -228,6 +244,7 @@ class Graph():
                 LOGGER.error("Error, unable to find ohlc data for %s %s %s"
                              % (index_item, ind, error))
             try:  # event
+                LOGGER.debug("Getting trade events")
                 result_list['event'] = ast.literal_eval(
                     redis.get_item('{}:{}'.format(self.pair, self.interval),
                                    index_item).decode())['event']
@@ -258,3 +275,4 @@ class Graph():
                                                                               'current_price',
                                                                               'date'])
         self.data = dataframes
+        LOGGER.debug("Done getting graph data")
