@@ -23,6 +23,37 @@ services:
       timeout: 2s
       retries: 5
 
+  gen-be-logtailer-api:
+    container_name: gen-be-logtailer-api
+    hostname: gen-be-logtailer-api
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    environment:
+      - CONFIG_ENV=per
+      - DB=false
+      - SECRET_KEY=$SECRET_KEY
+    entrypoint: /docker-entrypoint.sh logtailer
+    logging:
+      driver: journald
+    ports:
+      - 2000:2000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /var/log/syslog:/var/log/syslog
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history
+
+
   data-be-analyse_15m_big-change:
     container_name: data-be-analyse_15m_big-change
     hostname: data-be-analyse_15m_big-change
@@ -1321,6 +1352,7 @@ services:
       - data-base-mysql:mysql
       - data-base-redis:redis
       - data-fe-api-proxy:proxy
+      - gen-be-logtailer-api:logs
     depends_on:
       - data-base-mysql
       - data-base-redis
