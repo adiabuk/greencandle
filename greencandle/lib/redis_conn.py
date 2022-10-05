@@ -249,8 +249,9 @@ class Redis():
             b = self.conn.hmget(key, now)[0]
             if b:
                 dict = {item:value}
-                dict.update(ast.literal_eval(b.decode()))
-                result = self.conn.hmset(key, {now: dict})
+                x = ast.literal_eval(b.decode())
+                x[item] = value
+                result = self.conn.hmset(key, {now: x})
 
             else:
                 response = self.conn.hmset(key, dict)
