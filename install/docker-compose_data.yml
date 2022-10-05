@@ -1430,6 +1430,9 @@ services:
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
+      - data-fe-api-router:router
+      - data-fe-api-filesystem:filesystem
+      - data-fe-api-proxy:proxy
     ports:
       - 5000
     depends_on:
