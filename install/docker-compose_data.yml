@@ -30,7 +30,7 @@ services:
     pull_policy: always
     restart: always
     environment:
-      - CONFIG_ENV=per
+      - CONFIG_ENV=data
       - DB=false
       - SECRET_KEY=$SECRET_KEY
     entrypoint: /docker-entrypoint.sh logtailer
@@ -39,8 +39,8 @@ services:
     ports:
       - 2000:2000
     links:
-      - per-base-mysql:mysql
-      - per-base-redis:redis
+      - data-base-mysql:mysql
+      - data-base-redis:redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
