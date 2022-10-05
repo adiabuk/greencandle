@@ -243,8 +243,21 @@ class Redis():
         if not str(now).endswith("999"): # closing time, 1 ms before next candle
             self.logger.critical("Invalid time submitted to redis %s.  Skipping " % key)
             return None
+        for item, value in data.items():
 
-        result = self.conn.hset(key, now, data)
+            dict = {now: {item: value}}
+            b = self.conn.hmget(key, now)[0]
+            if b:
+                dict = {item:value}
+                dict.update(ast.literal_eval(b.decode()))
+                result = self.conn.hmset(key, {now: dict})
+
+            else:
+                response = self.conn.hmset(key, dict)
+                    # key = pair:interval
+                    # item = ohlc etc
+                    # now: miliepoch
+                    # value = {dict}
 
         expire = str2bool(config.redis.redis_expire)
         if expire:
