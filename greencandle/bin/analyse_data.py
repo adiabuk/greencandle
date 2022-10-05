@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-position,wrong-import-order,no-member,logging-not-lazy,import-error,broad-except
+#pylint: disable=wrong-import-position,wrong-import-order,no-member,logging-not-lazy,broad-except,global-statement
 
 """
 Analyze available data rom redis
@@ -30,6 +30,7 @@ def analyse_loop():
     """
     Gather data from redis and analyze
     """
+    global TRIGGERED
     client = binance_auth()
     isolated = client.get_isolated_margin_pairs()
     cross = client.get_cross_margin_pairs()
