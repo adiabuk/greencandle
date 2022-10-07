@@ -306,16 +306,19 @@ class Trade():
                                  float(self.config.main.divisor))
 
         #convert to base asset if we are short
-        else:
+        else:  # amt in base
             final = sub_perc(1, quote2base(total, orig_base+"USDT") /
                              float(self.config.main.divisor))
 
         # Use 99% of amount determined by divisor
         # and check if we have exceeded max_borrable amount
-        if orig_quote == 'USDT' and final > max_borrow_usd:
+        if (orig_quote == 'USDT' and final > max_borrow_usd and
+                self.config.main.trade_direction == "long"):
             return sub_perc(10, max_borrow_usd)
 
-        elif orig_quote != 'USDT' and base2quote(final, orig_quote+'USDT') > max_borrow_usd:
+        elif (orig_quote != 'USDT' and
+              base2quote(final, orig_quote+'USDT') > max_borrow_usd and
+              self.config.main.trade_direction == "long"):
             return quote2base(sub_perc(10, max_borrow_usd), orig_quote+'USDT')
         else:
             return final
