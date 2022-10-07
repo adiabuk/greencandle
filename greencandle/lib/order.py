@@ -307,8 +307,7 @@ class Trade():
 
         #convert to base asset if we are short
         else:
-            #final = quote2base(total, orig_base+"USDT")
-            final = sub_perc(1, quote2base(total, orig_quote+"USDT") /
+            final = sub_perc(1, quote2base(total, orig_base+"USDT") /
                              float(self.config.main.divisor))
 
         # Use 99% of amount determined by divisor
