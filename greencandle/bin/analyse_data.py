@@ -31,6 +31,8 @@ def analyse_loop():
     Gather data from redis and analyze
     """
     global TRIGGERED
+    LOGGER.debug("Recently triggered: %s" % str(TRIGGERED))
+
     client = binance_auth()
     isolated = client.get_isolated_margin_pairs()
     cross = client.get_cross_margin_pairs()
