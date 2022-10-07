@@ -69,7 +69,7 @@ def analyse_loop():
                 # Only alert on a given pair once per hour
                 # for each strategy
                 if pair in TRIGGERED:
-                    diff = now - TRIGGERED['pair']
+                    diff = now - TRIGGERED[pair]
                     diff_in_hours = diff.total_seconds() / 3600
                     if diff_in_hours < 1:
                         LOGGER.debug("Skipping notification for %s %s as recently triggered"
@@ -77,7 +77,7 @@ def analyse_loop():
                         continue
                     LOGGER.debug("Triggering alert: last alert %s hours ago" % diff_in_hours)
 
-                TRIGGERED['pair'] = now
+                TRIGGERED[pair] = now
                 send_slack_message("notifications", "Open: %s %s %s (%s) - %s Current: %s" %
                                    (get_tv_link(pair, interval), interval,
                                     config.main.trade_direction, supported.strip(), current_time,
