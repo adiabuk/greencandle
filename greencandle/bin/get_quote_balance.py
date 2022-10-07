@@ -130,7 +130,7 @@ def get_isolated_margin_details(bal=None, client=None):
                     base2quote(quote_free, get_quote(pair)+'USDT')
 
             if iso_debt_usd > 0:
-                results += "\tTotal debts: " + format_usd(iso_debt_usd)+"\n"
+                results += "\tTotal debts {}: {}\n".format(pair, format_usd(iso_debt_usd))
 
             if base_free > 0:
                 results += "\t{} free: {} ({})\n".format(get_base(pair), base_free,
