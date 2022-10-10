@@ -58,7 +58,7 @@ def analyse_loop():
 
         LOGGER.debug("Analysing pair: %s" % pair)
         try:
-            result, _, _ current_price, _ = redis.get_action(pair=pair, interval=interval)
+            result, _, _, current_price, _ = redis.get_action(pair=pair, interval=interval)
 
             if result == "OPEN":
                 LOGGER.debug("Items to buy")
