@@ -42,8 +42,6 @@ services:
     entrypoint: /docker-entrypoint.sh logtailer
     logging:
       driver: journald
-    ports:
-      - 2000:2000
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
