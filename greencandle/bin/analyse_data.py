@@ -58,13 +58,12 @@ def analyse_loop():
 
         LOGGER.debug("Analysing pair: %s" % pair)
         try:
-            result = redis.get_action(pair=pair, interval=interval)[0]
+            result, _, _ current_price, _ = redis.get_action(pair=pair, interval=interval)
 
             if result == "OPEN":
                 LOGGER.debug("Items to buy")
                 now = datetime.now()
                 current_time = now.strftime("%H:%M:%S") + " UTC"
-                current_price = client.prices()[pair]
 
                 # Only alert on a given pair once per hour
                 # for each strategy
