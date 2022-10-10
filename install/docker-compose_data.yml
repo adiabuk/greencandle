@@ -7,6 +7,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
     environment:
       - VPN_IP=$VPN_IP
@@ -29,6 +32,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     environment:
       - CONFIG_ENV=data
       - DB=false
@@ -59,6 +65,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -92,6 +101,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -125,6 +137,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -158,6 +173,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -191,6 +209,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh get_data
     logging:
       driver: journald
@@ -222,6 +243,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -255,6 +279,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -288,6 +315,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -321,6 +351,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -354,6 +387,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh get_data
     logging:
       driver: journald
@@ -385,6 +421,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -418,6 +457,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -451,6 +493,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -484,6 +529,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -517,6 +565,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh get_data
     logging:
       driver: journald
@@ -548,6 +599,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -581,6 +635,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -614,6 +671,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -647,6 +707,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -680,6 +743,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -713,6 +779,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -746,6 +815,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -779,6 +851,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -812,6 +887,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -845,6 +923,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -878,6 +959,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh get_data
     logging:
       driver: journald
@@ -909,6 +993,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh api_values
     logging:
       driver: journald
@@ -942,6 +1029,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh api_data
     logging:
       driver: journald
@@ -975,6 +1065,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh api_data
     logging:
       driver: journald
@@ -1008,6 +1101,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -1041,6 +1137,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -1074,6 +1173,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -1107,6 +1209,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -1140,6 +1245,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh get_data
     logging:
       driver: journald
@@ -1171,6 +1279,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh api_data
     logging:
       driver: journald
@@ -1204,6 +1315,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh get_data
     logging:
       driver: journald
@@ -1240,6 +1354,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh tail -f /dev/null
     logging:
       driver: journald
@@ -1273,6 +1390,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh cron -f
     links:
       - data-base-mysql:mysql
@@ -1295,9 +1415,15 @@ services:
     image: amrox/gc-redis:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     ports:
       - 6379:6379
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     links:
       - data-base-mysql:mysql
     healthcheck:
@@ -1312,6 +1438,9 @@ services:
     image: amrox/gc-mysql:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh mysqld
     ports:
       - 3306:3306
@@ -1332,6 +1461,9 @@ services:
     image: amrox/webserver:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     healthcheck:
       test: service nginx status || exit 1
       interval: 5m
@@ -1374,6 +1506,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh api_proxy
     links:
       - data-be-api-router:router
@@ -1398,6 +1533,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     healthcheck:
       test: curl -Isf http://127.1:1080/healthcheck
       interval: 5m
@@ -1434,6 +1572,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh filesystem_api
     ports:
       - 6000
@@ -1457,6 +1598,9 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh api_dashboard
     links:
       - data-base-mysql:mysql
