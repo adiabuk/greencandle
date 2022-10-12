@@ -1,6 +1,23 @@
 version: "3.1"
 services:
 
+  gen-fe-data-cadvisor:
+    container_name: gen-fe-data-cadvisor
+    hostname: gen-fe-data-cadvisor
+    image: gcr.io/google_containers/cadvisor:v0.35.0
+    restart: always
+    volumes:
+      - /:/rootfs
+      - /var/run:/var/run
+      - /sys:/sys
+      - /var/lib/docker:/var/lib/docker
+      - /dev/disk:/dev/disk
+    healthcheck:
+      test: "printf 'GET /healthz HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc localhost 8080"
+      interval: 1m
+      timeout: 2s
+      retries: 5
+
   gen-be-logwatch:
     container_name: gen-be-logwatch
     hostname: gen-be-logwatch
@@ -1477,7 +1494,7 @@ services:
     links:
       - data-fe-api-dashboard:api_dash
       - data-fe-api-dashboard:logs
-      - data-fe-api-dashboard:cadvisor
+      - gen-fe-data-cadvisor:cadvisor
       - data-base-mysql:mysql
       - data-base-redis:redis
       - data-fe-api-proxy:proxy
@@ -1485,6 +1502,7 @@ services:
     depends_on:
       - data-base-mysql
       - data-base-redis
+      - gen-fe-data-cadvisor
     entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
     volumes:
       - /data:/data
