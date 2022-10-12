@@ -776,13 +776,13 @@ class Redis():
         winning_sell = self.__get_rules(rules, 'close')
         winning_buy = self.__get_rules(rules, 'open')
         if winning_sell:
-            self.logger.info('%s sell Rules matched: %s' % (pair, winning_sell))
+            self.logger.info('%s close Rules matched: %s' % (pair, winning_sell))
         else:
-            self.logger.debug('%s sell Rules matched: %s' % (pair, winning_sell))
+            self.logger.debug('%s close Rules matched: %s' % (pair, winning_sell))
         if winning_buy:
-            self.logger.info('%s buy Rules matched: %s' % (pair, winning_buy))
+            self.logger.info('%s open Rules matched: %s' % (pair, winning_buy))
         else:
-            self.logger.debug('%s buy Rules matched: %s' % (pair, winning_buy))
+            self.logger.debug('%s open Rules matched: %s' % (pair, winning_buy))
         del dbase
         if result == 'CLOSE':
             self.rm_on_entry(pair, 'take_profit_perc')
