@@ -41,7 +41,7 @@ def test_loop(interval=None, prices=None):
             prices_trunk[key] = val
     LOGGER.debug("Getting dataframes for all pairs")
     dataframes = get_dataframes(PAIRS, interval=interval, max_workers=1,
-            no_of_klines=config.main.no_of_klines)
+                                no_of_klines=config.main.no_of_klines)
     LOGGER.debug("Done getting dataframes")
 
     redis = Redis()
@@ -65,14 +65,11 @@ def prod_run():
     """
     interval = config.main.interval
     LOGGER.info("Starting prod run")
-    if os.path.exists('/var/run/gc-data-{}'.format(interval)):
-        os.remove('/var/run/gc-data-{}'.format(interval))
 
     client = Binance(debug=str2bool(config.accounts.account_debug))
     prices = client.prices()
     test_loop(interval=interval, prices=prices)
 
-    Path('/var/run/gc-data-{}'.format(interval)).touch()
     LOGGER.info("Finished prod run")
 
 @arg_decorator
