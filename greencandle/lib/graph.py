@@ -127,7 +127,7 @@ class Graph():
                                   mode='markers')
 
             # add rsi graph in second subply (below) if it exists
-            elif ('RSI' in name or 'signal' in name or 'tsi' in name) and "STOCH" not in name:
+            elif ('RSI' in name or 'perc' in name or 'signal' in name or 'tsi' in name) and "STOCH" not in name:
                 LOGGER.debug("Creating RSI graph")
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=value['value'],
