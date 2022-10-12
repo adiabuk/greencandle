@@ -19,8 +19,8 @@ import zlib
 import pandas
 import numpy
 import pandas_ta as ta
-from indicator import SuperTrend, RSI
 import talib
+from indicator import SuperTrend, RSI
 
 from greencandle.lib import config
 from greencandle.lib.common import make_float, pipify, pip_calc, epoch2date
@@ -232,6 +232,49 @@ class Engine(dict):
         scheme["close_time"] = str(self.dataframes[pair].iloc[location]["closeTime"])
         self.schemes.append(scheme)
 
+    def get_bb_perc(self, pair, dataframe, index=None, localconfig=None):
+        """get bb %"""
+        if (index == None and self.test) or len(self.dataframes[pair]) < 2:
+            index = -1
+        elif index == None and not self.test:
+            index = -2
+        close_time = str(self.dataframes[pair].iloc[index]["closeTime"])
+        LOGGER.debug("Getting bb perc for %s - %s" % (pair, close_time))
+        klines = self.__make_data_tupple(dataframe.iloc[:index])
+        func, timef = localconfig  # split tuple
+        timeframe, multiplier = timef.split(',')
+        results = {}
+        try:
+            close = klines[-1]
+        except Exception as exc:
+            LOGGER.warning("FAILED bb perc: %s " % str(exc))
+            return
+        try:
+            current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
+            #%B = (Current Price - Lower Band) / (Upper Band - Lower Band)
+            upper, middle, lower = \
+                    talib.BBANDS(close, timeperiod=int(timeframe),
+                                 nbdevup=float(multiplier), nbdevdn=float(multiplier), matype=0)
+            perc = (float(current_price) - float(lower[-1])) / (float(upper[-1]) - float(lower[-1]))
+
+        except Exception as exc:
+            perc = None
+            LOGGER.warning("Overall Exception getting bb perc: %s seq: %s" % (exc, index))
+        trigger = None
+        scheme = {}
+        try:
+
+            scheme["data"] = perc
+            scheme["symbol"] = pair
+            scheme["event"] = "{0}_{1}".format(func, timeframe)
+            scheme["close_time"] = close_time
+
+            self.schemes.append(scheme)
+
+        except KeyError as exc:
+            LOGGER.warning("KEY FAILURE in bb perc : %s" % str(exc))
+
+        LOGGER.debug("Done getting bb %")
 
     def get_bb(self, pair, dataframe, index=None, localconfig=None):
         """get bollinger bands"""
