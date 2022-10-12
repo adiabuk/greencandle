@@ -163,10 +163,15 @@ def get_tv_link(pair, interval=None):
     """
     Return Tradingview hyperlink for slack notifications
     """
+
+    minutes_per_unit = {"m": 1, "h": 60, "d": 1400, "w": 10080}
+    def convert_to_minutes(time_string):
+        return int(time_string[:-1]) * minutes_per_unit[time_string[-1]]
+
     if interval:
         interval = interval.replace('m', 'min').upper()
         return ("<https://www.tradingview.com/chart/?symbol=BINANCE:{0}&interval={1}|{0}>"
-                .format(pair, interval))
+                .format(pair, convert_to_minutes(interval)))
     else:
         return "<https://www.tradingview.com/chart/?symbol=BINANCE:{0}|{0}>".format(pair)
 
