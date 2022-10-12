@@ -1,0 +1,4 @@
+{
+  "name": "stag-be-eng-bbperc-long",
+  "open_rule1": "low \u003c results.current.lower_200 and results.current.bbperc_200 \u003c -1.5"
+}
