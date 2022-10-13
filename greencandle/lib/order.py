@@ -74,9 +74,9 @@ class Trade():
                                                '%Y-%m-%d %H:%M:%S'))) * 1000 + 999
 
         # if we are in an intermittent check - use previous timeframe
-        if not str(mepoch).endswith('99999'):
+        if not str(mepoch).endswith('9999'):
             try:
-                mepoch = redis.get_items(kwargs.pair, kwargs.interval)[-1].decode().split(':')[-1]
+                mepoch = redis.get_items(kwargs.pair, kwargs.interval)[-1]
             except IndexError:
                 self.logger.debug("Unable to get last epoch time for %s %s" % (kwargs.pair,
                                                                                kwargs.interval))
