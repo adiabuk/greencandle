@@ -1,5 +1,6 @@
 {
   "name": "stag-be-eng-bbperc-short",
+  "open_rule1": "high \u003e results.current.upper_200 and results.current.bbperc_200 \u003e 1.5",
   "trade_direction": "short",
   "trade_type": "margin"
 }
