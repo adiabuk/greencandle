@@ -1494,12 +1494,11 @@ services:
       - 7777:7777
     links:
       - data-fe-api-dashboard:api_dash
-      - data-fe-api-dashboard:logs
       - gen-fe-data-cadvisor:cadvisor
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-fe-api-proxy:proxy
       - gen-be-logtailer-api:logs
+      - data-fe-api-proxy:proxy
     depends_on:
       - data-base-mysql
       - data-base-redis
