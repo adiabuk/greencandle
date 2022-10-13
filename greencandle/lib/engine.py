@@ -250,12 +250,14 @@ class Engine(dict):
             LOGGER.warning("FAILED bb perc: %s " % str(exc))
             return
         try:
-            current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
-            #%B = (Current Price - Lower Band) / (Upper Band - Lower Band)
+            current_price = str(Decimal(self.dataframes[pair].iloc[index]["close"]))
             upper, middle, lower = \
-                    talib.BBANDS(close, timeperiod=int(timeframe),
-                                 nbdevup=float(multiplier), nbdevdn=float(multiplier), matype=0)
-            perc = (float(current_price) - float(lower[-1])) / (float(upper[-1]) - float(lower[-1]))
+                    talib.BBANDS(close*100000, timeperiod=int(timeframe),
+                                 nbdevup=float(multiplier), nbdevdn=float(multiplier), matype=1)
+
+            #%B = (Current Price - Lower Band) / (Upper Band - Lower Band)
+            perc = ((float(current_price) - float(lower[-1])/100000) /
+                    (float(upper[-1])/100000 - float(lower[-1])/100000))
 
         except Exception as exc:
             perc = None
@@ -310,7 +312,7 @@ class Engine(dict):
         trigger = None
         scheme = {}
         try:
-            current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
+            current_price = str(Decimal(self.dataframes[pair].iloc[index]["close"]))
 
             scheme["data"] = results[func]
             scheme["symbol"] = pair
@@ -483,7 +485,7 @@ class Engine(dict):
         results['lower'] = lower[-1]
         scheme = {}
         try:
-            current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
+            current_price = str(Decimal(self.dataframes[pair].iloc[index]["close"]))
 
             scheme["data"] = results[func]
             scheme["symbol"] = pair
