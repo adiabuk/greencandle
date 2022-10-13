@@ -169,7 +169,6 @@ def get_tv_link(pair, interval=None):
         return int(time_string[:-1]) * minutes_per_unit[time_string[-1]]
 
     if interval:
-        interval = interval.replace('m', 'min').upper()
         return ("<https://www.tradingview.com/chart/?symbol=BINANCE:{0}&interval={1}|{0}>"
                 .format(pair, convert_to_minutes(interval)))
     else:
