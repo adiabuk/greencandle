@@ -296,7 +296,7 @@ def prod_initial(interval, test=False):
     del redis
 
 @GET_EXCEPTIONS
-def prod_loop(interval):
+def prod_loop(interval, test=False):
     """
     Loop through collection cycle (PROD)
     """
@@ -344,9 +344,10 @@ def prod_loop(interval):
             redis.rm_drawup(pair)
             redis.rm_drawdown(pair)
 
+    trade = Trade(interval=interval, test_trade=test, test_data=False, config=config)
     for sell in sells:
-        trade.close_trade(trade, drawdowns=drawdowns, drawups=drawups)
+        trade.close_trade(sell, drawdowns=drawdowns, drawups=drawups)
     for buy in buys:
-        trade.open_trade(trade)
+        trade.open_trade(buy)
     del engine
     del redis

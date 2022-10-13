@@ -69,7 +69,7 @@ def main():
     @sched.scheduled_job('cron', minute=MINUTE[interval], hour=HOUR[interval], second="30")
     def prod_run():
         LOGGER.info("Starting prod run")
-        prod_loop(interval)
+        prod_loop(interval, args.test)
         LOGGER.info("Finished prod run")
 
     LOGGER.info("Starting initial prod run")
