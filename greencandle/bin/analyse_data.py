@@ -5,7 +5,7 @@
 Analyze available data rom redis
 Look for potential buys
 """
-import time
+
 from datetime import datetime
 from apscheduler.schedulers.blocking import BlockingScheduler
 from greencandle.lib import config
