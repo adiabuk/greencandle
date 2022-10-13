@@ -345,9 +345,7 @@ def prod_loop(interval, test=False):
             redis.rm_drawdown(pair)
 
     trade = Trade(interval=interval, test_trade=test, test_data=False, config=config)
-    for sell in sells:
-        trade.close_trade(sell, drawdowns=drawdowns, drawups=drawups)
-    for buy in buys:
-        trade.open_trade(buy)
+    trade.close_trade(sells, drawdowns=drawdowns, drawups=drawups)
+    trade.open_trade(buys)
     del engine
     del redis
