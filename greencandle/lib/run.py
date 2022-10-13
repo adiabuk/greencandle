@@ -327,8 +327,10 @@ def prod_loop(interval, test=False):
         result, event, current_time, current_price, _ = redis.get_action(pair=pair,
                                                                          interval=interval)
         current_candle = dataframes[pair].iloc[-1]
-        redis.update_drawdown(pair, current_candle)
-        redis.update_drawup(pair, current_candle)
+
+        if result != "NOITEM":
+            redis.update_drawdown(pair, current_candle)
+            redis.update_drawup(pair, current_candle)
 
         if result == "OPEN":
             LOGGER.debug("Items to buy")
