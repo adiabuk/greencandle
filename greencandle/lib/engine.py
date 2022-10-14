@@ -101,11 +101,11 @@ class Engine(dict):
 
         """
         if supertrend == "up":
-            result = 1, "BUY"
+            result = 1
         elif supertrend == "down":
-            result = 2, "SELL"
+            result = 2
         else:
-            result = 0, "HOLD"
+            result = 0
         return result
 
     @staticmethod
@@ -742,9 +742,11 @@ class Engine(dict):
 
         mine = dataframe.apply(pandas.to_numeric).loc[:index]
         timeframe, multiplier = timef.split(',')
-        supertrend = SuperTrend(mine, int(timeframe), int(multiplier))
-        df_list = supertrend["ST_{0}_{1}".format(timeframe, multiplier)].tolist()
-        scheme["data"] = df_list[-1]
+        supertrend2 = ta.supertrend(high=mine.High.astype(float),
+                                    low=mine.Low.astype(float),
+                                    close=mine.Close.astype(float),
+                                    multiplier=float(multiplier), length=float(timeframe))
+        scheme["data"] = supertrend2['SUPERTd_{}_{}.0'.format(timeframe, multiplier)].iloc[-1]
         scheme["symbol"] = pair
         scheme["event"] = "STX_{0}".format(timeframe)
 
@@ -753,8 +755,8 @@ class Engine(dict):
         elif index == None and not self.test:
             index = -2
 
-
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
+
 
         self.schemes.append(scheme)
         LOGGER.debug("done getting supertrend")
