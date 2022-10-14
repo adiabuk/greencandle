@@ -746,6 +746,8 @@ class Engine(dict):
                                     low=mine.Low.astype(float),
                                     close=mine.Close.astype(float),
                                     multiplier=float(multiplier), length=float(timeframe))
+        # -1 = downtrend
+        # 1 = uptrend
         scheme["data"] = supertrend2['SUPERTd_{}_{}.0'.format(timeframe, multiplier)].iloc[-1]
         scheme["symbol"] = pair
         scheme["event"] = "STX_{0}".format(timeframe)
