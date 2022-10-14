@@ -105,6 +105,16 @@ class Graph():
                                       close=value.close,
                                       name=self.pair)
 
+            elif 'STX' in name:
+                LOGGER.debug("Creating Supertrend graph")
+                value['value'].astype(str)
+                # FIX ME - add colour
+
+                item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
+                                  y=value['current_price'],
+                                  name="STX",
+                                  mode='markers',
+                                  marker=dict(size=16, color=value['value']))
 
             elif name == 'event':
                 LOGGER.debug("Creating event graph")
@@ -112,6 +122,7 @@ class Graph():
                 # therefore we will substitute buy/sell with and rgb value for red/green
                 replace = {"OPEN": "rgb(0,255,0)", "BUY": "rgb(0,255,0)",
                            "CLOSE": "rgb(255,0,0)", "SELL": "rgb(255,0,0)"
+
                            }
                 value = self.replace_all(value, replace)
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
@@ -127,7 +138,8 @@ class Graph():
                                   mode='markers')
 
             # add rsi graph in second subply (below) if it exists
-            elif ('RSI' in name or 'perc' in name or 'signal' in name or 'tsi' in name) and "STOCH" not in name:
+            elif ('RSI' in name or 'perc' in name
+                  or 'signal' in name or 'tsi' in name) and "STOCH" not in name:
                 LOGGER.debug("Creating RSI graph")
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=value['value'],
