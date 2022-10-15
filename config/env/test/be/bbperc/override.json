@@ -2,7 +2,7 @@
   "close_rule1": "1\u003e1",
   "immediate_stop": "true",
   "immediate_take_profit": "true",
-  "indicators": "get_supertrend;STX;23,3 get_bb;upper;200,1 get_bb;lower;200,1 get_bb;middle;200,1 get_bb_perc;bbperc;200,5",
+  "indicators": "get_supertrend;STX;23,3 get_bb;upper;200,1 get_bb;lower;200,1 get_bb;middle;200,1 get_bb_perc;bbperc;200,1",
   "interval": "1m",
   "max_trades": "100",
   "name": "test-be-bbperc",
