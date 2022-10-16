@@ -417,8 +417,7 @@ class Trade():
         return True
 
     @GET_EXCEPTIONS
-    @staticmethod
-    def get_test_balance(dbase, account=None):
+    def get_test_balance(self, dbase, account=None):
         """
         Get and return test balance dict in the same format as binance
         """
@@ -434,9 +433,11 @@ class Trade():
             last_value = dbase.fetch_sql_data("select quote_in from trades "
                                               "where pair like '%{0}'"
                                               "order by open_time desc limit 1"
-                                              .format(quote), header=False)[0][0]
-            last_value = float(last_value) if last_value else 0
+                                              .format(quote), header=False)
+            last_value = float(last_value[0][0]) if last_value else 0
+            print("AMROX", 'xxxxx')
             balance[account][quote]['count'] = max(last_value, balance[account][quote]['count'])
+        print("AMROX", balance)
         return balance
 
     @GET_EXCEPTIONS
