@@ -287,8 +287,9 @@ class Redis():
             try:
                 return ast.literal_eval(self.conn.hget("{}:{}".format(pair, interval), \
                         address).decode())[key]
-            except KeyEror as ke:
-                self.logger.critical("Unable to get key for {} {}: {}", pair, interval, str(ke))
+            except KeyError as ke:
+                self.logger.critical("Unable to get key for {} {}: {}" % pair, interval, str(ke))
+                return None
         return self.conn.hget(address, key)
 
     def hgetall(self):
