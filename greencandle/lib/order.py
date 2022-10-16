@@ -417,7 +417,8 @@ class Trade():
         return True
 
     @GET_EXCEPTIONS
-    def __get_test_balance(self, dbase, account=None):
+    @staticmethod
+    def __get_test_balance(dbase, account=None):
         """
         Get and return test balance dict in the same format as binance
         """
@@ -430,19 +431,12 @@ class Trade():
         balance[account]['GBP']['count'] = 10000
         balance[account]['BNB']['count'] = 46.06
         for quote in QUOTES:
-            db_result = dbase.fetch_sql_data("select sum(quote_out-quote_in) from trades "
-                                             "where pair like '%{0}' and name='{1}'"
-                                             .format(quote, self.config.main.name),
-                                             header=False)[0][0]
-            db_result = float(db_result) if db_result and db_result > 0 else 0
-            current_trade_values = dbase.fetch_sql_data("select sum(quote_in) from trades "
-                                                        "where pair like '%{0}' and "
-                                                        "quote_out is null"
-                                                        .format(quote), header=False)[0][0]
-            current_trade_values = float(current_trade_values) if \
-                    current_trade_values else 0
-            balance[account][quote]['count'] = max(db_result, current_trade_values,
-                                                   balance[account][quote]['count'])
+            last_value = dbase.fetch_sql_data("select quote_in from trades "
+                                              "where pair like '%{0}'"
+                                              "order by open_time desc limit 1"
+                                              .format(quote), header=False)[0][0]
+            last_value = float(last_value) if last_value else 0
+            balance[account][quote]['count'] = max(last_value, balance[account][quote]['count'])
         return balance
 
     @GET_EXCEPTIONS
