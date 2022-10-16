@@ -284,8 +284,11 @@ class Redis():
     def get_item(self, address, key, pair=None, interval=None):
         """Return a specific item from redis, given an address and key"""
         if pair:
-            return ast.literal_eval(self.conn.hget("{}:{}".format(pair, interval), \
-                    address).decode())[key]
+            try:
+                return ast.literal_eval(self.conn.hget("{}:{}".format(pair, interval), \
+                        address).decode())[key]
+            except KeyEror as ke:
+                self.logger.critical("Unable to get key for {} {}: {}", pair, interval, str(ke))
         return self.conn.hget(address, key)
 
     def hgetall(self):
