@@ -229,7 +229,7 @@ class Trade():
         Returns: float in base if short, or quote if long
         """
         symbol = get_quote(pair) if self.config.main.trade_direction == 'long' else get_base(pair)
-        test_balances = self.__get_test_balance(dbase, account=account)[account]
+        test_balances = self.get_test_balance(dbase, account=account)[account]
         final = 0
         if self.test_data or self.test_trade:
             if self.config.main.trade_direction == 'short' and symbol not in test_balances:
@@ -418,7 +418,7 @@ class Trade():
 
     @GET_EXCEPTIONS
     @staticmethod
-    def __get_test_balance(dbase, account=None):
+    def get_test_balance(dbase, account=None):
         """
         Get and return test balance dict in the same format as binance
         """
