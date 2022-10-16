@@ -288,7 +288,7 @@ class Redis():
                 return ast.literal_eval(self.conn.hget("{}:{}".format(pair, interval), \
                         address).decode())[key]
             except KeyError as ke:
-                self.logger.critical("Unable to get key for {} {}: {}" % pair, interval, str(ke))
+                self.logger.critical("Unable to get key for {} {}: {}" % (pair, interval, str(ke)))
                 return None
         return self.conn.hget(address, key)
 
