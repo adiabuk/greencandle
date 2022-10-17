@@ -767,7 +767,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
-      - CONFIG_ENV=test/be/bbpercst/long
+      - CONFIG_ENV=stag/be/bbpercst/long
       - intermittent="true"
       - DB=true
     links:
@@ -801,7 +801,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
-      - CONFIG_ENV=test/be/bbpercst2/long
+      - CONFIG_ENV=stag/be/bbpercst/long/2
       - intermittent="true"
       - DB=true
     links:
@@ -835,7 +835,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
-      - CONFIG_ENV=test/be/bbpercst2/short
+      - CONFIG_ENV=stag/be/bbpercst/short/2
       - intermittent="true"
       - DB=true
     links:
@@ -869,7 +869,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
-      - CONFIG_ENV=test/be/bbpercst/short
+      - CONFIG_ENV=stag/be/bbpercst/short
       - intermittent="true"
       - DB=true
     links:
@@ -971,7 +971,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
-      - CONFIG_ENV=test/be/any
+      - CONFIG_ENV=stag/be/any
       - HOST_IP=$HOST_IP
       - intermittent="true"
       - DB=true
@@ -1010,7 +1010,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
-      - CONFIG_ENV=test/be/any/short
+      - CONFIG_ENV=stag/be/any/short
       - HOST_IP=$HOST_IP
       - intermittent="true"
       - DB=true
@@ -1049,7 +1049,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
-      - CONFIG_ENV=test/be/inwcoin/cross-short
+      - CONFIG_ENV=stag/be/inwcoin/cross-short
       - HOST_IP=$HOST_IP
       - intermittent="true"
       - DB=true
@@ -1088,7 +1088,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
-      - CONFIG_ENV=test/be/inwcoin/cross-long
+      - CONFIG_ENV=stag/be/inwcoin/cross-long
       - HOST_IP=$HOST_IP
       - intermittent="true"
       - DB=true
