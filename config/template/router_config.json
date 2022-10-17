@@ -8,9 +8,15 @@
 "any2-4h-long": ["any2-4h-long", "alert"],
 "any2-4h-short": ["any2-4h-short", "alert"],
 "any2-4h-long-short": ["any2-4h-long", "any2-4h-long", "alert"],
+"any-test-long": ["anytest-long", "alert"],
+"any-test-short": ["anytest-short", "alert"],
+"any-test-long-short": ["anytest-long", "anytest-short", "alert"],
 "alert": ["alert"],
 "any-long-short": ["any-long", "any-short", "any-tsl-short", "any-tsl-long"],
 "any-spot-long": ["any-spot-long", "any-tsl-spot-long"],
+"inw-cross-long-short": ["inw-long", "inw-short", "alert"],
+"inw-cross-long": ["inw-long", "alert"],
+"inw-cross-short": ["inw-short", "alert"],
 "route": []
 }
 {{else if eq .base_env "test"}}
@@ -20,7 +26,6 @@
 "alert": ["alert"],
 "any-long-short": ["any-long", "any-short", "alert"],
 "any-spot-long": ["any-spot-long", "alert"],
-"inw-cross-long-short": ["inw-long", "inw-short", "alert"],
 "route": []
 }
 {{else if eq .base_env "prod"}}
