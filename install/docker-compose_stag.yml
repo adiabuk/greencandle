@@ -353,8 +353,8 @@ services:
       - stag-be-api-anytest-cross-short:anytest-short
       - stag-be-api-any2-cross-long:any2-long
       - stag-be-api-any2-cross-short:any2-short
-      - test-be-api-inw-cross-long:inw-long
-      - test-be-api-inw-cross-short:inw-short
+      - stag-be-api-inw-cross-long:inw-long
+      - stag-be-api-inw-cross-short:inw-short
       - stag-be-api-any2-4h-cross-long:any2-4h-long
       - stag-be-api-any2-4h-cross-short:any2-4h-short
       - stag-be-api-any-tsl-cross-long:any-tsl-long
