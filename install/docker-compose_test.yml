@@ -310,8 +310,6 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    extra_hosts:
-      - "alert:10.8.0.1"
     healthcheck:
       test: curl -Isf http://127.1:1080/healthcheck
       interval: 5m
