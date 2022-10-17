@@ -1,6 +1,29 @@
 
 # Releases
 
+# 4.7
+* Fixes to data dashboard
+* Fixes to redis writing
+* Increase graph logging
+* Fixes to logtailer web path
+* Fixes to short borrowing
+* Fixes to triggered data alerts
+* New pairs for data
+* Don't re-request current price when data is available in candle
+* Removal of retired pairs
+* Fix supertrend indicator
+* Various bb and bbperc test strategies with Supertrend
+* Don't use lock file while waiting for data collection
+* Add tradingview interval translation dict
+* Cleanup data env
+* Don't update draw up/down when not in a trade
+* Updated docs
+* New db views for perc and profitable perc by stategy/name
+* Remove pairs which don't have a corresponding USDT trading pair
+* Better logging when data missing from redis
+* Increase db field size for currencies
+* Fixes to testing quote amounts
+
 # 4.6
 * Get details of all isolated margin pairs
 * Script to transfer funds to/from isolated and spot
