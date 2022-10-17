@@ -324,7 +324,7 @@ services:
     links:
       - test-base-mysql:mysql
       - test-base-redis:redis
-      - -test-be-alert:alert
+      - test-be-alert:alert
       - test-be-api-any-cross-long:any-long
       - test-be-api-any-cross-short:any-short
       - test-be-api-any-spot-long:any-spot-long
