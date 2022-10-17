@@ -755,9 +755,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  test-be-eng-bbpercst-long:
-    container_name: test-be-eng-bbpercst-long
-    hostname: test-be-eng-bbpercst-long
+  stag-be-eng-bbpercst-long:
+    container_name: stag-be-eng-bbpercst-long
+    hostname: stag-be-eng-bbpercst-long
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -771,11 +771,11 @@ services:
       - intermittent="true"
       - DB=true
     links:
-      - test-base-mysql:mysql
-      - test-base-redis:redis
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
     depends_on:
-      - test-base-mysql
-      - test-base-redis
+      - stag-base-mysql
+      - stag-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -789,9 +789,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  test-be-eng-bbpercst2-long:
-    container_name: test-be-eng-bbpercst2-long
-    hostname: test-be-eng-bbpercst2-long
+  stag-be-eng-bbpercst2-long:
+    container_name: stag-be-eng-bbpercst2-long
+    hostname: stag-be-eng-bbpercst2-long
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -805,11 +805,11 @@ services:
       - intermittent="true"
       - DB=true
     links:
-      - test-base-mysql:mysql
-      - test-base-redis:redis
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
     depends_on:
-      - test-base-mysql
-      - test-base-redis
+      - stag-base-mysql
+      - stag-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -823,9 +823,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  test-be-eng-bbpercst2-short:
-    container_name: test-be-eng-bbpercst2-short
-    hostname: test-be-eng-bbpercst2-short
+  stag-be-eng-bbpercst2-short:
+    container_name: stag-be-eng-bbpercst2-short
+    hostname: stag-be-eng-bbpercst2-short
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -839,11 +839,11 @@ services:
       - intermittent="true"
       - DB=true
     links:
-      - test-base-mysql:mysql
-      - test-base-redis:redis
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
     depends_on:
-      - test-base-mysql
-      - test-base-redis
+      - stag-base-mysql
+      - stag-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -857,9 +857,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  test-be-eng-bbpercst-short:
-    container_name: test-be-eng-bbpercst-short
-    hostname: test-be-eng-bbpercst-short
+  stag-be-eng-bbpercst-short:
+    container_name: stag-be-eng-bbpercst-short
+    hostname: stag-be-eng-bbpercst-short
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -873,11 +873,11 @@ services:
       - intermittent="true"
       - DB=true
     links:
-      - test-base-mysql:mysql
-      - test-base-redis:redis
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
     depends_on:
-      - test-base-mysql
-      - test-base-redis
+      - stag-base-mysql
+      - stag-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -959,9 +959,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  test-be-api-any-cross-long:
-    container_name: test-be-api-any-cross-long
-    hostname: test-be-api-any-cross-long
+  stag-be-api-any-cross-long:
+    container_name: stag-be-api-any-cross-long
+    hostname: stag-be-api-any-cross-long
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -980,11 +980,11 @@ services:
     ports:
       - 20000
     links:
-      - test-base-mysql:mysql
-      - test-base-redis:redis
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
     depends_on:
-      - test-base-mysql
-      - test-base-redis
+      - stag-base-mysql
+      - stag-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -998,9 +998,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  test-be-api-any-cross-short:
-    container_name: test-be-api-any-cross-short
-    hostname: test-be-api-any-cross-short
+  stag-be-api-any-cross-short:
+    container_name: stag-be-api-any-cross-short
+    hostname: stag-be-api-any-cross-short
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -1019,11 +1019,11 @@ services:
     ports:
       - 20000
     links:
-      - test-base-mysql:mysql
-      - test-base-redis:redis
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
     depends_on:
-      - test-base-mysql
-      - test-base-redis
+      - stag-base-mysql
+      - stag-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -1037,9 +1037,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  test-be-api-inw-cross-short:
-    container_name: test-be-api-inw-cross-short
-    hostname: test-be-api-inw-cross-short
+  stag-be-api-inw-cross-short:
+    container_name: stag-be-api-inw-cross-short
+    hostname: stag-be-api-inw-cross-short
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -1058,11 +1058,11 @@ services:
     ports:
       - 20000
     links:
-      - test-base-mysql:mysql
-      - test-base-redis:redis
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
     depends_on:
-      - test-base-mysql
-      - test-base-redis
+      - stag-base-mysql
+      - stag-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m
@@ -1076,9 +1076,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  test-be-api-inw-cross-long:
-    container_name: test-be-api-inw-cross-long
-    hostname: test-be-api-inw-cross-long
+  stag-be-api-inw-cross-long:
+    container_name: stag-be-api-inw-cross-long
+    hostname: stag-be-api-inw-cross-long
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -1097,11 +1097,11 @@ services:
     ports:
       - 20000
     links:
-      - test-base-mysql:mysql
-      - test-base-redis:redis
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
     depends_on:
-      - test-base-mysql
-      - test-base-redis
+      - stag-base-mysql
+      - stag-base-redis
     healthcheck:
       test: ls ||exit 1
       interval: 1m

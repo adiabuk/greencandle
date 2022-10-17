@@ -380,9 +380,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  stag-be-alert:
-    container_name: stag-be-alert
-    hostname: stag-be-alert
+  test-be-alert:
+    container_name: test-be-alert
+    hostname: test-be-alert
     image: amrox/alert:latest
     pull_policy: always
     restart: always
@@ -399,7 +399,7 @@ services:
       - /dev/snd:/dev/snd
     environment:
       - HOST=$HOSTNAME
-      - CONFIG_ENV=stag
+      - CONFIG_ENV=test
       - DB=false
     volumes:
       - /root/.aws:/root/.aws
