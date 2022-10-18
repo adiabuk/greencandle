@@ -1,13 +1,15 @@
-
-* apply DB changes
-* Backup DBs
-* archive trades & open_trades tables
-* Stop stag/test
-* deploy stag on hp
+DONE * Backup DBs
+DONE * apply DB changes
+DONE * Backup DBs
+DONE * archive trades & open_trades tables
+DONE * Stop stag/test
+DONE * deploy stag on hp
 * restore stag tables
 * restore test tables
 * deploy test env
 * Ensure test db is blank
 * backup DBs
 * check next ID
-
+* Change routes on Bastion
+* change names in TV
+* rename hosts

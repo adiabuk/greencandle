@@ -13,9 +13,9 @@ update trades set name='any-test-short' where name='test-any-short';
 update trades set name='any-test-long' where name='test-any-long';
 update open_trades set name='any-test-short' where name='test-any-short';
 update open_trades set name='any-test-long' where name='test-any-long';
-update trades set name='test-be-eng-bbpercorig-short' where name='test-be-eng-bbperc-short';
-update trades set name='test-be-eng-bbpercorig-long' where name='test-be-eng-bbperc-long';
-update open_trades set name='test-be-eng-bbpercorig-short' where name='test-be-eng-bbperc-short';
-update open_trades set name='test-be-eng-bbpercorig-long' where name='test-be-eng-bbperc-long';
+update trades set name='stag-be-eng-bbpercorig-short' where name='stag-be-eng-bbperc-short';
+update trades set name='stag-be-eng-bbpercorig-long' where name='stag-be-eng-bbperc-long';
+update open_trades set name='stag-be-eng-bbpercorig-short' where name='stag-be-eng-bbperc-short';
+update open_trades set name='stag-be-eng-bbpercorig-long' where name='stag-be-eng-bbperc-long';
 
 SHOW TABLE STATUS LIKE 'trades';
