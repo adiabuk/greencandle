@@ -1,6 +1,6 @@
 {
   "divisor": "3",
-  "indicators": "get_moving_averages;EMA;50 get_moving_averages;EMA;100 get_moving_averages;EMA;200 get_rsi;RSI;14 get_bb;upper;20,2 get_bb;lower;20,2 get_bb;middle;20,2",
+  "indicators": "get_supertrend;STX;23,3 get_moving_averages;EMA;50 get_moving_averages;EMA;100 get_moving_averages;EMA;200 get_rsi;RSI;14 get_bb;upper;20,2 get_bb;lower;20,2 get_bb;middle;20,2",
   "name": "cron",
   "rate_indicator": "1"
 }
