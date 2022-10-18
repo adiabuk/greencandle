@@ -1,5 +1,5 @@
 {
-  "name": "stag-be-eng-bbperc-short",
+  "name": "stag-be-eng-bbpercorig-short",
   "open_rule1": "high \u003e results.current.upper_200 and results.current.bbperc_200 \u003e 1.5",
   "rate_indicator": "upper_200",
   "trade_direction": "short",
