@@ -288,7 +288,7 @@ class Redis():
                 return ast.literal_eval(self.conn.hget("{}:{}".format(pair, interval), \
                         address).decode())[key]
             except KeyError as ke:
-                self.logger.critical("Unable to get key for %s %s: %s" % (pair, interval, str(ke)))
+                self.logger.critical("Unable to get key for %s: %s" % (address, str(ke)))
                 return None
         return self.conn.hget(address, key)
 
@@ -313,8 +313,8 @@ class Redis():
 
         try:
             data = ast.literal_eval(byte.decode("UTF-8"))['ohlc']
-        except AttributeError:
-            self.logger.error("No Data for item %s" % item)
+        except KeyError:
+            self.logger.error("No Data for item %s %s" % (name, item))
             return None, None
         try:
             current_price = ast.literal_eval(self.get_item(name, item).decode())['current_price']
