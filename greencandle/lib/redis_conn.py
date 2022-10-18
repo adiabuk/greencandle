@@ -530,7 +530,7 @@ class Redis():
         Get final reconstructed candle data
         """
         last_item = self.get_items(pair, interval)[-1]
-        raw = self.get_current('{}:{}'.format(pair, interval), item)
+        raw = self.get_current('{}:{}'.format(pair, interval), last_item)
         return pickle.loads(zlib.decompress(raw[-1]))
 
     def get_action(self, pair, interval):
