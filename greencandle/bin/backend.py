@@ -31,6 +31,7 @@ def main():
     parser.add_argument("-g", "--graph", action="store_true", default=False)
     parser.add_argument("-j", "--json", action="store_true", default=False)
     parser.add_argument("-t", "--test", action="store_true", default=False)
+    parser.add_argument("-d", "--data", action="store_true", default=False)
     parser.add_argument("-i", "--interval")
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
@@ -69,13 +70,14 @@ def main():
     @sched.scheduled_job('cron', minute=MINUTE[interval], hour=HOUR[interval], second="30")
     def prod_run():
         LOGGER.info("Starting prod run")
-        prod_loop(interval, args.test)
+        prod_loop(interval, args.test, data=args.data)
         LOGGER.info("Finished prod run")
 
-    LOGGER.info("Starting initial prod run")
-    prod_initial(interval) # initial run, before scheduling begins
-    LOGGER.info("Finished initial prod run")
-    prod_run()
+    if args.data:
+        LOGGER.info("Starting initial prod run")
+        prod_initial(interval) # initial run, before scheduling begins
+        LOGGER.info("Finished initial prod run")
+        prod_run()
 
     try:
         sched.start()

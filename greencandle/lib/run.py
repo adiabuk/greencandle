@@ -296,7 +296,7 @@ def prod_initial(interval, test=False):
     del redis
 
 @GET_EXCEPTIONS
-def prod_loop(interval, test=False):
+def prod_loop(interval, test=False, data=True):
     """
     Loop through collection cycle (PROD)
     """
@@ -308,25 +308,28 @@ def prod_loop(interval, test=False):
     LOGGER.info("Starting new cycle")
     LOGGER.debug("max trades: %s" % config.main.max_trades)
     client = Binance(debug=str2bool(config.accounts.account_debug))
-    prices = client.prices()
-    prices_trunk = {}
-    for key, val in prices.items():
-        if key in PAIRS:
-            prices_trunk[key] = val
-    dataframes = get_dataframes(PAIRS, interval=interval)
-
     redis = Redis()
-    engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, redis=redis)
-    engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
-    buys = []
-    sells = []
-    drawdowns = {}
-    drawups = {}
-    dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=1)
+
+    if data:
+        prices = client.prices()
+        prices_trunk = {}
+        for key, val in prices.items():
+            if key in PAIRS:
+                prices_trunk[key] = val
+
+
+        dataframes = get_dataframes(PAIRS, interval=interval)
+        engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, redis=redis)
+        engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
+        buys = []
+        sells = []
+        drawdowns = {}
+        drawups = {}
+        dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=1)
     for pair in PAIRS:
         result, event, current_time, current_price, _ = redis.get_action(pair=pair,
                                                                          interval=interval)
-        current_candle = dataframes[pair].iloc[-1]
+        current_candle = redis.get_last_candle(pair, interval)
 
         if result != "NOITEM":
             redis.update_drawdown(pair, current_candle)

@@ -525,6 +525,14 @@ class Redis():
         trade_type = config.main.trade_type
         return "{}_{}_{}".format(trade_direction, trade_type, action)
 
+    def get_last_candle(self, pair, interval):
+        """
+        Get final reconstructed candle data
+        """
+        last_item = self.get_itme(pair, interval)[-1]
+        raw = self.get_current('{}:{}'.format(pair, interval), item)
+        return pickle.loads(zlib.decompress(raw[-1]))
+
     def get_action(self, pair, interval):
         """
         Determine if we are in a BUY/HOLD/SELL/NOITEM state for a specific pair and interval
