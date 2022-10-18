@@ -17,3 +17,5 @@ update trades set name='test-be-eng-bbpercorig-short' where name='test-be-eng-bb
 update trades set name='test-be-eng-bbpercorig-long' where name='test-be-eng-bbperc-long';
 update open_trades set name='test-be-eng-bbpercorig-short' where name='test-be-eng-bbperc-short';
 update open_trades set name='test-be-eng-bbpercorig-long' where name='test-be-eng-bbperc-long';
+
+SHOW TABLE STATUS LIKE 'trades';
