@@ -69,18 +69,7 @@ class Trade():
 
         self.logger.debug('Strategy - Adding to redis')
         redis = Redis()
-        # Change time back to milliseconds to line up with entries in redis
-        mepoch = int(time.mktime(time.strptime(kwargs.current_time,
-                                               '%Y-%m-%d %H:%M:%S'))) * 1000 + 999
-
-        # if we are in an intermittent check - use previous timeframe
-        if not str(mepoch).endswith('9999'):
-            try:
-                mepoch = redis.get_items(kwargs.pair, kwargs.interval)[-1]
-            except IndexError:
-                self.logger.debug("Unable to get last epoch time for %s %s" % (kwargs.pair,
-                                                                               kwargs.interval))
-                return
+        mepoch = redis.get_items(kwargs.pair, kwargs.interval)[-1]
 
         data = {"event":{"result": kwargs.event,
                          "current_price": format(float(kwargs.price), ".20f"),
