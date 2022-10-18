@@ -78,7 +78,7 @@ services:
       - DB=true
     restart: always
     ports:
-      - 3305:3306
+      - 3306:3306
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
       interval: 1m
@@ -409,7 +409,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /root/.bash_history:/root/.bash_history
 
- 
+
   test-be-api-any-cross-long:
     container_name: test-be-api-any-cross-long
     hostname: test-be-api-any-cross-long
