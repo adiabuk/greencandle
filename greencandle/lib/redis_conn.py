@@ -237,7 +237,7 @@ class Redis():
 
         self.logger.debug("Adding to Redis: %s %s %s" % (interval, list(data.keys()), now))
 
-        key = "{}:{}:{}".format(pair, interval, config.main.name)
+        key = "{0}:{1}".format(pair, interval)
         expiry = int(config.redis.redis_expiry_seconds)
         # closing time, 1 ms before next candle
         if not str(now).endswith("999"): # closing time, 1 ms before next candle
@@ -278,15 +278,14 @@ class Redis():
 
          each item in the list is a key to the hash containing data for that given period
         """
-        key = "{}:{}:{}".format(pair, interval, config.main.name)
+        key = "{}:{}".format(pair, interval)
         return sorted([item.decode() for item in list(self.conn.hgetall(key).keys())])
 
     def get_item(self, address, key, pair=None, interval=None):
         """Return a specific item from redis, given an address and key"""
         if pair:
             try:
-                return ast.literal_eval(self.conn.hget("{}:{}:{}".format(pair, interval,
-                                                                         config.main.name), \
+                return ast.literal_eval(self.conn.hget("{}:{}".format(pair, interval), \
                         address).decode())[key]
             except KeyError as ke:
                 self.logger.critical("Unable to get key for %s: %s" % (address, str(ke)))
@@ -588,7 +587,7 @@ class Redis():
             results['previous3'][indicator] = self.get_result(previous3, indicator,
                                                               pair, self.interval)
         items = self.get_items(pair, self.interval)
-        name = "{}:{}:{}".format(pair, self.interval, config.main.name)
+        name = "{}:{}".format(pair, self.interval)
         current = self.get_current(name, items[-1])
         previous = self.get_current(name, items[-2])
         current_epoch = float(current[1]) / 1000
