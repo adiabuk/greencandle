@@ -100,8 +100,9 @@ class Trade():
         avail_slots = int(self.config.main.max_trades) - len(current_trades)
         self.logger.info("%s buy slots available" % avail_slots)
         if avail_slots <= 0:
-            self.logger.warning("Too many trades, skipping")
-            send_slack_message("alerts", "Too many trades, skipping")
+            pairs_str = ', '.join((x[0] for x in items_list))
+            self.logger.warning("Too many trades, skipping:%s" % pairs_str)
+            send_slack_message("alerts", "Too many trades, skipping {}".format(pairs_str))
             return []
 
         final_list = []
