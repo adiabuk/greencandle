@@ -321,11 +321,12 @@ def prod_loop(interval, test=False, data=True):
         dataframes = get_dataframes(PAIRS, interval=interval)
         engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, redis=redis)
         engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
-        buys = []
-        sells = []
-        drawdowns = {}
-        drawups = {}
         dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=1)
+    buys = []
+    sells = []
+    drawdowns = {}
+    drawups = {}
+
     for pair in PAIRS:
         result, event, current_time, current_price, _ = redis.get_action(pair=pair,
                                                                          interval=interval)
