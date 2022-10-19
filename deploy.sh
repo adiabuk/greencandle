@@ -44,7 +44,7 @@ docker compose -f ./install/docker-compose_${env}.yml up -d $fe
 
 for container in $be; do
   docker compose -f ./install/docker-compose_${env}.yml up -d $container
-  sleep 5
+  sleep 2
 done
 
 
