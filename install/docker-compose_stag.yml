@@ -1,9 +1,9 @@
 version: "3.1"
 services:
 
-  gen-be-logwatch:
-    container_name: gen-be-logwatch
-    hostname: gen-be-logwatch
+  stag-gen-be-logwatch:
+    container_name: stag-gen-be-logwatch
+    hostname: stag-gen-be-logwatch
     image: amrox/greencandle:${TAG}
     restart: always
     entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
@@ -38,9 +38,9 @@ services:
       timeout: 2s
       retries: 5
 
-  gen-be-logtailer-api:
-    container_name: gen-be-logtailer-api
-    hostname: gen-be-logtailer-api
+  stag-gen-be-logtailer-api:
+    container_name: stag-gen-be-logtailer-api
+    hostname: stag-gen-be-logtailer-api
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -52,7 +52,7 @@ services:
     logging:
       driver: journald
     ports:
-      - 2000:2000
+      - 2000
     links:
       - stag-base-mysql:mysql
       - stag-base-redis:redis
@@ -232,7 +232,7 @@ services:
       - stag-fe-api-dashboard:api_dash
       - stag-base-mysql:mysql
       - stag-base-redis:redis
-      - gen-be-logtailer-api:logs
+      - stag-gen-be-logtailer-api:logs
       - stag-fe-api-proxy:proxy
     depends_on:
       - gen-fe-cadvisor
