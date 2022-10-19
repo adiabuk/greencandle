@@ -38,6 +38,6 @@ RUN cd /tmp/ta-lib; /tmp/ta-lib/configure --prefix=/usr &&  make && make install
 RUN pip install numpy==1.16.0 setuptools-rust setuptools==45.1.0 pip==9.0.1 ccxt==1.50.10 pytest==6.0.1 redis-dump-load gitpython Werkzeug==2.2.2 Flask==2.2.0
 RUN echo "jenkins ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 RUN git clone https://github.com/adiabuk/greencandle.git ~jenkins/greencandle && ln -s ~jenkins/greencandle /srv/greencandle
-RUN pip install Werkzeug==2.2.2 -e git+https://github.com/adiabuk/binance.git@0.33#egg=binance
+RUN pip install Werkzeug==2.2.2 importlib-metadata==4.12.0 -e git+https://github.com/adiabuk/binance.git@0.33#egg=binance
 RUN cd /srv/greencandle; python setup.py install
 RUN rm -rf /srv/greencandle ~jenkins/greencandle
