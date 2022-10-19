@@ -1,5 +1,0 @@
-{
-  "close_rule1": "results.current.STX_23 \u003c0",
-  "name": "stag-be-eng-st-long",
-  "open_rule1": "results.current.STX_23 \u003e0"
-}

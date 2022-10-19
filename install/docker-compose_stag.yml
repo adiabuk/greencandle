@@ -838,6 +838,40 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
+  stag-be-eng-bbpercst-long:
+    container_name: stag-be-eng-bbpercst-long
+    hostname: stag-be-eng-bbpercst-long
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend --test --data
+    logging:
+      driver: journald
+    environment:
+      - VPN_IP=$VPN_IP
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=stag/be/bbpercst/long
+      - intermittent="true"
+      - DB=true
+    links:
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
+    depends_on:
+      - stag-base-mysql
+      - stag-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
   stag-be-eng-bbpercst2-long:
     container_name: stag-be-eng-bbpercst2-long
     hostname: stag-be-eng-bbpercst2-long
@@ -906,40 +940,6 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  stag-be-eng-bbpercst-long:
-    container_name: stag-be-eng-bbpercst-long
-    hostname: stag-be-eng-bbpercst-long
-    image: amrox/greencandle:${TAG}
-    pull_policy: always
-    restart: always
-    entrypoint: /docker-entrypoint.sh backend --test --data
-    logging:
-      driver: journald
-    environment:
-      - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
-      - CONFIG_ENV=stag/be/bbpercst/long
-      - intermittent="true"
-      - DB=true
-    links:
-      - stag-base-mysql:mysql
-      - stag-base-redis:redis
-    depends_on:
-      - stag-base-mysql
-      - stag-base-redis
-    healthcheck:
-      test: ls ||exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    volumes:
-      - /data:/data
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run:/var/run
-      - /var/local:/var/local
-      - /root/.bash_history:/root/.bash_history
-
   stag-be-eng-bbpercst-short:
     container_name: stag-be-eng-bbpercst-short
     hostname: stag-be-eng-bbpercst-short
@@ -953,142 +953,6 @@ services:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
       - CONFIG_ENV=stag/be/bbpercst/short
-      - intermittent="true"
-      - DB=true
-    links:
-      - stag-base-mysql:mysql
-      - stag-base-redis:redis
-    depends_on:
-      - stag-base-mysql
-      - stag-base-redis
-    healthcheck:
-      test: ls ||exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    volumes:
-      - /data:/data
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run:/var/run
-      - /var/local:/var/local
-      - /root/.bash_history:/root/.bash_history
-
-  stag-be-eng-st2-long:
-    container_name: stag-be-eng-st2-long
-    hostname: stag-be-eng-st2-long
-    image: amrox/greencandle:${TAG}
-    pull_policy: always
-    restart: always
-    entrypoint: /docker-entrypoint.sh backend --test
-    logging:
-      driver: journald
-    environment:
-      - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
-      - CONFIG_ENV=stag/be/st/long/2
-      - intermittent="true"
-      - DB=true
-    links:
-      - stag-base-mysql:mysql
-      - stag-base-redis:redis
-    depends_on:
-      - stag-base-mysql
-      - stag-base-redis
-    healthcheck:
-      test: ls ||exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    volumes:
-      - /data:/data
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run:/var/run
-      - /var/local:/var/local
-      - /root/.bash_history:/root/.bash_history
-
-  stag-be-eng-st2-short:
-    container_name: stag-be-eng-st2-short
-    hostname: stag-be-eng-st2-short
-    image: amrox/greencandle:${TAG}
-    pull_policy: always
-    restart: always
-    entrypoint: /docker-entrypoint.sh backend --test
-    logging:
-      driver: journald
-    environment:
-      - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
-      - CONFIG_ENV=stag/be/st/short/2
-      - intermittent="true"
-      - DB=true
-    links:
-      - stag-base-mysql:mysql
-      - stag-base-redis:redis
-    depends_on:
-      - stag-base-mysql
-      - stag-base-redis
-    healthcheck:
-      test: ls ||exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    volumes:
-      - /data:/data
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run:/var/run
-      - /var/local:/var/local
-      - /root/.bash_history:/root/.bash_history
-
-  stag-be-eng-st-long:
-    container_name: stag-be-eng-st-long
-    hostname: stag-be-eng-st-long
-    image: amrox/greencandle:${TAG}
-    pull_policy: always
-    restart: always
-    entrypoint: /docker-entrypoint.sh backend --test --data
-    logging:
-      driver: journald
-    environment:
-      - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
-      - CONFIG_ENV=stag/be/st/long
-      - intermittent="true"
-      - DB=true
-    links:
-      - stag-base-mysql:mysql
-      - stag-base-redis:redis
-    depends_on:
-      - stag-base-mysql
-      - stag-base-redis
-    healthcheck:
-      test: ls ||exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    volumes:
-      - /data:/data
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run:/var/run
-      - /var/local:/var/local
-      - /root/.bash_history:/root/.bash_history
-
-  stag-be-eng-st-short:
-    container_name: stag-be-eng-st-short
-    hostname: stag-be-eng-st-short
-    image: amrox/greencandle:${TAG}
-    pull_policy: always
-    restart: always
-    entrypoint: /docker-entrypoint.sh backend --test
-    logging:
-      driver: journald
-    environment:
-      - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
-      - CONFIG_ENV=stag/be/st/short
       - intermittent="true"
       - DB=true
     links:
