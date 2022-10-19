@@ -425,9 +425,7 @@ class Trade():
                                               "order by open_time desc limit 1"
                                               .format(quote), header=False)
             last_value = float(last_value[0][0]) if last_value else 0
-            print("AMROX", 'xxxxx')
             balance[account][quote]['count'] = max(last_value, balance[account][quote]['count'])
-        print("AMROX", balance)
         return balance
 
     @GET_EXCEPTIONS
