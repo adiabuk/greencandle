@@ -1,0 +1,8 @@
+{
+  "close_rule1": "results.current.STX_23 \u003e1",
+  "name": "stag-be-eng-st-short",
+  "open_rule1": "results.current.STX_23 \u003c1",
+  "rate_indicator": "upper_200",
+  "trade_direction": "short",
+  "trade_type": "margin"
+}
