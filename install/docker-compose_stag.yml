@@ -1190,7 +1190,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
-      - CONFIG_ENV=stag/be/any
+      - CONFIG_ENV=stag/be/any/long
       - HOST_IP=$HOST_IP
       - intermittent="true"
       - DB=true
