@@ -37,7 +37,7 @@ if [[ ! -e /installed ]]; then
 
   elif [[ "$HOSTNAME" == *"manual"* ]]; then
     easy_install pip
-    pip3 install --upgrade pip setuptools
+    pip3 install --upgrade pip setuptools ipython
   fi
 
   touch /installed
