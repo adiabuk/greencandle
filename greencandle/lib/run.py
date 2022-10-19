@@ -320,6 +320,7 @@ def prod_loop(interval, test=False, data=True):
         dataframes = get_dataframes(PAIRS, interval=interval)
         engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, redis=redis)
         engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
+        del engine
 
     buys = []
     sells = []
@@ -352,5 +353,4 @@ def prod_loop(interval, test=False, data=True):
     trade = Trade(interval=interval, test_trade=test, test_data=False, config=config)
     trade.close_trade(sells, drawdowns=drawdowns, drawups=drawups)
     trade.open_trade(buys)
-    del engine
     del redis
