@@ -88,6 +88,7 @@ services:
     logging:
       driver: journald
     links:
+      - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
       - data-be-get_15m:data
@@ -124,6 +125,7 @@ services:
     logging:
       driver: journald
     links:
+      - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
       - data-be-get_15m:data
@@ -160,6 +162,7 @@ services:
     logging:
       driver: journald
     links:
+      - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
       - data-be-get_15m:data
@@ -196,6 +199,7 @@ services:
     logging:
       driver: journald
     links:
+      - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
       - data-be-get_15m:data
@@ -266,6 +270,7 @@ services:
     logging:
       driver: journald
     links:
+      - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
       - data-be-get_1d:data
@@ -302,6 +307,7 @@ services:
     logging:
       driver: journald
     links:
+      - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
       - data-be-get_1d:data
@@ -338,6 +344,7 @@ services:
     logging:
       driver: journald
     links:
+      - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
       - data-be-get_1d:data
@@ -374,6 +381,7 @@ services:
     logging:
       driver: journald
     links:
+      - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
       - data-be-get_1d:data
@@ -410,6 +418,7 @@ services:
     logging:
       driver: journald
     links:
+      - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -444,6 +453,7 @@ services:
     logging:
       driver: journald
     links:
+      - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
       - data-be-get_12h:data
@@ -480,6 +490,7 @@ services:
     logging:
       driver: journald
     links:
+      - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
       - data-be-get_12h:data
@@ -516,6 +527,7 @@ services:
     logging:
       driver: journald
     links:
+      - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
       - data-be-get_12h:data
@@ -552,6 +564,7 @@ services:
     logging:
       driver: journald
     links:
+      - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
       - data-be-get_12h:data
@@ -622,6 +635,7 @@ services:
     logging:
       driver: journald
     links:
+      - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
       - data-be-get_4h:data
@@ -658,6 +672,7 @@ services:
     logging:
       driver: journald
     links:
+      - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
       - data-be-get_4h:data
@@ -694,6 +709,7 @@ services:
     logging:
       driver: journald
     links:
+      - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
       - data-be-get_4h:data
@@ -730,6 +746,7 @@ services:
     logging:
       driver: journald
     links:
+      - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
       - data-be-get_4h:data
@@ -766,6 +783,7 @@ services:
     logging:
       driver: journald
     links:
+      - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
       - data-be-get_5m:data
@@ -802,6 +820,7 @@ services:
     logging:
       driver: journald
     links:
+      - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
       - data-be-get_5m:data
@@ -838,6 +857,7 @@ services:
     logging:
       driver: journald
     links:
+      - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
       - data-be-get_5m:data
@@ -874,6 +894,7 @@ services:
     logging:
       driver: journald
     links:
+      - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
       - data-be-get_5m:data
@@ -910,6 +931,7 @@ services:
     logging:
       driver: journald
     links:
+      - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
       - data-be-get_5m:data
@@ -946,6 +968,7 @@ services:
     logging:
       driver: journald
     links:
+      - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
       - data-be-get_5m:data
@@ -1124,6 +1147,7 @@ services:
     logging:
       driver: journald
     links:
+      - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
       - data-be-get_1h:data
@@ -1160,6 +1184,7 @@ services:
     logging:
       driver: journald
     links:
+      - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
       - data-be-get_1h:data
@@ -1196,6 +1221,7 @@ services:
     logging:
       driver: journald
     links:
+      - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
       - data-be-get_1h:data
@@ -1232,6 +1258,7 @@ services:
     logging:
       driver: journald
     links:
+      - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
       - data-be-get_1h:data
