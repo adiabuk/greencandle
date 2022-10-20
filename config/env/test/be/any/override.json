@@ -1,6 +1,8 @@
 {
-  "name": "test-api-any-cross-long",
+  "name": "test-api-any",
   "pairs": "any",
-  "stop_loss_perc": "18",
-  "take_profit_perc": "40"
+  "trade_type": "margin",
+  "stop_loss_perc": "1",
+  "max_trades": "2",
+  "take_profit_perc": "1"
 }
