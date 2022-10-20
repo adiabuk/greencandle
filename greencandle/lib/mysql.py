@@ -28,6 +28,7 @@ class Mysql():
 
         self.__connect()
         self.interval = interval
+        self.test = test
         self.logger.debug("Starting Mysql with interval %s, test=%s" % (interval, test))
 
     @get_exceptions
@@ -248,16 +249,18 @@ class Mysql():
         self.__execute(cur, command)
         return cur.fetchall()
 
-    @staticmethod
-    def get_rates(quote):
+    def get_rates(self, quote):
         """
         Get current rates
         return tupple of usd_rate and gbp_rate
         """
-        client = Binance(debug=str2bool(config.accounts.account_debug))
-        usd_rate = client.prices()[quote + 'USDT'] if quote != 'USDT' else 1
-        gbp_rate = float(usd_rate)/float(client.prices()['GBPUSDT'])
-        return (usd_rate, gbp_rate)
+        if self.test:
+            return (1, 1)
+        else:
+            client = Binance(debug=str2bool(config.accounts.account_debug))
+            usd_rate = client.prices()[quote + 'USDT'] if quote != 'USDT' else 1
+            gbp_rate = float(usd_rate)/float(client.prices()['GBPUSDT'])
+            return (usd_rate, gbp_rate)
 
     @get_exceptions
     def update_trades(self, pair, close_time, close_price, quote, base_out,
