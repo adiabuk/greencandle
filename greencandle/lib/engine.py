@@ -330,6 +330,7 @@ class Engine(dict):
     def get_pivot(self, pair, dataframe, index=None, localconfig=None):
         """
         Get pivot points based on previous day data
+        !!!Does not work with test data!!!
         """
 
         LOGGER.debug("Getting pivot points for %s" % pair)
