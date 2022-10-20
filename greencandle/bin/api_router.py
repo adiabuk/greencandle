@@ -6,6 +6,7 @@ API routing module
 """
 
 import sys
+import os
 import json
 from pathlib import Path
 import requests
@@ -21,11 +22,11 @@ APP = Flask(__name__)
 LOGGER = get_logger(__name__)
 TOKEN = config.web.api_token
 
-def send_trade(payload, host):
+def send_trade(payload, host, subd='/webhook'):
     """
     send trade to specified host
     """
-    url = "http://{}:20000/webhook".format(host)
+    url = "http://{}:20000/{}".format(host, subd)
     try:
         LOGGER.info("Calling url:%s" % url)
         requests.post(url, json=payload, timeout=1)
@@ -39,6 +40,19 @@ def healthcheck():
     Return 200
     """
     return Response(status=200)
+
+@APP.route('/forward', methods=['POST'])
+def forward():
+    """
+    Forward request to another environment
+    """
+    payload = request.json
+    env = payload['env']
+    command = "configstore package get --basedir /srv/greencandle/config {} api_token".format(env)
+    token = os.popen(command).read().split()[0]
+
+    payload['edited'] = "yes"
+    send_trade(payload=payload, host='10.8.0.1', subd=token)
 
 @APP.route('/{}'.format(TOKEN), methods=['POST'])
 def respond():

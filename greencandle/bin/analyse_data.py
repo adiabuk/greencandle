@@ -5,7 +5,8 @@
 Analyze available data rom redis
 Look for potential buys
 """
-
+import sys
+import requests
 from datetime import datetime
 from apscheduler.schedulers.blocking import BlockingScheduler
 from greencandle.lib import config
@@ -23,6 +24,7 @@ MAIN_INDICATORS = config.main.indicators.split()
 SCHED = BlockingScheduler()
 GET_EXCEPTIONS = exception_catcher((Exception))
 TRIGGERED = {}
+FORWARD = False
 
 @SCHED.scheduled_job('cron', minute=MINUTE[config.main.interval],
                      hour=HOUR[config.main.interval], second="32")
@@ -31,6 +33,7 @@ def analyse_loop():
     Gather data from redis and analyze
     """
     global TRIGGERED
+    global FORWARD
     LOGGER.debug("Recently triggered: %s" % str(TRIGGERED))
 
     client = binance_auth()
@@ -78,6 +81,18 @@ def analyse_loop():
                                     current_price), emoji=True,
                                    icon=':{0}-{1}:'.format(interval, config.main.trade_direction))
 
+                url = "http://router:1080/forward"
+                env, strategy = config.web.forward.split(',')
+                action = 1 if config.main.trade_direction == "long" else -1
+                payload = {"pair": pair,
+                           "text": "forwarding trade from {}".format(config.env.name),
+                           "action": action,
+                           "env": env,
+                           "price": current_price,
+                           "strategy": strategy}
+
+                requests.post(url, json=payload, timeout=1)
+
                 LOGGER.info("Trade alert: %s %s %s (%s)" % (pair, interval,
                                                             config.main.trade_direction,
                                                             supported.strip()))
@@ -102,7 +117,9 @@ def main():
 
     Usage: analyse_data
     """
-
+    global FORWARD
+    if len(sys.argv) > 1 and sys.argv[1] == "forward":
+        FORWARD = True
     LOGGER.info("Starting Initial loop")
     analyse_loop()
     LOGGER.info("Finished Initial loop")
