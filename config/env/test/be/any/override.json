@@ -1,8 +1,10 @@
 {
+  "drain": "true",
+  "drain_range": "01:30 - 08:30",
+  "max_trades": "2",
   "name": "test-api-any",
   "pairs": "any",
-  "trade_type": "margin",
   "stop_loss_perc": "1",
-  "max_trades": "2",
-  "take_profit_perc": "1"
+  "take_profit_perc": "1",
+  "trade_type": "margin"
 }
