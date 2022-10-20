@@ -53,7 +53,7 @@ def serial_test(pairs, intervals, data_dir, indicators):
 def perform_data(pair, interval, data_dir, indicators):
     """Serial test loop"""
     LOGGER.debug("Serial run %s %s" % (pair, interval))
-    redis = Redis(test_data=True)
+    redis = Redis(interval=interval, test_data=True)
     try:
         filename = glob("{0}/{1}_{2}.p*".format(data_dir, pair, interval))[0]
     except IndexError:

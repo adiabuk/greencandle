@@ -22,7 +22,7 @@ class Redis():
     Redis object
     """
 
-    def __init__(self, test_data=False):
+    def __init__(self, interval=config.main.interval, test_data=False):
         """
         Args:
             interval
@@ -38,7 +38,7 @@ class Redis():
         db = int(config.redis.db)
         expire = str2bool(config.redis.redis_expire)
 
-        self.interval = config.main.interval
+        self.interval = interval
         self.test_data = test_data
 
         self.logger.debug("Starting Redis with interval %s db=%s"
