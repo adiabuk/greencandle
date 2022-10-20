@@ -7,6 +7,7 @@ Look for potential buys
 """
 import sys
 import requests
+from str2bool import str2bool
 from datetime import datetime
 from apscheduler.schedulers.blocking import BlockingScheduler
 from greencandle.lib import config
@@ -15,7 +16,7 @@ from pathlib import Path
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.alerts import send_slack_message
-from greencandle.lib.common import HOUR, MINUTE, get_tv_link, arg_decorator
+from greencandle.lib.common import HOUR, MINUTE, get_tv_link, arg_decorator, convert_to_seconds
 from greencandle.lib.auth import binance_auth
 
 LOGGER = get_logger(__name__)
@@ -68,7 +69,8 @@ def analyse_loop():
                 if pair in TRIGGERED:
                     diff = now - TRIGGERED[pair]
                     diff_in_hours = diff.total_seconds() / 3600
-                    if diff_in_hours < 1:
+                    if str2bool(config.main.wait_between_trades) and diff.total_seconds() < \
+                            convert_to_seconds(config.main.time_between_trades):
                         LOGGER.debug("Skipping notification for %s %s as recently triggered"
                                      % (pair, interval))
                         continue
