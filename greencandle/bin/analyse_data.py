@@ -87,7 +87,7 @@ def analyse_loop():
                 env, strategy = config.web.forward.split(',')
                 action = 1 if config.main.trade_direction == "long" else -1
                 payload = {"pair": pair,
-                           "text": "forwarding trade from {}".format(config.env.name),
+                           "text": "forwarding trade from {}".format(config.main.name),
                            "action": action,
                            "env": env,
                            "price": current_price,
