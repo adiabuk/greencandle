@@ -82,18 +82,18 @@ def analyse_loop():
                                     config.main.trade_direction, supported.strip(), current_time,
                                     current_price), emoji=True,
                                    icon=':{0}-{1}:'.format(interval, config.main.trade_direction))
+                if FORWARD:
+                    url = "http://router:1080/forward"
+                    env, strategy = config.web.forward.split(',')
+                    action = 1 if config.main.trade_direction == "long" else -1
+                    payload = {"pair": pair,
+                               "text": "forwarding trade from {}".format(config.main.name),
+                               "action": action,
+                               "env": env,
+                               "price": current_price,
+                               "strategy": strategy}
 
-                url = "http://router:1080/forward"
-                env, strategy = config.web.forward.split(',')
-                action = 1 if config.main.trade_direction == "long" else -1
-                payload = {"pair": pair,
-                           "text": "forwarding trade from {}".format(config.main.name),
-                           "action": action,
-                           "env": env,
-                           "price": current_price,
-                           "strategy": strategy}
-
-                requests.post(url, json=payload, timeout=1)
+                    requests.post(url, json=payload, timeout=5)
 
                 LOGGER.info("Trade alert: %s %s %s (%s)" % (pair, interval,
                                                             config.main.trade_direction,
