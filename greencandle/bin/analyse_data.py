@@ -89,7 +89,7 @@ def analyse_loop():
                     action = 1 if config.main.trade_direction == "long" else -1
                     payload = {"pair": pair,
                                "text": "forwarding trade from {}".format(config.main.name),
-                               "action": action,
+                               "action": str(action),
                                "host": host,
                                "env": env,
                                "price": current_price,
