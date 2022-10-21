@@ -50,9 +50,10 @@ def forward():
     env = payload['env']
     command = "configstore package get --basedir /srv/greencandle/config {} api_token".format(env)
     token = os.popen(command).read().split()[0]
-
     payload['edited'] = "yes"
-    send_trade(payload=payload, host='10.8.0.1', subd=token)
+    url = "http://{}:1080/{}".format(payload['host'], token)
+    requests.post(url, json=payload, timeout=5)
+    return Response(status=200)
 
 @APP.route('/{}'.format(TOKEN), methods=['POST'])
 def respond():
