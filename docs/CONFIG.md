@@ -54,6 +54,7 @@
 * **wait_between_trades** *True|False*
 * **time_between_trades** *{1m|30h|1w} time between close and open*
 * **time_in_trade** *{1m|30h|1w} time before auto-closing trade*
+* **perc_at_timeout** percentage to wait for once timeout has been reached
 * **immediate_stop** *{True|False} Stop immediately after stop loss reached or wait for candle close*
 * **immediate_trailing_stop** *{True|False} Stop immediately after stop trailing stop loss reached or wait for candle close*
 * **immediate_take_profit** *{True|False} Stop immediately after take profit reached or wait for candle close*

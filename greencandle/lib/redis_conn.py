@@ -446,6 +446,20 @@ class Redis():
                              "open_price: %s" % (high_price, current_price, open_price))
         return result
 
+    def __get_timeout_profit(self, current_price):
+        """
+        Check if we have reached timeout perc
+        """
+
+        perc = float(config.main.perc_at_timeout)
+        direction = config.main.trade_direction
+
+        if direction == 'long':
+            result = float(current_price) > add_perc(float(perc), float(current_price))
+        elif direction == 'short':
+            result = float(current_price) < sub_perc(float(perc), float(current_price))
+        return result
+
     def __get_take_profit(self, current_price, current_high, open_price, pair):
         """
         Check if we have reached take profit
@@ -674,6 +688,7 @@ class Redis():
             buy_epoch = 0 if not isinstance(open_time, datetime) else open_time.timestamp()
             sell_epoch = int(buy_epoch) + int(convert_to_seconds(config.main.time_in_trade))
             close_timeout = current_epoch > sell_epoch
+            close_timeout_price = self.__get_timeout_profit(current_price)
 
         if not open_price and str2bool(config.main.wait_between_trades):
             try:
@@ -750,7 +765,7 @@ class Redis():
             result = 'CLOSE'
             event = self.get_event_str("TakeProfit" + result)
 
-        elif close_timeout:
+        elif close_timeout and close_timeout_price:
             result = 'CLOSE'
             event = self.get_event_str("TimeOut" + result)
 

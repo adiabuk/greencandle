@@ -281,6 +281,11 @@
       "is_binary": false,
       "is_secret": false
     },
+    "perc_at_timeout": {
+      "value": "0",
+      "is_binary": false,
+      "is_secret": false
+    },
     "production": {
       "value": "false",
       "is_binary": false,

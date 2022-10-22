@@ -1,5 +1,5 @@
 {
   "name": "stag-be-eng-bbpercst2-long",
-  "stop_loss_perc": "0.7",
-  "take_profit_perc": "1.2"
+  "perc_at_timeout": "0.3",
+  "time_in_trade": "4h"
 }
