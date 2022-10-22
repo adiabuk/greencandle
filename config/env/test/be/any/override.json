@@ -2,6 +2,7 @@
   "drain": "true",
   "drain_range": "01:30 - 08:30",
   "max_trades": "2",
+  "interval": "1m",
   "name": "test-api-any",
   "pairs": "any",
   "stop_loss_perc": "1",
