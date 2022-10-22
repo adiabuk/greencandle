@@ -446,7 +446,7 @@ class Redis():
                              "open_price: %s" % (high_price, current_price, open_price))
         return result
 
-    def __get_timeout_profit(self, current_price):
+    def __get_timeout_profit(self, open_price, current_price):
         """
         Check if we have reached timeout perc
         """
@@ -455,9 +455,9 @@ class Redis():
         direction = config.main.trade_direction
 
         if direction == 'long':
-            result = float(current_price) > add_perc(float(perc), float(current_price))
+            result = float(current_price) > add_perc(float(perc), float(open_price))
         elif direction == 'short':
-            result = float(current_price) < sub_perc(float(perc), float(current_price))
+            result = float(current_price) < sub_perc(float(perc), float(open_price))
         return result
 
     def __get_take_profit(self, current_price, current_high, open_price, pair):
@@ -688,7 +688,7 @@ class Redis():
             buy_epoch = 0 if not isinstance(open_time, datetime) else open_time.timestamp()
             sell_epoch = int(buy_epoch) + int(convert_to_seconds(config.main.time_in_trade))
             close_timeout = current_epoch > sell_epoch
-            close_timeout_price = self.__get_timeout_profit(current_price)
+            close_timeout_price = self.__get_timeout_profit(open_price, current_price)
 
         if not open_price and str2bool(config.main.wait_between_trades):
             try:
@@ -698,7 +698,6 @@ class Redis():
                 buy_epoch = 0 if not isinstance(open_time, datetime) else \
                     open_time.timestamp()
                 pattern = '%Y-%m-%d %H:%M:%S'
-                buy_epoch = open_time.timestamp()
                 able_to_buy = (int(buy_epoch) +
                                int(convert_to_seconds(config.main.time_between_trades))) < \
                                current_epoch
