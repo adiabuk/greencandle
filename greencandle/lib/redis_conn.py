@@ -390,7 +390,7 @@ class Redis():
         current_epoch = int(time.time())
 
         if open_price:
-            close_timeout = current_epoch > sell_epoc
+            close_timeout = current_epoch > sell_epoch
             close_timeout_price = self.__get_timeout_profit(open_price, current_price)
 
             if trailing_stop:
@@ -413,7 +413,7 @@ class Redis():
                 result = "HOLD"
                 event = self.get_event_str(result)
         else:
-            result="NOITEM"
+            result = "NOITEM"
             event = self.get_event_str(result)
 
         self.__log_event(event=event, rate=0, perc_rate=0,
