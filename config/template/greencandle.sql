@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.7.39, for Linux (x86_64)
 --
--- Host: 10.8.0.101    Database: greencandle
+-- Host: 10.8.0.104    Database: greencandle
 -- ------------------------------------------------------
 -- Server version	5.5.5-10.8.3-MariaDB-1:10.8.3+maria~jammy
 
@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `accounts`;
 /*!50001 DROP VIEW IF EXISTS `accounts`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `accounts` AS SELECT
+/*!50001 CREATE VIEW `accounts` AS SELECT 
  1 AS `open_time`,
  1 AS `close_time`,
  1 AS `open_price`,
@@ -47,7 +47,7 @@ DROP TABLE IF EXISTS `accounts2`;
 /*!50001 DROP VIEW IF EXISTS `accounts2`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `accounts2` AS SELECT
+/*!50001 CREATE VIEW `accounts2` AS SELECT 
  1 AS `id`,
  1 AS `open_time`,
  1 AS `close_time`,
@@ -76,7 +76,7 @@ CREATE TABLE `api_requests` (
   `price` varchar(30) DEFAULT NULL,
   `strategy` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4552 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6252 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -145,7 +145,8 @@ CREATE TABLE `open_trades` (
   `net_perc` varchar(30) DEFAULT NULL,
   `name` varchar(40) DEFAULT NULL,
   `interval` varchar(3) DEFAULT NULL,
-  `usd_quantity` varchar(30) DEFAULT NULL
+  `usd_quantity` varchar(30) DEFAULT NULL,
+  `direction` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -157,7 +158,7 @@ DROP TABLE IF EXISTS `profit`;
 /*!50001 DROP VIEW IF EXISTS `profit`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profit` AS SELECT
+/*!50001 CREATE VIEW `profit` AS SELECT 
  1 AS `id`,
  1 AS `day`,
  1 AS `open_time`,
@@ -199,7 +200,7 @@ DROP TABLE IF EXISTS `profit_daily`;
 /*!50001 DROP VIEW IF EXISTS `profit_daily`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profit_daily` AS SELECT
+/*!50001 CREATE VIEW `profit_daily` AS SELECT 
  1 AS `date`,
  1 AS `day`,
  1 AS `total_perc`,
@@ -219,7 +220,7 @@ DROP TABLE IF EXISTS `profit_daily_by_quote_pair`;
 /*!50001 DROP VIEW IF EXISTS `profit_daily_by_quote_pair`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profit_daily_by_quote_pair` AS SELECT
+/*!50001 CREATE VIEW `profit_daily_by_quote_pair` AS SELECT 
  1 AS `quote_pair`,
  1 AS `date`,
  1 AS `day`,
@@ -238,7 +239,7 @@ DROP TABLE IF EXISTS `profit_hourly`;
 /*!50001 DROP VIEW IF EXISTS `profit_hourly`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profit_hourly` AS SELECT
+/*!50001 CREATE VIEW `profit_hourly` AS SELECT 
  1 AS `date`,
  1 AS `day`,
  1 AS `hour`,
@@ -259,7 +260,7 @@ DROP TABLE IF EXISTS `profit_monthly`;
 /*!50001 DROP VIEW IF EXISTS `profit_monthly`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profit_monthly` AS SELECT
+/*!50001 CREATE VIEW `profit_monthly` AS SELECT 
  1 AS `date`,
  1 AS `usd_profit`,
  1 AS `usd_net_profit`,
@@ -276,7 +277,7 @@ DROP TABLE IF EXISTS `profit_weekly`;
 /*!50001 DROP VIEW IF EXISTS `profit_weekly`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profit_weekly` AS SELECT
+/*!50001 CREATE VIEW `profit_weekly` AS SELECT 
  1 AS `week_name`,
  1 AS `YEAR(close_time)`,
  1 AS `WEEK(close_time)`,
@@ -296,7 +297,7 @@ DROP TABLE IF EXISTS `profitable_all`;
 /*!50001 DROP VIEW IF EXISTS `profitable_all`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profitable_all` AS SELECT
+/*!50001 CREATE VIEW `profitable_all` AS SELECT 
  1 AS `pair`,
  1 AS `name`,
  1 AS `total`,
@@ -324,7 +325,7 @@ DROP TABLE IF EXISTS `profitable_by_name`;
 /*!50001 DROP VIEW IF EXISTS `profitable_by_name`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profitable_by_name` AS SELECT
+/*!50001 CREATE VIEW `profitable_by_name` AS SELECT 
  1 AS `name`,
  1 AS `total`,
  1 AS `profit`,
@@ -350,7 +351,7 @@ DROP TABLE IF EXISTS `profitable_by_name_date`;
 /*!50001 DROP VIEW IF EXISTS `profitable_by_name_date`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profitable_by_name_date` AS SELECT
+/*!50001 CREATE VIEW `profitable_by_name_date` AS SELECT 
  1 AS `name`,
  1 AS `date`,
  1 AS `total`,
@@ -377,7 +378,7 @@ DROP TABLE IF EXISTS `profitable_daily`;
 /*!50001 DROP VIEW IF EXISTS `profitable_daily`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profitable_daily` AS SELECT
+/*!50001 CREATE VIEW `profitable_daily` AS SELECT 
  1 AS `date`,
  1 AS `day`,
  1 AS `total`,
@@ -405,7 +406,7 @@ DROP TABLE IF EXISTS `profitable_hours`;
 /*!50001 DROP VIEW IF EXISTS `profitable_hours`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profitable_hours` AS SELECT
+/*!50001 CREATE VIEW `profitable_hours` AS SELECT 
  1 AS `hour`,
  1 AS `hour_perc`,
  1 AS `net_hour_perc`,
@@ -424,7 +425,7 @@ DROP TABLE IF EXISTS `profitable_month`;
 /*!50001 DROP VIEW IF EXISTS `profitable_month`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profitable_month` AS SELECT
+/*!50001 CREATE VIEW `profitable_month` AS SELECT 
  1 AS `pair`,
  1 AS `total`,
  1 AS `profit`,
@@ -451,7 +452,7 @@ DROP TABLE IF EXISTS `profitable_today`;
 /*!50001 DROP VIEW IF EXISTS `profitable_today`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profitable_today` AS SELECT
+/*!50001 CREATE VIEW `profitable_today` AS SELECT 
  1 AS `pair`,
  1 AS `total`,
  1 AS `profit`,
@@ -477,7 +478,7 @@ DROP TABLE IF EXISTS `profitable_totals`;
 /*!50001 DROP VIEW IF EXISTS `profitable_totals`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profitable_totals` AS SELECT
+/*!50001 CREATE VIEW `profitable_totals` AS SELECT 
  1 AS `table_name`,
  1 AS `perc_profitable`,
  1 AS `net_perc_profitable`,
@@ -496,7 +497,7 @@ DROP TABLE IF EXISTS `profitable_week`;
 /*!50001 DROP VIEW IF EXISTS `profitable_week`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profitable_week` AS SELECT
+/*!50001 CREATE VIEW `profitable_week` AS SELECT 
  1 AS `pair`,
  1 AS `total`,
  1 AS `profit`,
@@ -551,7 +552,7 @@ CREATE TABLE `trades` (
   `open_order_id` varchar(30) DEFAULT NULL,
   `close_order_id` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1007 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1114 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -963,10 +964,10 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-10-15 15:27:20
+-- Dump completed on 2022-10-23 22:14:00
 -- MySQL dump 10.13  Distrib 5.7.39, for Linux (x86_64)
 --
--- Host: 10.8.0.101    Database: greencandle
+-- Host: 10.8.0.104    Database: greencandle
 -- ------------------------------------------------------
 -- Server version	5.5.5-10.8.3-MariaDB-1:10.8.3+maria~jammy
 
@@ -1037,4 +1038,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-10-15 15:27:22
+-- Dump completed on 2022-10-23 22:14:02
