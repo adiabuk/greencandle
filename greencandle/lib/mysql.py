@@ -329,7 +329,7 @@ class Mysql():
                           '(" {0}", "{1}", "{2}", "{3}", "{4}", "{5}", "{6}", "{7}", "{8}", "{9}")'
                           .format(pair, open_time, open_price, current_price,
                                   perc, net_perc, name, interval,
-                                  format_usd(usd_quantity, direction)))
+                                  format_usd(usd_quantity), direction))
 
                 self.__run_sql_query(insert)
             except ZeroDivisionError:
