@@ -168,7 +168,8 @@ class Mysql():
         """
         command = ('select * from profit where pair="{0}" and name="{1}" and close_time '
                    '>= ("{2}" - interval "{3}" month) ' 'and perc '
-                   '> "{3}"'.format(pair, date, months, max_perc))
+                   '> "{3}" and direction="{4}"'.format(pair, date, months, max_perc,
+                                                        config.main.trade_direction))
 
         cur = self.dbase.cursor()
         self.__execute(cur, command)
@@ -243,8 +244,8 @@ class Mysql():
         """
         cur = self.dbase.cursor()
         command = ('select pair, open_time from trades where close_price is NULL and '
-                   '`interval`="{0}" ' 'and name in ("{1}","api")'
-                   .format(self.interval, config.main.name))
+                   '`interval`="{0}" and name in ("{1}","api" and direction="{2}")'
+                   .format(self.interval, config.main.name, config.main.trade_direction))
 
         self.__execute(cur, command)
         return cur.fetchall()
@@ -272,8 +273,9 @@ class Mysql():
         usd_rate, gbp_rate = self.get_rates(symbol_name)
         job_name = name if name else config.main.name
         query = """select id from trades where close_price is NULL and `interval`="{0}"
-                   and pair="{1}" and (name="{2}" or name like "api") ORDER BY ID ASC LIMIT 1
-                """.format(self.interval, pair, job_name)
+                   and pair="{1}" and (name="{2}" or name like "api") and direction="{3}"
+                   ORDER BY ID ASC LIMIT 1
+                """.format(self.interval, pair, job_name, config.main.trade_direction)
         try:
             trade_id = self.fetch_sql_data(query, header=False)[0][0]
         except IndexError:
