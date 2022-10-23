@@ -122,8 +122,10 @@ def intermittent_check():
     """
     Check for SL/TP
     """
+    LOGGER.info("Starting prod int check")
     alert = bool('HOST_IP' in os.environ)
     prod_int_check(config.main.interval, True, alert=alert)
+    LOGGER.info("Finished prod int check")
 
 @arg_decorator
 def main():
