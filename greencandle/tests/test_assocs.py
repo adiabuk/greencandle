@@ -80,4 +80,3 @@ class TestAssocs(unittest.TestCase):
                         actual_name = container.replace('-be', '')  # strip off container type
                     else:
                         continue
-                    _ = rev_names[actual_name]
