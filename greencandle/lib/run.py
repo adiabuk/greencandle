@@ -243,7 +243,8 @@ def prod_int_check(interval, test, alert=False):
         redis.update_drawup(pair, current_candle, open_time=open_time)
         result, event, current_time, current_price = redis.get_intermittent(pair,
                                                                             open_price,
-                                                                            current_candle)
+                                                                            current_candle,
+                                                                            open_time)
 
         LOGGER.debug("%s int check result: %s Buy:%s Current:%s Time:%s"
                      % (pair, result, open_price, current_price, current_time))

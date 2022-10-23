@@ -361,7 +361,7 @@ class Redis():
         else:
             self.logger.info("%s, %s" % (message, kwargs.current))
 
-    def get_intermittent(self, pair, open_price, current_candle):
+    def get_intermittent(self, pair, open_price, current_candle, open_time):
         """
         Check if price between intervals and sell if matches stop_loss or take_profit rules
         """
@@ -384,6 +384,12 @@ class Redis():
                                                  current_low, open_price)
 
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
+
+        buy_epoch = 0 if not isinstance(open_time, datetime) else open_time.timestamp()
+        sell_epoch = int(buy_epoch) + int(convert_to_seconds(config.main.time_in_trade))
+        current_epoch = int(time.time())
+        close_timeout = current_epoch > sell_epoch
+        close_timeout_price = self.__get_timeout_profit(open_price, current_price)
 
         if trailing_stop and open_price:
             result = "CLOSE"
