@@ -31,7 +31,7 @@ class TestMysql(OrderedTest):
             command = ("TAG={} docker-compose -f install/docker-compose_unit.yml up -d {}".format(
                 get_tag, container))
         time.sleep(6)
-        self.dbase = Mysql(test=True, interval="1h")
+        self.dbase = Mysql(test=True)
         self.dbase.delete_data()
 
     def step_1(self):
@@ -47,7 +47,8 @@ class TestMysql(OrderedTest):
         quote = get_quote(self.pair)
         LOGGER.info("Inserting trade")
         self.dbase.insert_trade(self.pair, self.date, self.open_price, quote_amount=quote_in,
-                                base_amount=30, symbol_name=quote)
+                                base_amount=30, symbol_name=quote,
+                                direction=config.main.trade_direction)
         sql = 'select open_time, close_time from trades'
         open_time, close_time = self.dbase.fetch_sql_data(sql)[-1]
         current_time = open_time.strftime("%Y-%m-%d %H:%M:%S")
@@ -96,11 +97,10 @@ class TestMysql(OrderedTest):
                                                                                  "%H:%M:%S")
         date2 = (datetime.datetime.now() - datetime.timedelta(hours=1)).strftime("%Y-%m-%d "
                                                                                  "%H:%M:%S")
-        print("AMROX", date1, date2)
         self.dbase.insert_trade('XXXUSDT', date1, 0, 0, 0, 0, 0, 0, 'short', 'USDT', 0)
         self.dbase.update_trades('XXXUSDT', date2, 0.2, 0.2, 0.2, config.main.name, 0, 0, 'BNB', 0)
 
-        last_hour_profit = self.dbase.get_last_hour_profit()
+        last_hour_profit = self.dbase.get_last_hour_profit(hour='22', date='2018-05-07')
         self.assertIs(len(last_hour_profit), 7)
 
         self.assertIsInstance(last_hour_profit[0], float)
@@ -112,7 +112,7 @@ class TestMysql(OrderedTest):
         time_tupple = now.timetuple()
         hour = time_tupple[3]
         last_hour = str(hour - 1)
-        self.assertEquals(last_hour_profit[3], 0)
+        self.assertEquals(last_hour_profit[3], 399.85)
 
 if __name__ == '__main__':
     unittest.main()

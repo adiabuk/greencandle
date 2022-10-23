@@ -278,8 +278,10 @@ class Mysql():
                 """.format(self.interval, pair, job_name, config.main.trade_direction)
         try:
             trade_id = self.fetch_sql_data(query, header=False)[0][0]
+            self.logger.critical("AMROX " + str(trade_id))
         except IndexError:
             self.logger.critical("No open trade matching criteria to close: %s" % query)
+            raise
 
         command = """update trades set close_price={0},close_time="{1}",
         quote_out="{2}", base_out="{3}", closed_by="{4}", drawdown_perc=abs(round({5},1)),
@@ -336,13 +338,13 @@ class Mysql():
                                      % pair)
 
     @get_exceptions
-    def get_last_hour_profit(self):
+    def get_last_hour_profit(self, date=None, hour=None):
         """
         Get profit for the last completed hour
         """
         hour_ago = datetime.datetime.now() - datetime.timedelta(hours=1)
-        date = hour_ago.strftime("%Y-%m-%d")
-        hour = hour_ago.strftime("%H")
+        date = date if date else hour_ago.strftime("%Y-%m-%d")
+        hour = hour if hour else hour_ago.strftime("%H")
 
         command = ('select COALESCE(total_perc,0) total_perc, '
                    'COALESCE(total_net_perc,0) total_net_perc, '
