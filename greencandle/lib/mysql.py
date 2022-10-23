@@ -314,23 +314,22 @@ class Mysql():
 
         self.__run_sql_query("delete from open_trades")
         trades = self.fetch_sql_data("select pair, open_time, open_price, name, `interval`, "
-                                     "open_usd_rate*quote_in as usd_quantity from "
+                                     "open_usd_rate*quote_in as usd_quantity, direction from "
                                      "trades where close_price is NULL or close_price=''",
                                      header=False)
         for trade in trades:
             try:
-                pair, open_time, open_price, name, interval, usd_quantity = trade
+                pair, open_time, open_price, name, interval, usd_quantity, direction = trade
                 current_price = get_current_price(pair)
                 perc = 100 * (float(current_price) - float(open_price)) / float(open_price)
                 perc = - perc if 'short' in name else perc
                 net_perc = perc - float(self.get_complete_commission())
                 insert = ('insert into open_trades (pair, open_time, open_price, current_price, '
-                          'perc, net_perc, name, `interval`, usd_quantity) VALUES ("{0}", '
-                          '"{1}", "{2}", "{3}", "{4}", "{5}", "{6}", "{7}", "{8}")'
-                          .format(pair, open_time, open_price,
-                                  current_price, perc,
-                                  net_perc, name, interval,
-                                  format_usd(usd_quantity)))
+                          'perc, net_perc, name, `interval`, usd_quantity, direction) VALUES '
+                          '(" {0}", "{1}", "{2}", "{3}", "{4}", "{5}", "{6}", "{7}", "{8}", "{9}")'
+                          .format(pair, open_time, open_price, current_price,
+                                  perc, net_perc, name, interval,
+                                  format_usd(usd_quantity, direction)))
 
                 self.__run_sql_query(insert)
             except ZeroDivisionError:
