@@ -244,7 +244,7 @@ class Mysql():
         """
         cur = self.dbase.cursor()
         command = ('select pair, open_time from trades where close_price is NULL and '
-                   '`interval`="{0}" and name in ("{1}","api" and direction="{2}")'
+                   '`interval`="{0}" and name in ("{1}","api") and direction="{2}"'
                    .format(self.interval, config.main.name, config.main.trade_direction))
 
         self.__execute(cur, command)
