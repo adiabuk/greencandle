@@ -388,28 +388,30 @@ class Redis():
         buy_epoch = 0 if not isinstance(open_time, datetime) else open_time.timestamp()
         sell_epoch = int(buy_epoch) + int(convert_to_seconds(config.main.time_in_trade))
         current_epoch = int(time.time())
-        close_timeout = current_epoch > sell_epoch
-        close_timeout_price = self.__get_timeout_profit(open_price, current_price)
 
-        if trailing_stop and open_price:
-            result = "CLOSE"
-            event = self.get_event_str("TrailingStopIntermittent" + result)
+        if open_price:
+            close_timeout = current_epoch > sell_epoch
+            close_timeout_price = self.__get_timeout_profit(open_price, current_price)
 
-        elif close_timeout and close_timeout_price and open_price:
-            result = 'CLOSE'
-            event = self.get_event_str("TimeOut" + result)
+            if trailing_stop:
+                result = "CLOSE"
+                event = self.get_event_str("TrailingStopIntermittent" + result)
 
-        elif stop_loss_rule and open_price:
-            result = "CLOSE"
-            event = self.get_event_str("StopIntermittent" + result)
+            elif close_timeout and close_timeout_price:
+                result = 'CLOSE'
+                event = self.get_event_str("TimeOut" + result)
 
-        elif take_profit_rule and open_price:
-            result = "CLOSE"
-            event = self.get_event_str("TakeProfitIntermittent" + result)
+            elif stop_loss_rule and open_price:
+                result = "CLOSE"
+                event = self.get_event_str("StopIntermittent" + result)
 
-        else:
-            result = "HOLD"
-            event = self.get_event_str(result)
+            elif take_profit_rule:
+                result = "CLOSE"
+                event = self.get_event_str("TakeProfitIntermittent" + result)
+
+            else:
+                result = "HOLD"
+                event = self.get_event_str(result)
 
         self.__log_event(event=event, rate=0, perc_rate=0,
                          open_price=open_price, close_price=current_price,
