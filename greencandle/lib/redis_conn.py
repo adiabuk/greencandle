@@ -395,6 +395,10 @@ class Redis():
             result = "CLOSE"
             event = self.get_event_str("TrailingStopIntermittent" + result)
 
+        elif close_timeout and close_timeout_price:
+            result = 'CLOSE'
+            event = self.get_event_str("TimeOut" + result)
+
         elif stop_loss_rule and open_price:
             result = "CLOSE"
             event = self.get_event_str("StopIntermittent" + result)
