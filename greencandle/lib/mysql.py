@@ -277,7 +277,7 @@ class Mysql():
         try:
             trade_id = self.fetch_sql_data(query, header=False)[0][0]
         except IndexError:
-            raise RuntimeError("No open trade matching criteria to close")
+            self.logger.critical("No open trade matching criteria to close: %s" % query)
 
         command = """update trades set close_price={0},close_time="{1}",
         quote_out="{2}", base_out="{3}", closed_by="{4}", drawdown_perc=abs(round({5},1)),
