@@ -7,6 +7,7 @@ import re
 import os
 import json
 import smtplib
+from datetime import datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import requests
@@ -85,7 +86,8 @@ def send_slack_trade(**kwargs):
     """
     Send trade notification in slack
     """
-    valid_keys = ["channel", "event", "pair", "action", "price", "perc", "usd_profit", "quote"]
+    valid_keys = ["channel", "event", "pair", "action", "price", "perc", "usd_profit", "quote",
+                  "open_time", "close_time"]
     kwargs = AttributeDict(kwargs)
     for key in valid_keys:
         if key not in kwargs:
@@ -115,14 +117,22 @@ def send_slack_trade(**kwargs):
         close_string = "• Close: {0}\n".format(get_trade_link(kwargs.pair, strat,
                                                               'close', 'close now'))
         quote_string = "• Quote in: %.4f\n" % float(kwargs.quote)
+        time_string = "• Open_time: %s " % kwargs.open_time
     elif kwargs.action == 'CLOSE':
         color = '#fc0303' # red
         close_string = ""
         quote_string = "• Quote out: %.4f\n" % float(kwargs.quote)
+        opent = datetime.strptime(kwargs.open_time, "%Y-%m-%d %H:%M:%S")
+        closet = datetime.strptime(kwargs.close_time, "%Y-%m-%d %H:%M:%S")
+        delta = str(closet-opent)
+        time_string = "• Open_time: %s\n• Close_time: %s\n• Trade time: %s\n" % (kwargs.open_time,
+                                                                                 kwargs.close_time,
+                                                                                 delta)
     else:
         color = '#ff7f00'
         close_string = ""
         quote_string = ""
+        time_string = ""
 
     icon = ":{}:".format(config.main.trade_direction)
 
@@ -144,17 +154,18 @@ def send_slack_trade(**kwargs):
                             "• USD quote: {7}\n"
                             "• Net perc: {8}\n"
                             "• Net usd_profit: {9}\n"
-                            "\n".format(get_tv_link(kwargs.pair),
-                                        kwargs.price,
-                                        config.main.trade_direction,
-                                        kwargs.perc,
-                                        kwargs.usd_profit,
-                                        close_string,
-                                        quote_string,
-                                        kwargs.usd_quote,
-                                        kwargs.net_perc,
-                                        kwargs.net_profit
-                                        )),
+                            "{10}" .format(get_tv_link(kwargs.pair),
+                                           kwargs.price,
+                                           config.main.trade_direction,
+                                           kwargs.perc,
+                                           kwargs.usd_profit,
+                                           close_string,
+                                           quote_string,
+                                           kwargs.usd_quote,
+                                           kwargs.net_perc,
+                                           kwargs.net_profit,
+                                           time_string
+                                           )),
                   "short":"false"
                  }]}]}
 
