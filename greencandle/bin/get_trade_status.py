@@ -11,6 +11,15 @@ from greencandle.lib.mysql import Mysql
 from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.common import get_tv_link, QUOTES, arg_decorator
 
+def divide_chunks(big_list, size):
+    """
+    divide list into list of sublists of given size
+    """
+    # looping till length big_list
+    for i in range(0, len(big_list), size):
+        yield big_list[i:i + size]
+
+
 @arg_decorator
 def main():
     """
@@ -28,14 +37,19 @@ def main():
              'order by perc +0 DESC')
 
     open_trades = dbase.fetch_sql_data(query, header=True)
-    output = ""
+    header = open_trades.pop(0)
+    chunks = list(divide_chunks(open_trades, 10))
+    for chunk in chunks:
+        chunk.insert(0, header)
+        output = ""
 
-    for trade in open_trades:
-        output += "" if "name" in trade[1]  else (":short: " if "short" in trade[2] else ":long: ")
-        output += '   '.join([get_tv_link(item) if str(item).endswith(QUOTES) else \
+        for trade in chunk:
+            output += "" if "name" in trade[1]  else (":short: " if "short" in trade[2] \
+                    else ":long: ")
+            output += '   '.join([get_tv_link(item) if str(item).endswith(QUOTES) else \
                 str(item).replace("-api-any", "") for item in trade[:-1]]) + '\n'
 
-    if len(open_trades) > 1:
-        send_slack_message('balance', output, name=sys.argv[0].split('/')[-1])
+        if len(chunk) > 1:
+            send_slack_message('balance', output, name=sys.argv[0].split('/')[-1])
 if __name__ == "__main__":
     main()
