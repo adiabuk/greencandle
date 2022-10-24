@@ -656,7 +656,7 @@ class Trade():
                                                          "trades t, profit p where p.id=t.id and "
                                                          "t.pair='{}' and t.closed_by='{}' order "
                                                          "by t.id desc limit 1"
-                                                         .format(pair, name), header=False)[0][0]
+                                                         .format(pair, name), header=False)[0]
 
                 self.__send_notifications(pair=pair, close_time=current_time, perc=perc_inc,
                                           fill_price=current_price, interval=self.interval,
@@ -812,7 +812,7 @@ class Trade():
                                                              "p.id=t.id and t.pair='{}' and "
                                                              "t.closed_by='{}' order by t.id desc "
                                                              "limit 1".format(pair, name),
-                                                             header=False)[0][0]
+                                                             header=False)[0]
 
                     self.__send_notifications(pair=pair, close_time=current_time, perc=perc_inc,
                                               fill_price=fill_price, interval=self.interval,
@@ -907,7 +907,7 @@ class Trade():
                                                          "p.id=t.id and t.pair='{}' and "
                                                          "t.closed_by='{}' order by t.id desc "
                                                          "limit 1".format(pair, name),
-                                                         header=False)[0][0]
+                                                         header=False)[0]
 
                 self.__send_notifications(pair=pair, close_time=current_time, perc=perc_inc,
                                           fill_price=fill_price, interval=self.interval,
