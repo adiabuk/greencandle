@@ -409,7 +409,7 @@ class Trade():
                 self.__send_notifications(pair=pair, open_time=current_time,
                                           fill_price=fill_price, interval=self.interval,
                                           event=event, action='OPEN', usd_profit='N/A',
-                                          quote=quote_to_use)
+                                          quote=quote_to_use, close_time='N/A')
 
         del dbase
         return True
@@ -508,7 +508,7 @@ class Trade():
                     self.__send_notifications(pair=pair, open_time=current_time,
                                               fill_price=fill_price, interval=self.interval,
                                               event=event, action='OPEN', usd_profit='N/A',
-                                              quote=quote_amount)
+                                              quote=quote_amount, close_time='N/A')
 
         del dbase
         return True
@@ -744,7 +744,7 @@ class Trade():
                 self.__send_notifications(pair=pair, open_time=current_time,
                                           fill_price=current_price, interval=self.interval,
                                           event=event, action='OPEN', usd_profit='N/A',
-                                          quote=total_quote_amount)
+                                          quote=total_quote_amount, close_time='N/A')
         del dbase
         return True
 
