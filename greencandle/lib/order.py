@@ -109,8 +109,10 @@ class Trade():
                 self.logger.info("Wrong trade direction")
             elif avail_slots <= 0:
                 pairs_str = ', '.join((x[0] for x in items_list))
-                self.logger.warning("Too many trades, skipping:%s" % pairs_str)
-                send_slack_message("alerts", "Too many trades, skipping {}".format(pairs_str))
+                self.logger.warning("Too many trades for %s, skipping:%s"
+                                    % (self.config.main.trade_direction, pairs_str))
+                send_slack_message("alerts", "Too many trades for {}, skipping {}"
+                                   .format(self.config.main.trade_direction, pairs_str))
             else:
                 final_list.append(item)
         return final_list
