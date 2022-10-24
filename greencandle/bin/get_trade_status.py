@@ -23,16 +23,17 @@ def main():
 
     dbase = Mysql()
 
-    query = ('select pair, name, open_time, concat(round(perc,2), " (", round(net_perc,2), ")") '
-             'as perc, usd_quantity, direction from open_trades order by perc +0 DESC')
+    query = ('select pair, name, direction open_time, concat(round(perc,2), " (", '
+             'round(net_perc,2), ")") as perc, usd_quantity, direction from open_trades '
+             'order by perc +0 DESC')
 
     open_trades = dbase.fetch_sql_data(query, header=True)
     output = ""
 
     for trade in open_trades:
-        output += "" if "name" in trade[1]  else (":short: " if "short" in trade[-1] else ":long: ")
+        output += "" if "name" in trade[1]  else (":short: " if "short" in trade[2] else ":long: ")
         output += '   '.join([get_tv_link(item) if str(item).endswith(QUOTES) else \
-                str(item).replace("-api-any", "") for item in trade]) + '\n'
+                str(item).replace("-api-any", "") for item in trade[:-1]]) + '\n'
 
     if len(open_trades) > 1:
         send_slack_message('balance', output, name=sys.argv[0].split('/')[-1])
