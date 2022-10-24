@@ -61,7 +61,7 @@ class Trade():
         """
         Send trade event to redis
         """
-        valid_keys = ["pair", "current_time", "price", "interval", "event"]
+        valid_keys = ["pair", "open_time", "current_time", "price", "interval", "event"]
         kwargs = AttributeDict(kwargs)
         for key in valid_keys:
             if key not in valid_keys:
@@ -406,7 +406,7 @@ class Trade():
                                    symbol_name=quote, commission=str(commission_usd),
                                    order_id=order_id)
 
-                self.__send_notifications(pair=pair, current_time=current_time,
+                self.__send_notifications(pair=pair, open_time=current_time,
                                           fill_price=fill_price, interval=self.interval,
                                           event=event, action='OPEN', usd_profit='N/A',
                                           quote=quote_to_use)
@@ -505,7 +505,7 @@ class Trade():
                                                symbol_name=quote, commission=str(commission_usd),
                                                order_id=order_id)
                 if db_result:
-                    self.__send_notifications(pair=pair, current_time=current_time,
+                    self.__send_notifications(pair=pair, open_time=current_time,
                                               fill_price=fill_price, interval=self.interval,
                                               event=event, action='OPEN', usd_profit='N/A',
                                               quote=quote_amount)
@@ -517,14 +517,16 @@ class Trade():
         """
         Pass given data to trade notification functions
         """
-        valid_keys = ["pair", "current_time", "fill_price", "event", "action", "usd_profit",
-                      "quote"]
+        valid_keys = ["pair", "fill_price", "event", "action", "usd_profit",
+                      "quote", "open_time", "close_time"]
+
         kwargs = AttributeDict(kwargs)
         for key in valid_keys:
             if key not in valid_keys:
                 raise KeyError("Missing param %s" % key)
 
-        self.__send_redis_trade(pair=kwargs.pair, current_time=kwargs.current_time,
+        current_time = kwargs.close_time if kwargs.event == 'CLOSE' else kwargs.open_time
+        self.__send_redis_trade(pair=kwargs.pair, current_time=current_time,
                                 price=kwargs.fill_price, interval=self.interval,
                                 event=kwargs.action, usd_profit=kwargs.usd_profit)
 
@@ -534,7 +536,8 @@ class Trade():
                 base2quote(kwargs.quote, get_quote(kwargs.pair)+'USDT')
         send_slack_trade(channel='trades', event=kwargs.event, perc=perc,
                          pair=kwargs.pair, action=kwargs.action, price=kwargs.fill_price,
-                         usd_profit=kwargs.usd_profit, quote=kwargs.quote, usd_quote=usd_quote)
+                         usd_profit=kwargs.usd_profit, quote=kwargs.quote, usd_quote=usd_quote,
+                         open_time=kwargs.open_time, close_time=kwargs.close_time)
 
     def __get_fill_price(self, current_price, trade_result):
         """
@@ -649,15 +652,16 @@ class Trade():
                                     symbol_name=quote, commission=commission_usd,
                                     order_id=order_id)
 
-                profit = dbase.fetch_sql_data("select p.usd_profit from trades t, profit p where "
-                                              "p.id=t.id and t.pair='{}' and t.closed_by='{}' "
-                                              "order by t.id desc limit 1".format(pair, name),
-                                              header=False)[0][0]
+                open_time, profit = dbase.fetch_sql_data("select p.open_time, p.usd_profit from "
+                                                         "trades t, profit p where p.id=t.id and "
+                                                         "t.pair='{}' and t.closed_by='{}' order "
+                                                         "by t.id desc limit 1"
+                                                         .format(pair, name), header=False)[0][0]
 
-                self.__send_notifications(pair=pair, current_time=current_time, perc=perc_inc,
+                self.__send_notifications(pair=pair, close_time=current_time, perc=perc_inc,
                                           fill_price=current_price, interval=self.interval,
                                           event=event, action='CLOSE', usd_profit=profit,
-                                          quote=quote_out)
+                                          quote=quote_out, open_time=open_time)
             else:
                 self.logger.critical("Sell Failed %s:%s" % (name, pair))
                 send_slack_message("alerts", "Sell Failed %s:%s" % (name, pair))
@@ -737,7 +741,7 @@ class Trade():
                                    symbol_name=get_quote(pair), commission=str(commission_usd),
                                    order_id=order_id)
 
-                self.__send_notifications(pair=pair, current_time=current_time,
+                self.__send_notifications(pair=pair, open_time=current_time,
                                           fill_price=current_price, interval=self.interval,
                                           event=event, action='OPEN', usd_profit='N/A',
                                           quote=total_quote_amount)
@@ -803,16 +807,17 @@ class Trade():
                                         symbol_name=get_quote(pair), commission=commission_usd,
                                         order_id=order_id)
 
-                    profit = dbase.fetch_sql_data("select p.usd_profit from trades t, "
-                                                  "profit p where p.id=t.id and t.pair='{}' "
-                                                  "and t.closed_by='{}' order by t.id desc "
-                                                  "limit 1".format(pair, name),
-                                                  header=False)[0][0]
+                    open_time, profit = dbase.fetch_sql_data("select p.open_time, p.usd_profit "
+                                                             "from trades t, profit p where "
+                                                             "p.id=t.id and t.pair='{}' and "
+                                                             "t.closed_by='{}' order by t.id desc "
+                                                             "limit 1".format(pair, name),
+                                                             header=False)[0][0]
 
-                    self.__send_notifications(pair=pair, current_time=current_time, perc=perc_inc,
+                    self.__send_notifications(pair=pair, close_time=current_time, perc=perc_inc,
                                               fill_price=fill_price, interval=self.interval,
                                               event=event, action='CLOSE', usd_profit=profit,
-                                              quote=quote_out)
+                                              quote=quote_out, open_time=open_time)
             else:
                 self.logger.critical("Sell Failed %s:%s" % (name, pair))
                 send_slack_message("alerts", "Sell Failed %s:%s" % (name, pair))
@@ -897,16 +902,17 @@ class Trade():
                                     drawup=drawups[pair], symbol_name=quote,
                                     commission=commission_usd, order_id=order_id)
 
-                profit = dbase.fetch_sql_data("select p.usd_profit from trades t, "
-                                              "profit p where p.id=t.id and t.pair='{}' "
-                                              "and t.closed_by='{}' order by t.id desc "
-                                              "limit 1".format(pair, name),
-                                              header=False)[0][0]
+                open_time, profit = dbase.fetch_sql_data("select p.open_time, p.usd_profit "
+                                                         "from trades t, profit p where "
+                                                         "p.id=t.id and t.pair='{}' and "
+                                                         "t.closed_by='{}' order by t.id desc "
+                                                         "limit 1".format(pair, name),
+                                                         header=False)[0][0]
 
-                self.__send_notifications(pair=pair, current_time=current_time, perc=perc_inc,
+                self.__send_notifications(pair=pair, close_time=current_time, perc=perc_inc,
                                           fill_price=fill_price, interval=self.interval,
                                           event=event, action='CLOSE', usd_profit=profit,
-                                          quote=quote_out)
+                                          quote=quote_out, open_time=open_time)
             else:
                 self.logger.critical("Sell Failed %s:%s" % (name, pair))
                 send_slack_message("alerts", "Sell Failed %s:%s" % (name, pair))
