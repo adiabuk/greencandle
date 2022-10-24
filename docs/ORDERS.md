@@ -9,6 +9,7 @@ list of tuples containing the following:
 * current_time: *YYYY-MM-DD h:m:s eg 2021-01-24 01:14:59*
 * current_price: *current price of trading pair*
 * event: *type of buy/sell from redis.Redis.get_action/get_intermittent eg StopLoss*
+* action: str  1 for long, -1 for short
 
 # Type of order
 
