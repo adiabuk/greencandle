@@ -92,11 +92,6 @@ class Trade():
         current_trades = dbase.get_trades()
         avail_slots = int(self.config.main.max_trades) - len(current_trades)
         self.logger.info("%s buy slots available" % avail_slots)
-        if avail_slots <= 0:
-            pairs_str = ', '.join((x[0] for x in items_list))
-            self.logger.warning("Too many trades, skipping:%s" % pairs_str)
-            send_slack_message("alerts", "Too many trades, skipping {}".format(pairs_str))
-            return []
 
         final_list = []
         manual = "any" in self.config.main.name
@@ -112,6 +107,10 @@ class Trade():
             elif (float(item[4]) > 0 and self.config.main.trade_direction == "short") or \
                     (float(item[4]) < 0 and self.config.main.trade_direction == "long"):
                 self.logger.info("Wrong trade direction")
+            elif avail_slots <= 0:
+                pairs_str = ', '.join((x[0] for x in items_list))
+                self.logger.warning("Too many trades, skipping:%s" % pairs_str)
+                send_slack_message("alerts", "Too many trades, skipping {}".format(pairs_str))
             else:
                 final_list.append(item)
         return final_list
