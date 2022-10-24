@@ -330,7 +330,7 @@ class Trade():
 
         dbase = Mysql(test=self.test_data, interval=self.interval)
 
-        for pair, current_time, current_price, event in long_list:
+        for pair, current_time, current_price, event, _ in long_list:
             amount_to_borrow = self.get_amount_to_borrow(pair, dbase)
             current_quote_bal = self.get_balance_to_use(dbase, account='margin', pair=pair)
             quote = get_quote(pair)
@@ -446,7 +446,7 @@ class Trade():
 
         dbase = Mysql(test=self.test_data, interval=self.interval)
 
-        for pair, current_time, current_price, event in buy_list:
+        for pair, current_time, current_price, event, _ in buy_list:
             quote_amount = self.get_balance_to_use(dbase, 'binance', pair=pair)
             quote = get_quote(pair)
 
@@ -576,7 +576,7 @@ class Trade():
         self.logger.info("We need to close margin short %s" % short_list)
         dbase = Mysql(test=self.test_data, interval=self.interval)
         name = self.config.main.name
-        for pair, current_time, current_price, event in short_list:
+        for pair, current_time, current_price, event, _ in short_list:
             base = get_base(pair)
             quote = get_quote(pair)
 
@@ -674,7 +674,7 @@ class Trade():
         self.logger.info("We have %s potential items to short" % len(short_list))
         dbase = Mysql(test=self.test_data, interval=self.interval)
 
-        for pair, current_time, current_price, event in short_list:
+        for pair, current_time, current_price, event, _ in short_list:
             base = get_base(pair)
             current_base_bal = self.get_balance_to_use(dbase, account='margin', pair=pair)
 
@@ -754,7 +754,7 @@ class Trade():
         self.logger.info("We need to close spot long %s" % sell_list)
         dbase = Mysql(test=self.test_data, interval=self.interval)
         name = self.config.main.name
-        for pair, current_time, current_price, event in sell_list:
+        for pair, current_time, current_price, event, _ in sell_list:
             quantity = dbase.get_quantity(pair)
 
             if not quantity:
@@ -830,7 +830,7 @@ class Trade():
         self.logger.info("We need to close margin long %s" % sell_list)
         dbase = Mysql(test=self.test_data, interval=self.interval)
         name = self.config.main.name
-        for pair, current_time, current_price, event in sell_list:
+        for pair, current_time, current_price, event, _ in sell_list:
             quantity = dbase.get_quantity(pair)
             if not quantity:
                 self.logger.info("close_margin_long: unable to find quantity for %s" % pair)
