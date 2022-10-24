@@ -101,9 +101,9 @@ def perform_data(pair, interval, data_dir, indicators):
         current_candle = dataframes[pair].iloc[-1]
         redis.update_drawdown(pair, current_candle)
         redis.update_drawup(pair, current_candle)
-
+        action = 1 if config.main.trade_direction == 'long' else -1
         if result == "OPEN":
-            buys.append((pair, current_time, current_price, event))
+            buys.append((pair, current_time, current_price, event, action))
             LOGGER.debug("Items to buy: %s" % buys)
             trade_result = trade.open_trade(buys)
             if trade_result:
@@ -113,7 +113,7 @@ def perform_data(pair, interval, data_dir, indicators):
                 LOGGER.info("Unable to open trade")
 
         elif result == "CLOSE":
-            sells.append((pair, current_time, current_price, event))
+            sells.append((pair, current_time, current_price, event, 0))
             LOGGER.debug("Items to sell: %s" % sells)
             drawdown = redis.get_drawdown(pair)
             drawup = redis.get_drawup(pair)['perc']
@@ -204,16 +204,17 @@ def parallel_test(pairs, interval, data_dir, indicators):
             LOGGER.info('In Strategy %s' % result)
             del engine
 
+            action = 1 if config.main.trade_direction == 'long' else -1
             if result == "OPEN":
                 LOGGER.debug("Items to buy")
                 redis.update_drawdown(pair, current_candle, event='open')
                 redis.update_drawup(pair, current_candle, event='open')
-                buys.append((pair, current_time, current_price, event))
+                buys.append((pair, current_time, current_price, event, action))
             if result == "CLOSE":
                 LOGGER.debug("Items to sell")
                 drawdowns[pair] = redis.get_drawdown(pair)
                 drawups[pair] = redis.get_drawup(pair)['perc']
-                sells.append((pair, current_time, current_price, event))
+                sells.append((pair, current_time, current_price, event, 0))
                 redis.rm_drawup(pair)
                 redis.rm_drawdown(pair)
 
@@ -250,7 +251,7 @@ def prod_int_check(interval, test, alert=False):
                      % (pair, result, open_price, current_price, current_time))
         if result == "CLOSE":
             LOGGER.debug("Items to sell")
-            sells.append((pair, current_time, current_price, event))
+            sells.append((pair, current_time, current_price, event, 0))
             drawdowns[pair] = redis.get_drawdown(pair)
             drawups[pair] = redis.get_drawup(pair)['perc']
             if alert:
@@ -337,11 +338,12 @@ def prod_loop(interval, test=False, data=True):
             redis.update_drawdown(pair, current_candle)
             redis.update_drawup(pair, current_candle)
 
+        action = 1 if config.main.trade_direction == 'long' else -1
         if result == "OPEN":
             LOGGER.debug("Items to buy")
             redis.update_drawdown(pair, current_candle, event='open')
             redis.update_drawup(pair, current_candle, event='open')
-            buys.append((pair, current_time, current_price, event))
+            buys.append((pair, current_time, current_price, event, action))
 
         if result == "CLOSE":
             LOGGER.debug("Items to sell")

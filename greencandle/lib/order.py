@@ -109,7 +109,9 @@ class Trade():
                 self.logger.warning("strategy is in drain for pair %s, skipping..." % item[0])
                 send_slack_message("alerts", "strategy is in drain, skipping")
                 return []
-
+            elif (float(item[4]) > 0 and self.config.main.trade_direction == "short") or \
+                    (float(item[4]) < 0 and self.config.main.trade_direction == "long"):
+                self.logger.info("Wrong trade direction")
             else:
                 final_list.append(item)
         return final_list
@@ -161,8 +163,10 @@ class Trade():
                 # Number of trades within scope
                 dbase = Mysql(test=self.test_data, interval=self.interval)
                 count = dbase.fetch_sql_data("select count(*) from trades where close_price "
-                                             "is NULL and pair like '%{0}' and name='{1}'"
-                                             .format(item[0], self.config.main.name),
+                                             "is NULL and pair like '%{0}' and name='{1}' "
+                                             "and direction='{2}'"
+                                             .format(item[0], self.config.main.name,
+                                                     self.config.main.trade_direction),
                                              header=False)[0][0]
 
                 while count -1 > 0:

@@ -4,8 +4,8 @@
 Push/Pull crypto signals and data to mysql
 """
 import datetime
-import MySQLdb
 from binance.binance import Binance
+import MySQLdb
 from greencandle.lib import config
 from greencandle.lib.binance_common import get_current_price
 from greencandle.lib.common import AttributeDict, format_usd
@@ -211,8 +211,10 @@ class Mysql():
         """
 
         command = ('select open_price, quote_in, open_time, base_in, borrowed, borrowed_usd '
-                   'from trades where close_price is NULL and `interval` = "{0}" and '
-                   'pair = "{1}" and name ="{2}"'.format(self.interval, pair, config.main.name))
+                   'from trades where close_price is NULL and '
+                   '`interval` = "{0}" and pair = "{1}" and name ="{2}" '
+                   'and direction="{3}"'.format(self.interval, pair, config.main.name,
+                                                config.main.trade_direction))
         cur = self.dbase.cursor()
         self.__execute(cur, command)
 
@@ -257,11 +259,10 @@ class Mysql():
         """
         if self.test:
             return (1, 1)
-        else:
-            client = Binance(debug=str2bool(config.accounts.account_debug))
-            usd_rate = client.prices()[quote + 'USDT'] if quote != 'USDT' else 1
-            gbp_rate = float(usd_rate)/float(client.prices()['GBPUSDT'])
-            return (usd_rate, gbp_rate)
+        client = Binance(debug=str2bool(config.accounts.account_debug))
+        usd_rate = client.prices()[quote + 'USDT'] if quote != 'USDT' else 1
+        gbp_rate = float(usd_rate)/float(client.prices()['GBPUSDT'])
+        return (usd_rate, gbp_rate)
 
     @get_exceptions
     def update_trades(self, pair, close_time, close_price, quote, base_out,

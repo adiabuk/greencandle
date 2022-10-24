@@ -32,13 +32,13 @@ def respond():
     """
     print("action:", request.json)
     pair = request.json['pair'].upper()
-    action = request.json['action'].upper()
+    action_str = request.json['action'].upper()
     text = request.json['text']
     if not pair:
         send_slack_message("alerts", "Missing pair for api trade")
         return Response(status=200)
 
-    LOGGER.info("Request received: %s %s %s" %(pair, action, text))
+    LOGGER.info("Request received: %s %s %s" %(pair, action_str, text))
     current_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     try:
         current_price = get_current_price(pair)
@@ -48,20 +48,20 @@ def respond():
         return Response(status=200)
 
     title = config.main.name + "-manual" if "manual" in request.json else config.main.name
-    item = [(pair, current_time, current_price, title)]
+    item = [(pair, current_time, current_price, title, action)]
     trade = Trade(interval=config.main.interval, test_data=False, test_trade=TEST, config=config)
 
     try:
         if (config.main.trade_direction == 'long' and float(action) > 0) or \
            (config.main.trade_direction == 'short' and float(action) < 0):
-            action = 'OPEN'
+            action_str = 'OPEN'
         else:
-            action = 'CLOSE'
+            action_str = 'CLOSE'
     except ValueError:
         pass
 
     redis = Redis()
-    if action == 'OPEN':
+    if action_str == 'OPEN':
 
         if 'get_trend' in os.environ:
             url = "http://trend:6001/get_trend?pair={}".format(pair)
@@ -73,7 +73,8 @@ def respond():
 
             trend = req.text.strip()
             if trend != config.main.trade_direction and "manual" not in request.json:
-                trade_link = get_trade_link(pair, request.json['strategy'], request.json['action'],
+                trade_link = get_trade_link(pair, request.json['strategy'],
+                                            request.json['action_str'],
                                             "Force trade")
                 message = ("Skipping {0} trade due to wrong trade direction ({1})"
                            .format(get_tv_link(pair), trade_link))
@@ -97,7 +98,7 @@ def respond():
             redis.update_drawdown(pair, current_candle, event="open")
             redis.update_drawup(pair, current_candle, event="open")
 
-    elif action == 'CLOSE':
+    elif action_str == 'CLOSE':
         drawdown = redis.get_drawdown(pair)
         drawup = redis.get_drawup(pair)['perc']
         result = trade.close_trade(item, drawdowns={pair:drawdown}, drawups={pair:drawup})
