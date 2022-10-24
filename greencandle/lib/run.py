@@ -128,7 +128,7 @@ def perform_data(pair, interval, data_dir, indicators):
     LOGGER.info("Selling remaining item")
     sells = []
     if current_trade:
-        sells.append((pair, current_time, current_price, event))
+        sells.append((pair, current_time, current_price, event, 0))
         current_candle = dataframes[pair].iloc[-1]
 
         redis.update_drawdown(pair, current_candle)
