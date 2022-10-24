@@ -279,7 +279,6 @@ class Mysql():
                 """.format(self.interval, pair, job_name, config.main.trade_direction)
         try:
             trade_id = self.fetch_sql_data(query, header=False)[0][0]
-            self.logger.critical("AMROX " + str(trade_id))
         except IndexError:
             self.logger.critical("No open trade matching criteria to close: %s" % query)
             raise

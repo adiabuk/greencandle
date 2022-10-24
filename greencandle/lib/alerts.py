@@ -109,7 +109,6 @@ def send_slack_trade(**kwargs):
 
     if not str2bool(config.slack.slack_active):
         return
-    title = config.main.name
     if kwargs.action == 'OPEN':
         color = '#00fc22'
         strat = re.findall(r"-([\s\S]*)$", config.main.name)[0].replace('api-', '')
@@ -137,7 +136,7 @@ def send_slack_trade(**kwargs):
              "fields":[
                  {"value": ("• Pair: {0}\n"
                             "• Price: {1}\n"
-                            "• title: {2}\n"
+                            "• direction: {2}\n"
                             "• Percentage: {3}\n"
                             "• usd_profit: {4}\n"
                             "{5}"
@@ -147,7 +146,7 @@ def send_slack_trade(**kwargs):
                             "• Net usd_profit: {9}\n"
                             "\n".format(get_tv_link(kwargs.pair),
                                         kwargs.price,
-                                        title,
+                                        config.main.trade_direction,
                                         kwargs.perc,
                                         kwargs.usd_profit,
                                         close_string,
