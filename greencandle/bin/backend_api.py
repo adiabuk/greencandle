@@ -33,6 +33,7 @@ def respond():
     print("action:", request.json)
     pair = request.json['pair'].upper()
     action_str = request.json['action'].upper()
+    action = request.json['action']
     text = request.json['text']
     if not pair:
         send_slack_message("alerts", "Missing pair for api trade")
