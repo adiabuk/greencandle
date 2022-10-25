@@ -301,11 +301,11 @@ class Mysql():
         Get today's profit perc so far
         Returns float
         """
-        command = ('select avg_perc, avg_net_perc, total_perc, total_net_perc '
+        command = ('select avg_perc, avg_net_perc, total_perc, total_net_perc, count '
                    'from profit_daily where date(date) = date(NOW())')
 
         row = self.fetch_sql_data(command, header=False)
-        return row[0] if row else [None] * 4
+        return row[0] if row else [None] * 5
 
     def get_active_trades(self):
         """
@@ -350,14 +350,16 @@ class Mysql():
                    'COALESCE(avg_perc,0) avg_perc, '
                    'COALESCE(avg_net_perc,0) avg_net_perc, '
                    'COALESCE(usd_profit,0) usd_profit, '
-                   'COALESCE(usd_net_profit,0) usd_net_profit '
+                   'COALESCE(usd_net_profit,0) usd_net_profit, '
+                   'COALESCE(num_trades,0) num_trades,'
                    'from profit_hourly where '
                    'date="{0}" and hour="{1}"'.format(date, hour))
         print(command)
         result = self.fetch_sql_data(command, header=False)
-        output = [float(item) for item in result[0]] if result else [None] * 6
+        output = [float(item) for item in result[0]] if result else [None] * 7
         output.append(hour)
-        # returns total_perc, total_net_perc, avg_perc, avg_net_perc, usd_profit, usd_net_profit
+        # returns total_perc, total_net_perc, avg_perc, avg_net_perc, usd_profit, usd_net_profit,
+        # count
         # + hour in list
         return output
 
