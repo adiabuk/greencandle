@@ -88,7 +88,7 @@ class TestMysql(OrderedTest):
         self.assertIsInstance(rates[0], int)
         #self.assertIsInstance(float(rates[1]), float)
         today = self.dbase.get_todays_profit()
-        self.assertIs(len(today), 4)
+        self.assertIs(len(today), 5)
         self.assertIs(today[0], None)
         self.assertIs(today[1], None)
         self.dbase.get_active_trades()   # No exception
@@ -101,7 +101,8 @@ class TestMysql(OrderedTest):
         self.dbase.update_trades('XXXUSDT', date2, 0.2, 0.2, 0.2, config.main.name, 0, 0, 'BNB', 0)
 
         last_hour_profit = self.dbase.get_last_hour_profit(hour='22', date='2018-05-07')
-        self.assertIs(len(last_hour_profit), 7)
+        print(last_hour_profit)
+        self.assertIs(len(last_hour_profit), 8)
 
         self.assertIsInstance(last_hour_profit[0], float)
         self.assertIsInstance(last_hour_profit[1], float)

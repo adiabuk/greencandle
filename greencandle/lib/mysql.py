@@ -351,12 +351,12 @@ class Mysql():
                    'COALESCE(avg_net_perc,0) avg_net_perc, '
                    'COALESCE(usd_profit,0) usd_profit, '
                    'COALESCE(usd_net_profit,0) usd_net_profit, '
-                   'COALESCE(num_trades,0) num_trades,'
+                   'COALESCE(num_trades,0) num_trades '
                    'from profit_hourly where '
                    'date="{0}" and hour="{1}"'.format(date, hour))
         print(command)
         result = self.fetch_sql_data(command, header=False)
-        output = [float(item) for item in result[0]] if result else [None] * 7
+        output = [float(item) for item in result[0]] if result else [None] * 8
         output.append(hour)
         # returns total_perc, total_net_perc, avg_perc, avg_net_perc, usd_profit, usd_net_profit,
         # count
