@@ -122,8 +122,8 @@ def send_slack_trade(**kwargs):
         color = '#fc0303' # red
         close_string = ""
         quote_string = "• Quote out: %.4f\n" % float(kwargs.quote)
-        opent = datetime.strptime(kwargs.open_time, "%Y-%m-%d %H:%M:%S")
-        closet = datetime.strptime(kwargs.close_time, "%Y-%m-%d %H:%M:%S")
+        opent = datetime.strptime(str(kwargs.open_time), "%Y-%m-%d %H:%M:%S")
+        closet = datetime.strptime(str(kwargs.close_time), "%Y-%m-%d %H:%M:%S")
         delta = str(closet-opent)
         time_string = "• Open_time: %s\n• Close_time: %s\n• Trade time: %s\n" % (kwargs.open_time,
                                                                                  kwargs.close_time,
