@@ -1,5 +1,31 @@
-
 # Releases
+
+# 4.8
+* Data migration between stag and test envs
+* Fixes for assocs tests not running on all envs
+* Log date and pair when missing data in redis
+* Allow backend to run withing fetching data
+* Adding supertrend to data env
+* Use epoch from redis candle data
+* Debug cleanups
+* Improve logging for missing data
+* Show pairs that were skipped when attempting trade
+* Use epoch of previous candle, not current time
+* Fix port conflicts when running multiple envs on single host
+* Allow backend to run without fetching data (use redis)
+* Update jenkins slave docker image
+* Run intermittent checks more frequently
+* Install ipython to manual containers on startup
+* Allow data containers to forward trade requests to other envs
+* Close trade after time-out if over perc profit threshold and check intermittently
+* Don't download GBP/USD rates when using test data
+* Allow using common name for short/long containers to combine max_trades
+* More logging when starting/finishing intermittent checks
+* Tweak data and corresponding test strategy
+* Add direction when fetching open_trade information
+* Add open/close times to trade notifications
+* Hack for 15-line slack limitation when showing open trades
+* Add number of trades to hourly profit notifications
 
 # 4.7
 * Fixes to data dashboard
