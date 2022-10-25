@@ -18,8 +18,8 @@ def main():
     """
     mysql = Mysql()
 
-    total_perc, total_net_perc, avg_perc, avg_net_perc, usd_profit, usd_net_profit, hour, \
-            num_hour = mysql.get_last_hour_profit()
+    total_perc, total_net_perc, avg_perc, avg_net_perc, usd_profit, usd_net_profit, num_hour, \
+            hour = mysql.get_last_hour_profit()
 
     todays_avg, todays_net_avg, todays_total, todays_net_total, num_day = mysql.get_todays_profit()
 
