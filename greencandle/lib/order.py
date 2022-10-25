@@ -526,7 +526,7 @@ class Trade():
             if key not in valid_keys:
                 raise KeyError("Missing param %s" % key)
 
-        current_time = kwargs.close_time if kwargs.event == 'CLOSE' else kwargs.open_time
+        current_time = kwargs.close_time if kwargs.action == 'CLOSE' else kwargs.open_time
         self.__send_redis_trade(pair=kwargs.pair, current_time=current_time,
                                 price=kwargs.fill_price, interval=self.interval,
                                 event=kwargs.action, usd_profit=kwargs.usd_profit)
