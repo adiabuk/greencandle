@@ -342,7 +342,7 @@ class Trade():
             quote_to_use = current_quote_bal + amount_to_borrow
             base_to_use = quote2base(quote_to_use, pair)
 
-            self.logger.info("Buying %s of %s with %s %s at %s"
+            self.logger.info("Opening margin long %s of %s with %s %s at %s"
                              % (base_to_use, pair, current_quote_bal+amount_to_borrow,
                                 quote, current_price))
             if self.prod:
@@ -458,7 +458,7 @@ class Trade():
 
             amount = quote2base(quote_amount, pair)
 
-            self.logger.info("Buying %s of %s with %s %s"
+            self.logger.info("Opening spot long %s of %s with %s %s"
                              % (amount, pair, quote_amount, quote))
             self.logger.debug("amount to buy: %s, current_price: %s, amount:%s"
                               % (quote_amount, current_price, amount))
@@ -597,7 +597,7 @@ class Trade():
             perc_inc = - (perc_diff(open_price, current_price))
             quote_out = sub_perc(perc_inc, quote_in)
 
-            self.logger.info("Closing %s of %s for %.15f %s"
+            self.logger.info("Closing margin short %s of %s for %.15f %s"
                              % (quantity, pair, float(current_price), quantity))
             if self.prod and not self.test_data:
                 amt_str = get_step_precision(pair, quantity)
@@ -690,7 +690,8 @@ class Trade():
             total_base_amount = get_step_precision(pair, sub_perc(1, amount_to_borrow +
                                                                   current_base_bal))
             total_quote_amount = base2quote(total_base_amount, pair)
-
+            self.logger.info("Opening margin short %s of %s with %s at %s"
+                             % (total_base_amount, pair, total_quote_amount, current_price))
             if self.prod:
                 self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
                                  % (amount_to_borrow, base, total_base_amount))
@@ -773,7 +774,7 @@ class Trade():
             perc_inc = perc_diff(open_price, current_price)
             quote_out = add_perc(perc_inc, quote_in)
 
-            self.logger.info("Selling %s of %s for %.15f %s"
+            self.logger.info("Closing spot long %s of %s for %.15f %s"
                              % (quantity, pair, float(current_price), quote_out))
             if self.prod and not self.test_data:
 
@@ -849,7 +850,7 @@ class Trade():
             perc_inc = perc_diff(open_price, current_price)
             quote_out = add_perc(perc_inc, quote_in)
 
-            self.logger.info("Selling %s of %s for %.15f %s"
+            self.logger.info("Closing margin short %s of %s for %.15f %s"
                              % (quantity, pair, float(current_price), quote_out))
             quote = get_quote(pair)
 
