@@ -1,4 +1,5 @@
 {
+  "immediate_stop": "true",
   "name": "test-api-any-cross",
   "trade_direction": "short"
 }
