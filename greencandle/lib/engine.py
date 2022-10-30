@@ -232,7 +232,14 @@ class Engine(dict):
         scheme["close_time"] = str(self.dataframes[pair].iloc[location]["closeTime"])
         self.schemes.append(scheme)
 
-    def get_bb_perc(self, pair, dataframe, index=None, localconfig=None):
+    def get_bb_perc_ema(self, pair, dataframe, index=None, localconfig=None):
+        """
+        Get EMA of bbperc
+        """
+        self.get_bb_perc(pair, dataframe, index, localconfig, ema=True)
+
+
+    def get_bb_perc(self, pair, dataframe, index=None, localconfig=None, ema=False):
         """get bb %"""
         if (index == None and self.test) or len(self.dataframes[pair]) < 2:
             index = -1
@@ -252,12 +259,23 @@ class Engine(dict):
         try:
             current_price = str(Decimal(self.dataframes[pair].iloc[index]["close"]))
             upper, middle, lower = \
-                    talib.BBANDS(close*100000, timeperiod=int(timeframe),
-                                 nbdevup=float(multiplier), nbdevdn=float(multiplier), matype=1)
+                     talib.BBANDS(close*100000, timeperiod=int(timeframe),
+                                  nbdevup=float(multiplier), nbdevdn=float(multiplier), matype=1)
 
             #%B = (Current Price - Lower Band) / (Upper Band - Lower Band)
             perc = ((float(current_price) - float(lower[-1])/100000) /
                     (float(upper[-1])/100000 - float(lower[-1])/100000))
+            if ema:
+                print("AMROX", upper)
+                # last last 21 perc
+                percs = []
+                for i in range(-21, 0):
+                    current_perc = ((float(current_price) - float(lower[i])/100000) /
+                                    (float(upper[i])/100000 - float(lower[i])/100000))
+                    percs.append(float(current_perc))
+                perc_arr = numpy.array(percs)
+                ema_result = talib.EMA(perc_arr, timeperiod=21)[-1]
+
 
         except Exception as exc:
             perc = None
@@ -266,7 +284,7 @@ class Engine(dict):
         scheme = {}
         try:
 
-            scheme["data"] = perc
+            scheme["data"] = ema_result if ema else perc
             scheme["symbol"] = pair
             scheme["event"] = "{0}_{1}".format(func, timeframe)
             scheme["close_time"] = close_time
