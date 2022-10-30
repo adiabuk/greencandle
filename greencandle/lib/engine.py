@@ -266,16 +266,17 @@ class Engine(dict):
             perc = ((float(current_price) - float(lower[-1])/100000) /
                     (float(upper[-1])/100000 - float(lower[-1])/100000))
             if ema:
-                print("AMROX", upper)
-                # last last 21 perc
                 percs = []
                 for i in range(-21, 0):
+
+                    # loop over last 21 bb items and get corresponding bbperc
                     current_perc = ((float(current_price) - float(lower[i])/100000) /
                                     (float(upper[i])/100000 - float(lower[i])/100000))
                     percs.append(float(current_perc))
+                # convert real list to ndarray
                 perc_arr = numpy.array(percs)
+                # get EMA using 21 timepeiod
                 ema_result = talib.EMA(perc_arr, timeperiod=21)[-1]
-
 
         except Exception as exc:
             perc = None
