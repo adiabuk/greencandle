@@ -155,18 +155,18 @@ def send_slack_trade(**kwargs):
                             "• Net perc: {}\n"
                             "• Net usd_profit: {}\n"
                             "{}" .format(get_tv_link(kwargs.pair),
-                                           kwargs.price,
-                                           config.main.name,
-                                           config.main.trade_direction,
-                                           kwargs.perc,
-                                           kwargs.usd_profit,
-                                           close_string,
-                                           quote_string,
-                                           kwargs.usd_quote,
-                                           kwargs.net_perc,
-                                           kwargs.net_profit,
-                                           time_string
-                                           )),
+                                         kwargs.price,
+                                         config.main.name,
+                                         config.main.trade_direction,
+                                         kwargs.perc,
+                                         kwargs.usd_profit,
+                                         close_string,
+                                         quote_string,
+                                         kwargs.usd_quote,
+                                         kwargs.net_perc,
+                                         kwargs.net_profit,
+                                         time_string
+                                         )),
                   "short":"false"
                  }]}]}
 
