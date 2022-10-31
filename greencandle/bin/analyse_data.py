@@ -45,6 +45,7 @@ def analyse_loop():
     interval = config.main.interval
     redis = Redis()
     for pair in PAIRS:
+        pair = pair.strip()
         supported = ""
         if config.main.trade_direction != "short":
             supported += "spot "

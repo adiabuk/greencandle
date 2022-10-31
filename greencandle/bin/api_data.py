@@ -43,6 +43,7 @@ def analyse_loop():
 
     redis = Redis()
     for pair in PAIRS:
+        pair = pair.strip()
         LOGGER.debug("Analysing pair: %s" % pair)
         try:
             result = redis.get_action(pair=pair, interval=config.main.interval)

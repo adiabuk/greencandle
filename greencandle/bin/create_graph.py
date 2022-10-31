@@ -28,6 +28,7 @@ def main():
     if args.all_pairs:
         pairs = config.main.pairs.split()
         for pair in pairs:
+            pair = pair.strip()
             graph = Graph(test=args.test, pair=pair, interval=args.interval, volume=volume)
             graph.get_data()
             graph.create_graph(args.output_dir)

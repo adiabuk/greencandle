@@ -98,6 +98,7 @@ def get_isolated_margin_details(bal=None, client=None):
     count = 0
 
     for pair in bal['isolated'].keys():
+        pair = pair.strip()
         iso_debt_usd = 0
         if pair != 'TOTALS':
             quote = get_quote(pair)

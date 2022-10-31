@@ -37,6 +37,7 @@ def serial_test(pairs, intervals, data_dir, indicators):
     LOGGER.debug("Performaing serial run")
 
     for pair in pairs:
+        pair = pair.strip()
         for interval in intervals:
             dbase = Mysql(test=True, interval=interval)
             dbase.delete_data()
@@ -52,6 +53,7 @@ def serial_test(pairs, intervals, data_dir, indicators):
 @GET_EXCEPTIONS
 def perform_data(pair, interval, data_dir, indicators):
     """Serial test loop"""
+    pair = pair.strip()
     LOGGER.debug("Serial run %s %s" % (pair, interval))
     redis = Redis(interval=interval, test_data=True)
     try:
@@ -159,6 +161,7 @@ def parallel_test(pairs, interval, data_dir, indicators):
     dframes = {}
     sizes = []
     for pair in pairs:
+        pair = pair.strip()
         try:
             filename = glob("/{0}/{1}_{2}.p*".format(data_dir, pair, interval))[0]
         except IndexError:
@@ -235,7 +238,7 @@ def prod_int_check(interval, test, alert=False):
         sells = []
         drawdowns = {}
         drawups = {}
-        pair = trade[0]
+        pair = trade[0].strip()
         open_price, _, open_time, _, _, _ = dbase.get_trade_value(pair)[0]
         dataframes = get_dataframes([pair], interval=interval, no_of_klines=1)
         current_candle = dataframes[pair].iloc[-1]
@@ -330,6 +333,8 @@ def prod_loop(interval, test=False, data=True):
     drawups = {}
 
     for pair in PAIRS:
+
+        pair = pair.strip()
         result, event, current_time, current_price, _ = redis.get_action(pair=pair,
                                                                          interval=interval)
         current_candle = redis.get_last_candle(pair, interval)

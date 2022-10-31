@@ -22,6 +22,7 @@ def main():
     now = datetime.datetime.now()
     bad_pairs = []
     for pair in config.main.pairs.split():
+        pair = pair.strip()
         try:
             dataframe = get_dataframes([pair], '4h', 1)[pair]
         except:

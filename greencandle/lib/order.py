@@ -332,6 +332,7 @@ class Trade():
         dbase = Mysql(test=self.test_data, interval=self.interval)
 
         for pair, current_time, current_price, event, _ in long_list:
+            pair = pair.strip()
             amount_to_borrow = self.get_amount_to_borrow(pair, dbase)
             current_quote_bal = self.get_balance_to_use(dbase, account='margin', pair=pair)
             quote = get_quote(pair)

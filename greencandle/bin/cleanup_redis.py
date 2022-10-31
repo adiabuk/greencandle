@@ -30,6 +30,7 @@ def main():
     count = 0
     for interval, days in data.items():
         for pair in pairs:
+            pair = pair.strip()
             print("Analysing pair {}".format(pair))
             items = redis.get_items(pair, interval)
             max_date = datetime.datetime.today() - datetime.timedelta(days=days)

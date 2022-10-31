@@ -166,6 +166,7 @@ class Engine(dict):
         """
         LOGGER.debug("Getting data")
         for pair in self.pairs:
+            pair = pair.strip()
             actual_klines = len(self.dataframes[pair]) if not no_of_klines else no_of_klines
 
             # get indicators supertrend, and API for each trading pair

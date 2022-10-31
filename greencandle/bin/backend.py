@@ -52,6 +52,7 @@ def main():
     @sched.scheduled_job('interval', minutes=30)
     def get_graph():
         for pair in config.main.pairs.split():
+            pair = pair.strip()
             LOGGER.info("Creating graph for %s" % pair)
             volume = 'vol' in config.main.indicators
             graph = Graph(test=False, pair=pair, interval=config.main.interval,

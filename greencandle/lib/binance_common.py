@@ -124,6 +124,7 @@ def get_data(startdate, intervals, pairs, days, outputdir, extra):
 
     intervals = intervals if intervals else klines_multiplier.keys()
     for pair in pairs:
+        pair = pair.strip()
         for interval in intervals:
             if not os.path.isdir(outputdir):
                 sys.exit("Invalid output directory: {0}".format(outputdir))

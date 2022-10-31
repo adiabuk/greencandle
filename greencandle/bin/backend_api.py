@@ -31,10 +31,10 @@ def respond():
     Default route to trade
     """
     print("action:", request.json)
-    pair = request.json['pair'].upper()
-    action_str = request.json['action'].upper()
-    action = request.json['action']
-    text = request.json['text']
+    pair = request.json['pair'].upper().strip()
+    action_str = request.json['action'].upper().strip()
+    action = request.json['action'].strip()
+    text = request.json['text'].strip()
     if not pair:
         send_slack_message("alerts", "Missing pair for api trade")
         return Response(status=200)

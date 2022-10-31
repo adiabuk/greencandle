@@ -41,8 +41,8 @@ class TestPair(unittest.TestCase):
         client = Binance(debug=str2bool(config.accounts.account_debug))
         info = client.exchange_info()
         for pair in set(pairs):
+            pair = pair.strip()
             if pair not in ("None", "any"):
                 print("Testing pair " + pair)
                 self.assertIn(pair, info)
                 self.assertEqual(info[pair]['status'], 'TRADING')
-                #os.system("git grep -l {0}|xargs sed -i 's/{0} //g'".format(pair))
