@@ -144,18 +144,19 @@ def send_slack_trade(**kwargs):
             {"color":"{}".format(color),
              "icon_emoji": "{}".format(icon),
              "fields":[
-                 {"value": ("• Pair: {0}\n"
-                            "• Price: {1}\n"
-                            "• direction: {2}\n"
-                            "• Percentage: {3}\n"
-                            "• usd_profit: {4}\n"
-                            "{5}"
-                            "{6}"
-                            "• USD quote: {7}\n"
-                            "• Net perc: {8}\n"
-                            "• Net usd_profit: {9}\n"
-                            "{10}" .format(get_tv_link(kwargs.pair),
+                 {"value": ("• Pair: {}\n"
+                            "• Price: {}\n"
+                            "• name/direction: {}/{}\n"
+                            "• Percentage: {}\n"
+                            "• usd_profit: {}\n"
+                            "{}"
+                            "{}"
+                            "• USD quote: {}\n"
+                            "• Net perc: {}\n"
+                            "• Net usd_profit: {}\n"
+                            "{}" .format(get_tv_link(kwargs.pair),
                                            kwargs.price,
+                                           config.main.name,
                                            config.main.trade_direction,
                                            kwargs.perc,
                                            kwargs.usd_profit,
