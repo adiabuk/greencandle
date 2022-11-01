@@ -352,7 +352,7 @@ def prod_loop(interval, test=False, data=True):
 
         if result == "CLOSE":
             LOGGER.debug("Items to sell")
-            sells.append((pair, current_time, current_price, event))
+            sells.append((pair, current_time, current_price, event, 0))
             drawdowns[pair] = redis.get_drawdown(pair)
             drawups[pair] = redis.get_drawup(pair)['perc']
             redis.rm_drawup(pair)
