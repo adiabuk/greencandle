@@ -256,7 +256,11 @@ class Trade():
                 pass
 
         # Use 99% of amount determined by divisor
-        return sub_perc(1, final / float(self.config.main.divisor)) if final else 0
+        return_symbol = sub_perc(1, final / float(self.config.main.divisor)) if final else 0
+        return_usd = return_symbol if 'USD' in symbol else base2quote(return_symbol, symbol+'USDT')
+        return_dict = {"symbol": return_symbol,
+                       "usd": return_usd}
+        return return_dict
 
     def get_amount_to_borrow(self, pair, dbase):
         """
@@ -334,7 +338,8 @@ class Trade():
         for pair, current_time, current_price, event, _ in long_list:
             pair = pair.strip()
             amount_to_borrow = self.get_amount_to_borrow(pair, dbase)
-            current_quote_bal = self.get_balance_to_use(dbase, account='margin', pair=pair)
+            current_quote_bal = self.get_balance_to_use(dbase, account='margin',
+                                                        pair=pair)['symbol']
             quote = get_quote(pair)
 
             borrowed_usd = amount_to_borrow if quote == 'USDT' else \
@@ -449,7 +454,7 @@ class Trade():
         dbase = Mysql(test=self.test_data, interval=self.interval)
 
         for pair, current_time, current_price, event, _ in buy_list:
-            quote_amount = self.get_balance_to_use(dbase, 'binance', pair=pair)
+            quote_amount = self.get_balance_to_use(dbase, 'binance', pair=pair)['symbol']
             quote = get_quote(pair)
 
             if quote_amount <= 0:
@@ -682,7 +687,7 @@ class Trade():
 
         for pair, current_time, current_price, event, _ in short_list:
             base = get_base(pair)
-            current_base_bal = self.get_balance_to_use(dbase, account='margin', pair=pair)
+            current_base_bal = self.get_balance_to_use(dbase, account='margin', pair=pair)['symbol']
 
             amount_to_borrow = self.get_amount_to_borrow(pair, dbase)
             borrowed_usd = amount_to_borrow if base == 'USDT' else \
