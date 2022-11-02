@@ -326,6 +326,21 @@ class Trade():
         else:
             return final
 
+    def get_total_amount_to_use(self, dbase, pair=None, account=None):
+        """
+        Get total amount to use as sum of balance_to_use and loan_to_use
+        """
+
+        balance_to_use = self.get_balance_to_use(dbase, account, pair)
+        loan_to_use = self.get_amount_to_borrow(pair, dbase) if \
+                self.config.main.trade_type != 'spot' else 0
+
+        return_dict = {"balance_amt": balance_to_use['symbol'],
+                       "loan_amt": loan_to_use
+                       }
+
+        return return_dict
+
     def __open_margin_long(self, long_list):
         """
         Get item details and attempt to trade according to config
@@ -337,9 +352,13 @@ class Trade():
 
         for pair, current_time, current_price, event, _ in long_list:
             pair = pair.strip()
-            amount_to_borrow = self.get_amount_to_borrow(pair, dbase)
-            current_quote_bal = self.get_balance_to_use(dbase, account='margin',
-                                                        pair=pair)['symbol']
+            #amount_to_borrow = self.get_amount_to_borrow(pair, dbase)
+            #current_quote_bal = self.get_balance_to_use(dbase, account='margin',
+            #                                            pair=pair)['symbol']
+            total_amt_to_use = self.get_total_amount_to_use(dbase, account='margin', pair=pair)
+            amount_to_borrow = total_amt_to_use['loan_amt']
+            current_quote_bal = total_amt_to_use['balance_amt']
+
             quote = get_quote(pair)
 
             borrowed_usd = amount_to_borrow if quote == 'USDT' else \
@@ -454,7 +473,9 @@ class Trade():
         dbase = Mysql(test=self.test_data, interval=self.interval)
 
         for pair, current_time, current_price, event, _ in buy_list:
-            quote_amount = self.get_balance_to_use(dbase, 'binance', pair=pair)['symbol']
+            #quote_amount = self.get_balance_to_use(dbase, 'binance', pair=pair)['symbol']
+            quote_amount = self.get_total_amount_to_use(dbase, account='binance',
+                                                        pair=pair)['balance_amt']
             quote = get_quote(pair)
 
             if quote_amount <= 0:
@@ -687,9 +708,14 @@ class Trade():
 
         for pair, current_time, current_price, event, _ in short_list:
             base = get_base(pair)
-            current_base_bal = self.get_balance_to_use(dbase, account='margin', pair=pair)['symbol']
+            #current_base_bal = self.get_balance_to_use(dbase, account='margin',
+                                                        #pair=pair)['symbol']
+            #amount_to_borrow = self.get_amount_to_borrow(pair, dbase)
 
-            amount_to_borrow = self.get_amount_to_borrow(pair, dbase)
+            total_amount_to_use = self.get_total_amount_to_use(dbase, account='margin', pair=pair)
+            current_base_bal = total_amount_to_use['balance_amt']
+            amount_to_borrow = total_amount_to_use['loan_amt']
+
             borrowed_usd = amount_to_borrow if base == 'USDT' else \
                     base2quote(amount_to_borrow, base+'USDT')
 
