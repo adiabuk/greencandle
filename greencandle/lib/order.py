@@ -352,9 +352,6 @@ class Trade():
 
         for pair, current_time, current_price, event, _ in long_list:
             pair = pair.strip()
-            #amount_to_borrow = self.get_amount_to_borrow(pair, dbase)
-            #current_quote_bal = self.get_balance_to_use(dbase, account='margin',
-            #                                            pair=pair)['symbol']
             total_amt_to_use = self.get_total_amount_to_use(dbase, account='margin', pair=pair)
             amount_to_borrow = total_amt_to_use['loan_amt']
             current_quote_bal = total_amt_to_use['balance_amt']
@@ -373,22 +370,22 @@ class Trade():
             if self.prod:
 
                 if float(amount_to_borrow) <= 0:
-                    self.logger.critical("Insufficient funds to borrow for %s" % pair)
-                    return False
+                    self.logger.critical("Borrow amount is zero for pair %s.  Continuing" % pair)
+                else:  # amount to borrow
+                    self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
+                                     % (amount_to_borrow, quote, current_quote_bal))
 
-                self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
-                                 % (amount_to_borrow, quote, current_quote_bal))
+                    borrow_res = self.client.margin_borrow(
+                        symbol=pair, quantity=amount_to_borrow,
+                        isolated=str2bool(self.config.main.isolated),
+                        asset=quote)
+                    if "msg" in borrow_res:
+                        self.logger.error("Borrow error-open %s: %s while trying to borrow %s %s"
+                                          % (pair, borrow_res, amount_to_borrow, quote))
+                        return False
 
-                borrow_res = self.client.margin_borrow(
-                    symbol=pair, quantity=amount_to_borrow,
-                    isolated=str2bool(self.config.main.isolated),
-                    asset=quote)
-                if "msg" in borrow_res:
-                    self.logger.error("Borrow error-open %s: %s while trying to borrow %s %s"
-                                      % (pair, borrow_res, amount_to_borrow, quote))
-                    return False
+                    self.logger.info(borrow_res)
 
-                self.logger.info(borrow_res)
                 amt_str = get_step_precision(pair, sub_perc(1, base_to_use))
                 trade_result = self.client.margin_order(symbol=pair, side=self.client.buy,
                                                         quantity=amt_str,
@@ -708,9 +705,6 @@ class Trade():
 
         for pair, current_time, current_price, event, _ in short_list:
             base = get_base(pair)
-            #current_base_bal = self.get_balance_to_use(dbase, account='margin',
-                                                        #pair=pair)['symbol']
-            #amount_to_borrow = self.get_amount_to_borrow(pair, dbase)
 
             total_amount_to_use = self.get_total_amount_to_use(dbase, account='margin', pair=pair)
             current_base_bal = total_amount_to_use['balance_amt']
@@ -725,19 +719,24 @@ class Trade():
             self.logger.info("Opening margin short %s of %s with %s at %s"
                              % (total_base_amount, pair, total_quote_amount, current_price))
             if self.prod:
-                self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
-                                 % (amount_to_borrow, base, total_base_amount))
-                amt_str = total_base_amount
-                borrow_res = self.client.margin_borrow(
-                    symbol=pair, quantity=amount_to_borrow,
-                    isolated=str2bool(self.config.main.isolated),
-                    asset=base)
-                if "msg" in borrow_res:
-                    self.logger.error("Borrow error-open %s: %s while trying to borrow %s %s"
-                                      % (pair, borrow_res, amount_to_borrow, base))
-                    return False
 
-                self.logger.info(borrow_res)
+                if float(amount_to_borrow) <= 0:
+                    self.logger.critical("Borrow amount is zero for pair %s.  Continuing" % pair)
+                else:  # amount to borrow
+                    self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
+                                     % (amount_to_borrow, base, total_base_amount))
+                    amt_str = total_base_amount
+                    borrow_res = self.client.margin_borrow(
+                        symbol=pair, quantity=amount_to_borrow,
+                        isolated=str2bool(self.config.main.isolated),
+                        asset=base)
+                    if "msg" in borrow_res:
+                        self.logger.error("Borrow error-open %s: %s while trying to borrow %s %s"
+                                          % (pair, borrow_res, amount_to_borrow, base))
+                        return False
+
+                    self.logger.info(borrow_res)
+
                 trade_result = self.client.margin_order(symbol=pair, side=self.client.sell,
                                                         quantity=amt_str,
                                                         order_type=self.client.market,
@@ -751,9 +750,10 @@ class Trade():
                                       % (amt_str, current_base_bal, amount_to_borrow))
                     return False
 
-            else:
+            else:  # not prod
                 amt_str = total_base_amount
                 order_id = 0
+
             fill_price = current_price if self.test_trade or self.test_data else \
                     self.__get_fill_price(current_price, trade_result)
             commission_usd = self.__get_commission(trade_result) if self.prod else 0
