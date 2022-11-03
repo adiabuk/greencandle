@@ -354,7 +354,7 @@ class Trade():
             else:
                 balance_to_use['symbol'] = quote2base(balance_to_use['usd'],
                                                       balance_to_use['symbol_name']+'USDT')
-                loan_to_use = 0
+                loan_to_use = {'symbol':0, 'usd':0}
         else:
 
             loan_to_use = self.get_amount_to_borrow(pair, dbase) if \
