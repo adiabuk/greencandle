@@ -301,7 +301,7 @@ def prod_initial(interval, test=False):
     del redis
 
 @GET_EXCEPTIONS
-def prod_loop(interval, test=False, data=True):
+def prod_loop(interval, test=False, data=True, analyse=True):
     """
     Loop through collection cycle (PROD)
     """
@@ -327,38 +327,39 @@ def prod_loop(interval, test=False, data=True):
         engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
         del engine
 
-    buys = []
-    sells = []
-    drawdowns = {}
-    drawups = {}
+    if analyse:
+        buys = []
+        sells = []
+        drawdowns = {}
+        drawups = {}
 
-    for pair in PAIRS:
+        for pair in PAIRS:
 
-        pair = pair.strip()
-        result, event, current_time, current_price, _ = redis.get_action(pair=pair,
-                                                                         interval=interval)
-        current_candle = redis.get_last_candle(pair, interval)
+            pair = pair.strip()
+            result, event, current_time, current_price, _ = redis.get_action(pair=pair,
+                                                                             interval=interval)
+            current_candle = redis.get_last_candle(pair, interval)
 
-        if result != "NOITEM":
-            redis.update_drawdown(pair, current_candle)
-            redis.update_drawup(pair, current_candle)
+            if result != "NOITEM":
+                redis.update_drawdown(pair, current_candle)
+                redis.update_drawup(pair, current_candle)
 
-        action = 1 if config.main.trade_direction == 'long' else -1
-        if result == "OPEN":
-            LOGGER.debug("Items to buy")
-            redis.update_drawdown(pair, current_candle, event='open')
-            redis.update_drawup(pair, current_candle, event='open')
-            buys.append((pair, current_time, current_price, event, action))
+            action = 1 if config.main.trade_direction == 'long' else -1
+            if result == "OPEN":
+                LOGGER.debug("Items to buy")
+                redis.update_drawdown(pair, current_candle, event='open')
+                redis.update_drawup(pair, current_candle, event='open')
+                buys.append((pair, current_time, current_price, event, action))
 
-        if result == "CLOSE":
-            LOGGER.debug("Items to sell")
-            sells.append((pair, current_time, current_price, event, 0))
-            drawdowns[pair] = redis.get_drawdown(pair)
-            drawups[pair] = redis.get_drawup(pair)['perc']
-            redis.rm_drawup(pair)
-            redis.rm_drawdown(pair)
+            if result == "CLOSE":
+                LOGGER.debug("Items to sell")
+                sells.append((pair, current_time, current_price, event, 0))
+                drawdowns[pair] = redis.get_drawdown(pair)
+                drawups[pair] = redis.get_drawup(pair)['perc']
+                redis.rm_drawup(pair)
+                redis.rm_drawdown(pair)
 
-    trade = Trade(interval=interval, test_trade=test, test_data=False, config=config)
-    trade.close_trade(sells, drawdowns=drawdowns, drawups=drawups)
-    trade.open_trade(buys)
-    del redis
+        trade = Trade(interval=interval, test_trade=test, test_data=False, config=config)
+        trade.close_trade(sells, drawdowns=drawdowns, drawups=drawups)
+        trade.open_trade(buys)
+        del redis

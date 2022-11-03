@@ -6,16 +6,11 @@ Collect OHLC and strategy data for later analysis
 import os
 from pathlib import Path
 from apscheduler.schedulers.blocking import BlockingScheduler
-from binance.binance import Binance
 from greencandle.lib import config
 config.create_config()
-from greencandle.lib.redis_conn import Redis
-from greencandle.lib.engine import Engine
-from greencandle.lib.run import prod_initial
-from greencandle.lib.binance_common import get_dataframes
+from greencandle.lib.run import prod_initial, prod_loop
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.common import HOUR, MINUTE, arg_decorator
-from str2bool import str2bool
 
 LOGGER = get_logger(__name__)
 PAIRS = config.main.pairs.split()
@@ -23,31 +18,16 @@ MAIN_INDICATORS = config.main.indicators.split()
 SCHED = BlockingScheduler()
 GET_EXCEPTIONS = exception_catcher((Exception))
 
-def test_loop(interval=None, prices=None):
+@SCHED.scheduled_job('cron', minute=MINUTE[config.main.interval],
+                     hour=HOUR[config.main.interval], second="30")
+def prod_run(interval=None):
     """
     Test loop
     """
-    LOGGER.debug("Performaing prod loop")
-    LOGGER.debug("Pairs in config: %s" % PAIRS)
-    LOGGER.debug("Total unique pairs: %s" % len(PAIRS))
+    LOGGER.info("Starting prod run")
+    prod_loop(interval, test=True, data=True, analyse=False)
+    LOGGER.info("Finished prod run")
 
-    LOGGER.info("Starting new cycle")
-    LOGGER.debug("max trades: %s" % config.main.max_trades)
-
-    prices_trunk = {}
-
-    for key, val in prices.items():
-        if key in PAIRS:
-            prices_trunk[key] = val
-    LOGGER.debug("Getting dataframes for all pairs")
-    dataframes = get_dataframes(PAIRS, interval=interval, max_workers=1,
-                                no_of_klines=config.main.no_of_klines)
-    LOGGER.debug("Done getting dataframes")
-
-    redis = Redis()
-    engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval,
-                    redis=redis, test=True)
-    engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
 
 @GET_EXCEPTIONS
 @SCHED.scheduled_job('interval', seconds=60)
@@ -57,20 +37,6 @@ def keepalive():
     """
     Path('/var/local/greencandle').touch()
 
-@SCHED.scheduled_job('cron', minute=MINUTE[config.main.interval],
-                     hour=HOUR[config.main.interval], second="30")
-def prod_run():
-    """
-    Prod run
-    """
-    interval = config.main.interval
-    LOGGER.info("Starting prod run")
-
-    client = Binance(debug=str2bool(config.accounts.account_debug))
-    prices = client.prices()
-    test_loop(interval=interval, prices=prices)
-
-    LOGGER.info("Finished prod run")
 
 @arg_decorator
 def main():
