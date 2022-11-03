@@ -326,7 +326,6 @@ def prod_loop(interval, test=False, data=True, analyse=True):
         engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, redis=redis)
         engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
         del engine
-
     if analyse:
         buys = []
         sells = []

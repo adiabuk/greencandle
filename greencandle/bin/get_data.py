@@ -20,10 +20,11 @@ GET_EXCEPTIONS = exception_catcher((Exception))
 
 @SCHED.scheduled_job('cron', minute=MINUTE[config.main.interval],
                      hour=HOUR[config.main.interval], second="30")
-def prod_run(interval=None):
+def prod_run():
     """
     Test loop
     """
+    interval=config.main.interval
     LOGGER.info("Starting prod run")
     prod_loop(interval, test=True, data=True, analyse=False)
     LOGGER.info("Finished prod run")
