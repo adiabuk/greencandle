@@ -259,6 +259,7 @@ class Trade():
         return_symbol = sub_perc(1, final / float(self.config.main.divisor)) if final else 0
         return_usd = return_symbol if 'USD' in symbol else base2quote(return_symbol, symbol+'USDT')
         return_dict = {"symbol": return_symbol,
+                       "symbol_name": symbol,
                        "usd": return_usd}
         return return_dict
 
@@ -269,6 +270,7 @@ class Trade():
         Only return 99% of the value
         Returns: float in base if short, or quote if long
         """
+        return_dict = {}
         orig_base = get_base(pair)
         orig_quote = get_quote(pair)
         orig_direction = self.config.main.trade_direction
@@ -301,42 +303,71 @@ class Trade():
         # divide total by divisor
         # convert to quote asset if not USDT
 
+        # long
         if self.config.main.trade_direction == "long":
             if "USD" in orig_quote:
-                final = sub_perc(1, total / float(self.config.main.divisor))
+                value = sub_perc(1, total / float(self.config.main.divisor))
+                return_dict['usd'] = value
+                return_dict['symbol'] = value
             else:
-                final = sub_perc(1, quote2base(total, orig_quote+"USDT") /
-                                 float(self.config.main.divisor))
+                usd_value = sub_perc(1, total / float(self.config.main.divisor))
+                value = quote2base(usd_value, orig_quote+'USDT')
+                return_dict['usd'] = usd_value
+                return_dict['symbol'] = value
 
         #convert to base asset if we are short
+        # short
         else:  # amt in base
-            final = sub_perc(1, quote2base(total, orig_base+"USDT") /
-                             float(self.config.main.divisor))
+            usd_value = sub_perc(1, total/float(self.config.main.divisor))
+            value = quote2base(usd_value, orig_base+'USDT')
+            return_dict['usd'] = usd_value
+            return_dict['symbol'] = value
 
         # Use 99% of amount determined by divisor
         # and check if we have exceeded max_borrable amount
-        if (orig_quote == 'USDT' and final > max_borrow_usd and
+        if (orig_quote == 'USDT' and return_dict['usd'] > max_borrow_usd and
                 self.config.main.trade_direction == "long"):
-            return sub_perc(10, max_borrow_usd)
+            value = sub_perc(10, max_borrow_usd)
+            return_dict['usd'] = value
+            return_dict['symbol'] = value
 
         elif (orig_quote != 'USDT' and
-              base2quote(final, orig_quote+'USDT') > max_borrow_usd and
+              base2quote(return_dict['symbol'], orig_quote+'USDT') > max_borrow_usd and
               self.config.main.trade_direction == "long"):
-            return quote2base(sub_perc(10, max_borrow_usd), orig_quote+'USDT')
-        else:
-            return final
+            usd_value = sub_perc(10, max_borrow_usd)
+            base_value = quote2base(usd_value, orig_quote+'USDT')
+            return_dict['usd'] = usd_value
+            return_dict['symbol'] = base_value
+
+        return return_dict
 
     def get_total_amount_to_use(self, dbase, pair=None, account=None):
         """
         Get total amount to use as sum of balance_to_use and loan_to_use
         """
-
+        total_max = int(self.config.main.max_trade_usd)
         balance_to_use = self.get_balance_to_use(dbase, account, pair)
-        loan_to_use = self.get_amount_to_borrow(pair, dbase) if \
-                self.config.main.trade_type != 'spot' else 0
+        if balance_to_use['usd'] > total_max:
+            balance_to_use['usd'] = total_max
+            if balance_to_use['symbol_name'] == 'USDT':
+                balance_to_use['symbol'] = balance_to_use['usd']
+            else:
+                balance_to_use['symbol'] = quote2base(balance_to_use['usd'],
+                                                      balance_to_use['symbol_name']+'USDT')
+                loan_to_use = 0
+        else:
+
+            loan_to_use = self.get_amount_to_borrow(pair, dbase) if \
+                    self.config.main.trade_type != 'spot' else {'usd':0, 'symbol':0}
+            total_remaining = total_max - balance_to_use['usd']
+            if loan_to_use['usd'] > total_remaining:
+                loan_to_use['usd'] = total_remaining
+                loan_to_use['symbol'] = quote2base(total_remaining, balance_to_use['symbol']+'USDT')
+
+
 
         return_dict = {"balance_amt": balance_to_use['symbol'],
-                       "loan_amt": loan_to_use
+                       "loan_amt": loan_to_use['symbol']
                        }
 
         return return_dict
