@@ -1079,7 +1079,7 @@ services:
       - stag-base-redis
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV= stag/be/bbpercst/long/2
+      - CONFIG_ENV= stag/be/bbpercst/long/2/3
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
@@ -1111,7 +1111,7 @@ services:
       - stag-base-redis
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV= stag/be/bbpercst/short/2
+      - CONFIG_ENV= stag/be/bbpercst/short/2/3
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:

@@ -1,4 +1,3 @@
 {
-  "name": "stag-be-eng-bbpercst3-long",
-  "open_rule1": "low \u003c results.current.lower_200 and results.current.bbperc_200 \u003c -1.5 and results.current.STX_23 \u003e0 and results.current.bbperc_200 \u003e results.current.bbperc_EMA_200"
+  "name": "stag-be-eng-bbpercst3-long"
 }
