@@ -40,7 +40,7 @@ class TestBorrow(unittest.TestCase):
 
             trade = Trade(interval='15m', test_data=False, test_trade=False, config=config)
             trade.client = client
-            amt = trade.get_amount_to_borrow(pair, instance)
+            amt = trade.get_amount_to_borrow(pair, instance)['symbol']
 
         self.assertEqual(config.main.trade_direction, "long")
         self.assertEqual(amt, sub_perc(1, (5000+20)/3))
@@ -63,10 +63,11 @@ class TestBorrow(unittest.TestCase):
 
             trade = Trade(interval='15m', test_data=False, test_trade=False, config=config)
             trade.client = client
-            amt = trade.get_amount_to_borrow(pair, instance)
+            amt = trade.get_amount_to_borrow(pair, instance)['symbol']
 
         self.assertEqual(config.main.trade_direction, "long")
-        # Same as previous test, except we shouldn't have the same value due to max_borrow being exceeded
+        # Same as previous test, except we shouldn't have the same value due to
+        # max_borrow being exceeded
         self.assertNotEqual(amt, sub_perc(1, (5000+20)/3))
 
 
@@ -88,7 +89,7 @@ class TestBorrow(unittest.TestCase):
 
             trade = Trade(interval='15m', test_data=False, test_trade=False, config=config)
             trade.client = client
-            amt = trade.get_amount_to_borrow(pair, instance)
+            amt = trade.get_amount_to_borrow(pair, instance)['symbol']
 
         self.assertEqual(config.main.trade_direction, "long")
         self.assertEqual(amt, sub_perc(1, (5000+2)/3))
@@ -111,7 +112,7 @@ class TestBorrow(unittest.TestCase):
 
             trade = Trade(interval='15m', test_data=False, test_trade=False, config=config)
             trade.client = client
-            amt = trade.get_amount_to_borrow(pair, instance)
+            amt = trade.get_amount_to_borrow(pair, instance)['symbol']
 
         self.assertEqual(config.main.trade_direction, "long")
         self.assertEqual(amt, sub_perc(1, (5000+20)/3))
@@ -135,7 +136,7 @@ class TestBorrow(unittest.TestCase):
 
                 trade = Trade(interval='15m', test_data=False, test_trade=False, config=config)
                 trade.client = client
-                amt = trade.get_amount_to_borrow(pair, instance)
+                amt = trade.get_amount_to_borrow(pair, instance)['symbol']
 
         self.assertEqual(config.main.trade_direction, "long")
         self.assertEqual(amt, sub_perc(1, 20/3)) # FIXME - this should be 5000 more
@@ -159,7 +160,7 @@ class TestBorrow(unittest.TestCase):
 
             trade = Trade(interval='15m', test_data=False, test_trade=False, config=config)
             trade.client = client
-            amt = trade.get_amount_to_borrow(pair, instance)
+            amt = trade.get_amount_to_borrow(pair, instance)['symbol']
 
         self.assertEqual(config.main.trade_direction, "long")
         self.assertEqual(amt, sub_perc(1, (5000+20)/10))
@@ -184,7 +185,7 @@ class TestBorrow(unittest.TestCase):
 
                 trade = Trade(interval='15m', test_data=False, test_trade=False, config=config)
                 trade.client = client
-                amt = trade.get_amount_to_borrow(pair, instance)
+                amt = trade.get_amount_to_borrow(pair, instance)['symbol']
 
         self.assertEqual(config.main.trade_direction, "short")
         self.assertEqual(amt, sub_perc(1, (20)/10))
@@ -207,7 +208,7 @@ class TestBorrow(unittest.TestCase):
 
             trade = Trade(interval='15m', test_data=False, test_trade=False, config=config)
             trade.client = client
-            amt = trade.get_amount_to_borrow(pair, instance)
+            amt = trade.get_amount_to_borrow(pair, instance)['symbol']
 
         self.assertEqual(config.main.trade_direction, "long")
         self.assertEqual(amt, sub_perc(1, (5000+20)/3))
@@ -230,7 +231,7 @@ class TestBorrow(unittest.TestCase):
 
             trade = Trade(interval='15m', test_data=False, test_trade=False, config=config)
             trade.client = client
-            amt = trade.get_amount_to_borrow(pair, instance)
+            amt = trade.get_amount_to_borrow(pair, instance)['symbol']
 
         self.assertEqual(config.main.trade_direction, "long")
         self.assertEqual(amt, sub_perc(1, (5000+2)/3))
@@ -253,7 +254,7 @@ class TestBorrow(unittest.TestCase):
 
             trade = Trade(interval='15m', test_data=False, test_trade=False, config=config)
             trade.client = client
-            amt = trade.get_amount_to_borrow(pair, instance)
+            amt = trade.get_amount_to_borrow(pair, instance)['symbol']
 
         self.assertEqual(config.main.trade_direction, "long")
         self.assertEqual(amt, sub_perc(1, (5000+20)/3))
@@ -277,7 +278,7 @@ class TestBorrow(unittest.TestCase):
 
                 trade = Trade(interval='15m', test_data=False, test_trade=False, config=config)
                 trade.client = client
-                amt = trade.get_amount_to_borrow(pair, instance)
+                amt = trade.get_amount_to_borrow(pair, instance)['symbol']
 
         self.assertEqual(config.main.trade_direction, "long")
         self.assertEqual(amt, sub_perc(1, (20)/3))
@@ -301,7 +302,7 @@ class TestBorrow(unittest.TestCase):
 
             trade = Trade(interval='15m', test_data=False, test_trade=False, config=config)
             trade.client = client
-            amt = trade.get_amount_to_borrow(pair, instance)
+            amt = trade.get_amount_to_borrow(pair, instance)['symbol']
 
         self.assertEqual(config.main.trade_direction, "long")
         self.assertEqual(amt, sub_perc(1, (5000+20)/10))
@@ -326,7 +327,7 @@ class TestBorrow(unittest.TestCase):
 
                 trade = Trade(interval='15m', test_data=False, test_trade=False, config=config)
                 trade.client = client
-                amt = trade.get_amount_to_borrow(pair, instance)
+                amt = trade.get_amount_to_borrow(pair, instance)['symbol']
 
         self.assertEqual(config.main.trade_direction, "short")
         self.assertEqual(amt, sub_perc(1, (20)/10))

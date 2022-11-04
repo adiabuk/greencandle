@@ -241,7 +241,7 @@
       "is_secret": false
     },
     "max_trade_usd": {
-      "value": "5000",
+      "value": "500000",
       "is_binary": false,
       "is_secret": false
     },

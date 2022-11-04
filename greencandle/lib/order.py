@@ -310,18 +310,26 @@ class Trade():
                 return_dict['usd'] = value
                 return_dict['symbol'] = value
             else:
+                final_symbol = sub_perc(1, quote2base(total, orig_quote+"USDT") /
+                                        float(self.config.main.divisor))
+                final_usd = sub_perc(1, total / float(self.config.main.divisor))
+
                 usd_value = sub_perc(1, total / float(self.config.main.divisor))
                 value = quote2base(usd_value, orig_quote+'USDT')
-                return_dict['usd'] = usd_value
-                return_dict['symbol'] = value
+                return_dict['usd'] = final_usd
+                return_dict['symbol'] = final_symbol
 
         #convert to base asset if we are short
         # short
         else:  # amt in base
             usd_value = sub_perc(1, total/float(self.config.main.divisor))
             value = quote2base(usd_value, orig_base+'USDT')
-            return_dict['usd'] = usd_value
-            return_dict['symbol'] = value
+            final_symbol = sub_perc(1, quote2base(total, orig_base+'USDT') /
+                                    float(self.config.main.divisor))
+            final_usd = sub_perc(1, total / float(self.config.main.divisor))
+            return_dict['usd'] = final_usd
+            return_dict['symbol'] = final_symbol
+            return return_dict
 
         # Use 99% of amount determined by divisor
         # and check if we have exceeded max_borrable amount
@@ -330,6 +338,7 @@ class Trade():
             value = sub_perc(10, max_borrow_usd)
             return_dict['usd'] = value
             return_dict['symbol'] = value
+            return return_dict
 
         elif (orig_quote != 'USDT' and
               base2quote(return_dict['symbol'], orig_quote+'USDT') > max_borrow_usd and
@@ -338,6 +347,7 @@ class Trade():
             base_value = quote2base(usd_value, orig_quote+'USDT')
             return_dict['usd'] = usd_value
             return_dict['symbol'] = base_value
+            return return_dict
 
         return return_dict
 
