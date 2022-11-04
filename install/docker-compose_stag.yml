@@ -1059,7 +1059,7 @@ services:
       - /dev/log:/dev/log
       - /var/run:/var/run
       - /var/local:/var/local
-      -
+      - /root/.bash_history:/root/.bash_history
 
   stag-be-analyse_1m_bbpercst-long:
     container_name: stag-be-analyse_1m_bbpercst-long
@@ -1092,6 +1092,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/:/var/run
+      - /root/.bash_history:/root/.bash_history
 
   stag-be-analyse_1m_bbpercst-short:
     container_name: stag-be-analyse_1m_bbpercst-short
@@ -1124,3 +1125,4 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/:/var/run
+      - /root/.bash_history:/root/.bash_history
