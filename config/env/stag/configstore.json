@@ -92,7 +92,7 @@
       "is_secret": false
     },
     "api_forward": {
-      "value": "",
+      "value": "test,10.8.0.104,any-long-short",
       "is_binary": false,
       "is_secret": false
     },

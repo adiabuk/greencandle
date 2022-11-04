@@ -1059,4 +1059,68 @@ services:
       - /dev/log:/dev/log
       - /var/run:/var/run
       - /var/local:/var/local
-      - /root/.bash_history:/root/.bash_history
+      -
+
+  stag-be-analyse_1m_bbpercst-long:
+    container_name: stag-be-analyse_1m_bbpercst-long
+    hostname: stag-be-analyse_1m_bbpercst-long
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh analyse_data forward
+    logging:
+      driver: journald
+    links:
+      - stag-be-api-router:router
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
+    depends_on:
+      - stag-base-mysql
+      - stag-base-redis
+    environment:
+      - VPN_IP=$VPN_IP
+      - CONFIG_ENV= stag/be/bbpercst/long/2
+      - HOST=$HOSTNAME
+      - DB=true
+    healthcheck:
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  stag-be-analyse_1m_bbpercst-short:
+    container_name: stag-be-analyse_1m_bbpercst-short
+    hostname: stag-be-analyse_1m_bbpercst-short
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh analyse_data forward
+    logging:
+      driver: journald
+    links:
+      - stag-be-api-router:router
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
+    depends_on:
+      - stag-base-mysql
+      - stag-base-redis
+    environment:
+      - VPN_IP=$VPN_IP
+      - CONFIG_ENV= stag/be/bbpercst/short/2
+      - HOST=$HOSTNAME
+      - DB=true
+    healthcheck:
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
