@@ -416,7 +416,7 @@
       "is_secret": false
     },
     "wait_between_trades": {
-      "value": "true",
+      "value": "false",
       "is_binary": false,
       "is_secret": false
     }
