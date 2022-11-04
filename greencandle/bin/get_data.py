@@ -24,7 +24,7 @@ def prod_run():
     """
     Test loop
     """
-    interval=config.main.interval
+    interval = config.main.interval
     LOGGER.info("Starting prod run")
     prod_loop(interval, test=True, data=True, analyse=False)
     LOGGER.info("Finished prod run")
