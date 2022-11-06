@@ -199,7 +199,15 @@ def trade():
                 actual_name = container.replace('-be', '')  # strip off container type
             else:
                 continue
-            config_env = rev_names[actual_name]
+            try:
+                config_env = rev_names[actual_name]
+            except KeyError:
+                # remove -long/-short from container names
+                # this is to support long/short containers
+                # with the same name
+                actual_name = re.sub(r'-\w+$', '', actual_name)
+                config_env = rev_names[actual_name]
+
             xxx = pairs[config_env]
             my_dic[strat] |= set(xxx)
 
