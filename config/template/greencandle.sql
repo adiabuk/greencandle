@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 5.7.39, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.40, for Linux (x86_64)
 --
 -- Host: 10.8.0.104    Database: greencandle
 -- ------------------------------------------------------
@@ -76,7 +76,7 @@ CREATE TABLE `api_requests` (
   `price` varchar(30) DEFAULT NULL,
   `strategy` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6252 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -126,7 +126,7 @@ CREATE TABLE `exchange` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -270,6 +270,33 @@ SET character_set_client = utf8;
 SET character_set_client = @saved_cs_client;
 
 --
+-- Temporary table structure for view `profit_pair_time`
+--
+
+DROP TABLE IF EXISTS `profit_pair_time`;
+/*!50001 DROP VIEW IF EXISTS `profit_pair_time`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `profit_pair_time` AS SELECT 
+ 1 AS `name`,
+ 1 AS `pair`,
+ 1 AS `total`,
+ 1 AS `profit`,
+ 1 AS `net_profit`,
+ 1 AS `net_loss`,
+ 1 AS `perc_profitable`,
+ 1 AS `net_perc_profitable`,
+ 1 AS `total_perc`,
+ 1 AS `per_trade`,
+ 1 AS `total_net_perc`,
+ 1 AS `net_per_trade`,
+ 1 AS `max(perc)`,
+ 1 AS `min(perc)`,
+ 1 AS `max(net_perc)`,
+ 1 AS `min(net_perc)`*/;
+SET character_set_client = @saved_cs_client;
+
+--
 -- Temporary table structure for view `profit_weekly`
 --
 
@@ -354,6 +381,33 @@ SET character_set_client = utf8;
 /*!50001 CREATE VIEW `profitable_by_name_date` AS SELECT 
  1 AS `name`,
  1 AS `date`,
+ 1 AS `total`,
+ 1 AS `profit`,
+ 1 AS `net_profit`,
+ 1 AS `net_loss`,
+ 1 AS `perc_profitable`,
+ 1 AS `net_perc_profitable`,
+ 1 AS `total_perc`,
+ 1 AS `per_trade`,
+ 1 AS `total_net_perc`,
+ 1 AS `net_per_trade`,
+ 1 AS `max(perc)`,
+ 1 AS `min(perc)`,
+ 1 AS `max(net_perc)`,
+ 1 AS `min(net_perc)`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `profitable_by_name_pair`
+--
+
+DROP TABLE IF EXISTS `profitable_by_name_pair`;
+/*!50001 DROP VIEW IF EXISTS `profitable_by_name_pair`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `profitable_by_name_pair` AS SELECT 
+ 1 AS `name`,
+ 1 AS `pair`,
  1 AS `total`,
  1 AS `profit`,
  1 AS `net_profit`,
@@ -552,7 +606,7 @@ CREATE TABLE `trades` (
   `open_order_id` varchar(30) DEFAULT NULL,
   `close_order_id` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1114 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -564,7 +618,9 @@ DROP TABLE IF EXISTS `variables`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `variables` (
   `name` varchar(30) DEFAULT NULL,
-  `value` varchar(30) DEFAULT NULL
+  `value` varchar(30) DEFAULT NULL,
+  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `name_2` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -600,6 +656,23 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`%` FUNCTION `commission`() RETURNS decimal(10,2)
 RETURN (select value from variables where name='commission' LIMIT 1) ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `get_var` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`%` FUNCTION `get_var`(name VARCHAR(30)) RETURNS varchar(30) CHARSET utf8mb4
+RETURN (select value from variables where name=name LIMIT 1) ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -776,6 +849,24 @@ DELIMITER ;
 /*!50001 SET collation_connection      = @saved_col_connection */;
 
 --
+-- Final view structure for view `profit_pair_time`
+--
+
+/*!50001 DROP VIEW IF EXISTS `profit_pair_time`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `profit_pair_time` AS select `profit`.`name` AS `name`,`profit`.`pair` AS `pair`,count(0) AS `total`,sum(case when `profit`.`perc` > 0 then 1 else 0 end) AS `profit`,sum(case when `profit`.`net_perc` > 0 then 1 else 0 end) AS `net_profit`,sum(case when `profit`.`net_perc` < 0 then 1 else 0 end) AS `net_loss`,sum(case when `profit`.`perc` > 0 then 1 else 0 end) / count(0) * 100 AS `perc_profitable`,sum(case when `profit`.`net_perc` > 0 then 1 else 0 end) / count(0) * 100 AS `net_perc_profitable`,sum(`profit`.`perc`) AS `total_perc`,sum(`profit`.`perc`) / count(0) AS `per_trade`,sum(`profit`.`net_perc`) AS `total_net_perc`,sum(`profit`.`net_perc`) / count(0) AS `net_per_trade`,max(`profit`.`perc`) AS `max(perc)`,min(`profit`.`perc`) AS `min(perc)`,max(`profit`.`net_perc`) AS `max(net_perc)`,min(`profit`.`net_perc`) AS `min(net_perc)` from `profit` where cast(`profit`.`open_time` as time) not between `get_var`('start_time') and `get_var`('end_time') group by `profit`.`name`,`profit`.`pair` order by cast(`profit`.`open_time` as date) desc */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
 -- Final view structure for view `profit_weekly`
 --
 
@@ -843,6 +934,24 @@ DELIMITER ;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
 /*!50001 VIEW `profitable_by_name_date` AS select `profit`.`name` AS `name`,cast(`profit`.`open_time` as date) AS `date`,count(0) AS `total`,sum(case when `profit`.`perc` > 0 then 1 else 0 end) AS `profit`,sum(case when `profit`.`net_perc` > 0 then 1 else 0 end) AS `net_profit`,sum(case when `profit`.`net_perc` < 0 then 1 else 0 end) AS `net_loss`,sum(case when `profit`.`perc` > 0 then 1 else 0 end) / count(0) * 100 AS `perc_profitable`,sum(case when `profit`.`net_perc` > 0 then 1 else 0 end) / count(0) * 100 AS `net_perc_profitable`,sum(`profit`.`perc`) AS `total_perc`,sum(`profit`.`perc`) / count(0) AS `per_trade`,sum(`profit`.`net_perc`) AS `total_net_perc`,sum(`profit`.`net_perc`) / count(0) AS `net_per_trade`,max(`profit`.`perc`) AS `max(perc)`,min(`profit`.`perc`) AS `min(perc)`,max(`profit`.`net_perc`) AS `max(net_perc)`,min(`profit`.`net_perc`) AS `min(net_perc)` from `profit` group by `profit`.`name`,cast(`profit`.`open_time` as date) order by cast(`profit`.`open_time` as date) desc */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `profitable_by_name_pair`
+--
+
+/*!50001 DROP VIEW IF EXISTS `profitable_by_name_pair`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `profitable_by_name_pair` AS select `profit`.`name` AS `name`,`profit`.`pair` AS `pair`,count(0) AS `total`,sum(case when `profit`.`perc` > 0 then 1 else 0 end) AS `profit`,sum(case when `profit`.`net_perc` > 0 then 1 else 0 end) AS `net_profit`,sum(case when `profit`.`net_perc` < 0 then 1 else 0 end) AS `net_loss`,sum(case when `profit`.`perc` > 0 then 1 else 0 end) / count(0) * 100 AS `perc_profitable`,sum(case when `profit`.`net_perc` > 0 then 1 else 0 end) / count(0) * 100 AS `net_perc_profitable`,sum(`profit`.`perc`) AS `total_perc`,sum(`profit`.`perc`) / count(0) AS `per_trade`,sum(`profit`.`net_perc`) AS `total_net_perc`,sum(`profit`.`net_perc`) / count(0) AS `net_per_trade`,max(`profit`.`perc`) AS `max(perc)`,min(`profit`.`perc`) AS `min(perc)`,max(`profit`.`net_perc`) AS `max(net_perc)`,min(`profit`.`net_perc`) AS `min(net_perc)` from `profit` group by `profit`.`name`,`profit`.`pair` order by cast(`profit`.`open_time` as date) desc */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -964,8 +1073,8 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-10-23 22:14:00
--- MySQL dump 10.13  Distrib 5.7.39, for Linux (x86_64)
+-- Dump completed on 2022-11-06 20:32:58
+-- MySQL dump 10.13  Distrib 5.7.40, for Linux (x86_64)
 --
 -- Host: 10.8.0.104    Database: greencandle
 -- ------------------------------------------------------
@@ -991,7 +1100,9 @@ DROP TABLE IF EXISTS `variables`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `variables` (
   `name` varchar(30) DEFAULT NULL,
-  `value` varchar(30) DEFAULT NULL
+  `value` varchar(30) DEFAULT NULL,
+  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `name_2` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1001,7 +1112,7 @@ CREATE TABLE `variables` (
 
 LOCK TABLES `variables` WRITE;
 /*!40000 ALTER TABLE `variables` DISABLE KEYS */;
-INSERT INTO `variables` VALUES ('commission','0.15');
+INSERT INTO `variables` VALUES ('commission','0.15'),('start_time','01:30'),('end_time','08:30');
 /*!40000 ALTER TABLE `variables` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1016,7 +1127,7 @@ CREATE TABLE `exchange` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1038,4 +1149,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-10-23 22:14:02
+-- Dump completed on 2022-11-06 20:33:00
