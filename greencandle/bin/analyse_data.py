@@ -32,6 +32,7 @@ FORWARD = False
 @SCHED.scheduled_job('cron', minute=MINUTE[config.main.interval],
                      hour=HOUR[config.main.interval],
                      second=config.main.check_interval)
+
 def analyse_loop():
     """
     Gather data from redis and analyze
@@ -55,6 +56,9 @@ def analyse_loop():
     del redis
 
 def analyse_pair(pair, redis, isolated, cross):
+    """
+    Analysis of individual pair
+    """
     pair = pair.strip()
     interval = config.main.interval
     supported = ""

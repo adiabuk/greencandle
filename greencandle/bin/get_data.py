@@ -19,7 +19,7 @@ SCHED = BlockingScheduler()
 GET_EXCEPTIONS = exception_catcher((Exception))
 
 @SCHED.scheduled_job('cron', minute=MINUTE[config.main.interval],
-                     hour=HOUR[config.main.interval], config.main.check_interval)
+                     hour=HOUR[config.main.interval], second=config.main.check_interval)
 def prod_run():
     """
     Test loop
