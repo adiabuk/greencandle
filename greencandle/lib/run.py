@@ -294,7 +294,7 @@ def prod_initial(interval, test=False):
     redis = Redis()
     no_of_klines = config.main.no_of_klines
     LOGGER.debug("Getting %s klines" % no_of_klines)
-    dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=no_of_klines)
+    dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=no_of_klines, max_workers=100)
     engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, test=test,
                     redis=redis)
     engine.get_data(localconfig=MAIN_INDICATORS, first_run=True, no_of_klines=no_of_klines)

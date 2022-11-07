@@ -42,7 +42,7 @@ def main():
     sched = BlockingScheduler()
 
     @GET_EXCEPTIONS
-    @sched.scheduled_job('interval', seconds=int(config.main.check_interval))
+    @sched.scheduled_job('interval', seconds=20)
     def get_price():
         LOGGER.info("Starting Price check")
         prod_int_check(interval, args.test)
@@ -68,7 +68,8 @@ def main():
         Path('/var/run/greencandle').touch()
 
     @GET_EXCEPTIONS
-    @sched.scheduled_job('cron', minute=MINUTE[interval], hour=HOUR[interval], second="30")
+    @sched.scheduled_job('cron', minute=MINUTE[interval], hour=HOUR[interval],
+                         second=config.main.check_interval)
     def prod_run():
         LOGGER.info("Starting prod run")
         prod_loop(interval, args.test, data=args.data)

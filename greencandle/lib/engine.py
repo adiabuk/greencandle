@@ -170,7 +170,7 @@ class Engine(dict):
             actual_klines = len(self.dataframes[pair]) if not no_of_klines else no_of_klines
 
             # get indicators supertrend, and API for each trading pair
-            with ThreadPoolExecutor(max_workers=100) as pool:
+            with ThreadPoolExecutor(max_workers=1000) as pool:
 
                 for item in localconfig:
                     function, name, period = item.split(';')
@@ -278,9 +278,12 @@ class Engine(dict):
                 perc_arr = numpy.array(percs)
                 # get EMA using 21 timepeiod
                 ema_result = talib.EMA(perc_arr, timeperiod=21)[-1]
+            else:
+                ema_result = None
 
         except Exception as exc:
             perc = None
+            ema_result = None
             LOGGER.warning("Overall Exception getting bb perc: %s seq: %s" % (exc, index))
         trigger = None
         scheme = {}

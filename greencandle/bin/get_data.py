@@ -19,7 +19,7 @@ SCHED = BlockingScheduler()
 GET_EXCEPTIONS = exception_catcher((Exception))
 
 @SCHED.scheduled_job('cron', minute=MINUTE[config.main.interval],
-                     hour=HOUR[config.main.interval], second="30")
+                     hour=HOUR[config.main.interval], config.main.check_interval)
 def prod_run():
     """
     Test loop
@@ -37,7 +37,6 @@ def keepalive():
     Periodically touch file for docker healthcheck
     """
     Path('/var/local/greencandle').touch()
-
 
 @arg_decorator
 def main():

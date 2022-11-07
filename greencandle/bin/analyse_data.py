@@ -19,6 +19,7 @@ from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.common import HOUR, MINUTE, get_tv_link, arg_decorator, convert_to_seconds
 from greencandle.lib.auth import binance_auth
+from concurrent.futures import ThreadPoolExecutor
 
 LOGGER = get_logger(__name__)
 PAIRS = config.main.pairs.split()
@@ -29,7 +30,8 @@ TRIGGERED = {}
 FORWARD = False
 
 @SCHED.scheduled_job('cron', minute=MINUTE[config.main.interval],
-                     hour=HOUR[config.main.interval], second="32")
+                     hour=HOUR[config.main.interval],
+                     second=config.main.check_interval)
 def analyse_loop():
     """
     Gather data from redis and analyze
@@ -42,70 +44,78 @@ def analyse_loop():
     isolated = client.get_isolated_margin_pairs()
     cross = client.get_cross_margin_pairs()
 
-    interval = config.main.interval
+
+    #interval = config.main.interval
     redis = Redis()
     for pair in PAIRS:
-        pair = pair.strip()
-        supported = ""
-        if config.main.trade_direction != "short":
-            supported += "spot "
 
-        supported += "isolated " if pair in isolated else ""
-        supported += "cross " if pair in cross else ""
-
-        if not supported.strip():
-            # don't analyse pair if spot/isolated/cross not supported
-            continue
-
-        LOGGER.debug("Analysing pair: %s" % pair)
-        try:
-            result, _, _, current_price, _ = redis.get_action(pair=pair, interval=interval)
-
-            if result == "OPEN":
-                LOGGER.debug("Items to buy")
-                now = datetime.now()
-                current_time = now.strftime("%H:%M:%S") + " UTC"
-
-                # Only alert on a given pair once per hour
-                # for each strategy
-                if pair in TRIGGERED:
-                    diff = now - TRIGGERED[pair]
-                    diff_in_hours = diff.total_seconds() / 3600
-                    if str2bool(config.main.wait_between_trades) and diff.total_seconds() < \
-                            convert_to_seconds(config.main.time_between_trades):
-                        LOGGER.debug("Skipping notification for %s %s as recently triggered"
-                                     % (pair, interval))
-                        continue
-                    LOGGER.debug("Triggering alert: last alert %s hours ago" % diff_in_hours)
-
-                TRIGGERED[pair] = now
-                send_slack_message("notifications", "Open: %s %s %s (%s) - %s Current: %s" %
-                                   (get_tv_link(pair, interval), interval,
-                                    config.main.trade_direction, supported.strip(), current_time,
-                                    current_price), emoji=True,
-                                   icon=':{0}-{1}:'.format(interval, config.main.trade_direction))
-                if FORWARD:
-                    url = "http://router:1080/forward"
-                    env, host, strategy = config.web.forward.split(',')
-                    action = 1 if config.main.trade_direction == "long" else -1
-                    payload = {"pair": pair,
-                               "text": "forwarding trade from {}".format(config.main.name),
-                               "action": str(action),
-                               "host": host,
-                               "env": env,
-                               "price": current_price,
-                               "strategy": strategy}
-
-                    requests.post(url, json.dumps(payload), timeout=5,
-                                  headers={'Content-Type': 'application/json'})
-
-                LOGGER.info("Trade alert: %s %s %s (%s)" % (pair, interval,
-                                                            config.main.trade_direction,
-                                                            supported.strip()))
-        except Exception as err_msg:
-            LOGGER.critical("Error with pair %s %s" % (pair, str(err_msg)))
+        with ThreadPoolExecutor(max_workers=100) as pool:
+            pool.submit(analyse_pair, pair, redis, isolated, cross)
     LOGGER.info("End of current loop")
     del redis
+
+def analyse_pair(pair, redis, isolated, cross):
+    pair = pair.strip()
+    interval = config.main.interval
+    supported = ""
+    if config.main.trade_direction != "short":
+        supported += "spot "
+
+    supported += "isolated " if pair in isolated else ""
+    supported += "cross " if pair in cross else ""
+
+    if not supported.strip():
+        # don't analyse pair if spot/isolated/cross not supported
+        return
+
+    LOGGER.debug("Analysing pair: %s" % pair)
+    try:
+        result, _, _, current_price, _ = redis.get_action(pair=pair, interval=interval)
+
+        if result == "OPEN":
+            LOGGER.debug("Items to buy")
+            now = datetime.now()
+            current_time = now.strftime("%H:%M:%S") + " UTC"
+
+            # Only alert on a given pair once per hour
+            # for each strategy
+            if pair in TRIGGERED:
+                diff = now - TRIGGERED[pair]
+                diff_in_hours = diff.total_seconds() / 3600
+                if str2bool(config.main.wait_between_trades) and diff.total_seconds() < \
+                        convert_to_seconds(config.main.time_between_trades):
+                    LOGGER.debug("Skipping notification for %s %s as recently triggered"
+                                 % (pair, interval))
+                    return
+                LOGGER.debug("Triggering alert: last alert %s hours ago" % diff_in_hours)
+
+            TRIGGERED[pair] = now
+            send_slack_message("notifications", "Open: %s %s %s (%s) - %s Current: %s" %
+                               (get_tv_link(pair, interval), interval,
+                                config.main.trade_direction, supported.strip(), current_time,
+                                current_price), emoji=True,
+                               icon=':{0}-{1}:'.format(interval, config.main.trade_direction))
+            if FORWARD:
+                url = "http://router:1080/forward"
+                env, host, strategy = config.web.forward.split(',')
+                action = 1 if config.main.trade_direction == "long" else -1
+                payload = {"pair": pair,
+                           "text": "forwarding trade from {}".format(config.main.name),
+                           "action": str(action),
+                           "host": host,
+                           "env": env,
+                           "price": current_price,
+                           "strategy": strategy}
+
+                requests.post(url, json.dumps(payload), timeout=5,
+                              headers={'Content-Type': 'application/json'})
+
+            LOGGER.info("Trade alert: %s %s %s (%s)" % (pair, interval,
+                                                        config.main.trade_direction,
+                                                        supported.strip()))
+    except Exception as err_msg:
+        LOGGER.critical("Error with pair %s %s" % (pair, str(err_msg)))
+
 
 @GET_EXCEPTIONS
 @SCHED.scheduled_job('interval', seconds=60)
