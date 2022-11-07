@@ -5,6 +5,8 @@
 Analyze available data rom redis
 Look for potential buys
 """
+import time
+import os
 import json
 import sys
 import requests
@@ -44,7 +46,9 @@ def analyse_loop():
     client = binance_auth()
     isolated = client.get_isolated_margin_pairs()
     cross = client.get_cross_margin_pairs()
-
+    while os.path.exists('var/run/gc-data-{}'.format(config.main.interval)):
+        LOGGER.info("Waiting for initial data collection to complete for %s" % config.main.interval)
+        time.sleep(30)
 
     #interval = config.main.interval
     redis = Redis()
