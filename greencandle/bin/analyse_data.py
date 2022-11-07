@@ -111,8 +111,14 @@ def analyse_pair(pair, redis, isolated, cross):
                            "price": current_price,
                            "strategy": strategy}
 
-                requests.post(url, json.dumps(payload), timeout=5,
-                              headers={'Content-Type': 'application/json'})
+                for _ in range(0, 3):
+                    while True:
+                        try:
+                            requests.post(url, json.dumps(payload), timeout=10,
+                                          headers={'Content-Type': 'application/json'})
+                        except requests.exceptions.RequestException:
+                            continue
+                        break
 
             LOGGER.info("Trade alert: %s %s %s (%s)" % (pair, interval,
                                                         config.main.trade_direction,
