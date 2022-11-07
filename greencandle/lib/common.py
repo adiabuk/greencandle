@@ -170,9 +170,9 @@ def get_tv_link(pair, interval=None):
 
     if interval:
         return ("<https://www.tradingview.com/chart/?symbol=BINANCE:{0}&interval={1}|{0}>"
-                .format(pair, convert_to_minutes(interval)))
+                .format(pair.strip(), convert_to_minutes(interval)))
     else:
-        return "<https://www.tradingview.com/chart/?symbol=BINANCE:{0}|{0}>".format(pair)
+        return "<https://www.tradingview.com/chart/?symbol=BINANCE:{0}|{0}>".format(pair.strip())
 
 def get_trade_link(pair, strategy, action, string):
     """Get trade link for forced trade"""
