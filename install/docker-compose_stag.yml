@@ -837,13 +837,47 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
+  stag-be-eng-bbpercst2-data:
+    container_name: stag-be-eng-bbpercst2-data
+    hostname: stag-be-eng-bbpercst2-data
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh get_data
+    logging:
+      driver: journald
+    environment:
+      - VPN_IP=$VPN_IP
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=stag/be/bbpercst
+      - intermittent="true"
+      - DB=true
+    links:
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
+    depends_on:
+      - stag-base-mysql
+      - stag-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
   stag-be-eng-bbpercst2-long:
     container_name: stag-be-eng-bbpercst2-long
     hostname: stag-be-eng-bbpercst2-long
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh backend --test --data
+    entrypoint: /docker-entrypoint.sh backend --test
     logging:
       driver: journald
     environment:
