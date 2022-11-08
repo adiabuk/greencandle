@@ -409,14 +409,13 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /root/.bash_history:/root/.bash_history
 
-
   test-be-api-any-cross-long:
     container_name: test-be-api-any-cross-long
     hostname: test-be-api-any-cross-long
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh backend_api --test
+    entrypoint: /docker-entrypoint.sh backend_api --test api & backend_api --test queue
     logging:
       driver: journald
     environment:
@@ -455,7 +454,7 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh backend_api --test
+    entrypoint: /docker-entrypoint.sh backend_api --test api & backend_api --test queue
     logging:
       driver: journald
     environment:
