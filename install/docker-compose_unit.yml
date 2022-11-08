@@ -37,7 +37,7 @@ services:
     hostname: api
     image: greencandle-${image_id}
     restart: always
-    entrypoint: bash -c "cd /srv/greencandle;configstore package process_templates unit /etc;backend_api"
+    entrypoint: bash -c "cd /srv/greencandle;configstore package process_templates unit /etc;backend_api --test api"
     ports:
       - 20000
     healthcheck:
