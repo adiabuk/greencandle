@@ -344,7 +344,7 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh backend_api --test api & backend_api --test queue
+    entrypoint: /docker-entrypoint.sh --test
     logging:
       driver: journald
     environment:
@@ -415,7 +415,7 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh backend_api --test api & backend_api --test queue
+    entrypoint: /docker-entrypoint.sh --test
     logging:
       driver: journald
     environment:
@@ -454,7 +454,7 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh backend_api --test api & backend_api --test queue
+    entrypoint: /docker-entrypoint.sh --test
     logging:
       driver: journald
     environment:

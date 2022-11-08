@@ -28,6 +28,7 @@ if [[ ! -e /installed ]]; then
     mkdir -p /etc/gcapi /var/www/html
     echo $(configstore package get $CONFIG_ENV base_env --basedir /opt/config) > /var/www/html/env.txt
     cp /opt/config/raw/* /etc/gcapi/
+    command="backend_api $@ api & backend_api $@ queue"
 
   elif [[ "$HOSTNAME" == *"cron"* ]]; then
     crontab /opt/output/gc-cron
@@ -41,7 +42,6 @@ if [[ ! -e /installed ]]; then
   fi
 
   touch /installed
-
 fi
 
 if [[ $DB == true ]]; then
@@ -60,4 +60,8 @@ if [[ $DB == true ]]; then
   echo "Done waiting for DB services"
 fi
 
-exec "$@"
+if [[ -z $command ]]; then
+  exec "$@";
+else
+  exec $command;
+fi
