@@ -5,6 +5,7 @@
 Store and retrieve items from redis
 """
 import ast
+import json
 import time
 import zlib
 import pickle
@@ -243,26 +244,38 @@ class Redis():
         if not str(now).endswith("999"): # closing time, 1 ms before next candle
             self.logger.critical("Invalid time submitted to redis %s.  Skipping " % key)
             return None
+        self.logger.critical("AMROX7 %s %s" % (type(data), str(data)))
         for item, value in data.items():
-
-            dict = {now: {item: value}}
+            di = {now: json.dumps({item: value})}
             b = self.conn.hmget(key, now)[0]
             if b:
-                dict = {item:value}
-                x = ast.literal_eval(b.decode())
-                x[item] = value
+                self.logger.critical("AMROXif")
+                di = {item:value}
+                self.logger.critical("AMROXif2 %s %s" %(str(b), type(b)) )
+
+                x = json.loads(b.decode())
+
+                self.logger.critical("AMROXif3 %s %s" %(x, type(x)))
+                #value=json.dumps(value) if type(value) == dict else value
+                x[item] = json.dumps(value)
+                self.logger.critical("AMROXif4")
+                x = json.dumps(x) if type(x) == dict else x
                 result = self.conn.hmset(key, {now: x})
+                self.logger.critical("AMROXif5")
+
 
             else:
-                response = self.conn.hmset(key, dict)
-                    # key = pair:interval
-                    # item = ohlc etc
-                    # now: miliepoch
-                    # value = {dict}
+                self.logger.critical("AMROXelse")
+                response = self.conn.hmset(key, di)
+                # key = pair:interval
+                # item = ohlc etc
+                # now: miliepoch
+                # value = {dict}
 
         expire = str2bool(config.redis.redis_expire)
         if expire:
             self.conn.expire(key, expiry)
+        self.logger.critical("AMROX returning")
 
         return True
 
@@ -628,8 +641,8 @@ class Redis():
         previous = self.get_current(name, items[-2])
         current_epoch = float(current[1]) / 1000
 
-        rehydrated = pickle.loads(zlib.decompress(current[-1]))
-        last_rehydrated = pickle.loads(zlib.decompress(previous[-1]))
+        rehydrated = AttributeDict(json.loads(current[-1]))
+        last_rehydrated = AttributeDict(json.loads(previous[-1]))
 
         # variables that can be referenced in config file
         open = float(rehydrated.open)

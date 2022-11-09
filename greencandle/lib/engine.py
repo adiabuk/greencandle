@@ -210,7 +210,11 @@ class Engine(dict):
                 if seq >= len(self.dataframes[pair]):
                     continue
                 LOGGER.debug("Getting initial sequence number %s" % seq)
-                scheme['data'] = zlib.compress(pickle.dumps(self.dataframes[pair].iloc[seq]))
+                LOGGER.debug("AMROXe %s" % str(self.dataframes[pair].iloc[seq]))
+                scheme['data'] = self.dataframes[pair].iloc[seq].to_dict()
+                LOGGER.critical("AMROX9 %s " % type(scheme['data']))
+                for k,v in scheme['data'].items():
+                    LOGGER.critical('AMROXtype %s' %type(v))
                 scheme["event"] = "ohlc"
                 scheme["close_time"] = str(self.dataframes[pair].iloc[seq]["closeTime"])
                 self.schemes.append(scheme)
@@ -228,7 +232,14 @@ class Engine(dict):
         except Exception as ex:
             LOGGER.critical("Non-float dataframe found")
 
-        scheme['data'] = zlib.compress(pickle.dumps(self.dataframes[pair].iloc[location]))
+        LOGGER.debug("AMROXee %s" % str(self.dataframes[pair].iloc[location].to_dict()))
+        scheme['data'] = self.dataframes[pair].iloc[location].to_dict()
+        LOGGER.critical("AMROX8 %s " % type(scheme['data']))
+        for k,v in scheme['data'].items():
+            LOGGER.critical('AMROXtype %s' %type(v))
+            if type(v) == numpy.int64:
+                scheme['data'][k] = int(v)
+            LOGGER.critical('AMROXtype %s' %type(v))
         scheme["event"] = "ohlc"
         scheme["close_time"] = str(self.dataframes[pair].iloc[location]["closeTime"])
         self.schemes.append(scheme)
@@ -277,7 +288,7 @@ class Engine(dict):
                 # convert real list to ndarray
                 perc_arr = numpy.array(percs)
                 # get EMA using 21 timepeiod
-                ema_result = talib.EMA(perc_arr, timeperiod=21)[-1]
+                ema_result = int(talib.EMA(perc_arr, timeperiod=21)[-1])
             else:
                 ema_result = None
 
@@ -772,7 +783,7 @@ class Engine(dict):
                                     multiplier=float(multiplier), length=float(timeframe))
         # -1 = downtrend - go short
         # 1 = uptrend - go long
-        scheme["data"] = supertrend2['SUPERTd_{}_{}.0'.format(timeframe, multiplier)].iloc[-1]
+        scheme["data"] = int(supertrend2['SUPERTd_{}_{}.0'.format(timeframe, multiplier)].iloc[-1])
         scheme["symbol"] = pair
         scheme["event"] = "STX_{0}".format(timeframe)
 

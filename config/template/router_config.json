@@ -11,6 +11,7 @@
 "any-test-long": ["anytest-long", "alert"],
 "any-test-short": ["anytest-short", "alert"],
 "any-test-long-short": ["anytest-long", "anytest-short", "alert"],
+"bbpercst-long-short": ["bbpercst-long", "bbpercst-short", "alert"],
 "alert": ["alert"],
 "any-long-short": ["any-long", "any-short", "any-tsl-short", "any-tsl-long"],
 "any-spot-long": ["any-spot-long", "any-tsl-spot-long"],
