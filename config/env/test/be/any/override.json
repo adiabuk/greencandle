@@ -5,6 +5,8 @@
   "interval": "1m",
   "name": "test-api-any",
   "pairs": "any",
+  "immediate_stop": "true",
+  "immediate_take_profit": "true",
   "stop_loss_perc": "1",
   "take_profit_perc": "1",
   "perc_at_timeout": "0.3",
