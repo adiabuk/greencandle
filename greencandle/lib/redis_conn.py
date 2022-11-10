@@ -248,19 +248,23 @@ class Redis():
         for item, value in data.items():
             di = {now: json.dumps({item: value})}
             b = self.conn.hmget(key, now)[0]
+            self.logger.critical("AMROX0 %s %s" %(str(b), type(b)))
             if b:
+                b = b.decode() if type(b) == bytes else b
+                #x = json.dumps(x) if type(x) == dict else x
                 self.logger.critical("AMROXif")
                 di = {item:value}
                 self.logger.critical("AMROXif2 %s %s" %(str(b), type(b)) )
 
-                x = json.loads(b.decode())
+                x = json.loads(b)
 
                 self.logger.critical("AMROXif3 %s %s" %(x, type(x)))
                 #value=json.dumps(value) if type(value) == dict else value
-                x[item] = json.dumps(value)
+                x[item] = value
                 self.logger.critical("AMROXif4")
                 x = json.dumps(x) if type(x) == dict else x
                 result = self.conn.hmset(key, {now: x})
+                self.logger.critical("AMROX returning1 %s" % str(x))
                 self.logger.critical("AMROXif5")
 
 
@@ -275,7 +279,7 @@ class Redis():
         expire = str2bool(config.redis.redis_expire)
         if expire:
             self.conn.expire(key, expiry)
-        self.logger.critical("AMROX returning")
+        self.logger.critical("AMROX returning %s" % str(di))
 
         return True
 
@@ -298,12 +302,18 @@ class Redis():
         """Return a specific item from redis, given an address and key"""
         if pair:
             try:
-                return ast.literal_eval(self.conn.hget("{}:{}".format(pair, interval), \
-                        address).decode())[key]
+                #return ast.literal_eval(self.conn.hget("{}:{}".format(pair, interval), \
+                #        address).decode())[key]
+                item =  json.loads(self.conn.hget("{}:{}".format(pair, interval),  address).decode())[key]
+                self.logger.critical("AMROX01 %s %s" %(type(item), str(item)))
+                return item
+                #return json.loads(redis.get_item('RCNBNB:1h','1553831999999').decode())[key]
             except KeyError as ke:
                 self.logger.critical("Unable to get key for %s: %s %s" % (address, key, str(ke)))
                 return None
-        return self.conn.hget(address, key)
+        item = self.conn.hget(address, key)
+        self.logger.critical("AMROX02 %s %s" %(type(item), str(item)))
+        return item
 
     def hgetall(self):
         """
@@ -641,8 +651,8 @@ class Redis():
         previous = self.get_current(name, items[-2])
         current_epoch = float(current[1]) / 1000
 
-        rehydrated = AttributeDict(json.loads(current[-1]))
-        last_rehydrated = AttributeDict(json.loads(previous[-1]))
+        rehydrated = AttributeDict(current[-1])
+        last_rehydrated = AttributeDict(previous[-1])
 
         # variables that can be referenced in config file
         open = float(rehydrated.open)

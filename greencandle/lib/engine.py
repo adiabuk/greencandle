@@ -456,7 +456,7 @@ class Engine(dict):
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
 
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
-        scheme["data"] = rsi[index]
+        scheme["data"] = float(rsi[index]) if rsi[index] != None else None
 
         self.schemes.append(scheme)
         LOGGER.debug("Done getting RSI")
@@ -695,7 +695,7 @@ class Engine(dict):
             LOGGER.warning("failed getting oscillators: %s" % str(error))
             return
 
-        result = fastk[-1]
+        result = float(fastk[-1]) if fastk[-1] != None else None
         try:
             scheme["data"] = result
             scheme["symbol"] = pair

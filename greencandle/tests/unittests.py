@@ -296,7 +296,7 @@ def make_test_case(config_env, pairs, interval, startdate, days, xsum, xmax, xmi
             """Cleanup DB and files"""
             self.logger.info("Cleaning up and gathering artifact")
             os.popen("mysqldump -h mysql -u root -ppassword greencandle > /tmp/output.sql")
-            self.redis.clear_all()
+            #self.redis.clear_all()  #AMROX
             self.dbase.delete_data()
             del self.redis
             del self.dbase
