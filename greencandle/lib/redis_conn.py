@@ -244,32 +244,18 @@ class Redis():
         if not str(now).endswith("999"): # closing time, 1 ms before next candle
             self.logger.critical("Invalid time submitted to redis %s.  Skipping " % key)
             return None
-        self.logger.critical("AMROX7 %s %s" % (type(data), str(data)))
         for item, value in data.items():
             di = {now: json.dumps({item: value})}
             b = self.conn.hmget(key, now)[0]
-            self.logger.critical("AMROX0 %s %s" %(str(b), type(b)))
             if b:
-                b = b.decode() if type(b) == bytes else b
-                #x = json.dumps(x) if type(x) == dict else x
-                self.logger.critical("AMROXif")
+                b = b.decode() if isinstance(b, bytes) else b
                 di = {item:value}
-                self.logger.critical("AMROXif2 %s %s" %(str(b), type(b)) )
-
                 x = json.loads(b)
-
-                self.logger.critical("AMROXif3 %s %s" %(x, type(x)))
-                #value=json.dumps(value) if type(value) == dict else value
                 x[item] = value
-                self.logger.critical("AMROXif4")
-                x = json.dumps(x) if type(x) == dict else x
+                x = json.dumps(x) if isinstance(x, dict) else x
                 result = self.conn.hmset(key, {now: x})
-                self.logger.critical("AMROX returning1 %s" % str(x))
-                self.logger.critical("AMROXif5")
-
 
             else:
-                self.logger.critical("AMROXelse")
                 response = self.conn.hmset(key, di)
                 # key = pair:interval
                 # item = ohlc etc
@@ -279,7 +265,6 @@ class Redis():
         expire = str2bool(config.redis.redis_expire)
         if expire:
             self.conn.expire(key, expiry)
-        self.logger.critical("AMROX returning %s" % str(di))
 
         return True
 
@@ -302,17 +287,13 @@ class Redis():
         """Return a specific item from redis, given an address and key"""
         if pair:
             try:
-                #return ast.literal_eval(self.conn.hget("{}:{}".format(pair, interval), \
-                #        address).decode())[key]
-                item =  json.loads(self.conn.hget("{}:{}".format(pair, interval),  address).decode())[key]
-                self.logger.critical("AMROX01 %s %s" %(type(item), str(item)))
+                item = json.loads(self.conn.hget("{}:{}".format(pair, interval),
+                                                 address).decode())[key]
                 return item
-                #return json.loads(redis.get_item('RCNBNB:1h','1553831999999').decode())[key]
             except KeyError as ke:
                 self.logger.critical("Unable to get key for %s: %s %s" % (address, key, str(ke)))
                 return None
         item = self.conn.hget(address, key)
-        self.logger.critical("AMROX02 %s %s" %(type(item), str(item)))
         return item
 
     def hgetall(self):
@@ -814,7 +795,7 @@ class Redis():
         # if we match any buy rules are NOT in a trade and sell rules don't match
         elif any(rules['open']) and not open_price and able_to_buy and not both:
 
-            # set stop_loss and #take_profit
+            # set stop_loss and take_profit
             self.update_on_entry(pair, 'take_profit_perc', eval(config.main.take_profit_perc))
             self.update_on_entry(pair, 'stop_loss_perc', eval(config.main.stop_loss_perc))
 

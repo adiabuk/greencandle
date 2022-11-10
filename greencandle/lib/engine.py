@@ -210,11 +210,10 @@ class Engine(dict):
                 if seq >= len(self.dataframes[pair]):
                     continue
                 LOGGER.debug("Getting initial sequence number %s" % seq)
-                LOGGER.debug("AMROXe %s" % str(self.dataframes[pair].iloc[seq]))
                 scheme['data'] = self.dataframes[pair].iloc[seq].to_dict()
-                LOGGER.critical("AMROX9 %s " % type(scheme['data']))
-                for k,v in scheme['data'].items():
-                    LOGGER.critical('AMROXtype %s' %type(v))
+                for key, val in scheme['data'].items():
+                    if isinstance(val, numpy.int64):
+                        scheme['data'][key] = int(val)
                 scheme["event"] = "ohlc"
                 scheme["close_time"] = str(self.dataframes[pair].iloc[seq]["closeTime"])
                 self.schemes.append(scheme)
@@ -232,14 +231,11 @@ class Engine(dict):
         except Exception as ex:
             LOGGER.critical("Non-float dataframe found")
 
-        LOGGER.debug("AMROXee %s" % str(self.dataframes[pair].iloc[location].to_dict()))
         scheme['data'] = self.dataframes[pair].iloc[location].to_dict()
-        LOGGER.critical("AMROX8 %s " % type(scheme['data']))
-        for k,v in scheme['data'].items():
-            LOGGER.critical('AMROXtype %s' %type(v))
-            if type(v) == numpy.int64:
-                scheme['data'][k] = int(v)
-            LOGGER.critical('AMROXtype %s' %type(v))
+        for key, val in scheme['data'].items():
+            if isinstance(val, numpy.int64):
+                scheme['data'][key] = int(val)
+
         scheme["event"] = "ohlc"
         scheme["close_time"] = str(self.dataframes[pair].iloc[location]["closeTime"])
         self.schemes.append(scheme)
