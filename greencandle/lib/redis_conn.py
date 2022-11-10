@@ -1,4 +1,4 @@
-#pylint: disable=eval-used,no-else-return,unused-variable,no-member,redefined-builtin
+#pylint: disable=eval-used,no-else-return,unused-variable,no-member,redefined-builtin,broad-except
 #pylint: disable=logging-not-lazy,inconsistent-return-statements,invalid-name
 
 """
@@ -563,7 +563,10 @@ class Redis():
         """
         last_item = self.get_items(pair, interval)[-1]
         raw = self.get_current('{}:{}'.format(pair, interval), last_item)
-        return pickle.loads(zlib.decompress(raw[-1]))
+        try:
+            return raw[-1]
+        except:  # hack for unit tests still using pickled zlib objects
+            return pickle.loads(zlib.decompress(raw[-1]))
 
     def get_action(self, pair, interval):
         """
