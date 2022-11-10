@@ -1,5 +1,6 @@
 {
   "name": "stag-be-eng-bbpercst2-long",
   "perc_at_timeout": "0.3",
+  "slack_active": "true",
   "time_in_trade": "4h"
 }

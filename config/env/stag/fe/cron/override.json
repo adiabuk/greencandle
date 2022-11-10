@@ -1,4 +1,5 @@
 {
   "name": "stag-cron",
-  "production": "false"
+  "production": "false",
+  "slack_active": "true"
 }
