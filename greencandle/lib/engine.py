@@ -210,7 +210,10 @@ class Engine(dict):
                 if seq >= len(self.dataframes[pair]):
                     continue
                 LOGGER.debug("Getting initial sequence number %s" % seq)
-                scheme['data'] = zlib.compress(pickle.dumps(self.dataframes[pair].iloc[seq]))
+                scheme['data'] = self.dataframes[pair].iloc[seq].to_dict()
+                for key, val in scheme['data'].items():
+                    if isinstance(val, numpy.int64):
+                        scheme['data'][key] = int(val)
                 scheme["event"] = "ohlc"
                 scheme["close_time"] = str(self.dataframes[pair].iloc[seq]["closeTime"])
                 self.schemes.append(scheme)
@@ -228,7 +231,11 @@ class Engine(dict):
         except Exception as ex:
             LOGGER.critical("Non-float dataframe found")
 
-        scheme['data'] = zlib.compress(pickle.dumps(self.dataframes[pair].iloc[location]))
+        scheme['data'] = self.dataframes[pair].iloc[location].to_dict()
+        for key, val in scheme['data'].items():
+            if isinstance(val, numpy.int64):
+                scheme['data'][key] = int(val)
+
         scheme["event"] = "ohlc"
         scheme["close_time"] = str(self.dataframes[pair].iloc[location]["closeTime"])
         self.schemes.append(scheme)
@@ -277,7 +284,7 @@ class Engine(dict):
                 # convert real list to ndarray
                 perc_arr = numpy.array(percs)
                 # get EMA using 21 timepeiod
-                ema_result = talib.EMA(perc_arr, timeperiod=21)[-1]
+                ema_result = int(talib.EMA(perc_arr, timeperiod=21)[-1])
             else:
                 ema_result = None
 
@@ -445,7 +452,7 @@ class Engine(dict):
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
 
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
-        scheme["data"] = rsi[index]
+        scheme["data"] = float(rsi[index]) if rsi[index] != None else None
 
         self.schemes.append(scheme)
         LOGGER.debug("Done getting RSI")
@@ -684,7 +691,7 @@ class Engine(dict):
             LOGGER.warning("failed getting oscillators: %s" % str(error))
             return
 
-        result = fastk[-1]
+        result = float(fastk[-1]) if fastk[-1] != None else None
         try:
             scheme["data"] = result
             scheme["symbol"] = pair
@@ -772,7 +779,7 @@ class Engine(dict):
                                     multiplier=float(multiplier), length=float(timeframe))
         # -1 = downtrend - go short
         # 1 = uptrend - go long
-        scheme["data"] = supertrend2['SUPERTd_{}_{}.0'.format(timeframe, multiplier)].iloc[-1]
+        scheme["data"] = int(supertrend2['SUPERTd_{}_{}.0'.format(timeframe, multiplier)].iloc[-1])
         scheme["symbol"] = pair
         scheme["event"] = "STX_{0}".format(timeframe)
 

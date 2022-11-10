@@ -5,6 +5,7 @@
 Store and retrieve items from redis
 """
 import ast
+import json
 import time
 import zlib
 import pickle
@@ -244,21 +245,22 @@ class Redis():
             self.logger.critical("Invalid time submitted to redis %s.  Skipping " % key)
             return None
         for item, value in data.items():
-
-            dict = {now: {item: value}}
+            di = {now: json.dumps({item: value})}
             b = self.conn.hmget(key, now)[0]
             if b:
-                dict = {item:value}
-                x = ast.literal_eval(b.decode())
+                b = b.decode() if isinstance(b, bytes) else b
+                di = {item:value}
+                x = json.loads(b)
                 x[item] = value
+                x = json.dumps(x) if isinstance(x, dict) else x
                 result = self.conn.hmset(key, {now: x})
 
             else:
-                response = self.conn.hmset(key, dict)
-                    # key = pair:interval
-                    # item = ohlc etc
-                    # now: miliepoch
-                    # value = {dict}
+                response = self.conn.hmset(key, di)
+                # key = pair:interval
+                # item = ohlc etc
+                # now: miliepoch
+                # value = {dict}
 
         expire = str2bool(config.redis.redis_expire)
         if expire:
@@ -285,12 +287,14 @@ class Redis():
         """Return a specific item from redis, given an address and key"""
         if pair:
             try:
-                return ast.literal_eval(self.conn.hget("{}:{}".format(pair, interval), \
-                        address).decode())[key]
+                item = json.loads(self.conn.hget("{}:{}".format(pair, interval),
+                                                 address).decode())[key]
+                return item
             except KeyError as ke:
                 self.logger.critical("Unable to get key for %s: %s %s" % (address, key, str(ke)))
                 return None
-        return self.conn.hget(address, key)
+        item = self.conn.hget(address, key)
+        return item
 
     def hgetall(self):
         """
@@ -628,8 +632,8 @@ class Redis():
         previous = self.get_current(name, items[-2])
         current_epoch = float(current[1]) / 1000
 
-        rehydrated = pickle.loads(zlib.decompress(current[-1]))
-        last_rehydrated = pickle.loads(zlib.decompress(previous[-1]))
+        rehydrated = AttributeDict(current[-1])
+        last_rehydrated = AttributeDict(previous[-1])
 
         # variables that can be referenced in config file
         open = float(rehydrated.open)
@@ -791,7 +795,7 @@ class Redis():
         # if we match any buy rules are NOT in a trade and sell rules don't match
         elif any(rules['open']) and not open_price and able_to_buy and not both:
 
-            # set stop_loss and #take_profit
+            # set stop_loss and take_profit
             self.update_on_entry(pair, 'take_profit_perc', eval(config.main.take_profit_perc))
             self.update_on_entry(pair, 'stop_loss_perc', eval(config.main.stop_loss_perc))
 

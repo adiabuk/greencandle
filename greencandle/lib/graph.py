@@ -4,8 +4,6 @@
 import ast
 import time
 import datetime
-import pickle
-import zlib
 from collections import defaultdict
 import pandas
 from selenium import webdriver
@@ -262,7 +260,7 @@ class Graph():
                                    index_item).decode())['event']
             except KeyError:  # no event for this time period, so skip
                 pass
-            rehydrated = pickle.loads(zlib.decompress(result_list['ohlc']))
+            rehydrated = result_list['ohlc']
             list_of_series.append(rehydrated)
             for ind in ind_list:
                 try:  # event
