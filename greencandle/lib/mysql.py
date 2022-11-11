@@ -18,9 +18,10 @@ class Mysql():
     """
     get_exceptions = exception_catcher((Exception))
 
-    def __init__(self, test=False, interval="15m"):
+    def __init__(self, test=False, interval="15m", host=None, port=3306):
         self.creds = AttributeDict()
-        self.creds.host = config.database.db_host
+        self.port = port
+        self.creds.host = host if host else config.database.db_host
         self.creds.user = config.database.db_user
         self.creds.password = config.database.db_password
         self.creds.database = config.database.db_database
@@ -37,6 +38,7 @@ class Mysql():
         Connect to Mysql DB
         """
         self.dbase = MySQLdb.connect(host=self.creds.host,
+                                     port=self.port,
                                      user=self.creds.user,
                                      passwd=self.creds.password,
                                      db=self.creds.database)

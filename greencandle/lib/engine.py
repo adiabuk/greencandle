@@ -246,7 +246,6 @@ class Engine(dict):
         """
         self.get_bb_perc(pair, dataframe, index, localconfig, ema=True)
 
-
     def get_bb_perc(self, pair, dataframe, index=None, localconfig=None, ema=False):
         """get bb %"""
         if (index == None and self.test) or len(self.dataframes[pair]) < 2:
