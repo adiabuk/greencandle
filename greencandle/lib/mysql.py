@@ -74,7 +74,7 @@ class Mysql():
         delete contents of given table
         """
 
-        self.run_sql_statement('delete from "{}"'.format(table_name))
+        self.run_sql_statement('delete from {}'.format(table_name))
 
     @get_exceptions
     def fetch_sql_data(self, query, header=True):

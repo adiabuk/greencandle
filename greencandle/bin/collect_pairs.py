@@ -23,6 +23,7 @@ def main():
     pstr = (' '.join('("{}"),'.format(item) for item in pairs)).rstrip(',')
 
     # insert into local db
+    dbase.run_sql_statement('create table if not exists tmp_pairs (pair varchar(30))')
     dbase.delete_table_contents('tmp_pairs')
     dbase.run_sql_statement('insert into tmp_pairs (pair) VALUES {}'.format(pstr))
 
