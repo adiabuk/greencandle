@@ -92,8 +92,9 @@ class Trade():
         current_trades = dbase.get_trades()
         avail_slots = int(self.config.main.max_trades) - len(current_trades)
         self.logger.info("%s buy slots available" % avail_slots)
-        tmp_pairs = dbase.fetch_sql_data('select pair from tmp_pairs', header=False)
-        db_pairs = [x[0] for x in tmp_pairs]
+        table = dbase.fetch_sql_data('show tables like "tmp_pairs"', header=False)
+        tmp_pairs = dbase.fetch_sql_data('select pair from tmp_pairs', header=False) if table else None
+        db_pairs = [x[0] for x in tmp_pairs] if tmp_pairs else None
         final_list = []
         manual = "any" in self.config.main.name
         for item in items_list:
