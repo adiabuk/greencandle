@@ -69,6 +69,14 @@ class Mysql():
         self.__execute(cur, command)
 
     @get_exceptions
+    def delete_table_contents(self, table_name):
+        """
+        delete contents of given table
+        """
+
+        self.run_sql_statement('delete from "{}"'.format(table_name))
+
+    @get_exceptions
     def fetch_sql_data(self, query, header=True):
         """"
         Fetch SQL data for totals and return dict
