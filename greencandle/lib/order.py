@@ -92,7 +92,8 @@ class Trade():
         current_trades = dbase.get_trades()
         avail_slots = int(self.config.main.max_trades) - len(current_trades)
         self.logger.info("%s buy slots available" % avail_slots)
-
+        tmp_pairs = dbase.fetch_sql_data('select pair from tmp_pairs', header=False)
+        db_pairs = [x[0] for x in tmp_pairs]
         final_list = []
         manual = "any" in self.config.main.name
         for item in items_list:
@@ -100,6 +101,8 @@ class Trade():
                 self.logger.warning("We already have a trade of %s, skipping..." % item[0])
             elif not manual and (item[0] not in self.config.main.pairs and not self.test_data):
                 self.logger.error("Pair %s not in main_pairs, skipping..." % item[0])
+            elif not manual and db_pairs and (item[0] not in db_pairs and not self.test_data):
+                self.logger.error("Pair %s not in db_pairs, skipping..." % item[0])
             elif self.is_in_drain() and not self.test_data:
                 self.logger.warning("strategy is in drain for pair %s, skipping..." % item[0])
                 send_slack_message("alerts", "strategy is in drain, skipping")
