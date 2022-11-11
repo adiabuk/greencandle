@@ -1,6 +1,4 @@
 {
-  "name": "test-be-eng-bbperc-short",
-  "open_rule1": "high \u003e results.current.upper_200 and results.current.bbperc_200 \u003e 1.5 and results.current.STX_23 \u003c 0",
-  "trade_direction": "short",
-  "trade_type": "margin"
+  "name": "test-api-bb-cross",
+  "trade_direction": "short"
 }
