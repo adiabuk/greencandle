@@ -17,7 +17,7 @@ def main():
 
     dbase.run_sql_statement('drop table if exists tmp_pairs')
     dbase.run_sql_statement('create table tmp_pairs as SELECT distinct(pair) from '
-                            'profitable_by_name_pair where perc_profitable > 60 '
+                            'profitable_by_name_pair where total > 10 and net_per_trade > 0 '
                             'and name like "%bbpercst2%"')
 
 if __name__ == '__main__':
