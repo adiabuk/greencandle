@@ -540,7 +540,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
-      - CONFIG_ENV=test/be/any/short
+      - CONFIG_ENV=test/be/bbperc/short
       - HOST_IP=$HOST_IP
       - intermittent="true"
       - DB=true
