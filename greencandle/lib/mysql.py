@@ -311,8 +311,8 @@ class Mysql():
         Get today's profit perc so far
         Returns float
         """
-        command = ('select avg_perc, avg_net_perc, total_perc, total_net_perc, count '
-                   'from profit_daily where date(date) = date(NOW())')
+        command = ('select usd_profit, usd_net_profit, avg_perc, avg_net_perc, total_perc, '
+                   'total_net_perc, count from profit_daily where date(date) = date(NOW())')
 
         row = self.fetch_sql_data(command, header=False)
         return row[0] if row else [None] * 5
