@@ -291,7 +291,7 @@ class Redis():
                                                  address).decode())[key]
                 return item
             except KeyError as ke:
-                self.logger.critical("Unable to get key for %s: %s %s" % (address, key, str(ke)))
+                self.logger.warning("Unable to get key for %s: %s %s" % (address, key, str(ke)))
                 return None
         item = self.conn.hget(address, key)
         return item
