@@ -116,7 +116,7 @@
       "is_binary": false,
       "is_secret": true
     },
-    "bad_trades": {
+    "bad_pairs": {
       "value": "false",
       "is_binary": false,
       "is_secret": false

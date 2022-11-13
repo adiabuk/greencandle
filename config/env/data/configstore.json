@@ -115,6 +115,11 @@
       "is_binary": false,
       "is_secret": false
     },
+    "bad_pairs": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
     "base_env": {
       "value": "data",
       "is_binary": false,
