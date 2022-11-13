@@ -51,6 +51,8 @@ def main():
     @GET_EXCEPTIONS
     @sched.scheduled_job('interval', minutes=30)
     def get_graph():
+        if not args.graph:
+            return
         for pair in config.main.pairs.split():
             pair = pair.strip()
             LOGGER.info("Creating graph for %s" % pair)
