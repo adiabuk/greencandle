@@ -1,6 +1,4 @@
-#pylint: disable=wrong-import-position,import-error,no-member,logging-not-lazy
-#pylint: disable=wrong-import-order,no-else-return,no-else-break,no-else-continue
-#pylint: disable=too-many-locals,consider-using-ternary
+#pylint: disable=no-member,wrong-import-order,logging-not-lazy,too-many-locals
 """
 Test Buy/Sell orders
 """
@@ -55,7 +53,7 @@ class Trade():
         manual_drain = Path('/var/local/{}_drain'.format(self.config.main.base_env)).is_file()
         if time_range[1] < time_range[0]:
             return time_str >= time_range[0] or time_str <= time_range[1]
-        return (drain and time_range[0] <= time_str <= time_range[1]) or manual_drain
+        return (time_range[0] <= time_str <= time_range[1]) if drain else manual_drain
 
     def __send_redis_trade(self, **kwargs):
         """
@@ -93,8 +91,9 @@ class Trade():
         avail_slots = int(self.config.main.max_trades) - len(current_trades)
         self.logger.info("%s buy slots available" % avail_slots)
         table = dbase.fetch_sql_data('show tables like "tmp_pairs"', header=False)
-        tmp_pairs = dbase.fetch_sql_data('select pair from tmp_pairs', header=False) if table else None
-        db_pairs = [x[0] for x in tmp_pairs] if tmp_pairs else None
+        tmp_pairs = dbase.fetch_sql_data('select pair from tmp_pairs', header=False) \
+                if table else []
+        db_pairs = [x[0] for x in tmp_pairs] if tmp_pairs else {}
         final_list = []
         manual = "any" in self.config.main.name
         for item in items_list:
@@ -161,22 +160,21 @@ class Trade():
         if not items_list:
             self.logger.warning("No items to close trade with")
             return False
-        else:
 
-            for item in items_list:
+        for item in items_list:
 
-                # Number of trades within scope
-                dbase = Mysql(test=self.test_data, interval=self.interval)
-                count = dbase.fetch_sql_data("select count(*) from trades where close_price "
-                                             "is NULL and pair like '%{0}' and name='{1}' "
-                                             "and direction='{2}'"
-                                             .format(item[0], self.config.main.name,
-                                                     self.config.main.trade_direction),
-                                             header=False)[0][0]
+            # Number of trades within scope
+            dbase = Mysql(test=self.test_data, interval=self.interval)
+            count = dbase.fetch_sql_data("select count(*) from trades where close_price "
+                                         "is NULL and pair like '%{0}' and name='{1}' "
+                                         "and direction='{2}'"
+                                         .format(item[0], self.config.main.name,
+                                                 self.config.main.trade_direction),
+                                         header=False)[0][0]
 
-                while count -1 > 0:
-                    additional_trades.append(item)
-                    count -= 1
+            while count -1 > 0:
+                additional_trades.append(item)
+                count -= 1
 
         items_list += additional_trades
 
@@ -220,7 +218,7 @@ class Trade():
             details = self.client.get_isolated_margin_details(pair)
             if details['assets'][0]['quoteAsset']['asset'] == symbol:
                 return float(details['assets'][0]['quoteAsset']['borrowed'])
-            elif details['assets'][0]['baseAsset']['asset'] == symbol:
+            if details['assets'][0]['baseAsset']['asset'] == symbol:
                 return float(details['assets'][0]['baseAsset']['borrowed'])
         return 0
 
@@ -344,9 +342,9 @@ class Trade():
             return_dict['symbol'] = value
             return return_dict
 
-        elif (orig_quote != 'USDT' and
-              base2quote(return_dict['symbol'], orig_quote+'USDT') > max_borrow_usd and
-              self.config.main.trade_direction == "long"):
+        if (orig_quote != 'USDT' and
+                base2quote(return_dict['symbol'], orig_quote+'USDT') > max_borrow_usd and
+                self.config.main.trade_direction == "long"):
             usd_value = sub_perc(10, max_borrow_usd)
             base_value = quote2base(usd_value, orig_quote+'USDT')
             return_dict['usd'] = usd_value
@@ -482,8 +480,10 @@ class Trade():
         del dbase
         return True
 
+
+    @staticmethod
     @GET_EXCEPTIONS
-    def get_test_balance(self, dbase, account=None):
+    def get_test_balance(dbase, account=None):
         """
         Get and return test balance dict in the same format as binance
         """
@@ -877,7 +877,6 @@ class Trade():
                     (not self.test_trade and 'transactTime' in trade_result):
                 if name == "api":
                     name = "%"
-
                 if update_db:
                     dbase.update_trades(pair=pair, close_time=current_time,
                                         close_price=fill_price, quote=quote_out,
@@ -945,7 +944,6 @@ class Trade():
                 if "msg" in trade_result:
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
                     return False
-
                 actual_borrowed = self.get_borrowed(pair=pair, symbol=quote)
                 borrowed = actual_borrowed if float(borrowed) > float(actual_borrowed) else borrowed
 
