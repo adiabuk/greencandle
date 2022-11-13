@@ -115,6 +115,11 @@
       "is_binary": false,
       "is_secret": false
     },
+    "bad_trades": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
     "base_env": {
       "value": "unit",
       "is_binary": false,

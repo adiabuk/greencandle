@@ -96,12 +96,14 @@ class Trade():
         db_pairs = [x[0] for x in tmp_pairs] if tmp_pairs else {}
         final_list = []
         manual = "any" in self.config.main.name
+        bad_pairs = str2bool(self.config.main.bad_pairs)
         for item in items_list:
             if current_trades and [trade for trade in current_trades if item[0] in trade]:
                 self.logger.warning("We already have a trade of %s, skipping..." % item[0])
             elif not manual and (item[0] not in self.config.main.pairs and not self.test_data):
                 self.logger.error("Pair %s not in main_pairs, skipping..." % item[0])
-            elif not manual and db_pairs and (item[0] not in db_pairs and not self.test_data):
+            elif not manual and bad_pairs and db_pairs and (item[0] not in db_pairs
+                                                            and not self.test_data):
                 self.logger.error("Pair %s not in db_pairs, skipping..." % item[0])
             elif self.is_in_drain() and not self.test_data:
                 self.logger.warning("strategy is in drain for pair %s, skipping..." % item[0])
@@ -354,9 +356,7 @@ class Trade():
         return return_dict
 
     def get_total_amount_to_use(self, dbase, pair=None, account=None):
-        """
-        Get total amount to use as sum of balance_to_use and loan_to_use
-        """
+        """ Get total amount to use as sum of balance_to_use and loan_to_use """
         total_max = int(self.config.main.max_trade_usd)
         balance_to_use = self.get_balance_to_use(dbase, account, pair)
         if balance_to_use['usd'] > total_max:

@@ -116,6 +116,11 @@
       "is_binary": false,
       "is_secret": true
     },
+    "bad_trades": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
     "base_env": {
       "value": "stag",
       "is_binary": false,
