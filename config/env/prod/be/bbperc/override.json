@@ -1,5 +1,5 @@
 {
-  "bad_pairs": "true",
+  "good_pairs": "true",
   "immediate_stop": "true",
   "immediate_take_profit": "true",
   "interval": "1m",

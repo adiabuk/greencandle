@@ -20,7 +20,7 @@ def main():
     Usage: check_pairs
     """
     now = datetime.datetime.now()
-    bad_pairs = []
+    good_pairs = []
     for pair in config.main.pairs.split():
         pair = pair.strip()
         try:
@@ -32,6 +32,6 @@ def main():
         if date.tm_year != now.year and date.tm_mon != now.month:
             print(pair)
             print('no_data')
-            bad_pairs.append(pair)
+            good_pairs.append(pair)
 
-    print(bad_pairs)
+    print(good_pairs)

@@ -96,13 +96,13 @@ class Trade():
         db_pairs = [x[0] for x in tmp_pairs] if tmp_pairs else {}
         final_list = []
         manual = "any" in self.config.main.name
-        bad_pairs = str2bool(self.config.main.bad_pairs)
+        good_pairs = str2bool(self.config.main.good_pairs)
         for item in items_list:
             if current_trades and [trade for trade in current_trades if item[0] in trade]:
                 self.logger.warning("We already have a trade of %s, skipping..." % item[0])
             elif not manual and (item[0] not in self.config.main.pairs and not self.test_data):
                 self.logger.error("Pair %s not in main_pairs, skipping..." % item[0])
-            elif not manual and bad_pairs and db_pairs and (item[0] not in db_pairs
+            elif not manual and good_pairs and db_pairs and (item[0] not in db_pairs
                                                             and not self.test_data):
                 self.logger.error("Pair %s not in db_pairs, skipping..." % item[0])
             elif self.is_in_drain() and not self.test_data:

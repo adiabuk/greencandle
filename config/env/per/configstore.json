@@ -116,7 +116,7 @@
       "is_binary": false,
       "is_secret": false
     },
-    "bad_pairs": {
+    "good_pairs": {
       "value": "false",
       "is_binary": false,
       "is_secret": false
