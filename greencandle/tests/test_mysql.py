@@ -88,7 +88,7 @@ class TestMysql(OrderedTest):
         self.assertIsInstance(rates[0], int)
         #self.assertIsInstance(float(rates[1]), float)
         today = self.dbase.get_todays_profit()
-        self.assertIs(len(today), 5)
+        self.assertIs(len(today), 7)
         self.assertIs(today[0], None)
         self.assertIs(today[1], None)
         self.dbase.get_active_trades()   # No exception
