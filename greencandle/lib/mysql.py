@@ -315,7 +315,7 @@ class Mysql():
                    'total_net_perc, count from profit_daily where date(date) = date(NOW())')
 
         row = self.fetch_sql_data(command, header=False)
-        return row[0] if row else [None] * 5
+        return row[0] if row else [None] * 7
 
     def get_active_trades(self):
         """
