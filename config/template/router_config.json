@@ -44,6 +44,7 @@
 "stochrsi-cross-long-short": ["prod-be-api-stochrsi-cross-short", "prod-be-api-stochrsi-cross-long", "alert"],
 "stochrsi-cross-short": ["prod-be-api-stochrsi-cross-short", "alert"],
 "stochrsi-cross-long": ["prod-be-api-stochrsi-cross-long", "alert"],
+"bb-long-short": ["bb-long", "bb-short", "alert"],
 "alert" : ["alert"],
 "route": []
 }
