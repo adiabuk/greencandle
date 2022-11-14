@@ -15,5 +15,6 @@
   "take_profit_perc": "1",
   "time_in_trade": "4h",
   "trade_type": "margin",
+  "max_trade_usd": "2500",
   "good_pairs": "true"
 }
