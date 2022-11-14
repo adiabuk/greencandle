@@ -4,7 +4,7 @@
 * * * * * /usr/bin/touch /var/run/cron > /proc/1/fd/1 2>/proc/1/fd/2 # healthcheck
 
 @reboot echo C.UTF-8 > /etc/default/locale
-@daily /usr/local/bin/cleanup_redis > /proc/1/fd/1 2>/proc/1/fd/2
+@hourly /usr/local/bin/cleanup_redis > /proc/1/fd/1 2>/proc/1/fd/2
 0 3 * * 1 /bin/ls -1t /data/mysql| tail -n +31 | /usr/bin/xargs -d '\n' /bin/rm -f > /proc/1/fd/1 2>/proc/1/fd/2
 
 {{if eq .base_env "prod" }}
