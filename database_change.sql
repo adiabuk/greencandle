@@ -1,4 +1,4 @@
-# 4.9
+# 5.0
 
 drop view if exists profitable_by_name_pair;
 create view profitable_by_name_pair as

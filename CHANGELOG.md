@@ -1,5 +1,27 @@
 # Releases
 
+# 5.0
+* Various new db views to assist with finding profitable pairs
+* Add bbperc and bbperc with EMA indicators
+* bbperc strategy with supertrend for all envs
+* Strip whitespace from pair before creating graph links
+* Continue with trade if unable to borrow
+* Allow restricting trade to a max amount (loan + available)
+* Better unified logging when opening/closing trades
+* Add numerical trade action to trade request
+* Methods to calculate total trade amount with max var
+* Remove pickle and zlib compression of ohlc data
+* Fix redis data to be jsonifed for new redis version
+* Forward API requests to different environments
+* Redis queue for incoming API requests
+* Don't save auto_inc value in db schema
+* Wait for initial data collection before analysing data
+* Cleanup of docker entryfiles
+* Various tests in stag and test envs
+* More data in hourly profit notifications
+* Fetch table of good pairs from different DBs
+* Cleanup old redis entries, and only keep last 250 items for each pair
+
 # 4.8
 * Data migration between stag and test envs
 * Fixes for assocs tests not running on all envs
