@@ -1,5 +1,6 @@
 {
   "name": "stag-cron",
+  "pairs": "ETHBTC",
   "production": "false",
   "slack_active": "true"
 }

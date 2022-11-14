@@ -1,4 +1,5 @@
 {
   "name": "test-cron",
+  "pairs": "ETHBTC",
   "production": "false"
 }

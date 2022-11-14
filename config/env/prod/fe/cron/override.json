@@ -1,3 +1,4 @@
 {
-  "name": "prod-cron"
+  "name": "prod-cron",
+  "pairs": "ETHBTC"
 }
