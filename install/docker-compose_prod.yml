@@ -325,8 +325,8 @@ services:
       - prod-be-api-any-isolated-short:prod-be-api-any-isolated-short
       - prod-be-api-stochrsi-cross-short:prod-be-api-stochrsi-cross-short
       - prod-be-api-stochrsi-cross-long:prod-be-api-stochrsi-cross-long
-      - prod-be-api-bb-cross-long:bb-long
-      - prod-be-api-bb-cross-short:bb-short
+      - prod-be-eng-bb-cross-long:bb-long
+      - prod-be-eng-bb-cross-short:bb-short
     depends_on:
       - prod-base-mysql
       - prod-base-redis
@@ -600,13 +600,47 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  prod-be-api-bb-cross-long:
-    container_name: prod-be-api-bb-cross-long
-    hostname: prod-be-api-bb-cross-long
+  prod-be-eng-bbpercst2-data:
+    container_name: prod-be-eng-bbpercst2-data
+    hostname: prod-be-eng-bbpercst2-data
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh --test
+    entrypoint: /docker-entrypoint.sh get_data
+    logging:
+      driver: journald
+    environment:
+      - VPN_IP=$VPN_IP
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=prod/be/bbperc/data
+      - intermittent="true"
+      - DB=true
+    links:
+      - prod-base-mysql:mysql
+      - prod-base-redis:redis
+    depends_on:
+      - prod-base-mysql
+      - prod-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  prod-be-eng-bb-cross-long:
+    container_name: prod-be-eng-bb-cross-long
+    hostname: prod-be-eng-bb-cross-long
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend --test --graph
     logging:
       driver: journald
     environment:
@@ -639,13 +673,13 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  prod-be-api-bb-cross-short:
-    container_name: prod-be-api-bb-cross-short
-    hostname: prod-be-api-bb-cross-short
+  prod-be-eng-bb-cross-short:
+    container_name: prod-be-eng-bb-cross-short
+    hostname: prod-be-eng-bb-cross-short
     image: amrox/greencandle:${TAG}
-    pull_policy: always
+    pull_policy: alwaysa
     restart: always
-    entrypoint: /docker-entrypoint.sh --test
+    entrypoint: /docker-entrypoint.sh backend --test
     logging:
       driver: journald
     environment:
