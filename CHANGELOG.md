@@ -1,5 +1,9 @@
 # Releases
 
+# 5.0.1
+* Fix typo in prod DC config
+* Wait for data collection to finish in backend
+
 # 5.0
 * Various new db views to assist with finding profitable pairs
 * Add bbperc and bbperc with EMA indicators
