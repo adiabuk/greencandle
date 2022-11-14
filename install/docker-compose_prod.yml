@@ -677,7 +677,7 @@ services:
     container_name: prod-be-eng-bb-cross-short
     hostname: prod-be-eng-bb-cross-short
     image: amrox/greencandle:${TAG}
-    pull_policy: alwaysa
+    pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh backend --test
     logging:
