@@ -9,6 +9,8 @@ and detect trends using candlestick patterns
 
 import argparse
 import sys
+import os
+import time
 from pathlib import Path
 import argcomplete
 
@@ -39,6 +41,14 @@ def main():
     interval = args.interval if args.interval else str(config.main.interval)
     test_string = "(test)" if args.test else "(live)"
     setproctitle.setproctitle("greencandle-backend_{0}{1}".format(interval, test_string))
+
+    if not args.data:
+        while os.path.exists('var/run/gc-data-{}'.format(config.main.interval)):
+            LOGGER.info("Waiting for initial data collection to complete for %s"
+                        % config.main.interval)
+            time.sleep(30)
+
+
     sched = BlockingScheduler()
 
     @GET_EXCEPTIONS
