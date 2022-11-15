@@ -295,36 +295,6 @@ services:
       - /root/.aws:/root/.aws
       - /var/run:/var/run
 
-  stag-fe-api-web:
-    container_name: stag-fe-api-web
-    hostname: stag-fe-api-web
-    image: amrox/webserver:${TAG}
-    pull_policy: always
-    restart: always
-    healthcheck:
-      test: service nginx status || exit 1
-      interval: 5m
-      timeout: 5s
-      retries: 5
-    environment:
-      - CONFIG_ENV=stag/fe/api
-      - HOST=$HOSTNAME
-      - DB=false
-    ports:
-      - 1111:1111
-    links:
-      - stag-be-api-router:router
-      - stag-base-mysql:mysql
-      - stag-base-redis:redis
-    depends_on:
-      - stag-base-mysql
-      - stag-base-redis
-    entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
-    volumes:
-      - /data:/data
-      - /root/.aws:/root/.aws
-      - /root/.bash_history:/root/.bash_history
-
   stag-be-api-router:
     container_name: stag-be-api-router
     hostname: stag-be-api-router
