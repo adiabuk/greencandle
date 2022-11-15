@@ -1462,7 +1462,7 @@ services:
     dns:
       - "8.8.8.8"
     ports:
-      - 6379:6379
+      - 6382:6379
     restart: always
     network_mode: "bridge"
     dns:
@@ -1486,7 +1486,7 @@ services:
       - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh mysqld
     ports:
-      - 3306:3306
+      - 3309:3306
     environment:
       - VPN_IP=$VPN_IP
       - MYSQL_ROOT_PASSWORD=password
@@ -1589,7 +1589,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     ports:
-      - 1081:1080
+      - 1083:1080
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis

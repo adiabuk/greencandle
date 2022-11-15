@@ -78,7 +78,7 @@ services:
     links:
       - per-base-mysql:mysql
     ports:
-      - 6379:6379
+      - 6380:6379
     healthcheck:
       test: redis-cli ping
       interval: 1m
@@ -101,7 +101,7 @@ services:
       - DB=true
     restart: always
     ports:
-      - 3306:3306
+      - 3307:3306
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
       interval: 1m
@@ -190,7 +190,7 @@ services:
        - HOST=$HOSTNAME
        - DB=false
      ports:
-       - 8888:8888
+       - 2222:8888
      links:
        - gen-fe-cadvisor:cadvisor
        - per-fe-api-dashboard:api_dash
@@ -315,7 +315,7 @@ services:
       - HOST_IP=$HOST_IP
       - DB=true
     ports:
-      - 1080:1080
+      - 1081:1080
     links:
       - per-base-mysql:mysql
       - per-base-redis:redis
