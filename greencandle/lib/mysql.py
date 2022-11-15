@@ -257,7 +257,7 @@ class Mysql():
         cur = self.dbase.cursor()
         command = ('select pair, open_time from trades where close_price is NULL and '
                    '`interval`="{0}" and name in ("{1}","api")'
-                   .format(self.interval, config.main.name, config.main.trade_direction))
+                   .format(self.interval, config.main.name))
 
         self.__execute(cur, command)
         return cur.fetchall()
