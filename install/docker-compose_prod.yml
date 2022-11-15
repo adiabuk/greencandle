@@ -702,8 +702,6 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-
-
   prod-be-eng-bb-cross-long:
     container_name: prod-be-eng-bb-cross-long
     hostname: prod-be-eng-bb-cross-long

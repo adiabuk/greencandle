@@ -53,7 +53,7 @@ def main():
 
     interval = config.main.interval
     LOGGER.info("Starting initial prod run")
-    name = config.env.main.split('-')[-1]
+    name = config.main.name.split('-')[-1]
     Path('/var/run/gc-data-{}-{}'.format(interval, name)).touch()
     prod_initial(interval, test=True) # initial run, before scheduling begins
     prod_run()
