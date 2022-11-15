@@ -231,8 +231,9 @@ class Graph():
             for ind in ind_list:
                 try:
                     LOGGER.debug("Getting Data for %s" % ind)
-                    result_list[ind] = ast.literal_eval(redis.get_item('{}:{}'.format(
-                        self.pair, self.interval), index_item).decode())[ind]
+                    str_dict = redis.get_item('{}:{}'.format(self.pair, self.interval),
+                                              index_item).decode().replace('null', 'None')
+                    result_list[ind] = ast.literal_eval(str_dict)[ind]
                 except AttributeError:
                     pass
                 except KeyError:
@@ -243,9 +244,9 @@ class Graph():
                     result_list[int] = redis.get_item(index_item, ind).decode()
 
             LOGGER.debug("Getting current prices")
-            result_list['current_price'] = ast.literal_eval(
-                redis.get_item('{}:{}'.format(self.pair, self.interval),
-                               index_item).decode())['current_price']
+            str_dict = redis.get_item('{}:{}'.format(self.pair, self.interval),
+                                      index_item).decode().replace('null', 'None')
+            result_list['current_price'] = ast.literal_eval(str_dict)['current_price']
             try:  #ohlc
                 result_list['ohlc'] = redis.get_current('{}:{}'.format(self.pair,
                                                                        self.interval),
@@ -255,9 +256,9 @@ class Graph():
                              % (index_item, ind, error))
             try:  # event
                 LOGGER.debug("Getting trade events")
-                result_list['event'] = ast.literal_eval(
-                    redis.get_item('{}:{}'.format(self.pair, self.interval),
-                                   index_item).decode())['event']
+                str_dict = redis.get_item('{}:{}'.format(self.pair, self.interval),
+                                          index_item).decode().replace('null', 'None')
+                result_list['event'] = ast.literal_eval(str_dict)['event']
             except KeyError:  # no event for this time period, so skip
                 pass
             rehydrated = result_list['ohlc']
