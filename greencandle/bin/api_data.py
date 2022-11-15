@@ -5,7 +5,7 @@ Flask module for manipulating API trades and displaying relevent graphs
 """
 import atexit
 import time
-from pathlib import Path
+import glob
 from collections import defaultdict
 from flask import Flask, request, Response
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -34,12 +34,12 @@ def analyse_loop():
     """
     Gather data from redis and analyze
     """
-    run_file = Path('/var/run/gc-data-{}'.format(config.main.interval))
 
-    while not run_file.is_file():
-        # file doesn't exist
-        LOGGER.info("Waiting for data collection to complete...")
+    while glob.glob('/var/run/gc-data-{}-*'.format(config.main.interval)):
+        LOGGER.info("Waiting for initial data collection to complete for %s"
+                    % config.main.interval)
         time.sleep(30)
+
 
     redis = Redis()
     for pair in PAIRS:
