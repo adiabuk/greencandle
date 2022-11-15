@@ -43,7 +43,7 @@ def main():
     setproctitle.setproctitle("greencandle-backend_{0}{1}".format(interval, test_string))
 
     if not args.data:
-        while glob.glob('/var/run/gc-data-{}-*'.format(config.main.interval)):
+        while glob.glob('/var/run/{}-data-{}-*'.format(config.main.base_env, config.main.interval)):
             LOGGER.info("Waiting for initial data collection to complete for %s"
                         % config.main.interval)
             time.sleep(30)

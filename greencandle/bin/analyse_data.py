@@ -46,7 +46,7 @@ def analyse_loop():
     client = binance_auth()
     isolated = client.get_isolated_margin_pairs()
     cross = client.get_cross_margin_pairs()
-    while glob.glob('/var/run/gc-data-{}-*'.format(config.main.interval)):
+    while glob.glob('/var/run/{}-data-{}-*'.format(config.main.base_env, config.main.interval)):
         LOGGER.info("Waiting for initial data collection to complete for %s" % config.main.interval)
         time.sleep(30)
 
