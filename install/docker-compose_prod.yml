@@ -142,6 +142,7 @@ services:
       - /dev/log:/dev/log
       - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
+      - /root/.ipython:/root/.ipython
 
   prod-fe-cron:
     container_name: prod-fe-cron

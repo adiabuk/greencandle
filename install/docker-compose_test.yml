@@ -206,6 +206,7 @@ services:
       - /dev/log:/dev/log
       - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
+      - /root/.ipython:/root/.ipython
 
   test-fe-cron:
     container_name: test-fe-cron

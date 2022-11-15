@@ -1421,6 +1421,7 @@ services:
       - /dev/log:/dev/log
       - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
+      - /root/.ipython:/root/.ipython
 
   data-fe-cron:
     container_name: data-fe-cron
