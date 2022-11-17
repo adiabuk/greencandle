@@ -142,6 +142,7 @@ services:
       - /dev/log:/dev/log
       - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
+      - /root/.ipython:/root/.ipython
 
   prod-fe-cron:
     container_name: prod-fe-cron
@@ -701,8 +702,6 @@ services:
       - /var/run:/var/run
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
-
-
 
   prod-be-eng-bb-cross-long:
     container_name: prod-be-eng-bb-cross-long

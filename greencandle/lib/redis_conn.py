@@ -316,12 +316,13 @@ class Redis():
         byte = self.conn.hget(name, item)
 
         try:
-            data = ast.literal_eval(byte.decode("UTF-8"))['ohlc']
+            data = ast.literal_eval(byte.decode("UTF-8").replace('null', 'None'))['ohlc']
         except KeyError:
             self.logger.error("No Data for item %s %s" % (name, item))
             return None, None
         try:
-            current_price = ast.literal_eval(self.get_item(name, item).decode())['current_price']
+            dict_str = self.get_item(name, item).decode().replace('null', 'None')
+            current_price = ast.literal_eval(dict_str)['current_price']
         except KeyError:
             current_price = None
         return current_price, item, data

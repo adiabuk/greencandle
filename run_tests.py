@@ -27,7 +27,8 @@ OPT_TESTS = [
     ("docker_mysql", "test_docker_mysql"),
     ("docker_redis", "test_docker_redis"),
     ("docker_api", "test_docker_api"),
-    ("docker_cron", "test_docker_cron")
+    ("docker_cron", "test_docker_cron"),
+    ("selenium", "test_selenium"),
     ]
 
 def run_tests(tests_to_run='all', run_optional=False):

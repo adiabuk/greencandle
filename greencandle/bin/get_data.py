@@ -53,12 +53,12 @@ def main():
 
     interval = config.main.interval
     LOGGER.info("Starting initial prod run")
-    name = config.env.main.split('-')[-1]
-    Path('/var/run/gc-data-{}-{}'.format(interval, name)).touch()
+    name = config.main.name.split('-')[-1]
+    Path('/var/run/{}-data-{}-{}'.format(config.main.base_env, interval, name)).touch()
     prod_initial(interval, test=True) # initial run, before scheduling begins
     prod_run()
-    if os.path.exists('/var/run/gc-data-{}-{}'.format(interval, name)):
-        os.remove('/var/run/gc-data-{}-{}'.format(interval, name))
+    if os.path.exists('/var/run/{}-data-{}-{}'.format(config.main.base_env, interval, name)):
+        os.remove('/var/run/{}-data-{}-{}'.format(config.main.base_env, interval, name))
     LOGGER.info("Finished initial prod run")
     prod_run()
 
