@@ -1,5 +1,18 @@
 # Releases
 
+# 5.1
+* Use unique exposed ports for each env
+* Ensure close rules never match when we are using TP/SL
+* No longer require checking interval in open trades - use name
+* Decom unused api-web containers everywhere
+* Reduce prod max trade value
+* Unique filename for check-data lockfile per env
+* Check we have available balance/loan before attempting trade open
+* Mount ipython volume for history preservation
+* Rename containers in prod
+* Missing pair raising exception in prod
+* Fix Null string evaluation in redis
+
 # 5.0.1
 * Fix typo in prod DC config
 * Wait for data collection to finish in backend
