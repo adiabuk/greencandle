@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=too-many-locals
+#pylint: disable=too-many-locals,unbalanced-tuple-unpacking
 """
 Get profit from prvious hour and send to slack
 """
