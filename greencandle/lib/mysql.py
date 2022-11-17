@@ -245,7 +245,7 @@ class Mysql():
         return cur.fetchall()
 
     @get_exceptions
-    def get_trades(self):
+    def get_trades(self, get_direction=False):
         """
         Get a list of current open trades.  This is identified by a db record
         which has a buy price, but no sell price - ie. we haven"t sold it yet
@@ -255,9 +255,11 @@ class Mysql():
               a single list of pairs that we currently hold with the buy time
         """
         cur = self.dbase.cursor()
+        direction = config.main.trade_direction if get_direction else ""
+
         command = ('select pair, open_time from trades where close_price is NULL and '
-                   '`interval`="{0}" and name in ("{1}","api")'
-                   .format(self.interval, config.main.name))
+                   '`interval`="{0}" and name in ("{1}","api") and direction like "%{2}%"'
+                   .format(self.interval, config.main.name, direction))
 
         self.__execute(cur, command)
         return cur.fetchall()
