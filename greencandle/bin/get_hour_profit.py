@@ -33,7 +33,8 @@ def main():
                    "Today's total profit: {12:.2f}% ({13:.2f}%) ~{14} trades\n"
                    .format(hour, total_perc, total_net_perc, num_hour, avg_perc, avg_net_perc,
                            format_usd(usd_profit), format_usd(usd_net_profit),
-                           todays_avg, todays_net_avg, todays_usd, todays_net_usd,
+                           todays_avg, todays_net_avg, format_usd(todays_usd),
+                           format_usd(todays_net_usd),
                            todays_total, todays_net_total, num_day))
 
         send_slack_message('balance', message, name=sys.argv[0].split('/')[-1])
