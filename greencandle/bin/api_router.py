@@ -51,7 +51,7 @@ def forward():
     command = "configstore package get --basedir /srv/greencandle/config {} api_token".format(env)
     token = os.popen(command).read().split()[0]
     payload['edited'] = "yes"
-    url = "http://{}:1080/{}".format(payload['host'], token)
+    url = "http://{}/{}".format(payload['host'], token)
     requests.post(url, json=payload, timeout=5)
     return Response(status=200)
 
