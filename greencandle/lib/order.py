@@ -385,7 +385,9 @@ class Trade():
             total_remaining = total_max - balance_to_use['usd']
             if loan_to_use['usd'] > total_remaining:
                 loan_to_use['usd'] = total_remaining
-                loan_to_use['symbol'] = quote2base(total_remaining, balance_to_use['symbol']+'USDT')
+                loan_to_use['symbol'] = total_remaining if 'USD' in \
+                        balance_to_use['symbol_name'] else \
+                        quote2base(total_remaining, balance_to_use['symbol_name']+'USDT')
 
 
 
