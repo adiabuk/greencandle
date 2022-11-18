@@ -941,7 +941,7 @@ class Trade():
             perc_inc = perc_diff(open_price, current_price)
             quote_out = add_perc(perc_inc, quote_in)
 
-            self.logger.info("Closing margin short %s of %s for %.15f %s"
+            self.logger.info("Closing margin long %s of %s for %.15f %s"
                              % (quantity, pair, float(current_price), quote_out))
             quote = get_quote(pair)
 
