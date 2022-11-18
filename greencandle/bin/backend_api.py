@@ -66,10 +66,10 @@ def main():
     Receives trade requests from web front-end/API/router and
     open/close trade as appropriate
 
-    Usage: backend_api
+    Usage: backend_api [--test] [api]
     """
 
-    if sys.argv[2] == 'api':
+    if sys.argv[-1] == 'api':
         if "intermittent" in os.environ:
             scheduler = BackgroundScheduler()
             scheduler.add_job(func=intermittent_check, trigger="interval", seconds=30)
@@ -79,7 +79,7 @@ def main():
         consume_queue()
 
 
-    if "intermittent" in os.environ and sys.argv[2] == 'api':
+    if "intermittent" in os.environ and sys.argv[-1] == 'api':
         # Shut down the scheduler when exiting the app
         atexit.register(scheduler.shutdown)
 
