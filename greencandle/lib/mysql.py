@@ -215,6 +215,15 @@ class Mysql():
         return row[0] if row else None # There should only be one open trade, so return first item
 
     @get_exceptions
+    def get_var_value(self, name):
+        """
+        get variable from db
+        """
+        query = "select get_var('{}')".format(name)
+        result = self.fetch_sql_data(query, header=False)[0][0]
+        return result
+
+    @get_exceptions
     def get_trade_value(self, pair):
         """
         Return details for calculating value of an open trade for a given trading pair
