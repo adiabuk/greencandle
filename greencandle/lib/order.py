@@ -390,6 +390,8 @@ class Trade():
                         balance_to_use['symbol_name'] else \
                         quote2base(total_remaining, balance_to_use['symbol_name']+'USDT')
 
+        if self.test:
+            loan_to_use = {'symbol':0, 'symbol_name':balance_to_use['symbol_name']}
 
 
         return_dict = {"balance_amt": balance_to_use['symbol'],
