@@ -115,11 +115,6 @@
       "is_binary": false,
       "is_secret": false
     },
-    "good_pairs": {
-      "value": "false",
-      "is_binary": false,
-      "is_secret": false
-    },
     "base_env": {
       "value": "data",
       "is_binary": false,
@@ -157,11 +152,6 @@
     },
     "db_password": {
       "value": "password",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "db_test": {
-      "value": "greencandle_test",
       "is_binary": false,
       "is_secret": false
     },
@@ -209,6 +199,11 @@
       "value": "G+giAcYAKGdIj5+ZrfDQxAfqsezmyhyo3rrO36JfDR6/hxdY+EgMGu2np4X2pt1wYcbvHE1HGGkg5AnikT/4QNxeQIFUM4NXhVAoaLn01KjAC0k781W8DQ5gfpPYtzOedL9MPv/dvrIDFjX8vCEvgfW9cPg/Py4c+fischVhb3vEb8tN/g3LKMXVpYrNvKyQCQXyWZONJZCOq7MRVqmTFCRPse6b3tDGH4TjWo4S2Us=",
       "is_binary": false,
       "is_secret": true
+    },
+    "good_pairs": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
     },
     "immediate_stop": {
       "value": "false",
