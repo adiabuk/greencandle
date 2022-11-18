@@ -709,7 +709,7 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh backend --test --graph
+    entrypoint: /docker-entrypoint.sh backend --graph
     logging:
       driver: journald
     environment:
@@ -748,7 +748,7 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh backend --test
+    entrypoint: /docker-entrypoint.sh backend
     logging:
       driver: journald
     environment:

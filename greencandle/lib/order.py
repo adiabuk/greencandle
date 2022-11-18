@@ -99,11 +99,16 @@ class Trade():
         good_pairs = str2bool(self.config.main.good_pairs)
 
         for item in items_list:
-            account = 'margin' if 'margin' in self.config.main.trade_type else 'binance'
-            totals = self.get_total_amount_to_use(dbase, item[0], account=account)
-            if sum(totals.values()) == 0:
-                self.logger.warning("Insufficient funds available for %s, skipping..." % item[0])
-            elif current_trades and [trade for trade in current_trades if item[0] in trade]:
+            if not self.test_trade:
+                account = 'margin' if 'margin' in self.config.main.trade_type else 'binance'
+                totals = self.get_total_amount_to_use(dbase, item[0], account=account)
+                if sum(totals.values()) == 0:
+                    self.logger.warning("Insufficient funds available for %s, skipping..."
+                                        % item[0])
+                    continue
+
+
+            if current_trades and [trade for trade in current_trades if item[0] in trade]:
                 self.logger.warning("We already have a trade of %s, skipping..." % item[0])
             elif not manual and (item[0] not in self.config.main.pairs and not self.test_data):
                 self.logger.error("Pair %s not in main_pairs, skipping..." % item[0])
@@ -380,7 +385,9 @@ class Trade():
             total_remaining = total_max - balance_to_use['usd']
             if loan_to_use['usd'] > total_remaining:
                 loan_to_use['usd'] = total_remaining
-                loan_to_use['symbol'] = quote2base(total_remaining, balance_to_use['symbol']+'USDT')
+                loan_to_use['symbol'] = total_remaining if 'USD' in \
+                        balance_to_use['symbol_name'] else \
+                        quote2base(total_remaining, balance_to_use['symbol_name']+'USDT')
 
 
 
