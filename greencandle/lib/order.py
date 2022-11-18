@@ -368,7 +368,8 @@ class Trade():
 
     def get_total_amount_to_use(self, dbase, pair=None, account=None):
         """ Get total amount to use as sum of balance_to_use and loan_to_use """
-        total_max = int(self.config.main.max_trade_usd)
+        max_from_db = dbase.get_var_value('max_trade_usd')
+        total_max = int(max_from_db) if max_from_db else int(self.config.main.max_trade_usd)
         balance_to_use = self.get_balance_to_use(dbase, account, pair)
         if balance_to_use['usd'] > total_max:
             balance_to_use['usd'] = total_max
