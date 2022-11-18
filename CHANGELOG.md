@@ -1,5 +1,13 @@
 # Releases
 
+# 5.2
+* Allow getting trades with or without direction in scope
+* Format current USD profit in hourly notification
+* Fix number of args returned from mysql method
+* Support using non-standard port for api request forwarding
+* Fix api backend for non-test envs
+* Remove test flag for prod env
+
 # 5.1
 * Use unique exposed ports for each env
 * Ensure close rules never match when we are using TP/SL
