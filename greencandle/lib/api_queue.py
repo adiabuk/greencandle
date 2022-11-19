@@ -70,7 +70,8 @@ def add_to_queue(req):
             if trend != config.main.trade_direction and "manual" not in req:
                 trade_link = get_trade_link(pair, req['strategy'],
                                             req['action_str'],
-                                            "Force trade")
+                                            "Force trade",
+                                            config.web.nginx_port)
                 message = ("Skipping {0} trade due to wrong trade direction ({1})"
                            .format(get_tv_link(pair), trade_link))
                 send_slack_message("trades", message)
