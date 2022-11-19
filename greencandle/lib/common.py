@@ -9,8 +9,6 @@ import datetime
 from decimal import Decimal, InvalidOperation
 from babel.numbers import format_currency
 import numpy
-from greencandle.lib import config
-config.create_config()
 
 QUOTES = ("BTC", "USDT", "ETH", "BNB", "GBP")
 
