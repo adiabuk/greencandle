@@ -7,7 +7,6 @@
   "logging_level": "20",
   "max_trades": "1000",
   "name": "stag-api",
-  "nginx_port": "1111",
   "open_rule1": "results.current.EMA_2 \u003e results.current.EMA_69 and results.previous.EMA_2 \u003c results.previous.EMA_69",
   "open_rule2": "results.current.EMA_8 \u003e results.current.EMA_13 and results.current.EMA_13 \u003e results.current.EMA_21 and results.current.EMA_21 \u003e results.current.EMA_55 and close \u003e last_close",
   "open_rule3": "results.current.EMA_8 \u003e results.current.EMA_13 and results.current.EMA_13 \u003e results.current.EMA_21 and results.current.EMA_21 \u003e results.current.EMA_55 and results.current.EMA_55 \u003e results.current.EMA_100",

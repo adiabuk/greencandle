@@ -9,6 +9,8 @@ import datetime
 from decimal import Decimal, InvalidOperation
 from babel.numbers import format_currency
 import numpy
+from greencandle.lib import config
+config.create_config()
 
 QUOTES = ("BTC", "USDT", "ETH", "BNB", "GBP")
 
@@ -176,6 +178,6 @@ def get_tv_link(pair, interval=None):
 
 def get_trade_link(pair, strategy, action, string):
     """Get trade link for forced trade"""
-    url = os.environ['VPN_IP'] + ":8888"
+    url = os.environ['VPN_IP'] + ":" + config.web.nginx_port
     return ("<http://{0}/action?pair={1}&strategy={2}&action={3}"
             "&close=true|{4}>".format(url, pair, strategy, action, string))
