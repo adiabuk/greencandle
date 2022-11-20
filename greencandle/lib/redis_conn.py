@@ -317,14 +317,10 @@ class Redis():
 
         try:
             data = ast.literal_eval(byte.decode("UTF-8").replace('null', 'None'))['ohlc']
+            current_price = data['close']
         except KeyError:
             self.logger.error("No Data for item %s %s" % (name, item))
-            return None, None
-        try:
-            dict_str = self.get_item(name, item).decode().replace('null', 'None')
-            current_price = ast.literal_eval(dict_str)['current_price']
-        except KeyError:
-            current_price = None
+            return None, None, None
         return current_price, item, data
 
     def get_result(self, item, indicator, pair=None, interval=None):
