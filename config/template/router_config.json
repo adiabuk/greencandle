@@ -25,7 +25,9 @@
 "any-short": ["any-short", "alert"],
 "alert": ["alert"],
 "any-long-short": ["any-long", "any-short", "alert"],
-"bb-long-short": ["bb-long", "bb-short", "alert"],
+"bb-any-long-short": ["bb-any-long", "bb-any-short", "alert"],
+"bb-any-long": ["bb-any-long", "alert"],
+"bb-any-short": ["bb-any-short", "alert"],
 "any-spot-long": ["any-spot-long", "alert"],
 "route": []
 }

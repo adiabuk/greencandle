@@ -326,8 +326,8 @@ services:
       - prod-be-api-any-isolated-short:prod-be-api-any-isolated-short
       - prod-be-api-stochrsi-cross-short:prod-be-api-stochrsi-cross-short
       - prod-be-api-stochrsi-cross-long:prod-be-api-stochrsi-cross-long
-      - prod-be-api-bb-cross-long:bb-long
-      - prod-be-api-bb-cross-short:bb-short
+      - prod-be-api-bb-cross-long:bb-any-long
+      - prod-be-api-bb-cross-short:bb-any-short
     depends_on:
       - prod-base-mysql
       - prod-base-redis
