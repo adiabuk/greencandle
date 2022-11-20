@@ -115,7 +115,8 @@ def send_slack_trade(**kwargs):
         color = '#00fc22'
         strat = re.findall(r"-([\s\S]*)$", config.main.name)[0].replace('api-', '')
         close_string = "• Close: {0}\n".format(get_trade_link(kwargs.pair, strat,
-                                                              'close', 'close now'))
+                                                              'close', 'close now',
+                                                                config.web.nginx_port))
         quote_string = "• Quote in: %.4f\n" % float(kwargs.quote)
         time_string = "• Open_time: %s " % kwargs.open_time
     elif kwargs.action == 'CLOSE':

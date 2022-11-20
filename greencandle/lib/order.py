@@ -368,7 +368,8 @@ class Trade():
 
     def get_total_amount_to_use(self, dbase, pair=None, account=None):
         """ Get total amount to use as sum of balance_to_use and loan_to_use """
-        total_max = int(self.config.main.max_trade_usd)
+        max_from_db = dbase.get_var_value('max_trade_usd')
+        total_max = int(max_from_db) if max_from_db else int(self.config.main.max_trade_usd)
         balance_to_use = self.get_balance_to_use(dbase, account, pair)
         if balance_to_use['usd'] > total_max:
             balance_to_use['usd'] = total_max
@@ -389,6 +390,8 @@ class Trade():
                         balance_to_use['symbol_name'] else \
                         quote2base(total_remaining, balance_to_use['symbol_name']+'USDT')
 
+        if self.test_trade:
+            loan_to_use = {'symbol':0, 'symbol_name':balance_to_use['symbol_name']}
 
 
         return_dict = {"balance_amt": balance_to_use['symbol'],
@@ -420,6 +423,7 @@ class Trade():
             quote_to_use = current_quote_bal + amount_to_borrow
             base_to_use = quote2base(quote_to_use, pair)
 
+
             self.logger.info("Opening margin long %s of %s with %s %s at %s"
                              % (base_to_use, pair, current_quote_bal+amount_to_borrow,
                                 quote, current_price))
@@ -427,10 +431,12 @@ class Trade():
 
                 if float(amount_to_borrow) <= 0:
                     self.logger.critical("Borrow amount is zero for pair %s.  Continuing" % pair)
+                    amt_str = get_step_precision(pair, quote2base(current_quote_bal, pair))
                 else:  # amount to borrow
                     self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
                                      % (amount_to_borrow, quote, current_quote_bal))
 
+                    amt_str = get_step_precision(pair, base_to_use)
                     borrow_res = self.client.margin_borrow(
                         symbol=pair, quantity=amount_to_borrow,
                         isolated=str2bool(self.config.main.isolated),
@@ -442,7 +448,6 @@ class Trade():
 
                     self.logger.info(borrow_res)
 
-                amt_str = get_step_precision(pair, sub_perc(1, base_to_use))
                 trade_result = self.client.margin_order(symbol=pair, side=self.client.buy,
                                                         quantity=amt_str,
                                                         order_type=self.client.market,
@@ -779,6 +784,8 @@ class Trade():
 
                 if float(amount_to_borrow) <= 0:
                     self.logger.critical("Borrow amount is zero for pair %s.  Continuing" % pair)
+                    amt_str = current_base_bal
+
                 else:  # amount to borrow
                     self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
                                      % (amount_to_borrow, base, total_base_amount))
@@ -938,7 +945,7 @@ class Trade():
             perc_inc = perc_diff(open_price, current_price)
             quote_out = add_perc(perc_inc, quote_in)
 
-            self.logger.info("Closing margin short %s of %s for %.15f %s"
+            self.logger.info("Closing margin long %s of %s for %.15f %s"
                              % (quantity, pair, float(current_price), quote_out))
             quote = get_quote(pair)
 

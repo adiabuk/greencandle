@@ -215,6 +215,15 @@ class Mysql():
         return row[0] if row else None # There should only be one open trade, so return first item
 
     @get_exceptions
+    def get_var_value(self, name):
+        """
+        get variable from db
+        """
+        query = "select get_var('{}')".format(name)
+        result = self.fetch_sql_data(query, header=False)[0][0]
+        return result
+
+    @get_exceptions
     def get_trade_value(self, pair):
         """
         Return details for calculating value of an open trade for a given trading pair
@@ -293,7 +302,7 @@ class Mysql():
             trade_id = self.fetch_sql_data(query, header=False)[0][0]
         except IndexError:
             self.logger.critical("No open trade matching criteria to close: %s" % query)
-            raise
+            return None
 
         command = """update trades set close_price={0},close_time="{1}",
         quote_out="{2}", base_out="{3}", closed_by="{4}", drawdown_perc=abs(round({5},1)),

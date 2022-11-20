@@ -37,6 +37,7 @@ def main():
              'order by perc +0 DESC')
 
     open_trades = dbase.fetch_sql_data(query, header=True)
+    open_trades.append("*" * 20)
     header = open_trades.pop(0)
     chunks = list(divide_chunks(open_trades, 10))
     for chunk in chunks:
@@ -44,8 +45,8 @@ def main():
         output = ""
 
         for trade in chunk:
-            output += "" if "name" in trade[1]  else (":short: " if "short" in trade[-1] \
-                    else ":long: ")
+            output += "" if "name" in trade[1] or "*" in trade[0] else \
+                    (":short: " if "short" in trade[-1] else ":long: ")
             output += '   '.join([get_tv_link(item) if str(item).endswith(QUOTES) else \
                 str(item).replace("-api-any", "") for item in trade[:-1]]) + '\n'
 
