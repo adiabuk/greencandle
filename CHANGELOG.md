@@ -1,5 +1,19 @@
 # Releases
 
+# 5.3
+* fix port allocations and conflicts for web
+* fix get_var db function
+* get db variable contents
+* allow override max trade value to be fetched from db vars table
+* fix log showing wrong direction
+* increase divisor for other prod cross strategies
+* rule under list of open trades for visibility
+* don't re-raise exception when unable to get trade_id
+* don't create graphs in prod
+* use current_price from OHLC data
+* ensure we have an amount to use if no loan available
+* alert when not enough bnb in x-margin (cron)
+
 # 5.2
 * Allow getting trades with or without direction in scope
 * Format current USD profit in hourly notification
