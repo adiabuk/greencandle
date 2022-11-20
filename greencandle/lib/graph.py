@@ -107,7 +107,8 @@ class Graph():
                 LOGGER.debug("Creating Supertrend graph")
                 value['value'].astype(str)
                 # FIX ME - add colour
-
+                print("AMROX")
+                print(name, value)
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=value['current_price'],
                                   name="STX",
@@ -246,11 +247,13 @@ class Graph():
             LOGGER.debug("Getting current prices")
             str_dict = redis.get_item('{}:{}'.format(self.pair, self.interval),
                                       index_item).decode().replace('null', 'None')
-            result_list['current_price'] = ast.literal_eval(str_dict)['current_price']
+
             try:  #ohlc
                 result_list['ohlc'] = redis.get_current('{}:{}'.format(self.pair,
                                                                        self.interval),
                                                         index_item)[-1]
+                result_list['current_price'] = result_list['ohlc']['close']
+
             except AttributeError as error:
                 LOGGER.error("Error, unable to find ohlc data for %s %s %s"
                              % (index_item, ind, error))
