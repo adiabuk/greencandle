@@ -107,8 +107,6 @@ class Graph():
                 LOGGER.debug("Creating Supertrend graph")
                 value['value'].astype(str)
                 # FIX ME - add colour
-                print("AMROX")
-                print(name, value)
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=value['current_price'],
                                   name="STX",
