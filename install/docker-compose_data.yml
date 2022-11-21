@@ -134,7 +134,7 @@ services:
       - data-base-redis
       - data-be-get_5m
     environment:
-      - V PN_IP=$VPN_IP
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/5m/long1
       - HOST=$HOSTNAME
       - DB=true
@@ -182,6 +182,115 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/:/var/run
+
+  data-be-analyse_1m_bb-short:
+    container_name: data-be-analyse_1m_bb-short
+    hostname: data-be-analyse_1m_bb-short
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
+    entrypoint: /docker-entrypoint.sh analyse_data
+    logging:
+      driver: journald
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+      - data-be-get_1m:data
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_1m
+    environment:
+      - VPN_IP=$VPN_IP
+      - CONFIG_ENV=data/1m/short1
+      - HOST=$HOSTNAME
+      - DB=true
+    healthcheck:
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-analyse_1m_bb-long:
+    container_name: data-be-analyse_1m_bb-long
+    hostname: data-be-analyse_1m_bb-long
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
+    entrypoint: /docker-entrypoint.sh analyse_data
+    logging:
+      driver: journald
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+      - data-be-get_1m:data
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_1m
+    environment:
+      - VPN_IP=$VPN_IP
+      - CONFIG_ENV=data/1m/long1
+      - HOST=$HOSTNAME
+      - DB=true
+    healthcheck:
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      -  /var/run/:/var/run
+
+  data-be-get_1m:
+    container_name: data-be-get_1m
+    hostname: data-be-get_1m
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    network_mode: "bridge"
+    dns:
+      - "8.8.8.8"
+    entrypoint: /docker-entrypoint.sh get_data
+    logging:
+      driver: journald
+    links:
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+    environment:
+      - VPN_IP=$VPN_IP
+      - CONFIG_ENV=data/1m/get_data
+      - HOST=$HOSTNAME
+      - DB=true
+    healthcheck:
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
 
   data-be-manual:
     container_name: data-be-manual
