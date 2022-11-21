@@ -38,6 +38,21 @@ class Trade():
         self.client = binance_auth()
         self.interval = interval
 
+    @staticmethod
+    def is_float(element: any) -> bool:
+        """
+        check if variable is a float
+        return True|False
+        """
+        #If you expect None to be passed:
+        if element is None:
+            return False
+        try:
+            float(element)
+            return True
+        except ValueError:
+            return False
+
     def is_in_drain(self):
         """
         Check if current scope is in drain given date range, and current time
@@ -119,8 +134,9 @@ class Trade():
                 self.logger.warning("strategy is in drain for pair %s, skipping..." % item[0])
                 send_slack_message("alerts", "strategy is in drain, skipping")
                 return []
-            elif (float(item[4]) > 0 and self.config.main.trade_direction == "short") or \
-                    (float(item[4]) < 0 and self.config.main.trade_direction == "long"):
+            elif self.is_float(item[4]) and \
+                    ((float(item[4]) > 0 and self.config.main.trade_direction == "short") or \
+                    (float(item[4]) < 0 and self.config.main.trade_direction == "long")):
                 self.logger.info("Wrong trade direction")
             elif avail_slots <= 0:
                 pairs_str = ', '.join((x[0] for x in items_list))
