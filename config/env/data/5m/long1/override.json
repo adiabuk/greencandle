@@ -1,4 +1,4 @@
 {
   "name": "bb-long_5m",
-  "open_rule1": "low \u003c results.current.lower_200 and results.current.bbperc_200 \u003c -1 and results.current.STX_23 \u003e0"
+  "open_rule1": "low \u003c results.current.lower_200 and results.current.bbperc_200 \u003c -1"
 }
