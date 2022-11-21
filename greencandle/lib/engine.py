@@ -130,22 +130,13 @@ class Engine(dict):
         for scheme in self.schemes:
             pair = scheme["symbol"]
             # add to redis
-            current_price = str(Decimal(self.dataframes[pair].iloc[-1]["close"]))
             close_time = str(self.dataframes[pair].iloc[-1]["closeTime"]) if not "close_time" in \
                     scheme else scheme["close_time"]
-
-
-            # close time might be in the future if we run between open/close
-            if epoch2date(int(close_time)/1000, formatted=False) > datetime.now() and not self.test:
-                continue
 
             result = None if (isinstance(scheme["data"], float) and
                               math.isnan(scheme["data"])) else scheme["data"]
             try:
-                data = {scheme["event"]: result,
-                        "current_price": format(float(current_price), ".20f")
-                        }
-
+                data = {scheme["event"]: result}
                 self.redis.redis_conn(pair, self.interval, data, close_time)
 
             except Exception as exc:
