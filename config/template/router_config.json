@@ -25,9 +25,7 @@
 "any-short": ["any-short", "alert"],
 "alert": ["alert"],
 "any-long-short": ["any-long", "any-short", "alert"],
-"bb-any-long-short": ["bb-any-long", "bb-any-short", "alert"],
-"bb-any-long": ["bb-any-long", "alert"],
-"bb-any-short": ["bb-any-short", "alert"],
+"bb-any-long-short": ["bb-long", "bb-short", "alert"],
 "any-spot-long": ["any-spot-long", "alert"],
 "route": []
 }
@@ -46,7 +44,9 @@
 "stochrsi-cross-long-short": ["prod-be-api-stochrsi-cross-short", "prod-be-api-stochrsi-cross-long", "alert"],
 "stochrsi-cross-short": ["prod-be-api-stochrsi-cross-short", "alert"],
 "stochrsi-cross-long": ["prod-be-api-stochrsi-cross-long", "alert"],
-"bb-long-short": ["bb-long", "bb-short", "alert"],
+"bb-any-long-short": ["bb-any-long", "bb-any-short", "alert"],
+"bb-any-long": ["bb-any-long", "alert"],
+"bb-any-short": ["bb-any-short", "alert"],
 "alert" : ["alert"],
 "route": []
 }
