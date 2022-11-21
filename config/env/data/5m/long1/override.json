@@ -1,4 +1,4 @@
 {
-  "name": "low-rsi_5m",
-  "open_rule1": "results.current.RSI_14 \u003c 30 and low \u003c results.current.lower_20"
+  "name": "bb-long_5m",
+  "open_rule1": "low \u003c results.current.lower_200 and results.current.bbperc_200 \u003c -1 and results.current.STX_23 \u003e0"
 }
