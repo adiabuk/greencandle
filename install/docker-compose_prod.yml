@@ -191,7 +191,7 @@ services:
        - HOST=$HOSTNAME
        - DB=false
      ports:
-       - 1111:8888
+       - 1111:1111
      links:
        - gen-fe-cadvisor:cadvisor
        - prod-fe-api-dashboard:api_dash

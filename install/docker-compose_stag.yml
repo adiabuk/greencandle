@@ -227,7 +227,7 @@ services:
       - HOST=$HOSTNAME
       - DB=false
     ports:
-      - 3333:8888
+      - 3333:3333
     links:
       - gen-fe-cadvisor:cadvisor
       - stag-fe-api-dashboard:api_dash
