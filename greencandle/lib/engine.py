@@ -212,7 +212,7 @@ class Engine(dict):
                 # reset for next loop
                 scheme = {"symbol": pair, "event": "ohlc"}
 
-        location = -1 if (self.test or len(self.dataframes[pair]) < 2) else -2
+        location = -1
         # compress and pickle current dataframe for redis storage
         # dont get most recent one, as it may not be complete
         try:
@@ -239,10 +239,7 @@ class Engine(dict):
 
     def get_bb_perc(self, pair, dataframe, index=None, localconfig=None, ema=False):
         """get bb %"""
-        if (index == None and self.test) or len(self.dataframes[pair]) < 2:
-            index = -1
-        elif index == None and not self.test:
-            index = -2
+        index = -1
         close_time = str(self.dataframes[pair].iloc[index]["closeTime"])
         LOGGER.debug("Getting bb perc for %s - %s" % (pair, close_time))
         klines = self.__make_data_tupple(dataframe.iloc[:index])
@@ -300,10 +297,7 @@ class Engine(dict):
 
     def get_bb(self, pair, dataframe, index=None, localconfig=None):
         """get bollinger bands"""
-        if (index == None and self.test) or len(self.dataframes[pair]) < 2:
-            index = -1
-        elif index == None and not self.test:
-            index = -2
+        index = -1
         close_time = str(self.dataframes[pair].iloc[index]["closeTime"])
         LOGGER.debug("Getting bollinger bands for %s - %s" % (pair, close_time))
         klines = self.__make_data_tupple(dataframe.iloc[:index])
@@ -356,10 +350,7 @@ class Engine(dict):
         LOGGER.debug("Getting pivot points for %s" % pair)
         global CROSS_DATA
         func, timeperiod = localconfig
-        if (index == None and self.test) or len(self.dataframes[pair]) < 2:
-            index = -1
-        elif index == None and not self.test:
-            index = -2
+        index = -1
         # Get current date:
         scheme = {}
         scheme["close_time"] = str(dataframe.iloc[index]["closeTime"])
@@ -390,10 +381,7 @@ class Engine(dict):
         Get TSI osscilator
         """
         LOGGER.debug("Getting TSI oscillator for %s" % pair)
-        if (index == None and self.test) or len(self.dataframes[pair]) < 2:
-            index = -1
-        elif index == None and not self.test:
-            index = -2
+        index = -1
 
         func, timeperiod = localconfig
         tsi = ta.smi(dataframe.close.astype(float), fast=13, slow=25, signal=13)
@@ -472,10 +460,7 @@ class Engine(dict):
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
 
-        if (index == None and self.test) or len(self.dataframes[pair]) < 2:
-            index = -1
-        elif index == None and not self.test:
-            index = -2
+        index = -1
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
         #scheme["data"] = stochrsi[index][0]
@@ -512,10 +497,7 @@ class Engine(dict):
             scheme["symbol"] = pair
             scheme["event"] = func + "_" + str(timeperiod)
 
-            if (index == None and self.test) or len(self.dataframes[pair]) < 2:
-                index = -1
-            elif index == None and not self.test:
-                index = -2
+            index = -1
             scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
             self.schemes.append(scheme)
@@ -547,10 +529,7 @@ class Engine(dict):
             scheme["symbol"] = pair
             scheme["event"] = func+"_"+str(timeperiod)
 
-            if (index == None and self.test) or len(self.dataframes[pair]) < 2:
-                index = -1
-            elif index == None and not self.test:
-                index = -2
+            index = -1
             scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
             self.schemes.append(scheme)
@@ -570,10 +549,7 @@ class Engine(dict):
         scheme = {}
         try:
             scheme["symbol"] = pair
-            if (index == None and self.test) or len(self.dataframes[pair]) < 2:
-                index = -1
-            elif index == None and not self.test:
-                index = -2
+            index = -1
             scheme["data"] = str(self.dataframes[pair].iloc[index]["volume"])
             scheme["event"] = "volume"
             scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
@@ -623,10 +599,7 @@ class Engine(dict):
 
             scheme["event"] = func + "_" + str(timeperiod)
 
-            if (not index and self.test) or len(self.dataframes[pair]) < 2:
-                index = -1
-            elif not index and not self.test:
-                index = -2
+            index = -1
 
             scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
             self.schemes.append(scheme)
@@ -687,10 +660,7 @@ class Engine(dict):
             scheme["symbol"] = pair
             scheme["event"] = '{}_{}'.format(func, timeperiod)
 
-            if (index == None and self.test) or len(self.dataframes[pair]) < 2:
-                index = -1
-            elif index == None and not self.test:
-                index = -2
+            index = -1
             scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
             self.schemes.append(scheme)
@@ -732,10 +702,7 @@ class Engine(dict):
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
 
-        if (index == None and self.test) or len(self.dataframes[pair]) < 2:
-            index = -1
-        elif index == None and not self.test:
-            index = -2
+        index = -1
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
         self.schemes.append(scheme)
@@ -773,10 +740,7 @@ class Engine(dict):
         scheme["symbol"] = pair
         scheme["event"] = "STX_{0}".format(timeframe)
 
-        if (index == None and self.test) or len(self.dataframes[pair]) < 2:
-            index = -1
-        elif index == None and not self.test:
-            index = -2
+        index = -1
 
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
