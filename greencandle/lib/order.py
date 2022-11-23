@@ -469,7 +469,7 @@ class Trade():
                                                         order_type=self.client.market,
                                                         isolated=str2bool(
                                                             self.config.main.isolated))
-                self.logger.info("%s result: %s" %(pair, trade_result))
+                self.logger.info("%s open margin long result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
                     self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
                     self.logger.error("Vars: base quantity:%s, quote_quantity: %s quote bal:%s, "
@@ -572,7 +572,7 @@ class Trade():
                                                       order_type=self.client.market,
                                                       test=self.test_trade)
 
-                self.logger.info("%s result: %s" %(pair, trade_result))
+                self.logger.info("%s open spot long result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
                     self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
                     self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str, quote_amount))
@@ -712,7 +712,7 @@ class Trade():
                                                             self.config.main.isolated))
 
                 order_id = trade_result.get('orderId')
-                self.logger.info("%s result: %s" %(pair, trade_result))
+                self.logger.info("%s close margin short result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
                     return False
@@ -823,7 +823,7 @@ class Trade():
                                                         isolated=str2bool(
                                                             self.config.main.isolated))
                 order_id = trade_result.get('orderId')
-                self.logger.info("%s result: %s" %(pair, trade_result))
+                self.logger.info("%s open margin short result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
                     self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
                     self.logger.error("Vars: quantity:%s, bal:%s, borrowed: %s"
@@ -897,7 +897,7 @@ class Trade():
                     order_type=self.client.market, test=self.test_trade)
 
                 order_id = trade_result.get('orderId')
-                self.logger.info("%s result: %s" %(pair, trade_result))
+                self.logger.info("%s close spot long result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
                     return False
@@ -975,7 +975,7 @@ class Trade():
                                                             self.config.main.isolated))
 
                 order_id = trade_result.get('orderId')
-                self.logger.info("%s result: %s" %(pair, trade_result))
+                self.logger.info("%s close margin long result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
                     return False
