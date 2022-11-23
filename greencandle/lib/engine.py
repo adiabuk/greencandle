@@ -249,7 +249,7 @@ class Engine(dict):
         try:
             close = klines[-1]
         except Exception as exc:
-            LOGGER.warning("FAILED bb perc: %s " % str(exc))
+            LOGGER.debug("FAILED bb perc: %s " % str(exc))
             return
         try:
             current_price = str(Decimal(self.dataframes[pair].iloc[index]["close"]))
@@ -278,7 +278,7 @@ class Engine(dict):
         except Exception as exc:
             perc = None
             ema_result = None
-            LOGGER.warning("Overall Exception getting bb perc: %s seq: %s" % (exc, index))
+            LOGGER.debug("Overall Exception getting bb perc: %s seq: %s" % (exc, index))
         trigger = None
         scheme = {}
         try:
@@ -307,7 +307,7 @@ class Engine(dict):
         try:
             close = klines[-1]
         except Exception as exc:
-            LOGGER.warning("FAILED bbands: %s " % str(exc))
+            LOGGER.debug("FAILED bbands: %s " % str(exc))
             return
         try:
             upper, middle, lower = \
@@ -322,7 +322,7 @@ class Engine(dict):
             results['upper'] = None
             results['middle'] = None
             results['lower'] = None
-            LOGGER.warning("Overall Exception getting bollinger bands: %s seq: %s" % (exc, index))
+            LOGGER.debug("Overall Exception getting bollinger bands: %s seq: %s" % (exc, index))
         trigger = None
         scheme = {}
         try:
@@ -581,13 +581,13 @@ class Engine(dict):
             close = klines[-1] # numpy.ndarray
             vol = klines[0]
         except Exception as exc:
-            LOGGER.warning("FAILED moving averages: %s" % str(exc))
+            LOGGER.debug("FAILED moving averages: %s" % str(exc))
             return
         data = vol if volume else close
         try:
             result = getattr(talib, new_func)(data, int(timeperiod))[-1]
         except Exception as exc:
-            LOGGER.warning("Overall Exception getting moving averages: %s" % exc)
+            LOGGER.debug("Overall Exception getting moving averages: %s" % exc)
             return
 
         scheme = {}
@@ -651,7 +651,7 @@ class Engine(dict):
 
         except Exception as error:
             traceback.print_exc()
-            LOGGER.warning("failed getting oscillators: %s" % str(error))
+            LOGGER.debug("failed getting oscillators: %s" % str(error))
             return
 
         result = float(fastk[-1]) if fastk[-1] != None else None
