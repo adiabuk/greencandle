@@ -1,5 +1,19 @@
 # Releases
 
+# 5.4
+
+* add api containers for bb eng strategies
+* Improve trade output logging
+* Add second bbperc stag strategy
+* add any to bb short api name
+* don't refetch redis data for current_price
+* Use actual port for webserver
+* Remove current_price from each redis key
+* Trial changes to 1m/5m data containers
+* fix string action in order module
+* enable delay between data notifications
+* always use last candle for analysis and ohlc data
+
 # 5.3
 * fix port allocations and conflicts for web
 * fix get_var db function
