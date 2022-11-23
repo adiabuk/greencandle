@@ -30,6 +30,9 @@ SCHED = BlockingScheduler()
 GET_EXCEPTIONS = exception_catcher((Exception))
 TRIGGERED = {}
 FORWARD = False
+CLIENT = binance_auth()
+ISOLATED = CLIENT.get_isolated_margin_pairs()
+CROSS = CLIENT.get_cross_margin_pairs()
 
 @SCHED.scheduled_job('cron', minute=MINUTE[config.main.interval],
                      hour=HOUR[config.main.interval],
@@ -43,9 +46,6 @@ def analyse_loop():
     global FORWARD
     LOGGER.debug("Recently triggered: %s" % str(TRIGGERED))
 
-    client = binance_auth()
-    isolated = client.get_isolated_margin_pairs()
-    cross = client.get_cross_margin_pairs()
     while glob.glob('/var/run/{}-data-{}-*'.format(config.main.base_env, config.main.interval)):
         LOGGER.info("Waiting for initial data collection to complete for %s" % config.main.interval)
         time.sleep(30)
@@ -55,11 +55,11 @@ def analyse_loop():
     for pair in PAIRS:
 
         with ThreadPoolExecutor(max_workers=100) as pool:
-            pool.submit(analyse_pair, pair, redis, isolated, cross)
+            pool.submit(analyse_pair, pair, redis)
     LOGGER.info("End of current loop")
     del redis
 
-def analyse_pair(pair, redis, isolated, cross):
+def analyse_pair(pair, redis):
     """
     Analysis of individual pair
     """
@@ -69,8 +69,8 @@ def analyse_pair(pair, redis, isolated, cross):
     if config.main.trade_direction != "short":
         supported += "spot "
 
-    supported += "isolated " if pair in isolated else ""
-    supported += "cross " if pair in cross else ""
+    supported += "isolated " if pair in ISOLATED else ""
+    supported += "cross " if pair in CROSS else ""
 
     if not supported.strip():
         # don't analyse pair if spot/isolated/cross not supported
