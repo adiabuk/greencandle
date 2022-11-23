@@ -1,5 +1,0 @@
-{
-  "name": "big-change_5m",
-  "open_rule1": "perc_diff(last_low, high) \u003e 3",
-  "trade_direction": "short"
-}

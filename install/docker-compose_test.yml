@@ -255,7 +255,7 @@ services:
       - HOST=$HOSTNAME
       - DB=false
     ports:
-      - 5555:8888
+      - 5555:5555
     links:
       - gen-fe-cadvisor:cadvisor
       - test-fe-api-dashboard:api_dash

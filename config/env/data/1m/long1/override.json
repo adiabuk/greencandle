@@ -1,0 +1,4 @@
+{
+  "name": "bb-long_1m",
+  "open_rule1": "low \u003c results.current.lower_20 and results.current.bbperc_200 \u003c -2"
+}
