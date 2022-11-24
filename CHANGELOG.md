@@ -1,5 +1,8 @@
 # Releases
 
+# 5.5.1
+* Fix prod indicator name
+
 # 5.5
 * reduce verbosity of NaN/None Engine data
 * display time from candle in notification
