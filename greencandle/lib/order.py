@@ -44,7 +44,7 @@ class Trade():
         check if variable is a float
         return True|False
         """
-        #If you expect None to be passed:
+        # If you expect None to be passed:
         if element is None:
             return False
         try:
@@ -350,7 +350,7 @@ class Trade():
                 return_dict['usd'] = final_usd
                 return_dict['symbol'] = final_symbol
 
-        #convert to base asset if we are short
+        # convert to base asset if we are short
         # short
         else:  # amt in base
             usd_value = sub_perc(1, total/float(self.config.main.divisor))
@@ -486,6 +486,7 @@ class Trade():
                 amt_str = base_to_use
                 order_id = 0
                 fill_price = current_price
+                trade_result = {}
 
             commission_usd = self.__get_commission(trade_result)
 
@@ -548,7 +549,6 @@ class Trade():
         dbase = Mysql(test=self.test_data, interval=self.interval)
 
         for pair, current_time, current_price, event, _ in buy_list:
-            #quote_amount = self.get_balance_to_use(dbase, 'binance', pair=pair)['symbol']
             quote_amount = self.get_total_amount_to_use(dbase, account='binance',
                                                         pair=pair)['balance_amt']
             quote = get_quote(pair)
@@ -586,6 +586,7 @@ class Trade():
                 trade_result = True
                 order_id = 0
                 fill_price = current_price
+                trade_result = {}
 
             commission_usd = self.__get_commission(trade_result)
 
@@ -742,12 +743,13 @@ class Trade():
                 else:
                     self.logger.info("No borrowed funds to repay for %s" % pair)
 
-                #override values from exchange if in prod
+                # override values from exchange if in prod
                 fill_price, quantity, quote_out, order_id = \
                         self.__get_result_details(current_price, trade_result)
             else:
                 order_id = 0
                 fill_price = current_price
+                trade_result = {}
 
             commission_usd = self.__get_commission(trade_result)
 
@@ -845,6 +847,7 @@ class Trade():
                 amt_str = total_base_amount
                 order_id = 0
                 fill_price = current_price
+                trade_result = {}
 
             commission_usd = self.__get_commission(trade_result)
 
@@ -915,9 +918,10 @@ class Trade():
                 fill_price, quantity, quote_out, order_id = \
                         self.__get_result_details(current_price, trade_result)
 
-            else:  #not prod
+            else:  # not prod
                 order_id = 0
                 fill_price = current_price
+                trade_result = {}
 
             commission_usd = self.__get_commission(trade_result)
 
@@ -1015,6 +1019,7 @@ class Trade():
             else:
                 order_id = 0
                 fill_price = current_price
+                trade_result = {}
 
             commission_usd = self.__get_commission(trade_result)
 
