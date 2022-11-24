@@ -12,6 +12,11 @@ pipeline {
     options { disableConcurrentBuilds() }
 
     stages {
+        stage("Start") {
+            steps {
+                slackSend color: "#808080", message: "Starting build\nRepo: ${env.GIT_REPO_NAME}\nCommit: ${SHORT_COMMIT}\nBranch: ${env.GIT_BRANCH}\nURL: (<${env.BUILD_URL}|Open>)"
+            }
+        }
         stage("build docker images") {
             steps {
                 echo 'building apps'

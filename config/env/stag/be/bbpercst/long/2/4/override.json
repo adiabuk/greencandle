@@ -1,0 +1,8 @@
+{
+  "check_interval": "00,30",
+  "indicators": "get_supertrend;STX;23,3 get_bb;upper;12,2 get_bb;lower;12,2 get_bb;middle;12,2 get_bb_perc;bbperc;200,1 get_bb_perc_ema;bbperc_EMA;200,1",
+  "logging_level": "10",
+  "name": "stag-be-eng-bbpercst3-long",
+  "open_rule1": "low \u003c results.current.lower_12 and results.current.bbperc_200 \u003c -2",
+  "rate_indicator": "middle_12"
+}

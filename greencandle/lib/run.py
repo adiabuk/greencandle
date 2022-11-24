@@ -14,6 +14,7 @@ from glob import glob
 import requests
 from binance.binance import Binance
 from str2bool import str2bool
+from greencandle.lib.auth import binance_auth
 from greencandle.lib.engine import Engine
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.mysql import Mysql
@@ -334,12 +335,11 @@ def prod_loop(interval, test=False, data=True, analyse=True):
         drawups = {}
 
         for pair in PAIRS:
-
             pair = pair.strip()
             result, event, current_time, current_price, _ = redis.get_action(pair=pair,
                                                                              interval=interval)
             current_candle = redis.get_last_candle(pair, interval)
-
+            client = binance_auth()
             if result != "NOITEM":
                 redis.update_drawdown(pair, current_candle)
                 redis.update_drawup(pair, current_candle)
@@ -347,12 +347,18 @@ def prod_loop(interval, test=False, data=True, analyse=True):
             action = 1 if config.main.trade_direction == 'long' else -1
             if result == "OPEN":
                 LOGGER.debug("Items to buy")
+                tick = client.tickers()
+                current_price = tick[pair]['ask'] if config.main.trade_direction == 'long' \
+                        else tick[pair]['bid']
                 redis.update_drawdown(pair, current_candle, event='open')
                 redis.update_drawup(pair, current_candle, event='open')
                 buys.append((pair, current_time, current_price, event, action))
 
             if result == "CLOSE":
                 LOGGER.debug("Items to sell")
+                tick = client.tickers()
+                current_price = tick[pair]['bid'] if config.main.trade_direction == 'long' \
+                        else tick[pair]['ask']
                 sells.append((pair, current_time, current_price, event, 0))
                 drawdowns[pair] = redis.get_drawdown(pair)
                 drawups[pair] = redis.get_drawup(pair)['perc']

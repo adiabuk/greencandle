@@ -1066,43 +1066,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  stag-be-eng-bbpercst3-long:
-    container_name: stag-be-eng-bbpercst3-long
-    hostname: stag-be-eng-bbpercst3-long
-    image: amrox/greencandle:${TAG}
-    pull_policy: always
-    restart: always
-    entrypoint: /docker-entrypoint.sh backend --test --graph
-    logging:
-      driver: journald
-    environment:
-      - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
-      - CONFIG_ENV=stag/be/bbpercst/long/2/3
-      - intermittent="true"
-      - DB=true
-    links:
-      - stag-base-mysql:mysql
-      - stag-base-redis:redis
-    depends_on:
-      - stag-base-mysql
-      - stag-base-redis
-    healthcheck:
-      test: ls ||exit 1
-      interval: 1m
-      timeout: 2s
-      retries: 5
-    volumes:
-      - /data:/data
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run:/var/run
-      - /var/local:/var/local
-      - /root/.bash_history:/root/.bash_history
-
-  stag-be-eng-bbpercst3-short:
-    container_name: stag-be-eng-bbpercst3-short
-    hostname: stag-be-eng-bbpercst3-short
+  stag-be-eng-bbpercst4-long:
+    container_name: stag-be-eng-bbpercst4-long
+    hostname: stag-be-eng-bbpercst4-long
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -1112,7 +1078,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
-      - CONFIG_ENV=stag/be/bbpercst/short/2/3
+      - CONFIG_ENV=stag/be/bbpercst/long/2/4
       - intermittent="true"
       - DB=true
     links:
@@ -1134,6 +1100,39 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
+  stag-be-eng-bbpercst4-short:
+    container_name: stag-be-eng-bbpercst4-short
+    hostname: stag-be-eng-bbpercst4-short
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh backend --test
+    logging:
+      driver: journald
+    environment:
+      - VPN_IP=$VPN_IP
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=stag/be/bbpercst/short/2/4
+      - intermittent="true"
+      - DB=true
+    links:
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
+    depends_on:
+      - stag-base-mysql
+      - stag-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
 
   stag-be-analyse_1m_bbpercst-long:
     container_name: stag-be-analyse_1m_bbpercst-long

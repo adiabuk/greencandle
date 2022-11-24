@@ -44,7 +44,7 @@ class Trade():
         check if variable is a float
         return True|False
         """
-        #If you expect None to be passed:
+        # If you expect None to be passed:
         if element is None:
             return False
         try:
@@ -350,7 +350,7 @@ class Trade():
                 return_dict['usd'] = final_usd
                 return_dict['symbol'] = final_symbol
 
-        #convert to base asset if we are short
+        # convert to base asset if we are short
         # short
         else:  # amt in base
             usd_value = sub_perc(1, total/float(self.config.main.divisor))
@@ -478,16 +478,17 @@ class Trade():
                                          amount_to_borrow))
                     return False
 
-                quote_to_use = trade_result.get('cummulativeQuoteQty', quote_to_use)
-                order_id = trade_result.get('orderId')
-                amt_str = trade_result.get('executedQty')
+                # override values from exchange if in prod
+                fill_price, amt_str, quote_to_use, order_id = \
+                        self.__get_result_details(current_price, trade_result)
+
             else: # not prod
                 amt_str = base_to_use
                 order_id = 0
+                fill_price = current_price
+                trade_result = {}
 
-            fill_price = current_price if self.test_trade or self.test_data else \
-                    self.__get_fill_price(current_price, trade_result)
-            commission_usd = self.__get_commission(trade_result) if self.prod else 0
+            commission_usd = self.__get_commission(trade_result)
 
             if self.test_data or self.test_trade or \
                     (not self.test_trade and 'transactTime' in trade_result):
@@ -548,7 +549,6 @@ class Trade():
         dbase = Mysql(test=self.test_data, interval=self.interval)
 
         for pair, current_time, current_price, event, _ in buy_list:
-            #quote_amount = self.get_balance_to_use(dbase, 'binance', pair=pair)['symbol']
             quote_amount = self.get_total_amount_to_use(dbase, account='binance',
                                                         pair=pair)['balance_amt']
             quote = get_quote(pair)
@@ -578,16 +578,17 @@ class Trade():
                     self.logger.error("Vars: quantity:%s, bal:%s" % (amt_str, quote_amount))
                     return False
 
-                quote_amount = trade_result.get('cummulativeQuoteQty', quote_amount)
-                order_id = trade_result.get('orderId')
+                # override values from exchange if in prod
+                fill_price, amount, quote_amount, order_id = \
+                        self.__get_result_details(current_price, trade_result)
 
             else:
                 trade_result = True
                 order_id = 0
+                fill_price = current_price
+                trade_result = {}
 
-            fill_price = current_price if self.test_trade or self.test_data else \
-                    self.__get_fill_price(current_price, trade_result)
-            commission_usd = self.__get_commission(trade_result) if self.prod else 0
+            commission_usd = self.__get_commission(trade_result)
 
             if self.test_data or self.test_trade or \
                     (not self.test_trade and 'transactTime' in trade_result):
@@ -642,9 +643,11 @@ class Trade():
                          usd_profit=kwargs.usd_profit, quote=kwargs.quote, usd_quote=usd_quote,
                          open_time=kwargs.open_time, close_time=kwargs.close_time)
 
-    def __get_fill_price(self, current_price, trade_result):
+    def __get_result_details(self, current_price, trade_result):
         """
-        Extract and average trade result from exchange output
+        Extract price, base/quote amt and order id from exchange transaction dict
+        Returns:
+        Tupple: price, base_amt, quote_amt, order_id
         """
         prices = []
         if 'transactTime' in trade_result:
@@ -653,8 +656,13 @@ class Trade():
                 prices.append(float(fill['price']))
             fill_price = sum(prices) / len(prices)
             self.logger.info("Current price %s, Fill price: %s" % (current_price, fill_price))
-            return fill_price
-        return None
+
+            return (fill_price,
+                    trade_result['executedQty'],
+                    trade_result['cummulativeQuoteQty'],
+                    trade_result['orderId'])
+
+        return [None] * 4
 
     def __get_commission(self, trade_result):
         """
@@ -662,7 +670,7 @@ class Trade():
 
         """
         usd_total = 0
-        if 'fills' in trade_result and not(self.test_trade or self.test_data):
+        if self.prod and 'fills' in trade_result and not(self.test_trade or self.test_data):
             for fill in trade_result['fills']:
                 if 'USD' in fill['commissionAsset']:
                     usd_total += float(fill['commission'])
@@ -711,7 +719,6 @@ class Trade():
                                                         isolated=str2bool(
                                                             self.config.main.isolated))
 
-                order_id = trade_result.get('orderId')
                 self.logger.info("%s close margin short result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
@@ -736,12 +743,15 @@ class Trade():
                 else:
                     self.logger.info("No borrowed funds to repay for %s" % pair)
 
+                # override values from exchange if in prod
+                fill_price, quantity, quote_out, order_id = \
+                        self.__get_result_details(current_price, trade_result)
             else:
                 order_id = 0
+                fill_price = current_price
+                trade_result = {}
 
-            fill_price = current_price if self.test_trade or self.test_data else \
-                    self.__get_fill_price(current_price, trade_result)
-            commission_usd = self.__get_commission(trade_result) if self.prod else 0
+            commission_usd = self.__get_commission(trade_result)
 
 
             if self.test_data or self.test_trade or \
@@ -822,7 +832,6 @@ class Trade():
                                                         order_type=self.client.market,
                                                         isolated=str2bool(
                                                             self.config.main.isolated))
-                order_id = trade_result.get('orderId')
                 self.logger.info("%s open margin short result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
                     self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
@@ -830,13 +839,17 @@ class Trade():
                                       % (amt_str, current_base_bal, amount_to_borrow))
                     return False
 
+                # override values from exchange if in prod
+                fill_price, amt_str, total_quote_amount, order_id = \
+                        self.__get_result_details(current_price, trade_result)
+
             else:  # not prod
                 amt_str = total_base_amount
                 order_id = 0
+                fill_price = current_price
+                trade_result = {}
 
-            fill_price = current_price if self.test_trade or self.test_data else \
-                    self.__get_fill_price(current_price, trade_result)
-            commission_usd = self.__get_commission(trade_result) if self.prod else 0
+            commission_usd = self.__get_commission(trade_result)
 
             if self.test_data or self.test_trade or \
                     (not self.test_trade and 'transactTime' in trade_result):
@@ -896,17 +909,21 @@ class Trade():
                     symbol=pair, side=self.client.sell, quantity=amt_str,
                     order_type=self.client.market, test=self.test_trade)
 
-                order_id = trade_result.get('orderId')
                 self.logger.info("%s close spot long result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
                     return False
-            else:
-                order_id = 0
 
-            commission_usd = self.__get_commission(trade_result) if self.prod else 0
-            fill_price = current_price if self.test_trade or self.test_data else \
-                    self.__get_fill_price(current_price, trade_result)
+                # override values from exchange if in prod
+                fill_price, quantity, quote_out, order_id = \
+                        self.__get_result_details(current_price, trade_result)
+
+            else:  # not prod
+                order_id = 0
+                fill_price = current_price
+                trade_result = {}
+
+            commission_usd = self.__get_commission(trade_result)
 
             if self.test_data or self.test_trade or \
                     (not self.test_trade and 'transactTime' in trade_result):
@@ -974,7 +991,6 @@ class Trade():
                                                         isolated=str2bool(
                                                             self.config.main.isolated))
 
-                order_id = trade_result.get('orderId')
                 self.logger.info("%s close margin long result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
                     self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
@@ -996,12 +1012,16 @@ class Trade():
                     self.logger.info("Repay result for %s: %s" % (pair, repay_result))
                 else:
                     self.logger.info("No borrowed funds to repay for %s" % pair)
+
+                # override values from exchange if in prod
+                fill_price, quantity, quote_out, order_id = \
+                        self.__get_result_details(current_price, trade_result)
             else:
                 order_id = 0
+                fill_price = current_price
+                trade_result = {}
 
-            fill_price = current_price if self.test_trade or self.test_data else \
-                    self.__get_fill_price(current_price, trade_result)
-            commission_usd = self.__get_commission(trade_result) if self.prod else 0
+            commission_usd = self.__get_commission(trade_result)
 
             if self.test_data or self.test_trade or not self.test_trade:
                 if name == "api":

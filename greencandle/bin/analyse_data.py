@@ -31,6 +31,11 @@ GET_EXCEPTIONS = exception_catcher((Exception))
 TRIGGERED = {}
 FORWARD = False
 
+if len(sys.argv) > 1 and sys.argv[1] != "--help":
+    CLIENT = binance_auth()
+    ISOLATED = CLIENT.get_isolated_margin_pairs()
+    CROSS = CLIENT.get_cross_margin_pairs()
+
 @SCHED.scheduled_job('cron', minute=MINUTE[config.main.interval],
                      hour=HOUR[config.main.interval],
                      second=config.main.check_interval)
@@ -43,9 +48,6 @@ def analyse_loop():
     global FORWARD
     LOGGER.debug("Recently triggered: %s" % str(TRIGGERED))
 
-    client = binance_auth()
-    isolated = client.get_isolated_margin_pairs()
-    cross = client.get_cross_margin_pairs()
     while glob.glob('/var/run/{}-data-{}-*'.format(config.main.base_env, config.main.interval)):
         LOGGER.info("Waiting for initial data collection to complete for %s" % config.main.interval)
         time.sleep(30)
@@ -55,11 +57,11 @@ def analyse_loop():
     for pair in PAIRS:
 
         with ThreadPoolExecutor(max_workers=100) as pool:
-            pool.submit(analyse_pair, pair, redis, isolated, cross)
+            pool.submit(analyse_pair, pair, redis)
     LOGGER.info("End of current loop")
     del redis
 
-def analyse_pair(pair, redis, isolated, cross):
+def analyse_pair(pair, redis):
     """
     Analysis of individual pair
     """
@@ -69,8 +71,8 @@ def analyse_pair(pair, redis, isolated, cross):
     if config.main.trade_direction != "short":
         supported += "spot "
 
-    supported += "isolated " if pair in isolated else ""
-    supported += "cross " if pair in cross else ""
+    supported += "isolated " if pair in ISOLATED else ""
+    supported += "cross " if pair in CROSS else ""
 
     if not supported.strip():
         # don't analyse pair if spot/isolated/cross not supported
@@ -78,12 +80,11 @@ def analyse_pair(pair, redis, isolated, cross):
 
     LOGGER.debug("Analysing pair: %s" % pair)
     try:
-        result, _, _, current_price, _ = redis.get_action(pair=pair, interval=interval)
+        result, _, current_time, current_price, _ = redis.get_action(pair=pair, interval=interval)
 
         if result == "OPEN":
             LOGGER.debug("Items to buy")
             now = datetime.now()
-            current_time = now.strftime("%H:%M:%S") + " UTC"
 
             # Only alert on a given pair once per hour
             # for each strategy
