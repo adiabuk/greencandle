@@ -1,6 +1,6 @@
 {
   "name": "prod-eng-bb-cross",
-  "indicators": "get_supertrend;STX;23,3 get_bb;12,2 get_bb_perc;bbperc;200,1",
+  "indicators": "get_supertrend;STX;23,3 get_bb;lower;12,2 get_bb_perc;bbperc;200,1",
   "open_rule1": "low \u003c results.current.lower_12 and results.current.bbperc_200 \u003c -2",
   "trade_direction": "long",
   "rate_indicator": "lower_12"
