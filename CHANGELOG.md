@@ -1,7 +1,18 @@
 # Releases
 
-# 5.4
+# 5.5
+* reduce verbosity of NaN/None Engine data
+* display time from candle in notification
+* use ask/bid price when not using test data
+* notify when starting gc build
+* seperate out 2 stag envs
+* only check for cross/isolated pairs once
+* cleanup extracting data from exchange
+* enure we only get commisssion in prod with non-test trades
+* ensure we declare trade_result in test mode
+* use updated prod strategy
 
+# 5.4
 * add api containers for bb eng strategies
 * Improve trade output logging
 * Add second bbperc stag strategy
