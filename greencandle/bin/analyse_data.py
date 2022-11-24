@@ -30,9 +30,11 @@ SCHED = BlockingScheduler()
 GET_EXCEPTIONS = exception_catcher((Exception))
 TRIGGERED = {}
 FORWARD = False
-CLIENT = binance_auth()
-ISOLATED = CLIENT.get_isolated_margin_pairs()
-CROSS = CLIENT.get_cross_margin_pairs()
+
+if len(sys.argv) > 1 and sys.argv[1] != "--help":
+    CLIENT = binance_auth()
+    ISOLATED = CLIENT.get_isolated_margin_pairs()
+    CROSS = CLIENT.get_cross_margin_pairs()
 
 @SCHED.scheduled_job('cron', minute=MINUTE[config.main.interval],
                      hour=HOUR[config.main.interval],
