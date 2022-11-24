@@ -669,7 +669,7 @@ class Trade():
 
         """
         usd_total = 0
-        if 'fills' in trade_result and not(self.test_trade or self.test_data):
+        if self.prod and 'fills' in trade_result and not(self.test_trade or self.test_data):
             for fill in trade_result['fills']:
                 if 'USD' in fill['commissionAsset']:
                     usd_total += float(fill['commission'])
