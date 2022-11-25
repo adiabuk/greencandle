@@ -1,5 +1,9 @@
 # Releases
 
+# 5.5.2
+* When shorting, buy back only the amount originally sold
+* Add pair name for skipped trades during drain
+
 # 5.5.1
 * Fix prod indicator name
 
