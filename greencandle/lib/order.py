@@ -132,7 +132,7 @@ class Trade():
                 self.logger.error("Pair %s not in db_pairs, skipping..." % item[0])
             elif self.is_in_drain() and not self.test_data:
                 self.logger.warning("strategy is in drain for pair %s, skipping..." % item[0])
-                send_slack_message("alerts", "strategy is in drain, skipping")
+                send_slack_message("alerts", "strategy is in drain, skipping %s" % item[0])
                 return []
             elif self.is_float(item[4]) and \
                     ((float(item[4]) > 0 and self.config.main.trade_direction == "short") or \
@@ -694,11 +694,12 @@ class Trade():
             base = get_base(pair)
             quote = get_quote(pair)
 
-            open_price, quote_in, _, _, borrowed, _, = dbase.get_trade_value(pair)[0]
+            open_price, quote_in, _, base_in, borrowed, _ = dbase.get_trade_value(pair)[0]
             if not open_price:
                 return False
             # Quantity of base_asset we can buy back based on current price
-            quantity = quote2base(quote_in, pair)
+            quantity = base_in
+
 
             if not quantity:
                 self.logger.info("close_margin_short: unable to get quantity for %s" % pair)
