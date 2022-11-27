@@ -8,13 +8,13 @@ from collections import defaultdict
 import pandas
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-from pyvirtualdisplay import Display
 
 import plotly.offline as py
 import plotly.graph_objs as go
 from plotly import subplots
 
 from PIL import Image
+from pyvirtualdisplay import Display
 from resizeimage import resizeimage
 from greencandle.lib import config
 from greencandle.lib.redis_conn import Redis
@@ -86,8 +86,8 @@ class Graph():
         """Create graph html file using plotly offline-mode from dataframe object"""
 
         fig = subplots.make_subplots(rows=2, cols=1, shared_xaxes=True, print_grid=False)
-
         for name, value in self.data.items():
+
             row = 1
             col = 1
             if name == 'ohlc':
@@ -96,6 +96,7 @@ class Graph():
                     print('Unable to find ohlc data for {0}, passing...'.format(self.pair))
                     return
                 value["time"] = pandas.to_datetime(value["openTime"], unit="ms")
+                print('AMROX ' + 'ohlc' + str(value['time']) + ' ' + value.close)
                 item = go.Candlestick(x=value.time,
                                       open=value.open,
                                       high=value.high,
@@ -135,8 +136,8 @@ class Graph():
                                   mode='markers')
 
             # add rsi graph in second subply (below) if it exists
-            elif ('RSI' in name or 'perc' in name
-                  or 'signal' in name or 'tsi' in name) and "STOCH" not in name:
+            elif any(substring in name for substring in ['RSI', 'ATR', 'signal', 'tsi']) \
+                    and 'STOCH' not in name:
                 LOGGER.debug("Creating RSI graph")
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=value['value'],
@@ -236,7 +237,7 @@ class Graph():
                 except AttributeError:
                     pass
                 except KeyError:
-                    LOGGER.debug("No indicator data for %s" % ind)
+                    LOGGER.debug("No indicator data for %s %s" % (ind, index_item))
                     continue
                 except ValueError:
                     LOGGER.debug("Value Error while getting %s" % ind)
@@ -247,9 +248,7 @@ class Graph():
                                       index_item).decode().replace('null', 'None')
 
             try:  #ohlc
-                result_list['ohlc'] = redis.get_current('{}:{}'.format(self.pair,
-                                                                       self.interval),
-                                                        index_item)[-1]
+                result_list['ohlc'] = ast.literal_eval(str_dict)['ohlc']
                 result_list['current_price'] = result_list['ohlc']['close']
 
             except AttributeError as error:
@@ -264,6 +263,7 @@ class Graph():
                 pass
             rehydrated = result_list['ohlc']
             list_of_series.append(rehydrated)
+
             for ind in ind_list:
                 try:  # event
                     list_of_results[ind].append((result_list[ind],
@@ -280,6 +280,7 @@ class Graph():
         dataframes = {}
 
         dataframes['ohlc'] = pandas.DataFrame(list_of_series)
+
         dataframes['event'] = pandas.DataFrame(list_of_results['event'],
                                                columns=['result', 'current_price', 'date'])
         for ind in ind_list:
