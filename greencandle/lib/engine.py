@@ -20,7 +20,6 @@ import pandas
 import numpy
 import pandas_ta as ta
 import talib
-from indicator import SuperTrend, RSI
 
 from greencandle.lib import config
 from greencandle.lib.common import make_float, pipify, pip_calc, epoch2date
@@ -297,9 +296,13 @@ class Engine(dict):
 
     def get_bb(self, pair, dataframe, index=None, localconfig=None):
         """get bollinger bands"""
-        index = -1
-        close_time = str(self.dataframes[pair].iloc[index]["closeTime"])
-        LOGGER.debug("Getting bollinger bands for %s - %s" % (pair, close_time))
+        if (not index and self.test) or len(self.dataframes[pair]) < 2:
+            index = -1
+        elif not index and not self.test:
+            index = -1
+        scheme = {}
+        scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
+        LOGGER.debug("Getting bollinger bands for %s - %s" % (pair, scheme['close_time']))
         klines = self.__make_data_tupple(dataframe.iloc[:index])
         func, timef = localconfig  # split tuple
         timeframe, multiplier = timef.split(',')
@@ -324,14 +327,12 @@ class Engine(dict):
             results['lower'] = None
             LOGGER.debug("Overall Exception getting bollinger bands: %s seq: %s" % (exc, index))
         trigger = None
-        scheme = {}
         try:
             current_price = str(Decimal(self.dataframes[pair].iloc[index]["close"]))
 
             scheme["data"] = results[func]
             scheme["symbol"] = pair
             scheme["event"] = "{0}_{1}".format(func, timeframe)
-            scheme["close_time"] = close_time
 
             self.schemes.append(scheme)
 
@@ -400,6 +401,39 @@ class Engine(dict):
 
         self.schemes.append(scheme)
         LOGGER.debug("Done getting TSI")
+
+    @get_exceptions
+    def get_atr(self, pair, dataframe, index=None, localconfig=None):
+        """
+        get Average True Range values for given pair
+        Append current RSI data to instance variable
+
+        Args:
+              pair: trading pair (eg. XRPBTC)
+              localconfig: indicator config tuple
+        Returns:
+            None
+
+        """
+
+        func, timeperiod = localconfig  # split tuple
+        LOGGER.debug("Getting %s_%s for %s" % (func, timeperiod, pair))
+        scheme = {}
+        mine = dataframe.apply(pandas.to_numeric).loc[:index]
+
+        if (not index and self.test) or len(self.dataframes[pair]) < 2:
+            index = -1
+        elif not index and not self.test:
+            index = -1
+        atr = talib.ATR(high=dataframe.high.values.astype(float),
+                        low=dataframe.low.values.astype(float),
+                        close=dataframe.close.values.astype(float), timeperiod=14)
+        scheme["symbol"] = pair
+        scheme["event"] = "{0}_{1}".format(func, timeperiod)
+        scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
+        scheme["data"] = float(atr[index]) if atr[index] != None else None
+        self.schemes.append(scheme)
+        LOGGER.debug("Done getting ATR")
 
     @get_exceptions
     def get_rsi(self, pair, dataframe, index=None, localconfig=None):
