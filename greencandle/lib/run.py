@@ -228,7 +228,9 @@ def parallel_test(pairs, interval, data_dir, indicators):
     print(get_recent_profit(True, interval))
 
 class ProdRunner():
-
+    """
+    Collect and OHLC and indicator data whilst preserving previous candles
+    """
     def __init__(self):
         self.dataframes = {}
 
@@ -331,7 +333,8 @@ class ProdRunner():
 
             new_dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=1)
             for pair in PAIRS:
-                self.dataframes[pair] = self.dataframes[pair].append(new_dataframes[pair], ignore_index=True)
+                self.dataframes[pair] = self.dataframes[pair].append(new_dataframes[pair],
+                                                                     ignore_index=True)
             engine = Engine(prices=prices_trunk, dataframes=self.dataframes, interval=interval,
                             redis=redis)
             engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
