@@ -1,5 +1,5 @@
 {
-  "check_interval": "20",
+  "check_interval": "5",
   "close_rule1": "1\u003e1",
   "immediate_stop": "true",
   "immediate_take_profit": "true",
