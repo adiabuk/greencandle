@@ -314,7 +314,6 @@ class ProdRunner():
         """
         Loop through collection cycle (PROD)
         """
-
         LOGGER.debug("Performaing prod loop")
         LOGGER.info("Pairs in config: %s" % PAIRS)
         LOGGER.info("Total unique pairs: %s" % len(PAIRS))
@@ -332,9 +331,11 @@ class ProdRunner():
                     prices_trunk[key] = val
 
             new_dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=1)
+            max_klines = int(config.main.no_of_klines)
             for pair in PAIRS:
-                self.dataframes[pair] = self.dataframes[pair].append(new_dataframes[pair],
-                                                                     ignore_index=True)
+                self.dataframes[pair] = \
+                        self.dataframes[pair].append(new_dataframes[pair],
+                                                     ignore_index=True).head(max_klines)
             engine = Engine(prices=prices_trunk, dataframes=self.dataframes, interval=interval,
                             redis=redis)
             engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
