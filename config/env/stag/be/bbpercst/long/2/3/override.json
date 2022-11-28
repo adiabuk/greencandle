@@ -1,5 +1,5 @@
 {
-  "check_interval": "00,30",
+  "check_interval": "5",
   "logging_level": "10",
   "name": "stag-be-eng-bbpercst3-long"
 }
