@@ -234,22 +234,23 @@ class ProdRunner():
     def __init__(self):
         self.dataframes = {}
 
+    @staticmethod
     @GET_EXCEPTIONS
-    def prod_int_check(self, interval, test, alert=False):
+    def prod_int_check(interval, test, alert=False):
         """Check price between candles for slippage below stoploss"""
         dbase = Mysql(test=False, interval=interval)
-        current_trades = dbase.get_trades()
         redis = Redis()
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
 
-        for trade in current_trades:
+        for trade in dbase.get_trades():
             sells = []
             drawdowns = {}
             drawups = {}
             pair = trade[0].strip()
             open_price, _, open_time, _, _, _ = dbase.get_trade_value(pair)[0]
-            self.dataframes[pair] = get_dataframes([pair], interval=interval, no_of_klines=1)
-            current_candle = self.dataframes[pair].iloc[-1]
+            current_candle = get_dataframes([pair],
+                                            interval=interval,
+                                            no_of_klines=1)[pair].iloc[-1]
 
             redis.update_drawdown(pair, current_candle, open_time=open_time)
             redis.update_drawup(pair, current_candle, open_time=open_time)

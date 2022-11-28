@@ -91,7 +91,6 @@ def main():
         LOGGER.info("Starting initial prod run")
         runner.prod_initial(interval) # initial run, before scheduling begins
         LOGGER.info("Finished initial prod run")
-        runner.prod_run()
 
     try:
         sched.start()
