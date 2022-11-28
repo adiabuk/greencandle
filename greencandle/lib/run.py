@@ -336,7 +336,7 @@ class ProdRunner():
             for pair in PAIRS:
                 self.dataframes[pair] = \
                         self.dataframes[pair].append(new_dataframes[pair],
-                                                     ignore_index=True).head(max_klines)
+                                                     ignore_index=True).tail(max_klines)
             engine = Engine(prices=prices_trunk, dataframes=self.dataframes, interval=interval,
                             redis=redis)
             engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
