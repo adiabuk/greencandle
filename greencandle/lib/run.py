@@ -330,7 +330,6 @@ class ProdRunner():
                     prices_trunk[key] = val
 
             new_dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=1)
-            print("AMROX", new_dataframes['COCOSUSDT'].iloc[-1]['closeTime'])
             for pair in PAIRS:
                 self.dataframes[pair] = self.dataframes[pair].append(new_dataframes[pair], ignore_index=True)
             engine = Engine(prices=prices_trunk, dataframes=self.dataframes, interval=interval,
