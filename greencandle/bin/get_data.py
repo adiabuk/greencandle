@@ -4,34 +4,19 @@
 Collect OHLC and strategy data for later analysis
 """
 import os
+import time
 from pathlib import Path
-from apscheduler.schedulers.blocking import BlockingScheduler
 from greencandle.lib import config
 config.create_config()
-from greencandle.lib.run import prod_initial, prod_loop
+from greencandle.lib.run import ProdRunner
 from greencandle.lib.logger import get_logger, exception_catcher
-from greencandle.lib.common import HOUR, MINUTE, arg_decorator
+from greencandle.lib.common import arg_decorator
 
 LOGGER = get_logger(__name__)
 PAIRS = config.main.pairs.split()
 MAIN_INDICATORS = config.main.indicators.split()
-SCHED = BlockingScheduler()
 GET_EXCEPTIONS = exception_catcher((Exception))
 
-@SCHED.scheduled_job('cron', minute=MINUTE[config.main.interval],
-                     hour=HOUR[config.main.interval], second=config.main.check_interval)
-def prod_run():
-    """
-    Test loop
-    """
-    interval = config.main.interval
-    LOGGER.info("Starting prod run")
-    prod_loop(interval, test=True, data=True, analyse=False)
-    LOGGER.info("Finished prod run")
-
-
-@GET_EXCEPTIONS
-@SCHED.scheduled_job('interval', seconds=60)
 def keepalive():
     """
     Periodically touch file for docker healthcheck
@@ -55,14 +40,18 @@ def main():
     LOGGER.info("Starting initial prod run")
     name = config.main.name.split('-')[-1]
     Path('/var/run/{}-data-{}-{}'.format(config.main.base_env, interval, name)).touch()
-    prod_initial(interval, test=True) # initial run, before scheduling begins
-    prod_run()
+    runner = ProdRunner()
+    runner.prod_initial(interval, test=True) # initial run, before scheduling begins
     if os.path.exists('/var/run/{}-data-{}-{}'.format(config.main.base_env, interval, name)):
         os.remove('/var/run/{}-data-{}-{}'.format(config.main.base_env, interval, name))
     LOGGER.info("Finished initial prod run")
-    prod_run()
 
-    SCHED.start()
+    while True:
+        LOGGER.info("Starting prod run")
+        runner.prod_loop(interval, test=True, data=True, analyse=False)
+        keepalive()
+        LOGGER.info("Finished prod run")
+        time.sleep(int(config.main.check_interval))
 
 if __name__ == '__main__':
     main()

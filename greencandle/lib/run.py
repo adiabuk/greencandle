@@ -227,145 +227,154 @@ def parallel_test(pairs, interval, data_dir, indicators):
 
     print(get_recent_profit(True, interval))
 
-@GET_EXCEPTIONS
-def prod_int_check(interval, test, alert=False):
-    """Check price between candles for slippage below stoploss"""
-    dbase = Mysql(test=False, interval=interval)
-    current_trades = dbase.get_trades()
-    redis = Redis()
-    current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
+class ProdRunner():
 
-    for trade in current_trades:
-        sells = []
-        drawdowns = {}
-        drawups = {}
-        pair = trade[0].strip()
-        open_price, _, open_time, _, _, _ = dbase.get_trade_value(pair)[0]
-        dataframes = get_dataframes([pair], interval=interval, no_of_klines=1)
-        current_candle = dataframes[pair].iloc[-1]
+    def __init__(self):
+        self.dataframes = {}
 
-        redis.update_drawdown(pair, current_candle, open_time=open_time)
-        redis.update_drawup(pair, current_candle, open_time=open_time)
-        result, event, current_time, current_price = redis.get_intermittent(pair,
-                                                                            open_price,
-                                                                            current_candle,
-                                                                            open_time)
+    @GET_EXCEPTIONS
+    def prod_int_check(self, interval, test, alert=False):
+        """Check price between candles for slippage below stoploss"""
+        dbase = Mysql(test=False, interval=interval)
+        current_trades = dbase.get_trades()
+        redis = Redis()
+        current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
 
-        LOGGER.debug("%s int check result: %s Buy:%s Current:%s Time:%s"
-                     % (pair, result, open_price, current_price, current_time))
-        if result == "CLOSE":
-            LOGGER.debug("Items to sell")
-            sells.append((pair, current_time, current_price, event, 0))
-            drawdowns[pair] = redis.get_drawdown(pair)
-            drawups[pair] = redis.get_drawup(pair)['perc']
-            if alert:
-                payload = {"pair":pair, "strategy":"alert",
-                           "text": "Closing API trade according to TP/SL rules",
-                           "action":"close"}
-                host = os.environ['HOST_IP']
-                url = "http://{}:1080/{}".format(host, config.web.api_token)
-                try:
-                    requests.post(url, json=payload, timeout=1)
-                except Exception:
-                    pass
+        for trade in current_trades:
+            sells = []
+            drawdowns = {}
+            drawups = {}
+            pair = trade[0].strip()
+            open_price, _, open_time, _, _, _ = dbase.get_trade_value(pair)[0]
+            self.dataframes[pair] = get_dataframes([pair], interval=interval, no_of_klines=1)
+            current_candle = self.dataframes[pair].iloc[-1]
 
-            trade = Trade(interval=interval, test_trade=test, test_data=False, config=config)
-            trade.close_trade(sells, drawdowns=drawdowns, drawups=drawups)
+            redis.update_drawdown(pair, current_candle, open_time=open_time)
+            redis.update_drawup(pair, current_candle, open_time=open_time)
+            result, event, current_time, current_price = redis.get_intermittent(pair,
+                                                                                open_price,
+                                                                                current_candle,
+                                                                                open_time)
 
-            redis.rm_drawup(pair)
-            redis.rm_drawdown(pair)
-            redis.rm_on_entry(pair, "take_profit_perc")
-            redis.rm_on_entry(pair, "stop_loss_perc")
-    del redis
-    del dbase
+            LOGGER.debug("%s int check result: %s Buy:%s Current:%s Time:%s"
+                         % (pair, result, open_price, current_price, current_time))
+            if result == "CLOSE":
+                LOGGER.debug("Items to sell")
+                sells.append((pair, current_time, current_price, event, 0))
+                drawdowns[pair] = redis.get_drawdown(pair)
+                drawups[pair] = redis.get_drawup(pair)['perc']
+                if alert:
+                    payload = {"pair":pair, "strategy":"alert",
+                               "text": "Closing API trade according to TP/SL rules",
+                               "action":"close"}
+                    host = os.environ['HOST_IP']
+                    url = "http://{}:1080/{}".format(host, config.web.api_token)
+                    try:
+                        requests.post(url, json=payload, timeout=1)
+                    except Exception:
+                        pass
 
-@GET_EXCEPTIONS
-def prod_initial(interval, test=False):
-    """
-    Initial prod run - back-fetching data for tech analysis.
-    """
-    client = Binance(debug=str2bool(config.accounts.account_debug))
-    prices = client.prices()
-    prices_trunk = {}
+                trade = Trade(interval=interval, test_trade=test, test_data=False, config=config)
+                trade.close_trade(sells, drawdowns=drawdowns, drawups=drawups)
 
-    for key, val in prices.items():
-        if key in PAIRS:
-            prices_trunk[key] = val
+                redis.rm_drawup(pair)
+                redis.rm_drawdown(pair)
+                redis.rm_on_entry(pair, "take_profit_perc")
+                redis.rm_on_entry(pair, "stop_loss_perc")
+        del redis
+        del dbase
 
-    redis = Redis()
-    no_of_klines = config.main.no_of_klines
-    LOGGER.debug("Getting %s klines" % no_of_klines)
-    dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=no_of_klines,
-                                max_workers=100)
-    engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, test=test,
-                    redis=redis)
-    engine.get_data(localconfig=MAIN_INDICATORS, first_run=True, no_of_klines=no_of_klines)
-    del redis
-
-@GET_EXCEPTIONS
-def prod_loop(interval, test=False, data=True, analyse=True):
-    """
-    Loop through collection cycle (PROD)
-    """
-
-    LOGGER.debug("Performaing prod loop")
-    LOGGER.info("Pairs in config: %s" % PAIRS)
-    LOGGER.info("Total unique pairs: %s" % len(PAIRS))
-
-    LOGGER.info("Starting new cycle")
-    LOGGER.debug("max trades: %s" % config.main.max_trades)
-    client = Binance(debug=str2bool(config.accounts.account_debug))
-    redis = Redis()
-
-    if data:
+    @GET_EXCEPTIONS
+    def prod_initial(self, interval, test=False):
+        """
+        Initial prod run - back-fetching data for tech analysis.
+        """
+        client = Binance(debug=str2bool(config.accounts.account_debug))
         prices = client.prices()
         prices_trunk = {}
+
         for key, val in prices.items():
             if key in PAIRS:
                 prices_trunk[key] = val
 
-        dataframes = get_dataframes(PAIRS, interval=interval)
-        engine = Engine(prices=prices_trunk, dataframes=dataframes, interval=interval, redis=redis)
-        engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
-        del engine
-    if analyse:
-        buys = []
-        sells = []
-        drawdowns = {}
-        drawups = {}
-
-        for pair in PAIRS:
-            pair = pair.strip()
-            result, event, current_time, current_price, _ = redis.get_action(pair=pair,
-                                                                             interval=interval)
-            current_candle = redis.get_last_candle(pair, interval)
-            client = binance_auth()
-            if result != "NOITEM":
-                redis.update_drawdown(pair, current_candle)
-                redis.update_drawup(pair, current_candle)
-
-            action = 1 if config.main.trade_direction == 'long' else -1
-            if result == "OPEN":
-                LOGGER.debug("Items to buy")
-                tick = client.tickers()
-                current_price = tick[pair]['ask'] if config.main.trade_direction == 'long' \
-                        else tick[pair]['bid']
-                redis.update_drawdown(pair, current_candle, event='open')
-                redis.update_drawup(pair, current_candle, event='open')
-                buys.append((pair, current_time, current_price, event, action))
-
-            if result == "CLOSE":
-                LOGGER.debug("Items to sell")
-                tick = client.tickers()
-                current_price = tick[pair]['bid'] if config.main.trade_direction == 'long' \
-                        else tick[pair]['ask']
-                sells.append((pair, current_time, current_price, event, 0))
-                drawdowns[pair] = redis.get_drawdown(pair)
-                drawups[pair] = redis.get_drawup(pair)['perc']
-                redis.rm_drawup(pair)
-                redis.rm_drawdown(pair)
-
-        trade = Trade(interval=interval, test_trade=test, test_data=False, config=config)
-        trade.close_trade(sells, drawdowns=drawdowns, drawups=drawups)
-        trade.open_trade(buys)
+        redis = Redis()
+        no_of_klines = config.main.no_of_klines
+        LOGGER.debug("Getting %s klines" % no_of_klines)
+        self.dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=no_of_klines,
+                                         max_workers=100)
+        engine = Engine(prices=prices_trunk, dataframes=self.dataframes, interval=interval,
+                        test=test, redis=redis)
+        engine.get_data(localconfig=MAIN_INDICATORS, first_run=True, no_of_klines=no_of_klines)
         del redis
+
+    @GET_EXCEPTIONS
+    def prod_loop(self, interval, test=False, data=True, analyse=True):
+        """
+        Loop through collection cycle (PROD)
+        """
+
+        LOGGER.debug("Performaing prod loop")
+        LOGGER.info("Pairs in config: %s" % PAIRS)
+        LOGGER.info("Total unique pairs: %s" % len(PAIRS))
+
+        LOGGER.info("Starting new cycle")
+        LOGGER.debug("max trades: %s" % config.main.max_trades)
+        client = Binance(debug=str2bool(config.accounts.account_debug))
+        redis = Redis()
+
+        if data:
+            prices = client.prices()
+            prices_trunk = {}
+            for key, val in prices.items():
+                if key in PAIRS:
+                    prices_trunk[key] = val
+
+            new_dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=1)
+            print("AMROX", new_dataframes['COCOSUSDT'].iloc[-1]['closeTime'])
+            for pair in PAIRS:
+                self.dataframes[pair] = self.dataframes[pair].append(new_dataframes[pair], ignore_index=True)
+            engine = Engine(prices=prices_trunk, dataframes=self.dataframes, interval=interval,
+                            redis=redis)
+            engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
+            del engine
+        if analyse:
+            buys = []
+            sells = []
+            drawdowns = {}
+            drawups = {}
+
+            for pair in PAIRS:
+                pair = pair.strip()
+                result, event, current_time, current_price, _ = redis.get_action(pair=pair,
+                                                                                 interval=interval)
+                current_candle = redis.get_last_candle(pair, interval)
+                client = binance_auth()
+                if result != "NOITEM":
+                    redis.update_drawdown(pair, current_candle)
+                    redis.update_drawup(pair, current_candle)
+
+                action = 1 if config.main.trade_direction == 'long' else -1
+                if result == "OPEN":
+                    LOGGER.debug("Items to buy")
+                    tick = client.tickers()
+                    current_price = tick[pair]['ask'] if config.main.trade_direction == 'long' \
+                            else tick[pair]['bid']
+                    redis.update_drawdown(pair, current_candle, event='open')
+                    redis.update_drawup(pair, current_candle, event='open')
+                    buys.append((pair, current_time, current_price, event, action))
+
+                if result == "CLOSE":
+                    LOGGER.debug("Items to sell")
+                    tick = client.tickers()
+                    current_price = tick[pair]['bid'] if config.main.trade_direction == 'long' \
+                            else tick[pair]['ask']
+                    sells.append((pair, current_time, current_price, event, 0))
+                    drawdowns[pair] = redis.get_drawdown(pair)
+                    drawups[pair] = redis.get_drawup(pair)['perc']
+                    redis.rm_drawup(pair)
+                    redis.rm_drawdown(pair)
+
+            trade = Trade(interval=interval, test_trade=test, test_data=False, config=config)
+            trade.close_trade(sells, drawdowns=drawdowns, drawups=drawups)
+            trade.open_trade(buys)
+            del redis
