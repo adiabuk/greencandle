@@ -1,5 +1,6 @@
 {
   "check_interval": "5",
   "logging_level": "10",
+  "slack_active": "false",
   "name": "stag-be-eng-bbpercst3-short"
 }
