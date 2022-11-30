@@ -578,7 +578,34 @@ class Redis():
            0.068467,                 -- current price of asset
            {'sell': [], 'buy': []})  -- matched buy/sell rules
         """
+        main_indicators = config.main.indicators.split()
 
+        ind_list = []
+        for i in main_indicators:
+            if 'vol' in i:
+                ind_list.append("volume")
+            split = i.split(';')
+            ind = split[1] + '_' + split[2].split(',')[0]
+            ind_list.append(ind)
+
+        # AMROX
+        res = []
+        name = "{}:{}".format(pair, self.interval)
+        # loop backwards through last 5 items
+        items = self.get_items(pair=pair, interval=interval)
+        for i in range(-1, -6, -1):
+            x = AttributeDict()
+            for indicator in ind_list:
+                self.logger.critical("AMROX1 %s %s" % (str(i), str(indicator)))
+                x[indicator] = self.get_result(items[i], indicator, pair, self.interval)
+            # OHLC
+            ohlc = self.get_current(name, items[i])[-1]
+            x.update(ohlc)
+            res.append(x)
+        self.logger.critical("AMROX2 %s %s" % (str(res), len(res)))
+
+
+        # AMROX
         results = AttributeDict(current=AttributeDict(), previous=AttributeDict(),
                                 previous1=AttributeDict(), previous2=AttributeDict(),
                                 previous3=AttributeDict())
@@ -605,15 +632,6 @@ class Redis():
             return ('HOLD', 'Not enough data', 0, 0, {'buy':[], 'sell':[]})
 
         # get current & previous indicator values
-        main_indicators = config.main.indicators.split()
-
-        ind_list = []
-        for i in main_indicators:
-            if 'vol' in i:
-                ind_list.append("volume")
-            split = i.split(';')
-            ind = split[1] + '_' + split[2].split(',')[0]
-            ind_list.append(ind)
 
         for indicator in ind_list:
             results['current'][indicator] = self.get_result(current, indicator,

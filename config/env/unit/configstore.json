@@ -126,12 +126,12 @@
       "is_secret": false
     },
     "close_rule1": {
-      "value": "results.current.EMA_8 \u003c results.current.EMA_13",
+      "value": "res[0].EMA_8 \u003c res[0].EMA_13",
       "is_binary": false,
       "is_secret": false
     },
     "close_rule2": {
-      "value": "results.current.RSI_48 \u003e 73",
+      "value": "res[0].RSI_48 \u003e 73",
       "is_binary": false,
       "is_secret": false
     },
@@ -266,7 +266,7 @@
       "is_secret": false
     },
     "open_rule1": {
-      "value": "results.current.EMA_8 \u003e results.current.EMA_13 and results.current.EMA_13 \u003e results.current.EMA_21 and results.current.EMA_21 \u003e results.current.EMA_34 and results.current.EMA_34 \u003e results.current.EMA_55 and results.current.RSI_48 \u003e 20 and results.current.RSI_48 \u003c 73 and results.current.EMA_200 \u003c close",
+      "value": "res[0].EMA_8 \u003e res[0].EMA_13 and res[0].EMA_13 \u003e res[0].EMA_21 and res[0].EMA_21 \u003e res[0].EMA_34 and res[0].EMA_34 \u003e res[0].EMA_55 and res[0].RSI_48 \u003e 20 and res[0].RSI_48 \u003c 73 and res[0].EMA_200 \u003c res[0].close",
       "is_binary": false,
       "is_secret": false
     },
