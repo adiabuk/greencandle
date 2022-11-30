@@ -602,14 +602,13 @@ class Redis():
         for i in range(-1, -6, -1):
             x = AttributeDict()
             for indicator in ind_list:
-                self.logger.critical("AMROX1 %s %s" % (str(i), str(indicator)))
                 x[indicator] = self.get_result(items[i], indicator, pair, self.interval)
             # OHLC
             ohlc = self.get_current(name, items[i])[-1]
+            for i in ['open', 'high', 'low', 'close']:
+                ohlc[i] = float(ohlc[i])
             x.update(ohlc)
             res.append(x)
-        self.logger.critical("AMROX2 %s %s" % (str(res), len(res)))
-
 
         # AMROX
 
