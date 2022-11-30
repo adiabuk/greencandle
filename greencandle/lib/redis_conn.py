@@ -592,7 +592,13 @@ class Redis():
         res = []
         name = "{}:{}".format(pair, self.interval)
         # loop backwards through last 5 items
-        items = self.get_items(pair=pair, interval=interval)
+        try:
+            items = self.get_items(pair=pair, interval=interval)
+            _ = items[-5]
+        except (ValueError, IndexError) as err:
+            self.logger.warning("Not enough data for %s: %s" % (pair, err))
+            return ('HOLD', 'Not enough data', 0, 0, {'buy':[], 'sell':[]})
+
         for i in range(-1, -6, -1):
             x = AttributeDict()
             for indicator in ind_list:
@@ -606,9 +612,6 @@ class Redis():
 
 
         # AMROX
-        results = AttributeDict(current=AttributeDict(), previous=AttributeDict(),
-                                previous1=AttributeDict(), previous2=AttributeDict(),
-                                previous3=AttributeDict())
 
         stop_loss_perc = self.get_on_entry(pair, 'stop_loss_perc')
         take_profit_perc = self.get_on_entry(pair, 'take_profit_perc')
@@ -623,48 +626,10 @@ class Redis():
         else:
             take_profit_perc = 0
 
-        try:
-            previous3, previous2, previous1, previous, current = \
-                    self.get_items(pair=pair, interval=interval)[-5:]
-        except ValueError as ve:
+        current_epoch = float(items[-1]) / 1000
 
-            self.logger.warning("Not enough data for %s: %s" % (pair, ve))
-            return ('HOLD', 'Not enough data', 0, 0, {'buy':[], 'sell':[]})
-
-        # get current & previous indicator values
-
-        for indicator in ind_list:
-            results['current'][indicator] = self.get_result(current, indicator,
-                                                            pair, self.interval)
-            results['previous'][indicator] = self.get_result(previous, indicator,
-                                                             pair, self.interval)
-            results['previous1'][indicator] = self.get_result(previous1, indicator,
-                                                              pair, self.interval)
-            results['previous2'][indicator] = self.get_result(previous2, indicator,
-                                                              pair, self.interval)
-            results['previous3'][indicator] = self.get_result(previous3, indicator,
-                                                              pair, self.interval)
-        items = self.get_items(pair, self.interval)
-        name = "{}:{}".format(pair, self.interval)
-        current = self.get_current(name, items[-1])
-        previous = self.get_current(name, items[-2])
-        current_epoch = float(current[1]) / 1000
-
-        rehydrated = AttributeDict(current[-1])
-        last_rehydrated = AttributeDict(previous[-1])
-
-        # variables that can be referenced in config file
-        open = float(rehydrated.open)
-        high = float(rehydrated.high)
-        low = float(rehydrated.low)
-        close = float(rehydrated.close)
-        trades = float(rehydrated.numTrades)
-        last_open = float(last_rehydrated.open)
-        last_high = float(last_rehydrated.high)
-        last_low = float(last_rehydrated.low)
-        last_close = float(last_rehydrated.close)
-        last_trades = float(last_rehydrated.numTrades)
         dbase = Mysql(test=self.test_data, interval=interval)
+
         try:
             # function returns an empty list if no results so cannot get first element
             open_price, _, open_time, _, _, _ = dbase.get_trade_value(pair)[0]
@@ -672,9 +637,7 @@ class Redis():
             open_price = None
             open_time = None
 
-        current_price = float(close)
-        current_low = float(low)
-        current_high = float(high)
+        current_price = float(res[0].close)
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_epoch))
 
         # rate of Moving Average increate/decreate based on indicator
