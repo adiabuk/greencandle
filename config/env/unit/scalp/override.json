@@ -1,6 +1,6 @@
 {
   "check_interval": "20",
-  "close_rule1": "res[0].tsi_25 \u003c res[0].signal_25 and res[1].tsi_25 \u003e res[1]signal_25",
+  "close_rule1": "res[0].tsi_25 \u003c res[0].signal_25 and res[1].tsi_25 \u003e res[1].signal_25",
   "close_rule2": " perc_rate \u003c 0",
   "divisor": "3",
   "immediate_stop": "true",
