@@ -643,7 +643,7 @@ class Redis():
         # rate of Moving Average increate/decreate based on indicator
         # specified in the rate_indicator config option - best with EMA_500
         rate_indicator = config.main.rate_indicator
-
+        """
         perc_rate = float(perc_diff(float(results.previous[rate_indicator]),
                                     float(results.current[rate_indicator]))) \
                                     if results.current[rate_indicator] and \
@@ -661,7 +661,12 @@ class Redis():
                           float(results.previous1[rate_indicator])) \
                                   if results.previous[rate_indicator] and \
                                   results.previous1[rate_indicator] else 0
-
+        """
+        # FIXME ^^
+        rate = 1
+        last_rate = 1
+        perc_rate = 1
+        last_perc_rate = 1
         rules = {'open': [], 'close': []}
         for seq in range(1, 10):
             current_config = None
@@ -677,7 +682,7 @@ class Redis():
                     except (TypeError, KeyError) as error:
                         self.logger.warning("Unable to eval config rule for pair %s: %s_rule: %s"
                                             "%s mepoch: %s" % (pair, rule, current_config, error,
-                                                               current[1]))
+                                                               items[seq]))  #FIXME?
                         continue
         close_timeout = False
         able_to_buy = True
@@ -712,10 +717,10 @@ class Redis():
         high_price = self.get_drawup(pair)['price']
         low_price = self.get_drawdown(pair)
         trailing_stop = self.__get_trailing_stop(current_price, high_price, low_price,
-                                                 current_high, current_low, open_price)
-        take_profit_rule = self.__get_take_profit(current_price, current_high,
-                                                  open_price, pair)
-        stop_loss_rule = self.__get_stop_loss(current_price, current_low, open_price, pair)
+                                                 res[0].high, res[0].low, res[0].open)
+        take_profit_rule = self.__get_take_profit(current_price, res[0].high,
+                                                  res[0].open, pair)
+        stop_loss_rule = self.__get_stop_loss(current_price, res[0].low, res[0].open, pair)
 
         if any(rules['open']) and not able_to_buy:
             self.logger.info("Unable to buy %s due to time_between_trades" % pair)
@@ -748,9 +753,9 @@ class Redis():
 
             if self.test_data and str2bool(config.main.immediate_stop):
                 if config.main.trade_direction == "long":
-                    stop_at = sub_perc(trailing_perc, current_high)
+                    stop_at = sub_perc(trailing_perc, res[0].high)
                 elif config.main.trade_direction == "short":
-                    stop_at = add_perc(trailing_perc, current_low)
+                    stop_at = add_perc(trailing_perc, res[0].low)
                 current_price = stop_at
             result = 'CLOSE'
             event = self.get_event_str("TrailingStopLoss" + result)
@@ -782,7 +787,7 @@ class Redis():
 
             # delete and re-store high price
             self.logger.debug("Close: %s, Previous Close: %s, >: %s" %
-                              (close, last_close, close > last_close))
+                              (res[0].close, res[1].close, res[0].close > res[1].close))
 
             result = 'OPEN'
             event = self.get_event_str("Normal" + result)
@@ -796,7 +801,7 @@ class Redis():
 
         self.__log_event(event=event, rate=rate, perc_rate=perc_rate,
                          open_price=open_price, close_price=current_price,
-                         pair=pair, current_time=current_time, current=results.current)
+                         pair=pair, current_time=current_time, current=res[0].close)
 
         winning_sell = self.__get_rules(rules, 'close')
         winning_buy = self.__get_rules(rules, 'open')
