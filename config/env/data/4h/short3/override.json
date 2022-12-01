@@ -1,5 +1,5 @@
 {
   "name": "big-change_4h",
-  "open_rule1": "perc_diff(last_low, high) \u003e 15",
+  "open_rule1": "perc_diff(res[1].low , res[0].high) \u003e 15",
   "trade_direction": "short"
 }

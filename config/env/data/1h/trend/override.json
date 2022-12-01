@@ -1,7 +1,7 @@
 {
   "check_interval": "30",
-  "close_rule1": "close \u003c results.current.EMA_200",
+  "close_rule1": "close \u003c res[0].EMA_200",
   "name": "trend_1h",
-  "open_rule1": "close \u003e results.current.EMA_200",
+  "open_rule1": "close \u003e res[0].EMA_200",
   "slack_active": "false"
 }
