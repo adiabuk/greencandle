@@ -718,8 +718,9 @@ class Redis():
         trailing_stop = self.__get_trailing_stop(current_price, high_price, low_price,
                                                  res[0].high, res[0].low, res[0].open)
         take_profit_rule = self.__get_take_profit(current_price, res[0].high,
-                                                  res[0].open, pair)
-        stop_loss_rule = self.__get_stop_loss(current_price, res[0].low, res[0].open, pair)
+                                                  open_price, pair)
+
+        stop_loss_rule = self.__get_stop_loss(current_price, res[0].low, open_price, pair)
 
         if any(rules['open']) and not able_to_buy:
             self.logger.info("Unable to buy %s due to time_between_trades" % pair)
@@ -800,7 +801,7 @@ class Redis():
 
         self.__log_event(event=event, rate=rate, perc_rate=perc_rate,
                          open_price=open_price, close_price=current_price,
-                         pair=pair, current_time=current_time, current=res[0].close)
+                         pair=pair, current_time=current_time, current=str(res[0]))
 
         winning_sell = self.__get_rules(rules, 'close')
         winning_buy = self.__get_rules(rules, 'open')
