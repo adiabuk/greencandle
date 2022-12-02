@@ -384,9 +384,14 @@ class Trade():
 
     def get_total_amount_to_use(self, dbase, pair=None, account=None):
         """ Get total amount to use as sum of balance_to_use and loan_to_use """
+
+
         max_from_db = dbase.get_var_value('max_trade_usd')
         total_max = int(max_from_db) if max_from_db else int(self.config.main.max_trade_usd)
         balance_to_use = self.get_balance_to_use(dbase, account, pair)
+        # set default loan to use as 0, may be overwritten if non-spot and not enough balance to
+        # cover max, where loan is available
+        loan_to_use = {'symbol': 0, 'usd': 0, 'symbol_name': balance_to_use['symbol_name']}
         if balance_to_use['usd'] > total_max:
             balance_to_use['usd'] = total_max
             if balance_to_use['symbol_name'] == 'USDT':
@@ -394,20 +399,20 @@ class Trade():
             else:
                 balance_to_use['symbol'] = quote2base(balance_to_use['usd'],
                                                       balance_to_use['symbol_name']+'USDT')
-                loan_to_use = {'symbol':0, 'usd':0}
+                loan_to_use = {'symbol':0, 'usd':0, 'symbol_name': balance_to_use['symbol_name']}
         else:
 
             loan_to_use = self.get_amount_to_borrow(pair, dbase) if \
-                    self.config.main.trade_type != 'spot' else {'usd':0, 'symbol':0}
+                    self.config.main.trade_type != 'spot' else {'usd': 0,
+                                                                'symbol': 0,
+                                                                'symbol_name':
+                                                                balance_to_use['symbol_name']}
             total_remaining = total_max - balance_to_use['usd']
             if loan_to_use['usd'] > total_remaining:
                 loan_to_use['usd'] = total_remaining
                 loan_to_use['symbol'] = total_remaining if 'USD' in \
                         balance_to_use['symbol_name'] else \
                         quote2base(total_remaining, balance_to_use['symbol_name']+'USDT')
-
-        if self.test_trade:
-            loan_to_use = {'symbol':0, 'symbol_name':balance_to_use['symbol_name']}
 
 
         return_dict = {"balance_amt": balance_to_use['symbol'],
