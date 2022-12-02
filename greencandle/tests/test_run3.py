@@ -34,17 +34,5 @@ class TestBNBETHIsoShort(make_test_case('unit/isolated-short', 'BNBETH', '1h',
 
     pass
 
-
-class TestBNBETHCrossShort(make_test_case('unit/cross-short', 'BNBETH', '1h',
-                                          '2019-02-27', 15, -46, 3, -21, 13.8, 9.2)):
-    """
-    Test BNBETH
-    cross margin short divisor=2
-    """
-
-    pass
-
-
-
 if __name__ == '__main__':
     unittest.main(verbosity=6)

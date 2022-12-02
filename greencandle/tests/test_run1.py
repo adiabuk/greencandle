@@ -21,5 +21,14 @@ class TestRCNBNB(make_test_case('unit', 'RCNBNB', '1h', '2019-03-29', 15, 22, 23
     """Test RCNBNB"""
     pass
 
+class TestBNBETHCrossShort(make_test_case('unit/cross-short', 'BNBETH', '1h',
+                                          '2019-02-27', 15, -46, 3, -21, 13.8, 9.2)):
+    """
+    Test BNBETH
+    cross margin short divisor=2
+    """
+
+    pass
+
 if __name__ == '__main__':
     unittest.main(verbosity=6)
