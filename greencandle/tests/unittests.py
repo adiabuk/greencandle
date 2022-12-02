@@ -236,7 +236,7 @@ def make_test_case(config_env, pair, interval, startdate, days, xsum, xmax, xmin
 
             self.logger.info("Getting test data")
             print(self.startdate, self.interval, self.pair, self.days, self.outputdir)
-            get_data(self.startdate, self.interval, self.pair, self.days, self.outputdir,
+            get_data(self.startdate, [self.interval], [self.pair], self.days, self.outputdir,
                      extra=200)
 
             filename = self.outputdir + '/' + self.pair + '_' + self.interval + '.p'
