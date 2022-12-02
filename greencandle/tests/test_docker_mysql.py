@@ -12,7 +12,8 @@ from .unittests import make_docker_case
 LOGGER = get_logger(__name__)
 
 class TestMysql(make_docker_case('mysql-unit', checks=["bash -c \"echo 'SELECT version();'| "
-                                                       "mysql --host localhost --protocol=tcp -uroot -ppassword \"",
+                                                       "mysql --host localhost --protocol=tcp "
+                                                       "-uroot -ppassword \"",
                                                        "ps ax"]
                                  )):
     """Test mysql docker instance"""

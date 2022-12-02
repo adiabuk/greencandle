@@ -113,7 +113,7 @@ class TestMysql(OrderedTest):
         time_tupple = now.timetuple()
         hour = time_tupple[3]
         last_hour = str(hour - 1)
-        self.assertEquals(last_hour_profit[3], 399.85)
+        self.assertEqual(last_hour_profit[3], 399.85)
 
 if __name__ == '__main__':
     unittest.main()

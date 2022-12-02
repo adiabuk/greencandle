@@ -44,4 +44,3 @@ class TestConfig(unittest.TestCase):
         """
         exit_code = os.system("configstore package test")
         self.assertEqual(exit_code, 0)
-

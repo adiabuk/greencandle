@@ -6,11 +6,9 @@ helper functions for print formatting
 
 #from cStringIO import StringIO
 from io import StringIO
-import datetime
 import os
 import sys
 import textwrap
-import time
 
 try:
     ROWS, COLUMNS = os.popen('stty size', 'r').read().split()

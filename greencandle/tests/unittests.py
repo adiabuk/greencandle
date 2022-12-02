@@ -6,7 +6,6 @@ Helper classes and functions for creating and running unittests
 
 import unittest
 import os
-import shutil
 import subprocess
 import time
 

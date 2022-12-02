@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+#pylint: disable=invalid-name
+
+"""
+Selenium unit test module
+"""
 
 import os
 import time
@@ -8,7 +13,13 @@ from selenium.webdriver.common.by import By
 from pyvirtualdisplay import Display
 
 class TestGc(unittest.TestCase):
+    """
+    Main test module for GC selenium testing
+    """
     def setUp(self):
+        """
+        Set up display and browser
+        """
         self.display = Display(visible=0, size=(1024, 768))
         self.display.start()
         profile = webdriver.FirefoxProfile()
@@ -18,10 +29,17 @@ class TestGc(unittest.TestCase):
         self.base_url = "https://www.google.com/"
         self.verificationErrors = []
         self.accept_next_alert = True
+
     def teardown(self):
+        """
+        Quit firefox driver on exit
+        """
         self.driver.quit()
 
     def test_gc(self):
+        """
+        Selenium test steps
+        """
         # Test name: gc
             # Test name: test1
         # Step # | name | target | value
