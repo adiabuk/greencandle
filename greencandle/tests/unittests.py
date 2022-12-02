@@ -16,7 +16,7 @@ from greencandle.lib.binance_common import get_data
 from greencandle.lib.logger import get_logger
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.mysql import Mysql
-from greencandle.lib.run import serial_test
+from greencandle.lib.run import perform_data
 from greencandle.lib.graph import Graph
 
 def get_tag():
@@ -189,7 +189,7 @@ def run_subprocess(command):
             conv(out).decode('utf-8').strip(),
             conv(err).decode('utf-8').strip())
 
-def make_test_case(config_env, pairs, interval, startdate, days, xsum, xmax, xmin,
+def make_test_case(config_env, pair, interval, startdate, days, xsum, xmax, xmin,
                    drawup, drawdown):
     """
     return run unittest customized with argument config
@@ -209,7 +209,7 @@ def make_test_case(config_env, pairs, interval, startdate, days, xsum, xmax, xmi
             directory
             """
 
-            self.pairs = [pairs]
+            self.pair = pair
             self.startdate = startdate
             self.sum = xsum
             self.max = xmax
@@ -221,11 +221,11 @@ def make_test_case(config_env, pairs, interval, startdate, days, xsum, xmax, xmi
             config.create_config()  # reload config
             self.days = days
             self.outputdir = "/data/test_data"
-            self.intervals = [interval]
+            self.interval = interval
             self.logger = get_logger(__name__)
             self.logger.info("Setting up environment")
             self.redis = Redis(test_data=True)
-            self.dbase = Mysql(test=True, interval=self.intervals[0])
+            self.dbase = Mysql(test=True, interval=self.interval)
             if not os.path.exists(self.outputdir):
                 os.mkdir(self.outputdir)
 
@@ -235,11 +235,11 @@ def make_test_case(config_env, pairs, interval, startdate, days, xsum, xmax, xmi
             """
 
             self.logger.info("Getting test data")
-            print(self.startdate, self.intervals, self.pairs, self.days, self.outputdir)
-            get_data(self.startdate, self.intervals, self.pairs, self.days, self.outputdir,
+            print(self.startdate, self.interval, self.pair, self.days, self.outputdir)
+            get_data(self.startdate, self.interval, self.pair, self.days, self.outputdir,
                      extra=200)
 
-            filename = self.outputdir + '/' + self.pairs[0]+ '_' + self.intervals[0] + '.p'
+            filename = self.outputdir + '/' + self.pair + '_' + self.interval + '.p'
             self.logger.info("Filename: %s", filename)
             assert os.path.exists(filename) == 1
 
@@ -249,7 +249,7 @@ def make_test_case(config_env, pairs, interval, startdate, days, xsum, xmax, xmi
             """
             self.logger.info("Executing serial test run")
             main_indicators = config.main.indicators.split()
-            serial_test(self.pairs, self.intervals, self.outputdir, main_indicators)
+            perform_data(self.pair, self.interval, self.outputdir, main_indicators)
             assert True
 
         def step_3(self):
@@ -257,7 +257,7 @@ def make_test_case(config_env, pairs, interval, startdate, days, xsum, xmax, xmi
             Step 3 - collect and compare data
             """
             self.logger.info("Comparing mysql data")
-            self.dbase = Mysql(test=True, interval=self.intervals[0])
+            self.dbase = Mysql(test=True, interval=self.interval)
             db_sum = self.dbase.fetch_sql_data("select sum(perc) from profit", header=False)[0][0]
             db_min = self.dbase.fetch_sql_data("select min(perc) from profit", header=False)[0][0]
             db_max = self.dbase.fetch_sql_data("select max(perc) from profit", header=False)[0][0]
@@ -285,7 +285,7 @@ def make_test_case(config_env, pairs, interval, startdate, days, xsum, xmax, xmi
             Step 5 - Create graphs
             """
             self.logger.info("Creating graph")
-            graph = Graph(test=False, pair=self.pairs[0], interval=self.intervals[0], volume=False)
+            graph = Graph(test=False, pair=self.pair, interval=self.interval, volume=False)
             graph.get_data()
             graph.create_graph(output_dir=self.outputdir)
 
