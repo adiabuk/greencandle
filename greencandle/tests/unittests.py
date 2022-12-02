@@ -221,7 +221,7 @@ def make_test_case(config_env, pairs, interval, startdate, days, xsum, xmax, xmi
             os.system("configstore package process_templates {} /etc".format(config_env))
             config.create_config()  # reload config
             self.days = days
-            self.outputdir = "/tmp/test_data"
+            self.outputdir = "/data/test_data"
             self.intervals = [interval]
             self.logger = get_logger(__name__)
             self.logger.info("Setting up environment")
@@ -237,8 +237,6 @@ def make_test_case(config_env, pairs, interval, startdate, days, xsum, xmax, xmi
 
             self.logger.info("Getting test data")
             print(self.startdate, self.intervals, self.pairs, self.days, self.outputdir)
-            print("hello")
-            #time.sleep(999)
             get_data(self.startdate, self.intervals, self.pairs, self.days, self.outputdir,
                      extra=200)
 
