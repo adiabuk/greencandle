@@ -607,6 +607,7 @@ class Redis():
             ohlc = self.get_current(name, items[i])[-1]
             for i in ['open', 'high', 'low', 'close']:
                 ohlc[i] = float(ohlc[i])
+
             x.update(ohlc)
             res.append(x)
 
@@ -642,26 +643,39 @@ class Redis():
         # rate of Moving Average increate/decreate based on indicator
         # specified in the rate_indicator config option - best with EMA_500
         rate_indicator = config.main.rate_indicator
-        """
-        perc_rate = float(perc_diff(float(results.previous[rate_indicator]),
-                                    float(results.current[rate_indicator]))) \
-                                    if results.current[rate_indicator] and \
-                                    results.previous[rate_indicator] else 0
-        rate = float(float(results.current[rate_indicator]) - \
-                     float(results.previous[rate_indicator])) \
-                     if results.current[rate_indicator] and \
-                     results.previous[rate_indicator] else 0
 
-        last_perc_rate = float(perc_diff(float(results.previous1[rate_indicator]),
-                                         float(results.previous[rate_indicator]))) \
-                                               if results.previous[rate_indicator] and \
-                                               results.previous1[rate_indicator] else 0
-        last_rate = float(float(results.previous[rate_indicator]) -
-                          float(results.previous1[rate_indicator])) \
-                                  if results.previous[rate_indicator] and \
-                                  results.previous1[rate_indicator] else 0
-        """
-        # FIXME ^^
+        #AMROX
+        for i in range(0, 4):
+            # loop through first 4 results (can't use 5th as we will need
+            # following item which doesn't exist
+            res[i]['perc_rate'] = float(perc_diff(float(res[i+1][rate_indicator]),
+                                                float(res[i][rate_indicator]))) \
+                                                if res[i][rate_indicator] and \
+                                                res[i+1][rate_indicator] else 0
+            res[i]['rate'] = float(float(res[i][rate_indicator]) - \
+                                 float(res[i+1][rate_indicator])) \
+                                 if res[i][rate_indicator] and \
+                                 res[i+1][rate_indicator] else 0
+
+
+        perc_rate = float(perc_diff(float(res[1][rate_indicator]),
+                                    float(res[0][rate_indicator]))) \
+                                    if res[0][rate_indicator] and \
+                                    res[1][rate_indicator] else 0
+        rate = float(float(res[0][rate_indicator]) - \
+                     float(res[1][rate_indicator])) \
+                     if res[0][rate_indicator] and \
+                     res[1][rate_indicator] else 0
+
+        last_perc_rate = float(perc_diff(float(res[2][rate_indicator]),
+                                         float(res[1][rate_indicator]))) \
+                                               if res[1][rate_indicator] and \
+                                               res[2][rate_indicator] else 0
+        last_rate = float(float(res[1][rate_indicator]) -
+                          float(res[2][rate_indicator])) \
+                                  if res[1][rate_indicator] and \
+                                  res[2][rate_indicator] else 0
+
         rate = 1
         last_rate = 1
         perc_rate = 1
