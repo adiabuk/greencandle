@@ -1,5 +1,12 @@
 # Releases
 
+# 5.6
+* More test strategies
+* Improved check syntax to allow for additional historical data
+* Don't refetch the same candles on subsequent prod runs/checks
+* Ensure candle data stored in instance doesn't exceed max candles
+* Cleanup logging complexity for trade status
+
 # 5.5.2
 * When shorting, buy back only the amount originally sold
 * Add pair name for skipped trades during drain
