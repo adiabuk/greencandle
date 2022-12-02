@@ -21,8 +21,7 @@ config.create_config()
 
 from greencandle.lib.graph import Graph
 from greencandle.lib.logger import get_logger, exception_catcher
-from greencandle.lib.run import prod_loop, prod_int_check, prod_initial
-from greencandle.lib.common import HOUR, MINUTE
+from greencandle.lib.run import ProdRunner
 GET_EXCEPTIONS = exception_catcher((Exception))
 LOGGER = get_logger(__name__)
 
@@ -50,12 +49,14 @@ def main():
 
 
     sched = BlockingScheduler()
+    runner = ProdRunner()
+
 
     @GET_EXCEPTIONS
     @sched.scheduled_job('interval', seconds=20)
     def get_price():
         LOGGER.info("Starting Price check")
-        prod_int_check(interval, args.test)
+        runner.prod_int_check(interval, args.test)
         LOGGER.info("Finished Price check")
 
     @GET_EXCEPTIONS
@@ -80,18 +81,16 @@ def main():
         Path('/var/run/greencandle').touch()
 
     @GET_EXCEPTIONS
-    @sched.scheduled_job('cron', minute=MINUTE[interval], hour=HOUR[interval],
-                         second=config.main.check_interval)
+    @sched.scheduled_job('interval', seconds=int(config.main.check_interval))
     def prod_run():
         LOGGER.info("Starting prod run")
-        prod_loop(interval, args.test, data=args.data)
+        runner.prod_loop(interval, args.test, data=args.data)
         LOGGER.info("Finished prod run")
 
     if args.data:
         LOGGER.info("Starting initial prod run")
-        prod_initial(interval) # initial run, before scheduling begins
+        runner.prod_initial(interval) # initial run, before scheduling begins
         LOGGER.info("Finished initial prod run")
-        prod_run()
 
     try:
         sched.start()

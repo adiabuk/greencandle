@@ -1,5 +1,5 @@
 {
   "name": "bb-short_1m",
-  "open_rule1": "high \u003e results.current.upper_20 and results.current.bbperc_200 \u003e 2",
+  "open_rule1": "res[0].high \u003e res[0].upper_200 and res[0].bbperc_200 \u003e 2",
   "trade_direction": "short"
 }

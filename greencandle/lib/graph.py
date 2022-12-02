@@ -96,7 +96,6 @@ class Graph():
                     print('Unable to find ohlc data for {0}, passing...'.format(self.pair))
                     return
                 value["time"] = pandas.to_datetime(value["openTime"], unit="ms")
-                print('AMROX ' + 'ohlc' + str(value['time']) + ' ' + value.close)
                 item = go.Candlestick(x=value.time,
                                       open=value.open,
                                       high=value.high,

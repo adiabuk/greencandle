@@ -1,8 +1,8 @@
 {
-  "check_interval": "00,30",
+  "check_interval": "5",
   "indicators": "get_supertrend;STX;23,3 get_bb;upper;12,2 get_bb;lower;12,2 get_bb;middle;12,2 get_bb_perc;bbperc;200,1 get_bb_perc_ema;bbperc_EMA;200,1",
   "logging_level": "10",
   "name": "stag-be-eng-bbpercst3-short",
-  "open_rule1": "high \u003e results.current.upper_12 and results.current.bbperc_200 \u003e 2",
+  "open_rule1": "res[0].high \u003e res[0].upper_12 and res[0].bbperc_200 \u003e 2",
   "rate_indicator": "middle_12"
 }

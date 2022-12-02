@@ -12,7 +12,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from rq import Queue, Worker
 from greencandle.lib import config
 config.create_config()
-from greencandle.lib.run import prod_int_check
+from greencandle.lib.run import ProdRunner
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.common import arg_decorator
 from greencandle.lib.logger import get_logger
@@ -57,7 +57,8 @@ def intermittent_check():
     """
     LOGGER.info("Starting prod int check")
     alert = bool('HOST_IP' in os.environ)
-    prod_int_check(config.main.interval, True, alert=alert)
+    runner = ProdRunner()
+    runner.prod_int_check(config.main.interval, True, alert=alert)
     LOGGER.info("Finished prod int check")
 
 @arg_decorator

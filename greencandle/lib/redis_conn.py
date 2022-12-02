@@ -343,24 +343,15 @@ class Redis():
         except TypeError:
             return result
 
-    def __log_event(self, **kwargs):
+    def __log_event(self, pair, event, current_time, data):
         """Send event data to logger"""
-        valid_keys = ["event", "rate", "perc_rate", "open_price", "close_price",
-                      "pair", "current_time", "current"]
-        kwargs = AttributeDict(kwargs)
-        for key in valid_keys:
-            if key not in valid_keys:
-                raise KeyError("Missing param %s" % key)
 
-        message = ('EVENT:({0}) {1} rate:{2} perc_rate:{3} open_price:{4} close_price:{5}, '
-                   'time:{6}'.format(kwargs.pair, kwargs.event, format(float(kwargs.rate), ".4f"),
-                                     format(float(kwargs.perc_rate), ".4f"),
-                                     kwargs.open_price, kwargs.close_price, kwargs.current_time))
+        message = ('EVENT:({0}) {1} time:{2} data:{3}'.format(pair, event, current_time, data))
 
-        if "HOLD" in kwargs.event == "HOLD" or "NOITEM" in kwargs.event:
-            self.logger.debug("%s, %s" % (message, kwargs.current))
+        if any(status in event for status in ['NOITEM', 'HOLD']):
+            self.logger.debug(message)
         else:
-            self.logger.info("%s, %s" % (message, kwargs.current))
+            self.logger.info(message)
 
     def get_intermittent(self, pair, open_price, current_candle, open_time):
         """
@@ -417,9 +408,7 @@ class Redis():
             result = "NOITEM"
             event = self.get_event_str(result)
 
-        self.__log_event(event=event, rate=0, perc_rate=0,
-                         open_price=open_price, close_price=current_price,
-                         pair=pair, current_time=current_time, current=0)
+        self.__log_event(pair=pair, event=event, current_time=current_time, data=0)
 
         return (result, event, current_time, current_price)
 
@@ -461,7 +450,8 @@ class Redis():
                              "open_price: %s" % (high_price, current_price, open_price))
         return result
 
-    def __get_timeout_profit(self, open_price, current_price):
+    @staticmethod
+    def __get_timeout_profit(open_price, current_price):
         """
         Check if we have reached timeout perc
         """
@@ -562,7 +552,7 @@ class Redis():
         raw = self.get_current('{}:{}'.format(pair, interval), last_item)
         try:
             return raw[-1]
-        except:  # hack for unit tests still using pickled zlib objects
+        except Exception:  # hack for unit tests still using pickled zlib objects
             return pickle.loads(zlib.decompress(raw[-1]))
 
     def get_action(self, pair, interval):
@@ -578,10 +568,41 @@ class Redis():
            0.068467,                 -- current price of asset
            {'sell': [], 'buy': []})  -- matched buy/sell rules
         """
+        main_indicators = config.main.indicators.split()
 
-        results = AttributeDict(current=AttributeDict(), previous=AttributeDict(),
-                                previous1=AttributeDict(), previous2=AttributeDict(),
-                                previous3=AttributeDict())
+        ind_list = []
+        for i in main_indicators:
+            if 'vol' in i:
+                ind_list.append("volume")
+            split = i.split(';')
+            ind = split[1] + '_' + split[2].split(',')[0]
+            ind_list.append(ind)
+
+        # AMROX
+        res = []
+        name = "{}:{}".format(pair, self.interval)
+        # loop backwards through last 5 items
+        try:
+            items = self.get_items(pair=pair, interval=interval)
+            _ = items[-5]
+        except (ValueError, IndexError) as err:
+            self.logger.warning("Not enough data for %s: %s" % (pair, err))
+            return ('HOLD', 'Not enough data', 0, 0, {'buy':[], 'sell':[]})
+
+        for i in range(-1, -6, -1):
+            x = AttributeDict()
+            for indicator in ind_list:
+                x[indicator] = self.get_result(items[i], indicator, pair, self.interval)
+
+            # Floatify each of the ohlc elements before adding
+            ohlc = self.get_current(name, items[i])[-1]
+            for item in ['open', 'high', 'low', 'close']:
+                ohlc[item] = float(ohlc[item])
+
+            x.update(ohlc)
+            res.append(x)
+
+        # AMROX
 
         stop_loss_perc = self.get_on_entry(pair, 'stop_loss_perc')
         take_profit_perc = self.get_on_entry(pair, 'take_profit_perc')
@@ -596,57 +617,10 @@ class Redis():
         else:
             take_profit_perc = 0
 
-        try:
-            previous3, previous2, previous1, previous, current = \
-                    self.get_items(pair=pair, interval=interval)[-5:]
-        except ValueError as ve:
+        current_epoch = float(items[-1]) / 1000
 
-            self.logger.warning("Not enough data for %s: %s" % (pair, ve))
-            return ('HOLD', 'Not enough data', 0, 0, {'buy':[], 'sell':[]})
-
-        # get current & previous indicator values
-        main_indicators = config.main.indicators.split()
-
-        ind_list = []
-        for i in main_indicators:
-            if 'vol' in i:
-                ind_list.append("volume")
-            split = i.split(';')
-            ind = split[1] + '_' + split[2].split(',')[0]
-            ind_list.append(ind)
-
-        for indicator in ind_list:
-            results['current'][indicator] = self.get_result(current, indicator,
-                                                            pair, self.interval)
-            results['previous'][indicator] = self.get_result(previous, indicator,
-                                                             pair, self.interval)
-            results['previous1'][indicator] = self.get_result(previous1, indicator,
-                                                              pair, self.interval)
-            results['previous2'][indicator] = self.get_result(previous2, indicator,
-                                                              pair, self.interval)
-            results['previous3'][indicator] = self.get_result(previous3, indicator,
-                                                              pair, self.interval)
-        items = self.get_items(pair, self.interval)
-        name = "{}:{}".format(pair, self.interval)
-        current = self.get_current(name, items[-1])
-        previous = self.get_current(name, items[-2])
-        current_epoch = float(current[1]) / 1000
-
-        rehydrated = AttributeDict(current[-1])
-        last_rehydrated = AttributeDict(previous[-1])
-
-        # variables that can be referenced in config file
-        open = float(rehydrated.open)
-        high = float(rehydrated.high)
-        low = float(rehydrated.low)
-        close = float(rehydrated.close)
-        trades = float(rehydrated.numTrades)
-        last_open = float(last_rehydrated.open)
-        last_high = float(last_rehydrated.high)
-        last_low = float(last_rehydrated.low)
-        last_close = float(last_rehydrated.close)
-        last_trades = float(last_rehydrated.numTrades)
         dbase = Mysql(test=self.test_data, interval=interval)
+
         try:
             # function returns an empty list if no results so cannot get first element
             open_price, _, open_time, _, _, _ = dbase.get_trade_value(pair)[0]
@@ -654,32 +628,25 @@ class Redis():
             open_price = None
             open_time = None
 
-        current_price = float(close)
-        current_low = float(low)
-        current_high = float(high)
+        current_price = float(res[0].close)
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_epoch))
 
         # rate of Moving Average increate/decreate based on indicator
         # specified in the rate_indicator config option - best with EMA_500
         rate_indicator = config.main.rate_indicator
 
-        perc_rate = float(perc_diff(float(results.previous[rate_indicator]),
-                                    float(results.current[rate_indicator]))) \
-                                    if results.current[rate_indicator] and \
-                                    results.previous[rate_indicator] else 0
-        rate = float(float(results.current[rate_indicator]) - \
-                     float(results.previous[rate_indicator])) \
-                     if results.current[rate_indicator] and \
-                     results.previous[rate_indicator] else 0
-
-        last_perc_rate = float(perc_diff(float(results.previous1[rate_indicator]),
-                                         float(results.previous[rate_indicator]))) \
-                                               if results.previous[rate_indicator] and \
-                                               results.previous1[rate_indicator] else 0
-        last_rate = float(float(results.previous[rate_indicator]) -
-                          float(results.previous1[rate_indicator])) \
-                                  if results.previous[rate_indicator] and \
-                                  results.previous1[rate_indicator] else 0
+        #AMROX
+        for i in range(0, 4):
+            # loop through first 4 results (can't use 5th as we will need
+            # following item which doesn't exist
+            res[i]['perc_rate'] = float(perc_diff(float(res[i+1][rate_indicator]),
+                                                  float(res[i][rate_indicator]))) \
+                                        if res[i][rate_indicator] and \
+                                        res[i+1][rate_indicator] else 0
+            res[i]['rate'] = float(float(res[i][rate_indicator]) - \
+                                   float(res[i+1][rate_indicator])) \
+                                   if res[i][rate_indicator] and \
+                                   res[i+1][rate_indicator] else 0
 
         rules = {'open': [], 'close': []}
         for seq in range(1, 10):
@@ -696,7 +663,7 @@ class Redis():
                     except (TypeError, KeyError) as error:
                         self.logger.warning("Unable to eval config rule for pair %s: %s_rule: %s"
                                             "%s mepoch: %s" % (pair, rule, current_config, error,
-                                                               current[1]))
+                                                               items[seq]))
                         continue
         close_timeout = False
         able_to_buy = True
@@ -731,10 +698,11 @@ class Redis():
         high_price = self.get_drawup(pair)['price']
         low_price = self.get_drawdown(pair)
         trailing_stop = self.__get_trailing_stop(current_price, high_price, low_price,
-                                                 current_high, current_low, open_price)
-        take_profit_rule = self.__get_take_profit(current_price, current_high,
+                                                 res[0].high, res[0].low, res[0].open)
+        take_profit_rule = self.__get_take_profit(current_price, res[0].high,
                                                   open_price, pair)
-        stop_loss_rule = self.__get_stop_loss(current_price, current_low, open_price, pair)
+
+        stop_loss_rule = self.__get_stop_loss(current_price, res[0].low, open_price, pair)
 
         if any(rules['open']) and not able_to_buy:
             self.logger.info("Unable to buy %s due to time_between_trades" % pair)
@@ -767,9 +735,9 @@ class Redis():
 
             if self.test_data and str2bool(config.main.immediate_stop):
                 if config.main.trade_direction == "long":
-                    stop_at = sub_perc(trailing_perc, current_high)
+                    stop_at = sub_perc(trailing_perc, res[0].high)
                 elif config.main.trade_direction == "short":
-                    stop_at = add_perc(trailing_perc, current_low)
+                    stop_at = add_perc(trailing_perc, res[0].low)
                 current_price = stop_at
             result = 'CLOSE'
             event = self.get_event_str("TrailingStopLoss" + result)
@@ -801,7 +769,7 @@ class Redis():
 
             # delete and re-store high price
             self.logger.debug("Close: %s, Previous Close: %s, >: %s" %
-                              (close, last_close, close > last_close))
+                              (res[0].close, res[1].close, res[0].close > res[1].close))
 
             result = 'OPEN'
             event = self.get_event_str("Normal" + result)
@@ -813,9 +781,7 @@ class Redis():
             result = 'NOITEM'
             event = self.get_event_str(result)
 
-        self.__log_event(event=event, rate=rate, perc_rate=perc_rate,
-                         open_price=open_price, close_price=current_price,
-                         pair=pair, current_time=current_time, current=results.current)
+        self.__log_event(pair=pair, event=event, current_time=current_time, data=str(res[0]))
 
         winning_sell = self.__get_rules(rules, 'close')
         winning_buy = self.__get_rules(rules, 'open')
