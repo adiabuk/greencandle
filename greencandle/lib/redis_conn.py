@@ -343,24 +343,15 @@ class Redis():
         except TypeError:
             return result
 
-    def __log_event(self, **kwargs):
+    def __log_event(self, pair, event, current_time, data):
         """Send event data to logger"""
-        valid_keys = ["event", "rate", "perc_rate", "open_price", "close_price",
-                      "pair", "current_time", "current"]
-        kwargs = AttributeDict(kwargs)
-        for key in valid_keys:
-            if key not in valid_keys:
-                raise KeyError("Missing param %s" % key)
 
-        message = ('EVENT:({0}) {1} rate:{2} perc_rate:{3} open_price:{4} close_price:{5}, '
-                   'time:{6}'.format(kwargs.pair, kwargs.event, format(float(kwargs.rate), ".4f"),
-                                     format(float(kwargs.perc_rate), ".4f"),
-                                     kwargs.open_price, kwargs.close_price, kwargs.current_time))
+        message = ('EVENT:({0}) {1} time:{2} data:{3}'.format(pair, event, current_time, data))
 
-        if "HOLD" in kwargs.event == "HOLD" or "NOITEM" in kwargs.event:
-            self.logger.debug("%s, %s" % (message, kwargs.current))
+        if any(status in event for status in ['NOITEM', 'HOLD']):
+            self.logger.debug(message)
         else:
-            self.logger.info("%s, %s" % (message, kwargs.current))
+            self.logger.info(message)
 
     def get_intermittent(self, pair, open_price, current_candle, open_time):
         """
@@ -417,9 +408,7 @@ class Redis():
             result = "NOITEM"
             event = self.get_event_str(result)
 
-        self.__log_event(event=event, rate=0, perc_rate=0,
-                         open_price=open_price, close_price=current_price,
-                         pair=pair, current_time=current_time, current=0)
+        self.__log_event(pair=pair, event=event, current_time=current_time, data=0)
 
         return (result, event, current_time, current_price)
 
@@ -649,37 +638,14 @@ class Redis():
             # loop through first 4 results (can't use 5th as we will need
             # following item which doesn't exist
             res[i]['perc_rate'] = float(perc_diff(float(res[i+1][rate_indicator]),
-                                                float(res[i][rate_indicator]))) \
-                                                if res[i][rate_indicator] and \
-                                                res[i+1][rate_indicator] else 0
+                                                  float(res[i][rate_indicator]))) \
+                                        if res[i][rate_indicator] and \
+                                        res[i+1][rate_indicator] else 0
             res[i]['rate'] = float(float(res[i][rate_indicator]) - \
-                                 float(res[i+1][rate_indicator])) \
-                                 if res[i][rate_indicator] and \
-                                 res[i+1][rate_indicator] else 0
+                                   float(res[i+1][rate_indicator])) \
+                                   if res[i][rate_indicator] and \
+                                   res[i+1][rate_indicator] else 0
 
-
-        perc_rate = float(perc_diff(float(res[1][rate_indicator]),
-                                    float(res[0][rate_indicator]))) \
-                                    if res[0][rate_indicator] and \
-                                    res[1][rate_indicator] else 0
-        rate = float(float(res[0][rate_indicator]) - \
-                     float(res[1][rate_indicator])) \
-                     if res[0][rate_indicator] and \
-                     res[1][rate_indicator] else 0
-
-        last_perc_rate = float(perc_diff(float(res[2][rate_indicator]),
-                                         float(res[1][rate_indicator]))) \
-                                               if res[1][rate_indicator] and \
-                                               res[2][rate_indicator] else 0
-        last_rate = float(float(res[1][rate_indicator]) -
-                          float(res[2][rate_indicator])) \
-                                  if res[1][rate_indicator] and \
-                                  res[2][rate_indicator] else 0
-
-        rate = 1
-        last_rate = 1
-        perc_rate = 1
-        last_perc_rate = 1
         rules = {'open': [], 'close': []}
         for seq in range(1, 10):
             current_config = None
@@ -813,9 +779,7 @@ class Redis():
             result = 'NOITEM'
             event = self.get_event_str(result)
 
-        self.__log_event(event=event, rate=rate, perc_rate=perc_rate,
-                         open_price=open_price, close_price=current_price,
-                         pair=pair, current_time=current_time, current=str(res[0]))
+        self.__log_event(pair=pair, event=event, current_time=current_time, data=str(res[0]))
 
         winning_sell = self.__get_rules(rules, 'close')
         winning_buy = self.__get_rules(rules, 'open')
