@@ -298,6 +298,5 @@ def make_test_case(config_env, pairs, interval, startdate, days, xsum, xmax, xmi
             self.dbase.delete_data()
             del self.redis
             del self.dbase
-            shutil.rmtree(self.outputdir)
 
     return UnitRun
