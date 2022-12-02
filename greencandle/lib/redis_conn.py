@@ -450,7 +450,8 @@ class Redis():
                              "open_price: %s" % (high_price, current_price, open_price))
         return result
 
-    def __get_timeout_profit(self, open_price, current_price):
+    @staticmethod
+    def __get_timeout_profit(open_price, current_price):
         """
         Check if we have reached timeout perc
         """
@@ -551,7 +552,7 @@ class Redis():
         raw = self.get_current('{}:{}'.format(pair, interval), last_item)
         try:
             return raw[-1]
-        except:  # hack for unit tests still using pickled zlib objects
+        except Exception:  # hack for unit tests still using pickled zlib objects
             return pickle.loads(zlib.decompress(raw[-1]))
 
     def get_action(self, pair, interval):
@@ -592,10 +593,11 @@ class Redis():
             x = AttributeDict()
             for indicator in ind_list:
                 x[indicator] = self.get_result(items[i], indicator, pair, self.interval)
-            # OHLC
+
+            # Floatify each of the ohlc elements before adding
             ohlc = self.get_current(name, items[i])[-1]
-            for i in ['open', 'high', 'low', 'close']:
-                ohlc[i] = float(ohlc[i])
+            for item in ['open', 'high', 'low', 'close']:
+                ohlc[item] = float(ohlc[item])
 
             x.update(ohlc)
             res.append(x)
@@ -661,7 +663,7 @@ class Redis():
                     except (TypeError, KeyError) as error:
                         self.logger.warning("Unable to eval config rule for pair %s: %s_rule: %s"
                                             "%s mepoch: %s" % (pair, rule, current_config, error,
-                                                               items[seq]))  #FIXME?
+                                                               items[seq]))
                         continue
         close_timeout = False
         able_to_buy = True
