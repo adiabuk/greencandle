@@ -331,7 +331,7 @@ class ProdRunner():
                 if key in PAIRS:
                     prices_trunk[key] = val
 
-            new_dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=1)
+            new_dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=2)
             max_klines = int(config.main.no_of_klines)
             for pair in PAIRS:
                 self.dataframes[pair] = \
