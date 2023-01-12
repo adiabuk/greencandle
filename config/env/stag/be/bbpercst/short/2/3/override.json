@@ -1,6 +1,6 @@
 {
-  "check_interval": "5",
+  "check_interval": "00,30",
   "logging_level": "10",
-  "slack_active": "false",
-  "name": "stag-be-eng-bbpercst3-short"
+  "name": "stag-be-eng-bbpercst3-short",
+  "slack_active": "false"
 }

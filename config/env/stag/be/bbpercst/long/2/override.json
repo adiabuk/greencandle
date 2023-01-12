@@ -1,5 +1,4 @@
 {
-  "close_rule1": "res[0].high \u003e res[0].upper_200",
   "name": "stag-be-eng-bbpercst2-long",
   "perc_at_timeout": "0.3",
   "slack_active": "true",
