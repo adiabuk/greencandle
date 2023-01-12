@@ -11,7 +11,6 @@ from datetime import datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import requests
-import notify_run
 from str2bool import str2bool
 from greencandle.lib import config
 from greencandle.lib.common import AttributeDict, format_usd, get_tv_link, get_trade_link
@@ -43,23 +42,6 @@ def send_gmail_alert(action, pair, price):
     text = msg.as_string()
     server.sendmail(fromaddr, toaddr, text)
     server.quit()
-
-def send_push_notif(*args):
-    """
-    Send push notification via notify.run
-    """
-    if not str2bool(config.push.push_active):
-        return
-    host = config.push.push_host
-    channel = config.push.push_channel
-    host = "unk" if 'HOST' not in os.environ else os.environ['HOST']
-
-    title = "{}_{}".format(host, config.main.name)
-    text = title + ' ' + ' '.join(str(item) for item in args)
-    notify = notify_run.Notify(channel)
-
-    notify.endpoint = 'https://{0}/{1}'.format(host, channel)
-    notify.send(text)
 
 def send_slack_message(channel, message, emoji=None, icon=None, name=None):
     """

@@ -9,7 +9,7 @@ import traceback
 from systemd.journal import JournaldLogHandler
 from greencandle.lib import config
 config.create_config()
-from greencandle.lib.alerts import send_push_notif, send_slack_message
+from greencandle.lib.alerts import send_slack_message
 
 class OneLineFormatter(logging.Formatter):
     """logging formatter for exceptions"""
@@ -38,17 +38,16 @@ class AppFilter(logging.Filter):
 
 class NotifyOnCriticalStream(logging.StreamHandler):
     """
-    Stream handler to send push notifications on error or critical
+    Stream handler to send notifications on error or critical
     """
     def emit(self, record):
         super().emit(record)
         if record.levelno in (logging.ERROR, logging.CRITICAL):
-            send_push_notif(record.msg)
             send_slack_message('alerts', record.msg.replace('"', ''))
 
 class NotifyOnCriticalJournald(JournaldLogHandler):
     """
-    Journald handler to send push notification on error or critical
+    Journald handler to send notification on error or critical
     """
     def emit(self, record):
         """
@@ -57,7 +56,6 @@ class NotifyOnCriticalJournald(JournaldLogHandler):
         record.name = config.main.name
         super().emit(record)
         if record.levelno in (logging.ERROR, logging.CRITICAL):
-            send_push_notif(record.msg)
             try:
                 send_slack_message('alerts', record.msg.replace('"', ''))
             except AttributeError:

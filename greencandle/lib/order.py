@@ -16,8 +16,7 @@ from greencandle.lib.redis_conn import Redis
 from greencandle.lib.binance_accounts import get_binance_spot, base2quote, quote2base
 from greencandle.lib.balance_common import get_base, get_quote, get_step_precision
 from greencandle.lib.common import perc_diff, add_perc, sub_perc, AttributeDict, QUOTES
-from greencandle.lib.alerts import send_gmail_alert, send_push_notif, send_slack_trade, \
-        send_slack_message
+from greencandle.lib.alerts import send_gmail_alert, send_slack_trade, send_slack_message
 
 GET_EXCEPTIONS = exception_catcher((Exception))
 
@@ -639,7 +638,6 @@ class Trade():
                                 price=kwargs.fill_price, interval=self.interval,
                                 event=kwargs.action, usd_profit=kwargs.usd_profit)
 
-        send_push_notif(kwargs.action, kwargs.pair, '%.15f' % float(kwargs.fill_price))
         send_gmail_alert(kwargs.action, kwargs.pair, '%.15f' % float(kwargs.fill_price))
         usd_quote = kwargs.quote if 'USD' in kwargs.pair else \
                 base2quote(kwargs.quote, get_quote(kwargs.pair)+'USDT')

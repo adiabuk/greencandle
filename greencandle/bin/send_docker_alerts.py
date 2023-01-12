@@ -9,7 +9,7 @@ import json
 from greencandle.lib import config
 config.create_config()
 from greencandle.lib.common import arg_decorator
-from greencandle.lib.alerts import send_push_notif, send_slack_message
+from greencandle.lib.alerts import send_slack_message
 
 import requests_unixsocket
 
@@ -54,7 +54,6 @@ def main():
 
     if issues:
         my_string = ', '.join(issues)
-        send_push_notif("Issues with docker containers: {}".format(my_string))
         send_slack_message("alerts", "Issues with docker containers: {}".format(my_string))
 
 if __name__ == '__main__':
