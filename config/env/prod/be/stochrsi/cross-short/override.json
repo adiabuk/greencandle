@@ -1,5 +1,5 @@
 {
   "name": "prod-api-stochrsi-cross-short",
-  "pairs": "WAVESUSDT ANCUSDT BCHUSDT",
+  "pairs": "WAVESUSDT BCHUSDT",
   "trade_direction": "short"
 }
