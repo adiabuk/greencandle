@@ -295,21 +295,6 @@
       "is_binary": false,
       "is_secret": false
     },
-    "push_active": {
-      "value": "false",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "push_channel": {
-      "value": "x",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "push_host": {
-      "value": "x",
-      "is_binary": false,
-      "is_secret": false
-    },
     "rate_indicator": {
       "value": "EMA_200",
       "is_binary": false,

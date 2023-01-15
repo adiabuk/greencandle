@@ -6,12 +6,6 @@
 * **email_password** *gmail password*
 * **email_active** *{True|False} email notifications active*
 
-## [push]  *Push notifications section*
-* **push_host** *host name for push notifications*
-* **push_channel** *channel name for push notifications*
-* **push_active** *{True|False} push notifications active}
-* **push_title** *Title used for push notifications*
-
 ## [slack]  *Slack notifications section*
 * **slack_active** *{True|False} Slack notifications active*
 * **alerts** *Name of alerts channel for current env*

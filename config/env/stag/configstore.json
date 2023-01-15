@@ -296,21 +296,6 @@
       "is_binary": false,
       "is_secret": false
     },
-    "push_active": {
-      "value": "false",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "push_channel": {
-      "value": "SdvcRWRXAQ6TQF/cxPqdZEJqSh7O3X/L9cCyuxq0qxQM4p6vUH5wMQ==",
-      "is_binary": false,
-      "is_secret": true
-    },
-    "push_host": {
-      "value": "l3sQHA1Nxd2awwIpvw1hwcaozfcdBjLDu+nzFPE2dy4=",
-      "is_binary": false,
-      "is_secret": true
-    },
     "rate_indicator": {
       "value": "EMA_2",
       "is_binary": false,
