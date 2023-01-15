@@ -1,5 +1,12 @@
 # Releases
 
+# 5.6.1
+* Fix version conflicts
+* Remove delisted pairs
+* Get 2 dataframes for each run
+* Fix rate indicator for data env
+* Remove deprecated push code/config
+
 # 5.6
 * More test strategies
 * Improved check syntax to allow for additional historical data
