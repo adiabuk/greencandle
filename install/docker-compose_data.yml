@@ -93,7 +93,7 @@ services:
       - data-base-redis:redis
       - data-be-get_1h:data
     depends_on:
-      - data-base-mysq l
+      - data-base-mysql
       - data-base-redis
       - data-be-get_1h
     environment:
