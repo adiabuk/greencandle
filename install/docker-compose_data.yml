@@ -76,7 +76,7 @@ services:
       - /root/.bash_history:/root/.bash_history
 
   data-be-analyse_1h_bb-short:
-    container_name:  data-be-analyse_1h_bb-short
+    container_name: data-be-analyse_1h_bb-short
     hostname: data-be-analyse_1h_bb-short
     image: amrox/greencandle:${TAG}
     pull_policy: always
@@ -88,7 +88,7 @@ services:
     logging:
       driver: journald
     links:
-      - dat a-be-api-router:router
+      - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
       - data-be-get_1h:data
@@ -147,7 +147,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      -  /var/run/:/var/run
+      - /var/run/:/var/run
 
   data-be-get_1h:
     container_name: data-be-get_1h
@@ -255,7 +255,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      -  /var/run/:/var/run
+      - /var/run/:/var/run
 
   data-be-get_1m:
     container_name: data-be-get_1m
@@ -370,10 +370,6 @@ services:
       - "8.8.8.8"
     ports:
       - 6382:6379
-    restart: always
-    network_mode: "bridge"
-    dns:
-      - "8.8.8.8"
     links:
       - data-base-mysql:mysql
     healthcheck:

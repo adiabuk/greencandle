@@ -1,7 +1,7 @@
 version: "3.7"
 services:
 
-###### Start Gen
+  ###### Start Gen
   gen-fe-cadvisor:
     container_name: gen-fe-cadvisor
     hostname: gen-fe-cadvisor
@@ -68,7 +68,7 @@ services:
       - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
-###### Start Per
+  ###### Start Per
   per-base-redis:
     container_name: per-base-redis
     hostname: per-base-redis
@@ -176,40 +176,40 @@ services:
       - /root/.bash_history:/root/.bash_history
 
   per-fe-webserver:
-     container_name: per-fe-webserver
-     hostname: per-fe-webserver
-     image: amrox/webserver:${TAG}
-     pull_policy: always
-     restart: always
-     healthcheck:
-       test: service nginx status || exit 1
-       interval: 5m
-       timeout: 5s
-       retries: 5
-     environment:
-       - CONFIG_ENV=per
-       - HOST=$HOSTNAME
-       - DB=false
-     ports:
-       - 4444:4444
-     links:
-       - gen-fe-cadvisor:cadvisor
-       - per-fe-api-dashboard:api_dash
-       - per-base-mysql:mysql
-       - per-base-redis:redis
-       - gen-be-logtailer-api:logs
-       - per-fe-api-proxy:proxy
-     depends_on:
-       - gen-fe-cadvisor
-       - per-base-mysql
-       - per-base-redis
-     entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
-     volumes:
-       - /data:/data
-       - /root/.aws:/root/.aws
-       - /root/.bash_history:/root/.bash_history
-       - /var/run:/var/run
-       - /var/local:/var/local
+    container_name: per-fe-webserver
+    hostname: per-fe-webserver
+    image: amrox/webserver:${TAG}
+    pull_policy: always
+    restart: always
+    healthcheck:
+      test: service nginx status || exit 1
+      interval: 5m
+      timeout: 5s
+      retries: 5
+    environment:
+      - CONFIG_ENV=per
+      - HOST=$HOSTNAME
+      - DB=false
+    ports:
+      - 4444:4444
+    links:
+      - gen-fe-cadvisor:cadvisor
+      - per-fe-api-dashboard:api_dash
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+      - gen-be-logtailer-api:logs
+      - per-fe-api-proxy:proxy
+    depends_on:
+      - gen-fe-cadvisor
+      - per-base-mysql
+      - per-base-redis
+    entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /root/.bash_history:/root/.bash_history
+      - /var/run:/var/run
+      - /var/local:/var/local
 
   per-fe-api-proxy:
     container_name: per-fe-api-proxy

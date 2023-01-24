@@ -1,7 +1,7 @@
 version: "3.7"
 services:
 
-###### Start Gen
+  ###### Start Gen
   gen-fe-cadvisor:
     container_name: gen-fe-cadvisor
     hostname: gen-fe-cadvisor
@@ -68,7 +68,7 @@ services:
       - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
-###### Start Prod
+  ###### Start Prod
   prod-base-redis:
     container_name: prod-base-redis
     hostname: prod-base-redis
@@ -176,40 +176,40 @@ services:
       - /root/.bash_history:/root/.bash_history
 
   prod-fe-webserver:
-     container_name: prod-fe-webserver
-     hostname: prod-fe-webserver
-     image: amrox/webserver:${TAG}
-     pull_policy: always
-     restart: always
-     healthcheck:
-       test: service nginx status || exit 1
-       interval: 5m
-       timeout: 5s
-       retries: 5
-     environment:
-       - CONFIG_ENV=prod/fe
-       - HOST=$HOSTNAME
-       - DB=false
-     ports:
-       - 1111:1111
-     links:
-       - gen-fe-cadvisor:cadvisor
-       - prod-fe-api-dashboard:api_dash
-       - prod-base-mysql:mysql
-       - prod-base-redis:redis
-       - gen-be-logtailer-api:logs
-       - prod-fe-api-proxy:proxy
-     depends_on:
-       - gen-fe-cadvisor
-       - prod-base-mysql
-       - prod-base-redis
-     entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
-     volumes:
-       - /data:/data
-       - /root/.aws:/root/.aws
-       - /root/.bash_history:/root/.bash_history
-       - /var/run:/var/run
-       - /var/local:/var/local
+    container_name: prod-fe-webserver
+    hostname: prod-fe-webserver
+    image: amrox/webserver:${TAG}
+    pull_policy: always
+    restart: always
+    healthcheck:
+      test: service nginx status || exit 1
+      interval: 5m
+      timeout: 5s
+      retries: 5
+    environment:
+      - CONFIG_ENV=prod/fe
+      - HOST=$HOSTNAME
+      - DB=false
+    ports:
+      - 1111:1111
+    links:
+      - gen-fe-cadvisor:cadvisor
+      - prod-fe-api-dashboard:api_dash
+      - prod-base-mysql:mysql
+      - prod-base-redis:redis
+      - gen-be-logtailer-api:logs
+      - prod-fe-api-proxy:proxy
+    depends_on:
+      - gen-fe-cadvisor
+      - prod-base-mysql
+      - prod-base-redis
+    entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /root/.bash_history:/root/.bash_history
+      - /var/run:/var/run
+      - /var/local:/var/local
 
   prod-fe-api-proxy:
     container_name: prod-fe-api-proxy
