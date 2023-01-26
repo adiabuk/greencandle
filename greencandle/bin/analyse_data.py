@@ -31,7 +31,7 @@ GET_EXCEPTIONS = exception_catcher((Exception))
 TRIGGERED = {}
 FORWARD = False
 
-if len(sys.argv) > 1 and sys.argv[1] != "--help":
+if sys.argv[-1] != "--help":
     CLIENT = binance_auth()
     ISOLATED = CLIENT.get_isolated_margin_pairs()
     CROSS = CLIENT.get_cross_margin_pairs()
