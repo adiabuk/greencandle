@@ -291,7 +291,6 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-
   data-be-manual:
     container_name: data-be-manual
     hostname: data-be-manual
