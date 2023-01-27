@@ -238,7 +238,10 @@ class Engine(dict):
 
     def get_bb_perc(self, pair, dataframe, index=None, localconfig=None, ema=False):
         """get bb %"""
-        index = -1
+        if (not index and self.test) or len(self.dataframes[pair]) < 2:
+            index = -1
+        elif not index and not self.test:
+            index = -1
         close_time = str(self.dataframes[pair].iloc[index]["closeTime"])
         LOGGER.debug("Getting bb perc for %s - %s" % (pair, close_time))
         klines = self.__make_data_tupple(dataframe.iloc[:index])
