@@ -248,19 +248,16 @@ class Engine(dict):
         func, timef = localconfig  # split tuple
         timeframe, multiplier = timef.split(',')
         results = {}
+
         try:
-            close = klines[-1]
-        except Exception as exc:
-            LOGGER.debug("FAILED bb perc: %s " % str(exc))
-            return
-        try:
+            close = make_float(dataframe.close.iloc[:index])
             current_price = str(Decimal(self.dataframes[pair].iloc[index]["close"]))
             upper, middle, lower = \
                      talib.BBANDS(close*100000, timeperiod=int(timeframe),
-                                  nbdevup=float(multiplier), nbdevdn=float(multiplier), matype=1)
+                                  nbdevup=float(multiplier), nbdevdn=float(multiplier), matype=0)
 
             #%B = (Current Price - Lower Band) / (Upper Band - Lower Band)
-            perc = ((float(current_price) - float(lower[-1])/100000) /
+            perc = ((float(current_price)- float(lower[-1]/100000)) /
                     (float(upper[-1])/100000 - float(lower[-1])/100000))
             if ema:
                 percs = []
