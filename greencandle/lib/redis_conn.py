@@ -245,7 +245,7 @@ class Redis():
             self.logger.critical("Invalid time submitted to redis %s.  Skipping " % key)
             return None
         for item, value in data.items():
-            di = {now: json.dumps({item: value})}
+            di = {now: json.dumps({item: value}).replace('null', 'None')}
             b = self.conn.hmget(key, now)[0]
             if b:
                 b = b.decode() if isinstance(b, bytes) else b
