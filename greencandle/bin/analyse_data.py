@@ -39,7 +39,6 @@ if sys.argv[-1] != "--help":
 @SCHED.scheduled_job('cron', minute=MINUTE[config.main.interval],
                      hour=HOUR[config.main.interval],
                      second=config.main.check_interval)
-
 def analyse_loop():
     """
     Gather data from redis and analyze
@@ -130,7 +129,6 @@ def analyse_pair(pair, redis):
                                                         supported.strip()))
     except Exception as err_msg:
         LOGGER.critical("Error with pair %s %s" % (pair, str(err_msg)))
-
 
 @GET_EXCEPTIONS
 @SCHED.scheduled_job('interval', seconds=60)
