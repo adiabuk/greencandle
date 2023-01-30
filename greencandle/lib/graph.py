@@ -1,4 +1,4 @@
-#pylint: disable=no-member,logging-not-lazy
+#pylint: disable=no-member,logging-not-lazy,too-many-statements,too-many-locals
 """Create candlestick graphs from OHLC data"""
 
 import json
