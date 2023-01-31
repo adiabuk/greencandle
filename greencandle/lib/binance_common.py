@@ -97,8 +97,7 @@ def get_all_klines(pair, interval=None, start_time=0, no_of_klines=1E1000):
 
     start = epoch2date(first_candle)
     end = epoch2date(last_candle)
-    print("Start: {}\nEnd: {}\n".format(start, end))
-    LOGGER.critical("Start: %s\nEnd: %s\n" %(start, end))
+    LOGGER.info("Start: %s\nEnd: %s\n" %(start, end))
 
     return result[:no_of_klines] if no_of_klines != float("inf") else result
 
