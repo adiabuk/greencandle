@@ -1,5 +1,34 @@
 # Releases
 
+# 5.7
+* increase 1m klines to allow for empty data
+* increase number of max klines available and remove empty dfs
+* use json to decode string instead of literal_eval
+* run analyzer for 1h less often
+* tweak data strategies and increase number of klines for accuracy
+* tidy up bbperc code
+* tweak stag bbperc short strategy
+* remove depricated pairs
+* correct bbperc  index when using live data
+* bump binance version to use random api host
+* cleanup all available redis keys/pairs
+* add bbperc to seperate graph
+* always check ISOLATED & CROSS pairs in data env
+* show unmatched docker container in logwatch
+* remove bbperc EMA
+* use a single deploy log for each server
+* tidy up docker compose yaml lint
+* remove 5m and add 1h data bb env
+* use new syntax after config reversion
+* upgrade requests for openssl compatibility
+* revert stag bbperc to previous settings
+* don't use wrapper function for run tests
+* reorganise tests for efficiency
+* improve unittest lint
+* don't delete test files on completion
+* allow re-using downloaded test data to speed up jenkins run
+* set default loan amount of zero before calculations
+
 # 5.6.1
 * Fix version conflicts
 * Remove delisted pairs
