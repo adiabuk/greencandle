@@ -1,4 +1,4 @@
 {
-  "name": "big-drop_15m",
+  "name": "data-big-drop_15m",
   "open_rule1": "perc_diff(res[1].high , res[0].low) \u003c -15"
 }
