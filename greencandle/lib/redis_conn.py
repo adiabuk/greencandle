@@ -4,7 +4,6 @@
 """
 Store and retrieve items from redis
 """
-import ast
 import json
 import time
 import zlib
@@ -316,7 +315,7 @@ class Redis():
         byte = self.conn.hget(name, item)
 
         try:
-            data = ast.literal_eval(byte.decode("UTF-8").replace('null', 'None'))['ohlc']
+            data = json.loads(byte.decode("UTF-8"))['ohlc']
             current_price = data['close']
         except KeyError:
             self.logger.error("No Data for item %s %s" % (name, item))
@@ -578,7 +577,6 @@ class Redis():
             ind = split[1] + '_' + split[2].split(',')[0]
             ind_list.append(ind)
 
-        # AMROX
         res = []
         name = "{}:{}".format(pair, self.interval)
         # loop backwards through last 5 items
@@ -601,8 +599,6 @@ class Redis():
 
             x.update(ohlc)
             res.append(x)
-
-        # AMROX
 
         stop_loss_perc = self.get_on_entry(pair, 'stop_loss_perc')
         take_profit_perc = self.get_on_entry(pair, 'take_profit_perc')
@@ -635,7 +631,6 @@ class Redis():
         # specified in the rate_indicator config option - best with EMA_500
         rate_indicator = config.main.rate_indicator
 
-        #AMROX
         for i in range(0, 4):
             # loop through first 4 results (can't use 5th as we will need
             # following item which doesn't exist

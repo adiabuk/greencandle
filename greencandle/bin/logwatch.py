@@ -45,7 +45,7 @@ def main():
             try:
                 name = client.containers.get(match).name
             except docker.errors.NotFound:
-                name = "unknown"
+                name = "unknown - {}".format(container_id)
             send_slack_message("alerts", "Unhandled exception found in %s container" % name)
 
 if __name__ == '__main__':

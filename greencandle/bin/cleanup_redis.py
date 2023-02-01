@@ -5,6 +5,7 @@
 Redis cleanup-script
 """
 
+import re
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.common import arg_decorator
 from greencandle.lib import config
@@ -14,12 +15,18 @@ def main():
     """
     Cleanup old data from redis by all but the last 250 timeframes
     for all intervals
-    Run through cron, using pairs in config
+    Run through cron, using pairs available in redis
     """
 
-    pairs = config.main.pairs.split()
-
     redis = Redis()
+    pairs = set()
+    # Get unique set of uppercase pairs from redis keys
+    for key in redis.conn.keys():
+        if re.match('([A-Z]+):.*h', key.decode()):
+            pairs.add(re.findall('([A-Z]+):.*hm', key.decode())[0])
+    # convert set to list
+    pairs = list(pairs)
+
     config.create_config()
     count = 0
     for interval in ['1m', '3m', '5m', '15m', '30m', '1h', '4h', '1d']:

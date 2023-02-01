@@ -1,7 +1,7 @@
-#pylint: disable=no-member,logging-not-lazy
+#pylint: disable=no-member,logging-not-lazy,too-many-statements,too-many-locals
 """Create candlestick graphs from OHLC data"""
 
-import ast
+import json
 import time
 import datetime
 from collections import defaultdict
@@ -135,7 +135,7 @@ class Graph():
                                   mode='markers')
 
             # add rsi graph in second subply (below) if it exists
-            elif any(substring in name for substring in ['RSI', 'ATR', 'signal', 'tsi']) \
+            elif any(substring in name for substring in ['RSI', 'ATR', 'signal', 'tsi', 'bbperc']) \
                     and 'STOCH' not in name:
                 LOGGER.debug("Creating RSI graph")
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
@@ -231,8 +231,8 @@ class Graph():
                 try:
                     LOGGER.debug("Getting Data for %s" % ind)
                     str_dict = redis.get_item('{}:{}'.format(self.pair, self.interval),
-                                              index_item).decode().replace('null', 'None')
-                    result_list[ind] = ast.literal_eval(str_dict)[ind]
+                                              index_item).decode()
+                    result_list[ind] = json.loads(str_dict)[ind]
                 except AttributeError:
                     pass
                 except KeyError:
@@ -244,23 +244,26 @@ class Graph():
 
             LOGGER.debug("Getting current prices")
             str_dict = redis.get_item('{}:{}'.format(self.pair, self.interval),
-                                      index_item).decode().replace('null', 'None')
+                                      index_item).decode()
 
             try:  #ohlc
-                result_list['ohlc'] = ast.literal_eval(str_dict)['ohlc']
+                result_list['ohlc'] = json.loads(str_dict)['ohlc']
                 result_list['current_price'] = result_list['ohlc']['close']
 
-            except AttributeError as error:
+            except (KeyError, AttributeError) as error:
                 LOGGER.error("Error, unable to find ohlc data for %s %s %s"
                              % (index_item, ind, error))
             try:  # event
                 LOGGER.debug("Getting trade events")
                 str_dict = redis.get_item('{}:{}'.format(self.pair, self.interval),
-                                          index_item).decode().replace('null', 'None')
-                result_list['event'] = ast.literal_eval(str_dict)['event']
+                                          index_item).decode()
+                result_list['event'] = json.loads(str_dict)['event']
             except KeyError:  # no event for this time period, so skip
                 pass
-            rehydrated = result_list['ohlc']
+            try:
+                rehydrated = result_list['ohlc']
+            except KeyError:
+                rehydrated = {}
             list_of_series.append(rehydrated)
 
             for ind in ind_list:

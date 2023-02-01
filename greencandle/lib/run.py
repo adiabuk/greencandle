@@ -303,8 +303,7 @@ class ProdRunner():
         redis = Redis()
         no_of_klines = config.main.no_of_klines
         LOGGER.debug("Getting %s klines" % no_of_klines)
-        self.dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=no_of_klines,
-                                         max_workers=100)
+        self.dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=no_of_klines)
         engine = Engine(prices=prices_trunk, dataframes=self.dataframes, interval=interval,
                         test=test, redis=redis)
         engine.get_data(localconfig=MAIN_INDICATORS, first_run=True, no_of_klines=no_of_klines)

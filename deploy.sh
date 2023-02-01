@@ -51,5 +51,5 @@ done
 export COMMIT=`docker exec ${env}-fe-cron  bash -c 'echo "$COMMIT_SHA"'`
 
 # log tag, env short commit sha, and date to log file
-echo "$TAG,$env,$COMMIT,`date`" > /var/local/${env}_deploy.txt
+echo "$TAG,$env,$COMMIT,`date`" >> /var/local/deploy.txt
 echo DONE

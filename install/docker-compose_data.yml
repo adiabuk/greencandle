@@ -75,9 +75,9 @@ services:
       - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
-  data-be-analyse_5m_bb-short:
-    container_name: data-be-analyse_5m_bb-short
-    hostname: data-be-analyse_5m_bb-short
+  data-be-analyse_1h_bb-short:
+    container_name: data-be-analyse_1h_bb-short
+    hostname: data-be-analyse_1h_bb-short
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -91,14 +91,14 @@ services:
       - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-be-get_5m:data
+      - data-be-get_1h:data
     depends_on:
       - data-base-mysql
       - data-base-redis
-      - data-be-get_5m
+      - data-be-get_1h
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV=data/5m/short1
+      - CONFIG_ENV=data/1h/short1
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
@@ -112,9 +112,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-  data-be-analyse_5m_bb-long:
-    container_name: data-be-analyse_5m_bb-long
-    hostname: data-be-analyse_5m_bb-long
+  data-be-analyse_1h_bb-long:
+    container_name: data-be-analyse_1h_bb-long
+    hostname: data-be-analyse_1h_bb-long
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -128,14 +128,14 @@ services:
       - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-be-get_5m:data
+      - data-be-get_1h:data
     depends_on:
       - data-base-mysql
       - data-base-redis
-      - data-be-get_5m
+      - data-be-get_1h
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV=data/5m/long1
+      - CONFIG_ENV=data/1h/long1
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
@@ -147,11 +147,11 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      -  /var/run/:/var/run
+      - /var/run/:/var/run
 
-  data-be-get_5m:
-    container_name: data-be-get_5m
-    hostname: data-be-get_5m
+  data-be-get_1h:
+    container_name: data-be-get_1h
+    hostname: data-be-get_1h
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -169,7 +169,7 @@ services:
       - data-base-redis
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV=data/5m/get_data
+      - CONFIG_ENV=data/1h/get_data
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
@@ -255,7 +255,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      -  /var/run/:/var/run
+      - /var/run/:/var/run
 
   data-be-get_1m:
     container_name: data-be-get_1m
@@ -290,7 +290,6 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/:/var/run
-
 
   data-be-manual:
     container_name: data-be-manual
@@ -370,10 +369,6 @@ services:
       - "8.8.8.8"
     ports:
       - 6382:6379
-    restart: always
-    network_mode: "bridge"
-    dns:
-      - "8.8.8.8"
     links:
       - data-base-mysql:mysql
     healthcheck:

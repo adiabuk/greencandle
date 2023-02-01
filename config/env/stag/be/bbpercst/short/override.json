@@ -1,6 +1,6 @@
 {
   "name": "stag-be-eng-bbpercst-short",
-  "open_rule1": "high \u003e results.current.upper_200 and results.current.bbperc_200 \u003e 1.5 and results.current.STX_23 \u003c 0",
+  "open_rule1": "res[0].high \u003e res[0].upper_200 and res[0].bbperc_200 \u003e 2 and res[0].STX_23 \u003c 0",
   "rate_indicator": "upper_200",
   "trade_direction": "short",
   "trade_type": "margin"

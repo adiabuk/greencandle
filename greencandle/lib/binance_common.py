@@ -10,14 +10,13 @@ import os
 import pickle
 import time
 import datetime
-from concurrent.futures import ThreadPoolExecutor
 import pandas
 from binance.binance import Binance
 from str2bool import str2bool
 
 from greencandle.lib import config
 from greencandle.lib.logger import get_logger
-from greencandle.lib.common import epoch2date
+from greencandle.lib.common import epoch2date, TF2MIN
 
 LOGGER = get_logger(__name__)
 
@@ -44,6 +43,7 @@ def get_binance_klines(pair, interval=None, limit=50):
         client = Binance(debug=str2bool(config.accounts.account_debug))
         interval = "1m" if interval.endswith("s") else interval
         raw = client.klines(pair, interval, limit=limit)
+
     except IndexError:
         LOGGER.critical("Unable to fetch data for " + pair)
         sys.exit(2)
@@ -51,7 +51,9 @@ def get_binance_klines(pair, interval=None, limit=50):
     if not raw:
         LOGGER.critical("Empty data for " + pair)
         sys.exit(2)
-    dataframe = pandas.DataFrame.from_dict(raw)
+
+    non_empty = [x for x in raw if x['numTrades'] != 0]
+    dataframe = pandas.DataFrame.from_dict(non_empty)
     return dataframe
 
 def get_all_klines(pair, interval=None, start_time=0, no_of_klines=1E1000):
@@ -95,7 +97,7 @@ def get_all_klines(pair, interval=None, start_time=0, no_of_klines=1E1000):
 
     start = epoch2date(first_candle)
     end = epoch2date(last_candle)
-    print("Start: {}\nEnd: {}\n".format(start, end))
+    LOGGER.info("Start: %s\nEnd: %s\n" %(start, end))
 
     return result[:no_of_klines] if no_of_klines != float("inf") else result
 
@@ -191,7 +193,7 @@ def get_dataframe(pair, interval, no_of_klines):
     dataframe = get_binance_klines(pair, interval=interval, limit=int(no_of_klines))
     return dataframe
 
-def get_dataframes(pairs, interval=None, no_of_klines=None, max_workers=50):
+def get_dataframes(pairs, interval=None, no_of_klines=None):
     """
     Get details from binance API
 
@@ -206,18 +208,19 @@ def get_dataframes(pairs, interval=None, no_of_klines=None, max_workers=50):
     if not no_of_klines:
         no_of_klines = config.main.no_of_klines
 
-    pool = ThreadPoolExecutor(max_workers=max_workers)
     dataframe = {}
     results = {}
     for pair in pairs:
         event = {}
         event["symbol"] = pair
         event["data"] = {}
-        results[pair] = pool.submit(get_dataframe, pair=pair, interval=interval,
-                                    no_of_klines=no_of_klines)
-
+        start_time = int(time.time()*1000) - int(int(no_of_klines) * TF2MIN[interval]*60000)
+        current_res = get_all_klines(pair=pair, interval=interval,
+                                     start_time=start_time, no_of_klines=int(no_of_klines))
+        non_empty = [x for x in current_res if x['numTrades'] != 0]
+        results[pair] = non_empty
     # extract results
     for key, value in results.items():
-        dataframe[key] = value.result()
-    pool.shutdown(wait=True)
+        dataframe[key] = pandas.DataFrame(value)
+
     return dataframe

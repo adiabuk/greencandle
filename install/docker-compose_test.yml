@@ -537,4 +537,3 @@ services:
       - /var/run:/var/run
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
-

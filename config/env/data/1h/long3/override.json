@@ -1,4 +1,0 @@
-{
-  "name": "big-drop_1h",
-  "open_rule1": "perc_diff(res[1].high , res[0].low) \u003c -10"
-}
