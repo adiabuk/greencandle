@@ -420,7 +420,7 @@ services:
       - HOST=$HOSTNAME
       - DB=false
     ports:
-      - 7777:7777
+      - 6666:6666
     links:
       - data-fe-api-dashboard:api_dash
       - gen-fe-data-cadvisor:cadvisor
