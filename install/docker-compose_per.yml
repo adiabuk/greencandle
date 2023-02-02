@@ -18,9 +18,9 @@ services:
       timeout: 2s
       retries: 5
 
-  gen-be-logwatch:
-    container_name: gen-be-logwatch
-    hostname: gen-be-logwatch
+  per-gen-be-logwatch:
+    container_name: per-gen-be-logwatch
+    hostname: per-gen-be-logwatch
     image: amrox/greencandle:${TAG}
     restart: always
     entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
@@ -38,9 +38,9 @@ services:
       timeout: 2s
       retries: 5
 
-  gen-be-logtailer-api:
-    container_name: gen-be-logtailer-api
-    hostname: gen-be-logtailer-api
+  per-gen-be-logtailer-api:
+    container_name: per-gen-be-logtailer-api
+    hostname: per-gen-be-logtailer-api
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -197,7 +197,7 @@ services:
       - per-fe-api-dashboard:api_dash
       - per-base-mysql:mysql
       - per-base-redis:redis
-      - gen-be-logtailer-api:logs
+      - per-gen-be-logtailer-api:logs
       - per-fe-api-proxy:proxy
     depends_on:
       - gen-fe-cadvisor

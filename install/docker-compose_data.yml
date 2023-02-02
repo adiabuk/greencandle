@@ -19,9 +19,9 @@ services:
       timeout: 2s
       retries: 5
 
-  gen-be-logwatch:
-    container_name: gen-be-logwatch
-    hostname: gen-be-logwatch
+  data-gen-be-logwatch:
+    container_name: data-gen-be-logwatch
+    hostname: data-gen-be-logwatch
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -44,9 +44,9 @@ services:
       timeout: 2s
       retries: 5
 
-  gen-be-logtailer-api:
-    container_name: gen-be-logtailer-api
-    hostname: gen-be-logtailer-api
+  data-gen-be-logtailer-api:
+    container_name: data-gen-be-logtailer-api
+    hostname: data-gen-be-logtailer-api
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -426,7 +426,7 @@ services:
       - gen-fe-data-cadvisor:cadvisor
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - gen-be-logtailer-api:logs
+      - data-gen-be-logtailer-api:logs
       - data-fe-api-proxy:proxy
     depends_on:
       - data-base-mysql

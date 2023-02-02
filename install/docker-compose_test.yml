@@ -18,9 +18,9 @@ services:
       timeout: 2s
       retries: 5
 
-  gen-be-logtailer-api:
-    container_name: gen-be-logtailer-api
-    hostname: gen-be-logtailer-api
+  test-gen-be-logtailer-api:
+    container_name: test-gen-be-logtailer-api
+    hostname: test-gen-be-logtailer-api
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -259,7 +259,7 @@ services:
     links:
       - gen-fe-cadvisor:cadvisor
       - test-fe-api-dashboard:api_dash
-      - gen-be-logtailer-api:logs
+      - test-gen-be-logtailer-api:logs
       - test-base-mysql:mysql
       - test-base-redis:redis
       - test-fe-api-filesystem:filesystem
