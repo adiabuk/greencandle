@@ -250,7 +250,7 @@ class ProdRunner():
             open_price, _, open_time, _, _, _ = dbase.get_trade_value(pair)[0]
             current_candle = get_dataframes([pair],
                                             interval=interval,
-                                            no_of_klines=1)[pair].iloc[-1]
+                                            no_of_klines=3)[pair].iloc[-1]
 
             redis.update_drawdown(pair, current_candle, open_time=open_time)
             redis.update_drawup(pair, current_candle, open_time=open_time)
