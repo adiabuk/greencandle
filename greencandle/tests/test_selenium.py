@@ -110,21 +110,20 @@ class TestGc(unittest.TestCase):
         self.driver.find_element(By.CSS_SELECTOR, "li:nth-child(7) > a").click()
         self.driver.back()
         # 27 | click | css=li:nth-child(9) > a |
-        self.driver.find_element(By.CSS_SELECTOR, "li:nth-child(9) > a").click()
+        self.driver.find_element(By.CSS_SELECTOR, "li:nth-child(8) > a").click()
         # 28 | click | css=li:nth-child(10) > a |
         self.driver.find_element(By.LINK_TEXT, "Main Page").click()
         self.driver.find_element(By.CSS_SELECTOR, ".hamburger:nth-child(3)").click()
-        self.driver.find_element(By.CSS_SELECTOR, "li:nth-child(10) > a").click()
+
+        # graphs
+        self.driver.find_element(By.CSS_SELECTOR, "li:nth-child(9) > a").click()
         # 29 | click | linkText=graphs |
         self.driver.find_element(By.LINK_TEXT, "graphs").click()
         # 30 | click | linkText=Main Page |
         self.driver.find_element(By.LINK_TEXT, "Main Page").click()
         # 31 | click | css=.hamburger:nth-child(3) |
         self.driver.find_element(By.CSS_SELECTOR, ".hamburger:nth-child(3)").click()
-        # 32 | click | css=li:nth-child(13) > a |
-        self.driver.find_element(By.CSS_SELECTOR, "li:nth-child(13) > a").click()
-        # 33 | click | linkText=Main Page |
-        self.driver.find_element(By.LINK_TEXT, "Main Page").click()
+
         # 34 | click | css=.hamburger:nth-child(3) |
         self.driver.find_element(By.CSS_SELECTOR, ".hamburger:nth-child(3)").click()
         # 35 | click | css=.hamburger:nth-child(3) |
