@@ -218,7 +218,7 @@ services:
     pull_policy: always
     restart: always
     healthcheck:
-      test: service nginx status || exit 1
+      test: curl -Isf 127.1:3333
       interval: 5m
       timeout: 5s
       retries: 5

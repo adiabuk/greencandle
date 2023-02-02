@@ -410,7 +410,7 @@ services:
     dns:
       - "8.8.8.8"
     healthcheck:
-      test: service nginx status || exit 1
+      test: curl -Isf 127.1:6666
       interval: 5m
       timeout: 5s
       retries: 5
