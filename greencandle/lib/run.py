@@ -305,7 +305,7 @@ class ProdRunner():
         LOGGER.debug("Getting %s klines" % no_of_klines)
         self.dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=no_of_klines)
         for pair, dframe in self.dataframes.items():
-            self.dataframes[pair] = df[:-1]
+            self.dataframes[pair] = dframe[:-1]
         engine = Engine(prices=prices_trunk, dataframes=self.dataframes, interval=interval,
                         test=test, redis=redis)
         engine.get_data(localconfig=MAIN_INDICATORS, first_run=True, no_of_klines=no_of_klines)
