@@ -135,7 +135,7 @@ mkdir -p /data/{mysql,config,graphs,reports}
 # Install outside docker
 install_dir=/srv/greencandle
 cd $install_dir
-pip install setuptools-rust setuptools==45.1.0 pip==9.0.1 numpy==1.16.0 ccxt==1.50.10 cryptography==3.3.1
+pip install setuptools-rust setuptools==45.1.0 pip==9.0.1 numpy==1.16.0 ccxt==1.50.1 cryptography==3.3.1
 
 python ./setup.py install
 pip install pytest==6.0.1 redis-dump-load gitpython
