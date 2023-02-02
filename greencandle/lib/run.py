@@ -334,7 +334,7 @@ class ProdRunner():
             max_klines = int(config.main.no_of_klines)
             for pair in PAIRS:
                 self.dataframes[pair] = \
-                        self.dataframes[pair].append(new_dataframes[pair],
+                        self.dataframes[pair].append(new_dataframes[pair][:-1],
                                                      ignore_index=True).tail(max_klines)
             engine = Engine(prices=prices_trunk, dataframes=self.dataframes, interval=interval,
                             redis=redis)
