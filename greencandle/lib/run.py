@@ -335,9 +335,23 @@ class ProdRunner():
             new_dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=2)
             max_klines = int(config.main.no_of_klines)
             for pair in PAIRS:
-                self.dataframes[pair] = \
-                        self.dataframes[pair].append(new_dataframes[pair][:-1],
-                                                     ignore_index=True).tail(max_klines)
+                # get last column of new data
+                frame = new_dataframes[pair].iloc[-1]
+                # use closeTime as index
+                new_close = frame['closeTime']
+                # see if closeTime already exists in data
+                old_index = self.dataframes[pair].index[self.dataframes[pair]['closeTime'] ==
+                                                        new_close].tolist()
+                if old_index:
+                    # if it exsits, then we use the last index occurance in list
+                    # and overwrite that field in existing data
+                    self.dataframes[pair].loc[old_index[-1]] = frame.loc[0]
+                else:
+                    # otherwise just append the data to the end of the dataframe
+                    self.dataframes[pair] = \
+                            self.dataframes[pair].append(new_dataframes[pair],
+                                                         ignore_index=True).tail(max_klines)
+            LOGGER.critical(self.dataframes['BTCUSDT'].iloc[-1])
             engine = Engine(prices=prices_trunk, dataframes=self.dataframes, interval=interval,
                             redis=redis)
             engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
