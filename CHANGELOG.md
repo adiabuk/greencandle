@@ -1,5 +1,9 @@
 # Releases
 
+# 5.8.1
+* Fix logtailer env name in prod
+* Hide logtailer port in per
+
 # 5.8
 * Skip processing of dataframe if no new data
 * Check interval needs to be low 60 seconds
