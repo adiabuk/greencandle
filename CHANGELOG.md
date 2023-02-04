@@ -1,5 +1,21 @@
 # Releases
 
+# 5.8
+* Skip processing of dataframe if no new data
+* Check interval needs to be low 60 seconds
+* Increase waiting times between data prod runs for 1h
+* Don't allow dupe close time values in instance df
+* Overwrite kline data if data for incomplete candle already exists, otherwise append
+* Get a few candles to ensure df isn't empty
+* Use correct logwatch/logtailer names in all envs
+* Install valid version of ccxt
+* Correct selenium links
+* Fix webserver healthchecks
+* Fix data env nginx port assignment
+* Add 2nd test envs for long/short any pairs
+* Ensure all containers contain env in name
+* Use large no of klines for redis cleanup and add logging
+
 # 5.7
 * increase 1m klines to allow for empty data
 * increase number of max klines available and remove empty dfs
