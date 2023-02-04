@@ -335,6 +335,9 @@ class ProdRunner():
             new_dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=2)
             max_klines = int(config.main.no_of_klines)
             for pair in PAIRS:
+                # skip pair if empty dataframe (no new trades in kline)
+                if len(new_dataframes) == 0:
+                    continue
                 # get last column of new data
                 frame = new_dataframes[pair].iloc[-1]
                 # use closeTime as index
