@@ -351,7 +351,6 @@ class ProdRunner():
                     self.dataframes[pair] = \
                             self.dataframes[pair].append(new_dataframes[pair],
                                                          ignore_index=True).tail(max_klines)
-            LOGGER.critical(self.dataframes['BTCUSDT'].iloc[-1])
             engine = Engine(prices=prices_trunk, dataframes=self.dataframes, interval=interval,
                             redis=redis)
             engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
