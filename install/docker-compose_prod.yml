@@ -19,8 +19,8 @@ services:
       retries: 5
 
   prod-gen-be-logwatch:
-    container_name: stag-gen-be-logwatch
-    hostname: stag-gen-be-logwatch
+    container_name: prod-gen-be-logwatch
+    hostname: prod-gen-be-logwatch
     image: amrox/greencandle:${TAG}
     restart: always
     entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
