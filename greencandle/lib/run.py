@@ -348,7 +348,7 @@ class ProdRunner():
                 if old_index:
                     # if it exsits, then we use the last index occurance in list
                     # and overwrite that field in existing data
-                    self.dataframes[pair].loc[old_index[-1]] = frame.loc[0]
+                    self.dataframes[pair].loc[old_index[-1]] = frame.iloc[0]
                 else:
                     # otherwise just append the data to the end of the dataframe
                     self.dataframes[pair] = \
