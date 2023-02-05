@@ -311,6 +311,36 @@ class ProdRunner():
         engine.get_data(localconfig=MAIN_INDICATORS, first_run=True, no_of_klines=no_of_klines)
         del redis
 
+    def append_data(self, interval):
+        """
+        Fetch new dataframe data and append to existing structure
+        """
+
+        new_dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=2)
+        max_klines = int(config.main.no_of_klines)
+        for pair in PAIRS:
+            # skip pair if empty dataframe (no new trades in kline)
+            if len(new_dataframes[pair]) == 0:
+                continue
+            # get last column of new data
+            for _, row in new_dataframes[pair].iterrows():
+                # use closeTime as index
+                new_close = row['closeTime']
+                # see if closeTime already exists in data
+                old_index = self.dataframes[pair].index[self.dataframes[pair]['closeTime'] ==
+                                                        new_close].tolist()
+                if old_index:
+                    # if it exsits, then we use the last index occurance in list
+                    # and overwrite that field in existing data
+                    self.dataframes[pair].loc[old_index[-1]] = row
+                else:
+                    # otherwise just append the data to the end of the dataframe
+                    self.dataframes[pair] = \
+                            self.dataframes[pair].append(new_dataframes[pair],
+                                                         ignore_index=True).tail(max_klines)
+
+
+
     @GET_EXCEPTIONS
     def prod_loop(self, interval, test=False, data=True, analyse=True):
         """
@@ -331,29 +361,7 @@ class ProdRunner():
             for key, val in prices.items():
                 if key in PAIRS:
                     prices_trunk[key] = val
-
-            new_dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=2)
-            max_klines = int(config.main.no_of_klines)
-            for pair in PAIRS:
-                # skip pair if empty dataframe (no new trades in kline)
-                if len(new_dataframes[pair]) == 0:
-                    continue
-                # get last column of new data
-                frame = new_dataframes[pair].iloc[-1]
-                # use closeTime as index
-                new_close = frame['closeTime']
-                # see if closeTime already exists in data
-                old_index = self.dataframes[pair].index[self.dataframes[pair]['closeTime'] ==
-                                                        new_close].tolist()
-                if old_index:
-                    # if it exsits, then we use the last index occurance in list
-                    # and overwrite that field in existing data
-                    self.dataframes[pair].loc[old_index[-1]] = frame.iloc[0]
-                else:
-                    # otherwise just append the data to the end of the dataframe
-                    self.dataframes[pair] = \
-                            self.dataframes[pair].append(new_dataframes[pair],
-                                                         ignore_index=True).tail(max_klines)
+            self.append_data(interval)
             engine = Engine(prices=prices_trunk, dataframes=self.dataframes, interval=interval,
                             redis=redis)
             engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
