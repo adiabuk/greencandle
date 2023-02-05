@@ -93,11 +93,11 @@ def get_all_klines(pair, interval=None, start_time=0, no_of_klines=1E1000):
             # Break out of while true loop as we have exhausted possible entries
             break
     first_candle = result[0]['openTime']/1000
-    last_candle = result[-1]['openTime']/1000
+    last_candle = result[-1]['closeTime']/1000
 
     start = epoch2date(first_candle)
     end = epoch2date(last_candle)
-    LOGGER.info("Start: %s\nEnd: %s\n" %(start, end))
+    LOGGER.info("%s Start: %s, End: %s" %(pair, start, end))
 
     return result[:no_of_klines] if no_of_klines != float("inf") else result
 
