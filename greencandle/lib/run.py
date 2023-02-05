@@ -248,9 +248,11 @@ class ProdRunner():
             drawups = {}
             pair = trade[0].strip()
             open_price, _, open_time, _, _, _ = dbase.get_trade_value(pair)[0]
+
+            klines = 10 if interval == '1m' else 3
             current_candle = get_dataframes([pair],
                                             interval=interval,
-                                            no_of_klines=3)[pair].iloc[-1]
+                                            no_of_klines=klines)[pair].iloc[-1]
 
             redis.update_drawdown(pair, current_candle, open_time=open_time)
             redis.update_drawup(pair, current_candle, open_time=open_time)
@@ -338,8 +340,6 @@ class ProdRunner():
                     self.dataframes[pair] = \
                             self.dataframes[pair].append(new_dataframes[pair],
                                                          ignore_index=True).tail(max_klines)
-
-
 
     @GET_EXCEPTIONS
     def prod_loop(self, interval, test=False, data=True, analyse=True):
