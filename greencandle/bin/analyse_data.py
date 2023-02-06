@@ -84,7 +84,8 @@ def analyse_pair(pair, redis):
         if result == "OPEN":
             LOGGER.debug("Items to buy")
             now = datetime.now()
-
+            items = redis.get_items(pair, interval)
+            data = redis.get_item("{}:{}".format(pair, interval), items[-1]).decode()
             # Only alert on a given pair once per hour
             # for each strategy
             if pair in TRIGGERED:
@@ -98,10 +99,10 @@ def analyse_pair(pair, redis):
                 LOGGER.debug("Triggering alert: last alert %s hours ago" % diff_in_hours)
 
             TRIGGERED[pair] = now
-            send_slack_message("notifications", "Open: %s %s %s (%s) - %s Current: %s" %
+            send_slack_message("notifications", "Open: %s %s %s (%s) - %s Data: %s" %
                                (get_tv_link(pair, interval), interval,
                                 config.main.trade_direction, supported.strip(), current_time,
-                                current_price), emoji=True,
+                                data), emoji=True,
                                icon=':{0}-{1}:'.format(interval, config.main.trade_direction))
             if FORWARD:
                 url = "http://router:1080/forward"
