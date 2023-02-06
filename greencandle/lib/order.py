@@ -92,7 +92,7 @@ class Trade():
                          "date": mepoch,
                         }}
 
-        redis.redis_conn(kwargs.pair, kwargs.interval, data, mepoch)
+        redis.append_data(kwargs.pair, kwargs.interval, data)
         del redis
 
     def check_pairs(self, items_list):

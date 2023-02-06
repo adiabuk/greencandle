@@ -222,7 +222,23 @@ class Redis():
                 data = {"max_price": price, "orig_price": orig_price}
                 self.__add_price(key, data)
 
-    def redis_conn(self, pair, interval, data, now):
+    def append_data(self, pair, interval, data):
+        """
+        Add data to existing redis keys
+        """
+        date = data['event']['date']
+        key = "{0}:{1}".format(pair, interval)
+        byte = self.conn.hmget(key, date)
+        if byte:
+            decoded = json.loads(byte[0].decode())
+            decoded.update(data)
+            recoded = json.dumps(decoded)
+            result = self.conn.hmset(key, {date: recoded})
+            return result
+        return False
+
+
+    def add_data(self, pair, interval, data):
         """
         Add data to redis
 
@@ -235,34 +251,17 @@ class Redis():
             success of operation: True/False
         """
 
-        self.logger.debug("Adding to Redis: %s %s %s" % (pair, list(data.keys()), now))
+        #self.logger.debug("Adding to Redis: %s %s %s" % (pair, list(data.keys()), now))
+        for close, value in data.items():
+            key = "{0}:{1}".format(pair, interval)
+            expiry = int(config.redis.redis_expiry_seconds)
+            # closing time, 1 ms before next candle
+            if not str(close).endswith("999"): # closing time, 1 ms before next candle
+                self.logger.critical("Invalid time submitted to redis %s.  Skipping " % key)
+                continue
+            result = self.conn.hmset(key, {close: json.dumps(value)})
 
-        key = "{0}:{1}".format(pair, interval)
-        expiry = int(config.redis.redis_expiry_seconds)
-        # closing time, 1 ms before next candle
-        if not str(now).endswith("999"): # closing time, 1 ms before next candle
-            self.logger.critical("Invalid time submitted to redis %s.  Skipping " % key)
-            return None
-        for item, value in data.items():
-            di = {now: json.dumps({item: value})}
-            b = self.conn.hmget(key, now)[0]
-            if b:
-                b = b.decode() if isinstance(b, bytes) else b
-                di = {item:value}
-                x = json.loads(b)
-                x[item] = value
-                x = json.dumps(x) if isinstance(x, dict) else x
-                result = self.conn.hmset(key, {now: x})
-
-            else:
-                response = self.conn.hmset(key, di)
-                # key = pair:interval
-                # item = ohlc etc
-                # now: miliepoch
-                # value = {dict}
-
-        expire = str2bool(config.redis.redis_expire)
-        if expire:
+        if str2bool(config.redis.redis_expire):
             self.conn.expire(key, expiry)
 
         return True

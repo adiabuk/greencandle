@@ -13,6 +13,7 @@ import operator
 from time import time, strftime, localtime
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
+from collections import defaultdict
 from decimal import Decimal
 import pickle
 import zlib
@@ -125,22 +126,23 @@ class Engine(dict):
     @get_exceptions
     def __add_schemes(self):
         """ add scheme to correct structure """
-
+        final_scheme = defaultdict(lambda: defaultdict(dict))
         for scheme in self.schemes:
             pair = scheme["symbol"]
             # add to redis
+            event = scheme['event']
             close_time = str(self.dataframes[pair].iloc[-1]["closeTime"]) if not "close_time" in \
                     scheme else scheme["close_time"]
 
             result = None if (isinstance(scheme["data"], float) and
                               math.isnan(scheme["data"])) else scheme["data"]
-            try:
-                data = {scheme["event"]: result}
-                self.redis.redis_conn(pair, self.interval, data, close_time)
+            final_scheme[pair][close_time][event] = result
 
-            except Exception as exc:
-                LOGGER.critical("Redis failure %s %s" % (str(exc), repr(sys.exc_info())))
+        for pair, data in final_scheme.items():
+            self.redis.add_data(pair, self.interval, data)
+
         self.schemes = []
+
 
     @get_exceptions
     def get_data(self, localconfig=None, first_run=False, no_of_klines=None):
