@@ -168,8 +168,6 @@ class Engine(dict):
                     # from config eg. self.supertrend(pair, config), where config is a tuple
                     # each method has the method name in 'function't st
 
-                    pool.submit(getattr(self, function)(pair, self.dataframes[pair], index=None,
-                                                        localconfig=(name, period)))
                     if first_run:
                         for seq in range(int(actual_klines) -1):
                             if seq >= len(self.dataframes[pair]):
@@ -177,6 +175,10 @@ class Engine(dict):
                             pool.submit(getattr(self, function)(pair, self.dataframes[pair],
                                                                 index=seq,
                                                                 localconfig=(name, period)))
+                    else:
+                        pool.submit(getattr(self, function)(pair, self.dataframes[pair],
+                                                            index=None,
+                                                            localconfig=(name, period)))
 
                 pool.shutdown(wait=True)
 
