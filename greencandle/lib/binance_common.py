@@ -10,10 +10,10 @@ import os
 import pickle
 import time
 import datetime
+from concurrent.futures import ThreadPoolExecutor
 import pandas
 from binance.binance import Binance
 from str2bool import str2bool
-
 from greencandle.lib import config
 from greencandle.lib.logger import get_logger
 from greencandle.lib.common import epoch2date, TF2MIN
@@ -193,7 +193,7 @@ def get_dataframe(pair, interval, no_of_klines):
     dataframe = get_binance_klines(pair, interval=interval, limit=int(no_of_klines))
     return dataframe
 
-def get_dataframes(pairs, interval=None, no_of_klines=None):
+def get_dataframes(pairs, interval=None, no_of_klines=None, max_workers=50):
     """
     Get details from binance API
 
@@ -208,6 +208,7 @@ def get_dataframes(pairs, interval=None, no_of_klines=None):
     if not no_of_klines:
         no_of_klines = config.main.no_of_klines
 
+    pool = ThreadPoolExecutor(max_workers=max_workers)
     dataframe = {}
     results = {}
     for pair in pairs:
@@ -215,12 +216,13 @@ def get_dataframes(pairs, interval=None, no_of_klines=None):
         event["symbol"] = pair
         event["data"] = {}
         start_time = int(time.time()*1000) - int(int(no_of_klines) * TF2MIN[interval]*60000)
-        current_res = get_all_klines(pair=pair, interval=interval,
-                                     start_time=start_time, no_of_klines=int(no_of_klines))
-        non_empty = [x for x in current_res if x['numTrades'] != 0]
-        results[pair] = non_empty
-    # extract results
-    for key, value in results.items():
-        dataframe[key] = pandas.DataFrame(value)
 
+        results[pair] = pool.submit(get_all_klines, pair=pair, interval=interval,
+                                    start_time=start_time, no_of_klines=int(no_of_klines))
+
+    # extract results
+    for pair, value in results.items():
+        non_empty = [x for x in value.result() if x['numTrades'] != 0]
+        dataframe[pair] = pandas.DataFrame(non_empty)
+    pool.shutdown(wait=True)
     return dataframe
