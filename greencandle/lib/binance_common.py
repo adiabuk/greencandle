@@ -178,21 +178,6 @@ def to_csv(pair, data):
         dict_writer.writeheader()
         dict_writer.writerows(reversed(data))
 
-def get_dataframe(pair, interval, no_of_klines):
-    """
-    Extract and return ohlc (open, high, low close) data
-    for single pair from available data
-
-    Args:
-        pair: trading pair (eg. XRPBTC)
-        interval: Interval of each candlestick (eg. 1m, 3m, 15m, 1d etc)
-
-    Returns:
-        A truple containing full pandas dataframe and a tuple of float values
-    """
-    dataframe = get_binance_klines(pair, interval=interval, limit=int(no_of_klines))
-    return dataframe
-
 def get_dataframes(pairs, interval=None, no_of_klines=None, max_workers=50):
     """
     Get details from binance API
