@@ -1,5 +1,17 @@
 # Releases
 
+# 5.9
+* add long/short route for any2 test strategy
+* add only row from loop and ensure it is appended correctly
+* add latest redis data to data notification
+* speed up initial run by reducing data klines
+* combine calls to redis to further reduce run time for initial and loop
+* Remove unused code from binance_common
+* restore threading in get_dataframes for speed
+* don't get initial data twice as it's overwritten by the same data
+* merge data from all downloaded klines to ensure no missing data
+* show start/end time of downloaded klines from openTime and closeTime
+
 # 5.8.1
 * Fix logtailer env name in prod
 * Hide logtailer port in per
