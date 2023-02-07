@@ -8,9 +8,9 @@ import os
 import time
 import pickle
 import gzip
-import pandas
-from concurrent.futures import ThreadPoolExecutor
 from glob import glob
+from concurrent.futures import ThreadPoolExecutor
+import pandas
 import requests
 from binance.binance import Binance
 from str2bool import str2bool
@@ -153,7 +153,7 @@ def parallel_test(pairs, interval, data_dir, indicators):
     for pair in pairs:
         pair = pair.strip()
         pickle_data = get_pickle_data(pair, data_dir, interval)
-        if isinstance(dframe[pair], pandas.DataFrame):
+        if isinstance(pickle_data, pandas.DataFrame):
             dframes[pair] = pickle_data
         else:
             # skip to next pair if no data returned
