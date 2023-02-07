@@ -330,7 +330,7 @@ class ProdRunner():
                 new_close = row['closeTime']
                 # see if closeTime already exists in data
                 old_index = self.dataframes[pair].index[self.dataframes[pair]['closeTime'] ==
-                                                        new_close].tolist()
+                                                        str(new_close)].tolist()
                 if old_index:
                     # if it exsits, then we use the last index occurance in list
                     # and overwrite that field in existing data
@@ -338,8 +338,8 @@ class ProdRunner():
                 else:
                     # otherwise just append the data to the end of the dataframe
                     self.dataframes[pair] = \
-                            self.dataframes[pair].append(new_dataframes[pair],
-                                                         ignore_index=True).tail(max_klines)
+                        self.dataframes[pair].append(row, ignore_index=True,
+                                                     verify_integrity=True).tail(max_klines)
 
     @GET_EXCEPTIONS
     def prod_loop(self, interval, test=False, data=True, analyse=True):
