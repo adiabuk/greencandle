@@ -57,21 +57,10 @@ def perform_data(pair, interval, data_dir, indicators):
     pair = pair.strip()
     LOGGER.debug("Serial run %s %s" % (pair, interval))
     redis = Redis(interval=interval, test_data=True)
-    try:
-        filename = glob("{0}/{1}_{2}.p*".format(data_dir, pair, interval))[0]
-    except IndexError:
-        print("File not found: {0}/{1}_{2}.p*".format(data_dir, pair, interval))
-        sys.exit(1)
-    if not os.path.exists(filename):
-        LOGGER.critical("Filename:%s not found for %s %s" % (filename, pair, interval))
-        return
-    if filename.endswith("gz"):
-        handle = gzip.open(filename, "rb")
-    else:
-        handle = open(filename, "rb")
-    dframe = pickle.load(handle)
-    handle.close()
 
+    dframe = get_pickle_data(pair, data_dir, interval)
+    if not dframe:
+        return
     dbase = Mysql(test=True, interval=interval)
     prices_trunk = {pair: "0"}
     for beg in range(len(dframe) - CHUNK_SIZE):
@@ -163,23 +152,14 @@ def parallel_test(pairs, interval, data_dir, indicators):
     sizes = []
     for pair in pairs:
         pair = pair.strip()
-        try:
-            filename = glob("/{0}/{1}_{2}.p*".format(data_dir, pair, interval))[0]
-        except IndexError:
-            print("File not found: {0}/{1}_{2}.p*".format(data_dir, pair, interval))
-            sys.exit(1)
-        if not os.path.exists(filename):
-            LOGGER.critical("Cannot find file: %s" % filename)
-            continue
-        if filename.endswith("gz"):
-            handle = gzip.open(filename, "rb")
+        pickle_data = get_pickle_data(pair, data_dir, interval)
+        if pickle_data:
+            dframes[pair] = pickle_data
         else:
-            handle = open(filename, "rb")
-
-        dframes[pair] = pickle.load(handle)
+            # skip to next pair if no data returned
+            continue
         sizes.append(len(dframes[pair]))
         LOGGER.info("%s dataframe size: %s" % (pair, len(dframes[pair])))
-        handle.close()
 
     for beg in range(max(sizes) - CHUNK_SIZE):
         end = beg + CHUNK_SIZE
@@ -226,6 +206,27 @@ def parallel_test(pairs, interval, data_dir, indicators):
         trade.open_trade(buys)
 
     print(get_recent_profit(True, interval))
+
+def get_pickle_data(pair, data_dir, interval):
+    """
+    Get dataframes from stored pickle file
+    """
+    try:
+        filename = glob("{0}/{1}_{2}.p*".format(data_dir, pair, interval))[0]
+    except IndexError:
+        LOGGER.critical("Filename:%s not found for %s %s" % (filename, pair, interval))
+        return None
+    if not os.path.exists(filename):
+        LOGGER.critical("Filename:%s not found for %s %s" % (filename, pair, interval))
+        return None
+    if filename.endswith("gz"):
+        handle = gzip.open(filename, "rb")
+    else:
+        handle = open(filename, "rb")
+    dframe = pickle.load(handle)
+    handle.close()
+    return dframe
+
 
 class ProdRunner():
     """
