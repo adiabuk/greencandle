@@ -15,8 +15,8 @@ def main():
     """
     dbase = Mysql()
 
-    dbase.run_sql_statement('drop table if exists tmp_pairs')
-    dbase.run_sql_statement('create table tmp_pairs as SELECT distinct(pair) from '
+    dbase.delete_table_contents('tmp_pairs')
+    dbase.run_sql_statement('insert into tmp_pairs (pair) SELECT distinct(pair) from '
                             'profitable_by_name_pair where net_per_trade > 0 '
                             'and name like "%bbpercst3%"')
 
