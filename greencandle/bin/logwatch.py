@@ -1,4 +1,4 @@
-#pylint: disable=wrong-import-position
+#pylint: disable=wrong-import-position,no-member
 """
 Follow log files and alert on Error
 """
@@ -46,7 +46,8 @@ def main():
                 name = client.containers.get(match).name
             except docker.errors.NotFound:
                 name = "unknown - {}".format(container_id)
-            send_slack_message("alerts", "Unhandled exception found in %s container" % name)
+            if config.main.base_env in name:
+                send_slack_message("alerts", "Unhandled exception found in %s container" % name)
 
 if __name__ == '__main__':
     main()
