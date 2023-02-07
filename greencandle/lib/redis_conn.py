@@ -229,14 +229,14 @@ class Redis():
         date = data['event']['date']
         key = "{0}:{1}".format(pair, interval)
         byte = self.conn.hmget(key, date)
-        if byte:
+        if byte[0]:
             decoded = json.loads(byte[0].decode())
             decoded.update(data)
             recoded = json.dumps(decoded)
             result = self.conn.hmset(key, {date: recoded})
-            return result
-        return False
-
+        else:
+            result = self.conn.hmset(key, {date: json.dumps(data)})
+        return result
 
     def add_data(self, pair, interval, data):
         """
