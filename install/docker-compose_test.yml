@@ -191,6 +191,7 @@ services:
     links:
       - test-base-mysql:mysql
       - test-base-redis:redis
+      - test-be-api-router:router
     depends_on:
       - test-base-mysql
       - test-base-redis

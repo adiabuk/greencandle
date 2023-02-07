@@ -128,6 +128,7 @@ services:
     links:
       - per-base-mysql:mysql
       - per-base-redis:redis
+      - per-be-api-router:router
     depends_on:
       - per-base-mysql
       - per-base-redis
