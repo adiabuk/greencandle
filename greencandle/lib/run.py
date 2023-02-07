@@ -5,10 +5,10 @@ Perform run for test & prod
 """
 
 import os
-import sys
 import time
 import pickle
 import gzip
+import pandas
 from concurrent.futures import ThreadPoolExecutor
 from glob import glob
 import requests
@@ -59,7 +59,7 @@ def perform_data(pair, interval, data_dir, indicators):
     redis = Redis(interval=interval, test_data=True)
 
     dframe = get_pickle_data(pair, data_dir, interval)
-    if not dframe:
+    if not isinstance(dframe, pandas.DataFrame):
         return
     dbase = Mysql(test=True, interval=interval)
     prices_trunk = {pair: "0"}
@@ -153,7 +153,7 @@ def parallel_test(pairs, interval, data_dir, indicators):
     for pair in pairs:
         pair = pair.strip()
         pickle_data = get_pickle_data(pair, data_dir, interval)
-        if pickle_data:
+        if isinstance(dframe[pair], pandas.DataFrame):
             dframes[pair] = pickle_data
         else:
             # skip to next pair if no data returned
