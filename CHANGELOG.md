@@ -1,5 +1,8 @@
 # Releases
 
+# 5.10.1
+* Fix syntax error
+
 # 5.10
 * send trade messages to trade slack channels
 * add router links to manual containers in all envs
