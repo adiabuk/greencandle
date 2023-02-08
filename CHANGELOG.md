@@ -1,5 +1,14 @@
 # Releases
 
+# 5.10
+* send trade messages to trade slack channels
+* add router links to manual containers in all envs
+* remove contents, not table when recreating usable pairs
+* check environment before alerting on exception
+* properly check that dframe is not None
+* separate dupe pickle data code into function
+* create new key if redis data doesn't exist (API containers)
+
 # 5.9
 * add long/short route for any2 test strategy
 * add only row from loop and ensure it is appended correctly
