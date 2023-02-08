@@ -1,5 +1,7 @@
 {
-  "name": "test-api-any2-1h-cross",
   "interval": "1h",
+  "name": "test-api-any2-1h-cross",
+  "stop_loss_perc": "5",
+  "take_profit_perc": "10",
   "trade_direction": "long"
 }
