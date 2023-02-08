@@ -22,7 +22,7 @@ class Redis():
     Redis object
     """
 
-    def __init__(self, interval=config.main.interval, test_data=False):
+    def __init__(self, interval=config.main.interval, test_data=False, db=0):
         """
         Args:
             interval
@@ -35,7 +35,7 @@ class Redis():
         self.logger = get_logger(__name__)
         host = config.redis.redis_host
         port = config.redis.redis_port
-        db = int(config.redis.db)
+        db = db
         expire = str2bool(config.redis.redis_expire)
 
         self.interval = interval

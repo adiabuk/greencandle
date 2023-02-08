@@ -300,11 +300,6 @@
       "is_binary": false,
       "is_secret": false
     },
-    "redis_db": {
-      "value": "0",
-      "is_binary": false,
-      "is_secret": false
-    },
     "redis_expire": {
       "value": "false",
       "is_binary": false,

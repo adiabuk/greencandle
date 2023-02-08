@@ -34,7 +34,7 @@
     "account2_key": {
       "value": "",
       "is_binary": false,
-      "is_secret":false
+      "is_secret": false
     },
     "account2_secret": {
       "value": "",
@@ -298,11 +298,6 @@
     },
     "rate_indicator": {
       "value": "EMA_2",
-      "is_binary": false,
-      "is_secret": false
-    },
-    "redis_db": {
-      "value": "0",
       "is_binary": false,
       "is_secret": false
     },
