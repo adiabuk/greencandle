@@ -1,6 +1,6 @@
 {
-  "drain": "true",
-  "drain_range": "01:30 - 08:30",
+  "drain": "false",
+  "drain_range": "00:00 - 00:00",
   "max_trades": "10",
   "interval": "1m",
   "name": "test-api-any",
