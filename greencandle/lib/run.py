@@ -214,7 +214,7 @@ def get_pickle_data(pair, data_dir, interval):
     try:
         filename = glob("{0}/{1}_{2}.p*".format(data_dir, pair, interval))[0]
     except IndexError:
-        LOGGER.critical("Filename:%s not found for %s %s" % (filename, pair, interval))
+        LOGGER.critical("Filename not found for %s %s" % (pair, interval))
         return None
     if not os.path.exists(filename):
         LOGGER.critical("Filename:%s not found for %s %s" % (filename, pair, interval))
