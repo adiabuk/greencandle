@@ -92,8 +92,12 @@ def get_all_klines(pair, interval=None, start_time=0, no_of_klines=1E1000):
         if len(current_section) < 500:
             # Break out of while true loop as we have exhausted possible entries
             break
-    first_candle = result[0]['openTime']/1000
-    last_candle = result[-1]['closeTime']/1000
+    try:
+        first_candle = result[0]['openTime']/1000
+        last_candle = result[-1]['closeTime']/1000
+    except IndexError:
+        LOGGER.info("No candles for %s" %pair)
+        return None
 
     start = epoch2date(first_candle)
     end = epoch2date(last_candle)
