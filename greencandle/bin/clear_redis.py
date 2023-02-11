@@ -14,8 +14,8 @@ def main():
     Clear all Redis DB rows
     """
 
-    for db in [0,1,2]:
-        redis = Redis(db=db)
+    for dbase in [0, 1, 2]:
+        redis = Redis(db=dbase)
         redis.clear_all()
 
 
