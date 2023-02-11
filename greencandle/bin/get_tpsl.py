@@ -16,7 +16,7 @@ def main():
     """
 
     config.create_config()
-    redis = Redis()
+    redis = Redis(db=2)
     pair = sys.argv[1]
     take_profit = redis.get_on_entry(pair, 'take_profit_perc')
     stop_loss = redis.get_on_entry(pair, 'stop_loss_perc')

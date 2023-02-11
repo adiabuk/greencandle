@@ -17,7 +17,7 @@ def main():
     """
 
     config.create_config()
-    redis = Redis()
+    redis = Redis(db=2)
     pair = sys.argv[1]
     if len(sys.argv) == 4:
         take_profit = sys.argv[2]

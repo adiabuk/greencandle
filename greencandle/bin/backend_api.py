@@ -26,7 +26,7 @@ def consume_queue():
     """
     Process redis queue
     """
-    redis = Redis()
+    redis = Redis(db=1)
     name = "{}-{}".format(config.main.name, config.main.trade_direction)
     queue = Queue(connection=redis.conn, name=name)
     worker = Worker([queue], connection=redis.conn)
@@ -37,7 +37,7 @@ def respond():
     """
     Default route to trade
     """
-    redis = Redis()
+    redis = Redis(db=1)
     name = "{}-{}".format(config.main.name, config.main.trade_direction)
     queue = Queue(connection=redis.conn, name=name)
     queue.enqueue(add_to_queue, request.json, result_ttl=60)

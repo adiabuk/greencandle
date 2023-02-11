@@ -55,7 +55,7 @@ def add_to_queue(req):
     except ValueError:
         pass
 
-    redis = Redis()
+    redis = Redis(db=2)
     if action_str == 'OPEN':
 
         if 'get_trend' in os.environ:
@@ -99,7 +99,7 @@ def add_to_queue(req):
         drawup = redis.get_drawup(pair)['perc']
         result = trade.close_trade(item, drawdowns={pair:drawdown}, drawups={pair:drawup})
         if result:
-            redis = Redis()
+            redis = Redis(db=2)
             redis.rm_on_entry(item[0][0], 'take_profit_perc')
             redis.rm_on_entry(item[0][0], 'stop_loss_perc')
             redis.rm_drawup(pair)

@@ -126,12 +126,16 @@ class Redis():
         If no value exists, retrieve default from config
         Returns float
         """
+        redis1 = Redis(db=2)
         key = "{}-{}-{}".format(pair, name, config.main.name)
-        value = self.conn.get(key)
+        value = redis1.conn.get(key)
+
         try:
-            return float(value.decode())
+            result = float(value.decode())
         except AttributeError:
-            return float(config.main[name])
+            result = float(config.main[name])
+        del redis1
+        return result
 
     def rm_on_entry(self, pair, name):
         """
