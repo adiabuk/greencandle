@@ -24,7 +24,7 @@ def get_docker_status(docker_socket):
     request = session.get(url)
     assert request.status_code == 200
     for container in json.loads(request.content):
-        item = (container["Names"], container["Status"])
+        item = (container["Names"][0][0], container["Status"])
         if config.main.base_env in item:
             container_list.append(item)
     return container_list
