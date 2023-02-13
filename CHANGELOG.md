@@ -1,5 +1,15 @@
 # Releases
 
+# 5.11
+* run UI command in background and reutrn immediately
+* tweak test env params
+* separate redis functions into different dbs
+* remove redis db from config and use add default
+* remove delisted pairs
+* fail gracefully when no candles for a pair
+* remove test drain hours
+* add 1h and 1m test envs
+
 # 5.10.1
 * Fix syntax error
 
