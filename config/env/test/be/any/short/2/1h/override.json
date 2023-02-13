@@ -1,7 +1,12 @@
 {
+  "immediate_trailing_stop": "true",
   "interval": "1h",
   "name": "test-api-any2-1h-cross",
-  "stop_loss_perc": "5",
-  "take_profit_perc": "10",
-  "trade_direction": "short"
+  "perc_at_timeout": "5",
+  "stop_loss_perc": "15",
+  "take_profit_perc": "20",
+  "time_in_trade": "12h",
+  "trade_direction": "short",
+  "trailing_start": "10",
+  "trailing_stop_loss_perc": "2"
 }
