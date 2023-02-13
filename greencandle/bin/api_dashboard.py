@@ -111,7 +111,7 @@ def run():
     """
     command = request.args.get('command')
     if command.strip() in SCRIPTS:
-        subprocess.Popen(command, shell=True, stdout=subprocess.PIPE).stdout.read()
+        subprocess.Popen(command)
     return redirect(url_for('commands'))
 
 @APP.route('/charts', methods=["GET"])
