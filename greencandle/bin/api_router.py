@@ -77,15 +77,15 @@ def respond():
         Path('/var/run/router-{}'.format(config.main.base_env)).touch()
         return Response(status=200)
 
-
+    env = config.main.base_env
+    alert_drain = Path('/var/local/{}_alert_drain'.format(env)).is_file()
     for host in hosts:
-        if host == 'alert' and 'edited' not in payload:
+        if host == 'alert' and 'edited' not in payload and not alert_drain:
             # change strategy
             # so we don't create an infinate API loop
             payload['strategy'] = 'alert'
 
             # add environment name to text
-            env = config.main.base_env
             try:
                 environment = {"per":  "personal",
                                "prod": "production",
