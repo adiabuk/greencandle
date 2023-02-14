@@ -19,7 +19,6 @@ def divide_chunks(big_list, size):
     for i in range(0, len(big_list), size):
         yield big_list[i:i + size]
 
-
 @arg_decorator
 def main():
     """
@@ -33,8 +32,8 @@ def main():
     dbase = Mysql()
 
     query = ('select pair, name, open_time, concat(round(perc,2), " (", '
-             'round(net_perc,2), ")") as perc, usd_quantity, direction from open_trades '
-             'order by perc +0 DESC')
+             'round(net_perc,2), ")") as perc, usd_quantity, direction, '
+             '`interval` from open_trades order by perc +0 DESC')
 
     open_trades = dbase.fetch_sql_data(query, header=True)
     open_trades.append("*" * 20)
@@ -45,9 +44,10 @@ def main():
         output = ""
 
         for trade in chunk:
+            interval = trade.pop(-1)  # remove interval from results
             output += "" if "name" in trade[1] or "*" in trade[0] else \
                     (":short: " if "short" in trade[-1] else ":long: ")
-            output += '   '.join([get_tv_link(item) if str(item).endswith(QUOTES) else \
+            output += '   '.join([get_tv_link(item, interval) if str(item).endswith(QUOTES) else \
                 str(item).replace("-api-any", "") for item in trade[:-1]]) + '\n'
 
         if len(chunk) > 1:

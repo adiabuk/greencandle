@@ -4,7 +4,6 @@ Functions for sending alerts
 """
 
 import re
-import os
 import json
 import smtplib
 from datetime import datetime
