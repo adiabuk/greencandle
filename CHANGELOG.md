@@ -1,5 +1,10 @@
 # Releases
 
+# 5.12
+* statefile for disabling audio alarms per env
+* Add interval to TV link in trade status alerts
+* Fix docker status alert script by matching container string
+
 # 5.11
 * run UI command in background and reutrn immediately
 * tweak test env params
