@@ -227,7 +227,6 @@ def get_pickle_data(pair, data_dir, interval):
     handle.close()
     return dframe
 
-
 class ProdRunner():
     """
     Collect and OHLC and indicator data whilst preserving previous candles
@@ -250,7 +249,7 @@ class ProdRunner():
             pair = trade[0].strip()
             open_price, _, open_time, _, _, _ = dbase.get_trade_value(pair)[0]
 
-            klines = 60 if interval == '1m' else 5
+            klines = 60 if interval.endswith('s') or interval.endswith('m') else 5
             current_candle = get_dataframes([pair],
                                             interval=interval,
                                             no_of_klines=klines)[pair].iloc[-1]
