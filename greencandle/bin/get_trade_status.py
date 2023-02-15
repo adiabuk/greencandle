@@ -36,7 +36,6 @@ def main():
              '`interval` from open_trades order by perc +0 DESC')
 
     open_trades = dbase.fetch_sql_data(query, header=True)
-    open_trades.append("*" * 20)
     header = open_trades.pop(0)
     chunks = list(divide_chunks(open_trades, 10))
     for chunk in chunks:
@@ -45,12 +44,13 @@ def main():
 
         for trade in chunk:
             interval = trade.pop(-1)  # remove interval from results
-            output += "" if "name" in trade[1] or "*" in trade[0] else \
+            output += "" if "name" in trade[1] else \
                     (":short: " if "short" in trade[-1] else ":long: ")
             output += '   '.join([get_tv_link(item, interval) if str(item).endswith(QUOTES) else \
                 str(item).replace("-api-any", "") for item in trade[:-1]]) + '\n'
 
         if len(chunk) > 1:
             send_slack_message('balance', output, name=sys.argv[0].split('/')[-1])
+    send_slack_message('balance', "*" * 20, name=sys.argv[0].split('/')[-1])
 if __name__ == "__main__":
     main()

@@ -92,7 +92,9 @@ class Mysql():
         description = list(list(column[0] for column in cur.description))
         if header:
             output.insert(0, description)
-        return output
+        # turn list of tuple into list of lists
+        res = [list(ele) for ele in output]
+        return res
 
     @get_exceptions
     def __run_sql_query(self, query, get_id=False):
