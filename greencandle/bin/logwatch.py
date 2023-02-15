@@ -35,6 +35,7 @@ def main():
 
     Usage: logwatch
     """
+    env = config.main.base_env
     client = docker.from_env()
     logfile = open("/var/log/syslog", "r")
     loglines = follow(logfile)    # iterate over the generator
@@ -46,7 +47,7 @@ def main():
                 name = client.containers.get(match).name
             except docker.errors.NotFound:
                 name = "unknown - {}".format(container_id)
-            if config.main.base_env in name:
+            if name.startswith(env) or container_id.startswith(env):
                 send_slack_message("alerts", "Unhandled exception found in %s container" % name)
 
 if __name__ == '__main__':
