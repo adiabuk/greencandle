@@ -1,5 +1,11 @@
 # Releases
 
+# 5.12.1
+* Match env at beginning of container name when alerting on exceptions
+* Ensure we fetch more candles when timeframe is x seconds or minutes
+* Add logwatch container to test env
+* ensure we pop items from list, not tupple/string when printing current trades
+
 # 5.12
 * statefile for disabling audio alarms per env
 * Add interval to TV link in trade status alerts
