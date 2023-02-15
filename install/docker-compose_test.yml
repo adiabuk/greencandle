@@ -18,6 +18,26 @@ services:
       timeout: 2s
       retries: 5
 
+  test-gen-be-logwatch:
+    container_name: test-gen-be-logwatch
+    hostname: test-gen-be-logwatch
+    image: amrox/greencandle:${TAG}
+    restart: always
+    entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
+    environment:
+      - CONFIG_ENV=test/fe/cron
+      - HOST=$HOSTNAME
+      - DB=false
+    volumes:
+      - /var/log:/var/log
+      - /root/.aws:/root/.aws
+      - /var/run:/var/run
+    healthcheck:
+      test: ls /var/log/syslog
+      interval: 1m
+      timeout: 2s
+      retries: 5
+
   test-gen-be-logtailer-api:
     container_name: test-gen-be-logtailer-api
     hostname: test-gen-be-logtailer-api
