@@ -41,6 +41,6 @@ pandas_ta==0.2.23b0
 pyyaml==5.4.1
 gitpython
 browsepy
-werkzeug==2.2.0
+werkzeug==2.2.3
 click>=8.1.3
 rq==1.11.1
