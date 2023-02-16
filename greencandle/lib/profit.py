@@ -12,15 +12,15 @@ from greencandle.lib.common import sub_perc, perc_diff
 RATE = 0.00014 # GBP to BTC
 FEES = 0.05
 
-def get_quantity(open_price, total_buy_btc):
-    """get amount to buy"""
-    total_buy_btc = sub_perc(FEES, total_buy_btc)   # Subtract trading fees
-    amount = total_buy_btc / open_price
+def get_quantity(open_price, total_open_btc):
+    """get amount to open with"""
+    total_open_btc = sub_perc(FEES, total_open_btc)   # Subtract trading fees
+    amount = total_open_btc / open_price
     return amount
 
 def guess_profit(open_price, close_price, investment_gbp):
     """
-    Get profit prediction based on initial GBP investment and buy/sell values of currency pair
+    Get profit prediction based on initial GBP investment and open/close prices of currency pair
 
     Args:
         open_price
@@ -36,14 +36,14 @@ def guess_profit(open_price, close_price, investment_gbp):
     open_price = float(open_price)
     close_price = float(close_price)
 
-    total_buy_btc = investment_gbp * RATE
-    total_buy_btc = sub_perc(FEES, total_buy_btc)   # Subtract trading fees
-    amount = total_buy_btc / open_price
+    total_open_btc = investment_gbp * RATE
+    total_open_btc = sub_perc(FEES, total_open_btc)   # Subtract trading fees
+    amount = total_open_btc / open_price
 
-    total_sell_btc = close_price * amount
-    total_sell_btc = sub_perc(FEES, total_sell_btc)  # Subtract trading fees
+    total_close_btc = close_price * amount
+    total_close_btc = sub_perc(FEES, total_close_btc)  # Subtract trading fees
 
-    difference = total_sell_btc - total_buy_btc
+    difference = total_close_btc - total_open_btc
     profit = difference * (1 / RATE)
     perc = perc_diff(open_price, close_price)
     return profit, amount, difference, perc

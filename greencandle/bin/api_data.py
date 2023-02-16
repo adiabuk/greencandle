@@ -49,14 +49,14 @@ def analyse_loop():
             result = redis.get_action(pair=pair, interval=config.main.interval)
 
             ALL[pair]['date'] = result[2]
-            if result[4]['buy'] and not result[4]['sell']:
+            if result[4]['open'] and not result[4]['close']:
                 LONG.add(pair)
                 SHORT.discard(pair)
-                ALL[pair]['action'] = 'buy'
-            elif result[4]['sell'] and not result[4]['buy']:
+                ALL[pair]['action'] = 'open'
+            elif result[4]['close'] and not result[4]['open']:
                 SHORT.add(pair)
                 LONG.discard(pair)
-                ALL[pair]['action'] = 'sell'
+                ALL[pair]['action'] = 'close'
 
         except Exception as err_msg:
             LOGGER.critical("Error with pair %s %s" % (pair, str(err_msg)))
@@ -73,7 +73,7 @@ def get_data():
 @APP.route('/get_trend', methods=["GET"])
 def get_trend():
     """
-    Buy/sell actions for API trades
+    open/close actions for API trades
     """
     pair = request.args.get('pair')
     if pair in LONG:
@@ -101,7 +101,7 @@ def get_stoch():
 def main():
     """
     API for determining entrypoint for given pair
-    according to buy/sell rules.
+    according to open/close rules.
     """
 
     scheduler = BackgroundScheduler()

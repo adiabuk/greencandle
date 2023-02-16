@@ -134,7 +134,7 @@ def list_to_dict(rlist):
 @login_required
 def action():
     """
-    get buy/sell request
+    get open/close request
     """
     pair = request.args.get('pair')
     strategy = request.args.get('strategy')
@@ -149,7 +149,7 @@ def action():
 
 def send_trade(pair, strategy, trade_action):
     """
-    Create BUY/SELL post request and send to API router
+    Create OPEN/CLOSE post request and send to API router
     """
     payload = {"pair": pair,
                "text": "Manual {} action from API".format(trade_action),
@@ -167,7 +167,7 @@ def send_trade(pair, strategy, trade_action):
 @login_required
 def trade():
     """
-    Buy/sell actions for API trades
+    open/close actions for API trades
     """
     pairs, _, names = get_pairs()
 

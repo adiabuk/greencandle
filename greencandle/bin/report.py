@@ -16,7 +16,7 @@ from greencandle.lib.mysql import Mysql
 def main():
     """
     Create Excel Spreadsheet with results and analysis of trades
-    Analysis comes from database entries: buy/sell prices as
+    Analysis comes from database entries: open/close prices as
     well as drawup/drawdown prices and profits
 
     Usage: report <interval> <filename>
@@ -31,9 +31,9 @@ def main():
     workbook = openpyxl.Workbook()
     workbook.remove(workbook.get_sheet_by_name('Sheet'))
     if config.main.trade_direction == 'short':
-        buy_hold = "(select (first_buy-last_sell)/first_buy)*100 as buy_hold"
+        open_hold = "(select (first_open-last_close)/first_open)*100 as open_hold"
     elif config.main.trade_direction == 'long':
-        buy_hold = "(select (last_sell-first_buy)/first_buy)*100 as buy_hold"
+        open_hold = "(select (last_close-first_open)/first_open)*100 as open_hold"
 
     mysql = Mysql(test=True, interval=interval)
     queries = {"weekly": "select perc, pair, week(close_time) as week from profit",
@@ -53,10 +53,10 @@ def main():
                "profit-factor": "select IFNULL((select sum(quote_profit) from profit where \
                                 quote_profit >0)/-(select sum(quote_profit) from profit where \
                                 quote_profit <0),100) as profit_factor",
-               "buy-hold-return": "select (select open_price from profit order by \
+               "open-hold-return": "select (select open_price from profit order by \
                                    open_time limit 1) \
-                                   as first_buy, (select close_price from profit order by \
-                                   open_time desc limit 1) as last_sell," + buy_hold}
+                                   as first_open, (select close_price from profit order by \
+                                   open_time desc limit 1) as last_close," + open_hold}
     for name, query in queries.items():
         result = mysql.fetch_sql_data(query)
         workbook.create_sheet(title=name)

@@ -35,7 +35,6 @@ class Redis():
         self.logger = get_logger(__name__)
         host = config.redis.redis_host
         port = config.redis.redis_port
-        db = db
         expire = str2bool(config.redis.redis_expire)
 
         self.interval = interval
@@ -379,8 +378,8 @@ class Redis():
 
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
 
-        buy_epoch = 0 if not isinstance(open_time, datetime) else open_time.timestamp()
-        sell_epoch = int(buy_epoch) + int(convert_to_seconds(config.main.time_in_trade))
+        open_epoch = 0 if not isinstance(open_time, datetime) else open_time.timestamp()
+        sell_epoch = int(open_epoch) + int(convert_to_seconds(config.main.time_in_trade))
         current_epoch = int(time.time())
 
         if open_price:
@@ -559,7 +558,7 @@ class Redis():
 
     def get_action(self, pair, interval):
         """
-        Determine if we are in a BUY/HOLD/SELL/NOITEM state for a specific pair and interval
+        Determine if we are in a OPEN/HOLD/CLOSE/NOITEM state for a specific pair and interval
         Will retrieve the current and previous 4 elements from redis and run open/close rules, as
         well as assessing stop_loss and take_profit status
         Retruns: tupple of dicts containing data
@@ -568,7 +567,7 @@ class Redis():
            'long_spot_NOITEM',       -- status name
            '2022-09-30 16:09:59',    -- current date/time stamp
            0.068467,                 -- current price of asset
-           {'sell': [], 'buy': []})  -- matched buy/sell rules
+           {'close': [], 'open': []})  -- matched open/close rules
         """
         main_indicators = config.main.indicators.split()
 
@@ -588,7 +587,7 @@ class Redis():
             _ = items[-5]
         except (ValueError, IndexError) as err:
             self.logger.warning("Not enough data for %s: %s" % (pair, err))
-            return ('HOLD', 'Not enough data', 0, 0, {'buy':[], 'sell':[]})
+            return ('HOLD', 'Not enough data', 0, 0, {'open':[], 'close':[]})
 
         for i in range(-1, -6, -1):
             x = AttributeDict()
@@ -664,12 +663,12 @@ class Redis():
                                                                items[seq]))
                         continue
         close_timeout = False
-        able_to_buy = True
+        able_to_open = True
 
         if open_price:
 
-            buy_epoch = 0 if not isinstance(open_time, datetime) else open_time.timestamp()
-            sell_epoch = int(buy_epoch) + int(convert_to_seconds(config.main.time_in_trade))
+            open_epoch = 0 if not isinstance(open_time, datetime) else open_time.timestamp()
+            sell_epoch = int(open_epoch) + int(convert_to_seconds(config.main.time_in_trade))
             close_timeout = current_epoch > sell_epoch
             close_timeout_price = self.__get_timeout_profit(open_price, current_price)
 
@@ -678,19 +677,19 @@ class Redis():
                 open_time = dbase.fetch_sql_data("select close_time from trades where pair='{}' "
                                                  "and closed_by = 'api' order by close_time desc "
                                                  "LIMIT 1", header=False)[0][0]
-                buy_epoch = 0 if not isinstance(open_time, datetime) else \
+                open_epoch = 0 if not isinstance(open_time, datetime) else \
                     open_time.timestamp()
                 pattern = '%Y-%m-%d %H:%M:%S'
-                able_to_buy = (int(buy_epoch) +
-                               int(convert_to_seconds(config.main.time_between_trades))) < \
-                               current_epoch
+                able_to_open = (int(open_epoch) +
+                                int(convert_to_seconds(config.main.time_between_trades))) < \
+                                current_epoch
             except (IndexError, AttributeError):
                 pass  # no previous trades
         elif dbase.get_recent_high(pair, current_time, 12, 200):
             self.logger.info("Recently sold %s with high profit, skipping" % pair)
-            able_to_buy = False
+            able_to_open = False
         else:
-            able_to_buy = True
+            able_to_open = True
 
         trailing_perc = float(config.main.trailing_stop_loss_perc)
         high_price = self.get_drawup(pair)['price']
@@ -702,16 +701,16 @@ class Redis():
 
         stop_loss_rule = self.__get_stop_loss(current_price, res[0].low, open_price, pair)
 
-        if any(rules['open']) and not able_to_buy:
-            self.logger.info("Unable to buy %s due to time_between_trades" % pair)
+        if any(rules['open']) and not able_to_open:
+            self.logger.info("Unable to open trade %s due to time_between_trades" % pair)
 
         if open_price and any(rules['open']) and any(rules['close']):
-            self.logger.warning('We ARE In a trade and have matched both buy and '
-                                'sell rules for %s', pair)
+            self.logger.warning('We ARE In a trade and have matched both open and '
+                                'close rules for %s', pair)
             both = True
         elif not open_price and any(rules['open']) and any(rules['close']):
-            self.logger.warning('We are NOT in a trade and have matched both buy and '
-                                'sell rules for %s', pair)
+            self.logger.warning('We are NOT in a trade and have matched both open and '
+                                'close rules for %s', pair)
             both = True
         else:
             both = False
@@ -752,14 +751,14 @@ class Redis():
             result = 'CLOSE'
             event = self.get_event_str("TimeOut" + result)
 
-        # if we match any sell rules, are in a trade and no buy rules match
+        # if we match any close rules, are in a trade and no open rules match
         elif any(rules['close']) and open_price and not both:
 
             result = 'CLOSE'
             event = self.get_event_str("Normal" + result)
 
-        # if we match any buy rules are NOT in a trade and sell rules don't match
-        elif any(rules['open']) and not open_price and able_to_buy and not both:
+        # if we match any open rules are NOT in a trade and close rules don't match
+        elif any(rules['open']) and not open_price and able_to_open and not both:
 
             # set stop_loss and take_profit
             self.update_on_entry(pair, 'take_profit_perc', eval(config.main.take_profit_perc))
@@ -781,20 +780,20 @@ class Redis():
 
         self.__log_event(pair=pair, event=event, current_time=current_time, data=str(res[0]))
 
-        winning_sell = self.__get_rules(rules, 'close')
-        winning_buy = self.__get_rules(rules, 'open')
-        if winning_sell:
-            self.logger.info('%s close Rules matched: %s' % (pair, winning_sell))
+        winning_close = self.__get_rules(rules, 'close')
+        winning_open = self.__get_rules(rules, 'open')
+        if winning_close:
+            self.logger.info('%s close Rules matched: %s' % (pair, winning_close))
         else:
-            self.logger.debug('%s close Rules matched: %s' % (pair, winning_sell))
-        if winning_buy:
-            self.logger.info('%s open Rules matched: %s' % (pair, winning_buy))
+            self.logger.debug('%s close Rules matched: %s' % (pair, winning_close))
+        if winning_open:
+            self.logger.info('%s open Rules matched: %s' % (pair, winning_open))
         else:
-            self.logger.debug('%s open Rules matched: %s' % (pair, winning_buy))
+            self.logger.debug('%s open Rules matched: %s' % (pair, winning_open))
         del dbase
         if result == 'CLOSE':
             self.rm_on_entry(pair, 'take_profit_perc')
             self.rm_on_entry(pair, 'stop_loss_perc')
 
-        return (result, event, current_time, current_price, {'sell':winning_sell,
-                                                             'buy': winning_buy})
+        return (result, event, current_time, current_price, {'close':winning_close,
+                                                             'open': winning_open})

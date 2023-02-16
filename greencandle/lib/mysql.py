@@ -259,11 +259,11 @@ class Mysql():
     def get_trades(self, get_direction=False):
         """
         Get a list of current open trades.  This is identified by a db record
-        which has a buy price, but no sell price - ie. we haven"t sold it yet
+        which has a open price, but no close price - ie. we haven"t sold it yet
 
         Args:
         Returns:
-              a single list of pairs that we currently hold with the buy time
+              a single list of pairs that we currently hold with the open time
         """
         cur = self.dbase.cursor()
         direction = config.main.trade_direction if get_direction else ""
@@ -292,7 +292,7 @@ class Mysql():
                       name=None, drawdown=0, drawup=0, symbol_name=None, commission=None,
                       order_id=0):
         """
-        Update an existing trade with sell price
+        Update an existing trade with close price
         """
         usd_rate, gbp_rate = self.get_rates(symbol_name)
         job_name = name if name else config.main.name
@@ -356,7 +356,7 @@ class Mysql():
 
                 self.__run_sql_query(insert)
             except ZeroDivisionError:
-                self.logger.critical("%s has a zero buy price, unable to calculate percentage"
+                self.logger.critical("%s has a zero open price, unable to calculate percentage"
                                      % pair)
 
     @get_exceptions

@@ -3,7 +3,7 @@
 
 """
 Analyze available data rom redis
-Look for potential buys
+Look for potential trades
 """
 import time
 import glob
@@ -82,7 +82,7 @@ def analyse_pair(pair, redis):
         result, _, current_time, current_price, _ = redis.get_action(pair=pair, interval=interval)
 
         if result == "OPEN":
-            LOGGER.debug("Items to buy")
+            LOGGER.debug("Trades to open")
             now = datetime.now()
             items = redis.get_items(pair, interval)
             data = redis.get_item("{}:{}".format(pair, interval), items[-1]).decode()
@@ -142,7 +142,7 @@ def keepalive():
 @arg_decorator
 def main():
     """
-    Analyse data from redis and alert to slack if there are current buying opportunities
+    Analyse data from redis and alert to slack if there are current trade opportunities
     Required: CONFIG_ENV var and config
 
     Usage: analyse_data
