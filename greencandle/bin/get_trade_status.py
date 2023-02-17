@@ -9,15 +9,7 @@ from greencandle.lib import config
 config.create_config()
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.alerts import send_slack_message
-from greencandle.lib.common import get_tv_link, QUOTES, arg_decorator
-
-def divide_chunks(big_list, size):
-    """
-    divide list into list of sublists of given size
-    """
-    # looping till length big_list
-    for i in range(0, len(big_list), size):
-        yield big_list[i:i + size]
+from greencandle.lib.common import get_tv_link, QUOTES, arg_decorator, divide_chunks
 
 @arg_decorator
 def main():

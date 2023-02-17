@@ -50,6 +50,16 @@ TF2MIN = {"1s": 1,
           "4h": 240
           }
 
+def divide_chunks(lst, num):
+    """
+    Divide list into lists of lists
+    using given chunk size
+    """
+
+    # looping till length l
+    for i in range(0, len(lst), num):
+        yield lst[i:i + num]
+
 def format_usd(amount):
     """
     Return formatted USD string, with dollar sign and 2dp

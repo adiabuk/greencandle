@@ -15,7 +15,7 @@ from flask import Flask, render_template, request, Response, redirect, url_for
 from flask_login import LoginManager, login_required
 APP = Flask(__name__, template_folder="/etc/gcapi", static_url_path='/',
             static_folder='/etc/gcapi')
-from greencandle.lib.common import arg_decorator
+from greencandle.lib.common import arg_decorator, divide_chunks
 from greencandle.lib import config
 from greencandle.lib.flask_auth import load_user, login as loginx, logout as logoutx
 config.create_config()
@@ -62,16 +62,6 @@ def get_pairs():
     for key, val in pairs_dict.items():
         length[key] = len(val)
     return pairs_dict, dict(length), names
-
-def divide_chunks(lst, num):
-    """
-    Divide list into lists of lists
-    using given chunk size
-    """
-
-    # looping till length l
-    for i in range(0, len(lst), num):
-        yield lst[i:i + num]
 
 @APP.route('/healthcheck', methods=["GET"])
 @login_required
