@@ -1,5 +1,5 @@
 {
-  "name": "test-api-any-spot-long",
+  "name": "test-be-api-any-spot-long",
   "trade_direction": "long",
   "trade_type": "spot"
 }
