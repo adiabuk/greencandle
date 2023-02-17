@@ -15,7 +15,7 @@ from flask import Flask, render_template, request, Response, redirect, url_for
 from flask_login import LoginManager, login_required
 APP = Flask(__name__, template_folder="/etc/gcapi", static_url_path='/',
             static_folder='/etc/gcapi')
-from greencandle.lib.common import arg_decorator, divide_chunks
+from greencandle.lib.common import arg_decorator, divide_chunks, get_be_services, list_to_dict
 from greencandle.lib import config
 from greencandle.lib.flask_auth import load_user, login as loginx, logout as logoutx
 config.create_config()
@@ -113,13 +113,6 @@ def charts():
 
     return render_template('charts.html', groups=groups)
 
-def list_to_dict(rlist):
-    """
-    Convert colon seperated string list to key/value dict
-    """
-    links = dict(map(lambda s: s.split(':'), rlist))
-    return {v: k for k, v in links.items() if "-be-" in k}
-
 @APP.route("/action", methods=['POST', 'GET'])
 @login_required
 def action():
@@ -165,15 +158,9 @@ def trade():
     with open('/etc/router_config.json', 'r') as json_file:
         router_config = json.load(json_file)
 
-    with open("/srv/greencandle/install/docker-compose_{}.yml"
-              .format(os.environ['HOST'].lower()), "r") as stream:
-        try:
-            output = (yaml.safe_load(stream))
-        except yaml.YAMLError as exc:
-            print(exc)
     env = config.main.base_env
-    links_list = output['services']['{}-be-api-router'.format(env)]['links']
-    links_dict = list_to_dict(links_list)
+    links_list = get_be_services(env)
+    links_dict = list_to_dict(links_list, reverse=True)
 
     my_dic = defaultdict(set)
     for strat, short_name in router_config.items():

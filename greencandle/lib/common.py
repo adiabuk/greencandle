@@ -7,6 +7,7 @@ import os
 import sys
 import datetime
 from decimal import Decimal, InvalidOperation
+import yaml
 from babel.numbers import format_currency
 import numpy
 
@@ -49,6 +50,29 @@ TF2MIN = {"1s": 1,
           "3h": 180,
           "4h": 240
           }
+
+def get_be_services(env):
+    """
+    Get long/short services from docker-compose file
+    """
+
+    with open("/srv/greencandle/install/docker-compose_{}.yml" .format(env), "r") as stream:
+        try:
+            output = (yaml.safe_load(stream))
+        except yaml.YAMLError as exc:
+            print(exc)
+    links_list = output['services']['{}-be-api-router'.format(env)]['links']
+    return links_list
+
+def list_to_dict(rlist, reverse=True):
+    """
+    Convert colon seperated string list to key/value dict
+    """
+    links = dict(map(lambda s: s.split(':'), rlist))
+    if reverse:
+        return {v: k for k, v in links.items() if "-be-" in k}
+    else:
+        return {k: v for k, v in links.items() if "-be-" in k}
 
 def divide_chunks(lst, num):
     """
