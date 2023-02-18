@@ -24,7 +24,7 @@ def add_to_queue(req):
     """
     Add received post request to redis queue to be actioned
     """
-    print("action:", req)
+    LOGGER.info("action: %s", str(req))
     pair = req['pair'].upper().strip()
     action_str = req['action'].upper().strip()
     action = req['action'].strip()
