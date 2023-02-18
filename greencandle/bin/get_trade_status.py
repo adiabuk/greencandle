@@ -39,6 +39,7 @@ def main():
             try:
                 trade_direction = "{}-{}".format(trade[1], config.main.trade_direction)
                 short_name = services[trade_direction]
+                trade[1] = short_name
                 link = get_trade_link(trade[0], short_name, 'close', 'close_now',
                                       config.web.nginx_port)
             except KeyError:
