@@ -37,17 +37,18 @@ def main():
 
         for trade in chunk:
             try:
-                short_name = services[trade[1]]
+                trade_direction = "{}-{}".format(trade[1], config.main.trade_direction)
+                short_name = services[trade_direction]
                 link = get_trade_link(trade[0], short_name, 'close', 'close_now',
                                       config.web.nginx_port)
             except KeyError:
-                link = "no_link"
+                link = "Link"
 
             interval = trade.pop(-1)  # remove interval from results
             output += "" if "name" in trade[1] else \
                     (":short: " if "short" in trade[-1] else ":long: ")
             output += '   '.join([get_tv_link(item, interval) if str(item).endswith(QUOTES) else \
-                str(item) for item in trade[:-1]]) + link + '\n'
+                str(item) for item in trade[:-1]]) + " " + link + '\n'
 
         if len(chunk) > 1:
             send_slack_message('balance', output, name=sys.argv[0].split('/')[-1])
