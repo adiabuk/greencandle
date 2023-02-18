@@ -59,9 +59,11 @@ class Redis():
         """
         add/update min and max price dict
         """
+        redis1 = Redis(db=2)
         for key, val in data.items():
             self.logger.debug("Adding to Redis: %s %s %s" % (name, key, val))
-            response = self.conn.hset(name, key, val)
+            response = redis1.conn.hset(name, key, val)
+        del redis1
         return response
 
     def get_drawup(self, pair):
@@ -70,30 +72,36 @@ class Redis():
         and calculate drawdup based on trade opening price.
         Return max price and drawup as a percentage
         """
+        redis1 = Redis(db=2)
         key = "{}_{}_drawup".format(pair, config.main.name)
-        max_price = self.get_item(key, 'max_price')
-        orig_price = self.get_item(key, 'orig_price')
+        max_price = redis1.get_item(key, 'max_price')
+        orig_price = redis1.get_item(key, 'orig_price')
         try:
             drawup = perc_diff(orig_price, max_price)
         except TypeError:
             drawup = 0
         self.logger.debug("Getting drawup orig_price: %s,  max_price: %s, drawup: %s"
                           % (orig_price, max_price, drawup))
+        del redis1
         return {'price':max_price, 'perc': drawup}
 
     def rm_drawup(self, pair):
         """
         Delete current draw up value for given pair
         """
+        redis1 = Redis(db=2)
         key = "{}_{}_drawup".format(pair, config.main.name)
-        self.conn.delete(key)
+        redis1.conn.delete(key)
+        del redis1
 
     def rm_drawdown(self, pair):
         """
         Delete current draw down value for given pair
         """
+        redis1 = Redis(db=2)
         key = "{}_{}_drawdown".format(pair, config.main.name)
-        self.conn.delete(key)
+        redis1.conn.delete(key)
+        del redis1
 
     def get_drawdown(self, pair):
         """
@@ -101,23 +109,27 @@ class Redis():
         and calculate drawdown based on trade opening price.
         Return min price and drawdown as a percentage
         """
+        redis1 = Redis(db=2)
         key = "{}_{}_drawdown".format(pair, config.main.name)
-        min_price = self.get_item(key, 'min_price')
-        orig_price = self.get_item(key, 'orig_price')
+        min_price = redis1.get_item(key, 'min_price')
+        orig_price = redis1.get_item(key, 'orig_price')
         try:
             drawdown = perc_diff(orig_price, min_price)
         except TypeError:
             drawdown = 0
         self.logger.debug("Getting drawdown orig_price: %s,  min_price: %s, drawdown: %s"
                           % (orig_price, min_price, drawdown))
+        del redis1
         return drawdown
 
     def update_on_entry(self, pair, name, value):
         """
         Update key/value for storing profit/stoploss from figures derived at trade entry
         """
+        redis1 = Redis(db=2)
         key = "{}-{}-{}".format(pair, name, config.main.name)
-        self.conn.set(key, value)
+        redis1.conn.set(key, value)
+        del redis1
 
     def get_on_entry(self, pair, name):
         """
@@ -141,8 +153,9 @@ class Redis():
         Remove key/value pair set at trade entry
         This is normally done on trade exit
         """
+        redis1 = Redis(db=2)
         key = "{}-{}-{}".format(pair, name, config.main.name)
-        return self.conn.delete(key)
+        return redis1.conn.delete(key)
 
     @staticmethod
     def in_current_candle(open_time):
