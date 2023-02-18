@@ -233,6 +233,7 @@ services:
     container_name: test-fe-cron
     hostname: test-fe-cron
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/fe/cron
       - HOST=$HOSTNAME
       - DB=true

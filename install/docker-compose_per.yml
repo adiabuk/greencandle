@@ -149,6 +149,7 @@ services:
     container_name: per-fe-cron
     hostname: per-fe-cron
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=per/fe/cron
       - HOST=$HOSTNAME
       - DB=true

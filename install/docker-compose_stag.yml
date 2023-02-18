@@ -185,6 +185,7 @@ services:
     container_name: stag-fe-cron
     hostname: stag-fe-cron
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=stag/fe/cron
       - HOST=$HOSTNAME
       - DB=true

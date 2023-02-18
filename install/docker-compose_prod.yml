@@ -149,6 +149,7 @@ services:
     container_name: prod-fe-cron
     hostname: prod-fe-cron
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=prod/fe/cron
       - HOST=$HOSTNAME
       - DB=true
