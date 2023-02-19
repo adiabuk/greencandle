@@ -30,7 +30,7 @@ def main():
     services = list_to_dict(get_be_services(config.main.base_env), reverse=False)
     open_trades = dbase.fetch_sql_data(query, header=True)
     header = open_trades.pop(0)
-    chunks = list(divide_chunks(open_trades, 9))
+    chunks = list(divide_chunks(open_trades, 7))
     for chunk in chunks:
         chunk.insert(0, header)
         output = ""
