@@ -1,3 +1,6 @@
+SHELL=/bin/bash
+BASH_ENV=/container.env
+
 # minute hour day_of_month month day_of_week command
 
 @reboot /usr/bin/touch /var/run/cron > /proc/1/fd/1 2>/proc/1/fd/2 # healthcheck
