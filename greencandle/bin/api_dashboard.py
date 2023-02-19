@@ -10,7 +10,6 @@ import json
 import subprocess
 from collections import defaultdict
 import requests
-import yaml
 from flask import Flask, render_template, request, Response, redirect, url_for
 from flask_login import LoginManager, login_required
 APP = Flask(__name__, template_folder="/etc/gcapi", static_url_path='/',
@@ -167,23 +166,18 @@ def trade():
         for item in short_name:
             name = item.split(':')[0]
             if name == 'alert':
-                # use same format for alert redirection
-                container = "{}-be-alert".format(env)
+                continue
             else:
                 container = links_dict[name]
 
-            if container.startswith('{}-be-'.format(env)) and 'alert' not in container:
-                actual_name = container.replace('-be', '')  # strip off container type
-            else:
-                continue
             try:
-                config_env = rev_names[actual_name]
+                config_env = rev_names[container]
             except KeyError:
                 # remove -long/-short from container names
                 # this is to support long/short containers
                 # with the same name
-                actual_name = re.sub(r'-\w+$', '', actual_name)
-                config_env = rev_names[actual_name]
+                container = re.sub(r'-\w+$', '', container)
+                config_env = rev_names[container]
 
             xxx = pairs[config_env]
             my_dic[strat] |= set(xxx)

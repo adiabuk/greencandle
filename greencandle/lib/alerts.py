@@ -94,7 +94,7 @@ def send_slack_trade(**kwargs):
         return
     if kwargs.action == 'OPEN':
         color = '#00fc22'
-        strat = re.findall(r"-([\s\S]*)$", config.main.name)[0].replace('api-', '')
+        strat = re.findall(r"-([\s\S]*)$", config.main.name)[0].replace('be-api-', '')
         close_string = "• Close: {0}\n".format(get_trade_link(kwargs.pair, strat,
                                                               'close', 'close now',
                                                               config.web.nginx_port))

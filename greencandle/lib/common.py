@@ -212,4 +212,5 @@ def get_trade_link(pair, strategy, action, string, port=8888):
     """Get trade link for forced trade"""
     url = os.environ['VPN_IP'] + ":" + port
     return ("<http://{0}/action?pair={1}&strategy={2}&action={3}"
-            "&close=true|{4}>".format(url, pair, strategy, action, string))
+            "&close=true|{4}>".format(url.strip(), pair.strip(), strategy.strip(), action.strip(),
+                                      string.strip()))
