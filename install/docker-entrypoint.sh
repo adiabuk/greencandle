@@ -6,7 +6,7 @@ if [[ -z $CONFIG_ENV ]]; then
   echo "CONFIG_ENV var not set, exiting..."
   exit 1
 fi
-
+declare -p | grep -Ev 'BASHOPTS|BASH_VERSINFO|EUID|PPID|SHELLOPTS|UID' > /container.env
 configstore package process_templates --ignore-role --basedir /opt/config $CONFIG_ENV /opt/output
 cp /opt/output/greencandle.ini /opt/output/router_config.json /opt/output/alert.ini /etc
 
