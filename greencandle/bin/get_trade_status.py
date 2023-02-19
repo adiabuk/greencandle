@@ -37,7 +37,7 @@ def main():
 
         for trade in chunk:
             try:
-                trade_direction = "{}-{}".format(trade[1], config.main.trade_direction)
+                trade_direction = "{}-{}".format(trade[1], trade[5])
                 short_name = services[trade_direction]
                 trade[1] = short_name
                 link = get_trade_link(trade[0], short_name, 'close', 'close_now',
