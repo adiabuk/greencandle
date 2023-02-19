@@ -174,9 +174,10 @@ class Redis():
         """
         Update minimum price for current asset.  Create redis record if it doesn't exist.
         """
+        redis1=Redis(db=2)
         key = "{}_{}_drawdown".format(pair, config.main.name)
-        min_price = self.get_item(key, 'min_price')
-        orig_price = self.get_item(key, 'orig_price')
+        min_price = redis1.get_item(key, 'min_price')
+        orig_price = redis1.get_item(key, 'orig_price')
 
         current_low = current_candle['low']
         current_high = current_candle['high']
@@ -187,32 +188,37 @@ class Redis():
             current_low = current_price
             current_high = current_price
 
+        self.logger.debug("Calling update_drawdown %s" % current_candle['close'])
         if not orig_price:
             orig_price = current_price
 
         if config.main.trade_direction == 'long':
             # if min price already exists and current price is lower, or there is no min price yet.
             price = current_price if self.in_current_candle(open_time) else current_low
+            self.logger.debug("We are long")
 
             if (min_price and float(price) < float(min_price)) or \
                     (not min_price and event == 'open'):
 
                 data = {"min_price": price, "orig_price": orig_price}
+                self.logger.debug("Setting long data")
                 self.__add_price(key, data)
         elif config.main.trade_direction == 'short':
             price = current_price if self.in_current_candle(open_time) else current_high
             if (min_price and float(price) > float(min_price)) or \
                     (not min_price and event == 'open'):
                 data = {"min_price": price, "orig_price": orig_price}
+                self.logger.debug("Setting short data")
                 self.__add_price(key, data)
 
     def update_drawup(self, pair, current_candle, event=None, open_time=None):
         """
         Update minimum price for current asset.  Create redis record if it doesn't exist.
         """
+        redis1=Redis(db=2)
         key = "{}_{}_drawup".format(pair, config.main.name)
-        max_price = self.get_item(key, 'max_price')
-        orig_price = self.get_item(key, 'orig_price')
+        max_price = redis1.get_item(key, 'max_price')
+        orig_price = redis1.get_item(key, 'orig_price')
         current_low = current_candle['low']
         current_high = current_candle['high']
         current_price = current_candle['close']
