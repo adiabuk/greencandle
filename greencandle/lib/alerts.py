@@ -3,7 +3,6 @@
 Functions for sending alerts
 """
 
-import re
 import json
 import smtplib
 from datetime import datetime
@@ -12,7 +11,8 @@ from email.mime.text import MIMEText
 import requests
 from str2bool import str2bool
 from greencandle.lib import config
-from greencandle.lib.common import AttributeDict, format_usd, get_tv_link, get_trade_link
+from greencandle.lib.common import (AttributeDict, format_usd, get_tv_link, get_trade_link,
+                                    list_to_dict, get_be_services)
 
 def send_gmail_alert(action, pair, price):
     """
@@ -94,10 +94,12 @@ def send_slack_trade(**kwargs):
         return
     if kwargs.action == 'OPEN':
         color = '#00fc22'
-        strat = re.findall(r"-([\s\S]*)$", config.main.name)[0].replace('be-api-', '')
-        close_string = "• Close: {0}\n".format(get_trade_link(kwargs.pair, strat,
-                                                              'close', 'close now',
-                                                              config.web.nginx_port))
+        services = list_to_dict(get_be_services(config.main.base_env), reverse=False)
+        trade_direction = "{}-{}".format(kwargs.pair, config.main.trade_direction)
+        short_name = services[trade_direction]
+        link = get_trade_link(kwargs.pair, short_name, 'close', 'close_now',
+                              config.web.nginx_port)
+        close_string = "• Close: {0}\n".format(link)
         quote_string = "• Quote in: %.4f\n" % float(kwargs.quote)
         time_string = "• Open_time: %s " % kwargs.open_time
     elif kwargs.action == 'CLOSE':
