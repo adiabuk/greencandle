@@ -321,19 +321,19 @@ services:
     links:
       - prod-base-mysql:mysql
       - prod-base-redis:redis
-      - prod-be-api-any-spot-long:prod-be-api-any-spot-long
-      - prod-be-api-any-cross-long:prod-be-api-any-cross-long
-      - prod-be-api-any-isolated-long:prod-be-api-any-isolated-long
-      - prod-be-api-any-cross-short:prod-be-api-any-cross-short
-      - prod-be-api-any-isolated-short:prod-be-api-any-isolated-short
+      - prod-be-api-any-1h-spot-long:prod-be-api-any-1h-spot-long
+      - prod-be-api-any-1h-cross-long:prod-be-api-any-1h-cross-long
+      - prod-be-api-any-1h-isolated-long:prod-be-api-any-1h-isolated-long
+      - prod-be-api-any-1h-cross-short:prod-be-api-any-1h-cross-short
+      - prod-be-api-any-1h-isolated-short:prod-be-api-any-1h-isolated-short
     depends_on:
       - prod-base-mysql
       - prod-base-redis
-      - prod-be-api-any-spot-long
-      - prod-be-api-any-cross-long
-      - prod-be-api-any-isolated-long
-      - prod-be-api-any-cross-short
-      - prod-be-api-any-isolated-short
+      - prod-be-api-any-1h-spot-long
+      - prod-be-api-any-1h-cross-long
+      - prod-be-api-any-1h-isolated-long
+      - prod-be-api-any-1h-cross-short
+      - prod-be-api-any-1h-isolated-short
     entrypoint: /docker-entrypoint.sh api_router
     volumes:
       - /data:/data
@@ -341,9 +341,9 @@ services:
       - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
-  prod-be-api-any-spot-long:
-    container_name: prod-be-api-any-spot-long
-    hostname: prod-be-api-any-spot-long
+  prod-be-api-any-1h-spot-long:
+    container_name: prod-be-api-any-1h-spot-long
+    hostname: prod-be-api-any-1h-spot-long
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -353,7 +353,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
-      - CONFIG_ENV=prod/be/any/spot-long
+      - CONFIG_ENV=prod/be/any/1h/spot-long
       - intermittent="true"
       - DB=true
     ports:
@@ -377,9 +377,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  prod-be-api-any-cross-long:
-    container_name: prod-be-api-any-cross-long
-    hostname: prod-be-api-any-cross-long
+  prod-be-api-any-1h-cross-long:
+    container_name: prod-be-api-any-1h-cross-long
+    hostname: prod-be-api-any-1h-cross-long
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -390,7 +390,7 @@ services:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
       - intermittent="true"
-      - CONFIG_ENV=prod/be/any/cross-long
+      - CONFIG_ENV=prod/be/any/1h/cross-long
       - DB=true
     ports:
       - 20000
@@ -413,9 +413,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  prod-be-api-any-isolated-long:
-    container_name: prod-be-api-any-isolated-long
-    hostname: prod-be-api-any-isolated-long
+  prod-be-api-any-1h-isolated-long:
+    container_name: prod-be-api-any-1h-isolated-long
+    hostname: prod-be-api-any-1h-isolated-long
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -426,7 +426,7 @@ services:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
       - intermittent="true"
-      - CONFIG_ENV=prod/be/any/isolated-long
+      - CONFIG_ENV=prod/be/any/1h/isolated-long
       - DB=true
     ports:
       - 20000
@@ -449,9 +449,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  prod-be-api-any-cross-short:
-    container_name: prod-be-api-any-cross-short
-    hostname: prod-be-api-any-cross-short
+  prod-be-api-any-1h-cross-short:
+    container_name: prod-be-api-any-1h-cross-short
+    hostname: prod-be-api-any-1h-cross-short
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -462,7 +462,7 @@ services:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
       - intermittent="true"
-      - CONFIG_ENV=prod/be/any/cross-short
+      - CONFIG_ENV=prod/be/any/1h/cross-short
       - DB=true
     ports:
       - 20000
@@ -485,9 +485,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  prod-be-api-any-isolated-short:
-    container_name: prod-be-api-any-isolated-short
-    hostname: prod-be-api-any-isolated-short
+  prod-be-api-any-1h-isolated-short:
+    container_name: prod-be-api-any-1h-isolated-short
+    hostname: prod-be-api-any-1h-isolated-short
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -498,7 +498,7 @@ services:
       - VPN_IP=$VPN_IP
       - HOST=$HOSTNAME
       - intermittent="true"
-      - CONFIG_ENV=prod/be/any/isolated-short
+      - CONFIG_ENV=prod/be/any/1h/isolated-short
       - DB=true
     ports:
       - 20000
