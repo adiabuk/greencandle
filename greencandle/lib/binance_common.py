@@ -80,7 +80,7 @@ def get_all_klines(pair, interval=None, start_time=0, no_of_klines=1E1000):
         result += current_section
         if len(result) >= no_of_klines:
             # reached maximum
-            print("Reached maximum number of candles")
+            LOGGER.debug("Reached maximum number of candles")
             break
 
         # Start time becomes 1 more than start time of last entry, +1, so that we don"t duplicate
@@ -135,9 +135,9 @@ def get_data(startdate, intervals, pairs, days, outputdir, extra):
             if not os.path.isdir(outputdir):
                 sys.exit("Invalid output directory: {0}".format(outputdir))
             filename = "{0}/{1}_{2}.p".format(outputdir.rstrip('/'), pair, interval)
-            print("Using filename:", filename)
+            LOGGER.debug("Using filename: %s" % filename)
             if os.path.exists(filename) or os.path.exists(filename + '.gz'):
-                print("File already exists, skipping....\n")
+                LOGGER.debug("File already exists, skipping")
                 continue
 
 
@@ -153,8 +153,8 @@ def get_data(startdate, intervals, pairs, days, outputdir, extra):
             start_mepoch = int(actual_start_epoch * 1000)
             ###################################
 
-            print("Getting {0} klines for {1} {2} - {3} days".format(total_klines,
-                                                                     pair, interval, days))
+            LOGGER.debug("Getting %s klines for %s %s - %s days" %(total_klines,
+                                                                   pair, interval, days))
             current = pandas.DataFrame.from_dict(get_all_klines(pair=pair, interval=interval,
                                                                 start_time=start_mepoch,
                                                                 no_of_klines=total_klines))
