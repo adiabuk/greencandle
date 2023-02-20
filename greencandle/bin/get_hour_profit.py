@@ -6,9 +6,13 @@ Get profit from prvious hour and send to slack
 
 import sys
 from greencandle.lib.alerts import send_slack_message
+from greencandle.lib.logger import exception_catcher
 from greencandle.lib.common import format_usd, arg_decorator
 from greencandle.lib.mysql import Mysql
 
+GET_EXCEPTIONS = exception_catcher((Exception))
+
+@GET_EXCEPTIONS
 @arg_decorator
 def main():
     """

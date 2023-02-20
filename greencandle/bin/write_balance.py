@@ -8,10 +8,14 @@ Get binance balance from API and save to DB
 import sys
 from greencandle.lib import config
 config.create_config()
+from greencandle.lib.logger import exception_catcher
 from greencandle.lib.common import arg_decorator
 from greencandle.lib.balance import Balance
 from greencandle.lib.alerts import send_slack_message
 
+GET_EXCEPTIONS = exception_catcher((Exception))
+
+@GET_EXCEPTIONS
 @arg_decorator
 def main():
     """

@@ -5,9 +5,13 @@
 Get details of current trades using mysql and current value from binance
 """
 
+from greencandle.lib.logger import exception_catcher
 from greencandle.lib.common import arg_decorator
 from greencandle.lib.mysql import Mysql
 
+GET_EXCEPTIONS = exception_catcher((Exception))
+
+@GET_EXCEPTIONS
 @arg_decorator
 def main():
     """
