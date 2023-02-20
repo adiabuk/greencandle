@@ -1,5 +1,9 @@
 # Releases
 
+# 5.13.1
+* only add direction to name if it doesn't already have it
+* replace more print statements with debug logging
+
 # 5.13
 * catch exceptions from cron scripts
 * fix time in trade values for all envs
