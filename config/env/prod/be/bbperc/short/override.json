@@ -1,7 +1,0 @@
-{
-  "name": "prod-eng-bb-cross",
-  "indicators": "get_supertrend;STX;23,3 get_bb;upper;12,2 get_bb_perc;bbperc;200,1",
-  "open_rule1": "res[0].high \u003e res[0].upper_12 and res[0].bbperc_200 \u003e 2",
-  "rate_indicator": "upper_12",
-  "trade_direction": "short"
-}
