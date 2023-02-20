@@ -95,7 +95,8 @@ def send_slack_trade(**kwargs):
     if kwargs.action == 'OPEN':
         color = '#00fc22'
         services = list_to_dict(get_be_services(config.main.base_env), reverse=False)
-        trade_direction = "{}-{}".format(config.main.name, config.main.trade_direction)
+        trade_direction = "{}-{}".format(config.main.name, config.main.trade_direction) if not \
+                config.main.name.endswith(config.main.trade_direction) else config.main.name
         short_name = services[trade_direction]
         link = get_trade_link(kwargs.pair, short_name, 'close', 'close_now',
                               config.web.nginx_port)
