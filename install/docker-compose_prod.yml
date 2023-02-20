@@ -326,6 +326,11 @@ services:
       - prod-be-api-any-1h-isolated-long:prod-be-api-any-1h-isolated-long
       - prod-be-api-any-1h-cross-short:prod-be-api-any-1h-cross-short
       - prod-be-api-any-1h-isolated-short:prod-be-api-any-1h-isolated-short
+      - prod-be-api-any-1m-spot-long:prod-be-api-any-1m-spot-long
+      - prod-be-api-any-1m-cross-long:prod-be-api-any-1m-cross-long
+      - prod-be-api-any-1m-isolated-long:prod-be-api-any-1m-isolated-long
+      - prod-be-api-any-1m-cross-short:prod-be-api-any-1m-cross-short
+      - prod-be-api-any-1m-isolated-short:prod-be-api-any-1m-isolated-short
     depends_on:
       - prod-base-mysql
       - prod-base-redis
