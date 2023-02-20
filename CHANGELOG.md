@@ -1,5 +1,30 @@
 # Releases
 
+# 5.13
+* catch exceptions from cron scripts
+* fix time in trade values for all envs
+* increase time between trades test env
+* display 1m graph for 1s strategy
+* tweak 1h strategy
+* use container name to get short-name
+* fix open alert close link
+* use correct trade direction for each open trade
+* source container vars in cron
+* fix internal trade link
+* reduce size of trade list before notifying
+* source vars from env file
+* use shortname in trade status
+* ensure we use right db for drawup/down
+* replace print with logger statement
+* get correct short name with direction for link
+* add VPN_IP env var to cron containers
+* add close link to trade status notifications
+* move api functions to common lib
+* ensure c9e names match dc names
+* remove dupe code
+* Bump werkzeug from 2.2.0 to 2.2.3 - security fix
+* differentiate between buy/sell and open/close
+
 # 5.12.1
 * Match env at beginning of container name when alerting on exceptions
 * Ensure we fetch more candles when timeframe is x seconds or minutes
