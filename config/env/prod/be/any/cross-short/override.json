@@ -1,5 +1,4 @@
 {
-  "max_trades": "2",
   "name": "prod-api-any-cross-short",
   "trade_direction": "short",
   "trade_isolated": "false",
