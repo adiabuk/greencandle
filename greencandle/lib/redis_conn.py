@@ -174,7 +174,7 @@ class Redis():
         """
         Update minimum price for current asset.  Create redis record if it doesn't exist.
         """
-        redis1=Redis(db=2)
+        redis1 = Redis(db=2)
         key = "{}_{}_drawdown".format(pair, config.main.name)
         min_price = redis1.get_item(key, 'min_price')
         orig_price = redis1.get_item(key, 'orig_price')
@@ -215,7 +215,7 @@ class Redis():
         """
         Update minimum price for current asset.  Create redis record if it doesn't exist.
         """
-        redis1=Redis(db=2)
+        redis1 = Redis(db=2)
         key = "{}_{}_drawup".format(pair, config.main.name)
         max_price = redis1.get_item(key, 'max_price')
         orig_price = redis1.get_item(key, 'orig_price')
