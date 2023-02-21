@@ -1,5 +1,5 @@
 {
-  "name": "stag-api-any-cross-short",
+  "name": "stag-be-api-any-cross-short",
   "trade_direction": "short",
   "trade_type": "margin"
 }

@@ -4,5 +4,5 @@
   "take_profit_perc": "3",
   "trailing_start": "0.6",
   "trailing_stop_loss_perc": "0.4",
-  "name": "stag-api-any-tsl-cross-long"
+  "name": "stag-be-api-any-tsl-cross-long"
 }
