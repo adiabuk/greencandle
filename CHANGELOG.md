@@ -1,5 +1,15 @@
 # Releases
 
+# 5.14
+* Fix staging container names
+* add 1m prod api strategies
+* don't try to create close link for eng containers
+* rename any prod to include 1h and matching DC name
+* remove old prod containers from links
+* remove unused prod config
+* tweak prod to match 1h test env
+* don't try to modify header line of trade list notification
+
 # 5.13.1
 * only add direction to name if it doesn't already have it
 * replace more print statements with debug logging
