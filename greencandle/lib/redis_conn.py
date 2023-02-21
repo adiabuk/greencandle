@@ -80,8 +80,8 @@ class Redis():
             drawup = perc_diff(orig_price, max_price)
         except TypeError:
             drawup = 0
-        self.logger.debug("Getting drawup orig_price: %s,  max_price: %s, drawup: %s"
-                          % (orig_price, max_price, drawup))
+        self.logger.debug("Getting %s drawup orig_price: %s,  max_price: %s, drawup: %s"
+                          % (pair, orig_price, max_price, drawup))
         del redis1
         return {'price':max_price, 'perc': drawup}
 
@@ -117,8 +117,8 @@ class Redis():
             drawdown = perc_diff(orig_price, min_price)
         except TypeError:
             drawdown = 0
-        self.logger.debug("Getting drawdown orig_price: %s,  min_price: %s, drawdown: %s"
-                          % (orig_price, min_price, drawdown))
+        self.logger.debug("Getting %s drawdown orig_price: %s,  min_price: %s, drawdown: %s"
+                          % (pair, orig_price, min_price, drawdown))
         del redis1
         return drawdown
 
