@@ -28,9 +28,11 @@ def main():
 
     dbase = Mysql()
     dbase.get_active_trades()
+    query_filter = sys.argv[1] if len(sys.argv) > 1 else ""
     query = ('select pair, name, open_time, concat(round(perc,2), " (", '
              'round(net_perc,2), ")") as perc, usd_quantity, direction, '
-             '`interval` from open_trades order by perc +0 DESC')
+             '`interval` from open_trades where name like "%{}%" order '
+             'by perc +0 DESC'.format(query_filter))
     services = list_to_dict(get_be_services(config.main.base_env), reverse=False)
     open_trades = dbase.fetch_sql_data(query, header=True)
     header = open_trades.pop(0)
