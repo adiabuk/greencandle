@@ -27,7 +27,7 @@ def main():
     """
 
     dbase = Mysql()
-
+    dbase.get_active_trades()
     query = ('select pair, name, open_time, concat(round(perc,2), " (", '
              'round(net_perc,2), ")") as perc, usd_quantity, direction, '
              '`interval` from open_trades order by perc +0 DESC')
