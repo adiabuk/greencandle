@@ -4,8 +4,8 @@
 Collect OHLC and strategy data for later analysis
 """
 import os
-import time
 from pathlib import Path
+from apscheduler.schedulers.blocking import BlockingScheduler
 from greencandle.lib import config
 config.create_config()
 from greencandle.lib.run import ProdRunner
@@ -16,13 +16,29 @@ LOGGER = get_logger(__name__)
 PAIRS = config.main.pairs.split()
 MAIN_INDICATORS = config.main.indicators.split()
 GET_EXCEPTIONS = exception_catcher((Exception))
+SCHED = BlockingScheduler()
+RUNNER = ProdRunner()
 
+@SCHED.scheduled_job('cron', minute='*')
 def keepalive():
     """
     Periodically touch file for docker healthcheck
     """
-    Path('/var/local/greencandle').touch()
+    Path('/var/local/gc_get_{}.lock'.format(config.main.interval)).touch()
 
+@GET_EXCEPTIONS
+@SCHED.scheduled_job('cron', minute=config.main.check_interval)
+def get_data():
+    """
+    Get-data run
+    """
+    LOGGER.info("Starting prod run")
+    interval = config.main.interval
+    RUNNER.prod_loop(interval, test=True, data=True, analyse=False)
+    keepalive()
+    LOGGER.info("Finished prod run")
+
+@GET_EXCEPTIONS
 @arg_decorator
 def main():
     """
@@ -40,18 +56,11 @@ def main():
     LOGGER.info("Starting initial prod run")
     name = config.main.name.split('-')[-1]
     Path('/var/run/{}-data-{}-{}'.format(config.main.base_env, interval, name)).touch()
-    runner = ProdRunner()
-    runner.prod_initial(interval, test=True) # initial run, before scheduling begins
+    RUNNER.prod_initial(interval, test=True) # initial run, before scheduling begins
     if os.path.exists('/var/run/{}-data-{}-{}'.format(config.main.base_env, interval, name)):
         os.remove('/var/run/{}-data-{}-{}'.format(config.main.base_env, interval, name))
     LOGGER.info("Finished initial prod run")
-
-    while True:
-        LOGGER.info("Starting prod run")
-        runner.prod_loop(interval, test=True, data=True, analyse=False)
-        keepalive()
-        LOGGER.info("Finished prod run")
-        time.sleep(int(config.main.check_interval))
+    SCHED.start()
 
 if __name__ == '__main__':
     main()
