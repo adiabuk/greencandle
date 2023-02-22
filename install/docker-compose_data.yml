@@ -173,7 +173,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/gc_get_1h.lock  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
@@ -281,7 +281,7 @@ services:
       - HOST=$HOSTNAME
       - DB=true
     healthcheck:
-      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/gc_get_1m.lock  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
       timeout: 2s
       retries: 5
