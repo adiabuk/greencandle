@@ -26,7 +26,6 @@ services:
     entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
     environment:
       - CONFIG_ENV=per/fe/cron
-      - HOST=$HOSTNAME
       - DB=false
     volumes:
       - /var/log:/var/log
@@ -117,7 +116,6 @@ services:
     hostname: per-be-manual
     environment:
       - CONFIG_ENV=per/be/manual
-      - HOST=$HOSTNAME
       - DB=true
     image: amrox/greencandle:${TAG}
     pull_policy: always
@@ -151,7 +149,6 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=per/fe/cron
-      - HOST=$HOSTNAME
       - DB=true
     image: amrox/greencandle:${TAG}
     pull_policy: always
@@ -190,7 +187,6 @@ services:
       retries: 5
     environment:
       - CONFIG_ENV=per
-      - HOST=$HOSTNAME
       - DB=false
     ports:
       - 4444:4444
@@ -218,7 +214,6 @@ services:
     hostname: per-fe-api-proxy
     environment:
       - CONFIG_ENV=per/fe/api
-      - HOST=$HOSTNAME
       - SECRET_KEY=$SECRET_KEY
     logging:
       driver: journald
@@ -246,7 +241,6 @@ services:
     hostname: per-fe-api-filesystem
     environment:
       - CONFIG_ENV=per/fe/api
-      - HOST=$HOSTNAME
       - SECRET_KEY=$SECRET_KEY
     logging:
       driver: journald
@@ -314,7 +308,6 @@ services:
       retries: 5
     environment:
       - CONFIG_ENV=per/fe/api
-      - HOST=$HOSTNAME
       - HOST_IP=$HOST_IP
       - DB=true
     ports:
@@ -348,7 +341,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=per/be/any/spot-long
       - DB=true
     ports:
@@ -383,7 +375,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=per/be/any/cross-long
       - DB=true
     ports:
@@ -418,7 +409,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=per/be/any/cross-short
       - DB=true
     ports:

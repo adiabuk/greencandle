@@ -5,7 +5,6 @@ services:
     container_name: cron
     environment:
       - CONFIG_ENV=unit
-      - HOST=$HOSTNAME
       - DB=true
     hostname: cron
     image: amrox/greencandle:${TAG}
@@ -30,7 +29,6 @@ services:
     container_name: api
     environment:
       - CONFIG_ENV=unit
-      - HOST=$HOSTNAME
       - DB=true
     hostname: api
     image: amrox/greencandle:${TAG}

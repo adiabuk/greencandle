@@ -9,7 +9,6 @@ services:
     entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
     environment:
       - CONFIG_ENV=stag/fe/cron
-      - HOST=$HOSTNAME
       - DB=false
     volumes:
       - /var/log:/var/log
@@ -153,7 +152,6 @@ services:
     hostname: stag-be-manual
     environment:
       - CONFIG_ENV=stag/be/manual
-      - HOST=$HOSTNAME
       - DB=true
     image: amrox/greencandle:${TAG}
     pull_policy: always
@@ -187,7 +185,6 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=stag/fe/cron
-      - HOST=$HOSTNAME
       - DB=true
     image: amrox/greencandle:${TAG}
     pull_policy: always
@@ -226,7 +223,6 @@ services:
       retries: 5
     environment:
       - CONFIG_ENV=stag
-      - HOST=$HOSTNAME
       - DB=false
     ports:
       - 3333:3333
@@ -254,7 +250,6 @@ services:
     hostname: stag-fe-api-proxy
     environment:
       - CONFIG_ENV=stag/fe/api
-      - HOST=$HOSTNAME
       - SECRET_KEY=$SECRET_KEY
     logging:
       driver: journald
@@ -282,7 +277,6 @@ services:
     hostname: stag-fe-api-filesystem
     environment:
       - CONFIG_ENV=stag/fe/api
-      - HOST=$HOSTNAME
       - SECRET_KEY=$SECRET_KEY
     logging:
       driver: journald
@@ -311,7 +305,6 @@ services:
       retries: 5
     environment:
       - CONFIG_ENV=stag
-      - HOST=$HOSTNAME
       - DB=true
     ports:
       - 1082:1080
@@ -355,7 +348,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=stag/be/any/spot
       - get_trend="true"
       - intermittent="true"
@@ -394,7 +386,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=stag/be/any/long
       - get_trend="true"
       - intermittent="true"
@@ -433,7 +424,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=stag/be/any2/short/4h
       - HOST_IP=$HOST_IP
       - intermittent="true"
@@ -472,7 +462,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=stag/be/any2/long/4h
       - intermittent="true"
       - HOST_IP=$HOST_IP
@@ -511,7 +500,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=stag/be/any2/short
       - intermittent="true"
       - DB=true
@@ -549,7 +537,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=stag/be/any2/long
       - intermittent="true"
       - DB=true
@@ -587,7 +574,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=stag/be/any/short/test
       - get_trend="true"
       - intermittent="true"
@@ -626,7 +612,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=stag/be/any/long/test
       - get_trend="true"
       - intermittent="true"
@@ -665,7 +650,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=stag/be/any/short
       - get_trend="true"
       - intermittent="true"
@@ -704,7 +688,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=stag/be/any/spot/tsl
       - get_trend="true"
       - intermittent="true"
@@ -743,7 +726,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=stag/be/any/long/tsl
       - get_trend="true"
       - intermittent="true"
@@ -782,7 +764,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=stag/be/any/short/tsl
       - get_trend="true"
       - intermittent="true"
@@ -821,7 +802,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=stag/be/inwcoin/cross-short
       - HOST_IP=$HOST_IP
       - intermittent="true"
@@ -860,7 +840,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=stag/be/inwcoin/cross-long
       - HOST_IP=$HOST_IP
       - intermittent="true"
@@ -899,7 +878,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=stag/be/bbpercst
       - intermittent="true"
       - DB=true
@@ -933,7 +911,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=stag/be/bbpercst/long/2
       - intermittent="true"
       - DB=true
@@ -967,7 +944,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=stag/be/bbpercst/short/2
       - intermittent="true"
       - DB=true
@@ -1001,7 +977,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=stag/be/bbpercst/long/2/4
       - intermittent="true"
       - DB=true
@@ -1035,7 +1010,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=stag/be/bbpercst/short/2/4
       - intermittent="true"
       - DB=true
@@ -1077,7 +1051,6 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV= stag/be/bbpercst/long/2/3
-      - HOST=$HOSTNAME
       - DB=true
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -1110,7 +1083,6 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV= stag/be/bbpercst/short/2/3
-      - HOST=$HOSTNAME
       - DB=true
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1

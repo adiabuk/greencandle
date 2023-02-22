@@ -26,7 +26,6 @@ services:
     entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
     environment:
       - CONFIG_ENV=test/fe/cron
-      - HOST=$HOSTNAME
       - DB=false
     volumes:
       - /var/log:/var/log
@@ -114,7 +113,6 @@ services:
     hostname: test-fe-api-filesystem
     environment:
       - CONFIG_ENV=test/fe/api
-      - HOST=$HOSTNAME
       - SECRET_KEY=$SECRET_KEY
     logging:
       driver: journald
@@ -134,8 +132,8 @@ services:
     container_name: test-fe-api-dashboard
     hostname: test-fe-api-dashboard
     environment:
-      - CONFIG_ENV=test/fe/api
       - HOST=$HOSTNAME
+      - CONFIG_ENV=test/fe/api
       - DB=true
       - SECRET_KEY=$SECRET_KEY
     logging:
@@ -172,7 +170,6 @@ services:
     hostname: test-fe-api-proxy
     environment:
       - CONFIG_ENV=test/fe/api
-      - HOST=$HOSTNAME
       - SECRET_KEY=$SECRET_KEY
     logging:
       driver: journald
@@ -200,7 +197,6 @@ services:
     hostname: test-be-manual
     environment:
       - CONFIG_ENV=test/be/manual
-      - HOST=$HOSTNAME
       - DB=true
     image: amrox/greencandle:${TAG}
     pull_policy: always
@@ -235,7 +231,6 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/fe/cron
-      - HOST=$HOSTNAME
       - DB=true
     image: amrox/greencandle:${TAG}
     pull_policy: always
@@ -274,7 +269,6 @@ services:
       retries: 5
     environment:
       - CONFIG_ENV=test
-      - HOST=$HOSTNAME
       - DB=false
     ports:
       - 5555:5555
@@ -310,7 +304,6 @@ services:
       retries: 5
     environment:
       - CONFIG_ENV=test
-      - HOST=$HOSTNAME
       - DB=true
     ports:
       - 1084:1080
@@ -348,7 +341,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=test/be/any/long/2/1h
       - HOST_IP=$HOST_IP
       - intermittent="true"
@@ -387,7 +379,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=test/be/any/short/2/1h
       - HOST_IP=$HOST_IP
       - intermittent="true"
@@ -426,7 +417,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=test/be/any/long/2/1m
       - HOST_IP=$HOST_IP
       - intermittent="true"
@@ -465,7 +455,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=test/be/any/short/2/1m
       - HOST_IP=$HOST_IP
       - intermittent="true"
@@ -504,7 +493,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=test/be/any/spot
       - HOST_IP=$HOST_IP
       - intermittent="true"
@@ -575,7 +563,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=test/be/any/long
       - HOST_IP=$HOST_IP
       - intermittent="true"
@@ -614,7 +601,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=test/be/any/short
       - HOST_IP=$HOST_IP
       - intermittent="true"
@@ -653,7 +639,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=test/be/bbperc/long
       - HOST_IP=$HOST_IP
       - intermittent="true"
@@ -692,7 +677,6 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - HOST=$HOSTNAME
       - CONFIG_ENV=test/be/bbperc/short
       - HOST_IP=$HOST_IP
       - intermittent="true"

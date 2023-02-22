@@ -8,7 +8,6 @@ services:
     container_name: unit-runner-$id
     environment:
       - CONFIG_ENV=unit
-      - HOST=$HOSTNAME
       - BUILD_ID=$id
       - DB=true
       - id=$id
@@ -40,7 +39,6 @@ services:
       dockerfile: install/Dockerfile-gc
     environment:
       - CONFIG_ENV=unit
-      - HOST=$HOSTNAME
     hostname: cron
     image: greencandle-${image_id}
     restart: always
@@ -67,7 +65,6 @@ services:
       dockerfile: install/Dockerfile-gc
     environment:
       - CONFIG_ENV=unit
-      - HOST=$HOSTNAME
     hostname: api
     image: greencandle-${image_id}
     restart: always
