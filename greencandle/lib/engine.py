@@ -486,6 +486,10 @@ class Engine(dict):
             k,d
 
         """
+        if (not index and self.test) or len(self.dataframes[pair]) < 2:
+            index = -1
+        elif not index and not self.test:
+            index = -1
         func, details = localconfig  # split tuple
         timeperiod, k_period, d_period = details.split(',')
         LOGGER.debug("Getting %s_%s for %s" % (func, timeperiod, pair))
@@ -494,11 +498,9 @@ class Engine(dict):
         rsi = talib.RSI(dataframe.close.values.astype(float) * 100000, timeperiod=int(timeperiod))
         rsinp = rsi[numpy.logical_not(numpy.isnan(rsi))]
         stochrsi = talib.STOCH(rsinp, rsinp, rsinp, int(timeperiod), int(k_period), int(d_period))
-
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
 
-        index = -1
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
         #scheme["data"] = stochrsi[index][0]
@@ -507,7 +509,7 @@ class Engine(dict):
         scheme["data"] = stochrsi[0][index], stochrsi[1][index]
         self.schemes.append(scheme)
 
-        LOGGER.debug("Done getting STOCHRSI")
+        LOGGER.debug("Done getting STOCHRSI %s" % str(scheme['data']))
 
     @get_exceptions
     def get_envelope(self, pair, dataframe, index=None, localconfig=None):

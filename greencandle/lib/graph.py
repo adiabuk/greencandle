@@ -85,6 +85,7 @@ class Graph():
     def create_graph(self, output_dir='/tmp'):
         """Create graph html file using plotly offline-mode from dataframe object"""
 
+        item2 = None
         fig = subplots.make_subplots(rows=2, cols=1, shared_xaxes=True, print_grid=False)
         for name, value in self.data.items():
 
@@ -148,10 +149,13 @@ class Graph():
                 # add stochrsi graph in second subply (below) if it exists
                 LOGGER.debug("Creating STOCH graph")
                 row = 2
-                value['k'] = value.value
+                stoch_k, stoch_d = zip(*value.value)
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
-                                  y=value['k'],
+                                  y=stoch_k,
                                   name=name+'-k')
+                item2 = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
+                                   y=stoch_d,
+                                   name=name+'-d')
 
 
             elif 'SHOOTINGSTAR' in name or 'SPINNINGTOP' in name:
@@ -174,6 +178,8 @@ class Graph():
                                   y=value['value'],
                                   name=name)
             fig.append_trace(item, row, col)
+            fig.append_trace(item2, row, col)
+
 
             if name == "ohlc" and self.volume:
                 increasing_color = '#17BECF'
