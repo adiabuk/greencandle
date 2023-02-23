@@ -145,7 +145,7 @@ class Graph():
                 row = 2
                 # add rsi graph in second subply (below) if it exists
 
-            elif 'STOCH' in name:
+            elif 'STOCHRSI' in name:
                 # add stochrsi graph in second subply (below) if it exists
                 LOGGER.debug("Creating STOCH graph")
                 row = 2
@@ -157,6 +157,14 @@ class Graph():
                                    y=stoch_d,
                                    name=name+'-d')
 
+            elif 'STOCH' in name:
+                # add stochf graph in second subply (below) if it exists
+                LOGGER.debug("Creating STOCH graph")
+                row = 2
+                value['k'] = value.value
+                item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
+                                  y=value['k'],
+                                  name=name+'-k')
 
             elif 'SHOOTINGSTAR' in name or 'SPINNINGTOP' in name:
                 LOGGER.debug("Creating shootingstar/spinningtop graph")
