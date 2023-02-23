@@ -178,7 +178,7 @@ class Graph():
                                   y=value['value'],
                                   name=name)
             fig.append_trace(item, row, col)
-            if item:
+            if item2:
                 fig.append_trace(item2, row, col)
 
 
