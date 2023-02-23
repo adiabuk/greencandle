@@ -178,7 +178,8 @@ class Graph():
                                   y=value['value'],
                                   name=name)
             fig.append_trace(item, row, col)
-            fig.append_trace(item2, row, col)
+            if item:
+                fig.append_trace(item2, row, col)
 
 
             if name == "ohlc" and self.volume:
