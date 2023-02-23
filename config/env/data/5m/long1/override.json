@@ -1,4 +1,4 @@
 {
   "name": "data-bb-long_5m",
-  "open_rule1": "res[0].low \u003c res[0].lower_12 and res[0].bbperc_200 \u003c -2"
+  "open_rule1": "res[0].low \u003c res[0].lower_12 and res[0].bbperc_200 \u003c -1.5"
 }
