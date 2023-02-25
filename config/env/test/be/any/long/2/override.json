@@ -1,5 +1,10 @@
 {
   "max_trades": "100",
   "name": "test-be-api-any2-cross",
+  "perc_at_timeout": "0.3",
+  "immediate_stop": "true",
+  "take_profit_perc": "1",
+  "stop_loss_perc": "1",
+  "immediate_take_profit": "true",
   "trade_direction": "long"
 }

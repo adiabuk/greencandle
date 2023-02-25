@@ -5,11 +5,11 @@
   "interval": "1m",
   "name": "test-api-any",
   "pairs": "any",
-  "immediate_stop": "true",
-  "immediate_take_profit": "true",
-  "stop_loss_perc": "1",
-  "take_profit_perc": "1",
-  "perc_at_timeout": "0.3",
+  "immediate_stop": "false",
+  "immediate_take_profit": "false",
+  "stop_loss_perc": "999",
+  "take_profit_perc": "999",
+  "perc_at_timeout": "999",
   "time_in_trade": "4h",
   "trade_type": "margin"
 }
