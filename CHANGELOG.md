@@ -1,5 +1,26 @@
 # Releases
 
+# 5.15
+* add trade direction to more logs
+* add query filter to trade status title
+* separate trade status for test env any-1m and any2-1h
+* no tpsl for test any #1 containers
+* differenciate between stochf and strochrsi in graphing
+* fix stochrsi indexing and graphing
+* add data 5m and 4h containers
+* different channel for different data interval containers
+* no longer need HOST env var for all containers
+* add proper scheduling for get_data runs and healhcheck
+* unique lock files for get_data containers
+* add direction grouping for profitable view and use close_time for order
+* move some test alerts to seperate channel
+* increase test log verbosity
+* add drawup/down debug logging
+* allow open trades to be filtered
+* correct path for get_bnb cron script
+* combine active_trade/trade_status scripts
+* add missing prod 1m containers
+
 # 5.14
 * Fix staging container names
 * add 1m prod api strategies
