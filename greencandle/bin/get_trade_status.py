@@ -62,6 +62,7 @@ def main():
 
         if len(chunk) > 1:
             send_slack_message('balance', output, name=sys.argv[0].split('/')[-1])
-    send_slack_message('balance', "*" * 20, name=sys.argv[0].split('/')[-1])
+    name = "{}-{}".format(sys.argv[0].split('/')[-1], query_filter if query_filter else "all")
+    send_slack_message('balance', "*" * 20, name=name)
 if __name__ == "__main__":
     main()
