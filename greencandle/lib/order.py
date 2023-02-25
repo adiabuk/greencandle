@@ -103,7 +103,7 @@ class Trade():
         dbase = Mysql(test=self.test_data, interval=self.interval)
         current_trades = dbase.get_trades()
         avail_slots = int(self.config.main.max_trades) - len(current_trades)
-        self.logger.info("%s buy slots available" % avail_slots)
+        self.logger.info("%s open slots available" % avail_slots)
         table = dbase.fetch_sql_data('show tables like "tmp_pairs"', header=False)
         tmp_pairs = dbase.fetch_sql_data('select pair from tmp_pairs', header=False) \
                 if table else []
@@ -117,13 +117,14 @@ class Trade():
                 account = 'margin' if 'margin' in self.config.main.trade_type else 'binance'
                 totals = self.get_total_amount_to_use(dbase, item[0], account=account)
                 if sum(totals.values()) == 0:
-                    self.logger.warning("Insufficient funds available for %s, skipping..."
-                                        % item[0])
+                    self.logger.warning("Insufficient funds available for %s %s, skipping..."
+                                        % (self.config.main.trade_direction, item[0]))
                     continue
 
 
             if current_trades and [trade for trade in current_trades if item[0] in trade]:
-                self.logger.warning("We already have a trade of %s, skipping..." % item[0])
+                self.logger.warning("We already have a trade of %s %s, skipping..." % (
+                    self.config.main.trade_direction, item[0]))
             elif not manual and (item[0] not in self.config.main.pairs and not self.test_data):
                 self.logger.error("Pair %s not in main_pairs, skipping..." % item[0])
             elif not manual and good_pairs and db_pairs and (item[0] not in db_pairs
@@ -137,7 +138,7 @@ class Trade():
             elif self.is_float(item[4]) and \
                     ((float(item[4]) > 0 and self.config.main.trade_direction == "short") or \
                     (float(item[4]) < 0 and self.config.main.trade_direction == "long")):
-                self.logger.info("Wrong trade direction")
+                self.logger.info("Wrong trade direction %s" % self.config.main.trade_direction)
             elif avail_slots <= 0:
                 pairs_str = ', '.join((x[0] for x in items_list))
                 self.logger.warning("Too many trades for %s, skipping:%s"
@@ -451,10 +452,11 @@ class Trade():
             if self.prod:
 
                 if float(amount_to_borrow) <= 0:
-                    self.logger.critical("Borrow amount is zero for pair %s.  Continuing" % pair)
+                    self.logger.critical("Borrow amount is zero for pair open long %s.  Continuing"
+                                         % pair)
                     amt_str = get_step_precision(pair, quote2base(current_quote_bal, pair))
                 else:  # amount to borrow
-                    self.logger.info("Will attempt to borrow %s of %s. Balance: %s"
+                    self.logger.info("Will attempt to borrow %s of %s for long. Balance: %s"
                                      % (amount_to_borrow, quote, current_quote_bal))
 
                     amt_str = get_step_precision(pair, base_to_use)
@@ -463,7 +465,7 @@ class Trade():
                         isolated=str2bool(self.config.main.isolated),
                         asset=quote)
                     if "msg" in borrow_res:
-                        self.logger.error("Borrow error-open %s: %s while trying to borrow %s %s"
+                        self.logger.error("Borrow error-open long %s: %s while trying to borrow %s %s"
                                           % (pair, borrow_res, amount_to_borrow, quote))
                         return False
 
@@ -476,7 +478,8 @@ class Trade():
                                                             self.config.main.isolated))
                 self.logger.info("%s open margin long result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
-                    self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
+                    self.logger.error("Trade error-open %s %s: %s" %
+                                      (self.config.main.trade_direction, pair, str(trade_result)))
                     self.logger.error("Vars: base quantity:%s, quote_quantity: %s quote bal:%s, "
                                       "quote_borrowed: %s"
                                       % (amt_str, quote_to_use, current_quote_bal,
@@ -549,7 +552,7 @@ class Trade():
         Get item details and attempt to trade according to config
         Returns True|False
         """
-        self.logger.info("We have %s potential items to buy" % len(buy_list))
+        self.logger.info("We have %s potential items to open spot long" % len(buy_list))
 
         dbase = Mysql(test=self.test_data, interval=self.interval)
 
@@ -559,8 +562,8 @@ class Trade():
             quote = get_quote(pair)
 
             if quote_amount <= 0:
-                self.logger.critical("Unable to get balance %s for quote %s while trading %s"
-                                     % (quote_amount, quote, pair))
+                self.logger.critical("Unable to get balance %s for quote %s while trading %s "
+                                     "spot long" % (quote_amount, quote, pair))
                 return False
 
             amount = quote2base(quote_amount, pair)
@@ -726,27 +729,27 @@ class Trade():
 
                 self.logger.info("%s close margin short result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
-                    self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
+                    self.logger.error("Trade error-close short %s: %s" % (pair, trade_result))
                     return False
 
                 actual_borrowed = self.get_borrowed(pair=pair, symbol=base)
                 borrowed = actual_borrowed if float(borrowed) > float(actual_borrowed) else borrowed
 
                 if float(borrowed) > 0:
-                    self.logger.info("Trying to repay: %s %s for pair %s" %(borrowed, base, pair))
+                    self.logger.info("Trying to repay: %s %s for pair short %s" %(borrowed, base, pair))
                     repay_result = self.client.margin_repay(
                         symbol=pair, quantity=float(borrowed),
                         isolated=str2bool(self.config.main.isolated),
                         asset=base)
                     if "msg" in repay_result:
-                        self.logger.error("Repay error-close %s: %s" % (pair, repay_result))
+                        self.logger.error("Repay error-close short %s: %s" % (pair, repay_result))
                         self.logger.error("Params: %s, %s, %s %s" % (pair, borrowed,
                                                                      self.config.main.isolated,
                                                                      base))
 
-                    self.logger.info("Repay result for %s: %s" % (pair, repay_result))
+                    self.logger.info("Repay result for short %s: %s" % (pair, repay_result))
                 else:
-                    self.logger.info("No borrowed funds to repay for %s" % pair)
+                    self.logger.info("No borrowed funds to repay for short %s" % pair)
 
                 # override values from exchange if in prod
                 fill_price, quantity, quote_out, order_id = \
@@ -781,8 +784,8 @@ class Trade():
                                           event=event, action='CLOSE', usd_profit=profit,
                                           quote=quote_out, open_time=open_time)
             else:
-                self.logger.critical("Sell Failed %s:%s" % (name, pair))
-                send_slack_message("alerts", "Sell Failed %s:%s" % (name, pair))
+                self.logger.critical("Close short Failed %s:%s" % (name, pair))
+                send_slack_message("alerts", "Close short Failed %s:%s" % (name, pair))
 
         del dbase
         return True
@@ -793,7 +796,7 @@ class Trade():
         Get item details and attempt to open margin short trade according to config
         Returns True|False
         """
-        self.logger.info("We have %s potential items to short" % len(short_list))
+        self.logger.info("We have %s potential items to open short" % len(short_list))
         dbase = Mysql(test=self.test_data, interval=self.interval)
 
         for pair, current_time, current_price, event, _ in short_list:
@@ -814,7 +817,7 @@ class Trade():
             if self.prod:
 
                 if float(amount_to_borrow) <= 0:
-                    self.logger.critical("Borrow amount is zero for pair %s.  Continuing" % pair)
+                    self.logger.critical("Borrow amount is zero for short pair %s.  Continuing" % pair)
                     amt_str = current_base_bal
 
                 else:  # amount to borrow
@@ -826,7 +829,7 @@ class Trade():
                         isolated=str2bool(self.config.main.isolated),
                         asset=base)
                     if "msg" in borrow_res:
-                        self.logger.error("Borrow error-open %s: %s while trying to borrow %s %s"
+                        self.logger.error("Borrow error-open %s: %s while trying to borrow short %s %s"
                                           % (pair, borrow_res, amount_to_borrow, base))
                         return False
 
@@ -839,7 +842,7 @@ class Trade():
                                                             self.config.main.isolated))
                 self.logger.info("%s open margin short result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
-                    self.logger.error("Trade error-open %s: %s" % (pair, str(trade_result)))
+                    self.logger.error("Short Trade error-open %s: %s" % (pair, str(trade_result)))
                     self.logger.error("Vars: quantity:%s, bal:%s, borrowed: %s"
                                       % (amt_str, current_base_bal, amount_to_borrow))
                     return False
@@ -916,7 +919,7 @@ class Trade():
 
                 self.logger.info("%s close spot long result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
-                    self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
+                    self.logger.error("Long Trade error-close %s: %s" % (pair, trade_result))
                     return False
 
                 # override values from exchange if in prod
@@ -954,8 +957,8 @@ class Trade():
                                               event=event, action='CLOSE', usd_profit=profit,
                                               quote=quote_out, open_time=open_time)
             else:
-                self.logger.critical("Sell Failed %s:%s" % (name, pair))
-                send_slack_message("alerts", "Sell Failed %s:%s" % (name, pair))
+                self.logger.critical("Close spot long Failed %s:%s" % (name, pair))
+                send_slack_message("alerts", "Close spot long Failed %s:%s" % (name, pair))
                 return False
         del dbase
         return True
@@ -998,7 +1001,7 @@ class Trade():
 
                 self.logger.info("%s close margin long result: %s" %(pair, trade_result))
                 if "msg" in trade_result:
-                    self.logger.error("Trade error-close %s: %s" % (pair, trade_result))
+                    self.logger.error("Margin long Trade error-close %s: %s" % (pair, trade_result))
                     return False
                 actual_borrowed = self.get_borrowed(pair=pair, symbol=quote)
                 borrowed = actual_borrowed if float(borrowed) > float(actual_borrowed) else borrowed
@@ -1051,8 +1054,8 @@ class Trade():
                                           event=event, action='CLOSE', usd_profit=profit,
                                           quote=quote_out, open_time=open_time)
             else:
-                self.logger.critical("Sell Failed %s:%s" % (name, pair))
-                send_slack_message("alerts", "Sell Failed %s:%s" % (name, pair))
+                self.logger.critical("Close margin long Failed %s:%s" % (name, pair))
+                send_slack_message("alerts", "Close margin long Failed %s:%s" % (name, pair))
                 return False
 
         del dbase
