@@ -23,6 +23,7 @@ class TestGc(unittest.TestCase):
         self.display = Display(visible=0, size=(1024, 768))
         self.display.start()
         profile = webdriver.FirefoxProfile()
+        profile.set_preference("network.security.ports.banned.override", "6000")
         self.driver = webdriver.Firefox(firefox_profile=profile,
                                         executable_path='/usr/local/bin/geckodriver')
         self.driver.implicitly_wait(30)
