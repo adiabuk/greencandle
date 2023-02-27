@@ -26,8 +26,6 @@ services:
     pull_policy: always
     restart: always
     network_mode: "bridge"
-    dns:
-      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
     environment:
       - VPN_IP=$VPN_IP
@@ -50,8 +48,6 @@ services:
     pull_policy: always
     restart: always
     network_mode: "bridge"
-    dns:
-      - "8.8.8.8"
     environment:
       - CONFIG_ENV=data
       - DB=false
@@ -81,8 +77,6 @@ services:
     pull_policy: always
     restart: always
     network_mode: "bridge"
-    dns:
-      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -117,8 +111,6 @@ services:
     pull_policy: always
     restart: always
     network_mode: "bridge"
-    dns:
-      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -153,8 +145,6 @@ services:
     pull_policy: always
     restart: always
     network_mode: "bridge"
-    dns:
-      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -189,8 +179,6 @@ services:
     pull_policy: always
     restart: always
     network_mode: "bridge"
-    dns:
-      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -225,8 +213,6 @@ services:
     pull_policy: always
     restart: always
     network_mode: "bridge"
-    dns:
-      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh get_data
     logging:
       driver: journald
@@ -258,8 +244,6 @@ services:
     pull_policy: always
     restart: always
     network_mode: "bridge"
-    dns:
-      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh get_data
     logging:
       driver: journald
@@ -291,8 +275,6 @@ services:
     pull_policy: always
     restart: always
     network_mode: "bridge"
-    dns:
-      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -327,8 +309,6 @@ services:
     pull_policy: always
     restart: always
     network_mode: "bridge"
-    dns:
-      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -363,8 +343,6 @@ services:
     pull_policy: always
     restart: always
     network_mode: "bridge"
-    dns:
-      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh get_data
     logging:
       driver: journald
@@ -396,8 +374,6 @@ services:
     pull_policy: always
     restart: always
     network_mode: "bridge"
-    dns:
-      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -432,8 +408,6 @@ services:
     pull_policy: always
     restart: always
     network_mode: "bridge"
-    dns:
-      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -468,8 +442,6 @@ services:
     pull_policy: always
     restart: always
     network_mode: "bridge"
-    dns:
-      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh get_data
     logging:
       driver: journald
@@ -506,8 +478,6 @@ services:
     pull_policy: always
     restart: always
     network_mode: "bridge"
-    dns:
-      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh tail -f /dev/null
     logging:
       driver: journald
@@ -543,8 +513,6 @@ services:
     pull_policy: always
     restart: always
     network_mode: "bridge"
-    dns:
-      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh cron -f
     links:
       - data-base-mysql:mysql
@@ -568,8 +536,6 @@ services:
     pull_policy: always
     restart: always
     network_mode: "bridge"
-    dns:
-      - "8.8.8.8"
     ports:
       - 6382:6379
     links:
@@ -587,8 +553,6 @@ services:
     pull_policy: always
     restart: always
     network_mode: "bridge"
-    dns:
-      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh mysqld
     ports:
       - 3309:3306
@@ -610,8 +574,6 @@ services:
     pull_policy: always
     restart: always
     network_mode: "bridge"
-    dns:
-      - "8.8.8.8"
     healthcheck:
       test: curl -Isf 127.1:6666
       interval: 5m
@@ -653,8 +615,6 @@ services:
     pull_policy: always
     restart: always
     network_mode: "bridge"
-    dns:
-      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh api_proxy
     links:
       - data-be-api-router:router
@@ -680,8 +640,6 @@ services:
     pull_policy: always
     restart: always
     network_mode: "bridge"
-    dns:
-      - "8.8.8.8"
     healthcheck:
       test: curl -Isf http://127.1:1080/healthcheck
       interval: 5m
@@ -717,8 +675,6 @@ services:
     pull_policy: always
     restart: always
     network_mode: "bridge"
-    dns:
-      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh filesystem_api
     ports:
       - 6000
@@ -743,8 +699,6 @@ services:
     pull_policy: always
     restart: always
     network_mode: "bridge"
-    dns:
-      - "8.8.8.8"
     entrypoint: /docker-entrypoint.sh api_dashboard
     links:
       - data-base-mysql:mysql
