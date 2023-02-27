@@ -250,9 +250,13 @@ class ProdRunner():
             open_price, _, open_time, _, _, _ = dbase.get_trade_value(pair)[0]
 
             klines = 60 if interval.endswith('s') or interval.endswith('m') else 5
-            current_candle = get_dataframes([pair],
-                                            interval=interval,
-                                            no_of_klines=klines)[pair].iloc[-1]
+            try:
+                current_candle = get_dataframes([pair],
+                                                interval=interval,
+                                                no_of_klines=klines)[pair].iloc[-1]
+            except IndexError:
+                LOGGER.critical("Unable to get %s candles for %s while performing %s prod_int_check"
+                                % (str(klines), pair, interval))
 
             redis.update_drawdown(pair, current_candle, open_time=open_time)
             redis.update_drawup(pair, current_candle, open_time=open_time)
