@@ -14,9 +14,6 @@
 "alert": ["alert"],
 "any-long-short": ["any-long", "any-short", "any-tsl-short", "any-tsl-long"],
 "any-spot-long": ["any-spot-long", "any-tsl-spot-long"],
-"inw-cross-long-short": ["inw-long", "inw-short", "alert"],
-"inw-cross-long": ["inw-long", "alert"],
-"inw-cross-short": ["inw-short", "alert"],
 "route": []
 }
 {{else if eq .base_env "test"}}
