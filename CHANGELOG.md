@@ -1,5 +1,16 @@
 # Releases
 
+# 5.16
+* remove staging inwcoin
+* use internal router alias and remove HOST_IP var
+* revert alert port to 20000
+* catch exception when unable to get candles
+* attempt to forward data audio alert
+* Remove data env bridge networking and dns overrides
+* add /var/local volume for alert lock files
+* Fix Selenium tests
+* fix per env names
+
 # 5.15
 * add trade direction to more logs
 * add query filter to trade status title
