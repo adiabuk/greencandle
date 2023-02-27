@@ -6,7 +6,6 @@ services:
     hostname: gen-fe-data-cadvisor
     image: gcr.io/google_containers/cadvisor:v0.35.0
     restart: always
-    network_mode: "bridge"
     volumes:
       - /:/rootfs
       - /var/run:/var/run
@@ -25,7 +24,6 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    network_mode: "bridge"
     entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
     environment:
       - VPN_IP=$VPN_IP
@@ -47,7 +45,6 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    network_mode: "bridge"
     environment:
       - CONFIG_ENV=data
       - DB=false
@@ -76,7 +73,6 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    network_mode: "bridge"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -111,7 +107,6 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    network_mode: "bridge"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -146,7 +141,6 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    network_mode: "bridge"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -181,7 +175,6 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    network_mode: "bridge"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -216,7 +209,6 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    network_mode: "bridge"
     entrypoint: /docker-entrypoint.sh get_data
     logging:
       driver: journald
@@ -247,7 +239,6 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    network_mode: "bridge"
     entrypoint: /docker-entrypoint.sh get_data
     logging:
       driver: journald
@@ -278,7 +269,6 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    network_mode: "bridge"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -313,7 +303,6 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    network_mode: "bridge"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -348,7 +337,6 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    network_mode: "bridge"
     entrypoint: /docker-entrypoint.sh get_data
     logging:
       driver: journald
@@ -379,7 +367,6 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    network_mode: "bridge"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -414,7 +401,6 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    network_mode: "bridge"
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
       driver: journald
@@ -449,7 +435,6 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    network_mode: "bridge"
     entrypoint: /docker-entrypoint.sh get_data
     logging:
       driver: journald
@@ -485,7 +470,6 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    network_mode: "bridge"
     entrypoint: /docker-entrypoint.sh tail -f /dev/null
     logging:
       driver: journald
@@ -520,7 +504,6 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    network_mode: "bridge"
     entrypoint: /docker-entrypoint.sh cron -f
     links:
       - data-base-mysql:mysql
@@ -543,7 +526,6 @@ services:
     image: amrox/gc-redis:${TAG}
     pull_policy: always
     restart: always
-    network_mode: "bridge"
     ports:
       - 6382:6379
     links:
@@ -560,7 +542,6 @@ services:
     image: amrox/gc-mysql:${TAG}
     pull_policy: always
     restart: always
-    network_mode: "bridge"
     entrypoint: /docker-entrypoint.sh mysqld
     ports:
       - 3309:3306
@@ -581,7 +562,6 @@ services:
     image: amrox/webserver:${TAG}
     pull_policy: always
     restart: always
-    network_mode: "bridge"
     healthcheck:
       test: curl -Isf 127.1:6666
       interval: 5m
@@ -622,7 +602,6 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    network_mode: "bridge"
     entrypoint: /docker-entrypoint.sh api_proxy
     links:
       - data-be-api-router:router
@@ -647,7 +626,6 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    network_mode: "bridge"
     healthcheck:
       test: curl -Isf http://127.1:1080/healthcheck
       interval: 5m
@@ -683,7 +661,6 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    network_mode: "bridge"
     entrypoint: /docker-entrypoint.sh filesystem_api
     ports:
       - 6000
@@ -707,7 +684,6 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    network_mode: "bridge"
     entrypoint: /docker-entrypoint.sh api_dashboard
     links:
       - data-base-mysql:mysql
