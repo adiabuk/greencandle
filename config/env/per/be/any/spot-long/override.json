@@ -1,5 +1,5 @@
 {
-  "name": "per-api-any-spot-long",
+  "name": "per-be-api-any-spot-long",
   "divisor": "1.6",
   "max_trades": "4"
 }
