@@ -106,14 +106,13 @@ def analyse_pair(pair, redis):
                                 data), emoji=True,
                                icon=':{0}-{1}:'.format(interval, config.main.trade_direction))
 
-            if bool('HOST_IP' in os.environ):  # alert active if var exists
+            if bool('ALERT' in os.environ):  # alert active if var exists
                 int_str = config.main.interval + 'in' if config.main.interval.endswith('m') else \
                 config.main.interval
-                payload = {"pair":pair, "strategy":"alert",
+                payload = {"pair":pair, "strategy":"alert", "host": "alert",
                            "text": "trade alert for " + int_str,
                            "action": "open"}
-                host = os.environ['HOST_IP']
-                url = "http://{}:1080/{}".format(host, config.web.api_token)
+                url = "http://router:1080/{}".format(config.web.api_token)
                 try:
                     requests.post(url, json=payload, timeout=1)
                 except Exception:

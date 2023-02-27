@@ -426,7 +426,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=stag/be/any2/short/4h
-      - HOST_IP=$HOST_IP
+      - ALERT="True"
       - intermittent="true"
       - DB=true
     extra_hosts:
@@ -465,7 +465,7 @@ services:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=stag/be/any2/long/4h
       - intermittent="true"
-      - HOST_IP=$HOST_IP
+      - ALERT="True"
       - DB=true
     extra_hosts:
       - "trend:10.8.0.101"
@@ -804,7 +804,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=stag/be/inwcoin/cross-short
-      - HOST_IP=$HOST_IP
+      - ALERT="True"
       - intermittent="true"
       - DB=true
     extra_hosts:
@@ -842,7 +842,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=stag/be/inwcoin/cross-long
-      - HOST_IP=$HOST_IP
+      - ALERT="True"
       - intermittent="true"
       - DB=true
     extra_hosts:

@@ -56,7 +56,7 @@ def intermittent_check():
     Check for SL/TP
     """
     LOGGER.info("Starting prod int check")
-    alert = bool('HOST_IP' in os.environ)
+    alert = bool('ALERT' in os.environ)
     runner = ProdRunner()
     runner.prod_int_check(config.main.interval, True, alert=alert)
     LOGGER.info("Finished prod int check")

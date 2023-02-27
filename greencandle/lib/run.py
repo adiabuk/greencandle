@@ -273,11 +273,10 @@ class ProdRunner():
                 drawdowns[pair] = redis.get_drawdown(pair)
                 drawups[pair] = redis.get_drawup(pair)['perc']
                 if alert:
-                    payload = {"pair":pair, "strategy":"alert",
+                    payload = {"pair":pair, "strategy":"alert", "host": "alert",
                                "text": "Closing API trade according to TP/SL rules",
                                "action":"close"}
-                    host = os.environ['HOST_IP']
-                    url = "http://{}:1080/{}".format(host, config.web.api_token)
+                    url = "http://router:1080/{}".format(config.web.api_token)
                     try:
                         requests.post(url, json=payload, timeout=1)
                     except Exception:

@@ -343,7 +343,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/2/1h
-      - HOST_IP=$HOST_IP
+      - ALERT="True"
       - intermittent="true"
       - DB=true
     extra_hosts:
@@ -381,7 +381,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/2/1h
-      - HOST_IP=$HOST_IP
+      - ALERT="True"
       - intermittent="true"
       - DB=true
     extra_hosts:
@@ -419,7 +419,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/2/1m
-      - HOST_IP=$HOST_IP
+      - ALERT="True"
       - intermittent="true"
       - DB=true
     extra_hosts:
@@ -457,7 +457,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/2/1m
-      - HOST_IP=$HOST_IP
+      - ALERT="True"
       - intermittent="true"
       - DB=true
     extra_hosts:
@@ -495,7 +495,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/spot
-      - HOST_IP=$HOST_IP
+      - ALERT="True"
       - intermittent="true"
       - DB=true
     extra_hosts:
@@ -565,7 +565,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long
-      - HOST_IP=$HOST_IP
+      - ALERT="True"
       - intermittent="true"
       - DB=true
     extra_hosts:
@@ -603,7 +603,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short
-      - HOST_IP=$HOST_IP
+      - ALERT="True"
       - intermittent="true"
       - DB=true
     extra_hosts:
@@ -641,7 +641,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/bbperc/long
-      - HOST_IP=$HOST_IP
+      - ALERT="True"
       - intermittent="true"
       - DB=true
     extra_hosts:
@@ -679,7 +679,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/bbperc/short
-      - HOST_IP=$HOST_IP
+      - ALERT="True"
       - intermittent="true"
       - DB=true
     extra_hosts:

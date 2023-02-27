@@ -87,7 +87,7 @@ services:
       - data-be-get_1h
     environment:
       - VPN_IP=$VPN_IP
-      - HOST_IP=$HOST_IP
+      - ALERT="True"
       - CONFIG_ENV=data/1h/short1
       - DB=true
     healthcheck:
@@ -121,7 +121,7 @@ services:
       - data-be-get_1h
     environment:
       - VPN_IP=$VPN_IP
-      - HOST_IP=$HOST_IP
+      - ALERT="True"
       - CONFIG_ENV=data/1h/long1
       - DB=true
     healthcheck:
@@ -155,7 +155,7 @@ services:
       - data-be-get_4h
     environment:
       - VPN_IP=$VPN_IP
-      - HOST_IP=$HOST_IP
+      - ALERT="True"
       - CONFIG_ENV=data/4h/short1
       - DB=true
     healthcheck:
@@ -189,7 +189,7 @@ services:
       - data-be-get_4h
     environment:
       - VPN_IP=$VPN_IP
-      - HOST_IP=$HOST_IP
+      - ALERT="True"
       - CONFIG_ENV=data/4h/long1
       - DB=true
     healthcheck:
@@ -283,7 +283,7 @@ services:
       - data-be-get_1m
     environment:
       - VPN_IP=$VPN_IP
-      - HOST_IP=$HOST_IP
+      - ALERT="True"
       - CONFIG_ENV=data/1m/short1
       - DB=true
     healthcheck:
@@ -317,7 +317,7 @@ services:
       - data-be-get_1m
     environment:
       - VPN_IP=$VPN_IP
-      - HOST_IP=$HOST_IP
+      - ALERT="True"
       - CONFIG_ENV=data/1m/long1
       - DB=true
     healthcheck:
@@ -381,7 +381,7 @@ services:
       - data-be-get_5m
     environment:
       - VPN_IP=$VPN_IP
-      - HOST_IP=$HOST_IP
+      - ALERT="True"
       - CONFIG_ENV=data/5m/short1
       - DB=true
     healthcheck:
@@ -415,7 +415,7 @@ services:
       - data-be-get_5m
     environment:
       - VPN_IP=$VPN_IP
-      - HOST_IP=$HOST_IP
+      - ALERT="True"
       - CONFIG_ENV=data/5m/long1
       - DB=true
     healthcheck:
