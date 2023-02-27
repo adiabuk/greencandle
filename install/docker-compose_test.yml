@@ -328,6 +328,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /var/run:/var/run
+      - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
   test-be-api-any2-1h-cross-long:
