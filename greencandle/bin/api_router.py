@@ -70,7 +70,7 @@ def respond():
         LOGGER.error("Invalid JSON detected: %s" % payload)
         return Response(status=500)
     except KeyError:
-        LOGGER.error("Invalid strategy %s" % payload["strategy"])
+        LOGGER.error("Invalid or missing strategy %s" % str(payload))
         return Response(status=500)
 
     if payload["strategy"] == "route":
