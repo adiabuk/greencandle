@@ -44,7 +44,8 @@ def main():
 
         for trade in chunk:
             try:
-                trade_direction = "{}-{}".format(trade[1], trade[5])
+                trade_direction = "{}-{}".format(trade[1], trade[5]) if \
+                        not (trade[1].enswith('long') or trade[1].ensdswith('short')) else trade[1]
                 short_name = services[trade_direction]
                 trade[1] = short_name
                 link = get_trade_link(trade[0], short_name, 'close', 'close_now',
