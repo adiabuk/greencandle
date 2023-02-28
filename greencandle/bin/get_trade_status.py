@@ -29,6 +29,7 @@ def main():
     dbase = Mysql()
     dbase.get_active_trades()
     query_filter = sys.argv[1] if len(sys.argv) > 1 else ""
+    name = "{}-{}".format(sys.argv[0].split('/')[-1], query_filter if query_filter else "all")
     query = ('select pair, name, open_time, concat(round(perc,2), " (", '
              'round(net_perc,2), ")") as perc, usd_quantity, direction, '
              '`interval` from open_trades where name like "%{}%" order '
@@ -61,8 +62,8 @@ def main():
                 continue
 
         if len(chunk) > 1:
-            send_slack_message('balance', output, name=sys.argv[0].split('/')[-1])
-    name = "{}-{}".format(sys.argv[0].split('/')[-1], query_filter if query_filter else "all")
-    send_slack_message('balance', "*" * 20, name=name)
+            send_slack_message('balance', output, name=name)
+    if len(chunks) > 0:
+        send_slack_message('balance', "*" * 20, name=name)
 if __name__ == "__main__":
     main()
