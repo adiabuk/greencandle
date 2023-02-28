@@ -42,7 +42,7 @@ BASH_ENV=/container.env
 
 {{else if eq .base_env "test"}}
 */6 * * * * /usr/local/bin/get_trade_status 1h > /proc/1/fd/1 2>/proc/1/fd/2
-*/5 * * * * /usr/local/bin/get_trade_status test-be-api-any-1m > /proc/1/fd/1 2>/proc/1/fd/2
+*/5 * * * * /usr/local/bin/get_trade_status test-be-api-any-cross > /proc/1/fd/1 2>/proc/1/fd/2
 03 * * * * /usr/local/bin/get_hour_profit > /proc/1/fd/1 2>/proc/1/fd/2
 15 * * * * /usr/local/bin/collect_pairs > /proc/1/fd/1 2>/proc/1/fd/2
 
