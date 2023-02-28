@@ -1,5 +1,11 @@
 # Releases
 
+# 5.16.1
+* fix get_trade_status formatting & name retrieval
+* clear applied db changes
+* updated db schema
+* fix slack channel assignments
+
 # 5.16
 * remove staging inwcoin
 * use internal router alias and remove HOST_IP var
