@@ -1,5 +1,8 @@
 {
   "name": "test-be-api-any2-1m-cross",
   "interval": "1m",
+  "slack_alerts": "test",
+  "slack_balance": "test",
+  "slack_notifications": "test",
   "trade_direction": "long"
 }
