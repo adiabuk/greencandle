@@ -1,4 +1,4 @@
-#pylint: disable=wrong-import-position, broad-except, no-member,logging-not-lazy, protected-access
+#pylint: disable=wrong-import-position, broad-except, no-member, logging-not-lazy
 
 """
 Push/Pull crypto signals and data to mysql
@@ -58,7 +58,7 @@ class Mysql():
         self.logger.debug("Running Mysql command: %s" % command)
         try:
             cur.execute(command)
-        except MySQLdb._exceptions.ProgrammingError:
+        except MySQLdb.ProgrammingError:
             self.logger.critical("Error running SQL command %s" % command)
             return
 
