@@ -1,4 +1,4 @@
-#pylint: disable=undefined-variable, wrong-import-position, broad-except, no-member, logging-not-lazy
+#pylint: disable=wrong-import-position, broad-except, no-member,logging-not-lazy, protected-access
 
 """
 Push/Pull crypto signals and data to mysql
@@ -51,13 +51,17 @@ class Mysql():
         except AttributeError:
             pass
 
-    @get_exceptions
     def __execute(self, cur, command):
         """
         Execute query on MYSQL DB
         """
         self.logger.debug("Running Mysql command: %s" % command)
-        cur.execute(command)
+        try:
+            cur.execute(command)
+        except MySQLdb._exceptions.ProgrammingError:
+            self.logger.critical("Error running SQL command %s" % command)
+            return
+
         self.dbase.commit()
 
     @get_exceptions
