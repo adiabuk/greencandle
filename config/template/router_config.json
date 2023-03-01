@@ -20,16 +20,19 @@
 {
 "any-long": ["any-long", "alert"],
 "any-short": ["any-short", "alert"],
+"any-long-short": ["any-long", "any-short", "alert"],
+
+"any-spot-long": ["any-spot-long", "alert"],
+
 "any2-1m-long": ["any2-1m-long", "alert"],
 "any2-1m-short": ["any2-1m-short", "alert"],
+"any2-long-short-1m": ["any2-1m-long", "any2-1m-short", "alert"],
+
 "any2-1h-long": ["any2-1h-long", "alert"],
 "any2-1h-short": ["any2-1h-short", "alert"],
+"any2-long-short-1h": ["any2-1h-long", "any2-1h-short", "alert"],
+
 "alert": ["alert"],
-"any-long-short": ["any-long", "any-short", "alert"],
-"any2-long-1m-short": ["any2-1m-long", "any2-1m-short", "alert"],
-"any2-long-1h-short": ["any2-1h-long", "any2-1h-short", "alert"],
-"bb-any-long-short": ["bb-long", "bb-short", "alert"],
-"any-spot-long": ["any-spot-long", "alert"],
 "route": []
 }
 {{else if eq .base_env "prod"}}
