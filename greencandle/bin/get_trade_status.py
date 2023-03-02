@@ -51,7 +51,7 @@ def main():
                 link = get_trade_link(trade[0], short_name, 'close', 'close_now',
                                       config.web.nginx_port)
             except (KeyError, IndexError):
-                link = "Link"
+                link = "no-link"
             try:
                 # remove interval from results
                 interval = trade.pop(-1) if trade[0] != "pair" else ""
