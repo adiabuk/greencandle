@@ -182,7 +182,8 @@ def perc_diff(num1, num2):
 
 def convert_to_seconds(string):
     """conver human readable duration to seconds"""
-    seconds_per_unit = {"s": 1, "m": 60, "h": 3600, "d": 86400, "w": 604800}
+    seconds_per_unit = {"s": 1, "m": 60, "h": 3600, "d": 86400, "w": 604800,
+                        "M": 2628288, "Y": 31536000}
     return int(string[:-1]) * seconds_per_unit[string[-1]]
 
 def epoch2date(epoch, use_spaces=True, formatted=True):
