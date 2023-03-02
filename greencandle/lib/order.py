@@ -93,6 +93,9 @@ class Trade():
                         }}
 
         redis.append_data(kwargs.pair, kwargs.interval, data)
+        if kwargs.event == 'CLOSE':
+            redis.rm_on_entry(kwargs.pair, 'take_profit_perc')
+            redis.rm_on_entry(kwargs.pair, 'stop_loss_perc')
         del redis
 
     def check_pairs(self, items_list):

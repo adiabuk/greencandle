@@ -810,9 +810,6 @@ class Redis():
         else:
             self.logger.debug('%s open Rules matched: %s' % (pair, winning_open))
         del dbase
-        if result == 'CLOSE':
-            self.rm_on_entry(pair, 'take_profit_perc')
-            self.rm_on_entry(pair, 'stop_loss_perc')
 
         return (result, event, current_time, current_price, {'close':winning_close,
                                                              'open': winning_open})
