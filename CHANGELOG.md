@@ -1,5 +1,14 @@
 # Releases
 
+# 5.16.2
+* only remove tpsl from redis after order has successfully closed
+* use correct slack channel for test env trades
+* allow multiple orders for race condition when opening trade in opposite direction
+* improve lint score of orders module
+* cleanup config
+* capture sql command during sql exception
+* add stochrsi to data envs
+
 # 5.16.1
 * fix get_trade_status formatting & name retrieval
 * clear applied db changes
