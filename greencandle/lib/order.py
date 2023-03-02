@@ -465,8 +465,9 @@ class Trade():
                         isolated=str2bool(self.config.main.isolated),
                         asset=quote)
                     if "msg" in borrow_res:
-                        self.logger.error("Borrow error-open long %s: %s while trying to borrow %s %s"
-                                          % (pair, borrow_res, amount_to_borrow, quote))
+                        self.logger.error("Borrow error-open long %s: %s while trying to "
+                                          "borrow %s %s" % (pair, borrow_res,
+                                                            amount_to_borrow, quote))
                         return False
 
                     self.logger.info(borrow_res)
@@ -736,7 +737,8 @@ class Trade():
                 borrowed = actual_borrowed if float(borrowed) > float(actual_borrowed) else borrowed
 
                 if float(borrowed) > 0:
-                    self.logger.info("Trying to repay: %s %s for pair short %s" %(borrowed, base, pair))
+                    self.logger.info("Trying to repay: %s %s for pair short %s"
+                                     %(borrowed, base, pair))
                     repay_result = self.client.margin_repay(
                         symbol=pair, quantity=float(borrowed),
                         isolated=str2bool(self.config.main.isolated),
@@ -817,7 +819,8 @@ class Trade():
             if self.prod:
 
                 if float(amount_to_borrow) <= 0:
-                    self.logger.critical("Borrow amount is zero for short pair %s.  Continuing" % pair)
+                    self.logger.critical("Borrow amount is zero for short pair %s.  Continuing"
+                                         % pair)
                     amt_str = current_base_bal
 
                 else:  # amount to borrow
@@ -829,8 +832,9 @@ class Trade():
                         isolated=str2bool(self.config.main.isolated),
                         asset=base)
                     if "msg" in borrow_res:
-                        self.logger.error("Borrow error-open %s: %s while trying to borrow short %s %s"
-                                          % (pair, borrow_res, amount_to_borrow, base))
+                        self.logger.error("Borrow error-open %s: %s while trying to borrow "
+                                          "short %s %s" % (pair, borrow_res, amount_to_borrow,
+                                                           base))
                         return False
 
                     self.logger.info(borrow_res)
