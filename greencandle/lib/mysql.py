@@ -351,7 +351,7 @@ class Mysql():
                 perc = 100 * (float(current_price) - float(open_price)) / float(open_price)
                 perc = - perc if 'short' in direction else perc
                 net_perc = perc - float(self.get_complete_commission())
-                insert = ('insert into open_trades (pair, open_time, open_price, current_price, '
+                insert = ('replace into open_trades (pair, open_time, open_price, current_price, '
                           'perc, net_perc, name, `interval`, usd_quantity, direction) VALUES '
                           '(" {0}", "{1}", "{2}", "{3}", "{4}", "{5}", "{6}", "{7}", "{8}", "{9}")'
                           .format(pair, open_time, open_price, current_price,
