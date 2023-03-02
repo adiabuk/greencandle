@@ -57,7 +57,6 @@ def add_to_queue(req):
 
     redis = Redis(db=2)
     if action_str == 'OPEN':
-
         if 'get_trend' in os.environ:
             url = "http://trend:6001/get_trend?pair={}".format(pair)
             try:

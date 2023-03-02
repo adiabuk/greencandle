@@ -6,6 +6,7 @@
   "slack_alerts": "test2",
   "slack_balance": "test2",
   "slack_notifications": "test2",
+  "slack_trades": "test2",
   "stop_loss_perc": "15",
   "take_profit_perc": "10",
   "time_in_trade": "12h",

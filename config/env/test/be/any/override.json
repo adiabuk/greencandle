@@ -1,18 +1,19 @@
 {
   "drain": "false",
   "drain_range": "00:00 - 00:00",
-  "max_trades": "10",
+  "immediate_stop": "false",
+  "immediate_take_profit": "false",
   "interval": "1m",
+  "max_trades": "10",
   "name": "test-api-any",
   "pairs": "any",
+  "perc_at_timeout": "999",
   "slack_alerts": "test2",
   "slack_balance": "test2",
   "slack_notifications": "test2",
-  "immediate_stop": "false",
-  "immediate_take_profit": "false",
+  "slack_trades": "test2",
   "stop_loss_perc": "999",
   "take_profit_perc": "999",
-  "perc_at_timeout": "999",
   "time_in_trade": "4h",
   "trade_type": "margin"
 }
