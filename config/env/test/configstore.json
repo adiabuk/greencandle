@@ -91,6 +91,11 @@
       "is_binary": false,
       "is_secret": false
     },
+    "allow_multiple": {
+      "value": "True",
+      "is_binary": false,
+      "is_secret": false
+    },
     "api_forward": {
       "value": "",
       "is_binary": false,

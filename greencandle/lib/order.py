@@ -122,7 +122,8 @@ class Trade():
                     continue
 
 
-            if current_trades and [trade for trade in current_trades if item[0] in trade]:
+            if (current_trades and not str2bool(self.config.main.allow_multiple) and
+                    [trade for trade in current_trades if item[0] in trade]):
                 self.logger.warning("We already have a trade of %s %s, skipping..." % (
                     self.config.main.trade_direction, item[0]))
             elif not manual and (item[0] not in self.config.main.pairs and not self.test_data):
