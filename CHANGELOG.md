@@ -1,5 +1,8 @@
 # Releases
 
+# 5.17.1
+* Fix failing api trades in test mode
+
 # 5.17
 * populate good pairs from correct strategy
 * convert to uppercase after we ensure action isn't numerical
