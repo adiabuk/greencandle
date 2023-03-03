@@ -118,11 +118,21 @@ def action():
     """
     get open/close request
     """
+    
+    # get integer value of action
+    # keep open the same as we don't know direction
+    int_action = {"open": "open",
+                  "close": 0,
+                  "short": -1,
+                  "long": 1,
+                  }
+
     pair = request.args.get('pair')
     strategy = request.args.get('strategy')
     trade_action = request.args.get('action')
     close = request.args.get('close')
-    send_trade(pair, strategy, trade_action)
+    action = int_action[trade_action]
+    send_trade(pair, strategy, action)
 
     if close:
         return '<button type="button" onclick="window.close()">Close Tab</button>'
