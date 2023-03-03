@@ -118,7 +118,7 @@ def action():
     """
     get open/close request
     """
-    
+
     # get integer value of action
     # keep open the same as we don't know direction
     int_action = {"open": "open",
@@ -129,10 +129,9 @@ def action():
 
     pair = request.args.get('pair')
     strategy = request.args.get('strategy')
-    trade_action = request.args.get('action')
+    trade_action = int_action[request.args.get('action')]
     close = request.args.get('close')
-    action = int_action[trade_action]
-    send_trade(pair, strategy, action)
+    send_trade(pair, strategy, trade_action)
 
     if close:
         return '<button type="button" onclick="window.close()">Close Tab</button>'
@@ -175,10 +174,11 @@ def trade():
     for strat, short_name in router_config.items():
         for item in short_name:
             name = item.split(':')[0]
-            if name == 'alert':
-                continue
-            else:
+
+            if not name == 'alert':
                 container = links_dict[name]
+            else:
+                continue
 
             try:
                 config_env = rev_names[container]
