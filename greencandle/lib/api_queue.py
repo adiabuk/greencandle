@@ -26,14 +26,13 @@ def add_to_queue(req):
     """
     LOGGER.info("action: %s", str(req))
     pair = req['pair'].upper().strip()
-    action_str = req['action'].upper().strip()
     action = req['action'].strip()
     text = req['text'].strip()
     if not pair:
         send_slack_message("alerts", "Missing pair for api trade")
         return
 
-    LOGGER.info("Request received: %s %s %s" %(pair, action_str, text))
+    LOGGER.info("Request received: %s %s %s" %(pair, str(action), text))
     current_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     try:
         current_price = get_current_price(pair)
@@ -53,7 +52,7 @@ def add_to_queue(req):
         else:
             action_str = 'CLOSE'
     except ValueError:
-        pass
+        action_str = str(action).upper().strip()
 
     redis = Redis(db=2)
     if action_str == 'OPEN':
