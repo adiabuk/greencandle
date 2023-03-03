@@ -6,7 +6,6 @@ Function for adding to redis queue
 """
 
 import os
-import sys
 from time import strftime, gmtime
 import requests
 from greencandle.lib import config
@@ -19,8 +18,8 @@ from greencandle.lib.common import get_trade_link, get_tv_link
 from greencandle.lib.alerts import send_slack_message
 
 LOGGER = get_logger(__name__)
-TEST = bool(len(sys.argv) > 1 and sys.argv[1] == '--test')
-def add_to_queue(req):
+
+def add_to_queue(req, test=False):
     """
     Add received post request to redis queue to be actioned
     """
@@ -43,7 +42,7 @@ def add_to_queue(req):
 
     title = config.main.name + "-manual" if "manual" in req else config.main.name
     item = [(pair, current_time, current_price, title, action)]
-    trade = Trade(interval=config.main.interval, test_data=False, test_trade=TEST, config=config)
+    trade = Trade(interval=config.main.interval, test_data=False, test_trade=test, config=config)
 
     try:
         if (config.main.trade_direction == 'long' and float(action) > 0) or \
@@ -77,7 +76,7 @@ def add_to_queue(req):
                 return
 
         result = trade.open_trade(item)
-        if result:
+        if result or test:
             take_profit = float(req['tp']) if 'tp' in req else \
                 eval(config.main.take_profit_perc)
             stop_loss = float(req['sl']) if 'sl' in req else \
@@ -96,5 +95,5 @@ def add_to_queue(req):
         drawdown = redis.get_drawdown(pair)
         drawup = redis.get_drawup(pair)['perc']
         result = trade.close_trade(item, drawdowns={pair:drawdown}, drawups={pair:drawup})
-        if not result:
+        if not result and not test:
             LOGGER.critical("Unable to close trade %s" % item)
