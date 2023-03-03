@@ -106,7 +106,7 @@ class Trade():
         Return filtered list
         """
         dbase = Mysql(test=self.test_data, interval=self.interval)
-        current_trades = dbase.get_trades()
+        current_trades = dbase.get_trades(direction=self.config.main.trade_direction)
         avail_slots = int(self.config.main.max_trades) - len(current_trades)
         self.logger.info("%s open slots available" % avail_slots)
         table = dbase.fetch_sql_data('show tables like "tmp_pairs"', header=False)
@@ -127,8 +127,7 @@ class Trade():
                     continue
 
 
-            if (current_trades and not str2bool(self.config.main.allow_multiple) and
-                    [trade for trade in current_trades if item[0] in trade]):
+            if (current_trades and [trade for trade in current_trades if item[0] in trade]):
                 self.logger.warning("We already have a trade of %s %s, skipping..." % (
                     self.config.main.trade_direction, item[0]))
             elif not manual and (item[0] not in self.config.main.pairs and not self.test_data):

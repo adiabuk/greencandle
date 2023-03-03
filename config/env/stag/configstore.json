@@ -91,11 +91,6 @@
       "is_binary": false,
       "is_secret": false
     },
-    "allow_multiple": {
-      "value": "False",
-      "is_binary": false,
-      "is_secret": false
-    },
     "api_forward": {
       "value": "test,10.8.0.104:1084,bb-any-long-short",
       "is_binary": false,
