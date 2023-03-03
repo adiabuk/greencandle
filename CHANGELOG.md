@@ -1,5 +1,17 @@
 # Releases
 
+# 5.17
+* populate good pairs from correct strategy
+* convert to uppercase after we ensure action isn't numerical
+* only insert good pairs into table if available
+* only avoid dupe trades in current direction
+* only remove redis drawdown/drawup & tpsl from one place
+* allow open/close on combined strategies
+* remove forwarding containers in stag
+* try not to overlap trade_status runs
+* extend max time in trade for prod
+* allow converting months and years into seconds
+
 # 5.16.2
 * only remove tpsl from redis after order has successfully closed
 * use correct slack channel for test env trades
