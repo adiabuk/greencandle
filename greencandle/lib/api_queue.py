@@ -97,9 +97,5 @@ def add_to_queue(req):
         drawdown = redis.get_drawdown(pair)
         drawup = redis.get_drawup(pair)['perc']
         result = trade.close_trade(item, drawdowns={pair:drawdown}, drawups={pair:drawup})
-        if result:
-            redis = Redis(db=2)
-            redis.rm_on_entry(item[0][0], 'take_profit_perc')
-            redis.rm_on_entry(item[0][0], 'stop_loss_perc')
-            redis.rm_drawup(pair)
-            redis.rm_drawdown(pair)
+        if not result:
+            LOGGER.critical("Unable to close trade %s" % item)

@@ -111,10 +111,7 @@ def perform_data(pair, interval, data_dir, indicators):
             drawup = redis.get_drawup(pair)['perc']
             trade_result = trade.close_trade(closes, drawdowns={pair:drawdown},
                                              drawups={pair:drawup})
-            if trade_result:
-                redis.rm_drawup(pair)
-                redis.rm_drawdown(pair)
-            else:
+            if not trade_result:
                 LOGGER.info("Unable to close trade")
 
     LOGGER.info("Closing remaining item")
@@ -129,10 +126,6 @@ def perform_data(pair, interval, data_dir, indicators):
         drawdown = redis.get_drawdown(pair)
         drawup = redis.get_drawup(pair)['perc']
         trade_result = trade.close_trade(closes, drawdowns={pair:drawdown}, drawups={pair:drawup})
-        if trade_result:
-            redis.rm_drawup(pair)
-            redis.rm_drawdown(pair)
-
 
     del redis
     del dbase
@@ -199,8 +192,6 @@ def parallel_test(pairs, interval, data_dir, indicators):
                 drawdowns[pair] = redis.get_drawdown(pair)
                 drawups[pair] = redis.get_drawup(pair)['perc']
                 closes.append((pair, current_time, current_price, event, 0))
-                redis.rm_drawup(pair)
-                redis.rm_drawdown(pair)
 
         trade.close_trade(closes, drawdowns=drawdowns, drawups=drawups)
         trade.open_trade(opens)
@@ -285,10 +276,6 @@ class ProdRunner():
                 trade = Trade(interval=interval, test_trade=test, test_data=False, config=config)
                 trade.close_trade(closes, drawdowns=drawdowns, drawups=drawups)
 
-                redis.rm_drawup(pair)
-                redis.rm_drawdown(pair)
-                redis.rm_on_entry(pair, "take_profit_perc")
-                redis.rm_on_entry(pair, "stop_loss_perc")
         del redis
         del dbase
 
@@ -403,8 +390,6 @@ class ProdRunner():
                     closes.append((pair, current_time, current_price, event, 0))
                     drawdowns[pair] = redis.get_drawdown(pair)
                     drawups[pair] = redis.get_drawup(pair)['perc']
-                    redis.rm_drawup(pair)
-                    redis.rm_drawdown(pair)
 
             trade = Trade(interval=interval, test_trade=test, test_data=False, config=config)
             trade.close_trade(closes, drawdowns=drawdowns, drawups=drawups)

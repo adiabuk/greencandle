@@ -96,6 +96,8 @@ class Trade():
         if kwargs.event == 'CLOSE':
             redis.rm_on_entry(kwargs.pair, 'take_profit_perc')
             redis.rm_on_entry(kwargs.pair, 'stop_loss_perc')
+            redis.rm_drawup(kwargs.pair)
+            redis.rm_drawdown(kwargs.pair)
         del redis
 
     def check_pairs(self, items_list):
