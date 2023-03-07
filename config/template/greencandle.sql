@@ -692,7 +692,7 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`%` FUNCTION `PERC_DIFF`(direction varchar(30),
 money_in varchar(30),
 money_out varchar(30)
-) RETURNS decimal(10,6)
+) RETURNS varchar(30)
 RETURN
 
 CASE WHEN money_out = 0 or money_in=0
