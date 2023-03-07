@@ -281,6 +281,7 @@ class Redis():
             if not str(close).endswith("999"): # closing time, 1 ms before next candle
                 self.logger.critical("Invalid time submitted to redis %s.  Skipping " % key)
                 continue
+            value['current_epoch'] = int(time.time())
             result = self.conn.hmset(key, {close: json.dumps(value)})
 
         if str2bool(config.redis.redis_expire):
