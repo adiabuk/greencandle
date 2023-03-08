@@ -86,7 +86,8 @@ def add_to_queue(req, test=False):
             redis.update_on_entry(item[0][0], 'stop_loss_perc', stop_loss)
 
             interval = "1m" if config.main.interval.endswith("s") else config.main.interval
-            dataframes = get_dataframes([pair], interval=interval, no_of_klines=1)
+            klines = 60 if interval.endswith('s') or interval.endswith('m') else 5
+            dataframes = get_dataframes([pair], interval=interval, no_of_klines=klines)
             current_candle = dataframes[pair].iloc[-1]
             redis.update_drawdown(pair, current_candle, event="open")
             redis.update_drawup(pair, current_candle, event="open")
