@@ -1,5 +1,13 @@
 # Releases
 
+# 5.18
+* increase healthcheck timeouts
+* adjust non averaged profits
+* ensure action is a string regardless of contents
+* increase size of perc_diff function return value and adjust tests
+* add current epoch to each redis entry
+* fix get_data docker healthchecks
+
 # 5.17.1
 * Fix failing api trades in test mode
 
