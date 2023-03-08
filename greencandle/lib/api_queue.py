@@ -25,7 +25,7 @@ def add_to_queue(req, test=False):
     """
     LOGGER.info("action: %s", str(req))
     pair = req['pair'].upper().strip()
-    action = req['action'].strip()
+    action = str(req['action']).strip()
     text = req['text'].strip()
     if not pair:
         send_slack_message("alerts", "Missing pair for api trade")
