@@ -346,8 +346,7 @@ class Mysql():
             try:
                 pair, open_time, open_price, name, interval, usd_quantity, direction = trade
                 current_price = get_current_price(pair)
-                perc = round(100 * (float(current_price) - float(open_price)) / float(open_price),
-                             4)
+                perc = 100 * (float(current_price) - float(open_price)) / float(open_price)
                 perc = - perc if 'short' in direction else perc
                 net_perc = perc - float(self.get_complete_commission())
                 insert = ('replace into open_trades (pair, open_time, open_price, current_price, '
