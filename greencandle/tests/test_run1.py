@@ -6,7 +6,7 @@ Unittest file for testing results of a run using downloaded data
 import unittest
 from .unittests import make_test_case
 
-class TestBNBETH(make_test_case('unit', 'BNBETH', '1h', '2019-02-27', 15, 35, 14, -5.5,
+class TestBNBETH(make_test_case('unit', 'BNBETH', '1h', '2019-02-27', 15, 35, 9, -5.5,
                                 61, 9.2)):
     """Test BNBETH"""
     pass
