@@ -15,7 +15,7 @@ services:
       - /dev/disk:/dev/disk
       - /root/.bash_history:/root/.bash_history
     healthcheck:
-      timeout: 2s
+      timeout: 10s
       retries: 5
 
   per-gen-be-logwatch:
@@ -34,7 +34,7 @@ services:
     healthcheck:
       test: ls /var/log/syslog
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
 
   per-gen-be-logtailer-api:
@@ -58,7 +58,7 @@ services:
     healthcheck:
       test: ls ||exit 1
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
     volumes:
       - /var/log/syslog:/var/log/syslog
@@ -81,7 +81,7 @@ services:
     healthcheck:
       test: redis-cli ping
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
     volumes:
       - /var/run:/var/run
@@ -104,7 +104,7 @@ services:
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
     volumes:
       - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
@@ -133,7 +133,7 @@ services:
     healthcheck:
       test: ls || exit 1
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
     volumes:
       - /data:/data
@@ -165,7 +165,7 @@ services:
     healthcheck:
       test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
     volumes:
       - /data:/data
@@ -284,7 +284,7 @@ services:
     healthcheck:
       test: curl -Isf http://127.1:5000/healthcheck
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
     volumes:
       - /data:/data
@@ -355,7 +355,7 @@ services:
     healthcheck:
       test: ls ||exit 1
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
     volumes:
       - /data:/data
@@ -389,7 +389,7 @@ services:
     healthcheck:
       test: ls ||exit 1
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
     volumes:
       - /data:/data
@@ -423,7 +423,7 @@ services:
     healthcheck:
       test: ls ||exit 1
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
     volumes:
       - /data:/data

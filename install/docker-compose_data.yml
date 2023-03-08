@@ -15,7 +15,7 @@ services:
     healthcheck:
       test: "printf 'GET /healthz HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc localhost 8080"
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
 
   data-gen-be-logwatch:
@@ -36,7 +36,7 @@ services:
     healthcheck:
       test: ls /var/log/syslog
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
 
   data-gen-be-logtailer-api:
@@ -58,7 +58,7 @@ services:
     healthcheck:
       test: ls ||exit 1
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
     volumes:
       - /var/log/syslog:/var/log/syslog
@@ -93,7 +93,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
     volumes:
       - /data:/data
@@ -127,7 +127,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
     volumes:
       - /data:/data
@@ -161,7 +161,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
     volumes:
       - /data:/data
@@ -195,7 +195,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
     volumes:
       - /data:/data
@@ -225,7 +225,7 @@ services:
     healthcheck:
       test: find /var/local/gc_get_1h.lock  -mmin -2 ||exit 1
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
     volumes:
       - /data:/data
@@ -256,7 +256,7 @@ services:
     healthcheck:
       test: find /var/local/gc_get_4h.lock  -mmin -2 ||exit 1
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
     volumes:
       - /data:/data
@@ -291,7 +291,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
     volumes:
       - /data:/data
@@ -325,7 +325,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
     volumes:
       - /data:/data
@@ -355,7 +355,7 @@ services:
     healthcheck:
       test: find /var/local/gc_get_1m.lock  -mmin -2 ||exit 1
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
     volumes:
       - /data:/data
@@ -390,7 +390,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
     volumes:
       - /data:/data
@@ -424,7 +424,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
     volumes:
       - /data:/data
@@ -454,7 +454,7 @@ services:
     healthcheck:
       test: find /var/local/gc_get_5m.lock  -mmin -2 ||exit 1
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
     volumes:
       - /data:/data
@@ -486,7 +486,7 @@ services:
     healthcheck:
       test: ls || exit 1
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
     volumes:
       - /data:/data
@@ -517,7 +517,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
     volumes:
       - /data:/data
@@ -536,7 +536,7 @@ services:
     healthcheck:
       test: redis-cli ping
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
 
   data-base-mysql:
@@ -556,7 +556,7 @@ services:
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
 
   data-fe-webserver:
@@ -702,7 +702,7 @@ services:
     healthcheck:
       test: curl -Isf http://127.1:5000/healthcheck
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
     volumes:
       - /data:/data

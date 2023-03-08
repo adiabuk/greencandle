@@ -26,7 +26,7 @@ services:
     healthcheck:
       test: ls
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
     volumes:
       - /data:/data
@@ -52,7 +52,7 @@ services:
     healthcheck:
       test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
     volumes:
       - /data:/data
@@ -80,7 +80,7 @@ services:
     healthcheck:
       test: nc -z 127.1 20000
       interval: 10s
-      timeout: 2s
+      timeout: 10s
       retries: 5
     volumes:
       - /data:/data
@@ -100,7 +100,7 @@ services:
     healthcheck:
       test: redis-cli ping
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
 
   mysql-unit:
@@ -120,7 +120,7 @@ services:
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
 
   alert-unit:
@@ -136,7 +136,7 @@ services:
     healthcheck:
       test: ls
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
 
   web-unit:
@@ -152,5 +152,5 @@ services:
     healthcheck:
       test: ls
       interval: 1m
-      timeout: 2s
+      timeout: 10s
       retries: 5
