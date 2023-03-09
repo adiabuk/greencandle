@@ -19,7 +19,7 @@ from pathlib import Path
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.alerts import send_slack_message
-from greencandle.lib.common import HOUR, MINUTE, get_tv_link, arg_decorator, convert_to_seconds
+from greencandle.lib.common import get_tv_link, arg_decorator, convert_to_seconds
 from greencandle.lib.auth import binance_auth
 from concurrent.futures import ThreadPoolExecutor
 
@@ -36,9 +36,7 @@ if sys.argv[-1] != "--help":
     ISOLATED = CLIENT.get_isolated_margin_pairs()
     CROSS = CLIENT.get_cross_margin_pairs()
 
-@SCHED.scheduled_job('cron', minute=MINUTE[config.main.interval],
-                     hour=HOUR[config.main.interval],
-                     second=config.main.check_interval)
+@SCHED.scheduled_job('cron', minute=config.main.check_interval)
 def analyse_loop():
     """
     Gather data from redis and analyze
