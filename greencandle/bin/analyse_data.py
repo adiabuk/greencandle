@@ -5,7 +5,6 @@
 Analyze available data rom redis
 Look for potential trades
 """
-import os
 import time
 import glob
 import json
@@ -106,19 +105,8 @@ def analyse_pair(pair, redis):
                                 data), emoji=True,
                                icon=':{0}-{1}:'.format(interval, config.main.trade_direction))
 
-            if bool('ALERT' in os.environ):  # alert active if var exists
-                int_str = config.main.interval + 'in' if config.main.interval.endswith('m') else \
-                config.main.interval
-                payload = {"pair":pair, "strategy":"alert", "host": "alert",
-                           "text": "trade alert for " + int_str,
-                           "action": "open"}
-                url = "http://router:1080/{}".format(config.web.api_token)
-                try:
-                    requests.post(url, json=payload, timeout=1)
-                except Exception:
-                    pass
             if FORWARD:
-                url = "http://router:1080/forward"
+                url = "http://router:1080/{}".format(config.web.api_token)
                 env, host, strategy = config.web.forward.split(',')
                 action = 1 if config.main.trade_direction == "long" else -1
                 payload = {"pair": pair,

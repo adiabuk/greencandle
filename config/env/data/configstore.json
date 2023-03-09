@@ -91,9 +91,9 @@
       "is_secret": false
     },
     "api_forward": {
-      "value": "test,10.8.0.104:1084,any-long-short",
+      "value": "vjtfznPNolVv5izP5XFqrVtRHLIv2nqlnHAXDx1NaPM4nmJPNQxQKTtnHz8kC4YFzr79mEks3996TJZV",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "api_token": {
       "value": "gAYOpGKVTkTXaJyOIkcgBz3DT+NHOl+q",

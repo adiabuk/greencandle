@@ -41,8 +41,7 @@ def healthcheck():
     """
     return Response(status=200)
 
-@APP.route('/forward', methods=['POST'])
-def forward():
+def forward(token):
     """
     Forward request to another environment
     """
@@ -65,7 +64,7 @@ def respond():
         router_config = json.load(json_file)
 
     try:
-        hosts = router_config[payload["strategy"].strip()]
+        containers = router_config[payload["strategy"].strip()]
     except TypeError:
         LOGGER.error("Invalid JSON detected: %s" % payload)
         return Response(status=500)
@@ -79,8 +78,8 @@ def respond():
 
     env = config.main.base_env
     alert_drain = Path('/var/local/{}_alert_drain'.format(env)).is_file()
-    for host in hosts:
-        if host == 'alert' and 'edited' not in payload and not alert_drain:
+    for container in containers:
+        if container == 'alert' and 'edited' not in payload and not alert_drain:
             # change strategy
             # so we don't create an infinate API loop
             payload['strategy'] = 'alert'
@@ -98,7 +97,10 @@ def respond():
             payload['edited'] = "yes"
 
         payload['pair'] = payload['pair'].lower()
-        send_trade(payload, host)
+        if payload['env'] == env:
+            send_trade(payload, container)
+        else:
+            forward(payload)
     LOGGER.info("Request received: %s" %(request.json))
     mysql = Mysql()
     try:
