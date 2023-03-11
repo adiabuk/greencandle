@@ -103,6 +103,7 @@ def respond():
             send_trade(payload, container)
         else:
             forward(payload)
+            break
     mysql = Mysql()
     try:
         mysql.insert_api_trade(**request.json)
