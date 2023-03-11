@@ -208,8 +208,7 @@ class Redis():
             if (min_price and float(price) > float(min_price)) or \
                     (not min_price and event == 'open'):
                 data = {"min_price": price, "orig_price": orig_price}
-                self.logger.debug("Setting short data")
-            self.__add_price(key, data)
+                self.__add_price(key, data)
             self.logger.debug("We are short")
 
     def update_drawup(self, pair, current_candle, event=None, open_time=None):
