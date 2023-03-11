@@ -22,7 +22,10 @@ def main():
     redis = Redis()
     config.create_config()
     key = sys.argv[1]
-    pairs = config.main.pairs.split()
+    pair_set = set()
+    for item in redis.conn.scan_iter("*:1m"):
+        pair_set.add(item.decode().split(":")[0])
+    pairs = list(pair_set)
     items = defaultdict(dict)
     res = defaultdict(dict)
     intervals = ['1m', '5m', '1h', '4h']
