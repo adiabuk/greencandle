@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-member, bare-except
+#pylint: disable=no-member, bare-except,too-many-locals, too-many-branches
 """
 get data for all timeframes and pairs
 output data to csv files
@@ -56,31 +56,40 @@ def main():
                 continue
 
     if key == 'distance':
+        data.append(['pair', 'direction', 'interval', 'distance'])
         for pair in pairs:
             for interval in intervals:
                 try:
-                    print(pair,
-                          "upper:{}".format(interval),
-                          float(res[interval][pair]['ohlc']['close']) > \
-                                  float(res[interval][pair]['upper_12']),
-                          perc_diff(res[interval][pair]['ohlc']['close'],
-                                    res[interval][pair]['upper_12']))
-                    print(pair,
-                          "lower:{}".format(interval),
-                          float(res[interval][pair]['ohlc']['close']) < \
-                                  float(res[interval][pair]['lower_12']),
-                          perc_diff(res[interval][pair]['ohlc']['close'],
-                                    res[interval][pair]['lower_12']))
+                    if float(res[interval][pair]['ohlc']['close']) > \
+                            float(res[interval][pair]['upper_12']):
+
+                        print(pair, "upper:{}".format(interval),
+                              perc_diff(res[interval][pair]['ohlc']['close'],
+                                        res[interval][pair]['upper_12']))
+                        data.append([pair, "upper", interval,
+                                     perc_diff(res[interval][pair]['ohlc']['close'],
+                                               res[interval][pair]['upper_12'])])
+
+                    elif float(res[interval][pair]['ohlc']['close']) < \
+                            float(res[interval][pair]['lower_12']):
+
+                        print(pair, "lower:{}".format(interval),
+                              perc_diff(res[interval][pair]['ohlc']['close'],
+                                        res[interval][pair]['lower_12']))
+                        data.append([pair, "lower", interval,
+                                     perc_diff(res[interval][pair]['ohlc']['close'],
+                                               res[interval][pair]['lower_12'])])
 
                 except:
                     pass
+        with open('/data/aggregate/{}.csv'.format(key), 'w', encoding='UTF8', newline='') as handle:
+            writer = csv.writer(handle)
+            writer.writerows(data)
+
     else:
-        print('else')
         data.append(['pair', '1m', '5m', '1h', '4h'])
         for pair in pairs:
             try:
-                #print(pair, res['1h'][pair].keys())
-
                 print(pair,
                       "1m:", res['1m'][pair][indicator],
                       "5m:", res['5m'][pair][indicator],
