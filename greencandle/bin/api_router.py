@@ -48,6 +48,7 @@ def forward(token):
     payload = request.json
     env = payload['env']
     command = "configstore package get --basedir /srv/greencandle/config {} api_token".format(env)
+    LOGGER.info("Forwarding request to %s" % env)
     token = os.popen(command).read().split()[0]
     payload['edited'] = "yes"
     url = "http://{}/{}".format(payload['host'], token)
@@ -63,6 +64,7 @@ def respond():
     with open('/etc/router_config.json') as json_file:
         router_config = json.load(json_file)
 
+    LOGGER.info("Request received: %s" % payload)
     try:
         containers = router_config[payload["strategy"].strip()]
     except TypeError:
@@ -101,7 +103,6 @@ def respond():
             send_trade(payload, container)
         else:
             forward(payload)
-    LOGGER.info("Request received: %s" %(request.json))
     mysql = Mysql()
     try:
         mysql.insert_api_trade(**request.json)
