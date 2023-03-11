@@ -51,8 +51,8 @@ def forward(token):
     LOGGER.info("Forwarding request to %s - %s " %(env, str(payload)))
     token = os.popen(command).read().split()[0]
     payload['edited'] = "yes"
-    url = "http://{}/{}".format(payload['host'], token)
-    requests.post(url, json=payload, timeout=5)
+    url = "https://{}/{}".format(payload['host'], token)
+    requests.post(url, json=payload, timeout=5, verify=False)
     return Response(status=200)
 
 @APP.route('/{}'.format(TOKEN), methods=['POST'])
