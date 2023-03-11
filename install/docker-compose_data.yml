@@ -271,7 +271,7 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh analyse_data
+    entrypoint: /docker-entrypoint.sh analyse_data forward
     logging:
       driver: journald
     links:
@@ -305,7 +305,7 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh analyse_data
+    entrypoint: /docker-entrypoint.sh analyse_data forward
     logging:
       driver: journald
     links:

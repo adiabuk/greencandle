@@ -32,6 +32,9 @@ elif [[ "$HOSTNAME" == *"api"* ]]; then
   fi
 
 
+elif [[ "$HOSTNAME" == *"analyse"* ]]; then
+    command="$@"
+
 elif [[ "$HOSTNAME" == *"cron"* ]]; then
   crontab /opt/output/gc-cron
 
