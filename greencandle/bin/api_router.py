@@ -28,7 +28,7 @@ def send_trade(payload, host, subd='/webhook'):
     """
     url = "http://{}:20000/{}".format(host, subd)
     try:
-        LOGGER.info("Calling url:%s" % url)
+        LOGGER.info("Calling url %s - %s " %(env, str(payload)))
         requests.post(url, json=payload, timeout=1)
     except:
         pass
@@ -48,7 +48,7 @@ def forward(token):
     payload = request.json
     env = payload['env']
     command = "configstore package get --basedir /srv/greencandle/config {} api_token".format(env)
-    LOGGER.info("Forwarding request to %s" % env)
+    LOGGER.info("Forwarding request to %s - %s " %(env, str(payload)))
     token = os.popen(command).read().split()[0]
     payload['edited'] = "yes"
     url = "http://{}/{}".format(payload['host'], token)
