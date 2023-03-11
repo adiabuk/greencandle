@@ -99,7 +99,7 @@ def respond():
             payload['edited'] = "yes"
 
         payload['pair'] = payload['pair'].lower()
-        if payload['env'] == env:
+        if 'env' not in payload or payload['env'] == env:
             send_trade(payload, container)
         else:
             forward(payload)
