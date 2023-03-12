@@ -1,5 +1,27 @@
 # Releases
 
+# 5.19
+* small routing fixes
+* add forwarding strategy to router
+* check if env var is in the payload
+* change forwarding strategy in dev env
+* matching logs for short trades
+* use https when forwarding to different env
+* display full payload in log
+* correct api forward rule for data env
+* more logging for api router
+* use proper api token for data env
+* add data for bb distance script
+* fix router config syntax
+* get unique set of pairs from redis 1m to use in aggregate csv script
+* turn on forwarding for data 1m
+* add data env csv creation cron
+* gather data more often than analysing
+* use router for all routing
+* initial script to aggredate data env data
+* never get just one candle even with intermittant checks
+* remove applied db changes
+
 # 5.18
 * increase healthcheck timeouts
 * adjust non averaged profits
