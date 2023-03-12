@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-position,no-member,logging-not-lazy,bare-except
+#pylint: disable=wrong-import-position,no-member,logging-not-lazy,broad-except
 
 """
 API routing module
@@ -28,10 +28,10 @@ def send_trade(payload, host, subd='/webhook'):
     """
     url = "http://{}:20000/{}".format(host, subd)
     try:
-        LOGGER.info("Calling url %s - %s " %(env, str(payload)))
-        requests.post(url, json=payload, timeout=1)
-    except:
-        pass
+        LOGGER.info("Calling url %s - %s " %(url, str(payload)))
+        requests.post(url, json=payload, timeout=5)
+    except Exception as exc:
+        LOGGER.critical("Unable to call url: %s - %s" % (url, str(exc)))
 
 @APP.route('/healthcheck', methods=["GET"])
 def healthcheck():
@@ -68,7 +68,7 @@ def respond():
     try:
         containers = router_config[payload["strategy"].strip()]
     except TypeError:
-        LOGGER.error("Invalid JSON detected: %s" % payload)
+        LOGGER.error("Invalid router_config or payload detected: %s" % payload)
         return Response(status=500)
     except KeyError:
         LOGGER.error("Invalid or missing strategy %s" % str(payload))
@@ -103,7 +103,6 @@ def respond():
             send_trade(payload, container)
         else:
             forward(payload)
-            break
     mysql = Mysql()
     try:
         mysql.insert_api_trade(**request.json)
