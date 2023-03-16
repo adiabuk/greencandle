@@ -29,7 +29,7 @@ def send_trade(payload, host, subd='/webhook'):
     url = "http://{}:20000/{}".format(host, subd)
     try:
         LOGGER.info("Calling url %s - %s " %(url, str(payload)))
-        requests.post(url, json=payload, timeout=5)
+        requests.post(url, json=payload, timeout=10)
     except Exception as exc:
         LOGGER.critical("Unable to call url: %s - %s" % (url, str(exc)))
 
