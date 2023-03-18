@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-member, bare-except,too-many-locals, too-many-branches
+#pylint: disable=no-member, bare-except,too-many-locals, too-many-branches, too-many-statements
 """
 get data for all timeframes and pairs
 output data to csv files
@@ -9,10 +9,28 @@ import json
 import sys
 import csv
 import time
+import os
+import errno
 from collections import defaultdict
 from greencandle.lib import config
 from greencandle.lib.common import perc_diff, arg_decorator
 from greencandle.lib.redis_conn import Redis
+
+
+def symlink_force(target, link_name):
+    """
+    Create symlink
+    If exists, delete and recreate
+    """
+    try:
+        os.symlink(target, link_name)
+    except OSError as err:
+        if err.errno == errno.EEXIST:
+            os.remove(link_name)
+            os.symlink(target, link_name)
+        else:
+            raise err
+
 
 @arg_decorator
 def main():
@@ -133,6 +151,9 @@ def main():
         writer = csv.writer(handle, delimiter='\t')
         writer.writerows(data)
 
+    os.chdir('/data/aggregate')
+    symlink_force('../{}_{}.tsv'.format(key, timestr), 'current/{}.tsv'.format(key))
+    symlink_force('../{}_{}.csv'.format(key, timestr), 'current/{}.csv'.format(key))
     print('DONE')
 
 if __name__ == '__main__':
