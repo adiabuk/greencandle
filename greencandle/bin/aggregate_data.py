@@ -62,6 +62,20 @@ def main():
             except:
                 continue
 
+    if key == 'stoch_flat':
+        data.append(['pair', 'interval', 'avg'])
+        for pair in pairs:
+            for interval in intervals:
+                if round(sum(res[interval][pair]['STOCHRSI_8'])/2) >= 100 and \
+                        round(sum(last_res[interval][pair]['STOCHRSI_8'])/2) >= 100:
+                    data.append([pair, interval, sum(res[interval][pair]['STOCHRSI_8'])/2])
+
+                elif round(sum(res[interval][pair]['STOCHRSI_8'])/2) <= 0 and \
+                        round(sum(last_res[interval][pair]['STOCHRSI_8'])/2) <= 0:
+                    data.append([pair, interval, sum(res[interval][pair]['STOCHRSI_8'])/2])
+                else:
+                    pass
+
     if key == 'size':
         data.append(['pair', '1m', '5m', '1h', '4h'])
         for pair in pairs:
