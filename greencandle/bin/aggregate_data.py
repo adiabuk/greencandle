@@ -70,7 +70,6 @@ def main():
                                              last_res[interval][pair]['ohlc']['low'])),
                                abs(perc_diff(res[interval][pair]['ohlc']['low'],
                                              last_res[interval][pair]['ohlc']['high'])))
-                #print(pair, interval, max_diff)
                 agg_res[interval][pair] = max_diff
             data.append([pair, agg_res['1m'][pair], agg_res['5m'][pair],
                          agg_res['1h'][pair], agg_res['4h'][pair]])
@@ -83,9 +82,6 @@ def main():
                     if float(res[interval][pair]['ohlc']['close']) > \
                             float(res[interval][pair]['upper_12']):
 
-                        print(pair, "upper:{}".format(interval),
-                              perc_diff(res[interval][pair]['ohlc']['close'],
-                                        res[interval][pair]['upper_12']))
                         data.append([pair, "upper", interval,
                                      perc_diff(res[interval][pair]['ohlc']['close'],
                                                res[interval][pair]['upper_12'])])
@@ -93,9 +89,6 @@ def main():
                     elif float(res[interval][pair]['ohlc']['close']) < \
                             float(res[interval][pair]['lower_12']):
 
-                        print(pair, "lower:{}".format(interval),
-                              perc_diff(res[interval][pair]['ohlc']['close'],
-                                        res[interval][pair]['lower_12']))
                         data.append([pair, "lower", interval,
                                      perc_diff(res[interval][pair]['ohlc']['close'],
                                                res[interval][pair]['lower_12'])])
@@ -107,11 +100,6 @@ def main():
         data.append(['pair', '1m', '5m', '1h', '4h'])
         for pair in pairs:
             try:
-                print(pair,
-                      "1m:", res['1m'][pair][indicator],
-                      "5m:", res['5m'][pair][indicator],
-                      "1h:", res['1h'][pair][indicator],
-                      "4h:", res['4h'][pair][indicator])
                 data.append([pair,
                              res['1m'][pair][indicator],
                              res['5m'][pair][indicator],
