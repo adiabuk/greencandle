@@ -73,7 +73,7 @@ def main():
                 #print(pair, interval, max_diff)
                 agg_res[interval][pair] = max_diff
             data.append([pair, agg_res['1m'][pair], agg_res['5m'][pair],
-                         agg_res['1h'][pair], agg_res['4h'][pair][indicator]])
+                         agg_res['1h'][pair], agg_res['4h'][pair]])
 
     elif key == 'distance':
         data.append(['pair', 'direction', 'interval', 'distance'])
