@@ -175,7 +175,7 @@ def trade():
         for item in short_name:
             name = item.split(':')[0]
 
-            if not name == 'alert':
+            if not name in ['alert', 'forward']:
                 container = links_dict[name]
             else:
                 continue
