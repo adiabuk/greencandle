@@ -57,6 +57,9 @@ BASH_ENV=/container.env
 */5 * * * * /usr/local/bin/aggregate_data distance > /proc/1/fd/1 2> /proc/1/fd/2
 */5 * * * * /usr/local/bin/aggregate_data bbperc_200 > /proc/1/fd/1 2> /proc/1/fd/2
 */5 * * * * /usr/local/bin/aggregate_data STOCHRSI_8 > /proc/1/fd/1 2> /proc/1/fd/2
-
+*/5 * * * * /usr/local/bin/aggregate_data size > /proc/1/fd/1 2> /proc/1/fd/2
+@hourly /bin/ls -1t /data/mysql| tail -n +31 | /usr/bin/xargs -d '\n' /bin/rm -f > /proc/1/fd/1 2>/proc/1/fd/2
+@hourly /usr/bin/find /data/aggregate -maxdepth 1 -type f -mmin +10 -exec mv '{}' /data/aggregate/old/ \;
+@hourly /usr/bin/find /data -type f -name ".*" -delete
 
 {{end}}
