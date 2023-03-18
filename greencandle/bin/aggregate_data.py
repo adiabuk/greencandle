@@ -29,6 +29,8 @@ def main():
     pairs = list(pair_set)
     items = defaultdict(dict)
     res = defaultdict(dict)
+    last_res = defaultdict(dict)
+    agg_res = defaultdict(dict)
     intervals = ['1m', '5m', '1h', '4h']
     data = []
     if key == 'keys':
@@ -53,10 +55,27 @@ def main():
             try:
                 res[interval][pair] = json.loads(redis.get_item('{}:{}'.format(pair, interval),
                                                                 items[interval][pair][-1]).decode())
+                last_res[interval][pair] = json.loads(redis.get_item('{}:{}'.format(pair, interval),
+                                                                     items[interval][pair][-2])
+                                                      .decode())
+
             except:
                 continue
 
-    if key == 'distance':
+    if key == 'size':
+        data.append(['pair', '1m', '5m', '1h', '4h'])
+        for pair in pairs:
+            for interval in intervals:
+                max_diff = max(abs(perc_diff(res[interval][pair]['ohlc']['high'],
+                                             last_res[interval][pair]['ohlc']['low'])),
+                               abs(perc_diff(res[interval][pair]['ohlc']['low'],
+                                             last_res[interval][pair]['ohlc']['high'])))
+                #print(pair, interval, max_diff)
+                agg_res[interval][pair] = max_diff
+            data.append([pair, agg_res['1m'][pair], agg_res['5m'][pair],
+                         agg_res['1h'][pair], agg_res['4h'][pair][indicator]])
+
+    elif key == 'distance':
         data.append(['pair', 'direction', 'interval', 'distance'])
         for pair in pairs:
             for interval in intervals:
