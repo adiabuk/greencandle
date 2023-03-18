@@ -8,6 +8,7 @@ output data to csv files
 import json
 import sys
 import csv
+import time
 from collections import defaultdict
 from greencandle.lib import config
 from greencandle.lib.common import perc_diff, arg_decorator
@@ -82,9 +83,6 @@ def main():
 
                 except:
                     pass
-        with open('/data/aggregate/{}.csv'.format(key), 'w', encoding='UTF8', newline='') as handle:
-            writer = csv.writer(handle)
-            writer.writerows(data)
 
     else:
         data.append(['pair', '1m', '5m', '1h', '4h'])
@@ -103,9 +101,17 @@ def main():
 
             except:
                 continue
-        with open('/data/aggregate/{}.csv'.format(key), 'w', encoding='UTF8', newline='') as handle:
-            writer = csv.writer(handle)
-            writer.writerows(data)
+    timestr = time.strftime("%Y%m%d-%H%M%S")
+    with open('/data/aggregate/{}_{}.csv'.format(key, timestr),
+              'w', encoding='UTF8', newline='') as handle:
+        writer = csv.writer(handle)
+        writer.writerows(data)
+
+    with open('/data/aggregate/{}_{}.tsv'.format(key, timestr),
+              'w', encoding='UTF8', newline='') as handle:
+        writer = csv.writer(handle, delimiter='\t')
+        writer.writerows(data)
+
     print('DONE')
 
 if __name__ == '__main__':
