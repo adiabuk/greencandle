@@ -31,7 +31,6 @@ def symlink_force(target, link_name):
         else:
             raise err
 
-
 @arg_decorator
 def main():
     """
@@ -91,8 +90,18 @@ def main():
                 elif round(sum(res[interval][pair]['STOCHRSI_8'])/2) <= 0 and \
                         round(sum(last_res[interval][pair]['STOCHRSI_8'])/2) <= 0:
                     data.append([pair, interval, sum(res[interval][pair]['STOCHRSI_8'])/2])
-                else:
-                    pass
+
+    elif key == 'bbperc_diff':
+        data.append(['pair', 'interval', 'diff', 'from', 'to'])
+        for pair in pairs:
+            for interval in intervals:
+                try:
+                    bb_from = last_res[interval][pair]['bbperc_200']
+                    bb_to = res[interval][pair]['bbperc_200']
+                    diff = perc_diff(bb_from, bb_to)
+                except TypeError:
+                    continue
+                data.append([pair, interval, diff, bb_from, bb_to])
 
     if key == 'size':
         data.append(['pair', '1m', '5m', '1h', '4h'])
