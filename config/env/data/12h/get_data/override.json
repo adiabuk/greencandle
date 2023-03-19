@@ -1,3 +1,6 @@
 {
-  "name": "data-get_data_12h"
+  "name": "data-get_data_12h",
+  "open_rule1": "res[0].close \u003e res[0].upper_12",
+  "slack_active": "false",
+  "check_interval": "*/10"
 }
