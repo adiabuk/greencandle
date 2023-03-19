@@ -90,6 +90,14 @@ def main():
                 elif round(sum(res[interval][pair]['STOCHRSI_8'])/2) <= 0 and \
                         round(sum(last_res[interval][pair]['STOCHRSI_8'])/2) <= 0:
                     data.append([pair, interval, sum(res[interval][pair]['STOCHRSI_8'])/2])
+    elif key == 'volume':
+        data.append(['pair', 'interval', 'volume'])
+        for pair in pairs:
+            for interval in intervals:
+                try:
+                    data.append([pair, interval, res[interval][pair]['ohlc']['volume']])
+                except:
+                    continue
 
     elif key == 'bbperc_diff':
         data.append(['pair', 'interval', 'diff', 'from', 'to'])
