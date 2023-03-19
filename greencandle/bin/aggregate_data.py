@@ -103,7 +103,7 @@ def main():
                     continue
                 data.append([pair, interval, diff, bb_from, bb_to])
 
-    if key == 'size':
+    elif key == 'size':
         data.append(['pair', '1m', '5m', '1h', '4h'])
         for pair in pairs:
             for interval in intervals:
@@ -149,6 +149,7 @@ def main():
 
             except:
                 continue
+
     timestr = time.strftime("%Y%m%d-%H%M%S")
     with open('/data/aggregate/{}_{}.csv'.format(key, timestr),
               'w', encoding='UTF8', newline='') as handle:
