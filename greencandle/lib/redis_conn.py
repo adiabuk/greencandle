@@ -581,7 +581,7 @@ class Redis():
         Determine if we are in a OPEN/HOLD/CLOSE/NOITEM state for a specific pair and interval
         Will retrieve the current and previous 4 elements from redis and run open/close rules, as
         well as assessing stop_loss and take_profit status
-        Retruns: tupple of dicts containing data
+        Returns: tupple of dicts containing data
         eg
           ('NOITEM',                 -- status
            'long_spot_NOITEM',       -- status name
