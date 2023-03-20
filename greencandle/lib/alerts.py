@@ -143,7 +143,7 @@ def send_slack_trade(**kwargs):
                             "• USD quote: {}\n"
                             "• Net perc: {}\n"
                             "• Net usd_profit: {}\n"
-                            "{}" .format(get_tv_link(kwargs.pair),
+                            "{}" .format(get_tv_link(kwargs.pair, config.main.interval),
                                          kwargs.price,
                                          config.main.name,
                                          config.main.trade_direction,
