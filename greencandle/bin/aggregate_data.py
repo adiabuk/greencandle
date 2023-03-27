@@ -48,7 +48,7 @@ def main():
     res = defaultdict(dict)
     last_res = defaultdict(dict)
     agg_res = defaultdict(dict)
-    intervals = ['1m', '5m', '1h', '4h']
+    intervals = ['1m', '5m', '1h', '4h', '12h']
     data = []
     if key == 'keys':
         items_1h = redis.get_items('BTCUSDT', '1h')
