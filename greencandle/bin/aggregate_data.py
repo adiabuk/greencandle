@@ -112,7 +112,7 @@ def main():
                 data.append([pair, interval, diff, bb_from, bb_to])
 
     elif key == 'size':
-        data.append(['pair', '1m', '5m', '1h', '4h'])
+        data.append(['pair', '1m', '5m', '1h', '4h', '12h'])
         for pair in pairs:
             for interval in intervals:
                 max_diff = max(abs(perc_diff(res[interval][pair]['ohlc']['high'],
@@ -121,7 +121,7 @@ def main():
                                              last_res[interval][pair]['ohlc']['high'])))
                 agg_res[interval][pair] = max_diff
             data.append([pair, agg_res['1m'][pair], agg_res['5m'][pair],
-                         agg_res['1h'][pair], agg_res['4h'][pair]])
+                         agg_res['1h'][pair], agg_res['4h'][pair]], agg_res['12h'][pair])
 
     elif key == 'distance':
         data.append(['pair', 'direction', 'interval', 'distance'])
@@ -146,14 +146,15 @@ def main():
                     pass
 
     else:
-        data.append(['pair', '1m', '5m', '1h', '4h'])
+        data.append(['pair', '1m', '5m', '1h', '4h', '12h'])
         for pair in pairs:
             try:
                 data.append([pair,
                              res['1m'][pair][indicator],
                              res['5m'][pair][indicator],
                              res['1h'][pair][indicator],
-                             res['4h'][pair][indicator]])
+                             res['4h'][pair][indicator]],
+                             res['12h'][pair][indicator]])
 
             except:
                 continue
