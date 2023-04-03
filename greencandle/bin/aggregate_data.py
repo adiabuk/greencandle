@@ -153,7 +153,7 @@ def main():
                              res['1m'][pair][indicator],
                              res['5m'][pair][indicator],
                              res['1h'][pair][indicator],
-                             res['4h'][pair][indicator]],
+                             res['4h'][pair][indicator],
                              res['12h'][pair][indicator]])
 
             except:
