@@ -83,13 +83,17 @@ def main():
         data.append(['pair', 'interval', 'avg'])
         for pair in pairs:
             for interval in intervals:
-                if round(sum(res[interval][pair]['STOCHRSI_8'])/2) >= 100 and \
-                        round(sum(last_res[interval][pair]['STOCHRSI_8'])/2) >= 100:
-                    data.append([pair, interval, sum(res[interval][pair]['STOCHRSI_8'])/2])
+                try:
+                    if round(sum(res[interval][pair]['STOCHRSI_8'])/2) >= 100 and \
+                            round(sum(last_res[interval][pair]['STOCHRSI_8'])/2) >= 100:
+                        data.append([pair, interval, sum(res[interval][pair]['STOCHRSI_8'])/2])
 
-                elif round(sum(res[interval][pair]['STOCHRSI_8'])/2) <= 0 and \
-                        round(sum(last_res[interval][pair]['STOCHRSI_8'])/2) <= 0:
-                    data.append([pair, interval, sum(res[interval][pair]['STOCHRSI_8'])/2])
+                    elif round(sum(res[interval][pair]['STOCHRSI_8'])/2) <= 0 and \
+                            round(sum(last_res[interval][pair]['STOCHRSI_8'])/2) <= 0:
+                        data.append([pair, interval, sum(res[interval][pair]['STOCHRSI_8'])/2])
+                except:
+                    continue
+
     elif key == 'volume':
         data.append(['pair', 'interval', 'volume'])
         for pair in pairs:
@@ -107,21 +111,24 @@ def main():
                     bb_from = last_res[interval][pair]['bbperc_200']
                     bb_to = res[interval][pair]['bbperc_200']
                     diff = perc_diff(bb_from, bb_to)
-                except TypeError:
+                    data.append([pair, interval, diff, bb_from, bb_to])
+                except:
                     continue
-                data.append([pair, interval, diff, bb_from, bb_to])
 
     elif key == 'size':
         data.append(['pair', '1m', '5m', '1h', '4h', '12h'])
         for pair in pairs:
             for interval in intervals:
-                max_diff = max(abs(perc_diff(res[interval][pair]['ohlc']['high'],
-                                             last_res[interval][pair]['ohlc']['low'])),
-                               abs(perc_diff(res[interval][pair]['ohlc']['low'],
-                                             last_res[interval][pair]['ohlc']['high'])))
-                agg_res[interval][pair] = max_diff
-            data.append([pair, agg_res['1m'][pair], agg_res['5m'][pair],
-                         agg_res['1h'][pair], agg_res['4h'][pair]], agg_res['12h'][pair])
+                try:
+                    max_diff = max(abs(perc_diff(res[interval][pair]['ohlc']['high'],
+                                                 last_res[interval][pair]['ohlc']['low'])),
+                                   abs(perc_diff(res[interval][pair]['ohlc']['low'],
+                                                 last_res[interval][pair]['ohlc']['high'])))
+                    agg_res[interval][pair] = max_diff
+                    data.append([pair, agg_res['1m'][pair], agg_res['5m'][pair],
+                                 agg_res['1h'][pair], agg_res['4h'][pair]], agg_res['12h'][pair])
+                except:
+                    continue
 
     elif key == 'distance':
         data.append(['pair', 'direction', 'interval', 'distance'])
