@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 from apscheduler.schedulers.blocking import BlockingScheduler
 from greencandle.lib import config
+from greencandle.lib.alerts import send_slack_message
 config.create_config()
 from greencandle.lib.run import ProdRunner
 from greencandle.lib.logger import get_logger, exception_catcher
@@ -53,12 +54,14 @@ def main():
     """
 
     interval = config.main.interval
+    send_slack_message('alerts', "Starting initial prod run")
     LOGGER.info("Starting initial prod run")
     name = config.main.name.split('-')[-1]
     Path('/var/run/{}-data-{}-{}'.format(config.main.base_env, interval, name)).touch()
     RUNNER.prod_initial(interval, test=True) # initial run, before scheduling begins
     if os.path.exists('/var/run/{}-data-{}-{}'.format(config.main.base_env, interval, name)):
         os.remove('/var/run/{}-data-{}-{}'.format(config.main.base_env, interval, name))
+    send_slack_message('alerts', "Finished initial prod run")
     LOGGER.info("Finished initial prod run")
     SCHED.start()
 
