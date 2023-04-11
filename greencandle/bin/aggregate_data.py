@@ -60,6 +60,8 @@ def main():
     else:
         indicator = key
 
+
+    # Collect timeframes (milliepochs) for each pair/interval
     for pair in pairs:
         for interval in intervals:
             try:
@@ -67,6 +69,7 @@ def main():
             except:
                 continue
 
+    # Collect data for each pair/interval
     for pair in pairs:
         for interval in intervals:
             try:
@@ -78,7 +81,7 @@ def main():
 
             except:
                 continue
-
+    # stochf k,d maxed out
     if key == 'stoch_flat':
         data.append(['pair', 'interval', 'avg'])
         for pair in pairs:
@@ -93,7 +96,7 @@ def main():
                         data.append([pair, interval, sum(res[interval][pair]['STOCHRSI_8'])/2])
                 except:
                     continue
-
+    # volume
     elif key == 'volume':
         data.append(['pair', 'interval', 'volume'])
         for pair in pairs:
@@ -102,7 +105,7 @@ def main():
                     data.append([pair, interval, res[interval][pair]['ohlc']['volume']])
                 except:
                     continue
-
+    # rapid change in bbperc value
     elif key == 'bbperc_diff':
         data.append(['pair', 'interval', 'diff', 'from', 'to'])
         for pair in pairs:
@@ -115,6 +118,7 @@ def main():
                 except:
                     continue
 
+    # change in candle size
     elif key == 'size':
         data.append(['pair', '1m', '5m', '1h', '4h', '12h'])
         for pair in pairs:
@@ -129,7 +133,7 @@ def main():
                                  agg_res['1h'][pair], agg_res['4h'][pair]], agg_res['12h'][pair])
                 except:
                     continue
-
+    # distance between current price and edge of upper/lower bollinger bands
     elif key == 'distance':
         data.append(['pair', 'direction', 'interval', 'distance'])
         for pair in pairs:
@@ -152,6 +156,7 @@ def main():
                 except:
                     pass
 
+    # indicator data
     else:
         data.append(['pair', '1m', '5m', '1h', '4h', '12h'])
         for pair in pairs:
@@ -166,17 +171,20 @@ def main():
             except:
                 continue
 
+    # save as csv
     timestr = time.strftime("%Y%m%d-%H%M%S")
     with open('/data/aggregate/{}_{}.csv'.format(key, timestr),
               'w', encoding='UTF8', newline='') as handle:
         writer = csv.writer(handle)
         writer.writerows(data)
 
+    # save as tsv
     with open('/data/aggregate/{}_{}.tsv'.format(key, timestr),
               'w', encoding='UTF8', newline='') as handle:
         writer = csv.writer(handle, delimiter='\t')
         writer.writerows(data)
 
+    # create/overwrite symlink to most recent file
     os.chdir('/data/aggregate')
     symlink_force('../{}_{}.tsv'.format(key, timestr), 'current/{}.tsv'.format(key))
     symlink_force('../{}_{}.csv'.format(key, timestr), 'current/{}.csv'.format(key))
