@@ -106,9 +106,9 @@ services:
       interval: 1m
       timeout: 10s
       retries: 5
-        #devices:
-      #- /dev/ttyACM0:/dev/ttyACM0
-      #- /dev/snd:/dev/snd
+     devices:
+      - /dev/ttyACM0:/dev/ttyACM0
+      - /dev/snd:/dev/snd
     environment:
       - HOST=$HOSTNAME
       - CONFIG_ENV=alarm
