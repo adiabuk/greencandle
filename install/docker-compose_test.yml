@@ -310,7 +310,6 @@ services:
     links:
       - test-base-mysql:mysql
       - test-base-redis:redis
-      - test-be-alert:alert
       - test-be-api-any-cross-long:any-long
       - test-be-api-any-cross-short:any-short
       - test-be-api-any2-1m-cross-long:any2-1m-long
@@ -519,38 +518,6 @@ services:
       - /dev/log:/dev/log
       - /var/run:/var/run
       - /var/local:/var/local
-      - /root/.bash_history:/root/.bash_history
-
-  test-be-alert:
-    container_name: test-be-alert
-    hostname: test-be-alert
-    image: amrox/alert:latest
-    pull_policy: always
-    restart: always
-    entrypoint: /docker-entrypoint.sh /srv/alert/webhook.py
-    ports:
-      - 20000:20000
-    healthcheck:
-      test: curl -Isf http://127.1:20000/healthcheck
-      interval: 1m
-      timeout: 10s
-      retries: 5
-    devices:
-      - /dev/ttyACM0:/dev/ttyACM0
-      - /dev/snd:/dev/snd
-    environment:
-      - HOST=$HOSTNAME
-      - CONFIG_ENV=test
-      - DB=false
-    volumes:
-      - /root/.aws:/root/.aws
-      - /run/dbus/:/run/dbus/
-      - /dev/shm:/dev/shm
-      - /run/user:/run/user
-      - /var/run:/var/run
-      - /var/local:/var/local
-      - /tmp/.X11-unix:/tmp/.X11-unix
-      - /etc/localtime:/etc/localtime:ro
       - /root/.bash_history:/root/.bash_history
 
   test-be-api-any-cross-long:
