@@ -1,0 +1,405 @@
+{
+  "version": 3,
+  "region": "eu-west-1",
+  "role": "",
+  "is_insecure": false,
+  "data_key": "AQIDAHh86o+e1l3vhl3F7Gn0lhwL0nWY7Q8sBy8abugAZ50HlgFByZYGyV9NwGy6UkmVEb2oAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMnQc09bFnrB/sDzJoAgEQgDs7H09GPBab3jf9VOE0bF06keLff5e2CuoQr2pOn6WEMWWtyDeWt/+0Afeq6LxxkfomB2Hd59fuUe/fxA==",
+  "master_key_id": "alias/greencandle",
+  "data": {
+    "account1_endpoint": {
+      "value": "https://api.binance.com",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account1_key": {
+      "value": "qNx2dIDBh1QsBduqeYBc7g==",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "account1_secret": {
+      "value": "n0q4OWTC7HcIoQm1BcoEoQ==",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "account1_type": {
+      "value": "binance",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account2_endpoint": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account2_key": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account2_secret": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account2_type": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account3_endpoint": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account3_key": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account3_secret": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account3_type": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account4_endpoint": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account4_key": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account4_secret": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account4_type": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account_debug": {
+      "value": "False",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "api_forward": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "api_token": {
+      "value": "lfy831FKvTvy4qZF9i4YFIbdv4WqqemgfwlAX4P7lXnLRa4hDUpZQ1hpz68lTiv8",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "auth_key": {
+      "value": "v0bPbAcXhZG0BwQBNlvYFVB1X4SdGSORs6FjGprSq6wvxLhYUJNS7+De+9sUw00GSZP7oEBzm6B7mA98bsKn4uGkkZk8knED3K5sTg==",
+      "is_binary": true,
+      "is_secret": true
+    },
+    "aws_access_key": {
+      "value": "KvMNglAlY37ucmGGMbYnwXlyx2pinzzoRzbQ7AEeDnKs9Ik+IhUOaPAZoyY=",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "aws_secret_key": {
+      "value": "zeLOpecrRTXKfaeuDazsH0l5m3cFGGPkp3xiHG5fN8iLwvyhpBYxYfGOEmqYhubMhharCja9+1wCPCTT/o35IhGKe6M6xnAr",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "base_env": {
+      "value": "test",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "check_interval": {
+      "value": "59",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "close_rule1": {
+      "value": "1\u003c2",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "close_rule2": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "close_rule3": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "db_database": {
+      "value": "greencandle",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "db_host": {
+      "value": "mysql",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "db_password": {
+      "value": "password",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "db_user": {
+      "value": "root",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "divisor": {
+      "value": "3",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "drain": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "drain_range": {
+      "value": "00:00 - 00:00",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "email_active": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "email_from": {
+      "value": "a@b.c",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "email_password": {
+      "value": "password",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "email_to": {
+      "value": "a@b.c",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "flask_auth": {
+      "value": "GcjgxU7aSQxS2LmuFvFclaQuIrtvO5EAf2eSeLhHEYTkR/1CCOkbWmvEZ/YtDpMqOk529+oj+3KoPHuJ2I1OqzJQF3/hSzHx6wcG0r+WXxqzbM8r/TxmYL8ilFB1rh1pdv65Xx/Pn3kYFzIXgw5nnINnR7BuBlGyDLCtrdD/aeHUxd2PyfjxV/sIHSG1ycCn+nRsEuz7v/zeMgteuKlQVO8HV2HkTbQlzryVOZVleXY=",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "good_pairs": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "immediate_stop": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "immediate_take_profit": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "immediate_trailing_stop": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "indicators": {
+      "value": "get_moving_averages;EMA;8 get_moving_averages;EMA;13 get_moving_averages;EMA;21 get_moving_averages;EMA;34 get_moving_averages;EMA;55 get_rsi;RSI;50 get_moving_averages;EMA;200 get_oscillators;STOCHF;14",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "interval": {
+      "value": "4h",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "logging_level": {
+      "value": "10",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "logging_output": {
+      "value": "journald",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "max_trade_usd": {
+      "value": "5000",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "max_trades": {
+      "value": "10",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "name": {
+      "value": "alarm",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "nginx_port": {
+      "value": "5555",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "no_of_klines": {
+      "value": "500",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "open_rule1": {
+      "value": "1\u003c2",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "open_rule2": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "open_rule3": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "pairs": {
+      "value": "BTCUSDT",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "perc_at_timeout": {
+      "value": "0",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "production": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "rate_indicator": {
+      "value": "EMA_2",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "redis_expire": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "redis_expiry_seconds": {
+      "value": "2073600",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "redis_host": {
+      "value": "redis",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "redis_port": {
+      "value": "6379",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "slack_active": {
+      "value": "true",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "slack_alerts": {
+      "value": "test",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "slack_balance": {
+      "value": "test",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "slack_notifications": {
+      "value": "notifications",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "slack_trades": {
+      "value": "test",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "slack_url": {
+      "value": "JjjJlaICdGkH79MaRthWrVZrZ3Q/N7spoGCjDcq7XVjZfn2S6Yd8zhHdhT9YR+BTa4RbyAfbzEAm1gLo6jake/B9okYU72SlIqZBWzCuf6B+FUu/GrTzGh+iURI5krjxHlsV7Sx82/yyhlBCb2kvf6gQezM5RVC2gxUYCQ==",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "stop_loss_perc": {
+      "value": "20",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "take_profit_perc": {
+      "value": "0",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "time_between_trades": {
+      "value": "1h",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "time_in_trade": {
+      "value": "52w",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "trade_direction": {
+      "value": "long",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "trade_isolated": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "trade_type": {
+      "value": "spot",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "trailing_start": {
+      "value": "0",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "trailing_stop_loss_perc": {
+      "value": "0",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "wait_between_trades": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    }
+  }
+}

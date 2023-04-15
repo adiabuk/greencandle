@@ -1,0 +1,126 @@
+version: "3.1"
+services:
+
+  gen-fe-cadvisor:
+    container_name: gen-fe-cadvisor
+    hostname: gen-fe-cadvisor
+    image: gcr.io/google_containers/cadvisor:v0.35.0
+    restart: always
+    volumes:
+      - /:/rootfs
+      - /var/run:/var/run
+      - /sys:/sys
+      - /var/lib/docker:/var/lib/docker
+      - /dev/disk:/dev/disk
+    healthcheck:
+      test: "printf 'GET /healthz HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc localhost 8080"
+      interval: 1m
+      timeout: 10s
+      retries: 5
+
+  alarm-base-redis:
+    container_name: alarm-base-redis
+    hostname: alarm-base-redis
+    image: amrox/gc-redis:${TAG}
+    pull_policy: always
+    restart: always
+    links:
+      - alarm-base-mysql:mysql
+    ports:
+      - 6383:6379
+    healthcheck:
+      test: redis-cli ping
+      interval: 1m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /var/run:/var/run
+      - /root/.aws:/root/.aws
+      - /root/.bash_history:/root/.bash_history
+
+  alarm-base-mysql:
+    container_name: alarm-base-mysql
+    hostname: alarm-base-mysql
+    image: amrox/gc-mysql:${TAG}
+    entrypoint: /docker-entrypoint.sh mysqld
+    pull_policy: always
+    environment:
+      - CONFIG_ENV=alarm
+      - MYSQL_ROOT_PASSWORD=password
+      - DB=true
+    restart: always
+    ports:
+      - 3310:3306
+    healthcheck:
+      test: echo 'SELECT version();'| mysql -uroot -ppassword
+      interval: 1m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /var/run/systemd/journal/socket:/var/run/systemd/journal/socket
+      - /root/.aws:/root/.aws
+      - /root/.bash_history:/root/.bash_history
+
+  alarm-be-api-router:
+    container_name: alarm-be-api-router
+    hostname: alarm-be-api-router
+    image: amrox/greencandle:${TAG}
+    pull_policy: always
+    restart: always
+    healthcheck:
+      test: curl -Isf http://127.1:1080/healthcheck
+      interval: 5m
+      timeout: 5s
+      retries: 5
+    environment:
+      - CONFIG_ENV=alarm
+      - DB=true
+    ports:
+      - 1084:1080
+    links:
+      - alarm-base-mysql:mysql
+      - alarm-base-redis:redis
+      - alarm-be-alert:alert
+    depends_on:
+      - alarm-base-mysql
+      - alarm-base-redis
+    entrypoint: /docker-entrypoint.sh api_router --test
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  alarm-be-alert:
+    container_name: alarm-be-alert
+    hostname: alarm-be-alert
+    image: amrox/alert:latest
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh /srv/alert/webhook.py
+    ports:
+      - 20000:20000
+    healthcheck:
+      test: curl -Isf http://127.1:20000/healthcheck
+      interval: 1m
+      timeout: 10s
+      retries: 5
+        #devices:
+      #- /dev/ttyACM0:/dev/ttyACM0
+      #- /dev/snd:/dev/snd
+    environment:
+      - HOST=$HOSTNAME
+      - CONFIG_ENV=alarm
+      - DB=false
+    volumes:
+      - /root/.aws:/root/.aws
+      - /run/dbus/:/run/dbus/
+      - /dev/shm:/dev/shm
+      - /run/user:/run/user
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /etc/localtime:/etc/localtime:ro
+      - /root/.bash_history:/root/.bash_history
+
