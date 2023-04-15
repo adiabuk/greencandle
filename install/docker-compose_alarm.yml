@@ -106,7 +106,7 @@ services:
       interval: 1m
       timeout: 10s
       retries: 5
-     devices:
+    devices:
       - /dev/ttyACM0:/dev/ttyACM0
       - /dev/snd:/dev/snd
     environment:
