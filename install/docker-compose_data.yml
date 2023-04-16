@@ -401,7 +401,7 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh analyse_data forward
+    entrypoint: /docker-entrypoint.sh "analyse_data forward"
     logging:
       driver: journald
     links:
@@ -435,7 +435,7 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh analyse_data forward
+    entrypoint: /docker-entrypoint.sh "analyse_data forward"
     logging:
       driver: journald
     links:
@@ -572,7 +572,7 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh tail -f /dev/null
+    entrypoint: /docker-entrypoint.sh "tail -f /dev/null"
     logging:
       driver: journald
     links:
@@ -606,7 +606,7 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh cron -f
+    entrypoint: /docker-entrypoint.sh "cron -f"
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
@@ -686,7 +686,7 @@ services:
       - data-base-mysql
       - data-base-redis
       - gen-fe-data-cadvisor
-    entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
+    entrypoint: /docker-entrypoint.sh "nginx -g 'daemon off;'"
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws

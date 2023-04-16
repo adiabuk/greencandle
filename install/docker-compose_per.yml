@@ -120,7 +120,7 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh tail -f /dev/null
+    entrypoint: /docker-entrypoint.sh "tail -f /dev/null"
     logging:
       driver: journald
     links:
@@ -153,7 +153,7 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh cron -f
+    entrypoint: /docker-entrypoint.sh "cron -f"
     logging:
       driver: journald
     links:
@@ -201,7 +201,7 @@ services:
       - gen-fe-cadvisor
       - per-base-mysql
       - per-base-redis
-    entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
+    entrypoint: /docker-entrypoint.sh "nginx -g 'daemon off;'"
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws

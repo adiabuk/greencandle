@@ -9,7 +9,7 @@ services:
     hostname: cron
     image: amrox/greencandle:${TAG}
     restart: always
-    entrypoint: /docker-entrypoint.sh cron -f
+    entrypoint: /docker-entrypoint.sh "cron -f"
     links:
       - mysql-unit:mysql
       - redis-unit:redis
@@ -33,7 +33,7 @@ services:
     hostname: api
     image: amrox/greencandle:${TAG}
     restart: always
-    entrypoint: /docker-entrypoint.sh backend_api --test api
+    entrypoint: /docker-entrypoint.sh "backend_api --test api"
     links:
       - mysql-unit:mysql
       - redis-unit:redis
