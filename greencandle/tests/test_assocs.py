@@ -8,6 +8,11 @@ import yaml
 from greencandle.bin.api_dashboard import get_pairs, list_to_dict
 
 
+ENVS = (('per', 'PER'),
+        ('prod', 'PROD'),
+        ('stag', 'STAG'),
+        ('test', 'TEST'),
+        ('alarm', 'ALARM'))
 class TestAssocs(unittest.TestCase):
     """
     Test all assocs in docker-compose and config
@@ -18,8 +23,7 @@ class TestAssocs(unittest.TestCase):
         Ensure all envs in router configs exist
         """
 
-        envs = (('per', 'PER'), ('prod', 'PROD'), ('stag', 'STAG'), ('test', 'TEST'))
-        for env, host in envs:
+        for env, host in ENVS:
             os.system("sudo configstore package process_templates {} /tmp".format(env))
             with open('/tmp/router_config.json', 'r') as json_file:
                 router_config = json.load(json_file)
@@ -37,7 +41,7 @@ class TestAssocs(unittest.TestCase):
             router_config_flat_list = [item for sublist in router_config for item in sublist]
 
             for item in router_config_flat_list:
-                if env != 'test' and item != 'alert':  # alert container only in test env
+                if env != 'alarm' and item != 'alert':  # alert container only in test env
                     # alert uses hosts file in non-test envs
                     self.assertIn(item, service_list)
         print("Done testing", env)
@@ -47,8 +51,7 @@ class TestAssocs(unittest.TestCase):
         """
         Scrape environments from CONFIG_ENV vars in docker compose file and test
         """
-        envs = (('per', 'PER'), ('prod', 'PROD'), ('test', 'TEST'), ('stag', 'STAG'))
-        for env, host in envs:
+        for env, host in ENVS:
             print("processing env {}".format(env))
             os.system("sudo configstore package process_templates {} /tmp".format(env))
             os.environ['HOST'] = host
@@ -68,7 +71,8 @@ class TestAssocs(unittest.TestCase):
             for _, short_name in router_config.items():
                 for item in short_name:
                     name = item.split(':')[0]
-                    if env != 'test' and name == 'alert':
+                    print(name)
+                    if env != 'alarm' and name == 'alert':
                         continue
                     try:
                         container = links_dict[name]

@@ -73,4 +73,9 @@
 "alert" : ["alert"],
 "route": []
 }
+{{else if eq .base_env "alarm"}}
+{
+"alert" : ["alert"],
+"route": []
+}
 {{end}}
