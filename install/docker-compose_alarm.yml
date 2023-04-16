@@ -76,7 +76,7 @@ services:
       - CONFIG_ENV=alarm
       - DB=true
     ports:
-      - 1084:1080
+      - 1085:1080
     links:
       - alarm-base-mysql:mysql
       - alarm-base-redis:redis
