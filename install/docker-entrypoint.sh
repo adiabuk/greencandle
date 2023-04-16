@@ -30,7 +30,7 @@ if [[ ! -f /installed ]]; then
     echo $(configstore package get $CONFIG_ENV base_env --basedir /opt/config) > /var/www/html/env.txt
     cp /opt/config/raw/* /etc/gcapi/
     if [[ "$HOSTNAME" == *"long"* || "$HOSTNAME" == *"short"* ]]; then
-      command="backend_api $@ api & backend_api $@ queue"
+      command="$@"
     fi
 
 

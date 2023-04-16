@@ -324,7 +324,7 @@ services:
     depends_on:
       - test-base-mysql
       - test-base-redis
-    entrypoint: /docker-entrypoint.sh api_router --test
+    entrypoint: /docker-entrypoint.sh api_router backend_api --test api & backend_api --test queue
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws
@@ -338,7 +338,7 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh --test
+    entrypoint: /docker-entrypoint.sh backend_api --test api & backend_api --test queue
     logging:
       driver: journald
     environment:
@@ -376,7 +376,7 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh --test
+    entrypoint: /docker-entrypoint.sh backend_api --test api & backend_api --test queue
     logging:
       driver: journald
     environment:
@@ -414,7 +414,7 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh --test
+    entrypoint: /docker-entrypoint.sh backend_api --test api & backend_api --test queue
     logging:
       driver: journald
     environment:
@@ -452,7 +452,7 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh --test
+    entrypoint: /docker-entrypoint.sh backend_api --test api & backend_api --test queue
     logging:
       driver: journald
     environment:
@@ -490,7 +490,7 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh --test
+    entrypoint: /docker-entrypoint.sh backend_api --test api & backend_api --test queue
     logging:
       driver: journald
     environment:
@@ -528,7 +528,7 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh --test
+    entrypoint: /docker-entrypoint.sh backend_api --test api & backend_api --test queue
     logging:
       driver: journald
     environment:
@@ -566,7 +566,7 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh --test
+    entrypoint: /docker-entrypoint.sh backend_api --test api & backend_api --test queue
     logging:
       driver: journald
     environment:
@@ -604,7 +604,7 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh --test
+    entrypoint: /docker-entrypoint.sh backend_api --test api & backend_api --test queue
     logging:
       driver: journald
     environment:
@@ -642,7 +642,7 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh --test
+    entrypoint: /docker-entrypoint.sh backend_api --test api & backend_api --test queue
     logging:
       driver: journald
     environment:
