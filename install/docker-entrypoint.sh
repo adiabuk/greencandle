@@ -30,9 +30,6 @@ if [[ ! -f /installed ]]; then
     echo $(configstore package get $CONFIG_ENV base_env --basedir /opt/config) > /var/www/html/env.txt
     cp /opt/config/raw/* /etc/gcapi/
 
-  elif [[ "$HOSTNAME" == *"analyse"* ]]; then
-      command="$@"
-
   elif [[ "$HOSTNAME" == *"cron"* ]]; then
     crontab /opt/output/gc-cron
 
@@ -62,8 +59,4 @@ if [[ ! -f /installed ]]; then
   fi
 fi
 touch /installed
-if [[ -z $command ]]; then
-  exec "$@";
-else
-  bash -c "$command";
-fi
+bash -c "$@";
