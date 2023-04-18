@@ -1,5 +1,34 @@
 # Releases
 
+# 5.20
+* don't use perc for bboerc_diff
+* remove delisted pair
+* get all data every minute, whilst keeping analysis to candle close
+* use api and queue together in prod/per envs
+* fix stag entrypoints
+* quote entrypoint args for all envs and cleanup
+* use decimal type for perc/net_perc to get accurate min/max values & update schema
+* fix broken api after container restart
+* use test env ports for dev env
+* increase max_trades for test env
+* add seperate alarm env and update assocs/forwarding rules
+* comments for aggregated data code
+* send start/end initial prod run to data channel
+* remove 5m and 1m pairs with insufficient volume
+* add new cross USDT pairs to data env
+* timeframe arg for open graphs script
+* support 12h timeframes in binance
+* use localhost if no VPN_IP set
+* add interval to TV link for open/close alerts
+* add 12h data containers
+* cleanup container order in docker-compose
+* add agg data volume/bbperc/flatline stochrsi/candle size
+* exclude forward from container lookup
+* aggrgate csv/tsv files with date for each run and create symlinks to most recent
+* get open_price in trade_status, not amount
+* increase timeout
+* reintroduce installed flag for docker entryfile
+
 # 5.19
 * small routing fixes
 * add forwarding strategy to router
