@@ -107,14 +107,14 @@ def main():
                     continue
     # rapid change in bbperc value
     elif key == 'bbperc_diff':
-        data.append(['pair', 'interval', 'diff', 'from', 'to'])
+        data.append(['pair', 'interval', 'from', 'to', 'diff'])
         for pair in pairs:
             for interval in intervals:
                 try:
                     bb_from = last_res[interval][pair]['bbperc_200']
                     bb_to = res[interval][pair]['bbperc_200']
-                    diff = perc_diff(bb_from, bb_to)
-                    data.append([pair, interval, diff, bb_from, bb_to])
+                    diff = abs(bb_from, bb_to)
+                    data.append([pair, interval, bb_from, bb_to, diff])
                 except:
                     continue
 
