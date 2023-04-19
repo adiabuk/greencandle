@@ -125,7 +125,7 @@ def main():
 
     # change in candle size
     elif key == 'size':
-        data.append(['pair', '1m', '5m', '1h', '4h', '12h'])
+        data.append(['pair', 'interval', 'key'])
         for pair in pairs:
             for interval in intervals:
                 try:
@@ -134,10 +134,9 @@ def main():
                                    abs(perc_diff(res[interval][pair]['ohlc']['low'],
                                                  last_res[interval][pair]['ohlc']['high'])))
                     agg_res[interval][pair] = '{0:.2f}'.format(max_diff)
+                    data.append([pair, interval, agg_res[interval][pair]])
                 except:
-                    agg_res[interval][pair] = ""
-                data.append([pair, agg_res['1m'][pair], agg_res['5m'][pair],
-                             agg_res['1h'][pair], agg_res['4h'][pair], agg_res['12h'][pair]])
+                    continue
 
     # distance between current price and edge of upper/lower bollinger bands
     elif key == 'distance':
@@ -163,18 +162,14 @@ def main():
 
     # indicator data
     else:
-        data.append(['pair', '1m', '5m', '1h', '4h', '12h'])
+        data.append(['pair', 'interval', indicator])
         for pair in pairs:
-            try:
-                data.append([pair,
-                             res['1m'][pair][indicator],
-                             res['5m'][pair][indicator],
-                             res['1h'][pair][indicator],
-                             res['4h'][pair][indicator],
-                             res['12h'][pair][indicator]])
+            for interval in intervals:
+                try:
+                    data.append([pair, interval, res[interval][pair][indicator]])
 
-            except:
-                continue
+                except:
+                    continue
 
     # save as csv
     timestr = time.strftime("%Y%m%d-%H%M%S")
