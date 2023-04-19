@@ -93,7 +93,8 @@ def main():
 
                     elif round(sum(res[interval][pair]['STOCHRSI_8'])/2) <= 0 and \
                             round(sum(last_res[interval][pair]['STOCHRSI_8'])/2) <= 0:
-                        data.append([pair, interval, sum(res[interval][pair]['STOCHRSI_8'])/2])
+                        data.append([pair, interval,
+                                     '{0:.2f}'.format(sum(res[interval][pair]['STOCHRSI_8'])/2)])
                 except:
                     continue
     # volume
@@ -113,8 +114,9 @@ def main():
                 try:
                     bb_from = last_res[interval][pair]['bbperc_200']
                     bb_to = res[interval][pair]['bbperc_200']
-                    diff = abs(bb_from, bb_to)
-                    data.append([pair, interval, bb_from, bb_to, diff])
+                    diff = abs(bb_from - bb_to)
+                    data.append([pair, interval, '{0:.2f}'.format(bb_from), '{0:.2f}'.format(bb_to),
+                                 '{0:.2f}'.format(diff)])
                 except:
                     continue
 
