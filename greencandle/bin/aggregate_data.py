@@ -130,11 +130,11 @@ def main():
                                                  last_res[interval][pair]['ohlc']['low'])),
                                    abs(perc_diff(res[interval][pair]['ohlc']['low'],
                                                  last_res[interval][pair]['ohlc']['high'])))
-                    agg_res[interval][pair] = max_diff
-                    data.append([pair, agg_res['1m'][pair], agg_res['5m'][pair],
-                                 agg_res['1h'][pair], agg_res['4h'][pair]], agg_res['12h'][pair])
+                    agg_res[interval][pair] = '{0:.2f}'.format(max_diff)
                 except:
-                    continue
+                    agg_res[interval][pair] = ""
+                data.append([pair, agg_res['1m'][pair], agg_res['5m'][pair],
+                             agg_res['1h'][pair], agg_res['4h'][pair], agg_res['12h'][pair]])
     # distance between current price and edge of upper/lower bollinger bands
     elif key == 'distance':
         data.append(['pair', 'direction', 'interval', 'distance'])
