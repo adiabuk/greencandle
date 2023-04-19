@@ -41,7 +41,7 @@ def main():
     config.create_config()
     key = sys.argv[1]
     pair_set = set()
-    for item in redis.conn.scan_iter("*:1m"):
+    for item in redis.conn.scan_iter("*:12h"):
         pair_set.add(item.decode().split(":")[0])
     pairs = list(pair_set)
     items = defaultdict(dict)
