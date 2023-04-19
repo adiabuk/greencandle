@@ -95,7 +95,7 @@ def main():
                     elif round(sum(res[interval][pair]['STOCHRSI_8'])/2) <= 0 and \
                             round(sum(last_res[interval][pair]['STOCHRSI_8'])/2) <= 0:
                         data.append([pair, interval,
-                                     '{0:.2f}'.format(sum(res[interval][pair]['STOCHRSI_8'])/2)])
+                                     '{:.2f}'.format(sum(res[interval][pair]['STOCHRSI_8'])/2)])
                 except:
                     continue
 
@@ -118,8 +118,8 @@ def main():
                     bb_from = last_res[interval][pair]['bbperc_200']
                     bb_to = res[interval][pair]['bbperc_200']
                     diff = abs(bb_from - bb_to)
-                    data.append([pair, interval, '{0:.2f}'.format(bb_from), '{0:.2f}'.format(bb_to),
-                                 '{0:.2f}'.format(diff)])
+                    data.append([pair, interval, '{:.2f}'.format(bb_from), '{:.2f}'.format(bb_to),
+                                 '{:.2f}'.format(diff)])
                 except:
                     continue
 
@@ -133,7 +133,7 @@ def main():
                                                  last_res[interval][pair]['ohlc']['low'])),
                                    abs(perc_diff(res[interval][pair]['ohlc']['low'],
                                                  last_res[interval][pair]['ohlc']['high'])))
-                    agg_res[interval][pair] = '{0:.2f}'.format(max_diff)
+                    agg_res[interval][pair] = '{:.2f}'.format(max_diff)
                     data.append([pair, interval, agg_res[interval][pair]])
                 except:
                     continue
@@ -148,17 +148,17 @@ def main():
                             float(res[interval][pair]['upper_12']):
 
                         data.append([pair, "upper", interval,
-                                     perc_diff(res[interval][pair]['ohlc']['close'],
-                                               res[interval][pair]['upper_12'])])
+                                     '{:.2f}'.format(perc_diff(res[interval][pair]['ohlc']['close'],
+                                                               res[interval][pair]['upper_12']))])
 
                     elif float(res[interval][pair]['ohlc']['close']) < \
                             float(res[interval][pair]['lower_12']):
 
                         data.append([pair, "lower", interval,
-                                     perc_diff(res[interval][pair]['ohlc']['close'],
-                                               res[interval][pair]['lower_12'])])
+                                     '{:.2f}'.format(perc_diff(res[interval][pair]['ohlc']['close'],
+                                                               res[interval][pair]['lower_12']))])
                 except:
-                    pass
+                    continue
 
     # indicator data
     else:
