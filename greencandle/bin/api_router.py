@@ -47,6 +47,7 @@ def forward(token):
     """
     payload = request.json
     env = payload['env']
+    payload['strategy'] = 'alert' if env == 'alarm' else payload['strategy']
     command = "configstore package get --basedir /srv/greencandle/config {} api_token".format(env)
     LOGGER.info("Forwarding request to %s - %s " %(env, str(payload)))
     token = os.popen(command).read().split()[0]
@@ -92,6 +93,7 @@ def respond():
                                "prod": "production",
                                "stag": "staging",
                                "test": "testing",
+                               "alert": "alert",
                                "data": "data"}[env]
             except KeyError:
                 environment = "unknown"
