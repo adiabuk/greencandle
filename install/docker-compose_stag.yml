@@ -237,7 +237,7 @@ services:
       - gen-fe-cadvisor
       - stag-base-mysql
       - stag-base-redis
-    entrypoint: /docker-entrypoint.sh nginx -g 'daemon off;'
+    entrypoint: /docker-entrypoint.sh "nginx -g 'daemon off;'"
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws
