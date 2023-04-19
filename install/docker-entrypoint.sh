@@ -38,7 +38,8 @@ if [[ ! -f /installed ]]; then
 
   elif [[ "$HOSTNAME" == *"manual"* ]]; then
     easy_install pip
-    pip3 install --upgrade pip setuptools ipython
+    pip3 install --upgrade pip ipython
+    pip3 install setuptools==45.1.0
   fi
 
 
