@@ -495,19 +495,22 @@ class Engine(dict):
         LOGGER.debug("Getting %s_%s for %s" % (func, timeperiod, pair))
         scheme = {}
         mine = dataframe.apply(pandas.to_numeric).loc[:index]
-        rsi = talib.RSI(dataframe.close.values.astype(float) * 100000, timeperiod=int(timeperiod))
-        rsinp = rsi[numpy.logical_not(numpy.isnan(rsi))]
-        stochrsi = talib.STOCH(rsinp, rsinp, rsinp, int(timeperiod), int(k_period), int(d_period))
-        scheme["symbol"] = pair
-        scheme["event"] = "{0}_{1}".format(func, timeperiod)
+        try:
+            rsi = talib.RSI(dataframe.close.values.astype(float) * 100000, timeperiod=int(timeperiod))
+            rsinp = rsi[numpy.logical_not(numpy.isnan(rsi))]
+            stochrsi = talib.STOCH(rsinp, rsinp, rsinp, int(timeperiod), int(k_period), int(d_period))
+            scheme["symbol"] = pair
+            scheme["event"] = "{0}_{1}".format(func, timeperiod)
 
-        scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
+            scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
-        #scheme["data"] = stochrsi[index][0]
+            #scheme["data"] = stochrsi[index][0]
 
-        scheme["event"] = "{0}_{1}".format(func, timeperiod)
-        scheme["data"] = stochrsi[0][index], stochrsi[1][index]
-        self.schemes.append(scheme)
+            scheme["event"] = "{0}_{1}".format(func, timeperiod)
+            scheme["data"] = stochrsi[0][index], stochrsi[1][index]
+            self.schemes.append(scheme)
+        except IndexError as exc:
+            LOGGER.warning("Index FAILURE in stochrsi %s" % str(exc))
 
         LOGGER.debug("Done getting STOCHRSI %s" % str(scheme['data']))
 
