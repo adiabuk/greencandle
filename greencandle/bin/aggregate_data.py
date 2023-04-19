@@ -50,6 +50,7 @@ def main():
     agg_res = defaultdict(dict)
     intervals = ['1m', '5m', '1h', '4h', '12h']
     data = []
+
     if key == 'keys':
         items_1h = redis.get_items('BTCUSDT', '1h')
         keys = json.loads(redis.get_item('BTCUSDT:1h', items_1h[-1]).decode()).keys()
@@ -59,7 +60,6 @@ def main():
         indicator = 'upper_12'
     else:
         indicator = key
-
 
     # Collect timeframes (milliepochs) for each pair/interval
     for pair in pairs:
@@ -81,6 +81,7 @@ def main():
 
             except:
                 continue
+
     # stochf k,d maxed out
     if key == 'stoch_flat':
         data.append(['pair', 'interval', 'avg'])
@@ -97,6 +98,7 @@ def main():
                                      '{0:.2f}'.format(sum(res[interval][pair]['STOCHRSI_8'])/2)])
                 except:
                     continue
+
     # volume
     elif key == 'volume':
         data.append(['pair', 'interval', 'volume'])
@@ -106,6 +108,7 @@ def main():
                     data.append([pair, interval, res[interval][pair]['ohlc']['volume']])
                 except:
                     continue
+
     # rapid change in bbperc value
     elif key == 'bbperc_diff':
         data.append(['pair', 'interval', 'from', 'to', 'diff'])
@@ -135,6 +138,7 @@ def main():
                     agg_res[interval][pair] = ""
                 data.append([pair, agg_res['1m'][pair], agg_res['5m'][pair],
                              agg_res['1h'][pair], agg_res['4h'][pair], agg_res['12h'][pair]])
+
     # distance between current price and edge of upper/lower bollinger bands
     elif key == 'distance':
         data.append(['pair', 'direction', 'interval', 'distance'])
@@ -154,7 +158,6 @@ def main():
                         data.append([pair, "lower", interval,
                                      perc_diff(res[interval][pair]['ohlc']['close'],
                                                res[interval][pair]['lower_12'])])
-
                 except:
                     pass
 
