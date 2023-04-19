@@ -147,16 +147,16 @@ def main():
                     if float(res[interval][pair]['ohlc']['close']) > \
                             float(res[interval][pair]['upper_12']):
 
-                        data.append([pair, "upper", interval,
-                                     '{:.2f}'.format(perc_diff(res[interval][pair]['ohlc']['close'],
-                                                               res[interval][pair]['upper_12']))])
+                        distance_diff = perc_diff(res[interval][pair]['ohlc']['close'],
+                                                  res[interval][pair]['upper_12'])
 
                     elif float(res[interval][pair]['ohlc']['close']) < \
                             float(res[interval][pair]['lower_12']):
+                        distance_diff = abs(perc_diff(res[interval][pair]['ohlc']['close'],
+                                                      res[interval][pair]['lower_12']))
 
-                        data.append([pair, "lower", interval,
-                                     '{:.2f}'.format(perc_diff(res[interval][pair]['ohlc']['close'],
-                                                               res[interval][pair]['lower_12']))])
+                    data.append([pair, "lower", interval, '{:.2f}'.format(distance_diff)])
+
                 except:
                     continue
 
