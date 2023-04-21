@@ -509,8 +509,8 @@ class Engine(dict):
             scheme["event"] = "{0}_{1}".format(func, timeperiod)
             scheme["data"] = stochrsi[0][index], stochrsi[1][index]
             self.schemes.append(scheme)
-        except IndexError as exc:
-            LOGGER.warning("Index FAILURE in stochrsi %s" % str(exc))
+        except (IndexError, KeyError) as exc:
+            LOGGER.warning("FAILURE in stochrsi %s" % str(exc))
 
         LOGGER.debug("Done getting STOCHRSI %s" % str(scheme['data']))
 
