@@ -512,7 +512,7 @@ class Engine(dict):
         except (IndexError, KeyError) as exc:
             LOGGER.warning("FAILURE in stochrsi %s" % str(exc))
 
-        LOGGER.debug("Done getting STOCHRSI %s" % str(scheme['data']))
+        LOGGER.debug("Done getting STOCHRSI ")
 
     @get_exceptions
     def get_envelope(self, pair, dataframe, index=None, localconfig=None):
