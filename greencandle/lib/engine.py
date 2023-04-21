@@ -496,9 +496,11 @@ class Engine(dict):
         scheme = {}
         mine = dataframe.apply(pandas.to_numeric).loc[:index]
         try:
-            rsi = talib.RSI(dataframe.close.values.astype(float) * 100000, timeperiod=int(timeperiod))
+            rsi = talib.RSI(dataframe.close.values.astype(float) * 100000,
+                            timeperiod=int(timeperiod))
             rsinp = rsi[numpy.logical_not(numpy.isnan(rsi))]
-            stochrsi = talib.STOCH(rsinp, rsinp, rsinp, int(timeperiod), int(k_period), int(d_period))
+            stochrsi = talib.STOCH(rsinp, rsinp, rsinp, int(timeperiod),
+                                   int(k_period), int(d_period))
             scheme["symbol"] = pair
             scheme["event"] = "{0}_{1}".format(func, timeperiod)
 
