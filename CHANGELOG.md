@@ -1,5 +1,9 @@
 # Releases
 
+# 5.21.1
+* lint fix
+* simplify stochrsi logger msg outside try block
+
 # 5.21
 * get bb size agg using data cron
 * get aggregate size between bollinger bands
