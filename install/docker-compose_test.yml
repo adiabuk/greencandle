@@ -347,6 +347,8 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -385,6 +387,8 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -423,6 +427,8 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -461,6 +467,8 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -499,6 +507,8 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -537,6 +547,8 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -575,6 +587,8 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -613,6 +627,8 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -651,6 +667,8 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
