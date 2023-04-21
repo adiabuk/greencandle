@@ -232,6 +232,8 @@ services:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/fe/cron
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
