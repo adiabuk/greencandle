@@ -1,5 +1,23 @@
 # Releases
 
+# 5.21
+* get bb size agg using data cron
+* get aggregate size between bollinger bands
+* get lower timeframe data continuously
+* use web proxy for test containers and higher timeframe data containers
+* fix stag webserver cmd line args
+* forward alerts to correct container
+* use absolute values for distance agg result
+* script to get open pairs in current container's scope
+* catch stochrsi exceptions
+* run agg scripts every minute
+* fix manual container setuptools deps
+* enable slack alerts for get_data containers
+* all agg intervals on seperate line for sorting
+* fix candle size aggregate
+* fix agg float formatting
+* get complete list of pairs for agg
+
 # 5.20
 * don't use perc for bboerc_diff
 * remove delisted pair
