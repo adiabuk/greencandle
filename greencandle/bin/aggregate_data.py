@@ -109,6 +109,19 @@ def main():
                 except:
                     continue
 
+    # percent between upper and lower bb
+    elif key == 'bb_size':
+        data.append(['pair', 'interval', 'bb_size'])
+        for pair in pairs:
+            for interval in intervals:
+                try:
+                    bb_diff = abs(perc_diff(res[interval][pair]['upper_12'],
+                                            res[interval][pair]['lower_12']))
+
+                    data.append([pair, interval, '{:.2f}'.format(bb_diff)])
+                except:
+                    continue
+
     # rapid change in bbperc value
     elif key == 'bbperc_diff':
         data.append(['pair', 'interval', 'from', 'to', 'diff'])
