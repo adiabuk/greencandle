@@ -11,7 +11,7 @@ from greencandle.lib.alerts import send_slack_message
 config.create_config()
 from greencandle.lib.run import ProdRunner
 from greencandle.lib.logger import get_logger, exception_catcher
-from greencandle.lib.common import arg_decorator
+from greencandle.lib.common import arg_decorator, TF2MIN
 
 LOGGER = get_logger(__name__)
 PAIRS = config.main.pairs.split()
@@ -63,7 +63,13 @@ def main():
         os.remove('/var/run/{}-data-{}-{}'.format(config.main.base_env, interval, name))
     send_slack_message('alerts', "Finished initial prod run")
     LOGGER.info("Finished initial prod run")
-    SCHED.start()
+
+    if TF2MIN[config.main.interval] <= 5:
+        while True:
+            # continuous loop for smaller timeframes
+            get_data()
+    else:
+        SCHED.start()
 
 if __name__ == '__main__':
     main()
