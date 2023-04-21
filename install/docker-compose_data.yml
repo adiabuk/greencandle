@@ -86,6 +86,8 @@ services:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/1h/get_data
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     healthcheck:
       test: find /var/local/gc_get_1h.lock  -mmin -2 ||exit 1
       interval: 1m
@@ -185,6 +187,8 @@ services:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/12h/get_data
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     healthcheck:
       test: find /var/local/gc_get_12h.lock  -mmin -2 ||exit 1
       interval: 1m
@@ -284,6 +288,8 @@ services:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/4h/get_data
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     healthcheck:
       test: find /var/local/gc_get_4h.lock  -mmin -2 ||exit 1
       interval: 1m
