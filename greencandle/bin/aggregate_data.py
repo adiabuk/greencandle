@@ -50,6 +50,8 @@ def get_stoch_flat(pair, interval, res, last_res):
         elif round(sum(res[interval][pair]['STOCHRSI_8'])/2) <= 0 and \
                 round(sum(last_res[interval][pair]['STOCHRSI_8'])/2) <= 0:
             value = '{:.2f}'.format(sum(res[interval][pair]['STOCHRSI_8'])/2)
+        else:
+            value = None
         return value
     except KeyError:
         return None
@@ -65,7 +67,6 @@ def get_bbperc_diff(pair, interval, res, last_res):
         return '{:.2f}'.format(bb_from), '{:.2f}'.format(bb_to), '{:.2f}'.format(diff)
     except (TypeError, KeyError):
         return None, None, None
-
 
 def get_volume(pair, interval, res):
     """
@@ -113,7 +114,6 @@ def get_distance(pair, interval, res):
         print(direction, pair, interval, distance_diff)
         return direction, '{:.2f}'.format(distance_diff)
     except KeyError:
-        print('keyerror', pair, interval)
         return None, None
 
 def symlink_force(target, link_name):
@@ -231,6 +231,26 @@ def main():
                 direction, distance_diff = get_distance(pair, interval, res)
                 if direction:
                     data.append([pair, interval, direction, distance_diff])
+
+    # all data in a single spreadsheet
+    elif key == 'all':
+        data.append(['pair', 'interval', 'distance', 'candle_size', 'stoch_flat', 'bb_size',
+                     'bb_diff', 'volume', 'upper', 'middle', 'lower', 'bbperc_200', 'stoch'])
+        for pair in pairs:
+            for interval in intervals:
+                distance = get_distance(pair, interval, res)[-1]
+                candle_size = get_candle_size(pair, interval, res, last_res)
+                stoch_flat = get_stoch_flat(pair, interval, res, last_res)
+                bb_size = get_bb_size(pair, interval, res)
+                bb_diff = get_bbperc_diff(pair, interval, res, last_res)[-1]
+                vol = get_volume(pair, interval, res)
+                upper = get_indicator_value(pair, interval, res, 'upper_12')
+                middle = get_indicator_value(pair, interval, res, 'middle_12')
+                lower = get_indicator_value(pair, interval, res, 'lower_12')
+                bbperc_200 = get_indicator_value(pair, interval, res, 'bbperc_200')
+                stoch = get_indicator_value(pair, interval, res, 'STOCHRSI_8')
+                data.append([pair, interval, distance, candle_size, stoch_flat, bb_size,
+                             bb_diff, vol, upper, middle, lower, bbperc_200, stoch])
 
     # indicator data
     else:
