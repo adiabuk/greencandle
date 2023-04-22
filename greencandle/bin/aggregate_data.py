@@ -90,7 +90,6 @@ def get_candle_size(pair, interval, res, last_res):
     except:
         return None
 
-
 def get_distance(pair, interval, res):
     """
     get distance between upper and lower bollinger bands as a percentage
@@ -226,7 +225,7 @@ def main():
 
     # distance between current price and edge of upper/lower bollinger bands
     elif key == 'distance':
-        data.append(['pair', 'direction', 'interval', 'distance'])
+        data.append(['pair', 'interval', 'direction', 'distance'])
         for pair in pairs:
             for interval in intervals:
                 direction, distance_diff = get_distance(pair, interval, res)
@@ -257,8 +256,8 @@ def main():
 
     # create/overwrite symlink to most recent file
     os.chdir('/data/aggregate')
-    symlink_force('../{}_{}.tsv'.format(key, timestr), 'current/{}-new.tsv'.format(key))
-    symlink_force('../{}_{}.csv'.format(key, timestr), 'current/{}-new.csv'.format(key))
+    symlink_force('../{}_{}.tsv'.format(key, timestr), 'current/{}.tsv'.format(key))
+    symlink_force('../{}_{}.csv'.format(key, timestr), 'current/{}.csv'.format(key))
     print('DONE')
 
 if __name__ == '__main__':
