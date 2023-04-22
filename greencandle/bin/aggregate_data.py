@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-member, bare-except,too-many-locals, too-many-branches, too-many-statements
+#pylint: disable=no-member,bare-except,too-many-locals,too-many-branches,too-many-statements
 """
 get data for all timeframes and pairs
 output data to csv files
@@ -16,6 +16,106 @@ from greencandle.lib import config
 from greencandle.lib.common import perc_diff, arg_decorator
 from greencandle.lib.redis_conn import Redis
 
+def get_bb_size(pair, interval, res):
+    """
+    percent between upper and lower bb
+    """
+    try:
+        bb_diff = abs(perc_diff(res[interval][pair]['upper_12'],
+                                res[interval][pair]['lower_12']))
+        bb_diff = '{:.2f}'.format(bb_diff)
+    except KeyError:
+        bb_diff = ''
+
+    return bb_diff
+
+def get_indicator_value(pair, interval, res, indicator):
+    """
+    get value of indicator
+    """
+    try:
+        return res[interval][pair][indicator]
+    except KeyError:
+        return None
+
+def get_stoch_flat(pair, interval, res, last_res):
+    """
+    Get stoch value if k,d maxed out or bottomed out
+    """
+    try:
+        if round(sum(res[interval][pair]['STOCHRSI_8'])/2) >= 100 and \
+                round(sum(last_res[interval][pair]['STOCHRSI_8'])/2) >= 100:
+            value = '{:.2f}'.format(sum(res[interval][pair]['STOCHRSI_8'])/2)
+
+        elif round(sum(res[interval][pair]['STOCHRSI_8'])/2) <= 0 and \
+                round(sum(last_res[interval][pair]['STOCHRSI_8'])/2) <= 0:
+            value = '{:.2f}'.format(sum(res[interval][pair]['STOCHRSI_8'])/2)
+        return value
+    except KeyError:
+        return None
+
+def get_bbperc_diff(pair, interval, res, last_res):
+    """
+    get diff between current and previous bbperc value
+    """
+    try:
+        bb_from = last_res[interval][pair]['bbperc_200']
+        bb_to = res[interval][pair]['bbperc_200']
+        diff = abs(bb_from - bb_to)
+        return '{:.2f}'.format(bb_from), '{:.2f}'.format(bb_to), '{:.2f}'.format(diff)
+    except (TypeError, KeyError):
+        return None, None, None
+
+
+def get_volume(pair, interval, res):
+    """
+    get volume indicator
+    """
+    try:
+        return res[interval][pair]['ohlc']['volume']
+    except KeyError:
+        return None
+
+def get_candle_size(pair, interval, res, last_res):
+    """
+    get size of current candle compared to previous
+    """
+    try:
+        max_diff = max(abs(perc_diff(res[interval][pair]['ohlc']['high'],
+                                     last_res[interval][pair]['ohlc']['low'])),
+                       abs(perc_diff(res[interval][pair]['ohlc']['low'],
+                                     last_res[interval][pair]['ohlc']['high'])))
+
+        return '{:.2f}'.format(max_diff)
+    except:
+        return None
+
+
+def get_distance(pair, interval, res):
+    """
+    get distance between upper and lower bollinger bands as a percentage
+    """
+
+    try:
+        if float(res[interval][pair]['ohlc']['close']) > \
+                 float(res[interval][pair]['upper_12']):
+
+            distance_diff = abs(perc_diff(res[interval][pair]['ohlc']['close'],
+                                          res[interval][pair]['upper_12']))
+            direction = 'upper'
+
+        elif float(res[interval][pair]['ohlc']['close']) < \
+                 float(res[interval][pair]['lower_12']):
+            distance_diff = abs(perc_diff(res[interval][pair]['ohlc']['close'],
+                                          res[interval][pair]['lower_12']))
+            direction = 'lower'
+        else:
+            return None, None
+        print(direction, pair, interval, distance_diff)
+        return direction, '{:.2f}'.format(distance_diff)
+    except KeyError:
+        print('keyerror', pair, interval)
+        return None, None
 
 def symlink_force(target, link_name):
     """
@@ -47,7 +147,6 @@ def main():
     items = defaultdict(dict)
     res = defaultdict(dict)
     last_res = defaultdict(dict)
-    agg_res = defaultdict(dict)
     intervals = ['1m', '5m', '1h', '4h', '12h']
     data = []
 
@@ -87,102 +186,61 @@ def main():
         data.append(['pair', 'interval', 'avg'])
         for pair in pairs:
             for interval in intervals:
-                try:
-                    if round(sum(res[interval][pair]['STOCHRSI_8'])/2) >= 100 and \
-                            round(sum(last_res[interval][pair]['STOCHRSI_8'])/2) >= 100:
-                        data.append([pair, interval, sum(res[interval][pair]['STOCHRSI_8'])/2])
-
-                    elif round(sum(res[interval][pair]['STOCHRSI_8'])/2) <= 0 and \
-                            round(sum(last_res[interval][pair]['STOCHRSI_8'])/2) <= 0:
-                        data.append([pair, interval,
-                                     '{:.2f}'.format(sum(res[interval][pair]['STOCHRSI_8'])/2)])
-                except:
-                    continue
+                stoch_flat = get_stoch_flat(pair, interval, res, last_res)
+                data.append([pair, interval, stoch_flat])
 
     # volume
     elif key == 'volume':
         data.append(['pair', 'interval', 'volume'])
         for pair in pairs:
             for interval in intervals:
-                try:
-                    data.append([pair, interval, res[interval][pair]['ohlc']['volume']])
-                except:
-                    continue
+                vol = get_volume(pair, interval, res)
+                if vol:
+                    data.append([pair, interval, vol])
 
     # percent between upper and lower bb
     elif key == 'bb_size':
         data.append(['pair', 'interval', 'bb_size'])
         for pair in pairs:
             for interval in intervals:
-                try:
-                    bb_diff = abs(perc_diff(res[interval][pair]['upper_12'],
-                                            res[interval][pair]['lower_12']))
-
-                    data.append([pair, interval, '{:.2f}'.format(bb_diff)])
-                except:
-                    continue
+                bb_diff = get_bb_size(pair, interval, res)
+                data.append([pair, interval, bb_diff])
 
     # rapid change in bbperc value
     elif key == 'bbperc_diff':
         data.append(['pair', 'interval', 'from', 'to', 'diff'])
         for pair in pairs:
             for interval in intervals:
-                try:
-                    bb_from = last_res[interval][pair]['bbperc_200']
-                    bb_to = res[interval][pair]['bbperc_200']
-                    diff = abs(bb_from - bb_to)
-                    data.append([pair, interval, '{:.2f}'.format(bb_from), '{:.2f}'.format(bb_to),
-                                 '{:.2f}'.format(diff)])
-                except:
-                    continue
+                bb_from, bb_to, bb_diff = get_bbperc_diff(pair, interval, res, last_res)
+                if bb_diff:
+                    data.append([pair, interval, bb_from, bb_to, bb_diff])
 
     # change in candle size
-    elif key == 'size':
+    elif key == 'candle_size':
         data.append(['pair', 'interval', 'key'])
         for pair in pairs:
             for interval in intervals:
-                try:
-                    max_diff = max(abs(perc_diff(res[interval][pair]['ohlc']['high'],
-                                                 last_res[interval][pair]['ohlc']['low'])),
-                                   abs(perc_diff(res[interval][pair]['ohlc']['low'],
-                                                 last_res[interval][pair]['ohlc']['high'])))
-                    agg_res[interval][pair] = '{:.2f}'.format(max_diff)
-                    data.append([pair, interval, agg_res[interval][pair]])
-                except:
-                    continue
+                max_diff = get_candle_size(pair, interval, res, last_res)
+                if max_diff:
+                    data.append([pair, interval, max_diff])
 
     # distance between current price and edge of upper/lower bollinger bands
     elif key == 'distance':
         data.append(['pair', 'direction', 'interval', 'distance'])
         for pair in pairs:
             for interval in intervals:
-                try:
-                    if float(res[interval][pair]['ohlc']['close']) > \
-                            float(res[interval][pair]['upper_12']):
-
-                        distance_diff = perc_diff(res[interval][pair]['ohlc']['close'],
-                                                  res[interval][pair]['upper_12'])
-
-                    elif float(res[interval][pair]['ohlc']['close']) < \
-                            float(res[interval][pair]['lower_12']):
-                        distance_diff = abs(perc_diff(res[interval][pair]['ohlc']['close'],
-                                                      res[interval][pair]['lower_12']))
-
-                    data.append([pair, "lower", interval, '{:.2f}'.format(distance_diff)])
-
-                except:
-                    continue
+                direction, distance_diff = get_distance(pair, interval, res)
+                if direction:
+                    data.append([pair, interval, direction, distance_diff])
 
     # indicator data
     else:
         data.append(['pair', 'interval', indicator])
         for pair in pairs:
             for interval in intervals:
-                try:
-                    data.append([pair, interval, res[interval][pair][indicator]])
-
-                except:
-                    continue
+                value = get_indicator_value(pair, interval, res, indicator)
+                if value:
+                    data.append([pair, interval, value])
 
     # save as csv
     timestr = time.strftime("%Y%m%d-%H%M%S")
@@ -199,8 +257,8 @@ def main():
 
     # create/overwrite symlink to most recent file
     os.chdir('/data/aggregate')
-    symlink_force('../{}_{}.tsv'.format(key, timestr), 'current/{}.tsv'.format(key))
-    symlink_force('../{}_{}.csv'.format(key, timestr), 'current/{}.csv'.format(key))
+    symlink_force('../{}_{}.tsv'.format(key, timestr), 'current/{}-new.tsv'.format(key))
+    symlink_force('../{}_{}.csv'.format(key, timestr), 'current/{}-new.csv'.format(key))
     print('DONE')
 
 if __name__ == '__main__':
