@@ -186,6 +186,8 @@ services:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=stag/fe/cron
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
@@ -351,6 +353,8 @@ services:
       - get_trend="true"
       - intermittent="true"
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -389,6 +393,8 @@ services:
       - get_trend="true"
       - intermittent="true"
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -427,6 +433,8 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -465,6 +473,8 @@ services:
       - intermittent="true"
       - ALERT="True"
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -502,6 +512,8 @@ services:
       - CONFIG_ENV=stag/be/any2/short
       - intermittent="true"
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -539,6 +551,8 @@ services:
       - CONFIG_ENV=stag/be/any2/long
       - intermittent="true"
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -577,6 +591,8 @@ services:
       - get_trend="true"
       - intermittent="true"
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -615,6 +631,8 @@ services:
       - get_trend="true"
       - intermittent="true"
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -653,6 +671,8 @@ services:
       - get_trend="true"
       - intermittent="true"
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -691,6 +711,8 @@ services:
       - get_trend="true"
       - intermittent="true"
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -729,6 +751,8 @@ services:
       - get_trend="true"
       - intermittent="true"
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -767,6 +791,8 @@ services:
       - get_trend="true"
       - intermittent="true"
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -804,6 +830,8 @@ services:
       - CONFIG_ENV=stag/be/bbpercst
       - intermittent="true"
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     links:
       - stag-base-mysql:mysql
       - stag-base-redis:redis
@@ -837,6 +865,8 @@ services:
       - CONFIG_ENV=stag/be/bbpercst/long/2
       - intermittent="true"
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     links:
       - stag-base-mysql:mysql
       - stag-base-redis:redis
@@ -870,6 +900,8 @@ services:
       - CONFIG_ENV=stag/be/bbpercst/short/2
       - intermittent="true"
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     links:
       - stag-base-mysql:mysql
       - stag-base-redis:redis
@@ -903,6 +935,8 @@ services:
       - CONFIG_ENV=stag/be/bbpercst/long/2/4
       - intermittent="true"
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     links:
       - stag-base-mysql:mysql
       - stag-base-redis:redis
@@ -936,6 +970,8 @@ services:
       - CONFIG_ENV=stag/be/bbpercst/short/2/4
       - intermittent="true"
       - DB=true
+      - http_proxy=http://172.17.0.1:8082
+      - https_proxy=http://172.17.0.1:8082
     links:
       - stag-base-mysql:mysql
       - stag-base-redis:redis
