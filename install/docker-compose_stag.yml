@@ -504,6 +504,8 @@ services:
       - DB=true
       - http_proxy=http://172.17.0.1:8082
       - https_proxy=http://172.17.0.1:8082
+      - no_proxy=router
+      - no_proxy=router
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -543,6 +545,7 @@ services:
       - DB=true
       - http_proxy=http://172.17.0.1:8082
       - https_proxy=http://172.17.0.1:8082
+      - no_proxy=router
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -583,6 +586,7 @@ services:
       - DB=true
       - http_proxy=http://172.17.0.1:8082
       - https_proxy=http://172.17.0.1:8082
+      - no_proxy=router
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -623,6 +627,7 @@ services:
       - DB=true
       - http_proxy=http://172.17.0.1:8082
       - https_proxy=http://172.17.0.1:8082
+      - no_proxy=router
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -663,6 +668,7 @@ services:
       - DB=true
       - http_proxy=http://172.17.0.1:8082
       - https_proxy=http://172.17.0.1:8082
+      - no_proxy=router
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -703,6 +709,7 @@ services:
       - DB=true
       - http_proxy=http://172.17.0.1:8082
       - https_proxy=http://172.17.0.1:8082
+      - no_proxy=router
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -743,6 +750,7 @@ services:
       - DB=true
       - http_proxy=http://172.17.0.1:8082
       - https_proxy=http://172.17.0.1:8082
+      - no_proxy=router
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -783,6 +791,7 @@ services:
       - DB=true
       - http_proxy=http://172.17.0.1:8082
       - https_proxy=http://172.17.0.1:8082
+      - no_proxy=router
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -822,6 +831,7 @@ services:
       - DB=true
       - http_proxy=http://172.17.0.1:8082
       - https_proxy=http://172.17.0.1:8082
+      - no_proxy=router
     links:
       - stag-base-mysql:mysql
       - stag-base-redis:redis
@@ -857,6 +867,7 @@ services:
       - DB=true
       - http_proxy=http://172.17.0.1:8082
       - https_proxy=http://172.17.0.1:8082
+      - no_proxy=router
     links:
       - stag-base-mysql:mysql
       - stag-base-redis:redis
@@ -892,6 +903,7 @@ services:
       - DB=true
       - http_proxy=http://172.17.0.1:8082
       - https_proxy=http://172.17.0.1:8082
+      - no_proxy=router
     links:
       - stag-base-mysql:mysql
       - stag-base-redis:redis
@@ -927,6 +939,7 @@ services:
       - DB=true
       - http_proxy=http://172.17.0.1:8082
       - https_proxy=http://172.17.0.1:8082
+      - no_proxy=router
     links:
       - stag-base-mysql:mysql
       - stag-base-redis:redis
@@ -962,6 +975,7 @@ services:
       - DB=true
       - http_proxy=http://172.17.0.1:8082
       - https_proxy=http://172.17.0.1:8082
+      - no_proxy=router
     links:
       - stag-base-mysql:mysql
       - stag-base-redis:redis

@@ -88,6 +88,7 @@ services:
       - DB=true
       - http_proxy=http://172.17.0.1:8082
       - https_proxy=http://172.17.0.1:8082
+      - no_proxy=router
     healthcheck:
       test: find /var/local/gc_get_1h.lock  -mmin -2 ||exit 1
       interval: 1m
@@ -189,6 +190,7 @@ services:
       - DB=true
       - http_proxy=http://172.17.0.1:8082
       - https_proxy=http://172.17.0.1:8082
+      - no_proxy=router
     healthcheck:
       test: find /var/local/gc_get_12h.lock  -mmin -2 ||exit 1
       interval: 1m
@@ -290,6 +292,7 @@ services:
       - DB=true
       - http_proxy=http://172.17.0.1:8082
       - https_proxy=http://172.17.0.1:8082
+      - no_proxy=router
     healthcheck:
       test: find /var/local/gc_get_4h.lock  -mmin -2 ||exit 1
       interval: 1m
