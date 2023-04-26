@@ -14,26 +14,29 @@ config.create_config()
 BITCOIN = {}
 LOGGER = get_logger(__name__)
 
-def quote2base(amount, pair):
+def quote2base(amount, pair, prices=None):
     """
     convert quote amount to base amount
     """
     client = binance_auth()
-    return float(amount) / float(client.prices()[pair])
+    prices = prices if prices else client.prices()
+    return float(amount) / float(prices[pair])
 
-def base2quote(amount, pair):
+def base2quote(amount, pair, prices=None):
     """
     convert base amount to quote amount
     """
     client = binance_auth()
-    return float(amount) * float(client.prices()[pair])
+    prices = prices if prices else client.prices()
+    return float(amount) * float(prices[pair])
 
-def usd2gbp():
+def usd2gbp(prices=None):
     """
     Get usd/gbp rate
     """
     client = binance_auth()
-    return  1/float(client.prices()['GBPUSDT'])
+    prices = prices if prices else client.prices()
+    return  1/float(prices['GBPUSDT'])
 
 def get_current_isolated():
     """Get balance for isolated accounts"""
@@ -86,7 +89,7 @@ def get_binance_isolated():
                     continue
 
             usd = bcoin*float(prices['BTCUSDT'])
-            gbp = usd2gbp() * usd
+            gbp = usd2gbp(prices) * usd
 
             bitcoin_total += bcoin
             usd_total += usd
@@ -100,7 +103,7 @@ def get_binance_isolated():
     result["isolated"]["TOTALS"]["BTC"] = bitcoin_total
     result["isolated"]["TOTALS"]["USD"] = usd_total
     result["isolated"]["TOTALS"]["count"] = "N/A"
-    gbp_total = usd2gbp() * usd_total
+    gbp_total = usd2gbp(prices) * usd_total
     result["isolated"]["TOTALS"]["GBP"] = gbp_total
 
     return default_to_regular(result)
@@ -153,7 +156,7 @@ def get_binance_cross():
             add_value(key, bcoin)
 
             usd = bcoin *float(prices["BTCUSDT"])
-            gbp = usd2gbp() * usd
+            gbp = usd2gbp(prices) * usd
             usd_total += usd
             gbp_total += gbp
             result["margin"][key]["BTC"] = bcoin
@@ -164,7 +167,7 @@ def get_binance_cross():
     result["margin"]["TOTALS"]["BTC"] = bitcoin_totals
     result["margin"]["TOTALS"]["USD"] = usd_total
     result["margin"]["TOTALS"]["count"] = "N/A"
-    gbp_total = usd2gbp() * usd_total
+    gbp_total = usd2gbp(prices) * usd_total
     result["margin"]["TOTALS"]["GBP"] = gbp_total
     add_value("USD", usd_total)
     add_value("GBP", gbp_total)
@@ -224,7 +227,7 @@ def get_binance_spot():
             add_value(key, bcoin)
 
             usd = bcoin *float(prices["BTCUSDT"])
-            gbp = usd2gbp() * usd
+            gbp = usd2gbp(prices) * usd
             usd_total += usd
             gbp_total += gbp
             result["binance"][key]["BTC"] = bcoin
@@ -235,7 +238,7 @@ def get_binance_spot():
         result["binance"]["TOTALS"]["BTC"] = bitcoin_totals
         result["binance"]["TOTALS"]["USD"] = usd_total
         result["binance"]["TOTALS"]["count"] = "N/A"
-        gbp_total = usd2gbp() * usd_total
+        gbp_total = usd2gbp(prices) * usd_total
         result["binance"]["TOTALS"]["GBP"] = gbp_total
         add_value("USD", usd_total)
         add_value("GBP", gbp_total)
