@@ -10,6 +10,7 @@ import threading
 import websocket
 from flask import Flask, request
 
+from greencandle.lib.common import arg_decorator
 from greencandle.lib import config
 config.create_config()
 APP = Flask(__name__)
@@ -69,9 +70,12 @@ def start_flask():
     """
     APP.run(debug=False, host='0.0.0.0', port=9876, threaded=True)
 
+@arg_decorator
 def main():
     """
-    Main function
+    Stream candle data from binance and make latest data available through flask
+
+    For use in data environment, uses pairs and interval within scope
     """
 
     p_flask = threading.Thread(target=start_flask)
