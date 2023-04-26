@@ -62,7 +62,6 @@ def perform_data(pair, interval, data_dir, indicators):
     if not isinstance(dframe, pandas.DataFrame):
         return
     dbase = Mysql(test=True, interval=interval)
-    prices_trunk = {pair: "0"}
     for beg in range(len(dframe) - CHUNK_SIZE):
         LOGGER.debug("IN LOOP %s " % beg)
         trade = Trade(interval=interval, test_trade=True, test_data=True, config=config)
@@ -82,7 +81,7 @@ def perform_data(pair, interval, data_dir, indicators):
             LOGGER.debug("End of dataframe")
             break
         dataframes = {pair:dataframe}
-        engine = Engine(prices=prices_trunk, dataframes=dataframes,
+        engine = Engine(dataframes=dataframes,
                         interval=interval, test=True, redis=redis)
         engine.get_data(localconfig=indicators)
 
@@ -164,11 +163,10 @@ def parallel_test(pairs, interval, data_dir, indicators):
         for pair in pairs:
             LOGGER.info("Current loop: %s to %s pair:%s" % (beg, end, pair))
             dataframe = dframes[pair][beg: end]
-            prices_trunk = {pair: "0"}
             if len(dataframe) < CHUNK_SIZE:
                 break
             dataframes.update({pair:dataframe})
-            engine = Engine(prices=prices_trunk, dataframes=dataframes,
+            engine = Engine(dataframes=dataframes,
                             interval=interval, test=True, redis=redis)
             engine.get_data(localconfig=indicators)
 
@@ -284,13 +282,6 @@ class ProdRunner():
         """
         Initial prod run - back-fetching data for tech analysis.
         """
-        client = Binance(debug=str2bool(config.accounts.account_debug))
-        prices = client.prices()
-        prices_trunk = {}
-
-        for key, val in prices.items():
-            if key in PAIRS:
-                prices_trunk[key] = val
 
         redis = Redis()
         no_of_klines = config.main.no_of_klines
@@ -298,7 +289,7 @@ class ProdRunner():
         self.dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=no_of_klines)
         for pair, dframe in self.dataframes.items():
             self.dataframes[pair] = dframe[:-1]
-        engine = Engine(prices=prices_trunk, dataframes=self.dataframes, interval=interval,
+        engine = Engine(dataframes=self.dataframes, interval=interval,
                         test=test, redis=redis)
         engine.get_data(localconfig=MAIN_INDICATORS, first_run=True, no_of_klines=no_of_klines)
         del redis
@@ -346,13 +337,8 @@ class ProdRunner():
         redis = Redis()
 
         if data:
-            prices = client.prices()
-            prices_trunk = {}
-            for key, val in prices.items():
-                if key in PAIRS:
-                    prices_trunk[key] = val
             self.append_data(interval)
-            engine = Engine(prices=prices_trunk, dataframes=self.dataframes, interval=interval,
+            engine = Engine(dataframes=self.dataframes, interval=interval,
                             redis=redis)
             engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
             del engine
