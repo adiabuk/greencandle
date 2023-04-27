@@ -8,7 +8,7 @@ For use in data environment, uses pairs and interval within scope
 import json
 import threading
 import websocket
-from flask import Flask, request
+from flask import Flask, request, Response
 
 from greencandle.lib.common import arg_decorator
 from greencandle.lib import config
@@ -17,6 +17,7 @@ APP = Flask(__name__)
 RECENT = {}
 CLOSED = {}
 PAIR_STRING = ""
+
 for pair in config.main.pairs.split():
     PAIR_STRING += "/{}@kline_{}".format(pair.lower(), config.main.interval)
 
@@ -34,8 +35,6 @@ def on_message(socket, message):
     global CLOSED
     json_message = json.loads(message)
     candle = json_message['data']['k']
-    candle = json.dumps(candle, indent=2)
-
     current_dict = {'openTime': candle['t'], 'closeTime': candle['T'], 'open': candle['o'],
                     'high': candle['h'], 'low': candle['l'], 'close': candle['c'],
                     'quoteVolume': candle['q'], 'volume': candle['v'], 'numTrades': candle['n']}
@@ -55,14 +54,26 @@ def serve_recent():
     """
     closed candle data request through flask API
     """
-    return RECENT[request.args.get('pair')]
+    try:
+        return RECENT[request.args.get('pair')]
+    except KeyError:
+        return Response(None, status=400,)
 
 @APP.route('/closed', methods=['GET'])
 def serve_closed():
     """
     recent data request through flask API
     """
-    return CLOSED[request.args.get('pair')]
+    try:
+        return CLOSED[request.args.get('pair')]
+    except KeyError:
+        return Response(None, status=400,)
+
+def on_error(socket, error):
+    """
+    Raise errors from websocket
+    """
+    raise error
 
 def start_ws():
     """
@@ -71,7 +82,7 @@ def start_ws():
     sock = "wss://stream.binance.com:9443/stream?streams=" + PAIR_STRING.lstrip('/')
 
     socket = websocket.WebSocketApp(sock, on_open=on_open, on_close=on_close,
-                                    on_message=on_message)
+                                    on_message=on_message, on_error=on_error)
     socket.run_forever()
 
 def start_flask():
@@ -88,14 +99,14 @@ def main():
     For use in data environment, uses pairs and interval within scope
     """
 
-    p_flask = threading.Thread(target=start_flask)
-    p_ws = threading.Thread(target=start_ws)
+    t_flask = threading.Thread(target=start_flask)
+    t_ws = threading.Thread(target=start_ws)
 
-    p_flask.start()
-    p_ws.start()
+    t_flask.start()
+    t_ws.start()
 
-    p_flask.join()
-    p_ws.join()
+    t_flask.join()
+    t_ws.join()
 
 if __name__ == '__main__':
     main()
