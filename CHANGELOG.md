@@ -1,5 +1,21 @@
 # Releases
 
+# 5.22
+* get closed candles separately from recent data and sort dataframe
+* format aggregated indicator values
+* get all data continuously now that we're using websockets
+* use stream instead of api for data updates
+* stream data using websockets
+* don't send prices to Engine instantiation
+* bump binance version for path logging
+* pass binance prices to helper functions
+* fix ordering on /trade page
+* add complete aggregate data sheet
+* Add proxy for some containers, and exclude local http/https calls
+* fix stag env
+* aggregate all data into a single spreadsheet
+* use functions for each aggregation and cleanup script
+
 # 5.21.1
 * lint fix
 * simplify stochrsi logger msg outside try block
