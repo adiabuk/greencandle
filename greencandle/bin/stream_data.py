@@ -14,7 +14,8 @@ from greencandle.lib.common import arg_decorator
 from greencandle.lib import config
 config.create_config()
 APP = Flask(__name__)
-DATA = {}
+RECENT = {}
+CLOSED = {}
 PAIR_STRING = ""
 for pair in config.main.pairs.split():
     PAIR_STRING += "/{}@kline_{}".format(pair.lower(), config.main.interval)
@@ -29,16 +30,19 @@ def on_message(socket, message):
     """
     When data received through socket
     """
-    global DATA
+    global RECENT
+    global CLOSED
     json_message = json.loads(message)
     candle = json_message['data']['k']
-    raw = json.dumps(candle, indent=2)
-    raw = candle
-    current_dict = {'openTime': raw['t'], 'closeTime': raw['T'], 'open': raw['o'], 'high': raw['h'],
-                    'low': raw['l'], 'close': raw['c'], 'quoteVolume': raw['q'], 'volume': raw['v'],
-                    'numTrades': raw['n']}
-    DATA[raw['s']] = current_dict
-    #is_candle_closed = candle['x']
+    candle = json.dumps(candle, indent=2)
+
+    current_dict = {'openTime': candle['t'], 'closeTime': candle['T'], 'open': candle['o'],
+                    'high': candle['h'], 'low': candle['l'], 'close': candle['c'],
+                    'quoteVolume': candle['q'], 'volume': candle['v'], 'numTrades': candle['n']}
+    RECENT[candle['s']] = current_dict
+
+    if candle['x']:  # closed candle (bool)
+        CLOSED[candle['s']] = current_dict
 
 def on_close(socket, close_status_code, close_msg):
     """
@@ -49,10 +53,16 @@ def on_close(socket, close_status_code, close_msg):
 @APP.route('/recent', methods=['GET'])
 def serve_recent():
     """
-    data request through flask API
+    closed candle data request through flask API
     """
-    return DATA[request.args.get('pair')]
+    return RECENT[request.args.get('pair')]
 
+@APP.route('/closed', methods=['GET'])
+def serve_closed():
+    """
+    recent data request through flask API
+    """
+    return CLOSED[request.args.get('pair')]
 
 def start_ws():
     """

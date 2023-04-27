@@ -300,14 +300,22 @@ class ProdRunner():
         Fetch new dataframe data and append to existing structure
         """
 
-        #new_dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=2)
         new_dataframes = defaultdict(dict)
         for pair in PAIRS:
             try:
-                request = requests.get("http://stream:5000/recent?pair={}".format(pair))
-                data_di = request.json()
-                dframe = pandas.DataFrame(columns=data_di.keys())
-                dframe.loc[0] = data_di
+                request1 = requests.get("http://stream:5000/recent?pair={}".format(pair))
+                request2 = requests.get("http://stream:5000/closed?pair={}".format(pair))
+                recent_di = request1.json()
+
+                try:
+                    closed_di = request2.json()
+                except ValueError:
+                    closed_di = None
+
+                dframe = pandas.DataFrame(columns=recent_di.keys())
+                dframe.loc[0] = recent_di
+                if closed_di and closed_di != recent_di:
+                    dframe.loc[1] = closed_di
                 new_dataframes[pair] = dframe
             except ValueError:
                 continue
