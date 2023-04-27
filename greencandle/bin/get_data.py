@@ -5,22 +5,19 @@ Collect OHLC and strategy data for later analysis
 """
 import os
 from pathlib import Path
-from apscheduler.schedulers.blocking import BlockingScheduler
 from greencandle.lib import config
 from greencandle.lib.alerts import send_slack_message
 config.create_config()
 from greencandle.lib.run import ProdRunner
 from greencandle.lib.logger import get_logger, exception_catcher
-from greencandle.lib.common import arg_decorator, TF2MIN
+from greencandle.lib.common import arg_decorator
 
 LOGGER = get_logger(__name__)
 PAIRS = config.main.pairs.split()
 MAIN_INDICATORS = config.main.indicators.split()
 GET_EXCEPTIONS = exception_catcher((Exception))
-SCHED = BlockingScheduler()
 RUNNER = ProdRunner()
 
-@SCHED.scheduled_job('cron', minute='*')
 def keepalive():
     """
     Periodically touch file for docker healthcheck
@@ -28,7 +25,6 @@ def keepalive():
     Path('/var/local/gc_get_{}.lock'.format(config.main.interval)).touch()
 
 @GET_EXCEPTIONS
-@SCHED.scheduled_job('cron', minute=config.main.check_interval)
 def get_data():
     """
     Get-data run
@@ -64,12 +60,9 @@ def main():
     send_slack_message('alerts', "Finished initial prod run")
     LOGGER.info("Finished initial prod run")
 
-    if TF2MIN[config.main.interval] <= 5:
-        while True:
-            # continuous loop for smaller timeframes
-            get_data()
-    else:
-        SCHED.start()
+    while True:
+        # continuous loop for smaller timeframes
+        get_data()
 
 if __name__ == '__main__':
     main()
