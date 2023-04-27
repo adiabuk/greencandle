@@ -10,6 +10,7 @@ import pickle
 import gzip
 from glob import glob
 from concurrent.futures import ThreadPoolExecutor
+from collections import defaultdict
 import pandas
 import requests
 from binance.binance import Binance
@@ -294,12 +295,24 @@ class ProdRunner():
         engine.get_data(localconfig=MAIN_INDICATORS, first_run=True, no_of_klines=no_of_klines)
         del redis
 
-    def append_data(self, interval):
+    def append_data(self):
         """
         Fetch new dataframe data and append to existing structure
         """
 
-        new_dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=2)
+        #new_dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=2)
+        new_dataframes = defaultdict(dict)
+        for pair in PAIRS:
+            try:
+                request = requests.get("http://stream:5000/recent?pair={}".format(pair))
+                data_di = request.json()
+                dframe = pandas.DataFrame(columns=data_di.keys())
+                dframe.loc[0] = data_di
+                new_dataframes[pair] = dframe
+            except ValueError:
+                continue
+
+
         max_klines = int(config.main.no_of_klines)
         for pair in PAIRS:
             # skip pair if empty dataframe (no new trades in kline)
@@ -337,7 +350,7 @@ class ProdRunner():
         redis = Redis()
 
         if data:
-            self.append_data(interval)
+            self.append_data()
             engine = Engine(dataframes=self.dataframes, interval=interval,
                             redis=redis)
             engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
