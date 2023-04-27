@@ -34,9 +34,15 @@ def get_indicator_value(pair, interval, res, indicator):
     get value of indicator
     """
     try:
-        return res[interval][pair][indicator]
+        value = res[interval][pair][indicator]
+        if "bbperc" in indicator:
+            return "{:.2f}".format(value)
+        elif "STOCH" in indicator:
+            return "{:.2f}".format(value[0]), "{:.2f}".format(value[1])
+        else:
+            return value
     except KeyError:
-        return None
+        return None, None
 
 def get_stoch_flat(pair, interval, res, last_res):
     """
