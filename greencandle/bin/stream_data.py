@@ -68,7 +68,7 @@ def start_flask():
     """
     Start flask app
     """
-    APP.run(debug=False, host='0.0.0.0', port=9876, threaded=True)
+    APP.run(debug=False, host='0.0.0.0', port=5000, threaded=True)
 
 @arg_decorator
 def main():
