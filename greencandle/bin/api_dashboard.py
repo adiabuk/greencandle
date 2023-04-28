@@ -201,12 +201,13 @@ def data():
     """
     route to data spreadsheets
     """
-    files = [os.path.basename(i.split('.')[0]) for i in glob.glob('files/*.csv')]
+    path = '/data/aggregate/current'
+    files = [os.path.basename(i.split('.')[0]) for i in glob.glob('{}/*.csv'.format(path))]
     if request.method == 'GET':
-        return render_template('home.html', files=files)
+        return render_template('data.html', files=files)
     elif request.method == 'POST':
         results = []
-        file = open('files/{}.csv'.format(request.form['book']), 'r').readlines()
+        file = open('{}/{}.csv'.format(path, request.form['submit']), 'r').readlines()
         reader = csv.DictReader(file)
         for row in reader:
             results.append(dict(row))
