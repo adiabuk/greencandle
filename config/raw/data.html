@@ -22,7 +22,7 @@
     <script type = "text/javascript"  src="https://cdn.datatables.net/plug-ins/1.10.15/dataRender/datetime.js"></script>
   </head>
   <body>
-    <div class="card">
+    <div>
 	    <div class="card-body">
 
         <div style="display: flex;">
@@ -30,7 +30,7 @@
 	<form method="post">
 		<input type="hidden" name="submit" value="{{file}}" />
 		<button class="btn btn-success mt-2">{{file}}</button>
-	</form>   
+	</form>
 	{% endfor %}
         </div>
         <div class="mt-4">
@@ -61,10 +61,7 @@
   <script type="text/javascript">
     $('#proxies').DataTable();
   </script>
-  
+
 </html>
-
-
-
 
 {% endblock %}
