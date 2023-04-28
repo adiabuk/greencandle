@@ -1,11 +1,13 @@
 #!/usr/bin/env python
-#pylint: disable=bare-except, no-member, wrong-import-position,no-else-return
+#pylint: disable=bare-except,no-member,wrong-import-position,no-else-return,unnecessary-comprehension
 
 """
 Flask module for manipulating API trades and displaying relevent graphs
 """
 import re
 import os
+import glob
+import csv
 import json
 import subprocess
 from collections import defaultdict
@@ -193,6 +195,27 @@ def trade():
             my_dic[strat] |= set(xxx)
 
     return render_template('action.html', my_dic=my_dic)
+
+@APP.route('/data', methods=['GET', 'POST'])
+def data():
+    """
+    route to data spreadsheets
+    """
+    files = [os.path.basename(i.split('.')[0]) for i in glob.glob('files/*.csv')]
+    if request.method == 'GET':
+        return render_template('home.html', files=files)
+    elif request.method == 'POST':
+        results = []
+        file = open('files/{}.csv'.format(request.form['book']), 'r').readlines()
+        reader = csv.DictReader(file)
+        for row in reader:
+            results.append(dict(row))
+
+        fieldnames = [key for key in results[0].keys()]
+        return render_template('data.html', results=results, fieldnames=fieldnames, len=len,
+                               files=files)
+    return None
+
 
 @APP.route('/menu', methods=["GET"])
 @login_required
