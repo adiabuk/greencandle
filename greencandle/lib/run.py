@@ -293,6 +293,9 @@ class ProdRunner():
         engine = Engine(dataframes=self.dataframes, interval=interval,
                         test=test, redis=redis)
         engine.get_data(localconfig=MAIN_INDICATORS, first_run=True, no_of_klines=no_of_klines)
+
+
+
         del redis
 
     def append_data(self):
@@ -316,7 +319,8 @@ class ProdRunner():
                 dframe.loc[0] = recent_di
                 if closed_di and closed_di != recent_di:
                     dframe.loc[1] = closed_di
-                new_dataframes[pair] = dframe
+                new_dataframes[pair] = dframe.sort_values('closeTime')
+
             except ValueError:
                 continue
 
