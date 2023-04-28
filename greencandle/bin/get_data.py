@@ -4,6 +4,7 @@
 Collect OHLC and strategy data for later analysis
 """
 import os
+import time
 from pathlib import Path
 from greencandle.lib import config
 from greencandle.lib.alerts import send_slack_message
@@ -63,6 +64,7 @@ def main():
     while True:
         # continuous loop for smaller timeframes
         get_data()
+        time.sleep(10)
 
 if __name__ == '__main__':
     main()
