@@ -1,5 +1,15 @@
 # Releases
 
+# 5.23
+* correct agg column names
+* fix aggregate type error with bbperc ind
+* add spreadsheets to web/dashboard
+* move sorting of df columns from Engine to Runner class
+* slow down fetching of data a little
+* reduce no of candles for data env
+* raise websocket errors, but catch flask errors
+* fix stag container
+
 # 5.22
 * get closed candles separately from recent data and sort dataframe
 * format aggregated indicator values
