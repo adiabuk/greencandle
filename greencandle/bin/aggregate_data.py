@@ -36,7 +36,7 @@ def get_indicator_value(pair, interval, res, indicator):
     try:
         value = res[interval][pair][indicator]
         if "bbperc" in indicator:
-            return "{:.2f}".format(value)
+            return "{:.2f}".format(value) if value is not None else None
         elif "STOCH" in indicator:
             return "{:.2f}".format(value[0]), "{:.2f}".format(value[1])
         else:
@@ -117,7 +117,6 @@ def get_distance(pair, interval, res):
             direction = 'lower'
         else:
             return None, None
-        print(direction, pair, interval, distance_diff)
         return direction, '{:.2f}'.format(distance_diff)
     except KeyError:
         return None, None
