@@ -1,7 +1,0 @@
-{
-  "name": "stag-be-eng-bbpercorig-short",
-  "open_rule1": "res[0].high \u003e res[0].upper_200 and res[0].bbperc_200 \u003e 2",
-  "rate_indicator": "upper_200",
-  "trade_direction": "short",
-  "trade_type": "margin"
-}

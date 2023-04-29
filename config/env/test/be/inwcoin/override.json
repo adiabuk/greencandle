@@ -1,7 +1,0 @@
-{
-  "interval": "1s",
-  "pairs": "BCHBTC BCHUSDT",
-  "stop_loss_perc": "20",
-  "take_profit_perc": "20",
-  "trade_type": "margin"
-}

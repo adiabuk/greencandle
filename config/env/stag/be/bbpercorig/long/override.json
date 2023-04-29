@@ -1,4 +1,0 @@
-{
-  "name": "stag-be-eng-bbpercorig-long",
-  "open_rule1": "res[0].low \u003c res[0].lower_200 and res[0].bbperc_200 \u003c -1.5"
-}
