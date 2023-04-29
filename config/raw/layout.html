@@ -40,7 +40,7 @@
 
     </header>
 
-    {% if request.path=="/" %}
+    {% if request.path=="/" or request.path=="/data" %}
     <p id="demo"></p>
     <meta http-equiv="refresh" content="60">
     <script>
