@@ -174,12 +174,10 @@ class Engine(dict):
                         for seq in range(int(actual_klines) -1):
                             if seq >= len(self.dataframes[pair]):
                                 continue
-                            pool.submit(getattr(self, function)(pair, self.dataframes[pair],
-                                                                index=seq,
+                            pool.submit(getattr(self, function)(pair, index=seq,
                                                                 localconfig=(name, period)))
                     else:
-                        pool.submit(getattr(self, function)(pair, self.dataframes[pair],
-                                                            index=None,
+                        pool.submit(getattr(self, function)(pair, index=None,
                                                             localconfig=(name, period)))
 
                 pool.shutdown(wait=True)
@@ -234,13 +232,13 @@ class Engine(dict):
         scheme["close_time"] = str(self.dataframes[pair].iloc[location]["closeTime"])
         self.schemes.append(scheme)
 
-    def get_bb_perc_ema(self, pair, dataframe, index=None, localconfig=None):
+    def get_bb_perc_ema(self, pair, index=None, localconfig=None):
         """
         Get EMA of bbperc
         """
-        self.get_bb_perc(pair, dataframe, index, localconfig, ema=True)
+        self.get_bb_perc(pair, index, localconfig, ema=True)
 
-    def get_bb_perc(self, pair, dataframe, index=None, localconfig=None, ema=False):
+    def get_bb_perc(self, pair, index=None, localconfig=None, ema=False):
         """get bb %"""
         if (not index and self.test) or len(self.dataframes[pair]) < 2:
             index = -1
@@ -248,13 +246,13 @@ class Engine(dict):
             index = -1
         close_time = str(self.dataframes[pair].iloc[index]["closeTime"])
         LOGGER.debug("Getting bb perc for %s - %s" % (pair, close_time))
-        klines = self.__make_data_tupple(dataframe.iloc[:index])
+        klines = self.__make_data_tupple(self.dataframes[pair].iloc[:index])
         func, timef = localconfig  # split tuple
         timeframe, multiplier = timef.split(',')
         results = {}
 
         try:
-            close = make_float(dataframe.close.iloc[:index])
+            close = make_float(self.dataframes[pair].close.iloc[:index])
             current_price = str(Decimal(self.dataframes[pair].iloc[index]["close"]))
             upper, middle, lower = \
                      talib.BBANDS(close*100000, timeperiod=int(timeframe),
@@ -298,7 +296,7 @@ class Engine(dict):
 
         LOGGER.debug("Done getting bb %")
 
-    def get_bb(self, pair, dataframe, index=None, localconfig=None):
+    def get_bb(self, pair, index=None, localconfig=None):
         """get bollinger bands"""
         if (not index and self.test) or len(self.dataframes[pair]) < 2:
             index = -1
@@ -307,7 +305,7 @@ class Engine(dict):
         scheme = {}
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
         LOGGER.debug("Getting bollinger bands for %s - %s" % (pair, scheme['close_time']))
-        klines = self.__make_data_tupple(dataframe.iloc[:index])
+        klines = self.__make_data_tupple(self.dataframes[pair].iloc[:index])
         func, timef = localconfig  # split tuple
         timeframe, multiplier = timef.split(',')
         results = {}
@@ -346,7 +344,7 @@ class Engine(dict):
         LOGGER.debug("Done getting Bollinger bands")
 
     @get_exceptions
-    def get_pivot(self, pair, dataframe, index=None, localconfig=None):
+    def get_pivot(self, pair, index=None, localconfig=None):
         """
         Get pivot points based on previous day data
         !!!Does not work with test data!!!
@@ -358,7 +356,7 @@ class Engine(dict):
         index = -1
         # Get current date:
         scheme = {}
-        scheme["close_time"] = str(dataframe.iloc[index]["closeTime"])
+        scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
         # get yesterday's m'epoch time
         get_data_for = int(int(scheme["close_time"]) - 1.728e+8)
@@ -381,7 +379,7 @@ class Engine(dict):
         LOGGER.debug("Done getting pivot")
 
     @get_exceptions
-    def get_tsi(self, pair, dataframe, index=None, localconfig=None):
+    def get_tsi(self, pair, index=None, localconfig=None):
         """
         Get TSI osscilator
         """
@@ -389,7 +387,7 @@ class Engine(dict):
         index = -1
 
         func, timeperiod = localconfig
-        tsi = ta.smi(dataframe.close.astype(float), fast=13, slow=25, signal=13)
+        tsi = ta.smi(self.dataframes[pair].close.astype(float), fast=13, slow=25, signal=13)
         if func == 'tsi':
             result = float(tsi[tsi.columns[0]].iloc[index]) * 100
         elif func == 'signal':
@@ -407,7 +405,7 @@ class Engine(dict):
         LOGGER.debug("Done getting TSI")
 
     @get_exceptions
-    def get_atr(self, pair, dataframe, index=None, localconfig=None):
+    def get_atr(self, pair, index=None, localconfig=None):
         """
         get Average True Range values for given pair
         Append current RSI data to instance variable
@@ -423,15 +421,15 @@ class Engine(dict):
         func, timeperiod = localconfig  # split tuple
         LOGGER.debug("Getting %s_%s for %s" % (func, timeperiod, pair))
         scheme = {}
-        mine = dataframe.apply(pandas.to_numeric).loc[:index]
+        mine = self.dataframes[pair].apply(pandas.to_numeric).loc[:index]
 
         if (not index and self.test) or len(self.dataframes[pair]) < 2:
             index = -1
         elif not index and not self.test:
             index = -1
-        atr = talib.ATR(high=dataframe.high.values.astype(float),
-                        low=dataframe.low.values.astype(float),
-                        close=dataframe.close.values.astype(float), timeperiod=14)
+        atr = talib.ATR(high=self.dataframes[pair].high.values.astype(float),
+                        low=self.dataframes[pair].low.values.astype(float),
+                        close=self.dataframes[pair].close.values.astype(float), timeperiod=14)
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
@@ -440,7 +438,7 @@ class Engine(dict):
         LOGGER.debug("Done getting ATR")
 
     @get_exceptions
-    def get_rsi(self, pair, dataframe, index=None, localconfig=None):
+    def get_rsi(self, pair, index=None, localconfig=None):
         """
         get RSI oscillator values for given pair
         Append current RSI data to instance variable
@@ -456,14 +454,15 @@ class Engine(dict):
         func, timeperiod = localconfig  # split tuple
         LOGGER.debug("Getting %s_%s for %s" % (func, timeperiod, pair))
         scheme = {}
-        mine = dataframe.apply(pandas.to_numeric).loc[:index]
+        mine = self.dataframes[pair].apply(pandas.to_numeric).loc[:index]
 
         if (not index and self.test) or len(self.dataframes[pair]) < 2:
             index = -1
         elif not index and not self.test:
             index = -1
 
-        rsi = talib.RSI(dataframe.close.values.astype(float) * 100000, timeperiod=int(timeperiod))
+        rsi = talib.RSI(self.dataframes[pair].close.values.astype(float) * 100000,
+                        timeperiod=int(timeperiod))
         scheme["symbol"] = pair
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
 
@@ -474,7 +473,7 @@ class Engine(dict):
         LOGGER.debug("Done getting RSI")
 
     @get_exceptions
-    def get_stochrsi(self, pair, dataframe, index=None, localconfig=None):
+    def get_stochrsi(self, pair, index=None, localconfig=None):
         """
         get Stochastic RSI values for given pair
         Append current Stochastic RSI data to instance variable
@@ -494,9 +493,9 @@ class Engine(dict):
         timeperiod, k_period, d_period = details.split(',')
         LOGGER.debug("Getting %s_%s for %s" % (func, timeperiod, pair))
         scheme = {}
-        mine = dataframe.apply(pandas.to_numeric).loc[:index]
+        mine = self.dataframes[pair].apply(pandas.to_numeric).loc[:index]
         try:
-            rsi = talib.RSI(dataframe.close.values.astype(float) * 100000,
+            rsi = talib.RSI(self.dataframes[pair].close.values.astype(float) * 100000,
                             timeperiod=int(timeperiod))
             rsinp = rsi[numpy.logical_not(numpy.isnan(rsi))]
             stochrsi = talib.STOCH(rsinp, rsinp, rsinp, int(timeperiod),
@@ -517,11 +516,11 @@ class Engine(dict):
         LOGGER.debug("Done getting STOCHRSI ")
 
     @get_exceptions
-    def get_envelope(self, pair, dataframe, index=None, localconfig=None):
+    def get_envelope(self, pair, index=None, localconfig=None):
         """
         Get envelope strategy
         """
-        klines = self.__make_data_tupple(dataframe.iloc[:index])
+        klines = self.__make_data_tupple(self.dataframes[pair].iloc[:index])
         func, timeperiod = localconfig
         close = klines[-1]
         basis = talib.SMA(close, int(timeperiod))
@@ -552,11 +551,11 @@ class Engine(dict):
         LOGGER.debug("Done getting envelope")
 
     @get_exceptions
-    def get_hma(self, pair, dataframe, index=None, localconfig=None):
+    def get_hma(self, pair, index=None, localconfig=None):
         """
         Calculate Hull Moving Average using Weighted Moving Average
         """
-        klines = self.__make_data_tupple(dataframe.iloc[:index])
+        klines = self.__make_data_tupple(self.dataframes[pair].iloc[:index])
         func, timeperiod = localconfig
         close = klines[-1]
         first = talib.WMA(close, int(timeperiod)/2)
@@ -585,11 +584,11 @@ class Engine(dict):
         LOGGER.debug("done getting moving averages")
 
     @get_exceptions
-    def get_vol_moving_averages(self, pair, dataframe, index=None, localconfig=None):
+    def get_vol_moving_averages(self, pair, index=None, localconfig=None):
         """
         Get moving averages with and expose volume indicator
         """
-        self.get_moving_averages(pair, dataframe, index, localconfig, volume=True)
+        self.get_moving_averages(pair, index, localconfig, volume=True)
 
         scheme = {}
         try:
@@ -606,7 +605,7 @@ class Engine(dict):
         LOGGER.debug("done getting volume moving averages")
 
     @get_exceptions
-    def get_moving_averages(self, pair, dataframe, index=None, localconfig=None, volume=False):
+    def get_moving_averages(self, pair, index=None, localconfig=None, volume=False):
         """
         Apply moving averages to klines and get BUY/SELL triggers
         Add data to DB
@@ -619,7 +618,7 @@ class Engine(dict):
             None
         """
         LOGGER.debug("Getting moving averages for %s" % pair)
-        klines = self.__make_data_tupple(dataframe.iloc[:index])
+        klines = self.__make_data_tupple(self.dataframes[pair].iloc[:index])
         func, timeperiod = localconfig  # split tuple
         new_func = func.strip("_vol") if volume else func
         try:
@@ -655,7 +654,7 @@ class Engine(dict):
         LOGGER.debug("done getting moving averages")
 
     @get_exceptions
-    def get_oscillators(self, pair, dataframe, index=None, localconfig=None):
+    def get_oscillators(self, pair, index=None, localconfig=None):
         """
 
         Apply osscilators to klines and get BUY/SELL triggers
@@ -669,7 +668,7 @@ class Engine(dict):
             None
         """
         LOGGER.debug("Getting Oscillators for %s" % pair)
-        klines = self.__make_data_tupple(dataframe.iloc[:index])
+        klines = self.__make_data_tupple(self.dataframes[pair].iloc[:index])
         _, open, high, low, close = klines
         func, timeperiod = localconfig  # split tuple
 
@@ -715,7 +714,7 @@ class Engine(dict):
         LOGGER.debug("Done getting Oscillators")
 
     @get_exceptions
-    def get_indicators(self, pair, dataframe, index=None, localconfig=None):
+    def get_indicators(self, pair, index=None, localconfig=None):
         """
 
         Cross Reference data against trend indicators
@@ -729,7 +728,7 @@ class Engine(dict):
             None
         """
         func, timeperiod = localconfig
-        klines = self.__make_data_tupple(dataframe.iloc[:index])
+        klines = self.__make_data_tupple(self.dataframes[pair].iloc[:index])
         LOGGER.debug("Getting Indicators for %s" % pair)
         scheme = {}
         trends = {"HAMMER": {100: "BUY", 0:"HOLD"},
@@ -755,7 +754,7 @@ class Engine(dict):
         LOGGER.debug("Done getting Indicators")
 
     @get_exceptions
-    def get_supertrend(self, pair, dataframe, index=None, localconfig=None):
+    def get_supertrend(self, pair, index=None, localconfig=None):
         """
         Get the super trend oscillator values for a given pair
         append current supertrend data to instance variable
@@ -771,9 +770,9 @@ class Engine(dict):
         func, timef = localconfig  # split tuple
         LOGGER.debug("Getting supertrend for %s" % pair)
         scheme = {}
-        dataframe = self.__renamed_dataframe_columns(dataframe)
+        dataframe = self.__renamed_dataframe_columns(self.dataframes[pair])
 
-        mine = dataframe.apply(pandas.to_numeric).loc[:index]
+        mine = self.dataframes[pair].apply(pandas.to_numeric).loc[:index]
         timeframe, multiplier = timef.split(',')
         supertrend2 = ta.supertrend(high=mine.High.astype(float),
                                     low=mine.Low.astype(float),
