@@ -1,4 +1,3 @@
 Manual image build steps:
-docker build -f install/Dockerfile-as .
-docker tag <image_id> amrox/alert:latest
+docker build -f install/Dockerfile-as . -t amrox/alert:latest
 docker push amrox/alert:latest
