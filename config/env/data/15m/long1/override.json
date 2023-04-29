@@ -1,4 +1,0 @@
-{
-  "name": "data-low-rsi_15m",
-  "open_rule1": "res[0].RSI_14 \u003c 30 and res[0].low \u003c res[0].lower_20"
-}

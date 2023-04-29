@@ -1,7 +1,0 @@
-{
-  "check_interval": "30",
-  "close_rule1": "res[0].close \u003c res[0].EMA_200",
-  "name": "data-trend_15m",
-  "open_rule1": "res[0].close \u003e res[0].EMA_200",
-  "slack_active": "false"
-}
