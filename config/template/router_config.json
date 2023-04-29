@@ -29,9 +29,9 @@
 "any2-1h-short": ["any2-1h-short", "alert"],
 "any2-long-short-1h": ["any2-1h-long", "any2-1h-short", "alert"],
 
-"any-long": ["any-long", "alert"],
-"any-short": ["any-short", "alert"],
-"any-long-short": ["any-long", "any-short", "alert"],
+"any-long": ["any-long"],
+"any-short": ["any-short"],
+"any-long-short": ["any-long", "any-short"],
 
 "alert": ["alert"],
 "route": []
