@@ -82,10 +82,12 @@ def respond():
     env = config.main.base_env
     alert_drain = Path('/var/local/{}_alert_drain'.format(env)).is_file()
     for container in containers:
-        if container == 'alert' and 'edited' not in payload and not alert_drain:
+        if container == 'alert' and not alert_drain:
             # change strategy
             # so we don't create an infinate API loop
             payload['strategy'] = 'alert'
+            payload['env'] = 'alarm'
+            payload['host'] = '10.8.0.1'
 
             # add environment name to text
             try:
@@ -93,7 +95,7 @@ def respond():
                                "prod": "production",
                                "stag": "staging",
                                "test": "testing",
-                               "alert": "alert",
+                               "alarm": "alarm",
                                "data": "data"}[env]
             except KeyError:
                 environment = "unknown"
