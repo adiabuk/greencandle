@@ -240,7 +240,7 @@ def main():
     # all data in a single spreadsheet
     elif key == 'all':
         data.append(['pair', 'interval', 'distance', 'candle_size', 'stoch_flat', 'bb_size',
-                     'bbperc_diff', 'volume', 'upper', 'middle', 'lower', 'bbperc_200', 'stoch'])
+                     'bbperc_diff', 'bbperc_200', 'stoch', 'volume', 'upper', 'middle', 'lower'])
         for pair in pairs:
             for interval in intervals:
                 distance = get_distance(pair, interval, res)[-1]
@@ -255,7 +255,7 @@ def main():
                 bbperc_200 = get_indicator_value(pair, interval, res, 'bbperc_200')
                 stoch = get_indicator_value(pair, interval, res, 'STOCHRSI_8')
                 data.append([pair, interval, distance, candle_size, stoch_flat, bb_size,
-                             bbperc_diff, vol, upper, middle, lower, bbperc_200, stoch])
+                             bbperc_diff, vol, bbperc_200, stoch, upper, middle, lower])
 
     # indicator data
     else:
