@@ -221,7 +221,7 @@ def main():
 
     # change in candle size
     elif key == 'candle_size':
-        data.append(['pair', 'interval', 'key'])
+        data.append(['pair', 'interval', 'size'])
         for pair in pairs:
             for interval in intervals:
                 max_diff = get_candle_size(pair, interval, res, last_res)
