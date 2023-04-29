@@ -56,7 +56,6 @@ def healthcheck():
     """
     return Response(status=200)
 
-
 def lights(port='/dev/ttyACM0', baud=19200):
     """
     Open serial port to activate lights program
@@ -118,6 +117,6 @@ def main():
     Main function
     start Flask APP on port 20000
     """
-    APP.run(debug=False, host='0.0.0.0', port=20000, threaded=True)
+    APP.run(debug=False, host='0.0.0.0', port=20000, threaded=False)
 if __name__ == "__main__":
     main()
