@@ -20,11 +20,11 @@ from greencandle.lib.common import epoch2date, TF2MIN
 
 LOGGER = get_logger(__name__)
 
-def get_current_price(pair):
+def get_current_price(pair, prices=None):
     """Get current price from binance"""
 
     client = Binance(debug=str2bool(config.accounts.account_debug))
-    prices = client.prices()
+    prices = prices if prices else client.prices()
     return prices[pair]
 
 def get_binance_klines(pair, interval=None, limit=50):

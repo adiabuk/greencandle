@@ -337,6 +337,8 @@ class Mysql():
         Get current active trades and store in active_trades table with current price
         """
 
+        client = Binance(debug=str2bool(config.accounts.account_debug))
+        prices = client.prices()
         self.__run_sql_query("delete from open_trades")
         trades = self.fetch_sql_data("select pair, open_time, open_price, name, `interval`, "
                                      "open_usd_rate*quote_in as usd_quantity, direction from "
@@ -345,7 +347,7 @@ class Mysql():
         for trade in trades:
             try:
                 pair, open_time, open_price, name, interval, usd_quantity, direction = trade
-                current_price = get_current_price(pair)
+                current_price = get_current_price(pair, prices)
                 perc = 100 * (float(current_price) - float(open_price)) / float(open_price)
                 perc = - perc if 'short' in direction else perc
                 net_perc = perc - float(self.get_complete_commission())
