@@ -53,7 +53,10 @@ def forward(token):
     token = os.popen(command).read().split()[0]
     payload['edited'] = "yes"
     url = "https://{}/{}".format(payload['host'], token)
-    requests.post(url, json=payload, timeout=5, verify=False)
+    try:
+        requests.post(url, json=payload, timeout=5, verify=False)
+    except requests.exceptions.RequestException:
+        pass
     return Response(status=200)
 
 @APP.route('/{}'.format(TOKEN), methods=['POST'])
