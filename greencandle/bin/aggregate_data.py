@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-member,bare-except,too-many-locals,too-many-branches,too-many-statements
+#pylint: disable=no-member,bare-except,too-many-locals,too-many-branches,too-many-statements,no-else-return
 """
 get data for all timeframes and pairs
 output data to csv files
