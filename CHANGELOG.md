@@ -1,5 +1,18 @@
 # Releases
 
+# 5.24
+* allow for larger pair strings in db & update db schema
+* refresh data page periodically
+* revert devenv ports
+* remove unused config
+* reduce frequency of data alerts
+* use engine instance vars instead of passing same data & use renamed df for supertrend
+* alert image build steps
+* disable alert threading so audio doesn't overlap and disable manual trade alerts
+* change ordering of all data spreadsheet and fix column names
+* only alert when calling combined strategies
+* fix alarm forwarding in router and only forward analysed trades once
+
 # 5.23
 * correct agg column names
 * fix aggregate type error with bbperc ind
