@@ -119,7 +119,7 @@ def analyse_pair(pair, redis):
                     requests.post(url, json.dumps(payload), timeout=10,
                                   headers={'Content-Type': 'application/json'})
                 except requests.exceptions.RequestException:
-                    continue
+                    pass
 
             LOGGER.info("Trade alert: %s %s %s (%s)" % (pair, interval,
                                                         config.main.trade_direction,
