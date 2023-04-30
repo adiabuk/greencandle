@@ -1,5 +1,8 @@
 # Releases
 
+# 5.24.1
+* code syntax fix
+
 # 5.24
 * allow for larger pair strings in db & update db schema
 * refresh data page periodically
