@@ -53,6 +53,7 @@ class Engine(dict):
             # Cleanout false datapoints
             value['closeTime'] = value['closeTime'].astype(str)
             self.dataframes[key] = value[value.closeTime.str.endswith('999')]
+
         self.schemes = []
         super().__init__()
         LOGGER.debug("Finished fetching raw data")
@@ -772,7 +773,7 @@ class Engine(dict):
         scheme = {}
         dataframe = self.__renamed_dataframe_columns(self.dataframes[pair])
 
-        mine = self.dataframes[pair].apply(pandas.to_numeric).loc[:index]
+        mine = dataframe.apply(pandas.to_numeric).loc[:index]
         timeframe, multiplier = timef.split(',')
         supertrend2 = ta.supertrend(high=mine.High.astype(float),
                                     low=mine.Low.astype(float),
