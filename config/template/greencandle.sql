@@ -582,7 +582,7 @@ CREATE TABLE `trades` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `open_time` timestamp NULL DEFAULT '0000-00-00 00:00:00',
   `close_time` timestamp NULL DEFAULT '0000-00-00 00:00:00',
-  `pair` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `pair` varchar(15) DEFAULT NULL,
   `interval` varchar(3) DEFAULT NULL,
   `open_price` varchar(30) DEFAULT NULL,
   `close_price` varchar(30) DEFAULT NULL,
@@ -1074,7 +1074,7 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-04-18 17:19:32
+-- Dump completed on 2023-04-30 10:01:36
 -- MySQL dump 10.13  Distrib 5.7.41, for Linux (x86_64)
 --
 -- Host: 10.8.0.101    Database: greencandle
@@ -1150,4 +1150,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-04-18 17:19:39
+-- Dump completed on 2023-04-30 10:01:41
