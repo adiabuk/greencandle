@@ -52,6 +52,16 @@ TF2MIN = {"1s": 1,
           "12h": 720
           }
 
+def get_short_name(name, env, direction):
+    """
+    Get short name for a container
+    """
+    if direction not in name:
+        name = "{}-{}".format(name, direction)
+    short = list_to_dict(get_be_services(env), reverse=False)[name]
+    return short
+
+
 def get_be_services(env):
     """
     Get long/short services from docker-compose file

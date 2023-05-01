@@ -15,7 +15,7 @@ from greencandle.lib.mysql import Mysql
 from greencandle.lib.logger import get_logger
 from greencandle.lib import config
 from greencandle.lib.common import add_perc, sub_perc, AttributeDict, \
-        perc_diff, convert_to_seconds, TF2MIN
+        perc_diff, convert_to_seconds, get_short_name, TF2MIN
 
 class Redis():
     """
@@ -66,15 +66,20 @@ class Redis():
         del redis1
         return response
 
-    def get_drawup(self, pair, name=None):
+    def get_drawup(self, pair, name=None, direction=None):
         """
         Get maximum price of current open trade for given pair/interval
         and calculate drawdup based on trade opening price.
         Return max price and drawup as a percentage
         """
         name = name if name else config.main.name
+        direction = direction if direction else config.main.trade_direction
         redis1 = Redis(interval=self.interval, db=2)
-        key = "{}_{}_drawup".format(pair, name)
+
+        short = get_short_name(config.main.name,
+                               config.main.base_env,
+                               config.main.trade_direction)
+        key = "{}_{}_drawup".format(pair, short)
         max_price = redis1.get_item(key, 'max_price')
         orig_price = redis1.get_item(key, 'orig_price')
         try:
@@ -104,15 +109,20 @@ class Redis():
         redis1.conn.delete(key)
         del redis1
 
-    def get_drawdown(self, pair, name=None):
+    def get_drawdown(self, pair, name=None, direction=None):
         """
         Get minimum price of current open trade for given pair/interval
         and calculate drawdown based on trade opening price.
         Return min price and drawdown as a percentage
         """
         name = name if name else config.main.name
+        direction = direction if direction else config.main.trade_direction
         redis1 = Redis(interval=self.interval, db=2)
-        key = "{}_{}_drawdown".format(pair, name)
+
+        short = get_short_name(config.main.name,
+                               config.main.base_env,
+                               config.main.trade_direction)
+        key = "{}_{}_drawdown".format(pair, short)
         min_price = redis1.get_item(key, 'min_price')
         orig_price = redis1.get_item(key, 'orig_price')
         try:
@@ -129,7 +139,11 @@ class Redis():
         Update key/value for storing profit/stoploss from figures derived at trade entry
         """
         redis1 = Redis(interval=self.interval, db=2)
-        key = "{}-{}-{}".format(pair, name, config.main.name)
+
+        short = get_short_name(config.main.name,
+                               config.main.base_env,
+                               config.main.trade_direction)
+        key = "{}-{}-{}".format(pair, name, short)
         redis1.conn.set(key, value)
         del redis1
 
@@ -140,7 +154,10 @@ class Redis():
         Returns float
         """
         redis1 = Redis(interval=self.interval, db=2)
-        key = "{}-{}-{}".format(pair, name, config.main.name)
+        short = get_short_name(config.main.name,
+                               config.main.base_env,
+                               config.main.trade_direction)
+        key = "{}-{}-{}".format(pair, name, short)
         value = redis1.conn.get(key)
 
         try:
@@ -177,7 +194,11 @@ class Redis():
         Update minimum price for current asset.  Create redis record if it doesn't exist.
         """
         redis1 = Redis(interval=self.interval, db=2)
-        key = "{}_{}_drawdown".format(pair, config.main.name)
+        short = get_short_name(config.main.name,
+                               config.main.base_env,
+                               config.main.trade_direction)
+
+        key = "{}_{}_drawdown".format(pair, short)
         min_price = redis1.get_item(key, 'min_price')
         orig_price = redis1.get_item(key, 'orig_price')
 
@@ -215,10 +236,13 @@ class Redis():
 
     def update_drawup(self, pair, current_candle, event=None, open_time=None):
         """
-        Update minimum price for current asset.  Create redis record if it doesn't exist.
+        Update maximum price for current asset.  Create redis record if it doesn't exist.
         """
         redis1 = Redis(interval=self.interval, db=2)
-        key = "{}_{}_drawup".format(pair, config.main.name)
+        short = get_short_name(config.main.name,
+                               config.main.base_env,
+                               config.main.trade_direction)
+        key = "{}_{}_drawup".format(pair, short)
         max_price = redis1.get_item(key, 'max_price')
         orig_price = redis1.get_item(key, 'orig_price')
         current_low = current_candle['low']
