@@ -61,7 +61,6 @@ def get_short_name(name, env, direction):
     short = list_to_dict(get_be_services(env), reverse=False)[name]
     return short
 
-
 def get_be_services(env):
     """
     Get long/short services from docker-compose file

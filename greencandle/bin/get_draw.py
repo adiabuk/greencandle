@@ -10,7 +10,7 @@ from greencandle.lib.redis_conn import Redis
 def main():
     """
     Retrieve TP and SL from redis for given pair
-    Usage: get_draw <pair> <interval> <name> up|down
+    Usage: get_draw <pair> <interval> <name> up|down <direction>
     """
     interval = sys.argv
     pair = sys.argv[1]

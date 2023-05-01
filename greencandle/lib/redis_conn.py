@@ -72,14 +72,16 @@ class Redis():
         and calculate drawdup based on trade opening price.
         Return max price and drawup as a percentage
         """
-        name = name if name else config.main.name
         direction = direction if direction else config.main.trade_direction
         redis1 = Redis(interval=self.interval, db=2)
 
         short = get_short_name(config.main.name,
                                config.main.base_env,
                                config.main.trade_direction)
-        key = "{}_{}_drawup".format(pair, short)
+
+
+        name = name if name else short
+        key = "{}_{}_drawup".format(pair, name)
         max_price = redis1.get_item(key, 'max_price')
         orig_price = redis1.get_item(key, 'orig_price')
         try:
@@ -115,14 +117,14 @@ class Redis():
         and calculate drawdown based on trade opening price.
         Return min price and drawdown as a percentage
         """
-        name = name if name else config.main.name
         direction = direction if direction else config.main.trade_direction
         redis1 = Redis(interval=self.interval, db=2)
 
         short = get_short_name(config.main.name,
                                config.main.base_env,
                                config.main.trade_direction)
-        key = "{}_{}_drawdown".format(pair, short)
+        name = name if name else short
+        key = "{}_{}_drawdown".format(pair, name)
         min_price = redis1.get_item(key, 'min_price')
         orig_price = redis1.get_item(key, 'orig_price')
         try:
