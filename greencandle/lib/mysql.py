@@ -371,7 +371,7 @@ class Mysql():
         query = ("select * from open_trades where pair={0} and name={1} and direction={2}"
                  .format(pair, name, direction))
         result = self.fetch_sql_data(query, header=False)
-        return book(result)
+        return bool(result)
 
 
 
