@@ -4,8 +4,8 @@
 Push/Pull crypto signals and data to mysql
 """
 import datetime
-from binance.binance import Binance
 import MySQLdb
+from binance.binance import Binance
 from greencandle.lib import config
 from greencandle.lib.binance_common import get_current_price
 from greencandle.lib.common import AttributeDict, format_usd
