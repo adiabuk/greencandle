@@ -1,6 +1,6 @@
 Jinja2==3.0.1
 boto3==1.17.13
-Flask==2.0.2
+Flask==2.3.2
 playsound==1.2.2
 vext==0.7.4
 pgi==0.0.11.2
