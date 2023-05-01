@@ -1,4 +1,4 @@
-#pylint: disable=wrong-import-position, broad-except, no-member, logging-not-lazy
+#pylint: disable=wrong-import-position,broad-except,no-member,logging-not-lazy,too-many-arguments
 
 """
 Push/Pull crypto signals and data to mysql
