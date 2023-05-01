@@ -59,21 +59,22 @@ class Redis():
         """
         add/update min and max price dict
         """
-        redis1 = Redis(db=2)
+        redis1 = Redis(interval=self.interval, db=2)
         for key, val in data.items():
             self.logger.debug("Adding to Redis: %s %s %s" % (name, key, val))
             response = redis1.conn.hset(name, key, val)
         del redis1
         return response
 
-    def get_drawup(self, pair):
+    def get_drawup(self, pair, name=None):
         """
         Get maximum price of current open trade for given pair/interval
         and calculate drawdup based on trade opening price.
         Return max price and drawup as a percentage
         """
-        redis1 = Redis(db=2)
-        key = "{}_{}_drawup".format(pair, config.main.name)
+        name = name if name else config.main.name
+        redis1 = Redis(interval=self.interval, db=2)
+        key = "{}_{}_drawup".format(pair, name)
         max_price = redis1.get_item(key, 'max_price')
         orig_price = redis1.get_item(key, 'orig_price')
         try:
@@ -89,7 +90,7 @@ class Redis():
         """
         Delete current draw up value for given pair
         """
-        redis1 = Redis(db=2)
+        redis1 = Redis(interval=self.interval, db=2)
         key = "{}_{}_drawup".format(pair, config.main.name)
         redis1.conn.delete(key)
         del redis1
@@ -98,19 +99,20 @@ class Redis():
         """
         Delete current draw down value for given pair
         """
-        redis1 = Redis(db=2)
+        redis1 = Redis(interval=self.interval, db=2)
         key = "{}_{}_drawdown".format(pair, config.main.name)
         redis1.conn.delete(key)
         del redis1
 
-    def get_drawdown(self, pair):
+    def get_drawdown(self, pair, name=None):
         """
         Get minimum price of current open trade for given pair/interval
         and calculate drawdown based on trade opening price.
         Return min price and drawdown as a percentage
         """
-        redis1 = Redis(db=2)
-        key = "{}_{}_drawdown".format(pair, config.main.name)
+        name = name if name else config.main.name
+        redis1 = Redis(interval=self.interval, db=2)
+        key = "{}_{}_drawdown".format(pair, name)
         min_price = redis1.get_item(key, 'min_price')
         orig_price = redis1.get_item(key, 'orig_price')
         try:
@@ -126,7 +128,7 @@ class Redis():
         """
         Update key/value for storing profit/stoploss from figures derived at trade entry
         """
-        redis1 = Redis(db=2)
+        redis1 = Redis(interval=self.interval, db=2)
         key = "{}-{}-{}".format(pair, name, config.main.name)
         redis1.conn.set(key, value)
         del redis1
@@ -137,7 +139,7 @@ class Redis():
         If no value exists, retrieve default from config
         Returns float
         """
-        redis1 = Redis(db=2)
+        redis1 = Redis(interval=self.interval, db=2)
         key = "{}-{}-{}".format(pair, name, config.main.name)
         value = redis1.conn.get(key)
 
@@ -153,7 +155,7 @@ class Redis():
         Remove key/value pair set at trade entry
         This is normally done on trade exit
         """
-        redis1 = Redis(db=2)
+        redis1 = Redis(interval=self.interval, db=2)
         key = "{}-{}-{}".format(pair, name, config.main.name)
         return redis1.conn.delete(key)
 
@@ -174,7 +176,7 @@ class Redis():
         """
         Update minimum price for current asset.  Create redis record if it doesn't exist.
         """
-        redis1 = Redis(db=2)
+        redis1 = Redis(interval=self.interval, db=2)
         key = "{}_{}_drawdown".format(pair, config.main.name)
         min_price = redis1.get_item(key, 'min_price')
         orig_price = redis1.get_item(key, 'orig_price')
@@ -215,7 +217,7 @@ class Redis():
         """
         Update minimum price for current asset.  Create redis record if it doesn't exist.
         """
-        redis1 = Redis(db=2)
+        redis1 = Redis(interval=self.interval, db=2)
         key = "{}_{}_drawup".format(pair, config.main.name)
         max_price = redis1.get_item(key, 'max_price')
         orig_price = redis1.get_item(key, 'orig_price')
