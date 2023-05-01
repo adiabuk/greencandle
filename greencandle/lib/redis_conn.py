@@ -132,7 +132,7 @@ class Redis():
         self.logger.debug("Getting %s drawdown orig_price: %s,  min_price: %s, drawdown: %s"
                           % (pair, orig_price, min_price, drawdown))
         del redis1
-        return drawdown
+        return {'price':min_price, 'perc': drawdown}
 
     def update_on_entry(self, pair, name, value):
         """
@@ -413,7 +413,7 @@ class Redis():
 
         trailing_perc = float(config.main.trailing_stop_loss_perc)
         high_price = self.get_drawup(pair)['price']
-        low_price = self.get_drawdown(pair)
+        low_price = self.get_drawdown(pair)['price']
 
         stop_loss_rule = self.__get_stop_loss(current_price, current_low, open_price, pair)
 
@@ -739,7 +739,7 @@ class Redis():
 
         trailing_perc = float(config.main.trailing_stop_loss_perc)
         high_price = self.get_drawup(pair)['price']
-        low_price = self.get_drawdown(pair)
+        low_price = self.get_drawdown(pair)['price']
         trailing_stop = self.__get_trailing_stop(current_price, high_price, low_price,
                                                  res[0].high, res[0].low, res[0].open)
         take_profit_rule = self.__get_take_profit(current_price, res[0].high,

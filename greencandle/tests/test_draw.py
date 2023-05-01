@@ -38,41 +38,41 @@ class TestDraw(unittest.TestCase):
         # Initial data - no intial drawdown
         data = {'closeTime':  [1], 'open': [100], 'high': [200], 'low': [300], 'close': [100]}
         redis.update_drawdown(pair, self.create_series(data), 'open')
-        self.assertEqual(abs(redis.get_drawdown(pair)), 0)
+        self.assertEqual(abs(redis.get_drawdown(pair)['perc']), 0)
         time.sleep(1)
         # Close price 90% lower
         data = {'closeTime':  [2], 'open': [3], 'high': [4], 'low': [10], 'close': [10]}
         redis.update_drawdown(pair, self.create_series(data))
-        self.assertEqual(abs(redis.get_drawdown(pair)), 90)
+        self.assertEqual(abs(redis.get_drawdown(pair)['perc']), 90)
 
         time.sleep(1)
         # Close price higher - no change in drawdown
         data = {'closeTime':  [3], 'open': [100], 'high': [200], 'low': [300], 'close': [100]}
         redis.update_drawdown(pair, self.create_series(data))
-        self.assertEqual(abs(redis.get_drawdown(pair)), 90)
+        self.assertEqual(abs(redis.get_drawdown(pair)['perc']), 90)
 
         time.sleep(1)
         # Close price higher - no change in drawdown
         data = {'closeTime':  [4], 'open': [200], 'high': [300], 'low': [500], 'close': [200]}
         redis.update_drawdown(pair, self.create_series(data))
-        self.assertEqual(abs(redis.get_drawdown(pair)), 90)
+        self.assertEqual(abs(redis.get_drawdown(pair)['perc']), 90)
 
         time.sleep(1)
         # Close price 5% lower than previos low
         data = {'closeTime':  [5], 'open': [200], 'high': [300], 'low': [5], 'close': [2]}
         redis.update_drawdown(pair, self.create_series(data))
-        self.assertEqual(abs(redis.get_drawdown(pair)), 95)
+        self.assertEqual(abs(redis.get_drawdown(pair)['perc']), 95)
 
         time.sleep(1)
         # End of trade - 0 drawdown
         redis.rm_drawdown(pair)
-        self.assertEqual(abs(redis.get_drawdown(pair)), 0)
+        self.assertEqual(abs(redis.get_drawdown(pair)['perc']), 0)
 
         time.sleep(1)
         # regarless of price, drawdown is 0 as open arg not specified
         data = {'closeTime':  [6], 'open': [200], 'high': [300], 'low': [5], 'close': [2]}
         redis.update_drawdown(pair, self.create_series(data))
-        self.assertEqual(abs(redis.get_drawdown(pair)), 0)
+        self.assertEqual(abs(redis.get_drawdown(pair)['perc']), 0)
 
     def test_long_drawup(self):
         """

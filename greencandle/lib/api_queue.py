@@ -93,7 +93,7 @@ def add_to_queue(req, test=False):
             redis.update_drawup(pair, current_candle, event="open")
 
     elif action_str == 'CLOSE':
-        drawdown = redis.get_drawdown(pair)
+        drawdown = redis.get_drawdown(pair)['perc']
         drawup = redis.get_drawup(pair)['perc']
         result = trade.close_trade(item, drawdowns={pair:drawdown}, drawups={pair:drawup})
         if not result and not test:

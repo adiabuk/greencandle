@@ -107,7 +107,7 @@ def perform_data(pair, interval, data_dir, indicators):
         elif result == "CLOSE":
             closes.append((pair, current_time, current_price, event, 0))
             LOGGER.debug("Items to close: %s" % closes)
-            drawdown = redis.get_drawdown(pair)
+            drawdown = redis.get_drawdown(pair)['perc']
             drawup = redis.get_drawup(pair)['perc']
             trade_result = trade.close_trade(closes, drawdowns={pair:drawdown},
                                              drawups={pair:drawup})
@@ -123,7 +123,7 @@ def perform_data(pair, interval, data_dir, indicators):
         redis.update_drawdown(pair, current_candle)
         redis.update_drawup(pair, current_candle)
 
-        drawdown = redis.get_drawdown(pair)
+        drawdown = redis.get_drawdown(pair)['perc']
         drawup = redis.get_drawup(pair)['perc']
         trade_result = trade.close_trade(closes, drawdowns={pair:drawdown}, drawups={pair:drawup})
 
@@ -188,7 +188,7 @@ def parallel_test(pairs, interval, data_dir, indicators):
                 opens.append((pair, current_time, current_price, event, action))
             if result == "CLOSE":
                 LOGGER.debug("Items to close")
-                drawdowns[pair] = redis.get_drawdown(pair)
+                drawdowns[pair] = redis.get_drawdown(pair)['perc']
                 drawups[pair] = redis.get_drawup(pair)['perc']
                 closes.append((pair, current_time, current_price, event, 0))
 
@@ -260,7 +260,7 @@ class ProdRunner():
             if result == "CLOSE":
                 LOGGER.debug("Items to close")
                 closes.append((pair, current_time, current_price, event, 0))
-                drawdowns[pair] = redis.get_drawdown(pair)
+                drawdowns[pair] = redis.get_drawdown(pair)['perc']
                 drawups[pair] = redis.get_drawup(pair)['perc']
                 if alert:
                     payload = {"pair":pair, "strategy":"alert", "host": "alert",
@@ -399,7 +399,7 @@ class ProdRunner():
                     current_price = tick[pair]['bid'] if config.main.trade_direction == 'long' \
                             else tick[pair]['ask']
                     closes.append((pair, current_time, current_price, event, 0))
-                    drawdowns[pair] = redis.get_drawdown(pair)
+                    drawdowns[pair] = redis.get_drawdown(pair)['perc']
                     drawups[pair] = redis.get_drawup(pair)['perc']
 
             trade = Trade(interval=interval, test_trade=test, test_data=False, config=config)
