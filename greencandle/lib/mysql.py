@@ -363,6 +363,18 @@ class Mysql():
                 self.logger.critical("%s has a zero open price, unable to calculate percentage"
                                      % pair)
 
+    def trade_in_context(self, pair, name, direction):
+        """
+        Check if a trade exists for given pair, name, and direction
+        """
+
+        query = ("select * from open_trades where pair={0} and name={1} and direction={2}"
+                 .format(pair, name, direction))
+        result = self.fetch_sql_data(query, header=False)
+        return book(result)
+
+
+
     @get_exceptions
     def get_last_hour_profit(self, date=None, hour=None):
         """
@@ -381,7 +393,6 @@ class Mysql():
                    'COALESCE(num_trades,0) num_trades '
                    'from profit_hourly where '
                    'date="{0}" and hour="{1}"'.format(date, hour))
-        print(command)
         result = self.fetch_sql_data(command, header=False)
         output = [float(item) for item in result[0]] if result else [None] * 7
         output.append(hour)
