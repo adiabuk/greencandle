@@ -368,12 +368,10 @@ class Mysql():
         Check if a trade exists for given pair, name, and direction
         """
 
-        query = ("select * from open_trades where pair={0} and name={1} and direction={2}"
+        query = ('select * from open_trades where pair="{0}" and name="{1}" and direction="{2}"'
                  .format(pair, name, direction))
         result = self.fetch_sql_data(query, header=False)
         return bool(result)
-
-
 
     @get_exceptions
     def get_last_hour_profit(self, date=None, hour=None):
