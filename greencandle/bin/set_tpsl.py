@@ -22,7 +22,7 @@ def main():
     pair = sys.argv[1]
     dbase = Mysql()
     name = config.main.name
-    direction = config.main.trade_diction
+    direction = config.main.trade_direction
 
     if dbase.trade_in_context(pair, name, direction):
         if len(sys.argv) == 4:

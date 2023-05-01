@@ -20,7 +20,7 @@ def main():
     redis = Redis(db=2)
     pair = sys.argv[1]
     name = config.main.name
-    direction = config.main.trade_diction
+    direction = config.main.trade_direction
 
     if dbase.trade_in_context(pair, name, direction):
         take_profit = redis.get_on_entry(pair, 'take_profit_perc')
