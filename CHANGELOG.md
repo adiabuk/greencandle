@@ -1,5 +1,20 @@
 # Releases
 
+# 5.25
+* bump flask and jinja2 versions for alert module security fix
+* clear redis db1 api queues on env startup
+* delete bad redis keys from db2
+* always add draw up/down in context even if one doesn't exist
+* use consistent delimiter and ordering for redis keys
+* remove space in sql statement when updating open_trades table
+* don't get/set tpsl or update draw up/down if no trade in context
+* ensure drawup/down function outputs match
+* script to get current drawup/drawdown
+* use short name for redis tpsl & draws
+* allow drawdown to get passed interval
+* speed up get_status by getting prices only once
+* catch request timeout exception
+
 # 5.24.1
 * code syntax fix
 
