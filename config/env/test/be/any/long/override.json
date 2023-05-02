@@ -1,6 +1,6 @@
 {
   "name": "test-be-api-any-cross",
-  "stop-loss-perc": "999",
-  "take-profit-perc": "999",
+  "stop_loss_perc": "999",
+  "take_profit_perc": "999",
   "trade_direction": "long"
 }

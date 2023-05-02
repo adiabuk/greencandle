@@ -12,8 +12,8 @@
   "slack_balance": "test2",
   "slack_notifications": "test2",
   "slack_trades": "test2",
-  "stop-loss-perc": "999",
-  "take-profit-perc": "999",
+  "stop_loss_perc": "999",
+  "take_profit_perc": "999",
   "time_in_trade": "4h",
   "trade_type": "margin"
 }

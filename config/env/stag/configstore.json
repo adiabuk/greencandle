@@ -351,12 +351,12 @@
       "is_binary": false,
       "is_secret": true
     },
-    "stop-loss-perc": {
+    "stop_loss_perc": {
       "value": "20",
       "is_binary": false,
       "is_secret": false
     },
-    "take-profit-perc": {
+    "take_profit_perc": {
       "value": "0",
       "is_binary": false,
       "is_secret": false
