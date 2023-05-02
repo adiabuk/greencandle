@@ -1,5 +1,5 @@
 #pylint: disable=eval-used,no-else-return,unused-variable,no-member,redefined-builtin,broad-except
-#pylint: disable=logging-not-lazy,inconsistent-return-statements,invalid-name
+#pylint: disable=logging-not-lazy,inconsistent-return-statements,invalid-name,too-many-boolean-expressions
 
 """
 Store and retrieve items from redis
@@ -804,7 +804,8 @@ class Redis():
             event = self.get_event_str("Normal" + result)
 
         # if we match any open rules are NOT in a trade and close rules don't match
-        elif any(rules['open']) and not open_price and able_to_open and not both:
+        elif (not high_price or not low_price or any(rules['open'])) and not open_price and \
+                able_to_open and not both:
 
             # set stop_loss and take_profit
             self.update_on_entry(pair, 'take_profit_perc', eval(config.main.take_profit_perc))
