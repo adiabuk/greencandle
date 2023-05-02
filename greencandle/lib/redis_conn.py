@@ -143,7 +143,7 @@ class Redis():
         short = get_short_name(config.main.name,
                                config.main.base_env,
                                config.main.trade_direction)
-        key = "{}_{}_{}".format(pair, name, short)
+        key = "{}-{}-{}".format(pair, name, short)
         redis1.conn.set(key, value)
         del redis1
 
@@ -157,7 +157,7 @@ class Redis():
         short = get_short_name(config.main.name,
                                config.main.base_env,
                                config.main.trade_direction)
-        key = "{}_{}_{}".format(pair, name, short)
+        key = "{}-{}-{}".format(pair, name, short)
         value = redis1.conn.get(key)
 
         try:
@@ -173,7 +173,7 @@ class Redis():
         This is normally done on trade exit
         """
         redis1 = Redis(interval=self.interval, db=2)
-        key = "{}_{}_{}".format(pair, name, config.main.name)
+        key = "{}-{}-{}".format(pair, name, config.main.name)
         return redis1.conn.delete(key)
 
     @staticmethod
@@ -404,8 +404,8 @@ class Redis():
         """
         Check if price between intervals and sell if matches stop_loss or take_profit rules
         """
-        stop_loss_perc = self.get_on_entry(pair, 'stop-loss-perc')
-        take_profit_perc = self.get_on_entry(pair, 'take-profit-perc')
+        stop_loss_perc = self.get_on_entry(pair, 'stop_loss_perc')
+        take_profit_perc = self.get_on_entry(pair, 'take_profit_perc')
 
         current_price = current_candle.close
         current_high = current_candle.high
@@ -518,7 +518,7 @@ class Redis():
         return True/False
         """
 
-        profit_perc = self.get_on_entry(pair, 'take-profit-perc')
+        profit_perc = self.get_on_entry(pair, 'take_profit_perc')
         if profit_perc <= 0:
             return False
         direction = config.main.trade_direction
@@ -551,7 +551,7 @@ class Redis():
         """
         direction = config.main.trade_direction
 
-        stop_perc = self.get_on_entry(pair, 'stop-loss-perc')
+        stop_perc = self.get_on_entry(pair, 'stop_loss_perc')
         immediate = str2bool(config.main.immediate_stop)
 
         if not open_price:
@@ -648,8 +648,8 @@ class Redis():
             x.update(ohlc)
             res.append(x)
 
-        stop_loss_perc = self.get_on_entry(pair, 'stop-loss-perc')
-        take_profit_perc = self.get_on_entry(pair, 'take-profit-perc')
+        stop_loss_perc = self.get_on_entry(pair, 'stop_loss_perc')
+        take_profit_perc = self.get_on_entry(pair, 'take_profit_perc')
 
         if stop_loss_perc:
             stop_loss_perc = float(stop_loss_perc)
@@ -807,8 +807,8 @@ class Redis():
         elif any(rules['open']) and not open_price and able_to_open and not both:
 
             # set stop_loss and take_profit
-            self.update_on_entry(pair, 'take-profit-perc', eval(config.main.take_profit_perc))
-            self.update_on_entry(pair, 'stop-loss-perc', eval(config.main.stop_loss_perc))
+            self.update_on_entry(pair, 'take_profit_perc', eval(config.main.take_profit_perc))
+            self.update_on_entry(pair, 'stop_loss_perc', eval(config.main.stop_loss_perc))
 
             # delete and re-store high price
             self.logger.debug("Close: %s, Previous Close: %s, >: %s" %
