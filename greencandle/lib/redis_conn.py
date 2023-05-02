@@ -80,7 +80,7 @@ class Redis():
                                   config.main.base_env,
                                   config.main.trade_direction)
 
-        key = "{}_{}_drawup".format(pair, name)
+        key = "{}:{}:{}".format(pair, "drawup", name)
         max_price = redis1.get_item(key, 'max_price')
         orig_price = redis1.get_item(key, 'orig_price')
         try:
@@ -97,7 +97,7 @@ class Redis():
         Delete current draw up value for given pair
         """
         redis1 = Redis(interval=self.interval, db=2)
-        key = "{}_{}_drawup".format(pair, config.main.name)
+        key = "{}:{}:{}".format(pair, "drawup", config.main.name)
         redis1.conn.delete(key)
         del redis1
 
@@ -106,7 +106,7 @@ class Redis():
         Delete current draw down value for given pair
         """
         redis1 = Redis(interval=self.interval, db=2)
-        key = "{}_{}_drawdown".format(pair, config.main.name)
+        key = "{}:{}:{}".format(pair, "drawdown", config.main.name)
         redis1.conn.delete(key)
         del redis1
 
@@ -122,7 +122,7 @@ class Redis():
             name = get_short_name(config.main.name,
                                   config.main.base_env,
                                   config.main.trade_direction)
-        key = "{}_{}_drawdown".format(pair, name)
+        key = "{}:{}:{}".format(pair, "drawdown", name)
         min_price = redis1.get_item(key, 'min_price')
         orig_price = redis1.get_item(key, 'orig_price')
         try:
@@ -143,7 +143,7 @@ class Redis():
         short = get_short_name(config.main.name,
                                config.main.base_env,
                                config.main.trade_direction)
-        key = "{}-{}-{}".format(pair, name, short)
+        key = "{}:{}:{}".format(pair, name, short)
         redis1.conn.set(key, value)
         del redis1
 
@@ -157,7 +157,7 @@ class Redis():
         short = get_short_name(config.main.name,
                                config.main.base_env,
                                config.main.trade_direction)
-        key = "{}-{}-{}".format(pair, name, short)
+        key = "{}:{}:{}".format(pair, name, short)
         value = redis1.conn.get(key)
 
         try:
@@ -173,7 +173,7 @@ class Redis():
         This is normally done on trade exit
         """
         redis1 = Redis(interval=self.interval, db=2)
-        key = "{}-{}-{}".format(pair, name, config.main.name)
+        key = "{}:{}:{}".format(pair, name, config.main.name)
         return redis1.conn.delete(key)
 
     @staticmethod
@@ -198,7 +198,7 @@ class Redis():
                                config.main.base_env,
                                config.main.trade_direction)
 
-        key = "{}_{}_drawdown".format(pair, short)
+        key = "{}:{}:{}".format(pair, "drawdown", short)
         min_price = redis1.get_item(key, 'min_price')
         orig_price = redis1.get_item(key, 'orig_price')
 
@@ -242,7 +242,7 @@ class Redis():
         short = get_short_name(config.main.name,
                                config.main.base_env,
                                config.main.trade_direction)
-        key = "{}_{}_drawup".format(pair, short)
+        key = "{}:{}:{}".format(pair, "drawup", short)
         max_price = redis1.get_item(key, 'max_price')
         orig_price = redis1.get_item(key, 'orig_price')
         current_low = current_candle['low']
