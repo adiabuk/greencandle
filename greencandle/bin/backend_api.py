@@ -69,8 +69,6 @@ def main():
 
     Usage: backend_api [--test] [api]
     """
-    redis = Redis(db=1)
-    redis.conn.flushdb()
     if sys.argv[-1] == 'api':
         if "intermittent" in os.environ:
             scheduler = BackgroundScheduler()
