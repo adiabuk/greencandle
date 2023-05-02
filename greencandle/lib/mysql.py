@@ -354,7 +354,7 @@ class Mysql():
                 insert = ('replace into open_trades (pair, open_time, open_price, current_price, '
                           'perc, net_perc, name, `interval`, usd_quantity, direction) VALUES '
                           '(" {0}", "{1}", "{2}", "{3}", "{4}", "{5}", "{6}", "{7}", "{8}", "{9}")'
-                          .format(pair.strip(), open_time, open_price, current_price,
+                          .format(pair, open_time, open_price, current_price,
                                   perc, net_perc, name, interval,
                                   format_usd(usd_quantity), direction))
 
