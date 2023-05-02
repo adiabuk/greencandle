@@ -20,7 +20,7 @@ def main():
     redis = Redis(db=2)
     keys = redis.conn.keys()
     for key in keys:
-        pair, short, _ = key.decode().split(':')
+        pair, _, short = key.decode().split(':')
         name = list_to_dict(get_be_services(config.main.base_env), reverse=True)[short]
         direction = name.split('-')[-1]
         if not dbase.trade_in_context(pair, name.strip('-{}'.format(direction)), direction):
