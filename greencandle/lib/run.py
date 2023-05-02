@@ -248,9 +248,9 @@ class ProdRunner():
                 LOGGER.critical("Unable to get %s candles for %s while performing %s prod_int_check"
                                 % (str(klines), pair, interval))
 
-            redis.update_drawdown(pair, current_candle, open_time=open_time)
-            redis.update_drawup(pair, current_candle, open_time=open_time)
             if dbase.trade_in_context(pair, config.main.name, config.main.trade_direction):
+                redis.update_drawdown(pair, current_candle, open_time=open_time)
+                redis.update_drawup(pair, current_candle, open_time=open_time)
                 result, event, current_time, current_price = redis.get_intermittent(pair,
                                                                                     open_price,
                                                                                     current_candle,
