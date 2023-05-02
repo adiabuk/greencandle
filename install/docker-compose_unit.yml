@@ -37,10 +37,6 @@ services:
     hostname: api
     image: greencandle-${image_id}
     restart: always
-    depends_on:
-      -  redis-unit 
-    links:
-      - redis-unit:redis
     entrypoint: bash -c "cd /srv/greencandle;configstore package process_templates unit /etc;backend_api --test api"
     ports:
       - 20000
