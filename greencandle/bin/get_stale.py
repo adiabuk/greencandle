@@ -19,12 +19,31 @@ def main():
     dbase = Mysql()
     redis = Redis(db=2)
     keys = redis.conn.keys()
+    bad_keys = []
     for key in keys:
-        pair, _, short = key.decode().split(':')
-        name = list_to_dict(get_be_services(config.main.base_env), reverse=True)[short]
+        try:
+            pair, _, short = key.decode().split(':')
+            name = list_to_dict(get_be_services(config.main.base_env), reverse=True)[short]
+        except (KeyError, ValueError):
+            bad_keys.append(key.decode())
+            continue
         direction = name.split('-')[-1]
-        if not dbase.trade_in_context(pair, name.strip('-{}'.format(direction)), direction):
-            print("{} not available in context".format(key.decode()))
+        if not dbase.trade_in_context(pair, name.rsplit('-', 1)[0], direction):
+            bad_keys.append(key.decode())
+
+    if bad_keys:
+        print("Bad Keys.....")
+        for key in bad_keys:
+            print(key)
+        user_input = input('delete? (y/n): ')
+        if user_input.lower() == 'y':
+            for key in bad_keys:
+                redis.conn.delete(key)
+        else:
+            print('exiting')
+    else:
+        print('no bad keys found')
+
     print("DONE")
 if __name__ == '__main__':
     main()
