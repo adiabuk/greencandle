@@ -350,12 +350,12 @@
       "is_binary": false,
       "is_secret": true
     },
-    "stop_loss_perc": {
+    "stop-loss-perc": {
       "value": "20",
       "is_binary": false,
       "is_secret": false
     },
-    "take_profit_perc": {
+    "take-profit-perc": {
       "value": "0",
       "is_binary": false,
       "is_secret": false

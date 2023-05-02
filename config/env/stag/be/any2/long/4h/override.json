@@ -1,5 +1,5 @@
 {
   "name": "stag-be-api-any2-4h-cross-long",
-  "stop_loss_perc": "2",
-  "take_profit_perc": "3.5"
+  "stop-loss-perc": "2",
+  "take-profit-perc": "3.5"
 }

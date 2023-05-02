@@ -9,8 +9,8 @@
   "interval": "15m",
   "open_rule1": "res[0].tsi_25 \u003e res[0].signal_25 and res[1].tsi_25 \u003c res[1].signal_25 and res[0].close \u003e res[0].pivot_1",
   "rate_indicator": "EMA_20",
-  "stop_loss_perc": "10",
-  "take_profit_perc": "10",
+  "stop-loss-perc": "10",
+  "take-profit-perc": "10",
   "time_in_trade": "45m",
   "trailing_start": "1",
   "trailing_stop_loss_perc": "0.1"
