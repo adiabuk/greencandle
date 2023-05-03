@@ -1,5 +1,5 @@
 {
-  "name": "data-bb-short_1h",
+  "name": "data-be-analyse-short-1h",
   "open_rule1": "res[0].high \u003e res[0].upper_12 and res[0].bbperc_200 \u003e 2",
   "trade_direction": "short"
 }

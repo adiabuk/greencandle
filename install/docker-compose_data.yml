@@ -138,13 +138,13 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-  data-be-analyse_1h_bb-short:
-    container_name: data-be-analyse_1h_bb-short
-    hostname: data-be-analyse_1h_bb-short
+  data-be-analyse-1h-short:
+    container_name: data-be-analyse-1h-short
+    hostname: data-be-analyse-1h-short
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh analyse_data
+    entrypoint: /docker-entrypoint.sh analyse-data
     logging:
       driver: journald
     links:
@@ -172,13 +172,13 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-  data-be-analyse_1h_bb-long:
-    container_name: data-be-analyse_1h_bb-long
-    hostname: data-be-analyse_1h_bb-long
+  data-be-analyse-1h-long:
+    container_name: data-be-analyse-1h-long
+    hostname: data-be-analyse-1h-long
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh analyse_data
+    entrypoint: /docker-entrypoint.sh analyse-data
     logging:
       driver: journald
     links:
@@ -277,13 +277,13 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-  data-be-analyse_12h_bb-short:
-    container_name: data-be-analyse_12h_bb-short
-    hostname: data-be-analyse_12h_bb-short
+  data-be-analyse-12h-short:
+    container_name: data-be-analyse-12h-short
+    hostname: data-be-analyse-12h-short
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh analyse_data
+    entrypoint: /docker-entrypoint.sh analyse-data
     logging:
       driver: journald
     links:
@@ -311,13 +311,13 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-  data-be-analyse_12h_bb-long:
-    container_name: data-be-analyse_12h_bb-long
-    hostname: data-be-analyse_12h_bb-long
+  data-be-analyse-12h-long:
+    container_name: data-be-analyse-12h-long
+    hostname: data-be-analyse-12h-long
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh analyse_data
+    entrypoint: /docker-entrypoint.sh analyse-data
     logging:
       driver: journald
     links:
@@ -416,13 +416,13 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-  data-be-analyse_4h_bb-short:
-    container_name: data-be-analyse_4h_bb-short
-    hostname: data-be-analyse_4h_bb-short
+  data-be-analyse-4h-short:
+    container_name: data-be-analyse-4h-short
+    hostname: data-be-analyse-4h-short
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh analyse_data
+    entrypoint: /docker-entrypoint.sh analyse-data
     logging:
       driver: journald
     links:
@@ -450,13 +450,13 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-  data-be-analyse_4h_bb-long:
-    container_name: data-be-analyse_4h_bb-long
-    hostname: data-be-analyse_4h_bb-long
+  data-be-analyse-4h-long:
+    container_name: data-be-analyse-4h-long
+    hostname: data-be-analyse-4h-long
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh analyse_data
+    entrypoint: /docker-entrypoint.sh analyse-data
     logging:
       driver: journald
     links:
@@ -549,13 +549,13 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-  data-be-analyse_1m_bb-short:
-    container_name: data-be-analyse_1m_bb-short
-    hostname: data-be-analyse_1m_bb-short
+  data-be-analyse-1m-short:
+    container_name: data-be-analyse-1m-short
+    hostname: data-be-analyse-1m-short
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "analyse_data forward"
+    entrypoint: /docker-entrypoint.sh "analyse-data forward"
     logging:
       driver: journald
     links:
@@ -583,13 +583,13 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-  data-be-analyse_1m_bb-long:
-    container_name: data-be-analyse_1m_bb-long
-    hostname: data-be-analyse_1m_bb-long
+  data-be-analyse-1m-long:
+    container_name: data-be-analyse-1m-long
+    hostname: data-be-analyse-1m-long
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "analyse_data forward"
+    entrypoint: /docker-entrypoint.sh "analyse-data forward"
     logging:
       driver: journald
     links:
@@ -682,13 +682,13 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-  data-be-analyse_5m_bb-short:
-    container_name: data-be-analyse_5m_bb-short
-    hostname: data-be-analyse_5m_bb-short
+  data-be-analyse-5m-short:
+    container_name: data-be-analyse-5m-short
+    hostname: data-be-analyse-5m-short
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh analyse_data
+    entrypoint: /docker-entrypoint.sh analyse-data
     logging:
       driver: journald
     links:
@@ -716,13 +716,13 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-  data-be-analyse_5m_bb-long:
-    container_name: data-be-analyse_5m_bb-long
-    hostname: data-be-analyse_5m_bb-long
+  data-be-analyse-5m-long:
+    container_name: data-be-analyse-5m-long
+    hostname: data-be-analyse-5m-long
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh analyse_data
+    entrypoint: /docker-entrypoint.sh analyse-data
     logging:
       driver: journald
     links:
@@ -929,6 +929,17 @@ services:
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
+      - data-be-analyse-short-1h:short-1h
+      - data-be-analyse-long-1h:long-1h
+      - data-be-analyse-short-12h:short-12h
+      - data-be-analyse-long-12h:long-12h
+      - data-be-analyse-short-5m:short-5m
+      - data-be-analyse-long-5m:long-5m
+      - data-be-analyse-short-4h:short-4h
+      - data-be-analyse-long-4h:long-4h
+      - data-be-analyse-short-1m:short-1m
+      - data-be-analyse-long-1m:long-1m
+
     depends_on:
       - data-base-mysql
       - data-base-redis
