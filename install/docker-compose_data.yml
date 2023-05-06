@@ -929,17 +929,6 @@ services:
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-be-analyse-short-1h:short-1h
-      - data-be-analyse-long-1h:long-1h
-      - data-be-analyse-short-12h:short-12h
-      - data-be-analyse-long-12h:long-12h
-      - data-be-analyse-short-5m:short-5m
-      - data-be-analyse-long-5m:long-5m
-      - data-be-analyse-short-4h:short-4h
-      - data-be-analyse-long-4h:long-4h
-      - data-be-analyse-short-1m:short-1m
-      - data-be-analyse-long-1m:long-1m
-
     depends_on:
       - data-base-mysql
       - data-base-redis
