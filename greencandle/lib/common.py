@@ -58,7 +58,10 @@ def get_short_name(name, env, direction):
     """
     if direction not in name:
         name = "{}-{}".format(name, direction)
-    short = list_to_dict(get_be_services(env), reverse=False)[name]
+    try:
+        short = list_to_dict(get_be_services(env), reverse=False)[name]
+    except KeyError:
+        short = "xx"
     return short
 
 def get_be_services(env):
@@ -74,15 +77,29 @@ def get_be_services(env):
     links_list = output['services']['{}-be-api-router'.format(env)]['links']
     return links_list
 
-def list_to_dict(rlist, reverse=True):
+def get_worker_containers(env):
+    """
+    Get list of worker containers in given environments
+    """
+    containers = []
+    with open('/srv/greencandle/install/docker-compose_{}.yml'.format(env), 'r') as stream:
+        output = yaml.safe_load(stream)
+        keys = list(output['services'].keys())
+        for key in keys:
+            if 'be-api-' in key or 'be-eng-' in key:
+                containers.append(key)
+
+    return containers
+
+def list_to_dict(rlist, reverse=True, delimiter=":", str_filter=''):
     """
     Convert colon seperated string list to key/value dict
     """
-    links = dict(map(lambda s: s.split(':'), rlist))
+    links = dict(map(lambda s: s.split(delimiter), rlist))
     if reverse:
-        return {v: k for k, v in links.items() if "-be-" in k}
+        return {v: k for k, v in links.items() if str_filter in k}
     else:
-        return {k: v for k, v in links.items() if "-be-" in k}
+        return {k: v for k, v in links.items() if str_filter in k}
 
 def divide_chunks(lst, num):
     """

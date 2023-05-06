@@ -67,7 +67,7 @@ class TestAssocs(unittest.TestCase):
                 except yaml.YAMLError as exc:
                     print(exc)
             links_list = output['services']['{}-be-api-router'.format(env)]['links']
-            links_dict = list_to_dict(links_list)
+            links_dict = list_to_dict(links_list, str_filter='-be-')
             for _, short_name in router_config.items():
                 for item in short_name:
                     name = item.split(':')[0]

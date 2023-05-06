@@ -23,7 +23,8 @@ def main():
     for key in keys:
         try:
             pair, _, short = key.decode().split(':')
-            name = list_to_dict(get_be_services(config.main.base_env), reverse=True)[short]
+            name = list_to_dict(get_be_services(config.main.base_env),
+                                reverse=True, str_filter='-be-')[short]
         except (KeyError, ValueError):
             bad_keys.append(key.decode())
             continue

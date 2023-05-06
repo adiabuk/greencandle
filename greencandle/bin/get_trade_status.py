@@ -34,7 +34,7 @@ def main():
              'round(net_perc,2), ")") as perc, open_price, direction, '
              '`interval` from open_trades where name like "%{}%" order '
              'by perc +0 ASC'.format(query_filter))
-    services = list_to_dict(get_be_services(config.main.base_env), reverse=False)
+    services = list_to_dict(get_be_services(config.main.base_env), reverse=False, str_filter='-be-')
     open_trades = dbase.fetch_sql_data(query, header=True)
     header = open_trades.pop(0)
     chunks = list(divide_chunks(open_trades, 7))
