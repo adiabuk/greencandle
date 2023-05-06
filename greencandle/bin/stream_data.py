@@ -9,11 +9,12 @@ import json
 import threading
 import websocket
 from flask import Flask, request, Response
-
+from greencandle.lib.logger import get_logger
 from greencandle.lib.common import arg_decorator
 from greencandle.lib import config
 config.create_config()
 APP = Flask(__name__)
+LOGGER = get_logger(__name__)
 RECENT = {}
 CLOSED = {}
 PAIR_STRING = ""
@@ -25,7 +26,7 @@ def on_open(socket):
     """
     print when socket is opened
     """
-    print("open")
+    LOGGER.info("open")
 
 def on_message(socket, message):
     """
@@ -47,7 +48,7 @@ def on_close(socket, close_status_code, close_msg):
     """
     Print when socket is closed
     """
-    print("closed")
+    LOGGER.critical("closed")
 
 @APP.route('/recent', methods=['GET'])
 def serve_recent():
@@ -73,7 +74,7 @@ def on_error(socket, error):
     """
     Raise errors from websocket
     """
-    raise error
+    LOGGER.critical(error)
 
 def start_ws():
     """
