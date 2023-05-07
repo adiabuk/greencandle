@@ -1,5 +1,16 @@
 # Releases
 
+# 5.25.1
+* fix broken open rule check
+* 30m between 1m trade alerts
+* fix analyse data entrypoint
+* use logging module for websockets
+* add filter arg to links_to_dict function
+* match data names to DC names
+* add shortname assocs for stag containers
+* aggregate column ordering
+* use naming/links convention for data env
+
 # 5.25
 * bump flask and jinja2 versions for alert module security fix
 * clear redis db1 api queues on env startup
