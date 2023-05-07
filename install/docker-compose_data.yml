@@ -95,7 +95,7 @@ services:
       timeout: 10s
       retries: 5
     ports:
-      - 5000
+      - 5003:5000
     volumes:
       - /data:/data
       - /var/local:/var/local
@@ -234,7 +234,7 @@ services:
       timeout: 10s
       retries: 5
     ports:
-      - 5000
+      - 5005:5000
     volumes:
       - /data:/data
       - /var/local:/var/local
@@ -373,7 +373,7 @@ services:
       timeout: 10s
       retries: 5
     ports:
-      - 5000
+      - 5004:5000
     volumes:
       - /data:/data
       - /var/local:/var/local
@@ -509,7 +509,7 @@ services:
       timeout: 10s
       retries: 5
     ports:
-      - 5000
+      - 5001:5000
     volumes:
       - /data:/data
       - /var/local:/var/local
@@ -642,7 +642,7 @@ services:
       timeout: 10s
       retries: 5
     ports:
-      - 5000
+      - 5002:5000
     volumes:
       - /data:/data
       - /var/local:/var/local
