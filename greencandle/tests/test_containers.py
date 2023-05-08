@@ -65,5 +65,3 @@ class TestContainers(unittest.TestCase):
                     self.assertEqual(result, cont)
                 except AssertionError:
                     self.assertEqual(result, cont.rsplit('-', 1)[0])
-
-
