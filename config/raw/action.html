@@ -22,9 +22,9 @@
 			      <label for="fname">pair: </label>
 			      <input type="text" id="pair" name="pair">
 			      <label for="fname">tp: </label>
-			      <input type="text" id="tp" name="tp">
+			      <input type="text" id="tp" name="tp" maxlength="4" size="4">
 			      <label for="fname">sl: </label>
-			      <input type="text" id="sl" name="sl">
+			      <input type="text" id="sl" name="sl" maxlength="4" size="4">
 			    </td>
 
 			    <input type="hidden" name="strategy" value="{{strat}}" />
@@ -45,8 +45,13 @@
 			    <td>
 			      <label for="fname">pair: </label>
 			      <input type="text" id="pair" name="pair">
-			    </td>
 
+			      <label for="fname">tp: </label>
+			      <input type="text" id="tp" name="tp" maxlength="4" size="4">
+			      <label for="fname">sl: </label>
+			      <input type="text" id="sl" name="sl" maxlength="4" size="4">
+
+			    </td>
 			    <input type="hidden" name="strategy" value="{{strat}}" />
 			    <td>
 			      <input type="submit" name="action" value="open">

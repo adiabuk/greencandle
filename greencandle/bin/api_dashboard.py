@@ -133,14 +133,15 @@ def action():
     strategy = request.args.get('strategy')
     trade_action = int_action[request.args.get('action')]
     close = request.args.get('close')
-    send_trade(pair, strategy, trade_action)
-
+    take = request.args.get('tp') if 'tp' in request.args else None
+    stop = request.args.get('sl') if 'sl' in request.args else None
+    send_trade(pair, strategy, trade_action, take=take, stop=stop)
     if close:
         return '<button type="button" onclick="window.close()">Close Tab</button>'
     else:
         return redirect(url_for('trade'))
 
-def send_trade(pair, strategy, trade_action):
+def send_trade(pair, strategy, trade_action, take=None, stop=None):
     """
     Create OPEN/CLOSE post request and send to API router
     """
@@ -148,7 +149,9 @@ def send_trade(pair, strategy, trade_action):
                "text": "Manual {} action from API".format(trade_action),
                "action": trade_action,
                "strategy": strategy,
-               "manual": True}
+               "manual": True,
+               "tp": take,
+               "sl": stop}
     api_token = config.web.api_token
     url = "http://router:1080/{}".format(api_token)
     try:
