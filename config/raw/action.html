@@ -21,6 +21,10 @@
 			    <td>
 			      <label for="fname">pair: </label>
 			      <input type="text" id="pair" name="pair">
+			      <label for="fname">tp: </label>
+			      <input type="text" id="tp" name="tp">
+			      <label for="fname">sl: </label>
+			      <input type="text" id="sl" name="sl">
 			    </td>
 
 			    <input type="hidden" name="strategy" value="{{strat}}" />
@@ -56,7 +60,7 @@
 	  {% else %}
 		  <td>{{pair}}</td>
 		  <td>
-		    <form action="/action?pair={{pair}}&strategy={{strat}}&action=open" method="post">
+        <form action="/action?pair={{pair}}&strategy={{strat}}&action=open&tp={{tp}}&sl={{sl}}" method="post">
 		      <button name="actionBtn" type="submit">Open</button>
 		    </form>
 		  </td>
