@@ -40,3 +40,30 @@ class TestContainers(unittest.TestCase):
                 print(cont, short)
                 self.assertNotEqual(short, 'xxx')
 
+    def test_name_match(self):
+        """
+        test name match
+        """
+        for env in ENVS:
+            containers = get_worker_containers(env)
+            with open('/srv/greencandle/install/docker-compose_{}.yml'.format(env), 'r') as stream:
+                output = yaml.safe_load(stream)
+                #keys = list(output['services'].keys())
+
+            for cont in containers:
+                if cont.endswith('data') or cont.endswith('router'):
+                    continue
+                config_env = list_to_dict(output['services'][cont]['environment'],
+                                          delimiter='=', reverse=False)['CONFIG_ENV']
+
+                command = ('configstore package get --basedir /srv/greencandle/config {} '
+                           'name'.format(config_env))
+
+                result = subprocess.Popen(command.split(),
+                                          stdout=subprocess.PIPE).stdout.read().split()[0].decode()
+                try:
+                    self.assertEqual(result, cont)
+                except AssertionError:
+                    self.assertEqual(result, cont.rsplit('-', 1)[0])
+
+
