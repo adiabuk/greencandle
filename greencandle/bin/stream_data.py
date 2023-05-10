@@ -74,7 +74,7 @@ def on_error(socket, error):
     """
     Raise errors from websocket
     """
-    LOGGER.critical(error)
+    LOGGER.critical(str(error))
 
 def start_ws():
     """
