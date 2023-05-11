@@ -84,7 +84,7 @@ def start_ws():
 
     socket = websocket.WebSocketApp(sock, on_open=on_open, on_close=on_close,
                                     on_message=on_message, on_error=on_error)
-    socket.run_forever()
+    socket.run_forever(reconnect=5)
 
 def start_flask():
     """
