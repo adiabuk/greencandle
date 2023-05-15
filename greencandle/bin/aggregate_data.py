@@ -74,6 +74,24 @@ def get_bbperc_diff(pair, interval, res, last_res):
     except (TypeError, KeyError):
         return None, None, None
 
+def get_stx_diff(pair, interval, res, last_res):
+    """
+    Get change in supertrend direction
+    """
+    try:
+        stx_from = last_res[interval][pair]['STX_23']
+        stx_to = res[interval][pair]['STX_23']
+        if stx_from == 1 and stx_to == -1:
+            result = 'down'
+        elif stx_from == -1 and stx_to == 1:
+            result = 'up'
+        else:
+            result = 'hodl'
+
+        return '{:.2f}'.format(stx_from), '{:.2f}'.format(stx_to), result
+    except (TypeError, KeyError):
+        return None, None, None
+
 def get_volume(pair, interval, res):
     """
     get volume indicator
@@ -193,6 +211,14 @@ def main():
                 stoch_flat = get_stoch_flat(pair, interval, res, last_res)
                 data.append([pair, interval, stoch_flat])
 
+    # change in supertrend direction
+    elif key == 'stx_diff':
+        data.append(['pair', 'interval', 'from', 'to', 'direction'])
+        for pair in pairs:
+            for interval in intervals:
+                stx_from, stx_to, direction = get_stx_diff(pair, interval, res, last_res)
+                if direction:
+                    data.append([pair, interval, stx_from, stx_to, direction])
     # volume
     elif key == 'volume':
         data.append(['pair', 'interval', 'volume'])
