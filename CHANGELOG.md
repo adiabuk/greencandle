@@ -1,5 +1,17 @@
 # Releases
 
+# 5.26
+* aggrgate data for supertrend direction change
+* remove delisted pairs
+* update websockets module and try to reconnect after failure
+* turn websocket exception into string for logging
+* move data indicator config to top level
+* test tpsl in trade ui
+* test container name matching c9e name
+* remove unused stag containers
+* short name container unit test
+* add stream api port mappings for monitoring
+
 # 5.25.1
 * fix broken open rule check
 * 30m between 1m trade alerts
