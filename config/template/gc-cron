@@ -52,7 +52,7 @@ BASH_ENV=/container.env
 
 {{else if eq .base_env "data"}}
 @reboot /usr/local/bin/clear_redis > /proc/1/fd/1 2>/proc/1/fd/2
-@reboot /data/scripts/get_data.sh
+#@reboot /data/scripts/get_data.sh
 @hourly /usr/local/bin/create_graph -i 5m -o /data/graphs -a > /proc/1/fd/1 2>/proc/1/fd/2
 @hourly /usr/local/bin/create_graph -i 1h -o /data/graphs -a > /proc/1/fd/1 2>/proc/1/fd/2
 @daily /usr/local/bin/create_graph -i 4h -o /data/graphs -a > /proc/1/fd/1 2>/proc/1/fd/2
