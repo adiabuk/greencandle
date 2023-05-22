@@ -88,11 +88,11 @@ services:
       - DB=true
       - http_proxy=http://172.17.0.1:8082
       - https_proxy=http://172.17.0.1:8082
-      - no_proxy=router,stream
+      - no_proxy=router,stream,127.1
     healthcheck:
       test: /mnt/libexec/check_milliepoch -u http://127.1:5000 -w 3600 -c 3660 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
       interval: 1m
-      start_period: 60s
+      start_period: 1m
       timeout: 10s
       retries: 5
     ports:
@@ -127,7 +127,7 @@ services:
       - DB=true
       - http_proxy=http://172.17.0.1:8082
       - https_proxy=http://172.17.0.1:8082
-      - no_proxy=router,stream
+      - no_proxy=router,stream,127.1
     healthcheck:
       test: find /var/local/gc_get_1h.lock  -mmin -2 ||exit 1
       interval: 1m
@@ -229,10 +229,10 @@ services:
       - DB=true
       - http_proxy=http://172.17.0.1:8082
       - https_proxy=http://172.17.0.1:8082
-      - no_proxy=router,stream
+      - no_proxy=router,stream,127.1
     healthcheck:
       test: /mnt/libexec/check_milliepoch -u http://127.1:5000 -w 43200 -c 42360 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
-      start_period: 60s
+      start_period: 1m
       interval: 1m
       timeout: 10s
       retries: 5
@@ -268,7 +268,7 @@ services:
       - DB=true
       - http_proxy=http://172.17.0.1:8082
       - https_proxy=http://172.17.0.1:8082
-      - no_proxy=router,stream
+      - no_proxy=router,stream,127.1
     healthcheck:
       test: find /var/local/gc_get_12h.lock  -mmin -2 ||exit 1
       interval: 1m
@@ -370,10 +370,10 @@ services:
       - DB=true
       - http_proxy=http://172.17.0.1:8082
       - https_proxy=http://172.17.0.1:8082
-      - no_proxy=router,stream
+      - no_proxy=router,stream,127.1
     healthcheck:
       test: /mnt/libexec/check_milliepoch -u http://127.1:5000 -w 14400 -c 14460 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
-      start_period: 60s
+      start_period: 1m
       interval: 1m
       timeout: 10s
       retries: 5
@@ -409,7 +409,7 @@ services:
       - DB=true
       - http_proxy=http://172.17.0.1:8082
       - https_proxy=http://172.17.0.1:8082
-      - no_proxy=router,stream
+      - no_proxy=router,stream,127.1
     healthcheck:
       test: find /var/local/gc_get_4h.lock  -mmin -2 ||exit 1
       interval: 1m
@@ -511,7 +511,7 @@ services:
       - DB=true
     healthcheck:
       test: /mnt/libexec/check_milliepoch -u http://127.1:5000 -w 60 -c 120 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
-      start_period: 60s
+      start_period: 1m
       interval: 1m
       timeout: 10s
       retries: 5
@@ -646,7 +646,7 @@ services:
       - DB=true
     healthcheck:
       test: /mnt/libexec/check_milliepoch -u http://127.1:5000 -w 300 -c 360 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
-      start_period: 60s
+      start_period: 1m
       interval: 1m
       timeout: 10s
       retries: 5
