@@ -90,13 +90,15 @@ services:
       - https_proxy=http://172.17.0.1:8082
       - no_proxy=router,stream
     healthcheck:
-      test: ls
+      test: /mnt/libexec/check_milliepoch -u http://127.1:5000 -w 3600 -c 3660 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
       interval: 1m
+      start_period: 60s
       timeout: 10s
       retries: 5
     ports:
       - 5003:5000
     volumes:
+      - /mnt:/mnt
       - /data:/data
       - /var/local:/var/local
       - /root/.aws:/root/.aws
@@ -229,7 +231,8 @@ services:
       - https_proxy=http://172.17.0.1:8082
       - no_proxy=router,stream
     healthcheck:
-      test: ls
+      test: /mnt/libexec/check_milliepoch -u http://127.1:5000 -w 43200 -c 42360 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      start_period: 60s
       interval: 1m
       timeout: 10s
       retries: 5
@@ -241,6 +244,7 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/:/var/run
+      - /mnt:/mnt
 
   data-be-get_12h:
     container_name: data-be-get_12h
@@ -368,13 +372,15 @@ services:
       - https_proxy=http://172.17.0.1:8082
       - no_proxy=router,stream
     healthcheck:
-      test: ls
+      test: /mnt/libexec/check_milliepoch -u http://127.1:5000 -w 14400 -c 14460 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      start_period: 60s
       interval: 1m
       timeout: 10s
       retries: 5
     ports:
       - 5004:5000
     volumes:
+      - /mnt:/mnt
       - /data:/data
       - /var/local:/var/local
       - /root/.aws:/root/.aws
@@ -504,13 +510,15 @@ services:
       - CONFIG_ENV=data/1m/get_data
       - DB=true
     healthcheck:
-      test: ls
+      test: /mnt/libexec/check_milliepoch -u http://127.1:5000 -w 60 -c 120 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      start_period: 60s
       interval: 1m
       timeout: 10s
       retries: 5
     ports:
       - 5001:5000
     volumes:
+      - /mnt:/mnt
       - /data:/data
       - /var/local:/var/local
       - /root/.aws:/root/.aws
@@ -637,13 +645,15 @@ services:
       - CONFIG_ENV=data/5m/get_data
       - DB=true
     healthcheck:
-      test: ls
+      test: /mnt/libexec/check_milliepoch -u http://127.1:5000 -w 300 -c 360 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      start_period: 60s
       interval: 1m
       timeout: 10s
       retries: 5
     ports:
       - 5002:5000
     volumes:
+      - /mnt:/mnt
       - /data:/data
       - /var/local:/var/local
       - /root/.aws:/root/.aws
