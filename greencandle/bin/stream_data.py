@@ -11,6 +11,7 @@ import websocket
 from flask import Flask, request, Response
 from greencandle.lib.logger import get_logger
 from greencandle.lib.common import arg_decorator
+from greencandle.lib.alerts import send_slack_message
 from greencandle.lib import config
 config.create_config()
 APP = Flask(__name__)
@@ -26,7 +27,8 @@ def on_open(socket):
     """
     print when socket is opened
     """
-    LOGGER.info("open")
+    send_slack_message("alerts", "ws socket opened")
+    LOGGER.info("ws socket opened")
 
 def on_message(socket, message):
     """
@@ -48,7 +50,8 @@ def on_close(socket, close_status_code, close_msg):
     """
     Print when socket is closed
     """
-    LOGGER.critical("closed")
+    send_slack_message("alerts", "ws socket closed")
+    LOGGER.info("ws socket closed")
 
 @APP.route('/recent', methods=['GET'])
 def serve_recent():
