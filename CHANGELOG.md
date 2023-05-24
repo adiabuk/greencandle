@@ -1,5 +1,17 @@
 # Releases
 
+# 5.27
+* increase timeout and interval of 12h/4h stream healthchecks
+* round open trade current percs
+* increase stream healthcheck interval/timeout thresholds
+* log to slack when ws socket is opened or closed
+* Bump requests from 2.28.2 to 2.31.0
+* ensure healthchecks don't use proxy
+* add stream healthchecks
+* fix agg data cleanup cron
+* Don't run old get_data cron
+* archive agg files older than 3mins, and delete after a week
+
 # 5.26
 * aggrgate data for supertrend direction change
 * remove delisted pairs
