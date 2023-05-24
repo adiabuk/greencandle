@@ -148,7 +148,7 @@ class Mysql():
         usd_rate, gbp_rate = self.get_rates(symbol_name)
         command = """insert into trades (pair, open_time, open_price, base_in, `interval`,
                      quote_in, name, borrowed, borrowed_usd, divisor, direction, open_usd_rate,
-                     open_gbp_rate, comm_open, open_order_id) VALUES ("{0}", "{1}", "{2}", "{3}",
+                     open_gbp_rate, comm_open, open_order_id) VALUES ("{0}", "{1}", trim("{2}")+0, "{3}",
                      "{4}", "{5}", "{6}", "{7}", "{8}", "{9}", "{10}", "{11}", "{12}", "{13}",
                      "{14}")
                    """.format(pair, date, '%.15f' % float(price), '%.15f' % float(base_amount),
@@ -308,7 +308,7 @@ class Mysql():
             self.logger.critical("No open trade matching criteria to close: %s" % query)
             return None
 
-        command = """update trades set close_price={0},close_time="{1}",
+        command = """update trades set close_price=trim({0})+0,close_time="{1}",
         quote_out="{2}", base_out="{3}", closed_by="{4}", drawdown_perc=abs(round({5},1)),
         drawup_perc=abs(round({6},1)), close_usd_rate="{7}", close_gbp_rate="{8}",
         comm_close="{9}", close_order_id="{10}" where id = "{11}"
@@ -353,7 +353,7 @@ class Mysql():
                 net_perc = perc - float(self.get_complete_commission())
                 insert = ('replace into open_trades (pair, open_time, open_price, current_price, '
                           'perc, net_perc, name, `interval`, usd_quantity, direction) VALUES '
-                          '("{0}", "{1}", "{2}", "{3}", round("{4}",2), round("{5}",2), "{6}", "{7}", "{8}", "{9}")'
+                          '("{0}", "{1}", trim("{2}")+0, trim("{3}"+0), round("{4}",2), round("{5}",2), "{6}", "{7}", "{8}", "{9}")'
                           .format(pair, open_time, open_price, current_price,
                                   perc, net_perc, name, interval,
                                   format_usd(usd_quantity), direction))
