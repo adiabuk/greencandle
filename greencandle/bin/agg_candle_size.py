@@ -16,19 +16,6 @@ from greencandle.lib import config
 from greencandle.lib.common import perc_diff, arg_decorator
 from greencandle.lib.redis_conn import Redis
 
-def get_bb_size(pair, interval, res):
-    """
-    percent between upper and lower bb
-    """
-    try:
-        bb_diff = abs(perc_diff(res[interval][pair]['upper_12'],
-                                res[interval][pair]['lower_12']))
-        bb_diff = '{:.2f}'.format(bb_diff)
-    except KeyError:
-        bb_diff = ''
-
-    return bb_diff
-
 def symlink_force(target, link_name):
     """
     Create symlink
@@ -49,12 +36,13 @@ def average(lst):
     """
     return sum(lst) / len(lst)
 
-
 @arg_decorator
 def main():
     """
     Get min/max/avg candle size for given number of candles
     output data to csv files
+
+    Usage: agg_candle_size <no_of_candles>
     """
     redis = Redis()
     config.create_config()
