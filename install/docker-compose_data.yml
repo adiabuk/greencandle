@@ -231,9 +231,9 @@ services:
       - https_proxy=http://172.17.0.1:8082
       - no_proxy=router,stream,127.1
     healthcheck:
-      test: /mnt/libexec/check_milliepoch -u http://127.1:5000 -w 43200 -c 42360 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
-      start_period: 5m
-      interval: 5m
+      test: /mnt/libexec/check_milliepoch -u http://127.1:5000 -w 43260 -c 42420 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      start_period: 10m
+      interval: 10m
       timeout: 30s
       retries: 5
     ports:
