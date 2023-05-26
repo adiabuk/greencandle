@@ -99,6 +99,8 @@ services:
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh /srv/alert/webhook.py
+    logging:
+      driver: journald
     ports:
       - 20000:20000
     healthcheck:
