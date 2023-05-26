@@ -40,12 +40,13 @@ def respond():
     """
     Activate lights and pass json to audio function for parsing
     """
-    if Path('/var/local/alert_drain').is_file():
-        print("Skipping alert")
-        return Response(status=500)
-    print(request.json)
     lights()
-    play(request.json)
+    print(request.json)
+    if Path('/var/local/alert_drain').is_file():
+        print("Skipping audio alert")
+    else:
+        print("playing audio")
+        play(request.json)
     return Response(status=200)
 
 @APP.route('/healthcheck', methods=["GET"])
