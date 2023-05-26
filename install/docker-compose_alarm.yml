@@ -98,7 +98,7 @@ services:
     image: amrox/alert:latest
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh /srv/alert/webhook.py
+    entrypoint: /docker-entrypoint.sh "python -u /srv/alert/webhook.py"
     logging:
       driver: journald
     ports:
