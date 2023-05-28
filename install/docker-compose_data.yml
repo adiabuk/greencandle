@@ -90,7 +90,7 @@ services:
       - https_proxy=http://172.17.0.1:8082
       - no_proxy=router,stream,127.1
     healthcheck:
-      test: /mnt/libexec/check_milliepoch -u http://127.1:5000 -w 3600 -c 3660 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      test: /mnt/nagios_checks/check_milliepoch -u http://127.1:5000 -w 3600 -c 3660 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
       interval: 1m
       start_period: 1m
       timeout: 10s
@@ -231,7 +231,7 @@ services:
       - https_proxy=http://172.17.0.1:8082
       - no_proxy=router,stream,127.1
     healthcheck:
-      test: /mnt/libexec/check_milliepoch -u http://127.1:5000 -w 43260 -c 42420 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      test: /mnt/nagios_checks/check_milliepoch -u http://127.1:5000 -w 43260 -c 42420 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
       start_period: 10m
       interval: 10m
       timeout: 30s
@@ -372,7 +372,7 @@ services:
       - https_proxy=http://172.17.0.1:8082
       - no_proxy=router,stream,127.1
     healthcheck:
-      test: /mnt/libexec/check_milliepoch -u http://127.1:5000 -w 14400 -c 14460 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      test: /mnt/nagios_checks/check_milliepoch -u http://127.1:5000 -w 14400 -c 14460 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
       start_period: 5m
       interval: 5m
       timeout: 30s
@@ -510,7 +510,7 @@ services:
       - CONFIG_ENV=data/1m/get_data
       - DB=true
     healthcheck:
-      test: /mnt/libexec/check_milliepoch -u http://127.1:5000 -w 120 -c 180 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      test: /mnt/nagios_checks/check_milliepoch -u http://127.1:5000 -w 120 -c 180 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
       start_period: 1m
       interval: 1m
       timeout: 10s
@@ -645,7 +645,7 @@ services:
       - CONFIG_ENV=data/5m/get_data
       - DB=true
     healthcheck:
-      test: /mnt/libexec/check_milliepoch -u http://127.1:5000 -w 360 -c 420 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      test: /mnt/nagios_checks/check_milliepoch -u http://127.1:5000 -w 360 -c 420 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
       start_period: 1m
       interval: 1m
       timeout: 10s
