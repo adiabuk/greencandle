@@ -8,7 +8,6 @@ BASH_ENV=/container.env
 
 @reboot echo C.UTF-8 > /etc/default/locale
 @hourly /usr/local/bin/cleanup_redis > /proc/1/fd/1 2>/proc/1/fd/2
-0 3 * * 1 /bin/ls -1t /data/mysql| tail -n +14 | /usr/bin/xargs -d '\n' /bin/rm -f > /proc/1/fd/1 2>/proc/1/fd/2
 
 {{if eq .base_env "prod" }}
 @reboot /usr/local/bin/clear_redis 1 > /proc/1/fd/1 2>/proc/1/fd/2
@@ -26,6 +25,7 @@ BASH_ENV=/container.env
 15 * * * * /usr/local/bin/collect_pairs > /proc/1/fd/1 2>/proc/1/fd/2
 @hourly /usr/local/bin/get_bnb > /proc/1/fd/1 2>/proc/1/fd/2
 @daily /usr/bin/find /data/mysql -name "*.gz" -mtime +7 -delete
+@daily /usr/bin/find /data/reports -name "*.xlsx" -mtime +7 -delete
 
 {{else if eq .base_env "per" }}
 @reboot /usr/local/bin/clear_redis 1 > /proc/1/fd/1 2>/proc/1/fd/2
@@ -53,7 +53,6 @@ BASH_ENV=/container.env
 
 {{else if eq .base_env "data"}}
 @reboot /usr/local/bin/clear_redis > /proc/1/fd/1 2>/proc/1/fd/2
-#@reboot /data/scripts/get_data.sh
 @hourly /usr/local/bin/create_graph -i 5m -o /data/graphs -a > /proc/1/fd/1 2>/proc/1/fd/2
 @hourly /usr/local/bin/create_graph -i 1h -o /data/graphs -a > /proc/1/fd/1 2>/proc/1/fd/2
 @daily /usr/local/bin/create_graph -i 4h -o /data/graphs -a > /proc/1/fd/1 2>/proc/1/fd/2
@@ -71,7 +70,6 @@ BASH_ENV=/container.env
 * * * * * /usr/local/bin/aggregate_data bb_size > /proc/1/fd/1 2> /proc/1/fd/2
 * * * * * /usr/local/bin/aggregate_data all > /proc/1/fd/1 2> /proc/1/fd/2
 * * * * * /usr/local/bin/agg_candle_size 10 > /proc/1/fd/1 2> /proc/1/fd/2
-#@hourly /bin/ls -1t /data/mysql| tail -n +31 | /usr/bin/xargs -d '\n' /bin/rm -f > /proc/1/fd/1 2>/proc/1/fd/2
 @hourly for f in ` /usr/bin/find /data/aggregate -maxdepth 1 -regex  '.*\(csv\|tsv\)$' -type f -mmin +3 -print`;do /bin/echo $f; /bin/gzip $f; /bin/mv ${f}.gz /data/aggregate/old;done
 @hourly /usr/bin/find /data -type f -name ".*" -delete
 @daily /usr/bin/find /data/aggregate/old -name "*.gz" -mtime +7 -delete
