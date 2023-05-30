@@ -332,12 +332,12 @@ class Engine(dict):
         trigger = None
         try:
             current_price = str(Decimal(self.dataframes[pair].iloc[index]["close"]))
+            for func in ["upper", "middle", "lower"]:
+                scheme["data"] = results[func]
+                scheme["symbol"] = pair
+                scheme["event"] = "{0}_{1}".format(func, timeframe)
 
-            scheme["data"] = results[func]
-            scheme["symbol"] = pair
-            scheme["event"] = "{0}_{1}".format(func, timeframe)
-
-            self.schemes.append(scheme)
+                self.schemes.append(scheme)
 
         except KeyError as exc:
             LOGGER.warning("KEY FAILURE in bollinger bands: %s" % str(exc))
