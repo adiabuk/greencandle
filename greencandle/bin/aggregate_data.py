@@ -115,23 +115,23 @@ def get_candle_size(pair, interval, res, last_res):
     except:
         return None
 
-def get_distance(pair, interval, res):
+def get_distance(pair, interval, res, timeframe='12'):
     """
     get distance between upper and lower bollinger bands as a percentage
     """
 
     try:
         if float(res[interval][pair]['ohlc']['close']) > \
-                 float(res[interval][pair]['upper_12']):
+                 float(res[interval][pair]['upper_'+timeframe]):
 
             distance_diff = abs(perc_diff(res[interval][pair]['ohlc']['close'],
-                                          res[interval][pair]['upper_12']))
+                                          res[interval][pair]['upper_'+timeframe]))
             direction = 'upper'
 
         elif float(res[interval][pair]['ohlc']['close']) < \
-                 float(res[interval][pair]['lower_12']):
+                 float(res[interval][pair]['lower_'+timeframe]):
             distance_diff = abs(perc_diff(res[interval][pair]['ohlc']['close'],
-                                          res[interval][pair]['lower_12']))
+                                          res[interval][pair]['lower_'+timeframe]))
             direction = 'lower'
         else:
             return None, None
@@ -177,7 +177,7 @@ def main():
         keys = json.loads(redis.get_item('BTCUSDT:1h', items_1h[-1]).decode()).keys()
         print(keys)
         sys.exit()
-    elif key == 'distance':
+    elif 'distance' in key:
         indicator = 'upper_12'
     else:
         indicator = key
@@ -255,11 +255,12 @@ def main():
                     data.append([pair, interval, max_diff])
 
     # distance between current price and edge of upper/lower bollinger bands
-    elif key == 'distance':
+    elif 'distance' in key:
         data.append(['pair', 'interval', 'direction', 'distance'])
         for pair in pairs:
             for interval in intervals:
-                direction, distance_diff = get_distance(pair, interval, res)
+                _, timeframe = key.split('_')
+                direction, distance_diff = get_distance(pair, interval, res, timeframe)
                 if direction:
                     data.append([pair, interval, direction, distance_diff])
 
@@ -270,20 +271,18 @@ def main():
                      'stx_23'])
         for pair in pairs:
             for interval in intervals:
-                distance = get_distance(pair, interval, res)[-1]
+                distance_12 = get_distance(pair, interval, res, '12')[-1]
+                distance_200 = get_distance(pair, interval, res, '200')[-1]
                 candle_size = get_candle_size(pair, interval, res, last_res)
                 stoch_flat = get_stoch_flat(pair, interval, res, last_res)
                 bb_size = get_bb_size(pair, interval, res)
                 bbperc_diff = get_bbperc_diff(pair, interval, res, last_res)[-1]
                 vol = get_volume(pair, interval, res)
-                upper = get_indicator_value(pair, interval, res, 'upper_12')
-                middle = get_indicator_value(pair, interval, res, 'middle_12')
-                lower = get_indicator_value(pair, interval, res, 'lower_12')
                 bbperc_200 = get_indicator_value(pair, interval, res, 'bbperc_200')
                 stx_23 = get_indicator_value(pair, interval, res, 'STX_23')
                 stoch = get_indicator_value(pair, interval, res, 'STOCHRSI_8')
-                data.append([pair, interval, distance, candle_size, stoch_flat, bb_size,
-                             bbperc_diff, bbperc_200, stoch, vol, upper, middle, lower, stx_23])
+                data.append([pair, interval, distance_12, distance_200, candle_size, stoch_flat,
+                             bb_size, bbperc_diff, bbperc_200, stoch, stx_23])
 
     # indicator data
     else:
