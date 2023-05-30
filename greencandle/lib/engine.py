@@ -303,9 +303,8 @@ class Engine(dict):
             index = -1
         elif not index and not self.test:
             index = -1
-        scheme = {}
-        scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
-        LOGGER.debug("Getting bollinger bands for %s - %s" % (pair, scheme['close_time']))
+        close_time  = str(self.dataframes[pair].iloc[index]["closeTime"])
+        LOGGER.debug("Getting bollinger bands for %s - %s" % (pair, close_time))
         klines = self.__make_data_tupple(self.dataframes[pair].iloc[:index])
         func, timef = localconfig  # split tuple
         timeframe, multiplier = timef.split(',')
@@ -333,11 +332,16 @@ class Engine(dict):
         try:
             current_price = str(Decimal(self.dataframes[pair].iloc[index]["close"]))
             for func in ["upper", "middle", "lower"]:
+
+                scheme = {}
+                scheme["close_time"] = close_time
                 scheme["data"] = results[func]
                 scheme["symbol"] = pair
                 scheme["event"] = "{0}_{1}".format(func, timeframe)
-
+                LOGGER.debug("AMROX %s %s %s %s" %(func, results[func], str(scheme), len(self.schemes)))
                 self.schemes.append(scheme)
+                LOGGER.debug("AMROX2 %s" % str(self.schemes))
+
 
         except KeyError as exc:
             LOGGER.warning("KEY FAILURE in bollinger bands: %s" % str(exc))
