@@ -338,9 +338,7 @@ class Engine(dict):
                 scheme["data"] = results[func]
                 scheme["symbol"] = pair
                 scheme["event"] = "{0}_{1}".format(func, timeframe)
-                LOGGER.debug("AMROX %s %s %s %s" %(func, results[func], str(scheme), len(self.schemes)))
                 self.schemes.append(scheme)
-                LOGGER.debug("AMROX2 %s" % str(self.schemes))
 
 
         except KeyError as exc:
