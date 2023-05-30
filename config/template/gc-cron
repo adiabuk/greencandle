@@ -70,8 +70,8 @@ BASH_ENV=/container.env
 * * * * * /usr/local/bin/aggregate_data bb_size > /proc/1/fd/1 2> /proc/1/fd/2
 * * * * * /usr/local/bin/aggregate_data all > /proc/1/fd/1 2> /proc/1/fd/2
 * * * * * /usr/local/bin/agg_candle_size 10 > /proc/1/fd/1 2> /proc/1/fd/2
-@hourly for f in ` /usr/bin/find /data/aggregate -maxdepth 1 -regex  '.*\(csv\|tsv\)$' -type f -mmin +3 -print`;do /bin/echo $f; /bin/gzip $f; /bin/mv ${f}.gz /data/aggregate/old;done
-@hourly /usr/bin/find /data -type f -name ".*" -delete
+*/3 * * * * for f in ` /usr/bin/find /data/aggregate -maxdepth 1 -regex  '.*\(csv\|tsv\)$' -type f -mmin +3 -print`;do /bin/echo $f; /bin/gzip $f; /bin/mv ${f}.gz /data/aggregate/old;done
+@daily /usr/bin/find /data -type f -name ".*" -delete
 @daily /usr/bin/find /data/aggregate/old -name "*.gz" -mtime +7 -delete
 
 {{end}}
