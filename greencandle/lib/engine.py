@@ -737,6 +737,10 @@ class Engine(dict):
             None
 
         """
+        if (not index and self.test) or len(self.dataframes[pair]) < 2:
+            index = -1
+        elif not index and not self.test:
+            index = -1
 
         func, timef = localconfig  # split tuple
         scheme = {}
