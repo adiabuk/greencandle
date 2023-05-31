@@ -1,5 +1,5 @@
 {
   "name": "data-be-get_1h",
-  "open_rule1": "res[0].close \u003e res[0].upper_12",
+  "open_rule1": "res[0].close \u003e res[0].bb[0]",
   "check_interval": "*"
 }

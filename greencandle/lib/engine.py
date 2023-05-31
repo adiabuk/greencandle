@@ -157,7 +157,6 @@ class Engine(dict):
         Returns:
             dict containing all collected data
         """
-        LOGGER.debug("Getting data")
         for pair in self.pairs:
             pair = pair.strip()
             actual_klines = len(self.dataframes[pair]) if not no_of_klines else no_of_klines
@@ -246,7 +245,6 @@ class Engine(dict):
         elif not index and not self.test:
             index = -1
         close_time = str(self.dataframes[pair].iloc[index]["closeTime"])
-        LOGGER.debug("Getting bb perc for %s - %s" % (pair, close_time))
         klines = self.__make_data_tupple(self.dataframes[pair].iloc[:index])
         func, timef = localconfig  # split tuple
         timeframe, multiplier = timef.split(',')
@@ -295,7 +293,7 @@ class Engine(dict):
         except KeyError as exc:
             LOGGER.warning("KEY FAILURE in bb perc : %s" % str(exc))
 
-        LOGGER.debug("Done getting bb %")
+        LOGGER.debug("Done Getting bb perc for %s - %s" % (pair, close_time))
 
     def get_bb(self, pair, index=None, localconfig=None):
         """get bollinger bands"""
@@ -303,8 +301,7 @@ class Engine(dict):
             index = -1
         elif not index and not self.test:
             index = -1
-        close_time  = str(self.dataframes[pair].iloc[index]["closeTime"])
-        LOGGER.debug("Getting bollinger bands for %s - %s" % (pair, close_time))
+        close_time = str(self.dataframes[pair].iloc[index]["closeTime"])
         klines = self.__make_data_tupple(self.dataframes[pair].iloc[:index])
         func, timef = localconfig  # split tuple
         timeframe, multiplier = timef.split(',')
@@ -319,32 +316,26 @@ class Engine(dict):
                     talib.BBANDS(close * 100000, timeperiod=int(timeframe),
                                  nbdevup=float(multiplier), nbdevdn=float(multiplier), matype=0)
 
-            results['upper'] = upper[-1]/100000
-            results['middle'] = middle[-1]/100000
-            results['lower'] = lower[-1]/100000
+            res = [upper[-1]/100000, middle[-1]/100000, lower[-1]/100000]
 
         except Exception as exc:
-            results['upper'] = None
-            results['middle'] = None
-            results['lower'] = None
+            res = []
             LOGGER.debug("Overall Exception getting bollinger bands: %s seq: %s" % (exc, index))
         trigger = None
         try:
             current_price = str(Decimal(self.dataframes[pair].iloc[index]["close"]))
-            for func in ["upper", "middle", "lower"]:
-
-                scheme = {}
-                scheme["close_time"] = close_time
-                scheme["data"] = results[func]
-                scheme["symbol"] = pair
-                scheme["event"] = "{0}_{1}".format(func, timeframe)
-                self.schemes.append(scheme)
+            scheme = {}
+            scheme["close_time"] = close_time
+            scheme["data"] = results[func] = res
+            scheme["symbol"] = pair
+            scheme["event"] = "{0}_{1}".format(func, timeframe)
+            self.schemes.append(scheme)
 
 
         except KeyError as exc:
             LOGGER.warning("KEY FAILURE in bollinger bands: %s" % str(exc))
 
-        LOGGER.debug("Done getting Bollinger bands")
+        LOGGER.debug("Done Getting bb for %s - %s" % (pair, close_time))
 
     @get_exceptions
     def get_pivot(self, pair, index=None, localconfig=None):
@@ -353,7 +344,6 @@ class Engine(dict):
         !!!Does not work with test data!!!
         """
 
-        LOGGER.debug("Getting pivot points for %s" % pair)
         global CROSS_DATA
         func, timeperiod = localconfig
         index = -1
@@ -379,16 +369,14 @@ class Engine(dict):
         scheme["event"] = "{0}_{1}".format(func, timeperiod)
 
         self.schemes.append(scheme)
-        LOGGER.debug("Done getting pivot")
+        LOGGER.debug("Done Getting pivot for %s - %s" % (pair, scheme['close_time']))
 
     @get_exceptions
     def get_tsi(self, pair, index=None, localconfig=None):
         """
         Get TSI osscilator
         """
-        LOGGER.debug("Getting TSI oscillator for %s" % pair)
         index = -1
-
         func, timeperiod = localconfig
         tsi = ta.smi(self.dataframes[pair].close.astype(float), fast=13, slow=25, signal=13)
         if func == 'tsi':
@@ -405,7 +393,7 @@ class Engine(dict):
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
         self.schemes.append(scheme)
-        LOGGER.debug("Done getting TSI")
+        LOGGER.debug("Done Getting TSI for %s - %s" % (pair, scheme['close_time']))
 
     @get_exceptions
     def get_atr(self, pair, index=None, localconfig=None):
@@ -422,7 +410,6 @@ class Engine(dict):
         """
 
         func, timeperiod = localconfig  # split tuple
-        LOGGER.debug("Getting %s_%s for %s" % (func, timeperiod, pair))
         scheme = {}
         mine = self.dataframes[pair].apply(pandas.to_numeric).loc[:index]
 
@@ -438,7 +425,7 @@ class Engine(dict):
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
         scheme["data"] = float(atr[index]) if atr[index] != None else None
         self.schemes.append(scheme)
-        LOGGER.debug("Done getting ATR")
+        LOGGER.debug("Done Getting ATR for %s - %s" % (pair, scheme['close_time']))
 
     @get_exceptions
     def get_rsi(self, pair, index=None, localconfig=None):
@@ -455,7 +442,6 @@ class Engine(dict):
         """
 
         func, timeperiod = localconfig  # split tuple
-        LOGGER.debug("Getting %s_%s for %s" % (func, timeperiod, pair))
         scheme = {}
         mine = self.dataframes[pair].apply(pandas.to_numeric).loc[:index]
 
@@ -473,7 +459,7 @@ class Engine(dict):
         scheme["data"] = float(rsi[index]) if rsi[index] != None else None
 
         self.schemes.append(scheme)
-        LOGGER.debug("Done getting RSI")
+        LOGGER.debug("Done Getting RSI for %s - %s" % (pair, scheme['close_time']))
 
     @get_exceptions
     def get_stochrsi(self, pair, index=None, localconfig=None):
@@ -494,7 +480,6 @@ class Engine(dict):
             index = -1
         func, details = localconfig  # split tuple
         timeperiod, k_period, d_period = details.split(',')
-        LOGGER.debug("Getting %s_%s for %s" % (func, timeperiod, pair))
         scheme = {}
         mine = self.dataframes[pair].apply(pandas.to_numeric).loc[:index]
         try:
@@ -505,18 +490,14 @@ class Engine(dict):
                                    int(k_period), int(d_period))
             scheme["symbol"] = pair
             scheme["event"] = "{0}_{1}".format(func, timeperiod)
-
             scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
-
-            #scheme["data"] = stochrsi[index][0]
-
             scheme["event"] = "{0}_{1}".format(func, timeperiod)
             scheme["data"] = stochrsi[0][index], stochrsi[1][index]
             self.schemes.append(scheme)
         except (IndexError, KeyError) as exc:
             LOGGER.warning("FAILURE in stochrsi %s" % str(exc))
 
-        LOGGER.debug("Done getting STOCHRSI ")
+        LOGGER.debug("Done Getting STOCHRSI for %s - %s" % (pair, scheme['close_time']))
 
     @get_exceptions
     def get_envelope(self, pair, index=None, localconfig=None):
@@ -539,19 +520,16 @@ class Engine(dict):
         scheme = {}
         try:
             current_price = str(Decimal(self.dataframes[pair].iloc[index]["close"]))
-
             scheme["data"] = results[func]
             scheme["symbol"] = pair
             scheme["event"] = func + "_" + str(timeperiod)
-
             index = -1
             scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
-
             self.schemes.append(scheme)
 
         except KeyError as exc:
             LOGGER.warning("KEY FAILURE in envelope  %s" % str(exc))
-        LOGGER.debug("Done getting envelope")
+        LOGGER.debug("Done Getting envelope for %s - %s" % (pair, scheme['close_time']))
 
     @get_exceptions
     def get_hma(self, pair, index=None, localconfig=None):
@@ -584,7 +562,7 @@ class Engine(dict):
         except KeyError as exc:
             LOGGER.warning("KEY FAILURE in moving averages: %s" % str(exc))
 
-        LOGGER.debug("done getting moving averages")
+        LOGGER.debug("Done Getting MA for %s - %s" % (pair, scheme['close_time']))
 
     @get_exceptions
     def get_vol_moving_averages(self, pair, index=None, localconfig=None):
@@ -605,7 +583,7 @@ class Engine(dict):
         except KeyError as exc:
             LOGGER.warning("KEY FAILURE in moving averages: %s" % str(exc))
 
-        LOGGER.debug("done getting volume moving averages")
+        LOGGER.debug("Done Getting volume MA for %s - %s" % (pair, scheme['close_time']))
 
     @get_exceptions
     def get_moving_averages(self, pair, index=None, localconfig=None, volume=False):
@@ -620,7 +598,6 @@ class Engine(dict):
         Returns:
             None
         """
-        LOGGER.debug("Getting moving averages for %s" % pair)
         klines = self.__make_data_tupple(self.dataframes[pair].iloc[:index])
         func, timeperiod = localconfig  # split tuple
         new_func = func.strip("_vol") if volume else func
@@ -643,18 +620,15 @@ class Engine(dict):
         try:
             scheme["data"] = result
             scheme["symbol"] = pair
-
             scheme["event"] = func + "_" + str(timeperiod)
-
             index = -1
-
             scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
             self.schemes.append(scheme)
 
         except KeyError as exc:
             LOGGER.warning("KEY FAILURE in moving averages: %s " % str(exc))
 
-        LOGGER.debug("done getting moving averages")
+        LOGGER.debug("Done Getting MA for %s - %s" % (pair, scheme['close_time']))
 
     @get_exceptions
     def get_oscillators(self, pair, index=None, localconfig=None):
@@ -670,7 +644,6 @@ class Engine(dict):
         Returns:
             None
         """
-        LOGGER.debug("Getting Oscillators for %s" % pair)
         klines = self.__make_data_tupple(self.dataframes[pair].iloc[:index])
         _, open, high, low, close = klines
         func, timeperiod = localconfig  # split tuple
@@ -706,15 +679,13 @@ class Engine(dict):
             scheme["data"] = result
             scheme["symbol"] = pair
             scheme["event"] = '{}_{}'.format(func, timeperiod)
-
             index = -1
             scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
-
             self.schemes.append(scheme)
 
         except KeyError as error:
             LOGGER.warning("Key failure while getting oscillators: %s" % str(error))
-        LOGGER.debug("Done getting Oscillators")
+        LOGGER.debug("Done Getting oscillators for %s - %s" % (pair, scheme['close_time']))
 
     @get_exceptions
     def get_indicators(self, pair, index=None, localconfig=None):
@@ -732,7 +703,6 @@ class Engine(dict):
         """
         func, timeperiod = localconfig
         klines = self.__make_data_tupple(self.dataframes[pair].iloc[:index])
-        LOGGER.debug("Getting Indicators for %s" % pair)
         scheme = {}
         trends = {"HAMMER": {100: "BUY", 0:"HOLD"},
                   "INVERTEDHAMMER": {100: "SELL", 0:"HOLD"},
@@ -751,10 +721,8 @@ class Engine(dict):
 
         index = -1
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
-
         self.schemes.append(scheme)
-
-        LOGGER.debug("Done getting Indicators")
+        LOGGER.debug("Done Getting indicators for %s - %s" % (pair, scheme['close_time']))
 
     @get_exceptions
     def get_supertrend(self, pair, index=None, localconfig=None):
@@ -771,7 +739,6 @@ class Engine(dict):
         """
 
         func, timef = localconfig  # split tuple
-        LOGGER.debug("Getting supertrend for %s" % pair)
         scheme = {}
         dataframe = self.__renamed_dataframe_columns(self.dataframes[pair])
 
@@ -786,11 +753,9 @@ class Engine(dict):
         scheme["data"] = int(supertrend2['SUPERTd_{}_{}.0'.format(timeframe, multiplier)].iloc[-1])
         scheme["symbol"] = pair
         scheme["event"] = "STX_{0}".format(timeframe)
-
         index = -1
-
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
 
         self.schemes.append(scheme)
-        LOGGER.debug("done getting supertrend")
+        LOGGER.debug("Done Getting supertrend for %s - %s" % (pair, scheme['close_time']))
