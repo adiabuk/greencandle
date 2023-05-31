@@ -121,17 +121,18 @@ def get_distance(pair, interval, res, timeframe='12'):
     """
 
     try:
+        # upper
         if float(res[interval][pair]['ohlc']['close']) > \
-                 float(res[interval][pair]['upper_'+timeframe]):
+                 float(res[interval][pair]['bb_'+timeframe][0]):
 
             distance_diff = abs(perc_diff(res[interval][pair]['ohlc']['close'],
-                                          res[interval][pair]['upper_'+timeframe]))
+                                          res[interval][pair]['bb_'+timeframe][0]))
             direction = 'upper'
-
+        # lower
         elif float(res[interval][pair]['ohlc']['close']) < \
-                 float(res[interval][pair]['lower_'+timeframe]):
+                 float(res[interval][pair]['bb_'+timeframe][2]):
             distance_diff = abs(perc_diff(res[interval][pair]['ohlc']['close'],
-                                          res[interval][pair]['lower_'+timeframe]))
+                                          res[interval][pair]['bb_'+timeframe][2]))
             direction = 'lower'
         else:
             return None, None
@@ -178,7 +179,7 @@ def main():
         print(keys)
         sys.exit()
     elif 'distance' in key:
-        indicator = 'upper_12'
+        indicator = 'bb_12'
     else:
         indicator = key
 
@@ -266,9 +267,8 @@ def main():
 
     # all data in a single spreadsheet
     elif key == 'all':
-        data.append(['pair', 'interval', 'distance', 'candle_size', 'stoch_flat', 'bb_size',
-                     'bbperc_diff', 'bbperc_200', 'stoch', 'volume', 'upper', 'middle', 'lower',
-                     'stx_23'])
+        data.append(['pair', 'interval', 'distance_12', 'distance_200', 'candle_size', 'stoch_flat', 'bb_size',
+                     'bbperc_diff', 'bbperc_200', 'stoch' 'stx_23'])
         for pair in pairs:
             for interval in intervals:
                 distance_12 = get_distance(pair, interval, res, '12')[-1]
