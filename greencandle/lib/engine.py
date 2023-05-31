@@ -737,10 +737,6 @@ class Engine(dict):
             None
 
         """
-        if (not index and self.test) or len(self.dataframes[pair]) < 2:
-            index = -1
-        elif not index and not self.test:
-            index = -1
 
         func, timef = localconfig  # split tuple
         scheme = {}
@@ -757,6 +753,10 @@ class Engine(dict):
         scheme["data"] = int(supertrend2['SUPERTd_{}_{}.0'.format(timeframe, multiplier)].iloc[-1])
         scheme["symbol"] = pair
         scheme["event"] = "STX_{0}".format(timeframe)
+        if (not index and self.test) or len(self.dataframes[pair]) < 2:
+            index = -1
+        elif not index and not self.test:
+            index = -1
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
 
