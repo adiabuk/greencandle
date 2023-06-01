@@ -192,7 +192,8 @@ services:
     depends_on:
       - data-base-mysql
       - data-base-redis
-      - data-be-get_1h
+      - data-be-get_1h-btc
+      - data-be-get_1h-usdt
     environment:
       - VPN_IP=$VPN_IP
       - ALERT="True"
@@ -227,7 +228,8 @@ services:
     depends_on:
       - data-base-mysql
       - data-base-redis
-      - data-be-get_1h
+      - data-be-get_1h-btc
+      - data-be-get_1h-usdt
     environment:
       - VPN_IP=$VPN_IP
       - ALERT="True"
@@ -370,7 +372,8 @@ services:
     depends_on:
       - data-base-mysql
       - data-base-redis
-      - data-be-get_12h
+      - data-be-get_12h-btc
+      - data-be-get_12h-usdt
     environment:
       - VPN_IP=$VPN_IP
       - ALERT="True"
@@ -405,7 +408,8 @@ services:
     depends_on:
       - data-base-mysql
       - data-base-redis
-      - data-be-get_12h
+      - data-be-get_12h-btc
+      - data-be-get_12h-usdt
     environment:
       - VPN_IP=$VPN_IP
       - ALERT="True"
@@ -548,7 +552,8 @@ services:
     depends_on:
       - data-base-mysql
       - data-base-redis
-      - data-be-get_4h
+      - data-be-get_4h-btc
+      - data-be-get_4h-usdt
     environment:
       - VPN_IP=$VPN_IP
       - ALERT="True"
@@ -583,7 +588,8 @@ services:
     depends_on:
       - data-base-mysql
       - data-base-redis
-      - data-be-get_4h
+      - data-be-get_4h-btc
+      - data-be-get_4h-usdt
     environment:
       - VPN_IP=$VPN_IP
       - ALERT="True"
