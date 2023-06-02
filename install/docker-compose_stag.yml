@@ -156,7 +156,7 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh tail -f /dev/null
+    entrypoint: /docker-entrypoint.sh "tail -f /dev/null"
     logging:
       driver: journald
     links:
