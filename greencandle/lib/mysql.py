@@ -10,7 +10,6 @@ from greencandle.lib import config
 from greencandle.lib.binance_common import get_current_price
 from greencandle.lib.common import AttributeDict, format_usd
 from greencandle.lib.logger import get_logger, exception_catcher
-from str2bool import str2bool
 
 class Mysql():
     """
@@ -284,7 +283,7 @@ class Mysql():
         """
         if self.test:
             return (1, 1)
-        client = Binance(debug=str2bool(config.accounts.account_debug))
+        client = Binance()
         usd_rate = client.prices()[quote + 'USDT'] if quote != 'USDT' else 1
         gbp_rate = float(usd_rate)/float(client.prices()['GBPUSDT'])
         return (usd_rate, gbp_rate)
@@ -337,7 +336,7 @@ class Mysql():
         Get current active trades and store in active_trades table with current price
         """
 
-        client = Binance(debug=str2bool(config.accounts.account_debug))
+        client = Binance()
         prices = client.prices()
         self.__run_sql_query("delete from open_trades")
         trades = self.fetch_sql_data("select pair, open_time, open_price, name, `interval`, "

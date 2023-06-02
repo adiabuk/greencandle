@@ -13,7 +13,6 @@ from concurrent.futures import ThreadPoolExecutor
 from collections import defaultdict
 import pandas
 import requests
-from str2bool import str2bool
 from greencandle.lib.binance import Binance
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.engine import Engine
@@ -360,7 +359,7 @@ class ProdRunner():
 
         LOGGER.info("Starting new cycle")
         LOGGER.debug("max trades: %s" % config.main.max_trades)
-        client = Binance(debug=str2bool(config.accounts.account_debug))
+        client = Binance()
         redis = Redis()
 
         if data:

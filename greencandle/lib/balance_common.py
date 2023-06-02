@@ -3,10 +3,8 @@
 
 import math
 from collections import defaultdict
-from str2bool import str2bool
 from greencandle.lib.binance import Binance
 from greencandle.lib.common import QUOTES
-from greencandle.lib import config
 
 def default_to_regular(ddict):
     """
@@ -48,7 +46,7 @@ def get_step_precision(item, amount):
     """
     Get/apply precision required for trading pair from exchange
     """
-    client = Binance(debug=str2bool(config.accounts.account_debug))
+    client = Binance()
     exchange_info = client.exchange_info()[item]
     flat = flatten(exchange_info)
     step_size = float(flat['stepSize'])

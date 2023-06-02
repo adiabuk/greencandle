@@ -1,4 +1,4 @@
-#pylint: disable=unnecessary-comprehension,no-else-return
+#pylint: disable=unnecessary-comprehension,no-else-return,logging-not-lazy
 """
 Spot and margin trading module for binance
 """
@@ -12,14 +12,14 @@ from urllib.parse import urlencode
 from urllib3.util.retry import Retry
 import requests
 from requests.adapters import HTTPAdapter
+from greencandle.lib.logger import get_logger
 
 class Binance():
     """
     Provide methods for interacting with binance API
     """
 
-    def __init__(self, api_key=None, secret=None, endpoint="",
-                 debug=False):
+    def __init__(self, api_key=None, secret=None, endpoint=""):
         self.endpoint = endpoint if endpoint else random.choice(["https://api.binance.com",
                                                                  "https://api1.binance.com",
                                                                  "https://api2.binance.com",
@@ -29,7 +29,7 @@ class Binance():
         self.limit = "LIMIT"
         self.market = "MARKET"
         self.options = {"apiKey":api_key, "secret":secret}
-        self.debug = debug
+        self.logger = get_logger(__name__)
 
     def prices(self):
         """Get latest prices for all symbols."""
@@ -271,7 +271,7 @@ class Binance():
             try:
                 amount = self.balances()[asset]['free']
             except KeyError:
-                print("No such asset")
+                self.logger.warning("No such asset")
                 return False
 
         elif direction == "from_isolated":
@@ -280,10 +280,10 @@ class Binance():
             try:
                 amount = self.isolated_balances()[symbol][asset]
             except KeyError:
-                print("No such symbol or asset {} {}".format(symbol, asset))
+                self.logger.warning("No such symbol or asset %s %s" %(symbol, asset))
                 return False
         else:
-            print("Invalid direction")
+            self.logger.warning("Invalid direction")
             return False
 
         params = {
@@ -441,10 +441,8 @@ class Binance():
         session = self.retry_session(retries=5)
         resp = session.request(method, self.endpoint + path, params=params, timeout=60)
         data = resp.json()
-        if self.debug:
-            print(inspect.stack()[1].function, data)
-        else:
-            print("Calling binance api path ", path)
+        self.logger.debug(inspect.stack()[1].function, data)
+        self.logger.info("Calling binance api path %s" %path)
         return data
 
     def signed_request(self, method, path, params):
@@ -466,10 +464,11 @@ class Binance():
                                self.endpoint + path + "?" + query, timeout=60,
                                headers={"X-MBX-APIKEY": self.options["apiKey"]})
         data = resp.json()
-        if self.debug:
-            print(inspect.stack()[1].function, data)
-        else:
-            print("Calling binance api path ", path)
+        if 'msg' in data:
+            self.logger.critical(data['msg'])
+            return None
+        self.logger.debug(inspect.stack()[1].function, data)
+        self.logger.info("Calling binance api path %s" % path)
         return data
 
     @staticmethod

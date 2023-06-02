@@ -7,7 +7,6 @@ Check that all trading pairs used in various configs exist and have data
 import os
 import unittest
 from greencandle.lib.binance import Binance
-from str2bool import str2bool
 from greencandle.lib import config
 config.create_config()
 
@@ -38,7 +37,7 @@ class TestPair(unittest.TestCase):
                 extracted = os.popen('configstore package get {} pairs'.format(item)).read().split()
                 pairs.extend(extracted)
 
-        client = Binance(debug=str2bool(config.accounts.account_debug))
+        client = Binance()
         info = client.exchange_info()
         for pair in set(pairs):
             pair = pair.strip()
