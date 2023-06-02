@@ -188,7 +188,6 @@ services:
       - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-be-get_1h:data
     depends_on:
       - data-base-mysql
       - data-base-redis
@@ -224,7 +223,6 @@ services:
       - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-be-get_1h:data
     depends_on:
       - data-base-mysql
       - data-base-redis
@@ -368,7 +366,6 @@ services:
       - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-be-get_12h:data
     depends_on:
       - data-base-mysql
       - data-base-redis
@@ -404,7 +401,6 @@ services:
       - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-be-get_12h:data
     depends_on:
       - data-base-mysql
       - data-base-redis
@@ -548,7 +544,6 @@ services:
       - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-be-get_4h:data
     depends_on:
       - data-base-mysql
       - data-base-redis
@@ -584,7 +579,6 @@ services:
       - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-be-get_4h:data
     depends_on:
       - data-base-mysql
       - data-base-redis
@@ -687,7 +681,6 @@ services:
       - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-be-get_1m:data
     depends_on:
       - data-base-mysql
       - data-base-redis
@@ -722,7 +715,6 @@ services:
       - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-be-get_1m:data
     depends_on:
       - data-base-mysql
       - data-base-redis
@@ -824,7 +816,6 @@ services:
       - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-be-get_5m:data
     depends_on:
       - data-base-mysql
       - data-base-redis
@@ -859,7 +850,6 @@ services:
       - data-be-api-router:router
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-be-get_5m:data
     depends_on:
       - data-base-mysql
       - data-base-redis
