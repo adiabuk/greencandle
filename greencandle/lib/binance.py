@@ -12,7 +12,13 @@ from urllib.parse import urlencode
 from urllib3.util.retry import Retry
 import requests
 from requests.adapters import HTTPAdapter
-from greencandle.lib.logger import get_logger
+from greencandle.lib.logger import get_logger, exception_catcher
+
+GET_EXCEPTIONS = exception_catcher((Exception))
+
+class BinanceException(Exception):
+    """Custom binance exception"""
+    pass
 
 class Binance():
     """
@@ -95,8 +101,6 @@ class Binance():
     def balances(self):
         """Get current balances for all symbols."""
         data = self.signed_request("GET", "/api/v3/account", {'recvWindow': 60000})
-        if 'msg' in data:
-            raise ValueError("Error from exchange: {}".format(data['msg']))
 
         return {d["asset"]: {
             "free": d["free"],
@@ -107,8 +111,6 @@ class Binance():
         """Get current free balances for all symbols in cross margin account"""
 
         data = self.signed_request("GET", "/sapi/v1/margin/account", {'recvWindow': 60000})
-        if 'msg' in data:
-            raise ValueError("Error from exchange: {}".format(data['msg']))
 
         return {d["asset"]: {
             "net": d["free"]
@@ -118,8 +120,6 @@ class Binance():
         """Get current net balances for all symbols in cross margin account"""
 
         data = self.signed_request("GET", "/sapi/v1/margin/account", {'recvWindow': 60000})
-        if 'msg' in data:
-            raise ValueError("Error from exchange: {}".format(data['msg']))
 
         return {d["asset"]: {
             "net": d["netAsset"]
@@ -129,8 +129,6 @@ class Binance():
         """Get current free balances for alsymbols in isolated account"""
 
         data = self.signed_request("GET", "/sapi/v1/margin/isolated/account", {'recvWindow': 60000})
-        if 'msg' in data:
-            raise ValueError("Error from exchange: {}".format(data['msg']))
 
         return {d['symbol']: {d['quoteAsset']['asset']: d['quoteAsset']['free'],
                               d['baseAsset']['asset']: d['baseAsset']['free']} for d in
@@ -140,8 +138,6 @@ class Binance():
         """Get current net balances for alsymbols in margin account"""
 
         data = self.signed_request("GET", "/sapi/v1/margin/isolated/account", {'recvWindow': 60000})
-        if 'msg' in data:
-            raise ValueError("Error from exchange: {}".format(data['msg']))
 
         return {d['symbol']: {d['quoteAsset']['asset']: d['quoteAsset']['netAsset'],
                               d['baseAsset']['asset']: d['baseAsset']['netAsset']} for d in
@@ -434,6 +430,7 @@ class Binance():
         session.mount('https://', adapter)
         return session
 
+    @GET_EXCEPTIONS
     def request(self, method, path, params=None):
         """
         Make request to API and return result
@@ -445,11 +442,11 @@ class Binance():
         self.logger.info("Calling binance api path %s" %path)
 
         if 'msg' in data:
-            self.logger.critical(data['msg'])
-            return None
+            raise BinanceException(data['msg'])
 
         return data
 
+    @GET_EXCEPTIONS
     def signed_request(self, method, path, params):
         """
         Send authenticated request
@@ -470,8 +467,8 @@ class Binance():
                                headers={"X-MBX-APIKEY": self.options["apiKey"]})
         data = resp.json()
         if 'msg' in data:
-            self.logger.critical(data['msg'])
-            return None
+            raise BinanceException(data['msg'])
+
         self.logger.debug("%s %s" %(inspect.stack()[1].function, data))
         self.logger.info("Calling binance api path %s" % path)
         return data
