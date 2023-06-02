@@ -441,8 +441,13 @@ class Binance():
         session = self.retry_session(retries=5)
         resp = session.request(method, self.endpoint + path, params=params, timeout=60)
         data = resp.json()
-        self.logger.debug(inspect.stack()[1].function, data)
+        self.logger.debug("%s %s" %(inspect.stack()[1].function, data))
         self.logger.info("Calling binance api path %s" %path)
+
+        if 'msg' in data:
+            self.logger.critical(data['msg'])
+            return None
+
         return data
 
     def signed_request(self, method, path, params):
@@ -467,7 +472,7 @@ class Binance():
         if 'msg' in data:
             self.logger.critical(data['msg'])
             return None
-        self.logger.debug(inspect.stack()[1].function, data)
+        self.logger.debug("%s %s" %(inspect.stack()[1].function, data))
         self.logger.info("Calling binance api path %s" % path)
         return data
 
