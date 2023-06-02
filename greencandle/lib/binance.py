@@ -1,4 +1,4 @@
-#pylint: disable=unnecessary-comprehension,no-else-return,logging-not-lazy
+#pylint: disable=unnecessary-comprehension,no-else-return,logging-not-lazy,unnecessary-pass
 """
 Spot and margin trading module for binance
 """
@@ -9,6 +9,7 @@ import hashlib
 import time
 import inspect
 from urllib.parse import urlencode
+from json import JSONDecodeError
 from urllib3.util.retry import Retry
 import requests
 from requests.adapters import HTTPAdapter
@@ -40,6 +41,7 @@ class Binance():
     def prices(self):
         """Get latest prices for all symbols."""
         data = self.request("GET", "/api/v1/ticker/allPrices")
+        print(type(data))
         return {d["symbol"]: d["price"] for d in data}
 
     def tickers(self):
@@ -437,10 +439,14 @@ class Binance():
         """
         session = self.retry_session(retries=5)
         resp = session.request(method, self.endpoint + path, params=params, timeout=60)
-        data = resp.json()
+        try:
+            data = resp.json()
+        except JSONDecodeError:
+            raise BinanceException(resp.content.decode())
+
         self.logger.debug("%s %s" %(inspect.stack()[1].function, data))
         self.logger.info("Calling binance api path %s" %path)
-
+        self.logger.critical(type(data), data[0])
         if 'msg' in data:
             raise BinanceException(data['msg'])
 
@@ -465,7 +471,11 @@ class Binance():
         resp = session.request(method,
                                self.endpoint + path + "?" + query, timeout=60,
                                headers={"X-MBX-APIKEY": self.options["apiKey"]})
-        data = resp.json()
+        try:
+            data = resp.json()
+        except JSONDecodeError:
+            raise BinanceException(resp.content.decode())
+
         if 'msg' in data:
             raise BinanceException(data['msg'])
 
