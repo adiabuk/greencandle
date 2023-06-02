@@ -1,5 +1,9 @@
 # Releases
 
+# 5.28.1
+* Capture json decode error when binance returns HTML error
+* Remove proxy from test env
+
 # 5.28
 * Fix stag entrypoint causing container restart loop
 * new testing API keys
