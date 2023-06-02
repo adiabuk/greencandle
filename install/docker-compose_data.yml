@@ -86,8 +86,8 @@ services:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/1h/get_data
       - DB=true
-      - http_proxy=http://172.17.0.1:8082
-      - https_proxy=http://172.17.0.1:8082
+      - http_proxy=https://172.17.0.1:8082
+      - https_proxy=https://172.17.0.1:8082
       - no_proxy=router,stream,127.1
     healthcheck:
       test: /mnt/nagios_checks/check_milliepoch -u http://127.1:5000 -w 3660 -c 3720 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
@@ -125,8 +125,8 @@ services:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/1h/get_data/btc
       - DB=true
-      - http_proxy=http://172.17.0.1:8082
-      - https_proxy=http://172.17.0.1:8082
+      - http_proxy=https://172.17.0.1:8082
+      - https_proxy=https://172.17.0.1:8082
       - no_proxy=router,stream,127.1
     healthcheck:
       test: find /var/local/gc_get_1h.lock  -mmin -2 ||exit 1
@@ -160,8 +160,8 @@ services:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/1h/get_data/usdt
       - DB=true
-      - http_proxy=http://172.17.0.1:8082
-      - https_proxy=http://172.17.0.1:8082
+      - http_proxy=https://172.17.0.1:8082
+      - https_proxy=https://172.17.0.1:8082
       - no_proxy=router,stream,127.1
     healthcheck:
       test: find /var/local/gc_get_1h.lock  -mmin -2 ||exit 1
@@ -264,8 +264,8 @@ services:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/12h/get_data
       - DB=true
-      - http_proxy=http://172.17.0.1:8082
-      - https_proxy=http://172.17.0.1:8082
+      - http_proxy=https://172.17.0.1:8082
+      - https_proxy=https://172.17.0.1:8082
       - no_proxy=router,stream,127.1
     healthcheck:
       test: /mnt/nagios_checks/check_milliepoch -u http://127.1:5000 -w 43500 -c 43560 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
@@ -303,8 +303,8 @@ services:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/12h/get_data/btc
       - DB=true
-      - http_proxy=http://172.17.0.1:8082
-      - https_proxy=http://172.17.0.1:8082
+      - http_proxy=https://172.17.0.1:8082
+      - https_proxy=https://172.17.0.1:8082
       - no_proxy=router,stream,127.1
     healthcheck:
       test: find /var/local/gc_get_12h.lock  -mmin -2 ||exit 1
@@ -338,8 +338,8 @@ services:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/12h/get_data/usdt
       - DB=true
-      - http_proxy=http://172.17.0.1:8082
-      - https_proxy=http://172.17.0.1:8082
+      - http_proxy=https://172.17.0.1:8082
+      - https_proxy=https://172.17.0.1:8082
       - no_proxy=router,stream,127.1
     healthcheck:
       test: find /var/local/gc_get_12h.lock  -mmin -2 ||exit 1
@@ -442,8 +442,8 @@ services:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/4h/get_data
       - DB=true
-      - http_proxy=http://172.17.0.1:8082
-      - https_proxy=http://172.17.0.1:8082
+      - http_proxy=https://172.17.0.1:8082
+      - https_proxy=https://172.17.0.1:8082
       - no_proxy=router,stream,127.1
     healthcheck:
       test: /mnt/nagios_checks/check_milliepoch -u http://127.1:5000 -w 14400 -c 14460 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
@@ -481,8 +481,8 @@ services:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/4h/get_data/btc
       - DB=true
-      - http_proxy=http://172.17.0.1:8082
-      - https_proxy=http://172.17.0.1:8082
+      - http_proxy=https://172.17.0.1:8082
+      - https_proxy=https://172.17.0.1:8082
       - no_proxy=router,stream,127.1
     healthcheck:
       test: find /var/local/gc_get_4h.lock  -mmin -2 ||exit 1
@@ -516,8 +516,8 @@ services:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/4h/get_data/usdt
       - DB=true
-      - http_proxy=http://172.17.0.1:8082
-      - https_proxy=http://172.17.0.1:8082
+      - http_proxy=https://172.17.0.1:8082
+      - https_proxy=https://172.17.0.1:8082
       - no_proxy=router,stream,127.1
     healthcheck:
       test: find /var/local/gc_get_4h.lock  -mmin -2 ||exit 1
