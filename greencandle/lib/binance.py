@@ -9,7 +9,6 @@ import hashlib
 import time
 import inspect
 from urllib.parse import urlencode
-from json import JSONDecodeError
 from urllib3.util.retry import Retry
 import requests
 from requests.adapters import HTTPAdapter
@@ -441,7 +440,7 @@ class Binance():
         resp = session.request(method, self.endpoint + path, params=params, timeout=60)
         try:
             data = resp.json()
-        except JSONDecodeError:
+        except:
             raise BinanceException(resp.content.decode())
 
         self.logger.debug("%s %s" %(inspect.stack()[1].function, data))
@@ -472,7 +471,7 @@ class Binance():
                                headers={"X-MBX-APIKEY": self.options["apiKey"]})
         try:
             data = resp.json()
-        except JSONDecodeError:
+        except:
             raise BinanceException(resp.content.decode())
 
         if 'msg' in data:
