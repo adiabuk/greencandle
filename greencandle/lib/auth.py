@@ -4,9 +4,9 @@ Helper functions for authernticating with APIs
 """
 
 import os
-from binance.binance import Binance
-from coinbase.wallet.client import Client
 import ccxt
+from coinbase.wallet.client import Client
+from greencandle.lib.binance import Binance
 from greencandle.lib import config
 
 HOME_DIR = os.path.expanduser("~")

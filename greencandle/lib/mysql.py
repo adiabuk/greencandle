@@ -5,7 +5,7 @@ Push/Pull crypto signals and data to mysql
 """
 import datetime
 import MySQLdb
-from binance.binance import Binance
+from greencandle.lib.binance import Binance
 from greencandle.lib import config
 from greencandle.lib.binance_common import get_current_price
 from greencandle.lib.common import AttributeDict, format_usd
@@ -353,7 +353,8 @@ class Mysql():
                 net_perc = perc - float(self.get_complete_commission())
                 insert = ('replace into open_trades (pair, open_time, open_price, current_price, '
                           'perc, net_perc, name, `interval`, usd_quantity, direction) VALUES '
-                          '("{0}", "{1}", trim("{2}")+0, trim("{3}"+0), round("{4}",2), round("{5}",2), "{6}", "{7}", "{8}", "{9}")'
+                          '("{0}", "{1}", trim("{2}")+0, trim("{3}"+0), round("{4}",2), '
+                          'round("{5}",2), "{6}", "{7}", "{8}", "{9}")'
                           .format(pair, open_time, open_price, current_price,
                                   perc, net_perc, name, interval,
                                   format_usd(usd_quantity), direction))

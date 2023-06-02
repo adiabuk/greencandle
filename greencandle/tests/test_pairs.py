@@ -6,7 +6,7 @@ Check that all trading pairs used in various configs exist and have data
 
 import os
 import unittest
-from binance.binance import Binance
+from greencandle.lib.binance import Binance
 from str2bool import str2bool
 from greencandle.lib import config
 config.create_config()

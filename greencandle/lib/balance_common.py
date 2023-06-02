@@ -3,8 +3,8 @@
 
 import math
 from collections import defaultdict
-from binance.binance import Binance
 from str2bool import str2bool
+from greencandle.lib.binance import Binance
 from greencandle.lib.common import QUOTES
 from greencandle.lib import config
 

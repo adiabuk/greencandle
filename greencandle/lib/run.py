@@ -13,8 +13,8 @@ from concurrent.futures import ThreadPoolExecutor
 from collections import defaultdict
 import pandas
 import requests
-from binance.binance import Binance
 from str2bool import str2bool
+from greencandle.lib.binance import Binance
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.engine import Engine
 from greencandle.lib.redis_conn import Redis

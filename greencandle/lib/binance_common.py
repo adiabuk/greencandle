@@ -12,7 +12,7 @@ import time
 import datetime
 from concurrent.futures import ThreadPoolExecutor
 import pandas
-from binance.binance import Binance
+from greencandle.lib.binance import Binance
 from str2bool import str2bool
 from greencandle.lib import config
 from greencandle.lib.logger import get_logger
