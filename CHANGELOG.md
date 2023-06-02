@@ -1,5 +1,40 @@
 # Releases
 
+# 5.28
+* Fix stag entrypoint causing container restart loop
+* new testing API keys
+* add logging and exception handling to binance
+* merge seperate binance module
+* add tpsl to trade status output
+* add seperate containers for btc/usdt data upper timeframes
+* add new btc data pairs and split btc/usdt in higher timeframes
+* delete broken symlinks in current agg dir
+* fix data cron healthcheck
+* change data rules
+* add 1h start period to analyse healthchecks to account for get_data wait time
+* increase analyse container healthcheck interval
+* further reduce initial data klines, but leave more during cleanup
+* ensure we have an index for supertrend
+* unable to parse index for rate_indicator
+* use new bb notation in agg data and fix csv output header
+* add u/m/l as list in a single dict key
+* remove debug logging
+* cleanup config
+* add 2nd higher bb for data envs and add to agg data
+* get all 3 bollinger bands with a single request
+* update alerts doc
+* more cron cleanup/tidy
+* remove non-trading pair
+* further increase higher timeframe stream healthcheck thresholds
+* cleanup cron template
+* only supress audio alert alert when drain file is present
+* run alert webbhook unbuffered for print statements
+* add logging driver for alert container
+* cleanup old mysql backups after 7 days
+* get agg candle size from new script
+* get min/max/avg candle size perc over last x candles
+* trim trailing zeros from open/close prices in db
+
 # 5.27
 * increase timeout and interval of 12h/4h stream healthchecks
 * round open trade current percs
