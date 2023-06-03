@@ -1,5 +1,13 @@
 # Releases
 
+# 5.28.2
+* wait 30 secs after deploying a get-container
+* initial indicator doc
+* catch attribute error
+* catch all binance exceptions when converting to json
+* use https proxy
+* remove unused data env container links
+
 # 5.28.1
 * Capture json decode error when binance returns HTML error
 * Remove proxy from test env
