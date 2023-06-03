@@ -45,6 +45,10 @@ docker compose -f ./install/docker-compose_${env}.yml up -d $fe
 for container in $be; do
   docker compose -f ./install/docker-compose_${env}.yml up -d $container
   sleep 2
+  if [[ "$container" == *"get"* ]]; then
+    sleep 30
+  fi
+
 done
 
 
