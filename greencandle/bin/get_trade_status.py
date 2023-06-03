@@ -33,7 +33,7 @@ def main():
     query_filter = sys.argv[1] if len(sys.argv) > 1 else ""
     name = "{}-{}".format(sys.argv[0].split('/')[-1], query_filter if query_filter else "all")
     query = ('select pair, name, open_time, concat(round(perc,2), " (", '
-             'round(net_perc,2), ")") as perc, open_price, direction, '
+             'round(net_perc,2), ")") as perc, open_price, '
              '`interval` from open_trades where name like "%{}%" order '
              'by perc +0 ASC'.format(query_filter))
     services = list_to_dict(get_be_services(config.main.base_env), reverse=False, str_filter='-be-')
