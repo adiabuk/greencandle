@@ -45,10 +45,9 @@ def main():
         output = ""
 
         for trade in chunk:
+            trade_direction = "{}-{}".format(trade[1], trade[5]) if \
+                    not (trade[1].endswith('long') or trade[1].endswith('short')) else trade[1]
             try:
-                tpsl = 'tpsl'
-                trade_direction = "{}-{}".format(trade[1], trade[5]) if \
-                        not (trade[1].endswith('long') or trade[1].endswith('short')) else trade[1]
                 short_name = services[trade_direction]
                 trade[1] = short_name
                 take = redis.conn.get("{}:{}:{}".format(trade[0], 'take_profit_perc', short_name))
@@ -56,9 +55,9 @@ def main():
                 tpsl = "{}/{}".format(take.decode(), stop.decode())
                 link = get_trade_link(trade[0], short_name, 'close', 'close_now',
                                       config.web.nginx_port)
-
-            except (KeyError, IndexError):
-                link = "no-link"
+            except (AttributeError, KeyError, IndexError):
+                tpsl = "tpsl"
+                link = "link"
             try:
                 # remove interval from results
                 interval = trade.pop(-1) if trade[0] != "pair" else ""
