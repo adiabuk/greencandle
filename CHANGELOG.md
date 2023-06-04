@@ -1,5 +1,11 @@
 # Releases
 
+# 5.29
+* make isolated balance disabled by default
+* add 5m and 1h forward rule
+* alerting for 1h test only
+* remove unused column header
+
 # 5.28.2
 * wait 30 secs after deploying a get-container
 * initial indicator doc
