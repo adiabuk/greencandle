@@ -63,7 +63,7 @@ def main():
                 # remove interval from results
                 direction = trade.pop(-1)
                 interval = trade.pop(-1) if trade[0] != "pair" else ""
-                output += "" if len(trade) > 5 and "name" in trade[1] else \
+                output += "" if "name" in trade else \
                         (":short: " if "short" in direction else ":long: ")
                 output += '   '.join([get_tv_link(item, interval) if str(item).endswith(QUOTES) \
                         else str(item) for item in trade[:-1]]) + " " + link + " " + tpsl + '\n'
