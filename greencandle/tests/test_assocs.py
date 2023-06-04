@@ -8,11 +8,7 @@ import yaml
 from greencandle.bin.api_dashboard import get_pairs, list_to_dict
 
 
-ENVS = (('per', 'PER'),
-        ('prod', 'PROD'),
-        ('stag', 'STAG'),
-        ('test', 'TEST'),
-        ('alarm', 'ALARM'))
+ENVS = ('per', 'prod', 'stag', 'test', 'alarm')
 class TestAssocs(unittest.TestCase):
     """
     Test all assocs in docker-compose and config
@@ -23,12 +19,12 @@ class TestAssocs(unittest.TestCase):
         Ensure all envs in router configs exist
         """
 
-        for env, host in ENVS:
+        for env in ENVS:
             os.system("sudo configstore package process_templates {} /tmp".format(env))
             with open('/tmp/router_config.json', 'r') as json_file:
                 router_config = json.load(json_file)
             with open("install/docker-compose_{}.yml"
-                      .format(host.lower()), "r") as stream:
+                      .format(env), "r") as stream:
                 try:
                     output = (yaml.safe_load(stream))
                 except yaml.YAMLError as exc:
@@ -51,17 +47,16 @@ class TestAssocs(unittest.TestCase):
         """
         Scrape environments from CONFIG_ENV vars in docker compose file and test
         """
-        for env, host in ENVS:
+        for env in ENVS:
             print("processing env {}".format(env))
             os.system("sudo configstore package process_templates {} /tmp".format(env))
-            os.environ['HOST'] = host
-            names = get_pairs()[-1]
+            names = get_pairs(env)[-1]
             rev_names = {v: k for k, v in names.items()}
             with open('/tmp/router_config.json', 'r') as json_file:
                 router_config = json.load(json_file)
 
             with open("install/docker-compose_{}.yml"
-                      .format(host.lower()), "r") as stream:
+                      .format(env), "r") as stream:
                 try:
                     output = (yaml.safe_load(stream))
                 except yaml.YAMLError as exc:

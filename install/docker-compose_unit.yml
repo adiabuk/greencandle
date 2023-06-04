@@ -8,7 +8,6 @@ services:
       dockerfile: install/Dockerfile-gc
     environment:
       - CONFIG_ENV=unit
-      - HOST=$HOSTNAME
       - DB=true
       - id=$id
     hostname: cron
@@ -31,7 +30,6 @@ services:
       dockerfile: install/Dockerfile-gc
     environment:
       - CONFIG_ENV=unit
-      - HOST=$HOSTNAME
       - DB=true
       - id=$id
     hostname: api

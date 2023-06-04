@@ -112,7 +112,6 @@ services:
       - /dev/ttyACM0:/dev/ttyACM0
       - /dev/snd:/dev/snd
     environment:
-      - HOST=$HOSTNAME
       - CONFIG_ENV=alarm
       - DB=false
     volumes:

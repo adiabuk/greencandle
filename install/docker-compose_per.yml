@@ -261,7 +261,6 @@ services:
     hostname: per-fe-api-dashboard
     environment:
       - CONFIG_ENV=per/fe/api
-      - HOST=$HOSTNAME
       - DB=true
       - SECRET_KEY=$SECRET_KEY
     logging:

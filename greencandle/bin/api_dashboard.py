@@ -33,7 +33,7 @@ LOGIN = APP.route("/logout", methods=["GET", "POST"])(logoutx)
 SCRIPTS = ["write_balance", "get_quote_balance", "get_active_trades", "get_trade_status",
            "get_hour_profit", "repay_debts", "balance_graph", "test_close"]
 
-def get_pairs():
+def get_pairs(env=config.main.base_env):
     """
     get details from docker_compose, configstore, and router config
     output in reversed JSON format
@@ -41,7 +41,7 @@ def get_pairs():
     Usage: api_dashboard
     """
     docker_compose = open("/srv/greencandle/install/docker-compose_{}.yml"
-                          .format(config.main.base_env), "r")
+                          .format(env), "r")
     pairs_dict = {}
     names = {}
     length = defaultdict(int)

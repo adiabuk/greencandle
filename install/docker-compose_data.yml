@@ -1060,7 +1060,6 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=data
-      - HOST=$HOSTNAME
       - DB=true
       - SECRET_KEY=$SECRET_KEY
     logging:
