@@ -41,7 +41,7 @@ class Balance(dict):
         """
         return {strategy: {'TOTALS': {'BTC': 0, 'USD': 0, 'GBP': 0, 'count': 'N/A'}}}
 
-    def get_balance(self, coinbase=False, margin=True, phemex=False, isolated=True):
+    def get_balance(self, coinbase=False, margin=True, phemex=False, isolated=False):
         """
         get dict of all balances
 
