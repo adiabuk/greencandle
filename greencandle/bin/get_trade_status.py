@@ -34,7 +34,7 @@ def main():
     name = "{}-{}".format(sys.argv[0].split('/')[-1], query_filter if query_filter else "all")
     query = ('select pair, name, open_time, concat(round(perc,2), " (", '
              'round(net_perc,2), ")") as perc, open_price, '
-             '`interval` from open_trades where name like "%{}%" order '
+             '`interval`, direction from open_trades where name like "%{}%" order '
              'by perc +0 ASC'.format(query_filter))
     services = list_to_dict(get_be_services(config.main.base_env), reverse=False, str_filter='-be-')
     open_trades = dbase.fetch_sql_data(query, header=True)
@@ -45,24 +45,26 @@ def main():
         output = ""
 
         for trade in chunk:
-            trade_direction = "{}-{}".format(trade[1], trade[5]) if \
+            trade_direction = "{}-{}".format(trade[1], trade[6]) if \
                     not (trade[1].endswith('long') or trade[1].endswith('short')) else trade[1]
             try:
                 short_name = services[trade_direction]
+
                 trade[1] = short_name
                 take = redis.conn.get("{}:{}:{}".format(trade[0], 'take_profit_perc', short_name))
                 stop = redis.conn.get("{}:{}:{}".format(trade[0], 'stop_loss_perc', short_name))
                 tpsl = "{}/{}".format(take.decode(), stop.decode())
                 link = get_trade_link(trade[0], short_name, 'close', 'close_now',
                                       config.web.nginx_port)
-            except (AttributeError, KeyError, IndexError):
+            except (AttributeError, KeyError, IndexError) as error:
                 tpsl = "tpsl"
                 link = "link"
             try:
                 # remove interval from results
+                direction = trade.pop(-1)
                 interval = trade.pop(-1) if trade[0] != "pair" else ""
                 output += "" if len(trade) > 5 and "name" in trade[1] else \
-                        (":short: " if "short" in trade[-1] else ":long: ")
+                        (":short: " if "short" in direction else ":long: ")
                 output += '   '.join([get_tv_link(item, interval) if str(item).endswith(QUOTES) \
                         else str(item) for item in trade[:-1]]) + " " + link + " " + tpsl + '\n'
             except IndexError:
