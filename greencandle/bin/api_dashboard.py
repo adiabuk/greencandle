@@ -41,7 +41,7 @@ def get_pairs():
     Usage: api_dashboard
     """
     docker_compose = open("/srv/greencandle/install/docker-compose_{}.yml"
-                          .format(os.environ['HOST'].lower()), "r")
+                          .format(config.main.base_env), "r")
     pairs_dict = {}
     names = {}
     length = defaultdict(int)
