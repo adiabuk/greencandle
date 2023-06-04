@@ -37,8 +37,8 @@ def main():
              '`interval`, direction from open_trades where name like "%{}%" order '
              'by perc +0 ASC'.format(query_filter))
     services = list_to_dict(get_be_services(config.main.base_env), reverse=False, str_filter='-be-')
-    open_trades = dbase.fetch_sql_data(query, header=True)
-    header = open_trades.pop(0)
+    open_trades = dbase.fetch_sql_data(query, header=False)
+    header = ["pair", "name", "open_time", "perc", "open_price", "link", "tpsl"]
     chunks = list(divide_chunks(open_trades, 7))
     for chunk in chunks:
         chunk.insert(0, header)
