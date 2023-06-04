@@ -56,7 +56,7 @@ def main():
                 tpsl = "{}/{}".format(take.decode(), stop.decode())
                 link = get_trade_link(trade[0], short_name, 'close', 'close_now',
                                       config.web.nginx_port)
-            except (AttributeError, KeyError, IndexError) as error:
+            except (AttributeError, KeyError, IndexError):
                 tpsl = "tpsl"
                 link = "link"
             try:
