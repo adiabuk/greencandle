@@ -115,9 +115,28 @@ def get_candle_size(pair, interval, res, last_res):
     except:
         return None
 
+def get_middle_distance(pair, interval, res, timeframe='12'):
+    """
+    get distance between to middle bollinger band as a percentage
+    """
+
+    try:
+
+        distance = perc_diff(res[interval][pair]['ohlc']['close'],
+                             res[interval][pair]['bb_'+timeframe][1])
+        if distance > 0:
+            direction = 'below'
+        else:
+            direction = 'above'
+        return direction, '{:.2f}'.format(abs(distance))
+    except KeyError:
+        return None, None
+
+
 def get_distance(pair, interval, res, timeframe='12'):
     """
-    get distance between upper and lower bollinger bands as a percentage
+    get distance between upper/lower bollinger bands
+    and current price as a percentage if above/below
     """
 
     try:
@@ -265,10 +284,21 @@ def main():
                 if direction:
                     data.append([pair, interval, direction, distance_diff])
 
+    # distance to middle bb
+    elif 'middle' in key:
+        data.append(['pair', 'interval', 'direction', 'distance'])
+        for pair in pairs:
+            for interval in intervals:
+                _, timeframe = key.split('_')
+                direction, distance_diff = get_middle_distance(pair, interval, res, timeframe)
+                if direction:
+                    data.append([pair, interval, direction, distance_diff])
+
+
     # all data in a single spreadsheet
     elif key == 'all':
-        data.append(['pair', 'interval', 'distance_12', 'distance_200', 'candle_size', 'stoch_flat', 'bb_size',
-                     'bbperc_diff', 'bbperc_200', 'stoch' 'stx_23'])
+        data.append(['pair', 'interval', 'distance_12', 'distance_200', 'candle_size',
+                     'stoch_flat', 'bb_size', 'bbperc_diff', 'bbperc_200', 'stoch' 'stx_23'])
         for pair in pairs:
             for interval in intervals:
                 distance_12 = get_distance(pair, interval, res, '12')[-1]
