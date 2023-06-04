@@ -497,7 +497,7 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV=test/be/any/long/2/1m
+      - CONFIG_ENV=test/be/any/long/2/5m
       - ALERT="True"
       - intermittent="true"
       - DB=true
@@ -535,7 +535,7 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV=test/be/any/short/2/1m
+      - CONFIG_ENV=test/be/any/short/2/5m
       - ALERT="True"
       - intermittent="true"
       - DB=true
