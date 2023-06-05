@@ -298,12 +298,17 @@ def main():
     # all data in a single spreadsheet
     elif key == 'all':
         data.append(['pair', 'interval', 'distance_12', 'distance_200', 'candle_size',
-                     'stoch_flat', 'bb_size', 'bbperc_diff', 'bbperc_200', 'stoch' 'stx_23'])
+                     'middle_12', 'middle_200', 'stoch_flat', 'bb_size',
+                     'bbperc_diff', 'bbperc_200', 'stoch', 'stx_23'])
         for pair in pairs:
             for interval in intervals:
                 distance_12 = get_distance(pair, interval, res, '12')[-1]
                 distance_200 = get_distance(pair, interval, res, '200')[-1]
                 candle_size = get_candle_size(pair, interval, res, last_res)
+
+                _, middle_12 = get_middle_distance(pair, interval, res, '12')
+                _, middle_200 = get_middle_distance(pair, interval, res, '200')
+
                 stoch_flat = get_stoch_flat(pair, interval, res, last_res)
                 bb_size = get_bb_size(pair, interval, res)
                 bbperc_diff = get_bbperc_diff(pair, interval, res, last_res)[-1]
@@ -311,8 +316,9 @@ def main():
                 bbperc_200 = get_indicator_value(pair, interval, res, 'bbperc_200')
                 stx_23 = get_indicator_value(pair, interval, res, 'STX_23')
                 stoch = get_indicator_value(pair, interval, res, 'STOCHRSI_8')
-                data.append([pair, interval, distance_12, distance_200, candle_size, stoch_flat,
-                             bb_size, bbperc_diff, bbperc_200, stoch, stx_23])
+                data.append([pair, interval, distance_12, distance_200, candle_size, middle_12,
+                             middle_200, stoch_flat, bb_size, bbperc_diff, bbperc_200, stoch,
+                             stx_23])
 
     # indicator data
     else:
