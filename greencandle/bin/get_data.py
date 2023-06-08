@@ -62,9 +62,7 @@ def main():
     LOGGER.info("Finished initial prod run")
 
     while True:
-        # continuous loop for smaller timeframes
         get_data()
-        time.sleep(10)
 
 if __name__ == '__main__':
     main()

@@ -36,7 +36,6 @@ if sys.argv[-1] != "--help":
     ISOLATED = CLIENT.get_isolated_margin_pairs()
     CROSS = CLIENT.get_cross_margin_pairs()
 
-@SCHED.scheduled_job('cron', minute=config.main.check_interval)
 def analyse_loop():
     """
     Gather data from redis and analyze
@@ -49,7 +48,7 @@ def analyse_loop():
         LOGGER.info("Waiting for initial data collection to complete for %s" % config.main.interval)
         time.sleep(30)
 
-    #interval = config.main.interval
+    LOGGER.info("Start of current loop")
     redis = Redis()
     for pair in PAIRS:
 
@@ -150,10 +149,9 @@ def main():
     global FORWARD
     if len(sys.argv) > 1 and sys.argv[1] == "forward":
         FORWARD = True
-    LOGGER.info("Starting Initial loop")
-    analyse_loop()
-    LOGGER.info("Finished Initial loop")
     SCHED.start()
+    while True:
+        analyse_loop()
 
 if __name__ == "__main__":
     main()
