@@ -25,7 +25,6 @@ from concurrent.futures import ThreadPoolExecutor
 LOGGER = get_logger(__name__)
 PAIRS = config.main.pairs.split()
 MAIN_INDICATORS = config.main.indicators.split()
-SCHED = BlockingScheduler()
 GET_EXCEPTIONS = exception_catcher((Exception))
 TRIGGERED = {}
 FORWARD = False
