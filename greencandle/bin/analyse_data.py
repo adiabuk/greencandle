@@ -12,7 +12,6 @@ import sys
 import requests
 from str2bool import str2bool
 from datetime import datetime
-from apscheduler.schedulers.blocking import BlockingScheduler
 from greencandle.lib import config
 config.create_config()
 from pathlib import Path
@@ -44,6 +43,7 @@ def analyse_loop():
     global FORWARD
     LOGGER.debug("Recently triggered: %s" % str(TRIGGERED))
 
+    Path('/var/local/greencandle').touch()
     while glob.glob('/var/run/{}-data-{}-*'.format(config.main.base_env, config.main.interval)):
         LOGGER.info("Waiting for initial data collection to complete for %s" % config.main.interval)
         time.sleep(30)
@@ -130,14 +130,6 @@ def analyse_pair(pair, redis):
     except Exception as err_msg:
         LOGGER.critical("Error with pair %s %s" % (pair, str(err_msg)))
 
-@GET_EXCEPTIONS
-@SCHED.scheduled_job('interval', seconds=60)
-def keepalive():
-    """
-    Periodically touch file for docker healthcheck
-    """
-    Path('/var/local/greencandle').touch()
-
 @arg_decorator
 def main():
     """
@@ -149,7 +141,6 @@ def main():
     global FORWARD
     if len(sys.argv) > 1 and sys.argv[1] == "forward":
         FORWARD = True
-    SCHED.start()
     while True:
         analyse_loop()
 
