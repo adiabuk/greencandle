@@ -412,7 +412,7 @@ class Engine(dict):
 
         func, timeperiod = localconfig  # split tuple
         scheme = {}
-        mine = self.dataframes[pair].apply(pandas.to_numeric).loc[:index]
+        series = self.dataframes[pair].apply(pandas.to_numeric).loc[:index]
 
         if (not index and self.test) or len(self.dataframes[pair]) < 2:
             index = -1
@@ -444,7 +444,7 @@ class Engine(dict):
 
         func, timeperiod = localconfig  # split tuple
         scheme = {}
-        mine = self.dataframes[pair].apply(pandas.to_numeric).loc[:index]
+        series = self.dataframes[pair].apply(pandas.to_numeric).loc[:index]
 
         if (not index and self.test) or len(self.dataframes[pair]) < 2:
             index = -1
@@ -476,11 +476,11 @@ class Engine(dict):
 
         """
 
-        mine = self.dataframes[pair].close.apply(pandas.to_numeric).astype('float32')
+        series = self.dataframes[pair].close.apply(pandas.to_numeric).astype('float32')
         if not index or len(self.dataframes[pair]) < 2:
             index = -1
         else:
-            mine = mine.iloc[:index +1]
+            series = series.iloc[:index +1]
 
         func, details = localconfig  # split tuple
         rsi_period, stoch_period, smooth = (int(x) for x in details.split(','))
@@ -488,7 +488,7 @@ class Engine(dict):
         scheme = {}
         try:
             # Calculate RSI
-            delta = mine.astype('float32').diff().dropna()
+            delta = series.astype('float32').diff().dropna()
             ups = delta * 0
             downs = ups.copy()
             ups[delta > 0] = delta[delta > 0]
@@ -768,11 +768,11 @@ class Engine(dict):
         scheme = {}
         dataframe = self.__renamed_dataframe_columns(self.dataframes[pair])
 
-        mine = dataframe.apply(pandas.to_numeric).loc[:index]
+        series = dataframe.apply(pandas.to_numeric).loc[:index]
         timeframe, multiplier = timef.split(',')
-        supertrend2 = ta.supertrend(high=mine.High.astype(float),
-                                    low=mine.Low.astype(float),
-                                    close=mine.Close.astype(float),
+        supertrend2 = ta.supertrend(high=series.High.astype(float),
+                                    low=series.Low.astype(float),
+                                    close=series.Close.astype(float),
                                     multiplier=float(multiplier), length=float(timeframe))
         # -1 = downtrend - go short
         # 1 = uptrend - go long
