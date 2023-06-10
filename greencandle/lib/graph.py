@@ -86,6 +86,7 @@ class Graph():
         """Create graph html file using plotly offline-mode from dataframe object"""
 
         item2 = None
+        item3 = None
         fig = subplots.make_subplots(rows=2, cols=1, shared_xaxes=True, print_grid=False)
         for name, value in self.data.items():
 
@@ -134,6 +135,21 @@ class Graph():
                                   y=value['value'],
                                   name=name,
                                   mode='markers')
+
+            elif 'bb' in name and 'bbperc' not in name:
+                # add bb graph in first subply (above)
+                LOGGER.debug("Creating bb graph")
+                bb_upper, bb_middle, bb_lower = zip(*value.value)
+                item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
+                                  y=bb_upper,
+                                  name=name+'-upper')
+                item2 = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
+                                   y=bb_middle,
+                                   name=name+'-middle')
+                item3 = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
+                                   y=bb_lower,
+                                   name=name+'-lower')
+
 
             # add rsi graph in second subply (below) if it exists
             elif any(substring in name for substring in ['RSI', 'ATR', 'signal', 'tsi', 'bbperc']) \
@@ -188,6 +204,8 @@ class Graph():
             fig.append_trace(item, row, col)
             if item2:
                 fig.append_trace(item2, row, col)
+            if item3:
+                fig.append_trace(item3, row, col)
 
 
             if name == "ohlc" and self.volume:
