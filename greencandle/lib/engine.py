@@ -475,26 +475,51 @@ class Engine(dict):
             k,d
 
         """
-        if (not index and self.test) or len(self.dataframes[pair]) < 2:
+
+        mine = self.dataframes[pair].close.apply(pandas.to_numeric).astype('float32')
+        if not index or len(self.dataframes[pair]) < 2:
             index = -1
-        elif not index and not self.test:
-            index = -1
+        else:
+            mine = mine.iloc[:index +1]
+
         func, details = localconfig  # split tuple
-        timeperiod, k_period, d_period = details.split(',')
+        rsi_period, stoch_period, smooth = (int(x) for x in details.split(','))
+
         scheme = {}
-        mine = self.dataframes[pair].apply(pandas.to_numeric).loc[:index]
         try:
-            rsi = talib.RSI(self.dataframes[pair].close.values.astype(float) * 100000,
-                            timeperiod=int(timeperiod))
-            rsinp = rsi[numpy.logical_not(numpy.isnan(rsi))]
-            stochrsi = talib.STOCH(rsinp, rsinp, rsinp, int(timeperiod),
-                                   int(k_period), int(d_period))
+            # Calculate RSI
+            delta = mine.astype('float32').diff().dropna()
+            ups = delta * 0
+            downs = ups.copy()
+            ups[delta > 0] = delta[delta > 0]
+            downs[delta < 0] = -delta[delta < 0]
+            #first value is sum of avg gains
+            ups[ups.index[rsi_period-1]] = numpy.mean(ups[:rsi_period])
+            ups = ups.drop(ups.index[:(rsi_period-1)])
+            #first value is sum of avg losses
+            downs[downs.index[rsi_period-1]] = numpy.mean(downs[:rsi_period])
+            downs = downs.drop(downs.index[:(rsi_period-1)])
+            r_s = ups.ewm(com=rsi_period-1, min_periods=0, adjust=False, ignore_na=False).mean() / \
+                 downs.ewm(com=rsi_period-1, min_periods=0, adjust=False, ignore_na=False).mean()
+            rsi = 100 - 100 / (1 + r_s)
+
+            # Calculate StochRSI
+            stochrsi = (rsi - rsi.rolling(stoch_period, min_periods=0).min()) / \
+            (rsi.rolling(stoch_period, min_periods=0).max() - rsi.rolling(stoch_period,
+                                                                          min_periods=0).min())
+            stochrsik = stochrsi.rolling(smooth, min_periods=0).mean()
+            stochrsid = stochrsik.rolling(smooth, min_periods=0).mean()
+            sto_k = 100 * stochrsik
+            sto_d = 100 * stochrsid
+
             scheme["symbol"] = pair
-            scheme["event"] = "{0}_{1}".format(func, timeperiod)
+            scheme["event"] = "{0}_{1}".format(func, rsi_period)
             scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
-            scheme["event"] = "{0}_{1}".format(func, timeperiod)
-            scheme["data"] = stochrsi[0][index], stochrsi[1][index]
+            scheme["event"] = "{0}_{1}".format(func, rsi_period)
+            scheme["data"] = sto_k.iloc[-1], sto_d.iloc[-1]
             self.schemes.append(scheme)
+            #LOGGER.warning("SUCCESS in stochrsi %s %s " %(index, str(stochrsi)))
+
         except (IndexError, KeyError) as exc:
             LOGGER.warning("FAILURE in stochrsi %s" % str(exc))
 
