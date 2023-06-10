@@ -58,17 +58,16 @@ class Engine(dict):
         super().__init__()
         LOGGER.debug("Finished fetching raw data")
 
-    @staticmethod
-    def __make_data_tupple(dataframe):
+    def __make_data_tupple(self, pair, index):
         """
         Transform dataframe to tupple of of floats
         """
-        ohlc = (make_float(dataframe.volume),
-                make_float(dataframe.open),
-                make_float(dataframe.high),
-                make_float(dataframe.low),
-                make_float(dataframe.close))
-
+        local = self.dataframes[pair] if index == -1 else self.dataframes[pair].iloc[:index]
+        ohlc = (make_float(local.volume),
+                make_float(local.open),
+                make_float(local.high),
+                make_float(local.low),
+                make_float(local.close))
         return ohlc
 
     @staticmethod
@@ -159,7 +158,7 @@ class Engine(dict):
         """
         for pair in self.pairs:
             pair = pair.strip()
-            actual_klines = len(self.dataframes[pair]) if not no_of_klines else no_of_klines
+            actual_klines = len(self.dataframes[pair])
 
             # get indicators supertrend, and API for each trading pair
             with ThreadPoolExecutor(max_workers=1000) as pool:
@@ -171,8 +170,8 @@ class Engine(dict):
                     # each method has the method name in 'function't st
 
                     if first_run:
-                        for seq in range(int(actual_klines) -1):
-                            if seq >= len(self.dataframes[pair]):
+                        for seq in range(int(actual_klines)):
+                            if seq > len(self.dataframes[pair]):
                                 continue
                             pool.submit(getattr(self, function)(pair, index=seq,
                                                                 localconfig=(name, period)))
@@ -245,7 +244,7 @@ class Engine(dict):
         elif not index and not self.test:
             index = -1
         close_time = str(self.dataframes[pair].iloc[index]["closeTime"])
-        klines = self.__make_data_tupple(self.dataframes[pair].iloc[:index])
+        klines = self.__make_data_tupple(pair, index)
         func, timef = localconfig  # split tuple
         timeframe, multiplier = timef.split(',')
         results = {}
@@ -301,21 +300,24 @@ class Engine(dict):
             index = -1
         elif not index and not self.test:
             index = -1
+
         close_time = str(self.dataframes[pair].iloc[index]["closeTime"])
-        klines = self.__make_data_tupple(self.dataframes[pair].iloc[:index])
+        new_close = str(self.dataframes[pair].iloc[index]["close"])
+        klines = self.__make_data_tupple(pair, index)
+
         func, timef = localconfig  # split tuple
         timeframe, multiplier = timef.split(',')
         results = {}
         try:
             close = klines[-1]
+
         except Exception as exc:
-            LOGGER.debug("FAILED bbands: %s " % str(exc))
+            LOGGER.info("FAILED bbands: %s " % str(exc))
             return
         try:
             upper, middle, lower = \
                     talib.BBANDS(close * 100000, timeperiod=int(timeframe),
                                  nbdevup=float(multiplier), nbdevdn=float(multiplier), matype=0)
-
             res = [upper[-1]/100000, middle[-1]/100000, lower[-1]/100000]
 
         except Exception as exc:
@@ -330,7 +332,6 @@ class Engine(dict):
             scheme["symbol"] = pair
             scheme["event"] = "{0}_{1}".format(func, timeframe)
             self.schemes.append(scheme)
-
 
         except KeyError as exc:
             LOGGER.warning("KEY FAILURE in bollinger bands: %s" % str(exc))
@@ -504,7 +505,7 @@ class Engine(dict):
         """
         Get envelope strategy
         """
-        klines = self.__make_data_tupple(self.dataframes[pair].iloc[:index])
+        klines = self.__make_data_tupple(pair, index)
         func, timeperiod = localconfig
         close = klines[-1]
         basis = talib.SMA(close, int(timeperiod))
@@ -536,7 +537,7 @@ class Engine(dict):
         """
         Calculate Hull Moving Average using Weighted Moving Average
         """
-        klines = self.__make_data_tupple(self.dataframes[pair].iloc[:index])
+        klines = self.__make_data_tupple(pair, index)
         func, timeperiod = localconfig
         close = klines[-1]
         first = talib.WMA(close, int(timeperiod)/2)
@@ -598,7 +599,7 @@ class Engine(dict):
         Returns:
             None
         """
-        klines = self.__make_data_tupple(self.dataframes[pair].iloc[:index])
+        klines = self.__make_data_tupple(pair, index)
         func, timeperiod = localconfig  # split tuple
         new_func = func.strip("_vol") if volume else func
         try:
@@ -644,7 +645,7 @@ class Engine(dict):
         Returns:
             None
         """
-        klines = self.__make_data_tupple(self.dataframes[pair].iloc[:index])
+        klines = self.__make_data_tupple(pair, index)
         _, open, high, low, close = klines
         func, timeperiod = localconfig  # split tuple
 
@@ -702,7 +703,7 @@ class Engine(dict):
             None
         """
         func, timeperiod = localconfig
-        klines = self.__make_data_tupple(self.dataframes[pair].iloc[:index])
+        klines = self.__make_data_tupple(pair, index)
         scheme = {}
         trends = {"HAMMER": {100: "BUY", 0:"HOLD"},
                   "INVERTEDHAMMER": {100: "SELL", 0:"HOLD"},
