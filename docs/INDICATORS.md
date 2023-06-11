@@ -22,6 +22,8 @@ res[1].bb_12[0]
 ## RSI
 
 ## Stochrsi
+get_stochrsi;STOCHRSI;8,5,3
+<RSI length>,<STOCH length>,<k/d SMOOTH>
 
 ## envelope
 
