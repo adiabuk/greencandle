@@ -1,5 +1,26 @@
 # Releases
 
+# 5.30
+* fix 12h usdt name
+* display done msg if no exceptions
+* stochrsi settings doc
+* add stochrsi k to open/short data rules
+* make bb graph with with new notations
+* rename to meaningful var name for pandas series
+* use custom stochrsi method to match tv data
+* use data tupple function to get get correct amount of rows
+* remove scheduler as it doesn't run in background
+* speed up get/analyse data
+* add middle bb aggregate to all csv/tsv
+* log when forwarding trade from data env
+* fix aggregate header
+* use fixed header each time in loop
+* add indicator unit test
+* get distance to middle bb agg data
+* direction required for trade link and tpsl calc
+* get env from c9e not env var and remove all refs to $HOST
+* use correct CONFIG_ENV for 5m containers
+
 # 5.29
 * make isolated balance disabled by default
 * add 5m and 1h forward rule
