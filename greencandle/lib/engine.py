@@ -480,7 +480,10 @@ class Engine(dict):
         if not index or len(self.dataframes[pair]) < 2:
             index = -1
         else:
-            series = series.iloc[:index +1]
+            try:
+                series = series.iloc[:index +1]
+            except:
+                LOGGER.info("AMROX FUCK U")
 
         func, details = localconfig  # split tuple
         rsi_period, stoch_period, smooth = (int(x) for x in details.split(','))
@@ -522,8 +525,8 @@ class Engine(dict):
 
         except (IndexError, KeyError) as exc:
             LOGGER.warning("FAILURE in stochrsi %s" % str(exc))
-
-        LOGGER.debug("Done Getting STOCHRSI for %s - %s" % (pair, scheme['close_time']))
+        else:
+            LOGGER.debug("Done Getting STOCHRSI for %s - %s" % (pair, scheme['close_time']))
 
     @get_exceptions
     def get_envelope(self, pair, index=None, localconfig=None):
@@ -787,4 +790,4 @@ class Engine(dict):
 
 
         self.schemes.append(scheme)
-        LOGGER.debug("Done Getting supertrend for %s - %s" % (pair, scheme['close_time']))
+        LOGGER.debug("Done GeFUtting supertrend for %s - %s" % (pair, scheme['close_time']))
