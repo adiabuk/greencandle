@@ -61,7 +61,7 @@ def main():
                 link = "link"
             try:
                 # remove interval from results
-                direction = trade.pop(-1)
+                direction = trade.pop(-1) if trade[0] != "pair" else ""
                 interval = trade.pop(-1) if trade[0] != "pair" else ""
                 output += "" if "name" in trade else \
                         (":short: " if "short" in direction else ":long: ")
