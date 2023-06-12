@@ -59,7 +59,7 @@ def get_stoch_flat(pair, interval, res, last_res):
         else:
             value = None
         return value
-    except KeyError:
+    except (ValueError, KeyError):
         return None
 
 def get_bbperc_diff(pair, interval, res, last_res):
@@ -131,7 +131,6 @@ def get_middle_distance(pair, interval, res, timeframe='12'):
         return direction, '{:.2f}'.format(abs(distance))
     except KeyError:
         return None, None
-
 
 def get_distance(pair, interval, res, timeframe='12'):
     """

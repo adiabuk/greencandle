@@ -59,7 +59,5 @@ class TestIndicators(unittest.TestCase):
             else:
                 self.assertIsNotNone(results[ind])
 
-
-
         if __name__ == '__main__':
             unittest.main()
