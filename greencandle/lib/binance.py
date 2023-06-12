@@ -40,7 +40,6 @@ class Binance():
     def prices(self):
         """Get latest prices for all symbols."""
         data = self.request("GET", "/api/v1/ticker/allPrices")
-        print(type(data))
         return {d["symbol"]: d["price"] for d in data}
 
     def tickers(self):
