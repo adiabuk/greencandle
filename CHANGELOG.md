@@ -1,5 +1,13 @@
 # Releases
 
+# 5.30.1
+* stag proxy no long required
+* move stag slack config to upper level to enable slack for all containers
+* remove debug print statement
+* don't pop items from header in trade status notifications
+* catch/ignore Nan values in StochRSI agg data
+* upper time frames take longer for each loop, fix healthcheck
+
 # 5.30
 * fix 12h usdt name
 * display done msg if no exceptions
