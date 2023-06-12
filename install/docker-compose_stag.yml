@@ -815,6 +815,8 @@ services:
       - intermittent="true"
       - DB=true
       - no_proxy=router
+    extra_hosts:
+      - "127.17.0.1 stream"
     links:
       - stag-base-mysql:mysql
       - stag-base-redis:redis
