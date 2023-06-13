@@ -55,7 +55,7 @@ def main():
     LOGGER.info("Starting initial prod run")
     name = config.main.name.split('-')[-1]
     Path('/var/run/{}-data-{}-{}'.format(config.main.base_env, interval, name)).touch()
-    RUNNER.prod_initial(interval, test=True) # initial run, before scheduling begins
+    RUNNER.prod_initial(interval, test=True, first_run=False) # initial run, before scheduling begins
     if os.path.exists('/var/run/{}-data-{}-{}'.format(config.main.base_env, interval, name)):
         os.remove('/var/run/{}-data-{}-{}'.format(config.main.base_env, interval, name))
     send_slack_message('alerts', "Finished initial prod run")

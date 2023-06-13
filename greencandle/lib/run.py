@@ -280,7 +280,7 @@ class ProdRunner():
         del dbase
 
     @GET_EXCEPTIONS
-    def prod_initial(self, interval, test=False):
+    def prod_initial(self, interval, test=False, first_run=True):
         """
         Initial prod run - back-fetching data for tech analysis.
         """
@@ -293,7 +293,7 @@ class ProdRunner():
             self.dataframes[pair] = dframe
         engine = Engine(dataframes=self.dataframes, interval=interval,
                         test=test, redis=redis)
-        engine.get_data(localconfig=MAIN_INDICATORS, first_run=True, no_of_klines=no_of_klines)
+        engine.get_data(localconfig=MAIN_INDICATORS, first_run=first_run, no_of_klines=no_of_klines)
 
         del redis
 
