@@ -60,7 +60,7 @@ def main():
     # only fetch historic indicator data for higher timeframes
     # as it will take hours/days to catch up in real time
     # lower timeframes with catch up after 4 candles have been processed
-    first_run = bool('m' in config.main.interval)
+    first_run = bool('h' in config.main.interval)
 
     # initial run, before scheduling begins
     RUNNER.prod_initial(interval, test=True, first_run=first_run)
