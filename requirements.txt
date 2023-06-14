@@ -4,7 +4,6 @@ argcomplete==2.0.0
 coinbase==2.0.6
 configparser==3.5.0
 Babel==2.9.1
--e git+https://github.com/adiabuk/Technical-Indicators.git#egg=indicator
 CurrencyConverter==0.16.1
 Flask>=2.1.2
 Flask-Login==0.6.2
@@ -13,7 +12,7 @@ lib==3.0.0
 pyOpenSSL==22.0.0
 mysqlclient==2.1.0
 oauth==1.0.1
-pandas==1.0.1
+pandas==1.1.5
 numpy==1.16.0
 Pillow>=6.2.2
 plotly==4.1.1
