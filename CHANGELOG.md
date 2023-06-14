@@ -1,5 +1,12 @@
 # Releases
 
+# 5.31
+* Update pandas to latest for efficiency
+* cleanup unused dataframe objects and garbage collect
+* remove stochrsi data rules
+* no need to back fill indicator data for lower timeframes (1m/5m)
+* add stream to stag data hosts file
+
 # 5.30.1
 * stag proxy no long required
 * move stag slack config to upper level to enable slack for all containers
