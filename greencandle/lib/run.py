@@ -3,7 +3,8 @@
 """
 Perform run for test & prod
 """
-
+import gc
+import sys
 import os
 import time
 import pickle
@@ -296,6 +297,8 @@ class ProdRunner():
         engine.get_data(localconfig=MAIN_INDICATORS, first_run=first_run, no_of_klines=no_of_klines)
 
         del redis
+        del engine
+        del dframe
 
     def append_data(self):
         """
@@ -319,6 +322,8 @@ class ProdRunner():
                 if closed_di and closed_di != recent_di:
                     dframe.loc[1] = closed_di
                 new_dataframes[pair] = dframe.sort_values('closeTime')
+                del dframe
+                del closed_di
 
             except ValueError:
                 continue
@@ -345,6 +350,8 @@ class ProdRunner():
                     self.dataframes[pair] = \
                         self.dataframes[pair].append(row, ignore_index=True,
                                                      verify_integrity=True).tail(max_klines)
+        del new_dataframes
+        gc.collect()
 
     @GET_EXCEPTIONS
     def prod_loop(self, interval, test=False, data=True, analyse=True):
@@ -366,6 +373,7 @@ class ProdRunner():
                             redis=redis)
             engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
             del engine
+
         if analyse:
             opens = []
             closes = []
@@ -404,4 +412,6 @@ class ProdRunner():
             trade = Trade(interval=interval, test_trade=test, test_data=False, config=config)
             trade.close_trade(closes, drawdowns=drawdowns, drawups=drawups)
             trade.open_trade(opens)
-            del redis
+            del trade
+        del client
+        del redis
