@@ -75,7 +75,8 @@ def analyse_pair(pair, redis):
 
     LOGGER.debug("Analysing pair: %s" % pair)
     try:
-        result, _, current_time, current_price, _ = redis.get_action(pair=pair, interval=interval)
+        result, _, current_time, current_price, match = \
+                redis.get_action(pair=pair, interval=interval)
 
         if result == "OPEN":
             LOGGER.debug("Trades to open")
@@ -95,8 +96,8 @@ def analyse_pair(pair, redis):
                 LOGGER.debug("Triggering alert: last alert %s hours ago" % diff_in_hours)
 
             TRIGGERED[pair] = now
-            send_slack_message("notifications", "Open: %s %s %s (%s) - %s Data: %s" %
-                               (get_tv_link(pair, interval), interval,
+            send_slack_message("notifications", "Open(%s): %s %s %s (%s) - %s Data: %s" %
+                               (str(match), get_tv_link(pair, interval), interval,
                                 config.main.trade_direction, supported.strip(), current_time,
                                 data), emoji=True,
                                icon=':{0}-{1}:'.format(interval, config.main.trade_direction))
