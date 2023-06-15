@@ -97,7 +97,7 @@ def analyse_pair(pair, redis):
 
             TRIGGERED[pair] = now
             send_slack_message("notifications", "Open(%s): %s %s %s (%s) - %s Data: %s" %
-                               (str(match), get_tv_link(pair, interval), interval,
+                               (str(match['open']), get_tv_link(pair, interval), interval,
                                 config.main.trade_direction, supported.strip(), current_time,
                                 data), emoji=True,
                                icon=':{0}-{1}:'.format(interval, config.main.trade_direction))
