@@ -37,12 +37,12 @@ all_fe=$(docker ps | grep $env |awk {'print $NF'}|grep ${env}.*fe) || true
 docker stop $all_fe $all_be || true
 docker rm $all_fe $all_be || true
 
-docker compose -f ./install/docker-compose_${env}.yml up -d $base
+docker compose -f ./install/docker-compose_${env}.yml -p $env up -d $base
 
-docker compose -f ./install/docker-compose_${env}.yml up -d $fe
+docker compose -f ./install/docker-compose_${env}.yml -p $env up -d $fe
 
 for container in $be; do
-  docker compose -f ./install/docker-compose_${env}.yml up -d $container
+  docker compose -f ./install/docker-compose_${env}.yml -p $env up -d $container
   sleep 2
   if [[ "$container" == *"get"* ]]; then
     sleep 30
