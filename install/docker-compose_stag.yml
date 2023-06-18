@@ -324,9 +324,6 @@ services:
       - stag-be-api-any-tsl-cross-short:any-tsl-short
       - stag-be-api-any-spot-long:any-spot-long
       - stag-be-api-any-tsl-spot-long:any-tsl-spot-long
-      - stag-be-eng-bbpercst2-data:stag-data
-      - stag-be-eng-bbpercst2-long:st2-long
-      - stag-be-eng-bbpercst2-short:st2-short
     depends_on:
       - stag-base-mysql
       - stag-base-redis
