@@ -355,7 +355,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
-      interval: 1m
+      interval: 30m
       timeout: 10s
       retries: 5
     volumes:
@@ -391,7 +391,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
-      interval: 1m
+      interval: 30m
       timeout: 10s
       retries: 5
     volumes:
@@ -529,7 +529,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
-      interval: 1m
+      interval: 30m
       timeout: 10s
       retries: 5
     volumes:
@@ -565,7 +565,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
-      interval: 1m
+      interval: 30m
       timeout: 10s
       retries: 5
     volumes:
