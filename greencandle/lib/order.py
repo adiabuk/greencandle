@@ -949,10 +949,12 @@ class Trade():
                 if name == "api":
                     name = "%"
                 if update_db:
+                    drawdown = 0 if not drawdowns else drawdowns[pair]
+                    drawup = 0 if not drawdowns else drawups[pair]
                     dbase.update_trades(pair=pair, close_time=current_time,
                                         close_price=fill_price, quote=quote_out,
                                         base_out=quantity, name=name,
-                                        drawdown=drawdowns[pair], drawup=drawups[pair],
+                                        drawdown=drawdown, drawup=drawup,
                                         symbol_name=get_quote(pair), commission=commission_usd,
                                         order_id=order_id)
 
@@ -1045,12 +1047,13 @@ class Trade():
             if self.test_data or self.test_trade or not self.test_trade:
                 if name == "api":
                     name = "%"
-
+                drawdown = 0 if not drawdowns else drawdowns[pair]
+                drawup = 0 if not drawdowns else drawups[pair]
                 dbase.update_trades(pair=pair, close_time=current_time,
                                     close_price=fill_price, quote=quote_out,
                                     base_out=quantity, name=name,
-                                    drawdown=drawdowns[pair],
-                                    drawup=drawups[pair], symbol_name=quote,
+                                    drawdown=drawdown,
+                                    drawup=drawup, symbol_name=quote,
                                     commission=commission_usd, order_id=order_id)
 
                 open_time, profit = dbase.fetch_sql_data("select p.open_time, p.usd_profit "
