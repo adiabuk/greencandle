@@ -381,7 +381,7 @@
       "is_secret": false
     },
     "trade_type": {
-      "value": "spot",
+      "value": "margin",
       "is_binary": false,
       "is_secret": false
     },
