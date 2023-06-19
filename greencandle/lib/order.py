@@ -773,10 +773,12 @@ class Trade():
                     (not self.test_trade and 'transactTime' in trade_result):
                 if name == "api":
                     name = "%"
+                drawdown = 0 if not drawdowns else drawdowns[pair]
+                drawup = 0 if not drawdowns else drawups[pair]
                 dbase.update_trades(pair=pair, close_time=current_time,
                                     close_price=fill_price,
                                     quote=quote_out, base_out=quantity, name=name,
-                                    drawdown=drawdowns[pair], drawup=drawups[pair],
+                                    drawdown=drawdown, drawup=drawup,
                                     symbol_name=quote, commission=commission_usd,
                                     order_id=order_id)
 
