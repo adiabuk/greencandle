@@ -768,7 +768,6 @@ class Trade():
 
             commission_usd = self.__get_commission(trade_result)
 
-
             if self.test_data or self.test_trade or \
                     (not self.test_trade and 'transactTime' in trade_result):
                 if name == "api":
