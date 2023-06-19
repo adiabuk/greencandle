@@ -54,7 +54,7 @@ services:
     container_name: test-base-redis
     hostname: test-base-redis
     image: amrox/gc-redis:${TAG}
-    mem_limit: 100m
+    mem_limit: 300m
     pull_policy: always
     restart: always
     links:
@@ -75,7 +75,7 @@ services:
     container_name: test-base-mysql
     hostname: test-base-mysql
     image: amrox/gc-mysql:${TAG}
-    mem_limit: 100m
+    mem_limit: 300m
     entrypoint: /docker-entrypoint.sh mysqld
     pull_policy: always
     environment:

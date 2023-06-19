@@ -918,7 +918,7 @@ services:
     container_name: data-base-redis
     hostname: data-base-redis
     image: amrox/gc-redis:${TAG}
-    mem_limit: 100m
+    mem_limit: 300m
     pull_policy: always
     restart: always
     ports:
@@ -935,7 +935,7 @@ services:
     container_name: data-base-mysql
     hostname: data-base-mysql
     image: amrox/gc-mysql:${TAG}
-    mem_limit: 100m
+    mem_limit: 300m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh mysqld
