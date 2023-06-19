@@ -113,7 +113,7 @@ def analyse_pair(pair, redis):
                 action = 0
 
 
-            details = [pair, current_time, current_price, event, action]
+            details = [[pair, current_time, current_price, event, action]]
             trade = Trade(interval=interval, test_trade=True, test_data=False, config=config)
             if result == 'OPEN' and STORE_IN_DB:
                 trade.open_trade(details)
