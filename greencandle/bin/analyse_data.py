@@ -99,8 +99,8 @@ def analyse_pair(pair, redis):
                 LOGGER.debug("Triggering alert: last alert %s hours ago" % diff_in_hours)
 
             TRIGGERED[pair] = now
-            send_slack_message("notifications", "Open %s: %s %s %s (%s) - %s Data: %s" %
-                               (str(match['{}'.format(result.lower())]),
+            send_slack_message("notifications", "%s %s: %s %s %s (%s) - %s Data: %s" %
+                               (result.lower(), str(match['{}'.format(result.lower())]),
                                 get_tv_link(pair, interval), interval,
                                 config.main.trade_direction, supported.strip(), current_time,
                                 data), emoji=True,
