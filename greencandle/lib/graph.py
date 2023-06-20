@@ -163,7 +163,7 @@ class Graph():
 
             elif 'STOCHRSI' in name:
                 # add stochrsi graph in second subply (below) if it exists
-                LOGGER.debug("Creating STOCH graph")
+                LOGGER.debug("Creating STOCHRSI graph %s" % name)
                 row = 2
                 stoch_k, stoch_d = zip(*value.value)
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
@@ -173,9 +173,9 @@ class Graph():
                                    y=stoch_d,
                                    name=name+'-d')
 
-            elif 'STOCH' in name:
+            elif 'STOCH' in name and 'RSI' not in name:
                 # add stochf graph in second subply (below) if it exists
-                LOGGER.debug("Creating STOCH graph")
+                LOGGER.debug("Creating STOCH graph %s" % name)
                 row = 2
                 value['k'] = value.value
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
@@ -202,10 +202,13 @@ class Graph():
                                   y=value['value'],
                                   name=name)
             fig.append_trace(item, row, col)
+            LOGGER.debug("Adding item1 %s row:%s" % (item.name, row))
             if item2:
+                LOGGER.debug("Adding item2 %s row:%s" % (item2.name, row))
                 fig.append_trace(item2, row, col)
             if item3:
                 fig.append_trace(item3, row, col)
+                LOGGER.debug("Adding item3 %s row:%s" %(item3.name, row))
 
 
             if name == "ohlc" and self.volume:
@@ -228,6 +231,9 @@ class Graph():
                               marker=dict(color=colors))
                 row = 2
                 fig.append_trace(item, row, col)
+            item = None
+            item2 = None
+            item3 = None
 
         LOGGER.debug("Generating graph file")
         now = datetime.datetime.now()
