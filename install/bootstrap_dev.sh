@@ -106,12 +106,12 @@ echo "127.0.0.1    mysql" >> /etc/hosts
 echo "127.0.0.1    redis" >> /etc/hosts
 
 # Build Images
-if [[ -z $GIT_BRANCH ]]; then
-  TAG="latest"
-elif [[ $GIT_BRANCH == "master" ]]; then
+if [[ $GIT_BRANCH == "master" ]] || [[ -z $GIT_BRANCH ]]; then
   TAG="latest";
-else
+elif [[ "$GIT_BRANCH" =~ "[0-9].+" ]]; then
   TAG="release-${GIT_BRANCH}"
+else
+  TAG=${GIT_BRANCH}
 fi
 
 docker build --force-rm --no-cache -f $DIR/Dockerfile-gc . --tag=amrox/greencandle:${TAG}
