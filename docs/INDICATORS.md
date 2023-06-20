@@ -31,7 +31,16 @@ Usage: res[0].STOCHRSI_8[1] #for d
 Redis output: (k,d) tupple
 
 ## Supertrend
-to be verified
+VERIFIED to be equal to tradingview
+get_super_trend_STX;<ATR Period>,<ATR Multiplier>
+get_supertrend;STX;23,3
+Output: tupple (direction, value)
+direction: -1 (downtrend)
+            1 (uptrend)
+Usage:
+res[0].STX_23[0] > 0
+res[0].close > res[0].STX_23[1]
+
 
 ## pivot
 to be verified
