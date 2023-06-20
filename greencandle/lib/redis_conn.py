@@ -15,7 +15,7 @@ from greencandle.lib.mysql import Mysql
 from greencandle.lib.logger import get_logger
 from greencandle.lib import config
 from greencandle.lib.common import add_perc, sub_perc, AttributeDict, \
-        perc_diff, convert_to_seconds, get_short_name, TF2MIN
+        perc_diff, convert_to_seconds, get_short_name, TF2MIN, epoch2date
 
 class Redis():
     """
@@ -306,6 +306,7 @@ class Redis():
                 self.logger.critical("Invalid time submitted to redis %s.  Skipping " % key)
                 continue
             value['current_epoch'] = int(time.time())
+            value['current_time'] = epoch2date(time.time())
             result = self.conn.hmset(key, {close: json.dumps(value)})
 
         if str2bool(config.redis.redis_expire):

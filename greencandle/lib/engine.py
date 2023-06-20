@@ -480,10 +480,7 @@ class Engine(dict):
         if not index or len(self.dataframes[pair]) < 2:
             index = -1
         else:
-            try:
-                series = series.iloc[:index +1]
-            except:
-                LOGGER.info("AMROX FUCK U")
+            series = series.iloc[:index +1]
 
         func, details = localconfig  # split tuple
         rsi_period, stoch_period, smooth = (int(x) for x in details.split(','))
@@ -766,12 +763,16 @@ class Engine(dict):
             None
 
         """
+        dataframe = self.__renamed_dataframe_columns(self.dataframes[pair])
+        series = dataframe.apply(pandas.to_numeric)
+        if not index or len(self.dataframes[pair]) < 2:
+            index = -1
+        else:
+            # line up with TV graphs
+            series = series.iloc[:index +2]
 
         func, timef = localconfig  # split tuple
         scheme = {}
-        dataframe = self.__renamed_dataframe_columns(self.dataframes[pair])
-
-        series = dataframe.apply(pandas.to_numeric).loc[:index]
         timeframe, multiplier = timef.split(',')
         supertrend2 = ta.supertrend(high=series.High.astype(float),
                                     low=series.Low.astype(float),
@@ -779,15 +780,12 @@ class Engine(dict):
                                     multiplier=float(multiplier), length=float(timeframe))
         # -1 = downtrend - go short
         # 1 = uptrend - go long
-        scheme["data"] = int(supertrend2['SUPERTd_{}_{}.0'.format(timeframe, multiplier)].iloc[-1])
+        scheme["data"] = (int(supertrend2['SUPERTd_{}_{}.0'.format(timeframe,
+                                                                   multiplier)].iloc[-1]),
+                          supertrend2['SUPERT_{}_{}.0'.format(timeframe, multiplier)].iloc[-1])
         scheme["symbol"] = pair
         scheme["event"] = "STX_{0}".format(timeframe)
-        if (not index and self.test) or len(self.dataframes[pair]) < 2:
-            index = -1
-        elif not index and not self.test:
-            index = -1
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
 
-
         self.schemes.append(scheme)
-        LOGGER.debug("Done GeFUtting supertrend for %s - %s" % (pair, scheme['close_time']))
+        LOGGER.debug("Done Getting supertrend for %s - %s" % (pair, scheme['close_time']))

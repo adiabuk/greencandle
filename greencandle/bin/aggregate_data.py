@@ -172,55 +172,16 @@ def symlink_force(target, link_name):
         else:
             raise err
 
-@arg_decorator
-def main():
+def aggregate_data(key, pairs, intervals, res, last_res):
     """
-    get data for all timeframes and pairs
-    output data to csv files
+    create aggregate spreadsheets for given key using collected data
     """
-    redis = Redis()
-    config.create_config()
-    key = sys.argv[1]
-    pair_set = set()
-    for item in redis.conn.scan_iter("*:12h"):
-        pair_set.add(item.decode().split(":")[0])
-    pairs = list(pair_set)
-    items = defaultdict(dict)
-    res = defaultdict(dict)
-    last_res = defaultdict(dict)
-    intervals = ['1m', '5m', '1h', '4h', '12h']
-    data = []
 
-    if key == 'keys':
-        items_1h = redis.get_items('BTCUSDT', '1h')
-        keys = json.loads(redis.get_item('BTCUSDT:1h', items_1h[-1]).decode()).keys()
-        print(keys)
-        sys.exit()
-    elif 'distance' in key:
+    data = []
+    if 'distance' in key:
         indicator = 'bb_12'
     else:
         indicator = key
-
-    # Collect timeframes (milliepochs) for each pair/interval
-    for pair in pairs:
-        for interval in intervals:
-            try:
-                items[interval][pair] = redis.get_items(pair=pair, interval=interval)
-            except:
-                continue
-
-    # Collect data for each pair/interval
-    for pair in pairs:
-        for interval in intervals:
-            try:
-                res[interval][pair] = json.loads(redis.get_item('{}:{}'.format(pair, interval),
-                                                                items[interval][pair][-1]).decode())
-                last_res[interval][pair] = json.loads(redis.get_item('{}:{}'.format(pair, interval),
-                                                                     items[interval][pair][-2])
-                                                      .decode())
-
-            except:
-                continue
 
     # stochf k,d maxed out
     if key == 'stoch_flat':
@@ -293,7 +254,6 @@ def main():
                 if direction:
                     data.append([pair, interval, direction, distance_diff])
 
-
     # all data in a single spreadsheet
     elif key == 'all':
         data.append(['pair', 'interval', 'distance_12', 'distance_200', 'candle_size',
@@ -345,6 +305,57 @@ def main():
     os.chdir('/data/aggregate')
     symlink_force('../{}_{}.tsv'.format(key, timestr), 'current/{}.tsv'.format(key))
     symlink_force('../{}_{}.csv'.format(key, timestr), 'current/{}.csv'.format(key))
+
+@arg_decorator
+def main():
+    """
+    get data for all timeframes and pairs
+    output data to csv files
+    """
+
+    redis = Redis()
+    key = sys.argv[1] if len(sys.argv) > 1 else None
+    config.create_config()
+    pair_set = set()
+    for item in redis.conn.scan_iter("*:12h"):
+        pair_set.add(item.decode().split(":")[0])
+    pairs = list(pair_set)
+    items = defaultdict(dict)
+    res = defaultdict(dict)
+    last_res = defaultdict(dict)
+    intervals = ['1m', '5m', '1h', '4h', '12h']
+
+    aggregates = ["distance_12", "distance_200", "bbperc_200", "STOCHRSI_8", "STX_23", "stoch_flat",
+                  "bbperc_diff", "stx_diff", "volume", "bb_size", "all", "middle_200", "middle_12"]
+
+    # Collect timeframes (milliepochs) for each pair/interval
+    for pair in pairs:
+        for interval in intervals:
+            try:
+                items[interval][pair] = redis.get_items(pair=pair, interval=interval)
+            except:
+                continue
+
+    # Collect data for each pair/interval
+    for pair in pairs:
+        for interval in intervals:
+            try:
+                res[interval][pair] = json.loads(redis.get_item('{}:{}'.format(pair, interval),
+                                                                items[interval][pair][-1]).decode())
+                last_res[interval][pair] = json.loads(redis.get_item('{}:{}'.format(pair, interval),
+                                                                     items[interval][pair][-2])
+                                                      .decode())
+
+            except:
+                continue
+    if key == 'keys':
+        items_1h = redis.get_items('BTCUSDT', '1h')
+        keys = json.loads(redis.get_item('BTCUSDT:1h', items_1h[-1]).decode()).keys()
+        print(keys)
+        sys.exit()
+    for aggregate in aggregates:
+        aggregate_data(aggregate, pairs, intervals, res, last_res)
+
     print('DONE')
 
 if __name__ == '__main__':

@@ -1,5 +1,31 @@
 # Releases
 
+# 5.32
+* update indicator doc for supertrend
+* add supertrend value and direction for graph plotting and reformat plot
+* reset graph items for next loop iter to avoid duplicate plots
+* line up supertrend data with tradingview graph
+* don't use ctrl chars in DC output
+* use lockfile to ensure crons don't overlap
+* Increase any2 test take-profit to 2
+* Allow for null drawdown/drawup for data env which aren't real trades
+* Use margin for data env to allow for short trade notifs with close
+* remove low volume pair from lower timeframes
+* don't send usual trade alerts in data env
+* add/enable data close trades for 1m containers only
+* store data trades in db to allow for close notifications
+* interval for analyse needs to be higher
+* add memory limits to containers
+* remove cadvisor containers from all envs
+* remove unused strategy from stag env
+* Specify project when deploying to avoid interference with other envs
+* docs for verified indicators
+* add human readable time to redis entries
+* reduce time between trades in data env
+* add second rule in data upper timeframes with bb_12
+* show matching trade rules in data notification
+* fix DC extra hosts syntax
+
 # 5.31
 * Update pandas to latest for efficiency
 * cleanup unused dataframe objects and garbage collect

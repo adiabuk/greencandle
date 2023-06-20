@@ -2,26 +2,11 @@ version: "3.7"
 services:
 
   ###### Start Gen
-  gen-fe-cadvisor:
-    container_name: gen-fe-cadvisor
-    hostname: gen-fe-cadvisor
-    image: gcr.io/google_containers/cadvisor:v0.35.0
-    restart: always
-    volumes:
-      - /:/rootfs
-      - /var/run:/var/run
-      - /sys:/sys
-      - /var/lib/docker:/var/lib/docker
-      - /dev/disk:/dev/disk
-      - /root/.bash_history:/root/.bash_history
-    healthcheck:
-      timeout: 10s
-      retries: 5
-
   prod-gen-be-logwatch:
     container_name: prod-gen-be-logwatch
     hostname: prod-gen-be-logwatch
     image: amrox/greencandle:${TAG}
+    mem_limit: 100m
     restart: always
     entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
     environment:
@@ -41,6 +26,7 @@ services:
     container_name: prod-gen-be-logtailer-api
     hostname: prod-gen-be-logtailer-api
     image: amrox/greencandle:${TAG}
+    mem_limit: 100m
     pull_policy: always
     restart: always
     environment:
@@ -72,6 +58,7 @@ services:
     container_name: prod-base-redis
     hostname: prod-base-redis
     image: amrox/gc-redis:${TAG}
+    mem_limit: 300m
     pull_policy: always
     restart: always
     links:
@@ -92,6 +79,7 @@ services:
     container_name: prod-base-mysql
     hostname: prod-base-mysql
     image: amrox/gc-mysql:${TAG}
+    mem_limit: 300m
     pull_policy: always
     entrypoint: /docker-entrypoint.sh mysqld
     environment:
@@ -118,6 +106,7 @@ services:
       - CONFIG_ENV=prod/be/manual
       - DB=true
     image: amrox/greencandle:${TAG}
+    mem_limit: 100m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "tail -f /dev/null"
@@ -151,6 +140,7 @@ services:
       - CONFIG_ENV=prod/fe/cron
       - DB=true
     image: amrox/greencandle:${TAG}
+    mem_limit: 100m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "cron -f"
@@ -178,6 +168,7 @@ services:
     container_name: prod-fe-webserver
     hostname: prod-fe-webserver
     image: amrox/webserver:${TAG}
+    mem_limit: 100m
     pull_policy: always
     restart: always
     healthcheck:
@@ -191,14 +182,12 @@ services:
     ports:
       - 1111:1111
     links:
-      - gen-fe-cadvisor:cadvisor
       - prod-fe-api-dashboard:api_dash
       - prod-base-mysql:mysql
       - prod-base-redis:redis
       - prod-gen-be-logtailer-api:logs
       - prod-fe-api-proxy:proxy
     depends_on:
-      - gen-fe-cadvisor
       - prod-base-mysql
       - prod-base-redis
     entrypoint: /docker-entrypoint.sh "nginx -g 'daemon off;'"
@@ -218,6 +207,7 @@ services:
     logging:
       driver: journald
     image: amrox/greencandle:${TAG}
+    mem_limit: 100m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh api_proxy
@@ -245,6 +235,7 @@ services:
     logging:
       driver: journald
     image: amrox/greencandle:${TAG}
+    mem_limit: 100m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh filesystem_api
@@ -266,6 +257,7 @@ services:
     logging:
       driver: journald
     image: amrox/greencandle:${TAG}
+    mem_limit: 100m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh api_dashboard
@@ -298,6 +290,7 @@ services:
     extra_hosts:
       - "alert:172.31.15.59"
     image: amrox/greencandle:${TAG}
+    mem_limit: 100m
     pull_policy: always
     restart: always
     healthcheck:
@@ -343,6 +336,7 @@ services:
     container_name: prod-be-api-any-1h-spot-long
     hostname: prod-be-api-any-1h-spot-long
     image: amrox/greencandle:${TAG}
+    mem_limit: 100m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api /docker-entrypoint.sh backend_api backend_api queue"
@@ -378,6 +372,7 @@ services:
     container_name: prod-be-api-any-1h-cross-long
     hostname: prod-be-api-any-1h-cross-long
     image: amrox/greencandle:${TAG}
+    mem_limit: 100m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api /docker-entrypoint.sh backend_api backend_api queue"
@@ -413,6 +408,7 @@ services:
     container_name: prod-be-api-any-1h-isolated-long
     hostname: prod-be-api-any-1h-isolated-long
     image: amrox/greencandle:${TAG}
+    mem_limit: 100m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api /docker-entrypoint.sh backend_api backend_api queue"
@@ -448,6 +444,7 @@ services:
     container_name: prod-be-api-any-1h-cross-short
     hostname: prod-be-api-any-1h-cross-short
     image: amrox/greencandle:${TAG}
+    mem_limit: 100m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api /docker-entrypoint.sh backend_api backend_api queue"
@@ -483,6 +480,7 @@ services:
     container_name: prod-be-api-any-1h-isolated-short
     hostname: prod-be-api-any-1h-isolated-short
     image: amrox/greencandle:${TAG}
+    mem_limit: 100m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api /docker-entrypoint.sh backend_api backend_api queue"
@@ -518,6 +516,7 @@ services:
     container_name: prod-be-api-any-1m-spot-long
     hostname: prod-be-api-any-1m-spot-long
     image: amrox/greencandle:${TAG}
+    mem_limit: 100m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api /docker-entrypoint.sh backend_api backend_api queue"
@@ -553,6 +552,7 @@ services:
     container_name: prod-be-api-any-1m-cross-long
     hostname: prod-be-api-any-1m-cross-long
     image: amrox/greencandle:${TAG}
+    mem_limit: 100m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api /docker-entrypoint.sh backend_api backend_api queue"
@@ -588,6 +588,7 @@ services:
     container_name: prod-be-api-any-1m-isolated-long
     hostname: prod-be-api-any-1m-isolated-long
     image: amrox/greencandle:${TAG}
+    mem_limit: 100m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api /docker-entrypoint.sh backend_api backend_api queue"
@@ -623,6 +624,7 @@ services:
     container_name: prod-be-api-any-1m-cross-short
     hostname: prod-be-api-any-1m-cross-short
     image: amrox/greencandle:${TAG}
+    mem_limit: 100m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api /docker-entrypoint.sh backend_api backend_api queue"
@@ -658,6 +660,7 @@ services:
     container_name: prod-be-api-any-1m-isolated-short
     hostname: prod-be-api-any-1m-isolated-short
     image: amrox/greencandle:${TAG}
+    mem_limit: 100m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api /docker-entrypoint.sh backend_api backend_api queue"
