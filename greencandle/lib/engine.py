@@ -780,7 +780,9 @@ class Engine(dict):
                                     multiplier=float(multiplier), length=float(timeframe))
         # -1 = downtrend - go short
         # 1 = uptrend - go long
-        scheme["data"] = int(supertrend2['SUPERTd_{}_{}.0'.format(timeframe, multiplier)].iloc[-1])
+        scheme["data"] = (int(supertrend2['SUPERTd_{}_{}.0'.format(timeframe,
+                                                                   multiplier)].iloc[-1]),
+                          supertrend2['SUPERT_{}_{}.0'.format(timeframe, multiplier)].iloc[-1])
         scheme["symbol"] = pair
         scheme["event"] = "STX_{0}".format(timeframe)
         scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])

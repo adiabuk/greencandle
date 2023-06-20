@@ -108,12 +108,12 @@ class Graph():
             elif 'STX' in name:
                 LOGGER.debug("Creating Supertrend graph")
                 value['value'].astype(str)
-                # FIX ME - add colour
+                direction, location = zip(*value.value)
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
-                                  y=value['current_price'],
+                                  y=location,
                                   name="STX",
                                   mode='markers',
-                                  marker=dict(size=16, color=value['value']))
+                                  marker=dict(size=4, color=direction))
 
             elif name == 'event':
                 LOGGER.debug("Creating event graph")
