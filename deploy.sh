@@ -24,8 +24,9 @@ export HOST_IP=$(ip -4 addr show docker0 | grep -Po 'inet \K[\d.]+')
 export TAG=$version
 export VPN_IP=$(ip -4 addr show tun0 | grep -Po 'inet \K[\d.]+'|| echo localhost)
 export SECRET_KEY=$(hexdump -vn16 -e'4/4 "%08X" 1 "\n"' /dev/urandom)
+export COMPOSE="docker compose --ansi never -f ./install/docker_compose_${env}.yml -p ${env}
 
-docker compose -f ./install/docker-compose_${env}.yml pull
+$COMPOSE pull
 base=$(yq r install/docker-compose_${env}.yml services | grep -v '^ .*' | sed 's/:.*$//'|grep 'base')
 
 be=$(yq r install/docker-compose_${env}.yml services | grep -v '^ .*' | sed 's/:.*$//'|grep 'be')
@@ -37,19 +38,17 @@ all_fe=$(docker ps | grep $env |awk {'print $NF'}|grep ${env}.*fe) || true
 docker stop $all_fe $all_be || true
 docker rm $all_fe $all_be || true
 
-docker compose -f ./install/docker-compose_${env}.yml -p $env up -d $base
-
-docker compose -f ./install/docker-compose_${env}.yml -p $env up -d $fe
+$COMPOSE up -d $base
+$COMPOSE up -d $fe
 
 for container in $be; do
-  docker compose -f ./install/docker-compose_${env}.yml -p $env up -d $container
+  $COMPOSE up -d $container
   sleep 2
   if [[ "$container" == *"get"* ]]; then
     sleep 30
   fi
 
 done
-
 
 export COMMIT=`docker exec ${env}-base-mysql  bash -c 'echo "$COMMIT_SHA"'`
 
