@@ -1,5 +1,10 @@
 # Releases
 
+# 5.32.1
+* ensure we shutdown thread pools
+* increase mem limit 100->200
+* only versioned tags are releases
+
 # 5.32
 * update indicator doc for supertrend
 * add supertrend value and direction for graph plotting and reformat plot
