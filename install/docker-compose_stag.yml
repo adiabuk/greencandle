@@ -5,7 +5,7 @@ services:
     container_name: stag-gen-be-logwatch
     hostname: stag-gen-be-logwatch
     image: amrox/greencandle:${TAG}
-    mem_limit: 100m
+    mem_limit: 200m
     restart: always
     entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
     environment:
@@ -25,7 +25,7 @@ services:
     container_name: stag-gen-be-logtailer-api
     hostname: stag-gen-be-logtailer-api
     image: amrox/greencandle:${TAG}
-    mem_limit: 100m
+    mem_limit: 200m
     pull_policy: always
     restart: always
     environment:
@@ -107,7 +107,7 @@ services:
     logging:
       driver: journald
     image: amrox/greencandle:${TAG}
-    mem_limit: 100m
+    mem_limit: 200m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh api_dashboard
@@ -141,7 +141,7 @@ services:
       - CONFIG_ENV=stag/be/manual
       - DB=true
     image: amrox/greencandle:${TAG}
-    mem_limit: 100m
+    mem_limit: 200m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "tail -f /dev/null"
@@ -175,7 +175,7 @@ services:
       - CONFIG_ENV=stag/fe/cron
       - DB=true
     image: amrox/greencandle:${TAG}
-    mem_limit: 100m
+    mem_limit: 200m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "cron -f"
@@ -203,7 +203,7 @@ services:
     container_name: stag-fe-webserver
     hostname: stag-fe-webserver
     image: amrox/webserver:${TAG}
-    mem_limit: 100m
+    mem_limit: 200m
     pull_policy: always
     restart: always
     healthcheck:
@@ -242,7 +242,7 @@ services:
     logging:
       driver: journald
     image: amrox/greencandle:${TAG}
-    mem_limit: 100m
+    mem_limit: 200m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh api_proxy
@@ -270,7 +270,7 @@ services:
     logging:
       driver: journald
     image: amrox/greencandle:${TAG}
-    mem_limit: 100m
+    mem_limit: 200m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh filesystem_api
@@ -286,7 +286,7 @@ services:
     container_name: stag-be-api-router
     hostname: stag-be-api-router
     image: amrox/greencandle:${TAG}
-    mem_limit: 100m
+    mem_limit: 200m
     pull_policy: always
     restart: always
     healthcheck:
@@ -331,7 +331,7 @@ services:
     container_name: stag-be-api-any-spot-long
     hostname: stag-be-api-any-spot-long
     image: amrox/greencandle:${TAG}
-    mem_limit: 100m
+    mem_limit: 200m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
@@ -370,7 +370,7 @@ services:
     container_name: stag-be-api-any-cross-long
     hostname: stag-be-api-any-cross-long
     image: amrox/greencandle:${TAG}
-    mem_limit: 100m
+    mem_limit: 200m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
@@ -409,7 +409,7 @@ services:
     container_name: stag-be-api-any2-4h-cross-short
     hostname: stag-be-api-any2-4h-cross-short
     image: amrox/greencandle:${TAG}
-    mem_limit: 100m
+    mem_limit: 200m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
@@ -448,7 +448,7 @@ services:
     container_name: stag-be-api-any2-4h-cross-long
     hostname: stag-be-api-any2-4h-cross-long
     image: amrox/greencandle:${TAG}
-    mem_limit: 100m
+    mem_limit: 200m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
@@ -487,7 +487,7 @@ services:
     container_name: stag-be-api-any2-cross-short
     hostname: stag-be-api-any2-cross-short
     image: amrox/greencandle:${TAG}
-    mem_limit: 100m
+    mem_limit: 200m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
@@ -526,7 +526,7 @@ services:
     container_name: stag-be-api-any2-cross-long
     hostname: stag-be-api-any2-cross-long
     image: amrox/greencandle:${TAG}
-    mem_limit: 100m
+    mem_limit: 200m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
@@ -565,7 +565,7 @@ services:
     container_name: stag-be-api-anytest-cross-short
     hostname: stag-be-api-anytest-cross-short
     image: amrox/greencandle:${TAG}
-    mem_limit: 100m
+    mem_limit: 200m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
@@ -605,7 +605,7 @@ services:
     container_name: stag-be-api-anytest-cross-long
     hostname: stag-be-api-anytest-cross-long
     image: amrox/greencandle:${TAG}
-    mem_limit: 100m
+    mem_limit: 200m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
@@ -645,7 +645,7 @@ services:
     container_name: stag-be-api-any-cross-short
     hostname: stag-be-api-any-cross-short
     image: amrox/greencandle:${TAG}
-    mem_limit: 100m
+    mem_limit: 200m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
@@ -685,7 +685,7 @@ services:
     container_name: stag-be-api-any-tsl-spot-long
     hostname: stag-be-api-any-tsl-spot-long
     image: amrox/greencandle:${TAG}
-    mem_limit: 100m
+    mem_limit: 200m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
@@ -725,7 +725,7 @@ services:
     container_name: stag-be-api-any-tsl-cross-long
     hostname: stag-be-api-any-tsl-cross-long
     image: amrox/greencandle:${TAG}
-    mem_limit: 100m
+    mem_limit: 200m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
@@ -765,7 +765,7 @@ services:
     container_name: stag-be-api-any-tsl-cross-short
     hostname: stag-be-api-any-tsl-cross-short
     image: amrox/greencandle:${TAG}
-    mem_limit: 100m
+    mem_limit: 200m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
