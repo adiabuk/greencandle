@@ -4,7 +4,6 @@
 Perform run for test & prod
 """
 import gc
-import sys
 import os
 import time
 import pickle
@@ -48,9 +47,10 @@ def serial_test(pairs, intervals, data_dir, indicators):
             redis.clear_all()
             del redis
 
-        for interval in intervals:
-            with ThreadPoolExecutor(max_workers=len(intervals)) as pool:
+        with ThreadPoolExecutor(max_workers=len(intervals)) as pool:
+            for interval in intervals:
                 pool.submit(perform_data, pair, interval, data_dir, indicators)
+        pool.shutdown(wait=True)
 
 @GET_EXCEPTIONS
 def perform_data(pair, interval, data_dir, indicators):

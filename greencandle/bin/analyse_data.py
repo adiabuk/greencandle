@@ -52,10 +52,11 @@ def analyse_loop():
 
     LOGGER.info("Start of current loop")
     redis = Redis()
-    for pair in PAIRS:
 
-        with ThreadPoolExecutor(max_workers=100) as pool:
+    with ThreadPoolExecutor(max_workers=100) as pool:
+        for pair in PAIRS:
             pool.submit(analyse_pair, pair, redis)
+    pool.shutdown(wait=True)
     LOGGER.info("End of current loop")
     del redis
 
