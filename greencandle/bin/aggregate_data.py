@@ -79,8 +79,8 @@ def get_stx_diff(pair, interval, res, last_res):
     Get change in supertrend direction
     """
     try:
-        stx_from = last_res[interval][pair]['STX_23']
-        stx_to = res[interval][pair]['STX_23']
+        stx_from = last_res[interval][pair]['STX_200']
+        stx_to = res[interval][pair]['STX_200']
         if stx_from == 1 and stx_to == -1:
             result = 'down'
         elif stx_from == -1 and stx_to == 1:
@@ -258,7 +258,7 @@ def aggregate_data(key, pairs, intervals, res, last_res):
     elif key == 'all':
         data.append(['pair', 'interval', 'distance_12', 'distance_200', 'candle_size',
                      'middle_12', 'middle_200', 'stoch_flat', 'bb_size',
-                     'bbperc_diff', 'bbperc_200', 'stoch', 'stx_23'])
+                     'bbperc_diff', 'bbperc_200', 'stoch', 'stx_200'])
         for pair in pairs:
             for interval in intervals:
                 distance_12 = get_distance(pair, interval, res, '12')[-1]
@@ -273,11 +273,11 @@ def aggregate_data(key, pairs, intervals, res, last_res):
                 bbperc_diff = get_bbperc_diff(pair, interval, res, last_res)[-1]
                 vol = get_volume(pair, interval, res)
                 bbperc_200 = get_indicator_value(pair, interval, res, 'bbperc_200')
-                stx_23 = get_indicator_value(pair, interval, res, 'STX_23')
+                stx_200 = get_indicator_value(pair, interval, res, 'STX_200')
                 stoch = get_indicator_value(pair, interval, res, 'STOCHRSI_8')
                 data.append([pair, interval, distance_12, distance_200, candle_size, middle_12,
                              middle_200, stoch_flat, bb_size, bbperc_diff, bbperc_200, stoch,
-                             stx_23])
+                             stx_200])
 
     # indicator data
     else:
@@ -325,8 +325,9 @@ def main():
     last_res = defaultdict(dict)
     intervals = ['1m', '5m', '1h', '4h', '12h']
 
-    aggregates = ["distance_12", "distance_200", "bbperc_200", "STOCHRSI_8", "STX_23", "stoch_flat",
-                  "bbperc_diff", "stx_diff", "volume", "bb_size", "all", "middle_200", "middle_12"]
+    aggregates = ["distance_12", "distance_200", "bbperc_200", "STOCHRSI_8", "STX_200",
+                  "stoch_flat", "bbperc_diff", "stx_diff", "volume", "bb_size", "all",
+                  "middle_200", "middle_12"]
 
     # Collect timeframes (milliepochs) for each pair/interval
     for pair in pairs:
