@@ -22,7 +22,6 @@ from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.common import get_tv_link, arg_decorator, convert_to_seconds
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.order import Trade
-from concurrent.futures import ThreadPoolExecutor
 
 LOGGER = get_logger(__name__)
 PAIRS = config.main.pairs.split()
@@ -53,10 +52,8 @@ def analyse_loop():
     LOGGER.debug("Start of current loop")
     redis = Redis()
 
-    with ThreadPoolExecutor(max_workers=100) as pool:
-        for pair in PAIRS:
-            pool.submit(analyse_pair, pair, redis)
-    pool.shutdown(wait=True)
+    for pair in PAIRS:
+        analyse_pair(pair, redis)
     LOGGER.debug("End of current loop")
     del redis
 
