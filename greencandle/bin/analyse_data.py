@@ -50,14 +50,14 @@ def analyse_loop():
         LOGGER.info("Waiting for initial data collection to complete for %s" % config.main.interval)
         time.sleep(30)
 
-    LOGGER.info("Start of current loop")
+    LOGGER.debug("Start of current loop")
     redis = Redis()
 
     with ThreadPoolExecutor(max_workers=100) as pool:
         for pair in PAIRS:
             pool.submit(analyse_pair, pair, redis)
     pool.shutdown(wait=True)
-    LOGGER.info("End of current loop")
+    LOGGER.debug("End of current loop")
     del redis
 
 def analyse_pair(pair, redis):
