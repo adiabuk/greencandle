@@ -573,7 +573,7 @@ class Redis():
         return result
 
     @staticmethod
-    def __get_rules(rules, direction):
+    def get_rules(rules, direction):
         """determine which rules have been matched"""
         winning = []
         for seq, close_rule in enumerate(rules[direction]):
@@ -600,6 +600,69 @@ class Redis():
             return raw[-1]
         except Exception:  # hack for unit tests still using pickled zlib objects
             return pickle.loads(zlib.decompress(raw[-1]))
+
+    def get_rule_action(self, pair, interval):
+        """
+        get only rule results, without checking tp/sl etc.
+        """
+
+        rules = {'open': [], 'close':[]}
+        res = []
+        ind_list = []
+        for i in config.main.indicators.split():
+            split = i.split(';')
+            ind = split[1]+'_' +split[2].split(',')[0]
+            ind_list.append(ind)
+        items = redis.get_items(pair, interval)
+        x = AttributeDict()
+        for indicator in ind_list:
+            x[indicator] = redis.get_result(items[-1], indicator, pair, interval)
+            name = "{}:{}".format(pair, interval)
+            ohlc = redis.get_current(name, items[-1])[-1]
+            for item in ['open', 'high', 'low', 'close']:
+                ohlc[item] = float(ohlc[item])
+            x.update(ohlc)
+            res.append(x)
+
+
+        for seq in range(1, 2):
+            current_config = None
+            for rule in "open", "close":
+                try:
+                    current_config = config.main['{}_rule{}'.format(rule, seq)]
+                except (KeyError, TypeError):
+                    print('no match')
+                if current_config:
+                    try:
+                        rules[rule].append(eval(current_config))
+                    except (TypeError, KeyError) as error:
+                        self.logger.warning("Unable to eval config rule for pair %s: %s_rule: %s"
+                                            "%s mepoch: %s" % (pair, rule, current_config, error,
+                                                               items[seq]))
+                        continue
+        dbase = Mysql()
+        try:
+            open_price = dbase.get_trade_value(pair)[0][0]
+        except IndexError:
+            open_price = None
+        winning_open = self.get_rules(rules, 'open')
+        winning_close = self.get_rules(rules, 'close')
+        if any(rules['open']) and not open_price:
+            print(pair + ' open')
+            result = 'OPEN'
+        elif any(rules['close']) and open_price:
+            print(pair + ' close')
+            result = 'CLOSE'
+        else:
+            result = 'HODL'
+        event = self.get_event_str(result)
+
+        current_epoch = int(items[-1])/1000
+        current_price = float(res[0].close)
+        current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_epoch))
+
+        return result, event, current_time, current_price, {'close': winning_close,
+                                                            'open': winning_open}
 
     def get_action(self, pair, interval):
         """
@@ -774,7 +837,6 @@ class Redis():
             event = self.get_event_str("StopLoss" + result)
 
         elif trailing_stop and open_price:
-
             if self.test_data and str2bool(config.main.immediate_stop):
                 if config.main.trade_direction == "long":
                     stop_at = sub_perc(trailing_perc, res[0].high)
@@ -783,8 +845,9 @@ class Redis():
                 current_price = stop_at
             result = 'CLOSE'
             event = self.get_event_str("TrailingStopLoss" + result)
-        # if we match take_profit rule and are in a trade
+
         elif take_profit_rule and open_price:
+            # if we match take_profit rule and are in a trade
             if self.test_data and str2bool(config.main.immediate_stop):
                 stop_at = add_perc(take_profit_perc, open_price)
                 current_price = stop_at
@@ -796,14 +859,13 @@ class Redis():
             result = 'CLOSE'
             event = self.get_event_str("TimeOut" + result)
 
-        # if we match any close rules, are in a trade and no open rules match
         elif any(rules['close']) and open_price and not both:
-
+            # if we match any close rules, are in a trade and no open rules match
             result = 'CLOSE'
             event = self.get_event_str("Normal" + result)
 
-        # if we match any open rules are NOT in a trade and close rules don't match
         elif any(rules['open']) and not open_price and able_to_open and not both:
+            # if we match any open rules are NOT in a trade and close rules don't match
             # set stop_loss and take_profit
             self.update_on_entry(pair, 'take_profit_perc', eval(config.main.take_profit_perc))
             self.update_on_entry(pair, 'stop_loss_perc', eval(config.main.stop_loss_perc))
@@ -826,8 +888,8 @@ class Redis():
 
         self.__log_event(pair=pair, event=event, current_time=current_time, data=str(res[0]))
 
-        winning_close = self.__get_rules(rules, 'close')
-        winning_open = self.__get_rules(rules, 'open')
+        winning_close = self.get_rules(rules, 'close')
+        winning_open = self.get_rules(rules, 'open')
         if winning_close:
             self.logger.info('%s close Rules matched: %s' % (pair, winning_close))
         else:

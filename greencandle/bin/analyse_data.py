@@ -80,7 +80,7 @@ def analyse_pair(pair, redis):
     LOGGER.debug("Analysing pair: %s" % pair)
     try:
         result, event, current_time, current_price, match = \
-                redis.get_action(pair=pair, interval=interval)
+                redis.get_rule_action(pair=pair, interval=interval)
 
         if result in ('OPEN', 'CLOSE'):
             LOGGER.debug("Trades to %s" % result.lower())
