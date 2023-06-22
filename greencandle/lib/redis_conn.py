@@ -613,12 +613,12 @@ class Redis():
             split = i.split(';')
             ind = split[1]+'_' +split[2].split(',')[0]
             ind_list.append(ind)
-        items = redis.get_items(pair, interval)
+        items = self.get_items(pair, interval)
         x = AttributeDict()
         for indicator in ind_list:
-            x[indicator] = redis.get_result(items[-1], indicator, pair, interval)
+            x[indicator] = self.get_result(items[-1], indicator, pair, interval)
             name = "{}:{}".format(pair, interval)
-            ohlc = redis.get_current(name, items[-1])[-1]
+            ohlc = self.get_current(name, items[-1])[-1]
             for item in ['open', 'high', 'low', 'close']:
                 ohlc[item] = float(ohlc[item])
             x.update(ohlc)
