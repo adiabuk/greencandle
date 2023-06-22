@@ -79,7 +79,7 @@ services:
     image: amrox/gc-mysql:${TAG}
     mem_limit: 300m
     pull_policy: always
-    entrypoint: /docker-entrypoint.sh mysqld
+    entrypoint: /docker-entrypoint.sh "mysqld --max-connections=10000 --wait-timeout=28800"
     environment:
       - CONFIG_ENV=stag
       - MYSQL_ROOT_PASSWORD=password

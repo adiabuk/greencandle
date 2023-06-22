@@ -940,7 +940,7 @@ services:
     mem_limit: 300m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh mysqld
+    entrypoint: /docker-entrypoint.sh "mysqld --max-connections=10000 --wait-timeout=28800"
     ports:
       - 3309:3306
     environment:
