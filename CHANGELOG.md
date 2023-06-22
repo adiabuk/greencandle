@@ -1,5 +1,15 @@
 # Releases
 
+# 5.33
+* no longer need to run analyser in threads as process has significantly faster
+* reduce logging in each analyser loop
+* add max_connections arg to mysql
+* speed up data analysis by only checking rules in data env (reduce run by 7mins)
+* remove bb test containers
+* backend api containers need more memory for rq
+* update rq version
+* change data supertrend settings
+
 # 5.32.1
 * ensure we shutdown thread pools
 * increase mem limit 100->200
