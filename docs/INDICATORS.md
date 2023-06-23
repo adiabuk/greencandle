@@ -18,7 +18,7 @@ Redis output: (u, m, l) tupple
 VERIFIED to be equal to tradingview
 get_bbperc;name;<period>,<std dev>
 
-eg; get_bbperc;bbperc;200,1
+eg; get_bb_perc;bbperc;200,1
 Usage: res[0].bbperc_200
 
 ## Stochrsi
