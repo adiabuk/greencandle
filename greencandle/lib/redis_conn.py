@@ -614,11 +614,12 @@ class Redis():
             ind = split[1]+'_' +split[2].split(',')[0]
             ind_list.append(ind)
         items = self.get_items(pair, interval)
-        x = AttributeDict()
-        for indicator in ind_list:
-            x[indicator] = self.get_result(items[-1], indicator, pair, interval)
+        for i in range(-1, -3, -1):
+            x = AttributeDict()
+            for indicator in ind_list:
+                x[indicator] = self.get_result(items[i], indicator, pair, interval)
             name = "{}:{}".format(pair, interval)
-            ohlc = self.get_current(name, items[-1])[-1]
+            ohlc = self.get_current(name, items[i])[-1]
             for item in ['open', 'high', 'low', 'close']:
                 ohlc[item] = float(ohlc[item])
             x.update(ohlc)
@@ -631,7 +632,7 @@ class Redis():
                 try:
                     current_config = config.main['{}_rule{}'.format(rule, seq)]
                 except (KeyError, TypeError):
-                    print('no match')
+                    pass
                 if current_config:
                     try:
                         rules[rule].append(eval(current_config))
@@ -648,10 +649,8 @@ class Redis():
         winning_open = self.get_rules(rules, 'open')
         winning_close = self.get_rules(rules, 'close')
         if any(rules['open']) and not open_price:
-            print(pair + ' open')
             result = 'OPEN'
         elif any(rules['close']) and open_price:
-            print(pair + ' close')
             result = 'CLOSE'
         else:
             result = 'HODL'
