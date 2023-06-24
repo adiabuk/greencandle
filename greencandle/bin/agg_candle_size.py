@@ -79,7 +79,7 @@ def main():
                                                                           item).decode())
                 except:
                     continue
-    data.append(["pair", "interval", "max", "min", "avg"])
+    data.append(["pair", "interval", "max", "min", "avg", "current"])
     for interval in intervals:
         for pair in pairs:
             diffs = []
@@ -91,7 +91,7 @@ def main():
                     pass
             if diffs:
                 data.append([pair, interval, round(max(diffs), 2),
-                             round(min(diffs), 2), round(average(diffs), 2)])
+                             round(min(diffs), 2), round(average(diffs), 2), round(diffs[-1], 2)])
 
     timestr = time.strftime("%Y%m%d-%H%M%S")
     # save as csv
