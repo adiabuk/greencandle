@@ -904,6 +904,7 @@ services:
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
+      - data-be-api-router:router
     depends_on:
       - data-base-mysql
       - data-base-redis
