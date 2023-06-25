@@ -83,6 +83,8 @@ class Redis():
         key = "{}:{}:{}".format(pair, "drawup", name)
         max_price = redis1.get_item(key, 'max_price')
         orig_price = redis1.get_item(key, 'orig_price')
+        print("AMROX max_price %s" %max_price)
+        print("AMROX orig_price %s" %orig_price)
         try:
             drawup = perc_diff(orig_price, max_price)
         except TypeError:
@@ -125,6 +127,7 @@ class Redis():
         key = "{}:{}:{}".format(pair, "drawdown", name)
         min_price = redis1.get_item(key, 'min_price')
         orig_price = redis1.get_item(key, 'orig_price')
+
         try:
             drawdown = perc_diff(orig_price, min_price)
         except TypeError:
@@ -210,6 +213,8 @@ class Redis():
             self.rm_drawdown(pair)
             current_low = current_price
             current_high = current_price
+            min_price = None
+            orig_price = None
 
         if not orig_price:
             orig_price = current_price
@@ -217,8 +222,6 @@ class Redis():
         if config.main.trade_direction == 'long':
             # if min price already exists and current price is lower, or there is no min price yet.
             price = current_price if self.in_current_candle(open_time) else current_low
-            self.logger.debug("We are long")
-
             if (min_price and float(price) < float(min_price)) or not min_price:
                 data = {"min_price": price, "orig_price": orig_price}
                 self.logger.debug("setting drawdown for long %s" % pair)
@@ -250,6 +253,8 @@ class Redis():
             self.rm_drawup(pair)
             current_low = current_price
             current_high = current_price
+            min_price = None
+            orig_price = None
 
         if not orig_price:
             orig_price = current_price
