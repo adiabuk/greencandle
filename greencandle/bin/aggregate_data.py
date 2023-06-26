@@ -288,8 +288,8 @@ def aggregate_data(key, pairs, intervals, res, last_res):
         # save to redis, overwriting previous value
         redis3 = Redis(db=3)
         for item, value in redis_data.items():
-            value = {k:str(v) for k,v in value.items()}
-            print(item, value)
+            # convert dict values to str
+            value = {k:str(v) for k, v in value.items()}
             redis3.conn.hmset(item, value)
 
 
