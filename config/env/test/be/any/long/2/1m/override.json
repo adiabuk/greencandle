@@ -5,5 +5,7 @@
   "slack_balance": "test",
   "slack_notifications": "test",
   "slack_trades": "test",
-  "trade_direction": "long"
+  "trade_direction": "long",
+  "take_profit_perc": "1",
+  "stop_loss_perc": "2"
 }
