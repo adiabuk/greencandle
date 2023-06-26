@@ -610,6 +610,11 @@ class Redis():
         """
         get only rule results, without checking tp/sl etc.
         """
+        # fetch latest agg data and make available as AttributeDict
+        redis3 = Redis(interval=interval, db=3)
+        raw = redis3.conn.hgetall('{}:{}'.format(pair, interval))
+        agg = AttributeDict({k.decode():v.decode() for k, v in raw.items()})
+        del redis3
 
         rules = {'open': [], 'close':[]}
         res = []
