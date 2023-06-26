@@ -256,6 +256,7 @@ def aggregate_data(key, pairs, intervals, res, last_res):
 
     # all data in a single spreadsheet
     elif key == 'all':
+        redis_data = defaultdict()
         data.append(['pair', 'interval', 'distance_12', 'distance_200', 'candle_size',
                      'middle_12', 'middle_200', 'stoch_flat', 'bb_size',
                      'bbperc_diff', 'bbperc_200', 'stoch', 'stx_200'])
@@ -275,9 +276,19 @@ def aggregate_data(key, pairs, intervals, res, last_res):
                 bbperc_200 = get_indicator_value(pair, interval, res, 'bbperc_200')
                 stx_200 = get_indicator_value(pair, interval, res, 'STX_200')
                 stoch = get_indicator_value(pair, interval, res, 'STOCHRSI_8')
+                redis_data['{}:{}'.format(pair, interval)] = \
+                {'distance_12':distance_12, 'distance_200': distance_200,
+                 'candle_size': candle_size, 'middle_12': middle_12, 'middle_200': middle_200,
+                 'stoch_flat': stoch_flat, 'bb_size': bb_size, 'bbperc_200': bbperc_200}
+
                 data.append([pair, interval, distance_12, distance_200, candle_size, middle_12,
                              middle_200, stoch_flat, bb_size, bbperc_diff, bbperc_200, stoch,
                              stx_200])
+
+        # save to redis, overwriting previous value
+        redis4 = Redis(db=3)
+        for item, value in redis_data.items():
+            redis4.conn.hmset(item, value)
 
     # indicator data
     else:
