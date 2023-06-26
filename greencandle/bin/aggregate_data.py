@@ -286,9 +286,12 @@ def aggregate_data(key, pairs, intervals, res, last_res):
                              stx_200])
 
         # save to redis, overwriting previous value
-        redis4 = Redis(db=3)
+        redis3 = Redis(db=3)
         for item, value in redis_data.items():
-            redis4.conn.hmset(item, value)
+            value = {k:str(v) for k,v in value.items()}
+            print(item, value)
+            redis3.conn.hmset(item, value)
+
 
     # indicator data
     else:
