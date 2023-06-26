@@ -145,7 +145,7 @@ class Engine(dict):
 
 
     @get_exceptions
-    def get_data(self, localconfig=None, first_run=False, no_of_klines=None):
+    def get_data(self, localconfig=None, first_run=False, no_of_klines=None, no_of_runs=999):
         """
         Iterate through data and trading pairs to extract data
         Run data through indicator, oscillators, moving average
@@ -170,7 +170,7 @@ class Engine(dict):
                     # each method has the method name in 'function't st
 
                     if first_run:
-                        for seq in range(int(actual_klines)):
+                        for seq in range(int(actual_klines))[-no_of_runs:]:
                             if seq > len(self.dataframes[pair]):
                                 continue
                             pool.submit(getattr(self, function)(pair, index=seq,
@@ -181,13 +181,14 @@ class Engine(dict):
 
                 pool.shutdown(wait=True)
 
-            self.__send_ohlcs(pair, first_run=first_run, no_of_klines=no_of_klines)
+            self.__send_ohlcs(pair, first_run=first_run, no_of_klines=no_of_klines,
+                              no_of_runs=no_of_runs)
         self.__add_schemes()
 
         LOGGER.debug("Done getting data")
         return self
 
-    def __send_ohlcs(self, pair, first_run, no_of_klines=None):
+    def __send_ohlcs(self, pair, first_run, no_of_klines=None, no_of_runs=999):
         """Send ohcls data to redis"""
         scheme = {}
         scheme["symbol"] = pair
@@ -197,7 +198,7 @@ class Engine(dict):
         self.schemes.append(scheme)
         actual_klines = len(self.dataframes[pair]) if not no_of_klines else no_of_klines
         if first_run:
-            for seq in range(int(actual_klines) -1):
+            for seq in range(int(actual_klines))[-no_of_runs +1:]:
                 if seq >= len(self.dataframes[pair]):
                     continue
                 LOGGER.debug("Getting initial sequence number %s" % seq)
