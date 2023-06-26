@@ -610,13 +610,20 @@ class Redis():
         """
         get only rule results, without checking tp/sl etc.
         """
+        def get_float(var):
+            """
+            try to convert var into float
+            otherwise return unmodified
+            """
+            try:
+                return float(var)
+            except ValueError:
+                return var
+
         # fetch latest agg data and make available as AttributeDict
         redis3 = Redis(interval=interval, db=3)
         raw = redis3.conn.hgetall('{}:{}'.format(pair, interval))
-        try:
-            agg = AttributeDict({k.decode():float(v.decode()) for k, v in raw.items()})
-        except ValueError:
-            agg = AttributeDict({k.decode():v.decode() for k, v in raw.items()})
+        agg = AttributeDict({k.decode():get_float(v.decode()) for k, v in raw.items()})
         del redis3
 
         rules = {'open': [], 'close':[]}
