@@ -309,8 +309,10 @@ def aggregate_data(key, pairs, intervals, res, last_res):
     # save as tsv
     with open('/data/aggregate/{}_{}.tsv'.format(key, timestr),
               'w', encoding='UTF8', newline='') as handle:
+        # remove spaces from lists for cmd line parsing
+        new_list = [[str(x).replace(' ', '') for x in y] for y in data]
         writer = csv.writer(handle, delimiter='\t')
-        writer.writerows(data)
+        writer.writerows(new_list)
 
     # create/overwrite symlink to most recent file
     os.chdir('/data/aggregate')
