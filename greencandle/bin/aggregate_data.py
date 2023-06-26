@@ -4,7 +4,6 @@
 get data for all timeframes and pairs
 output data to csv files
 """
-import redis
 import json
 import sys
 import csv
@@ -288,10 +287,9 @@ def aggregate_data(key, pairs, intervals, res, last_res):
         # save to redis, overwriting previous value
         redis3 = Redis(db=3)
         for item, value in redis_data.items():
-            value = {k:str(v) for k,v in value.items()}
+            value = {k:str(v) for k, v in value.items()}
             print(item, value)
             redis3.conn.hmset(item, value)
-
 
     # indicator data
     else:
