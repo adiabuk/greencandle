@@ -83,8 +83,6 @@ class Redis():
         key = "{}:{}:{}".format(pair, "drawup", name)
         max_price = redis1.get_item(key, 'max_price')
         orig_price = redis1.get_item(key, 'orig_price')
-        print("AMROX max_price %s" %max_price)
-        print("AMROX orig_price %s" %orig_price)
         try:
             drawup = perc_diff(orig_price, max_price)
         except TypeError:
@@ -306,10 +304,6 @@ class Redis():
         for close, value in data.items():
             key = "{0}:{1}".format(pair, interval)
             expiry = int(config.redis.redis_expiry_seconds)
-            # closing time, 1 ms before next candle
-            if not str(close).endswith("999"): # closing time, 1 ms before next candle
-                self.logger.critical("Invalid time submitted to redis %s.  Skipping " % key)
-                continue
             value['current_epoch'] = int(time.time())
             value['current_time'] = epoch2date(time.time())
             result = self.conn.hmset(key, {close: json.dumps(value)})
