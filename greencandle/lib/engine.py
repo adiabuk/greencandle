@@ -604,8 +604,8 @@ class Engine(dict):
             index = -1
         elif not index and not self.test:
             index = -1
-        open_time = str(self.dataframes[pair].iloc[index -1]["openTime"])
-        klines = self.__make_data_tupple(pair, index)
+        open_time = str(self.dataframes[pair].iloc[index]["openTime"])
+        klines = self.__make_data_tupple(pair, index +1)
         func, timef = localconfig  # split tuple
         results = {}
 
