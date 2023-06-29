@@ -592,27 +592,6 @@ class Engine(dict):
         LOGGER.debug("Done Getting MA for %s - %s" % (pair, scheme['close_time']))
 
     @get_exceptions
-    def get_vol_moving_averages(self, pair, index=None, localconfig=None):
-        """
-        Get moving averages with and expose volume indicator
-        """
-        self.get_moving_averages(pair, index, localconfig, volume=True)
-
-        scheme = {}
-        try:
-            scheme["symbol"] = pair
-            index = -1
-            scheme["data"] = str(self.dataframes[pair].iloc[index]["volume"])
-            scheme["event"] = "volume"
-            scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
-            self.schemes.append(scheme)
-
-        except KeyError as exc:
-            LOGGER.warning("KEY FAILURE in moving averages: %s" % str(exc))
-
-        LOGGER.debug("Done Getting volume MA for %s - %s" % (pair, scheme['close_time']))
-
-    @get_exceptions
     def get_moving_averages(self, pair, index=None, localconfig=None, volume=False):
         """
         Apply moving averages to klines and get BUY/SELL triggers
