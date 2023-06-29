@@ -129,6 +129,7 @@ class Graph():
                                   name="events",
                                   mode='markers',
                                   marker=dict(size=16, color=value['result']))
+
             elif 'pivot' in name:
                 LOGGER.debug("Creating pivot graph")
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
@@ -150,16 +151,14 @@ class Graph():
                                    y=bb_lower,
                                    name=name+'-lower')
 
-
-            # add rsi graph in second subply (below) if it exists
             elif any(substring in name for substring in ['RSI', 'ATR', 'signal', 'tsi', 'bbperc']) \
                     and 'STOCH' not in name:
+                # add rsi graph in second subply (below) if it exists
                 LOGGER.debug("Creating RSI graph")
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=value['value'],
                                   name=name)
                 row = 2
-                # add rsi graph in second subply (below) if it exists
 
             elif 'STOCHRSI' in name:
                 # add stochrsi graph in second subply (below) if it exists
@@ -201,6 +200,7 @@ class Graph():
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=value['value'],
                                   name=name)
+
             fig.append_trace(item, row, col)
             LOGGER.debug("Adding item1 %s row:%s" % (item.name, row))
             if item2:
@@ -209,7 +209,6 @@ class Graph():
             if item3:
                 fig.append_trace(item3, row, col)
                 LOGGER.debug("Adding item3 %s row:%s" %(item3.name, row))
-
 
             if name == "ohlc" and self.volume:
                 increasing_color = '#17BECF'
