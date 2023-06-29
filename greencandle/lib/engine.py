@@ -625,37 +625,39 @@ class Engine(dict):
         Returns:
             None
         """
-        klines = self.__make_data_tupple(pair, index)
-        func, timeperiod = localconfig  # split tuple
-        new_func = func.strip("_vol") if volume else func
-        try:
-            close = klines[-1] # numpy.ndarray
-            vol = klines[0]
-        except Exception as exc:
-            LOGGER.debug("FAILED moving averages: %s" % str(exc))
-            return
-        data = vol if volume else close
-        try:
-            result = getattr(talib, new_func)(data, int(timeperiod))[-1]
-        except Exception as exc:
-            LOGGER.debug("Overall Exception getting moving averages: %s" % exc)
-            return
-
-        scheme = {}
-
-        result = None if math.isnan(result) else format(float(result), ".20f")
-        try:
-            scheme["data"] = result
-            scheme["symbol"] = pair
-            scheme["event"] = func + "_" + str(timeperiod)
+        if (not index and self.test) or len(self.dataframes[pair]) < 2:
             index = -1
-            scheme["close_time"] = str(self.dataframes[pair].iloc[index]["closeTime"])
+        elif not index and not self.test:
+            index = -1
+        close_time = str(self.dataframes[pair].iloc[index -1]["closeTime"])
+        klines = self.__make_data_tupple(pair, index)
+        func, timef = localconfig  # split tuple
+        results = {}
+
+        try:
+            close = make_float(self.dataframes[pair].close.iloc[:index])
+            current_price = str(Decimal(self.dataframes[pair].iloc[index]["close"]))
+            result = talib.EMA(close, timeperiod=int(timef))
+
+        except Exception as exc:
+            result = None
+            LOGGER.debug("Overall Exception getting EMA: %s seq: %s" % (exc, index))
+        trigger = None
+        scheme = {}
+        try:
+
+            scheme["data"] = result[-1]
+            scheme["symbol"] = pair
+            scheme["event"] = "{0}_{1}".format(func, timef)
+            scheme["close_time"] = close_time
+
             self.schemes.append(scheme)
 
         except KeyError as exc:
-            LOGGER.warning("KEY FAILURE in moving averages: %s " % str(exc))
+            LOGGER.warning("KEY FAILURE in bb perc : %s" % str(exc))
 
-        LOGGER.debug("Done Getting MA for %s - %s" % (pair, scheme['close_time']))
+        LOGGER.debug("Done Getting bb perc for %s - %s" % (pair, close_time))
+
 
     @get_exceptions
     def get_oscillators(self, pair, index=None, localconfig=None):
