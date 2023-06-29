@@ -14,7 +14,7 @@ res[1].bb_12[0]
 Redis output: (u, m, l) tupple
 
 
-## bbperc bbperc_ema
+## bbperc bbperc
 VERIFIED to be equal to tradingview
 get_bbperc;name;<period>,<std dev>
 
