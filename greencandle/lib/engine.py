@@ -139,7 +139,6 @@ class Engine(dict):
 
         self.schemes = []
 
-
     @get_exceptions
     def get_data(self, localconfig=None, first_run=False, no_of_klines=None, no_of_runs=999):
         """
@@ -194,9 +193,7 @@ class Engine(dict):
         self.schemes.append(scheme)
         actual_klines = len(self.dataframes[pair]) if not no_of_klines else no_of_klines
         if first_run:
-            for seq in range(int(actual_klines))[-no_of_runs +1:]:
-                if seq >= len(self.dataframes[pair]):
-                    continue
+            for seq in range(-no_of_runs, 0, 1): # last x items in seq order
                 LOGGER.debug("Getting initial sequence number %s" % seq)
                 scheme['data'] = self.dataframes[pair].iloc[seq].to_dict()
                 for key, val in scheme['data'].items():
