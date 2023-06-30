@@ -794,7 +794,7 @@ services:
     mem_limit: 200m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "analyse_data forward"
+    entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: journald
     links:
@@ -830,7 +830,7 @@ services:
     mem_limit: 200m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "analyse_data forward"
+    entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: journald
     links:
