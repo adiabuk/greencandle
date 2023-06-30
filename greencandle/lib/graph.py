@@ -108,6 +108,8 @@ class Graph():
             elif 'STX' in name:
                 LOGGER.debug("Creating Supertrend graph")
                 value['value'].astype(str)
+                if value.empty:  # empty dataframe
+                    continue
                 direction, location = zip(*value.value)
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=location,
