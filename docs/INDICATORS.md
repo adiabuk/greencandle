@@ -41,6 +41,16 @@ Usage:
 res[0].STX_23[0] > 0
 res[0].close > res[0].STX_23[1]
 
+## Moving averages
+VERIFIED to be equal to tradingview
+get_moving_averages;EMA;8
+<function>;<MA><timeframe>
+Usage: res[0].EMA_8[0]
+Redis output: EMA value, float
+
+<MA> can be MA|SMA|EMA|WMA
+
+
 
 ## pivot
 to be verified
@@ -53,7 +63,6 @@ to be verified
 
 ## envelope
 
-## Moving averages
 
 ## Oscillators (stochf etc)
 
