@@ -1,5 +1,38 @@
 # Releases
 
+# 5.23
+* close all trades above threshold from cmdline & dashboard
+* Use open_time as redis index and graphs/event dates
+* ensure we have enough data in 1m, accounting for empty candles
+* properly loop through last x first-run items in engine
+* use min number of runs for data analyser
+* increase number of lookback elements in res list
+* continue making graph on empty supertrend df
+* create 3 seperate long/short data 1m containers and remove temp cron
+* fix indicator sync when using live data
+* update indicators doc
+* never alter opentime/index when fetching indicator data as this overwrites existing data in scheme
+* update plotly to latest version to overcome bug displaying ohlc candle graphs
+* remove vol MA method as not required
+* Update moving averages method, and verified values match tradingview
+* cleanup graph lib
+* tweak tp/sl for 1m test containers
+* don't skip entire dict if some values are None
+* convert values to string as redis doesn't like None
+* try to turn agg data to float for parsing/comparision
+* make agg data available to analyser and add to 1m rules
+* remove spaces from agg tsv files for column parsing
+* add agg data to redis db3
+* fix selenium tests
+* ensure we reset drawup/drawdown on new trade to avoid incorrect data on trade close
+* no max trades for in data env
+* clear more redis dbs in clear_redis script
+* add link to router from data cron container
+* add current candle size to agg data
+* add missing pair in 4h/1h get_data containers
+* look for bbperc reversal in data env
+* add non btc/usdt pairs to btc get containers
+
 # 5.33
 * no longer need to run analyser in threads as process has significantly faster
 * reduce logging in each analyser loop
