@@ -26,7 +26,7 @@ def main():
 
     for trade in open_trades:
         pair, name, net_perc, direction = trade
-        if net_perc > float(sys.argv[1]) if len(sys.argv) >1 else 0.3:
+        if net_perc > float(sys.argv[1]) if len(sys.argv) > 1 else 0.3:
             short_name = get_short_name(name, env, direction)
             print("We can close {} {}".format(pair, name))
             payload = {"pair": pair,
