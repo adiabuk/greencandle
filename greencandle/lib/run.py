@@ -73,9 +73,9 @@ def perform_data(pair, interval, data_dir, indicators):
         LOGGER.debug("chunk: %s, %s" % (beg, end))
         dataframe = dframe.copy()[beg: end]
 
-        current_ctime = int(dataframe.iloc[-1].closeTime)/1000
+        current_otime = int(dataframe.iloc[-1].openTime)/1000
         current_time = time.strftime("%Y-%m-%d %H:%M:%S",
-                                     time.gmtime(current_ctime))
+                                     time.gmtime(current_otime))
         LOGGER.debug("current date: %s" %  current_time)
 
         if len(dataframe) < CHUNK_SIZE:
@@ -321,13 +321,11 @@ class ProdRunner():
                 dframe.loc[0] = recent_di
                 if closed_di and closed_di != recent_di:
                     dframe.loc[1] = closed_di
-                new_dataframes[pair] = dframe.sort_values('closeTime')
+                new_dataframes[pair] = dframe.sort_values('openTime')
                 del dframe
                 del closed_di
-
             except ValueError:
                 continue
-
 
         max_klines = int(config.main.no_of_klines)
         for pair in PAIRS:
@@ -336,11 +334,11 @@ class ProdRunner():
                 continue
             # get last column of new data
             for _, row in new_dataframes[pair].iterrows():
-                # use closeTime as index
-                new_close = row['closeTime']
-                # see if closeTime already exists in data
-                old_index = self.dataframes[pair].index[self.dataframes[pair]['closeTime'] ==
-                                                        str(new_close)].tolist()
+                # use openTime as index
+                new_open = row['openTime']
+                # see if openTime already exists in data
+                old_index = self.dataframes[pair].index[self.dataframes[pair]['openTime'].astype(str) ==
+                                                        str(new_open)].tolist()
                 if old_index:
                     # if it exsits, then we use the last index occurance in list
                     # and overwrite that field in existing data
