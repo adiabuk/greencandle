@@ -1,0 +1,6 @@
+{
+  "api_forward": "test,10.8.0.1,any-long-short",
+  "close_rule1": "res[0].close \u003e res[0].bb_12[0]",
+  "name": "data-be-analyse-1m-long2",
+  "open_rule1": "res[1].bbperc_200 \u003e -1 and agg.candle_size \u003e 1"
+}
