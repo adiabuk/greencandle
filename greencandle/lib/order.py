@@ -4,7 +4,6 @@ Test Buy/Sell orders
 """
 
 from collections import defaultdict
-import time
 import datetime
 import re
 from str2bool import str2bool
@@ -81,11 +80,7 @@ class Trade():
 
         self.logger.debug('Strategy - Adding to redis')
         redis = Redis()
-        if 'api' in self.config.main.name or 'data' in self.config.main.base_env:
-            mepoch = int(time.mktime(time.strptime(kwargs.current_time,
-                                                   '%Y-%m-%d %H:%M:%S'))) * 1000 + 999
-        else:
-            mepoch = redis.get_items(kwargs.pair, kwargs.interval)[-1]
+        mepoch = redis.get_items(kwargs.pair, kwargs.interval)[-1]
 
         data = {"event":{"result": kwargs.event,
                          "current_price": format(float(kwargs.price), ".20f"),
