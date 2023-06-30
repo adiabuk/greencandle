@@ -236,9 +236,7 @@ class Engine(dict):
 
     def get_bb_perc(self, pair, index=None, localconfig=None, ema=False):
         """get bb %"""
-        if (not index and self.test) or len(self.dataframes[pair]) < 2:
-            index = -1
-        elif not index and not self.test:
+        if index is None:
             index = -1
         open_time = str(self.dataframes[pair].iloc[index]["openTime"])
         klines = self.__make_data_tupple(pair, index)
@@ -247,10 +245,13 @@ class Engine(dict):
         results = {}
 
         try:
-            close = make_float(self.dataframes[pair].close.iloc[:index])
+            if index == -1:
+                closes = make_float(self.dataframes[pair].close)
+            else:
+                closes = make_float(self.dataframes[pair].close.iloc[:index])
             current_price = str(Decimal(self.dataframes[pair].iloc[index]["close"]))
             upper, middle, lower = \
-                     talib.BBANDS(close*100000, timeperiod=int(timeframe),
+                     talib.BBANDS(closes*100000, timeperiod=int(timeframe),
                                   nbdevup=float(multiplier), nbdevdn=float(multiplier), matype=0)
 
             #%B = (Current Price - Lower Band) / (Upper Band - Lower Band)
@@ -293,9 +294,7 @@ class Engine(dict):
 
     def get_bb(self, pair, index=None, localconfig=None):
         """get bollinger bands"""
-        if (not index and self.test) or len(self.dataframes[pair]) < 2:
-            index = -1
-        elif not index and not self.test:
+        if index is None:
             index = -1
 
         open_time = str(self.dataframes[pair].iloc[index]["openTime"])
@@ -304,7 +303,6 @@ class Engine(dict):
 
         func, timef = localconfig  # split tuple
         timeframe, multiplier = timef.split(',')
-        results = {}
         try:
             close = klines[-1]
 
@@ -318,14 +316,14 @@ class Engine(dict):
             res = [upper[-1]/100000, middle[-1]/100000, lower[-1]/100000]
 
         except Exception as exc:
-            res = []
+            res = [None, None, None]
             LOGGER.debug("Overall Exception getting bollinger bands: %s seq: %s" % (exc, index))
         trigger = None
         try:
             current_price = str(Decimal(self.dataframes[pair].iloc[index]["close"]))
             scheme = {}
             scheme["open_time"] = open_time
-            scheme["data"] = results[func] = res
+            scheme["data"] = res
             scheme["symbol"] = pair
             scheme["event"] = "{0}_{1}".format(func, timeframe)
             self.schemes.append(scheme)
@@ -410,10 +408,7 @@ class Engine(dict):
         func, timeperiod = localconfig  # split tuple
         scheme = {}
         series = self.dataframes[pair].apply(pandas.to_numeric).loc[:index]
-
-        if (not index and self.test) or len(self.dataframes[pair]) < 2:
-            index = -1
-        elif not index and not self.test:
+        if index is None:
             index = -1
         atr = talib.ATR(high=self.dataframes[pair].high.values.astype(float),
                         low=self.dataframes[pair].low.values.astype(float),
@@ -443,11 +438,8 @@ class Engine(dict):
         scheme = {}
         series = self.dataframes[pair].apply(pandas.to_numeric).loc[:index]
 
-        if (not index and self.test) or len(self.dataframes[pair]) < 2:
+        if index is None:
             index = -1
-        elif not index and not self.test:
-            index = -1
-
         rsi = talib.RSI(self.dataframes[pair].close.values.astype(float) * 100000,
                         timeperiod=int(timeperiod))
         scheme["symbol"] = pair
@@ -474,11 +466,11 @@ class Engine(dict):
         """
 
         series = self.dataframes[pair].close.apply(pandas.to_numeric).astype('float32')
-        if not index or len(self.dataframes[pair]) < 2:
+
+        if index is None:
             index = -1
         else:
             series = series.iloc[:index +1]
-
         func, details = localconfig  # split tuple
         rsi_period, stoch_period, smooth = (int(x) for x in details.split(','))
 
@@ -600,19 +592,22 @@ class Engine(dict):
         Returns:
             None
         """
-        if (not index and self.test) or len(self.dataframes[pair]) < 2:
-            index = -1
-        elif not index and not self.test:
+        if index is None:
             index = -1
         open_time = str(self.dataframes[pair].iloc[index]["openTime"])
-        klines = self.__make_data_tupple(pair, index +1)
+        klines = self.__make_data_tupple(pair, index)
         func, timef = localconfig  # split tuple
         results = {}
 
         try:
-            close = make_float(self.dataframes[pair].close.iloc[:index])
+            if index == -1:
+                closes = make_float(self.dataframes[pair].close)
+            else:
+                closes = make_float(self.dataframes[pair].close.iloc[:index])
+
+            open_times = self.dataframes[pair].openTime.iloc[:8]
             current_price = str(Decimal(self.dataframes[pair].iloc[index]["close"]))
-            result = talib.EMA(close, timeperiod=int(timef))
+            results = talib.EMA(closes, timeperiod=int(timef))
 
         except Exception as exc:
             result = None
@@ -621,7 +616,7 @@ class Engine(dict):
         scheme = {}
         try:
 
-            scheme["data"] = result[-1]
+            scheme["data"] = results[-1]
             scheme["symbol"] = pair
             scheme["event"] = "{0}_{1}".format(func, timef)
             scheme["open_time"] = open_time
@@ -742,12 +737,11 @@ class Engine(dict):
         """
         dataframe = self.__renamed_dataframe_columns(self.dataframes[pair])
         series = dataframe.apply(pandas.to_numeric)
-        if not index or len(self.dataframes[pair]) < 2:
+        if index is None:
             index = -1
         else:
             # line up with TV graphs
             series = series.iloc[:index +2]
-
         func, timef = localconfig  # split tuple
         scheme = {}
         timeframe, multiplier = timef.split(',')
