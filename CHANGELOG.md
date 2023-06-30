@@ -1,6 +1,9 @@
 # Releases
 
-# 5.23
+# 5.34.1
+* Lint fixes
+
+# 5.34
 * close all trades above threshold from cmdline & dashboard
 * Use open_time as redis index and graphs/event dates
 * ensure we have enough data in 1m, accounting for empty candles
