@@ -59,10 +59,9 @@ def main():
     # only fetch historic indicator data for higher timeframes
     # as it will take hours/days to catch up in real time
     # lower timeframes with catch up after 4 candles have been processed
-    first_run = bool('h' in config.main.interval)
 
     # initial run, before scheduling begins
-    RUNNER.prod_initial(interval, test=True, first_run=first_run)
+    RUNNER.prod_initial(interval, test=True, first_run=True, no_of_runs=4)
     if os.path.exists('/var/run/{}-data-{}-{}'.format(config.main.base_env, interval, name)):
         os.remove('/var/run/{}-data-{}-{}'.format(config.main.base_env, interval, name))
     send_slack_message('alerts', "Finished initial prod run")
