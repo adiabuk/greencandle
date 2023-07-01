@@ -100,7 +100,7 @@ def analyse_pair(pair, redis):
             send_slack_message("notifications", "%s %s: %s %s %s (%s) - %s Data: %s" %
                                (result.lower(), str(match['{}'.format(result.lower())]),
                                 get_tv_link(pair, interval), interval,
-                                config.main.trade_direction, supported.strip(), current_time,
+                                config.main.name, supported.strip(), current_time,
                                 data), emoji=True,
                                icon=':{0}-{1}:'.format(interval, config.main.trade_direction))
             if config.main.trade_direction == 'long' and result == 'OPEN':
