@@ -21,6 +21,7 @@ def main():
     env = config.main.base_env
     url = "http://router:1080/{}".format(config.web.api_token)
     dbase = Mysql()
+    dbase.get_active_trades()
     open_trades = dbase.fetch_sql_data('select pair, name, net_perc, direction from open_trades',
                                        header=False)
 
