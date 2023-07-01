@@ -15,13 +15,13 @@ from greencandle.lib import config
 from greencandle.lib.common import perc_diff, arg_decorator
 from greencandle.lib.redis_conn import Redis
 
-def get_bb_size(pair, interval, res):
+def get_bb_size(pair, interval, res, timeframe='12'):
     """
     percent between upper and lower bb
     """
     try:
-        bb_diff = abs(perc_diff(res[interval][pair]['upper_12'],
-                                res[interval][pair]['lower_12']))
+        bb_diff = abs(perc_diff(res[interval][pair]['bb_{}'.format(timeframe)][0],
+                                res[interval][pair]['bb_{}'.format(timeframe)][2]))
         bb_diff = '{:.2f}'.format(bb_diff)
     except KeyError:
         bb_diff = ''
