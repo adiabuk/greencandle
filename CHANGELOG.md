@@ -1,5 +1,17 @@
 # Releases
 
+# 5.35
+* add candle size to data ema rule
+* fix data long2 open rule
+* update active trades before closing
+* fix bb_size agg to use new bb list
+* add container name to data trade notification
+* fix perc comparision and display value in close script
+* rename ema channels in data env
+* separate slack channel for noisy notifications
+* reduce data env deploy delay
+* single trade-status cron invocation for test env
+
 # 5.34.1
 * Lint fixes
 
