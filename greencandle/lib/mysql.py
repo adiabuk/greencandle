@@ -338,8 +338,6 @@ class Mysql():
 
         client = Binance()
         prices = client.prices()
-        self.__run_sql_query("lock tables open_trades read")
-
         self.__run_sql_query("delete from open_trades")
         trades = self.fetch_sql_data("select pair, open_time, open_price, name, `interval`, "
                                      "open_usd_rate*quote_in as usd_quantity, direction from "
@@ -364,8 +362,6 @@ class Mysql():
             except ZeroDivisionError:
                 self.logger.critical("%s has a zero open price, unable to calculate percentage"
                                      % pair)
-
-        self.__run_sql_query("unlock tables")
 
     def trade_in_context(self, pair, name, direction):
         """
