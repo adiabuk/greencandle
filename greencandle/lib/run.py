@@ -358,16 +358,13 @@ class ProdRunner():
         Loop through collection cycle (PROD)
         """
         LOGGER.debug("Performaing prod loop")
-        LOGGER.info("Pairs in config: %s" % PAIRS)
-        LOGGER.info("Total unique pairs: %s" % len(PAIRS))
-
-        LOGGER.info("Starting new cycle")
-        LOGGER.debug("max trades: %s" % config.main.max_trades)
+        LOGGER.debug("Pairs in config: %s" % PAIRS)
+        LOGGER.info("Starting new cycle with %s pairs" %len(PAIRS))
         client = Binance()
         redis = Redis()
 
         if data:
-            self.append_data()
+            self.app end_data()
             engine = Engine(dataframes=self.dataframes, interval=interval,
                             redis=redis)
             engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
