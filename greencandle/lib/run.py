@@ -364,7 +364,7 @@ class ProdRunner():
         redis = Redis()
 
         if data:
-            self.app end_data()
+            self.append_data()
             engine = Engine(dataframes=self.dataframes, interval=interval,
                             redis=redis)
             engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
