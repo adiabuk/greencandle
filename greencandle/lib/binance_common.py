@@ -100,7 +100,7 @@ def get_all_klines(pair, interval=None, start_time=0, no_of_klines=1E1000):
 
     start = epoch2date(first_candle)
     end = epoch2date(last_candle)
-    LOGGER.info("%s Start: %s, End: %s" %(pair, start, end))
+    LOGGER.debug("%s Start: %s, End: %s" %(pair, start, end))
 
     return result[:no_of_klines] if no_of_klines != float("inf") else result
 

@@ -443,7 +443,7 @@ class Binance():
             raise BinanceException(resp.content.decode())
 
         self.logger.debug("%s %s" %(inspect.stack()[1].function, data))
-        self.logger.info("Calling binance api path %s" %path)
+        self.logger.debug("Calling binance api path %s" %path)
         if 'msg' in data:
             raise BinanceException(data['msg'])
 
