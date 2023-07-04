@@ -6,6 +6,7 @@ Stream candle data from binance and make latest data available through flask
 For use in data environment, uses pairs and interval within scope
 """
 import json
+import logging
 import threading
 import websocket
 from flask import Flask, request, Response
@@ -94,6 +95,9 @@ def start_flask():
     Start flask app
     """
     APP.run(debug=False, host='0.0.0.0', port=5000, threaded=True)
+    if float(config.env.logging_level) > 10:
+        log = logging.getLogger('werkzeug')
+        log.disabled = True
 
 @arg_decorator
 def main():
