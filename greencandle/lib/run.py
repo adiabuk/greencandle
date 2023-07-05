@@ -313,7 +313,7 @@ class ProdRunner():
                 request2 = requests.get("http://stream:5000/closed?pair={}".format(pair))
                 recent_di = request1.json()
                 if request1.status_code != 200:
-                    LOGGER.critical("Unable to fetch recent data for %s %s" % pair)
+                    LOGGER.critical("Unable to fetch recent data for %s" % pair)
 
                 try:
                     closed_di = request2.json()
