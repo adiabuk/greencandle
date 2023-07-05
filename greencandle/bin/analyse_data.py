@@ -114,8 +114,10 @@ def analyse_pair(pair, redis):
             details = [[pair, current_time, current_price, event, action]]
             trade = Trade(interval=interval, test_trade=True, test_data=False, config=config)
             if result == 'OPEN' and STORE_IN_DB:
+                LOGGER.info("opening data trade for %s" % pair)
                 trade.open_trade(details)
             elif result == 'CLOSE' and STORE_IN_DB:
+                LOGGER.info("closing data trade for %s" % pair)
                 trade.close_trade(details)
 
             if FORWARD:
