@@ -297,9 +297,6 @@ class ProdRunner():
 
         del redis
         del engine
-        del dframe
-
-        
 
     def append_data(self):
         """
