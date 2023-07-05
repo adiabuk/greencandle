@@ -290,8 +290,6 @@ class ProdRunner():
         no_of_klines = config.main.no_of_klines
         LOGGER.debug("Getting %s klines" % no_of_klines)
         self.dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=no_of_klines)
-        for pair, dframe in self.dataframes.items():
-            self.dataframes[pair] = dframe
         engine = Engine(dataframes=self.dataframes, interval=interval,
                         test=test, redis=redis)
         engine.get_data(localconfig=MAIN_INDICATORS, first_run=first_run, no_of_klines=no_of_klines,
@@ -300,6 +298,8 @@ class ProdRunner():
         del redis
         del engine
         del dframe
+
+        
 
     def append_data(self):
         """
