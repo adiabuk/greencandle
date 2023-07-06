@@ -1,5 +1,18 @@
 # Releases
 
+# 5.36
+* fix prod api container entrypoints
+* add more logging for data analyser when opening/closing trades
+* greatly increase no of initial 1m candles to account for low volume pairs
+* fix long2 open_rule1 bbperc
+* add missing pairs from BTC containers
+* raise error when unable to fetch stream for given pair
+* increase bbperc short trigger on all data containers
+* print direction when closing trade in data env
+* reduce logging by downgrading to debug and disabling noisy stream container GET output
+* turn off debugging for test env
+* code cleanup
+
 # 5.35
 * add candle size to data ema rule
 * fix data long2 open rule
