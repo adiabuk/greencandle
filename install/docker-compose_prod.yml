@@ -339,7 +339,7 @@ services:
     mem_limit: 200m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "backend_api api /docker-entrypoint.sh backend_api backend_api queue"
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: journald
     environment:
@@ -375,7 +375,7 @@ services:
     mem_limit: 200m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "backend_api api /docker-entrypoint.sh backend_api backend_api queue"
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: journald
     environment:
@@ -411,7 +411,7 @@ services:
     mem_limit: 200m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "backend_api api /docker-entrypoint.sh backend_api backend_api queue"
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: journald
     environment:
@@ -447,7 +447,7 @@ services:
     mem_limit: 200m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "backend_api api /docker-entrypoint.sh backend_api backend_api queue"
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: journald
     environment:
@@ -483,7 +483,7 @@ services:
     mem_limit: 200m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "backend_api api /docker-entrypoint.sh backend_api backend_api queue"
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: journald
     environment:
@@ -519,7 +519,7 @@ services:
     mem_limit: 200m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "backend_api api /docker-entrypoint.sh backend_api backend_api queue"
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: journald
     environment:
@@ -555,7 +555,7 @@ services:
     mem_limit: 200m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "backend_api api /docker-entrypoint.sh backend_api backend_api queue"
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: journald
     environment:
@@ -591,7 +591,7 @@ services:
     mem_limit: 200m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "backend_api api /docker-entrypoint.sh backend_api backend_api queue"
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: journald
     environment:
@@ -627,7 +627,7 @@ services:
     mem_limit: 200m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "backend_api api /docker-entrypoint.sh backend_api backend_api queue"
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: journald
     environment:
@@ -663,7 +663,7 @@ services:
     mem_limit: 200m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "backend_api api /docker-entrypoint.sh backend_api backend_api queue"
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: journald
     environment:
