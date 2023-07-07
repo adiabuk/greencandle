@@ -6,7 +6,7 @@ Generic logging class for greencandle modules
 
 import logging
 import traceback
-from systemd.journal import JournaldLogHandler
+from cysystemd.journal import JournaldLogHandler
 from greencandle.lib import config
 config.create_config()
 from greencandle.lib.alerts import send_slack_message
