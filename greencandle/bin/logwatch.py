@@ -37,18 +37,18 @@ def main():
     """
     env = config.main.base_env
     client = docker.from_env()
-    logfile = open("/var/log/syslog", "r")
-    loglines = follow(logfile)    # iterate over the generator
-    for line in loglines:
-        if "Traceback" in line:
-            container_id = line.split()[4]
-            match = container_id[0:container_id.find('[')]
-            try:
-                name = client.containers.get(match).name
-            except docker.errors.NotFound:
-                name = "unknown - {}".format(container_id)
-            if name.startswith(env) or container_id.startswith(env):
-                send_slack_message("alerts", "Unhandled exception found in %s container" % name)
+    with open("/var/log/syslog", "r") as logfile:
+        loglines = follow(logfile)    # iterate over the generator
+        for line in loglines:
+            if "Traceback" in line:
+                container_id = line.split()[4]
+                match = container_id[0:container_id.find('[')]
+                try:
+                    name = client.containers.get(match).name
+                except docker.errors.NotFound:
+                    name = "unknown - {}".format(container_id)
+                if name.startswith(env) or container_id.startswith(env):
+                    send_slack_message("alerts", "Unhandled exception found in %s container" % name)
 
 if __name__ == '__main__':
     main()

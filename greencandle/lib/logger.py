@@ -1,4 +1,4 @@
-#pylint: disable=no-member,arguments-differ,too-few-public-methods,wrong-import-position
+#pylint: disable=no-member,arguments-differ,too-few-public-methods,wrong-import-position,inconsistent-return-statements
 
 """
 Generic logging class for greencandle modules
