@@ -1,5 +1,22 @@
 # Releases
 
+# 6.0
+* Security updates for python scipy
+* Security updates for python numpy
+* Security update for python redis
+* Security update for python flask
+* Update python to 3.9 and recreate base/jenkins docker images
+* Various updates for dependency resolution
+* Various fixes to account for libray changes
+* remove ipython hack in dockerentry file for manual containers
+* insure using right version of urllib3
+* Removal of unused test code relating to git pre-hook and checksum
+* Account for new lint rules from updated pylint packages
+* reduce base img size by merging docker layers
+* remove pip hackyness and install required verions in base image
+* fix per env api container entrypoints
+* change EMA_8 to EMA_13 in data env
+
 # 5.36
 * fix prod api container entrypoints
 * add more logging for data analyser when opening/closing trades
