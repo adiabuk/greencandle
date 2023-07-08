@@ -10,7 +10,7 @@ import argparse
 import sys
 import unittest
 from greencandle.tests.print_format import SuppressStdoutStderr
-from greencandle.tests.finish import finish_test, create_link
+from greencandle.tests.finish import finish_test
 from greencandle.tests.__init__ import __all__
 from greencandle.tests import test_run1, test_run2, test_run3, test_mysql, test_lint, \
      test_scripts, test_docker_mysql, test_docker_redis, test_docker_api, test_docker_cron, \
@@ -78,8 +78,6 @@ def main():
                        help='Display only results summary')
     group.add_argument('-l', '--list_tests', action='store_true', default=False,
                        required=False, help='list available tests')
-    group.add_argument('-c', '--create_symlink', action='store_true', default=False,
-                       help='create git hook symlink')
     parser.add_argument('-t', '--test', dest="test", type=str, default="all",
                         help='run a specific test', required=False)
     parser.add_argument('-r', '--run_optional', action='store_true',
@@ -92,9 +90,6 @@ def main():
         sys.exit(1)
     elif args.list_tests:
         print_list()
-        sys.exit(0)
-    elif args.create_symlink:
-        create_link()
         sys.exit(0)
 
     if args.summary:
