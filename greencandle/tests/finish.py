@@ -5,12 +5,7 @@ Aggregate test results, and perform git checks
 
 """
 
-import os
 import sys
-
-BASE_DIR = os.getcwd().split('netgenius', 1)[0]+'netgenius'
-sys.path.append(BASE_DIR)
-
 from greencandle.tests.print_format import  print_status_line
 
 def finish_test(results=None):
