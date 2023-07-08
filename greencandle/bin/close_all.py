@@ -29,7 +29,7 @@ def main():
         pair, name, net_perc, direction = trade
         if net_perc > (float(sys.argv[1]) if len(sys.argv) > 1 else 0.3):
             short_name = get_short_name(name, env, direction)
-            print("We can close {} {} {} @ {}%".format(pair, name, net_perc, direction))
+            print("We can close {} {} {} @ {}%".format(pair, name, direction, net_perc))
             payload = {"pair": pair,
                        "text": "closing trade from close_all script",
                        "action": "close",
