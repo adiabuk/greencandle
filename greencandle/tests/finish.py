@@ -54,15 +54,13 @@ def create_link():
 def update_results(result):
     """ Adding new test results. """
     # Get current GIT COMMIT SHA to include in results
-    repo = git.Repo()
-    sha = repo.head.object.hexsha
 
     # Write Results to log file to be read by git hook
     with open('results.log', 'w') as results_file:
         if  result != 100:  # not all passed
-            results = "FAILED: {0}".format(sha)
+            results = "FAILED"
         else:  # everything OK
-            results = "OK: {0}".format(sha)
+            results = "OK"
         print(results)
         results_file.write(results)
 
