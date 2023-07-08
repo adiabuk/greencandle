@@ -1,4 +1,4 @@
-FROM amrox/python:3.7.0-new
+FROM amrox/python:3.9.0-new
 
 ADD . /srv/greencandle
 RUN bash /srv/greencandle/install/bootstrap_docker.sh && \

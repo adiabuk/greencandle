@@ -37,9 +37,7 @@ if [[ ! -f /installed ]]; then
     cp /srv/alert/com.mp3 /srv/alert/250ms-silence.mp3 /
 
   elif [[ "$HOSTNAME" == *"manual"* ]]; then
-    easy_install pip
-    pip3 install --upgrade pip ipython
-    pip3 install setuptools==45.1.0
+    pip install ipython
   fi
 
 
