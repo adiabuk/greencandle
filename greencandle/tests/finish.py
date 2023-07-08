@@ -7,7 +7,6 @@ Aggregate test results, and perform git checks
 
 import os
 import sys
-import git
 
 BASE_DIR = os.getcwd().split('netgenius', 1)[0]+'netgenius'
 sys.path.append(BASE_DIR)
@@ -35,21 +34,7 @@ def finish_test(results=None):
     print_status_line(total_text, total_code)
     update_results(int(total))
 
-    create_link()
-
     return total_code
-
-def create_link():
-    """
-    Create link to pre-push git hook to enforce test run
-    """
-    # Ensure git hook is in place
-    repo = git.Repo('.')
-    current_repo = repo.git.working_dir + '/'
-    src = '../../greencandle/tests/pre-push'
-    dst = current_repo + '.git/hooks/pre-push'
-    if not os.path.lexists(dst):
-        os.symlink(src, dst)
 
 def update_results(result):
     """ Adding new test results. """
