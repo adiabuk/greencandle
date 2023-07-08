@@ -46,3 +46,4 @@ pytest==6.0.1
 backports.shutil-get-terminal-size==1.0.0
 scandir==1.10.0
 browsepy==0.5.6
+ccxt
