@@ -5,13 +5,7 @@ Aggregate test results, and perform git checks
 
 """
 
-import os
 import sys
-import git
-
-BASE_DIR = os.getcwd().split('netgenius', 1)[0]+'netgenius'
-sys.path.append(BASE_DIR)
-
 from greencandle.tests.print_format import  print_status_line
 
 def finish_test(results=None):
@@ -35,34 +29,18 @@ def finish_test(results=None):
     print_status_line(total_text, total_code)
     update_results(int(total))
 
-    create_link()
-
     return total_code
-
-def create_link():
-    """
-    Create link to pre-push git hook to enforce test run
-    """
-    # Ensure git hook is in place
-    repo = git.Repo('.')
-    current_repo = repo.git.working_dir + '/'
-    src = '../../greencandle/tests/pre-push'
-    dst = current_repo + '.git/hooks/pre-push'
-    if not os.path.lexists(dst):
-        os.symlink(src, dst)
 
 def update_results(result):
     """ Adding new test results. """
     # Get current GIT COMMIT SHA to include in results
-    repo = git.Repo()
-    sha = repo.head.object.hexsha
 
     # Write Results to log file to be read by git hook
     with open('results.log', 'w') as results_file:
         if  result != 100:  # not all passed
-            results = "FAILED: {0}".format(sha)
+            results = "FAILED"
         else:  # everything OK
-            results = "OK: {0}".format(sha)
+            results = "OK"
         print(results)
         results_file.write(results)
 
