@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=bare-except,no-member,wrong-import-position,no-else-return,unnecessary-comprehension
+#pylint: disable=bare-except,no-member,wrong-import-position,no-else-return,unnecessary-comprehension,consider-using-with
 
 """
 Flask module for manipulating API trades and displaying relevent graphs
