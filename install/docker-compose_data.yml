@@ -351,8 +351,7 @@ services:
     depends_on:
       - data-base-mysql
       - data-base-redis
-      - data-be-get_5m-btc
-      - data-be-get_5m-usdt
+      - data-be-get_5m
     environment:
       - VPN_IP=$VPN_IP
       - ALERT="True"
@@ -387,8 +386,7 @@ services:
     depends_on:
       - data-base-mysql
       - data-base-redis
-      - data-be-get_1m-btc
-      - data-be-get_1m-usdt
+      - data-be-get_1m
     environment:
       - VPN_IP=$VPN_IP
       - ALERT="True"
