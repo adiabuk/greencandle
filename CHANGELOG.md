@@ -1,5 +1,9 @@
 # Releases
 
+# 6.1
+* add data agg analysers
+* update docker and websockets python versions
+
 # 6.0
 * Security updates for python scipy
 * Security updates for python numpy
