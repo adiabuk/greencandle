@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-member,bare-except,too-many-locals,too-many-branches,too-many-statements,no-else-return
+#pylint: disable=no-member,bare-except,too-many-locals,too-many-branches,too-many-statements,no-else-return,unused-variable
 """
 get data for all timeframes and pairs
 output data to csv files
@@ -254,7 +254,7 @@ def aggregate_data(key, pairs, intervals, res, last_res):
                     data.append([pair, interval, direction, distance_diff])
 
     # all data in a single spreadsheet
-    elif key == 'all':
+    elif key in ('all', 'redis'):
         redis_data = defaultdict()
         data.append(['pair', 'interval', 'distance_12', 'distance_200', 'candle_size',
                      'middle_12', 'middle_200', 'stoch_flat', 'bb_size',
@@ -284,12 +284,15 @@ def aggregate_data(key, pairs, intervals, res, last_res):
                              middle_200, stoch_flat, bb_size, bbperc_diff, bbperc_200, stoch,
                              stx_200])
 
+
         # save to redis, overwriting previous value
         redis3 = Redis(db=3)
         for item, value in redis_data.items():
             value = {k:str(v) for k, v in value.items()}
             print(item, value)
             redis3.conn.hmset(item, value)
+        if key == 'redis':
+            return
 
     # indicator data
     else:
@@ -368,8 +371,10 @@ def main():
         keys = json.loads(redis.get_item('BTCUSDT:1h', items_1h[-1]).decode()).keys()
         print(keys)
         sys.exit()
-    for aggregate in aggregates:
-        aggregate_data(aggregate, pairs, intervals, res, last_res)
+    #for aggregate in aggregates:
+    #    aggregate_data(aggregate, pairs, intervals, res, last_res)
+    aggregate_data('redis', pairs, intervals, res, last_res)
+
 
     print('DONE')
 
