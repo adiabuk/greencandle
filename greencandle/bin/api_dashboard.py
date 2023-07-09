@@ -1,13 +1,11 @@
 #!/usr/bin/env python
-#pylint: disable=bare-except,no-member,wrong-import-position,no-else-return,unnecessary-comprehension,consider-using-with
+#pylint: disable=bare-except,no-member,wrong-import-position,no-else-return,unnecessary-comprehension
 
 """
 Flask module for manipulating API trades and displaying relevent graphs
 """
 import re
 import os
-import glob
-import csv
 import json
 import subprocess
 from collections import defaultdict
@@ -16,6 +14,7 @@ from flask import Flask, render_template, request, Response, redirect, url_for
 from flask_login import LoginManager, login_required
 APP = Flask(__name__, template_folder="/etc/gcapi", static_url_path='/',
             static_folder='/etc/gcapi')
+from greencandle.lib.redis_conn import Redis
 from greencandle.lib.common import arg_decorator, divide_chunks, get_be_services, list_to_dict
 from greencandle.lib import config
 from greencandle.lib.flask_auth import load_user, login as loginx, logout as logoutx
@@ -204,19 +203,29 @@ def data():
     """
     route to data spreadsheets
     """
-    path = '/data/aggregate/current'
-    files = [os.path.basename(i.split('.')[0]) for i in glob.glob('{}/*.csv'.format(path))]
+    files = ['middle_200', 'STOCHRSI_8', 'volume', 'distance_12', 'middle_12', 'stoch_flat',
+             'candle_size', 'STX_200', 'bb_size', 'all', 'bbperc_diff', 'distance_200',
+             'bbperc_200', 'stx_diff']
     if request.method == 'GET':
         return render_template('data.html', files=files)
     elif request.method == 'POST':
-        results = []
-        file = open('{}/{}.csv'.format(path, request.form['submit']), 'r').readlines()
-        reader = csv.DictReader(file)
-        for row in reader:
-            results.append(dict(row))
+        results2 = []
+        redis = Redis(db=3)
+        keys = redis.conn.keys()
+        function = request.form['submit']
+        for key in keys:
+            try:
+                item = redis.conn.hmget(key, function.encode())[0].decode()
+                if 'None' not in item:
 
-        fieldnames = [key for key in results[0].keys()]
-        return render_template('data.html', results=results, fieldnames=fieldnames, len=len,
+                    pair, interval = key.decode().split(':')
+                    results2.append({'pair':pair, 'interval': interval, function: item})
+            except:
+                continue
+
+        fieldnames = [key for key in results2[0].keys()]
+
+        return render_template('data.html', results=results2, fieldnames=fieldnames, len=len,
                                files=files)
     return None
 
