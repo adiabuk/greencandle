@@ -323,8 +323,7 @@ def aggregate_data(key, pairs, intervals, res, last_res):
     symlink_force('../{}_{}.tsv'.format(key, timestr), 'current/{}.tsv'.format(key))
     symlink_force('../{}_{}.csv'.format(key, timestr), 'current/{}.csv'.format(key))
 
-@arg_decorator
-def main():
+def collect_data():
     """
     get data for all timeframes and pairs
     output data to csv files
@@ -378,6 +377,13 @@ def main():
 
     print('DONE')
 
-if __name__ == '__main__':
+@arg_decorator
+def main():
+    """
+    main function
+    """
     while True:
-        main()
+        collect_data()
+
+if __name__ == '__main__':
+    main()
