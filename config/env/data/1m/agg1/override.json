@@ -1,0 +1,8 @@
+{
+  "name": "data-be-analyse-1m-agg1",
+  "open_rule1": "agg.candle_size \u003e 1",
+  "slack_alerts": "opportunities_agg1",
+  "slack_balance": "opportunities_agg1",
+  "slack_notifications": "opportunities_agg1",
+  "slack_trades": "opportunities_agg1"
+}
