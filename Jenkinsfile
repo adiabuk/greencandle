@@ -9,7 +9,11 @@ pipeline {
         SHORT_COMMIT = "${GIT_COMMIT[0..7]}"
     }
 
-    options { disableConcurrentBuilds() }
+    options {
+        disableConcurrentBuilds()
+        buildDiscarder(logRotator(numToKeepStr: '5'))
+    }
+
 
     stages {
         stage("Start") {
