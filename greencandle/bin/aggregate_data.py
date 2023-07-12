@@ -289,7 +289,6 @@ def aggregate_data(key, pairs, intervals, res, last_res):
         redis3 = Redis(db=3)
         for item, value in redis_data.items():
             value = {k:str(v) for k, v in value.items()}
-            print(item, value)
             redis3.conn.hmset(item, value)
         if key == 'redis':
             return
@@ -368,14 +367,8 @@ def collect_data():
     if key == 'keys':
         items_1h = redis.get_items('BTCUSDT', '1h')
         keys = json.loads(redis.get_item('BTCUSDT:1h', items_1h[-1]).decode()).keys()
-        print(keys)
         sys.exit()
-    #for aggregate in aggregates:
-    #    aggregate_data(aggregate, pairs, intervals, res, last_res)
     aggregate_data('redis', pairs, intervals, res, last_res)
-
-
-    print('DONE')
 
 @arg_decorator
 def main():
