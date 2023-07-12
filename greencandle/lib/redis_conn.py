@@ -464,18 +464,18 @@ class Redis():
         return True/False
         """
         trailing_perc = float(config.main.trailing_stop_loss_perc)
+        immediate = str2bool(config.main.immediate_trailing_stop)
 
-        if trailing_perc <= 0:
+        if trailing_perc <= 0 or immediate:
             return False
 
         direction = config.main.trade_direction
-        immediate = str2bool(config.main.immediate_trailing_stop)
         trailing_start = float(config.main.trailing_start)
         if not high_price or not open_price:
             return False
-        elif direction == 'long' and self.test_data and immediate:
+        elif direction == 'long' and self.test_data:
             check = current_high
-        elif direction == 'short' and self.test_data and immediate:
+        elif direction == 'short' and self.test_data:
             check = current_low
         else:
             check = current_price
