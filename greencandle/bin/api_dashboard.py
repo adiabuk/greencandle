@@ -209,23 +209,25 @@ def data():
     if request.method == 'GET':
         return render_template('data.html', files=files)
     elif request.method == 'POST':
-        results2 = []
+        req = request.form['submit']
+        all_data = results = defaultdict(list)
         redis = Redis(db=3)
         keys = redis.conn.keys()
-        function = request.form['submit']
         for key in keys:
-            try:
-                item = redis.conn.hmget(key, function.encode())[0].decode()
-                if 'None' not in item:
+            cur_data = redis.conn.hgetall(key)
+            pair, interval = key.decode().split(':')
+            current_row = {}
+            current_row.update({'pair': pair, 'interval':interval})
+            for function, value in cur_data.items():
+                current_value = '' if b'None' in value else value.decode()
+                all_data[function.decode()].append({'pair': pair, 'interval': interval,
+                                                    function.decode(): current_value})
+                current_row.update({function.decode():current_value})
+            all_data['all'].append(current_row)
+        results = all_data[req]
+        fieldnames = [key for key in results[0].keys()]
 
-                    pair, interval = key.decode().split(':')
-                    results2.append({'pair':pair, 'interval': interval, function: item})
-            except:
-                continue
-
-        fieldnames = [key for key in results2[0].keys()]
-
-        return render_template('data.html', results=results2, fieldnames=fieldnames, len=len,
+        return render_template('data.html', results=results, fieldnames=fieldnames, len=len,
                                files=files)
     return None
 
