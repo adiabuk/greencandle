@@ -12,14 +12,15 @@ from collections import defaultdict
 import requests
 from flask import Flask, render_template, request, Response, redirect, url_for
 from flask_login import LoginManager, login_required
-APP = Flask(__name__, template_folder="/etc/gcapi", static_url_path='/',
-            static_folder='/etc/gcapi')
+import setproctitle
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.common import arg_decorator, divide_chunks, get_be_services, list_to_dict
 from greencandle.lib import config
 from greencandle.lib.flask_auth import load_user, login as loginx, logout as logoutx
-config.create_config()
 
+config.create_config()
+APP = Flask(__name__, template_folder="/etc/gcapi", static_url_path='/',
+            static_folder='/etc/gcapi')
 LOGIN_MANAGER = LoginManager()
 LOGIN_MANAGER.init_app(APP)
 LOGIN_MANAGER.login_view = "login"
@@ -245,6 +246,7 @@ def menu():
 def main():
     """API for interacting with trading system"""
 
+    setproctitle.setproctitle("api_dashboard")
     APP.run(debug=False, host='0.0.0.0', port=5000, threaded=True)
 
 if __name__ == '__main__':

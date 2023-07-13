@@ -8,6 +8,7 @@ API module for listening for JSON POST requests and playing audio alerts and act
 from pathlib import Path
 from configparser import ConfigParser
 from datetime import datetime, time
+import setproctitle
 import subprocess
 import boto3
 from flask import Flask, request, Response
@@ -118,6 +119,7 @@ def main():
     Main function
     start Flask APP on port 20000
     """
+    setproctitle.setproctitle("alert")
     APP.run(debug=False, host='0.0.0.0', port=20000, threaded=False)
 if __name__ == "__main__":
     main()

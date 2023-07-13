@@ -2,7 +2,7 @@
 #pylint: disable=wrong-import-position,wrong-import-order,no-member,logging-not-lazy,broad-except,global-statement
 
 """
-Analyze available data rom redis
+Analyze available data from redis
 Look for potential trades
 """
 import os
@@ -13,9 +13,9 @@ import sys
 import requests
 from str2bool import str2bool
 from datetime import datetime
-from greencandle.lib import config
-config.create_config()
 from pathlib import Path
+import setproctitle
+from greencandle.lib import config
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.alerts import send_slack_message
@@ -23,6 +23,8 @@ from greencandle.lib.common import get_tv_link, arg_decorator, convert_to_second
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.order import Trade
 
+config.create_config()
+INTERVAL = config.main.interval
 LOGGER = get_logger(__name__)
 PAIRS = config.main.pairs.split()
 MAIN_INDICATORS = config.main.indicators.split()
@@ -40,13 +42,11 @@ def analyse_loop():
     """
     Gather data from redis and analyze
     """
-    global TRIGGERED
-    global FORWARD
     LOGGER.debug("Recently triggered: %s" % str(TRIGGERED))
 
     Path('/var/local/greencandle').touch()
-    while glob.glob('/var/run/{}-data-{}-*'.format(config.main.base_env, config.main.interval)):
-        LOGGER.info("Waiting for initial data collection to complete for %s" % config.main.interval)
+    while glob.glob('/var/run/{}-data-{}-*'.format(config.main.base_env, INTERVAL)):
+        LOGGER.info("Waiting for initial data collection to complete for %s" % INTERVAL)
         time.sleep(30)
 
     LOGGER.debug("Start of current loop")
@@ -62,7 +62,7 @@ def analyse_pair(pair, redis):
     Analysis of individual pair
     """
     pair = pair.strip()
-    interval = config.main.interval
+
     supported = ""
     if config.main.trade_direction != "short":
         supported += "spot "
@@ -77,13 +77,13 @@ def analyse_pair(pair, redis):
     LOGGER.debug("Analysing pair: %s" % pair)
     try:
         result, event, current_time, current_price, match = \
-                redis.get_rule_action(pair=pair, interval=interval)
+                redis.get_rule_action(pair=pair, interval=INTERVAL)
 
         if result in ('OPEN', 'CLOSE'):
             LOGGER.debug("Trades to %s" % result.lower())
             now = datetime.now()
-            items = redis.get_items(pair, interval)
-            data = redis.get_item("{}:{}".format(pair, interval), items[-1]).decode()
+            items = redis.get_items(pair, INTERVAL)
+            data = redis.get_item("{}:{}".format(pair, INTERVAL), items[-1]).decode()
             # Only alert on a given pair once per hour
             # for each strategy
             if pair in TRIGGERED:
@@ -92,17 +92,17 @@ def analyse_pair(pair, redis):
                 if str2bool(config.main.wait_between_trades) and diff.total_seconds() < \
                         convert_to_seconds(config.main.time_between_trades):
                     LOGGER.debug("Skipping notification for %s %s as recently triggered"
-                                 % (pair, interval))
+                                 % (pair, INTERVAL))
                     return
                 LOGGER.debug("Triggering alert: last alert %s hours ago" % diff_in_hours)
 
             TRIGGERED[pair] = now
             send_slack_message("notifications", "%s %s: %s %s %s (%s) - %s Data: %s" %
                                (result.lower(), str(match['{}'.format(result.lower())]),
-                                get_tv_link(pair, interval), interval,
+                                get_tv_link(pair, INTERVAL), INTERVAL,
                                 config.main.name, supported.strip(), current_time,
                                 data), emoji=True,
-                               icon=':{0}-{1}:'.format(interval, config.main.trade_direction))
+                               icon=':{0}-{1}:'.format(INTERVAL, config.main.trade_direction))
             if config.main.trade_direction == 'long' and result == 'OPEN':
                 action = 1
             elif config.main.trade_direction == 'short' and result == 'OPEN':
@@ -112,7 +112,7 @@ def analyse_pair(pair, redis):
 
 
             details = [[pair, current_time, current_price, event, action]]
-            trade = Trade(interval=interval, test_trade=True, test_data=False, config=config)
+            trade = Trade(interval=INTERVAL, test_trade=True, test_data=False, config=config)
             if result == 'OPEN' and STORE_IN_DB:
                 LOGGER.info("opening data trade for %s" % pair)
                 trade.open_trade(details)
@@ -135,12 +135,12 @@ def analyse_pair(pair, redis):
                     requests.post(url, json.dumps(payload), timeout=10,
                                   headers={'Content-Type': 'application/json'})
                     LOGGER.info("forwarding %s %s/%s trade to: %s/%s"
-                                % (pair, interval, config.main.trade_direction, env, strategy))
+                                % (pair, INTERVAL, config.main.trade_direction, env, strategy))
 
                 except requests.exceptions.RequestException:
                     pass
 
-            LOGGER.info("Trade alert: %s %s %s (%s)" % (pair, interval,
+            LOGGER.info("Trade alert: %s %s %s (%s)" % (pair, INTERVAL,
                                                         config.main.trade_direction,
                                                         supported.strip()))
     except Exception as err_msg:
@@ -155,8 +155,11 @@ def main():
     Usage: analyse_data
     """
     global FORWARD
+    fwd_str = ''
     if len(sys.argv) > 1 and sys.argv[1] == "forward":
         FORWARD = True
+        fwd_str = "-forward"
+    setproctitle.setproctitle("analyse_data-$interval$forward".substitute(INTERVAL, fwd_str))
     while True:
         analyse_loop()
 

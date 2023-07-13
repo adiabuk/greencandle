@@ -1,4 +1,4 @@
-#pylint: disable=no-member, global-statement, unused-argument
+#pylint: disable=no-member,unused-argument
 
 """
 Stream candle data from binance and make latest data available through flask
@@ -10,11 +10,14 @@ import logging
 import threading
 import websocket
 from flask import Flask, request, Response
+import setproctitle
+from greencandle.lib import config
 from greencandle.lib.logger import get_logger
 from greencandle.lib.common import arg_decorator
 from greencandle.lib.alerts import send_slack_message
-from greencandle.lib import config
+
 config.create_config()
+INTERVAL = config.main.interval
 APP = Flask(__name__)
 LOGGER = get_logger(__name__)
 RECENT = {}
@@ -22,7 +25,7 @@ CLOSED = {}
 PAIR_STRING = ""
 
 for pair in config.main.pairs.split():
-    PAIR_STRING += "/{}@kline_{}".format(pair.lower(), config.main.interval)
+    PAIR_STRING += "/{}@kline_{}".format(pair.lower(), INTERVAL)
 
 def on_open(socket):
     """
@@ -35,8 +38,6 @@ def on_message(socket, message):
     """
     When data received through socket
     """
-    global RECENT
-    global CLOSED
     json_message = json.loads(message)
     candle = json_message['data']['k']
     current_dict = {'openTime': candle['t'], 'closeTime': candle['T'], 'open': candle['o'],
@@ -107,7 +108,7 @@ def main():
 
     For use in data environment, uses pairs and interval within scope
     """
-
+    setproctitle.setproctitle("stream_data-$interval".substitute(INTERVAL))
     t_flask = threading.Thread(target=start_flask)
     t_ws = threading.Thread(target=start_ws)
 

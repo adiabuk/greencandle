@@ -10,14 +10,15 @@ import atexit
 from flask import Flask, request, Response
 from apscheduler.schedulers.background import BackgroundScheduler
 from rq import Queue, Worker
+import setproctitle
 from greencandle.lib import config
-config.create_config()
 from greencandle.lib.run import ProdRunner
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.common import arg_decorator
 from greencandle.lib.logger import get_logger
 from greencandle.lib.api_queue import add_to_queue
 
+config.create_config()
 TEST = bool(len(sys.argv) > 1 and sys.argv[1] == '--test')
 APP = Flask(__name__)
 LOGGER = get_logger(__name__)
@@ -67,8 +68,11 @@ def main():
     Receives trade requests from web front-end/API/router and
     open/close trade as appropriate
 
-    Usage: backend_api [--test] [api]
+    Usage: backend_api [--test] [api|queue]
     """
+    test_str = '-test' if TEST else ''
+    setproctitle.setproctitle("backend_api-$func$test".substitute(func=sys.argv[-1],
+                                               test=test_str))
     if sys.argv[-1] == 'api':
         if "intermittent" in os.environ:
             scheduler = BackgroundScheduler()

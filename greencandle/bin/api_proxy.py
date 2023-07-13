@@ -5,6 +5,7 @@ Flask based web proxy
 """
 from flask import Flask, request, Response
 import requests
+import setproctitle
 from greencandle.lib.common import arg_decorator
 
 APP = Flask(__name__, static_url_path='/not_static')
@@ -46,7 +47,9 @@ def proxy(path="/"):
 
 @arg_decorator
 def main():
-    """proxy request to another host"""
+    """proxy api/web requests to another hosts"""
+
+    setproctitle.setproctitle("api_proxy")
     APP.run(debug=False, host='0.0.0.0', port=5000)
 
 if __name__ == '__main__':

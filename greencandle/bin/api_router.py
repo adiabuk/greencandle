@@ -11,12 +11,13 @@ import json
 from pathlib import Path
 import requests
 from flask import Flask, request, Response
+import setproctitle
 from greencandle.lib.common import arg_decorator
 from greencandle.lib import config
-config.create_config()
 from greencandle.lib.logger import get_logger
 from greencandle.lib.mysql import Mysql
 
+config.create_config()
 TEST = bool(len(sys.argv) > 1 and sys.argv[1] == '--test')
 APP = Flask(__name__)
 LOGGER = get_logger(__name__)
@@ -126,6 +127,7 @@ def main():
 
     Usage: api_router
     """
+    setproctitle.setproctitle("api_router")
     APP.run(debug=False, host='0.0.0.0', port=1080, threaded=True)
 if __name__ == "__main__":
     main()

@@ -6,6 +6,7 @@ Flask module to provide web interface for tailing /var/log/syslog
 
 import os
 import time
+import setproctitle
 from flask import Flask, render_template
 from flask_login import LoginManager, login_required
 from greencandle.lib.common import arg_decorator
@@ -46,6 +47,7 @@ def stream():
 @arg_decorator
 def main():
     """Web interface for current host syslog"""
+    setproctitle.setproctitle("logtailer")
     APP.run(debug=False, host='0.0.0.0', port=2000, threaded=True)
 
 if __name__ == '__main__':

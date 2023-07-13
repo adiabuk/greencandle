@@ -5,13 +5,14 @@ Collect OHLC and strategy data for later analysis
 """
 import os
 from pathlib import Path
+import setproctitle
 from greencandle.lib import config
 from greencandle.lib.alerts import send_slack_message
-config.create_config()
 from greencandle.lib.run import ProdRunner
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.common import arg_decorator
 
+config.create_config()
 LOGGER = get_logger(__name__)
 PAIRS = config.main.pairs.split()
 MAIN_INDICATORS = config.main.indicators.split()
@@ -50,6 +51,7 @@ def main():
     """
 
     interval = config.main.interval
+    setproctitle.setproctitle("get_data-$name".substitute(interval))
     send_slack_message('alerts', "Starting initial prod run")
     LOGGER.info("Starting initial prod run")
     name = config.main.name.split('-')[-1]

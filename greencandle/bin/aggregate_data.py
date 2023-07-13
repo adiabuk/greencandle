@@ -11,6 +11,7 @@ import time
 import os
 import errno
 from collections import defaultdict
+import setproctitle
 from greencandle.lib import config
 from greencandle.lib.common import perc_diff, arg_decorator
 from greencandle.lib.redis_conn import Redis
@@ -375,6 +376,7 @@ def main():
     """
     main function
     """
+    setproctitle.setproctitle('aggregate_data')
     while True:
         collect_data()
 
