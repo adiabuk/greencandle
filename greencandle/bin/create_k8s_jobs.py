@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=cell-var-from-loop,
+#pylint: disable=consider-using-with,cell-var-from-loop
 
 """
 Create k8s job files using template file and given substitution variables
@@ -31,11 +31,10 @@ def main():
                "$STRATEGY": args.name.lower(), "$YEAR": args.year, "$INTERVAL": args.interval}
 
         rep = dict((re.escape(k), v) for k, v in rep.items())
-        print(rep)
         pattern = re.compile("|".join(rep.keys()))
         text = pattern.sub(lambda m: rep[re.escape(m.group(0))], contents)
 
-        with open('{}/job-{}.yaml'.format(args.name.lower(), pair), 'w') as handle:
+        with open(f'{args.name.lower()}/job-{pair}.yaml', 'w') as handle:
             handle.write(text)
 
 if __name__ == '__main__':

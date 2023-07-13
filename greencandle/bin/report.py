@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-position,no-member
+#pylint: disable=no-member
 
 """
 Create Excel Spreadsheet with results and analysis of trades
@@ -9,7 +9,6 @@ import sys
 import openpyxl
 from greencandle.lib.common import arg_decorator
 from greencandle.lib import config
-config.create_config()
 from greencandle.lib.mysql import Mysql
 
 @arg_decorator
@@ -28,6 +27,8 @@ def main():
 
     interval = sys.argv[1]
     filename = sys.argv[2]
+    config.create_config()
+
     workbook = openpyxl.Workbook()
     workbook.remove(workbook.get_sheet_by_name('Sheet'))
     if config.main.trade_direction == 'short':

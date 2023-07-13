@@ -21,9 +21,9 @@ def get_bb_size(pair, interval, res, timeframe='12'):
     percent between upper and lower bb
     """
     try:
-        bb_diff = abs(perc_diff(res[interval][pair]['bb_{}'.format(timeframe)][0],
-                                res[interval][pair]['bb_{}'.format(timeframe)][2]))
-        bb_diff = '{:.2f}'.format(bb_diff)
+        bb_diff = abs(perc_diff(res[interval][pair][f'bb_{timeframe}'][0],
+                                res[interval][pair][f'bb_{timeframe}'][2]))
+        bb_diff = f'{bb_diff:.2f}'
     except KeyError:
         bb_diff = ''
 
@@ -36,9 +36,9 @@ def get_indicator_value(pair, interval, res, indicator):
     try:
         value = res[interval][pair][indicator]
         if "bbperc" in indicator:
-            return "{:.2f}".format(value) if value is not None else None
+            return f"{value:.2f}" if value is not None else None
         elif "STOCH" in indicator:
-            return "{:.2f}".format(value[0]), "{:.2f}".format(value[1])
+            return f"{value[0]:.2f}", f"{value[1]:.2f}"
         else:
             return value
     except KeyError:
@@ -51,11 +51,11 @@ def get_stoch_flat(pair, interval, res, last_res):
     try:
         if round(sum(res[interval][pair]['STOCHRSI_8'])/2) >= 100 and \
                 round(sum(last_res[interval][pair]['STOCHRSI_8'])/2) >= 100:
-            value = '{:.2f}'.format(sum(res[interval][pair]['STOCHRSI_8'])/2)
+            value = f"{sum(res[interval][pair]['STOCHRSI_8'])/2:.2f}"
 
         elif round(sum(res[interval][pair]['STOCHRSI_8'])/2) <= 0 and \
                 round(sum(last_res[interval][pair]['STOCHRSI_8'])/2) <= 0:
-            value = '{:.2f}'.format(sum(res[interval][pair]['STOCHRSI_8'])/2)
+            value = f"{sum(res[interval][pair]['STOCHRSI_8'])/2:.2f}"
         else:
             value = None
         return value
@@ -70,7 +70,7 @@ def get_bbperc_diff(pair, interval, res, last_res):
         bb_from = last_res[interval][pair]['bbperc_200']
         bb_to = res[interval][pair]['bbperc_200']
         diff = abs(bb_from - bb_to)
-        return '{:.2f}'.format(bb_from), '{:.2f}'.format(bb_to), '{:.2f}'.format(diff)
+        return f'{bb_from:.2f}', f'{bb_to:.2f}', f'{diff:.2f}'
     except (TypeError, KeyError):
         return None, None, None
 
@@ -88,7 +88,7 @@ def get_stx_diff(pair, interval, res, last_res):
         else:
             result = 'hodl'
 
-        return '{:.2f}'.format(stx_from), '{:.2f}'.format(stx_to), result
+        return f'{stx_from:.2f}', f'{stx_to:.2f}', result
     except (TypeError, KeyError):
         return None, None, None
 
@@ -111,7 +111,7 @@ def get_candle_size(pair, interval, res, last_res):
                        abs(perc_diff(res[interval][pair]['ohlc']['low'],
                                      last_res[interval][pair]['ohlc']['high'])))
 
-        return '{:.2f}'.format(max_diff)
+        return f'{max_diff:.2f}'
     except:
         return None
 
@@ -128,7 +128,7 @@ def get_middle_distance(pair, interval, res, timeframe='12'):
             direction = 'below'
         else:
             direction = 'above'
-        return direction, '{:.2f}'.format(abs(distance))
+        return direction, f'{abs(distance):.2f}'
     except KeyError:
         return None, None
 
@@ -154,7 +154,7 @@ def get_distance(pair, interval, res, timeframe='12'):
             direction = 'lower'
         else:
             return None, None
-        return direction, '{:.2f}'.format(distance_diff)
+        return direction, f'{distance_diff:.2f}'
     except KeyError:
         return None, None
 
@@ -276,7 +276,7 @@ def aggregate_data(key, pairs, intervals, res, last_res):
                 bbperc_200 = get_indicator_value(pair, interval, res, 'bbperc_200')
                 stx_200 = get_indicator_value(pair, interval, res, 'STX_200')
                 stoch = get_indicator_value(pair, interval, res, 'STOCHRSI_8')
-                redis_data['{}:{}'.format(pair, interval)] = \
+                redis_data[f'{pair}:{interval}'] = \
                 {'distance_12':distance_12, 'distance_200': distance_200,
                  'candle_size': candle_size, 'middle_12': middle_12, 'middle_200': middle_200,
                  'stoch_flat': stoch_flat, 'bb_size': bb_size, 'bbperc_200': bbperc_200}
@@ -284,7 +284,6 @@ def aggregate_data(key, pairs, intervals, res, last_res):
                 data.append([pair, interval, distance_12, distance_200, candle_size, middle_12,
                              middle_200, stoch_flat, bb_size, bbperc_diff, bbperc_200, stoch,
                              stx_200])
-
 
         # save to redis, overwriting previous value
         redis3 = Redis(db=3)
@@ -305,13 +304,13 @@ def aggregate_data(key, pairs, intervals, res, last_res):
 
     # save as csv
     timestr = time.strftime("%Y%m%d-%H%M%S")
-    with open('/data/aggregate/{}_{}.csv'.format(key, timestr),
+    with open(f'/data/aggregate/{key}_{timestr}.csv',
               'w', encoding='UTF8', newline='') as handle:
         writer = csv.writer(handle)
         writer.writerows(data)
 
     # save as tsv
-    with open('/data/aggregate/{}_{}.tsv'.format(key, timestr),
+    with open(f'/data/aggregate/{key}_{timestr}.tsv',
               'w', encoding='UTF8', newline='') as handle:
         # remove spaces from lists for cmd line parsing
         new_list = [[str(x).replace(' ', '') for x in y] for y in data]
@@ -320,8 +319,8 @@ def aggregate_data(key, pairs, intervals, res, last_res):
 
     # create/overwrite symlink to most recent file
     os.chdir('/data/aggregate')
-    symlink_force('../{}_{}.tsv'.format(key, timestr), 'current/{}.tsv'.format(key))
-    symlink_force('../{}_{}.csv'.format(key, timestr), 'current/{}.csv'.format(key))
+    symlink_force(f'../{key}_{timestr}.tsv', 'current/{key}.tsv')
+    symlink_force(f'../{key}_{timestr}.csv', 'current/{key}.csv')
 
 def collect_data():
     """
@@ -357,9 +356,9 @@ def collect_data():
     for pair in pairs:
         for interval in intervals:
             try:
-                res[interval][pair] = json.loads(redis.get_item('{}:{}'.format(pair, interval),
+                res[interval][pair] = json.loads(redis.get_item(f'{pair}:{interval}',
                                                                 items[interval][pair][-1]).decode())
-                last_res[interval][pair] = json.loads(redis.get_item('{}:{}'.format(pair, interval),
+                last_res[interval][pair] = json.loads(redis.get_item(f'{pair}:{interval}',
                                                                      items[interval][pair][-2])
                                                       .decode())
 

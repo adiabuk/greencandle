@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-position,no-member,too-many-locals
+#pylint: disable=too-many-locals
 
 """
 Create Excel Spreadsheet with results and analysis of trades
@@ -10,8 +10,8 @@ import openpyxl
 from greencandle.lib import config
 from greencandle.lib.balance_common import get_quote, get_base
 from greencandle.lib.common import arg_decorator
-config.create_config()
 from greencandle.lib.mysql import Mysql
+
 
 @arg_decorator
 def main():
@@ -34,6 +34,8 @@ def main():
         sys.exit(1)
 
     filename = sys.argv[1]
+
+    config.create_config()
     workbook = openpyxl.Workbook()
     workbook.remove(workbook.get_sheet_by_name('Sheet'))
     query = """Select open_time, close_time, pair, quote_in, quote_out, base_in, base_out,

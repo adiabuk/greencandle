@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-order,no-member
+#pylint: disable=no-member
 
 """
 Test authentication to binance

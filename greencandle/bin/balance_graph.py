@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-position,no-member
 
 """
 Create OHLC graph using daily balance
@@ -9,9 +8,10 @@ import numpy
 import pandas
 from greencandle.lib.common import arg_decorator
 from greencandle.lib import config
-config.create_config()
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.graph import Graph
+
+config.create_config()
 
 @arg_decorator
 def main():

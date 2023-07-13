@@ -1,22 +1,19 @@
 #!/usr/bin/env python
-#pylint:disable=no-member,wrong-import-position,c-extension-no-member
+#pylint:disable=no-member
 #PYTHON_ARGCOMPLETE_OK
 """
 Run module with test data
 """
 
-import sys
 import argparse
 import argcomplete
 import setproctitle
 
 from greencandle.lib import config
-# config is required before loading other modules as it is global
-config.create_config()
-
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.run import serial_test, parallel_test
 
+config.create_config()
 LOGGER = get_logger(__name__)
 GET_EXCEPTIONS = exception_catcher((Exception))
 
@@ -47,5 +44,4 @@ def main():
         parallel_test(pairs, parallel_interval, args.data_dir, main_indicators)
 
 if __name__ == "__main__":
-    sys.exit()
     main()

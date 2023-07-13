@@ -1,12 +1,11 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-position,no-member
+#pylint: disable=no-member,too-many-locals
 """
 Get details of current trades using mysql and current value from binance
 """
 
 import sys
 from greencandle.lib import config
-config.create_config()
 from greencandle.lib.logger import exception_catcher
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.redis_conn import Redis
@@ -14,6 +13,7 @@ from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.common import (get_tv_link, QUOTES, arg_decorator, divide_chunks,
                                     list_to_dict, get_be_services, get_trade_link)
 
+config.create_config()
 GET_EXCEPTIONS = exception_catcher((Exception))
 
 @GET_EXCEPTIONS
@@ -31,11 +31,11 @@ def main():
     dbase.get_active_trades()
     redis = Redis(db=2)
     query_filter = sys.argv[1] if len(sys.argv) > 1 else ""
-    name = "{}-{}".format(sys.argv[0].split('/')[-1], query_filter if query_filter else "all")
-    query = ('select pair, name, open_time, concat(round(perc,2), " (", '
-             'round(net_perc,2), ")") as perc, open_price, '
-             '`interval`, direction from open_trades where name like "%{}%" order '
-             'by perc +0 ASC'.format(query_filter))
+    name = f"{sys.argv[0].rsplit('/', maxsplit=1)[-1]}-{query_filter if query_filter else 'all'}"
+    query = (f'select pair, name, open_time, concat(round(perc,2), " (", '
+             f'round(net_perc,2), ")") as perc, open_price, '
+             f'`interval`, direction from open_trades where name like "%{query_filter}%" order '
+             f'by perc +0 ASC')
     services = list_to_dict(get_be_services(config.main.base_env), reverse=False, str_filter='-be-')
     open_trades = dbase.fetch_sql_data(query, header=False)
     header = ["pair", "name", "open_time", "perc", "open_price", "link", "tpsl"]
@@ -45,15 +45,15 @@ def main():
         output = ""
 
         for trade in chunk:
-            trade_direction = "{}-{}".format(trade[1], trade[6]) if \
+            trade_direction = f"{trade[1]}-{trade[6]}" if \
                     not (trade[1].endswith('long') or trade[1].endswith('short')) else trade[1]
             try:
                 short_name = services[trade_direction]
 
                 trade[1] = short_name
-                take = redis.conn.get("{}:{}:{}".format(trade[0], 'take_profit_perc', short_name))
-                stop = redis.conn.get("{}:{}:{}".format(trade[0], 'stop_loss_perc', short_name))
-                tpsl = "{}/{}".format(take.decode(), stop.decode())
+                take = redis.conn.get(f"{trade[0]}:take_profit_perc:{short_name}")
+                stop = redis.conn.get(f"{trade[0]}:stop_loss_perc:{short_name}")
+                tpsl = f"{take.decode()}/{stop.decode()}"
                 link = get_trade_link(trade[0], short_name, 'close', 'close_now',
                                       config.web.nginx_port)
             except (AttributeError, KeyError, IndexError):

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-member, wrong-import-position,no-else-return,logging-not-lazy,broad-except
+#pylint: disable=no-member,broad-except
 """
 Flask module for manipulating API trades and displaying relevent graphs
 """
@@ -13,6 +13,7 @@ from greencandle.lib import config
 from greencandle.lib.common import arg_decorator
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.logger import get_logger
+
 config.create_config()
 LONG = set()
 SHORT = set()
@@ -35,16 +36,16 @@ def analyse_loop():
     Gather data from redis and analyze
     """
 
-    while glob.glob('/var/run/{}-data-{}-*'.format(config.main.base_env, config.main.interval)):
-        LOGGER.info("Waiting for initial data collection to complete for %s"
-                    % config.main.interval)
+    while glob.glob(f'/var/run/{config.main.base_env}-data-{config.main.interval}-*'):
+        LOGGER.info("Waiting for initial data collection to complete for %s",
+                    config.main.interval)
         time.sleep(30)
 
 
     redis = Redis()
     for pair in PAIRS:
         pair = pair.strip()
-        LOGGER.debug("Analysing pair: %s" % pair)
+        LOGGER.debug("Analysing pair: %s", pair)
         try:
             result = redis.get_action(pair=pair, interval=config.main.interval)
 
@@ -59,7 +60,7 @@ def analyse_loop():
                 ALL[pair]['action'] = 'close'
 
         except Exception as err_msg:
-            LOGGER.critical("Error with pair %s %s" % (pair, str(err_msg)))
+            LOGGER.critical("Error with pair %s %s", pair, str(err_msg))
     LOGGER.info("End of current loop")
     del redis
 
@@ -78,12 +79,11 @@ def get_trend():
     pair = request.args.get('pair')
     if pair in LONG:
         return "long"
-    elif pair in SHORT:
+    if pair in SHORT:
         return "short"
-    elif not pair:
+    if not pair:
         return {"long": list(LONG), "short": list(SHORT)}
-    else:
-        return "Invalid Pair"
+    return "Invalid Pair"
 
 @APP.route('/get_stoch', methods=["GET"])
 def get_stoch():

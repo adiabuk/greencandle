@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-member
+#pylint: disable=no-member,too-many-locals
 """
 Report quote currencies and available trading funds
 """
@@ -35,7 +35,7 @@ def main():
     client = binance_auth()
     results = get_spot_details(bal) + get_cross_margin_details(client) + \
             get_isolated_margin_details(bal, client)
-    send_slack_message('balance', results, name=sys.argv[0].split('/')[-1])
+    send_slack_message('balance', results, name=sys.argv[0].rsplit('/', maxsplit=1)[-1])
 
 def get_spot_details(bal=None):
     """
@@ -47,8 +47,8 @@ def get_spot_details(bal=None):
     results += "Spot Account:\n"
     for quote in QUOTES:
         try:
-            results += "\t{} {} {}\n".format(quote, bal['binance'][quote]['count'],
-                                             format_usd(bal['binance'][quote]['USD']))
+            results += (f"\t{quote} {bal['binance'][quote]['count']} "
+                        "{format_usd(bal['binance'][quote]['USD']}\n")
 
         except KeyError:  # Zero Balance
             continue
@@ -75,15 +75,15 @@ def get_cross_margin_details(client=None):
     usd_debts_total = 0
     for key, val in debts.items():
         usd_debt = val if 'USD' in key else base2quote(val, key+'USDT')
-        results += "\t{} debt: {} ({})\n".format(key, "{:.5f}".format(val), format_usd(usd_debt))
+        results += f"\t{key} debt: {val:.5f} ({format_usd(usd_debt)})\n"
         usd_debts_total += usd_debt
     if usd_debts_total > 0:
-        results += "\tTotal debts: " + format_usd(usd_debts_total)+"\n"
+        results += f"\tTotal debts: {format_usd(usd_debts_total)}\n"
 
 
     for key, val in free.items():
         usd_debt = val if 'USD' in key else base2quote(val, key+'USDT')
-        results += "\t{} free: {} ({})\n".format(key, "{:.5f}".format(val), format_usd(usd_debt))
+        results += f"\t{key} free: {val:.5f} ({format_usd(usd_debt)})\n"
     return results
 
 def get_isolated_margin_details(bal=None, client=None):
@@ -106,7 +106,7 @@ def get_isolated_margin_details(bal=None, client=None):
             usd = max_borrow if 'USD' in quote else base2quote(max_borrow, quote+'USDT')
 
             if usd > 0:
-                results += "\tAvailable to borrow {}: {}\n".format(pair, format_usd(usd))
+                results += f"\tAvailable to borrow {pair}: {format_usd(usd)}\n"
                 count += 1
 
             # Isolated debt
@@ -131,14 +131,14 @@ def get_isolated_margin_details(bal=None, client=None):
                     base2quote(quote_free, get_quote(pair)+'USDT')
 
             if iso_debt_usd > 0:
-                results += "\tTotal debts {}: {}\n".format(pair, format_usd(iso_debt_usd))
+                results += f"\tTotal debts {pair}: {format_usd(iso_debt_usd)}\n"
 
             if base_free > 0:
-                results += "\t{} free: {} ({})\n".format(get_base(pair), base_free,
-                                                         format_usd(base_free_usd))
+                results += f"\t{get_base(pair)} free: {base_free} ({format_usd(base_free_usd)})\n"
+
             if quote_free > 0:
-                results += "\t{} free: {} ({})\n".format(get_quote(pair), quote_free,
-                                                         format_usd(quote_free_usd))
+                results += (f"\t{get_quote(pair)} free: {quote_free} "
+                            f"({format_usd(quote_free_usd)})\n")
 
     if count == 0:
         results += "\tNone available"

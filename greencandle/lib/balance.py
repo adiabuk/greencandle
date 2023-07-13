@@ -1,11 +1,9 @@
-#pylint: disable=no-member,unused-import,logging-not-lazy
+#pylint: disable=no-member
 
 """Get account value from binance and coinbase """
 
 from __future__ import print_function
-import json
 from requests.exceptions import ReadTimeout
-from greencandle.lib.alerts import send_slack_message
 from greencandle.lib import config
 from greencandle.lib.binance_accounts import get_binance_spot, get_binance_cross, \
         get_binance_isolated
@@ -147,7 +145,7 @@ class Balance(dict):
         for key, val in bal.items():
             result = self.check_balance(val)
             if not result:
-                LOGGER.info("Error: invalid balance entry for %s" % key)
+                LOGGER.info("Error: invalid balance entry for %s", key)
 
         binance_usd = bal['margin']['TOTALS']['USD'] + bal['binance']['TOTALS']['USD'] + \
                       bal['isolated']['TOTALS']['USD']
@@ -162,12 +160,12 @@ class Balance(dict):
         totals_btc = float(binance_btc) + float(phemex_btc)
         totals_usd = float(binance_usd) + float(phemex_usd)
 
-        balances = ["Binance USD = ${:,.2f}".format(binance_usd),
-                    "Binance BTC = ฿{}".format(round(binance_btc, 5)),
-                    "Phemex USD = ${:,.2f}".format(phemex_usd),
-                    "Phemex BTC = ฿{}".format(round(phemex_btc, 5)),
-                    "TOTAL USD = ${:,.2f}".format(totals_usd),
-                    "TOTAL BTC = ฿{}".format(round(totals_btc, 5))]
+        balances = [f"Binance USD = ${binance_usd:,.2f}",
+                    f"Binance BTC = ฿{binance_btc}",
+                    f"Phemex USD = ${phemex_usd:,.2f}",
+                    f"Phemex BTC = ฿{round(phemex_btc, 5)}",
+                    f"TOTAL USD = ${totals_usd:,.2f}",
+                    f"TOTAL BTC = ฿{round(totals_btc, 5)}"]
 
         bal_str = '\n'.join(balances) + '\n'
         return bal_str

@@ -22,9 +22,9 @@ def main():
     base = get_base(pair)
 
     for asset in quote, base:
-        print("Transferring {} {} for pair:{}".format(asset, direction, pair))
+        print(f"Transferring {asset} {direction} for pair:{pair}")
         result = client.transfer_isolated(symbol=pair, asset=asset, direction=direction)
-        print("Result: {}".format(result))
+        print(f"Result: {result}")
 
 
 

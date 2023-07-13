@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-order
 """
 Calculate potential profits from historical data
 """

@@ -25,7 +25,7 @@ def main():
     if dbase.trade_in_context(pair, name, direction):
         take_profit = redis.get_on_entry(pair, 'take_profit_perc')
         stop_loss = redis.get_on_entry(pair, 'stop_loss_perc')
-        print("TP: {}\nSL: {}".format(take_profit, stop_loss))
+        print(f"TP: {take_profit}\nSL: {stop_loss}")
     else:
         print("No open trades in current context")
 

@@ -15,7 +15,7 @@ def get_price(pair, str_time):
     pattern = '%Y-%m-%d %H:%M:%S'
     epoch = int(time.mktime(time.strptime(str(str_time), pattern)))
     interval = '5m'
-    klines = get_all_klines(pair, interval, start_time='{}000'.format(epoch), no_of_klines=1)
+    klines = get_all_klines(pair, interval, start_time=f'{epoch}000', no_of_klines=1)
 
     return klines[0]['close']
 
@@ -41,10 +41,9 @@ def main():
         open_gbp_rate = float(open_usd_rate)/float(get_price('GBPUSDT', open_time))
         close_gbp_rate = float(close_usd_rate)/float(get_price('GBPUSDT', close_time))
 
-        update = ('update trades set new_open_usd_rate="{}", new_open_gbp_rate="{}", '
-                  'new_close_usd_rate="{}", new_close_gbp_rate="{}"  '
-                  'where id="{}"'.format(open_usd_rate, open_gbp_rate, close_usd_rate,
-                                         close_gbp_rate, trade_id))
+        update = (f'update trades set new_open_usd_rate="{open_usd_rate}", '
+                  f'new_open_gbp_rate="{open_gbp_rate}", new_close_usd_rate="{close_usd_rate}", '
+                  f'new_close_gbp_rate="{close_gbp_rate}"  where id="{trade_id}"')
         dbase.run_sql_statement(update)
         print("\n\n\n")
 

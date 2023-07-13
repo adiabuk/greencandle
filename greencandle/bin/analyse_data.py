@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-position,wrong-import-order,no-member,logging-not-lazy,broad-except,global-statement
+#pylint: disable=no-member,global-statement,too-many-locals,broad-except
 
 """
 Analyze available data from redis
@@ -10,11 +10,11 @@ import time
 import glob
 import json
 import sys
-import requests
-from str2bool import str2bool
 from datetime import datetime
 from pathlib import Path
+import requests
 import setproctitle
+from str2bool import str2bool
 from greencandle.lib import config
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.logger import get_logger, exception_catcher
@@ -42,11 +42,11 @@ def analyse_loop():
     """
     Gather data from redis and analyze
     """
-    LOGGER.debug("Recently triggered: %s" % str(TRIGGERED))
+    LOGGER.debug("Recently triggered: %s", str(TRIGGERED))
 
     Path('/var/local/greencandle').touch()
-    while glob.glob('/var/run/{}-data-{}-*'.format(config.main.base_env, INTERVAL)):
-        LOGGER.info("Waiting for initial data collection to complete for %s" % INTERVAL)
+    while glob.glob(f'/var/run/{config.main.base_env}-data-{INTERVAL}-*'):
+        LOGGER.info("Waiting for initial data collection to complete for %s", INTERVAL)
         time.sleep(30)
 
     LOGGER.debug("Start of current loop")
@@ -74,16 +74,16 @@ def analyse_pair(pair, redis):
         # don't analyse pair if spot/isolated/cross not supported
         return
 
-    LOGGER.debug("Analysing pair: %s" % pair)
+    LOGGER.debug("Analysing pair: %s", pair)
     try:
         result, event, current_time, current_price, match = \
                 redis.get_rule_action(pair=pair, interval=INTERVAL)
 
         if result in ('OPEN', 'CLOSE'):
-            LOGGER.debug("Trades to %s" % result.lower())
+            LOGGER.debug("Trades to %s", result.lower())
             now = datetime.now()
             items = redis.get_items(pair, INTERVAL)
-            data = redis.get_item("{}:{}".format(pair, INTERVAL), items[-1]).decode()
+            data = redis.get_item(f"{pair}:{INTERVAL}", items[-1]).decode()
             # Only alert on a given pair once per hour
             # for each strategy
             if pair in TRIGGERED:
@@ -91,18 +91,18 @@ def analyse_pair(pair, redis):
                 diff_in_hours = diff.total_seconds() / 3600
                 if str2bool(config.main.wait_between_trades) and diff.total_seconds() < \
                         convert_to_seconds(config.main.time_between_trades):
-                    LOGGER.debug("Skipping notification for %s %s as recently triggered"
-                                 % (pair, INTERVAL))
+                    LOGGER.debug("Skipping notification for %s %s as recently triggered",
+                                 pair, INTERVAL)
                     return
-                LOGGER.debug("Triggering alert: last alert %s hours ago" % diff_in_hours)
+                LOGGER.debug("Triggering alert: last alert %s hours ago", diff_in_hours)
 
             TRIGGERED[pair] = now
-            send_slack_message("notifications", "%s %s: %s %s %s (%s) - %s Data: %s" %
-                               (result.lower(), str(match['{}'.format(result.lower())]),
-                                get_tv_link(pair, INTERVAL), INTERVAL,
-                                config.main.name, supported.strip(), current_time,
-                                data), emoji=True,
-                               icon=':{0}-{1}:'.format(INTERVAL, config.main.trade_direction))
+            msg = (f"{result.lower()}, {str(match[result.lower()])}: {get_tv_link(pair, INTERVAL)} "
+                   f"{INTERVAL} {config.main.name} ({supported.strip()}) - {current_time} "
+                   f"Data: {data}")
+
+            send_slack_message("notifications", msg, emoji=True,
+                               icon=f':{INTERVAL}-{config.main.trade_direction}:')
             if config.main.trade_direction == 'long' and result == 'OPEN':
                 action = 1
             elif config.main.trade_direction == 'short' and result == 'OPEN':
@@ -114,17 +114,17 @@ def analyse_pair(pair, redis):
             details = [[pair, current_time, current_price, event, action]]
             trade = Trade(interval=INTERVAL, test_trade=True, test_data=False, config=config)
             if result == 'OPEN' and STORE_IN_DB:
-                LOGGER.info("opening data trade for %s" % pair)
+                LOGGER.info("opening data trade for %s", pair)
                 trade.open_trade(details)
             elif result == 'CLOSE' and STORE_IN_DB:
-                LOGGER.info("closing data trade for %s" % pair)
+                LOGGER.info("closing data trade for %s", pair)
                 trade.close_trade(details)
 
             if FORWARD:
-                url = "http://router:1080/{}".format(config.web.api_token)
+                url = f"http://router:1080/{config.web.api_token}"
                 env, host, strategy = config.web.forward.split(',')
                 payload = {"pair": pair,
-                           "text": "forwarding trade from {}".format(config.main.name),
+                           "text": f"forwarding trade from {config.main.name}",
                            "action": str(action),
                            "host": host,
                            "env": env,
@@ -134,17 +134,16 @@ def analyse_pair(pair, redis):
                 try:
                     requests.post(url, json.dumps(payload), timeout=10,
                                   headers={'Content-Type': 'application/json'})
-                    LOGGER.info("forwarding %s %s/%s trade to: %s/%s"
-                                % (pair, INTERVAL, config.main.trade_direction, env, strategy))
+                    LOGGER.info("forwarding %s %s/%s trade to: %s/%s",
+                                pair, INTERVAL, config.main.trade_direction, env, strategy)
 
                 except requests.exceptions.RequestException:
                     pass
 
-            LOGGER.info("Trade alert: %s %s %s (%s)" % (pair, INTERVAL,
-                                                        config.main.trade_direction,
-                                                        supported.strip()))
+            LOGGER.info("Trade alert: %s %s %s (%s)", pair, INTERVAL,
+                        config.main.trade_direction, supported.strip())
     except Exception as err_msg:
-        LOGGER.critical("Error with pair %s %s" % (pair, str(err_msg)))
+        LOGGER.critical("Error with pair %s %s", pair, str(err_msg))
 
 @arg_decorator
 def main():
@@ -159,7 +158,8 @@ def main():
     if len(sys.argv) > 1 and sys.argv[1] == "forward":
         FORWARD = True
         fwd_str = "-forward"
-    setproctitle.setproctitle("analyse_data-$interval$forward".substitute(INTERVAL, fwd_str))
+    setproctitle.setproctitle(f"analyse_data-{INTERVAL}{fwd_str}")
+
     while True:
         analyse_loop()
 

@@ -1,4 +1,4 @@
-#pylint: disable=no-member,arguments-differ,too-few-public-methods,wrong-import-position,inconsistent-return-statements
+#pylint: disable=no-member,arguments-differ,too-few-public-methods,inconsistent-return-statements
 
 """
 Generic logging class for greencandle modules
@@ -8,8 +8,9 @@ import logging
 import traceback
 from cysystemd.journal import JournaldLogHandler
 from greencandle.lib import config
-config.create_config()
 from greencandle.lib.alerts import send_slack_message
+
+config.create_config()
 
 class OneLineFormatter(logging.Formatter):
     """logging formatter for exceptions"""

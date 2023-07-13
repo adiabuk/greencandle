@@ -26,7 +26,7 @@ def main():
     percent = float(args.percent)/100
 
     for i in range(0, 30 * months):
-        print(i, '{0:,}'.format(int(total)))
+        print(f'{i} {int(total):,}')
         total = total+(total * percent)
 
 if __name__ == "__main__":

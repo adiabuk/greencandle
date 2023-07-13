@@ -1,4 +1,5 @@
-#pylint: disable=logging-not-lazy,wrong-import-position,no-member
+#pylint: disable=no-member,too-many-arguments,too-many-locals
+
 
 """
 Functions to fetch data from binance
@@ -44,11 +45,11 @@ def get_binance_klines(pair, interval=None, limit=50):
         raw = client.klines(pair, interval, limit=limit)
 
     except IndexError:
-        LOGGER.critical("Unable to fetch data for " + pair)
+        LOGGER.critical("Unable to fetch data for %s", pair)
         sys.exit(2)
 
     if not raw:
-        LOGGER.critical("Empty data for " + pair)
+        LOGGER.critical("Empty data for %s", pair)
         sys.exit(2)
 
     non_empty = [x for x in raw if x['numTrades'] != 0]
@@ -95,12 +96,12 @@ def get_all_klines(pair, interval=None, start_time=0, no_of_klines=1E1000):
         first_candle = result[0]['openTime']/1000
         last_candle = result[-1]['closeTime']/1000
     except IndexError:
-        LOGGER.info("No candles for %s" %pair)
+        LOGGER.info("No candles for %s", pair)
         return None
 
     start = epoch2date(first_candle)
     end = epoch2date(last_candle)
-    LOGGER.debug("%s Start: %s, End: %s" %(pair, start, end))
+    LOGGER.debug("%s Start: %s, End: %s", pair, start, end)
 
     return result[:no_of_klines] if no_of_klines != float("inf") else result
 
@@ -132,9 +133,9 @@ def get_data(startdate, intervals, pairs, days, outputdir, extra):
         pair = pair.strip()
         for interval in intervals:
             if not os.path.isdir(outputdir):
-                sys.exit("Invalid output directory: {0}".format(outputdir))
-            filename = "{0}/{1}_{2}.p".format(outputdir.rstrip('/'), pair, interval)
-            LOGGER.debug("Using filename: %s" % filename)
+                sys.exit(f"Invalid output directory: {outputdir}")
+            filename = f"{outputdir.rstrip('/')}/{pair}_{interval}.p"
+            LOGGER.debug("Using filename: %s", filename)
             if os.path.exists(filename) or os.path.exists(filename + '.gz'):
                 LOGGER.debug("File already exists, skipping")
                 continue
@@ -152,8 +153,8 @@ def get_data(startdate, intervals, pairs, days, outputdir, extra):
             start_mepoch = int(actual_start_epoch * 1000)
             ###################################
 
-            LOGGER.debug("Getting %s klines for %s %s - %s days" %(total_klines,
-                                                                   pair, interval, days))
+            LOGGER.debug("Getting %s klines for %s %s - %s days", total_klines, pair, interval,
+                         days)
             current = pandas.DataFrame.from_dict(get_all_klines(pair=pair, interval=interval,
                                                                 start_time=start_mepoch,
                                                                 no_of_klines=total_klines))
@@ -176,7 +177,7 @@ def to_csv(pair, data):
     keys = data[0].keys()
     keys = ["closeTime", "low", "high", "open", "close", "volume",
             "openTime", "numTrades", "quoteVolume"]
-    with open("{0}.csv".format(pair), "w") as output_file:
+    with open(f"{pair}.csv", "w") as output_file:
         dict_writer = csv.DictWriter(output_file, keys)
         dict_writer.writeheader()
         dict_writer.writerows(reversed(data))

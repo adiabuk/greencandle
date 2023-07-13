@@ -1,4 +1,4 @@
-#pylint: disable=unnecessary-comprehension,no-else-return,logging-not-lazy,unnecessary-pass
+#pylint: disable=unnecessary-pass,too-many-public-methods,too-many-arguments
 """
 Spot and margin trading module for binance
 """
@@ -65,8 +65,9 @@ class Binance():
         params.update(kwargs)
         data = self.request("GET", "/api/v1/depth", params)
         return {
-            "bids": {px: qty for px, qty, in data["bids"]},
-            "asks": {px: qty for px, qty, in data["asks"]},
+            "bids": dict(data['bids']),
+            "asks": dict(data['asks'])
+
         }
 
     def klines(self, symbol, interval, **kwargs):
@@ -276,7 +277,7 @@ class Binance():
             try:
                 amount = self.isolated_balances()[symbol][asset]
             except KeyError:
-                self.logger.warning("No such symbol or asset %s %s" %(symbol, asset))
+                self.logger.warning("No such symbol or asset %s %s", symbol, asset)
                 return False
         else:
             self.logger.warning("Invalid direction")
@@ -293,8 +294,7 @@ class Binance():
         if float(amount) > 0:
             data = self.signed_request("POST", path, params)
             return data
-        else:
-            return False
+        return False
 
     def margin_order(self, symbol, side, quantity, order_type, isolated=False, **kwargs):
         """
@@ -442,8 +442,8 @@ class Binance():
         except:
             raise BinanceException(resp.content.decode())
 
-        self.logger.debug("%s %s" %(inspect.stack()[1].function, data))
-        self.logger.debug("Calling binance api path %s" %path)
+        self.logger.debug("%s %s", inspect.stack()[1].function, data)
+        self.logger.debug("Calling binance api path %s", path)
         if 'msg' in data:
             raise BinanceException(data['msg'])
 
@@ -458,11 +458,11 @@ class Binance():
             raise ValueError("Api key and secret must be set")
 
         query = urlencode(sorted(params.items()))
-        query += "&timestamp={}".format(int(time.time() * 1000))
+        query += f"&timestamp={int(time.time()*1000)}"
         secret = bytes(self.options["secret"].encode("utf-8"))
         signature = hmac.new(secret, query.encode("utf-8"),
                              hashlib.sha256).hexdigest()
-        query += "&signature={}".format(signature)
+        query += f"&signature={signature}"
 
         session = self.retry_session(retries=5)
         resp = session.request(method,
@@ -476,8 +476,8 @@ class Binance():
         if 'msg' in data:
             raise BinanceException(data['msg'])
 
-        self.logger.debug("%s %s" %(inspect.stack()[1].function, data))
-        self.logger.info("Calling binance api path %s" % path)
+        self.logger.debug("%s %s", inspect.stack()[1].function, data)
+        self.logger.info("Calling binance api path %s", path)
         return data
 
     @staticmethod
@@ -486,6 +486,5 @@ class Binance():
         Format decimal to 8dp if float
         """
         if isinstance(number, float):
-            return "{:.8f}".format(number)
-        else:
-            return str(number)
+            return f"{number:.8f}"
+        return str(number)

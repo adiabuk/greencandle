@@ -25,7 +25,7 @@ CLOSED = {}
 PAIR_STRING = ""
 
 for pair in config.main.pairs.split():
-    PAIR_STRING += "/{}@kline_{}".format(pair.lower(), INTERVAL)
+    PAIR_STRING += f"/{pair.lower()}@kline_{INTERVAL}"
 
 def on_open(socket):
     """

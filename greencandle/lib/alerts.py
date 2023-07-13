@@ -1,4 +1,4 @@
-#pylint: disable=no-member
+#pylint: disable=no-member,too-many-locals
 """
 Functions for sending alerts
 """
@@ -29,7 +29,7 @@ def send_gmail_alert(action, pair, price):
     msg = MIMEMultipart()
     msg['From'] = email_from
     msg['To'] = email_to
-    message = "{0} alert generated for {1} at {2}".format(action, pair, price)
+    message = f"{action} alert generated for {pair} at {price}"
     msg['Subject'] = message
 
     body = message
@@ -47,7 +47,7 @@ def send_slack_message(channel, message, emoji=None, icon=None, name=None):
     Send notification using slack api
     """
     if not icon:
-        icon = ":{}:".format(config.main.trade_direction) if emoji else ":robot_face:"
+        icon = f":{config.main.trade_direction}:" if emoji else ":robot_face:"
 
     if not str2bool(config.slack.slack_active):
         return
@@ -61,7 +61,8 @@ def send_slack_message(channel, message, emoji=None, icon=None, name=None):
                         }]}]}
 
     webhook = config.slack["url"]
-    requests.post(webhook, data=json.dumps(payload), headers={'Content-Type': 'application/json'})
+    requests.post(webhook, data=json.dumps(payload), timeout=20,
+                  headers={'Content-Type': 'application/json'})
 
 def send_slack_trade(**kwargs):
     """
@@ -75,14 +76,14 @@ def send_slack_trade(**kwargs):
             kwargs[key] = "N/A"
     try:
         kwargs['price'] = str(kwargs['price']).rstrip("0")
-        kwargs['perc'] = "%.4f" % (kwargs['perc'])
+        kwargs['perc'] = f"{kwargs['perc']:.4f}"
         commission = 0.2
-        kwargs['net_perc'] = "%.4f" % float(float(kwargs['perc']) - float(commission)) + "%"
+        kwargs['net_perc'] = f"{float(float(kwargs['perc']) - float(commission)):.f4}%"
         kwargs['net_profit'] = format_usd(float(kwargs['usd_profit']) - ((float(kwargs.usd_quote)
                                                                           /100) * 0.2))
         kwargs['usd_profit'] = format_usd(kwargs['usd_profit'])
         kwargs['perc'] = str(kwargs['perc']) + "%"
-        kwargs['quote'] = "%.4f" % (kwargs['quote'])
+        kwargs['quote'] = f"{kwargs['quote']:.4f}"
         kwargs['usd_quote'] = format_usd(kwargs['usd_quote'])
 
     except TypeError:
@@ -96,7 +97,7 @@ def send_slack_trade(**kwargs):
         color = '#00fc22'
         services = list_to_dict(get_be_services(config.main.base_env),
                                 reverse=False, str_filter='-be-')
-        trade_direction = "{}-{}".format(config.main.name, config.main.trade_direction) if not \
+        trade_direction = f"{config.main.name}-{config.main.trade_direction}" if not \
                 config.main.name.endswith(config.main.trade_direction) else config.main.name
         try:
             short_name = services[trade_direction]
@@ -105,60 +106,48 @@ def send_slack_trade(**kwargs):
                                   config.web.nginx_port)
         except KeyError:
             link = "API - no link"
-        close_string = "• Close: {0}\n".format(link)
-        quote_string = "• Quote in: %.4f\n" % float(kwargs.quote)
-        time_string = "• Open_time: %s " % kwargs.open_time
+        close_string = f"• Close: {link}\n"
+        quote_string = f"• Quote in: {float(kwargs.quote):.4f}\n"
+        time_string = f"• Open_time: {kwargs.open_time} "
     elif kwargs.action == 'CLOSE':
         color = '#fc0303' # red
         close_string = ""
-        quote_string = "• Quote out: %.4f\n" % float(kwargs.quote)
+        quote_string = f"• Quote out: {kwargs.quote:.4f}\n"
         opent = datetime.strptime(str(kwargs.open_time), "%Y-%m-%d %H:%M:%S")
         closet = datetime.strptime(str(kwargs.close_time), "%Y-%m-%d %H:%M:%S")
         delta = str(closet-opent)
-        time_string = "• Open_time: %s\n• Close_time: %s\n• Trade time: %s\n" % (kwargs.open_time,
-                                                                                 kwargs.close_time,
-                                                                                 delta)
+        time_string = (f"• Open_time: {kwargs.open_time}\n• Close_time: {kwargs.close_time}\n"
+                       f"• Trade time: {delta}\n")
     else:
         color = '#ff7f00'
         close_string = ""
         quote_string = ""
         time_string = ""
 
-    icon = ":{}:".format(config.main.trade_direction)
+    icon = f":{config.main.trade_direction}:"
 
     block = {
         "username": kwargs.event,
-        "icon_emoji": "{}".format(icon),
+        "icon_emoji": icon,
         "channel": config.slack[kwargs.channel],
         "attachments":[
-            {"color":"{}".format(color),
-             "icon_emoji": "{}".format(icon),
+            {"color":f"{color}",
+             "icon_emoji": icon,
              "fields":[
-                 {"value": ("• Pair: {}\n"
-                            "• Price: {}\n"
-                            "• name/direction: {}/{}\n"
-                            "• Percentage: {}\n"
-                            "• usd_profit: {}\n"
-                            "{}"
-                            "{}"
-                            "• USD quote: {}\n"
-                            "• Net perc: {}\n"
-                            "• Net usd_profit: {}\n"
-                            "{}" .format(get_tv_link(kwargs.pair, config.main.interval),
-                                         kwargs.price,
-                                         config.main.name,
-                                         config.main.trade_direction,
-                                         kwargs.perc,
-                                         kwargs.usd_profit,
-                                         close_string,
-                                         quote_string,
-                                         kwargs.usd_quote,
-                                         kwargs.net_perc,
-                                         kwargs.net_profit,
-                                         time_string
-                                         )),
+                 {"value": (f'• Pair: {get_tv_link(kwargs.pair, config.main.interval)}\n'
+                            f'• Price: {kwargs.price}\n'
+                            f'• name/direction: {config.main.name}/{config.main.trade_direction}\n'
+                            f'• Percentage: {kwargs.perc}\n'
+                            f'• usd_profit: {kwargs.usd_profit}\n'
+                            f'{close_string}'
+                            f'{quote_string}'
+                            f'• USD quote: {kwargs.usd_quote}\n'
+                            f'• Net perc: {kwargs.net_perc}\n'
+                            f'• Net usd_profit: {kwargs.net_profit}\n'
+                            f'{time_string}'),
                   "short":"false"
                  }]}]}
 
     webhook = config.slack["url"]
-    requests.post(webhook, data=json.dumps(block), headers={'Content-Type': 'application/json'})
+    requests.post(webhook, data=json.dumps(block), headers={'Content-Type': 'application/json'},
+                  timeout=20)

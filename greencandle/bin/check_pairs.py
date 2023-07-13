@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-position,no-member,bare-except
+#pylint: disable=no-member,bare-except
 
 """
 Check pairs in config are still current
@@ -8,8 +8,9 @@ import time
 import datetime
 from greencandle.lib.common import arg_decorator
 from greencandle.lib import config
-config.create_config()
 from greencandle.lib.binance_common import get_dataframes
+
+config.create_config()
 
 @arg_decorator
 def main():

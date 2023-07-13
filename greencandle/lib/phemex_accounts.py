@@ -1,4 +1,4 @@
-#pylint: disable=no-member,wrong-import-order,logging-not-lazy
+#pylint: disable=no-member,too-many-locals
 
 """
 Get/Convert Balances from Phemex
@@ -6,11 +6,11 @@ Get/Convert Balances from Phemex
 
 from collections import defaultdict
 from currency_converter import CurrencyConverter
+import ccxt
 from greencandle.lib.balance_common import default_to_regular
 from greencandle.lib.auth import phemex_auth
 from greencandle.lib.logger import get_logger
 from greencandle.lib import config
-import ccxt
 config.create_config()
 BITCOIN = {}
 LOGGER = get_logger(__name__)
@@ -33,10 +33,10 @@ def get_phemex_values():
         balance = phemex.fetch_balance({'code':'BTC'})
         spot_total = balance['total']['USDT']
         for key, val in balance['total'].items():
-            LOGGER.debug("Getting phemex %s" % key)
+            LOGGER.debug("Getting phemex %s", key)
             # iterate through all items and convert to USDT
             if val > 0 and key != 'USDT':
-                ticker = hitbtc.fetch_ticker('{}/USDT'.format(key))['close']
+                ticker = hitbtc.fetch_ticker(f'{key}/USDT')['close']
                 spot_total += val * ticker
 
 

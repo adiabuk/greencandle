@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-order,wrong-import-position,no-member
+#pylint: disable=no-member
 
 """
 Sell a particular trade immediately
@@ -10,7 +10,6 @@ import time
 from greencandle.lib.binance import Binance
 from greencandle.lib.common import arg_decorator
 from greencandle.lib import config
-config.create_config()
 from greencandle.lib.order import Trade
 
 @arg_decorator
@@ -22,12 +21,13 @@ def main():
     Usage: sell_now <pair> <interval> <test_trade> <test_data>
     """
     if len(sys.argv) < 4:
-        print("Usage {} [pair] [interval] [test_trade] [test_data]".format(sys.argv[0]))
+        print(f"Usage {sys.argv[0]} [pair] [interval] [test_trade] [test_data]")
         sys.exit(1)
 
     pair = sys.argv[1]
     interval = sys.argv[2]
 
+    config.create_config()
     test_trade = bool(len(sys.argv) > 3 and sys.argv[3] == "test")
     test_data = bool(len(sys.argv) > 3 and sys.argv[4] == "test")
     current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())

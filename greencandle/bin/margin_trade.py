@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-member,wrong-import-position
+#pylint: disable=no-member
 
 """
 Buy and sell instantly using binance margin
@@ -18,7 +18,7 @@ def main():
     Usage: margin_trade <pair> <side>
     """
     if len(sys.argv) < 3:
-        print("Usage: {} <pair> <side>".format(sys.argv[0]))
+        print(f"Usage: {sys.argv[0]} <pair> <side>")
         sys.exit(1)
     pair = sys.argv[1]
     side = sys.argv[2]
@@ -28,22 +28,22 @@ def main():
 
     if side == 'OPEN':
         result = client.margin_borrow(quote, quote_amount)
-        print("Borrow result: {}".format(result))
+        print(f"Borrow result: {result}")
         base_amount = 100/float(client.prices()[pair])
         precise_amount = get_step_precision(pair, base_amount)
         result = client.margin_order(symbol=pair, side='BUY', quantity=precise_amount,
                                      order_type=client.market)
 
-        print("Buy result: {}".format(result))
+        print(f"Buy result: {result}")
     elif side == 'CLOSE':
         result = client.margin_order(symbol=pair, side='SELL', quantity=precise_amount,
                                      order_type=client.market)
-        print("Sell result: {}".format(result))
+        print(f"Sell result: {result}")
         result = client.margin_repay(quote, quote_amount)
 
-        print("Repay result: {}".format(result))
+        print(f"Repay result: {result}")
     else:
-        print('Unknown side: {}'.format(side))
+        print(f'Unknown side: {result}')
 
 if __name__ == '__main__':
     main()

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-position,no-member,logging-not-lazy,eval-used,broad-except
+#pylint: disable=no-member,eval-used,broad-except,too-many-locals,too-many-statements
 
 """
 Function for adding to redis queue
@@ -9,7 +9,6 @@ import os
 from time import strftime, gmtime
 import requests
 from greencandle.lib import config
-config.create_config()
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.binance_common import get_current_price, get_dataframes
 from greencandle.lib.order import Trade
@@ -17,6 +16,7 @@ from greencandle.lib.logger import get_logger
 from greencandle.lib.common import get_trade_link, get_tv_link
 from greencandle.lib.alerts import send_slack_message
 
+config.create_config()
 LOGGER = get_logger(__name__)
 
 def add_to_queue(req, test=False):
@@ -31,12 +31,12 @@ def add_to_queue(req, test=False):
         send_slack_message("alerts", "Missing pair for api trade")
         return
 
-    LOGGER.info("Request received: %s %s %s" %(pair, str(action), text))
+    LOGGER.info("Request received: %s %s %s", pair, str(action), text)
     current_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     try:
         current_price = get_current_price(pair)
     except KeyError:
-        message = "Unable to get price for {}".format(pair)
+        message = f"Unable to get price for {pair}"
         send_slack_message("alerts", message)
         return
 
@@ -56,11 +56,11 @@ def add_to_queue(req, test=False):
     redis = Redis(db=2)
     if action_str == 'OPEN':
         if 'get_trend' in os.environ:
-            url = "http://trend:6001/get_trend?pair={}".format(pair)
+            url = f"http://trend:6001/get_trend?pair={pair}"
             try:
                 req = requests.get(url, timeout=1)
             except Exception:
-                LOGGER.error("Unable to get trend from %s" % url)
+                LOGGER.error("Unable to get trend from %s", url)
                 return
 
             trend = req.text.strip()
@@ -69,8 +69,8 @@ def add_to_queue(req, test=False):
                                             req['action_str'],
                                             "Force trade",
                                             config.web.nginx_port)
-                message = ("Skipping {0} trade due to wrong trade direction ({1})"
-                           .format(get_tv_link(pair), trade_link))
+                message = (f"Skipping {get_tv_link(pair)} trade due to wrong trade direction "
+                           f"({trade_link})")
                 send_slack_message("trades", message)
                 LOGGER.info(message)
                 return
@@ -97,4 +97,4 @@ def add_to_queue(req, test=False):
         drawup = redis.get_drawup(pair)['perc']
         result = trade.close_trade(item, drawdowns={pair:drawdown}, drawups={pair:drawup})
         if not result and not test:
-            LOGGER.critical("Unable to close trade %s" % item)
+            LOGGER.critical("Unable to close trade %s", item)

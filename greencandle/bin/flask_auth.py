@@ -27,7 +27,7 @@ def main():
         if not password == password2:
             print("Passwords don't match")
             sys.exit(2)
-        message = "{}:{}".format(username, password)
+        message = f"{username}:{password}"
         encoded = fernet.encrypt(message.encode())
         print(encoded)
 

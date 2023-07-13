@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-else-return,protected-access,import-error
+#pylint: disable=protected-access,no-else-return,consider-using-with
 
 """
 API module for listening for JSON POST requests and playing audio alerts and activating alert lights
@@ -8,11 +8,11 @@ API module for listening for JSON POST requests and playing audio alerts and act
 from pathlib import Path
 from configparser import ConfigParser
 from datetime import datetime, time
-import setproctitle
 import subprocess
 import boto3
 from flask import Flask, request, Response
 import serial
+import setproctitle
 
 APP = Flask(__name__)
 
@@ -77,16 +77,14 @@ def play(data):
         region_name='eu-west-1').client('polly')
 
     pair = '.'.join(list(data['pair']))
-    text = 'Red Alert, all hands to battle stations. {} {}'.format(pair, data['text'])
+    text = f"Red Alert, all hands to battle stations. {pair} {data['text']}"
     response = polly_client.synthesize_speech(VoiceId='Emma',
                                               OutputFormat='mp3',
                                               SampleRate='24000',
                                               Engine="neural",
                                               Text=text)
-    file = open('speech.mp3', 'wb')
-    file.write(response['AudioStream'].read())
-    print(text)
-    file.close()
+    with open ('speech.mp3', 'wb') as file:
+        file.write(response['AudioStream'].read())
     play_mp3('250ms-silence.mp3')
     play_mp3('com.mp3')
     play_mp3('speech.mp3')

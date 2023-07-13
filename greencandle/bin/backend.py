@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint:disable=no-member,wrong-import-position,unused-variable,logging-not-lazy,c-extension-no-member
+#pylint:disable=no-member,unused-variable
 #PYTHON_ARGCOMPLETE_OK
 
 """
@@ -17,11 +17,12 @@ import argcomplete
 from apscheduler.schedulers.blocking import BlockingScheduler
 import setproctitle
 from greencandle.lib import config
-config.create_config()
 
 from greencandle.lib.graph import Graph
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.run import ProdRunner
+
+config.create_config()
 GET_EXCEPTIONS = exception_catcher((Exception))
 LOGGER = get_logger(__name__)
 
@@ -38,13 +39,12 @@ def main():
     args = parser.parse_args()
 
     interval = args.interval if args.interval else str(config.main.interval)
-    test_string = "(test)" if args.test else "(live)"
-    setproctitle.setproctitle("greencandle-backend_{0}{1}".format(interval, test_string))
+    test_str = "(test)" if args.test else "(live)"
+    setproctitle.setproctitle(f"greencandle-backend_{interval}{test_str}")
 
     if not args.data:
-        while glob.glob('/var/run/{}-data-{}-*'.format(config.main.base_env, config.main.interval)):
-            LOGGER.info("Waiting for initial data collection to complete for %s"
-                        % config.main.interval)
+        while glob.glob(f'/var/run/{config.main.base_env}-data-{interval}-*'):
+            LOGGER.info("Waiting for initial data collection to complete for %s", interval)
             time.sleep(30)
 
 
@@ -66,7 +66,7 @@ def main():
             return
         for pair in config.main.pairs.split():
             pair = pair.strip()
-            LOGGER.info("Creating graph for %s" % pair)
+            LOGGER.info("Creating graph for %s", pair)
             volume = 'vol' in config.main.indicators
             graph = Graph(test=False, pair=pair, interval=config.main.interval,
                           volume=volume)

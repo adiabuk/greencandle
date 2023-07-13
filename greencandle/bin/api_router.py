@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-position,no-member,logging-not-lazy,broad-except
+#pylint: disable=no-member,broad-except
 
 """
 API routing module
@@ -27,12 +27,12 @@ def send_trade(payload, host, subd='/webhook'):
     """
     send trade to specified host
     """
-    url = "http://{}:20000/{}".format(host, subd)
+    url = f"http://{host}:20000/{subd}"
     try:
-        LOGGER.info("Calling url %s - %s " %(url, str(payload)))
+        LOGGER.info("Calling url %s - %s ", url, str(payload))
         requests.post(url, json=payload, timeout=10)
     except Exception as exc:
-        LOGGER.critical("Unable to call url: %s - %s" % (url, str(exc)))
+        LOGGER.critical("Unable to call url: %s - %s", url, str(exc))
 
 @APP.route('/healthcheck', methods=["GET"])
 def healthcheck():
@@ -49,18 +49,18 @@ def forward(token):
     payload = request.json
     env = payload['env']
     payload['strategy'] = 'alert' if env == 'alarm' else payload['strategy']
-    command = "configstore package get --basedir /srv/greencandle/config {} api_token".format(env)
-    LOGGER.info("Forwarding request to %s - %s " %(env, str(payload)))
+    command = f"configstore package get --basedir /srv/greencandle/config {env} api_token"
+    LOGGER.info("Forwarding request to %s - %s ",env, str(payload))
     token = os.popen(command).read().split()[0]
     payload['edited'] = "yes"
-    url = "https://{}/{}".format(payload['host'], token)
+    url = f"https://{payload['host']}/{token}"
     try:
         requests.post(url, json=payload, timeout=5, verify=False)
     except requests.exceptions.RequestException:
         pass
     return Response(status=200)
 
-@APP.route('/{}'.format(TOKEN), methods=['POST'])
+@APP.route(f'/{TOKEN}', methods=['POST'])
 def respond():
     """
     Default route to trade
@@ -69,22 +69,22 @@ def respond():
     with open('/etc/router_config.json') as json_file:
         router_config = json.load(json_file)
 
-    LOGGER.info("Request received: %s" % payload)
+    LOGGER.info("Request received: %s", payload)
     try:
         containers = router_config[payload["strategy"].strip()]
     except TypeError:
-        LOGGER.error("Invalid router_config or payload detected: %s" % payload)
+        LOGGER.error("Invalid router_config or payload detected: %s", payload)
         return Response(status=500)
     except KeyError:
-        LOGGER.error("Invalid or missing strategy %s" % str(payload))
+        LOGGER.error("Invalid or missing strategy %s", str(payload))
         return Response(status=500)
 
     if payload["strategy"] == "route":
-        Path('/var/run/router-{}'.format(config.main.base_env)).touch()
+        Path(f'/var/run/router-{config.main.base_env}').touch()
         return Response(status=200)
 
     env = config.main.base_env
-    alert_drain = Path('/var/local/{}_alert_drain'.format(env)).is_file()
+    alert_drain = Path('/var/local/{env}_alert_drain').is_file()
     for container in containers:
         if container == 'alert' and not alert_drain:
             # change strategy
@@ -103,7 +103,7 @@ def respond():
                                "data": "data"}[env]
             except KeyError:
                 environment = "unknown"
-            payload['text'] += '...{} environment'.format(environment)
+            payload['text'] += f'...{environment} environment'
             payload['edited'] = "yes"
 
         payload['pair'] = payload['pair'].lower()
@@ -115,7 +115,7 @@ def respond():
     try:
         mysql.insert_api_trade(**request.json)
     except KeyError:
-        LOGGER.error("Missing required field in json: %s" % str(request.json))
+        LOGGER.error("Missing required field in json: %s", str(request.json))
 
     return Response(status=200)
 

@@ -16,7 +16,7 @@ def main():
     """
     dbases = [sys.argv[1]] if len(sys.argv) > 1 else [0, 1, 2, 3, 4]
     for dbase in dbases:
-        print("Clearing redis db {}".format(dbase))
+        print(f"Clearing redis db {dbase}")
         redis = Redis(db=dbase)
         redis.clear_all()
 

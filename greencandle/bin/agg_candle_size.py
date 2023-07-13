@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-#pylint: disable=no-member,bare-except,too-many-locals,too-many-branches,too-many-statements,no-else-return
+#pylint: disable=no-member,bare-except,too-many-branches,too-many-locals
+
 """
 get data for all timeframes and pairs
 output data to csv files
@@ -74,8 +75,7 @@ def main():
 
             for item in items[interval][pair]:
                 try:
-                    res[interval][pair][item] = json.loads(redis.get_item('{}:{}'.format(pair,
-                                                                                         interval),
+                    res[interval][pair][item] = json.loads(redis.get_item(f'{pair}:{interval}',
                                                                           item).decode())
                 except:
                     continue
@@ -95,20 +95,20 @@ def main():
 
     timestr = time.strftime("%Y%m%d-%H%M%S")
     # save as csv
-    with open('/data/aggregate/{}_{}.csv'.format(key, timestr),
+    with open(f'/data/aggregate/{key}_{timestr}.csv',
               'w', encoding='UTF8', newline='') as handle:
         writer = csv.writer(handle)
         writer.writerows(data)
     # save as tsv
-    with open('/data/aggregate/{}_{}.tsv'.format(key, timestr),
+    with open(f'/data/aggregate/{key}_{timestr}.tsv',
               'w', encoding='UTF8', newline='') as handle:
         writer = csv.writer(handle, delimiter='\t')
         writer.writerows(data)
 
     # create/overwrite symlink to most recent file
     os.chdir('/data/aggregate')
-    symlink_force('../{}_{}.tsv'.format(key, timestr), 'current/{}.tsv'.format(key))
-    symlink_force('../{}_{}.csv'.format(key, timestr), 'current/{}.csv'.format(key))
+    symlink_force(f'../{key}_{timestr}.tsv', f'current/{key}.tsv')
+    symlink_force(f'../{key}_{timestr}.csv', f'current/{key}.csv')
     print('DONE')
 
 if __name__ == '__main__':

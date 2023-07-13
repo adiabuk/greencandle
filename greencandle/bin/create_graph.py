@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-position,no-member
+#pylint: disable=no-member
 
 """
 Standalone script for generating graphs from data in redis
@@ -9,11 +9,12 @@ import argparse
 import argcomplete
 
 from greencandle.lib import config
-config.create_config()
 from greencandle.lib.graph import Graph
+
 
 def main():
     """Main function"""
+    config.create_config()
     parser = argparse.ArgumentParser()
     parser.add_argument("-a", "--all_pairs", action="store_true", required=False, default=False)
     parser.add_argument("-p", "--pair", required=False)

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=too-many-locals,unbalanced-tuple-unpacking
+#pylint: disable=too-many-locals
 """
 Get profit from prvious hour and send to slack
 """
@@ -28,20 +28,16 @@ def main():
     num_day = mysql.get_todays_profit()
 
     if avg_perc:
-        message = ("Profit for Hour {0}\n"
-                   "Total perc: {1:.2f}% ({2:.2f}%) ~{3} trades\n"
-                   "Average perc: {4:.2f}% ({5:.2f}%)\n"
-                   "USD profit: {6} ({7})\n"
-                   "Today's avg profit: {8:.2f}% ({9:.2f}%)\n"
-                   "Todays USD profit: {10} ({11})\n"
-                   "Today's total profit: {12:.2f}% ({13:.2f}%) ~{14} trades\n"
-                   .format(hour, total_perc, total_net_perc, num_hour, avg_perc, avg_net_perc,
-                           format_usd(usd_profit), format_usd(usd_net_profit),
-                           todays_avg, todays_net_avg, format_usd(todays_usd),
-                           format_usd(todays_net_usd),
-                           todays_total, todays_net_total, num_day))
+        message = (f"Profit for Hour {hour}\n"
+                   f"Total perc: {total_perc:.2f}% ({total_net_perc:.2f}%) ~{num_hour} trades\n"
+                   f"Average perc: {avg_perc:.2f}% ({avg_net_perc:.2f}%)\n"
+                   f"USD profit: {format_usd(usd_profit)} ({format_usd(usd_net_profit)})\n"
+                   f"Today's avg profit: {todays_avg:.2f}% ({todays_net_avg:.2f}%)\n"
+                   f"Todays USD profit: {format_usd(todays_usd)} ({format_usd(todays_net_usd)})\n"
+                   f"Today's total profit: {todays_total:.2f}% ({todays_net_total:.2f}%) ~{num_day}"
+                   f"trades\n")
 
-        send_slack_message('balance', message, name=sys.argv[0].split('/')[-1])
+        send_slack_message('balance', message, name=sys.argv[0].rsplit('/', maxsplit=1)[-1])
 
 if __name__ == "__main__":
     main()

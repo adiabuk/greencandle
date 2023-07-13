@@ -1,5 +1,5 @@
-#pylint: disable=eval-used,no-else-return,unused-variable,no-member,redefined-builtin,broad-except
-#pylint: disable=logging-not-lazy,inconsistent-return-statements,invalid-name,too-many-boolean-expressions
+#pylint: disable=eval-used,no-member,too-many-locals,too-many-branches,too-many-statements
+#pylint: disable=broad-except,too-many-arguments,invalid-name
 
 """
 Store and retrieve items from redis
@@ -35,13 +35,11 @@ class Redis():
         self.logger = get_logger(__name__)
         host = config.redis.redis_host
         port = config.redis.redis_port
-        expire = str2bool(config.redis.redis_expire)
 
         self.interval = interval
         self.test_data = test_data
 
-        self.logger.debug("Starting Redis with interval %s db=%s"
-                          % (self.interval, db))
+        self.logger.debug("Starting Redis with interval %s db=%s", self.interval, db)
         pool = redis.ConnectionPool(host=host, port=port, db=db)
         self.conn = redis.StrictRedis(connection_pool=pool)
 
@@ -61,7 +59,7 @@ class Redis():
         """
         redis1 = Redis(interval=self.interval, db=2)
         for key, val in data.items():
-            self.logger.debug("Adding to Redis: %s %s %s" % (name, key, val))
+            self.logger.debug("Adding to Redis: %s %s %s", name, key, val)
             response = redis1.conn.hset(name, key, val)
         del redis1
         return response
@@ -80,15 +78,15 @@ class Redis():
                                   config.main.base_env,
                                   config.main.trade_direction)
 
-        key = "{}:{}:{}".format(pair, "drawup", name)
+        key = f"{pair}:drawup:{name}"
         max_price = redis1.get_item(key, 'max_price')
         orig_price = redis1.get_item(key, 'orig_price')
         try:
             drawup = perc_diff(orig_price, max_price)
         except TypeError:
             drawup = 0
-        self.logger.debug("Getting %s drawup orig_price: %s,  max_price: %s, drawup: %s"
-                          % (pair, orig_price, max_price, drawup))
+        self.logger.debug("Getting %s drawup orig_price: %s,  max_price: %s, drawup: %s",
+                          pair, orig_price, max_price, drawup)
         del redis1
         return {'price':max_price, 'perc': drawup}
 
@@ -97,7 +95,7 @@ class Redis():
         Delete current draw up value for given pair
         """
         redis1 = Redis(interval=self.interval, db=2)
-        key = "{}:{}:{}".format(pair, "drawup", config.main.name)
+        key = f"{pair}:drawup:{config.main.name}"
         redis1.conn.delete(key)
         del redis1
 
@@ -106,7 +104,7 @@ class Redis():
         Delete current draw down value for given pair
         """
         redis1 = Redis(interval=self.interval, db=2)
-        key = "{}:{}:{}".format(pair, "drawdown", config.main.name)
+        key = f"{pair}:drawdown:{config.main.name}"
         redis1.conn.delete(key)
         del redis1
 
@@ -122,7 +120,7 @@ class Redis():
             name = get_short_name(config.main.name,
                                   config.main.base_env,
                                   config.main.trade_direction)
-        key = "{}:{}:{}".format(pair, "drawdown", name)
+        key = f"{pair}:drawdown:{name}"
         min_price = redis1.get_item(key, 'min_price')
         orig_price = redis1.get_item(key, 'orig_price')
 
@@ -130,8 +128,8 @@ class Redis():
             drawdown = perc_diff(orig_price, min_price)
         except TypeError:
             drawdown = 0
-        self.logger.debug("Getting %s drawdown orig_price: %s,  min_price: %s, drawdown: %s"
-                          % (pair, orig_price, min_price, drawdown))
+        self.logger.debug("Getting %s drawdown orig_price: %s,  min_price: %s, drawdown: %s",
+                          pair, orig_price, min_price, drawdown)
         del redis1
         return {'price':min_price, 'perc': drawdown}
 
@@ -144,7 +142,7 @@ class Redis():
         short = get_short_name(config.main.name,
                                config.main.base_env,
                                config.main.trade_direction)
-        key = "{}:{}:{}".format(pair, name, short)
+        key = f"{pair}:{name}:{short}"
         redis1.conn.set(key, value)
         del redis1
 
@@ -158,7 +156,7 @@ class Redis():
         short = get_short_name(config.main.name,
                                config.main.base_env,
                                config.main.trade_direction)
-        key = "{}:{}:{}".format(pair, name, short)
+        key = f"{pair}:{name}:{short}"
         value = redis1.conn.get(key)
 
         try:
@@ -174,7 +172,7 @@ class Redis():
         This is normally done on trade exit
         """
         redis1 = Redis(interval=self.interval, db=2)
-        key = "{}:{}:{}".format(pair, name, config.main.name)
+        key = f"{pair}:{name}:{config.main.name}"
         return redis1.conn.delete(key)
 
     @staticmethod
@@ -185,9 +183,8 @@ class Redis():
         """
         if not open_time:
             return False
-        else:
-            current_time = datetime.now()
-            future_time = open_time + timedelta(minutes=TF2MIN[config.main.interval])
+        current_time = datetime.now()
+        future_time = open_time + timedelta(minutes=TF2MIN[config.main.interval])
         return bool(future_time > current_time)
 
     def update_drawdown(self, pair, current_candle, event=None, open_time=None):
@@ -199,7 +196,7 @@ class Redis():
                                config.main.base_env,
                                config.main.trade_direction)
 
-        key = "{}:{}:{}".format(pair, "drawdown", short)
+        key = f"{pair}:drawdown:{short}"
         min_price = redis1.get_item(key, 'min_price')
         orig_price = redis1.get_item(key, 'orig_price')
 
@@ -222,14 +219,14 @@ class Redis():
             price = current_price if self.in_current_candle(open_time) else current_low
             if (min_price and float(price) < float(min_price)) or not min_price:
                 data = {"min_price": price, "orig_price": orig_price}
-                self.logger.debug("setting drawdown for long %s" % pair)
+                self.logger.debug("setting drawdown for long %s", pair)
                 self.__add_price(key, data)
 
         elif config.main.trade_direction == 'short':
             price = current_price if self.in_current_candle(open_time) else current_high
             if (min_price and float(price) > float(min_price)) or not min_price:
                 data = {"min_price": price, "orig_price": orig_price}
-                self.logger.debug("setting drawdown for short %s" % pair)
+                self.logger.debug("setting drawdown for short %s", pair)
                 self.__add_price(key, data)
 
     def update_drawup(self, pair, current_candle, event=None, open_time=None):
@@ -240,7 +237,7 @@ class Redis():
         short = get_short_name(config.main.name,
                                config.main.base_env,
                                config.main.trade_direction)
-        key = "{}:{}:{}".format(pair, "drawup", short)
+        key = f"{pair}:drawup:{short}"
         max_price = redis1.get_item(key, 'max_price')
         orig_price = redis1.get_item(key, 'orig_price')
         current_low = current_candle['low']
@@ -251,7 +248,6 @@ class Redis():
             self.rm_drawup(pair)
             current_low = current_price
             current_high = current_price
-            min_price = None
             orig_price = None
 
         if not orig_price:
@@ -261,14 +257,14 @@ class Redis():
             price = current_price if self.in_current_candle(open_time) else current_high
             if (max_price and float(price) > float(max_price)) or not max_price:
                 data = {"max_price": price, "orig_price": orig_price}
-                self.logger.debug("setting drawup for long %s" % pair)
+                self.logger.debug("setting drawup for long %s", pair)
                 self.__add_price(key, data)
 
         elif config.main.trade_direction == 'short':
             price = current_price if self.in_current_candle(open_time) else current_low
             if (max_price and float(price) < float(max_price)) or not max_price:
                 data = {"max_price": price, "orig_price": orig_price}
-                self.logger.debug("setting drawup for short %s" % pair)
+                self.logger.debug("setting drawup for short %s", pair)
                 self.__add_price(key, data)
 
     def append_data(self, pair, interval, data):
@@ -276,7 +272,7 @@ class Redis():
         Add data to existing redis keys
         """
         date = data['event']['date']
-        key = "{0}:{1}".format(pair, interval)
+        key = f"{pair}:{interval}"
         byte = self.conn.hmget(key, date)
         if byte[0]:
             decoded = json.loads(byte[0].decode())
@@ -300,13 +296,11 @@ class Redis():
             success of operation: True/False
         """
 
-        #self.logger.debug("Adding to Redis: %s %s %s" % (pair, list(data.keys()), now))
-        for close, value in data.items():
-            key = "{0}:{1}".format(pair, interval)
+        for _, value in data.items():
+            key = f"{pair}:{interval}"
             expiry = int(config.redis.redis_expiry_seconds)
             value['current_epoch'] = int(time.time())
             value['current_time'] = epoch2date(time.time())
-            result = self.conn.hmset(key, {close: json.dumps(value)})
 
         if str2bool(config.redis.redis_expire):
             self.conn.expire(key, expiry)
@@ -325,18 +319,18 @@ class Redis():
 
          each item in the list is a key to the hash containing data for that given period
         """
-        key = "{}:{}".format(pair, interval)
+        key = f"{pair}:{interval}"
         return sorted([item.decode() for item in list(self.conn.hgetall(key).keys())])
 
     def get_item(self, address, key, pair=None, interval=None):
         """Return a specific item from redis, given an address and key"""
         if pair:
             try:
-                item = json.loads(self.conn.hget("{}:{}".format(pair, interval),
+                item = json.loads(self.conn.hget(f"{pair}:{interval}",
                                                  address).decode())[key]
                 return item
-            except KeyError as ke:
-                self.logger.warning("Unable to get key for %s: %s %s" % (address, key, str(ke)))
+            except KeyError as keyerr:
+                self.logger.warning("Unable to get key for %s: %s %s", address, key, str(keyerr))
                 return None
         item = self.conn.hget(address, key)
         return item
@@ -346,7 +340,7 @@ class Redis():
         Log current redis hashes for debugging unit tests
         """
         for key in self.conn.keys():
-            self.logger.critical("%s %s" % (key, self.conn.hgetall(key)))
+            self.logger.critical("%s %s", key, self.conn.hgetall(key))
 
     def get_current(self, name, item):
         """
@@ -364,7 +358,7 @@ class Redis():
             data = json.loads(byte.decode("UTF-8"))['ohlc']
             current_price = data['close']
         except KeyError:
-            self.logger.error("No Data for item %s %s" % (name, item))
+            self.logger.error("No Data for item %s %s", name, item)
             return None, None, None
         return current_price, item, data
 
@@ -378,7 +372,7 @@ class Redis():
           interval
         """
         try:
-            self.logger.debug("Running get_result %s %s %s %s" %(item, indicator, pair, interval))
+            self.logger.debug("Running get_result %s %s %s %s", item, indicator, pair, interval)
             result = self.get_item(item, indicator, pair, interval)
         except AttributeError:
             return None
@@ -391,7 +385,7 @@ class Redis():
     def __log_event(self, pair, event, current_time, data):
         """Send event data to logger"""
 
-        message = ('EVENT:({0}) {1} time:{2} data:{3}'.format(pair, event, current_time, data))
+        message = f'EVENT:({pair}) {event} time:{current_time} data:{data}'
 
         if any(status in event for status in ['NOITEM', 'HOLD']):
             self.logger.debug(message)
@@ -402,14 +396,11 @@ class Redis():
         """
         Check if price between intervals and sell if matches stop_loss or take_profit rules
         """
-        stop_loss_perc = self.get_on_entry(pair, 'stop_loss_perc')
-        take_profit_perc = self.get_on_entry(pair, 'take_profit_perc')
 
         current_price = current_candle.close
         current_high = current_candle.high
         current_low = current_candle.low
 
-        trailing_perc = float(config.main.trailing_stop_loss_perc)
         high_price = self.get_drawup(pair)['price']
         low_price = self.get_drawdown(pair)['price']
 
@@ -471,14 +462,13 @@ class Redis():
 
         direction = config.main.trade_direction
         trailing_start = float(config.main.trailing_start)
+        check = current_price
         if not high_price or not open_price:
             return False
-        elif direction == 'long' and self.test_data:
+        if direction == 'long' and self.test_data:
             check = current_high
-        elif direction == 'short' and self.test_data:
+        if direction == 'short' and self.test_data:
             check = current_low
-        else:
-            check = current_price
 
         if direction == "long":
             result = float(check) <= sub_perc(float(trailing_perc), float(high_price)) and \
@@ -492,7 +482,7 @@ class Redis():
         if result:
             high_price = low_price if direction == "short" else high_price
             self.logger.info("TrailingStopLoss reached high_price: %s current_price: %s "
-                             "open_price: %s" % (high_price, current_price, open_price))
+                             "open_price: %s", high_price, current_price, open_price)
         return result
 
     @staticmethod
@@ -539,7 +529,7 @@ class Redis():
 
         if result:
             self.logger.info("TakeProfit reached current_high: %s current_price: %s "
-                             "open_price: %s" % (current_high, current_price, open_price))
+                             "open_price: %s", current_high, current_price, open_price)
         return result
 
     def __get_stop_loss(self, current_price, current_low, open_price, pair):
@@ -568,7 +558,7 @@ class Redis():
 
         if result:
             self.logger.info("StopLoss reached current_low: %s current_price: %s "
-                             "open_price: %s" % (current_low, current_price, open_price))
+                             "open_price: %s", current_low, current_price, open_price)
         return result
 
     @staticmethod
@@ -587,14 +577,14 @@ class Redis():
         """
         trade_direction = config.main.trade_direction
         trade_type = config.main.trade_type
-        return "{}_{}_{}".format(trade_direction, trade_type, action)
+        return f"{trade_direction}_{trade_type}_{action}"
 
     def get_last_candle(self, pair, interval):
         """
         Get final reconstructed candle data
         """
         last_item = self.get_items(pair, interval)[-1]
-        raw = self.get_current('{}:{}'.format(pair, interval), last_item)
+        raw = self.get_current(f'{pair}:{interval}', last_item)
         try:
             return raw[-1]
         except Exception:  # hack for unit tests still using pickled zlib objects
@@ -604,20 +594,8 @@ class Redis():
         """
         get only rule results, without checking tp/sl etc.
         """
-        def get_float(var):
-            """
-            try to convert var into float
-            otherwise return unmodified
-            """
-            try:
-                return float(var)
-            except ValueError:
-                return var
-
         # fetch latest agg data and make available as AttributeDict
         redis3 = Redis(interval=interval, db=3)
-        raw = redis3.conn.hgetall('{}:{}'.format(pair, interval))
-        agg = AttributeDict({k.decode():get_float(v.decode()) for k, v in raw.items()})
         del redis3
 
         rules = {'open': [], 'close':[]}
@@ -630,23 +608,23 @@ class Redis():
         items = self.get_items(pair, interval)
         for i in range(-1, -4, -1): # from, to, increment
             # look backwards through last 3 items of redis data
-            x = AttributeDict()
+            datax = AttributeDict()
             for indicator in ind_list:
-                x[indicator] = self.get_result(items[i], indicator, pair, interval)
-            name = "{}:{}".format(pair, interval)
+                datax[indicator] = self.get_result(items[i], indicator, pair, interval)
+            name = f"{pair}:{interval}"
             ohlc = self.get_current(name, items[i])[-1]
             for item in ['open', 'high', 'low', 'close']:
                 ohlc[item] = float(ohlc[item])
-            x.update(ohlc)
+            datax.update(ohlc)
 
-            res.append(x)
+            res.append(datax)
 
 
         for seq in range(1, 2):
             current_config = None
             for rule in "open", "close":
                 try:
-                    current_config = config.main['{}_rule{}'.format(rule, seq)]
+                    current_config = config.main[f'{rule}_rule{seq}']
                 except (KeyError, TypeError):
                     pass
                 if current_config:
@@ -654,8 +632,8 @@ class Redis():
                         rules[rule].append(eval(current_config))
                     except (TypeError, KeyError) as error:
                         self.logger.warning("Unable to eval config rule for pair %s: %s_rule: %s"
-                                            "%s mepoch: %s" % (pair, rule, current_config, error,
-                                                               items[seq]))
+                                            "%s mepoch: %s", pair, rule, current_config, error,
+                                                               items[seq])
                         continue
         dbase = Mysql()
         try:
@@ -703,27 +681,27 @@ class Redis():
             ind_list.append(ind)
 
         res = []
-        name = "{}:{}".format(pair, self.interval)
+        name = f"{pair}:{interval}"
         # loop backwards through last 5 items
         try:
             items = self.get_items(pair=pair, interval=interval)
             _ = items[-5]
         except (ValueError, IndexError) as err:
-            self.logger.warning("Not enough data for %s: %s" % (pair, err))
+            self.logger.warning("Not enough data for %s: %s", pair, err)
             return ('HOLD', 'Not enough data', 0, 0, {'open':[], 'close':[]})
 
         for i in range(-1, -6, -1):
-            x = AttributeDict()
+            datax = AttributeDict()
             for indicator in ind_list:
-                x[indicator] = self.get_result(items[i], indicator, pair, self.interval)
+                datax[indicator] = self.get_result(items[i], indicator, pair, self.interval)
 
             # Floatify each of the ohlc elements before adding
             ohlc = self.get_current(name, items[i])[-1]
             for item in ['open', 'high', 'low', 'close']:
                 ohlc[item] = float(ohlc[item])
 
-            x.update(ohlc)
-            res.append(x)
+            datax.update(ohlc)
+            res.append(datax)
 
         stop_loss_perc = self.get_on_entry(pair, 'stop_loss_perc')
         take_profit_perc = self.get_on_entry(pair, 'take_profit_perc')
@@ -773,8 +751,8 @@ class Redis():
             current_config = None
             for rule in "open", "close":
                 try:
-                    current_config = config.main['{}_rule{}'.format(rule, seq)]
-                    self.logger.debug("Rule: %s_rule%s: %s" % (rule, seq, current_config))
+                    current_config = config.main[f'{rule}_rule{seq}']
+                    self.logger.debug("Rule: %s_rule%s: %s", rule, seq, current_config)
                 except (KeyError, TypeError):
                     pass
                 if current_config:
@@ -782,8 +760,8 @@ class Redis():
                         rules[rule].append(eval(current_config))
                     except (TypeError, KeyError) as error:
                         self.logger.warning("Unable to eval config rule for pair %s: %s_rule: %s"
-                                            "%s mepoch: %s" % (pair, rule, current_config, error,
-                                                               items[seq]))
+                                            "%s mepoch: %s", pair, rule, current_config, error,
+                                                               items[seq])
                         continue
         close_timeout = False
         able_to_open = True
@@ -802,14 +780,13 @@ class Redis():
                                                  "LIMIT 1", header=False)[0][0]
                 open_epoch = 0 if not isinstance(open_time, datetime) else \
                     open_time.timestamp()
-                pattern = '%Y-%m-%d %H:%M:%S'
                 able_to_open = (int(open_epoch) +
                                 int(convert_to_seconds(config.main.time_between_trades))) < \
                                 current_epoch
             except (IndexError, AttributeError):
                 pass  # no previous trades
         elif dbase.get_recent_high(pair, current_time, 12, 200):
-            self.logger.info("Recently sold %s with high profit, skipping" % pair)
+            self.logger.info("Recently sold %s with high profit, skipping", pair)
             able_to_open = False
         else:
             able_to_open = True
@@ -825,7 +802,7 @@ class Redis():
         stop_loss_rule = self.__get_stop_loss(current_price, res[0].low, open_price, pair)
 
         if any(rules['open']) and not able_to_open:
-            self.logger.info("Unable to open trade %s due to time_between_trades" % pair)
+            self.logger.info("Unable to open trade %s due to time_between_trades", pair)
 
         if open_price and any(rules['open']) and any(rules['close']):
             self.logger.warning('We ARE In a trade and have matched both open and '
@@ -886,8 +863,8 @@ class Redis():
             self.update_on_entry(pair, 'stop_loss_perc', eval(config.main.stop_loss_perc))
 
             # delete and re-store high price
-            self.logger.debug("Close: %s, Previous Close: %s, >: %s" %
-                              (res[0].close, res[1].close, res[0].close > res[1].close))
+            self.logger.debug("Close: %s, Previous Close: %s, >: %s",
+                              res[0].close, res[1].close, res[0].close > res[1].close)
 
             result = 'OPEN'
             event = self.get_event_str("Normal" + result)
@@ -906,13 +883,13 @@ class Redis():
         winning_close = self.get_rules(rules, 'close')
         winning_open = self.get_rules(rules, 'open')
         if winning_close:
-            self.logger.info('%s close Rules matched: %s' % (pair, winning_close))
+            self.logger.info('%s close Rules matched: %s', pair, winning_close)
         else:
-            self.logger.debug('%s close Rules matched: %s' % (pair, winning_close))
+            self.logger.debug('%s close Rules matched: %s', pair, winning_close)
         if winning_open:
-            self.logger.info('%s open Rules matched: %s' % (pair, winning_open))
+            self.logger.info('%s open Rules matched: %s', pair, winning_open)
         else:
-            self.logger.debug('%s open Rules matched: %s' % (pair, winning_open))
+            self.logger.debug('%s open Rules matched: %s', pair, winning_open)
         del dbase
 
         return (result, event, current_time, current_price, {'close':winning_close,

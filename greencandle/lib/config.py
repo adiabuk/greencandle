@@ -1,4 +1,4 @@
-#pylint: disable=protected-access,consider-iterating-dictionary,logging-not-lazy,no-else-raise
+#pylint: disable=protected-access,consider-iterating-dictionary
 
 """
 Get values from config file
@@ -36,10 +36,10 @@ def create_config():
     check_config()
     # sort account details
     for i in range(1, 5):
-        if 'account{}_type'.format(i) in globals()['accounts']:
-            account_type = globals()['accounts']['account{}_type'.format(i)]
-            key = globals()['accounts']['account{}_key'.format(i)]
-            secret = globals()['accounts']['account{}_secret'.format(i)]
+        if f'account{i}_type' in globals()['accounts']:
+            account_type = globals()['accounts'][f'account{i}_type']
+            key = globals()['accounts'][f'account{i}_key']
+            secret = globals()['accounts'][f'account{i}_secret']
             if account_type not in globals()['accounts']:
                 globals()['accounts'][account_type] = []
             globals()['accounts'][account_type].append({'key':key, 'secret':secret})
@@ -68,8 +68,7 @@ def check_config():
                 missing_section.append(key)
                 globals()[section].pop(key, None)
     if missing_list:
-        raise AttributeError('error, missing config %s' % missing_list)
-    elif missing_section:
-        raise AttributeError('error, missing section %s' % missing_section)
-    else:
-        return config
+        raise AttributeError(f'error, missing config {missing_list}')
+    if missing_section:
+        raise AttributeError(f'error, missing section {missing_section}')
+    return config

@@ -33,12 +33,12 @@ def main():
     for interval in ['1m', '3m', '5m', '15m', '30m', '1h', '4h', '1d']:
         for pair in pairs:
             pair = pair.strip()
-            logger.info("Analysing pair %s:%s" %(pair, interval))
+            logger.info("Analysing pair %s:%s", pair, interval)
             items = redis.get_items(pair, interval)
             for item in items[:-500]:
-                redis.conn.hdel('{}:{}'.format(pair, interval), item)
+                redis.conn.hdel(f'{pair}:{interval}', item)
                 count += 1
-    logger.info("Deleted %s keys" % count)
+    logger.info("Deleted %s keys", count)
 
 
 if __name__ == '__main__':

@@ -22,7 +22,7 @@ def main():
     """
     files = glob.glob('*.xlsx')
     if len(sys.argv) != 2 or sys.argv[1] not in ("annual", "monthly", "factor", "--help"):
-        sys.stderr.write("Usage: {} <annual|monthly|factor>\n".format(sys.argv[0]))
+        sys.stderr.write(f"Usage: {sys.argv[0]} <annual|monthly|factor>\n")
         sys.exit(1)
 
     output = sys.argv[1]

@@ -1,4 +1,4 @@
-#pylint: disable=wrong-import-position,broad-except,no-member,logging-not-lazy,too-many-arguments
+#pylint: disable=broad-except,no-member,too-many-arguments,too-many-locals,too-many-public-methods
 
 """
 Push/Pull crypto signals and data to mysql
@@ -29,7 +29,7 @@ class Mysql():
         self.__connect()
         self.interval = interval
         self.test = test
-        self.logger.debug("Starting Mysql with interval %s, test=%s" % (interval, test))
+        self.logger.debug("Starting Mysql with interval %s, test=%s", interval, test)
 
     @get_exceptions
     def __connect(self):
@@ -54,11 +54,11 @@ class Mysql():
         """
         Execute query on MYSQL DB
         """
-        self.logger.debug("Running Mysql command: %s" % command)
+        self.logger.debug("Running Mysql command: %s", command)
         try:
             cur.execute(command)
         except MySQLdb.ProgrammingError:
-            self.logger.critical("Error running SQL command %s" % command)
+            self.logger.critical("Error running SQL command %s", command)
             return
 
         self.dbase.commit()
@@ -77,7 +77,7 @@ class Mysql():
         delete contents of given table
         """
 
-        self.run_sql_statement('delete from {}'.format(table_name))
+        self.run_sql_statement(f'delete from {table_name}')
 
     @get_exceptions
     def fetch_sql_data(self, query, header=True):
@@ -113,11 +113,12 @@ class Mysql():
             self.__execute(cur, query)
             return cur.lastrowid if get_id else cur.rowcount
         except NameError as exc:
-            self.logger.critical("One or more expected variables not passed to DB %s" % exc)
+            self.logger.critical("One or more expected variables not passed to DB %s", exc)
         except Exception:
-            self.logger.critical("Error - unable to execute query %s" % query)
+            self.logger.critical("Error - unable to execute query %s", query)
         except MySQLdb.ProgrammingError:
-            self.logger.critical("Syntax error in query: %s" % query)
+            self.logger.critical("Syntax error in query: %s", query)
+        return None
 
     @get_exceptions
     def delete_data(self):
@@ -145,15 +146,13 @@ class Mysql():
               None
         """
         usd_rate, gbp_rate = self.get_rates(symbol_name)
-        command = """insert into trades (pair, open_time, open_price, base_in, `interval`,
-                     quote_in, name, borrowed, borrowed_usd, divisor, direction, open_usd_rate,
-                     open_gbp_rate, comm_open, open_order_id) VALUES ("{0}", "{1}", trim("{2}")+0, "{3}",
-                     "{4}", "{5}", "{6}", "{7}", "{8}", "{9}", "{10}", "{11}", "{12}", "{13}",
-                     "{14}")
-                   """.format(pair, date, '%.15f' % float(price), '%.15f' % float(base_amount),
-                              self.interval, quote_amount, config.main.name, borrowed,
-                              borrowed_usd, divisor, direction, usd_rate, gbp_rate,
-                              commission, order_id)
+        command = (f'insert into trades (pair, open_time, open_price, base_in, `interval`, '
+                   f'quote_in, name, borrowed, borrowed_usd, divisor, direction, open_usd_rate, '
+                   f'open_gbp_rate, comm_open, open_order_id) VALUES ("{pair}", "{date}", '
+                   f'trim("{float(price):.15f}")+0, "{float(base_amount):.15f}", '
+                   f'"{self.interval}", "{quote_amount}", "{config.main.name}", "{borrowed}", '
+                   f'"{borrowed_usd}", "{divisor}", "{direction}", "{usd_rate}", "{gbp_rate}", '
+                   f'"{commission}", "{order_id}")')
 
         result = self.__run_sql_query(command, get_id=True)
 
@@ -164,12 +163,9 @@ class Mysql():
         archive data received from api-router
         """
         kwargs = AttributeDict(kwargs)
-        command = """insert into api_requests (pair, text, action, price, strategy) VALUES
-                     ('{0}', '{1}', '{2}', '{3}', '{4}')""".format(kwargs.pair,
-                                                                   kwargs.text,
-                                                                   kwargs.action,
-                                                                   kwargs.get('price', 'N/A'),
-                                                                   kwargs.strategy)
+        command = f"""insert into api_requests (pair, text, action, price, strategy) VALUES
+                     ("{kwargs.pair}", "{kwargs.text}'" "{kwargs.action}",
+                     "{kwargs.get('price', 'N/A')}", "{kwargs.strategy}")"""
         result = self.__run_sql_query(command)
         return result == 1
 
@@ -181,10 +177,9 @@ class Mysql():
 
         Return True/False
         """
-        command = ('select * from profit where pair="{0}" and name="{1}" and close_time '
-                   '>= ("{2}" - interval "{3}" month) ' 'and perc '
-                   '> "{3}" and direction="{4}"'.format(pair, date, months, max_perc,
-                                                        config.main.trade_direction))
+        command = (f'select * from profit where pair="{pair}" and name="{config.main.name}" '
+                   f'and close_time >= ("{date}" - interval "{months}" month) ' 'and perc '
+                   f'> "{max_perc}" and direction="{config.main.trade_direction}"')
 
         cur = self.dbase.cursor()
         self.__execute(cur, command)
@@ -195,7 +190,7 @@ class Mysql():
         """
         Get commission value for open and close trade
         """
-        command = ('select commission()')
+        command = 'select commission()'
 
         cur = self.dbase.cursor()
         self.__execute(cur, command)
@@ -208,10 +203,9 @@ class Mysql():
         """
         Return quantity for a current open trade
         """
-        command = ('select base_in from trades where close_price '
-                   'is NULL and `interval` = "{0}" and '
-                   'pair = "{1}" and name="{2}" LIMIT 1'
-                   .format(self.interval, pair, config.main.name))
+        command = (f'select base_in from trades where close_price '
+                   f'is NULL and `interval` = "{self.interval}" and '
+                   f'pair = "{pair}" and name="{config.main.name}" LIMIT 1')
 
         cur = self.dbase.cursor()
         self.__execute(cur, command)
@@ -224,7 +218,7 @@ class Mysql():
         """
         get variable from db
         """
-        query = "select get_var('{}')".format(name)
+        query = f"select get_var('{name}')"
         result = self.fetch_sql_data(query, header=False)[0][0]
         return result
 
@@ -234,11 +228,11 @@ class Mysql():
         Return details for calculating value of an open trade for a given trading pair
         """
 
-        command = ('select open_price, quote_in, open_time, base_in, borrowed, borrowed_usd '
-                   'from trades where close_price is NULL and '
-                   '`interval` = "{0}" and pair = "{1}" and name ="{2}" '
-                   'and direction="{3}"'.format(self.interval, pair, config.main.name,
-                                                config.main.trade_direction))
+        command = (f'select open_price, quote_in, open_time, base_in, borrowed, borrowed_usd '
+                   f'from trades where close_price is NULL and `interval` = "{self.interval}" '
+                   f'and pair = "{pair}" and name ="{config.main.name}" '
+                   f'and direction="{config.main.trade_direction}"')
+
         cur = self.dbase.cursor()
         self.__execute(cur, command)
 
@@ -252,8 +246,8 @@ class Mysql():
         for each complete trade logged
         """
         cur = self.dbase.cursor()
-        command = ('select close_time, open_price, close_price, quote_in from trades where '
-                   '`interval` = "{0}" and close_price is NOT NULL'.format(self.interval))
+        command = (f'select close_time, open_price, close_price, quote_in from trades where '
+                   f'`interval` = "{self.interval}" and close_price is NOT NULL')
 
         self.__execute(cur, command)
         return cur.fetchall()
@@ -269,9 +263,9 @@ class Mysql():
               a single list of pairs that we currently hold with the open time
         """
         cur = self.dbase.cursor()
-        command = ('select pair, open_time from trades where close_price is NULL and '
-                   '`interval`="{0}" and name in ("{1}","api") and direction like "%{2}%"'
-                   .format(self.interval, config.main.name, direction))
+        command = (f'select pair, open_time from trades where close_price is NULL and '
+                   f'`interval`="{self.interval}" and name in ("{config.main.name}","api") and '
+                   f'direction like "%{direction}%"')
 
         self.__execute(cur, command)
         return cur.fetchall()
@@ -297,23 +291,23 @@ class Mysql():
         """
         usd_rate, gbp_rate = self.get_rates(symbol_name)
         job_name = name if name else config.main.name
-        query = """select id from trades where close_price is NULL and `interval`="{0}"
-                   and pair="{1}" and (name="{2}" or name like "api") and direction="{3}"
-                   ORDER BY ID ASC LIMIT 1
-                """.format(self.interval, pair, job_name, config.main.trade_direction)
+        query = f"""select id from trades where close_price is NULL and '
+                   `interval`="{self.interval}" and pair="{pair}" and (name="{job_name}"
+                   or name like "api") and ' direction="{config.main.trade_direction}"
+                   ORDER BY ID ASC LIMIT 1"""
         try:
             trade_id = self.fetch_sql_data(query, header=False)[0][0]
         except IndexError:
-            self.logger.critical("No open trade matching criteria to close: %s" % query)
+            self.logger.critical("No open trade matching criteria to close: %s", query)
             return None
 
-        command = """update trades set close_price=trim({0})+0,close_time="{1}",
-        quote_out="{2}", base_out="{3}", closed_by="{4}", drawdown_perc=abs(round({5},1)),
-        drawup_perc=abs(round({6},1)), close_usd_rate="{7}", close_gbp_rate="{8}",
-        comm_close="{9}", close_order_id="{10}" where id = "{11}"
-        """.format('%.15f' % float(close_price), close_time, quote,
-                   '%.15f' % float(base_out), job_name,
-                   drawdown, drawup, usd_rate, gbp_rate, str(commission), order_id, trade_id)
+        command = f"""update trades set close_price=trim({float(close_price):.15f})+0,
+                      close_time="{close_time}", quote_out="{quote}",
+                      base_out="{float(base_out):.15f}", closed_by="{job_name}",
+                      drawdown_perc=abs(round({drawdown},1)), drawup_perc=abs(round({drawup},1)),
+                      close_usd_rate="{usd_rate}", close_gbp_rate="{gbp_rate}",
+                      comm_close="{commission}", close_order_id="{order_id}" where id = "{trade_id}"
+                   """
 
         self.__run_sql_query(command)
 
@@ -350,26 +344,25 @@ class Mysql():
                 perc = 100 * (float(current_price) - float(open_price)) / float(open_price)
                 perc = - perc if 'short' in direction else perc
                 net_perc = perc - float(self.get_complete_commission())
-                insert = ('replace into open_trades (pair, open_time, open_price, current_price, '
-                          'perc, net_perc, name, `interval`, usd_quantity, direction) VALUES '
-                          '("{0}", "{1}", trim("{2}")+0, trim("{3}"+0), round("{4}",2), '
-                          'round("{5}",2), "{6}", "{7}", "{8}", "{9}")'
-                          .format(pair, open_time, open_price, current_price,
-                                  perc, net_perc, name, interval,
-                                  format_usd(usd_quantity), direction))
+                insert = (f'replace into open_trades (pair, open_time, open_price, current_price, '
+                          f'perc, net_perc, name, `interval`, usd_quantity, direction) VALUES '
+                          f'("{pair}", "{open_time}", trim("{open_price}")+0, '
+                          f'trim("{current_price}"+0), round("{perc}",2), '
+                          f'round("{net_perc}",2), "{name}", "{interval}", '
+                          f'"{format_usd(usd_quantity)}", "{direction}")')
 
                 self.__run_sql_query(insert)
             except ZeroDivisionError:
-                self.logger.critical("%s has a zero open price, unable to calculate percentage"
-                                     % pair)
+                self.logger.critical("%s has a zero open price, unable to calculate percentage",
+                                     pair)
 
     def trade_in_context(self, pair, name, direction):
         """
         Check if a trade exists for given pair, name, and direction
         """
 
-        query = ('select * from open_trades where pair="{0}" and name="{1}" and direction="{2}"'
-                 .format(pair, name, direction))
+        query = (f'select * from open_trades where pair="{pair}" and name="{name}" and '
+                 f'direction="{direction}"')
         result = self.fetch_sql_data(query, header=False)
         return bool(result)
 
@@ -382,15 +375,15 @@ class Mysql():
         date = date if date else hour_ago.strftime("%Y-%m-%d")
         hour = hour if hour else hour_ago.strftime("%H")
 
-        command = ('select COALESCE(total_perc,0) total_perc, '
-                   'COALESCE(total_net_perc,0) total_net_perc, '
-                   'COALESCE(avg_perc,0) avg_perc, '
-                   'COALESCE(avg_net_perc,0) avg_net_perc, '
-                   'COALESCE(usd_profit,0) usd_profit, '
-                   'COALESCE(usd_net_profit,0) usd_net_profit, '
-                   'COALESCE(num_trades,0) num_trades '
-                   'from profit_hourly where '
-                   'date="{0}" and hour="{1}"'.format(date, hour))
+        command = (f'select COALESCE(total_perc,0) total_perc, '
+                   f'COALESCE(total_net_perc,0) total_net_perc, '
+                   f'COALESCE(avg_perc,0) avg_perc, '
+                   f'COALESCE(avg_net_perc,0) avg_net_perc, '
+                   f'COALESCE(usd_profit,0) usd_profit, '
+                   f'COALESCE(usd_net_profit,0) usd_net_profit, '
+                   f'COALESCE(num_trades,0) num_trades '
+                   f'from profit_hourly where '
+                   f'date="{date}" and hour="{hour}"')
         result = self.fetch_sql_data(command, header=False)
         output = [float(item) for item in result[0]] if result else [None] * 7
         output.append(hour)
@@ -404,9 +397,9 @@ class Mysql():
         """
         Get amount borrowed in current scope
         """
-        command = ('select pair, borrowed, direction from trades '
-                   'where pair like "%{0}%" and name like "%{1}%" '
-                   'and close_price is NULL'.format(pair, account))
+        command = (f'select pair, borrowed, direction from trades '
+                   f'where pair like "%{pair}%" and name like "%{account}%" '
+                   f'and close_price is NULL')
 
         cur = self.dbase.cursor()
         self.__execute(cur, command)
@@ -427,17 +420,16 @@ class Mysql():
         for exchange, values in balances.items():
             for coin, data in values.items():
                 try:
-                    command = ('insert into balance (gbp, btc, usd, count, coin, exchange_id) '
-                               'values ("{0}", "{1}", "{2}", "{3}", "{4}", (select id from '
-                               'exchange where name="{5}"))'.format(data["GBP"], data["BTC"],
-                                                                    data["USD"], data["count"],
-                                                                    coin, exchange))
+                    command = (f'insert into balance (gbp, btc, usd, count, coin, exchange_id) '
+                               f'values ("{data["GBP"]}", "{data["BTC"]}", "{data["USD"]}", '
+                               f'"{data["count"]}", "{coin}", (select id from '
+                               f'exchange where name="{exchange}"))')
                 except KeyError:
                     self.logger.info(" ".join(["Unable to find coin:", coin,
                                                exchange, "KEYERROR"]))
                     continue
                 except IndexError:
-                    self.logger.critical("Index error %s" % exchange)
+                    self.logger.critical("Index error %s", exchange)
                     raise
 
                 try:

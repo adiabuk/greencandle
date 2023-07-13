@@ -1,4 +1,4 @@
-#pylint: disable=no-member,logging-not-lazy,too-many-statements,too-many-locals
+#pylint: disable=no-member,too-many-statements,too-many-locals,too-many-branches
 """Create candlestick graphs from OHLC data"""
 
 import json
@@ -47,15 +47,15 @@ class Graph():
 
         driver = webdriver.Firefox(firefox_profile=profile, capabilities=cap,
                                    executable_path="/usr/local/bin/geckodriver")
-        driver.get("file://{0}/{1}".format(output_dir, self.filename))
-        driver.save_screenshot("{0}/{1}.png".format(output_dir, self.filename))
+        driver.get(f"file://{output_dir}/{self.filename}")
+        driver.save_screenshot(f"{output_dir}/{self.filename}.png")
         time.sleep(10)
         driver.quit()
         display.stop()
 
     def resize_screenshot(self, output_dir=''):
         """Resize screenshot to thumbnail - for use in API"""
-        with open("{0}/{1}.png".format(output_dir, self.filename), "r+b") as png_file:
+        with open(f"{output_dir}/{self.filename}.png", "r+b") as png_file:
             with Image.open(png_file) as image:
                 _, height = image.size
 
@@ -70,7 +70,8 @@ class Graph():
 
                 # Shows the image in image viewer
                 cover = resizeimage.resize_width(im1, 120)
-                cover.save("{0}/{1}_resized.png".format(output_dir, self.filename), image.format)
+                cover.save(f"{output_dir}/{self.filename}_resized.png", image.format)
+
 
     @staticmethod
     def replace_all(text, dic):
@@ -95,7 +96,7 @@ class Graph():
             if name == 'ohlc':
                 LOGGER.debug("Creating OHLC graph")
                 if value.empty:  # empty dataframe:
-                    print('Unable to find ohlc data for {0}, passing...'.format(self.pair))
+                    print(f'Unable to find ohlc data for {self.pair}, passing...')
                     return
                 value["time"] = pandas.to_datetime(value["openTime"], unit="ms")
                 item = go.Candlestick(x=value.time,
@@ -115,7 +116,7 @@ class Graph():
                                   y=location,
                                   name="STX",
                                   mode='markers',
-                                  marker=dict(size=4, color=direction))
+                                  marker={'size':4, 'color':direction})
 
             elif name == 'event':
                 LOGGER.debug("Creating event graph")
@@ -130,7 +131,7 @@ class Graph():
                                   y=value['current_price'],
                                   name="events",
                                   mode='markers',
-                                  marker=dict(size=16, color=value['result']))
+                                  marker={'size':16, 'color':value['result']})
 
             elif 'pivot' in name:
                 LOGGER.debug("Creating pivot graph")
@@ -164,7 +165,7 @@ class Graph():
 
             elif 'STOCHRSI' in name:
                 # add stochrsi graph in second subply (below) if it exists
-                LOGGER.debug("Creating STOCHRSI graph %s" % name)
+                LOGGER.debug("Creating STOCHRSI graph %s", name)
                 row = 2
                 stoch_k, stoch_d = zip(*value.value)
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
@@ -176,7 +177,7 @@ class Graph():
 
             elif 'STOCH' in name and 'RSI' not in name:
                 # add stochf graph in second subply (below) if it exists
-                LOGGER.debug("Creating STOCH graph %s" % name)
+                LOGGER.debug("Creating STOCH graph %s", name)
                 row = 2
                 value['k'] = value.value
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
@@ -204,13 +205,13 @@ class Graph():
                                   name=name)
 
             fig.append_trace(item, row, col)
-            LOGGER.debug("Adding item1 %s row:%s" % (item.name, row))
+            LOGGER.debug("Adding item1 %s row:%s", item.name, row)
             if item2:
-                LOGGER.debug("Adding item2 %s row:%s" % (item2.name, row))
+                LOGGER.debug("Adding item2 %s row:%s", item2.name, row)
                 fig.append_trace(item2, row, col)
             if item3:
                 fig.append_trace(item3, row, col)
-                LOGGER.debug("Adding item3 %s row:%s" %(item3.name, row))
+                LOGGER.debug("Adding item3 %s row:%s", item3.name, row)
 
             if name == "ohlc" and self.volume:
                 increasing_color = '#17BECF'
@@ -229,7 +230,7 @@ class Graph():
                 item = go.Bar(x=value.time,
                               y=value.volume,
                               name="volume",
-                              marker=dict(color=colors))
+                              marker={'color':colors})
                 row = 2
                 fig.append_trace(item, row, col)
             item = None
@@ -240,8 +241,7 @@ class Graph():
         now = datetime.datetime.now()
         date = now.strftime('%Y-%m-%d_%H-%M-%S')
         env = config.main.base_env
-        self.filename = "{0}/{1}_{2}_{3}-{4}.html".format(output_dir, self.pair, env,
-                                                          date, self.interval)
+        self.filename = f"{output_dir}/{self.pair}_{env}_{date}-{self.interval}.html"
         py.plot(fig, filename=self.filename, auto_open=False)
         LOGGER.debug("Done")
 
@@ -269,21 +269,21 @@ class Graph():
             result_list = {}
             for ind in ind_list:
                 try:
-                    LOGGER.debug("Getting Data for %s" % ind)
-                    str_dict = redis.get_item('{}:{}'.format(self.pair, self.interval),
+                    LOGGER.debug("Getting Data for %s", ind)
+                    str_dict = redis.get_item(f'{self.pair}:{self.interval}',
                                               index_item).decode()
                     result_list[ind] = json.loads(str_dict)[ind]
                 except AttributeError:
                     pass
                 except KeyError:
-                    LOGGER.debug("No indicator data for %s %s" % (ind, index_item))
+                    LOGGER.debug("No indicator data for %s %s", ind, index_item)
                     continue
                 except ValueError:
-                    LOGGER.debug("Value Error while getting %s" % ind)
+                    LOGGER.debug("Value Error while getting %s", ind)
                     result_list[int] = redis.get_item(index_item, ind).decode()
 
             LOGGER.debug("Getting current prices")
-            str_dict = redis.get_item('{}:{}'.format(self.pair, self.interval),
+            str_dict = redis.get_item(f'{self.pair}:{self.interval}',
                                       index_item).decode()
 
             try:  #ohlc
@@ -291,12 +291,11 @@ class Graph():
                 result_list['current_price'] = result_list['ohlc']['close']
 
             except (KeyError, AttributeError) as error:
-                LOGGER.error("Error, unable to find ohlc data for %s %s %s"
-                             % (index_item, ind, error))
+                LOGGER.error("Error, unable to find ohlc data for %s %s %s",
+                             index_item, ind, error)
             try:  # event
                 LOGGER.debug("Getting trade events")
-                str_dict = redis.get_item('{}:{}'.format(self.pair, self.interval),
-                                          index_item).decode()
+                str_dict = redis.get_item(f'{self.pair}:{self.interval}', index_item).decode()
                 result_list['event'] = json.loads(str_dict)['event']
             except KeyError:  # no event for this time period, so skip
                 pass

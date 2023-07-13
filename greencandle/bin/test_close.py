@@ -1,4 +1,4 @@
-#pylint: disable=no-member,wrong-import-position
+#pylint: disable=no-member,too-many-locals,too-many-statements
 
 """
 Check current open trades for ability to close
@@ -28,7 +28,7 @@ def main():
     client = binance_auth()
 
     dbase = Mysql()
-    query = ("select pair, base_in, quote_in, name from trades where close_price is NULL")
+    query = "select pair, base_in, quote_in, name from trades where close_price is NULL"
 
     open_trades = dbase.fetch_sql_data(query, header=False)
     bal = Balance(test=False)
@@ -44,7 +44,7 @@ def main():
         result = client.spot_order(symbol=pair, side=client.sell,
                                    quantity=get_step_precision(pair, base_in),
                                    order_type=client.market, test=True)
-        print("Testing {} from {}, result: {}".format(pair, name, str(result)))
+        print("Testing {pair} from {name}, result: {str(result)}")
         print("comparing amount with available balance...")
         try:
             if 'isolated' in name:
@@ -58,7 +58,8 @@ def main():
             else:
                 bal_amount = balances['binance'][get_base(pair)]['count']
 
-            if "long" in name and sub_perc(dbase.get_complete_commission(), float(base_in)) > bal_amount:
+            if "long" in name and sub_perc(dbase.get_complete_commission(),
+                                           float(base_in)) > bal_amount:
                 result2 = True
                 reason = "Not enough base amount"
             elif "short" in name and quote2base(quote_in, pair) < bal_amount:
@@ -75,22 +76,21 @@ def main():
             bnb_available = bal_amount = balances[account]['BNB']['count']
 
             if float(bnb_required) > float(bnb_available):
-                print("Insufficient BNBrequired:{} available:{}".format(bnb_required,
-                                                                        bnb_available))
+                print(f"Insufficient BNB required:{bnb_required} available:{bnb_available}")
                 result3 = "True"
                 reason = "BNB not available"
 
 
         except KeyError as key_err:
             result2 = True
-            reason = "Unable to get balance: {}".format(str(key_err))
+            reason = f"Unable to get balance: {str(key_err)}"
         if result or result2 or result3:
-            pairs.append("{} ({}): {}".format(pair, name, reason))
+            pairs.append(f"{pair} ({name}): {reason}")
 
     str_pairs = '\n'.join(map(str, pairs))
     if str_pairs:
-        send_slack_message("alerts", "Issues with open trades:\n {}".format(str_pairs),
-                           name=sys.argv[0].split('/')[-1])
+        send_slack_message("alerts", f"Issues with open trades:\n {str_pairs}",
+                           name=sys.argv[0].rsplit('/', maxsplit=1)[-1])
 
 if __name__ == '__main__':
     main()

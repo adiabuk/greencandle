@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-position,no-member
 
 """
 Slack alert when not enough available BNB
@@ -22,7 +21,7 @@ def main():
     bnb = float(all_bal['margin']['BNB']['USD'])
     if bnb < 10:
         error_str = "Not enough BNB in cross margin account"
-        send_slack_message('alerts', error_str, name=sys.argv[0].split('/')[-1])
+        send_slack_message('alerts', error_str, name=sys.argv[0].rsplit('/', maxsplit=1)[-1])
 
 
 if __name__ == "__main__":

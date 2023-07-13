@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-position,no-member,logging-not-lazy,import-error,bare-except
+#pylint: disable=no-member
 """
 Collect OHLC and strategy data for later analysis
 """
@@ -23,7 +23,7 @@ def keepalive():
     """
     Periodically touch file for docker healthcheck
     """
-    Path('/var/local/gc_get_{}.lock'.format(config.main.interval)).touch()
+    Path(f'/var/local/gc_get_{config.main.interval}.lock').touch()
 
 @GET_EXCEPTIONS
 def get_data():
@@ -55,7 +55,7 @@ def main():
     send_slack_message('alerts', "Starting initial prod run")
     LOGGER.info("Starting initial prod run")
     name = config.main.name.split('-')[-1]
-    Path('/var/run/{}-data-{}-{}'.format(config.main.base_env, interval, name)).touch()
+    Path(f'/var/run/{config.main.base_env}-data-{interval}-{name}').touch()
 
 
     # only fetch historic indicator data for higher timeframes
@@ -64,8 +64,8 @@ def main():
 
     # initial run, before scheduling begins
     RUNNER.prod_initial(interval, test=True, first_run=True, no_of_runs=4)
-    if os.path.exists('/var/run/{}-data-{}-{}'.format(config.main.base_env, interval, name)):
-        os.remove('/var/run/{}-data-{}-{}'.format(config.main.base_env, interval, name))
+    if os.path.exists(f'/var/run/{config.main.base_env}-data-{interval}-{name}'):
+        os.remove(f'/var/run/{config.main.base_env}-data-{interval}-{name}')
     send_slack_message('alerts', "Finished initial prod run")
     LOGGER.info("Finished initial prod run")
 

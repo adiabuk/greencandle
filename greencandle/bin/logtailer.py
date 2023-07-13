@@ -1,14 +1,13 @@
 #!/usr/bin/env python
-#pylint: disable=invalid-name
 """
 Flask module to provide web interface for tailing /var/log/syslog
 """
 
 import os
 import time
-import setproctitle
 from flask import Flask, render_template
 from flask_login import LoginManager, login_required
+import setproctitle
 from greencandle.lib.common import arg_decorator
 from greencandle.lib.flask_auth import load_user, login as loginx, logout as logoutx
 

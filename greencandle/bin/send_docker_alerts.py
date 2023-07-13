@@ -1,17 +1,17 @@
 #!/usr/bin/env python
-#pylint: disable=ungrouped-imports,wrong-import-position,import-error,wrong-import-order,no-member
+#pylint: disable=no-member
 
 """
 Check if docker containers are up/healthy, otherwise alert to slack
 """
 
 import json
+import requests_unixsocket
 from greencandle.lib import config
-config.create_config()
 from greencandle.lib.common import arg_decorator
 from greencandle.lib.alerts import send_slack_message
 
-import requests_unixsocket
+config.create_config()
 
 def get_docker_status(docker_socket):
     """
@@ -20,7 +20,7 @@ def get_docker_status(docker_socket):
     session = requests_unixsocket.Session()
     container_list = []
     socket = docker_socket.replace("/", "%2F")
-    url = "http+unix://{}/containers/json?all=1".format(socket)
+    url = f"http+unix://{socket}/containers/json?all=1"
     request = session.get(url)
     assert request.status_code == 200
     for container in json.loads(request.content):
@@ -54,7 +54,7 @@ def main():
 
     if issues:
         my_string = ', '.join(issues)
-        send_slack_message("alerts", "Issues with docker containers: {}".format(my_string))
+        send_slack_message("alerts", f"Issues with docker containers: {my_string}")
 
 if __name__ == '__main__':
     main()

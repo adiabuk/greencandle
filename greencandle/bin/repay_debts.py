@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-member, logging-not-lazy
+#pylint: disable=no-member
 """
 Look for cross balances which can be paid off
 """
@@ -31,10 +31,10 @@ def main():
             to_pay = owed if owed <= free else free
             if to_pay == 0:
                 continue
-            logger.info("Attempting to pay off Cross %s of %s" % (to_pay, symbol))
+            logger.info("Attempting to pay off Cross %s of %s", to_pay, symbol)
             result = client.margin_repay(symbol=symbol, asset=symbol,
                                          quantity=to_pay, isolated=False)
-            logger.info("Repay result for %s: %s" % (symbol, result))
+            logger.info("Repay result for %s: %s", symbol, result)
     isolated_details = client.get_isolated_margin_details()
     for item in isolated_details['assets']:
         symbol = item['symbol']
@@ -46,12 +46,12 @@ def main():
                 to_pay = borrowed if borrowed < free else free
                 if to_pay == 0:
                     continue
-                logger.info("Attempting to pay off Isolated %s of %s %s" % (to_pay, asset, symbol))
+                logger.info("Attempting to pay off Isolated %s of %s %s", to_pay, asset, symbol)
                 result = client.margin_repay(symbol=symbol,
                                              asset=asset,
                                              quantity=to_pay,
                                              isolated=True)
-                logger.info("Repay result for %s %s: %s" % (symbol, asset, result))
+                logger.info("Repay result for %s %s: %s", symbol, asset, result)
 
 if __name__ == '__main__':
     main()

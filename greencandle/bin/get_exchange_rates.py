@@ -15,7 +15,7 @@ def main():
     mysql = Mysql()
     quote = sys.argv[1]
     rates = mysql.get_rates(quote)
-    print("USD: {}, GBP: {}".format(rates[0], rates[1]))
+    print(f"USD: {rates[0]}, GBP: {rates[1]}")
 
 if __name__ == '__main__':
     main()

@@ -9,7 +9,6 @@ from greencandle.lib.mysql import Mysql
 from greencandle.lib.common import get_short_name, arg_decorator
 from greencandle.lib import config
 
-
 @arg_decorator
 def main():
     """
@@ -19,7 +18,7 @@ def main():
     """
     config.create_config()
     env = config.main.base_env
-    url = "http://router:1080/{}".format(config.web.api_token)
+    url = f"http://router:1080/{config.web.api_token}"
     dbase = Mysql()
     dbase.get_active_trades()
     open_trades = dbase.fetch_sql_data('select pair, name, net_perc, direction from open_trades',
@@ -29,7 +28,7 @@ def main():
         pair, name, net_perc, direction = trade
         if net_perc > (float(sys.argv[1]) if len(sys.argv) > 1 else 0.3):
             short_name = get_short_name(name, env, direction)
-            print("We can close {} {} {} @ {}%".format(pair, name, direction, net_perc))
+            print(f"We can close {pair} {name} {direction} @ {net_perc}%")
             payload = {"pair": pair,
                        "text": "closing trade from close_all script",
                        "action": "close",

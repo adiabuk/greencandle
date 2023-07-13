@@ -1,4 +1,4 @@
-#pylint: disable=wrong-import-position,no-member
+#pylint: disable=no-member
 """
 Follow log files and alert on Error
 """
@@ -7,7 +7,6 @@ import os
 import docker
 import setproctitle
 from greencandle.lib import config
-config.create_config()
 from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.common import arg_decorator
 
@@ -36,6 +35,7 @@ def main():
 
     Usage: logwatch
     """
+    config.create_config()
     setproctitle.setproctitle("logwatch")
     env = config.main.base_env
     client = docker.from_env()
@@ -48,9 +48,9 @@ def main():
                 try:
                     name = client.containers.get(match).name
                 except docker.errors.NotFound:
-                    name = "unknown - {}".format(container_id)
+                    name = f"unknown - {container_id}"
                 if name.startswith(env) or container_id.startswith(env):
-                    send_slack_message("alerts", "Unhandled exception found in %s container" % name)
+                    send_slack_message("alerts", "Unhandled exception found in %s container", name)
 
 if __name__ == '__main__':
     main()

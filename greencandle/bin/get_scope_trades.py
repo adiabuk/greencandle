@@ -15,9 +15,8 @@ def main():
     """
     dbase = Mysql()
     config.create_config()
-    results = dbase.fetch_sql_data('select pair from open_trades where name="{}" and '
-                                   'direction="{}"'.format(config.main.name,
-                                                           config.main.trade_direction),
+    results = dbase.fetch_sql_data(f'select pair from open_trades where name="config.main.name" '
+                                   f'and direction="{config.main.trade_direction}"',
                                    header=False)
 
     pairs = [item for sublist in results for item in sublist]

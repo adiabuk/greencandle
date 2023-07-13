@@ -1,4 +1,4 @@
-#pylint: disable=no-member,wrong-import-order,logging-not-lazy
+#pylint: disable=no-member,too-many-statements
 
 """
 Get/Convert Balances from Binance
@@ -10,6 +10,7 @@ from greencandle.lib.balance_common import default_to_regular, get_quote
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.logger import get_logger
 from greencandle.lib import config
+
 config.create_config()
 BITCOIN = {}
 LOGGER = get_logger(__name__)
@@ -82,10 +83,10 @@ def get_binance_isolated():
 
             else:  # other currencies that need converting to BTC
                 try:
-                    LOGGER.debug("Converting currency %s" % key)
+                    LOGGER.debug("Converting currency %s", key)
                     bcoin = float(amount) * float(prices[quote+"BTC"])  # value in BTC
                 except KeyError:
-                    LOGGER.critical("Error: Unable to quantify margin currency: %s" % quote)
+                    LOGGER.critical("Error: Unable to quantify margin currency: %s", quote)
                     continue
 
             usd = bcoin*float(prices['BTCUSDT'])
@@ -126,7 +127,7 @@ def get_binance_cross():
     usd_total = 0
 
     for key in all_balances:
-        LOGGER.debug('%s %s ' % (str(key), str(all_balances[key]["net"])))
+        LOGGER.debug('%s %s ', str(key), str(all_balances[key]["net"]))
         current_value = float(all_balances[key]["net"])
 
         if float(current_value) != 0:  # available currency
@@ -146,11 +147,11 @@ def get_binance_cross():
 
             else:  # other currencies that need converting to BTC
                 try:
-                    LOGGER.debug("Converting currency %s" % key)
+                    LOGGER.debug("Converting currency %s", key)
                     bcoin = float(current_value) * float(prices[key+"BTC"])  # value in BTC
                     bitcoin_totals += bcoin
                 except KeyError:
-                    LOGGER.critical("Error: Unable to quantify margin currency: %s" % key)
+                    LOGGER.critical("Error: Unable to quantify margin currency: %s", key)
                     continue
 
             add_value(key, bcoin)
@@ -217,11 +218,11 @@ def get_binance_spot():
             else:  # other currencies that need converting to BTC
                 try:
                     key = "ETH" if key == "ETHW" else key
-                    LOGGER.debug("Converting spot currency %s %s" % (key, str(current_value)))
+                    LOGGER.debug("Converting spot currency %s %s", key, str(current_value))
                     bcoin = float(current_value) * float(prices[key+"BTC"])  # value in BTC
                     bitcoin_totals += bcoin
                 except KeyError:
-                    LOGGER.critical("Error: Unable to quantify spot currency: %s " % key)
+                    LOGGER.critical("Error: Unable to quantify spot currency: %s ", key)
                     continue
 
             add_value(key, bcoin)

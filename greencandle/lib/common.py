@@ -1,4 +1,4 @@
-#pylint: disable=no-member,no-else-return
+#pylint: disable=no-member
 """
 Common functions that don't belong anywhere else
 """
@@ -57,7 +57,7 @@ def get_short_name(name, env, direction):
     Get short name for a container
     """
     if direction not in name:
-        name = "{}-{}".format(name, direction)
+        name = f"{name}-{direction}"
     try:
         short = list_to_dict(get_be_services(env), reverse=False)[name]
     except KeyError:
@@ -69,12 +69,12 @@ def get_be_services(env):
     Get long/short services from docker-compose file
     """
 
-    with open("/srv/greencandle/install/docker-compose_{}.yml" .format(env), "r") as stream:
+    with open(f"/srv/greencandle/install/docker-compose_{env}.yml", "r") as stream:
         try:
-            output = (yaml.safe_load(stream))
+            output = yaml.safe_load(stream)
         except yaml.YAMLError as exc:
             print(exc)
-    links_list = output['services']['{}-be-api-router'.format(env)]['links']
+    links_list = output['services'][f'{env}-be-api-router']['links']
     return links_list
 
 def get_worker_containers(env):
@@ -82,7 +82,7 @@ def get_worker_containers(env):
     Get list of worker containers in given environments
     """
     containers = []
-    with open('/srv/greencandle/install/docker-compose_{}.yml'.format(env), 'r') as stream:
+    with open(f'/srv/greencandle/install/docker-compose_{env}.yml', 'r') as stream:
         output = yaml.safe_load(stream)
         keys = list(output['services'].keys())
         for key in keys:
@@ -98,8 +98,7 @@ def list_to_dict(rlist, reverse=True, delimiter=":", str_filter=''):
     links = dict(map(lambda s: s.split(delimiter), rlist))
     if reverse:
         return {v: k for k, v in links.items() if str_filter in k}
-    else:
-        return {k: v for k, v in links.items() if str_filter in k}
+    return {k: v for k, v in links.items() if str_filter in k}
 
 def divide_chunks(lst, num):
     """
@@ -171,7 +170,7 @@ def pipify(value):
     """
     value = Decimal(value)
     try:
-        pip_value = int((str(value) + "000").split(".")[-1][:4])
+        pip_value = int((str(value) + "000").rsplit(".", maxsplit=1)[-1][:4])
         return pip_value
     except ValueError:
         print("Value Error", value)
@@ -231,14 +230,12 @@ def get_tv_link(pair, interval=None):
         return int(time_string[:-1]) * minutes_per_unit[time_string[-1]]
 
     if interval:
-        return ("<https://www.tradingview.com/chart/?symbol=BINANCE:{0}&interval={1}|{0}>"
-                .format(pair.strip(), convert_to_minutes(interval)))
-    else:
-        return "<https://www.tradingview.com/chart/?symbol=BINANCE:{0}|{0}>".format(pair.strip())
+        return (f"<https://www.tradingview.com/chart/?symbol=BINANCE:{pair.strip()}"
+                f"&interval={convert_to_minutes(interval)}|{0}>")
+    return f"<https://www.tradingview.com/chart/?symbol=BINANCE:{pair.strip()}|{pair.strip()}>"
 
 def get_trade_link(pair, strategy, action, string, port=8888):
     """Get trade link for forced trade"""
     url = os.environ['VPN_IP'] + ":" + port
-    return ("<http://{0}/action?pair={1}&strategy={2}&action={3}"
-            "&close=true|{4}>".format(url.strip(), pair.strip(), strategy.strip(), action.strip(),
-                                      string.strip()))
+    return (f"<http://{url.strip()}/action?pair={pair.strip()}&strategy={strategy.strip()}"
+            f"&action={action.strip()}&close=true|{string.strip()}>")

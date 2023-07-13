@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=bare-except,no-member,wrong-import-position,no-else-return,unnecessary-comprehension,consider-using-with
+#pylint: disable=bare-except,no-member,consider-using-with,too-many-locals
 
 """
 Flask module for manipulating API trades and displaying relevent graphs
@@ -40,8 +40,7 @@ def get_pairs(env=config.main.base_env):
 
     Usage: api_dashboard
     """
-    docker_compose = open("/srv/greencandle/install/docker-compose_{}.yml"
-                          .format(env), "r")
+    docker_compose = open(f"/srv/greencandle/install/docker-compose_{env}.yml", "r")
     pairs_dict = {}
     names = {}
     length = defaultdict(int)
@@ -49,12 +48,10 @@ def get_pairs(env=config.main.base_env):
     for line in docker_compose:
         if re.search(pattern, line.strip()) and not line.strip().endswith(('prod', 'api', 'cron')):
             env = line.split('=')[1].strip()
-            command = ('configstore package get --basedir /srv/greencandle/config {} pairs'
-                       .format(env))
+            command = f'configstore package get --basedir /srv/greencandle/config {env} pairs'
             result = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
             pairs = result.stdout.read().split()
-            command = ('configstore package get --basedir /srv/greencandle/config {} name'
-                       .format(env))
+            command = f'configstore package get --basedir /srv/greencandle/config {env} name'
             result = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
             name = result.stdout.read().split()
             pairs_dict[env] = [pair.decode('utf-8') for pair in pairs]
@@ -84,7 +81,7 @@ def commands():
 def interal():
     """Load internal page"""
     page = "http://" + request.args.get('page')
-    resp = requests.get(f'{page}')
+    resp = requests.get(page, timeout=20)
     return render_template('internal.html', page=resp.content.decode())
 
 @APP.route('/iframe', methods=["GET"])
@@ -138,22 +135,21 @@ def action():
     send_trade(pair, strategy, trade_action, take=take, stop=stop)
     if close:
         return '<button type="button" onclick="window.close()">Close Tab</button>'
-    else:
-        return redirect(url_for('trade'))
+    return redirect(url_for('trade'))
 
 def send_trade(pair, strategy, trade_action, take=None, stop=None):
     """
     Create OPEN/CLOSE post request and send to API router
     """
     payload = {"pair": pair,
-               "text": "Manual {} action from API".format(trade_action),
+               "text": f"Manual {trade_action} action from API",
                "action": trade_action,
                "strategy": strategy,
                "manual": True,
                "tp": take,
                "sl": stop}
     api_token = config.web.api_token
-    url = "http://router:1080/{}".format(api_token)
+    url = f"http://router:1080/{api_token}"
     try:
         requests.post(url, json=payload, timeout=1)
     except:
@@ -209,7 +205,7 @@ def data():
              'bbperc_200', 'stx_diff']
     if request.method == 'GET':
         return render_template('data.html', files=files)
-    elif request.method == 'POST':
+    if request.method == 'POST':
         req = request.form['submit']
         all_data = results = defaultdict(list)
         redis = Redis(db=3)
@@ -226,7 +222,7 @@ def data():
                 current_row.update({function.decode():current_value})
             all_data['all'].append(current_row)
         results = all_data[req]
-        fieldnames = [key for key in results[0].keys()]
+        fieldnames = list(results[0].keys())
 
         return render_template('data.html', results=results, fieldnames=fieldnames, len=len,
                                files=files)

@@ -1,4 +1,4 @@
-#pylint: disable=no-member, logging-not-lazy, broad-except
+#pylint: disable=no-member,broad-except,too-many-locals,too-many-statements,consider-using-with
 
 """
 Perform run for test & prod
@@ -56,7 +56,7 @@ def serial_test(pairs, intervals, data_dir, indicators):
 def perform_data(pair, interval, data_dir, indicators):
     """Serial test loop"""
     pair = pair.strip()
-    LOGGER.debug("Serial run %s %s" % (pair, interval))
+    LOGGER.debug("Serial run %s %s", pair, interval)
     redis = Redis(interval=interval, test_data=True)
 
     dframe = get_pickle_data(pair, data_dir, interval)
@@ -64,19 +64,19 @@ def perform_data(pair, interval, data_dir, indicators):
         return
     dbase = Mysql(test=True, interval=interval)
     for beg in range(len(dframe) - CHUNK_SIZE):
-        LOGGER.debug("IN LOOP %s " % beg)
+        LOGGER.debug("IN LOOP %s", beg)
         trade = Trade(interval=interval, test_trade=True, test_data=True, config=config)
 
         closes = []
         opens = []
         end = beg + CHUNK_SIZE
-        LOGGER.debug("chunk: %s, %s" % (beg, end))
+        LOGGER.debug("chunk: %s, %s", beg, end)
         dataframe = dframe.copy()[beg: end]
 
         current_otime = int(dataframe.iloc[-1].openTime)/1000
         current_time = time.strftime("%Y-%m-%d %H:%M:%S",
                                      time.gmtime(current_otime))
-        LOGGER.debug("current date: %s" %  current_time)
+        LOGGER.debug("current date: %s", current_time)
 
         if len(dataframe) < CHUNK_SIZE:
             LOGGER.debug("End of dataframe")
@@ -96,7 +96,7 @@ def perform_data(pair, interval, data_dir, indicators):
         action = 1 if config.main.trade_direction == 'long' else -1
         if result == "OPEN":
             opens.append((pair, current_time, current_price, event, action))
-            LOGGER.debug("Items to open: %s" % opens)
+            LOGGER.debug("Items to open: %s", opens)
             trade_result = trade.open_trade(opens)
             if trade_result:
                 redis.update_drawdown(pair, current_candle, event='open')
@@ -106,7 +106,7 @@ def perform_data(pair, interval, data_dir, indicators):
 
         elif result == "CLOSE":
             closes.append((pair, current_time, current_price, event, 0))
-            LOGGER.debug("Items to close: %s" % closes)
+            LOGGER.debug("Items to close: %s", closes)
             drawdown = redis.get_drawdown(pair)['perc']
             drawup = redis.get_drawup(pair)['perc']
             trade_result = trade.close_trade(closes, drawdowns={pair:drawdown},
@@ -134,7 +134,7 @@ def parallel_test(pairs, interval, data_dir, indicators):
     """
     Do test with parallel data
     """
-    LOGGER.info("Performaing parallel run %s" % interval)
+    LOGGER.info("Performaing parallel run %s", interval)
     redis = Redis(test_data=True)
     redis.clear_all()
     dbase = Mysql(test=True, interval=interval)
@@ -152,7 +152,7 @@ def parallel_test(pairs, interval, data_dir, indicators):
             # skip to next pair if no data returned
             continue
         sizes.append(len(dframes[pair]))
-        LOGGER.info("%s dataframe size: %s" % (pair, len(dframes[pair])))
+        LOGGER.info("%s dataframe size: %s", pair, len(dframes[pair]))
 
     for beg in range(max(sizes) - CHUNK_SIZE):
         end = beg + CHUNK_SIZE
@@ -162,7 +162,7 @@ def parallel_test(pairs, interval, data_dir, indicators):
         drawdowns = {}
         drawups = {}
         for pair in pairs:
-            LOGGER.info("Current loop: %s to %s pair:%s" % (beg, end, pair))
+            LOGGER.info("Current loop: %s to %s pair:%s", beg, end, pair)
             dataframe = dframes[pair][beg: end]
             if len(dataframe) < CHUNK_SIZE:
                 break
@@ -177,7 +177,7 @@ def parallel_test(pairs, interval, data_dir, indicators):
             redis.update_drawdown(pair, current_candle)
             redis.update_drawup(pair, current_candle)
 
-            LOGGER.info('In Strategy %s' % result)
+            LOGGER.info('In Strategy %s', result)
             del engine
 
             action = 1 if config.main.trade_direction == 'long' else -1
@@ -202,12 +202,12 @@ def get_pickle_data(pair, data_dir, interval):
     Get dataframes from stored pickle file
     """
     try:
-        filename = glob("{0}/{1}_{2}.p*".format(data_dir, pair, interval))[0]
+        filename = glob(f"{data_dir}/{pair}_{interval}.p*")[0]
     except IndexError:
-        LOGGER.critical("Filename not found for %s %s" % (pair, interval))
+        LOGGER.critical("Filename not found for %s %s", pair, interval)
         return None
     if not os.path.exists(filename):
-        LOGGER.critical("Filename:%s not found for %s %s" % (filename, pair, interval))
+        LOGGER.critical("Filename:%s not found for %s %s", filename, pair, interval)
         return None
     if filename.endswith("gz"):
         handle = gzip.open(filename, "rb")
@@ -245,8 +245,8 @@ class ProdRunner():
                                                 interval=interval,
                                                 no_of_klines=klines)[pair].iloc[-1]
             except IndexError:
-                LOGGER.critical("Unable to get %s candles for %s while performing %s prod_int_check"
-                                % (str(klines), pair, interval))
+                LOGGER.critical("Unable to get %s candles for %s while running %s prod_int_check",
+                                str(klines), pair, interval)
 
             if dbase.trade_in_context(pair, config.main.name, config.main.trade_direction):
                 redis.update_drawdown(pair, current_candle, open_time=open_time)
@@ -256,8 +256,8 @@ class ProdRunner():
                                                                                     current_candle,
                                                                                     open_time)
 
-                LOGGER.debug("%s int check result: %s Open:%s Current:%s Time:%s"
-                             % (pair, result, open_price, current_price, current_time))
+                LOGGER.debug("%s int check result: %s Open:%s Current:%s Time:%s",
+                             pair, result, open_price, current_price, current_time)
                 if result == "CLOSE":
                     LOGGER.debug("Items to close")
                     closes.append((pair, current_time, current_price, event, 0))
@@ -267,7 +267,7 @@ class ProdRunner():
                         payload = {"pair":pair, "strategy":"alert", "host": "alert",
                                    "text": "Closing API trade according to TP/SL rules",
                                    "action":"close"}
-                        url = "http://router:1080/{}".format(config.web.api_token)
+                        url = f"http://router:1080/{config.web.api_token}"
                         try:
                             requests.post(url, json=payload, timeout=1)
                         except Exception:
@@ -288,7 +288,7 @@ class ProdRunner():
 
         redis = Redis()
         no_of_klines = config.main.no_of_klines
-        LOGGER.debug("Getting %s klines" % no_of_klines)
+        LOGGER.debug("Getting %s klines", no_of_klines)
         self.dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=no_of_klines)
         engine = Engine(dataframes=self.dataframes, interval=interval,
                         test=test, redis=redis)
@@ -306,11 +306,10 @@ class ProdRunner():
         new_dataframes = defaultdict(dict)
         for pair in PAIRS:
             try:
-                request1 = requests.get("http://stream:5000/recent?pair={}".format(pair))
-                request2 = requests.get("http://stream:5000/closed?pair={}".format(pair))
+                request1 = requests.get(f"http://stream:5000/recent?pair={pair}", timeout=2)
+                request2 = requests.get(f"http://stream:5000/closed?pair={pair}", timeout=2)
                 if request1.status_code != 200:
-                    LOGGER.warning("Unable to fetch recent data for %s %s" % (pair,
-                                                                              config.main.name))
+                    LOGGER.warning("Unable to fetch recent data for %s %s", pair, config.main.name)
                 recent_di = request1.json()
 
                 try:
@@ -338,8 +337,8 @@ class ProdRunner():
                 # use openTime as index
                 new_open = row['openTime']
                 # see if openTime already exists in data
-                old_index = self.dataframes[pair].index[self.dataframes[pair]['openTime'].astype(str) ==
-                                                        str(new_open)].tolist()
+                old_index = self.dataframes[pair].index[self.dataframes[pair] \
+                        ['openTime'].astype(str) == str(new_open)].tolist()
                 if old_index:
                     # if it exsits, then we use the last index occurance in list
                     # and overwrite that field in existing data
@@ -358,8 +357,8 @@ class ProdRunner():
         Loop through collection cycle (PROD)
         """
         LOGGER.debug("Performaing prod loop")
-        LOGGER.debug("Pairs in config: %s" % PAIRS)
-        LOGGER.info("Starting new cycle with %s pairs" %len(PAIRS))
+        LOGGER.debug("Pairs in config: %s", PAIRS)
+        LOGGER.info("Starting new cycle with %s pairs", len(PAIRS))
         client = Binance()
         redis = Redis()
 

@@ -24,7 +24,7 @@ def main():
                 dframe = pickle.load(handle)
                 date = time.strftime("%Y-%m-%d", time.gmtime(int(dframe.iloc[0].closeTime)/1000))
             except Exception:
-                print("skipping {}".format(filename))
+                print(f"skipping {filename}")
             print(filename, date)
 
 if __name__ == '__main__':

@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-position
 
 """
 Download historic data to be used for testing purposes
@@ -11,12 +10,12 @@ import argparse
 import argcomplete
 
 from greencandle.lib import config
-config.create_config()
 from greencandle.lib.binance_common import get_data
 
 def main():
     """ Main function """
 
+    config.create_config()
     parser = argparse.ArgumentParser()
     parser.add_argument("-s", "--startdate", required=True)
     parser.add_argument("-d", "--days", required=True)

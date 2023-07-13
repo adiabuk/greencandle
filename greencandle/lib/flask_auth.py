@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-#pylint: disable=no-else-return,invalid-overridden-method,invalid-name,no-self-use,no-member
+#pylint: disable=invalid-overridden-method,invalid-name,no-member
+
 """
 Libraries for adding auth to all Flask api modules
 """
@@ -26,7 +27,7 @@ class User(UserMixin):
         self.password = USERS_DB[username]
 
     def __repr__(self):
-        return "%s/%s" % (self.id, self.password)
+        return f"{self.id}/{self.password}"
 
     def is_active(self):
         """if logged in"""
@@ -40,10 +41,8 @@ def login():
         if (username, password) in USERS_DB.items():
             login_user(User(username))
             return redirect(request.args.get("next"))
-        else:
-            return abort(401)
-    else:
-        return render_template('login.html')
+        return abort(401)
+    return render_template('login.html')
 
 def logout():
     """logout page"""

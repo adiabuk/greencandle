@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-member, wrong-import-position,no-else-return,logging-not-lazy,broad-except
+#pylint: disable=no-member
 """
 Flask module for getting indicator values
 """
@@ -9,6 +9,7 @@ from greencandle.lib import config
 from greencandle.lib.common import arg_decorator
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.logger import get_logger
+
 config.create_config()
 LONG = set()
 SHORT = set()

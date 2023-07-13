@@ -1,11 +1,9 @@
 #!/usr/bin/env python
-#pylint: disable=wrong-import-position
 """
 Get list of profitable pairs
 """
 from greencandle.lib import config
 from greencandle.lib.common import arg_decorator
-config.create_config()
 from greencandle.lib.mysql import Mysql
 
 @arg_decorator
@@ -13,6 +11,7 @@ def main():
     """
     Populate table of profitable pairs for given strategy
     """
+    config.create_config()
     dbase = Mysql()
 
     dbase.delete_table_contents('tmp_pairs')
