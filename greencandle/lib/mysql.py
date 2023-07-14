@@ -164,7 +164,7 @@ class Mysql():
         """
         kwargs = AttributeDict(kwargs)
         command = f"""insert into api_requests (pair, text, action, price, strategy) VALUES
-                     ("{kwargs.pair}", "{kwargs.text}" "{kwargs.action}",
+                     ("{kwargs.pair}", "{kwargs.text}", "{kwargs.action}",
                      "{kwargs.get('price', 'N/A')}", "{kwargs.strategy}")"""
         result = self.__run_sql_query(command)
         return result == 1
