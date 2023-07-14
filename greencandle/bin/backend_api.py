@@ -71,8 +71,7 @@ def main():
     Usage: backend_api [--test] [api|queue]
     """
     test_str = '-test' if TEST else ''
-    setproctitle.setproctitle("backend_api-$func$test".substitute(func=sys.argv[-1],
-                                               test=test_str))
+    setproctitle.setproctitle(f"backend_api-{sys.argv[-1]}{test_str}")
     if sys.argv[-1] == 'api':
         if "intermittent" in os.environ:
             scheduler = BackgroundScheduler()

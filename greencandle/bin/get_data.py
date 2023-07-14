@@ -51,7 +51,7 @@ def main():
     """
 
     interval = config.main.interval
-    setproctitle.setproctitle("get_data-$name".substitute(interval))
+    setproctitle.setproctitle(f"get_data-{interval}")
     send_slack_message('alerts', "Starting initial prod run")
     LOGGER.info("Starting initial prod run")
     name = config.main.name.split('-')[-1]
