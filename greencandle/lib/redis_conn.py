@@ -296,16 +296,16 @@ class Redis():
             success of operation: True/False
         """
 
-        for _, value in data.items():
+        for close, value in data.items():
             key = f"{pair}:{interval}"
             expiry = int(config.redis.redis_expiry_seconds)
             value['current_epoch'] = int(time.time())
             value['current_time'] = epoch2date(time.time())
+            result = self.conn.hmset(key, {close: json.dumps(value)})
 
         if str2bool(config.redis.redis_expire):
             self.conn.expire(key, expiry)
-
-        return True
+        return result
 
     def get_items(self, pair, interval):
         """
