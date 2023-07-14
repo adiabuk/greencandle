@@ -44,7 +44,8 @@ class NotifyOnCriticalStream(logging.StreamHandler):
     def emit(self, record):
         super().emit(record)
         if record.levelno in (logging.ERROR, logging.CRITICAL):
-            send_slack_message('alerts', record.msg.format().replace('"', ''))
+            message = self.format(record)
+            send_slack_message('alerts', message)
 
 class NotifyOnCriticalJournald(JournaldLogHandler):
     """
@@ -57,11 +58,8 @@ class NotifyOnCriticalJournald(JournaldLogHandler):
         record.name = config.main.name
         super().emit(record)
         if record.levelno in (logging.ERROR, logging.CRITICAL):
-            try:
-                send_slack_message('alerts', record.msg.replace('"', ''))
-            except AttributeError:
-                if record.msg:
-                    send_slack_message('alerts', record.msg)
+            message = self.format(record)
+            send_slack_message('alerts', message)
 
 def get_logger(module_name=None):
     """
