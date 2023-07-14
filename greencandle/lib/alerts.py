@@ -78,7 +78,7 @@ def send_slack_trade(**kwargs):
         kwargs['price'] = str(kwargs['price']).rstrip("0")
         kwargs['perc'] = f"{kwargs['perc']:.4f}"
         commission = 0.2
-        kwargs['net_perc'] = f"{float(float(kwargs['perc']) - float(commission)):.f4}%"
+        kwargs['net_perc'] = f"{float(float(kwargs['perc']) - float(commission)):.4f}%"
         kwargs['net_profit'] = format_usd(float(kwargs['usd_profit']) - ((float(kwargs.usd_quote)
                                                                           /100) * 0.2))
         kwargs['usd_profit'] = format_usd(kwargs['usd_profit'])

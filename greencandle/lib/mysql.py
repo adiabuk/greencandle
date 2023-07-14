@@ -164,7 +164,7 @@ class Mysql():
         """
         kwargs = AttributeDict(kwargs)
         command = f"""insert into api_requests (pair, text, action, price, strategy) VALUES
-                     ("{kwargs.pair}", "{kwargs.text}'" "{kwargs.action}",
+                     ("{kwargs.pair}", "{kwargs.text}" "{kwargs.action}",
                      "{kwargs.get('price', 'N/A')}", "{kwargs.strategy}")"""
         result = self.__run_sql_query(command)
         return result == 1
@@ -293,7 +293,7 @@ class Mysql():
         job_name = name if name else config.main.name
         query = f"""select id from trades where close_price is NULL and
                    `interval`="{self.interval}" and pair="{pair}" and (name="{job_name}"
-                   or name like "api") and ' direction="{config.main.trade_direction}"
+                   or name like "api") and direction="{config.main.trade_direction}"
                    ORDER BY ID ASC LIMIT 1"""
         try:
             trade_id = self.fetch_sql_data(query, header=False)[0][0]
