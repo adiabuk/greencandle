@@ -134,7 +134,7 @@ class Engine(dict):
         self.schemes = []
 
     @get_exceptions
-    def get_data(self, localconfig=None, first_run=False, no_of_klines=None, no_of_runs=999):
+    def get_data(self, localconfig=None, first_run=False, no_of_runs=999):
         """
         Iterate through data and trading pairs to extract data
         Run data through indicator, oscillators, moving average

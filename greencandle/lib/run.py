@@ -292,8 +292,7 @@ class ProdRunner():
         self.dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=no_of_klines)
         engine = Engine(dataframes=self.dataframes, interval=interval,
                         test=test, redis=redis)
-        engine.get_data(localconfig=MAIN_INDICATORS, first_run=first_run, no_of_klines=no_of_klines,
-                        no_of_runs=no_of_runs)
+        engine.get_data(localconfig=MAIN_INDICATORS, first_run=first_run, no_of_runs=no_of_runs)
 
         del redis
         del engine
