@@ -291,7 +291,7 @@ class Mysql():
         """
         usd_rate, gbp_rate = self.get_rates(symbol_name)
         job_name = name if name else config.main.name
-        query = f"""select id from trades where close_price is NULL and '
+        query = f"""select id from trades where close_price is NULL and
                    `interval`="{self.interval}" and pair="{pair}" and (name="{job_name}"
                    or name like "api") and ' direction="{config.main.trade_direction}"
                    ORDER BY ID ASC LIMIT 1"""

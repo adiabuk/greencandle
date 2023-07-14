@@ -542,7 +542,7 @@ class Trade():
         balance[account]['BNB']['count'] = 46.06
         for quote in QUOTES:
             last_value = dbase.fetch_sql_data(f"select quote_in from trades "
-                                              f"where pair like '%{quote}'"
+                                              f"where pair like '%{quote}' "
                                               f"order by open_time desc limit 1",
                                               header=False)
             last_value = float(last_value[0][0]) if last_value else 0
