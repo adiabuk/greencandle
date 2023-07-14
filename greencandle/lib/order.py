@@ -5,6 +5,7 @@ Test Buy/Sell orders
 
 from collections import defaultdict
 import datetime
+import time
 import re
 from pathlib import Path
 from str2bool import str2bool
@@ -80,7 +81,11 @@ class Trade():
 
         self.logger.debug('Strategy - Adding to redis')
         redis = Redis()
-        mepoch = redis.get_items(kwargs.pair, kwargs.interval)[-1]
+        try:
+            mepoch = redis.get_items(kwargs.pair, kwargs.interval)[-1]
+        except IndexError:
+            # if unable to get latest time from redis
+            mepoch = int(time.time()*1000)
 
         data = {"event":{"result": kwargs.event,
                          "current_price": format(float(kwargs.price), ".20f"),
