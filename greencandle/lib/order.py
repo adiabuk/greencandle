@@ -135,10 +135,10 @@ class Trade():
             elif not manual and good_pairs and db_pairs and (item[0] not in db_pairs
                                                              and not self.test_data):
                 self.logger.warning("Pair %s not in db_pairs, skipping...", item[0])
-                send_slack_message("trades", "Pair %s not in db_pairs, skipping...", item[0])
+                send_slack_message("trades", f"Pair {item[0]} not in db_pairs, skipping...")
             elif self.is_in_drain() and not self.test_data:
                 self.logger.warning("strategy is in drain for pair %s, skipping...", item[0])
-                send_slack_message("trades", "strategy is in drain, skipping %s", item[0])
+                send_slack_message("trades", f"strategy is in drain, skipping {item[0]}")
                 return []
             elif self.is_float(item[4]) and \
                     ((float(item[4]) > 0 and self.config.main.trade_direction == "short") or \
@@ -788,7 +788,7 @@ class Trade():
                                           quote=quote_out, open_time=open_time)
             else:
                 self.logger.critical("Close short Failed %s:%s", name, pair)
-                send_slack_message("alerts", "Close short Failed %s:%s", name, pair)
+                send_slack_message("alerts", f"Close short Failed {name}:{pair}")
 
         del dbase
         return True
@@ -963,7 +963,7 @@ class Trade():
                                               quote=quote_out, open_time=open_time)
             else:
                 self.logger.critical("Close spot long Failed %s:%s", name, pair)
-                send_slack_message("alerts", "Close spot long Failed %s:%s", name, pair)
+                send_slack_message("alerts", f"Close spot long Failed {name}:{pair}")
                 return False
         del dbase
         return True
@@ -1059,7 +1059,7 @@ class Trade():
                                           quote=quote_out, open_time=open_time)
             else:
                 self.logger.critical("Close margin long Failed %s:%s", name, pair)
-                send_slack_message("alerts", "Close margin long Failed %s:%s", name, pair)
+                send_slack_message("alerts", f"Close margin long Failed {name}:{pair}")
                 return False
 
         del dbase

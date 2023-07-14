@@ -50,7 +50,7 @@ def main():
                 except docker.errors.NotFound:
                     name = f"unknown - {container_id}"
                 if name.startswith(env) or container_id.startswith(env):
-                    send_slack_message("alerts", "Unhandled exception found in %s container", name)
+                    send_slack_message("alerts", f"Unhandled exception found in {name} container")
 
 if __name__ == '__main__':
     main()
