@@ -76,14 +76,14 @@ def send_slack_trade(**kwargs):
             kwargs[key] = "N/A"
     try:
         kwargs['price'] = str(kwargs['price']).rstrip("0")
-        kwargs['perc'] = f"{kwargs['perc']:.4f}"
+        kwargs['perc'] = f"{float(kwargs['perc']):.4f}"
         commission = 0.2
         kwargs['net_perc'] = f"{float(float(kwargs['perc']) - float(commission)):.4f}%"
         kwargs['net_profit'] = format_usd(float(kwargs['usd_profit']) - ((float(kwargs.usd_quote)
                                                                           /100) * 0.2))
         kwargs['usd_profit'] = format_usd(kwargs['usd_profit'])
         kwargs['perc'] = str(kwargs['perc']) + "%"
-        kwargs['quote'] = f"{kwargs['quote']:.4f}"
+        kwargs['quote'] = f"{float(kwargs['quote']):.4f}"
         kwargs['usd_quote'] = format_usd(kwargs['usd_quote'])
 
     except TypeError:
@@ -112,7 +112,7 @@ def send_slack_trade(**kwargs):
     elif kwargs.action == 'CLOSE':
         color = '#fc0303' # red
         close_string = ""
-        quote_string = f"• Quote out: {kwargs.quote:.4f}\n"
+        quote_string = f"• Quote out: {float(kwargs.quote):.4f}\n"
         opent = datetime.strptime(str(kwargs.open_time), "%Y-%m-%d %H:%M:%S")
         closet = datetime.strptime(str(kwargs.close_time), "%Y-%m-%d %H:%M:%S")
         delta = str(closet-opent)
