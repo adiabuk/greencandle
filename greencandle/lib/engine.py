@@ -1,5 +1,5 @@
 #pylint: disable=no-member,consider-iterating-dictionary,broad-except,too-many-locals
-#pylint: disable=global-statement,singleton-comparison
+#pylint: disable=global-statement,singleton-comparison,unused-variable
 
 """
 Module for collecting price data and creating TA results
@@ -266,7 +266,7 @@ class Engine(dict):
 
             scheme["data"] = ema_result if ema else perc
             scheme["symbol"] = pair
-            scheme["event"] = f"{func}_{open_time}"
+            scheme["event"] = f"{func}_{timef}"
             scheme["open_time"] = open_time
 
             self.schemes.append(scheme)
@@ -306,7 +306,7 @@ class Engine(dict):
             scheme["open_time"] = open_time
             scheme["data"] = res
             scheme["symbol"] = pair
-            scheme["event"] = f"{func}_{open_time}"
+            scheme["event"] = f"{func}_{timeframe}"
             self.schemes.append(scheme)
 
         except KeyError as exc:
@@ -570,22 +570,34 @@ class Engine(dict):
         if index is None:
             index = -1
         open_time = str(self.dataframes[pair].iloc[index]["openTime"])
+        klines = self.__make_data_tupple(pair, index)
         func, timef = localconfig  # split tuple
         results = {}
+
+        try:
+            if index == -1:
+                closes = make_float(self.dataframes[pair].close)
+            else:
+                closes = make_float(self.dataframes[pair].close.iloc[:index])
+
+            results = talib.EMA(closes, timeperiod=int(timef))
+
+        except Exception as exc:
+            LOGGER.debug("Overall Exception getting EMA: %s seq: %s", exc, index)
         scheme = {}
         try:
 
             scheme["data"] = results[-1]
             scheme["symbol"] = pair
-            scheme["event"] = func+"_"+str(timef)
+            scheme["event"] = "{0}_{1}".format(func, timef)
             scheme["open_time"] = open_time
 
             self.schemes.append(scheme)
 
         except KeyError as exc:
-            LOGGER.warning("KEY FAILURE in bb perc : %s", str(exc))
+            LOGGER.warning("KEY FAILURE in moving averages : %s", str(exc))
 
-        LOGGER.debug("Done Getting bb perc for %s - %s", pair, open_time)
+        LOGGER.debug("Done Getting moving averages for %s - %s", pair, open_time)
 
     @get_exceptions
     def get_oscillators(self, pair, index=None, localconfig=None):
