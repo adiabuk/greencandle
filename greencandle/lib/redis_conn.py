@@ -1,5 +1,5 @@
 #pylint: disable=eval-used,no-member,too-many-locals,too-many-branches,too-many-statements
-#pylint: disable=broad-except,too-many-arguments,invalid-name
+#pylint: disable=broad-except,too-many-arguments,invalid-name,unused-variable
 
 """
 Store and retrieve items from redis
@@ -594,8 +594,21 @@ class Redis():
         """
         get only rule results, without checking tp/sl etc.
         """
+
+        def get_float(var):
+            """
+            try to convert var into float
+            otherwise return unmodified
+            """
+            try:
+                return float(var)
+            except ValueError:
+                return var
+
         # fetch latest agg data and make available as AttributeDict
         redis3 = Redis(interval=interval, db=3)
+        raw = redis3.conn.hgetall('{}:{}'.format(pair, interval))
+        agg = AttributeDict({k.decode():get_float(v.decode()) for k, v in raw.items()})
         del redis3
 
         rules = {'open': [], 'close':[]}
