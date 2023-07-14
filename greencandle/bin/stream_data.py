@@ -108,7 +108,7 @@ def main():
 
     For use in data environment, uses pairs and interval within scope
     """
-    setproctitle.setproctitle(f"stream_data-{interval}")
+    setproctitle.setproctitle(f"stream_data-{INTERVAL}")
     t_flask = threading.Thread(target=start_flask)
     t_ws = threading.Thread(target=start_ws)
 
