@@ -201,7 +201,7 @@ class Trade():
             # Number of trades within scope
             dbase = Mysql(test=self.test_data, interval=self.interval)
             count = dbase.fetch_sql_data(f"select count(*) from trades where close_price "
-                                         f"is NULL and pair like '%{item[0]}' and"
+                                         f"is NULL and pair like '%{item[0]}' and "
                                          f"name='{self.config.main.name}' "
                                          f"and direction='{self.config.main.trade_direction}'",
                                          header=False)[0][0]
