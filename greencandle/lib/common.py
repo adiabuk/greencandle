@@ -231,7 +231,7 @@ def get_tv_link(pair, interval=None):
 
     if interval:
         return (f"<https://www.tradingview.com/chart/?symbol=BINANCE:{pair.strip()}"
-                f"&interval={convert_to_minutes(interval)}|{0}>")
+                f"&interval={convert_to_minutes(interval)}|{pair.strip()}>")
     return f"<https://www.tradingview.com/chart/?symbol=BINANCE:{pair.strip()}|{pair.strip()}>"
 
 def get_trade_link(pair, strategy, action, string, port=8888):
