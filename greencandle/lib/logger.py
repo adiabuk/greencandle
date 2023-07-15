@@ -57,8 +57,7 @@ class NotifyOnCriticalJournald(JournaldLogHandler):
         """
         record.name = config.main.name
         super().emit(record)
-        if record.levelno == logging.CRITICAL:
-            message = self.format(record)
+        message = self.format(record)
         if record.levelno == logging.ERROR:
             message = record.msg
         send_slack_message('alerts', message)
