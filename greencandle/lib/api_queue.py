@@ -77,9 +77,9 @@ def add_to_queue(req, test=False):
 
         result = trade.open_trade(item)
         if result or test:
-            take_profit = float(req['tp']) if 'tp' in req and req['tp'] is not None else \
+            take_profit = float(req['tp']) if 'tp' in req and req['tp'] else \
                 eval(config.main.take_profit_perc)
-            stop_loss = float(req['sl']) if 'sl' in req and req['tp'] is not None else \
+            stop_loss = float(req['sl']) if 'sl' in req and req['sl'] else \
                 eval(config.main.stop_loss_perc)
 
             redis.update_on_entry(item[0][0], 'take_profit_perc', take_profit)
