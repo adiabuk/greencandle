@@ -263,10 +263,9 @@ class Engine(dict):
             LOGGER.debug("Overall Exception getting bb perc: %s seq: %s", exc, index)
         scheme = {}
         try:
-
             scheme["data"] = ema_result if ema else perc
             scheme["symbol"] = pair
-            scheme["event"] = f"{func}_{timef}"
+            scheme["event"] = f"{func}_{timeframe}"
             scheme["open_time"] = open_time
 
             self.schemes.append(scheme)
