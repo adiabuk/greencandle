@@ -7,3 +7,4 @@ pgi==0.0.11.2
 pyserial==3.5
 pycairo==1.20.1
 PyGObject==3.42.0
+setproctitle==1.1.10
