@@ -1,6 +1,6 @@
 {
   "name": "data-be-analyse-1h-agg1",
-  "open_rule1": "agg.distance_200 \u003e 3",
+  "open_rule1": "agg.distance_200 \u003e 5",
   "slack_alerts": "opportunities_agg1",
   "slack_balance": "opportunities_agg1",
   "slack_notifications": "opportunities_agg1",
