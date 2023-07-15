@@ -1,5 +1,24 @@
 # Releases
 
+# 6.2
+* Switch to using f-strings
+* Multitude of lint fixes following recent updates
+* Log/slack output formatting fixes
+* only use error level logging for exceptions
+* check if tpsl is empty string or None
+* get mepoch from current time if unable to fetch from redis
+* remove unused args, pararms, and vars
+* add proctitle to all executables started from docker entryfile
+* reduce default max trades to 4 in prod 1m, unless overridden
+* disable trailing SL for prod 1h
+* ensure we check if trailing SL is enabled
+* remove print statements from agg script
+* add "all" data table in data env UI
+* discard old jenkins builds
+* only keep 3 days of mysql backups & reports
+* run agg data continuously in separate container
+* get agg data from redis directly for dashboard and remove csv creation
+
 # 6.1
 * add data agg analysers
 * update docker and websockets python versions
