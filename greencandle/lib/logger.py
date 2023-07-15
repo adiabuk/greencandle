@@ -60,7 +60,7 @@ class NotifyOnCriticalJournald(JournaldLogHandler):
         message = self.format(record)
         if record.levelno == logging.ERROR:
             message = record.msg
-        send_slack_message('alerts', message)
+            send_slack_message('alerts', message)
 
 def get_logger(module_name=None):
     """
