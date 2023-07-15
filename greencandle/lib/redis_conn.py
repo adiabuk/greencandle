@@ -358,7 +358,7 @@ class Redis():
             data = json.loads(byte.decode("UTF-8"))['ohlc']
             current_price = data['close']
         except KeyError:
-            self.logger.error("No Data for item %s %s", name, item)
+            self.logger.critical("No Data for item %s %s", name, item)
             return None, None, None
         return current_price, item, data
 

@@ -291,8 +291,8 @@ class Graph():
                 result_list['current_price'] = result_list['ohlc']['close']
 
             except (KeyError, AttributeError) as error:
-                LOGGER.error("Error, unable to find ohlc data for %s %s %s",
-                             index_item, ind, error)
+                LOGGER.critical("Error, unable to find ohlc data for %s %s %s",
+                                index_item, ind, error)
             try:  # event
                 LOGGER.debug("Getting trade events")
                 str_dict = redis.get_item(f'{self.pair}:{self.interval}', index_item).decode()

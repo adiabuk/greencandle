@@ -131,7 +131,7 @@ class Trade():
                 self.logger.warning("We already have a trade of %s %s, skipping...",
                     self.config.main.trade_direction, item[0])
             elif not manual and (item[0] not in self.config.main.pairs and not self.test_data):
-                self.logger.error("Pair %s not in main_pairs, skipping...", item[0])
+                self.logger.critical("Pair %s not in main_pairs, skipping...", item[0])
             elif not manual and good_pairs and db_pairs and (item[0] not in db_pairs
                                                              and not self.test_data):
                 self.logger.warning("Pair %s not in db_pairs, skipping...", item[0])
@@ -469,7 +469,7 @@ class Trade():
                         isolated=str2bool(self.config.main.isolated),
                         asset=quote)
                     if "msg" in borrow_res:
-                        self.logger.error("Borrow error-open long %s: %s while trying to "
+                        self.logger.critical("Borrow error-open long %s: %s while trying to "
                                           "borrow %s %s", pair, borrow_res, amount_to_borrow, quote)
                         return False
 
@@ -482,9 +482,9 @@ class Trade():
                                                             self.config.main.isolated))
                 self.logger.info("%s open margin long result: %s", pair, trade_result)
                 if "msg" in trade_result:
-                    self.logger.error("Trade error-open %s %s: %s",
+                    self.logger.critical("Trade error-open %s %s: %s",
                                       self.config.main.trade_direction, pair, str(trade_result))
-                    self.logger.error("Vars: base quantity:%s, quote_quantity: %s quote bal:%s, "
+                    self.logger.critical("Vars: base quantity:%s, quote_quantity: %s quote bal:%s, "
                                       "quote_borrowed: %s", amt_str, quote_to_use,
                                       current_quote_bal, amount_to_borrow)
                     return False
@@ -585,8 +585,8 @@ class Trade():
 
                 self.logger.info("%s open spot long result: %s", pair, trade_result)
                 if "msg" in trade_result:
-                    self.logger.error("Trade error-open %s: %s", pair, str(trade_result))
-                    self.logger.error("Vars: quantity:%s, bal:%s", amt_str, quote_amount)
+                    self.logger.critical("Trade error-open %s: %s", pair, str(trade_result))
+                    self.logger.critical("Vars: quantity:%s, bal:%s", amt_str, quote_amount)
                     return False
 
                 # override values from exchange if in prod
@@ -731,7 +731,7 @@ class Trade():
 
                 self.logger.info("%s close margin short result: %s", pair, trade_result)
                 if "msg" in trade_result:
-                    self.logger.error("Trade error-close short %s: %s", pair, trade_result)
+                    self.logger.critical("Trade error-close short %s: %s", pair, trade_result)
                     return False
 
                 actual_borrowed = self.get_borrowed(pair=pair, symbol=base)
@@ -745,8 +745,8 @@ class Trade():
                         isolated=str2bool(self.config.main.isolated),
                         asset=base)
                     if "msg" in repay_result:
-                        self.logger.error("Repay error-close short %s: %s", pair, repay_result)
-                        self.logger.error("Params: %s, %s, %s %s", pair, borrowed,
+                        self.logger.critical("Repay error-close short %s: %s", pair, repay_result)
+                        self.logger.critical("Params: %s, %s, %s %s", pair, borrowed,
                                           self.config.main.isolated, base)
 
                     self.logger.info("Repay result for short %s: %s", pair, repay_result)
@@ -833,7 +833,7 @@ class Trade():
                         isolated=str2bool(self.config.main.isolated),
                         asset=base)
                     if "msg" in borrow_res:
-                        self.logger.error("Borrow error-open %s: %s while trying to borrow "
+                        self.logger.critical("Borrow error-open %s: %s while trying to borrow "
                                           "short %s %s", pair, borrow_res, amount_to_borrow, base)
                         return False
 
@@ -846,8 +846,8 @@ class Trade():
                                                             self.config.main.isolated))
                 self.logger.info("%s open margin short result: %s", pair, trade_result)
                 if "msg" in trade_result:
-                    self.logger.error("Short Trade error-open %s: %s", pair, str(trade_result))
-                    self.logger.error("Vars: quantity:%s, bal:%s, borrowed: %s",
+                    self.logger.critical("Short Trade error-open %s: %s", pair, str(trade_result))
+                    self.logger.critical("Vars: quantity:%s, bal:%s, borrowed: %s",
                                       amt_str, current_base_bal, amount_to_borrow)
                     return False
 
@@ -923,7 +923,7 @@ class Trade():
 
                 self.logger.info("%s close spot long result: %s", pair, trade_result)
                 if "msg" in trade_result:
-                    self.logger.error("Long Trade error-close %s: %s", pair, trade_result)
+                    self.logger.critical("Long Trade error-close %s: %s", pair, trade_result)
                     return False
 
                 # override values from exchange if in prod
@@ -1006,7 +1006,7 @@ class Trade():
 
                 self.logger.info("%s close margin long result: %s", pair, trade_result)
                 if "msg" in trade_result:
-                    self.logger.error("Margin long Trade error-close %s: %s",  pair, trade_result)
+                    self.logger.critical("Margin long Trade error-close %s: %s", pair, trade_result)
                     return False
                 actual_borrowed = self.get_borrowed(pair=pair, symbol=quote)
                 borrowed = actual_borrowed if float(borrowed) > float(actual_borrowed) else borrowed
@@ -1018,8 +1018,8 @@ class Trade():
                         isolated=str2bool(self.config.main.isolated),
                         asset=quote)
                     if "msg" in repay_result:
-                        self.logger.error("Repay error-close %s: %s", pair, repay_result)
-                        self.logger.error("Params: %s, %s, %s %s", pair, borrowed,
+                        self.logger.critical("Repay error-close %s: %s", pair, repay_result)
+                        self.logger.critical("Params: %s, %s, %s %s", pair, borrowed,
                                           self.config.main.isolated, quote)
                     self.logger.info("Repay result for %s: %s", pair, repay_result)
                 else:

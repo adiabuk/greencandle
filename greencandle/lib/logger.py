@@ -18,9 +18,9 @@ class OneLineFormatter(logging.Formatter):
         result = super().formatException(exc_info)
         return repr(result)
 
-    def format(self, record):
+    def format(self, record, slack=False):
         result = super().format(record)
-        if record.exc_text or isinstance(record, str):
+        if not slack and (record.exc_text or isinstance(record, str)):
             result = result.replace("\n", "")
         return result
 
@@ -57,9 +57,11 @@ class NotifyOnCriticalJournald(JournaldLogHandler):
         """
         record.name = config.main.name
         super().emit(record)
-        if record.levelno in (logging.ERROR, logging.CRITICAL):
+        if record.levelno == logging.CRITICAL:
             message = self.format(record)
-            send_slack_message('alerts', message)
+        if record.levelno == logging.ERROR:
+            message = record.msg
+        send_slack_message('alerts', message)
 
 def get_logger(module_name=None):
     """

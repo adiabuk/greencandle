@@ -60,7 +60,7 @@ def add_to_queue(req, test=False):
             try:
                 req = requests.get(url, timeout=1)
             except Exception:
-                LOGGER.error("Unable to get trend from %s", url)
+                LOGGER.critical("Unable to get trend from %s", url)
                 return
 
             trend = req.text.strip()

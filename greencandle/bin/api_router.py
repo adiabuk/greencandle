@@ -73,10 +73,10 @@ def respond():
     try:
         containers = router_config[payload["strategy"].strip()]
     except TypeError:
-        LOGGER.error("Invalid router_config or payload detected: %s", payload)
+        LOGGER.critical("Invalid router_config or payload detected: %s", payload)
         return Response(status=500)
     except KeyError:
-        LOGGER.error("Invalid or missing strategy %s", str(payload))
+        LOGGER.critical("Invalid or missing strategy %s", str(payload))
         return Response(status=500)
 
     if payload["strategy"] == "route":
@@ -115,7 +115,7 @@ def respond():
     try:
         mysql.insert_api_trade(**request.json)
     except KeyError:
-        LOGGER.error("Missing required field in json: %s", str(request.json))
+        LOGGER.critical("Missing required field in json: %s", str(request.json))
 
     return Response(status=200)
 

@@ -112,7 +112,7 @@ def make_docker_case(container, checks=None):
                 get_tag(), self.compose_file, self.build_id, container)
             return_code, out, err = self.run_subprocess(command)
             if err:
-                self.logger.error(err)
+                self.logger.critical(err)
             elif out:
                 self.logger.info(out)
             self.assertEqual(return_code, 0)

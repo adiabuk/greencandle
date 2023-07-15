@@ -435,4 +435,4 @@ class Mysql():
                 try:
                     self.__run_sql_query(command)
                 except NameError:
-                    self.logger.error("One or more expected variables not passed to insert into DB")
+                    self.logger.critical("Expected variables not passed to insert into DB")
