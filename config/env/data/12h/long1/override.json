@@ -1,5 +1,0 @@
-{
-  "name": "data-be-analyse-12h-long",
-  "open_rule1": "res[0].low \u003c res[0].bb_200[2] and res[1].bbperc_200 \u003c -2 and res[0].bbperc_200 \u003e res[1].bbperc_200",
-  "open_rule2": "res[0].low \u003c res[0].bb_12[2] and res[1].bbperc_200 \u003c -2 and res[0].bbperc_200 \u003e res[1].bbperc_200"
-}

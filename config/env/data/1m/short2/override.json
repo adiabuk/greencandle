@@ -1,7 +1,0 @@
-{
-  "api_forward": "test,10.8.0.1,any-long-short",
-  "close_rule1": "res[0].close \u003c res[0].bb_12[2]",
-  "name": "data-be-analyse-1m-short2",
-  "open_rule1": "res[1].bbperc_200 \u003e 2.5 and agg.candle_size \u003e 1",
-  "trade_direction": "short"
-}

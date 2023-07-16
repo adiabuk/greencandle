@@ -1,9 +1,0 @@
-{
-  "close_rule1": "res[0].close \u003c res[0].bb_12[2]",
-  "name": "data-be-analyse-1m-short3",
-  "open_rule1": "res[0].EMA_13 \u003c res[0].EMA_21 and res[1].EMA_13 \u003c res[1].EMA_21 and res[2].EMA_13 \u003e res[2].EMA_21 and agg.candle_size \u003e 1",
-  "slack_alerts": "opportunities_1m-ema",
-  "slack_balance": "opportunities_1m-ema",
-  "slack_notifications": "opportunities_1m-ema",
-  "trade_direction": "short"
-}
