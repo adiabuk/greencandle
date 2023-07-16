@@ -1,18 +1,14 @@
 {{if eq .base_env "stag"}}
 {
-"any-long": ["any-long", "any-tsl-long"],
-"any-short": ["any-short", "any-tsl-short"],
+"any-long": ["any-long"],
+"any-short": ["any-short"],
 "any2-long": ["any2-long"],
 "any2-short": ["any2-short"],
 "any2-long-short": ["any2-long", "any2-short"],
 "any2-4h-long": ["any2-4h-long"],
 "any2-4h-short": ["any2-4h-short"],
 "any2-4h-long-short": ["any2-4h-long", "any2-4h-long", "alert"],
-"any-test-long": ["anytest-long"],
-"any-test-short": ["anytest-short"],
-"any-test-long-short": ["anytest-long", "anytest-short", "alert"],
-"any-long-short": ["any-long", "any-short", "any-tsl-short", "any-tsl-long"],
-"any-spot-long": ["any-spot-long", "any-tsl-spot-long"],
+"any-long-short": ["any-long", "any-short"],
 
 "alert": ["alert"],
 "route": []
