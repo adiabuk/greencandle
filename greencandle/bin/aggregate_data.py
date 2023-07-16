@@ -6,8 +6,6 @@ output data to csv files
 """
 import json
 import sys
-import csv
-import time
 import os
 import errno
 from collections import defaultdict
@@ -186,8 +184,8 @@ def aggregate_data(key, pairs, intervals, res, last_res):
     if key in ('all', 'redis'):
         redis_data = defaultdict()
 
-        aggregates = ["distance_12", "distance_200", "stoch_flat", "bbperc_diff", "stx_diff", "bb_size",
-                      "middle_200", "middle_12"]
+        aggregates = ["distance_12", "distance_200", "stoch_flat", "bbperc_diff", "stx_diff",
+                      "bb_size", "middle_200", "middle_12"]
         data.append(aggregates)
         for pair in pairs:
             for interval in intervals:
@@ -219,7 +217,7 @@ def aggregate_data(key, pairs, intervals, res, last_res):
         for item, value in redis_data.items():
             value = {k:str(v) for k, v in value.items()}
             redis3.conn.hmset(item, value)
-            
+
 def collect_data():
     """
     get data for all timeframes and pairs
