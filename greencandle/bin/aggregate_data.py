@@ -182,147 +182,44 @@ def aggregate_data(key, pairs, intervals, res, last_res):
     else:
         indicator = key
 
-    # stochf k,d maxed out
-    if key == 'stoch_flat':
-        data.append(['pair', 'interval', 'avg'])
-        for pair in pairs:
-            for interval in intervals:
-                stoch_flat = get_stoch_flat(pair, interval, res, last_res)
-                data.append([pair, interval, stoch_flat])
-
-    # change in supertrend direction
-    elif key == 'stx_diff':
-        data.append(['pair', 'interval', 'from', 'to', 'direction'])
-        for pair in pairs:
-            for interval in intervals:
-                stx_from, stx_to, direction = get_stx_diff(pair, interval, res, last_res)
-                if direction:
-                    data.append([pair, interval, stx_from, stx_to, direction])
-    # volume
-    elif key == 'volume':
-        data.append(['pair', 'interval', 'volume'])
-        for pair in pairs:
-            for interval in intervals:
-                vol = get_volume(pair, interval, res)
-                if vol:
-                    data.append([pair, interval, vol])
-
-    # percent between upper and lower bb
-    elif key == 'bb_size':
-        data.append(['pair', 'interval', 'bb_size'])
-        for pair in pairs:
-            for interval in intervals:
-                bb_diff = get_bb_size(pair, interval, res)
-                data.append([pair, interval, bb_diff])
-
-    # rapid change in bbperc value
-    elif key == 'bbperc_diff':
-        data.append(['pair', 'interval', 'from', 'to', 'diff'])
-        for pair in pairs:
-            for interval in intervals:
-                bb_from, bb_to, bb_diff = get_bbperc_diff(pair, interval, res, last_res)
-                if bb_diff:
-                    data.append([pair, interval, bb_from, bb_to, bb_diff])
-
-    # change in candle size
-    elif key == 'candle_size':
-        data.append(['pair', 'interval', 'size'])
-        for pair in pairs:
-            for interval in intervals:
-                max_diff = get_candle_size(pair, interval, res, last_res)
-                if max_diff:
-                    data.append([pair, interval, max_diff])
-
-    # distance between current price and edge of upper/lower bollinger bands
-    elif 'distance' in key:
-        data.append(['pair', 'interval', 'direction', 'distance'])
-        for pair in pairs:
-            for interval in intervals:
-                _, timeframe = key.split('_')
-                direction, distance_diff = get_distance(pair, interval, res, timeframe)
-                if direction:
-                    data.append([pair, interval, direction, distance_diff])
-
-    # distance to middle bb
-    elif 'middle' in key:
-        data.append(['pair', 'interval', 'direction', 'distance'])
-        for pair in pairs:
-            for interval in intervals:
-                _, timeframe = key.split('_')
-                direction, distance_diff = get_middle_distance(pair, interval, res, timeframe)
-                if direction:
-                    data.append([pair, interval, direction, distance_diff])
-
     # all data in a single spreadsheet
-    elif key in ('all', 'redis'):
+    if key in ('all', 'redis'):
         redis_data = defaultdict()
-        data.append(['pair', 'interval', 'distance_12', 'distance_200', 'candle_size',
-                     'middle_12', 'middle_200', 'stoch_flat', 'bb_size',
-                     'bbperc_diff', 'bbperc_200', 'stoch', 'stx_200', 'stx_diff'])
+
+        aggregates = ["distance_12", "distance_200", "stoch_flat", "bbperc_diff", "stx_diff", "bb_size",
+                      "middle_200", "middle_12"]
+        data.append(aggregates)
         for pair in pairs:
             for interval in intervals:
                 distance_12 = get_distance(pair, interval, res, '12')[-1]
+                middle_12 = get_middle_distance(pair, interval, res, '12')[-1]
                 distance_200 = get_distance(pair, interval, res, '200')[-1]
+                middle_200 = get_middle_distance(pair, interval, res, '200')[-1]
                 candle_size = get_candle_size(pair, interval, res, last_res)
-
-                _, middle_12 = get_middle_distance(pair, interval, res, '12')
-                _, middle_200 = get_middle_distance(pair, interval, res, '200')
-
                 stoch_flat = get_stoch_flat(pair, interval, res, last_res)
                 bb_size = get_bb_size(pair, interval, res)
                 bbperc_diff = get_bbperc_diff(pair, interval, res, last_res)[-1]
-                vol = get_volume(pair, interval, res)
-                bbperc_200 = get_indicator_value(pair, interval, res, 'bbperc_200')
-                stx_200 = get_indicator_value(pair, interval, res, 'STX_200')
                 stx_diff = get_stx_diff(pair, interval, res, last_res)[-1]
-                stoch = get_indicator_value(pair, interval, res, 'STOCHRSI_8')
+
                 redis_data[f'{pair}:{interval}'] = \
-                {'distance_12':distance_12, 'distance_200': distance_200,
-                 'candle_size': candle_size, 'middle_12': middle_12, 'middle_200': middle_200,
-                 'stoch_flat': stoch_flat, 'bb_size': bb_size, 'bbperc_200': bbperc_200,
+                {'distance_12':distance_12,
+                 'distance_200': distance_200,
+                 'candle_size': candle_size,
+                 'middle_12': middle_12,
+                 'middle_200': middle_200,
+                 'stoch_flat': stoch_flat,
+                 'bb_size': bb_size,
                  'stx_diff': stx_diff}
 
                 data.append([pair, interval, distance_12, distance_200, candle_size, middle_12,
-                             middle_200, stoch_flat, bb_size, bbperc_diff, bbperc_200, stoch,
-                             stx_200])
+                             middle_200, stoch_flat, bb_size, bbperc_diff])
 
         # save to redis, overwriting previous value
         redis3 = Redis(db=3)
         for item, value in redis_data.items():
             value = {k:str(v) for k, v in value.items()}
             redis3.conn.hmset(item, value)
-        if key == 'redis':
-            return
-
-    # indicator data
-    else:
-        data.append(['pair', 'interval', indicator])
-        for pair in pairs:
-            for interval in intervals:
-                value = get_indicator_value(pair, interval, res, indicator)
-                if value:
-                    data.append([pair, interval, value])
-
-    # save as csv
-    timestr = time.strftime("%Y%m%d-%H%M%S")
-    with open(f'/data/aggregate/{key}_{timestr}.csv',
-              'w', encoding='UTF8', newline='') as handle:
-        writer = csv.writer(handle)
-        writer.writerows(data)
-
-    # save as tsv
-    with open(f'/data/aggregate/{key}_{timestr}.tsv',
-              'w', encoding='UTF8', newline='') as handle:
-        # remove spaces from lists for cmd line parsing
-        new_list = [[str(x).replace(' ', '') for x in y] for y in data]
-        writer = csv.writer(handle, delimiter='\t')
-        writer.writerows(new_list)
-
-    # create/overwrite symlink to most recent file
-    os.chdir('/data/aggregate')
-    symlink_force(f'../{key}_{timestr}.tsv', 'current/{key}.tsv')
-    symlink_force(f'../{key}_{timestr}.csv', 'current/{key}.csv')
-
+            
 def collect_data():
     """
     get data for all timeframes and pairs
@@ -341,9 +238,8 @@ def collect_data():
     last_res = defaultdict(dict)
     intervals = ['1m', '5m', '1h', '4h', '12h']
 
-    aggregates = ["distance_12", "distance_200", "bbperc_200", "STOCHRSI_8", "STX_200",
-                  "stoch_flat", "bbperc_diff", "stx_diff", "volume", "bb_size", "all",
-                  "middle_200", "middle_12"]
+    aggregates = ["distance_12", "distance_200", "stoch_flat", "bbperc_diff", "stx_diff", "bb_size",
+                  "all", "middle_200", "middle_12"]
 
     # Collect timeframes (milliepochs) for each pair/interval
     for pair in pairs:
@@ -365,10 +261,7 @@ def collect_data():
 
             except:
                 continue
-    if key == 'keys':
-        items_1h = redis.get_items('BTCUSDT', '1h')
-        keys = json.loads(redis.get_item('BTCUSDT:1h', items_1h[-1]).decode()).keys()
-        sys.exit()
+
     aggregate_data('redis', pairs, intervals, res, last_res)
 
 @arg_decorator
