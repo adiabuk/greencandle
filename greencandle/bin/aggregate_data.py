@@ -87,9 +87,8 @@ def get_stx_diff(pair, interval, res, last_res):
             result = 'up'
         else:
             result = 'hodl'
-
-        return f'{stx_from:.2f}', f'{stx_to:.2f}', result
-    except (TypeError, KeyError):
+        return pair, interval, result
+    except (TypeError, KeyError) as err:
         return None, None, None
 
 def get_volume(pair, interval, res):
@@ -259,7 +258,7 @@ def aggregate_data(key, pairs, intervals, res, last_res):
         redis_data = defaultdict()
         data.append(['pair', 'interval', 'distance_12', 'distance_200', 'candle_size',
                      'middle_12', 'middle_200', 'stoch_flat', 'bb_size',
-                     'bbperc_diff', 'bbperc_200', 'stoch', 'stx_200'])
+                     'bbperc_diff', 'bbperc_200', 'stoch', 'stx_200', 'stx_diff'])
         for pair in pairs:
             for interval in intervals:
                 distance_12 = get_distance(pair, interval, res, '12')[-1]
@@ -275,11 +274,13 @@ def aggregate_data(key, pairs, intervals, res, last_res):
                 vol = get_volume(pair, interval, res)
                 bbperc_200 = get_indicator_value(pair, interval, res, 'bbperc_200')
                 stx_200 = get_indicator_value(pair, interval, res, 'STX_200')
+                stx_diff = get_stx_diff(pair, interval, res, last_res)[-1]
                 stoch = get_indicator_value(pair, interval, res, 'STOCHRSI_8')
                 redis_data[f'{pair}:{interval}'] = \
                 {'distance_12':distance_12, 'distance_200': distance_200,
                  'candle_size': candle_size, 'middle_12': middle_12, 'middle_200': middle_200,
-                 'stoch_flat': stoch_flat, 'bb_size': bb_size, 'bbperc_200': bbperc_200}
+                 'stoch_flat': stoch_flat, 'bb_size': bb_size, 'bbperc_200': bbperc_200,
+                 'stx_diff': stx_diff}
 
                 data.append([pair, interval, distance_12, distance_200, candle_size, middle_12,
                              middle_200, stoch_flat, bb_size, bbperc_diff, bbperc_200, stoch,
