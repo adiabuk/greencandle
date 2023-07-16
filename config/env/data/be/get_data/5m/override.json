@@ -2,6 +2,7 @@
   "check_interval": "*",
   "name": "data-be-get_5m",
   "open_rule1": "res[0].close \u003e res[0].bb_200[0]",
+  "interval": "5m",
   "slack_alerts": "opportinities_5m",
   "slack_balance": "opportinities_5m",
   "slack_notifications": "opportinities_5m",

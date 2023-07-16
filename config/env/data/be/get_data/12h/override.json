@@ -3,6 +3,7 @@
   "name": "data-be-get_12h",
   "open_rule1": "res[0].close \u003e res[0].bb_200[0]",
   "slack_alerts": "opportinities_12h",
+  "interval": "12h",
   "slack_balance": "opportinities_12h",
   "slack_notifications": "opportinities_12h",
   "slack_trades": "opportinities_12h",
