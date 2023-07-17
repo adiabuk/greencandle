@@ -77,17 +77,17 @@ def get_stx_diff(pair, interval, res, last_res):
     Get change in supertrend direction
     """
     try:
-        stx_from = last_res[interval][pair]['STX_200']
-        stx_to = res[interval][pair]['STX_200']
+        stx_from = last_res[interval][pair]['STX_200'][0]
+        stx_to = res[interval][pair]['STX_200'][0]
         if stx_from == 1 and stx_to == -1:
-            result = 'down'
+            result = '-1'
         elif stx_from == -1 and stx_to == 1:
-            result = 'up'
+            result = '1'
         else:
-            result = 'hodl'
+            result = '0'
         return pair, interval, result
     except (TypeError, KeyError) as err:
-        return None, None, None
+        return None, None, 0
 
 def get_volume(pair, interval, res):
     """
@@ -127,7 +127,7 @@ def get_middle_distance(pair, interval, res, timeframe='12'):
             direction = 'above'
         return direction, f'{abs(distance):.2f}'
     except KeyError:
-        return None, -1
+        return None, None
 
 def get_distance(pair, interval, res, timeframe='12'):
     """
@@ -153,7 +153,7 @@ def get_distance(pair, interval, res, timeframe='12'):
             return None, None
         return direction, f'{distance_diff:.2f}'
     except KeyError:
-        return None, -1
+        return None, None
 
 def symlink_force(target, link_name):
     """
