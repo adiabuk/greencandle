@@ -6,6 +6,5 @@
   "name": "data-be-analyse-1h-long2",
   "interval": "1h",
   "slack_notifications": "opportunities_1h",
-  "slack_trades": "opportunities_1h",
   "time_between_trades": "3h"
 }

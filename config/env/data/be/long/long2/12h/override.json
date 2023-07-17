@@ -6,6 +6,5 @@
   "interval": "12h",
   "slack_balance": "opportunities_12h",
   "slack_notifications": "opportunities_12h",
-  "slack_trades": "opportunities_12h",
   "time_between_trades": "1h"
 }

@@ -6,6 +6,5 @@
   "name": "data-be-analyse-4h-short2",
   "interval": "4h",
   "slack_notifications": "opportunities_4h",
-  "slack_trades": "opportunities_4h",
   "time_between_trades": "8h"
 }

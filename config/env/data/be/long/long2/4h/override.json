@@ -4,7 +4,6 @@
   "slack_alerts": "opportunities_4h",
   "slack_balance": "opportunities_4h",
   "slack_notifications": "opportunities_4h",
-  "slack_trades": "opportunities_4h",
   "name": "data-be-analyse-4h-long2",
   "interval": "4h",
   "time_between_trades": "8h"
