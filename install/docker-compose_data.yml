@@ -703,7 +703,6 @@ services:
       - ALERT="True"
       - CONFIG_ENV=data/be/short/short1/1m
       - DB=true
-      - STORE_IN_DB=true
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -739,7 +738,6 @@ services:
       - ALERT="True"
       - CONFIG_ENV=data/be/long/long1/1m
       - DB=true
-      - STORE_IN_DB=true
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -1055,7 +1053,6 @@ services:
       - ALERT="True"
       - CONFIG_ENV=data/be/short/short2/1m
       - DB=true
-      - STORE_IN_DB=true
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -1091,7 +1088,6 @@ services:
       - ALERT="True"
       - CONFIG_ENV=data/be/long/long2/1m
       - DB=true
-      - STORE_IN_DB=true
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
