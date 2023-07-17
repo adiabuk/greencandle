@@ -57,6 +57,17 @@ def analyse_loop():
     LOGGER.debug("End of current loop")
     del redis
 
+def get_match_name(matches):
+    """
+    get a list of matching rule names based on container number, and matching rule number
+    """
+    match_names = []
+    container_num = int(config.main.name[-1])
+    name_lookup = [['bb', 'ema', 'stx'],['distance']]
+    for match in matches:
+        match_names.append(name_lookup[container_num-1][match-1])
+    return ','.join(match_names)
+
 def analyse_pair(pair, redis):
     """
     Analysis of individual pair
@@ -97,7 +108,8 @@ def analyse_pair(pair, redis):
                 LOGGER.debug("Triggering alert: last alert %s hours ago", diff_in_hours)
 
             TRIGGERED[pair] = now
-            msg = (f"{result.lower()}, {str(match[result.lower()])}: {get_tv_link(pair, INTERVAL)} "
+            match_strs = get_match_name(match[result.lower()])
+            msg = (f"{result.lower()}, {match_strs}: {get_tv_link(pair, INTERVAL)} "
                    f"{INTERVAL} {config.main.name} ({supported.strip()}) - {current_time} "
                    f"Data: {data}")
 
