@@ -127,7 +127,7 @@ def get_middle_distance(pair, interval, res, timeframe='12'):
             direction = 'above'
         return direction, f'{abs(distance):.2f}'
     except KeyError:
-        return None, None
+        return None, -1
 
 def get_distance(pair, interval, res, timeframe='12'):
     """
@@ -153,7 +153,7 @@ def get_distance(pair, interval, res, timeframe='12'):
             return None, None
         return direction, f'{distance_diff:.2f}'
     except KeyError:
-        return None, None
+        return None, -1
 
 def symlink_force(target, link_name):
     """
