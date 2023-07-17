@@ -80,25 +80,6 @@ class Engine(dict):
         return dataframe
 
     @staticmethod
-    def get_supertrend_direction(supertrend):
-        """
-        Get new direction of supertrend from pattern
-
-        Args:
-            supertrend: list of trend directions (up/down)
-        Returns:
-            String action based on patten (BUY/SELL/HOLD/UNKNOWN)
-
-        """
-        if supertrend == "up":
-            result = 1
-        elif supertrend == "down":
-            result = 2
-        else:
-            result = 0
-        return result
-
-    @staticmethod
     def get_operator_fn(symbol):
         """
         Get operator function from string
