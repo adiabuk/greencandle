@@ -5,5 +5,7 @@
   "slack_balance": "opportunities_5m",
   "slack_notifications": "opportunities_5m",
   "slack_trades": "opportunities_5m",
+  "name": "data-be-analyse-5m-long2",
+  "interval": "5m",
   "time_between_trades": "30m"
 }
