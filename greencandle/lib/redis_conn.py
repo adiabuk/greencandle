@@ -607,7 +607,7 @@ class Redis():
 
         # fetch latest agg data and make available as AttributeDict
         redis3 = Redis(interval=interval, db=3)
-        raw = redis3.conn.hgetall('{}:{}'.format(pair, interval))
+        raw = redis3.conn.hgetall(f'{pair}:{interval}')
         agg = AttributeDict({k.decode():get_float(v.decode()) for k, v in raw.items()})
         del redis3
 
@@ -633,7 +633,7 @@ class Redis():
             res.append(datax)
 
 
-        for seq in range(1, 2):
+        for seq in range(1, 4):
             current_config = None
             for rule in "open", "close":
                 try:
