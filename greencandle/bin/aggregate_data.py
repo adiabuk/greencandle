@@ -150,7 +150,7 @@ def get_distance(pair, interval, res, timeframe='12'):
                                           res[interval][pair]['bb_'+timeframe][2]))
             direction = 'lower'
         else:
-            return None, None
+            return None, 0
         return direction, f'{distance_diff:.2f}'
     except KeyError:
         return None, 0
