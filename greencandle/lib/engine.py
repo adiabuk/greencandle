@@ -691,7 +691,7 @@ class Engine(dict):
             index = -1
         else:
             # line up with TV graphs
-            series = series.iloc[:index +2]
+            series = series.iloc[:index +1]
         _, timef = localconfig  # split tuple
         scheme = {}
         timeframe, multiplier = timef.split(',')
