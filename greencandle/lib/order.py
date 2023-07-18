@@ -447,7 +447,9 @@ class Trade():
                     base2quote(amount_to_borrow, quote + 'USDT')
             # amt in base
             quote_to_use = current_quote_bal + amount_to_borrow
-            base_to_use = quote2base(quote_to_use, pair)
+
+            # allow 2% incase trade goes in wrong direction
+            base_to_use = get_step_precision(pair, sub_perc(2, quote2base(quote_to_use, pair)))
 
 
             self.logger.info("Opening margin long %s of %s with %s %s at %s",
@@ -463,7 +465,7 @@ class Trade():
                     self.logger.info("Will attempt to borrow %s of %s for long. Balance: %s",
                                      amount_to_borrow, quote, current_quote_bal)
 
-                    amt_str = get_step_precision(pair, base_to_use)
+                    amt_str = base_to_use
                     borrow_res = self.client.margin_borrow(
                         symbol=pair, quantity=amount_to_borrow,
                         isolated=str2bool(self.config.main.isolated),
@@ -812,8 +814,10 @@ class Trade():
             borrowed_usd = amount_to_borrow if base == 'USDT' else \
                     base2quote(amount_to_borrow, base+'USDT')
 
-            total_base_amount = get_step_precision(pair, sub_perc(1, amount_to_borrow +
+            # allow 2% incase trade goes in wrong direction
+            total_base_amount = get_step_precision(pair, sub_perc(2, amount_to_borrow +
                                                                   current_base_bal))
+
             total_quote_amount = base2quote(total_base_amount, pair)
             self.logger.info("Opening margin short %s of %s with %s at %s",
                              total_base_amount, pair, total_quote_amount, current_price)
