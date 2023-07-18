@@ -305,8 +305,8 @@ class ProdRunner():
         new_dataframes = defaultdict(dict)
         for pair in PAIRS:
             try:
-                request1 = requests.get(f"http://stream:5000/recent?pair={pair}", timeout=5)
-                request2 = requests.get(f"http://stream:5000/closed?pair={pair}", timeout=5)
+                request1 = requests.get(f"http://stream:5000/recent?pair={pair}", timeout=10)
+                request2 = requests.get(f"http://stream:5000/closed?pair={pair}", timeout=10)
                 if request1.status_code != 200:
                     LOGGER.warning("Unable to fetch recent data for %s %s", pair, config.main.name)
                 recent_di = request1.json()
