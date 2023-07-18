@@ -77,8 +77,8 @@ def get_stx_diff(pair, interval, res, last_res):
     Get change in supertrend direction
     """
     try:
-        stx_from = last_res[interval][pair]['STX_200'][0]
-        stx_to = res[interval][pair]['STX_200'][0]
+        stx_from = last_res[interval][pair]['STX_22'][0]
+        stx_to = res[interval][pair]['STX_22'][0]
         if stx_from == 1 and stx_to == -1:
             result = '-1'
         elif stx_from == -1 and stx_to == 1:
