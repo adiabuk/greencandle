@@ -1,5 +1,29 @@
 # Releases
 
+# 6.3
+* move api_forward config to second analyse containers
+* STX needs to wait for candle close
+* increase timeout to stream container request
+* STX data point alignment
+* change STX settings
+* tweak ema rules
+* write match string to log
+* display match name instead of number in notif
+* return number instead of None for distance agg
+* ensure we eval all rules during each run
+* remove store-in-db flag in data env
+* disable slack_trades throughout data env
+* try to avoid strings in agg data - use numerical
+* remove non-trading pair
+* insure all containers have correct name and interval
+* add slack channels to get containers
+* remove some stag containers
+* reorganise data c9e
+* General cleanup and removal of unused code
+* add stx_diff to agg data
+* increase distance agg threshold on >1m containers
+* add proctitle pip as req for alert
+
 # 6.2
 * Switch to using f-strings
 * Multitude of lint fixes following recent updates
