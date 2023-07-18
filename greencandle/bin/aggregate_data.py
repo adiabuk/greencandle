@@ -169,7 +169,7 @@ def symlink_force(target, link_name):
         else:
             raise err
 
-def aggregate_data(key, pairs, intervals, res, last_res):
+def aggregate_data(key, pairs, intervals, res, last_res, third_res):
     """
     create aggregate spreadsheets for given key using collected data
     """
@@ -197,7 +197,7 @@ def aggregate_data(key, pairs, intervals, res, last_res):
                 stoch_flat = get_stoch_flat(pair, interval, res, last_res)
                 bb_size = get_bb_size(pair, interval, res)
                 bbperc_diff = get_bbperc_diff(pair, interval, res, last_res)[-1]
-                stx_diff = get_stx_diff(pair, interval, res, last_res)[-1]
+                stx_diff = get_stx_diff(pair, interval, last_res, third_res)[-1]
 
                 redis_data[f'{pair}:{interval}'] = \
                 {'distance_12':distance_12,
@@ -234,6 +234,7 @@ def collect_data():
     items = defaultdict(dict)
     res = defaultdict(dict)
     last_res = defaultdict(dict)
+    third_res = defaultdict(dict)
     intervals = ['1m', '5m', '1h', '4h', '12h']
 
     aggregates = ["distance_12", "distance_200", "stoch_flat", "bbperc_diff", "stx_diff", "bb_size",
@@ -256,11 +257,14 @@ def collect_data():
                 last_res[interval][pair] = json.loads(redis.get_item(f'{pair}:{interval}',
                                                                      items[interval][pair][-2])
                                                       .decode())
+                third_res[interval][pair] = json.loads(redis.get_item(f'{pair}:{interval}',
+                                                                      items[interval][pair][-3])
+                                                       .decode())
 
             except:
                 continue
 
-    aggregate_data('redis', pairs, intervals, res, last_res)
+    aggregate_data('redis', pairs, intervals, res, last_res, third_res)
 
 @arg_decorator
 def main():
