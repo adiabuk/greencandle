@@ -2,7 +2,6 @@
   "check_interval": "*",
   "name": "data-be-get_4h",
   "interval": "4h",
-  "open_rule1": "res[0].close \u003e res[0].bb_200[0]",
   "slack_alerts": "opportunities_4h",
   "slack_balance": "opportunities_4h",
   "slack_notifications": "opportunities_4h",

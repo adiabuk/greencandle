@@ -1,7 +1,6 @@
 {
   "check_interval": "*",
   "name": "data-be-get_1h",
-  "open_rule1": "res[0].close \u003e res[0].bb_200[0]",
   "slack_alerts": "opportunities_1h",
   "slack_balance": "opportunities_1h",
   "slack_notifications": "opportunities_1h",

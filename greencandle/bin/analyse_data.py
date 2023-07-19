@@ -63,7 +63,7 @@ def get_match_name(matches):
     """
     match_names = []
     container_num = int(config.main.name[-1])
-    name_lookup = [['bb', 'ema', 'stx'],['distance']]
+    name_lookup = [['ema', 'stx'],['distance', 'bb']]
     for match in matches:
         match_names.append(name_lookup[container_num-1][match-1])
     return ','.join(match_names)
