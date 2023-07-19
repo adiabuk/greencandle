@@ -1,7 +1,6 @@
 {
   "divisor": "3",
   "name": "data-cron",
-  "pairs": "ETHBTC",
   "rate_indicator": "1",
   "no_of_klines": "350"
 }

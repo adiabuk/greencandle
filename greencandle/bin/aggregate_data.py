@@ -227,10 +227,7 @@ def collect_data():
     redis = Redis()
     key = sys.argv[1] if len(sys.argv) > 1 else None
     config.create_config()
-    pair_set = set()
-    for item in redis.conn.scan_iter("*:12h"):
-        pair_set.add(item.decode().split(":")[0])
-    pairs = list(pair_set)
+    pairs = config.main.pairs.split()
     items = defaultdict(dict)
     res = defaultdict(dict)
     last_res = defaultdict(dict)
