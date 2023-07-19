@@ -1,7 +1,0 @@
-{
-  "divisor": "1.4",
-  "max_trades": "999",
-  "name": "prod-be-api-any-1h-isolated-long",
-  "trade_isolated": "true",
-  "trade_type": "margin"
-}
