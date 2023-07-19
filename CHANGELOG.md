@@ -1,5 +1,14 @@
 # Releases
 
+# 6.4
+* remove all but 1h/1m cross containers in prod
+* use a single set of pairs for entire data env for simplicity
+* move bb rule to second container for visibility
+* keep 2% of borrowed & available funds when trading for slippage
+* use more of avail balance rather than loan in prod
+* use different slack channel for second data analyse containers
+* further increase timeout to stream containers
+
 # 6.3
 * move api_forward config to second analyse containers
 * STX needs to wait for candle close
