@@ -244,9 +244,14 @@ class ProdRunner():
                 current_candle = get_dataframes([pair],
                                                 interval=interval,
                                                 no_of_klines=klines)[pair].iloc[-1]
+
             except IndexError:
                 LOGGER.critical("Unable to get %s candles for %s while running %s prod_int_check",
                                 str(klines), pair, interval)
+                # Ensure we skip iteration so we don't update db/redis using values from previous loop
+                del redis
+                del dbase
+                continue
 
             if dbase.trade_in_context(pair, config.main.name, config.main.trade_direction):
                 redis.update_drawdown(pair, current_candle, open_time=open_time)
