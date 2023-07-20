@@ -1,5 +1,14 @@
 # Releases
 
+# 6.5
+* single api queue for stag and prod
+* use explicit trade_direction for sub configs, don't rely on inheritance
+* fix env and router config for stag
+* remove unused stag dirs
+* disable trend on all stag containers
+* cosmetic syntax fix in sql code
+* fix redis values being updated with values from previous loop if data fetching fails
+
 # 6.4
 * remove all but 1h/1m cross containers in prod
 * use a single set of pairs for entire data env for simplicity
