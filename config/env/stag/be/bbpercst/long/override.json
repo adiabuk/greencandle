@@ -1,4 +1,0 @@
-{
-  "name": "stag-be-eng-bbpercst-long",
-  "open_rule1": "res[0].low \u003c res[0].bb_200[2] and res[0].bbperc_200 \u003c -1 and res[0].STX_23 \u003e0"
-}
