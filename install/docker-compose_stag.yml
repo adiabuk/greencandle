@@ -334,11 +334,8 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=stag/be/any/long
-      - get_trend="true"
       - intermittent="true"
       - DB=true
-    extra_hosts:
-      - "trend:10.8.0.101"
     ports:
       - 20000
     links:
@@ -376,8 +373,6 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-    extra_hosts:
-      - "trend:10.8.0.101"
     ports:
       - 20000
     links:
@@ -410,13 +405,6 @@ services:
     logging:
       driver: journald
     environment:
-      - VPN_IP=$VPN_IP
-      - CONFIG_ENV=stag/be/any2/long/4h
-      - intermittent="true"
-      - ALERT="True"
-      - DB=true
-    extra_hosts:
-      - "trend:10.8.0.101"
     ports:
       - 20000
     links:
@@ -454,8 +442,6 @@ services:
       - intermittent="true"
       - DB=true
       - no_proxy=router
-    extra_hosts:
-      - "trend:10.8.0.101"
     ports:
       - 20000
     links:
@@ -493,8 +479,6 @@ services:
       - intermittent="true"
       - DB=true
       - no_proxy=router
-    extra_hosts:
-      - "trend:10.8.0.101"
     ports:
       - 20000
     links:
@@ -529,12 +513,9 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=stag/be/any/short
-      - get_trend="true"
       - intermittent="true"
       - DB=true
       - no_proxy=router
-    extra_hosts:
-      - "trend:10.8.0.101"
     ports:
       - 20000
     links:
