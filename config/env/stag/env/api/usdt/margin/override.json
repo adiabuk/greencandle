@@ -1,7 +1,0 @@
-{
-  "max_trades": "10",
-  "name": "stag-env-api-usdt-isolated",
-  "pairs": "ENJUSDT",
-  "trade_isolated": "true",
-  "trade_type": "margin"
-}
