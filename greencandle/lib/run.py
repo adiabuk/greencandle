@@ -248,9 +248,8 @@ class ProdRunner():
             except IndexError:
                 LOGGER.critical("Unable to get %s candles for %s while running %s prod_int_check",
                                 str(klines), pair, interval)
-                # Ensure we skip iteration so we don't update db/redis using values from previous loop
-                del redis
-                del dbase
+                # Ensure we skip iteration so we don't update db/redis
+                # using values from previous loop
                 continue
 
             if dbase.trade_in_context(pair, config.main.name, config.main.trade_direction):
