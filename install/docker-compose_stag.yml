@@ -408,7 +408,7 @@ services:
       - 20000
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV=stag/be/any2/short/4h
+      - CONFIG_ENV=stag/be/any2/long/4h
       - ALERT="True"
       - intermittent="true"
       - DB=true
