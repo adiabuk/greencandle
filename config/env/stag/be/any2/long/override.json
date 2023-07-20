@@ -1,3 +1,4 @@
 {
-  "name": "stag-be-api-any2-cross-long"
+  "name": "stag-be-api-any2-cross",
+  "trade_direction": "long"
 }
