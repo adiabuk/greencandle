@@ -1,5 +1,6 @@
 {
   "name": "prod-be-api-any-1h-cross-long",
   "trade_isolated": "false",
+  "trade_direction": "long",
   "trade_type": "margin"
 }
