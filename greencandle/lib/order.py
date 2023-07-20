@@ -781,7 +781,7 @@ class Trade():
                 open_time, profit = \
                         dbase.fetch_sql_data(f"select p.open_time, p.usd_profit from trades t, "
                                              f"profit p where p.id=t.id and t.pair='{pair}' and "
-                                             f"t.closed_by='{name}' order " f"by t.id desc "
+                                             f"t.closed_by='{name}' order by t.id desc "
                                              f"limit 1", header=False)[0]
 
                 self.__send_notifications(pair=pair, close_time=current_time, perc=perc_inc,
