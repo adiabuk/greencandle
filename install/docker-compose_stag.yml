@@ -404,9 +404,14 @@ services:
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
       driver: journald
-    environment:
     ports:
       - 20000
+    environment:
+      - VPN_IP=$VPN_IP
+      - CONFIG_ENV=stag/be/any2/short/4h
+      - ALERT="True"
+      - intermittent="true"
+      - DB=true
     links:
       - stag-base-mysql:mysql
       - stag-base-redis:redis
