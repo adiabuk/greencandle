@@ -10,7 +10,6 @@ from greencandle.lib import config
 from greencandle.lib.binance_common import get_current_price
 from greencandle.lib.common import AttributeDict, format_usd
 from greencandle.lib.logger import get_logger, exception_catcher
-from greencandle.lib.alerts import send_slack_message
 
 class Mysql():
     """
@@ -120,9 +119,7 @@ class Mysql():
             self.logger.critical("Syntax error in query: %s", query)
             return False
         except Exception:
-            message = f"Error - unable to execute query {str(query)}"
-            self.logger.critical(message)
-            send_slack_message('alerts', message)
+            self.logger.critical("Error - unable to execute query: %s", query)
             return False
 
         return True
