@@ -1,5 +1,14 @@
 # Releases
 
+# 6.7
+* repay BNB in prod every hour
+* allow specifying single asset to be repaid
+* matching 1m router keys to fix close link, and add alert
+* prod shortnames in DC file need to match router config
+* get prod trade status more frequently
+* check for zero-trade candles in all data strategies
+* catch all errors with borrowing funds
+
 # 6.6
 * don't alert if no trades/volume for current candle
 * send forwarded trades from data env to alarm env
