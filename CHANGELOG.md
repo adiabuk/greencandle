@@ -1,5 +1,14 @@
 # Releases
 
+# 6.6
+* don't alert if no trades/volume for current candle
+* send forwarded trades from data env to alarm env
+* increase timeout to calls from router
+* wait at least 12h between 12h trade alerts
+* max volume for alert
+* only add alarm name to audio string if it hasn't already been set
+* need to convert net-perc to float to compare
+
 # 6.5
 * single api queue for stag and prod
 * use explicit trade_direction for sub configs, don't rely on inheritance
