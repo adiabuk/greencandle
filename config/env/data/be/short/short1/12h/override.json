@@ -4,5 +4,5 @@
   "slack_alerts": "opportunities_12h",
   "slack_balance": "opportunities_12h",
   "slack_notifications": "opportunities_12h",
-  "time_between_trades": "1h"
+  "time_between_trades": "12h"
 }
