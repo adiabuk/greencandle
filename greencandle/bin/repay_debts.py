@@ -4,6 +4,7 @@
 Look for cross balances which can be paid off
 """
 
+import sys
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.logger import get_logger
 from greencandle.lib.common import arg_decorator
@@ -19,6 +20,11 @@ def main():
     logger = get_logger("repay_loan")
     client = binance_auth()
     cross_details = client.get_cross_margin_details()
+
+    if len(sys.argv) > 1:
+        # filter list of assets to that containing string argument
+        cross_details['userAssets'] = [x for x in cross_details['userAssets']
+                                       if x['asset'] == sys.argv[1]]
 
     for item in cross_details['userAssets']:
         symbol = item['asset']
