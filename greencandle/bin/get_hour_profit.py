@@ -33,9 +33,9 @@ def main():
                    f"Average perc: {avg_perc:.2f}% ({avg_net_perc:.2f}%)\n"
                    f"USD profit: {format_usd(usd_profit)} ({format_usd(usd_net_profit)})\n"
                    f"Today's avg profit: {todays_avg:.2f}% ({todays_net_avg:.2f}%)\n"
-                   f"Todays USD profit: {format_usd(todays_usd)} ({format_usd(todays_net_usd)})\n"
-                   f"Today's total profit: {todays_total:.2f}% ({todays_net_total:.2f}%) ~{num_day}"
-                   f"trades\n")
+                   f"Today's USD profit: {format_usd(todays_usd)} ({format_usd(todays_net_usd)})\n"
+                   f"Today's total profit: {todays_total:.2f}% ({todays_net_total:.2f}%) "
+                   f"~{num_day} trades\n")
 
         send_slack_message('balance', message, name=sys.argv[0].rsplit('/', maxsplit=1)[-1])
 
