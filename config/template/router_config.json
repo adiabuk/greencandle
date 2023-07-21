@@ -40,13 +40,13 @@
 }
 {{else if eq .base_env "prod"}}
 {
-"any-1h-long" : ["prod-be-api-any-1h-cross-long"],
-"any-1h-short" : ["prod-be-api-any-1h-cross-short"],
-"any-1h-long-short": ["prod-be-api-any-1h-cross-short", "prod-be-api-any-1h-cross-long", "alert"],
+"any-1h-long" : ["any-1h-long"],
+"any-1h-short" : ["any-1h-short"],
+"any-1h-long-short": ["any-1h-short", "any-1h-long", "alert"],
 
-"any-1m-cross-long" : ["prod-be-api-any-1m-cross-long"],
-"any-1m-cross-short" : ["prod-be-api-any-1m-cross-short"],
-"any-1m-cross-long-short": ["prod-be-api-any-1m-cross-short", "prod-be-api-any-1m-cross-long", "alert"],
+"any-1m-cross-long" : ["any-1m-long"],
+"any-1m-cross-short" : ["any-1h-short"],
+"any-1m-cross-long-short": ["any-1m-short", "any-1m-long", "alert"],
 
 "alert" : ["alert"],
 "route": []

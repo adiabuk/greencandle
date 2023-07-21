@@ -306,10 +306,10 @@ services:
     links:
       - prod-base-mysql:mysql
       - prod-base-redis:redis
-      - prod-be-api-any-1h-cross-long:prod-be-api-any-1h-cross-long
-      - prod-be-api-any-1h-cross-short:prod-be-api-any-1h-cross-short
-      - prod-be-api-any-1m-cross-long:prod-be-api-any-1m-cross-long
-      - prod-be-api-any-1m-cross-short:prod-be-api-any-1m-cross-short
+      - prod-be-api-any-1h-cross-long:any-1h-long
+      - prod-be-api-any-1h-cross-short:any-1h-short
+      - prod-be-api-any-1m-cross-long:any-1m-long
+      - prod-be-api-any-1m-cross-short:any-1m-short
     depends_on:
       - prod-base-mysql
       - prod-base-redis
