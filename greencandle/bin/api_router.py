@@ -103,7 +103,9 @@ def respond():
                                "data": "data"}[env]
             except KeyError:
                 environment = "unknown"
-            payload['text'] += f'...{environment} environment'
+            if 'environment' not in payload['text']:
+                payload['text'] += f'...{environment} environment'
+
             payload['edited'] = "yes"
 
         payload['pair'] = payload['pair'].lower()
