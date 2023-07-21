@@ -1,4 +1,4 @@
 {
-  "open_rule1": "res[0].EMA_13 \u003c res[0].EMA_21 and res[1].EMA_13 \u003e res[1].EMA_21 and agg.candle_size \u003e 1",
-  "open_rule2": "agg.stx_diff \u003c 0"
+  "open_rule1": "res[0].EMA_13 \u003c res[0].EMA_21 and res[1].EMA_13 \u003e res[1].EMA_21 and agg.candle_size \u003e 1 and res[0].numTrades \u003e 0",
+  "open_rule2": "agg.stx_diff \u003c 0 and res[0].numTrades \u003e 0"
 }
