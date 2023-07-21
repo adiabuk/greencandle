@@ -20,7 +20,7 @@ BASH_ENV=/container.env
 59 23 * * * /usr/local/bin/report 4h /data/reports/report_$(date +"\%Y-\%m-\%d").xlsx > /proc/1/fd/1 2>/proc/1/fd/2
 @reboot /usr/local/bin/report 4h /data/reports/report_{{.base_env}}_$(date +"\%Y-\%m-\%d").xlsx > /proc/1/fd/1 2>/proc/1/fd/2
 03 * * * * /usr/local/bin/get_hour_profit > /proc/1/fd/1 2>/proc/1/fd/2
-#@hourly /usr/local/bin/repay_debts > /proc/1/fd/1 2>/proc/1/fd/2
+@hourly /usr/local/bin/repay_debts BNB > /proc/1/fd/1 2>/proc/1/fd/2
 30 * * * * /usr/bin/find /data/graphs -type f -mtime +1 -delete > /proc/1/fd/1 2>/proc/1/fd/2
 15 * * * * /usr/local/bin/collect_pairs > /proc/1/fd/1 2>/proc/1/fd/2
 @hourly /usr/local/bin/get_bnb > /proc/1/fd/1 2>/proc/1/fd/2
