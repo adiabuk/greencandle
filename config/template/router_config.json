@@ -44,9 +44,9 @@
 "any-1h-short" : ["any-1h-short"],
 "any-1h-long-short": ["any-1h-short", "any-1h-long", "alert"],
 
-"any-1m-cross-long" : ["any-1m-long"],
-"any-1m-cross-short" : ["any-1h-short"],
-"any-1m-cross-long-short": ["any-1m-short", "any-1m-long", "alert"],
+"any-1m-long" : ["any-1m-long", "alert"],
+"any-1m-short" : ["any-1h-short", "alert"],
+"any-1m-long-short": ["any-1m-short", "any-1m-long", "alert"],
 
 "alert" : ["alert"],
 "route": []
