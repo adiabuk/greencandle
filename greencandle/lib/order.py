@@ -186,7 +186,7 @@ class Trade():
         return True
 
     @GET_EXCEPTIONS
-    def close_trade(self, items_list, drawdowns=None, drawups=None, update_db=True):
+    def close_trade(self, items_list, drawdowns=None, drawups=None):
         """
         Main close trade method
         Will choose between spot/margin and long/short
@@ -214,8 +214,7 @@ class Trade():
 
         if self.config.main.trade_type == "spot":
             if self.config.main.trade_direction == "long":
-                result = self.__close_spot_long(items_list, drawdowns=drawdowns, drawups=drawups,
-                                                update_db=update_db)
+                result = self.__close_spot_long(items_list, drawdowns=drawdowns, drawups=drawups)
             else:
                 raise InvalidTradeError("Invalid trade direction for spot")
 
@@ -766,19 +765,17 @@ class Trade():
 
             commission_usd = self.__get_commission(trade_result)
 
-            if self.test_data or self.test_trade or \
-                    (not self.test_trade and 'transactTime' in trade_result):
-                if name == "api":
-                    name = "%"
-                drawdown = 0 if not drawdowns else drawdowns[pair]
-                drawup = 0 if not drawdowns else drawups[pair]
-                dbase.update_trades(pair=pair, close_time=current_time,
-                                    close_price=fill_price,
-                                    quote=quote_out, base_out=quantity, name=name,
-                                    drawdown=drawdown, drawup=drawup,
-                                    symbol_name=quote, commission=commission_usd,
-                                    order_id=order_id)
-
+            if name == "api":
+                name = "%"
+            drawdown = 0 if not drawdowns else drawdowns[pair]
+            drawup = 0 if not drawdowns else drawups[pair]
+            result = dbase.update_trades(pair=pair, close_time=current_time,
+                                         close_price=fill_price,
+                                         quote=quote_out, base_out=quantity, name=name,
+                                         drawdown=drawdown, drawup=drawup,
+                                         symbol_name=quote, commission=commission_usd,
+                                         order_id=order_id)
+            if result:
                 open_time, profit = \
                         dbase.fetch_sql_data(f"select p.open_time, p.usd_profit from trades t, "
                                              f"profit p where p.id=t.id and t.pair='{pair}' and "
@@ -894,7 +891,7 @@ class Trade():
         return True
 
     @GET_EXCEPTIONS
-    def __close_spot_long(self, sell_list, drawdowns=None, drawups=None, update_db=True):
+    def __close_spot_long(self, sell_list, drawdowns=None, drawups=None):
         """
         Get item details and attempt to close spot trade according to config
         Returns True|False
@@ -947,16 +944,16 @@ class Trade():
                     (not self.test_trade and 'transactTime' in trade_result):
                 if name == "api":
                     name = "%"
-                if update_db:
-                    drawdown = 0 if not drawdowns else drawdowns[pair]
-                    drawup = 0 if not drawdowns else drawups[pair]
-                    dbase.update_trades(pair=pair, close_time=current_time,
-                                        close_price=fill_price, quote=quote_out,
-                                        base_out=quantity, name=name,
-                                        drawdown=drawdown, drawup=drawup,
-                                        symbol_name=get_quote(pair), commission=commission_usd,
-                                        order_id=order_id)
 
+                drawdown = 0 if not drawdowns else drawdowns[pair]
+                drawup = 0 if not drawdowns else drawups[pair]
+                result = dbase.update_trades(pair=pair, close_time=current_time,
+                                             close_price=fill_price, quote=quote_out,
+                                             base_out=quantity, name=name,
+                                             drawdown=drawdown, drawup=drawup,
+                                             symbol_name=get_quote(pair), commission=commission_usd,
+                                             order_id=order_id)
+                if result:
                     open_time, profit = dbase.fetch_sql_data(f"select p.open_time, p.usd_profit "
                                                              f"from trades t, profit p where "
                                                              f"p.id=t.id and t.pair='{pair}' and "
@@ -967,10 +964,10 @@ class Trade():
                                               fill_price=fill_price, interval=self.interval,
                                               event=event, action='CLOSE', usd_profit=profit,
                                               quote=quote_out, open_time=open_time)
-            else:
-                self.logger.critical("Close spot long Failed %s:%s", name, pair)
-                send_slack_message("alerts", f"Close spot long Failed {name}:{pair}")
-                return False
+                else:
+                    self.logger.critical("Close spot long Failed %s:%s", name, pair)
+                    send_slack_message("alerts", f"Close spot long Failed {name}:{pair}")
+                    return False
         del dbase
         return True
 
@@ -1041,18 +1038,17 @@ class Trade():
 
             commission_usd = self.__get_commission(trade_result)
 
-            if self.test_data or self.test_trade or not self.test_trade:
-                if name == "api":
-                    name = "%"
-                drawdown = 0 if not drawdowns else drawdowns[pair]
-                drawup = 0 if not drawdowns else drawups[pair]
-                dbase.update_trades(pair=pair, close_time=current_time,
-                                    close_price=fill_price, quote=quote_out,
-                                    base_out=quantity, name=name,
-                                    drawdown=drawdown,
-                                    drawup=drawup, symbol_name=quote,
-                                    commission=commission_usd, order_id=order_id)
-
+            if name == "api":
+                name = "%"
+            drawdown = 0 if not drawdowns else drawdowns[pair]
+            drawup = 0 if not drawdowns else drawups[pair]
+            result = dbase.update_trades(pair=pair, close_time=current_time,
+                                         close_price=fill_price, quote=quote_out,
+                                         base_out=quantity, name=name,
+                                         drawdown=drawdown,
+                                         drawup=drawup, symbol_name=quote,
+                                         commission=commission_usd, order_id=order_id)
+            if result:
                 open_time, profit = dbase.fetch_sql_data(f"select p.open_time, p.usd_profit "
                                                          f"from trades t, profit p where "
                                                          f"p.id=t.id and t.pair='{pair}' and "

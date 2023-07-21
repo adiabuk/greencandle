@@ -10,6 +10,7 @@ from greencandle.lib import config
 from greencandle.lib.binance_common import get_current_price
 from greencandle.lib.common import AttributeDict, format_usd
 from greencandle.lib.logger import get_logger, exception_catcher
+from greencandle.lib.alerts import send_slack_message
 
 class Mysql():
     """
@@ -114,11 +115,17 @@ class Mysql():
             return cur.lastrowid if get_id else cur.rowcount
         except NameError as exc:
             self.logger.critical("One or more expected variables not passed to DB %s", exc)
-        except Exception:
-            self.logger.critical("Error - unable to execute query %s", query)
+            return False
         except MySQLdb.ProgrammingError:
             self.logger.critical("Syntax error in query: %s", query)
-        return None
+            return False
+        except Exception:
+            message = f"Error - unable to execute query {str(query)}"
+            self.logger.critical(message)
+            send_slack_message('alerts', message)
+            return False
+
+        return True
 
     @get_exceptions
     def delete_data(self):
@@ -309,9 +316,9 @@ class Mysql():
                       comm_close="{commission}", close_order_id="{order_id}" where id = "{trade_id}"
                    """
 
-        self.__run_sql_query(command)
+        result = self.__run_sql_query(command)
 
-        return trade_id
+        return result
 
     @get_exceptions
     def get_todays_profit(self):
