@@ -1,6 +1,6 @@
 {
   "api_forward": "test,10.8.0.1,any2-long-short-5m",
-  "open_rule1": "agg.distance_200 \u003e 3 and res[1].bbperc_200 \u003e 2",
+  "open_rule1": "agg.distance_200 \u003e 3 and res[1].bbperc_200 \u003e 2 and res[0].numTrades \u003e 0",
   "slack_alerts": "opportunities_rare",
   "name": "data-be-analyse-5m-short2",
   "interval": "5m",
