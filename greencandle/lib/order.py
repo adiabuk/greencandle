@@ -470,9 +470,10 @@ class Trade():
                         symbol=pair, quantity=amount_to_borrow,
                         isolated=str2bool(self.config.main.isolated),
                         asset=quote)
-                    if "msg" in borrow_res:
+                    if not borrow_res or "msg" in borrow_res:
                         self.logger.critical("Borrow error-open long %s: %s while trying to "
-                                          "borrow %s %s", pair, borrow_res, amount_to_borrow, quote)
+                                             "borrow %s %s", pair, str(borrow_res),
+                                             amount_to_borrow, quote)
                         return False
 
                     self.logger.info(borrow_res)
@@ -836,9 +837,9 @@ class Trade():
                         symbol=pair, quantity=amount_to_borrow,
                         isolated=str2bool(self.config.main.isolated),
                         asset=base)
-                    if "msg" in borrow_res:
+                    if not borrow_res or "msg" in borrow_res:
                         self.logger.critical("Borrow error-open %s: %s while trying to borrow "
-                                          "short %s %s", pair, borrow_res, amount_to_borrow, base)
+                                          "short %s %s", pair, str(borrow_res), amount_to_borrow, base)
                         return False
 
                     self.logger.info(borrow_res)
