@@ -109,7 +109,7 @@ def play_mp3(path):
     Play beep and downloaded synthesized audio
     Use 5% volume for out-of-hours alerts, otherwise 10% volume
     """
-    volume = '-g5' if get_time() == "night" else '-g50'
+    volume = '-g100'
     subprocess.Popen(['mpg123', volume, '-q', path]).wait()
 
 def main():
