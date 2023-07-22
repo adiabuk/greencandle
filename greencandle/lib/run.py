@@ -306,19 +306,28 @@ class ProdRunner():
         Fetch new dataframe data and append to existing structure
         """
 
+        request = requests.get("http://stream:5000/all", timeout=10)
+        if not request.ok:
+            LOGGER.critical("Unable to fetch data from streaming server")
+            return request.ok
+        data = request.json()
+
         new_dataframes = defaultdict(dict)
         for pair in PAIRS:
             try:
-                request1 = requests.get(f"http://stream:5000/recent?pair={pair}", timeout=10)
-                request2 = requests.get(f"http://stream:5000/closed?pair={pair}", timeout=10)
-                if request1.status_code != 200:
-                    LOGGER.warning("Unable to fetch recent data for %s %s", pair, config.main.name)
-                recent_di = request1.json()
+                try:
+                    recent_di = data['recent'][pair]
+                except KeyError:
+                    recent_di = None
 
                 try:
-                    closed_di = request2.json()
-                except ValueError:
+                    closed_di = data['closed'][pair]
+                except KeyError:
                     closed_di = None
+
+                if not recent_di or closed_di:
+                    LOGGER.warning("No candle data for pair %s", pair)
+                    continue
 
                 dframe = pandas.DataFrame(columns=recent_di.keys())
                 dframe.loc[0] = recent_di
@@ -353,6 +362,7 @@ class ProdRunner():
                                                      verify_integrity=True).tail(max_klines)
         del new_dataframes
         gc.collect()
+        return None
 
     @GET_EXCEPTIONS
     def prod_loop(self, interval, test=False, data=True, analyse=True):
@@ -366,7 +376,9 @@ class ProdRunner():
         redis = Redis()
 
         if data:
+            LOGGER.info("AMROX2 append start")
             self.append_data()
+            LOGGER.info("AMROX2 append end")
             engine = Engine(dataframes=self.dataframes, interval=interval,
                             redis=redis)
             engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)

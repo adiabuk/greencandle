@@ -75,6 +75,13 @@ def serve_closed():
     except KeyError:
         return Response(None, status=400,)
 
+@APP.route('/all', methods=['GET'])
+def serve_all():
+    """
+    return recent and closed data for all pairs as dict
+    """
+    return {'recent': RECENT, 'closed': CLOSED}
+
 def on_error(socket, error):
     """
     Raise errors from websocket
