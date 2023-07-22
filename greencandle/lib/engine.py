@@ -36,7 +36,7 @@ class Engine(dict):
         """
         LOGGER.debug("Fetching raw data")
         self.interval = interval
-        self.pairs = dataframes.keys()
+        self.pairs = [key for key in dataframes.keys() if len(dataframes[key]) > 4]
         self.test = test
         self.redis = redis
         self["hold"] = {}
