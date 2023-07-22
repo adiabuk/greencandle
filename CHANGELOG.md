@@ -1,5 +1,12 @@
 # Releases
 
+# 6.8
+* typo in router config causing missed trades
+* fix prod 1h long name
+* add num of trades/candle to agg data/dashboard
+* capture failed db trade update
+* improve formatting of slack msg
+
 # 6.7
 * repay BNB in prod every hour
 * allow specifying single asset to be repaid
