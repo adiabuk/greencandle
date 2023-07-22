@@ -98,6 +98,15 @@ def get_volume(pair, interval, res):
     except KeyError:
         return None
 
+def get_num(pair, interval, res):
+    """
+    get volume indicator
+    """
+    try:
+        return res[interval][pair]['ohlc']['numTrades']
+    except KeyError:
+        return None
+
 def get_candle_size(pair, interval, res, last_res):
     """
     get size of current candle compared to previous
@@ -198,6 +207,7 @@ def aggregate_data(key, pairs, intervals, res, last_res, third_res):
                 bb_size = get_bb_size(pair, interval, res)
                 bbperc_diff = get_bbperc_diff(pair, interval, res, last_res)[-1]
                 stx_diff = get_stx_diff(pair, interval, last_res, third_res)[-1]
+                num = get_num(pair, interval, res)
 
                 redis_data[f'{pair}:{interval}'] = \
                 {'distance_12':distance_12,
@@ -207,7 +217,8 @@ def aggregate_data(key, pairs, intervals, res, last_res, third_res):
                  'middle_200': middle_200,
                  'stoch_flat': stoch_flat,
                  'bb_size': bb_size,
-                 'stx_diff': stx_diff}
+                 'stx_diff': stx_diff,
+                 'num': num}
 
                 data.append([pair, interval, distance_12, distance_200, candle_size, middle_12,
                              middle_200, stoch_flat, bb_size, bbperc_diff])
