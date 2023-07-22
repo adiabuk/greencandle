@@ -14,7 +14,7 @@ from greencandle.lib import config
 from greencandle.lib.common import perc_diff, arg_decorator
 from greencandle.lib.redis_conn import Redis
 
-def get_bb_size(pair, interval, res, timeframe='12'):
+def get_bb_size(pair, interval, res, timeframe='200'):
     """
     percent between upper and lower bb
     """
@@ -121,7 +121,7 @@ def get_candle_size(pair, interval, res, last_res):
     except:
         return None
 
-def get_middle_distance(pair, interval, res, timeframe='12'):
+def get_middle_distance(pair, interval, res, timeframe='200'):
     """
     get distance between to middle bollinger band as a percentage
     """
@@ -138,7 +138,7 @@ def get_middle_distance(pair, interval, res, timeframe='12'):
     except KeyError:
         return None, None
 
-def get_distance(pair, interval, res, timeframe='12'):
+def get_distance(pair, interval, res, timeframe='200'):
     """
     get distance between upper/lower bollinger bands
     and current price as a percentage if above/below
@@ -185,7 +185,7 @@ def aggregate_data(key, pairs, intervals, res, last_res, third_res):
 
     data = []
     if 'distance' in key:
-        indicator = 'bb_12'
+        indicator = 'bb_200'
     else:
         indicator = key
 
@@ -193,13 +193,11 @@ def aggregate_data(key, pairs, intervals, res, last_res, third_res):
     if key in ('all', 'redis'):
         redis_data = defaultdict()
 
-        aggregates = ["distance_12", "distance_200", "stoch_flat", "bbperc_diff", "stx_diff",
-                      "bb_size", "middle_200", "middle_12"]
+        aggregates = ["distance_200", "stoch_flat", "bbperc_diff", "stx_diff",
+                      "bb_size", "middle_200"]
         data.append(aggregates)
         for pair in pairs:
             for interval in intervals:
-                distance_12 = get_distance(pair, interval, res, '12')[-1]
-                middle_12 = get_middle_distance(pair, interval, res, '12')[-1]
                 distance_200 = get_distance(pair, interval, res, '200')[-1]
                 middle_200 = get_middle_distance(pair, interval, res, '200')[-1]
                 candle_size = get_candle_size(pair, interval, res, last_res)
@@ -210,17 +208,16 @@ def aggregate_data(key, pairs, intervals, res, last_res, third_res):
                 num = get_num(pair, interval, res)
 
                 redis_data[f'{pair}:{interval}'] = \
-                {'distance_12':distance_12,
+                {
                  'distance_200': distance_200,
                  'candle_size': candle_size,
-                 'middle_12': middle_12,
                  'middle_200': middle_200,
                  'stoch_flat': stoch_flat,
                  'bb_size': bb_size,
                  'stx_diff': stx_diff,
                  'num': num}
 
-                data.append([pair, interval, distance_12, distance_200, candle_size, middle_12,
+                data.append([pair, interval, distance_200, candle_size,
                              middle_200, stoch_flat, bb_size, bbperc_diff])
 
         # save to redis, overwriting previous value
@@ -245,8 +242,8 @@ def collect_data():
     third_res = defaultdict(dict)
     intervals = ['1m', '5m', '1h', '4h', '12h']
 
-    aggregates = ["distance_12", "distance_200", "stoch_flat", "bbperc_diff", "stx_diff", "bb_size",
-                  "all", "middle_200", "middle_12"]
+    aggregates = ["distance_200", "stoch_flat", "bbperc_diff", "stx_diff", "bb_size",
+                  "all", "middle_200"]
 
     # Collect timeframes (milliepochs) for each pair/interval
     for pair in pairs:

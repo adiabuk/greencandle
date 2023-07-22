@@ -200,8 +200,8 @@ def data():
     """
     route to data spreadsheets
     """
-    files = ['middle_200', 'distance_12', 'num', 'stoch_flat', 'candle_size', 'bb_size',
-             'all', 'bbperc_diff', 'distance_200', 'stx_diff', 'middle_12']
+    files = ['middle_200', 'num', 'stoch_flat', 'candle_size', 'bb_size',
+             'all', 'bbperc_diff', 'distance_200', 'stx_diff']
     if request.method == 'GET':
         return render_template('data.html', files=files)
     if request.method == 'POST':
