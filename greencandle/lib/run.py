@@ -325,7 +325,7 @@ class ProdRunner():
                 except KeyError:
                     closed_di = None
 
-                if not recent_di or closed_di:
+                if not (recent_di or closed_di):
                     LOGGER.warning("No candle data for pair %s", pair)
                     continue
 
