@@ -53,8 +53,7 @@ BASH_ENV=/container.env
 {{else if eq .base_env "data"}}
 @reboot /usr/local/bin/clear_redis > /proc/1/fd/1 2>/proc/1/fd/2
 @daily /usr/bin/find /data/graphs -type f -mmin +2280 -delete > /proc/1/fd/1 2>/proc/1/fd/2
-#* * * * * /usr/bin/flock -n /tmp/agg1 /usr/local/bin/aggregate_data > /proc/1/fd/1 2> /proc/1/fd/2
-* * * * * /usr/bin/flock -n /tmp/agg2 /usr/local/bin/agg_candle_size 10 > /proc/1/fd/1 2> /proc/1/fd/2
+* * * * * /usr/local/bin/agg_candle_size 10 > /proc/1/fd/1 2> /proc/1/fd/2
 */3 * * * * for f in ` /usr/bin/find /data/aggregate -maxdepth 1 -regex  '.*\(csv\|tsv\)$' -type f -mmin +3 -print`;do /bin/echo $f; /bin/gzip $f; /bin/mv ${f}.gz /data/aggregate/old;done
 @daily /usr/bin/find /data -type f -name ".*" -delete
 @daily /usr/bin/find /data/aggregate/old -name "*.gz" -mtime +7 -delete
