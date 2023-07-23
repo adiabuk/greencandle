@@ -376,9 +376,7 @@ class ProdRunner():
         redis = Redis()
 
         if data:
-            LOGGER.info("AMROX2 append start")
             self.append_data()
-            LOGGER.info("AMROX2 append end")
             engine = Engine(dataframes=self.dataframes, interval=interval,
                             redis=redis)
             engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)
