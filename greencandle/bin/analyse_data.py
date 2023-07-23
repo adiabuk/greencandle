@@ -134,14 +134,13 @@ def analyse_pair(pair, redis):
 
             if FORWARD:
                 url = f"http://router:1080/{config.web.api_token}"
-                env, host, strategy = config.web.forward.split(',')
+                forward_strategy = config.web.forward
                 payload = {"pair": pair,
                            "text": f"forwarding trade from {config.main.name}",
                            "action": str(action),
-                           "host": host,
-                           "env": env,
+                           "env": config.main.name,
                            "price": current_price,
-                           "strategy": strategy}
+                           "strategy": forward_strategy}
 
                 try:
                     requests.post(url, json.dumps(payload), timeout=10,

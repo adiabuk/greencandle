@@ -54,9 +54,9 @@
 {{else if eq .base_env "data"}}
 {
 "any-long-short": ["forward"],
-"any2-long-short-1m": ["forward", "alert"],
-"any2-long-short-5m": ["forward", "alert"],
-"any2-long-short-1h": ["forward", "alert"],
+"forward1": ["test:any-long-short-1m", "prod:any-long-short-1m", "alert"],
+"forward2": ["test:any-long-short-5m", "alert"],
+"forward3": ["test:any-long-short-1h", "alert"],
 "alert": ["alert"],
 "route": []
 }

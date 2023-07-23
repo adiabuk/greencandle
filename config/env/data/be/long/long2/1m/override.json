@@ -1,5 +1,5 @@
 {
-  "api_forward": "test,10.8.0.1,any2-long-short-1m",
+  "api_forward": "forward1",
   "open_rule1": "agg.distance_200 \u003e 1 and res[1].bbperc_200 \u003c -2 and res[0].numTrades \u003e 0",
   "slack_alerts": "opportunities_rare",
   "slack_balance": "opportunities_rare",
