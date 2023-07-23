@@ -8,3 +8,4 @@ pyserial==3.5
 pycairo==1.20.1
 PyGObject==3.42.0
 setproctitle==1.1.10
+gTTS==2.3.2
