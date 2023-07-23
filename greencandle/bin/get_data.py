@@ -30,11 +30,11 @@ def get_data():
     """
     Get-data run
     """
-    LOGGER.info("Starting prod run")
+    LOGGER.debug("Starting prod run")
     interval = config.main.interval
     RUNNER.prod_loop(interval, test=True, data=True, analyse=False)
     keepalive()
-    LOGGER.info("Finished prod run")
+    LOGGER.debug("Finished prod run")
 
 @GET_EXCEPTIONS
 @arg_decorator
