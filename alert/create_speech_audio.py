@@ -10,7 +10,7 @@ def main():
     Create mp3 with synthesized voice from Amazon and Google
     """
     engines = ['polly', 'google']
-    if len(sys.argv) > 1 or sys.argv[1] in engines:
+    if len(sys.argv) > 1 and sys.argv[1] in engines:
         engine = sys.argv[1]
     else:
         print(f"Usage: {sys.argv[0]} <polly|google>")

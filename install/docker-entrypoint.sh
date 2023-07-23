@@ -34,7 +34,9 @@ if [[ ! -f /installed ]]; then
     crontab /opt/output/gc-cron
 
   elif [[ "$HOSTNAME" == *"alert"* ]]; then
-    cp /srv/alert/com.mp3 /srv/alert/250ms-silence.mp3 /
+    mkdir -p /srv/output
+    cp /srv/alert/com.mp3 /srv/alert/250ms-silence.mp3 /srv/output/
+
 
   elif [[ "$HOSTNAME" == *"manual"* ]]; then
     pip install ipython

@@ -51,10 +51,11 @@ def play(data):
     """
     pair = '.'.join(list(data['pair']))
     text = f"Red Alert, all hands to battle stations. {pair} {data['text']}"
-    create_polly_voice(text, 'speech.mp3')
-    play_mp3('250ms-silence.mp3')
-    play_mp3('com.mp3')
-    play_mp3('speech.mp3')
+    create_polly_voice(text, '/srv/output/speech.mp3')
+
+    play_mp3('/srv/output/250ms-silence.mp3')
+    play_mp3('/srv/output/com.mp3')
+    play_mp3('/srv/output/speech.mp3')
 
 def in_between(now, start, end):
     """
