@@ -1,5 +1,13 @@
 # Releases
 
+# 6.9
+* allow generous memory allocations for log/api/cron/analyser containers
+* remove old legacy code and debug comments
+* fix boolean check in prod run
+* don't try to analyse pairs without any data
+* remove unused indicator in data env
+* combine api calls to single one per prod run
+
 # 6.8
 * typo in router config causing missed trades
 * fix prod 1h long name
