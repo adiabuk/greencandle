@@ -1,5 +1,14 @@
 # Releases
 
+# 6.10
+* shorten text to alarm env
+* use output directory for all mp3s
+* refactor API forwarding rules to allow multiple forwards
+* script to create mp3 using google and amazon
+* alerts module lib file for future improvements
+* don't routinely create graphs with cron
+* change unsafe port for data env UI
+
 # 6.9
 * allow generous memory allocations for log/api/cron/analyser containers
 * remove old legacy code and debug comments
