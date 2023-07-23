@@ -534,7 +534,7 @@ services:
     pull_policy: always
     restart: always
     healthcheck:
-      test: curl -Isf 127.1:6666
+      test: curl -Isf 127.1:7777
       interval: 5m
       timeout: 5s
       retries: 5
@@ -543,7 +543,7 @@ services:
       - CONFIG_ENV=data
       - DB=false
     ports:
-      - 6666:6666
+      - 7777:7777
     links:
       - data-fe-api-dashboard:api_dash
       - data-base-mysql:mysql
