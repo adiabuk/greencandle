@@ -52,11 +52,6 @@ BASH_ENV=/container.env
 
 {{else if eq .base_env "data"}}
 @reboot /usr/local/bin/clear_redis > /proc/1/fd/1 2>/proc/1/fd/2
-@hourly /usr/local/bin/create_graph -i 5m -o /data/graphs -a > /proc/1/fd/1 2>/proc/1/fd/2
-@hourly /usr/local/bin/create_graph -i 1h -o /data/graphs -a > /proc/1/fd/1 2>/proc/1/fd/2
-@daily /usr/local/bin/create_graph -i 4h -o /data/graphs -a > /proc/1/fd/1 2>/proc/1/fd/2
-@daily /usr/local/bin/create_graph -i 12h -o /data/graphs -a > /proc/1/fd/1 2>/proc/1/fd/2
-@daily /usr/local/bin/create_graph -i 1d -o /data/graphs -a > /proc/1/fd/1 2>/proc/1/fd/2
 @daily /usr/bin/find /data/graphs -type f -mmin +2280 -delete > /proc/1/fd/1 2>/proc/1/fd/2
 #* * * * * /usr/bin/flock -n /tmp/agg1 /usr/local/bin/aggregate_data > /proc/1/fd/1 2> /proc/1/fd/2
 * * * * * /usr/bin/flock -n /tmp/agg2 /usr/local/bin/agg_candle_size 10 > /proc/1/fd/1 2> /proc/1/fd/2
