@@ -94,17 +94,9 @@ def respond():
             payload['host'] = '10.8.0.1'
 
             # add environment name to text
-            try:
-                environment = {"per":  "personal",
-                               "prod": "production",
-                               "stag": "staging",
-                               "test": "testing",
-                               "alarm": "alarm",
-                               "data": "data"}[env]
-            except KeyError:
-                environment = "unknown"
+
             if 'environment' not in payload['text']:
-                payload['text'] += f'...{environment} environment'
+                payload['text'] += f'.{env} environment'
 
             payload['edited'] = "yes"
 
