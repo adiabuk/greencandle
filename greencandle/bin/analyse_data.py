@@ -145,9 +145,9 @@ def analyse_pair(pair, redis):
                 try:
                     requests.post(url, json.dumps(payload), timeout=10,
                                   headers={'Content-Type': 'application/json'})
-                    LOGGER.info("forwarding %s %s/%s trade to: %s/%s match:%s",
+                    LOGGER.info("forwarding %s %s/%s trade to: %s match:%s",
                                 pair, INTERVAL, config.main.trade_direction,
-                                env, strategy, match_strs)
+                                forward_strategy, match_strs)
 
                 except requests.exceptions.RequestException:
                     pass
