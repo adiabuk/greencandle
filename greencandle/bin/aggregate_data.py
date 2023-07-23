@@ -193,9 +193,6 @@ def aggregate_data(key, pairs, intervals, res, last_res, third_res):
     if key in ('all', 'redis'):
         redis_data = defaultdict()
 
-        aggregates = ["distance_200", "stoch_flat", "bbperc_diff", "stx_diff",
-                      "bb_size", "middle_200"]
-        data.append(aggregates)
         for pair in pairs:
             for interval in intervals:
                 distance_200 = get_distance(pair, interval, res, '200')[-1]
@@ -216,9 +213,6 @@ def aggregate_data(key, pairs, intervals, res, last_res, third_res):
                  'bb_size': bb_size,
                  'stx_diff': stx_diff,
                  'num': num}
-
-                data.append([pair, interval, distance_200, candle_size,
-                             middle_200, stoch_flat, bb_size, bbperc_diff])
 
         # save to redis, overwriting previous value
         redis3 = Redis(db=3)
@@ -241,9 +235,6 @@ def collect_data():
     last_res = defaultdict(dict)
     third_res = defaultdict(dict)
     intervals = ['1m', '5m', '1h', '4h', '12h']
-
-    aggregates = ["distance_200", "stoch_flat", "bbperc_diff", "stx_diff", "bb_size",
-                  "all", "middle_200"]
 
     # Collect timeframes (milliepochs) for each pair/interval
     for pair in pairs:
