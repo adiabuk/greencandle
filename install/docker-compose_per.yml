@@ -27,7 +27,7 @@ services:
     container_name: per-gen-be-logtailer-api
     hostname: per-gen-be-logtailer-api
     image: amrox/greencandle:${TAG}
-    mem_limit: 200m
+    mem_limit: 300m
     pull_policy: always
     restart: always
     environment:
@@ -141,7 +141,7 @@ services:
       - CONFIG_ENV=per/fe/cron
       - DB=true
     image: amrox/greencandle:${TAG}
-    mem_limit: 200m
+    mem_limit: 300m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "cron -f"
@@ -328,7 +328,7 @@ services:
     container_name: per-be-api-any-spot-long
     hostname: per-be-api-any-spot-long
     image: amrox/greencandle:${TAG}
-    mem_limit: 200m
+    mem_limit: 400m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
@@ -363,7 +363,7 @@ services:
     container_name: per-be-api-any-cross-long
     hostname: per-be-api-any-cross-long
     image: amrox/greencandle:${TAG}
-    mem_limit: 200m
+    mem_limit: 400m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
@@ -398,7 +398,7 @@ services:
     container_name: per-be-api-any-cross-short
     hostname: per-be-api-any-cross-short
     image: amrox/greencandle:${TAG}
-    mem_limit: 200m
+    mem_limit: 400m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"

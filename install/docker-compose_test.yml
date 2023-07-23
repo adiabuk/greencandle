@@ -25,7 +25,7 @@ services:
     container_name: test-gen-be-logtailer-api
     hostname: test-gen-be-logtailer-api
     image: amrox/greencandle:${TAG}
-    mem_limit: 200m
+    mem_limit: 300m
     pull_policy: always
     restart: always
     environment:
@@ -223,7 +223,7 @@ services:
       - CONFIG_ENV=test/fe/cron
       - DB=true
     image: amrox/greencandle:${TAG}
-    mem_limit: 200m
+    mem_limit: 300m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "cron -f"
