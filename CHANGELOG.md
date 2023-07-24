@@ -1,5 +1,8 @@
 # Releases
 
+# 6.10.1
+* BUGFIX: don't forward every trade
+
 # 6.10
 * shorten text to alarm env
 * use output directory for all mp3s
