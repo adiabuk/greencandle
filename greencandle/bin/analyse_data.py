@@ -76,7 +76,7 @@ def pair_in_redis(pair):
     if it is, remove it, and return True, otherwise return False
     """
     redis4 = Redis(db=4)
-    result = redis4.conn.redis.conn.sismember(f'{INTERVAL}:{DIRECTION}', pair)
+    result = redis4.conn.sismember(f'{INTERVAL}:{DIRECTION}', pair)
     return result
 
 def rm_pair_from_redis(pair):
