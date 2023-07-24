@@ -54,7 +54,12 @@ def analyse_loop():
     LOGGER.debug("Start of current loop")
     redis = Redis()
 
-    for pair in PAIRS:
+    if CHECK_REDIS_PAIR:
+        pairs = [x.decode() for x in redis.conn.smembers(f'{INTERVAL}:{DIRECTION}')]
+    else:
+        pairs = PAIRS
+
+    for pair in pairs:
         analyse_pair(pair, redis)
     LOGGER.debug("End of current loop")
     del redis
@@ -98,10 +103,6 @@ def analyse_pair(pair, redis):
 
     supported += "isolated " if pair in ISOLATED else ""
     supported += "cross " if pair in CROSS else ""
-
-    if CHECK_REDIS_PAIR and not pair_in_redis(pair):
-        # we are not allowed to proceed
-        return
 
     if not supported.strip():
         # don't analyse pair if spot/isolated/cross not supported
