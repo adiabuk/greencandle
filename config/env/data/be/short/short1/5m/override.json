@@ -1,6 +1,7 @@
 {
-  "name": "data-be-analyse-5m-short1",
+  "api_forward": "forward2",
   "interval": "5m",
+  "name": "data-be-analyse-5m-short1",
   "slack_alerts": "opportunities_5m",
   "slack_balance": "opportunities_5m",
   "slack_notifications": "opportunities_5m",

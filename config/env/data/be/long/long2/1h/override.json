@@ -1,10 +1,9 @@
 {
-  "api_forward": "forward3",
+  "interval": "1h",
+  "name": "data-be-analyse-1h-long2",
   "open_rule1": "agg.distance_200 \u003e 5 and res[1].bbperc_200 \u003c -2 and res[0].numTrades \u003e 0",
   "slack_alerts": "opportunities_rare",
   "slack_balance": "opportunities_rare",
-  "name": "data-be-analyse-1h-long2",
-  "interval": "1h",
   "slack_notifications": "opportunities_rare",
   "time_between_trades": "3h"
 }

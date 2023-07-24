@@ -25,6 +25,7 @@ from greencandle.lib.order import Trade
 
 config.create_config()
 INTERVAL = config.main.interval
+DIRECTION = config.main.trade_direction
 LOGGER = get_logger(__name__)
 PAIRS = config.main.pairs.split()
 MAIN_INDICATORS = config.main.indicators.split()
@@ -37,6 +38,7 @@ if sys.argv[-1] != "--help":
     ISOLATED = CLIENT.get_isolated_margin_pairs()
     CROSS = CLIENT.get_cross_margin_pairs()
     STORE_IN_DB = bool('STORE_IN_DB' in os.environ)
+    CHECK_REDIS_PAIR = bool('CHECK_REDIS_PAIR' in os.environ)
 
 def analyse_loop():
     """
@@ -68,6 +70,16 @@ def get_match_name(matches):
         match_names.append(name_lookup[container_num-1][match-1])
     return ','.join(match_names)
 
+def pair_in_redis(pair):
+    """
+    Check if pair is in redis set for current scope
+    if it is, remove it, and return True, otherwise return False
+    """
+    redis4 = Redis(db=4)
+    result = redis4.conn.redis.conn.sismember(f'{INTERVAL}:{DIRECTION}', pair)
+    redis4.conn.srem(f'{INTERVAL}:{DIRECTION}', pair)
+    return result
+
 def analyse_pair(pair, redis):
     """
     Analysis of individual pair
@@ -75,12 +87,15 @@ def analyse_pair(pair, redis):
     pair = pair.strip()
 
     supported = ""
-    if config.main.trade_direction != "short":
+    if DIRECTION != "short":
         supported += "spot "
 
     supported += "isolated " if pair in ISOLATED else ""
     supported += "cross " if pair in CROSS else ""
 
+    if CHECK_REDIS_PAIR and not pair_in_redis(pair):
+        # we are not allowed to proceed
+        return
     if not supported.strip():
         # don't analyse pair if spot/isolated/cross not supported
         return
@@ -114,10 +129,10 @@ def analyse_pair(pair, redis):
                    f"Data: {data}")
 
             send_slack_message("notifications", msg, emoji=True,
-                               icon=f':{INTERVAL}-{config.main.trade_direction}:')
-            if config.main.trade_direction == 'long' and result == 'OPEN':
+                               icon=f':{INTERVAL}-{DIRECTION}:')
+            if DIRECTION == 'long' and result == 'OPEN':
                 action = 1
-            elif config.main.trade_direction == 'short' and result == 'OPEN':
+            elif DIRECTION == 'short' and result == 'OPEN':
                 action = -1
             else:
                 action = 0
@@ -146,14 +161,21 @@ def analyse_pair(pair, redis):
                     requests.post(url, json.dumps(payload), timeout=10,
                                   headers={'Content-Type': 'application/json'})
                     LOGGER.info("forwarding %s %s/%s trade to: %s match:%s",
-                                pair, INTERVAL, config.main.trade_direction,
+                                pair, INTERVAL, DIRECTION,
                                 forward_strategy, match_strs)
 
                 except requests.exceptions.RequestException:
                     pass
+            else:
+                # add to redis set
+                LOGGER.info("Adding %s to %s:%s set", pair, INTERVAL, DIRECTION)
+                redis4 = Redis(db=4)
+                redis4.conn.sadd(f'{INTERVAL}:{DIRECTION}', pair)
+
+
 
             LOGGER.info("Trade alert: %s %s %s (%s)", pair, INTERVAL,
-                        config.main.trade_direction, supported.strip())
+                        DIRECTION, supported.strip())
     except Exception as err_msg:
         LOGGER.critical("Error with pair %s %s", pair, str(err_msg))
 
