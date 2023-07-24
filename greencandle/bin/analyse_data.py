@@ -77,8 +77,14 @@ def pair_in_redis(pair):
     """
     redis4 = Redis(db=4)
     result = redis4.conn.redis.conn.sismember(f'{INTERVAL}:{DIRECTION}', pair)
-    redis4.conn.srem(f'{INTERVAL}:{DIRECTION}', pair)
     return result
+
+def rm_pair_from_redis(pair):
+    """
+    Remove pair from redis set
+    """
+    redis4 = Redis(db=4)
+    redis4.conn.srem(f'{INTERVAL}:{DIRECTION}', pair)
 
 def analyse_pair(pair, redis):
     """
@@ -96,6 +102,7 @@ def analyse_pair(pair, redis):
     if CHECK_REDIS_PAIR and not pair_in_redis(pair):
         # we are not allowed to proceed
         return
+
     if not supported.strip():
         # don't analyse pair if spot/isolated/cross not supported
         return
@@ -146,6 +153,9 @@ def analyse_pair(pair, redis):
             elif result == 'CLOSE' and STORE_IN_DB:
                 LOGGER.info("closing data trade for %s", pair)
                 trade.close_trade(details)
+
+            if CHECK_REDIS_PAIR and result=='OPEN':
+                rm_pair_from_redis(pair)
 
             if FORWARD:
                 url = f"http://router:1080/{config.web.api_token}"
