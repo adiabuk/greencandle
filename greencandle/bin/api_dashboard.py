@@ -196,6 +196,7 @@ def trade():
     return render_template('action.html', my_dic=my_dic)
 
 @APP.route('/data', methods=['GET', 'POST'])
+@login_required
 def data():
     """
     route to data spreadsheets
