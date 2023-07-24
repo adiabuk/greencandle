@@ -1,5 +1,14 @@
 # Releases
 
+# 6.11
+* save time and resources by only analysing pairs we care about in this loop
+* no longer need to delete redis data after release due to reduced startup times
+* ensure we don't miss a trade for preexisting conditions that triggered earlier
+* require login for data UI
+* only remove pair from redis if we have a confirmed 'open' match
+* allow sufficient mem for manual containers
+* use redis to forward trades between multiple analysers in data env before forwarding
+
 # 6.10.1
 * BUGFIX: don't forward every trade
 
