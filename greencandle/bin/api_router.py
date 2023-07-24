@@ -107,8 +107,12 @@ def respond():
             new_env, new_strategy = container.split(':')
             payload['env'] = new_env
             payload['strategy'] = new_strategy
-        payload['host'] = '10.8.0.1'
-        forward(payload)
+            payload['host'] = '10.8.0.1'
+            forward(payload)
+        else:
+            payload['host'] = '10.8.0.1'
+            forward(payload)
+
     mysql = Mysql()
     try:
         mysql.insert_api_trade(**request.json)
