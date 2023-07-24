@@ -141,7 +141,7 @@ services:
       - CONFIG_ENV=stag/be/manual
       - DB=true
     image: amrox/greencandle:${TAG}
-    mem_limit: 200m
+    mem_limit: 500m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "tail -f /dev/null"
