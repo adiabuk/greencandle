@@ -41,7 +41,6 @@ BASH_ENV=/container.env
 */6 * * * * /usr/local/bin/get_trade_status > /proc/1/fd/1 2>/proc/1/fd/2
 0 * * * * /usr/local/bin/send_docker_alerts
 03 * * * * /usr/local/bin/get_hour_profit > /proc/1/fd/1 2>/proc/1/fd/2
-30 * * * * /usr/bin/find /data/graphs -type f -mtime +1 -delete > /proc/1/fd/1 2>/proc/1/fd/2
 00 * * * * /usr/local/bin/populate_pairs
 
 {{else if eq .base_env "test"}}
@@ -51,8 +50,6 @@ BASH_ENV=/container.env
 15 * * * * /usr/local/bin/collect_pairs > /proc/1/fd/1 2>/proc/1/fd/2
 
 {{else if eq .base_env "data"}}
-@reboot /usr/local/bin/clear_redis > /proc/1/fd/1 2>/proc/1/fd/2
-@daily /usr/bin/find /data/graphs -type f -mmin +2280 -delete > /proc/1/fd/1 2>/proc/1/fd/2
 * * * * * /usr/local/bin/agg_candle_size 10 > /proc/1/fd/1 2> /proc/1/fd/2
 */3 * * * * for f in ` /usr/bin/find /data/aggregate -maxdepth 1 -regex  '.*\(csv\|tsv\)$' -type f -mmin +3 -print`;do /bin/echo $f; /bin/gzip $f; /bin/mv ${f}.gz /data/aggregate/old;done
 @daily /usr/bin/find /data -type f -name ".*" -delete
