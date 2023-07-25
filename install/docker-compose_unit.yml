@@ -51,6 +51,9 @@ services:
       context: ..
       dockerfile: install/Dockerfile-rs
     container_name: redis-unit-${id}
+    tmpfs:
+      - /srv
+      - /data
     environment:
       - id=$id
     hostname: redis-unit
@@ -71,6 +74,7 @@ services:
       dockerfile: install/Dockerfile-ms
     container_name: mysql-unit-${id}
     tmpfs:
+      - /srv
       - /var/lib/mysql
     hostname: mysql-unit
     image: gc-mysql-${image_id}

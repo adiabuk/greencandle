@@ -95,6 +95,7 @@ services:
     container_name: redis-unit-$id
     tmpfs:
       - /srv
+      - /data
     hostname: redis-unit
     build:
       context: ..
