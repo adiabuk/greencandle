@@ -221,7 +221,7 @@
       "is_secret": false
     },
     "indicators": {
-      "value": "get_bb_perc;bbperc;200,1 get_stochrsi;STOCHRSI;8,5,3 get_supertrend;STX;22,3 get_bb;bb;200,4 get_moving_averages;EMA;13 get_moving_averages;EMA;21",
+      "value": "get_bb_perc;bbperc;200,1 get_stochrsi;STOCHRSI;8,5,3 get_supertrend;STX;22,3 get_bb;bb;200,4 get_moving_averages;EMA;8 get_moving_averages;EMA;13",
       "is_binary": false,
       "is_secret": false
     },
