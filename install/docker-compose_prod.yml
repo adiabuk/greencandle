@@ -211,6 +211,11 @@ services:
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh api_proxy
+    healthcheck:
+      test: curl -Isf http://127.1:5000
+      interval: 1m
+      timeout: 10s
+      retries: 5
     links:
       - prod-be-api-router:router
       - prod-fe-api-filesystem:filesystem
@@ -239,6 +244,11 @@ services:
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh filesystem_api
+    healthcheck:
+      test: curl -Isf http://127.1:6000
+      interval: 1m
+      timeout: 10s
+      retries: 5
     ports:
       - 6000
     volumes:
