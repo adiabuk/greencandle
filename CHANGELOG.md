@@ -1,5 +1,21 @@
 # Releases
 
+# 6.12
+* reduce data env deploy time
+* install ta-lib in base image from tar and upgrade in reqs file
+* remove deprecated bootstrap scripts
+* move gc image steps to base image to speed up build/testing
+* data env makes more use of redis - increase mem
+* 5sec pause after fetching limited no of pairs from redis, otherwise 1sec
+* use tmpfs for mysql/redis in jenkins/unit DC files
+* use tmpfs for /srv when building/testing
+* stx needs a closed candle so use last full candle
+* add healthchecks for all containers in all envs
+* change intermittent start/end logs to debug
+* remove trade from db4 redis if one exists in opposite direction
+* reduce data EMA length
+* use db4 for pairs to pass pair from one strategy to the next
+
 # 6.11
 * save time and resources by only analysing pairs we care about in this loop
 * no longer need to delete redis data after release due to reduced startup times
