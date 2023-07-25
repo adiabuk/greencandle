@@ -25,7 +25,7 @@ scipy==1.11.1
 selenium==3.8.1
 setproctitle==1.1.10
 simplejson==3.13.2
-ta-lib==0.4.14
+ta-lib==0.4.28
 str2bool==1.1
 openpyxl==3.1.2
 xlrd==1.2.0
