@@ -6,6 +6,8 @@ services:
       context: ..
       dockerfile: install/Dockerfile-gc
     container_name: unit-runner-$id
+    tmpfs:
+      - /srv
     environment:
       - CONFIG_ENV=unit
       - BUILD_ID=$id
@@ -34,6 +36,8 @@ services:
 
   cron:
     container_name: cron-$id
+    tmpfs:
+      - /srv
     build:
       context: ..
       dockerfile: install/Dockerfile-gc
@@ -60,6 +64,8 @@ services:
 
   api:
     container_name: api-$id
+    tmpfs:
+      - /srv
     build:
       context: ..
       dockerfile: install/Dockerfile-gc
@@ -87,6 +93,8 @@ services:
 
   redis-unit:
     container_name: redis-unit-$id
+    tmpfs:
+      - /srv
     hostname: redis-unit
     build:
       context: ..
@@ -105,6 +113,8 @@ services:
 
   mysql-unit:
     container_name: mysql-unit-$id
+    tmpfs:
+      - /srv
     hostname: mysql-unit
     build:
       context: ..
@@ -141,6 +151,8 @@ services:
 
   web-unit:
     container_name: web-unit-$id
+    tmpfs:
+      - /srv
     hostname: web-unit
     build:
       context: ..

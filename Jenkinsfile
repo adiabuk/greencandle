@@ -14,7 +14,6 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr: '5'))
     }
 
-
     stages {
         stage("Start") {
             steps {
@@ -26,10 +25,11 @@ pipeline {
                 echo 'building apps'
                 sh "sudo ln -s . /srv/greencandle"
                 ansiColor('vga') {
-                    sh 'docker-compose -f install/docker-compose_jenkins.yml -p $BUILD_ID build --build-arg BRANCH=$GIT_BRANCH --build-arg COMMIT=$SHORT_COMMIT --build-arg DATE="$(date)"'
-                }
-            }
+                     sh 'docker-compose -f install/docker-compose_jenkins.yml -p $BUILD_ID build --build-arg BRANCH=$GIT_BRANCH --build-arg COMMIT=$SHORT_COMMIT --build-arg DATE="$(date)"'
+                 }
+             }
         }
+
         stage("run tests") {
             steps {
                 echo "run all tests"
