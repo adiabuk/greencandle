@@ -64,7 +64,7 @@ def analyse_loop():
         analyse_pair(pair, redis)
     LOGGER.debug("End of current loop")
     del redis
-    if CHECK_REDIS_PAIRS:
+    if CHECK_REDIS_PAIR:
         time.sleep(5)
 
 def get_match_name(matches):
