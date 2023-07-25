@@ -45,7 +45,7 @@ for container in $be; do
   $COMPOSE up -d $container
   sleep 2
   if [[ "$container" == *"get"* ]]; then
-    sleep 15
+    sleep 5
   fi
 
 done
