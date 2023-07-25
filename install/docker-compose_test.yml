@@ -180,7 +180,7 @@ services:
       - test-base-mysql
       - test-base-redis
     healthcheck:
-      test: curl -Isf http://127.1:5000
+      test: curl -qsf http://127.1:5000 >/dev/null
       interval: 1m
       timeout: 10s
       retries: 5
