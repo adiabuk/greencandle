@@ -2,7 +2,6 @@ FROM python:3.9.0
 
 RUN apt-get update && \
     apt-get -y install vim cron netcat default-mysql-client bsdmainutils libssl-dev libsystemd-dev xvfb xauth iceweasel --no-install-recommends && \
-    apt-get clean; apt-get autoclean; rm -rf /var/lib/apt/lists/* && \
     wget "https://www.dropbox.com/sh/l22jyonei087h4o/AAAVa_B_sDXtWZu17RzazsA2a/geckodriver-v0.26.0-linux64.tar.gz?dl=0" -O /tmp/geckodriver-v0.26.0-linux64.tar.gz && \
     tar zxvf /tmp/geckodriver-v0.26.0-linux64.tar.gz -C /usr/local/bin && \
     rm -rf /tmp/geckodriver-v0.26.0-linux64.tar.gz  && \
@@ -14,6 +13,12 @@ RUN apt-get update && \
     cd /tmp/ta-lib; ./configure --prefix=/usr; make; make install && \
     cd /; rm -rf /tmp/ta-lib /tmp/ta-lib-0.4.0-src.tar.gz && \
     pip install cython urllib3==2.0.3 APScheduler==3.6.1 argcomplete==2.0.0 coinbase==2.0.6 configparser==3.5.0 Babel==2.9.1 CurrencyConverter==0.16.1 Flask==2.2.5 Flask-Login==0.6.2 docker==6.1.3 lib==3.0.0 pyOpenSSL==22.0.0 mysqlclient==2.1.0 oauth==1.0.1 pandas==1.1.5 numpy==1.25.0 Pillow>=6.2.2 plotly==5.15.0 python_resize_image==1.1.11 PyVirtualDisplay==1.3.2 redis==4.4.4 requests==2.31.0 scipy==1.11.1 selenium==3.8.1 setproctitle==1.1.10 simplejson==3.13.2 && \
-    pip install ta-lib==0.4.14 str2bool==1.1 openpyxl==3.1.2 xlrd==1.2.0 requests-unixsocket==0.2.0 pylint==2.8.1 waitress six==1.12 systemd==0.16.1 tzlocal==2.1b1 cryptocompare==0.7.3 pandas_ta==0.2.23b0 pyyaml==5.4.1 gitpython werkzeug==2.2.3 click>=8.1.3 rq==1.15.0 websocket-client==1.6.1 pytest==6.0.1 backports.shutil-get-terminal-size==1.0.0 scandir==1.10.0 browsepy==0.5.6 pip==9.0.1 ccxt
+    pip install str2bool==1.1 openpyxl==3.1.2 xlrd==1.2.0 requests-unixsocket==0.2.0 pylint==2.8.1 waitress six==1.12 systemd==0.17.1 tzlocal==2.1b1 cryptocompare==0.7.3 pandas_ta==0.2.23b0 pyyaml==5.4.1 gitpython werkzeug==2.2.3 click>=8.1.3 rq==1.15.0 websocket-client==1.6.1 pytest==6.0.1 backports.shutil-get-terminal-size==1.0.0 scandir==1.10.0 browsepy==0.5.6 pip==9.0.1 ccxt && \
+    wget https://github.com/ta-lib/ta-lib-python/tarball/master  -O /tmp/talib.tgz && \
+    cd /tmp/TA-Lib-ta-lib-python-5974b7f/ && python setup.py install && \
+    apt purge -y gcc g++-8 libx265-165 mercurial-common && apt -y autoremove && apt autoclean && \
+    apt-get clean; apt-get autoclean; rm -rf /var/lib/apt/lists/* && \
+    mkdir -p /opt/output && cd / && rm -rf /tmp/*
+
 
 CMD ["python"]
