@@ -53,9 +53,10 @@ def analyse_loop():
 
     LOGGER.debug("Start of current loop")
     redis = Redis()
-    redis4=Redis(db=4)
     if CHECK_REDIS_PAIR:
-        pairs = [x.decode() for x in redis.conn.smembers(f'{INTERVAL}:{DIRECTION}')]
+        redis4=Redis(db=4)
+        pairs = [x.decode() for x in redis4.conn.smembers(f'{INTERVAL}:{DIRECTION}')]
+
     else:
         pairs = PAIRS
 
