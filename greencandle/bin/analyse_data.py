@@ -56,7 +56,7 @@ def analyse_loop():
     if CHECK_REDIS_PAIR:
         redis4=Redis(db=4)
         pairs = [x.decode() for x in redis4.conn.smembers(f'{INTERVAL}:{DIRECTION}')]
-
+        del redis4
     else:
         pairs = PAIRS
 
@@ -64,7 +64,6 @@ def analyse_loop():
         analyse_pair(pair, redis)
     LOGGER.debug("End of current loop")
     del redis
-    del redis4
 
 def get_match_name(matches):
     """
