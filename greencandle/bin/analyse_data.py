@@ -66,6 +66,8 @@ def analyse_loop():
     del redis
     if CHECK_REDIS_PAIR:
         time.sleep(5)
+    else:
+        time.sleep(1)
 
 def get_match_name(matches):
     """
