@@ -70,6 +70,8 @@ services:
       context: ..
       dockerfile: install/Dockerfile-ms
     container_name: mysql-unit-${id}
+    tmpfs:
+      - /var/lib/mysql
     hostname: mysql-unit
     image: gc-mysql-${image_id}
     ports:

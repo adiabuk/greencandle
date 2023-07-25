@@ -115,6 +115,7 @@ services:
     container_name: mysql-unit-$id
     tmpfs:
       - /srv
+      - /var/lib/mysql
     hostname: mysql-unit
     build:
       context: ..
