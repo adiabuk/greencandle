@@ -110,6 +110,11 @@ services:
     entrypoint: /docker-entrypoint.sh filesystem_api
     ports:
       - 6000
+    healthcheck:
+      test: curl -Isf http://127.1:6000
+      interval: 1m
+      timeout: 10s
+      retries: 5
     volumes:
       - /data:/data
       - /dev/log:/dev/log
@@ -174,6 +179,11 @@ services:
     depends_on:
       - test-base-mysql
       - test-base-redis
+    healthcheck:
+      test: curl -Isf http://127.1:5000
+      interval: 1m
+      timeout: 10s
+      retries: 5
     volumes:
       - /data:/data
       - /dev/log:/dev/log
