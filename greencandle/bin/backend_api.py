@@ -56,11 +56,11 @@ def intermittent_check():
     """
     Check for SL/TP
     """
-    LOGGER.info("Starting prod int check")
+    LOGGER.debug("Starting prod int check")
     alert = bool('ALERT' in os.environ)
     runner = ProdRunner()
     runner.prod_int_check(config.main.interval, True, alert=alert)
-    LOGGER.info("Finished prod int check")
+    LOGGER.debug("Finished prod int check")
 
 @arg_decorator
 def main():
