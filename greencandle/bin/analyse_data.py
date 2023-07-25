@@ -183,6 +183,8 @@ def analyse_pair(pair, redis):
                 LOGGER.info("Adding %s to %s:%s set", pair, INTERVAL, DIRECTION)
                 redis4 = Redis(db=4)
                 redis4.conn.sadd(f'{INTERVAL}:{DIRECTION}', pair)
+                invert = {'long': 'short', 'short':'long'}
+                redis4.conn.srem(f'{INTERVAL}:{invert[DIRECTION]}', pair)
 
 
 
