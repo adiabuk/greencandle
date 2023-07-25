@@ -1,11 +1,10 @@
 FROM amrox/python:3.9.0-small
 
 ADD . /srv/greencandle
-RUN python /srv/greencandle/setup.py install
+RUN python /srv/greencandle/setup.py install && \
     cp /srv/greencandle/install/docker-entrypoint*.sh / && \
     cp -rv /srv/greencandle/config /opt/config && \
     chmod +x /docker-entrypoint*.sh
-#&& rm -rf /srv/greencandle
 
 ARG BRANCH
 ARG COMMIT
