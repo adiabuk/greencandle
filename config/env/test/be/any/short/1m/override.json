@@ -1,0 +1,7 @@
+{
+  "interval": "1m",
+  "name": "test-be-api-any-1m-cross",
+  "trade_direction": "short",
+  "take_profit_perc": "2",
+  "stop_loss_perc": "2"
+}

@@ -16,8 +16,6 @@
 {{else if eq .base_env "test"}}
 {
 
-"any-spot-long": ["any-spot-long"],
-
 "any2-1m-long": ["any2-1m-long"],
 "any2-1m-short": ["any2-1m-short"],
 "any2-long-short-1m": ["any2-1m-long", "any2-1m-short"],
@@ -31,9 +29,18 @@
 "any2-1h-short": ["any2-1h-short"],
 "any2-long-short-1h": ["any2-1h-long", "any2-1h-short"],
 
-"any-long": ["any-long"],
-"any-short": ["any-short"],
-"any-long-short": ["any-long", "any-short"],
+"any-1m-long": ["any-1m-long"],
+"any-1m-short": ["any-1m-short"],
+"any-long-short-1m": ["any-1m-long", "any-1m-short"],
+
+"any-5m-long": ["any-5m-long"],
+"any-5m-short": ["any-5m-short"],
+"any-long-short-5m": ["any-5m-long", "any-5m-short"],
+
+
+"any-1h-long": ["any-1h-long"],
+"any-1h-short": ["any-1h-short"],
+"any-long-short-1h": ["any-1h-long", "any-1h-short"],
 
 "alert": ["alert"],
 "route": []
