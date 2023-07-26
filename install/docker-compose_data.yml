@@ -697,7 +697,7 @@ services:
     mem_limit: 300m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "analyse_data forward"
+    entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: journald
     links:
@@ -714,6 +714,7 @@ services:
       - CONFIG_ENV=data/be/short/short1/1m
       - DB=true
       - CHECK_REDIS_PAIR=True
+      - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -733,7 +734,7 @@ services:
     mem_limit: 300m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "analyse_data forward"
+    entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: journald
     links:
@@ -750,6 +751,7 @@ services:
       - CONFIG_ENV=data/be/long/long1/1m
       - DB=true
       - CHECK_REDIS_PAIR=True
+      - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -769,7 +771,7 @@ services:
     mem_limit: 300m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "analyse_data forward"
+    entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: journald
     links:
@@ -786,6 +788,7 @@ services:
       - CONFIG_ENV=data/be/short/short1/5m
       - DB=true
       - CHECK_REDIS_PAIR=True
+      - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -805,7 +808,7 @@ services:
     mem_limit: 300m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "analyse_data forward"
+    entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: journald
     links:
@@ -822,6 +825,7 @@ services:
       - CONFIG_ENV=data/be/long/long1/5m
       - DB=true
       - CHECK_REDIS_PAIR=True
+      - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -841,7 +845,7 @@ services:
     mem_limit: 300m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "analyse_data forward"
+    entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: journald
     links:
@@ -858,6 +862,7 @@ services:
       - CONFIG_ENV=data/be/short/short1/1h
       - DB=true
       - CHECK_REDIS_PAIR=True
+      - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -877,7 +882,7 @@ services:
     mem_limit: 300m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "analyse_data forward"
+    entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: journald
     links:
@@ -894,6 +899,7 @@ services:
       - CONFIG_ENV=data/be/long/long1/1h
       - DB=true
       - CHECK_REDIS_PAIR=True
+      - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -913,7 +919,7 @@ services:
     mem_limit: 300m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "analyse_data forward"
+    entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: journald
     links:
@@ -930,6 +936,7 @@ services:
       - CONFIG_ENV=data/be/short/short1/4h
       - DB=true
       - CHECK_REDIS_PAIR=True
+      - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -949,7 +956,7 @@ services:
     mem_limit: 300m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "analyse_data forward"
+    entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: journald
     links:
@@ -966,6 +973,7 @@ services:
       - CONFIG_ENV=data/be/long/long1/4h
       - DB=true
       - CHECK_REDIS_PAIR=True
+      - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -985,7 +993,7 @@ services:
     mem_limit: 300m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "analyse_data forward"
+    entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: journald
     links:
@@ -1002,6 +1010,7 @@ services:
       - CONFIG_ENV=data/be/short/short1/12h
       - DB=true
       - CHECK_REDIS_PAIR=True
+      - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -1021,7 +1030,7 @@ services:
     mem_limit: 300m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "analyse_data forward"
+    entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: journald
     links:
@@ -1038,6 +1047,7 @@ services:
       - CONFIG_ENV=data/be/long/long1/12h
       - DB=true
       - CHECK_REDIS_PAIR=True
+      - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -1073,6 +1083,8 @@ services:
       - ALERT="True"
       - CONFIG_ENV=data/be/short/short2/1m
       - DB=true
+      - REDIS_FORWARD=True
+      - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -1108,6 +1120,8 @@ services:
       - ALERT="True"
       - CONFIG_ENV=data/be/long/long2/1m
       - DB=true
+      - REDIS_FORWARD=True
+      - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -1143,6 +1157,8 @@ services:
       - ALERT="True"
       - CONFIG_ENV=data/be/short/short2/5m
       - DB=true
+      - REDIS_FORWARD=True
+      - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -1178,6 +1194,8 @@ services:
       - ALERT="True"
       - CONFIG_ENV=data/be/long/long2/5m
       - DB=true
+      - REDIS_FORWARD=True
+      - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -1213,6 +1231,8 @@ services:
       - ALERT="True"
       - CONFIG_ENV=data/be/short/short2/1h
       - DB=true
+      - REDIS_FORWARD=True
+      - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -1248,6 +1268,8 @@ services:
       - ALERT="True"
       - CONFIG_ENV=data/be/long/long2/1h
       - DB=true
+      - REDIS_FORWARD=True
+      - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -1283,6 +1305,8 @@ services:
       - ALERT="True"
       - CONFIG_ENV=data/be/short/short2/4h
       - DB=true
+      - REDIS_FORWARD=True
+      - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -1318,6 +1342,8 @@ services:
       - ALERT="True"
       - CONFIG_ENV=data/be/long/long2/4h
       - DB=true
+      - REDIS_FORWARD=True
+      - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -1353,6 +1379,8 @@ services:
       - ALERT="True"
       - CONFIG_ENV=data/be/short/short2/12h
       - DB=true
+      - REDIS_FORWARD=True
+      - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -1388,6 +1416,8 @@ services:
       - ALERT="True"
       - CONFIG_ENV=data/be/long/long2/12h
       - DB=true
+      - REDIS_FORWARD=True
+      - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h

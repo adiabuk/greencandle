@@ -31,7 +31,6 @@ PAIRS = config.main.pairs.split()
 MAIN_INDICATORS = config.main.indicators.split()
 GET_EXCEPTIONS = exception_catcher((Exception))
 TRIGGERED = {}
-FORWARD = False
 
 if sys.argv[-1] != "--help":
     CLIENT = binance_auth()
@@ -39,6 +38,8 @@ if sys.argv[-1] != "--help":
     CROSS = CLIENT.get_cross_margin_pairs()
     STORE_IN_DB = bool('STORE_IN_DB' in os.environ)
     CHECK_REDIS_PAIR = bool('CHECK_REDIS_PAIR' in os.environ)
+    ROUTER_FORWARD = bool('ROUTER_FORWARD' in os.environ)
+    REDIS_FORWARD = bool('REDIS_FORWARD' in os.environ)
 
 def analyse_loop():
     """
@@ -163,7 +164,7 @@ def analyse_pair(pair, redis):
             if CHECK_REDIS_PAIR and result=='OPEN':
                 rm_pair_from_redis(pair)
 
-            if FORWARD:
+            if ROUTER_FORWARD:
                 url = f"http://router:1080/{config.web.api_token}"
                 forward_strategy = config.web.forward
                 payload = {"pair": pair,
@@ -182,7 +183,8 @@ def analyse_pair(pair, redis):
 
                 except requests.exceptions.RequestException:
                     pass
-            else:
+
+            if REDIS_FORWARD:
                 # add to redis set
                 LOGGER.info("Adding %s to %s:%s set", pair, INTERVAL, DIRECTION)
                 redis4 = Redis(db=4)
@@ -205,11 +207,7 @@ def main():
 
     Usage: analyse_data
     """
-    global FORWARD
-    fwd_str = ''
-    if len(sys.argv) > 1 and sys.argv[1] == "forward":
-        FORWARD = True
-        fwd_str = "-forward"
+    fwd_str = "-forward" if ROUTER_FORWARD else ''
     setproctitle.setproctitle(f"analyse_data-{INTERVAL}{fwd_str}")
 
     while True:
