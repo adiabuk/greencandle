@@ -1,7 +1,7 @@
 {
   "immediate_trailing_stop": "true",
   "interval": "1h",
-  "name": "test-be-api-anyx2-1h-cross",
+  "name": "test-be-api-any2-1h-cross",
   "perc_at_timeout": "5",
   "stop_loss_perc": "5",
   "take_profit_perc": "5",
