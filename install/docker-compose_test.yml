@@ -313,15 +313,18 @@ services:
     links:
       - test-base-mysql:mysql
       - test-base-redis:redis
-      - test-be-api-any-cross-long:any-long
-      - test-be-api-any-cross-short:any-short
+      - test-be-api-any-1m-cross-long:any-1m-long
+      - test-be-api-any-1m-cross-short:any-1m-short
+      - test-be-api-any-1h-cross-long:any-1h-long
+      - test-be-api-any-1h-cross-short:any-1h-short
+      - test-be-api-any-5m-cross-long:any-5m-long
+      - test-be-api-any-5m-cross-short:any-5m-short
       - test-be-api-any2-1m-cross-long:any2-1m-long
       - test-be-api-any2-1m-cross-short:any2-1m-short
       - test-be-api-any2-1h-cross-long:any2-1h-long
       - test-be-api-any2-1h-cross-short:any2-1h-short
       - test-be-api-any2-5m-cross-long:any2-5m-long
       - test-be-api-any2-5m-cross-short:any2-5m-short
-      - test-be-api-any-spot-long:any-spot-long
     depends_on:
       - test-base-mysql
       - test-base-redis
@@ -568,8 +571,8 @@ services:
       - /root/.bash_history:/root/.bash_history
 
   test-be-api-any-1m-cross-long:
-    container_name: test-be-api-any-cross-long
-    hostname: test-be-api-any-cross-long
+    container_name: test-be-api-any-1m-cross-long
+    hostname: test-be-api-any-1m-cross-long
     image: amrox/greencandle:${TAG}
     mem_limit: 400m
     pull_policy: always
@@ -607,8 +610,8 @@ services:
       - /root/.bash_history:/root/.bash_history
 
   test-be-api-any-1m-cross-short:
-    container_name: test-be-api-any-cross-short
-    hostname: test-be-api-any-cross-short
+    container_name: test-be-api-any-1m-cross-short
+    hostname: test-be-api-any-1m-cross-short
     image: amrox/greencandle:${TAG}
     mem_limit: 400m
     pull_policy: always
@@ -646,8 +649,8 @@ services:
       - /root/.bash_history:/root/.bash_history
 
   test-be-api-any-5m-cross-long:
-    container_name: test-be-api-any-cross-long
-    hostname: test-be-api-any-cross-long
+    container_name: test-be-api-any-5m-cross-long
+    hostname: test-be-api-any-5m-cross-long
     image: amrox/greencandle:${TAG}
     mem_limit: 400m
     pull_policy: always
@@ -685,8 +688,8 @@ services:
       - /root/.bash_history:/root/.bash_history
 
   test-be-api-any-5m-cross-short:
-    container_name: test-be-api-any-cross-short
-    hostname: test-be-api-any-cross-short
+    container_name: test-be-api-any-5m-cross-short
+    hostname: test-be-api-any-5m-cross-short
     image: amrox/greencandle:${TAG}
     mem_limit: 400m
     pull_policy: always
@@ -724,8 +727,8 @@ services:
       - /root/.bash_history:/root/.bash_history
 
   test-be-api-any-1h-cross-long:
-    container_name: test-be-api-any-cross-long
-    hostname: test-be-api-any-cross-long
+    container_name: test-be-api-any-1h-cross-long
+    hostname: test-be-api-any-1h-cross-long
     image: amrox/greencandle:${TAG}
     mem_limit: 400m
     pull_policy: always
@@ -763,8 +766,8 @@ services:
       - /root/.bash_history:/root/.bash_history
 
   test-be-api-any-1h-cross-short:
-    container_name: test-be-api-any-cross-short
-    hostname: test-be-api-any-cross-short
+    container_name: test-be-api-any-1h-cross-short
+    hostname: test-be-api-any-1h-cross-short
     image: amrox/greencandle:${TAG}
     mem_limit: 400m
     pull_policy: always
