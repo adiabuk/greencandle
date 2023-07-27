@@ -35,7 +35,7 @@ if [[ ! -f /installed ]]; then
 
   elif [[ "$HOSTNAME" == *"alert"* ]]; then
     mkdir -p /srv/output
-    cp /srv/alert/com.mp3 /srv/alert/250ms-silence.mp3 /srv/output/
+    cp /srv/alert/*.mp3 /srv/output/
 
 
   elif [[ "$HOSTNAME" == *"manual"* ]]; then
