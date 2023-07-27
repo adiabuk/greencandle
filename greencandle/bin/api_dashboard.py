@@ -177,7 +177,10 @@ def trade():
             name = item.split(':')[0]
 
             if not name in ['alert', 'forward']:
-                container = links_dict[name]
+                try:
+                    container = links_dict[name]
+                except KeyError:
+                    continue
             else:
                 continue
 
