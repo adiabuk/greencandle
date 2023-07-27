@@ -15,7 +15,7 @@ def main():
     """
     dbase = Mysql()
     config.create_config()
-    results = dbase.fetch_sql_data(f'select pair from open_trades where name="config.main.name" '
+    results = dbase.fetch_sql_data(f'select pair from open_trades where name="{config.main.name}" '
                                    f'and direction="{config.main.trade_direction}"',
                                    header=False)
 
