@@ -135,22 +135,6 @@ services:
       timeout: 10s
       retries: 5
 
-  alert-unit:
-    container_name: alert-unit-$id
-    hostname: alert-unit
-    build:
-      context: ..
-      dockerfile: install/Dockerfile-as
-    image: alert-${image_id}
-    environment:
-      - CONFIG_ENV=unit
-    restart: always
-    healthcheck:
-      test: ls
-      interval: 1m
-      timeout: 10s
-      retries: 5
-
   web-unit:
     container_name: web-unit-$id
     tmpfs:
