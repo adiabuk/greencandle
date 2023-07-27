@@ -50,7 +50,7 @@ def play(data):
     Play audio beep and spoken text from Amazon Polly or Google
     """
     pair = '.'.join(list(data['pair']))
-    text = f"Red Alert, all hands to battle stations. {pair} {data['text']}"
+    text = f"Red Alert, all hands to battle stations. {pair}, {data['text']}"
 
     if Path('/var/local/google').is_file():
         create_google_voice(text, '/srv/output/speech.mp3')
