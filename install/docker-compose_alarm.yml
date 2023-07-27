@@ -95,7 +95,7 @@ services:
   alarm-be-alert:
     container_name: alarm-be-alert
     hostname: alarm-be-alert
-    image: amrox/alert:latest
+    image: amrox/alert:${TAG}
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "python -u /srv/alert/webhook.py"
