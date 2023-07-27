@@ -10,7 +10,7 @@ from datetime import datetime, time
 import subprocess
 from flask import Flask, request, Response
 import setproctitle
-from alertlibs import create_polly_voice, lights
+from alertlibs import create_polly_voice, create_google_voice, lights
 
 APP = Flask(__name__)
 
@@ -47,11 +47,15 @@ def healthcheck():
 
 def play(data):
     """
-    Play audio beep and spoken text from Amazon Polly
+    Play audio beep and spoken text from Amazon Polly or Google
     """
     pair = '.'.join(list(data['pair']))
     text = f"Red Alert, all hands to battle stations. {pair} {data['text']}"
-    create_polly_voice(text, '/srv/output/speech.mp3')
+
+    if Path('/var/local/google').is_file():
+        create_google_voice(text, '/srv/output/speech.mp3')
+    else:
+        create_polly_voice(text, '/srv/output/speech.mp3')
 
     play_mp3('/srv/output/250ms-silence.mp3')
     play_mp3('/srv/output/com.mp3')
