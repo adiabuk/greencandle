@@ -1,5 +1,25 @@
 # Releases
 
+# 6.13
+* use correct value for supertrend long
+* no need to cancel opposite opportunity, this is done at trade-open
+* remove EMA rules, leaving only supertrend for 2nd level data
+* change tpsl+trailing for test2 env
+* increase supertrend multiplier in data env to not get stopped out
+* fix fsting in scope script
+* add initial default redis config
+* skip containers that don't exist when getting short name
+* use cached mp3 for portions of text to avoid re-requesting
+* use tag for alert image
+* retag alert image
+* insert pause in audio between trading pair and text
+* prune alerts more
+* option to use google for voice syn
+* alert only from data env
+* alarm container will be created separately, not part of main build
+* allow forwarding to router and to redis
+* new replica test envs for 1m,5m,1h
+
 # 6.12
 * reduce data env deploy time
 * install ta-lib in base image from tar and upgrade in reqs file
