@@ -48,7 +48,7 @@ def get_spot_details(bal=None):
     for quote in QUOTES:
         try:
             results += (f"\t{quote} {bal['binance'][quote]['count']} "
-                        "{format_usd(bal['binance'][quote]['USD']}\n")
+                        f"{format_usd(bal['binance'][quote]['USD']}\n")
 
         except KeyError:  # Zero Balance
             continue
