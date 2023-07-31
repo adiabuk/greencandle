@@ -1,21 +1,21 @@
 version: "3.1"
 services:
 
-  cron:
-    container_name: cron
+  dev-fe-cron:
+    container_name: dev-fe-cron
     environment:
-      - CONFIG_ENV=unit
+      - CONFIG_ENV=dev
       - DB=true
-    hostname: cron
+    hostname: dev-fe-cron
     image: amrox/greencandle:${TAG}
     restart: always
     entrypoint: /docker-entrypoint.sh "cron -f"
     links:
-      - mysql-unit:mysql
-      - redis-unit:redis
+      - dev-base-mysql:mysql
+      - dev-base-redis-unit:redis
     depends_on:
-      - mysql-unit
-      - redis-unit
+      - dev-base-mysql
+      - dev-base-redis
     healthcheck:
       test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
       interval: 1m
@@ -25,56 +25,31 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
 
-  api:
-    container_name: api
-    environment:
-      - CONFIG_ENV=unit
-      - DB=true
-    hostname: api
-    image: amrox/greencandle:${TAG}
-    restart: always
-    entrypoint: /docker-entrypoint.sh "backend_api --test api"
-    links:
-      - mysql-unit:mysql
-      - redis-unit:redis
-    ports:
-      - 20000:20000
-    depends_on:
-      - mysql-unit
-      - redis-unit
-    healthcheck:
-      test: nc -z 127.1 20000
-      interval: 1m
-      timeout: 10s
-      retries: 5
-    volumes:
-      - /data:/data
-
-  redis-unit:
-    container_name: redis-unit
-    hostname: redis-unit
+  dev-base-redis:
+    container_name: dev-base-redis
+    hostname: dev-base-redis
     image: amrox/gc-redis:${TAG}
     ports:
       - 6379:6379
     restart: always
     links:
-      - mysql-unit:mysql
+      - dev-base-mysql:mysql
     healthcheck:
       test: redis-cli ping
       interval: 1m
       timeout: 10s
       retries: 5
 
-  mysql-unit:
-    container_name: mysql-unit
-    hostname: mysql-unit
+  dev-base-mysql:
+    container_name: dev-base-mysql
+    hostname: dev-base-mysql
     image: amrox/gc-mysql:${TAG}
     ports:
       - 3306:3306
     entrypoint: /docker-entrypoint.sh mysqld
     environment:
       - MYSQL_ROOT_PASSWORD=password
-      - CONFIG_ENV=unit
+      - CONFIG_ENV=dev
       - DB=true
     restart: always
     healthcheck:
@@ -82,3 +57,73 @@ services:
       interval: 1m
       timeout: 10s
       retries: 5
+
+  dev-be-stream_1m:
+    container_name: dev-be-stream_1m
+    hostname: dev-be-stream_1m
+    image: amrox/greencandle:${TAG}
+    mem_limit: 200m
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh stream_data
+    logging:
+      driver: journald
+    links:
+      - dev-base-mysql:mysql
+      - dev-base-redis:redis
+    depends_on:
+      - dev-base-mysql
+      - dev-base-redis
+    environment:
+      - VPN_IP=$VPN_IP
+      - CONFIG_ENV=dev
+      - DB=true
+    healthcheck:
+      test: /mnt/nagios_checks/check_milliepoch -u http://127.1:5000 -w 120 -c 180 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      start_period: 1m
+      interval: 1m
+      timeout: 10s
+      retries: 5
+    ports:
+      - 5001:5000
+    volumes:
+      - /mnt:/mnt
+      - /data:/data
+      - /var/local:/var/local
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+
+  dev-be-get_1m:
+    container_name: dev-be-get_1m
+    hostname: dev-be-get_1m
+    image: amrox/greencandle:${TAG}
+    mem_limit: 500m
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh get_data
+    logging:
+      driver: journald
+    links:
+      - dev-base-mysql:mysql
+      - dev-base-redis:redis
+      - dev-be-stream_1m:stream
+    depends_on:
+      - dev-base-mysql
+      - dev-base-redis
+    environment:
+      - VPN_IP=$VPN_IP
+      - CONFIG_ENV=dev
+      - DB=true
+    healthcheck:
+      test: find /var/local/gc_get_1m.lock  -mmin -2 ||exit 1
+      interval: 1m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /var/local:/var/local
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
