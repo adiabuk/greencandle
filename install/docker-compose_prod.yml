@@ -320,6 +320,8 @@ services:
       - prod-be-api-any-1h-cross-short:any-1h-short
       - prod-be-api-any-1m-cross-long:any-1m-long
       - prod-be-api-any-1m-cross-short:any-1m-short
+      - prod-be-api-any-5m-cross-long:any-5m-long
+      - prod-be-api-any-5m-cross-short:any-5m-short
     depends_on:
       - prod-base-mysql
       - prod-base-redis
@@ -455,6 +457,78 @@ services:
       - VPN_IP=$VPN_IP
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/1m/cross-short
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - prod-base-mysql:mysql
+      - prod-base-redis:redis
+    depends_on:
+      - prod-base-mysql
+      - prod-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  prod-be-api-any-5m-cross-long:
+    container_name: prod-be-api-any-5m-cross-long
+    hostname: prod-be-api-any-5m-cross-long
+    image: amrox/greencandle:${TAG}
+    mem_limit: 400m
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
+    logging:
+      driver: journald
+    environment:
+      - VPN_IP=$VPN_IP
+      - intermittent="true"
+      - CONFIG_ENV=prod/be/any/5m/cross-long
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - prod-base-mysql:mysql
+      - prod-base-redis:redis
+    depends_on:
+      - prod-base-mysql
+      - prod-base-redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 1m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  prod-be-api-any-5m-cross-short:
+    container_name: prod-be-api-any-5m-cross-short
+    hostname: prod-be-api-any-5m-cross-short
+    image: amrox/greencandle:${TAG}
+    mem_limit: 400m
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
+    logging:
+      driver: journald
+    environment:
+      - VPN_IP=$VPN_IP
+      - intermittent="true"
+      - CONFIG_ENV=prod/be/any/5m/cross-short
       - DB=true
     ports:
       - 20000

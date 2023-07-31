@@ -5,12 +5,12 @@
   "immediate_take_profit": "true",
   "immediate_trailing_stop": "false",
   "interval": "5m",
-  "max_trades": "4",
+  "max_trades": "10",
   "pairs": "any",
-  "perc_at_timeout": "0.3",
+  "perc_at_timeout": "1",
   "stop_loss_perc": "2",
   "take_profit_perc": "2",
-  "time_in_trade": "4h",
+  "time_in_trade": "6h",
   "trailing_start": "0",
   "trailing_stop_loss_perc": "0"
 }
