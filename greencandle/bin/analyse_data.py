@@ -204,7 +204,8 @@ def main():
     Usage: analyse_data
     """
     fwd_str = "-forward" if ROUTER_FORWARD else ''
-    setproctitle.setproctitle(f"analyse_data-{INTERVAL}{fwd_str}")
+    container_no = config.main.name[-1]
+    setproctitle.setproctitle(f"analyse_data{container_no}-{INTERVAL}{fwd_str}")
 
     while True:
         analyse_loop()
