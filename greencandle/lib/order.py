@@ -64,10 +64,12 @@ class Trade():
         start, end = re.findall(r"\d\d:\d\d\s?-\s?\d\d:\d\d", raw_range)[0].split('-')
         time_range = (start.strip(), end.strip())
         drain = str2bool(self.config.main.drain)
-        manual_drain = Path(f'/var/local/{self.config.main.base_env}_drain').is_file()
+        env_drain = Path(f'/var/local/{self.config.main.base_env}_drain').is_file()
+        local_drain = Path(f'/var/local/drain_{self.config.main.name}_'
+                           f'{self.config.main.trade_direction}').is_file()
         if time_range[1] < time_range[0]:
             return time_str >= time_range[0] or time_str <= time_range[1]
-        return (time_range[0] <= time_str <= time_range[1]) if drain else manual_drain
+        return (time_range[0] <= time_str <= time_range[1]) if drain else (env_drain or local_drain)
 
     def __send_redis_trade(self, **kwargs):
         """
