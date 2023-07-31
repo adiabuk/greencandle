@@ -20,6 +20,13 @@ pipeline {
                 slackSend color: "#808080", message: "Starting build\nRepo: ${env.GIT_REPO_NAME}\nCommit: ${SHORT_COMMIT}\nBranch: ${env.GIT_BRANCH}\nURL: (<${env.BUILD_URL}|Open>)"
             }
         }
+        stage("Mute Nagios Notifications") {
+            steps {
+                 build(job: 'nagios-downtime', parameters:
+                            [string(name: 'TIME', value: "5"),
+                             string(name: 'COMMENT', value: "running+build")])
+            }
+        }
         stage("build docker images") {
             steps {
                 echo 'building apps'
