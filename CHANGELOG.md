@@ -1,5 +1,14 @@
 # Releases
 
+# 6.14
+* add container number to analyser proc title
+* increase analyser containers to 500M
+* ability to drain specific container/strategy as well as entire env
+* add and configure 5m prod rules
+* make initial rules fire quicker, and use RSI for confirmation
+* add RSI with default values to data env
+* change alerting rules
+
 # 6.13
 * use correct value for supertrend long
 * no need to cancel opposite opportunity, this is done at trade-open
