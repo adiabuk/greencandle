@@ -1,5 +1,15 @@
 # Releases
 
+# 6.15
+* fix dev env links
+* match correct drain file
+* fix forwarding strategy name
+* tweak distance data rule
+* separate dev env from other envs
+* add current default redis config from running container
+* add nagios downtime during build process
+* fix format string for slack output
+
 # 6.14
 * add container number to analyser proc title
 * increase analyser containers to 500M
