@@ -2,13 +2,14 @@ FROM amrox/redis:5.0.5
 
 ADD . /srv/greencandle
 RUN cp -rv /srv/greencandle/config /opt/config && \
+mkdir /opt/output
 apt update && apt install -y wget  && \
 wget "https://www.dropbox.com/sh/l22jyonei087h4o/AAChfqr_j4ydTDjILz0Q62Y2a/configstore-2.5.0-linux-amd64.tar.gz?dl=0" -O /tmp/configstore-2.5.0-linux-amd64.tar.gz && \
     tar zxvf /tmp/configstore-2.5.0-linux-amd64.tar.gz -C /usr/local/bin && \
     rm -rf /tmp/configstore-2.5.0-linux-amd64.tar.gz && \
     apt purge -y wget && \
     apt -y clean && apt -y autoclean && apt -y autoremove && \
-    cp /srv/greencandle/install/docker-entrypoint*.sh / 
+    cp /srv/greencandle/install/docker-entrypoint*.sh /
 
 
 EXPOSE 6379
