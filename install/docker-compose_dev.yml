@@ -12,7 +12,7 @@ services:
     entrypoint: /docker-entrypoint.sh "cron -f"
     links:
       - dev-base-mysql:mysql
-      - dev-base-redis-unit:redis
+      - dev-base-redis:redis
     depends_on:
       - dev-base-mysql
       - dev-base-redis
