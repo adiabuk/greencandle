@@ -748,7 +748,7 @@ class Trade():
                         symbol=pair, quantity=float(borrowed),
                         isolated=str2bool(self.config.main.isolated),
                         asset=base)
-                    if "msg" in repay_result:
+                    if repay_result and "msg" in repay_result:
                         self.logger.critical("Repay error-close short %s: %s", pair, repay_result)
                         self.logger.critical("Params: %s, %s, %s %s", pair, borrowed,
                                           self.config.main.isolated, base)
@@ -1022,7 +1022,7 @@ class Trade():
                         symbol=pair, quantity=float(borrowed),
                         isolated=str2bool(self.config.main.isolated),
                         asset=quote)
-                    if "msg" in repay_result:
+                    if repay_result and "msg" in repay_result:
                         self.logger.critical("Repay error-close %s: %s", pair, repay_result)
                         self.logger.critical("Params: %s, %s, %s %s", pair, borrowed,
                                           self.config.main.isolated, quote)
