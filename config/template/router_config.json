@@ -67,7 +67,7 @@
 
 "forward4": ["test:any-1m-long-short", "prod:any-1m-long-short", "alert"],
 "forward5": ["test:any-5m-long-short", "prod:any-5m-long-short", "alert"],
-"forward6": ["test:any-1h-long-short"],
+"forward6": ["test:any-1h-long-short", "prod:any-1h-long-short", "alert"],
 
 "alert": ["alert"],
 "route": []
