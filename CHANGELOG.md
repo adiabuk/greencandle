@@ -1,5 +1,9 @@
 # Releases
 
+# 6.15.1
+* repay_result is normally empty/NoneType if all is good
+* missing bracket inside fstring
+
 # 6.15
 * fix dev env links
 * match correct drain file
