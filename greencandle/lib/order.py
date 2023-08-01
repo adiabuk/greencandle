@@ -65,7 +65,7 @@ class Trade():
         time_range = (start.strip(), end.strip())
         drain = str2bool(self.config.main.drain)
         env_drain = Path(f'/var/local/{self.config.main.base_env}_drain').is_file()
-        local_drain = Path(f'/var/local/drain_{self.config.main.name}_'
+        local_drain = Path(f'/var/local/drain_{self.config.main.name}-'
                            f'{self.config.main.trade_direction}').is_file()
         if time_range[1] < time_range[0]:
             return time_str >= time_range[0] or time_str <= time_range[1]
