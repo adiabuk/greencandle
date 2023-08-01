@@ -1,5 +1,5 @@
 {
-  "open_rule1": "agg.distance_200 \u003e 10 and res[1].bbperc_200 \u003c -2 and res[0].numTrades \u003e 0",
+  "open_rule1": "agg.distance_200 \u003e 10 res[0].RSI_14 \u003c 25 and res[0].numTrades \u003e 0",
   "slack_alerts": "opportunities_rare",
   "name": "data-be-analyse-12h-long2",
   "interval": "12h",
