@@ -1,5 +1,12 @@
 # Releases
 
+# 6.16
+* forward 1h trades to prod and adjust tpsl
+* run dev env using redis config file using entryfile
+* add c9e to redis image
+* increase nagios downtime for builds
+* increase max trades for 5m/1m containers
+
 # 6.15.1
 * repay_result is normally empty/NoneType if all is good
 * missing bracket inside fstring
