@@ -23,7 +23,7 @@ pipeline {
         stage("Mute Nagios Notifications") {
             steps {
                  build(job: 'nagios-downtime', parameters:
-                            [string(name: 'TIME', value: "5"),
+                            [string(name: 'TIME', value: "8"),
                              string(name: 'COMMENT', value: "running+build")])
             }
         }
