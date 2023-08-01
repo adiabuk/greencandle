@@ -7,7 +7,7 @@ wget "https://www.dropbox.com/sh/l22jyonei087h4o/AAChfqr_j4ydTDjILz0Q62Y2a/confi
     tar zxvf /tmp/configstore-2.5.0-linux-amd64.tar.gz -C /usr/local/bin && \
     rm -rf /tmp/configstore-2.5.0-linux-amd64.tar.gz && \
     apt purge -y wget && \
-    apt -y clean && apt -y autoclean && apt -y autoremove 
+    apt -y clean && apt -y autoclean && apt -y autoremove
 
 
 EXPOSE 6379

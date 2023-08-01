@@ -29,6 +29,8 @@ if [[ ! -f /installed ]]; then
     mkdir -p /etc/gcapi /var/www/html
     echo $(configstore package get $CONFIG_ENV base_env --basedir /opt/config) > /var/www/html/env.txt
     cp /opt/config/raw/* /etc/gcapi/
+  elif [[ "$HOSTNAME" == *"redis"* ]]; then
+    cp /opt/output/redis.conf /etc
 
   elif [[ "$HOSTNAME" == *"cron"* ]]; then
     crontab /opt/output/gc-cron

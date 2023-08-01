@@ -34,6 +34,7 @@ services:
     restart: always
     links:
       - dev-base-mysql:mysql
+    entrypoint: /docker-entrypoint.sh redis-server /etc/redis.conf
     healthcheck:
       test: redis-cli ping
       interval: 1m
