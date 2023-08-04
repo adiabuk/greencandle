@@ -289,7 +289,7 @@ class Mysql():
     @get_exceptions
     def update_trades(self, pair, close_time, close_price, quote, base_out,
                       name=None, drawdown=0, drawup=0, symbol_name=None, commission=None,
-                      order_id=0):
+                      order_id=0, comment=''):
         """
         Update an existing trade with close price
         """
@@ -310,7 +310,8 @@ class Mysql():
                       base_out="{float(base_out):.15f}", closed_by="{job_name}",
                       drawdown_perc=abs(round({drawdown},1)), drawup_perc=abs(round({drawup},1)),
                       close_usd_rate="{usd_rate}", close_gbp_rate="{gbp_rate}",
-                      comm_close="{commission}", close_order_id="{order_id}" where id = "{trade_id}"
+                      comm_close="{commission}", close_order_id="{order_id}", comment="{comment}"
+                      where id = "{trade_id}"
                    """
 
         result = self.__run_sql_query(command)

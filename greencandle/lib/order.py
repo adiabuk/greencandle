@@ -776,7 +776,7 @@ class Trade():
                                          quote=quote_out, base_out=quantity, name=name,
                                          drawdown=drawdown, drawup=drawup,
                                          symbol_name=quote, commission=commission_usd,
-                                         order_id=order_id)
+                                         order_id=order_id, comment=event)
             if result:
                 open_time, profit = \
                         dbase.fetch_sql_data(f"select p.open_time, p.usd_profit from trades t, "
@@ -954,7 +954,7 @@ class Trade():
                                              base_out=quantity, name=name,
                                              drawdown=drawdown, drawup=drawup,
                                              symbol_name=get_quote(pair), commission=commission_usd,
-                                             order_id=order_id)
+                                             order_id=order_id, comment=event)
                 if result:
                     open_time, profit = dbase.fetch_sql_data(f"select p.open_time, p.usd_profit "
                                                              f"from trades t, profit p where "
@@ -1049,7 +1049,8 @@ class Trade():
                                          base_out=quantity, name=name,
                                          drawdown=drawdown,
                                          drawup=drawup, symbol_name=quote,
-                                         commission=commission_usd, order_id=order_id)
+                                         commission=commission_usd, order_id=order_id,
+                                         comment=event)
             if result:
                 open_time, profit = dbase.fetch_sql_data(f"select p.open_time, p.usd_profit "
                                                          f"from trades t, profit p where "
