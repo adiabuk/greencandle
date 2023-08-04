@@ -95,6 +95,6 @@ ORDER BY
 );
 ALTER TABLE trades ADD COLUMN IF NOT EXISTS comment VARCHAR(255);
 
-create profit_open_trades as
+create view profit_open_trades as
 select name, sum(net_perc) as net_perc, direction, count(*) as count from open_trades group by name, direction order by net_perc desc;
 
