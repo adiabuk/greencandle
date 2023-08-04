@@ -6,6 +6,10 @@ drop view if exists profitable_by_name_pair;
 drop view if exists profitable_week;
 drop view if exists profit_daily_by_quote_pair;
 
+drop view if exists daily_profit_breakdown;
+drop view if exists profit_by_dayname_diretion;
+drop procedure if exists GetProfitableByDayName;
+
 create view daily_profit_breakdown as
 select dayname(
 	`profit`.`open_time`) AS `dayname`,
