@@ -10,7 +10,7 @@ fi
 if [[ ! -f /installed ]]; then
   declare -p | grep -Ev 'BASHOPTS|BASH_VERSINFO|EUID|PPID|SHELLOPTS|UID' > /container.env
   configstore package process_templates --ignore-role --basedir /opt/config $CONFIG_ENV /opt/output
-  cp /opt/output/greencandle.ini /opt/output/router_config.json /opt/output/alert.ini /etc
+  cp /opt/output/greencandle.ini /opt/output/send_nsca.cfg /opt/output/router_config.json /opt/output/alert.ini /etc
 
   if [[ "$HOSTNAME" == *"web"* ]]; then
     cp /opt/output/default.conf /etc/nginx/conf.d/default.conf
