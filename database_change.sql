@@ -84,4 +84,4 @@ ORDER BY
 	FIELD(
 		`day`, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
 );
-
+ALTER TABLE trades ADD COLUMN IF NOT EXISTS comments VARCHAR(255);
