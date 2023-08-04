@@ -47,4 +47,4 @@ backports.shutil-get-terminal-size==1.0.0
 scandir==1.10.0
 browsepy==0.5.6
 ccxt
--e "git+https://github.com/Yelp/send_nsca#egg=send_nsca"
+send_nsca3==0.1.6.0
