@@ -1,10 +1,10 @@
 # 6.17
 
-drop view daily_profit;
-drop view profit_pair_time;
-drop view profitable_by_name_pair;
-drop view profitable_week;
-drop view profit_daily_by_quote_pair;
+drop view if exists profit_daily;
+drop view if exists profit_pair_time;
+drop view if exists profitable_by_name_pair;
+drop view if exists profitable_week;
+drop view if exists profit_daily_by_quote_pair;
 
 create view daily_profit_breakdown as
 select dayname(
