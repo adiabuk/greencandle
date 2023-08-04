@@ -1,4 +1,4 @@
-#pylint: disable=no-member,too-many-locals
+#pylint: disable=no-member,too-many-locals,unsubscriptable-object
 
 """
 Get/Convert Balances from Phemex
