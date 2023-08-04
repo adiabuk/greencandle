@@ -1,4 +1,4 @@
-#pylint: disable=no-member,too-many-locals,too-many-lines
+#pylint: disable=no-member,too-many-locals,too-many-lines,broad-except
 """
 Test Buy/Sell orders
 """
@@ -9,6 +9,7 @@ import time
 import re
 from pathlib import Path
 from str2bool import str2bool
+from send_nsca3 import send_nsca
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.mysql import Mysql
@@ -155,6 +156,19 @@ class Trade():
             else:
                 final_list.append(item)
                 avail_slots -= 1
+        if avail_slots >= 10:
+            status = 0
+        elif avail_slots < 2:
+            status = 2
+        elif avail_slots < 10:
+            status = 1
+        else:
+            status = 3
+        try:
+            send_nsca(status=status, host_name='hp', service_name=f"slots_{self.config.main.name}",
+                      text_output=f"Avail Slots:{avail_slots}", remote_host='10.8.0.1')
+        except Exception:
+            self.logger.warning("Unable to push stats to nagios")
         return final_list
 
     @GET_EXCEPTIONS
