@@ -1,5 +1,22 @@
 # Releases
 
+# 6.17
+* add router level drain
+* profitable open_trades view
+* pass request details to binance exception
+* add ncsa pip to containers, jenkins image and base image
+* remove obsolete db views
+* table naming convention
+* submit avail trade slots to nagios as passive check
+* re-order profit view and profitable_daily views
+* add event to db comments field
+* add comments field to trades table
+* delete all new views/procs if exist before recreating
+* refresh db views and procedures
+* need to combine both long and short values of day's profit
+* add prod 5m router config
+* create c9e output dir for processed templates in redis container
+
 # 6.16
 * forward 1h trades to prod and adjust tpsl
 * run dev env using redis config file using entryfile
