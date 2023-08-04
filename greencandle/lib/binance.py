@@ -1,4 +1,4 @@
-#pylint: disable=unnecessary-pass,too-many-public-methods,too-many-arguments
+#pylint: disable=unnecessary-pass,too-many-public-methods,too-many-arguments,raise-missing-from
 """
 Spot and margin trading module for binance
 """
@@ -440,12 +440,12 @@ class Binance():
         try:
             data = resp.json()
         except:
-            raise BinanceException(resp.content.decode())
+            raise BinanceException(resp.content.decode(), method, path, params)
 
         self.logger.debug("%s %s", inspect.stack()[1].function, data)
         self.logger.debug("Calling binance api path %s", path)
         if 'msg' in data:
-            raise BinanceException(data['msg'])
+            raise BinanceException(data['msg'], method, path, params)
 
         return data
 
@@ -471,10 +471,10 @@ class Binance():
         try:
             data = resp.json()
         except:
-            raise BinanceException(resp.content.decode())
+            raise BinanceException(resp.content.decode(), method, path, params)
 
         if 'msg' in data:
-            raise BinanceException(data['msg'])
+            raise BinanceException(data['msg'], method, path, params)
 
         self.logger.debug("%s %s", inspect.stack()[1].function, data)
         self.logger.info("Calling binance api path %s", path)
