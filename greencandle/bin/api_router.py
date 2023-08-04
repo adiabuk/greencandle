@@ -108,7 +108,12 @@ def respond():
             payload['env'] = new_env
             payload['strategy'] = new_strategy
             payload['host'] = '10.8.0.1'
-            forward(payload)
+            route_drain = Path(f'/var/local/drain_{new_env}_{new_strategy}').is_file()
+            if route_drain:
+                LOGGER.warning('Skipping forwarding to %s:%s due to drain', new_env, new_strategy)
+            else:
+                forward(payload)
+
         else:
             payload['host'] = '10.8.0.1'
             forward(payload)
