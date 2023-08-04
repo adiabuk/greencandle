@@ -34,6 +34,10 @@ RUN wget "https://www.dropbox.com/sh/l22jyonei087h4o/AAChfqr_j4ydTDjILz0Q62Y2a/c
     tar zxvf /tmp/ta-lib-0.4.0-src.tar.gz -C /tmp && \
     cd /tmp/ta-lib; /tmp/ta-lib/configure --prefix=/usr &&  make && make install; cd - && rm -rf /tmp/ta-lib && \
     pip install wheel numpy==1.25.0 setuptools-rust setuptools==45.1.0 pip==9.0.1 pytest==6.0.1 gitpython werkzeug==2.2.3 Flask==2.2.5 importlib-metadata==4.12.0 ccxt send_nsca3==0.1.6.0 && \
+wget https://github.com/ta-lib/ta-lib-python/tarball/master  -O /tmp/talib.tgz && \
+    tar zxvf /tmp/talib.tgz -C /tmp && \
+    cd /tmp/TA-Lib-ta-lib-python-5974b7f/ && python setup.py install && \
+    apt purge -y gcc g++-8 libx265-165 mercurial-common && apt -y autoremove && apt autoclean && \
     echo "jenkins ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
     git clone https://github.com/adiabuk/greencandle.git -b dev ~jenkins/greencandle && ln -s ~jenkins/greencandle /srv/greencandle && \
     cd /srv/greencandle; python setup.py install && \
