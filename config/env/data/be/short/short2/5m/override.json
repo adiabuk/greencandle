@@ -4,7 +4,7 @@
   "open_rule1": "agg.distance_200 \u003e 2 and res[0].RSI_14 \u003e 75 and res[0].numTrades \u003e 0",
   "slack_alerts": "opportunities_rare",
   "slack_balance": "opportunities_rare",
-  "api_forward": "forward5",
+  "api_forward": "forward5-short",
   "slack_notifications": "opportunities_rare",
   "time_between_trades": "30m"
 }

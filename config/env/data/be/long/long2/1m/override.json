@@ -3,7 +3,7 @@
   "name": "data-be-analyse-1m-long2",
   "open_rule1": "agg.distance_200 \u003e 1 and res[0].RSI_14 \u003c 25 and res[0].numTrades \u003e 0",
   "slack_alerts": "opportunities_rare",
-  "api_forward": "forward4",
+  "api_forward": "forward4-long",
   "slack_balance": "opportunities_rare",
   "slack_notifications": "opportunities_rare",
   "time_between_trades": "15m"
