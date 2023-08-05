@@ -2,5 +2,6 @@
   "name": "stag-cron",
   "pairs": "ETHBTC",
   "production": "false",
-  "slack_active": "true"
+  "slack_active": "true",
+  "logging_output": "stdout"
 }

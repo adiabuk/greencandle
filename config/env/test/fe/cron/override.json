@@ -4,5 +4,6 @@
   "production": "false",
   "slack_alerts": "test2",
   "slack_balance": "test2",
-  "slack_notifications": "test2"
+  "slack_notifications": "test2",
+  "logging_output": "stdout"
 }

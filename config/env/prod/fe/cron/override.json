@@ -1,4 +1,5 @@
 {
   "name": "prod-cron",
-  "pairs": "ETHBTC"
+  "pairs": "ETHBTC",
+  "logging_output": "stdout"
 }

@@ -1,4 +1,5 @@
 {
   "name": "per-cron",
-  "pairs": "ETHBTC"
+  "pairs": "ETHBTC",
+  "logging_output": "stdout"
 }
