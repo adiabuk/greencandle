@@ -1,5 +1,11 @@
 # Releases
 
+# 6.18
+* use stdout for cron logging
+* forward long/short data trades separately to allow separate route draining
+* updated db schema from recent changes
+* add second batch of prod any containers with routing
+
 # 6.17
 * add router level drain
 * profitable open_trades view
