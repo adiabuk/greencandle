@@ -59,15 +59,28 @@
 "any-1m-short" : ["any-1m-short"],
 "any-1m-long-short": ["any-1m-short", "any-1m-long"],
 
+"any2-1h-long" : ["any2-1h-long"],
+"any2-1h-short" : ["any2-1h-short"],
+"any2-1h-long-short": ["any2-1h-short", "any2-1h-long"],
+
+"any2-5m-long" : ["any2-5m-long"],
+"any2-5m-short" : ["any2-5m-short"],
+"any2-5m-long-short": ["any2-5m-short", "any2-5m-long"],
+
+"any2-1m-long" : ["any2-1m-long"],
+"any2-1m-short" : ["any2-1m-short"],
+"any2-1m-long-short": ["any2-1m-short", "any2-1m-long"],
+
+
 "alert" : ["alert"],
 "route": []
 }
 {{else if eq .base_env "data"}}
 {
 "any-long-short": ["forward"],
-"forward1": ["test:any2-1m-long-short"],
-"forward2": ["test:any2-5m-long-short"],
-"forward3": ["test:any2-1h-long-short"],
+"forward1": ["test:any2-1m-long-short", "prod:any2-1m-long-short"],
+"forward2": ["test:any2-5m-long-short", "prod:any2-5m-long-short"],
+"forward3": ["test:any2-1h-long-short", "prod:any2-1h-long-short"],
 
 "forward4": ["test:any-1m-long-short", "prod:any-1m-long-short", "alert"],
 "forward5": ["test:any-5m-long-short", "prod:any-5m-long-short", "alert"],
