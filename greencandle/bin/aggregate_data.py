@@ -117,7 +117,7 @@ def get_candle_size(res, last_res):
                        abs(perc_diff(res['ohlc']['low'],
                                      last_res['ohlc']['high'])))
 
-        return f'{max_diff:.2f}'
+        return f'{max_diff:.6f}'
     except:
         return None
 
@@ -196,7 +196,7 @@ def get_avg_candle(data):
         except:
             pass
     if diffs:
-        return round(average(diffs), 2)
+        return average(diffs), 6)
     return 0
 
 def aggregate_data(key, pairs, intervals, data, items):
