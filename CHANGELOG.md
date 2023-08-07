@@ -1,5 +1,15 @@
 # Releases
 
+# 6.19.1
+* filter out low vol pairs in candle size rules
+* tweak candle size rule
+* empty string when match name not found
+* fix syntax errors in agg script
+* skip opening trade if unable to get candles
+* avoid divide by zero error and cleanup size rules
+* margin amount to use based on stop_loss to ensure enough to repay
+* remove deprecated agg script
+
 # 6.19
 * use 6dp for candle size perc and account for 0 candle size
 * add missing agg item in redis/dashboard
