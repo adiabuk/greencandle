@@ -1,5 +1,13 @@
 # Releases
 
+# 6.19
+* use 6dp for candle size perc and account for 0 candle size
+* add missing agg item in redis/dashboard
+* don't automatically reload data page after 60 secs
+* new data rules and containers for sudden increase in candlesize
+* combine both aggregate modules and sort data in dashboard
+* clear applied db changes
+
 # 6.18
 * use stdout for cron logging
 * forward long/short data trades separately to allow separate route draining
