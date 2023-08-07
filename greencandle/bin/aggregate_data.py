@@ -196,7 +196,7 @@ def get_avg_candle(data):
         except:
             pass
     if diffs:
-        return average(diffs), 6)
+        return round(average(diffs), 6)
     return 0
 
 def aggregate_data(key, pairs, intervals, data, items):
@@ -237,7 +237,7 @@ def aggregate_data(key, pairs, intervals, data, items):
                  'stoch_flat': stoch_flat,
                  'bb_size': bb_size,
                  'stx_diff': stx_diff,
-                 'bbperc_diff': bbperc_diff'
+                 'bbperc_diff': bbperc_diff,
                  'num': num}
 
         # save to redis, overwriting previous value
