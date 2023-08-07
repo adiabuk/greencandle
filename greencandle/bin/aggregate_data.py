@@ -237,6 +237,7 @@ def aggregate_data(key, pairs, intervals, data, items):
                  'stoch_flat': stoch_flat,
                  'bb_size': bb_size,
                  'stx_diff': stx_diff,
+                 'bbperc_diff': bbperc_diff'
                  'num': num}
 
         # save to redis, overwriting previous value
