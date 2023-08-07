@@ -27,6 +27,11 @@ def add_to_queue(req, test=False):
     pair = req['pair'].upper().strip()
     action = str(req['action']).strip()
     text = req['text'].strip()
+    take_profit = float(req['tp']) if 'tp' in req and req['tp'] else \
+                eval(config.main.take_profit_perc)
+    stop_loss = float(req['sl']) if 'sl' in req and req['sl'] else \
+                eval(config.main.stop_loss_perc)
+
     if not pair:
         send_slack_message("alerts", "Missing pair for api trade")
         return
@@ -75,13 +80,8 @@ def add_to_queue(req, test=False):
                 LOGGER.info(message)
                 return
 
-        result = trade.open_trade(item)
+        result = trade.open_trade(item, stop=stop_loss)
         if result or test:
-            take_profit = float(req['tp']) if 'tp' in req and req['tp'] else \
-                eval(config.main.take_profit_perc)
-            stop_loss = float(req['sl']) if 'sl' in req and req['sl'] else \
-                eval(config.main.stop_loss_perc)
-
             redis.update_on_entry(item[0][0], 'take_profit_perc', take_profit)
             redis.update_on_entry(item[0][0], 'stop_loss_perc', stop_loss)
 

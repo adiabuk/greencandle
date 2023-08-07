@@ -172,7 +172,7 @@ class Trade():
         return final_list
 
     @GET_EXCEPTIONS
-    def open_trade(self, items_list):
+    def open_trade(self, items_list, stop=0):
         """
         Main open trade method
         Will choose between spot/margin and long/short
@@ -191,9 +191,9 @@ class Trade():
 
         elif self.config.main.trade_type == "margin":
             if self.config.main.trade_direction == "long":
-                self.__open_margin_long(items_list)
+                self.__open_margin_long(items_list, stop)
             elif self.config.main.trade_direction == "short":
-                self.__open_margin_short(items_list)
+                self.__open_margin_short(items_list, stop)
             else:
                 raise InvalidTradeError("Invalid trade direction")
 
@@ -441,7 +441,7 @@ class Trade():
 
         return return_dict
 
-    def __open_margin_long(self, long_list):
+    def __open_margin_long(self, long_list, stop=0):
         """
         Get item details and attempt to trade according to config
         Returns True|False
@@ -463,8 +463,9 @@ class Trade():
             # amt in base
             quote_to_use = current_quote_bal + amount_to_borrow
 
-            # allow 2% incase trade goes in wrong direction
-            base_to_use = get_step_precision(pair, sub_perc(2, quote2base(quote_to_use, pair)))
+            # allow 1% + stoploss incase trade goes in wrong direction
+            base_to_use = get_step_precision(pair, sub_perc(1+float(stop),
+                                                            quote2base(quote_to_use, pair)))
 
 
             self.logger.info("Opening margin long %s of %s with %s %s at %s",
@@ -810,7 +811,7 @@ class Trade():
         return True
 
     @GET_EXCEPTIONS
-    def __open_margin_short(self, short_list):
+    def __open_margin_short(self, short_list, stop):
         """
         Get item details and attempt to open margin short trade according to config
         Returns True|False
@@ -828,8 +829,8 @@ class Trade():
             borrowed_usd = amount_to_borrow if base == 'USDT' else \
                     base2quote(amount_to_borrow, base+'USDT')
 
-            # allow 2% incase trade goes in wrong direction
-            total_base_amount = get_step_precision(pair, sub_perc(2, amount_to_borrow +
+            # allow 1% + stoploss incase trade goes in wrong direction
+            total_base_amount = get_step_precision(pair, sub_perc(1+float(stop), amount_to_borrow +
                                                                   current_base_bal))
 
             total_quote_amount = base2quote(total_base_amount, pair)
