@@ -50,10 +50,6 @@ BASH_ENV=/container.env
 15 * * * * /usr/local/bin/collect_pairs > /proc/1/fd/1 2>/proc/1/fd/2
 
 {{else if eq .base_env "data"}}
-* * * * * /usr/local/bin/agg_candle_size 10 > /proc/1/fd/1 2> /proc/1/fd/2
-*/3 * * * * for f in ` /usr/bin/find /data/aggregate -maxdepth 1 -regex  '.*\(csv\|tsv\)$' -type f -mmin +3 -print`;do /bin/echo $f; /bin/gzip $f; /bin/mv ${f}.gz /data/aggregate/old;done
 @daily /usr/bin/find /data -type f -name ".*" -delete
-@daily /usr/bin/find /data/aggregate/old -name "*.gz" -mtime +7 -delete
-@daily /usr/bin/find /data/aggregate/current -type l -xtype l -delete
 
 {{end}}
