@@ -137,7 +137,10 @@ def analyse_pair(pair, redis):
                 LOGGER.debug("Triggering alert: last alert %s hours ago", diff_in_hours)
 
             TRIGGERED[pair] = now
-            match_strs = get_match_name(match[result.lower()])
+            try:
+                match_strs = get_match_name(match[result.lower()])
+            except IndexError:
+                match_strs = ""
             msg = (f"{result.lower()}, {match_strs}: {get_tv_link(pair, INTERVAL)} "
                    f"{INTERVAL} {config.main.name} ({supported.strip()}) - {current_time} "
                    f"Data: {data}")
