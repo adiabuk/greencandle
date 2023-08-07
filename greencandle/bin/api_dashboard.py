@@ -204,7 +204,7 @@ def data():
     """
     route to data spreadsheets
     """
-    files = ['middle_200', 'num', 'stoch_flat', 'candle_size', 'bb_size',
+    files = ['middle_200', 'num', 'stoch_flat', 'candle_size', 'avg_candle', 'bb_size',
              'all', 'bbperc_diff', 'distance_200', 'stx_diff']
     if request.method == 'GET':
         return render_template('data.html', files=files)
@@ -215,14 +215,16 @@ def data():
         keys = redis.conn.keys()
         for key in keys:
             cur_data = redis.conn.hgetall(key)
+            decoded = {k.decode():v.decode() for k,v in cur_data.items()}
+            sort_data = dict(sorted(decoded.items(), key=lambda pair: files.index(pair[0])))
             pair, interval = key.decode().split(':')
             current_row = {}
             current_row.update({'pair': pair, 'interval':interval})
-            for function, value in cur_data.items():
-                current_value = '' if b'None' in value else value.decode()
-                all_data[function.decode()].append({'pair': pair, 'interval': interval,
-                                                    function.decode(): current_value})
-                current_row.update({function.decode():current_value})
+            for function, value in sort_data.items():
+                current_value = '' if 'None' in value else value
+                all_data[function].append({'pair': pair, 'interval': interval,
+                                                    function: current_value})
+                current_row.update({function:current_value})
             all_data['all'].append(current_row)
         results = all_data[req]
         fieldnames = list(results[0].keys())
