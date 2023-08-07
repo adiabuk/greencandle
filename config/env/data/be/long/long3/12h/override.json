@@ -1,0 +1,8 @@
+{
+  "slack_alerts": "opportunities_size",
+  "name": "data-be-analyse-12h-long3",
+  "interval": "12h",
+  "slack_balance": "opportunities_size",
+  "slack_notifications": "opportunities_size",
+  "time_between_trades": "12h"
+}
