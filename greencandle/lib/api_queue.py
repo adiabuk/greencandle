@@ -80,14 +80,17 @@ def add_to_queue(req, test=False):
                 LOGGER.info(message)
                 return
 
+        interval = "1m" if config.main.interval.endswith("s") else config.main.interval
+        klines = 60 if interval.endswith('s') or interval.endswith('m') else 5
+        try:
+            dataframes = get_dataframes([pair], interval=interval, no_of_klines=klines)
+        except IndexError:
+            return
         result = trade.open_trade(item, stop=stop_loss)
         if result or test:
             redis.update_on_entry(item[0][0], 'take_profit_perc', take_profit)
             redis.update_on_entry(item[0][0], 'stop_loss_perc', stop_loss)
 
-            interval = "1m" if config.main.interval.endswith("s") else config.main.interval
-            klines = 60 if interval.endswith('s') or interval.endswith('m') else 5
-            dataframes = get_dataframes([pair], interval=interval, no_of_klines=klines)
             current_candle = dataframes[pair].iloc[-1]
             redis.update_drawdown(pair, current_candle, event="open")
             redis.update_drawup(pair, current_candle, event="open")
