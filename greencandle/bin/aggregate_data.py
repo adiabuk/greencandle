@@ -11,7 +11,7 @@ import errno
 from collections import defaultdict
 import setproctitle
 from greencandle.lib import config
-from greencandle.lib.common import perc_diff, arg_decorator
+from greencandle.lib.common import perc_diff, arg_decorator, epoch2date
 from greencandle.lib.redis_conn import Redis
 
 def get_bb_size(res, timeframe='200'):
@@ -98,12 +98,12 @@ def get_volume(res):
     except KeyError:
         return None
 
-def get_num(res):
+def get_ohlc_attr(res, attr):
     """
-    get volume indicator
+    get ohlc attribute
     """
     try:
-        return res['ohlc']['numTrades']
+        return res['ohlc'][attr]
     except KeyError:
         return None
 
@@ -226,7 +226,9 @@ def aggregate_data(key, pairs, intervals, data, items):
                 bbperc_diff = get_bbperc_diff(res, last_res)[-1]
                 stx_diff = get_stx_diff(last_res, third_res)
                 avg_candle = get_avg_candle(data[interval][pair])
-                num = get_num(res)
+                num = get_ohlc_attr(res, 'numTrades')
+                date = get_ohlc_attr(res, 'openTime')
+                humandate = epoch2date(int(int(date)/1000))
 
                 redis_data[f'{pair}:{interval}'] = \
                 {
@@ -238,7 +240,8 @@ def aggregate_data(key, pairs, intervals, data, items):
                  'bb_size': bb_size,
                  'stx_diff': stx_diff,
                  'bbperc_diff': bbperc_diff,
-                 'num': num}
+                 'num': num,
+                 'date': humandate}
 
         # save to redis, overwriting previous value
         redis3 = Redis(db=3)
