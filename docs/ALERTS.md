@@ -19,8 +19,8 @@ Add "alert" to forwarding route in router_config
 
 
 ## Temporarily topping all alerts
-* To disable forwarding of alerts from a server touch file /var/local/alert_drain on that server
-* To disable all audio alerts - on alarm server touch /var/local/alert_drain
+* To disable forwarding of alerts from a server touch file /var/local/drain/alert_drain on that server
+* To disable all audio alerts - on alarm server touch /var/local/drain/alert_drain
 * Audio alerts will be suppressed, but light will still be activated
 * Remove "alert" fowarding rule for strategy in router_config
 

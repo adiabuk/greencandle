@@ -23,7 +23,7 @@ def keepalive():
     """
     Periodically touch file for docker healthcheck
     """
-    Path(f'/var/local/gc_get_{config.main.interval}.lock').touch()
+    Path(f'/var/local/lock/gc_get_{config.main.interval}.lock').touch()
 
 @GET_EXCEPTIONS
 def get_data():

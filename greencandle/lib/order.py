@@ -57,7 +57,7 @@ class Trade():
         """
         Check if current scope is in drain given date range, and current time
         Drain time is set in config (drain/drain_range)
-        or by the existance of /var/local/{env}_drain file
+        or by the existance of /var/local/drain/{env}_drain file
         """
         currentime = datetime.datetime.now()
         time_str = currentime.strftime('%H:%M')
@@ -65,8 +65,8 @@ class Trade():
         start, end = re.findall(r"\d\d:\d\d\s?-\s?\d\d:\d\d", raw_range)[0].split('-')
         time_range = (start.strip(), end.strip())
         drain = str2bool(self.config.main.drain)
-        env_drain = Path(f'/var/local/{self.config.main.base_env}_drain').is_file()
-        local_drain = Path(f'/var/local/drain_{self.config.main.name}-'
+        env_drain = Path(f'/var/local/drain/{self.config.main.base_env}_drain').is_file()
+        local_drain = Path(f'/var/local/drain/drain_{self.config.main.name}-'
                            f'{self.config.main.trade_direction}').is_file()
         if time_range[1] < time_range[0]:
             return time_str >= time_range[0] or time_str <= time_range[1]

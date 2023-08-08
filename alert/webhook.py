@@ -30,7 +30,7 @@ def respond():
     """
     lights()
     print(request.json)
-    if Path('/var/local/alert_drain').is_file():
+    if Path('/var/local/drain/alert_drain').is_file():
         print("Skipping audio alert")
     else:
         print("playing audio")

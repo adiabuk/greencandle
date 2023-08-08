@@ -84,7 +84,7 @@ def respond():
         return Response(status=200)
 
     env = config.main.base_env
-    alert_drain = Path('/var/local/{env}_alert_drain').is_file()
+    alert_drain = Path('/var/local/drain/{env}_alert_drain').is_file()
     for container in containers:
         if container == 'alert' and not alert_drain:
             # change strategy
@@ -108,7 +108,7 @@ def respond():
             payload['env'] = new_env
             payload['strategy'] = new_strategy
             payload['host'] = '10.8.0.1'
-            route_drain = Path(f'/var/local/drain_{new_env}_{new_strategy}').is_file()
+            route_drain = Path(f'/var/local/drain/drain_{new_env}_{new_strategy}').is_file()
             if route_drain:
                 LOGGER.warning('Skipping forwarding to %s:%s due to drain', new_env, new_strategy)
             else:
