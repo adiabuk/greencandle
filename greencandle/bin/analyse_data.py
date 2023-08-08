@@ -76,7 +76,10 @@ def get_match_name(matches):
     """
     match_names = []
     container_num = int(config.main.name[-1])
-    name_lookup = [['stx'],['distance', 'bb']]
+    name_lookup = [['stx'],
+                   ['distance', 'bb'],
+                   ['candle_low', 'candle_zero', 'candle_very_low']
+                   ]
     for match in matches:
         match_names.append(name_lookup[container_num-1][match-1])
     return ','.join(match_names)
@@ -140,7 +143,7 @@ def analyse_pair(pair, redis):
             try:
                 match_strs = get_match_name(match[result.lower()])
             except IndexError:
-                match_strs = ""
+                match_strs = match[result.lower()]
             msg = (f"{result.lower()}, {match_strs}: {get_tv_link(pair, INTERVAL)} "
                    f"{INTERVAL} {config.main.name} ({supported.strip()}) - {current_time} "
                    f"Data: {data}")
