@@ -13,6 +13,9 @@ import setproctitle
 from greencandle.lib import config
 from greencandle.lib.common import perc_diff, arg_decorator, epoch2date
 from greencandle.lib.redis_conn import Redis
+from greencandle.lib.logger import get_logger
+
+LOGGER = get_logger(__name__)
 
 def get_bb_size(res, timeframe='200'):
     """
@@ -295,7 +298,9 @@ def main():
     """
     setproctitle.setproctitle('aggregate_data')
     while True:
+        LOGGER.debug("Starting aggregate run")
         collect_data()
+        LOGGER.debug("Finishing aggregate run")
 
 if __name__ == '__main__':
     main()
