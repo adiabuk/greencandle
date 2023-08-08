@@ -2,7 +2,7 @@
   "check_interval": "*",
   "name": "data-be-get_5m",
   "interval": "5m",
-  "slack_alerts": "opportunities_5m",
-  "slack_balance": "opportunities_5m",
-  "slack_notifications": "opportunities_5m"
+  "slack_alerts": "data_step2",
+  "slack_balance": "data_step2",
+  "slack_notifications": "data_step2"
 }

@@ -1,8 +1,8 @@
 {
   "check_interval": "*",
   "name": "data-be-get_1h",
-  "slack_alerts": "opportunities_1h",
-  "slack_balance": "opportunities_1h",
-  "slack_notifications": "opportunities_1h",
+  "slack_alerts": "data_step2",
+  "slack_balance": "data_step2",
+  "slack_notifications": "data_step2",
   "interval": "1h"
 }

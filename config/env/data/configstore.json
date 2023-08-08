@@ -326,17 +326,17 @@
       "is_secret": false
     },
     "slack_alerts": {
-      "value": "opportunities",
+      "value": "data",
       "is_binary": false,
       "is_secret": false
     },
     "slack_balance": {
-      "value": "opportunities",
+      "value": "data",
       "is_binary": false,
       "is_secret": false
     },
     "slack_notifications": {
-      "value": "opportunities",
+      "value": "data",
       "is_binary": false,
       "is_secret": false
     },

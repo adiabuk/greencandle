@@ -1,8 +1,8 @@
 {
   "interval": "5m",
   "name": "data-be-analyse-5m-long3",
-  "slack_alerts": "opportunities_size",
-  "slack_balance": "opportunities_size",
-  "slack_notifications": "opportunities_size",
+  "slack_alerts": "data_size",
+  "slack_balance": "data_size",
+  "slack_notifications": "data_size",
   "time_between_trades": "30m"
 }
