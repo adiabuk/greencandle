@@ -107,15 +107,13 @@ def get_ohlc_attr(res, attr):
     except KeyError:
         return None
 
-def get_candle_size(res, last_res):
+def get_candle_size(res):
     """
     get size of current candle compared to previous
     """
     try:
-        max_diff = max(abs(perc_diff(res['ohlc']['high'],
-                                     last_res['ohlc']['low'])),
-                       abs(perc_diff(res['ohlc']['low'],
-                                     last_res['ohlc']['high'])))
+        max_diff = abs(perc_diff(res['ohlc']['high'],
+                                 res['ohlc']['low']))
 
         return f'{max_diff:.6f}'
     except:
@@ -220,7 +218,7 @@ def aggregate_data(key, pairs, intervals, data, items):
 
                 distance_200 = get_distance(res, '200')[-1]
                 middle_200 = get_middle_distance(res, '200')[-1]
-                candle_size = get_candle_size(res, last_res)
+                candle_size = get_candle_size(res)
                 stoch_flat = get_stoch_flat(res, last_res)
                 bb_size = get_bb_size(res)
                 bbperc_diff = get_bbperc_diff(res, last_res)[-1]
