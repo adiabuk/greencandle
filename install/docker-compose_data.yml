@@ -110,7 +110,7 @@ services:
       - CONFIG_ENV=data/be/get_data/12h
       - DB=true
     healthcheck:
-      test: find /var/local/gc_get_12h.lock  -mmin -2 ||exit 1
+      test: find /var/local/lock/gc_get_12h.lock  -mmin -2 ||exit 1
       interval: 1m
       timeout: 10s
       retries: 5
@@ -179,7 +179,7 @@ services:
       - CONFIG_ENV=data/be/get_data/4h
       - DB=true
     healthcheck:
-      test: find /var/local/gc_get_4h.lock  -mmin -2 ||exit 1
+      test: find /var/local/lock/gc_get_4h.lock  -mmin -2 ||exit 1
       interval: 1m
       timeout: 10s
       retries: 5
@@ -248,7 +248,7 @@ services:
       - CONFIG_ENV=data/be/get_data/1h
       - DB=true
     healthcheck:
-      test: find /var/local/gc_get_1h.lock  -mmin -2 ||exit 1
+      test: find /var/local/lock/gc_get_1h.lock  -mmin -2 ||exit 1
       interval: 1m
       timeout: 10s
       retries: 5
@@ -317,7 +317,7 @@ services:
       - CONFIG_ENV=data/be/get_data/1m
       - DB=true
     healthcheck:
-      test: find /var/local/gc_get_1m.lock  -mmin -2 ||exit 1
+      test: find /var/local/lock/gc_get_1m.lock  -mmin -2 ||exit 1
       interval: 1m
       timeout: 10s
       retries: 5
@@ -386,7 +386,7 @@ services:
       - CONFIG_ENV=data/be/get_data/5m
       - DB=true
     healthcheck:
-      test: find /var/local/gc_get_5m.lock  -mmin -2 ||exit 1
+      test: find /var/local/lock/gc_get_5m.lock  -mmin -2 ||exit 1
       interval: 1m
       timeout: 10s
       retries: 5

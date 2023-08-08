@@ -118,7 +118,7 @@ services:
       - CONFIG_ENV=dev
       - DB=true
     healthcheck:
-      test: find /var/local/gc_get_1m.lock  -mmin -2 ||exit 1
+      test: find /var/local/lock/gc_get_1m.lock  -mmin -2 ||exit 1
       interval: 1m
       timeout: 10s
       retries: 5
