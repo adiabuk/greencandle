@@ -31,6 +31,8 @@ services:
     image: amrox/gc-redis:${TAG}
     ports:
       - 6379:6379
+    environment:
+      - CONFIG_ENV=dev
     restart: always
     links:
       - dev-base-mysql:mysql
