@@ -673,6 +673,40 @@ class Engine(dict):
         LOGGER.debug("Done Getting indicators for %s - %s", pair, scheme['open_time'])
 
     @get_exceptions
+    def get_ha(self, pair, index=None, localconfig=None):
+        """
+        Get Heikin-Ashi candles
+
+        Args:
+              pair: trading pair (eg. XRPBTC)
+        Returns:
+            None
+
+        """
+        dataframe = self.__renamed_dataframe_columns(self.dataframes[pair])
+        series = dataframe.apply(pandas.to_numeric)
+        if index is None:
+            index = -1
+        else:
+            # line up with TV graphs
+            series = series.iloc[:index +1]
+        _, timef = localconfig  # split tuple
+        scheme = {}
+        timeframe, multiplier = timef.split(',')
+        hashi = ta.ha(open_=series.Open.astype(float),
+                      high=series.High.astype(float),
+                      low=series.Low.astype(float),
+                      close=series.Close.astype(float)
+                      )
+        scheme["data"] = (hashi['ha_open'].iloc[-1], hashi['ha_high'].iloc[-1],
+                          hashi['ha_low'].iloc[-1], hashi['ha_close'].iloc[-1])
+        scheme["symbol"] = pair
+        scheme["event"] = "ha"
+        scheme["open_time"] = str(self.dataframes[pair].iloc[index]["openTime"])
+
+        self.schemes.append(scheme)
+        LOGGER.debug("Done Getting haikin ashi for %s - %s", pair, scheme['open_time'])
+    @get_exceptions
     def get_supertrend(self, pair, index=None, localconfig=None):
         """
         Get the super trend oscillator values for a given pair
