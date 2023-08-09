@@ -74,22 +74,25 @@ def get_binance_isolated():
             gbp = 0
             if quote == "BTC":
                 bcoin = float(amount)
+                usd = float(amount) / float(prices["BTCUSDT"])
 
             elif "USD" in quote:
                 bcoin = float(amount) / float(prices["BTCUSDT"])
+                usd = float(amount)
 
             elif quote == 'GBP':
                 bcoin = float(amount) / float(prices["BTCGBP"])
+                usd = bcoin / float(prices["BTCUSDT"])
 
-            else:  # other currencies that need converting to BTC
+            else:  # other currencies that need converting to USDT
                 try:
                     LOGGER.debug("Converting currency %s", key)
-                    bcoin = float(amount) * float(prices[quote+"BTC"])  # value in BTC
+                    bcoin = float(amount) * float(prices[quote+"USDT"])  # value in USDT
+                    usd = float(bcoin) * float(prices["BTCUSDT"])
                 except KeyError:
-                    LOGGER.critical("Error: Unable to quantify margin currency: %s", quote)
+                    LOGGER.critical("Error: Unable to quantify isolated currency: %s", quote)
                     continue
 
-            usd = bcoin*float(prices['BTCUSDT'])
             gbp = usd2gbp(prices) * usd
 
             bitcoin_total += bcoin
@@ -123,6 +126,7 @@ def get_binance_cross():
     all_balances = client.margin_balances()
     prices = client.prices()
     bitcoin_totals = 0
+    usd_totals = 0
     gbp_total = 0
     usd_total = 0
 
@@ -136,27 +140,32 @@ def get_binance_cross():
             if key == "BTC":
                 bcoin = float(current_value)
                 bitcoin_totals += bcoin
+                usd_totals += bcoin *float(prices["BTCUSDT"])
 
             elif key in ("USDT", "LBUSD", "BUSD"):
                 bcoin = float(current_value) / float(prices["BTCUSDT"])
                 bitcoin_totals += bcoin
+                usd_totals += bcoin *float(prices["BTCUSDT"])
 
             elif key == "GBP":
                 bcoin = float(current_value) / float(prices["BTCGBP"])
-                bcoin_totals += bcoin
+                bitcoin_totals += bcoin
+                usd_totals += bcoin *float(prices["BTCUSDT"])
 
-            else:  # other currencies that need converting to BTC
+            else:  # other currencies that need converting to USDT
                 try:
                     LOGGER.debug("Converting currency %s", key)
-                    bcoin = float(current_value) * float(prices[key+"BTC"])  # value in BTC
+                    usd = float(current_value) * float(prices[key+"USDT"])  # value in USDT
+                    usd_totals += usd
+                    bcoin = usd / float(prices["BTCUSDT"])
                     bitcoin_totals += bcoin
+
                 except KeyError:
-                    LOGGER.critical("Error: Unable to quantify margin currency: %s", key)
+                    LOGGER.critical("Error: Unable to quantify cross currency: %s", key)
                     continue
 
             add_value(key, bcoin)
 
-            usd = bcoin *float(prices["BTCUSDT"])
             gbp = usd2gbp(prices) * usd
             usd_total += usd
             gbp_total += gbp
