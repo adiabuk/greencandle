@@ -126,12 +126,14 @@ class Engine(dict):
         Returns:
             dict containing all collected data
         """
-        for pair in self.pairs:
-            pair = pair.strip()
-            actual_klines = len(self.dataframes[pair])
 
-            # get indicators supertrend, and API for each trading pair
-            with ThreadPoolExecutor(max_workers=1000) as pool:
+        # get indicators supertrend, and API for each trading pair
+        with ThreadPoolExecutor(max_workers=1000) as pool:
+            for pair in self.pairs:
+                pair = pair.strip()
+                actual_klines = len(self.dataframes[pair])
+
+                pool.submit(self.__send_ohlcs, pair, first_run=first_run, no_of_runs=no_of_runs)
 
                 for item in localconfig:
                     function, name, period = item.split(';')
@@ -149,9 +151,7 @@ class Engine(dict):
                         pool.submit(getattr(self, function)(pair, index=None,
                                                             localconfig=(name, period)))
 
-                pool.shutdown(wait=True)
-
-            self.__send_ohlcs(pair, first_run=first_run, no_of_runs=no_of_runs)
+        pool.shutdown(wait=True)
         self.__add_schemes()
 
         LOGGER.debug("Done getting data")
