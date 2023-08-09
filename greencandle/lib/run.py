@@ -301,7 +301,7 @@ class ProdRunner():
         del redis
         del engine
 
-    def append_data(self):
+    def append_data(self, interval=None):
         """
         Fetch new dataframe data and append to existing structure
         """
@@ -330,9 +330,11 @@ class ProdRunner():
                     continue
 
                 dframe = pandas.DataFrame(columns=recent_di.keys())
-                dframe.loc[0] = recent_di
-                if closed_di and closed_di != recent_di:
-                    dframe.loc[1] = closed_di
+                if 'm' in interval and closed_di:
+                    dframe.loc[0] = closed_di
+                else:
+                    dframe.loc[0] = recent_di
+
                 new_dataframes[pair] = dframe.sort_values('openTime')
                 del dframe
                 del closed_di
@@ -376,7 +378,7 @@ class ProdRunner():
         redis = Redis()
 
         if data:
-            self.append_data()
+            self.append_data(interval)
             engine = Engine(dataframes=self.dataframes, interval=interval,
                             redis=redis)
             engine.get_data(localconfig=MAIN_INDICATORS, first_run=False)

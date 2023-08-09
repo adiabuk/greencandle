@@ -95,7 +95,6 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-
   dev-be-get_1m:
     container_name: dev-be-get_1m
     hostname: dev-be-get_1m
