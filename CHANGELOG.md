@@ -1,5 +1,19 @@
 # Releases
 
+# 6.20
+* use first element of STX for comparision
+* rename and consolidate data slack channels
+* add short candle-size data containers and add separate config for each timeframe short & long
+* use new location for docker healthchecks and tidy up dir
+* ensure we are on right side of trend for candle-size longs by using supertrend
+* add logging to aggregate container for debugging
+* add new match names to analyse script
+* calculate candle increase differently with lower start size
+* calculate candle size aggregate using only current candle, not previous
+* add human-readable open-time to agg data for debugging
+* fix syntax error reversion
+* more size rule tweaks
+
 # 6.19.1
 * filter out low vol pairs in candle size rules
 * tweak candle size rule
