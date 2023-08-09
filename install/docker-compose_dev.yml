@@ -1,15 +1,15 @@
 version: "3.1"
 services:
 
-  dev-fe-cron:
-    container_name: dev-fe-cron
+  dev-be-manual:
+    container_name: dev-be-manual
     environment:
       - CONFIG_ENV=dev
       - DB=true
-    hostname: dev-fe-cron
+    hostname: dev-be-manual
     image: amrox/greencandle:${TAG}
     restart: always
-    entrypoint: /docker-entrypoint.sh "cron -f"
+    entrypoint: /docker-entrypoint.sh "tail -f /dev/null"
     links:
       - dev-base-mysql:mysql
       - dev-base-redis:redis
@@ -17,7 +17,7 @@ services:
       - dev-base-mysql
       - dev-base-redis
     healthcheck:
-      test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
+      test: ls || exit 1
       interval: 1m
       timeout: 10s
       retries: 5
