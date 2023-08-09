@@ -321,27 +321,27 @@
       "is_secret": false
     },
     "slack_active": {
-      "value": "false",
+      "value": "true",
       "is_binary": false,
       "is_secret": false
     },
     "slack_alerts": {
-      "value": "test",
+      "value": "dev",
       "is_binary": false,
       "is_secret": false
     },
     "slack_balance": {
-      "value": "test",
+      "value": "dev",
       "is_binary": false,
-      "is_secret": false
+      "is_secret":  false
     },
     "slack_notifications": {
-      "value": "test",
+      "value": "dev",
       "is_binary": false,
       "is_secret": false
     },
     "slack_trades": {
-      "value": "test",
+      "value": "dev",
       "is_binary": false,
       "is_secret": false
     },
