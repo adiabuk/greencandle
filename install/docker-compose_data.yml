@@ -92,7 +92,7 @@ services:
     container_name: data-be-get_12h
     hostname: data-be-get_12h
     image: amrox/greencandle:${TAG}
-    mem_limit: 500m
+    mem_limit: 1000m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -161,7 +161,7 @@ services:
     container_name: data-be-get_4h
     hostname: data-be-get_4h
     image: amrox/greencandle:${TAG}
-    mem_limit: 500m
+    mem_limit: 1000m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -230,7 +230,7 @@ services:
     container_name: data-be-get_1h
     hostname: data-be-get_1h
     image: amrox/greencandle:${TAG}
-    mem_limit: 500m
+    mem_limit: 1000m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -299,7 +299,7 @@ services:
     container_name: data-be-get_1m
     hostname: data-be-get_1m
     image: amrox/greencandle:${TAG}
-    mem_limit: 500m
+    mem_limit: 1000m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -368,7 +368,7 @@ services:
     container_name: data-be-get_5m
     hostname: data-be-get_5m
     image: amrox/greencandle:${TAG}
-    mem_limit: 500m
+    mem_limit: 1000m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data

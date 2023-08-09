@@ -9,7 +9,7 @@ import math
 import traceback
 import operator
 from time import time, strftime, localtime
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ProcessPoolExecutor
 from collections import defaultdict
 from decimal import Decimal
 import pandas
@@ -128,7 +128,7 @@ class Engine(dict):
         """
 
         # get indicators supertrend, and API for each trading pair
-        with ThreadPoolExecutor(max_workers=1000) as pool:
+        with ProcessPoolExecutor(max_workers=1000) as pool:
             for pair in self.pairs:
                 pair = pair.strip()
                 actual_klines = len(self.dataframes[pair])
