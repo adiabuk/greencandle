@@ -25,7 +25,6 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
 
-
   dev-be-manual:
     container_name: dev-be-manual
     environment:
@@ -126,7 +125,7 @@ services:
     container_name: dev-be-get_1m
     hostname: dev-be-get_1m
     image: amrox/greencandle:${TAG}
-    mem_limit: 500m
+    mem_limit: 1000m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
