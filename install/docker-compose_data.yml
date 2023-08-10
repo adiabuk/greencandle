@@ -492,7 +492,7 @@ services:
     container_name: data-base-redis
     hostname: data-base-redis
     image: amrox/gc-redis:${TAG}
-    mem_limit: 500m
+    mem_limit: 1g
     pull_policy: always
     restart: always
     ports:
