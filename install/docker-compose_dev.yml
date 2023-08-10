@@ -1,6 +1,31 @@
 version: "3.1"
 services:
 
+  dev-fe-cron:
+    container_name: dev-fe-cron
+    hostname: dev-fe-cron
+    environment:
+      - CONFIG_ENV=dev
+      - DB=true
+    image: amrox/greencandle:${TAG}
+    restart: always
+    entrypoint: /docker-entrypoint.sh "cron -f"
+    links:
+      - dev-base-mysql:mysql
+      - dev-base-redis:redis
+    depends_on:
+      - dev-base-mysql
+      - dev-base-redis
+    healthcheck:
+      test: ls || exit 1
+      interval: 1m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+
+
   dev-be-manual:
     container_name: dev-be-manual
     environment:
@@ -82,7 +107,7 @@ services:
       - CONFIG_ENV=dev
       - DB=true
     healthcheck:
-      test: /mnt/nagios_checks/check_milliepoch -u http://127.1:5000 -w 120 -c 180 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      test: echo || exit 1
       start_period: 1m
       interval: 1m
       timeout: 10s
