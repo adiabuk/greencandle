@@ -1,5 +1,18 @@
 # Releases
 
+# 6.21
+* check that close time exists for a pair as higher timeframes might not have closed when starting
+* increase ram to data env redis
+* use both updated and recent candles together depending on which is more recent and not dupe
+* add stream link to dev manual container
+* use ProcessPoolExecutor for parallel procs
+* various changes to dev environment - slack, config, docker links
+* config for redis
+* manual container for dev env
+* add heiken ashi candles to engine for testing
+* check current direction with previous candle close in data strategy
+* convert currencies to USD, not BTC for balance as some coins don't have a BTC pairing
+
 # 6.20
 * use first element of STX for comparision
 * rename and consolidate data slack channels
