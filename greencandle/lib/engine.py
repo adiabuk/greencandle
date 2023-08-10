@@ -128,36 +128,38 @@ class Engine(dict):
         """
 
         # get indicators supertrend, and API for each trading pair
-        with ProcessPoolExecutor(max_workers=1000) as pool:
-            for pair in self.pairs:
-                pair = pair.strip()
-                actual_klines = len(self.dataframes[pair])
+        pool = ProcessPoolExecutor(max_workers=20)
+        futures = []
 
-                pool.submit(self.__send_ohlcs, pair, first_run=first_run, no_of_runs=no_of_runs)
+        for pair in self.pairs:
+            pair = pair.strip()
+            actual_klines = len(self.dataframes[pair])
 
-                for item in localconfig:
-                    function, name, period = item.split(';')
-                    # call each method defined in config with current pair and name,period tuple
-                    # from config eg. self.supertrend(pair, config), where config is a tuple
-                    # each method has the method name in 'function't st
+            futures.append(pool.submit(getattr(self,'send_ohlcs')(pair, first_run=first_run,
+                                                                  no_of_runs=no_of_runs)))
 
-                    if first_run:
-                        for seq in range(int(actual_klines))[-no_of_runs:]:
-                            if seq > len(self.dataframes[pair]):
-                                continue
-                            pool.submit(getattr(self, function)(pair, index=seq,
-                                                                localconfig=(name, period)))
-                    else:
-                        pool.submit(getattr(self, function)(pair, index=None,
-                                                            localconfig=(name, period)))
+            for item in localconfig:
+                function, name, period = item.split(';')
+                # call each method defined in config with current pair and name,period tuple
+                # from config eg. self.supertrend(pair, config), where config is a tuple
+                # each method has the method name in 'function't st
 
-        pool.shutdown(wait=True)
+                if first_run:
+                    for seq in range(int(actual_klines))[-no_of_runs:]:
+                        if seq > len(self.dataframes[pair]):
+                            continue
+                        futures.append(pool.submit(getattr(self, function)(pair, index=seq,
+                                                            localconfig=(name, period))))
+                else:
+                    futures.append(pool.submit(getattr(self, function)(pair, index=None,
+                                                        localconfig=(name, period))))
+        pool.shutdown(wait=False)
         self.__add_schemes()
 
         LOGGER.debug("Done getting data")
         return self
 
-    def __send_ohlcs(self, pair, first_run, no_of_runs=999):
+    def send_ohlcs(self, pair, first_run, no_of_runs=999):
         """Send ohcls data to redis"""
         scheme = {}
         scheme["symbol"] = pair
