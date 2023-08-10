@@ -346,23 +346,24 @@ class ProdRunner():
             # skip pair if empty dataframe (no new trades in kline)
             if len(new_dataframes[pair]) == 0:
                 continue
-            # get last column of new data
-            for _, row in new_dataframes[pair].iterrows():
-                # use openTime as index
-                new_open = row['openTime']
-                # see if openTime already exists in data
-                old_index = self.dataframes[pair].index[self.dataframes[pair] \
-                        ['openTime'].astype(str) == str(new_open)].tolist()
-                if old_index:
-                    # if it exsits, then we use the last index occurance in list
-                    # and overwrite that field in existing data
-                    self.dataframes[pair].loc[old_index[-1]] = row
-                else:
-                    # otherwise just append the data to the end of the dataframe
-                    self.dataframes[pair] = \
-                        self.dataframes[pair].append(row, ignore_index=True,
-                                                     verify_integrity=True).tail(max_klines)
-        del new_dataframes
+            if self.dataframes[pair].iloc[-1]['openTime'] ==  data['closed'][pair]['openTime'] and \
+              self.dataframes[pair].iloc[-1]['numTrades'] < data['closed'][pair]['numTrades']:
+                # candle closed
+                self.dataframes[pair].iloc[-1] = pandas.Series(data['closed'][pair])
+
+            elif self.dataframes[pair].iloc[-1]['openTime'] <  data['recent'][pair]['openTime']:
+                # new candle
+                df2 = self.dataframes[pair].append(pandas.Series(data['recent'][pair]),
+                                                   ignore_index=True,
+                                                   verify_integrity=True).tail(max_klines)
+                self.dataframes[pair] = df2
+
+            elif self.dataframes[pair].iloc[-1]['openTime'] == \
+                    data['recent'][pair]['openTime'] and \
+              self.dataframes[pair].iloc[-1]['numTrades'] < data['recent'][pair]['numTrades']:
+                # updated candle
+                self.dataframes[pair].iloc[-1] = pandas.Series(data['recent'][pair])
+
         gc.collect()
         return None
 
