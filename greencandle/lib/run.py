@@ -346,7 +346,8 @@ class ProdRunner():
             # skip pair if empty dataframe (no new trades in kline)
             if len(new_dataframes[pair]) == 0:
                 continue
-            if self.dataframes[pair].iloc[-1]['openTime'] ==  data['closed'][pair]['openTime'] and \
+            if pair in data['closed'] and self.dataframes[pair].iloc[-1]['openTime'] == \
+                    data['closed'][pair]['openTime'] and \
               self.dataframes[pair].iloc[-1]['numTrades'] < data['closed'][pair]['numTrades']:
                 # candle closed
                 self.dataframes[pair].iloc[-1] = pandas.Series(data['closed'][pair])
