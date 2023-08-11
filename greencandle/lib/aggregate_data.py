@@ -189,8 +189,7 @@ def get_avg_candle(data):
     get average candle size across number of candles provided
     """
     diffs = []
-    data = data[:-1]
-    for item in data.keys():
+    for item in list(data.keys())[:-1]:
         try:
             diffs.append(perc_diff(data[item]['ohlc']['low'],
                                    data[item]['ohlc']['high']))
