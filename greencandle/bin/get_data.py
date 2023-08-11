@@ -11,6 +11,7 @@ from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.run import ProdRunner
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.common import arg_decorator
+from greencandle.lib.aggregate_data  import collect_agg_data
 
 config.create_config()
 LOGGER = get_logger(__name__)
@@ -71,6 +72,7 @@ def main():
 
     while True:
         get_data()
+        collect_agg_data(interval)
 
 if __name__ == '__main__':
     main()

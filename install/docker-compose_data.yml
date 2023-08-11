@@ -397,34 +397,6 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-  data-be-get_agg:
-    container_name: data-be-get_agg
-    hostname: data-be-get_agg
-    image: amrox/greencandle:${TAG}
-    mem_limit: 500m
-    pull_policy: always
-    restart: always
-    entrypoint: /docker-entrypoint.sh aggregate_data
-    logging:
-      driver: journald
-    links:
-      - data-base-mysql:mysql
-      - data-base-redis:redis
-    depends_on:
-      - data-base-mysql
-      - data-base-redis
-    environment:
-      - VPN_IP=$VPN_IP
-      - CONFIG_ENV=data
-      - DB=true
-    healthcheck:
-      test: ls || exit 1
-      interval: 1m
-      timeout: 10s
-      retries: 5
-    volumes:
-      - /root/.aws:/root/.aws
-
   data-be-manual:
     container_name: data-be-manual
     hostname: data-be-manual
