@@ -296,7 +296,7 @@ services:
       - /var/run/:/var/run
 
   data-be-get1_1m:
-    container_ name: data-be-get1_1m
+    container_name: data-be-get1_1m
     hostname: data-be-get1_1m
     image: amrox/greencandle:${TAG}
     mem_limit: 1000m
