@@ -127,6 +127,10 @@ def analyse_pair(pair, redis):
             now = datetime.now()
             items = redis.get_items(pair, INTERVAL)
             data = redis.get_item(f"{pair}:{INTERVAL}", items[-1]).decode()
+            redis3 = Redis(db=3)
+            agg = redis3.get_item(f"{pair}:{INTERVAL}", items[-1]).decode()
+            del redis3
+
             # Only alert on a given pair once per hour
             # for each strategy
             if pair in TRIGGERED:
@@ -146,7 +150,7 @@ def analyse_pair(pair, redis):
                 match_strs = match[result.lower()]
             msg = (f"{result.lower()}, {match_strs}: {get_tv_link(pair, INTERVAL)} "
                    f"{INTERVAL} {config.main.name} ({supported.strip()}) - {current_time} "
-                   f"Data: {data}")
+                   f"Data: {data} Agg: {agg}")
 
             send_slack_message("notifications", msg, emoji=True,
                                icon=f':{INTERVAL}-{DIRECTION}:')
