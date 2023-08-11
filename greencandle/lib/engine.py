@@ -596,7 +596,7 @@ class Engine(dict):
             None
         """
         klines = self.__make_data_tupple(pair, index)
-        _, open, high, low, close = klines
+        _, _, high, low, close = klines
         func, timeperiod = localconfig  # split tuple
 
         scheme = {}
