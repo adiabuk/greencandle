@@ -295,9 +295,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-  data-be-get_1m:
-    container_name: data-be-get_1m
-    hostname: data-be-get_1m
+  data-be-get1_1m:
+    container_ name: data-be-get1_1m
+    hostname: data-be-get1_1m
     image: amrox/greencandle:${TAG}
     mem_limit: 1000m
     pull_policy: always
@@ -314,7 +314,7 @@ services:
       - data-base-redis
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV=data/be/get_data/1m
+      - CONFIG_ENV=data/be/get_data/1m/1
       - DB=true
     healthcheck:
       test: find /var/local/lock/gc_get_1m.lock  -mmin -2 ||exit 1
@@ -323,7 +323,102 @@ services:
       retries: 5
     volumes:
       - /data:/data
-      - /var/local:/var/local
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-get2_1m:
+    container_name: data-be-get2_1m
+    hostname: data-be-get2_1m
+    image: amrox/greencandle:${TAG}
+    mem_limit: 1000m
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh get_data
+    logging:
+      driver: journald
+    links:
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+      - data-be-stream_1m:stream
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+    environment:
+      - VPN_IP=$VPN_IP
+      - CONFIG_ENV=data/be/get_data/1m/2
+      - DB=true
+    healthcheck:
+      test: find /var/local/lock/gc_get_1m.lock  -mmin -2 ||exit 1
+      interval: 1m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-get3_1m:
+    container_name: data-be-get3_1m
+    hostname: data-be-get3_1m
+    image: amrox/greencandle:${TAG}
+    mem_limit: 1000m
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh get_data
+    logging:
+      driver: journald
+    links:
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+      - data-be-stream_1m:stream
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+    environment:
+      - VPN_IP=$VPN_IP
+      - CONFIG_ENV=data/be/get_data/1m/3
+      - DB=true
+    healthcheck:
+      test: find /var/local/lock/gc_get_1m.lock  -mmin -2 ||exit 1
+      interval: 1m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-get4_1m:
+    container_name: data-be-get4_1m
+    hostname: data-be-get4_1m
+    image: amrox/greencandle:${TAG}
+    mem_limit: 1000m
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh get_data
+    logging:
+      driver: journald
+    links:
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+      - data-be-stream_1m:stream
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+    environment:
+      - VPN_IP=$VPN_IP
+      - CONFIG_ENV=data/be/get_data/1m/4
+      - DB=true
+    healthcheck:
+      test: find /var/local/lock/gc_get_1m.lock  -mmin -2 ||exit 1
+      interval: 1m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/:/var/run
