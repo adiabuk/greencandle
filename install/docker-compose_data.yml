@@ -386,6 +386,7 @@ services:
       timeout: 10s
       retries: 5
     volumes:
+      - /var/local:/var/local
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
@@ -774,7 +775,7 @@ services:
     depends_on:
       - data-base-mysql
       - data-base-redis
-      - data-be-get_1m
+      - data-be-get3_1m
     environment:
       - VPN_IP=$VPN_IP
       - ALERT="True"
@@ -811,7 +812,7 @@ services:
     depends_on:
       - data-base-mysql
       - data-base-redis
-      - data-be-get_1m
+      - data-be-get3_1m
     environment:
       - VPN_IP=$VPN_IP
       - ALERT="True"
@@ -1144,7 +1145,7 @@ services:
     depends_on:
       - data-base-mysql
       - data-base-redis
-      - data-be-get_1m
+      - data-be-get3_1m
     environment:
       - VPN_IP=$VPN_IP
       - ALERT="True"
@@ -1181,7 +1182,7 @@ services:
     depends_on:
       - data-base-mysql
       - data-base-redis
-      - data-be-get_1m
+      - data-be-get3_1m
     environment:
       - VPN_IP=$VPN_IP
       - ALERT="True"
@@ -1514,7 +1515,7 @@ services:
     depends_on:
       - data-base-mysql
       - data-base-redis
-      - data-be-get_1m
+      - data-be-get3_1m
     environment:
       - VPN_IP=$VPN_IP
       - ALERT="True"
@@ -1689,7 +1690,7 @@ services:
     depends_on:
       - data-base-mysql
       - data-base-redis
-      - data-be-get_1m
+      - data-be-get3_1m
     environment:
       - VPN_IP=$VPN_IP
       - ALERT="True"
