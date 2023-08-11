@@ -1,11 +1,10 @@
 #!/usr/bin/env python
-#pylint: disable=no-member, logging-not-lazy
+#pylint: disable=no-member
 
 """
 Redis cleanup-script
 """
 
-import re
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.logger import get_logger
 from greencandle.lib.common import arg_decorator
