@@ -20,14 +20,7 @@ def main():
     """
     logger = get_logger("cleanup_redis")
     redis = Redis()
-    pairs = set()
-    # Get unique set of uppercase pairs from redis keys
-    for key in redis.conn.keys():
-        if re.match('([A-Z]+):.*h', key.decode()):
-            pairs.add(re.findall('([A-Z]+):.*[hm]', key.decode())[0])
-    # convert set to list
-    pairs = list(pairs)
-
+    pairs = config.main.pairs.split()
     config.create_config()
     count = 0
     for interval in ['1m', '3m', '5m', '15m', '30m', '1h', '4h', '1d']:
