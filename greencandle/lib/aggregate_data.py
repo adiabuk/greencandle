@@ -189,6 +189,7 @@ def get_avg_candle(data):
     get average candle size across number of candles provided
     """
     diffs = []
+    data = data[:-1]
     for item in data.keys():
         try:
             diffs.append(perc_diff(data[item]['ohlc']['low'],
@@ -266,7 +267,7 @@ def collect_agg_data(interval):
 
     ###
     # Collect timeframes (milliepochs) for each pair/interval
-    samples = 10
+    samples = 6
     for pair in pairs:
         try:
             items[interval][pair] = redis.get_items(pair=pair,
