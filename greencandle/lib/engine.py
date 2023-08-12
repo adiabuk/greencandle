@@ -710,7 +710,8 @@ class Engine(dict):
         scheme["data"] = {'open':series['HA_Open'].iloc[-1],
                           'high':series['HA_High'].iloc[-1],
                           'low':series['HA_Low'].iloc[-1],
-                          'close':series['HA_Close'].iloc[-1]}
+                          'close':series['HA_Close'].iloc[-1],
+                          'openTime':series['openTime'].iloc[-1]}
 
         scheme["symbol"] = pair
         scheme["event"] = "ha"

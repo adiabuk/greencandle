@@ -93,7 +93,7 @@ class Graph():
 
             row = 1
             col = 1
-            if name == 'ohlc':
+            if name == 'ohlc' or name == 'ha':
                 LOGGER.debug("Creating OHLC graph")
                 if value.empty:  # empty dataframe:
                     print(f'Unable to find ohlc data for {self.pair}, passing...')
