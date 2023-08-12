@@ -1,5 +1,5 @@
 #pylint: disable=no-member,consider-iterating-dictionary,broad-except,too-many-locals
-#pylint: disable=global-statement,singleton-comparison,unused-variable
+#pylint: disable=global-statement,singleton-comparison,unused-argument,unused-variable
 
 """
 Module for collecting price data and creating TA results
@@ -685,21 +685,33 @@ class Engine(dict):
             None
 
         """
+
         dataframe = self.__renamed_dataframe_columns(self.dataframes[pair])
         series = dataframe.apply(pandas.to_numeric)
         if index is None:
             index = -1
-        else:
-            # line up with TV graphs
-            series = series.iloc[:index +1]
         scheme = {}
-        hashi = ta.ha(open_=series.Open.astype(float),
-                      high=series.High.astype(float),
-                      low=series.Low.astype(float),
-                      close=series.Close.astype(float)
-                      )
-        scheme["data"] = (hashi['HA_open'].iloc[-1], hashi['HA_high'].iloc[-1],
-                          hashi['HA_low'].iloc[-1], hashi['HA_close'].iloc[-1])
+        series = dataframe.copy().astype(float)
+        series['HA_Close']=(series.Open + series.High + series.Low + series.Close)/4
+
+        series.reset_index(inplace=True)
+
+        ha_open = [ (series.Open[0] + series.Close[0]) / 2 ]
+
+        for i in range(0, len(series)-1):
+            ha_open.append((ha_open[i] + series.HA_Close.values[i]) / 2)
+        series['HA_Open'] = ha_open
+
+        series.set_index('index', inplace=True)
+
+        series['HA_High']=series[['HA_Open','HA_Close','High']].max(axis=1)
+        series['HA_Low']=series[['HA_Open','HA_Close','Low']].min(axis=1)
+
+        scheme["data"] = {'open':series['HA_Open'].iloc[-1],
+                          'high':series['HA_High'].iloc[-1],
+                          'low':series['HA_Low'].iloc[-1],
+                          'close':series['HA_Close'].iloc[-1]}
+
         scheme["symbol"] = pair
         scheme["event"] = "ha"
         scheme["open_time"] = str(self.dataframes[pair].iloc[index]["openTime"])
