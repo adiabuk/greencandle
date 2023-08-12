@@ -126,12 +126,12 @@
       "is_secret": false
     },
     "close_rule1": {
-      "value": "res[0].EMA_8 \u003c res[0].EMA_13",
+      "value": "1>1",
       "is_binary": false,
       "is_secret": false
     },
     "close_rule2": {
-      "value": "res[0].RSI_48 \u003e 73",
+      "value": "1>1",
       "is_binary": false,
       "is_secret": false
     },
@@ -221,7 +221,7 @@
       "is_secret": false
     },
     "indicators": {
-      "value": "get_moving_averages;EMA;8 get_moving_averages;EMA;13 get_moving_averages;EMA;21 get_moving_averages;EMA;34 get_moving_averages;EMA;55 get_rsi;RSI;48 get_moving_averages;EMA;200 get_oscillators;STOCHF;14",
+      "value": "get_moving_averages;EMA;200 get_ha;HA;0",
       "is_binary": false,
       "is_secret": false
     },
@@ -266,7 +266,7 @@
       "is_secret": false
     },
     "open_rule1": {
-      "value": "res[0].EMA_8 \u003e res[0].EMA_13 and res[0].EMA_13 \u003e res[0].EMA_21 and res[0].EMA_21 \u003e res[0].EMA_34 and res[0].EMA_34 \u003e res[0].EMA_55 and res[0].RSI_48 \u003e 20 and res[0].RSI_48 \u003c 73 and res[0].EMA_200 \u003c res[0].close",
+      "value": "1>1",
       "is_binary": false,
       "is_secret": false
     },
