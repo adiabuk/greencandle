@@ -36,7 +36,7 @@ six==1.12
 systemd==0.17.1
 tzlocal==2.1b1
 cryptocompare==0.7.3
-pandas_ta==0.2.23b0
+pandas_ta==0.3.2b0
 pyyaml==5.4.1
 gitpython
 werkzeug==2.2.3
