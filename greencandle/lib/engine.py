@@ -692,22 +692,21 @@ class Engine(dict):
         else:
             # line up with TV graphs
             series = series.iloc[:index +1]
-        _, timef = localconfig  # split tuple
         scheme = {}
-        timeframe, multiplier = timef.split(',')
         hashi = ta.ha(open_=series.Open.astype(float),
                       high=series.High.astype(float),
                       low=series.Low.astype(float),
                       close=series.Close.astype(float)
                       )
-        scheme["data"] = (hashi['ha_open'].iloc[-1], hashi['ha_high'].iloc[-1],
-                          hashi['ha_low'].iloc[-1], hashi['ha_close'].iloc[-1])
+        scheme["data"] = (hashi['HA_open'].iloc[-1], hashi['HA_high'].iloc[-1],
+                          hashi['HA_low'].iloc[-1], hashi['HA_close'].iloc[-1])
         scheme["symbol"] = pair
         scheme["event"] = "ha"
         scheme["open_time"] = str(self.dataframes[pair].iloc[index]["openTime"])
 
         self.schemes.append(scheme)
         LOGGER.debug("Done Getting haikin ashi for %s - %s", pair, scheme['open_time'])
+
     @get_exceptions
     def get_supertrend(self, pair, index=None, localconfig=None):
         """
