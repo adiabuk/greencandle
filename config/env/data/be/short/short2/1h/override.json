@@ -1,7 +1,7 @@
 {
   "interval": "1h",
   "name": "data-be-analyse-1h-short2",
-  "open_rule1": "agg.distance_200 \u003e 5 and res[0].RSI_14 \u003e 75 and res[0].numTrades \u003e 0",
+  "open_rule1": "agg.distance_200 \u003e 5 and res[0].RSI_14 \u003e 75 and res[0].numTrades \u003e 50",
   "slack_alerts": "data_step1",
   "api_forward": "forward6-short",
   "slack_balance": "data_step1",
