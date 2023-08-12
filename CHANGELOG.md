@@ -1,5 +1,16 @@
 # Releases
 
+# 6.22
+* don't ignore last item in agg
+* create lock dir if it doesn't exist
+* split 1m get_data containers into 4 to speed up each run
+* don't re-define open var in engine
+* remove old agg script
+* cleanup redis data using pairs from config to ensure none are missed
+* use previous 5 candles, not inc current for avg size
+* Add agg data to slack output
+* fetch agg data as part of get_data container to ensure it's in sync with candles and indicators
+
 # 6.21
 * check that close time exists for a pair as higher timeframes might not have closed when starting
 * increase ram to data env redis
