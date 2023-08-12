@@ -93,10 +93,10 @@ class Graph():
 
             row = 1
             col = 1
-            if name == 'ohlc' or name == 'ha':
+            if name == 'ohlc' or 'HA' in name:
                 LOGGER.debug("Creating OHLC graph")
                 if value.empty:  # empty dataframe:
-                    print(f'Unable to find ohlc data for {self.pair}, passing...')
+                    print(f'Unable to find {name} data for {self.pair}, passing...')
                     return
                 value["time"] = pandas.to_datetime(value["openTime"], unit="ms")
                 item = go.Candlestick(x=value.time,
@@ -104,7 +104,7 @@ class Graph():
                                       high=value.high,
                                       low=value.low,
                                       close=value.close,
-                                      name=self.pair)
+                                      name="{self.pair}-{name}")
 
             elif 'STX' in name:
                 LOGGER.debug("Creating Supertrend graph")
@@ -213,7 +213,7 @@ class Graph():
                 fig.append_trace(item3, row, col)
                 LOGGER.debug("Adding item3 %s row:%s", item3.name, row)
 
-            if name == "ohlc" and self.volume:
+            if (name == "ohlc" or 'HA' in name) and self.volume:
                 increasing_color = '#17BECF'
                 decreasing_color = '#7F7F7F'
                 colors = []
@@ -256,6 +256,7 @@ class Graph():
         """Fetch data from redis"""
         redis = Redis()
         list_of_series = []
+        list_of_series2 = []
         index = redis.get_items(self.pair, self.interval)
 
         main_indicators = config.main.indicators.split()
@@ -293,6 +294,11 @@ class Graph():
             except (KeyError, AttributeError) as error:
                 LOGGER.critical("Error, unable to find ohlc data for %s %s %s",
                                 index_item, ind, error)
+            try:   #ha
+                result_list['HA_0'] = json.loads(str_dict)['HA_0']
+                result_list['current_price'] = result_list['HA_0']['close']
+            except KeyError:
+                pass
             try:  # event
                 LOGGER.debug("Getting trade events")
                 str_dict = redis.get_item(f'{self.pair}:{self.interval}', index_item).decode()
@@ -303,10 +309,17 @@ class Graph():
                 rehydrated = result_list['ohlc']
             except KeyError:
                 rehydrated = {}
+            try:
+                rehydrated2 = result_list['HA_0']
+                #list_of_results['HA_0'].append(result_list['HA_0'])
+            except KeyError:
+                rehydrated2 = {}
+
             list_of_series.append(rehydrated)
+            list_of_series2.append(rehydrated2)
 
             for ind in ind_list:
-                try:  # event
+                try:  # inds
                     list_of_results[ind].append((result_list[ind],
                                                  result_list['current_price'], index_item))
                 except KeyError:
@@ -321,10 +334,13 @@ class Graph():
         dataframes = {}
 
         dataframes['ohlc'] = pandas.DataFrame(list_of_series)
+        dataframes['HA_0'] = pandas.DataFrame(list_of_series2)
+
 
         dataframes['event'] = pandas.DataFrame(list_of_results['event'],
                                                columns=['result', 'current_price', 'date'])
-        for ind in ind_list:
+
+        for ind in [x for x in ind_list if 'HA' not in x]:
             dataframes[ind] = pandas.DataFrame(list_of_results[ind], columns=['value',
                                                                               'current_price',
                                                                               'date'])

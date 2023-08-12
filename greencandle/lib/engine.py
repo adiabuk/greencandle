@@ -686,6 +686,7 @@ class Engine(dict):
 
         """
 
+        func, timef = localconfig  # split tuple
         dataframe = self.__renamed_dataframe_columns(self.dataframes[pair])
         series = dataframe.apply(pandas.to_numeric)
         if index is None:
@@ -711,10 +712,10 @@ class Engine(dict):
                           'high':series['HA_High'].iloc[-1],
                           'low':series['HA_Low'].iloc[-1],
                           'close':series['HA_Close'].iloc[-1],
-                          'openTime':series['openTime'].iloc[-1]}
+                          'openTime':series['date'].iloc[-1]}
 
         scheme["symbol"] = pair
-        scheme["event"] = "ha"
+        scheme["event"] = f"{func}_{timef}"
         scheme["open_time"] = str(self.dataframes[pair].iloc[index]["openTime"])
 
         self.schemes.append(scheme)
