@@ -128,7 +128,8 @@ def analyse_pair(pair, redis):
             items = redis.get_items(pair, INTERVAL)
             data = redis.get_item(f"{pair}:{INTERVAL}", items[-1]).decode()
             redis3 = Redis(db=3)
-            agg = redis3.get_item(f"{pair}:{INTERVAL}", items[-1]).decode()
+            raw_agg = redis3.conn.hgetall(f"{pair}:{INTERVAL}")
+            agg = {k.decode():v.decode() for k,v in raw_agg.items()}
             del redis3
 
             # Only alert on a given pair once per hour
