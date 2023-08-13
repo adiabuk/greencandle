@@ -1880,6 +1880,7 @@ services:
       - VPN_IP=$VPN_IP
       - ALERT="True"
       - CONFIG_ENV=data/be/long/long4/1m
+      - ROUTER_FORWARD=True
       - CHECK_REDIS_PAIR=True
       - DB=true
     healthcheck:
@@ -1916,6 +1917,7 @@ services:
       - VPN_IP=$VPN_IP
       - ALERT="True"
       - CHECK_REDIS_PAIR=True
+      - ROUTER_FORWARD=True
       - CONFIG_ENV=data/be/long/long4/5m
       - DB=true
     healthcheck:
@@ -2060,6 +2062,7 @@ services:
       - VPN_IP=$VPN_IP
       - CHECK_REDIS_PAIR=True
       - ALERT="True"
+      - ROUTER_FORWARD=True
       - CONFIG_ENV=data/be/short/short4/1m
       - DB=true
     healthcheck:
@@ -2095,6 +2098,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CHECK_REDIS_PAIR=True
+      - ROUTER_FORWARD=True
       - ALERT="True"
       - CONFIG_ENV=data/be/short/short4/5m
       - DB=true

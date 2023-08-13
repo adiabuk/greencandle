@@ -1,0 +1,16 @@
+{
+  "immediate_trailing_stop": "true",
+  "interval": "1h",
+  "name": "test-be-api-any3-1h-cross",
+  "perc_at_timeout": "5",
+  "slack_alerts": "test",
+  "slack_balance": "test",
+  "slack_notifications": "test",
+  "slack_trades": "test",
+  "stop_loss_perc": "5",
+  "take_profit_perc": "5",
+  "time_in_trade": "12h",
+  "trade_direction": "short",
+  "trailing_start": "8",
+  "trailing_stop_loss_perc": "2"
+}
