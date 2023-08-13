@@ -122,6 +122,41 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
+  dev-be-analyse-1m-short1:
+    container_name: dev-be-analyse-1m-short1
+    hostname: dev-be-analyse-1m-short1
+    image: amrox/greencandle:${TAG}
+    mem_limit: 500m
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "analyse_data"
+    logging:
+      driver: journald
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get3_1m
+    environment:
+      - VPN_IP=$VPN_IP
+      - ALERT="True"
+      - CONFIG_ENV=dev
+      - DB=true
+    healthcheck:
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      start_period: 1h
+      interval: 1m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
   dev-be-get_1m:
     container_name: dev-be-get_1m
     hostname: dev-be-get_1m
