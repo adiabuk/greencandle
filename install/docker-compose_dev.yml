@@ -133,13 +133,13 @@ services:
     logging:
       driver: journald
     links:
-      - data-be-api-router:router
-      - data-base-mysql:mysql
-      - data-base-redis:redis
+      - dev-be-api-router:router
+      - dev-base-mysql:mysql
+      - dev-base-redis:redis
     depends_on:
-      - data-base-mysql
-      - data-base-redis
-      - data-be-get3_1m
+      - dev-base-mysql
+      - dev-base-redis
+      - dev-be-get_1m
     environment:
       - VPN_IP=$VPN_IP
       - ALERT="True"
@@ -189,3 +189,38 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/:/var/run
+
+  dev-be-api-router:
+    container_name: dev-be-api-router
+    hostname: dev-be-api-router
+    extra_hosts:
+      - "alert:10.8.0.104"
+    image: amrox/greencandle:${TAG}
+    mem_limit: 200m
+    pull_policy: always
+    restart: always
+    healthcheck:
+      test: curl -Isf http://127.1:1080/healthcheck
+      interval: 5m
+      timeout: 5s
+      retries: 5
+    environment:
+      - CONFIG_ENV=dev
+      - DB=true
+    ports:
+      - 1083:1080
+    links:
+      - dev-base-mysql:mysql
+      - dev-base-redis:redis
+    depends_on:
+      - dev-base-mysql
+      - dev-base-redis
+    entrypoint: /docker-entrypoint.sh api_router
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+
