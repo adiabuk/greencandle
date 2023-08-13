@@ -13,6 +13,13 @@ last middle for period 12:
 res[1].bb_12[0]
 Redis output: (u, m, l) tupple
 
+## Heiken Ashi
+VERIFIED to be equal to tradingview
+get_ha;HA;0
+always need the last 0 despite not being used, for consistency with other indicators
+Usage:
+res[0].HA_open > res[0].HA_close # red candle
+res[0].HA_open < res[0].HA_close # green candle
 
 ## bbperc bbperc
 VERIFIED to be equal to tradingview
