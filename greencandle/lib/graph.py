@@ -104,7 +104,7 @@ class Graph():
                                       high=value.high,
                                       low=value.low,
                                       close=value.close,
-                                      name="{self.pair}-{name}")
+                                      name=f"{self.pair}-{name}")
 
             elif 'STX' in name:
                 LOGGER.debug("Creating Supertrend graph")
