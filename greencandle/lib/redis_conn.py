@@ -342,7 +342,7 @@ class Redis():
         for key in self.conn.keys():
             self.logger.critical("%s %s", key, self.conn.hgetall(key))
 
-    def get_current(self, name, item):
+    def get_current(self, name, item, candle_type='ohlc'):
         """
         Get the current price and data for given item where name is an address:
         eg.  "XRPBTC:15m"
@@ -355,7 +355,7 @@ class Redis():
         byte = self.conn.hget(name, item)
 
         try:
-            data = json.loads(byte.decode("UTF-8"))['ohlc']
+            data = json.loads(byte.decode("UTF-8"))[candle_type]
             current_price = data['close']
         except KeyError:
             self.logger.critical("No Data for item %s %s", name, item)
@@ -628,8 +628,14 @@ class Redis():
             ohlc = self.get_current(name, items[i])[-1]
             for item in ['open', 'high', 'low', 'close']:
                 ohlc[item] = float(ohlc[item])
-            datax.update(ohlc)
+            ha_raw = self.get_current(name, items[i], 'HA_0')[-1]
+            if ha_raw:
+                ha_ohlc={}
+                for item in ['open', 'high', 'low', 'close']:
+                    ha_ohlc[f'HA_{item}'] = float(ha_raw[item])
+                datax.update(ha_ohlc)
 
+            datax.update(ohlc)
             res.append(datax)
 
 
