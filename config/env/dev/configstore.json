@@ -11,14 +11,14 @@
       "is_secret": false
     },
     "account1_key": {
-      "value": "test",
+      "value": "rgzmSqV0b/yZRGBxS+jXIx5hiQYh4sJDetnDelO3GCX9qMaj6TqRO3f4WO+xA8gBOaOxv7mjkau5rR1hadSbNDmhA+tgi/wEKQSrMtHsvEKyuDvXQJI9keMYnAFQwoj9eG+O/YH5E8g=",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "account1_secret": {
-      "value": "test",
+      "value": "ipn58tyVmBic/3hcfBB/FsH7jBwzs5/HUHHG0HI+Mm3VBn8XqvpZlaok+xYYD8i+9lU6f9t8piR6axImZ6Ch7geC5dYIFcE6oumjDKaDFu2ejfDtdhqBsIR5WrbhT+WMqIkrpa97/II=",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "account1_type": {
       "value": "binance",
@@ -126,12 +126,12 @@
       "is_secret": false
     },
     "close_rule1": {
-      "value": "1>1",
+      "value": "1\u003e1",
       "is_binary": false,
       "is_secret": false
     },
     "close_rule2": {
-      "value": "1>1",
+      "value": "1\u003e1",
       "is_binary": false,
       "is_secret": false
     },
