@@ -21,8 +21,8 @@ def main():
     url = f"http://router:1080/{config.web.api_token}"
     dbase = Mysql()
     dbase.get_active_trades()
-    open_trades = dbase.fetch_sql_data('select pair, name, net_perc, direction, open_time from open_trades',
-                                       header=False)
+    open_trades = dbase.fetch_sql_data('select pair, name, net_perc, direction, open_time '
+                                       'from open_trades', header=False)
 
     for trade in open_trades:
         pair, name, net_perc, direction, open_time = trade
