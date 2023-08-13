@@ -38,6 +38,7 @@ if sys.argv[-1] != "--help":
     CROSS = CLIENT.get_cross_margin_pairs()
     STORE_IN_DB = bool('STORE_IN_DB' in os.environ)
     CHECK_REDIS_PAIR = bool('CHECK_REDIS_PAIR' in os.environ)
+    DELETE_FROM_REDIS = bool('DELETE_FROM_REDIS' in os.environ)
     ROUTER_FORWARD = bool('ROUTER_FORWARD' in os.environ)
     REDIS_FORWARD = bool('REDIS_FORWARD' in os.environ)
 
@@ -176,7 +177,7 @@ def analyse_pair(pair, redis):
                 LOGGER.info("closing data trade for %s", pair)
                 trade.close_trade(details)
 
-            if CHECK_REDIS_PAIR and result=='OPEN':
+            if CHECK_REDIS_PAIR and DELETE_FROM_REDIS and result=='OPEN':
                 rm_pair_from_redis(pair)
 
             if ROUTER_FORWARD:

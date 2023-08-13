@@ -782,6 +782,7 @@ services:
       - CONFIG_ENV=data/be/short/short1/1m
       - DB=true
       - CHECK_REDIS_PAIR=True
+      - DELETE_FROM_REDIS=True
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -819,6 +820,7 @@ services:
       - CONFIG_ENV=data/be/long/long1/1m
       - DB=true
       - CHECK_REDIS_PAIR=True
+      - DELETE_FROM_REDIS=True
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -856,6 +858,7 @@ services:
       - CONFIG_ENV=data/be/short/short1/5m
       - DB=true
       - CHECK_REDIS_PAIR=True
+      - DELETE_FROM_REDIS=True
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -893,6 +896,7 @@ services:
       - CONFIG_ENV=data/be/long/long1/5m
       - DB=true
       - CHECK_REDIS_PAIR=True
+      - DELETE_FROM_REDIS=True
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -930,6 +934,7 @@ services:
       - CONFIG_ENV=data/be/short/short1/1h
       - DB=true
       - CHECK_REDIS_PAIR=True
+      - DELETE_FROM_REDIS=True
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -967,6 +972,7 @@ services:
       - CONFIG_ENV=data/be/long/long1/1h
       - DB=true
       - CHECK_REDIS_PAIR=True
+      - DELETE_FROM_REDIS=True
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -1004,6 +1010,7 @@ services:
       - CONFIG_ENV=data/be/short/short1/4h
       - DB=true
       - CHECK_REDIS_PAIR=True
+      - DELETE_FROM_REDIS=True
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -1041,6 +1048,7 @@ services:
       - CONFIG_ENV=data/be/long/long1/4h
       - DB=true
       - CHECK_REDIS_PAIR=True
+      - DELETE_FROM_REDIS=True
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -1078,6 +1086,7 @@ services:
       - CONFIG_ENV=data/be/short/short1/12h
       - DB=true
       - CHECK_REDIS_PAIR=True
+      - DELETE_FROM_REDIS=True
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -1115,6 +1124,7 @@ services:
       - CONFIG_ENV=data/be/long/long1/12h
       - DB=true
       - CHECK_REDIS_PAIR=True
+      - DELETE_FROM_REDIS=True
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
