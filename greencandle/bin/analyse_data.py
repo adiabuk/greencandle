@@ -75,7 +75,11 @@ def get_match_name(matches):
     get a list of matching rule names based on container number, and matching rule number
     """
     match_names = []
-    container_num = int(config.main.name[-1])
+    try:
+        container_num = int(config.main.name[-1])
+    except ValueError:
+        container_num = 1
+
     name_lookup = [['stx'],
                    ['distance', 'bb'],
                    ['candle_low', 'candle_zero', 'candle_very_low']
