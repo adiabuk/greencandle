@@ -1,5 +1,13 @@
 # Releases
 
+# 6.24
+* fix today's profix query following view removal
+* add sum of last x candles to data dashboard
+* rename agg var for clarity
+* fix container names for latest data strategy short
+* fix heiken ashi sequencing for initial data run
+* add heiken ashi direction flip containers and check direction using STX
+
 # 6.23
 * extend time between trades for new data strategy
 * add HA match name to analyser list
