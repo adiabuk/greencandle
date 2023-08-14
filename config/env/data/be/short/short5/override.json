@@ -1,3 +1,3 @@
 {
-  "open_rule1": "res[0].HA_close \u003c res[0].HA_open and res[1].HA_close \u003e res[1].HA_open and res[2].HA_close \u003e res[2].HA_open"
+  "open_rule1": "res[0].HA_close \u003c res[0].HA_open and res[1].HA_close \u003e res[1].HA_open and res[2].HA_close \u003e res[2].HA_open and res[0].STX_22[0] \u003c 0"
 }
