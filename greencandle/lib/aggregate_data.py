@@ -199,6 +199,21 @@ def get_avg_candles(data):
         return round(average(diffs), 6)
     return 0
 
+def get_sum_candles(data):
+    """
+    get sum of candle size across number of candles provided
+    """
+    diffs = []
+    for item in list(data.keys())[:-1]:
+        try:
+            diffs.append(perc_diff(data[item]['ohlc']['low'],
+                                   data[item]['ohlc']['high']))
+        except:
+            pass
+    if diffs:
+        return round(sum(diffs), 6)
+    return 0
+
 def aggregate_data(key, pairs, interval, data, items):
     """
     create aggregate spreadsheets for given key using collected data
@@ -225,6 +240,7 @@ def aggregate_data(key, pairs, interval, data, items):
             bbperc_diff = get_bbperc_diff(res, last_res)[-1]
             stx_diff = get_stx_diff(last_res, third_res)
             avg_candles = get_avg_candles(data[interval][pair])
+            sum_candles = get_sum_candles(data[interval][pair])
             num = get_ohlc_attr(res, 'numTrades')
             date = get_ohlc_attr(res, 'openTime')
             humandate = epoch2date(int(int(date)/1000))
@@ -234,6 +250,7 @@ def aggregate_data(key, pairs, interval, data, items):
              'distance_200': distance_200,
              'candle_size': candle_size,
              'avg_candles': avg_candles,
+             'sum_candles': sum_candles,
              'middle_200': middle_200,
              'stoch_flat': stoch_flat,
              'bb_size': bb_size,
