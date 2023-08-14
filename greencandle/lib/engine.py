@@ -688,11 +688,11 @@ class Engine(dict):
 
         func, timef = localconfig  # split tuple
         dataframe = self.__renamed_dataframe_columns(self.dataframes[pair])
-        series = dataframe.apply(pandas.to_numeric)
-        if index is None:
-            index = -1
+        if index:
+            series = dataframe.apply(pandas.to_numeric)[:index+1].astype(float)
+        else:
+            series = dataframe.apply(pandas.to_numeric).astype(float)
         scheme = {}
-        series = dataframe.copy().astype(float)
         series['HA_Close']=(series.Open + series.High + series.Low + series.Close)/4
 
         series.reset_index(inplace=True)
@@ -713,10 +713,9 @@ class Engine(dict):
                           'low':series['HA_Low'].iloc[-1],
                           'close':series['HA_Close'].iloc[-1],
                           'openTime':series['date'].iloc[-1]}
-
         scheme["symbol"] = pair
         scheme["event"] = f"{func}_{timef}"
-        scheme["open_time"] = str(self.dataframes[pair].iloc[index]["openTime"])
+        scheme["open_time"] = str(int(series.iloc[-1]["date"]))
 
         self.schemes.append(scheme)
         LOGGER.debug("Done Getting heiken ashi for %s - %s", pair, scheme['open_time'])
