@@ -719,7 +719,7 @@ class Engine(dict):
         scheme["open_time"] = str(self.dataframes[pair].iloc[index]["openTime"])
 
         self.schemes.append(scheme)
-        LOGGER.debug("Done Getting haikin ashi for %s - %s", pair, scheme['open_time'])
+        LOGGER.debug("Done Getting heiken ashi for %s - %s", pair, scheme['open_time'])
 
     @get_exceptions
     def get_supertrend(self, pair, index=None, localconfig=None):
