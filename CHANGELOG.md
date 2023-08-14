@@ -1,5 +1,22 @@
 # Releases
 
+# 6.23
+* extend time between trades for new data strategy
+* add HA match name to analyser list
+* add bb size check to data size rules
+* only trigger data alerts where size between upper|lower bb is higher than 1%
+* forward HA to new test env
+* specify which containers to delete stage2 pairs from redis
+* add open_time to close_all script output
+* data containers for heiken ashi check after step1
+* add dev router, analyser, and test rules
+* add heiken ashi to data env
+* add graph support for heiken ashi
+* new algorithm for heiken ashi and updated docs
+* min 50 trades in candle for all strategies
+* fix HA keys
+* update pandas-ta
+
 # 6.22
 * don't ignore last item in agg
 * create lock dir if it doesn't exist
