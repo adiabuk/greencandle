@@ -184,7 +184,7 @@ def average(lst):
     """
     return sum(lst) / len(lst)
 
-def get_avg_candle(data):
+def get_avg_candles(data):
     """
     get average candle size across number of candles provided
     """
@@ -224,7 +224,7 @@ def aggregate_data(key, pairs, interval, data, items):
             bb_size = get_bb_size(res)
             bbperc_diff = get_bbperc_diff(res, last_res)[-1]
             stx_diff = get_stx_diff(last_res, third_res)
-            avg_candle = get_avg_candle(data[interval][pair])
+            avg_candles = get_avg_candles(data[interval][pair])
             num = get_ohlc_attr(res, 'numTrades')
             date = get_ohlc_attr(res, 'openTime')
             humandate = epoch2date(int(int(date)/1000))
@@ -233,7 +233,7 @@ def aggregate_data(key, pairs, interval, data, items):
             {
              'distance_200': distance_200,
              'candle_size': candle_size,
-             'avg_candle': avg_candle,
+             'avg_candles': avg_candles,
              'middle_200': middle_200,
              'stoch_flat': stoch_flat,
              'bb_size': bb_size,
