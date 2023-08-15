@@ -3,6 +3,7 @@
   "name": "test-be-api-any3-1m-cross",
   "slack_alerts": "test",
   "slack_balance": "test",
+  "time_in_trade": "5m"
   "slack_notifications": "test",
   "slack_trades": "test",
   "trade_direction": "short",
