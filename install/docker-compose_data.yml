@@ -778,7 +778,7 @@ services:
       - data-be-get3_1m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/short/short1/1m
       - DB=true
       - CHECK_REDIS_PAIR=4
@@ -815,7 +815,7 @@ services:
       - data-be-get3_1m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/long/long1/1m
       - DB=true
       - CHECK_REDIS_PAIR=4
@@ -852,7 +852,7 @@ services:
       - data-be-get_5m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/short/short1/5m
       - DB=true
       - CHECK_REDIS_PAIR=4
@@ -889,7 +889,7 @@ services:
       - data-be-get_5m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/long/long1/5m
       - DB=true
       - CHECK_REDIS_PAIR=4
@@ -926,7 +926,7 @@ services:
       - data-be-get_1h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/short/short1/1h
       - DB=true
       - CHECK_REDIS_PAIR=4
@@ -963,7 +963,7 @@ services:
       - data-be-get_1h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/long/long1/1h
       - DB=true
       - CHECK_REDIS_PAIR=4
@@ -1000,7 +1000,7 @@ services:
       - data-be-get_4h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/short/short1/4h
       - DB=true
       - CHECK_REDIS_PAIR=4
@@ -1037,7 +1037,7 @@ services:
       - data-be-get_4h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/long/long1/4h
       - DB=true
       - CHECK_REDIS_PAIR=4
@@ -1074,7 +1074,7 @@ services:
       - data-be-get_12h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/short/short1/12h
       - DB=true
       - CHECK_REDIS_PAIR=4
@@ -1111,7 +1111,7 @@ services:
       - data-be-get_12h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/long/long1/12h
       - DB=true
       - CHECK_REDIS_PAIR=4
@@ -1148,10 +1148,10 @@ services:
       - data-be-get3_1m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/short/short2/1m
       - DB=true
-      - REDIS_FORWARD="4,5"
+      - REDIS_FORWARD=4,5
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -1185,10 +1185,10 @@ services:
       - data-be-get3_1m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/long/long2/1m
       - DB=true
-      - REDIS_FORWARD="4,5"
+      - REDIS_FORWARD=4,5
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -1222,10 +1222,10 @@ services:
       - data-be-get_5m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/short/short2/5m
       - DB=true
-      - REDIS_FORWARD="4,5"
+      - REDIS_FORWARD=4,5
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -1259,10 +1259,10 @@ services:
       - data-be-get_5m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/long/long2/5m
       - DB=true
-      - REDIS_FORWARD="4,5"
+      - REDIS_FORWARD=4,5
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -1296,10 +1296,10 @@ services:
       - data-be-get_1h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/short/short2/1h
       - DB=true
-      - REDIS_FORWARD="4,5"
+      - REDIS_FORWARD=4,5
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -1333,10 +1333,10 @@ services:
       - data-be-get_1h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/long/long2/1h
       - DB=true
-      - REDIS_FORWARD="4,5"
+      - REDIS_FORWARD=4,5
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -1370,10 +1370,10 @@ services:
       - data-be-get_4h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/short/short2/4h
       - DB=true
-      - REDIS_FORWARD="4,5"
+      - REDIS_FORWARD=4,5
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -1407,10 +1407,10 @@ services:
       - data-be-get_4h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/long/long2/4h
       - DB=true
-      - REDIS_FORWARD="4,5"
+      - REDIS_FORWARD=4,5
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -1444,10 +1444,10 @@ services:
       - data-be-get_12h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/short/short2/12h
       - DB=true
-      - REDIS_FORWARD="4,5"
+      - REDIS_FORWARD=4,5
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -1481,10 +1481,10 @@ services:
       - data-be-get_12h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/long/long2/12h
       - DB=true
-      - REDIS_FORWARD="4,5"
+      - REDIS_FORWARD=4,5
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -1518,7 +1518,7 @@ services:
       - data-be-get3_1m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/long/long3/1m
       - DB=true
     healthcheck:
@@ -1553,7 +1553,7 @@ services:
       - data-be-get_5m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/long/long3/5m
       - DB=true
     healthcheck:
@@ -1588,7 +1588,7 @@ services:
       - data-be-get_1h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/long/long3/1h
       - DB=true
     healthcheck:
@@ -1623,7 +1623,7 @@ services:
       - data-be-get_4h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/long/long3/4h
       - DB=true
     healthcheck:
@@ -1658,7 +1658,7 @@ services:
       - data-be-get_12h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/long/long3/12h
       - DB=true
     healthcheck:
@@ -1693,7 +1693,7 @@ services:
       - data-be-get3_1m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/short/short3/1m
       - DB=true
     healthcheck:
@@ -1728,7 +1728,7 @@ services:
       - data-be-get_5m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/short/short3/5m
       - DB=true
     healthcheck:
@@ -1763,7 +1763,7 @@ services:
       - data-be-get_1h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/short/short3/1h
       - DB=true
     healthcheck:
@@ -1798,7 +1798,7 @@ services:
       - data-be-get_4h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/short/short3/4h
       - DB=true
     healthcheck:
@@ -1833,7 +1833,7 @@ services:
       - data-be-get_12h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/short/short3/12h
       - DB=true
     healthcheck:
@@ -1868,7 +1868,7 @@ services:
       - data-be-get3_1m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/long/long4/1m
       - ROUTER_FORWARD=True
       - CHECK_REDIS_PAIR=5
@@ -1905,7 +1905,7 @@ services:
       - data-be-get_5m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
       - CHECK_REDIS_PAIR=5
       - ROUTER_FORWARD=True
       - CONFIG_ENV=data/be/long/long4/5m
@@ -1943,7 +1943,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CHECK_REDIS_PAIR=5
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/long/long4/1h
       - DB=true
     healthcheck:
@@ -1979,7 +1979,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CHECK_REDIS_PAIR=5
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/long/long4/4h
       - DB=true
     healthcheck:
@@ -2015,7 +2015,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CHECK_REDIS_PAIR=5
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/long/long4/12h
       - DB=true
     healthcheck:
@@ -2051,7 +2051,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CHECK_REDIS_PAIR=5
-      - ALERT="True"
+      - ALERT=True
       - ROUTER_FORWARD=True
       - CONFIG_ENV=data/be/short/short4/1m
       - DB=true
@@ -2089,7 +2089,7 @@ services:
       - VPN_IP=$VPN_IP
       - CHECK_REDIS_PAIR=5
       - ROUTER_FORWARD=True
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/short/short4/5m
       - DB=true
     healthcheck:
@@ -2125,7 +2125,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CHECK_REDIS_PAIR=5
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/short/short4/1h
       - DB=true
     healthcheck:
@@ -2161,7 +2161,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CHECK_REDIS_PAIR=5
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/short/short4/4h
       - DB=true
     healthcheck:
@@ -2197,7 +2197,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CHECK_REDIS_PAIR=5
-      - ALERT="True"
+      - ALERT=True
       - CONFIG_ENV=data/be/short/short4/12h
       - DB=true
     healthcheck:
