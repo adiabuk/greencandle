@@ -9,7 +9,7 @@
   "slack_trades": "test",
   "stop_loss_perc": "5",
   "take_profit_perc": "5",
-  "time_in_trade": "5h",
+  "time_in_trade": "12h",
   "trade_direction": "long",
   "trailing_start": "8",
   "trailing_stop_loss_perc": "2"

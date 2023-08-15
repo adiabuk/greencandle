@@ -3,7 +3,6 @@
   "interval": "5m",
   "name": "test-be-api-any3-5m-cross",
   "perc_at_timeout": "5",
-  "time_in_trade": "25m",
   "slack_alerts": "test",
   "slack_balance": "test",
   "slack_notifications": "test",

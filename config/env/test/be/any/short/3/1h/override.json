@@ -4,7 +4,6 @@
   "name": "test-be-api-any3-1h-cross",
   "perc_at_timeout": "5",
   "slack_alerts": "test",
-  "time_in_trade": "5h",
   "slack_balance": "test",
   "slack_notifications": "test",
   "slack_trades": "test",
