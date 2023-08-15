@@ -40,7 +40,7 @@ if sys.argv[-1] != "--help":
     CHECK_REDIS_PAIR = int(os.environ['CHECK_REDIS_PAIR']) if 'CHECK_REDIS_PAIR' in \
             os.environ else False
     ROUTER_FORWARD = bool('ROUTER_FORWARD' in os.environ)
-    REDIS_FORWARD = [int(x) for x in REDIS_FORWARD.split(',')] if 'REDIS_FORWARD' \
+    REDIS_FORWARD = [int(x) for x in os.environ['REDIS_FORWARD'].split(',')] if 'REDIS_FORWARD' \
             in os.environ else False
 
 def analyse_loop():
