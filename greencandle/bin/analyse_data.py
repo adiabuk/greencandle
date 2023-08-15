@@ -37,10 +37,12 @@ if sys.argv[-1] != "--help":
     ISOLATED = CLIENT.get_isolated_margin_pairs()
     CROSS = CLIENT.get_cross_margin_pairs()
     STORE_IN_DB = bool('STORE_IN_DB' in os.environ)
-    CHECK_REDIS_PAIR = bool('CHECK_REDIS_PAIR' in os.environ)
-    DELETE_FROM_REDIS = bool('DELETE_FROM_REDIS' in os.environ)
+    CHECK_REDIS_PAIR = int(os.environ['CHECK_REDIS_PAIR']) if 'CHECK_REDIS_PAIR' in \
+            os.environ else False
     ROUTER_FORWARD = bool('ROUTER_FORWARD' in os.environ)
-    REDIS_FORWARD = bool('REDIS_FORWARD' in os.environ)
+    REDIS_FORWARD = int(os.environ['REDIS_FORWARD']) if 'REDIS_FORWARD' in os.environ else False
+    REDIS_FORWARD = [int(x) for x in REDIS_FORWARD.split(',')] if 'REDIS_FORWARD' \
+            in os.environ else False
 
 def analyse_loop():
     """
@@ -56,7 +58,7 @@ def analyse_loop():
     LOGGER.debug("Start of current loop")
     redis = Redis()
     if CHECK_REDIS_PAIR:
-        redis4=Redis(db=4)
+        redis4=Redis(db=CHECK_REDIS_PAIR)
         pairs = [x.decode() for x in redis4.conn.smembers(f'{INTERVAL}:{DIRECTION}')]
         del redis4
     else:
@@ -90,20 +92,11 @@ def get_match_name(matches):
         match_names.append(name_lookup[container_num-1][match-1])
     return ','.join(match_names)
 
-def pair_in_redis(pair):
-    """
-    Check if pair is in redis set for current scope
-    if it is, remove it, and return True, otherwise return False
-    """
-    redis4 = Redis(db=4)
-    result = redis4.conn.sismember(f'{INTERVAL}:{DIRECTION}', pair)
-    return result
-
-def rm_pair_from_redis(pair):
+def rm_pair_from_redis(pair, dbase):
     """
     Remove pair from redis set
     """
-    redis4 = Redis(db=4)
+    redis4 = Redis(db=dbase)
     redis4.conn.srem(f'{INTERVAL}:{DIRECTION}', pair)
 
 def analyse_pair(pair, redis):
@@ -178,8 +171,8 @@ def analyse_pair(pair, redis):
                 LOGGER.info("closing data trade for %s", pair)
                 trade.close_trade(details)
 
-            if CHECK_REDIS_PAIR and DELETE_FROM_REDIS and result=='OPEN':
-                rm_pair_from_redis(pair)
+            if CHECK_REDIS_PAIR and result=='OPEN':
+                rm_pair_from_redis(pair, dbase=CHECK_REDIS_PAIR)
 
             if ROUTER_FORWARD:
                 url = f"http://router:1080/{config.web.api_token}"
@@ -202,10 +195,12 @@ def analyse_pair(pair, redis):
                     pass
 
             if REDIS_FORWARD:
-                # add to redis set
-                LOGGER.info("Adding %s to %s:%s set", pair, INTERVAL, DIRECTION)
-                redis4 = Redis(db=4)
-                redis4.conn.sadd(f'{INTERVAL}:{DIRECTION}', pair)
+                for forward_db in REDIS_FORWARD:
+                    # add to redis set
+                    LOGGER.info("Adding %s to %s:%s set", pair, INTERVAL, DIRECTION)
+                    redis4 = Redis(db=forward_db)
+                    redis4.conn.sadd(f'{INTERVAL}:{DIRECTION}', pair)
+                    del redis4
 
             LOGGER.info("Trade alert: %s %s %s (%s)", pair, INTERVAL,
                         DIRECTION, supported.strip())
