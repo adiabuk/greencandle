@@ -1,5 +1,11 @@
 # Releases
 
+# 6.25
+* forward single rule to prod
+* remove quotes from env vars in docker compose files
+* separate redis db for different strategies and allow forwarding to multiple dbs
+* override css width to show more data fields in data dashboard
+
 # 6.24
 * fix today's profix query following view removal
 * add sum of last x candles to data dashboard
