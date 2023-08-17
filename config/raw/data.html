@@ -20,11 +20,14 @@
     <script type = "text/javascript"  src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script type = "text/javascript"  src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
     <script type = "text/javascript"  src="https://cdn.datatables.net/plug-ins/1.10.15/dataRender/datetime.js"></script>
+    <script src="excellentexport.js"></script>
   </head>
   <body>
     <div>
 	    <div class="card-body">
 
+		<a download="data.xls" href="#" onclick="return ExcellentExport.excel(this, 'proxies', 'Excel Data');">Export to Excel</a>
+        <a download="data.csv" href="#" onclick="return ExcellentExport.csv(this, 'proxies');">Export to CSV</a>
         <div style="display: flex;">
 	{% for file in files %}
 	<form method="post">
