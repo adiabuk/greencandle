@@ -79,7 +79,7 @@ def send_slack_trade(**kwargs):
     net_profit = format_usd(kwargs.usd_net_profit) if kwargs['usd_net_profit'] else "N/A"
 
     kwargs['price'] = str(kwargs['price']).rstrip("0")
-    kwargs['perc'] = f"{float(kwargs['perc']):.4f}"
+    kwargs['perc'] = f"{float(kwargs['perc']):.4f}" if kwargs['perc'] else None
     kwargs['net_perc'] = net_perc
     kwargs['net_profit'] = net_profit
     kwargs['usd_profit'] = format_usd(kwargs['usd_profit'])
