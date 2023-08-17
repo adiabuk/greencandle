@@ -654,7 +654,7 @@ class Redis():
                                             "%s mepoch: %s", pair, rule, current_config, error,
                                                                items[seq])
                         continue
-        dbase = Mysql(config.main.interval)
+        dbase = Mysql(interval=config.main.interval)
         try:
             open_price = dbase.get_trade_value(pair)[0][0]
         except IndexError:
