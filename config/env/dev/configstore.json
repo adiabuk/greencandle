@@ -126,7 +126,7 @@
       "is_secret": false
     },
     "close_rule1": {
-      "value": "1\u003e1",
+      "value": "res[0].HA_open \u003c res[0].HA_close",
       "is_binary": false,
       "is_secret": false
     },
