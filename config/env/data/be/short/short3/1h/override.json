@@ -1,9 +1,6 @@
 {
   "interval": "1h",
   "name": "data-be-analyse-1h-short3",
-  "slack_alerts": "data_size",
-  "slack_balance": "data_size",
-  "slack_notifications": "data_size",
   "time_between_trades": "3h",
   "open_rule1": "0.1 \u003c agg.avg_candles \u003c 1 and perc_diff(agg.avg_candles, agg.candle_size) \u003e 300 and res[0].numTrades \u003e 50 and res[0].STX_22[0] == -1 and res[0].close \u003c res[1].close and agg.bb_size \u003e 1",
   "open_rule2": "agg.avg_candles == 0 and agg.candle_size \u003e 1 and res[0].numTrades \u003e 50 and res[0].STX_22[0] == -1 and res[0].close \u003c res[1].close",

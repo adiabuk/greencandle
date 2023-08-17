@@ -84,7 +84,7 @@ def get_match_name(matches):
 
     name_lookup = [['stx'],
                    ['distance', 'bb'],
-                   ['candle_low', 'candle_zero', 'candle_very_low'],
+                   ['candle_low', 'candle_zero', 'candle_very_low', 'HA_flip'],
                    ['HA']
                    ]
     for match in matches:

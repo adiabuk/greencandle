@@ -1,9 +1,0 @@
-{
-  "api_forward": "forward1-long",
-  "interval": "1m",
-  "name": "data-be-analyse-1m-long5",
-  "slack_alerts": "data_HA-flip",
-  "slack_balance": "data_HA-flip",
-  "slack_notifications": "data_HA-flip",
-  "time_between_trades": "15m"
-}

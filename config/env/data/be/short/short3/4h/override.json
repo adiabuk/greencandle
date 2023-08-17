@@ -1,7 +1,4 @@
 {
-  "slack_alerts": "data_size",
-  "slack_balance": "data_size",
-  "slack_notifications": "data_size",
   "name": "data-be-analyse-4h-short3",
   "interval": "4h",
   "time_between_trades": "8h",

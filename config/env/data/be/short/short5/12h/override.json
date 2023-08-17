@@ -1,8 +1,0 @@
-{
-  "name": "data-be-analyse-12h-short5",
-  "slack_alerts": "data_HA-flip",
-  "interval": "12h",
-  "slack_balance": "data_HA-flip",
-  "slack_notifications": "data_HA-flip",
-  "time_between_trades": "12h"
-}

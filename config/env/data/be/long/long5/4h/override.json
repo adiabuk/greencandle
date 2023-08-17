@@ -1,8 +1,0 @@
-{
-  "name": "data-be-analyse-4h-long5",
-  "interval": "4h",
-  "slack_alerts": "data_HA-flip",
-  "slack_balance": "data_HA-flip",
-  "slack_notifications": "data_HA-flip",
-  "time_between_trades": "8h"
-}
