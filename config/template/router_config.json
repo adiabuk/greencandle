@@ -111,7 +111,7 @@
 "forward6-long": ["test:any-1h-long", "alert"],
 "forward6-short": ["test:any-1h-short", "alert"],
 
-"forward7": ["test:any3-1m-long-short", "prod:any-1m-long-short", "alert"],
+"forward7": ["test:any3-1m-long-short", "prod:any-1m-long", "prod:any-1m-short", "alert"],
 "forward8": ["test:any3-5m-long-short", "alert"],
 "alert": ["alert"],
 "route": []
