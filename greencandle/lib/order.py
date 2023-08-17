@@ -674,6 +674,10 @@ class Trade():
             net_perc, usd_net_profit =dbase.fetch_sql_data(f"select net_perc, usd_net_profit from "
                                                            f"profit where id={kwargs.id}",
                                                             header=False)[0]
+       else:
+           net_perc = None
+           usd_net_profit = None
+
 
         send_slack_trade(channel='trades', event=kwargs.event, perc=perc,
                          pair=kwargs.pair, action=kwargs.action, price=kwargs.fill_price,
