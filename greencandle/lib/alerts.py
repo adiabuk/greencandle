@@ -75,8 +75,8 @@ def send_slack_trade(**kwargs):
         if key not in kwargs:
             kwargs[key] = "N/A"
 
-    net_perc = f"{kwargs.net_perc:.4f}%" if 'net_perc' in kwargs else "N/A"
-    net_profit = format_usd(kwargs.usd_net_profit) if 'usd_net_profit' in kwargs else "N/A"
+    net_perc = f"{kwargs.net_perc:.4f}%" if kwargs['net_perc'] else "N/A"
+    net_profit = format_usd(kwargs.usd_net_profit) if kwargs['usd_net_profit'] else "N/A"
 
     kwargs['price'] = str(kwargs['price']).rstrip("0")
     kwargs['perc'] = f"{float(kwargs['perc']):.4f}"
