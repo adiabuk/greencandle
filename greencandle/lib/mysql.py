@@ -316,7 +316,7 @@ class Mysql():
 
         result = self.__run_sql_query(command)
 
-        return result
+        return trade_id
 
     @get_exceptions
     def get_todays_profit(self):

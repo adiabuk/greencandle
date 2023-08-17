@@ -74,22 +74,18 @@ def send_slack_trade(**kwargs):
     for key in valid_keys:
         if key not in kwargs:
             kwargs[key] = "N/A"
-    try:
-        kwargs['price'] = str(kwargs['price']).rstrip("0")
-        kwargs['perc'] = f"{float(kwargs['perc']):.4f}"
-        commission = 0.2
-        kwargs['net_perc'] = f"{float(float(kwargs['perc']) - float(commission)):.4f}%"
-        kwargs['net_profit'] = format_usd(float(kwargs['usd_profit']) - ((float(kwargs.usd_quote)
-                                                                          /100) * 0.2))
-        kwargs['usd_profit'] = format_usd(kwargs['usd_profit'])
-        kwargs['perc'] = str(kwargs['perc']) + "%"
-        kwargs['quote'] = f"{float(kwargs['quote']):.4f}"
-        kwargs['usd_quote'] = format_usd(kwargs['usd_quote'])
 
-    except TypeError:
-        kwargs['net_perc'] = 'N/A'
-        kwargs['net_profit'] = 'N/A'
-        kwargs['usd_quote'] = format_usd(kwargs['usd_quote'])
+    net_perc = f"{kwargs.net_perc:.4f}%" if net_perc in kwargs else "N/A"
+    net_profit = format_usd(kwargs.usd_net_profit) if 'usd_net_profit' in kwargs else "N/A"
+
+    kwargs['price'] = str(kwargs['price']).rstrip("0")
+    kwargs['perc'] = f"{float(kwargs['perc']):.4f}"
+    kwargs['net_perc'] = net_perc
+    kwargs['net_profit'] = net_profit
+    kwargs['usd_profit'] = format_usd(kwargs['usd_profit'])
+    kwargs['perc'] = str(kwargs['perc']) + "%"
+    kwargs['quote'] = f"{float(kwargs['quote']):.4f}"
+    kwargs['usd_quote'] = format_usd(kwargs['usd_quote'])
 
     if not str2bool(config.slack.slack_active):
         return

@@ -668,10 +668,18 @@ class Trade():
 
         usd_quote = kwargs.quote if 'USD' in kwargs.pair else \
                 base2quote(kwargs.quote, get_quote(kwargs.pair)+'USDT')
+
+        if 'id' in kwargs:
+            dbase = Mysql()
+            net_perc, usd_net_profit =dbase.fetch_sql_data(f"select net_perc, usd_net_profit from "
+                                                           f"profit where id={kwargs.id}",
+                                                            header=False)[0]
+
         send_slack_trade(channel='trades', event=kwargs.event, perc=perc,
                          pair=kwargs.pair, action=kwargs.action, price=kwargs.fill_price,
                          usd_profit=kwargs.usd_profit, quote=kwargs.quote, usd_quote=usd_quote,
-                         open_time=kwargs.open_time, close_time=kwargs.close_time)
+                         open_time=kwargs.open_time, close_time=kwargs.close_time,
+                         net_perc=net_perc, usd_net_profit=usd_net_profit)
 
     def __get_result_details(self, current_price, trade_result):
         """
@@ -804,7 +812,7 @@ class Trade():
                 self.__send_notifications(pair=pair, close_time=current_time, perc=perc_inc,
                                           fill_price=current_price, interval=self.interval,
                                           event=event, action='CLOSE', usd_profit=profit,
-                                          quote=quote_out, open_time=open_time)
+                                          quote=quote_out, open_time=open_time, id=result)
             else:
                 self.logger.critical("Close short Failed %s:%s", name, pair)
                 send_slack_message("alerts", f"Close short Failed {name}:{pair}")
@@ -987,7 +995,7 @@ class Trade():
                     self.__send_notifications(pair=pair, close_time=current_time, perc=perc_inc,
                                               fill_price=fill_price, interval=self.interval,
                                               event=event, action='CLOSE', usd_profit=profit,
-                                              quote=quote_out, open_time=open_time)
+                                              quote=quote_out, open_time=open_time, id=result)
                 else:
                     self.logger.critical("Close spot long Failed %s:%s", name, pair)
                     send_slack_message("alerts", f"Close spot long Failed {name}:{pair}")
@@ -1083,7 +1091,7 @@ class Trade():
                 self.__send_notifications(pair=pair, close_time=current_time, perc=perc_inc,
                                           fill_price=fill_price, interval=self.interval,
                                           event=event, action='CLOSE', usd_profit=profit,
-                                          quote=quote_out, open_time=open_time)
+                                          quote=quote_out, open_time=open_time, id=result)
             else:
                 self.logger.critical("Close margin long Failed %s:%s", name, pair)
                 send_slack_message("alerts", f"Close margin long Failed {name}:{pair}")
