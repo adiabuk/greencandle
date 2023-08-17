@@ -639,7 +639,7 @@ class Redis():
             res.append(datax)
 
 
-        for seq in range(1, 4):
+        for seq in range(1, 5):
             current_config = None
             for rule in "open", "close":
                 try:
@@ -753,7 +753,7 @@ class Redis():
         # specified in the rate_indicator config option - best with EMA_500
         rate_indicator = config.main.rate_indicator
 
-        for i in range(0, 4):
+        for i in range(0, 5):
             # loop through first 4 results (can't use 5th as we will need
             # following item which doesn't exist
             res[i]['perc_rate'] = float(perc_diff(float(res[i+1][rate_indicator]),
