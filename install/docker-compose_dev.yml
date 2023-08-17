@@ -142,7 +142,8 @@ services:
       - dev-be-get_1m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT="True"
+      - ALERT=True
+      - STORE_IN_DB=True
       - CONFIG_ENV=dev
       - DB=true
     healthcheck:
