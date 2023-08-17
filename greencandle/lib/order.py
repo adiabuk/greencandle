@@ -467,7 +467,9 @@ class Trade():
             base_to_use = get_step_precision(pair, sub_perc(1+float(stop),
                                                             quote2base(quote_to_use, pair)))
 
-
+            base_not_to_use = (quote2base(quote_to_use, pair)/100)*1+float(stop)
+            self.logger.info('Leaving %s perc of base margin aside (%s %s)',
+                             1+float(stop), base_not_to_use, get_base(pair))
             self.logger.info("Opening margin long %s of %s with %s %s at %s",
                              base_to_use, pair, current_quote_bal+amount_to_borrow, quote,
                              current_price)
@@ -834,8 +836,13 @@ class Trade():
                                                                   current_base_bal))
 
             total_quote_amount = base2quote(total_base_amount, pair)
+
+            base_not_to_use = (quote2base(total_quote_amount, pair)/100)*1+float(stop)
+            self.logger.info('Leaving %s perc of base margin aside (%s %s)',
+                             1+float(stop), base_not_to_use, get_base(pair))
             self.logger.info("Opening margin short %s of %s with %s at %s",
                              total_base_amount, pair, total_quote_amount, current_price)
+
             if self.prod:
 
                 if float(amount_to_borrow) <= 0:
