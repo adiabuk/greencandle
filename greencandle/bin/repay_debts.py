@@ -8,6 +8,8 @@ import sys
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.logger import get_logger
 from greencandle.lib.common import arg_decorator
+from greencandle.lib.mysql import Mysql
+from greencandle.lib.balance_common import get_base
 
 @arg_decorator
 def main():
@@ -25,22 +27,28 @@ def main():
         # filter list of assets to that containing string argument
         cross_details['userAssets'] = [x for x in cross_details['userAssets']
                                        if x['asset'] == sys.argv[1]]
+    dbase = Mysql()
 
+    bases = [get_base(x[0]) for x in dbase.fetch_sql_data("select pair from open_trades",
+                                                          header=False)]
     for item in cross_details['userAssets']:
         symbol = item['asset']
         borrowed = float(item['borrowed'])
         interest = float(item['interest'])
         free = float(item['free'])
         owed = borrowed + interest
-
         if owed > 0 and free > 0:
             to_pay = owed if owed <= free else free
             if to_pay == 0:
                 continue
-            logger.info("Attempting to pay off Cross %s of %s", to_pay, symbol)
-            result = client.margin_repay(symbol=symbol, asset=symbol,
-                                         quantity=to_pay, isolated=False)
-            logger.info("Repay result for %s: %s", symbol, result)
+            if symbol in bases:
+                logger.info("Skipping %s due to open trade", symbol)
+            else:
+                logger.info("Attempting to pay off Cross %s of %s", to_pay, symbol)
+                result = client.margin_repay(symbol=symbol, asset=symbol,
+                                             quantity=to_pay, isolated=False)
+                logger.info("Repay result for %s: %s", symbol, result)
+
     isolated_details = client.get_isolated_margin_details()
     for item in isolated_details['assets']:
         symbol = item['symbol']
