@@ -56,7 +56,7 @@ def analyse_loop():
 
     LOGGER.debug("Start of current loop")
     redis = Redis()
-    if CHECK_REDIS_PAIR:
+    if CHECK_REDIS_PAIR and not STORE_IN_DB:
         redis4=Redis(db=CHECK_REDIS_PAIR)
         pairs = [x.decode() for x in redis4.conn.smembers(f'{INTERVAL}:{DIRECTION}')]
         del redis4
