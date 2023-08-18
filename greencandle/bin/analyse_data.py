@@ -17,6 +17,7 @@ import setproctitle
 from str2bool import str2bool
 from greencandle.lib import config
 from greencandle.lib.redis_conn import Redis
+from greencandle.lib.mysql import Mysql
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.common import get_tv_link, arg_decorator, convert_to_seconds
@@ -56,9 +57,15 @@ def analyse_loop():
 
     LOGGER.debug("Start of current loop")
     redis = Redis()
-    if CHECK_REDIS_PAIR and not STORE_IN_DB:
+    if CHECK_REDIS_PAIR:
         redis4=Redis(db=CHECK_REDIS_PAIR)
-        pairs = [x.decode() for x in redis4.conn.smembers(f'{INTERVAL}:{DIRECTION}')]
+        redis_pairs = [x.decode() for x in redis4.conn.smembers(f'{INTERVAL}:{DIRECTION}')]
+        dbase = Mysql(interval=INTERVAL)
+        open_pairs = [pair[0] for pair in
+                      dbase.fetch_sql_data('select pair from trades where `interval`="{INTERVAL}" '
+                                           'and name="{config.main.name}" and close_price is null'
+                                           , header=False)]
+        pairs = redis_pairs + open_pairs
         del redis4
     else:
         pairs = PAIRS
