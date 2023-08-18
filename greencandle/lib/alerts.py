@@ -46,11 +46,13 @@ def send_slack_message(channel, message, emoji=None, icon=None, name=None):
     """
     Send notification using slack api
     """
+    if not config.slack[channel]:
+        return
+    if not str2bool(config.slack.slack_active):
+        return
     if not icon:
         icon = f":{config.main.trade_direction}:" if emoji else ":robot_face:"
 
-    if not str2bool(config.slack.slack_active):
-        return
     name = name if name else config.main.name
     payload = {"username": name,
                "icon_emoji": icon,
