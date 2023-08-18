@@ -1,4 +1,4 @@
 {
   "open_rule1": "res[1].HA_close \u003c res[1].HA_open",
-  "close_rule1": "res[0].HA_close \u003e res[0].HA_open"
+  "close_rule1": "res[0].bbperc_200 \u003c -2"
 }
