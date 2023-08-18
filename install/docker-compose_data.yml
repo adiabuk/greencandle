@@ -1872,7 +1872,6 @@ services:
       - CONFIG_ENV=data/be/long/long4/1m
       - ROUTER_FORWARD=True
       - CHECK_REDIS_PAIR=5
-      - STORE_IN_DB=True
       - DB=true
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -1911,7 +1910,6 @@ services:
       - ROUTER_FORWARD=True
       - CONFIG_ENV=data/be/long/long4/5m
       - DB=true
-      - STORE_IN_DB=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -1948,7 +1946,6 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/long/long4/1h
       - DB=true
-      - STORE_IN_DB=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -1985,7 +1982,6 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/long/long4/4h
       - DB=true
-      - STORE_IN_DB=True
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -2022,7 +2018,6 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/long/long4/12h
       - DB=true
-      - STORE_IN_DB=True
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -2060,7 +2055,6 @@ services:
       - ROUTER_FORWARD=True
       - CONFIG_ENV=data/be/short/short4/1m
       - DB=true
-      - STORE_IN_DB=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -2098,7 +2092,6 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/short/short4/5m
       - DB=true
-      - STORE_IN_DB=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -2135,7 +2128,6 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/short/short4/1h
       - DB=true
-      - STORE_IN_DB=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -2172,7 +2164,6 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/short/short4/4h
       - DB=true
-      - STORE_IN_DB=True
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -2209,7 +2200,6 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/short/short4/12h
       - DB=true
-      - STORE_IN_DB=True
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
