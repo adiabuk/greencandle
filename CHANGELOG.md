@@ -1,5 +1,26 @@
 # Releases
 
+# 6.26
+* use decorated func name for exception name in slack
+* don't run collect_pairs script in test or prod cron
+* close data short trades a little earlier by reducing bbperc value
+* add bbperc close rule
+* use open_pairs instead of all
+* modify bbperc/HA strategy and test tpsl
+* ensure alert don't go to default slack channel if empty
+* enable close trade notifs in data HA containers
+* start db with correct interval to ensure open|close of data trade notifs
+* increase cron mem limit
+* add 1 more open|close rule in data env
+* add and test close_rules in dev env
+* get net profit|perc from db for trade close notifs
+* separate out data=>prod routes to allow direction drain
+* download link for current data from dashboard as csv/excel
+* reduce no of HA flip notifs
+* combine data containers which don't use redis
+* log amount of slippage margin available on trade open
+* don't repay debts used for open trade
+
 # 6.25
 * forward single rule to prod
 * remove quotes from env vars in docker compose files
