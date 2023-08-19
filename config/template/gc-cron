@@ -47,7 +47,7 @@ BASH_ENV=/container.env
 @reboot /usr/local/bin/clear_redis 1 > /proc/1/fd/1 2>/proc/1/fd/2
 */5 * * * * /usr/local/bin/get_trade_status any > /proc/1/fd/1 2>/proc/1/fd/2
 03 * * * * /usr/local/bin/get_hour_profit > /proc/1/fd/1 2>/proc/1/fd/2
-15 * * * * /usr/local/bin/collect_pairs > /proc/1/fd/1 2>/proc/1/fd/2
+#15 * * * * /usr/local/bin/collect_pairs > /proc/1/fd/1 2>/proc/1/fd/2
 
 {{else if eq .base_env "data"}}
 @daily /usr/bin/find /data -type f -name ".*" -delete
