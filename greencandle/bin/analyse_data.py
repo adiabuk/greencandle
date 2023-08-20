@@ -62,8 +62,8 @@ def analyse_loop():
         redis_pairs = [x.decode() for x in redis4.conn.smembers(f'{INTERVAL}:{DIRECTION}')]
         dbase = Mysql(interval=INTERVAL)
         open_pairs = [pair[0] for pair in
-                      dbase.fetch_sql_data('select pair from trades where `interval`="{INTERVAL}" '
-                                           'and name="{config.main.name}" and close_price is null'
+                      dbase.fetch_sql_data(f'select pair from trades where `interval`="{INTERVAL}" '
+                                           f'and name="{config.main.name}" and close_price is null'
                                            , header=False)]
         pairs = redis_pairs + open_pairs
         del redis4
