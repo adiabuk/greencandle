@@ -2,12 +2,6 @@
 {
 "any-long": ["any-long"],
 "any-short": ["any-short"],
-"any2-long": ["any2-long"],
-"any2-short": ["any2-short"],
-"any2-long-short": ["any2-long", "any2-short"],
-"any2-4h-long": ["any2-4h-long"],
-"any2-4h-short": ["any2-4h-short"],
-"any2-4h-long-short": ["any2-4h-long", "any2-4h-short", "alert"],
 "any-long-short": ["any-long", "any-short"],
 
 "alert": ["alert"],
