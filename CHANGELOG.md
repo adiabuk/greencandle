@@ -1,5 +1,22 @@
 # Releases
 
+# 6.27
+* update prod tpsls
+* ensure logs have sufficient info to trace
+* reorganise slack notifs for test env
+* close trade if supertrend flips to opposite direction
+* wait for increasing candle size before opening trade
+* add one more item to loop through when fetching indicator/candles
+* filter out trade notifs
+* use 5m config from 1m test any3 strategy
+* reduce alarms
+* speed up deployments
+* allow trades with less volume for HA-flip
+* check both current and previous HA candles before flip
+* fix incorrect open rule will never fire
+* less noisy HA flip rules
+* fix trades not being closed due to undefined fstring
+
 # 6.26
 * use decorated func name for exception name in slack
 * don't run collect_pairs script in test or prod cron
