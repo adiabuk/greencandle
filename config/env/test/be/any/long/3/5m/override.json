@@ -1,10 +1,6 @@
 {
   "interval": "5m",
   "name": "test-be-api-any3-5m-cross",
-  "slack_alerts": "test",
-  "slack_balance": "test",
-  "slack_notifications": "test",
-  "slack_trades": "test",
   "trade_direction": "long",
   "take_profit_perc": "20",
   "stop_loss_perc": "10",
