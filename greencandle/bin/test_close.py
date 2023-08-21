@@ -44,8 +44,8 @@ def main():
         result = client.spot_order(symbol=pair, side=client.sell,
                                    quantity=get_step_precision(pair, base_in),
                                    order_type=client.market, test=True)
-        print("Testing {pair} from {name}, result: {str(result)}")
-        print("comparing amount with available balance...")
+        print(f"Testing {pair} from {name}, result: {str(result)}")
+        print(f"comparing amount with available balance...")
         try:
             if 'isolated' in name:
                 bal_amount = balances['isolated'][pair][get_base(pair)]
