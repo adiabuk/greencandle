@@ -480,8 +480,8 @@ class Trade():
                                          pair)
                     amt_str = get_step_precision(pair, quote2base(current_quote_bal, pair))
                 else:  # amount to borrow
-                    self.logger.info("Will attempt to borrow %s of %s for long. Balance: %s",
-                                     amount_to_borrow, quote, current_quote_bal)
+                    self.logger.info("Will attempt to borrow %s of %s for long pair %s Balance: %s",
+                                     amount_to_borrow, quote, pair, current_quote_bal)
 
                     amt_str = base_to_use
                     borrow_res = self.client.margin_borrow(
@@ -494,7 +494,7 @@ class Trade():
                                              amount_to_borrow, quote)
                         return False
 
-                    self.logger.info(borrow_res)
+                    self.logger.info("Borrow result for pair %s/long: %s", pair, borrow_res)
 
                 trade_result = self.client.margin_order(symbol=pair, side=self.client.buy,
                                                         quantity=amt_str,
@@ -505,9 +505,9 @@ class Trade():
                 if "msg" in trade_result:
                     self.logger.critical("Trade error-open %s %s: %s",
                                       self.config.main.trade_direction, pair, str(trade_result))
-                    self.logger.critical("Vars: base quantity:%s, quote_quantity: %s quote bal:%s, "
-                                      "quote_borrowed: %s", amt_str, quote_to_use,
-                                      current_quote_bal, amount_to_borrow)
+                    self.logger.critical("%s/long Vars: base quantity:%s, quote_quantity: %s "
+                                         "quote bal:%s, quote_borrowed: %s", pair, amt_str,
+                                         quote_to_use, current_quote_bal, amount_to_borrow)
                     return False
 
                 # override values from exchange if in prod
@@ -696,7 +696,8 @@ class Trade():
             for fill in trade_result['fills']:
                 prices.append(float(fill['price']))
             fill_price = sum(prices) / len(prices)
-            self.logger.info("Current price %s, Fill price: %s", current_price, fill_price)
+            self.logger.info("%s Current price %s, Fill price: %s",
+                             self.config.main.trade_direction, current_price, fill_price)
 
             return (fill_price,
                     trade_result['executedQty'],
@@ -849,8 +850,8 @@ class Trade():
             total_quote_amount = base2quote(total_base_amount, pair)
 
             base_not_to_use = (quote2base(total_quote_amount, pair)/100)*1+float(stop)
-            self.logger.info('Leaving %s perc of base margin aside (%s %s)',
-                             1+float(stop), base_not_to_use, get_base(pair))
+            self.logger.info('Leaving %s perc of base margin aside (%s %s) for pair %s',
+                             1+float(stop), base_not_to_use, get_base(pair), pair)
             self.logger.info("Opening margin short %s of %s with %s at %s",
                              total_base_amount, pair, total_quote_amount, current_price)
 
@@ -862,8 +863,8 @@ class Trade():
                     amt_str = current_base_bal
 
                 else:  # amount to borrow
-                    self.logger.info("Will attempt to borrow %s of %s. Balance: %s",
-                                     amount_to_borrow, base, total_base_amount)
+                    self.logger.info("Will attempt to borrow %s of %s for short pair %s "
+                                     "Balance: %s", amount_to_borrow, base, pair, total_base_amount)
                     amt_str = total_base_amount
                     borrow_res = self.client.margin_borrow(
                         symbol=pair, quantity=amount_to_borrow,
@@ -875,7 +876,7 @@ class Trade():
                                              amount_to_borrow, base)
                         return False
 
-                    self.logger.info(borrow_res)
+                    self.logger.info("Borrow result for pair %s/short: %s", pair, borrow_res)
 
                 trade_result = self.client.margin_order(symbol=pair, side=self.client.sell,
                                                         quantity=amt_str,
@@ -885,8 +886,8 @@ class Trade():
                 self.logger.info("%s open margin short result: %s", pair, trade_result)
                 if "msg" in trade_result:
                     self.logger.critical("Short Trade error-open %s: %s", pair, str(trade_result))
-                    self.logger.critical("Vars: quantity:%s, bal:%s, borrowed: %s",
-                                      amt_str, current_base_bal, amount_to_borrow)
+                    self.logger.critical("%s/short Vars: quantity:%s, bal:%s, borrowed: %s",
+                                      pair, amt_str, current_base_bal, amount_to_borrow)
                     return False
 
                 # override values from exchange if in prod
