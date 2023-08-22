@@ -1,5 +1,17 @@
 # Releases
 
+# 6.28
+* set default clack channel for data env
+* only repay as much as we can from avail bal
+* catch typeerror in supertrend
+* close data trade when we have a new open signal if checking redis and mysql
+* Forward 5m trades to prod env
+* remove STX data strategy
+* keep less backups
+* slim down stag env
+* fix test_close fstring
+* fix unicode in config
+
 # 6.27
 * update prod tpsls
 * ensure logs have sufficient info to trace
