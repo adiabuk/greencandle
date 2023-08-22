@@ -758,6 +758,7 @@ class Engine(dict):
             scheme["open_time"] = str(self.dataframes[pair].iloc[index]["openTime"])
         except TypeError:
             LOGGER.debug("Overall Exception getting supertrend seq: %s", index)
-
+            return
+            
         self.schemes.append(scheme)
         LOGGER.debug("Done Getting supertrend for %s - %s", pair, scheme['open_time'])
