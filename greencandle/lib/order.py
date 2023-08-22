@@ -1,6 +1,6 @@
 #pylint: disable=no-member,too-many-locals,too-many-lines,broad-except
 """
-Test Buy/Sell orders
+Buy/Sell orders
 """
 
 from collections import defaultdict
@@ -780,7 +780,8 @@ class Trade():
                     return False
 
                 actual_borrowed = self.get_borrowed(pair=pair, symbol=base)
-                borrowed = actual_borrowed if float(borrowed) > float(actual_borrowed) else borrowed
+                borrowed = float(actual_borrowed) if float(borrowed) > float(actual_borrowed) else \
+                    float(borrowed)
                 avail = self.get_avail_asset(base)
                 repay = borrowed if avail > borrowed else avail
 
@@ -1062,7 +1063,8 @@ class Trade():
                     self.logger.critical("Margin long Trade error-close %s: %s", pair, trade_result)
                     return False
                 actual_borrowed = self.get_borrowed(pair=pair, symbol=quote)
-                borrowed = actual_borrowed if float(borrowed) > float(actual_borrowed) else borrowed
+                borrowed = float(actual_borrowed) if float(borrowed) > float(actual_borrowed) else \
+                        float(borrowed)
 
                 avail = self.get_avail_asset(quote)
                 repay = borrowed if avail > borrowed else avail
