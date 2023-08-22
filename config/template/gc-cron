@@ -24,8 +24,8 @@ BASH_ENV=/container.env
 30 * * * * /usr/bin/find /data/graphs -type f -mtime +1 -delete > /proc/1/fd/1 2>/proc/1/fd/2
 #15 * * * * /usr/local/bin/collect_pairs > /proc/1/fd/1 2>/proc/1/fd/2
 @hourly /usr/local/bin/get_bnb > /proc/1/fd/1 2>/proc/1/fd/2
-@daily /usr/bin/find /data/mysql -name "*.gz" -mtime +3 -delete
-@daily /usr/bin/find /data/reports -name "*.xlsx" -mtime +3 -delete
+@daily /usr/bin/find /data/mysql -name "*.gz" -mtime +1 -delete
+@daily /usr/bin/find /data/reports -name "*.xlsx" -mtime +1 -delete
 
 {{else if eq .base_env "per" }}
 @reboot /usr/local/bin/clear_redis 1 > /proc/1/fd/1 2>/proc/1/fd/2
