@@ -63,9 +63,17 @@ def analyse_loop():
         dbase = Mysql(interval=INTERVAL)
         open_pairs = [pair[0] for pair in
                       dbase.fetch_sql_data(f'select pair from trades where `interval`="{INTERVAL}" '
-                                           f'and name="{config.main.name}" and close_price is null'
-                                           , header=False)]
-        pairs = redis_pairs + open_pairs
+                                           f'and name="{config.main.name}" and close_price is null',
+                                           header=False)]
+
+        pairs = list(set(redis_pairs + open_pairs))
+        common = list(set(redis_pairs).intersection(open_pairs))
+        for pair in common:
+            # close trade when so we can re-fire open signal
+            trade = Trade(interval=INTERVAL, test_trade=True, test_data=False, config=config)
+            details = [[pair, "2020-01-01 00:00:00", "1", "reopen", "0"]]
+            trade.close_trade(details)
+
         del redis4
     else:
         pairs = PAIRS
