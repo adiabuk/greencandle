@@ -743,17 +743,21 @@ class Engine(dict):
         _, timef = localconfig  # split tuple
         scheme = {}
         timeframe, multiplier = timef.split(',')
+
         supertrend2 = ta.supertrend(high=series.High.astype(float),
                                     low=series.Low.astype(float),
                                     close=series.Close.astype(float),
                                     multiplier=float(multiplier), length=float(timeframe))
         # -1 = downtrend - go short
         # 1 = uptrend - go long
-        scheme["data"] = (int(supertrend2[f'SUPERTd_{timeframe}_{multiplier}.0'].iloc[-1]),
-                          supertrend2[f'SUPERT_{timeframe}_{multiplier}.0'].iloc[-1])
-        scheme["symbol"] = pair
-        scheme["event"] = f"STX_{timeframe}"
-        scheme["open_time"] = str(self.dataframes[pair].iloc[index]["openTime"])
+        try:
+            scheme["data"] = (int(supertrend2[f'SUPERTd_{timeframe}_{multiplier}.0'].iloc[-1]),
+                              supertrend2[f'SUPERT_{timeframe}_{multiplier}.0'].iloc[-1])
+            scheme["symbol"] = pair
+            scheme["event"] = f"STX_{timeframe}"
+            scheme["open_time"] = str(self.dataframes[pair].iloc[index]["openTime"])
+        except TypeError:
+            LOGGER.debug("Overall Exception getting supertrend seq: %s", index)
 
         self.schemes.append(scheme)
         LOGGER.debug("Done Getting supertrend for %s - %s", pair, scheme['open_time'])
