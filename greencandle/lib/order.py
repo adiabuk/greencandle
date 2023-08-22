@@ -14,7 +14,8 @@ from greencandle.lib.auth import binance_auth
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.redis_conn import Redis
-from greencandle.lib.binance_accounts import get_binance_spot, base2quote, quote2base
+from greencandle.lib.binance_accounts import get_binance_spot, base2quote, quote2base, \
+        get_binance_isolated, get_binance_cross
 from greencandle.lib.balance_common import get_base, get_quote, get_step_precision
 from greencandle.lib.common import perc_diff, add_perc, sub_perc, AttributeDict, QUOTES
 from greencandle.lib.alerts import send_slack_trade, send_slack_message
@@ -270,6 +271,17 @@ class Trade():
             if details['assets'][0]['baseAsset']['asset'] == symbol:
                 return float(details['assets'][0]['baseAsset']['borrowed'])
         return 0
+
+    def get_avail_asset(self, symbol):
+        """
+        Get amount of available asset in wallet
+        Will check if we are isolated/cross environment
+        """
+        if str2bool(self.config.main.isolated):
+            bals = get_binance_isolated()['isolated']
+        else:
+            bals = get_binance_cross()['margin']
+        return float(bals[symbol])
 
     def get_balance_to_use(self, dbase, account=None, pair=None):
         """
@@ -769,12 +781,14 @@ class Trade():
 
                 actual_borrowed = self.get_borrowed(pair=pair, symbol=base)
                 borrowed = actual_borrowed if float(borrowed) > float(actual_borrowed) else borrowed
+                avail = self.get_avail_asset(base)
+                repay = borrowed if avail > borrowed else avail
 
                 if float(borrowed) > 0:
                     self.logger.info("Trying to repay: %s %s for pair short %s",
-                                     borrowed, base, pair)
+                                     repay, base, pair)
                     repay_result = self.client.margin_repay(
-                        symbol=pair, quantity=float(borrowed),
+                        symbol=pair, quantity=repay,
                         isolated=str2bool(self.config.main.isolated),
                         asset=base)
                     if repay_result and "msg" in repay_result:
@@ -1050,10 +1064,13 @@ class Trade():
                 actual_borrowed = self.get_borrowed(pair=pair, symbol=quote)
                 borrowed = actual_borrowed if float(borrowed) > float(actual_borrowed) else borrowed
 
+                avail = self.get_avail_asset(quote)
+                repay = borrowed if avail > borrowed else avail
+
                 if float(borrowed) > 0:
-                    self.logger.info("Trying to repay: %s %s for pair %s", borrowed, quote, pair)
+                    self.logger.info("Trying to repay: %s %s for pair %s", repay, quote, pair)
                     repay_result = self.client.margin_repay(
-                        symbol=pair, quantity=float(borrowed),
+                        symbol=pair, quantity=repay,
                         isolated=str2bool(self.config.main.isolated),
                         asset=quote)
                     if repay_result and "msg" in repay_result:
