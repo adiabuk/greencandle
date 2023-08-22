@@ -1,2 +1,5 @@
 {
+  "slack_alerts": "data",
+  "slack_balance": "data",
+  "slack_notifications": "data"
 }

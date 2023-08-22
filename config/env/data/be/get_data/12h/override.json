@@ -1,8 +1,5 @@
 {
   "check_interval": "*",
   "name": "data-be-get_12h",
-  "slack_alerts": "data_step2",
   "interval": "12h",
-  "slack_balance": "data_step2",
-  "slack_notifications": "data_step2"
 }
