@@ -783,6 +783,7 @@ services:
       - DB=true
       - REDIS_FORWARD=4,5
       - ROUTER_FORWARD=True
+      - NSCA=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -820,6 +821,7 @@ services:
       - DB=true
       - REDIS_FORWARD=4,5
       - ROUTER_FORWARD=True
+      - NSCA=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -1504,6 +1506,7 @@ services:
       - CHECK_REDIS_PAIR=5
       - STORE_IN_DB=True
       - DB=true
+      - NSCA=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -1691,6 +1694,7 @@ services:
       - CONFIG_ENV=data/be/short/short4/1m
       - DB=true
       - STORE_IN_DB=True
+      - NSCA=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h

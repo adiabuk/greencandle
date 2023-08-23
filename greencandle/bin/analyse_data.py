@@ -169,9 +169,9 @@ def analyse_pair(pair, redis):
 
             send_slack_message("notifications", msg, emoji=True,
                                icon=f':{INTERVAL}-{DIRECTION}:')
-
-            send_nsca(status=0, host_name='hp', service_name=config.main.name,
-                      text_output="OK", remote_host='10.8.0.1')
+            if 'NSCA' in os.environ:
+                send_nsca(status=0, host_name='hp', service_name=config.main.name,
+                          text_output="OK", remote_host='10.8.0.1')
 
             if DIRECTION == 'long' and result == 'OPEN':
                 action = 1
