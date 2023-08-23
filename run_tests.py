@@ -15,12 +15,11 @@ from greencandle.tests.__init__ import __all__
 from greencandle.tests import test_run1, test_run2, test_run3, test_mysql, test_lint, \
      test_scripts, test_docker_mysql, test_docker_redis, test_docker_api, test_docker_cron, \
      test_pairs, test_draw, test_stop, test_envs, test_assocs, test_config, test_borrowed, \
-     test_containers, test_indicators
+     test_containers, test_indicators, test_json
 
 # Tuple of tuples
 # (name, module)
 TESTS = __all__
-
 
 # Optional Tests - only run with the --run-optional flag
 OPT_TESTS = [
