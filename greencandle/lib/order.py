@@ -281,7 +281,7 @@ class Trade():
             bals = get_binance_isolated()['isolated']
         else:
             bals = get_binance_cross()['margin']
-        return float(bals[symbol]['count'])
+        return float(bals[symbol]['gross_count'])
 
     def get_balance_to_use(self, dbase, account=None, pair=None):
         """
