@@ -15,6 +15,7 @@ from pathlib import Path
 import requests
 import setproctitle
 from str2bool import str2bool
+from send_nsca3 import send_nsca
 from greencandle.lib import config
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.mysql import Mysql
@@ -168,6 +169,10 @@ def analyse_pair(pair, redis):
 
             send_slack_message("notifications", msg, emoji=True,
                                icon=f':{INTERVAL}-{DIRECTION}:')
+
+            send_nsca(status=0, host_name='hp', service_name=config.main.name,
+                      text_output="OK", remote_host='10.8.0.1')
+
             if DIRECTION == 'long' and result == 'OPEN':
                 action = 1
             elif DIRECTION == 'short' and result == 'OPEN':
