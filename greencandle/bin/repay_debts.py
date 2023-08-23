@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-member
+#pylint: disable=no-member,too-many-branches,too-many-locals
 """
 Look for cross balances which can be paid off
 """

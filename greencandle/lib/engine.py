@@ -759,6 +759,6 @@ class Engine(dict):
         except TypeError:
             LOGGER.debug("Overall Exception getting supertrend seq: %s", index)
             return
-            
+
         self.schemes.append(scheme)
         LOGGER.debug("Done Getting supertrend for %s - %s", pair, scheme['open_time'])
