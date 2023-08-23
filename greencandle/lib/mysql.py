@@ -326,7 +326,7 @@ class Mysql():
         """
         command = ('select sum(usd_profit), sum(usd_net_profit), avg(perc), '
                    'avg(net_perc), sum(perc), sum(net_perc), count(*) '
-                   'from profit where date(open_time) = date(NOW())')
+                   'from profit where date(close_time) = date(NOW())')
         row = self.fetch_sql_data(command, header=False)
         return row[0] if row else [None] * 7
 
