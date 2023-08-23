@@ -1,5 +1,8 @@
 # Releases
 
+# 5.28.2
+* Lint rules
+
 # 6.28.1
 * allow running repay debts script with list arg display actions without executing repayments
 * get gross balance from exchange (inc loan) in order to calc repayment and use to repay
