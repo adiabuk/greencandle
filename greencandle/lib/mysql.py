@@ -314,7 +314,7 @@ class Mysql():
                       where id = "{trade_id}"
                    """
 
-        result = self.__run_sql_query(command)
+        self.__run_sql_query(command)
 
         return trade_id
 
