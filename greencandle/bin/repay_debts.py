@@ -22,11 +22,17 @@ def main():
     logger = get_logger("repay_loan")
     client = binance_auth()
     cross_details = client.get_cross_margin_details()
-
+    list_only = False
+    asset_filter = ''
     if len(sys.argv) > 1:
-        # filter list of assets to that containing string argument
-        cross_details['userAssets'] = [x for x in cross_details['userAssets']
-                                       if x['asset'] == sys.argv[1]]
+        if 'list' in sys.argv[1]:
+            list_only = True
+        else:
+            asset_filter = sys.argv[1]
+
+    # filter list of assets to that containing string argument
+    cross_details['userAssets'] = [x for x in cross_details['userAssets']
+                                   if asset_filter in x['asset']]
     dbase = Mysql()
 
     bases = [get_base(x[0]) for x in dbase.fetch_sql_data("select pair from open_trades",
@@ -45,9 +51,10 @@ def main():
                 logger.info("Skipping %s due to open trade", symbol)
             else:
                 logger.info("Attempting to pay off Cross %s of %s", to_pay, symbol)
-                result = client.margin_repay(symbol=symbol, asset=symbol,
-                                             quantity=to_pay, isolated=False)
-                logger.info("Repay result for %s: %s", symbol, result)
+                if not list_only:
+                    result = client.margin_repay(symbol=symbol, asset=symbol,
+                                                 quantity=to_pay, isolated=False)
+                    logger.info("Repay result for %s: %s", symbol, result)
 
     isolated_details = client.get_isolated_margin_details()
     for item in isolated_details['assets']:
