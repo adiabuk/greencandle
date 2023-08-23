@@ -15,6 +15,27 @@ config.create_config()
 BITCOIN = {}
 LOGGER = get_logger(__name__)
 
+def get_cross_margin_level():
+    """
+    Calculate cross margin risk level
+    risk = total_assets / total_debts
+    """
+    client = binance_auth()
+
+    total_free = 0
+    total_debt = 0
+    details = client.get_cross_margin_details()
+    prices = client.prices()
+    for item in details['userAssets']:
+        asset = item['asset']
+        debt = float(item['borrowed']) + float(item['interest'])
+        usd_debt = base2quote(debt, asset+'USDT', prices) if 'USD' not in asset else debt
+        free = item['free']
+        usd_free = base2quote(free, asset+'USDT', prices) if 'USD' not in asset else free
+        total_free += float(usd_free)
+        total_debt += float(usd_debt)
+    return total_free / total_debt
+
 def quote2base(amount, pair, prices=None):
     """
     convert quote amount to base amount
@@ -103,7 +124,7 @@ def get_binance_isolated():
             result["isolated"][key]["GBP"] = gbp
             result["isolated"][key]["count"] = val[current_quote]
             result["isolated"][key][quote] = amount
-    # FIXME - needs to include gross amount for each asset
+
     result["isolated"]["TOTALS"]["BTC"] = bitcoin_total
     result["isolated"]["TOTALS"]["USD"] = usd_total
     result["isolated"]["TOTALS"]["count"] = "N/A"
@@ -133,11 +154,9 @@ def get_binance_cross():
     for key in all_balances:
         LOGGER.debug('%s %s ', str(key), str(all_balances[key]["net"]))
         current_value = float(all_balances[key]["net"])
-        current_gross = float(all_balances[key]["gross"])
 
         if float(current_value) != 0:  # available currency
             result["margin"][key]["count"] = current_value
-            result["margin"][key]["gross_count"] = current_gross
 
             if key == "BTC":
                 bcoin = float(current_value)
