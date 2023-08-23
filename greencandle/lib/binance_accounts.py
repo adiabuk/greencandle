@@ -103,7 +103,7 @@ def get_binance_isolated():
             result["isolated"][key]["GBP"] = gbp
             result["isolated"][key]["count"] = val[current_quote]
             result["isolated"][key][quote] = amount
-
+    # FIXME - needs to include gross amount for each asset
     result["isolated"]["TOTALS"]["BTC"] = bitcoin_total
     result["isolated"]["TOTALS"]["USD"] = usd_total
     result["isolated"]["TOTALS"]["count"] = "N/A"
@@ -133,9 +133,11 @@ def get_binance_cross():
     for key in all_balances:
         LOGGER.debug('%s %s ', str(key), str(all_balances[key]["net"]))
         current_value = float(all_balances[key]["net"])
+        current_gross = float(all_balances[key]["gross"])
 
         if float(current_value) != 0:  # available currency
             result["margin"][key]["count"] = current_value
+            result["margin"][key]["gross_count"] = current_gross
 
             if key == "BTC":
                 bcoin = float(current_value)

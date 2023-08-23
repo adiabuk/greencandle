@@ -123,6 +123,7 @@ class Binance():
         data = self.signed_request("GET", "/sapi/v1/margin/account", {'recvWindow': 60000})
 
         return {d["asset"]: {
+            "gross": d["free"],
             "net": d["netAsset"]
             } for d in data.get("userAssets", [])}
 
@@ -136,8 +137,8 @@ class Binance():
                 data.get('assets', {})}
 
     def isolated_balances(self):
-        """Get current net balances for alsymbols in margin account"""
-
+        """Get current net balances for all symbols in margin account"""
+        # FIXME - needs to include gross amount for each asset
         data = self.signed_request("GET", "/sapi/v1/margin/isolated/account", {'recvWindow': 60000})
 
         return {d['symbol']: {d['quoteAsset']['asset']: d['quoteAsset']['netAsset'],
