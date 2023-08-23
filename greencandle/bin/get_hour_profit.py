@@ -27,7 +27,7 @@ def main():
     todays_usd, todays_net_usd, todays_avg, todays_net_avg, todays_total, todays_net_total, \
     num_day = mysql.get_todays_profit()
 
-    if avg_perc:
+    if total_perc and todays_total:
         message = (f"Profit for Hour {hour}\n"
                    f"Total perc: {total_perc:.2f}% ({total_net_perc:.2f}%) ~{num_hour} trades\n"
                    f"Average perc: {avg_perc:.2f}% ({avg_net_perc:.2f}%)\n"
