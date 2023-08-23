@@ -1,5 +1,11 @@
 # Releases
 
+# 6.28.1
+* allow running repay debts script with list arg display actions without executing repayments
+* get gross balance from exchange (inc loan) in order to calc repayment and use to repay
+* ensure both hourly and daily queries return data in cron script
+* fix json syntax in data env/get_data containers
+
 # 6.28
 * set default clack channel for data env
 * only repay as much as we can from avail bal
