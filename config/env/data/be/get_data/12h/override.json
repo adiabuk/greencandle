@@ -1,5 +1,5 @@
 {
   "check_interval": "*",
   "name": "data-be-get_12h",
-  "interval": "12h",
+  "interval": "12h"
 }

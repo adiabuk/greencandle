@@ -1,5 +1,5 @@
 {
   "check_interval": "*",
   "name": "data-be-get_4h",
-  "interval": "4h",
+  "interval": "4h"
 }
