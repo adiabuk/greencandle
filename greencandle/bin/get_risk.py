@@ -19,7 +19,8 @@ def main():
         status = 3
         msg = "UNKNOWN"
         value = "unknown"
-    if value > 2:
+
+    if value > 2.5:
         status = 0
         msg = "OK"
     elif value < 2.5:
@@ -33,7 +34,7 @@ def main():
         msg = "UNKNOWN"
 
     send_nsca(status=status, host_name='hp', service_name='cross_margin_risk',
-              text_output=f'{msg} risk value is {value}', remote_host='10.8.0.1')
+              text_output=f'{msg} risk value is {round(value,2)}', remote_host='10.8.0.1')
 
     print(value)
 
