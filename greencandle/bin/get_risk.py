@@ -19,7 +19,7 @@ def main():
         status = 3
         msg = "UNKNOWN"
         value = "unknown"
-    if value < 2:
+    if value > 2:
         status = 0
         msg = "OK"
     elif value < 2.5:
