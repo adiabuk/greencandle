@@ -20,13 +20,13 @@ def main():
         msg = "UNKNOWN"
         value = "unknown"
 
-    if value > 2.5:
+    if value > 2:
         status = 0
         msg = "OK"
-    elif value < 2.5:
+    elif value < 2:
         status = 1
         msg = "WARNING"
-    elif value < 2:
+    elif value < 1.5:
         status = 2
         msg = "CRITICAL"
     else:
