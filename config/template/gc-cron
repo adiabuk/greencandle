@@ -11,7 +11,7 @@ BASH_ENV=/container.env
 
 {{if eq .base_env "prod" }}
 @reboot /usr/local/bin/clear_redis 1 > /proc/1/fd/1 2>/proc/1/fd/2
-*/5 /usr/local/bin/get_risk > /proc/1/fd/1 2>/proc/1/fd/2
+*/3 * * * * /usr/local/bin/get_risk > /proc/1/fd/1 2>/proc/1/fd/2
 32 * * * * /usr/local/bin/write_balance > /proc/1/fd/1 2>/proc/1/fd/2
 33 * * * * /usr/local/bin/get_quote_balance > /proc/1/fd/1 2>/proc/1/fd/2
 */4 * * * * /usr/local/bin/get_trade_status > /proc/1/fd/1 2>/proc/1/fd/2
