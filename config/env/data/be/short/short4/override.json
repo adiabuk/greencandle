@@ -1,5 +1,5 @@
 {
   "open_rule1": "res[0].HA_close \u003c res[0].HA_open and res[1].HA_close \u003c res[1].HA_open",
-  "close_rule1": "res[0].bbperc_200 \u003c -1.8",
+  "close_rule1": "res[0].bbperc_200 \u003c -1.8 and res[0].close \u003c res[0].bb_200[2]",
   "close_rule2": "agg.STX_diff \u003c 0"
 }
