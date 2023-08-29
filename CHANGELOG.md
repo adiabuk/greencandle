@@ -1,5 +1,24 @@
 # Releases
 
+# 5.29
+* don't fail api healthcheck if too many procs due to rq fork
+* add week commencing to profit weekly view
+* open open trades summary view
+* fix test env healthcheck intervals
+* add API healthcheck script for backend api & rq procs in all envs
+* add VPN_IP to all dashboard containers to allow trade status script to run from UI
+* add risk/repay debt scripts to dashboard
+* add new daily profit view and daily breakdown by open/close
+* add gross value to cross balance dict to allow prod trades to auto close/repay
+* wait for close to cross bb before sending close signal from data env
+* clear all debts not in trade every 10mins
+* get cross margin risk and push to nagios with performance data for graphing
+* wait for an extra HA candle before sending open trade
+* only send nagios data trade alert in selected containers
+* send data trade alerts to nagios
+* test json config integrity during build
+* catch exception when we don't have a balance for given asset
+
 # 5.28.2
 * Lint rules
 
