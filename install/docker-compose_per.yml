@@ -262,6 +262,7 @@ services:
     container_name: per-fe-api-dashboard
     hostname: per-fe-api-dashboard
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=per/fe/api
       - DB=true
       - SECRET_KEY=$SECRET_KEY

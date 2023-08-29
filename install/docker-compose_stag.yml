@@ -101,6 +101,7 @@ services:
     container_name: stag-fe-api-dashboard
     hostname: stag-fe-api-dashboard
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=stag/fe/api
       - DB=true
       - SECRET_KEY=$SECRET_KEY

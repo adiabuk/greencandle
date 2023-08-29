@@ -261,6 +261,7 @@ services:
     container_name: prod-fe-api-dashboard
     hostname: prod-fe-api-dashboard
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=prod/fe/api
       - DB=true
       - SECRET_KEY=$SECRET_KEY

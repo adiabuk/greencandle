@@ -125,6 +125,7 @@ services:
     container_name: test-fe-api-dashboard
     hostname: test-fe-api-dashboard
     environment:
+      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/fe/api
       - DB=true
       - SECRET_KEY=$SECRET_KEY
