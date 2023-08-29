@@ -30,7 +30,7 @@ LOAD_USER = LOGIN_MANAGER.user_loader(load_user)
 LOGIN = APP.route("/login", methods=["GET", "POST"])(loginx)
 LOGIN = APP.route("/logout", methods=["GET", "POST"])(logoutx)
 
-SCRIPTS = ["write_balance", "get_quote_balance", "repay_debts", "get_trade_status",
+SCRIPTS = ["write_balance", "get_quote_balance", "repay_debts", "get_risk", "get_trade_status",
            "get_hour_profit", "repay_debts", "balance_graph", "test_close", "close_all"]
 
 def get_pairs(env=config.main.base_env):
