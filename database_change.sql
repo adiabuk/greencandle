@@ -54,3 +54,36 @@ sum(
   ELSE
    0
   END) / count(0) * 100 AS `net_perc_profitable` from open_trades;
+
+
+drop function if exists FIRST_DAY_OF_WEEK;
+DELIMITER ;;
+CREATE FUNCTION FIRST_DAY_OF_WEEK(day DATE)
+RETURNS DATE DETERMINISTIC
+BEGIN
+  RETURN SUBDATE(day, WEEKDAY(day));
+END;;
+DELIMITER ;
+
+DROP VIEW IF EXISTS profit_weekly;
+create view profit_weekly as
+SELECT
+ concat(year(`profit`.`close_time`), '/', week(`profit`.`close_time`)) AS `week_no`,
+ FIRST_DAY_OF_WEEK(date(close_time)) as week_commencing,
+ count(0) AS count,
+ sum(`profit`.`usd_profit`) AS `usd_profit`,
+ sum(`profit`.`usd_net_profit`) AS `usd_net_profit`,
+ sum(`profit`.`perc`) AS `perc`,
+ sum(`profit`.`net_perc`) AS `net_perc`
+FROM
+ `greencandle`.`profit`
+WHERE
+ week(`profit`.`close_time`) IS NOT NULL
+GROUP BY
+ concat(year(`profit`.`close_time`), '/', week(`profit`.`close_time`))
+ORDER BY
+ year(`profit`.`close_time`)
+ DESC,
+ week(`profit`.`close_time`)
+ DESC;
+
