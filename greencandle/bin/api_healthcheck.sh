@@ -10,7 +10,7 @@ if [[ "$count" < 2 ]]; then
     exit 1
 elif [[ "$count" > 2 ]]; then
     echo "too many procs: $count"
-    exit 1
+    exit 0  # don't fail due to rq fork
 elif [[ "$count" == 2 ]]; then
     echo "OK: $count"
     exit 0
