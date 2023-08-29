@@ -286,7 +286,6 @@ class Trade():
         except KeyError:
             return 0
 
-
     def get_balance_to_use(self, dbase, account=None, pair=None):
         """
         Choose between spot/cross/isolated/test balances
@@ -789,7 +788,7 @@ class Trade():
                 avail = self.get_avail_asset(base)
                 repay = borrowed if avail > borrowed else avail
 
-                if float(borrowed) > 0:
+                if float(repay) > 0:
                     self.logger.info("Trying to repay: %s %s for pair short %s",
                                      repay, base, pair)
                     repay_result = self.client.margin_repay(
@@ -1073,7 +1072,7 @@ class Trade():
                 avail = self.get_avail_asset(quote)
                 repay = borrowed if avail > borrowed else avail
 
-                if float(borrowed) > 0:
+                if float(repay) > 0:
                     self.logger.info("Trying to repay: %s %s for pair %s", repay, quote, pair)
                     repay_result = self.client.margin_repay(
                         symbol=pair, quantity=repay,
