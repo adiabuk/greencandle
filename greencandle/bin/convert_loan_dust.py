@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#pylint:disable=too-many-locals
 """
 Find pairs with small loans and no open trades to convert to USDT
 """
