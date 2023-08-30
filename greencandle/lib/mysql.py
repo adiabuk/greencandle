@@ -9,6 +9,7 @@ from greencandle.lib.binance import Binance
 from greencandle.lib import config
 from greencandle.lib.binance_common import get_current_price
 from greencandle.lib.common import AttributeDict, format_usd
+from greencandle.lib.balance_common import get_base, get_quote
 from greencandle.lib.logger import get_logger, exception_catcher
 
 class Mysql():
@@ -413,7 +414,7 @@ class Mysql():
         return rows if rows else ()
 
     @get_exceptions
-    def get_main_open_assets():
+    def get_main_open_assets(self):
         """
         get unique set of assets from open trade pairs which are likely
         to a loan against them depending on trade direction
