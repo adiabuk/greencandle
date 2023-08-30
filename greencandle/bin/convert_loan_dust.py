@@ -18,7 +18,7 @@ def main():
     dbase = Mysql()
     client = binance_auth()
     borrowed_set = get_cross_assets_with_loan()
-    open_set = dbase.get_main_open_assets
+    open_set = dbase.get_main_open_assets()
     # get assets with loan which are not in a trade
     main_set = set(borrowed_set - open_set)
 
