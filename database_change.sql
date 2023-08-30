@@ -1,8 +1,7 @@
 # 6.30
 
 # add new commision table
-drop table if exists commission_paid;
-CREATE TABLE `commission_paid` (
+CREATE TABLE IF NOT EXISTS `commission_paid` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `date` datetime DEFAULT current_timestamp(),
   `asset` varchar(30) DEFAULT NULL,
