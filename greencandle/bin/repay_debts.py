@@ -21,9 +21,9 @@ def main():
 
     usage: repay_debts borrowed|interest [--list]
     """
-    logger = get_logger("repay_debts")
     client = binance_auth()
     debt_type = sys.argv[1]
+    logger = get_logger(f"repay_debts_{debt_type}")
     debt_assets = get_cross_assets_with_debt(debt_type=debt_type, amount=True)
 
     list_only = bool('--list' in sys.argv)
