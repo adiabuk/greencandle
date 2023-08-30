@@ -27,6 +27,7 @@ BASH_ENV=/container.env
 @hourly /usr/local/bin/get_bnb > /proc/1/fd/1 2>/proc/1/fd/2
 @daily /usr/bin/find /data/mysql -name "*.gz" -mtime +1 -delete
 @daily /usr/bin/find /data/reports -name "*.xlsx" -mtime +1 -delete
+* */7 * * * /usr/local/bin/convert_loan_dust > /proc/1/fd/1 2>/proc/1/fd/2
 
 {{else if eq .base_env "per" }}
 @reboot /usr/local/bin/clear_redis 1 > /proc/1/fd/1 2>/proc/1/fd/2
@@ -36,7 +37,6 @@ BASH_ENV=/container.env
 0 * * * * /usr/local/bin/send_docker_alerts
 21 00 * * * /usr/local/bin/balance_graph > /proc/1/fd/1 2>/proc/1/fd/2
 30 * * * * /usr/bin/find /data/graphs -type f -mtime +1 -delete > /proc/1/fd/1 2>/proc/1/fd/2
-* */6 * * * /usr/local/bin/convert_loan_dust > /proc/1/fd/1 2>/proc/1/fd/2
 
 {{else if eq .base_env "stag" }}
 @reboot /usr/local/bin/clear_redis 1 > /proc/1/fd/1 2>/proc/1/fd/2
