@@ -1,4 +1,4 @@
-#pylint: disable=no-member,too-many-statements
+#pylint: disable=no-member,too-many-statements,too-many-locals
 
 """
 Get/Convert Balances from Binance
@@ -15,7 +15,7 @@ config.create_config()
 BITCOIN = {}
 LOGGER = get_logger(__name__)
 
-def get_cross_assets_with_debt(type='borrowed'):
+def get_cross_assets_with_debt(debt_type='borrowed', amount=False):
     """
     get unique set of assets which have a loan against them
     """
@@ -25,8 +25,11 @@ def get_cross_assets_with_debt(type='borrowed'):
 
     # get unique set of assets which have a loan against tem
     for item in cross_details['userAssets']:
-        if float(item[type]) > 0:
-            borrowed_set.add(item['asset'])
+        if float(item[debt_type]) > 0:
+            if amount:
+                borrowed_set.add((item['asset'], float(item[debt_type])))
+            else:
+                borrowed_set.add(item['asset'])
     return borrowed_set
 
 def get_cross_margin_level():
