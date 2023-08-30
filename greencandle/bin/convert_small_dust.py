@@ -18,7 +18,7 @@ def main():
     dbase = Mysql()
     client = binance_auth()
     dust_set = client.get_dustable_set()
-    open_set = dbase.get_main_open_assets
+    open_set = dbase.get_main_open_assets()
 
     # get dust assets which are not in a trade
     main_list = list(set(dust_set - open_set))
