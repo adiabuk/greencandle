@@ -9,7 +9,7 @@ from greencandle.lib.auth import binance_auth
 from greencandle.lib.logger import get_logger
 from greencandle.lib.common import arg_decorator
 from greencandle.lib.mysql import Mysql
-from greencandle.lib.balance_common import get_base
+from greencandle.lib.binance_accounts import get_cross_assets_with_debt, usd2gbp, base2quote
 
 @arg_decorator
 def main():
@@ -18,61 +18,45 @@ def main():
     and if free balance is available for that asset attempt to pay
     off as much as possible
     Run from cron periodically in given environment
+
+    usage: repay_debts borrowed|interest [--list]
     """
-    logger = get_logger("repay_loan")
+    logger = get_logger("repay_debts")
     client = binance_auth()
-    cross_details = client.get_cross_margin_details()
-    list_only = False
-    asset_filter = ''
-    if len(sys.argv) > 1:
-        if 'list' in sys.argv[1]:
-            list_only = True
-        else:
-            asset_filter = sys.argv[1]
+    debt_type = sys.argv[1]
+    debt_assets = get_cross_assets_with_debt(debt_type=debt_type, amount=True)
 
-    # filter list of assets to that containing string argument
-    cross_details['userAssets'] = [x for x in cross_details['userAssets']
-                                   if asset_filter in x['asset']]
+    list_only = bool('--list' in sys.argv)
+
     dbase = Mysql()
+    open_set = dbase.get_main_open_assets()
+    prices = client.prices() if debt_type == 'interest' else None
 
-    bases = [get_base(x[0]) for x in dbase.fetch_sql_data("select pair from open_trades",
-                                                          header=False)]
-    for item in cross_details['userAssets']:
-        symbol = item['asset']
-        borrowed = float(item['borrowed'])
-        interest = float(item['interest'])
-        free = float(item['free'])
-        owed = borrowed + interest
-        if owed > 0 and free > 0:
-            to_pay = owed if owed <= free else free
-            if to_pay == 0:
+    logger.info("%s items with debts", len(debt_assets))
+    for asset, debt, free in debt_assets:
+
+        if debt > 0 and free > 0:
+            to_pay = min(debt, free)
+            if to_pay <= 0:
+                logger.info("Skipping %s due to insuficent funds", asset)
                 continue
-            if symbol in bases:
-                logger.info("Skipping %s due to open trade", symbol)
+            if asset in open_set:
+                logger.info("Skipping %s due to open trade", asset)
             else:
-                logger.info("Attempting to pay off Cross %s of %s", to_pay, symbol)
+                logger.info("Attempting to pay off Cross %s of %s", to_pay, debt)
                 if not list_only:
-                    result = client.margin_repay(symbol=symbol, asset=symbol,
+                    result = client.margin_repay(symbol=asset, asset=asset,
                                                  quantity=to_pay, isolated=False)
-                    logger.info("Repay result for %s: %s", symbol, result)
+                    if debt_type == 'interest':
+                        usd = to_pay if 'USD' in asset else base2quote(to_pay, asset+'USDT',
+                                                                           prices=prices)
+                        gbp = usd2gbp(prices) * usd
+                        dbase.add_commission_payment(asset=asset,
+                                                     asset_amt=to_pay,
+                                                     usd_amt=usd,
+                                                     gbp_amt=gbp)
 
-    isolated_details = client.get_isolated_margin_details()
-    for item in isolated_details['assets']:
-        symbol = item['symbol']
-        for side in ["quoteAsset", "baseAsset"]:
-            borrowed = float(item[side]['borrowed'])
-            free = float(item[side]['free'])
-            asset = item[side]['asset']
-            if borrowed > 0 and free > 0:
-                to_pay = borrowed if borrowed < free else free
-                if to_pay == 0:
-                    continue
-                logger.info("Attempting to pay off Isolated %s of %s %s", to_pay, asset, symbol)
-                result = client.margin_repay(symbol=symbol,
-                                             asset=asset,
-                                             quantity=to_pay,
-                                             isolated=True)
-                logger.info("Repay result for %s %s: %s", symbol, asset, result)
+                    logger.info("Repay result for %s: %s", asset, result)
 
 if __name__ == '__main__':
     main()

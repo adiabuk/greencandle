@@ -18,6 +18,12 @@ LOGGER = get_logger(__name__)
 def get_cross_assets_with_debt(debt_type='borrowed', amount=False):
     """
     get unique set of assets which have a loan against them
+    Input: debt_type: borrowed|interest
+           amount: True|False
+    Output: if amount==True: string asset
+            if amount==False: tupple (string asset,
+                                      float borrowed|interest,
+                                      float free)
     """
     client = binance_auth()
     cross_details = client.get_cross_margin_details()
@@ -27,7 +33,9 @@ def get_cross_assets_with_debt(debt_type='borrowed', amount=False):
     for item in cross_details['userAssets']:
         if float(item[debt_type]) > 0:
             if amount:
-                borrowed_set.add((item['asset'], float(item[debt_type])))
+                borrowed_set.add((item['asset'],
+                                  float(item[debt_type]),
+                                  float(item['free'])))
             else:
                 borrowed_set.add(item['asset'])
     return borrowed_set
