@@ -29,6 +29,7 @@ BASH_ENV=/container.env
 @daily /usr/bin/find /data/mysql -name "*.gz" -mtime +1 -delete
 @daily /usr/bin/find /data/reports -name "*.xlsx" -mtime +1 -delete
 * */7 * * * /usr/local/bin/convert_loan_dust > /proc/1/fd/1 2>/proc/1/fd/2
+* */7 * * * /usr/local/bin/convert_small_dust > /proc/1/fd/1 2>/proc/1/fd/2
 
 {{else if eq .base_env "per" }}
 @reboot /usr/local/bin/clear_redis 1 > /proc/1/fd/1 2>/proc/1/fd/2
