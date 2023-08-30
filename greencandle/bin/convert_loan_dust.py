@@ -5,7 +5,7 @@ Find pairs with small loans and no open trades to convert to USDT
 
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.mysql import Mysql
-from greencandle.lib.binance_accounts import get_cross_assets_with_loan
+from greencandle.lib.binance_accounts import get_cross_assets_with_debt
 from greencandle.lib.common import arg_decorator
 
 
@@ -17,7 +17,7 @@ def main():
 
     dbase = Mysql()
     client = binance_auth()
-    borrowed_set = get_cross_assets_with_loan()
+    borrowed_set = get_cross_assets_with_debt(type='borrowed')
     open_set = dbase.get_main_open_assets()
     # get assets with loan which are not in a trade
     main_set = set(borrowed_set - open_set)
