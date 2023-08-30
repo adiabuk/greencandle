@@ -43,7 +43,7 @@ def main():
             if asset in open_set:
                 logger.info("Skipping %s due to open trade", asset)
             else:
-                logger.info("Attempting to pay off Cross %s of %s", to_pay, debt)
+                logger.info("Attempting to pay off Cross %s of %s", to_pay, asset)
                 if not list_only:
                     result = client.margin_repay(symbol=asset, asset=asset,
                                                  quantity=to_pay, isolated=False)
