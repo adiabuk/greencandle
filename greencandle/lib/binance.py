@@ -397,6 +397,14 @@ class Binance():
         data = self.signed_request("GET", "/api/v3/allOrders", params)
         return data
 
+    def get_dustable_set(self):
+        """
+        get set of small loan assets capable of being converted to USDT loans
+        """
+        data = self.signed_request("GET", "/sapi/v1/margin/dust",
+                params={})
+        return set(x['asset'] for x in data['details'])
+
     def get_small_liability_set(self):
         """
         get set of small loan assets capable of being converted to USDT loans
@@ -413,6 +421,16 @@ class Binance():
         data = self.signed_request("POST", "/sapi/v1/margin/exchange-small-liability",
                 params={'assetNames':','.join(asset_list)})
         return data
+
+    def small_dust_exchange(self, asset_list):
+        """
+        Convert small given assets to BNB
+        Max 10 in asset list, 3 times every 6 hours
+        """
+        data = self.signed_request("POST", "/sapi/v1/margin/dust",
+                params={'assetNames':','.join(asset_list)})
+        return data
+
 
 
     def my_trades(self, symbol, **kwargs):
