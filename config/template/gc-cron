@@ -45,7 +45,7 @@ BASH_ENV=/container.env
 */6 * * * * /usr/local/bin/get_trade_status > /proc/1/fd/1 2>/proc/1/fd/2
 0 * * * * /usr/local/bin/send_docker_alerts
 03 * * * * /usr/local/bin/get_hour_profit > /proc/1/fd/1 2>/proc/1/fd/2
-00 * * * * /usr/local/bin/populate_pairs
+#00 * * * * /usr/local/bin/populate_pairs
 
 {{else if eq .base_env "test"}}
 @reboot /usr/local/bin/clear_redis 1 > /proc/1/fd/1 2>/proc/1/fd/2
