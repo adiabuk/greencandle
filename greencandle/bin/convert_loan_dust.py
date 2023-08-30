@@ -5,7 +5,7 @@ Find pairs with small loans and no open trades to convert to USDT
 
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.mysql import Mysql
-from greencandle.lib.balance_common import get_base, get_quote
+from greencandle.lib.binance_accounts import get_cross_assets_with_loan
 from greencandle.lib.common import arg_decorator
 
 
@@ -14,27 +14,11 @@ def main():
     """
     Find pairs with small loans and no open trades to convert to USDT
     """
-    client = binance_auth()
-    cross_details = client.get_cross_margin_details()
-    borrowed_set = set()
-
-    # get unique set of assets which have a loan against tem
-    for item in cross_details['userAssets']:
-        if float(item['borrowed']) > 0:
-            borrowed_set.add(item['asset'])
 
     dbase = Mysql()
-    open_trades = dbase.fetch_sql_data('select pair, direction from open_trades',
-                                       header=False)
-    # get unique set of pairs with open trades
-    # get assets from pairs, base if short, quote if long
-    open_set = set()
-    for pair, direction in open_trades:
-        if direction == 'short':
-            open_set.add(get_base(pair))
-        else:
-            open_set.add(get_quote(pair))
-
+    client = binance_auth()
+    borrowed_set = get_cross_assets_with_loan()
+    open_set = dbase.get_main_open_assets
     # get assets with loan which are not in a trade
     main_set = set(borrowed_set - open_set)
 

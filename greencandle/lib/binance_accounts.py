@@ -15,6 +15,22 @@ config.create_config()
 BITCOIN = {}
 LOGGER = get_logger(__name__)
 
+def get_cross_assets_with_loan():
+    """
+    get unique set of assets which have a loan against them
+    """
+    client = binance_auth()
+    cross_details = client.get_cross_margin_details()
+    borrowed_set = set()
+
+    # get unique set of assets which have a loan against tem
+    for item in cross_details['userAssets']:
+        if float(item['borrowed']) > 0:
+            borrowed_set.add(item['asset'])
+    return borrowed_set
+
+
+
 def get_cross_margin_level():
     """
     Calculate cross margin risk level

@@ -413,6 +413,25 @@ class Mysql():
         return rows if rows else ()
 
     @get_exceptions
+    def get_main_open_assets():
+        """
+        get unique set of assets from open trade pairs which are likely
+        to a loan against them depending on trade direction
+        base asset if short, quote asset if long
+        """
+        open_set = set()
+        open_trades = self.fetch_sql_data('select pair, direction from open_trades',
+                                           header=False)
+        # get unique set of pairs with open trades
+        # get assets from pairs, base if short, quote if long
+        for pair, direction in open_trades:
+            if direction == 'short':
+                open_set.add(get_base(pair))
+            else:
+                open_set.add(get_quote(pair))
+        return open_set
+
+    @get_exceptions
     def insert_balance(self, balances):
         """
         Insert balance in GBP/BTC/USD into balance table for coinbase & binance
