@@ -433,13 +433,13 @@ class Mysql():
         return open_set
 
     @get_exceptions
-    def add_commission_payment(self, asset, usd_amt, gbp_amt):
+    def add_commission_payment(self, asset, asset_amt, usd_amt, gbp_amt):
         """
         Insert commission payment into db
         """
 
-        insert = (f"insert into commission_paid (asset, usd_amt, gbp_amt) VALUES "
-                  f"('{asset}', '{usd_amt}', '{gbp_amt}')")
+        insert = (f"insert into commission_paid (asset, asset_amt, usd_amt, gbp_amt) VALUES "
+                  f"('{asset}', '{asset_amt}', '{usd_amt}', '{gbp_amt}')")
 
         self.__run_sql_query(insert)
 
