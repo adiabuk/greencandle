@@ -21,15 +21,15 @@ BASH_ENV=/container.env
 59 23 * * * /usr/local/bin/report 4h /data/reports/report_$(date +"\%Y-\%m-\%d").xlsx > /proc/1/fd/1 2>/proc/1/fd/2
 @reboot /usr/local/bin/report 4h /data/reports/report_{{.base_env}}_$(date +"\%Y-\%m-\%d").xlsx > /proc/1/fd/1 2>/proc/1/fd/2
 03 * * * * /usr/local/bin/get_hour_profit > /proc/1/fd/1 2>/proc/1/fd/2
-0 */2 * * * /usr/local/bin/repay_debts interest > /proc/1/fd/1 2>/proc/1/fd/2
+10 */2 * * * /usr/local/bin/repay_debts interest > /proc/1/fd/1 2>/proc/1/fd/2
 @hourly /usr/local/bin/repay_debts borrowed > /proc/1/fd/1 2>/proc/1/fd/2
 30 * * * * /usr/bin/find /data/graphs -type f -mtime +1 -delete > /proc/1/fd/1 2>/proc/1/fd/2
 #15 * * * * /usr/local/bin/collect_pairs > /proc/1/fd/1 2>/proc/1/fd/2
 @hourly /usr/local/bin/get_bnb > /proc/1/fd/1 2>/proc/1/fd/2
 @daily /usr/bin/find /data/mysql -name "*.gz" -mtime +1 -delete
 @daily /usr/bin/find /data/reports -name "*.xlsx" -mtime +1 -delete
-0 */7 * * * /usr/local/bin/convert_loan_dust > /proc/1/fd/1 2>/proc/1/fd/2
-0 */7 * * * /usr/local/bin/convert_small_dust > /proc/1/fd/1 2>/proc/1/fd/2
+20 */7 * * * /usr/local/bin/convert_loan_dust > /proc/1/fd/1 2>/proc/1/fd/2
+30 */7 * * * /usr/local/bin/convert_small_dust > /proc/1/fd/1 2>/proc/1/fd/2
 
 {{else if eq .base_env "per" }}
 @reboot /usr/local/bin/clear_redis 1 > /proc/1/fd/1 2>/proc/1/fd/2
