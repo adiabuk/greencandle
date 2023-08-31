@@ -2,13 +2,10 @@
 """Test Cron"""
 
 import unittest
-import json
 import os
-import yaml
-from greencandle.bin.api_dashboard import get_pairs, list_to_dict
 
-
-ENVS = ('per', 'prod', 'stag', 'test', 'alarm')
+# finish with unit env, so that container is clean for next test
+ENVS = ('per', 'prod', 'stag', 'test', 'alarm', 'unit')
 class TestCron(unittest.TestCase):
     """
     Test all assocs in docker-compose and config
@@ -24,4 +21,3 @@ class TestCron(unittest.TestCase):
             print("Testing", env)
             os.system("crontab /tmp/gc-cron")
             print("Done testing", env)
-

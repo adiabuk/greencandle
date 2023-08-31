@@ -51,7 +51,6 @@ class TestAssocs(unittest.TestCase):
             print("processing env {}".format(env))
             os.system("sudo configstore package process_templates {} /tmp".format(env))
             names = get_pairs(env)[-1]
-            rev_names = {v: k for k, v in names.items()}
             with open('/tmp/router_config.json', 'r') as json_file:
                 router_config = json.load(json_file)
 
@@ -75,7 +74,5 @@ class TestAssocs(unittest.TestCase):
                         print("Issue with {} in {}".format(name, env))
                         raise
 
-                    if container.startswith('{}-be-'.format(env)) and 'alert' not in container:
-                        actual_name = container.replace('-be', '')  # strip off container type
-                    else:
+                    if not container.startswith('{}-be-'.format(env)) and 'alert' not in container:
                         continue
