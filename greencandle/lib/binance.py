@@ -428,10 +428,8 @@ class Binance():
         Max 10 in asset list, 3 times every 6 hours
         """
         data = self.signed_request("POST", "/sapi/v1/margin/dust",
-                params={'assetNames':','.join(asset_list)})
+                params={'asset':','.join(asset_list)})
         return data
-
-
 
     def my_trades(self, symbol, **kwargs):
         """Get trades for a specific account and symbol.
