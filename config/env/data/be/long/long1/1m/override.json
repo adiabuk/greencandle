@@ -2,8 +2,8 @@
   "api_forward": "forward7",
   "interval": "1m",
   "name": "data-be-analyse-1m-long1",
-  "slack_alerts": "data_ha",
-  "slack_balance": "data_ha",
-  "slack_notifications": "data_ha",
+  "slack_alerts": "data_ha2",
+  "slack_balance": "data_ha2",
+  "slack_notifications": "data_ha2",
   "time_between_trades": "15m"
 }
