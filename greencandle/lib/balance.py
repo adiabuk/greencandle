@@ -161,7 +161,7 @@ class Balance(dict):
         totals_usd = float(binance_usd) + float(phemex_usd)
 
         balances = [f"Binance USD = ${binance_usd:,.2f}",
-                    f"Binance BTC = ฿{binance_btc}",
+                    f"Binance BTC = ฿{round(binance_btc, 5)}",
                     f"Phemex USD = ${phemex_usd:,.2f}",
                     f"Phemex BTC = ฿{round(phemex_btc, 5)}",
                     f"TOTAL USD = ${totals_usd:,.2f}",
