@@ -1,5 +1,23 @@
 # Releases
 
+# 5.30
+* add new data env with additional RSI close rule
+* more logging in assocs unit test
+* cleanup of tests inc unused vars/imports etc
+* add cron syntax tests for all envs
+* round binance BTC value for notif
+* don't call binance dust function if no dustable items to convert
+* remove old/unused cron script from stag cron
+* more mem for dashboard containers to allow running of scripts without OOM
+* cleanup profit monthly db view
+* differentiate between interest|borrowed debts in logs
+* add dust loan/amounts to cron to convert to USDT/BNB and run every 7 hours
+* run interest|borrowed repayments separately
+* add record of commission and interest payment to db
+* create lib functions for fetching loan/commission for re-use
+* binance methods to fetch/convert small loans to USDT
+* add dev port forwarding
+
 # 5.29
 * don't fail api healthcheck if too many procs due to rq fork
 * add week commencing to profit weekly view
