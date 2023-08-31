@@ -5,7 +5,7 @@ import unittest
 import json
 import os
 import yaml
-from greencandle.bin.api_dashboard import get_pairs, list_to_dict
+from greencandle.bin.api_dashboard import list_to_dict
 
 
 ENVS = ('per', 'prod', 'stag', 'test', 'alarm')
@@ -50,7 +50,6 @@ class TestAssocs(unittest.TestCase):
         for env in ENVS:
             print("processing env {}".format(env))
             os.system("sudo configstore package process_templates {} /tmp".format(env))
-            names = get_pairs(env)[-1]
             with open('/tmp/router_config.json', 'r') as json_file:
                 router_config = json.load(json_file)
 
