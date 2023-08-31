@@ -64,7 +64,7 @@ class TestAssocs(unittest.TestCase):
             for _, short_name in router_config.items():
                 for item in short_name:
                     name = item.split(':')[0]
-                    print(name)
+                    print(f"processing item: {item} in {env}")
                     if env != 'alarm' and name == 'alert':
                         continue
                     try:
