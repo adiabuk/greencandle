@@ -125,6 +125,7 @@ services:
     container_name: test-fe-api-dashboard
     hostname: test-fe-api-dashboard
     environment:
+      - STREAM=http://10.8.0.101:5001/all
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/fe/api
       - DB=true

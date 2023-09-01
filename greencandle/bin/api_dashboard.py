@@ -15,7 +15,8 @@ from flask_login import LoginManager, login_required
 import setproctitle
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.mysql import Mysql
-from greencandle.lib.common import arg_decorator, divide_chunks, get_be_services, list_to_dict
+from greencandle.lib.common import (arg_decorator, divide_chunks, get_be_services, list_to_dict,
+                                    perc_diff)
 from greencandle.lib import config
 from greencandle.lib.flask_auth import load_user, login as loginx, logout as logoutx
 
@@ -213,14 +214,21 @@ def live():
         req = request.form['submit']
         all_data = results = defaultdict(list)
         dbase = Mysql()
-        query = ("select open_time, `interval` pair, name, open_price from trades where "
+        stream = os.environ['STREAM']
+        req = request.get(stream, timeout=10)
+        prices = req.json()
+
+        query = ("select open_time, `interval`, pair, name, open_price from trades where "
                  "close_price is null;")
 
         raw = dbase.fetch_sql_data(query, header=False)
-        for row in raw:
-            all_data["prices"].append({"open_time": row[0], "interval": row[1], "pair": row[2],
-                                     "open_price": row[3], "current_price": "unknown",
-                                     "perc": "unknown"})
+        for open_time, interval, pair, name, open_price in raw:
+            current_price = prices[pair]['close']
+            perc = perc_diff(open_price, current_price)
+            all_data["prices"].append({"open_time": open_time, "interval": interval,
+                                       "pair": pair,
+                                       "name": name, "open_price": open_price,
+                                       "current_price": current_price, "perc": perc})
 
         results = all_data[req]
         fieldnames = list(results[0].keys())
