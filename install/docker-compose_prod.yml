@@ -262,6 +262,7 @@ services:
     hostname: prod-fe-api-dashboard
     environment:
       - VPN_IP=$VPN_IP
+      - STREAM=http://10.8.0.101:5001/all
       - CONFIG_ENV=prod/fe/api
       - DB=true
       - SECRET_KEY=$SECRET_KEY

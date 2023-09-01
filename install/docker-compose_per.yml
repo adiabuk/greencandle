@@ -263,6 +263,7 @@ services:
     hostname: per-fe-api-dashboard
     environment:
       - VPN_IP=$VPN_IP
+      - STREAM=http://10.8.0.101:5001/all
       - CONFIG_ENV=per/fe/api
       - DB=true
       - SECRET_KEY=$SECRET_KEY
