@@ -14,6 +14,7 @@ from flask import Flask, render_template, request, Response, redirect, url_for
 from flask_login import LoginManager, login_required
 import setproctitle
 from greencandle.lib.redis_conn import Redis
+from greencandle.lib.mysql import Mysql
 from greencandle.lib.common import arg_decorator, divide_chunks, get_be_services, list_to_dict
 from greencandle.lib import config
 from greencandle.lib.flask_auth import load_user, login as loginx, logout as logoutx
@@ -197,6 +198,36 @@ def trade():
             my_dic[strat] |= set(xxx)
 
     return render_template('action.html', my_dic=my_dic)
+
+@APP.route('/live', methods=['GET', 'POST'])
+@login_required
+def live():
+    """
+    route to live data
+    """
+    files = ['prices']
+
+    if request.method == 'GET':
+        return render_template('data.html', files=files)
+    if request.method == 'POST':
+        req = request.form['submit']
+        all_data = results = defaultdict(list)
+        dbase = Mysql()
+        query = ("select open_time, `interval` pair, name, open_price from trades where "
+                 "close_price is null;")
+
+        raw = dbase.fetch_sql_data(query, header=False)
+        for row in raw:
+            all_data["prices"].append({"open_time": row[0], "interval": row[1], "pair": row[2],
+                                     "open_price": row[3], "current_price": "unknown",
+                                     "perc": "unknown"})
+
+        results = all_data[req]
+        fieldnames = list(results[0].keys())
+
+        return render_template('data.html', results=results, fieldnames=fieldnames, len=len,
+                               files=files)
+    return None
 
 @APP.route('/data', methods=['GET', 'POST'])
 @login_required
