@@ -220,19 +220,20 @@ def live():
 
         services = list_to_dict(get_be_services(config.main.base_env),
                                 reverse=False, str_filter='-be-')
-        query = ("select open_time, `interval`, pair, name, open_price from trades where "
-                 "close_price is null;")
+        query = ("select open_time, `interval`, pair, name, open_price, direction from "
+                 "trades where close_price is null;")
 
         raw = dbase.fetch_sql_data(query, header=False)
         for open_time, interval, pair, name, open_price, direction in raw:
             current_price = prices['recent'][pair]['close']
             perc = perc_diff(open_price, current_price)
+            perc = -perc if direction == 'short' else perc
             trade_direction = f"{name}-{direction}" if \
                     not (name.endswith('long') or name.endswith('short')) else name
 
             short_name = services[trade_direction]
             close_link = get_trade_link(pair, short_name, 'close', 'close_now',
-                                  config.web.nginx_port)
+                                  config.web.nginx_port, anchor=True)
 
             all_data["prices"].append({"open_time": open_time, "interval": interval,
                                        "pair": get_tv_link(pair, interval, anchor=True),
