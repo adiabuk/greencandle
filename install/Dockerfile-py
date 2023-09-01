@@ -13,7 +13,7 @@ RUN apt-get update && \
     cd /tmp/ta-lib; ./configure --prefix=/usr; make; make install && \
     cd /; rm -rf /tmp/ta-lib /tmp/ta-lib-0.4.0-src.tar.gz && \
     pip install cython urllib3==2.0.3 APScheduler==3.6.1 argcomplete==2.0.0 coinbase==2.0.6 configparser==3.5.0 Babel==2.9.1 CurrencyConverter==0.16.1 Flask==2.2.5 Flask-Login==0.6.2 docker==6.1.3 lib==3.0.0 pyOpenSSL==22.0.0 mysqlclient==2.1.0 oauth==1.0.1 pandas==1.1.5 numpy==1.25.0 Pillow>=6.2.2 plotly==5.15.0 python_resize_image==1.1.11 PyVirtualDisplay==1.3.2 redis==4.4.4 requests==2.31.0 scipy==1.11.1 selenium==3.8.1 setproctitle==1.1.10 simplejson==3.13.2 && \
-    pip install str2bool==1.1 openpyxl==3.1.2 xlrd==1.2.0 requests-unixsocket==0.2.0 pylint==2.8.1 waitress six==1.12 systemd==0.17.1 tzlocal==2.1b1 cryptocompare==0.7.3 pandas_ta==0.3.2b0 pyyaml==5.4.1 gitpython werkzeug==2.2.3 click>=8.1.3 rq==1.15.0 websocket-client==1.6.1 pytest==6.0.1 backports.shutil-get-terminal-size==1.0.0 scandir==1.10.0 browsepy==0.5.6 pip==9.0.1 ccxt send_nsca3==0.1.6.0 && \
+    pip install str2bool==1.1 openpyxl==3.1.2 xlrd==1.2.0 requests-unixsocket==0.2.0 pylint==2.8.1 waitress six==1.12 systemd==0.17.1 tzlocal==2.1b1 cryptocompare==0.7.3 pandas_ta==0.3.2b0 pyyaml==5.4.1 gitpython werkzeug==2.2.3 click>=8.1.3 rq==1.15.0 websocket-client==1.6.1 pytest==6.0.1 backports.shutil-get-terminal-size==1.0.0 scandir==1.10.0 browsepy==0.5.6 pip==9.0.1 ccxt send_nsca3==0.1.6.0 sh==2.0.6 && \
     wget https://github.com/ta-lib/ta-lib-python/tarball/master  -O /tmp/talib.tgz && \
     tar zxvf /tmp/talib.tgz -C /tmp && \
     cd /tmp/TA-Lib-ta-lib-python-5974b7f/ && python setup.py install && \

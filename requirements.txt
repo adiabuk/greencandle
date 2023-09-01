@@ -48,3 +48,4 @@ scandir==1.10.0
 browsepy==0.5.6
 ccxt
 send_nsca3==0.1.6.0
+sh==2.0.6
