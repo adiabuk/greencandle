@@ -16,7 +16,7 @@ import setproctitle
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.common import (arg_decorator, divide_chunks, get_be_services, list_to_dict,
-                                    perc_diff, get_tv_link)
+                                    perc_diff, get_tv_link, get_trade_link)
 from greencandle.lib import config
 from greencandle.lib.flask_auth import load_user, login as loginx, logout as logoutx
 
@@ -218,17 +218,27 @@ def live():
         stream_req = requests.get(stream, timeout=10)
         prices = stream_req.json()
 
+        services = list_to_dict(get_be_services(config.main.base_env),
+                                reverse=False, str_filter='-be-')
         query = ("select open_time, `interval`, pair, name, open_price from trades where "
                  "close_price is null;")
 
         raw = dbase.fetch_sql_data(query, header=False)
-        for open_time, interval, pair, name, open_price in raw:
+        for open_time, interval, pair, name, open_price, direction in raw:
             current_price = prices['recent'][pair]['close']
             perc = perc_diff(open_price, current_price)
+            trade_direction = f"{name}-{direction}" if \
+                    not (name.endswith('long') or name.endswith('short')) else name
+
+            short_name = services[trade_direction]
+            close_link = get_trade_link(pair, short_name, 'close', 'close_now',
+                                  config.web.nginx_port)
+
             all_data["prices"].append({"open_time": open_time, "interval": interval,
                                        "pair": get_tv_link(pair, interval, anchor=True),
-                                       "name": name, "open_price": open_price,
-                                       "current_price": current_price, "perc": perc})
+                                       "name": short_name, "open_price": open_price,
+                                       "current_price": current_price, "perc": perc,
+                                       "close": close_link})
 
         results = all_data[req]
         print(results)

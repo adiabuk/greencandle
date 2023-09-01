@@ -231,7 +231,6 @@ def get_tv_link(pair, interval=None, anchor=False):
         return int(time_string[:-1]) * minutes_per_unit[time_string[-1]]
 
     if anchor:
-
         return Markup(f'<a href="https://www.tradingview.com/chart/?symbol=BINANCE:{pair.strip()}'
                       f'&interval={convert_to_minutes(interval)}|{pair.strip()}" '
                       f'target="_blank">{pair}</a>')
@@ -241,8 +240,13 @@ def get_tv_link(pair, interval=None, anchor=False):
                 f"&interval={convert_to_minutes(interval)}|{pair.strip()}>")
     return f"<https://www.tradingview.com/chart/?symbol=BINANCE:{pair.strip()}|{pair.strip()}>"
 
-def get_trade_link(pair, strategy, action, string, port=8888):
+def get_trade_link(pair, strategy, action, string, port=8888, anchor=False):
     """Get trade link for forced trade"""
     url = os.environ['VPN_IP'] + ":" + port
+    if anchor:
+        return Markup(f'<a href="http://{url.strip()}/action?pair={pair.strip()}&strategy='
+                      f'{strategy.strip()}&action={action.strip()}&close=true">'
+                      f'{string.strip()}</a>')
+
     return (f"<http://{url.strip()}/action?pair={pair.strip()}&strategy={strategy.strip()}"
             f"&action={action.strip()}&close=true|{string.strip()}>")
