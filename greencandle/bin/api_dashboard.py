@@ -16,7 +16,7 @@ import setproctitle
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.common import (arg_decorator, divide_chunks, get_be_services, list_to_dict,
-                                    perc_diff)
+                                    perc_diff, get_tv_link)
 from greencandle.lib import config
 from greencandle.lib.flask_auth import load_user, login as loginx, logout as logoutx
 
@@ -215,22 +215,23 @@ def live():
         all_data = results = defaultdict(list)
         dbase = Mysql()
         stream = os.environ['STREAM']
-        req = request.get(stream, timeout=10)
-        prices = req.json()
+        stream_req = requests.get(stream, timeout=10)
+        prices = stream_req.json()
 
         query = ("select open_time, `interval`, pair, name, open_price from trades where "
                  "close_price is null;")
 
         raw = dbase.fetch_sql_data(query, header=False)
         for open_time, interval, pair, name, open_price in raw:
-            current_price = prices[pair]['close']
+            current_price = prices['recent'][pair]['close']
             perc = perc_diff(open_price, current_price)
             all_data["prices"].append({"open_time": open_time, "interval": interval,
-                                       "pair": pair,
+                                       "pair": get_tv_link(pair, interval, anchor=True),
                                        "name": name, "open_price": open_price,
                                        "current_price": current_price, "perc": perc})
 
         results = all_data[req]
+        print(results)
         fieldnames = list(results[0].keys())
 
         return render_template('data.html', results=results, fieldnames=fieldnames, len=len,

@@ -10,6 +10,7 @@ from decimal import Decimal, InvalidOperation
 import yaml
 from babel.numbers import format_currency
 import numpy
+from markupsafe import Markup
 
 QUOTES = ("BTC", "USDT", "ETH", "BNB", "GBP")
 
@@ -220,7 +221,7 @@ def epoch2date(epoch, use_spaces=True, formatted=True):
     time_stamp = datetime.datetime.fromtimestamp(epoch)
     return time_stamp.strftime(format_str) if formatted else time_stamp
 
-def get_tv_link(pair, interval=None):
+def get_tv_link(pair, interval=None, anchor=False):
     """
     Return Tradingview hyperlink for slack notifications
     """
@@ -228,6 +229,12 @@ def get_tv_link(pair, interval=None):
     minutes_per_unit = {"s":1, "m": 1, "h": 60, "d": 1400, "w": 10080}
     def convert_to_minutes(time_string):
         return int(time_string[:-1]) * minutes_per_unit[time_string[-1]]
+
+    if anchor:
+
+        return Markup(f'<a href="https://www.tradingview.com/chart/?symbol=BINANCE:{pair.strip()}'
+                      f'&interval={convert_to_minutes(interval)}|{pair.strip()}" '
+                      f'target="_blank">{pair}</a>')
 
     if interval:
         return (f"<https://www.tradingview.com/chart/?symbol=BINANCE:{pair.strip()}"
