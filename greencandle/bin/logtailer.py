@@ -4,6 +4,7 @@ Flask module to provide web interface for tailing /var/log/syslog
 """
 
 import os
+import sh
 import time
 from flask import Flask, render_template
 from flask_login import LoginManager, login_required
@@ -20,7 +21,7 @@ APP.config['SECRET_KEY'] = os.environ['SECRET_KEY'] if 'SECRET_KEY' in os.enviro
         os.urandom(12).hex()
 load_user = LOGIN_MANAGER.user_loader(load_user)
 login = APP.route("/login", methods=["GET", "POST"])(loginx)
-login = APP.route("/logout", methods=["GET", "POST"])(logoutx)
+logout = APP.route("/logout", methods=["GET", "POST"])(logoutx)
 
 @APP.route('/')
 @login_required
@@ -36,10 +37,13 @@ def stream():
     """
     def generate():
         """ Generator for yielding log file contents """
-        with open('/var/log/syslog') as log_file:
-            while True:
-                yield log_file.read()
-                time.sleep(1)
+        while True:
+            try:
+                for line in sh.tail("-f", '/var/log/syslog', _iter=True):
+                    yield line
+                    time.sleep(1)
+            except sh.ErrorReturnCode_1:
+                yield None
 
     return APP.response_class(generate(), mimetype='text/plain')
 
