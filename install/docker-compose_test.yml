@@ -76,7 +76,7 @@ services:
     hostname: test-base-mysql
     image: amrox/gc-mysql:${TAG}
     mem_limit: 300m
-    entrypoint: /docker-entrypoint.sh "--max-connections=10000"
+    entrypoint: /docker-entrypoint.sh "--max-connections=5000"
     pull_policy: always
     environment:
       - CONFIG_ENV=test

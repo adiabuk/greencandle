@@ -42,7 +42,7 @@ services:
     container_name: alarm-base-mysql
     hostname: alarm-base-mysql
     image: amrox/gc-mysql:${TAG}
-    entrypoint: /docker-entrypoint.sh "--max-connections=10000"
+    entrypoint: /docker-entrypoint.sh "--max-connections=5000"
     pull_policy: always
     environment:
       - CONFIG_ENV=alarm

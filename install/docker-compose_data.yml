@@ -580,7 +580,7 @@ services:
     mem_limit: 300m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "--max-connections=10000"
+    entrypoint: /docker-entrypoint.sh "--max-connections=5000"
     ports:
       - 3309:3306
     environment:

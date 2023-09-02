@@ -82,7 +82,7 @@ services:
     image: amrox/gc-mysql:${TAG}
     mem_limit: 300m
     pull_policy: always
-    entrypoint: /docker-entrypoint.sh "--max-connections=10000"
+    entrypoint: /docker-entrypoint.sh "--max-connections=5000"
     environment:
       - CONFIG_ENV=per
       - MYSQL_ROOT_PASSWORD=password
