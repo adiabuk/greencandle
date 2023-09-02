@@ -68,8 +68,10 @@ def respond():
     payload = request.json
     with open('/etc/router_config.json') as json_file:
         router_config = json.load(json_file)
-
-    LOGGER.info("Request received: %s", payload)
+    if payload['pair'] == 'No pair':
+        LOGGER.debug("Request received: %s", payload)
+    else:
+        LOGGER.info("Request received: %s", payload)
     try:
         containers = router_config[payload["strategy"].strip()]
     except TypeError:
