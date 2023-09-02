@@ -245,7 +245,7 @@ def get_trade_link(pair, strategy, action, string, port=8888, anchor=False):
     url = os.environ['VPN_IP'] + ":" + port
     if anchor:
         return Markup(f'<a href="http://{url.strip()}/action?pair={pair.strip()}&strategy='
-                      f'{strategy.strip()}&action={action.strip()}&close=true">'
+                      f'{strategy.strip()}&action={action.strip()}&close=true" target="_blank">'
                       f'{string.strip()}</a>')
 
     return (f"<http://{url.strip()}/action?pair={pair.strip()}&strategy={strategy.strip()}"

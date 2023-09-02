@@ -237,8 +237,10 @@ def live():
 
             all_data["prices"].append({"open_time": open_time, "interval": interval,
                                        "pair": get_tv_link(pair, interval, anchor=True),
-                                       "name": short_name, "open_price": open_price,
-                                       "current_price": current_price, "perc": perc,
+                                       "name": short_name,
+                                       "open_price": '{:g}'.format(float(open_price)),
+                                       "current_price": '{:g}'.format(float(current_price)),
+                                       "perc": round(perc,4),
                                        "close": close_link})
 
         results = all_data[req]
