@@ -104,6 +104,7 @@ services:
     ports:
       - 6379
     restart: always
+    entrypoint: sh -c "rm -f /data/dump.rdb && redis-server"
     links:
       - mysql-unit:mysql
     healthcheck:

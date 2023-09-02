@@ -58,7 +58,7 @@ services:
       - id=$id
     hostname: redis-unit
     image: gc-redis-${image_id}
-    entrypoint: redis-server
+    entrypoint: sh -c "rm -f /data/dump.rdb && redis-server"
     ports:
       - 6379
     restart: always
