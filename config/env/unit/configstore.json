@@ -96,14 +96,14 @@
       "is_secret": false
     },
     "api_token": {
-      "value": "tqo/11oUw30IKayrW8ffKRnFrc84bY2z",
+      "value": "token",
       "is_binary": false,
-      "is_secret": true
+      "is_secret": false
     },
     "auth_key": {
-      "value": "aXXMGI59gAEY1HivKAFeYiTcKXIb9O5g+igqHQzhojL4Bp6dS52HUL+RO8lTdggyW323ZaHBiO/8WvX1LKjgOMHEaP67awwrouAWjw==",
-      "is_binary": true,
-      "is_secret": true
+      "value": "key",
+      "is_binary": false,
+      "is_secret": false
     },
     "aws_access_key": {
       "value": "",
@@ -201,9 +201,9 @@
       "is_secret": false
     },
     "flask_auth": {
-      "value": "MjM3BmTBh8MLCA+XODbPanqehvqOJb2j84yOxqdyA7BYH9lSC9Vt5oWUeIK1fx12hJGOsmjCpyFRnO0w3DLcW5D03J45YRcmy42QnYa97roVKnRoUKRVVnbcfzpZVLonvPOp2sqNsDNk7tL7PAuvaOJ7zEnyCuo/7ArZ/dlRFX+lc5jnGxmLT3jeLgIB+XaIxiXJfz/ddxE=",
-      "is_binary": true,
-      "is_secret": true
+      "value": "gAAAAABk8yoG2CVENYp9JNGa8kKTImDEkOVbLjJ46Iroq5T_8eQj0wrnSOA--6Gm7OBU15JHq8WwLdPZ6SsK5ShV3a8FeCtv2w==",
+      "is_binary": false,
+      "is_secret": false
     },
     "good_pairs": {
       "value": "false",
@@ -356,9 +356,9 @@
       "is_secret": false
     },
     "slack_url": {
-      "value": "0QFbfwKxavS1sLQar2yrxaCx10YwoDETr+nNVGr+RJ2tJ8TSTQbFF4JARS4nSKc7F+JnNxA0vLpMovFnrWAMs7I8UQkhMpOJZvD6SeuxXMVZHNJXtcfMAiPxgLbvI+jwKOBdbh3E3Nw5qBLFAnl3Y9DTpRRtt2w2y/F7Hw==",
+      "value": "None",
       "is_binary": false,
-      "is_secret": true
+      "is_secret": false
     },
     "stop_loss_perc": {
       "value": "20",
