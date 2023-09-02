@@ -17,7 +17,7 @@ services:
       - /var/run:/var/run
     healthcheck:
       test: ls /var/log/syslog
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
 
@@ -42,7 +42,7 @@ services:
       - stag-base-redis:redis
     healthcheck:
       test: ls ||exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -65,7 +65,7 @@ services:
       - 6381:6379
     healthcheck:
       test: redis-cli ping
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -89,7 +89,7 @@ services:
       - 3308:3306
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -126,7 +126,7 @@ services:
       - stag-base-redis
     healthcheck:
       test: curl -Isf http://127.1:5000/healthcheck
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -158,7 +158,7 @@ services:
       - stag-base-redis
     healthcheck:
       test: ls || exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -191,7 +191,7 @@ services:
       - stag-base-redis
     healthcheck:
       test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -250,7 +250,7 @@ services:
     entrypoint: /docker-entrypoint.sh api_proxy
     healthcheck:
       test: curl -qsf http://127.1:5000 >/dev/null
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     links:
@@ -283,7 +283,7 @@ services:
     entrypoint: /docker-entrypoint.sh filesystem_api
     healthcheck:
       test: curl -Isf http://127.1:6000
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     ports:
@@ -354,7 +354,7 @@ services:
       - stag-base-redis
     healthcheck:
       test: api_healthcheck.sh || exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -391,7 +391,7 @@ services:
       - stag-base-redis
     healthcheck:
       test: api_healthcheck.sh || exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:

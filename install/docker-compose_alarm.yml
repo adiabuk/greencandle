@@ -14,7 +14,7 @@ services:
       - /dev/disk:/dev/disk
     healthcheck:
       test: "printf 'GET /healthz HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc localhost 8080"
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
 
@@ -30,7 +30,7 @@ services:
       - 6383:6379
     healthcheck:
       test: redis-cli ping
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -53,7 +53,7 @@ services:
       - 3310:3306
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -105,7 +105,7 @@ services:
       - 20000:20000
     healthcheck:
       test: curl -Isf http://127.1:20000/healthcheck
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     devices:

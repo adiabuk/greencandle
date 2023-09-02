@@ -16,7 +16,7 @@ services:
     entrypoint: bash -c "cd /srv/greencandle;configstore package process_templates unit /opt/output; cp /opt/output/greencandle.ini /etc;crontab /opt/output/gc-cron;cron -f"
     healthcheck:
       test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
-      interval: 5s
+      interval: 10s
       timeout: 10s
       retries: 5
     volumes:
@@ -40,7 +40,7 @@ services:
       - 20000
     healthcheck:
       test: nc -z 127.1 20000 || exit 1
-      interval: 5s
+      interval: 10
       timeout: 10s
       retries: 5
     volumes:
@@ -64,8 +64,8 @@ services:
     restart: always
     healthcheck:
       test: redis-cli ping
-      interval: 5s
-      timeout: 5s
+      interval: 10s
+      timeout: 10s
       retries: 5
 
   mysql-unit:
@@ -89,6 +89,6 @@ services:
     restart: always
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
-      interval: 5s
-      timeout: 5s
+      interval: 10s
+      timeout: 10s
       retries: 10

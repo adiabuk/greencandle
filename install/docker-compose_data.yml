@@ -19,7 +19,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     healthcheck:
       test: ls /var/log/syslog
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
 
@@ -42,7 +42,7 @@ services:
       - data-base-redis:redis
     healthcheck:
       test: ls ||exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -111,7 +111,7 @@ services:
       - DB=true
     healthcheck:
       test: find /var/local/lock/gc_get_12h.lock  -mmin -2 ||exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -180,7 +180,7 @@ services:
       - DB=true
     healthcheck:
       test: find /var/local/lock/gc_get_4h.lock  -mmin -2 ||exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -212,8 +212,8 @@ services:
       - DB=true
     healthcheck:
       test: /mnt/nagios_checks/check_milliepoch -u http://127.1:5000 -w 3660 -c 3720 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
-      interval: 1m
-      start_period: 1m
+      interval: 5m
+      start_period: 5m
       timeout: 10s
       retries: 5
     ports:
@@ -249,7 +249,7 @@ services:
       - DB=true
     healthcheck:
       test: find /var/local/lock/gc_get_1h.lock  -mmin -2 ||exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -281,8 +281,8 @@ services:
       - DB=true
     healthcheck:
       test: /mnt/nagios_checks/check_milliepoch -u http://127.1:5000 -w 120 -c 180 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
-      start_period: 1m
-      interval: 1m
+      start_period: 5m
+      interval: 5m
       timeout: 10s
       retries: 5
     ports:
@@ -318,7 +318,7 @@ services:
       - DB=true
     healthcheck:
       test: find /var/local/lock/gc_get_1m.lock  -mmin -2 ||exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -350,7 +350,7 @@ services:
       - DB=true
     healthcheck:
       test: find /var/local/lock/gc_get_1m.lock  -mmin -2 ||exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -382,7 +382,7 @@ services:
       - DB=true
     healthcheck:
       test: find /var/local/lock/gc_get_1m.lock  -mmin -2 ||exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -415,7 +415,7 @@ services:
       - DB=true
     healthcheck:
       test: find /var/local/lock/gc_get_1m.lock  -mmin -2 ||exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -446,8 +446,8 @@ services:
       - DB=true
     healthcheck:
       test: /mnt/nagios_checks/check_milliepoch -u http://127.1:5000 -w 360 -c 420 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
-      start_period: 1m
-      interval: 1m
+      start_period: 5m
+      interval: 5m
       timeout: 10s
       retries: 5
     ports:
@@ -483,7 +483,7 @@ services:
       - DB=true
     healthcheck:
       test: find /var/local/lock/gc_get_5m.lock  -mmin -2 ||exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -516,7 +516,7 @@ services:
       - data-base-redis
     healthcheck:
       test: ls || exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -549,7 +549,7 @@ services:
       - data-base-redis
     healthcheck:
       test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -569,7 +569,7 @@ services:
       - data-base-mysql:mysql
     healthcheck:
       test: redis-cli ping
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
 
@@ -590,7 +590,7 @@ services:
       - DB=true
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
 
@@ -643,7 +643,7 @@ services:
     entrypoint: /docker-entrypoint.sh api_proxy
     healthcheck:
       test: curl -qsf http://127.1:5000 >/dev/null
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     links:
@@ -709,7 +709,7 @@ services:
     entrypoint: /docker-entrypoint.sh filesystem_api
     healthcheck:
       test: curl -Isf http://127.1:6000
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     ports:
@@ -749,7 +749,7 @@ services:
       - data-base-redis
     healthcheck:
       test: curl -Isf http://127.1:5000/healthcheck
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -788,7 +788,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -826,7 +826,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -863,7 +863,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -900,7 +900,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -937,7 +937,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -974,7 +974,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -1157,7 +1157,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -1192,7 +1192,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -1227,7 +1227,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -1332,7 +1332,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -1367,7 +1367,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -1402,7 +1402,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -1511,7 +1511,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -1549,7 +1549,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -1586,7 +1586,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -1699,7 +1699,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -1737,7 +1737,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -1774,7 +1774,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -1886,7 +1886,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -1924,7 +1924,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -1962,7 +1962,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -2000,7 +2000,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:

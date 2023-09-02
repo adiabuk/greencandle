@@ -18,7 +18,7 @@ services:
       - dev-base-redis
     healthcheck:
       test: ls || exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -43,7 +43,7 @@ services:
       - dev-base-redis
     healthcheck:
       test: ls || exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -64,7 +64,7 @@ services:
     entrypoint: /docker-entrypoint.sh redis-server /etc/redis.conf
     healthcheck:
       test: redis-cli ping
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
 
@@ -82,7 +82,7 @@ services:
     restart: always
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
 
@@ -108,8 +108,8 @@ services:
       - DB=true
     healthcheck:
       test: echo || exit 1
-      start_period: 1m
-      interval: 1m
+      start_period: 5m
+      interval: 5m
       timeout: 10s
       retries: 5
     ports:
@@ -149,7 +149,7 @@ services:
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -181,7 +181,7 @@ services:
       - DB=true
     healthcheck:
       test: find /var/local/lock/gc_get_1m.lock  -mmin -2 ||exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:

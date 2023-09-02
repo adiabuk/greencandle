@@ -17,7 +17,7 @@ services:
       - /var/run:/var/run
     healthcheck:
       test: ls /var/log/syslog
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
 
@@ -40,7 +40,7 @@ services:
       - test-base-redis:redis
     healthcheck:
       test: ls ||exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -63,7 +63,7 @@ services:
       - 6383:6379
     healthcheck:
       test: redis-cli ping
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -87,7 +87,7 @@ services:
       - 3310:3306
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -112,7 +112,7 @@ services:
       - 6000
     healthcheck:
       test: curl -Isf http://127.1:6000
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -150,7 +150,7 @@ services:
       - test-base-redis
     healthcheck:
       test: curl -Isf http://127.1:5000/healthcheck
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -183,7 +183,7 @@ services:
       - test-base-redis
     healthcheck:
       test: curl -qsf http://127.1:5000 >/dev/null
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -215,7 +215,7 @@ services:
       - test-base-redis
     healthcheck:
       test: ls || exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -249,7 +249,7 @@ services:
       - test-base-redis
     healthcheck:
       test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -373,7 +373,7 @@ services:
       - test-base-redis
     healthcheck:
       test: api_healthcheck.sh || exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -412,7 +412,7 @@ services:
       - test-base-redis
     healthcheck:
       test: api_healthcheck.sh || exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -451,7 +451,7 @@ services:
       - test-base-redis
     healthcheck:
       test: api_healthcheck.sh || exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -490,7 +490,7 @@ services:
       - test-base-redis
     healthcheck:
       test: api_healthcheck.sh || exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -529,7 +529,7 @@ services:
       - test-base-redis
     healthcheck:
       test: api_healthcheck.sh || exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -568,7 +568,7 @@ services:
       - test-base-redis
     healthcheck:
       test: api_healthcheck.sh || exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -607,7 +607,7 @@ services:
       - test-base-redis
     healthcheck:
       test: api_healthcheck.sh || exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -646,7 +646,7 @@ services:
       - test-base-redis
     healthcheck:
       test: api_healthcheck.sh || exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -685,7 +685,7 @@ services:
       - test-base-redis
     healthcheck:
       test: api_healthcheck.sh || exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -724,7 +724,7 @@ services:
       - test-base-redis
     healthcheck:
       test: api_healthcheck.sh || exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -763,7 +763,7 @@ services:
       - test-base-redis
     healthcheck:
       test: api_healthcheck.sh || exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -802,7 +802,7 @@ services:
       - test-base-redis
     healthcheck:
       test: api_healthcheck.sh || exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -841,7 +841,7 @@ services:
       - test-base-redis
     healthcheck:
       test: api_healthcheck.sh || exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -880,7 +880,7 @@ services:
       - test-base-redis
     healthcheck:
       test: api_healthcheck.sh || exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -919,7 +919,7 @@ services:
       - test-base-redis
     healthcheck:
       test: api_healthcheck.sh || exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -958,7 +958,7 @@ services:
       - test-base-redis
     healthcheck:
       test: api_healthcheck.sh || exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -997,7 +997,7 @@ services:
       - test-base-redis
     healthcheck:
       test: api_healthcheck.sh || exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
@@ -1036,7 +1036,7 @@ services:
       - test-base-redis
     healthcheck:
       test: api_healthcheck.sh || exit 1
-      interval: 1m
+      interval: 5m
       timeout: 10s
       retries: 5
     volumes:
