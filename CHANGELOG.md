@@ -1,5 +1,9 @@
 # Releases
 
+# 6.31.1
+* remove deprecated db tables, views, and code using open_trades table
+* fix trade scope functions and update unit test
+
 # 6.31
 * deprecate trade status cron and open_trades table
 * calculate perc in realtime for dash and close-trade script
