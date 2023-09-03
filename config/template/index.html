@@ -473,7 +473,7 @@
     <script>
         $(document).ready(function() {
             jQuery.get('env.txt', function(data) {
-                $("p").text('Greencandle-' + data);
+		    $("cite").text(data);
                 document.title = ('Greencandle-' + data);
             });
         });
@@ -484,7 +484,8 @@
     <content>
         <section class="msg">
             <div>
-                <p>Greencandle</p>
+		    <center>Greencandle<br><cite>xxx</cite></center>
+
             </div>
             <ul class="features">
                 <li>
@@ -515,6 +516,7 @@
                 </li>
             </ul>
         </section>
+
         <input id="hamburger" class="hamburger" type="checkbox">
         <label class="hamburger" for="hamburger">
             <i></i>
