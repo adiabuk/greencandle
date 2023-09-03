@@ -40,16 +40,6 @@
 
     </header>
 
-    {% if request.path=="/" %}
-    <p id="demo"></p>
-    <meta http-equiv="refresh" content="60">
-    <script>
-        var d = new Date();
-        document.getElementById("demo").innerHTML = "Page last updated: " + d;
-    </script>
-
-    {% endif %}
-
     <div class="container" style="max-width:2140px;">
         {% block content %} {% endblock %}
     </div>
