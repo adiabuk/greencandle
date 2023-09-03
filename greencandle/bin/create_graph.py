@@ -9,8 +9,7 @@ import argparse
 import argcomplete
 
 from greencandle.lib import config
-from greencandle.lib.graph import Graph
-
+from greencandle.lib.graph import parse_args
 
 def main():
     """Main function"""
@@ -23,27 +22,8 @@ def main():
     parser.add_argument("-o", "--output_dir", required=True)
     parser.add_argument("-m", "--thumbnails", required=False, action="store_true", default=False)
     argcomplete.autocomplete(parser)
-    args = parser.parse_args()
 
-    volume = 'vol' in config.main.indicators
-    if args.all_pairs:
-        pairs = config.main.pairs.split()
-        for pair in pairs:
-            pair = pair.strip()
-            graph = Graph(test=args.test, pair=pair, interval=args.interval, volume=volume)
-            graph.get_data()
-            graph.create_graph(args.output_dir)
-            if args.thumbnails:
-                graph.get_screenshot()
-                graph.resize_screenshot()
-
-    else:
-        graph = Graph(test=args, pair=args.pair, interval=args.interval)
-        graph.get_data()
-        graph.create_graph(args.output_dir)
-        if args.thumbnails:
-            graph.get_screenshot()
-            graph.resize_screenshot()
+    parse_args(**parser.parse_args())
 
 if __name__ == '__main__':
     main()

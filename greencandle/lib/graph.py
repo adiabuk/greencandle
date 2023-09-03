@@ -17,11 +17,37 @@ from PIL import Image
 from pyvirtualdisplay import Display
 from resizeimage import resizeimage
 from greencandle.lib import config
+from greencandle.lib.common import AttributeDict
 from greencandle.lib.redis_conn import Redis
 
 from greencandle.lib.logger import get_logger
 
 LOGGER = get_logger(__name__)
+
+def parse_args(**kwargs):
+    """
+    parse args required to create graph
+    """
+    kwargs = AttributeDict(kwargs)
+    volume = 'vol' in config.main.indicators
+    if kwargs.all_pairs:
+        pairs = config.main.pairs.split()
+        for pair in pairs:
+            pair = pair.strip()
+            graph = Graph(test=kwargs.test, pair=pair, interval=kwargs.interval, volume=volume)
+            graph.get_data()
+            graph.create_graph(kwargs.output_dir)
+            if kwargs.thumbnails:
+                graph.get_screenshot()
+                graph.resize_screenshot()
+
+    else:
+        graph = Graph(test=kwargs, pair=kwargs.pair, interval=kwargs.interval)
+        graph.get_data()
+        graph.create_graph(kwargs.output_dir)
+        if kwargs.thumbnails:
+            graph.get_screenshot()
+            graph.resize_screenshot()
 
 class Graph():
     """class for creating graph html and images"""
@@ -71,7 +97,6 @@ class Graph():
                 # Shows the image in image viewer
                 cover = resizeimage.resize_width(im1, 120)
                 cover.save(f"{output_dir}/{self.filename}_resized.png", image.format)
-
 
     @staticmethod
     def replace_all(text, dic):
