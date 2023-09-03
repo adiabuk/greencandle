@@ -7,8 +7,7 @@ import datetime
 import MySQLdb
 from greencandle.lib.binance import Binance
 from greencandle.lib import config
-from greencandle.lib.binance_common import get_current_price
-from greencandle.lib.common import AttributeDict, format_usd
+from greencandle.lib.common import AttributeDict
 from greencandle.lib.balance_common import get_base, get_quote
 from greencandle.lib.logger import get_logger, exception_catcher
 
