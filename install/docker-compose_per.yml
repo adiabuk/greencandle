@@ -106,6 +106,7 @@ services:
     environment:
       - CONFIG_ENV=per/be/manual
       - DB=true
+      - STREAM=http://10.8.0.101:5001/all
     image: amrox/greencandle:${TAG}
     mem_limit: 500m
     pull_policy: always
