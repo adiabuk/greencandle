@@ -1,6 +1,29 @@
 # Releases
 
-# 5.30
+# 6.31
+* deprecate trade status cron and open_trades table
+* calculate perc in realtime for dash and close-trade script
+* need much more ram for data cron to take snapshots
+* auto scroll log tailer and remove top line/remove page refresh
+* add installed version info to web portal title
+* don't use loan of we have 3x max trade balance avail
+* reduce verbosity of healthcheck logs
+* remove encrypted values from unittests
+* update redis to latest version 7.2.0
+* disable redis persistence when testing
+* tweak healthcheck intervals and reduce mysql/nginx procs
+* fix close link and perc (for short trades)
+* use sh.tail rather than opening up whole log file
+* add close link and shortname to open trades dash
+* add sh pip to reqs and python base image
+* add stream var to all containers requiring access to live prices
+* live data dashboard with current trade info
+* enable data1 trade db storage and close signals
+* fix and stagger cron entries
+* add curl to backend_api healthcheck
+* new data strategy with tweaks to close_rule
+
+# 6.30
 * add new data env with additional RSI close rule
 * more logging in assocs unit test
 * cleanup of tests inc unused vars/imports etc
@@ -18,7 +41,7 @@
 * binance methods to fetch/convert small loans to USDT
 * add dev port forwarding
 
-# 5.29
+# 6.29
 * don't fail api healthcheck if too many procs due to rq fork
 * add week commencing to profit weekly view
 * open open trades summary view
@@ -37,7 +60,7 @@
 * test json config integrity during build
 * catch exception when we don't have a balance for given asset
 
-# 5.28.2
+# 6.28.2
 * Lint rules
 
 # 6.28.1
