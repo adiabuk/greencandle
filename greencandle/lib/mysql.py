@@ -340,37 +340,6 @@ class Mysql():
         row = self.fetch_sql_data(command, header=False)
         return row[0] if row else [None] * 7
 
-    def get_active_trades(self):
-        """
-        Get current active trades and store in active_trades table with current price
-        """
-
-        client = Binance()
-        prices = client.prices()
-        self.__run_sql_query("delete from open_trades")
-        trades = self.fetch_sql_data("select pair, open_time, open_price, name, `interval`, "
-                                     "open_usd_rate*quote_in as usd_quantity, direction from "
-                                     "trades where close_price is NULL or close_price=''",
-                                     header=False)
-        for trade in trades:
-            try:
-                pair, open_time, open_price, name, interval, usd_quantity, direction = trade
-                current_price = get_current_price(pair, prices)
-                perc = 100 * (float(current_price) - float(open_price)) / float(open_price)
-                perc = - perc if 'short' in direction else perc
-                net_perc = perc - float(self.get_complete_commission())
-                insert = (f'replace into open_trades (pair, open_time, open_price, current_price, '
-                          f'perc, net_perc, name, `interval`, usd_quantity, direction) VALUES '
-                          f'("{pair}", "{open_time}", trim("{open_price}")+0, '
-                          f'trim("{current_price}"+0), round("{perc}",2), '
-                          f'round("{net_perc}",2), "{name}", "{interval}", '
-                          f'"{format_usd(usd_quantity)}", "{direction}")')
-
-                self.__run_sql_query(insert)
-            except ZeroDivisionError:
-                self.logger.critical("%s has a zero open price, unable to calculate percentage",
-                                     pair)
-
     def trade_in_context(self, pair, name, direction):
         """
         Check if a trade exists for given pair, name, and direction
@@ -430,8 +399,8 @@ class Mysql():
         base asset if short, quote asset if long
         """
         open_set = set()
-        open_trades = self.fetch_sql_data('select pair, direction from open_trades',
-                                           header=False)
+        open_trades = self.fetch_sql_data('select pair, direction from trades where '
+                                          'close_price is null', header=False)
         # get unique set of pairs with open trades
         # get assets from pairs, base if short, quote if long
         for pair, direction in open_trades:
