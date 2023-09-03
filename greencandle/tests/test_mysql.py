@@ -80,7 +80,7 @@ class TestMysql(OrderedTest):
         self.assertIs(len(value), 1)
         last_trades = self.dbase.get_last_trades()
         self.assertIs(len(last_trades), 1)
-        open_trades = self.dbase.get_trades()
+        open_trades = self.dbase.get_open_trades()
         self.assertIs(len(open_trades), 0)
         rates = self.dbase.get_rates('USDT')
         self.assertIs(len(rates), 2)

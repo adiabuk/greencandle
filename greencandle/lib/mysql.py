@@ -162,6 +162,7 @@ class Mysql():
         result = self.__run_sql_query(command, get_id=True)
 
         return result
+
     def get_open_trades(self):
         """
         get_details of open trades
@@ -375,8 +376,8 @@ class Mysql():
         Check if a trade exists for given pair, name, and direction
         """
 
-        query = (f'select * from open_trades where pair="{pair}" and name="{name}" and '
-                 f'direction="{direction}"')
+        query = (f'select * from trades where pair="{pair}" and name="{name}" and '
+                 f'direction="{direction}" and close_price is null')
         result = self.fetch_sql_data(query, header=False)
         return bool(result)
 

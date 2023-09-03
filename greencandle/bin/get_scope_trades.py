@@ -15,9 +15,9 @@ def main():
     """
     dbase = Mysql()
     config.create_config()
-    results = dbase.fetch_sql_data(f'select pair from open_trades where name="{config.main.name}" '
-                                   f'and direction="{config.main.trade_direction}"',
-                                   header=False)
+    results = dbase.fetch_sql_data(f'select pair from trades where name="{config.main.name}" '
+                                   f'and direction="{config.main.trade_direction}" and close_price '
+                                   'is null', header=False)
 
     pairs = [item for sublist in results for item in sublist]
     for pair in pairs:
