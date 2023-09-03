@@ -427,7 +427,9 @@ class Trade():
         # set default loan to use as 0, may be overwritten if non-spot and not enough balance to
         # cover max, where loan is available
         loan_to_use = {'symbol': 0, 'usd': 0, 'symbol_name': balance_to_use['symbol_name']}
-        if balance_to_use['usd'] > total_max:
+
+        # if we have 3x balance available then use that rather than loan
+        if (balance_to_use['usd'] * 3) > total_max:
             balance_to_use['usd'] = total_max
             if balance_to_use['symbol_name'] == 'USDT':
                 balance_to_use['symbol'] = balance_to_use['usd']
@@ -874,7 +876,6 @@ class Trade():
                              total_base_amount, pair, total_quote_amount, current_price)
 
             if self.prod:
-
                 if float(amount_to_borrow) <= 0:
                     self.logger.critical("Borrow amount is zero for short pair %s.  Continuing",
                                          pair)
