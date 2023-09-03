@@ -244,7 +244,6 @@ def live():
                                        "close": close_link})
 
         results = all_data[req]
-        print(results)
         fieldnames = list(results[0].keys())
 
         return render_template('data.html', results=results, fieldnames=fieldnames, len=len,
