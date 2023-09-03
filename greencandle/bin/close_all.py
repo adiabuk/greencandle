@@ -21,7 +21,7 @@ def main():
     env = config.main.base_env
     url = f"http://router:1080/{config.web.api_token}"
     dbase = Mysql()
-    open_trades = dbase.get_open_trtades()
+    open_trades = dbase.get_open_trades()
     stream = os.environ['STREAM']
     stream_req = requests.get(stream, timeout=10)
     prices = stream_req.json()
