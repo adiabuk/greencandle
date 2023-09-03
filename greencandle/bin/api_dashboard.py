@@ -220,10 +220,8 @@ def live():
 
         services = list_to_dict(get_be_services(config.main.base_env),
                                 reverse=False, str_filter='-be-')
-        query = ("select open_time, `interval`, pair, name, open_price, direction from "
-                 "trades where close_price is null;")
+        raw = dbase.get_open_trades()
 
-        raw = dbase.fetch_sql_data(query, header=False)
         for open_time, interval, pair, name, open_price, direction in raw:
             current_price = prices['recent'][pair]['close']
             perc = perc_diff(open_price, current_price)

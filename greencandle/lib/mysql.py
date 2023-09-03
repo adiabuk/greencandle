@@ -162,6 +162,14 @@ class Mysql():
         result = self.__run_sql_query(command, get_id=True)
 
         return result
+    def get_open_trades(self):
+        """
+        get_details of open trades
+        """
+        query = ("select open_time, `interval`, pair, name, open_price, direction from "
+                 "trades where close_price is null;")
+        raw = self.fetch_sql_data(query, header=False)
+        return raw
 
     def insert_api_trade(self, **kwargs):
         """
