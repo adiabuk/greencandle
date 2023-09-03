@@ -233,8 +233,9 @@ def live():
             close_link = get_trade_link(pair, short_name, 'close', 'close_now',
                                   config.web.nginx_port, anchor=True)
 
-            all_data["prices"].append({"open_time": open_time, "interval": interval,
-                                       "pair": get_tv_link(pair, interval, anchor=True),
+            all_data["prices"].append({"pair": get_tv_link(pair, interval, anchor=True),
+                                       "interval": interval,
+                                       "open_time": open_time,
                                        "name": short_name,
                                        "open_price": '{:g}'.format(float(open_price)),
                                        "current_price": '{:g}'.format(float(current_price)),
