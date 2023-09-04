@@ -141,7 +141,7 @@ services:
       - CONFIG_ENV=prod/fe/cron
       - DB=true
     image: amrox/greencandle:${TAG}
-    mem_limit: 400m
+    mem_limit: 5g
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "cron -f"
