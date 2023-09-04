@@ -23,7 +23,7 @@ def main():
     parser.add_argument("-m", "--thumbnails", required=False, action="store_true", default=False)
     argcomplete.autocomplete(parser)
 
-    parse_args(**parser.parse_args())
+    parse_args(**vars(parser.parse_args()))
 
 if __name__ == '__main__':
     main()
