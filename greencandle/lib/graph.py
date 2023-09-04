@@ -283,15 +283,14 @@ class Graph():
         LOGGER.debug("Inserting OHLC data info var")
         self.data = {'ohlc': dframe}
 
-    def get_data(self):
+    def get_data(self, ohlc_only=False):
         """Fetch data from redis"""
         redis = Redis()
         list_of_series = []
         list_of_series2 = []
         index = redis.get_items(self.pair, self.interval)
-
-        main_indicators = config.main.indicators.split()
         ind_list = []
+        main_indicators = [] if ohlc_only else config.main.indicators.split()
         for i in main_indicators:
             split = i.split(';')
             ind = split[1] + '_' + split[2].split(',')[0]
@@ -365,15 +364,16 @@ class Graph():
         dataframes = {}
 
         dataframes['ohlc'] = pandas.DataFrame(list_of_series)
-        dataframes['HA_0'] = pandas.DataFrame(list_of_series2)
+        if not ohlc_only:
+            dataframes['HA_0'] = pandas.DataFrame(list_of_series2)
 
 
-        dataframes['event'] = pandas.DataFrame(list_of_results['event'],
-                                               columns=['result', 'current_price', 'date'])
+            dataframes['event'] = pandas.DataFrame(list_of_results['event'],
+                                                   columns=['result', 'current_price', 'date'])
 
-        for ind in [x for x in ind_list if 'HA' not in x]:
-            dataframes[ind] = pandas.DataFrame(list_of_results[ind], columns=['value',
-                                                                              'current_price',
-                                                                              'date'])
+            for ind in [x for x in ind_list if 'HA' not in x]:
+                dataframes[ind] = pandas.DataFrame(list_of_results[ind], columns=['value',
+                                                                                  'current_price',
+                                                                                  'date'])
         self.data = dataframes
         LOGGER.debug("Done getting graph data")
