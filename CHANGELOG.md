@@ -1,5 +1,8 @@
 # Releases
 
+# 6.31.3
+* separate new data rules and forward to test env
+
 # 6.31.2
 * increase mem limit for all cron containers
 * access graph images directly from nginx
