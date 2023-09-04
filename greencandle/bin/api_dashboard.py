@@ -84,7 +84,11 @@ def interal():
     """Load internal page"""
     page = "http://" + request.args.get('page')
     resp = requests.get(page, timeout=20)
+    if page.endswith('png'):
+        filename = os.path.split(page)[-1]
+        return render_template('image.html', filename=filename)
     return render_template('internal.html', page=resp.content.decode())
+
 
 @APP.route('/iframe', methods=["GET"])
 @login_required
