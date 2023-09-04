@@ -130,6 +130,10 @@ class Graph():
                                       low=value.low,
                                       close=value.close,
                                       name=f"{self.pair}-{name}")
+                item.decreasing.fillcolor = 'red'
+                item.decreasing.line.color = 'red'
+                item.increasing.fillcolor = 'green'
+                item.increasing.line.color = 'green'
 
             elif 'STX' in name:
                 LOGGER.debug("Creating Supertrend graph")
@@ -267,6 +271,8 @@ class Graph():
         date = now.strftime('%Y-%m-%d_%H-%M-%S')
         env = config.main.base_env
         self.filename = f"{output_dir}/{self.pair}_{env}_{date}-{self.interval}.html"
+        fig.update_layout(plot_bgcolor='black', xaxis=dict(showgrid=False),
+              yaxis=dict(showgrid=False))
         py.plot(fig, filename=self.filename, auto_open=False)
         LOGGER.debug("Done")
 
