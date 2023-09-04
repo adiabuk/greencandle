@@ -1,5 +1,14 @@
 # Releases
 
+# 6.31.2
+* increase mem limit for all cron containers
+* access graph images directly from nginx
+* allow creating chart with ohlc only
+* update colours for chart and candles to be more visible in thumbnail
+* disable caching in browsers to ensure fresh dynamic data
+* allow redis cleanup script to take num arg and limit to 60 tfs
+* create graph function to parse args to enable calling with dict as well as cmd line
+
 # 6.31.1
 * remove deprecated db tables, views, and code using open_trades table
 * fix trade scope functions and update unit test
