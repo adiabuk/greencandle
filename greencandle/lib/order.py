@@ -11,6 +11,7 @@ from pathlib import Path
 from str2bool import str2bool
 from send_nsca3 import send_nsca
 from greencandle.lib.auth import binance_auth
+from greencandle.lib.binance import BinanceException
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.redis_conn import Redis
@@ -501,14 +502,15 @@ class Trade():
                                      amount_to_borrow, quote, pair, current_quote_bal)
 
                     amt_str = base_to_use
-                    borrow_res = self.client.margin_borrow(
-                        symbol=pair, quantity=amount_to_borrow,
-                        isolated=str2bool(self.config.main.isolated),
-                        asset=quote)
-                    if not borrow_res or "msg" in borrow_res:
+                    try:
+                        borrow_res = self.client.margin_borrow(
+                            symbol=pair, quantity=amount_to_borrow,
+                            isolated=str2bool(self.config.main.isolated),
+                            asset=quote)
+                    except BinanceException as binex:
                         self.logger.critical("Borrow error-open long %s: %s while trying to "
-                                             "borrow %s %s", pair, str(borrow_res),
-                                             amount_to_borrow, quote)
+                                             "borrow %s %s: %s", pair, str(borrow_res),
+                                             amount_to_borrow, quote, str(binex))
                         return False
 
                     self.logger.info("Borrow result for pair %s/long: %s", pair, borrow_res)
@@ -793,12 +795,14 @@ class Trade():
                 if float(repay) > 0:
                     self.logger.info("Trying to repay: %s %s for pair short %s",
                                      repay, base, pair)
-                    repay_result = self.client.margin_repay(
-                        symbol=pair, quantity=repay,
-                        isolated=str2bool(self.config.main.isolated),
-                        asset=base)
-                    if repay_result and "msg" in repay_result:
-                        self.logger.critical("Repay error-close short %s: %s", pair, repay_result)
+                    try:
+                        repay_result = self.client.margin_repay(
+                            symbol=pair, quantity=repay,
+                            isolated=str2bool(self.config.main.isolated),
+                            asset=base)
+                    except BinanceException as binex:
+                        self.logger.critical("Repay error-close short %s: %s %s",
+                                             pair, repay_result, str(binex))
                         self.logger.critical("Params: %s, %s, %s %s", pair, borrowed,
                                           self.config.main.isolated, base)
 
@@ -885,14 +889,15 @@ class Trade():
                     self.logger.info("Will attempt to borrow %s of %s for short pair %s "
                                      "Balance: %s", amount_to_borrow, base, pair, total_base_amount)
                     amt_str = total_base_amount
-                    borrow_res = self.client.margin_borrow(
-                        symbol=pair, quantity=amount_to_borrow,
-                        isolated=str2bool(self.config.main.isolated),
-                        asset=base)
-                    if not borrow_res or "msg" in borrow_res:
+                    try:
+                        borrow_res = self.client.margin_borrow(
+                            symbol=pair, quantity=amount_to_borrow,
+                            isolated=str2bool(self.config.main.isolated),
+                            asset=base)
+                    except BinanceException as binex:
                         self.logger.critical("Borrow error-open %s: %s while trying to borrow "
-                                             "short %s %s", pair, str(borrow_res),
-                                             amount_to_borrow, base)
+                                             "short %s %s %s", pair, str(borrow_res),
+                                             amount_to_borrow, base, str(binex))
                         return False
 
                     self.logger.info("Borrow result for pair %s/short: %s", pair, borrow_res)
@@ -1075,12 +1080,14 @@ class Trade():
 
                 if float(repay) > 0:
                     self.logger.info("Trying to repay: %s %s for pair %s", repay, quote, pair)
-                    repay_result = self.client.margin_repay(
-                        symbol=pair, quantity=repay,
-                        isolated=str2bool(self.config.main.isolated),
-                        asset=quote)
-                    if repay_result and "msg" in repay_result:
-                        self.logger.critical("Repay error-close %s: %s", pair, repay_result)
+                    try:
+                        repay_result = self.client.margin_repay(
+                            symbol=pair, quantity=repay,
+                            isolated=str2bool(self.config.main.isolated),
+                            asset=quote)
+                    except BinanceException as binex:
+                        self.logger.critical("Repay error-close %s: %s %s",
+                                             pair, repay_result, str(binex))
                         self.logger.critical("Params: %s, %s, %s %s", pair, borrowed,
                                           self.config.main.isolated, quote)
                     self.logger.info("Repay result for %s: %s", pair, repay_result)
