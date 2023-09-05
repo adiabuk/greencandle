@@ -1,5 +1,10 @@
 # Releases
 
+# 6.32
+* tighter step1 open rules checking open outside bb & (stoch)RSI levels
+* fix jinja syntax error
+* capture binance exception for borrow/repay loans
+
 # 6.31.3
 * separate new data rules and forward to test env
 
