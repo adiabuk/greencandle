@@ -22,7 +22,7 @@ def main():
     pairs = config.main.pairs.split()
     config.create_config()
     count = 0
-    num = sys.argv[1] if len(sys.argv) > 1 else 500
+    num = int(sys.argv[1]) if len(sys.argv) > 1 else 500
     for interval in ['1m', '3m', '5m', '15m', '30m', '1h', '4h', '12h', '1d']:
         for pair in pairs:
             pair = pair.strip()
