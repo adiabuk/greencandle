@@ -40,7 +40,7 @@ def main():
             if to_pay <= 0:
                 logger.info("Skipping %s due to insuficent funds", asset)
                 continue
-            if asset in open_set:
+            if asset in open_set and debt_type == 'borrowed':
                 logger.info("Skipping %s due to open trade", asset)
             else:
                 logger.info("Attempting to pay off Cross %s of %s", to_pay, asset)
