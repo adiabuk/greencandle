@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=bare-except,no-member,consider-using-with,too-many-locals
+#pylint: disable=bare-except,no-member,consider-using-with,too-many-locals,assigning-non-slot
 
 """
 Flask module for manipulating API trades and displaying relevent graphs
@@ -9,9 +9,10 @@ import os
 import json
 import subprocess
 from collections import defaultdict
+from datetime import timedelta
 import requests
-from flask import Flask, render_template, request, Response, redirect, url_for
-from flask_login import LoginManager, login_required
+from flask import Flask, render_template, request, Response, redirect, url_for, session, g
+from flask_login import LoginManager, login_required, current_user
 import setproctitle
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.mysql import Mysql
@@ -62,6 +63,16 @@ def get_pairs(env=config.main.base_env):
     for key, val in pairs_dict.items():
         length[key] = len(val)
     return pairs_dict, dict(length), names
+
+@APP.before_request
+def before_request():
+    """
+    Perserve session
+    """
+    session.permanent = True
+    APP.permanent_session_lifetime = timedelta(weeks=1)
+    session.modified = True
+    g.user = current_user
 
 @APP.route('/healthcheck', methods=["GET"])
 @login_required
