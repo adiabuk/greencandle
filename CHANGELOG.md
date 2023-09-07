@@ -1,5 +1,14 @@
 # Releases
 
+# 6.33
+* make UI login session last longer
+* cast perc/net_perc as decimal to allow sorting of db views
+* update db schema with latest changes
+* add comment field to profit view from trades table
+* don't skip interest repayments due to open_trade
+* fix typerror, num of redis items arg should be int
+* lower stop_loss on any3 test strategy & prod env
+
 # 6.32
 * tighter step1 open rules checking open outside bb & (stoch)RSI levels
 * fix jinja syntax error
