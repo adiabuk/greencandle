@@ -45,7 +45,7 @@ def main():
                                    quantity=get_step_precision(pair, base_in),
                                    order_type=client.market, test=True)
         print(f"Testing {pair} from {name}, result: {str(result)}")
-        print(f"comparing amount with available balance...")
+        print("comparing amount with available balance...")
         try:
             if 'isolated' in name:
                 bal_amount = balances['isolated'][pair][get_base(pair)]
@@ -73,7 +73,7 @@ def main():
                     (dbase.get_complete_commission()/2)
             production = str2bool(config.main.production)
             account = 'binance' if not production or not 'cross' in name else 'margin'
-            bnb_available = bal_amount = balances[account]['BNB']['count']
+            bnb_available = bal_amount = balances[account]['BNB']['gross_count']
 
             if float(bnb_required) > float(bnb_available):
                 print(f"Insufficient BNB required:{bnb_required} available:{bnb_available}")
