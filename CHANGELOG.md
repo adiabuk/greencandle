@@ -1,5 +1,13 @@
 # Releases
 
+# 6.34
+* don't reformat live page for mobile
+* remove applied db changes
+* remove unused containers in data/test env
+* use gross BNB when bnb and close cheker scripts
+* don't catch BinanceException in binance module as we catch it in orders
+* don't disable concurrent builds at top level - this queues when we run unit tests
+
 # 6.33
 * make UI login session last longer
 * cast perc/net_perc as decimal to allow sorting of db views
