@@ -12,9 +12,7 @@ from urllib.parse import urlencode
 from urllib3.util.retry import Retry
 import requests
 from requests.adapters import HTTPAdapter
-from greencandle.lib.logger import get_logger, exception_catcher
-
-GET_EXCEPTIONS = exception_catcher((Exception))
+from greencandle.lib.logger import get_logger
 
 class BinanceException(Exception):
     """Custom binance exception"""
@@ -465,7 +463,6 @@ class Binance():
         session.mount('https://', adapter)
         return session
 
-    @GET_EXCEPTIONS
     def request(self, method, path, params=None):
         """
         Make request to API and return result
@@ -484,7 +481,6 @@ class Binance():
 
         return data
 
-    @GET_EXCEPTIONS
     def signed_request(self, method, path, params):
         """
         Send authenticated request
