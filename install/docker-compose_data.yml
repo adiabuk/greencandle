@@ -1506,5 +1506,3 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/:/var/run
-
-      - /var/run/:/var/run
