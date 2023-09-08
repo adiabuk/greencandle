@@ -6,7 +6,9 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    {% if 'live' not in url_for(request.endpoint) %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% endif %}
     <title>Greencandle</title>
 
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.js"></script>
