@@ -18,8 +18,8 @@ def main():
 
     balance = Balance(test=False)
     all_bal = balance.get_balance()
-    bnb = float(all_bal['margin']['BNB']['USD'])
-    if bnb < 10:
+    bnb = float(all_bal['margin']['BNB']['gross_count'])
+    if bnb < 0.1:
         error_str = "Not enough BNB in cross margin account"
         send_slack_message('alerts', error_str, name=sys.argv[0].rsplit('/', maxsplit=1)[-1])
 
