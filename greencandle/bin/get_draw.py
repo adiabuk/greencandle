@@ -11,30 +11,26 @@ from greencandle.lib.mysql import Mysql
 def main():
     """
     Retrieve TP and SL from redis for given pair
-    Usage: get_draw <pair> <interval> <name> up|down <direction>
+    Usage: get_draw <pair> <name> <direction> up|down
     """
 
     dbase = Mysql()
     interval = sys.argv
     pair = sys.argv[1]
-    interval = sys.argv[2]
-    name = sys.argv[3]
+    name = sys.argv[2]
+    direction = sys.argv[3]
     updown = sys.argv[4]
-    direction = sys.argv[5]
 
-    if dbase.trade_in_context(pair, name, direction):
-        redis = Redis(interval=interval, test_data=False, db=2)
+    redis = Redis(interval=interval, test_data=False, db=2)
 
-        if updown == 'up':
-            result = redis.get_drawup(pair, name=name, direction=direction)
-        elif updown == 'down':
-            result = redis.get_drawdown(pair, name=name, direction=direction)
-        else:
-            result = 'error'
-
-        print(result)
+    if updown == 'up':
+        result = redis.get_drawup(pair, name=name, direction=direction)
+    elif updown == 'down':
+        result = redis.get_drawdown(pair, name=name, direction=direction)
     else:
-        print("No open trades in current context")
+        result = 'error'
+
+    print(result)
 
 if __name__ == '__main__':
     main()

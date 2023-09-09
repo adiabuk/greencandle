@@ -64,21 +64,23 @@ class Redis():
         del redis1
         return response
 
-    def get_drawup(self, pair, name=None, direction=None):
+    def get_drawup(self, pair, **kwargs):
         """
         Get maximum price of current open trade for given pair/interval
         and calculate drawdup based on trade opening price.
         Return max price and drawup as a percentage
         """
-        direction = direction if direction else config.main.trade_direction
+
+        name = kwargs['name'] if 'name' in kwargs else config.main.name
+        direction = kwargs['direction'] if 'direction' in kwargs else config.main.trade_direction
+
         redis1 = Redis(interval=self.interval, db=2)
 
-        if not name:
-            name = get_short_name(config.main.name,
-                                  config.main.base_env,
-                                  config.main.trade_direction)
+        short = get_short_name(name,
+                               config.main.base_env,
+                               direction)
 
-        key = f"{pair}:drawup:{name}"
+        key = f"{pair}:drawup:{short}"
         max_price = redis1.get_item(key, 'max_price')
         orig_price = redis1.get_item(key, 'orig_price')
         try:
@@ -108,19 +110,21 @@ class Redis():
         redis1.conn.delete(key)
         del redis1
 
-    def get_drawdown(self, pair, name=None, direction=None):
+    def get_drawdown(self, pair, **kwargs):
         """
         Get minimum price of current open trade for given pair/interval
         and calculate drawdown based on trade opening price.
         Return min price and drawdown as a percentage
         """
-        direction = direction if direction else config.main.trade_direction
+
+        name = kwargs['name'] if 'name' in kwargs else config.main.name
+        direction = kwargs['direction'] if 'direction' in kwargs else config.main.trade_direction
         redis1 = Redis(interval=self.interval, db=2)
-        if not name:
-            name = get_short_name(config.main.name,
-                                  config.main.base_env,
-                                  config.main.trade_direction)
-        key = f"{pair}:drawdown:{name}"
+
+        short = get_short_name(name,
+                               config.main.base_env,
+                               direction)
+        key = f"{pair}:drawdown:{short}"
         min_price = redis1.get_item(key, 'min_price')
         orig_price = redis1.get_item(key, 'orig_price')
 
