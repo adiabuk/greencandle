@@ -92,21 +92,35 @@ class Redis():
         del redis1
         return {'price':max_price, 'perc': drawup}
 
-    def rm_drawup(self, pair):
+    def rm_drawup(self, pair, **kwargs):
         """
         Delete current draw up value for given pair
         """
         redis1 = Redis(interval=self.interval, db=2)
-        key = f"{pair}:drawup:{config.main.name}"
+        name = kwargs['name'] if 'name' in kwargs else config.main.name
+        direction = kwargs['direction'] if 'direction' in kwargs else config.main.trade_direction
+
+        short = get_short_name(name,
+                               config.main.base_env,
+                               direction)
+
+        key = f"{pair}:drawup:{short}"
         redis1.conn.delete(key)
         del redis1
 
-    def rm_drawdown(self, pair):
+    def rm_drawdown(self, pair, **kwargs):
         """
         Delete current draw down value for given pair
         """
         redis1 = Redis(interval=self.interval, db=2)
-        key = f"{pair}:drawdown:{config.main.name}"
+        name = kwargs['name'] if 'name' in kwargs else config.main.name
+        direction = kwargs['direction'] if 'direction' in kwargs else config.main.trade_direction
+
+        short = get_short_name(name,
+                               config.main.base_env,
+                               direction)
+
+        key = f"{pair}:drawdown:{short}"
         redis1.conn.delete(key)
         del redis1
 
