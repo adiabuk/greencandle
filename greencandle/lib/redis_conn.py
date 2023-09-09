@@ -133,32 +133,39 @@ class Redis():
         del redis1
         return {'price':min_price, 'perc': drawdown}
 
-    def update_on_entry(self, pair, name, value):
+    def update_on_entry(self, pair, func, value,**kwargs):
         """
         Update key/value for storing profit/stoploss from figures derived at trade entry
         """
         redis1 = Redis(interval=self.interval, db=2)
 
-        short = get_short_name(config.main.name,
+        name = kwargs['name'] if 'name' in kwargs else config.main.name
+        direction = kwargs['direction'] if 'direction' in kwargs else config.main.trade_direction
+
+        short = get_short_name(name,
                                config.main.base_env,
-                               config.main.trade_direction)
-        key = f"{pair}:{name}:{short}"
+                               direction)
+        key = f"{pair}:{func}:{short}"
         redis1.conn.set(key, value)
         del redis1
 
-    def get_on_entry(self, pair, name):
+    def get_on_entry(self, pair, func, **kwargs):
         """
         fetch key/value set on trade entry
         If no value exists, retrieve default from config
         Returns float
         """
         redis1 = Redis(interval=self.interval, db=2)
-        short = get_short_name(config.main.name,
+        name = kwargs['name'] if 'name' in kwargs else config.main.name
+        direction = kwargs['direction'] if 'direction' in kwargs else config.main.trade_direction
+
+        short = get_short_name(name,
                                config.main.base_env,
-                               config.main.trade_direction)
-        key = f"{pair}:{name}:{short}"
+                               direction)
+        key = f"{pair}:{func}:{short}"
         value = redis1.conn.get(key)
 
+        self.logger.debug("getting key %s %s", key, value)
         try:
             result = float(value.decode())
         except AttributeError:
