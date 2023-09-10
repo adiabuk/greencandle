@@ -508,7 +508,7 @@ class Binance():
             raise BinanceException(data['msg'], method, path, params)
 
         self.logger.debug("%s %s", inspect.stack()[1].function, data)
-        self.logger.info("Calling binance api path %s", path)
+        self.logger.debug("Calling binance api path %s", path)
         return data
 
     @staticmethod
