@@ -1,5 +1,12 @@
 # Releases
 
+# 6.35
+* don't blanket-catch exceptions in orders mod
+* fix old drawup|drawdown values not being removed before after trade
+* re-add comment field in profit view and update schema
+* allow getting current drawup/drawdown and tpsl from outside context
+* fix data env docker compose yaml syntax
+
 # 6.34
 * don't reformat live page for mobile
 * remove applied db changes
