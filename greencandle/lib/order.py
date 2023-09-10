@@ -173,7 +173,6 @@ class Trade():
             self.logger.warning("Unable to push stats to nagios")
         return final_list
 
-    @GET_EXCEPTIONS
     def open_trade(self, items_list, stop=0):
         """
         Main open trade method
@@ -203,7 +202,6 @@ class Trade():
             raise InvalidTradeError("Invalid trade type")
         return True
 
-    @GET_EXCEPTIONS
     def close_trade(self, items_list, drawdowns=None, drawups=None):
         """
         Main close trade method
@@ -589,7 +587,6 @@ class Trade():
             balance[account][quote]['count'] = max(last_value, balance[account][quote]['count'])
         return balance
 
-    @GET_EXCEPTIONS
     def __open_spot_long(self, buy_list):
         """
         Get item details and attempt to trade according to config
@@ -741,7 +738,6 @@ class Trade():
                                             fill['commissionAsset']+'USDT')
         return usd_total
 
-    @GET_EXCEPTIONS
     def __close_margin_short(self, short_list, drawdowns=None, drawups=None):
         """
         Get item details and attempt to close margin short trade according to config
@@ -848,7 +844,6 @@ class Trade():
         del dbase
         return True
 
-    @GET_EXCEPTIONS
     def __open_margin_short(self, short_list, stop):
         """
         Get item details and attempt to open margin short trade according to config
@@ -950,7 +945,6 @@ class Trade():
         del dbase
         return True
 
-    @GET_EXCEPTIONS
     def __close_spot_long(self, sell_list, drawdowns=None, drawups=None):
         """
         Get item details and attempt to close spot trade according to config
@@ -1031,7 +1025,6 @@ class Trade():
         del dbase
         return True
 
-    @GET_EXCEPTIONS
     def __close_margin_long(self, sell_list, drawdowns=None, drawups=None):
         """
         Get item details and attempt to close margin long trade according to config
