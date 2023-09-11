@@ -12,7 +12,6 @@ from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.balance_common import get_base, get_quote
 from greencandle.lib.common import arg_decorator, sub_perc
 from greencandle.lib.balance import Balance
-from greencandle.lib.binance_accounts import quote2base
 from greencandle.lib.auth import binance_auth
 config.create_config()
 
@@ -28,7 +27,7 @@ def main():
     client = binance_auth()
 
     dbase = Mysql()
-    query = "select pair, base_in, quote_in, name from trades where close_price is NULL"
+    query = "select pair, base_in, quote_in, name, direction from trades where close_price is NULL"
 
     open_trades = dbase.fetch_sql_data(query, header=False)
     bal = Balance(test=False)
@@ -36,11 +35,11 @@ def main():
     balances = bal.get_balance(phemex=phemex)
     pairs = []
     prices = client.prices()
-    for trade in open_trades:
+    #for trade in open_trades:
+    for pair, base_in, quote_in, name, direction in open_trades:
         result = False
         result2 = False
         result3 = False
-        pair, base_in, quote_in, name = trade
         result = client.spot_order(symbol=pair, side=client.sell,
                                    quantity=get_step_precision(pair, base_in),
                                    order_type=client.market, test=True)
@@ -50,19 +49,21 @@ def main():
             if 'isolated' in name:
                 bal_amount = balances['isolated'][pair][get_base(pair)]
             elif 'cross' in name:
-                if 'long' in name:
-                    bal_amount = balances['margin'][get_base(pair)]['count']
+
+                if 'long' in direction:
+                    bal_amount = balances['margin'][get_base(pair)]['gross_count']
                 else:
-                    bal_amount = quote2base(quote_in, pair)
+                    bal_amount = balances['margin'][get_quote(pair)]['gross_count']
+                    #bal_amount = quote2base(quote_in, pair)
 
             else:
                 bal_amount = balances['binance'][get_base(pair)]['count']
-
-            if "long" in name and sub_perc(dbase.get_complete_commission(),
+            if "long" in direction and sub_perc(dbase.get_complete_commission(),
                                            float(base_in)) > bal_amount:
                 result2 = True
                 reason = "Not enough base amount"
-            elif "short" in name and quote2base(quote_in, pair) < bal_amount:
+
+            elif "short" in direction and float(quote_in) < bal_amount:
                 result2 = True
                 reason = "Not enough base amount"
 
@@ -91,6 +92,7 @@ def main():
     if str_pairs:
         send_slack_message("alerts", f"Issues with open trades:\n {str_pairs}",
                            name=sys.argv[0].rsplit('/', maxsplit=1)[-1])
+        print(f"Issue with open_trades:\n{str_pairs}")
 
 if __name__ == '__main__':
     main()
