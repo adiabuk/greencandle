@@ -782,7 +782,7 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/short/short2/1m
       - DB=true
-      - REDIS_FORWARD=4,5
+      - REDIS_FORWARD=4
       - ROUTER_FORWARD=True
       - NSCA=True
     healthcheck:
@@ -820,7 +820,7 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/long/long2/1m
       - DB=true
-      - REDIS_FORWARD=4,5
+      - REDIS_FORWARD=4
       - ROUTER_FORWARD=True
       - NSCA=True
     healthcheck:
@@ -858,7 +858,7 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/short/short2/5m
       - DB=true
-      - REDIS_FORWARD=4,5
+      - REDIS_FORWARD=4
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -895,7 +895,7 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/long/long2/5m
       - DB=true
-      - REDIS_FORWARD=4,5
+      - REDIS_FORWARD=4
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -932,7 +932,7 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/short/short2/1h
       - DB=true
-      - REDIS_FORWARD=4,5
+      - REDIS_FORWARD=4
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -969,7 +969,7 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/long/long2/1h
       - DB=true
-      - REDIS_FORWARD=4,5
+      - REDIS_FORWARD=4
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -1006,7 +1006,7 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/short/short2/4h
       - DB=true
-      - REDIS_FORWARD=4,5
+      - REDIS_FORWARD=4
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -1043,7 +1043,7 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/long/long2/4h
       - DB=true
-      - REDIS_FORWARD=4,5
+      - REDIS_FORWARD=4
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -1080,7 +1080,7 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/short/short2/12h
       - DB=true
-      - REDIS_FORWARD=4,5
+      - REDIS_FORWARD=4
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -1117,7 +1117,7 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/long/long2/12h
       - DB=true
-      - REDIS_FORWARD=4,5
+      - REDIS_FORWARD=4
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -1495,6 +1495,158 @@ services:
       - CONFIG_ENV=data/be/short/short4/12h
       - DB=true
       - STORE_IN_DB=True
+    healthcheck:
+      test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      start_period: 1h
+      interval: 30m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-direction-5m-short:
+    container_name: data-be-direction-5m-short
+    hostname: data-be-direction-5m-short
+    image: amrox/greencandle:${TAG}
+    mem_limit: 500m
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh analyse_data
+    logging:
+      driver: journald
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_1h
+    environment:
+      - VPN_IP=$VPN_IP
+      - CHECK_REDIS_PAIR=4
+      - ALERT=True
+      - CONFIG_ENV=data/be/short/check_direction/1h
+      - DB=true
+      - REDIS_FORWARD=5
+      - INTERVAL=5m
+    healthcheck:
+      test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      start_period: 1h
+      interval: 30m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-direction-1m-short:
+    container_name: data-be-direction-1m-short
+    hostname: data-be-direction-1m-short
+    image: amrox/greencandle:${TAG}
+    mem_limit: 500m
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh analyse_data
+    logging:
+      driver: journald
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_1m
+    environment:
+      - VPN_IP=$VPN_IP
+      - CHECK_REDIS_PAIR=4
+      - ALERT=True
+      - CONFIG_ENV=data/be/short/check_direction/1h
+      - DB=true
+      - REDIS_FORWARD=5
+      - INTERVAL=1m
+    healthcheck:
+      test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      start_period: 1h
+      interval: 30m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-direction-5m-long:
+    container_name: data-be-direction-5m-long
+    hostname: data-be-direction-5m-long
+    image: amrox/greencandle:${TAG}
+    mem_limit: 500m
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh analyse_data
+    logging:
+      driver: journald
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_1h
+    environment:
+      - VPN_IP=$VPN_IP
+      - CHECK_REDIS_PAIR=4
+      - ALERT=True
+      - CONFIG_ENV=data/be/long/check_direction/1h
+      - DB=true
+      - REDIS_FORWARD=5
+      - INTERVAL=5m
+    healthcheck:
+      test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      start_period: 1h
+      interval: 30m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-direction-1m-long:
+    container_name: data-be-direction-1m-long
+    hostname: data-be-direction-1m-long
+    image: amrox/greencandle:${TAG}
+    mem_limit: 500m
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh analyse_data
+    logging:
+      driver: journald
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_1m
+    environment:
+      - VPN_IP=$VPN_IP
+      - CHECK_REDIS_PAIR=4
+      - ALERT=True
+      - CONFIG_ENV=data/be/long/check_direction/1h
+      - DB=true
+      - REDIS_FORWARD=5
+      - INTERVAL=1m
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
