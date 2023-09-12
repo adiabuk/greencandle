@@ -91,9 +91,11 @@ def analyse_pair(pair, redis):
     redis4.conn.sadd(f'{NEW_INTERVAL}:{new_direction}', pair)
     del redis4
 
-    send_slack_message("alerts", f"{pair} {config.main.trade_direction} -> {new_direction}")
-    LOGGER.info("Trade alert: %s %s -> %s %s -> %s", pair, INTERVAL,NEW_INTERVAL, DIRECTION,
-                new_direction)
+    reversal = "no change" if DIRECTION == new_direction else "reversal"
+    send_slack_message("alerts", f"{pair} {config.main.trade_direction} -> {new_direction} "
+                       f"({reversal})", icon=f"{NEW_INTERVAL}-{new_direction}")
+    LOGGER.info("Trade alert: %s %s -> %s %s -> %s (%s)", pair, INTERVAL,NEW_INTERVAL, DIRECTION,
+                new_direction, reversal)
 
 @arg_decorator
 def main():
