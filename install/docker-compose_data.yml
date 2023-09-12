@@ -1562,7 +1562,7 @@ services:
     depends_on:
       - data-base-mysql
       - data-base-redis
-      - data-be-get_1m
+      - data-be-get1_1m
     environment:
       - VPN_IP=$VPN_IP
       - CHECK_REDIS_PAIR=4
@@ -1638,7 +1638,7 @@ services:
     depends_on:
       - data-base-mysql
       - data-base-redis
-      - data-be-get_1m
+      - data-be-get1_1m
     environment:
       - VPN_IP=$VPN_IP
       - CHECK_REDIS_PAIR=4
