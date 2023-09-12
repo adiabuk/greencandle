@@ -92,9 +92,8 @@ def analyse_pair(pair, redis):
         directions.remove(config.main.trade_direction)
         new_direction = directions[0]
 
-    forward_db = REDIS_FORWARD[0] if result == 'OPEN' else REDIS_FORWARD[1]
-    LOGGER.info("Adding %s to %s:%s set", pair, INTERVAL, DIRECTION)
-    redis4 = Redis(db=forward_db)
+    LOGGER.info("Adding %s to %s:%s set", pair, INTERVAL, new_direction)
+    redis4 = Redis(db=REDIS_FORWARD[0])
     redis4.conn.sadd(f'{INTERVAL}:{new_direction}', pair)
     del redis4
 
