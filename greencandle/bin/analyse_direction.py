@@ -80,7 +80,7 @@ def analyse_pair(pair, redis):
 
     # swap direction if we don't match rule
     directions = ['long', 'short']
-    if result == 'open':
+    if result.lower() == 'open':
         new_direction = config.main.trade_direction
     else:
         directions.remove(config.main.trade_direction)
@@ -94,8 +94,6 @@ def analyse_pair(pair, redis):
     send_slack_message("alerts", f"{pair} {config.main.trade_direction} -> {new_direction}")
     LOGGER.info("Trade alert: %s %s -> %s %s -> %s", pair, INTERVAL,NEW_INTERVAL, DIRECTION,
                 new_direction)
-
-
 
 @arg_decorator
 def main():
