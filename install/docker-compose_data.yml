@@ -1529,7 +1529,7 @@ services:
       - VPN_IP=$VPN_IP
       - CHECK_REDIS_PAIR=4
       - ALERT=True
-      - CONFIG_ENV=data/be/short/check_direction/1h
+      - CONFIG_ENV=data/be/short/check_direction
       - DB=true
       - REDIS_FORWARD=5
       - INTERVAL=5m
@@ -1567,7 +1567,7 @@ services:
       - VPN_IP=$VPN_IP
       - CHECK_REDIS_PAIR=4
       - ALERT=True
-      - CONFIG_ENV=data/be/short/check_direction/1h
+      - CONFIG_ENV=data/be/short/check_direction
       - DB=true
       - REDIS_FORWARD=5
       - INTERVAL=1m
@@ -1605,7 +1605,7 @@ services:
       - VPN_IP=$VPN_IP
       - CHECK_REDIS_PAIR=4
       - ALERT=True
-      - CONFIG_ENV=data/be/long/check_direction/1h
+      - CONFIG_ENV=data/be/long/check_direction
       - DB=true
       - REDIS_FORWARD=5
       - INTERVAL=5m
@@ -1643,7 +1643,7 @@ services:
       - VPN_IP=$VPN_IP
       - CHECK_REDIS_PAIR=4
       - ALERT=True
-      - CONFIG_ENV=data/be/long/check_direction/1h
+      - CONFIG_ENV=data/be/long/check_direction
       - DB=true
       - REDIS_FORWARD=5
       - INTERVAL=1m
