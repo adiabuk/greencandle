@@ -1514,7 +1514,7 @@ services:
     mem_limit: 500m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh analyse_data
+    entrypoint: /docker-entrypoint.sh analyse_direction
     logging:
       driver: journald
     links:
@@ -1552,7 +1552,7 @@ services:
     mem_limit: 500m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh analyse_data
+    entrypoint: /docker-entrypoint.sh analyse_direction
     logging:
       driver: journald
     links:
@@ -1590,7 +1590,7 @@ services:
     mem_limit: 500m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh analyse_data
+    entrypoint: /docker-entrypoint.sh analyse_direction
     logging:
       driver: journald
     links:
@@ -1628,7 +1628,7 @@ services:
     mem_limit: 500m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh analyse_data
+    entrypoint: /docker-entrypoint.sh analyse_direction
     logging:
       driver: journald
     links:
