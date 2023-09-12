@@ -512,20 +512,20 @@ class Trade():
                         return False
 
                     self.logger.info("Borrow result for pair %s/long: %s", pair, borrow_res)
-
-                trade_result = self.client.margin_order(symbol=pair, side=self.client.buy,
-                                                        quantity=amt_str,
-                                                        order_type=self.client.market,
-                                                        isolated=str2bool(
-                                                            self.config.main.isolated))
-                self.logger.info("%s open margin long result: %s", pair, trade_result)
-                if "msg" in trade_result:
+                try:
+                    trade_result = self.client.margin_order(symbol=pair, side=self.client.buy,
+                                                            quantity=amt_str,
+                                                            order_type=self.client.market,
+                                                            isolated=str2bool(
+                                                                self.config.main.isolated))
+                except BinanceException as binex:
                     self.logger.critical("Trade error-open %s %s: %s",
-                                      self.config.main.trade_direction, pair, str(trade_result))
+                                      self.config.main.trade_direction, pair, str(binex))
                     self.logger.critical("%s/long Vars: base quantity:%s, quote_quantity: %s "
                                          "quote bal:%s, quote_borrowed: %s", pair, amt_str,
                                          quote_to_use, current_quote_bal, amount_to_borrow)
                     return False
+                self.logger.info("%s open margin long result: %s", pair, trade_result)
 
                 # override values from exchange if in prod
                 fill_price, amt_str, quote_to_use, order_id = \
@@ -614,19 +614,19 @@ class Trade():
                               quote_amount, current_price, amount)
             if self.prod and not self.test_data:
                 amt_str = get_step_precision(pair, amount)
+                try:
+                    trade_result = self.client.spot_order(symbol=pair, side=self.client.buy,
+                                                          quantity=amt_str,
+                                                          order_type=self.client.market,
+                                                          test=self.test_trade)
 
-                trade_result = self.client.spot_order(symbol=pair, side=self.client.buy,
-                                                      quantity=amt_str,
-                                                      order_type=self.client.market,
-                                                      test=self.test_trade)
-
-                self.logger.info("%s open spot long result: %s", pair, trade_result)
-                if "msg" in trade_result:
-                    self.logger.critical("Trade error-open %s: %s", pair, str(trade_result))
+                except BinanceException as binex:
+                    self.logger.critical("Trade error-open %s: %s", pair, str(binex))
                     self.logger.critical("Vars: quantity:%s, bal:%s", amt_str, quote_amount)
                     return False
 
                 # override values from exchange if in prod
+                self.logger.info("%s open spot long result: %s", pair, trade_result)
                 fill_price, amount, quote_amount, order_id = \
                         self.__get_result_details(current_price, trade_result)
 
@@ -769,18 +769,18 @@ class Trade():
                              quantity, pair, float(current_price), quantity)
             if self.prod and not self.test_data:
                 amt_str = get_step_precision(pair, quantity)
+                try:
+                    trade_result = self.client.margin_order(symbol=pair,
+                                                            side=self.client.buy,
+                                                            quantity=amt_str,
+                                                            order_type=self.client.market,
+                                                            isolated=str2bool(
+                                                                self.config.main.isolated))
 
-                trade_result = self.client.margin_order(symbol=pair,
-                                                        side=self.client.buy,
-                                                        quantity=amt_str,
-                                                        order_type=self.client.market,
-                                                        isolated=str2bool(
-                                                            self.config.main.isolated))
-
-                self.logger.info("%s close margin short result: %s", pair, trade_result)
-                if "msg" in trade_result:
-                    self.logger.critical("Trade error-close short %s: %s", pair, trade_result)
+                except BinanceException as binex:
+                    self.logger.critical("Trade error-close short %s: %s", pair, str(binex))
                     return False
+                self.logger.info("%s close margin short result: %s", pair, trade_result)
 
                 actual_borrowed = self.get_borrowed(pair=pair, symbol=base)
                 borrowed = float(actual_borrowed) if float(borrowed) > float(actual_borrowed) else \
@@ -896,18 +896,19 @@ class Trade():
                         return False
 
                     self.logger.info("Borrow result for pair %s/short: %s", pair, borrow_res)
-
-                trade_result = self.client.margin_order(symbol=pair, side=self.client.sell,
-                                                        quantity=amt_str,
-                                                        order_type=self.client.market,
-                                                        isolated=str2bool(
-                                                            self.config.main.isolated))
-                self.logger.info("%s open margin short result: %s", pair, trade_result)
-                if "msg" in trade_result:
-                    self.logger.critical("Short Trade error-open %s: %s", pair, str(trade_result))
+                try:
+                    trade_result = self.client.margin_order(symbol=pair, side=self.client.sell,
+                                                            quantity=amt_str,
+                                                            order_type=self.client.market,
+                                                            isolated=str2bool(
+                                                                self.config.main.isolated))
+                except BinanceException as binex:
+                    self.logger.critical("Short Trade error-open %s: %s", pair, str(binex))
                     self.logger.critical("%s/short Vars: quantity:%s, bal:%s, borrowed: %s",
                                       pair, amt_str, current_base_bal, amount_to_borrow)
                     return False
+
+                self.logger.info("%s open margin short result: %s", pair, trade_result)
 
                 # override values from exchange if in prod
                 fill_price, amt_str, total_quote_amount, order_id = \
@@ -973,16 +974,16 @@ class Trade():
             if self.prod and not self.test_data:
 
                 amt_str = get_step_precision(pair, quantity)
+                try:
+                    trade_result = self.client.spot_order(
+                        symbol=pair, side=self.client.sell, quantity=amt_str,
+                        order_type=self.client.market, test=self.test_trade)
 
-                trade_result = self.client.spot_order(
-                    symbol=pair, side=self.client.sell, quantity=amt_str,
-                    order_type=self.client.market, test=self.test_trade)
-
-                self.logger.info("%s close spot long result: %s", pair, trade_result)
-                if "msg" in trade_result:
-                    self.logger.critical("Long Trade error-close %s: %s", pair, trade_result)
+                except BinanceException as binex:
+                    self.logger.critical("Long Trade error-close %s: %s", pair, str(binex))
                     return False
 
+                self.logger.info("%s close spot long result: %s", pair, trade_result)
                 # override values from exchange if in prod
                 fill_price, quantity, quote_out, order_id = \
                         self.__get_result_details(current_price, trade_result)
@@ -1053,17 +1054,17 @@ class Trade():
 
             if self.prod:
                 amt_str = get_step_precision(pair, quantity)
-
-                trade_result = self.client.margin_order(symbol=pair, side=self.client.sell,
-                                                        quantity=amt_str,
-                                                        order_type=self.client.market,
-                                                        isolated=str2bool(
-                                                            self.config.main.isolated))
+                try:
+                    trade_result = self.client.margin_order(symbol=pair, side=self.client.sell,
+                                                            quantity=amt_str,
+                                                            order_type=self.client.market,
+                                                            isolated=str2bool(
+                                                                self.config.main.isolated))
+                except BinanceException as binex:
+                    self.logger.critical("Margin long Trade error-close %s: %s", pair, str(binex))
+                    return False
 
                 self.logger.info("%s close margin long result: %s", pair, trade_result)
-                if "msg" in trade_result:
-                    self.logger.critical("Margin long Trade error-close %s: %s", pair, trade_result)
-                    return False
                 actual_borrowed = self.get_borrowed(pair=pair, symbol=quote)
                 borrowed = float(actual_borrowed) if float(borrowed) > float(actual_borrowed) else \
                         float(borrowed)
