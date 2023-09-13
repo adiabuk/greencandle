@@ -15,7 +15,7 @@ from greencandle.lib import config
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.alerts import send_slack_message
-from greencandle.lib.common import arg_decorator
+from greencandle.lib.common import arg_decorator, get_tv_link
 from greencandle.lib.auth import binance_auth
 
 config.create_config()
@@ -93,8 +93,19 @@ def analyse_pair(pair, redis):
     redis4.conn.sadd(f'{NEW_INTERVAL}:{new_direction}', f'{pair}:{reversal}')
     del redis4
 
-    send_slack_message("alerts", f"{pair} {config.main.trade_direction} -> {new_direction} "
-                       f"({reversal})", icon=f"{NEW_INTERVAL}-{new_direction}")
+    redis0 = Redis(db=0)
+    items = redis0.get_items(pair, INTERVAL)
+    data = redis0.get_item(f"{pair}:{INTERVAL}", items[-1]).decode()
+    redis3 = Redis(db=3)
+    raw_agg = redis3.conn.hgetall(f"{pair}:{INTERVAL}")
+    agg = {k.decode():v.decode() for k,v in raw_agg.items()}
+
+    send_slack_message("alerts", f"{get_tv_link(pair, NEW_INTERVAL)}:{NEW_INTERVAL} "
+                                 f"{config.main.trade_direction} -> "
+                                 f"{new_direction} ({reversal}) "
+                                 f"Data: {data} Agg: {agg}",
+                       emoji=True,
+                       icon=f"{NEW_INTERVAL}-{new_direction}")
     LOGGER.info("Trade alert: %s %s -> %s %s -> %s (%s)", pair, INTERVAL,NEW_INTERVAL, DIRECTION,
                 new_direction, reversal)
 
