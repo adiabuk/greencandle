@@ -131,7 +131,6 @@ class Trade():
                                         self.config.main.trade_direction, item[0])
                     continue
 
-
             if (current_trades and [trade for trade in current_trades if item[0] in trade]):
                 self.logger.warning("We already have a trade of %s %s, skipping...",
                     self.config.main.trade_direction, item[0])
@@ -554,7 +553,7 @@ class Trade():
                                    divisor=self.config.main.divisor,
                                    direction=self.config.main.trade_direction,
                                    symbol_name=quote, commission=str(commission_usd),
-                                   order_id=order_id)
+                                   order_id=order_id, comment=event)
 
                 self.__send_notifications(pair=pair, open_time=current_time,
                                           fill_price=fill_price, interval=self.interval,
@@ -655,7 +654,7 @@ class Trade():
                                                quote_amount=quote_amount, base_amount=amount,
                                                direction=self.config.main.trade_direction,
                                                symbol_name=quote, commission=str(commission_usd),
-                                               order_id=order_id)
+                                               order_id=order_id, comment=event)
                 if db_result:
                     self.__send_notifications(pair=pair, open_time=current_time,
                                               fill_price=fill_price, interval=self.interval,
@@ -937,7 +936,7 @@ class Trade():
                                    divisor=self.config.main.divisor,
                                    direction=self.config.main.trade_direction,
                                    symbol_name=get_quote(pair), commission=str(commission_usd),
-                                   order_id=order_id)
+                                   order_id=order_id, comment=event)
 
                 self.__send_notifications(pair=pair, open_time=current_time,
                                           fill_price=current_price, interval=self.interval,

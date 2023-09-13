@@ -60,20 +60,22 @@ def analyse_loop():
     redis = Redis()
     if CHECK_REDIS_PAIR:
         redis4=Redis(db=CHECK_REDIS_PAIR)
-        redis_pairs = [x.decode() for x in redis4.conn.smembers(f'{INTERVAL}:{DIRECTION}')]
+        redis_pairs = [x.decode().split(':') for x in
+                       redis4.conn.smembers(f'{INTERVAL}:{DIRECTION}')]
+
         dbase = Mysql(interval=INTERVAL)
-        open_pairs = [pair[0] for pair in
-                      dbase.fetch_sql_data(f'select pair from trades where `interval`="{INTERVAL}" '
-                                           f'and name="{config.main.name}" and close_price is null',
-                                           header=False)]
+        open_pairs = dbase.fetch_sql_data(f'select pair, comment from trades where '
+                                          f'`interval`="{INTERVAL}" and name="{config.main.name}" '
+                                          f'and close_price is null', header=False)
 
         pairs = list(set(redis_pairs + open_pairs))
         common = list(set(redis_pairs).intersection(open_pairs))
         for pair in common:
             # close trade when so we can re-fire open signal
             trade = Trade(interval=INTERVAL, test_trade=True, test_data=False, config=config)
-            details = [[pair, "2020-01-01 00:00:00", "1", "reopen", "0"]]
-            trade.close_trade(details)
+            details = [[pair[0], "2020-01-01 00:00:00", "1", "reopen", "0"]]
+            if pair[1] != 'reversal':
+                trade.close_trade(details)
 
         del redis4
     else:
@@ -107,18 +109,13 @@ def get_match_name(matches):
         match_names.append(name_lookup[container_num-1][match-1])
     return ','.join(match_names)
 
-def rm_pair_from_redis(pair, dbase):
-    """
-    Remove pair from redis set
-    """
-    redis4 = Redis(db=dbase)
-    redis4.conn.srem(f'{INTERVAL}:{DIRECTION}', pair)
-
 def analyse_pair(pair, redis):
     """
     Analysis of individual pair
     """
+    pair, reversal = pair.split(':')
     pair = pair.strip()
+
 
     supported = ""
     if DIRECTION != "short":
@@ -133,8 +130,9 @@ def analyse_pair(pair, redis):
 
     LOGGER.debug("Analysing pair: %s", pair)
     try:
-        result, event, current_time, current_price, match = \
+        result, current_time, current_price, match = \
                 redis.get_rule_action(pair=pair, interval=INTERVAL)
+        event = 'reversal'
 
         if result in ('OPEN', 'CLOSE'):
             LOGGER.debug("Trades to %s", result.lower())
@@ -187,11 +185,16 @@ def analyse_pair(pair, redis):
                 LOGGER.info("opening data trade for %s", pair)
                 trade.open_trade(details)
             elif result == 'CLOSE' and STORE_IN_DB:
-                LOGGER.info("closing data trade for %s", pair)
-                trade.close_trade(details)
+                if reversal == 'normal':
+                    LOGGER.info("closing normal trade for %s", pair)
+                    trade.close_trade(details)
+                else:
+                    LOGGER.info("not closing reversal trade for %s", pair)
 
             if CHECK_REDIS_PAIR and result=='OPEN':
-                rm_pair_from_redis(pair, dbase=CHECK_REDIS_PAIR)
+                redis4 = Redis(db=CHECK_REDIS_PAIR)
+                redis4.conn.srem(f'{INTERVAL}:{DIRECTION}', f'{pair}-{reversal}')
+
 
             if ROUTER_FORWARD:
                 url = f"http://router:1080/{config.web.api_token}"
@@ -218,7 +221,7 @@ def analyse_pair(pair, redis):
                     # add to redis set
                     LOGGER.info("Adding %s to %s:%s set", pair, INTERVAL, DIRECTION)
                     redis4 = Redis(db=forward_db)
-                    redis4.conn.sadd(f'{INTERVAL}:{DIRECTION}', pair)
+                    redis4.conn.sadd(f'{INTERVAL}:{DIRECTION}', f'{pair}:normal')
                     del redis4
 
             LOGGER.info("Trade alert: %s %s %s (%s)", pair, INTERVAL,

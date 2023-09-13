@@ -52,8 +52,9 @@ def analyse_loop():
     LOGGER.debug("Start of current loop")
     redis = Redis()
     redis4=Redis(db=CHECK_REDIS_PAIR)
-    pairs = [x.decode() for x in redis4.conn.smembers(f'{NEW_INTERVAL}:{DIRECTION}')]
 
+    pairs = [x.decode().split(':') for x in
+                   redis4.conn.smembers(f'{INTERVAL}:{DIRECTION}')]
     del redis4
 
     for pair in pairs:
@@ -69,14 +70,14 @@ def analyse_pair(pair, redis):
     """
     Analysis of individual pair
     """
-    pair = pair.strip()
+    pair = pair.split(':')[0].strip()
 
     LOGGER.debug("Analysing pair: %s", pair)
 
     result = redis.get_rule_action(pair=pair, interval=INTERVAL)[0]
 
     redis3 = Redis(db=CHECK_REDIS_PAIR)
-    redis3.conn.srem(f'{NEW_INTERVAL}:{DIRECTION}', pair)
+    redis3.conn.srem(f'{NEW_INTERVAL}:{DIRECTION}', f'{pair}:normal')
 
     # swap direction if we don't match rule
     directions = ['long', 'short']
@@ -86,12 +87,12 @@ def analyse_pair(pair, redis):
         directions.remove(config.main.trade_direction)
         new_direction = directions[0]
 
+    reversal = "normal" if DIRECTION == new_direction else "reversal"
     LOGGER.info("Adding %s to %s:%s set", pair, NEW_INTERVAL, new_direction)
     redis4 = Redis(db=REDIS_FORWARD[0])
-    redis4.conn.sadd(f'{NEW_INTERVAL}:{new_direction}', pair)
+    redis4.conn.sadd(f'{NEW_INTERVAL}:{new_direction}', f'{pair}:{reversal}')
     del redis4
 
-    reversal = "no change" if DIRECTION == new_direction else "reversal"
     send_slack_message("alerts", f"{pair} {config.main.trade_direction} -> {new_direction} "
                        f"({reversal})", icon=f"{NEW_INTERVAL}-{new_direction}")
     LOGGER.info("Trade alert: %s %s -> %s %s -> %s (%s)", pair, INTERVAL,NEW_INTERVAL, DIRECTION,

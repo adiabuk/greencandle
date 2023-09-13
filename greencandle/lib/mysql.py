@@ -136,7 +136,7 @@ class Mysql():
     @get_exceptions
     def insert_trade(self, pair, date, price, quote_amount, base_amount, borrowed='0',
                      borrowed_usd=0, divisor='0', direction='', symbol_name=None,
-                     commission=None, order_id=0):
+                     commission=None, order_id=0, comment=''):
         """
         Insert new trade into DB
         Args:
@@ -152,11 +152,11 @@ class Mysql():
         usd_rate, gbp_rate = self.get_rates(symbol_name)
         command = (f'insert into trades (pair, open_time, open_price, base_in, `interval`, '
                    f'quote_in, name, borrowed, borrowed_usd, divisor, direction, open_usd_rate, '
-                   f'open_gbp_rate, comm_open, open_order_id) VALUES ("{pair}", "{date}", '
+                   f'open_gbp_rate, comm_open, open_order_id, comment) VALUES ("{pair}", "{date}", '
                    f'trim("{float(price):.15f}")+0, "{float(base_amount):.15f}", '
                    f'"{self.interval}", "{quote_amount}", "{config.main.name}", "{borrowed}", '
                    f'"{borrowed_usd}", "{divisor}", "{direction}", "{usd_rate}", "{gbp_rate}", '
-                   f'"{commission}", "{order_id}")')
+                   f'"{commission}", "{order_id}", "{comment}")')
 
         result = self.__run_sql_query(command, get_id=True)
 
