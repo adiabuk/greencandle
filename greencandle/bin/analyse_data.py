@@ -67,10 +67,11 @@ def analyse_loop():
         open_pairs = dbase.fetch_sql_data(f'select pair, comment from trades where '
                                           f'`interval`="{INTERVAL}" and name="{config.main.name}" '
                                           f'and close_price is null', header=False)
+        open_pairs = {tuple(x) for x in open_pairs}
+        redis_pairs = {tuple(x) for x in redis_pairs}
+        pairs = list({redis_pairs + open_pairs})
 
-        pairs = list({tuple(x) for x in redis_pairs + open_pairs})
-
-        common = list(set(redis_pairs).intersection(open_pairs))
+        common = list(redis_pairs.intersection(open_pairs))
         for pair in common:
             # close trade when so we can re-fire open signal
             trade = Trade(interval=INTERVAL, test_trade=True, test_data=False, config=config)
