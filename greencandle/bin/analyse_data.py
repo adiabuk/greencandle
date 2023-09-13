@@ -81,7 +81,7 @@ def analyse_loop():
 
         del redis4
     else:
-        pairs = [pair + ":normal" for pair in PAIRS]
+        pairs = [(pair, normal) for pair in PAIRS]
 
     for pair in pairs:
         analyse_pair(pair, redis)
