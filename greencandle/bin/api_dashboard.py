@@ -261,7 +261,7 @@ def live():
         fieldnames = list(results[0].keys())
 
         return render_template('data.html', results=results, fieldnames=fieldnames, len=len,
-                               files=files)
+                               files=files, order_column=6)
     return None
 
 @APP.route('/data', methods=['GET', 'POST'])
@@ -296,7 +296,7 @@ def data():
         fieldnames = list(results[0].keys())
 
         return render_template('data.html', results=results, fieldnames=fieldnames, len=len,
-                               files=files)
+                               files=files, order_column=5)
     return None
 
 
