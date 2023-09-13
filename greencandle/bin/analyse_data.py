@@ -68,7 +68,8 @@ def analyse_loop():
                                           f'`interval`="{INTERVAL}" and name="{config.main.name}" '
                                           f'and close_price is null', header=False)
 
-        pairs = list(set(redis_pairs + open_pairs))
+        pairs = list({tuple(x) for x in redis_pairs + open_pairs})
+
         common = list(set(redis_pairs).intersection(open_pairs))
         for pair in common:
             # close trade when so we can re-fire open signal
