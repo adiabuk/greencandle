@@ -115,7 +115,7 @@ def analyse_pair(pair, redis):
     """
     Analysis of individual pair
     """
-    pair, reversal = pair.split(':')
+    pair, reversal = pair  # split tuple
     pair = pair.strip()
 
 
