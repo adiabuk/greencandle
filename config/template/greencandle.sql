@@ -594,6 +594,43 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `REOPEN_TRADE` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`%` FUNCTION `REOPEN_TRADE`(reopen_id int(11)) RETURNS int(11)
+    DETERMINISTIC
+BEGIN
+			UPDATE
+	trades
+SET
+	close_time = '0000-00-00 00:00:00',
+	close_price = NULL,
+	base_out = NULL,
+	quote_out = NULL,
+	closed_by = NULL,
+	drawdown_perc = NULL,
+	drawup_perc = NULL,
+	close_usd_rate = NULL,
+	close_gbp_rate = NULL,
+	comm_close = NULL,
+	close_order_id = NULL,
+	COMMENT = NULL
+WHERE
+	id =reopen_id;
+RETURN 1;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `GetProfitableByDayName` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -882,7 +919,7 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-09 11:54:51
+-- Dump completed on 2023-09-13  8:28:46
 -- MySQL dump 10.13  Distrib 5.7.42, for Linux (x86_64)
 --
 -- Host: 10.8.0.101    Database: greencandle
@@ -958,4 +995,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-09 11:54:52
+-- Dump completed on 2023-09-13  8:28:49
