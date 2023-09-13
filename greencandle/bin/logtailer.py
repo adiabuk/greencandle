@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Flask module to provide web interface for tailing /var/log/syslog
+Flask module to provide web interface for tailing /var/log/greencandle.log
 """
 
 import os
@@ -39,7 +39,7 @@ def stream():
         """ Generator for yielding log file contents """
         while True:
             try:
-                for line in sh.tail("-f", '/var/log/syslog', _iter=True):
+                for line in sh.tail("-f", '/var/log/greencandle.log', _iter=True):
                     yield line
                     time.sleep(1)
             except sh.ErrorReturnCode_1:
@@ -49,7 +49,7 @@ def stream():
 
 @arg_decorator
 def main():
-    """Web interface for current host syslog"""
+    """Web interface for current host gc logs"""
     setproctitle.setproctitle("logtailer")
     APP.run(debug=False, host='0.0.0.0', port=2000, threaded=True)
 

@@ -30,8 +30,8 @@ def follow(thefile):
 @arg_decorator
 def main():
     """
-    Tail syslog of current host and alert on unhandled traceback events
-    Ensure /var/log/syslog is shared with docker container
+    Tail gc logs on current host and alert on unhandled traceback events
+    Ensure /var/log/greencandle.log is shared with docker container
 
     Usage: logwatch
     """
@@ -39,7 +39,7 @@ def main():
     setproctitle.setproctitle("logwatch")
     env = config.main.base_env
     client = docker.from_env()
-    with open("/var/log/syslog", "r") as logfile:
+    with open("/var/log/greencandle.log", "r") as logfile:
         loglines = follow(logfile)    # iterate over the generator
         for line in loglines:
             if "Traceback" in line:
