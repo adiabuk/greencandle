@@ -132,7 +132,7 @@ def analyse_pair(pair, redis):
 
     LOGGER.debug("Analysing pair: %s", pair)
     try:
-        result, current_time, current_price, match = \
+        result, _, current_time, current_price, match = \
                 redis.get_rule_action(pair=pair, interval=INTERVAL)
         event = 'reversal'
 
