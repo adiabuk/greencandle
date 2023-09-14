@@ -51,7 +51,7 @@ def logout():
 
 def page_not_found(_):
     """404 page"""
-    return render_template('failed.html')
+    return render_template('failed.html', message="Login failed")
 
 def load_user(userid):
     """load user"""

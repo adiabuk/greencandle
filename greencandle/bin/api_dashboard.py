@@ -277,8 +277,9 @@ def live():
                                        "du/dd": f"{round(drawup,2)}/{round(drawdown,2)}" })
 
         results = all_data[req]
+        if results == []:
+            return render_template('error.html', message="No available data")
         fieldnames = list(results[0].keys())
-
         return render_template('data.html', results=results, fieldnames=fieldnames, len=len,
                                files=files, order_column=6)
     return None
@@ -312,8 +313,10 @@ def data():
                 current_row.update({function:current_value})
             all_data['all'].append(current_row)
         results = all_data[req]
-        fieldnames = list(results[0].keys())
+        if results == []:
+            return render_template('error.html', message="No available data")
 
+        fieldnames = list(results[0].keys())
         return render_template('data.html', results=results, fieldnames=fieldnames, len=len,
                                files=files, order_column=5)
     return None
