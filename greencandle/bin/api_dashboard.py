@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=bare-except,no-member,consider-using-with,too-many-locals,assigning-non-slot
+#pylint: disable=bare-except,no-member,consider-using-with,too-many-locals,assigning-non-slot,global-statement
 
 """
 Flask module for manipulating API trades and displaying relevent graphs
@@ -11,6 +11,7 @@ import subprocess
 from collections import defaultdict
 from datetime import timedelta
 import requests
+from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, render_template, request, Response, redirect, url_for, session, g
 from flask_login import LoginManager, login_required, current_user
 import setproctitle
@@ -32,6 +33,8 @@ APP.config['SECRET_KEY'] = os.environ['SECRET_KEY'] if 'SECRET_KEY' in os.enviro
 LOAD_USER = LOGIN_MANAGER.user_loader(load_user)
 LOGIN = APP.route("/login", methods=["GET", "POST"])(loginx)
 LOGIN = APP.route("/logout", methods=["GET", "POST"])(logoutx)
+
+VALUES = defaultdict(dict)
 
 SCRIPTS = ["write_balance", "get_quote_balance", "repay_debts", "get_risk", "get_trade_status",
            "get_hour_profit", "repay_debts", "balance_graph", "test_close", "close_all"]
@@ -215,6 +218,16 @@ def trade():
 
     return render_template('action.html', my_dic=my_dic)
 
+def get_value(item, pair, name, direction):
+    """
+    try to get value from global dict if exists
+    otherwise return -1
+    """
+    try:
+        return VALUES[item][f"{pair}:{name}:{direction}"]
+    except KeyError:
+        return -1
+
 @APP.route('/live', methods=['GET', 'POST'])
 @login_required
 def live():
@@ -247,6 +260,10 @@ def live():
             short_name = services[trade_direction]
             close_link = get_trade_link(pair, short_name, 'close', 'close_now',
                                   config.web.nginx_port, anchor=True)
+            take = get_value('take', pair, name, direction)
+            stop = get_value('stop', pair, name, direction)
+            drawup = get_value('drawup', pair, name, direction)
+            drawdown = get_value('drawdown', pair, name, direction)
 
             all_data["prices"].append({"pair": get_tv_link(pair, interval, anchor=True),
                                        "interval": interval,
@@ -255,7 +272,9 @@ def live():
                                        "open_price": '{:g}'.format(float(open_price)),
                                        "current_price": '{:g}'.format(float(current_price)),
                                        "perc": round(perc,4),
-                                       "close": close_link})
+                                       "close": close_link,
+                                       "tp/sl": f"{take}/{stop}",
+                                       "du/dd": f"{round(drawup,2)}/{round(drawdown,2)}" })
 
         results = all_data[req]
         fieldnames = list(results[0].keys())
@@ -299,7 +318,6 @@ def data():
                                files=files, order_column=5)
     return None
 
-
 @APP.route('/menu', methods=["GET"])
 @login_required
 def menu():
@@ -309,11 +327,42 @@ def menu():
     length = get_pairs()[1]
     return render_template('menu.html', strats=length)
 
+def get_additional_details():
+    """
+    Get tp/sl and drawup/drawdown from redis and mysql
+    """
+    redis=Redis()
+    dbase = Mysql()
+
+    trades = dbase.get_open_trades()
+    global VALUES
+    for item in trades:
+        _, interval, pair, name, _, direction = item
+        VALUES['drawup'][f"{pair}:{name}:{direction}"] = redis.get_drawup(pair, name=name,
+                                                        interval=interval)['perc']
+        VALUES['drawdown'][f"{pair}:{name}:{direction}"] = redis.get_drawdown(pair, name=name,
+                                                            interval=interval)['perc']
+        try:
+            VALUES['take'][f"{pair}:{name}:{direction}"] = redis.get_on_entry(pair,
+                                                                              'take_profit_perc',
+                                                                              name=name,
+                                                                              interval=interval)
+
+            VALUES['stop'][f"{pair}:{name}:{direction}"] = redis.get_on_entry(pair,
+                                                                              'stop_loss_perc',
+                                                                              name=name,
+                                                                              interval=interval)
+        except KeyError:
+            pass
+
 @arg_decorator
 def main():
     """API for interacting with trading system"""
 
     setproctitle.setproctitle("api_dashboard")
+    scheduler = BackgroundScheduler() # Create Scheduler
+    scheduler.add_job(func=get_additional_details, trigger="interval", seconds=5)
+    scheduler.start() # Start Scheduler
     APP.run(debug=False, host='0.0.0.0', port=5000, threaded=True)
 
 if __name__ == '__main__':
