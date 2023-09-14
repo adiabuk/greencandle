@@ -338,20 +338,25 @@ def get_additional_details():
     global VALUES
     for item in trades:
         _, interval, pair, name, _, direction = item
-        VALUES['drawup'][f"{pair}:{name}:{direction}"] = redis.get_drawup(pair, name=name,
-                                                        interval=interval)['perc']
-        VALUES['drawdown'][f"{pair}:{name}:{direction}"] = redis.get_drawdown(pair, name=name,
-                                                            interval=interval)['perc']
+
+        VALUES['drawup'][f"{pair}:{name}:{direction}"] = \
+                redis.get_drawup(pair, name=name, interval=interval, direction=direction)['perc']
+
+        VALUES['drawdown'][f"{pair}:{name}:{direction}"] = \
+                redis.get_drawdown(pair, name=name, interval=interval, direction=direction)['perc']
+
         try:
             VALUES['take'][f"{pair}:{name}:{direction}"] = redis.get_on_entry(pair,
                                                                               'take_profit_perc',
                                                                               name=name,
-                                                                              interval=interval)
+                                                                              interval=interval,
+                                                                              direction=direction)
 
             VALUES['stop'][f"{pair}:{name}:{direction}"] = redis.get_on_entry(pair,
                                                                               'stop_loss_perc',
                                                                               name=name,
-                                                                              interval=interval)
+                                                                              interval=interval,
+                                                                              direction=direction)
         except KeyError:
             pass
 
