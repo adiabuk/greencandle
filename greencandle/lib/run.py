@@ -373,9 +373,7 @@ class ProdRunner():
         """
         Loop through collection cycle (PROD)
         """
-        LOGGER.debug("Performaing prod loop")
-        LOGGER.debug("Pairs in config: %s", PAIRS)
-        LOGGER.info("Starting new cycle with %s pairs", len(PAIRS))
+        LOGGER.debug("Starting new prod loop with %s pairs", len(PAIRS))
         client = Binance()
         redis = Redis()
 
