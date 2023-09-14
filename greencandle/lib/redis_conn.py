@@ -90,7 +90,7 @@ class Redis():
         self.logger.debug("Getting %s drawup orig_price: %s,  max_price: %s, drawup: %s",
                           pair, orig_price, max_price, drawup)
         del redis1
-        return {'price':max_price, 'perc': drawup}
+        return {'price':max_price, 'perc': abs(drawup)}
 
     def rm_drawup(self, pair, **kwargs):
         """
@@ -149,7 +149,7 @@ class Redis():
         self.logger.debug("Getting %s drawdown orig_price: %s,  min_price: %s, drawdown: %s",
                           pair, orig_price, min_price, drawdown)
         del redis1
-        return {'price':min_price, 'perc': drawdown}
+        return {'price':min_price, 'perc': abs(drawdown)}
 
     def update_on_entry(self, pair, func, value,**kwargs):
         """
