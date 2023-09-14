@@ -1,5 +1,27 @@
 # Releases
 
+# 6.36
+* remove unused lint exception
+* add tpsl and draw up/down to live table UI
+* get correct reversal string
+* enable default table ordering in UI
+* separate gc logs out of syslog and use greencandle.log
+* add additional info to direction change notif
+* ensure all data pairs have trade type in mysql and redis
+* dont trigger close if we reversed direction
+* mysql function to reopen a trade
+* add slack icon and direction change string to notif
+* add to single redis db with long|short key
+* catch all binance exceptions from trade operations
+* fix deps for direction containers
+* add slack channel for new data containers
+* wait for 3rd HA candle before triggering trade as most recent candle is incomplete
+* add direction container configs
+* allow intermediate containers for checking higher timeframes
+* improvements to close-trade checker
+* remove applied db changes
+* downgrade binance log to debug
+
 # 6.35
 * don't blanket-catch exceptions in orders mod
 * fix old drawup|drawdown values not being removed before after trade
