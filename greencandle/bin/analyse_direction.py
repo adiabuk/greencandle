@@ -87,7 +87,7 @@ def analyse_pair(pair, redis):
         directions.remove(config.main.trade_direction)
         new_direction = directions[0]
 
-    reversal = "normal" if DIRECTION == new_direction else reversal
+    reversal = "reversal" if DIRECTION != new_direction else reversal
     LOGGER.info("Adding %s to %s:%s set", pair, NEW_INTERVAL, new_direction)
     redis4 = Redis(db=REDIS_FORWARD[0])
     redis4.conn.sadd(f'{NEW_INTERVAL}:{new_direction}', f'{pair}:{reversal}')
