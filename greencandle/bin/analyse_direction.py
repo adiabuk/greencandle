@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-member,global-statement,too-many-locals,broad-except
+#pylint: disable=no-member,too-many-locals,broad-except
 
 """
 intermediate check in higher timeframe to ensure
