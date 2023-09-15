@@ -1,5 +1,11 @@
 # Releases
 
+# 6.37
+* combine UI spreadsheets into single page
+* add error jinja2 template file with message param
+* reduce some logging
+* always return absolute values for drawup/drawdown
+
 # 6.36
 * remove unused lint exception
 * add tpsl and draw up/down to live table UI
