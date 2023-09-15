@@ -228,97 +228,87 @@ def get_value(item, pair, name, direction):
     except KeyError:
         return -1
 
+def get_agg():
+    """
+    collate aggregate data from redis
+    """
+    all_data = []
+    redis = Redis(db=3)
+    keys = redis.conn.keys()
+    for key in keys:
+        cur_data = redis.conn.hgetall(key)
+        decoded = {k.decode():v.decode() for k,v in cur_data.items()}
+        pair, interval = key.decode().split(':')
+        current_row = {}
+        current_row.update({'pair': pair, 'interval':interval})
+        for function, value in decoded.items():
+            current_value = '' if 'None' in value else value
+            current_row.update({function:current_value})
+        all_data.append(current_row)
+
+    return all_data
+
+def get_live():
+    """
+    Get live open trade details
+    """
+    if config.main.base_env.strip() == 'data':
+        return None
+    all_data = []
+    dbase = Mysql()
+    stream = os.environ['STREAM']
+    stream_req = requests.get(stream, timeout=10)
+    prices = stream_req.json()
+
+    services = list_to_dict(get_be_services(config.main.base_env),
+                            reverse=False, str_filter='-be-')
+    raw = dbase.get_open_trades()
+
+    for open_time, interval, pair, name, open_price, direction in raw:
+        current_price = prices['recent'][pair]['close']
+        perc = perc_diff(open_price, current_price)
+        perc = -perc if direction == 'short' else perc
+        trade_direction = f"{name}-{direction}" if \
+                not (name.endswith('long') or name.endswith('short')) else name
+
+        short_name = services[trade_direction]
+        close_link = get_trade_link(pair, short_name, 'close', 'close_now',
+                              config.web.nginx_port, anchor=True)
+        take = get_value('take', pair, name, direction)
+        stop = get_value('stop', pair, name, direction)
+        drawup = get_value('drawup', pair, name, direction)
+        drawdown = get_value('drawdown', pair, name, direction)
+
+        all_data.append({"pair": get_tv_link(pair, interval, anchor=True),
+                         "interval": interval,
+                         "open_time": open_time,
+                         "name": short_name,
+                         "open_price": '{:g}'.format(float(open_price)),
+                         "current_price": '{:g}'.format(float(current_price)),
+                         "perc": round(perc,4),
+                         "close": close_link,
+                         "tp/sl": f"{take}/{stop}",
+                         "du/dd": f"{round(drawup,2)}/{round(drawdown,2)}" })
+    return all_data
+
 @APP.route('/live', methods=['GET', 'POST'])
 @login_required
 def live():
     """
     route to live data
     """
-    files = ['prices']
+    files = {'open_trades': get_live(), 'aggregate': get_agg()}
 
     if request.method == 'GET':
         return render_template('data.html', files=files)
     if request.method == 'POST':
         req = request.form['submit']
-        all_data = results = defaultdict(list)
-        dbase = Mysql()
-        stream = os.environ['STREAM']
-        stream_req = requests.get(stream, timeout=10)
-        prices = stream_req.json()
-
-        services = list_to_dict(get_be_services(config.main.base_env),
-                                reverse=False, str_filter='-be-')
-        raw = dbase.get_open_trades()
-
-        for open_time, interval, pair, name, open_price, direction in raw:
-            current_price = prices['recent'][pair]['close']
-            perc = perc_diff(open_price, current_price)
-            perc = -perc if direction == 'short' else perc
-            trade_direction = f"{name}-{direction}" if \
-                    not (name.endswith('long') or name.endswith('short')) else name
-
-            short_name = services[trade_direction]
-            close_link = get_trade_link(pair, short_name, 'close', 'close_now',
-                                  config.web.nginx_port, anchor=True)
-            take = get_value('take', pair, name, direction)
-            stop = get_value('stop', pair, name, direction)
-            drawup = get_value('drawup', pair, name, direction)
-            drawdown = get_value('drawdown', pair, name, direction)
-
-            all_data["prices"].append({"pair": get_tv_link(pair, interval, anchor=True),
-                                       "interval": interval,
-                                       "open_time": open_time,
-                                       "name": short_name,
-                                       "open_price": '{:g}'.format(float(open_price)),
-                                       "current_price": '{:g}'.format(float(current_price)),
-                                       "perc": round(perc,4),
-                                       "close": close_link,
-                                       "tp/sl": f"{take}/{stop}",
-                                       "du/dd": f"{round(drawup,2)}/{round(drawdown,2)}" })
-
-        results = all_data[req]
+        results =files[req]
         if results == []:
             return render_template('error.html', message="No available data")
         fieldnames = list(results[0].keys())
         return render_template('data.html', results=results, fieldnames=fieldnames, len=len,
-                               files=files, order_column=6)
-    return None
-
-@APP.route('/data', methods=['GET', 'POST'])
-@login_required
-def data():
-    """
-    route to data spreadsheets
-    """
-    files = ['middle_200', 'num', 'stoch_flat', 'candle_size', 'avg_candles', 'sum_candles',
-             'bb_size', 'all', 'bbperc_diff', 'distance_200', 'stx_diff', 'date']
-    if request.method == 'GET':
-        return render_template('data.html', files=files)
-    if request.method == 'POST':
-        req = request.form['submit']
-        all_data = results = defaultdict(list)
-        redis = Redis(db=3)
-        keys = redis.conn.keys()
-        for key in keys:
-            cur_data = redis.conn.hgetall(key)
-            decoded = {k.decode():v.decode() for k,v in cur_data.items()}
-            sort_data = dict(sorted(decoded.items(), key=lambda pair: files.index(pair[0])))
-            pair, interval = key.decode().split(':')
-            current_row = {}
-            current_row.update({'pair': pair, 'interval':interval})
-            for function, value in sort_data.items():
-                current_value = '' if 'None' in value else value
-                all_data[function].append({'pair': pair, 'interval': interval,
-                                                    function: current_value})
-                current_row.update({function:current_value})
-            all_data['all'].append(current_row)
-        results = all_data[req]
-        if results == []:
-            return render_template('error.html', message="No available data")
-
-        fieldnames = list(results[0].keys())
-        return render_template('data.html', results=results, fieldnames=fieldnames, len=len,
-                               files=files, order_column=5)
+                               files=files.keys(), order_column=6)
     return None
 
 @APP.route('/menu', methods=["GET"])
@@ -368,9 +358,11 @@ def main():
     """API for interacting with trading system"""
 
     setproctitle.setproctitle("api_dashboard")
-    scheduler = BackgroundScheduler() # Create Scheduler
-    scheduler.add_job(func=get_additional_details, trigger="interval", seconds=5)
-    scheduler.start() # Start Scheduler
+
+    if config.main.base_env.strip() != 'data':
+        scheduler = BackgroundScheduler() # Create Scheduler
+        scheduler.add_job(func=get_additional_details, trigger="interval", seconds=5)
+        scheduler.start() # Start Scheduler
     APP.run(debug=False, host='0.0.0.0', port=5000, threaded=True)
 
 if __name__ == '__main__':
