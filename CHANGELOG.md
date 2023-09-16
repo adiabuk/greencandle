@@ -1,5 +1,14 @@
 # Releases
 
+# 6.38
+* add balances to live UI table and remove balance cron
+* update db schema
+* no profit filter by default
+* daily commission view
+* risk is 999 (inf) if there are no debts
+* add net_perc to dashboard
+* filter out profit views based on name
+
 # 6.37
 * combine UI spreadsheets into single page
 * add error jinja2 template file with message param
