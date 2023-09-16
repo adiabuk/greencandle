@@ -13,7 +13,7 @@ BASH_ENV=/container.env
 @reboot /usr/local/bin/clear_redis 1 > /proc/1/fd/1 2>/proc/1/fd/2
 */3 * * * * /usr/local/bin/get_risk > /proc/1/fd/1 2>/proc/1/fd/2
 32 * * * * /usr/local/bin/write_balance > /proc/1/fd/1 2>/proc/1/fd/2
-33 * * * * /usr/local/bin/get_quote_balance > /proc/1/fd/1 2>/proc/1/fd/2
+#33 * * * * /usr/local/bin/get_quote_balance > /proc/1/fd/1 2>/proc/1/fd/2
 05 * * * * sleep 120; /usr/local/bin/test_close > /proc/1/fd/1 2>/proc/1/fd/2
 0 * * * * /usr/local/bin/send_docker_alerts
 21 00 * * * /usr/local/bin/balance_graph > /proc/1/fd/1 2>/proc/1/fd/2
@@ -33,7 +33,7 @@ BASH_ENV=/container.env
 {{else if eq .base_env "per" }}
 @reboot /usr/local/bin/clear_redis 1 > /proc/1/fd/1 2>/proc/1/fd/2
 32 * * * * /usr/local/bin/write_balance > /proc/1/fd/1 2>/proc/1/fd/2
-33 * * * * /usr/local/bin/get_quote_balance > /proc/1/fd/1 2>/proc/1/fd/2
+#33 * * * * /usr/local/bin/get_quote_balance > /proc/1/fd/1 2>/proc/1/fd/2
 0 * * * * /usr/local/bin/send_docker_alerts
 21 00 * * * /usr/local/bin/balance_graph > /proc/1/fd/1 2>/proc/1/fd/2
 30 * * * * /usr/bin/find /data/graphs -type f -mtime +1 -delete > /proc/1/fd/1 2>/proc/1/fd/2
