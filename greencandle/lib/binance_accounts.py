@@ -59,7 +59,10 @@ def get_cross_margin_level():
         usd_free = base2quote(free, asset+'USDT', prices) if 'USD' not in asset else free
         total_free += float(usd_free)
         total_debt += float(usd_debt)
-    return total_free / total_debt
+    try:
+        return total_free / total_debt
+    except ZeroDivisionError:
+        return 999
 
 def quote2base(amount, pair, prices=None):
     """
