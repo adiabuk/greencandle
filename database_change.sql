@@ -66,7 +66,7 @@ ORDER BY
 
 REPLACE INTO `variables`
 SET `name` = 'filter',
-`value` = '%any3%';
+`value` = '%%';
 
 # add daily commission view
 create or replace view commission_paid_daily as
