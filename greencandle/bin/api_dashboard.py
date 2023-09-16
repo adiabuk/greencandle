@@ -16,9 +16,11 @@ from flask import Flask, render_template, request, Response, redirect, url_for, 
 from flask_login import LoginManager, login_required, current_user
 import setproctitle
 from greencandle.lib.redis_conn import Redis
+from greencandle.lib.auth import binance_auth
 from greencandle.lib.mysql import Mysql
+from greencandle.lib.binance_accounts import base2quote
 from greencandle.lib.common import (arg_decorator, divide_chunks, get_be_services, list_to_dict,
-                                    perc_diff, get_tv_link, get_trade_link)
+                                    perc_diff, get_tv_link, get_trade_link, format_usd)
 from greencandle.lib import config
 from greencandle.lib.flask_auth import load_user, login as loginx, logout as logoutx
 
@@ -35,6 +37,7 @@ LOGIN = APP.route("/login", methods=["GET", "POST"])(loginx)
 LOGIN = APP.route("/logout", methods=["GET", "POST"])(logoutx)
 
 VALUES = defaultdict(dict)
+BALANCE = []
 
 SCRIPTS = ["write_balance", "get_quote_balance", "repay_debts", "get_risk", "get_trade_status",
            "get_hour_profit", "repay_debts", "balance_graph", "test_close", "close_all"]
@@ -299,18 +302,18 @@ def live():
     """
     route to live data
     """
-    files = {'open_trades': get_live(), 'aggregate': get_agg()}
+    files = {'open_trades': (get_live(), 6), 'aggregate': (get_agg(), 1), 'balance':(BALANCE, 1)}
 
     if request.method == 'GET':
         return render_template('data.html', files=files)
     if request.method == 'POST':
         req = request.form['submit']
-        results =files[req]
+        results, order =files[req]
         if results == []:
             return render_template('error.html', message="No available data")
         fieldnames = list(results[0].keys())
         return render_template('data.html', results=results, fieldnames=fieldnames, len=len,
-                               files=files.keys(), order_column=6)
+                               files=files.keys(), order_column=order)
     return None
 
 @APP.route('/menu', methods=["GET"])
@@ -355,6 +358,39 @@ def get_additional_details():
         except KeyError:
             pass
 
+def get_balance():
+    """
+    Get cross margin quote amounts from exchange
+    """
+    global BALANCE
+    client=binance_auth()
+    all_results = []
+    details = client.get_cross_margin_details()
+    debts = {}
+    free = {}
+    for item in details['userAssets']:
+        debt = float(item['borrowed']) + float(item['interest'])
+        if debt > 0:
+            debts[item['asset']] = debt
+        if float(item['free']) > 0:
+            free[item['asset']] = float(item['free'])
+
+    all_results.append({'key': 'avail_borrow', 'val': format_usd(client.get_max_borrow())})
+    usd_debts_total = 0
+    for key, val in debts.items():
+        usd_debt = val if 'USD' in key else base2quote(val, key+'USDT')
+        all_results.append({'key': f'{key} debt', 'val': f'{format_usd(usd_debt)} ({val:.5f})'})
+        usd_debts_total += usd_debt
+    if usd_debts_total > 0:
+        all_results.append({'key':'total_debts', 'val': f'{format_usd(usd_debts_total)}'})
+
+
+    for key, val in free.items():
+        usd_free = val if 'USD' in key else base2quote(val, key+'USDT')
+        all_results.append({'key': f'{key} free', 'val': f'{format_usd(usd_free)} ({val:.5f})'})
+    BALANCE = all_results
+
+
 @arg_decorator
 def main():
     """API for interacting with trading system"""
@@ -364,6 +400,8 @@ def main():
     if config.main.base_env.strip() != 'data':
         scheduler = BackgroundScheduler() # Create Scheduler
         scheduler.add_job(func=get_additional_details, trigger="interval", seconds=5)
+        scheduler.add_job(func=get_balance, trigger="interval", minutes=30)
+        get_balance()
         scheduler.start() # Start Scheduler
     APP.run(debug=False, host='0.0.0.0', port=5000, threaded=True)
 
