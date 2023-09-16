@@ -263,11 +263,13 @@ def get_live():
     services = list_to_dict(get_be_services(config.main.base_env),
                             reverse=False, str_filter='-be-')
     raw = dbase.get_open_trades()
+    commission = float(dbase.get_complete_commission())
 
     for open_time, interval, pair, name, open_price, direction in raw:
         current_price = prices['recent'][pair]['close']
         perc = perc_diff(open_price, current_price)
         perc = -perc if direction == 'short' else perc
+        net_perc = perc - commission
         trade_direction = f"{name}-{direction}" if \
                 not (name.endswith('long') or name.endswith('short')) else name
 
@@ -285,7 +287,7 @@ def get_live():
                          "name": short_name,
                          "open_price": '{:g}'.format(float(open_price)),
                          "current_price": '{:g}'.format(float(current_price)),
-                         "perc": round(perc,4),
+                         "perc/net_perc": f'{round(perc,4)} ({round(net_perc,4)})',
                          "close": close_link,
                          "tp/sl": f"{take}/{stop}",
                          "du/dd": f"{round(drawup,2)}/{round(drawdown,2)}" })
