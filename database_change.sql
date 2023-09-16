@@ -67,3 +67,7 @@ ORDER BY
 REPLACE INTO `variables`
 SET `name` = 'filter',
 `value` = '%any3%';
+
+# add daily commission view
+create or replace view commission_paid_daily as
+select sum(gbp_amt), date(date) as date  from commission_paid group by date(date) desc;
