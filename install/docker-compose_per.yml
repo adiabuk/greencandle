@@ -360,7 +360,7 @@ services:
       - per-base-mysql
       - per-base-redis
     healthcheck:
-      test: api_healthcheck.sh || exit 1
+      test: api_healthcheck.sh || kill 1
       interval: 5m
       timeout: 10s
       retries: 5
@@ -395,7 +395,7 @@ services:
       - per-base-mysql
       - per-base-redis
     healthcheck:
-      test: api_healthcheck.sh || exit 1
+      test: api_healthcheck.sh || kill 1
       interval: 5m
       timeout: 10s
       retries: 5
@@ -430,7 +430,7 @@ services:
       - per-base-mysql
       - per-base-redis
     healthcheck:
-      test: api_healthcheck.sh || exit 1
+      test: api_healthcheck.sh || kill 1
       interval: 5m
       timeout: 10s
       retries: 5
