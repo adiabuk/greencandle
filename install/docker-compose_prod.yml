@@ -369,7 +369,7 @@ services:
       - prod-base-mysql
       - prod-base-redis
     healthcheck:
-      test: api_healthcheck.sh || kill 1
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
       interval: 5m
       timeout: 10s
       retries: 5
@@ -405,7 +405,7 @@ services:
       - prod-base-mysql
       - prod-base-redis
     healthcheck:
-      test: api_healthcheck.sh || kill 1
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
       interval: 5m
       timeout: 10s
       retries: 5
@@ -441,7 +441,7 @@ services:
       - prod-base-mysql
       - prod-base-redis
     healthcheck:
-      test: api_healthcheck.sh || kill 1
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
       interval: 5m
       timeout: 10s
       retries: 5
@@ -477,7 +477,7 @@ services:
       - prod-base-mysql
       - prod-base-redis
     healthcheck:
-      test: api_healthcheck.sh || kill 1
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
       interval: 5m
       timeout: 10s
       retries: 5
@@ -513,7 +513,7 @@ services:
       - prod-base-mysql
       - prod-base-redis
     healthcheck:
-      test: api_healthcheck.sh || kill 1
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
       interval: 5m
       timeout: 10s
       retries: 5
@@ -549,7 +549,7 @@ services:
       - prod-base-mysql
       - prod-base-redis
     healthcheck:
-      test: api_healthcheck.sh || kill 1
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
       interval: 5m
       timeout: 10s
       retries: 5
@@ -585,7 +585,7 @@ services:
       - prod-base-mysql
       - prod-base-redis
     healthcheck:
-      test: api_healthcheck.sh || kill 1
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
       interval: 5m
       timeout: 10s
       retries: 5
@@ -621,7 +621,7 @@ services:
       - prod-base-mysql
       - prod-base-redis
     healthcheck:
-      test: api_healthcheck.sh || kill 1
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
       interval: 5m
       timeout: 10s
       retries: 5
@@ -657,7 +657,7 @@ services:
       - prod-base-mysql
       - prod-base-redis
     healthcheck:
-      test: api_healthcheck.sh || kill 1
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
       interval: 5m
       timeout: 10s
       retries: 5
@@ -693,7 +693,7 @@ services:
       - prod-base-mysql
       - prod-base-redis
     healthcheck:
-      test: api_healthcheck.sh || kill 1
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
       interval: 5m
       timeout: 10s
       retries: 5
@@ -729,7 +729,7 @@ services:
       - prod-base-mysql
       - prod-base-redis
     healthcheck:
-      test: api_healthcheck.sh || kill 1
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
       interval: 5m
       timeout: 10s
       retries: 5
@@ -765,7 +765,7 @@ services:
       - prod-base-mysql
       - prod-base-redis
     healthcheck:
-      test: api_healthcheck.sh || kill 1
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
       interval: 5m
       timeout: 10s
       retries: 5
