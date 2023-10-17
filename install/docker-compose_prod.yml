@@ -270,7 +270,7 @@ services:
     logging:
       driver: journald
     image: amrox/greencandle:${TAG}
-    mem_limit: 400m
+    mem_limit: 600m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh api_dashboard
@@ -349,7 +349,7 @@ services:
     container_name: prod-be-api-any-1h-cross-long
     hostname: prod-be-api-any-1h-cross-long
     image: amrox/greencandle:${TAG}
-    mem_limit: 400m
+    mem_limit: 600m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
@@ -385,7 +385,7 @@ services:
     container_name: prod-be-api-any-1h-cross-short
     hostname: prod-be-api-any-1h-cross-short
     image: amrox/greencandle:${TAG}
-    mem_limit: 400m
+    mem_limit: 600m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
@@ -421,7 +421,7 @@ services:
     container_name: prod-be-api-any-1m-cross-long
     hostname: prod-be-api-any-1m-cross-long
     image: amrox/greencandle:${TAG}
-    mem_limit: 400m
+    mem_limit: 600m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
@@ -457,7 +457,7 @@ services:
     container_name: prod-be-api-any-1m-cross-short
     hostname: prod-be-api-any-1m-cross-short
     image: amrox/greencandle:${TAG}
-    mem_limit: 400m
+    mem_limit: 600m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
@@ -493,7 +493,7 @@ services:
     container_name: prod-be-api-any-5m-cross-long
     hostname: prod-be-api-any-5m-cross-long
     image: amrox/greencandle:${TAG}
-    mem_limit: 400m
+    mem_limit: 600m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
@@ -529,7 +529,7 @@ services:
     container_name: prod-be-api-any-5m-cross-short
     hostname: prod-be-api-any-5m-cross-short
     image: amrox/greencandle:${TAG}
-    mem_limit: 400m
+    mem_limit: 600m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
@@ -565,7 +565,7 @@ services:
     container_name: prod-be-api-any2-1h-cross-long
     hostname: prod-be-api-any2-1h-cross-long
     image: amrox/greencandle:${TAG}
-    mem_limit: 400m
+    mem_limit: 600m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
@@ -601,7 +601,7 @@ services:
     container_name: prod-be-api-any2-1h-cross-short
     hostname: prod-be-api-any2-1h-cross-short
     image: amrox/greencandle:${TAG}
-    mem_limit: 400m
+    mem_limit: 600m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
@@ -637,7 +637,7 @@ services:
     container_name: prod-be-api-any2-1m-cross-long
     hostname: prod-be-api-any2-1m-cross-long
     image: amrox/greencandle:${TAG}
-    mem_limit: 400m
+    mem_limit: 600m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
@@ -673,7 +673,7 @@ services:
     container_name: prod-be-api-any2-1m-cross-short
     hostname: prod-be-api-any2-1m-cross-short
     image: amrox/greencandle:${TAG}
-    mem_limit: 400m
+    mem_limit: 600m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
@@ -709,7 +709,7 @@ services:
     container_name: prod-be-api-any2-5m-cross-long
     hostname: prod-be-api-any2-5m-cross-long
     image: amrox/greencandle:${TAG}
-    mem_limit: 400m
+    mem_limit: 600m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
@@ -745,7 +745,7 @@ services:
     container_name: prod-be-api-any2-5m-cross-short
     hostname: prod-be-api-any2-5m-cross-short
     image: amrox/greencandle:${TAG}
-    mem_limit: 400m
+    mem_limit: 600m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"

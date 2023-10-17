@@ -109,7 +109,7 @@ services:
     logging:
       driver: journald
     image: amrox/greencandle:${TAG}
-    mem_limit: 400m
+    mem_limit: 600m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh api_dashboard
@@ -334,7 +334,7 @@ services:
     container_name: stag-be-api-any-cross-long
     hostname: stag-be-api-any-cross-long
     image: amrox/greencandle:${TAG}
-    mem_limit: 400m
+    mem_limit: 600m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
@@ -370,7 +370,7 @@ services:
     container_name: stag-be-api-any-cross-short
     hostname: stag-be-api-any-cross-short
     image: amrox/greencandle:${TAG}
-    mem_limit: 400m
+    mem_limit: 600m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
