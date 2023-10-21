@@ -288,10 +288,11 @@ def get_live():
                          "interval": interval,
                          "open_time": open_time,
                          "name": short_name,
+                         "perc": f'{round(perc,4)}',
+                         "net_perc": f'{round(net_perc,4)}',
+                         "close": close_link,
                          "open_price": '{:g}'.format(float(open_price)),
                          "current_price": '{:g}'.format(float(current_price)),
-                         "perc/net_perc": f'{round(perc,4)} ({round(net_perc,4)})',
-                         "close": close_link,
                          "tp/sl": f"{take}/{stop}",
                          "du/dd": f"{round(drawup,2)}/{round(drawdown,2)}" })
     return all_data
@@ -302,7 +303,7 @@ def live():
     """
     route to live data
     """
-    files = {'open_trades': (get_live(), 6), 'aggregate': (get_agg(), 1), 'balance':(BALANCE, 1)}
+    files = {'open_trades': (get_live(), 4), 'aggregate': (get_agg(), 1), 'balance':(BALANCE, 1)}
 
     if request.method == 'GET':
         return render_template('data.html', files=files)
@@ -375,19 +376,19 @@ def get_balance():
         if float(item['free']) > 0:
             free[item['asset']] = float(item['free'])
 
-    all_results.append({'key': 'avail_borrow', 'val': format_usd(client.get_max_borrow())})
+    all_results.append({'key': 'avail_borrow', 'usd': format_usd(client.get_max_borrow()), 'val': ''})
     usd_debts_total = 0
     for key, val in debts.items():
         usd_debt = val if 'USD' in key else base2quote(val, key+'USDT')
-        all_results.append({'key': f'{key} debt', 'val': f'{format_usd(usd_debt)} ({val:.5f})'})
+        all_results.append({'key': f'{key} debt', 'usd': f'{format_usd(usd_debt)}', 'val': f'{val:.5f}'})
         usd_debts_total += usd_debt
     if usd_debts_total > 0:
-        all_results.append({'key':'total_debts', 'val': f'{format_usd(usd_debts_total)}'})
+        all_results.append({'key':'total_debts', 'usd': f'{format_usd(usd_debts_total)}', 'val': ''})
 
 
     for key, val in free.items():
         usd_free = val if 'USD' in key else base2quote(val, key+'USDT')
-        all_results.append({'key': f'{key} free', 'val': f'{format_usd(usd_free)} ({val:.5f})'})
+        all_results.append({'key': f'{key} free', 'usd': format_usd(usd_free), 'val': f'{val:.5f}'})
     BALANCE = all_results
 
 

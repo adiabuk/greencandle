@@ -63,8 +63,8 @@
   </body>
   <script type="text/javascript">
     $('#proxies').DataTable( {
-	    order: [[ {{ order_column }}, 'desc' ], [ 0, 'asc' ]]
-    }  );
+	    "aaSorting": [[ {{ order_column }} ,'desc']]
+    } );
   </script>
 
 </html>
