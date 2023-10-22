@@ -18,6 +18,7 @@ import setproctitle
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.mysql import Mysql
+from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.binance_accounts import base2quote
 from greencandle.lib.common import (arg_decorator, divide_chunks, get_be_services, list_to_dict,
                                     perc_diff, get_tv_link, get_trade_link, format_usd)
@@ -38,6 +39,7 @@ LOGIN = APP.route("/logout", methods=["GET", "POST"])(logoutx)
 
 VALUES = defaultdict(dict)
 BALANCE = []
+LIVE = []
 
 SCRIPTS = ["write_balance", "get_quote_balance", "repay_debts", "get_risk", "get_trade_status",
            "get_hour_profit", "repay_debts", "balance_graph", "test_close", "close_all"]
@@ -255,9 +257,14 @@ def get_live():
     """
     Get live open trade details
     """
+    global LIVE
+
     if config.main.base_env.strip() == 'data':
         return None
     all_data = []
+    mt3 = 0
+    mt5 = 0
+
     dbase = Mysql()
     stream = os.environ['STREAM']
     stream_req = requests.get(stream, timeout=10)
@@ -273,6 +280,12 @@ def get_live():
         perc = perc_diff(open_price, current_price)
         perc = -perc if direction == 'short' else perc
         net_perc = perc - commission
+
+        if float(net_perc) > 3:
+            mt3 += 1
+        if float(net_perc) > 5:
+            mt5 += 1
+
         trade_direction = f"{name}-{direction}" if \
                 not (name.endswith('long') or name.endswith('short')) else name
 
@@ -295,7 +308,10 @@ def get_live():
                          "current_price": '{:g}'.format(float(current_price)),
                          "tp/sl": f"{take}/{stop}",
                          "du/dd": f"{round(drawup,2)}/{round(drawdown,2)}" })
-    return all_data
+    LIVE = all_data
+    if mt3 > 0 or mt5 > 0:
+        send_slack_message("balance", f"trades over 3%: {mt3}\ntrades over 5%: {mt5}")
+
 
 @APP.route('/live', methods=['GET', 'POST'])
 @login_required
@@ -303,7 +319,7 @@ def live():
     """
     route to live data
     """
-    files = {'open_trades': (get_live(), 4), 'aggregate': (get_agg(), 1), 'balance':(BALANCE, 1)}
+    files = {'open_trades': (LIVE, 4), 'aggregate': (get_agg(), 1), 'balance':(BALANCE, 1)}
 
     if request.method == 'GET':
         return render_template('data.html', files=files)
@@ -402,6 +418,7 @@ def main():
         scheduler = BackgroundScheduler() # Create Scheduler
         scheduler.add_job(func=get_additional_details, trigger="interval", seconds=5)
         scheduler.add_job(func=get_balance, trigger="interval", minutes=30)
+        scheduler.add_job(func=get_live, trigger="interval", minutes=2)
         get_balance()
         scheduler.start() # Start Scheduler
     APP.run(debug=False, host='0.0.0.0', port=5000, threaded=True)
