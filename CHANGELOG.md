@@ -1,5 +1,18 @@
 # Releases
 
+# 6.39
+* alert when trades reach certain profit
+* column name & ordering for open_trades and prod balance
+* increase mem limit again for api containers
+* properly kill docker containers after HC fail
+* Bump urllib3 from 2.0.3 to 2.0.6
+* increase analyser mem limit to 1g
+* restart container if api healthchecks fail
+* check bb_20 in upper timeframes and remove bb_200 middle check
+* fix mysql char set - remove refs to Swedish
+* fix small dust conversion script - unreachable code
+* add missing header in error template
+
 # 6.38
 * add balances to live UI table and remove balance cron
 * update db schema
