@@ -261,7 +261,7 @@ def get_live():
     global LIVE
 
     if config.main.base_env.strip() == 'data':
-        return
+        return None
     all_data = []
     mt3 = 0
     mt5 = 0
@@ -312,6 +312,7 @@ def get_live():
     LIVE = all_data
     if mt3 > 0 or mt5 > 0:
         send_slack_message("balance", f"trades over 3%: {mt3}\ntrades over 5%: {mt5}")
+    return LIVE
 
 @APP.route('/live', methods=['GET', 'POST'])
 @login_required
@@ -319,7 +320,7 @@ def live():
     """
     route to live data
     """
-    files = {'open_trades': (LIVE, 4), 'aggregate': (get_agg(), 1), 'balance':(BALANCE, 1)}
+    files = {'open_trades': (get_live(), 4), 'aggregate': (get_agg(), 1), 'balance':(BALANCE, 1)}
 
     if request.method == 'GET':
         return render_template('data.html', files=files)
