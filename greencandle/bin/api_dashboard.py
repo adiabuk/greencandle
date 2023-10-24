@@ -245,7 +245,8 @@ def get_agg():
         decoded = {k.decode():v.decode() for k,v in cur_data.items()}
         pair, interval = key.decode().split(':')
         current_row = {}
-        current_row.update({'pair': pair, 'interval':interval})
+        current_row.update({'pair': get_tv_link(pair, interval, anchor=True),
+                            'interval':interval})
         for function, value in decoded.items():
             current_value = '' if 'None' in value else value
             current_row.update({function:current_value})
@@ -311,7 +312,6 @@ def get_live():
     LIVE = all_data
     if mt3 > 0 or mt5 > 0:
         send_slack_message("balance", f"trades over 3%: {mt3}\ntrades over 5%: {mt5}")
-
 
 @APP.route('/live', methods=['GET', 'POST'])
 @login_required
