@@ -260,7 +260,7 @@ def get_live():
     global LIVE
 
     if config.main.base_env.strip() == 'data':
-        return None
+        return
     all_data = []
     mt3 = 0
     mt5 = 0
@@ -392,19 +392,22 @@ def get_balance():
         if float(item['free']) > 0:
             free[item['asset']] = float(item['free'])
 
-    all_results.append({'key': 'avail_borrow', 'usd': format_usd(client.get_max_borrow()), 'val': ''})
+    all_results.append({'key': 'avail_borrow', 'usd': format_usd(client.get_max_borrow()),
+                        'val': ''})
     usd_debts_total = 0
     for key, val in debts.items():
         usd_debt = val if 'USD' in key else base2quote(val, key+'USDT')
-        all_results.append({'key': f'{key} debt', 'usd': f'{format_usd(usd_debt)}', 'val': f'{val:.5f}'})
+        all_results.append({'key': f'{key} debt', 'usd': f'{format_usd(usd_debt)}',
+                            'val': f'{val:.5f}'})
         usd_debts_total += usd_debt
     if usd_debts_total > 0:
-        all_results.append({'key':'total_debts', 'usd': f'{format_usd(usd_debts_total)}', 'val': ''})
-
+        all_results.append({'key':'total_debts', 'usd': f'{format_usd(usd_debts_total)}',
+                            'val': ''})
 
     for key, val in free.items():
         usd_free = val if 'USD' in key else base2quote(val, key+'USDT')
-        all_results.append({'key': f'{key} free', 'usd': format_usd(usd_free), 'val': f'{val:.5f}'})
+        all_results.append({'key': f'{key} free', 'usd': format_usd(usd_free),
+                            'val': f'{val:.5f}'})
     BALANCE = all_results
 
 
