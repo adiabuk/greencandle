@@ -229,6 +229,7 @@ SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 /*!50001 CREATE VIEW `profit_daily` AS SELECT 
  1 AS `date(close_time)`,
+ 1 AS `dayname(close_time)`,
  1 AS `sum_net_perc`,
  1 AS `avg_net_perc`,
  1 AS `max_net_perc`,
@@ -494,6 +495,7 @@ CREATE TABLE `variables` (
 -- Dumping routines for database 'greencandle'
 --
 /*!50003 DROP FUNCTION IF EXISTS `ADD_PERCENT` */;
+ALTER DATABASE `greencandle` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -510,7 +512,9 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+ALTER DATABASE `greencandle` CHARACTER SET utf8 COLLATE utf8_general_ci ;
 /*!50003 DROP FUNCTION IF EXISTS `commission` */;
+ALTER DATABASE `greencandle` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -527,7 +531,9 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+ALTER DATABASE `greencandle` CHARACTER SET utf8 COLLATE utf8_general_ci ;
 /*!50003 DROP FUNCTION IF EXISTS `FIRST_DAY_OF_WEEK` */;
+ALTER DATABASE `greencandle` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -547,7 +553,9 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+ALTER DATABASE `greencandle` CHARACTER SET utf8 COLLATE utf8_general_ci ;
 /*!50003 DROP FUNCTION IF EXISTS `get_var` */;
+ALTER DATABASE `greencandle` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -564,7 +572,9 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+ALTER DATABASE `greencandle` CHARACTER SET utf8 COLLATE utf8_general_ci ;
 /*!50003 DROP FUNCTION IF EXISTS `PERC_DIFF` */;
+ALTER DATABASE `greencandle` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -590,7 +600,9 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+ALTER DATABASE `greencandle` CHARACTER SET utf8 COLLATE utf8_general_ci ;
 /*!50003 DROP FUNCTION IF EXISTS `REMOVE_PERCENT` */;
+ALTER DATABASE `greencandle` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -607,7 +619,9 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+ALTER DATABASE `greencandle` CHARACTER SET utf8 COLLATE utf8_general_ci ;
 /*!50003 DROP FUNCTION IF EXISTS `REOPEN_TRADE` */;
+ALTER DATABASE `greencandle` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -644,7 +658,9 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+ALTER DATABASE `greencandle` CHARACTER SET utf8 COLLATE utf8_general_ci ;
 /*!50003 DROP PROCEDURE IF EXISTS `GetProfitableByDayName` */;
+ALTER DATABASE `greencandle` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -669,6 +685,7 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+ALTER DATABASE `greencandle` CHARACTER SET utf8 COLLATE utf8_general_ci ;
 
 --
 -- Final view structure for view `accounts`
@@ -774,7 +791,7 @@ DELIMITER ;
 /*!50001 SET collation_connection      = utf8mb3_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `profit_daily` AS select cast(`profit`.`close_time` as date) AS `date(close_time)`,sum(cast(`profit`.`net_perc` as decimal(12,2))) AS `sum_net_perc`,avg(cast(`profit`.`net_perc` as decimal(12,2))) AS `avg_net_perc`,max(cast(`profit`.`net_perc` as decimal(12,2))) AS `max_net_perc`,min(cast(`profit`.`net_perc` as decimal(12,2))) AS `min_net_perc`,count(0) AS `count`,sum(case when `profit`.`net_perc` < 0 then 1 else 0 end) AS `net_loss`,sum(case when `profit`.`net_perc` > 0 then 1 else 0 end) / count(0) * 100 AS `perc_profitable`,sum(case when `profit`.`net_perc` > 0 then 1 else 0 end) / count(0) * 100 AS `net_perc_profitable`,sum(cast(`profit`.`usd_net_profit` as decimal(12,2))) AS `usd_net_profit` from `profit` group by cast(`profit`.`close_time` as date) order by cast(`profit`.`close_time` as date) desc */;
+/*!50001 VIEW `profit_daily` AS select cast(`profit`.`close_time` as date) AS `date(close_time)`,dayname(`profit`.`close_time`) AS `dayname(close_time)`,sum(cast(`profit`.`net_perc` as decimal(12,2))) AS `sum_net_perc`,avg(cast(`profit`.`net_perc` as decimal(12,2))) AS `avg_net_perc`,max(cast(`profit`.`net_perc` as decimal(12,2))) AS `max_net_perc`,min(cast(`profit`.`net_perc` as decimal(12,2))) AS `min_net_perc`,count(0) AS `count`,sum(case when `profit`.`net_perc` < 0 then 1 else 0 end) AS `net_loss`,sum(case when `profit`.`net_perc` > 0 then 1 else 0 end) / count(0) * 100 AS `perc_profitable`,sum(case when `profit`.`net_perc` > 0 then 1 else 0 end) / count(0) * 100 AS `net_perc_profitable`,sum(cast(`profit`.`usd_net_profit` as decimal(12,2))) AS `usd_net_profit` from `profit` group by cast(`profit`.`close_time` as date) order by cast(`profit`.`close_time` as date) desc */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -950,7 +967,7 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-16 12:27:02
+-- Dump completed on 2023-10-24 11:16:25
 -- MySQL dump 10.13  Distrib 5.7.42, for Linux (x86_64)
 --
 -- Host: 10.8.0.101    Database: greencandle
@@ -989,7 +1006,7 @@ CREATE TABLE `variables` (
 
 LOCK TABLES `variables` WRITE;
 /*!40000 ALTER TABLE `variables` DISABLE KEYS */;
-INSERT INTO `variables` VALUES ('commission','0.15'),('start_time','01:30'),('end_time','08:30'),('max_trade_usd','3000'),('filter','%%');
+INSERT INTO `variables` VALUES ('commission','0.15'),('start_time','01:30'),('end_time','08:30'),('max_trade_usd','3000'),('filter','%any3%');
 /*!40000 ALTER TABLE `variables` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1026,4 +1043,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-16 12:27:04
+-- Dump completed on 2023-10-24 11:16:27
