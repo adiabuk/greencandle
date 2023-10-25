@@ -1,5 +1,11 @@
 # Releases
 
+# 6.40
+* reloading live sheet should reload fresh data
+* update db schema with charset and view changes
+* add day of week to profit_daily db view
+* use tv link for aggregate data pair
+
 # 6.39
 * alert when trades reach certain profit
 * column name & ordering for open_trades and prod balance
