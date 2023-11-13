@@ -6,7 +6,7 @@ ADD ./install /opt/install
 RUN pip install -r /srv/alert/requirements.txt
 RUN mkdir /opt/output
 RUN  cp /opt/install/docker-entrypoint.sh /
-
+RUN useradd -ms /bin/bash dockeraudio
 ARG BRANCH
 ARG COMMIT
 ARG DATE
