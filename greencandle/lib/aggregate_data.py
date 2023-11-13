@@ -29,6 +29,7 @@ def get_bb_size(res, timeframe='200'):
 
     return bb_diff
 
+
 def get_indicator_value(res, indicator):
     """
     get value of indicator
@@ -244,7 +245,7 @@ def aggregate_data(key, pairs, interval, data, items):
             num = get_ohlc_attr(res, 'numTrades')
             date = get_ohlc_attr(res, 'openTime')
             humandate = epoch2date(int(int(date)/1000))
-
+            bbperc = res['bbperc_200'][0]
             redis_data[f'{pair}:{interval}'] = \
             {
              'distance_200': distance_200,
@@ -253,6 +254,7 @@ def aggregate_data(key, pairs, interval, data, items):
              'sum_candles': sum_candles,
              'middle_200': middle_200,
              'stoch_flat': stoch_flat,
+             'bbperc': bbperc,
              'bb_size': bb_size,
              'stx_diff': stx_diff,
              'bbperc_diff': bbperc_diff,
