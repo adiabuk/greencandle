@@ -245,7 +245,7 @@ def aggregate_data(key, pairs, interval, data, items):
             num = get_ohlc_attr(res, 'numTrades')
             date = get_ohlc_attr(res, 'openTime')
             humandate = epoch2date(int(int(date)/1000))
-            bbperc = res['bbperc_200'][0]
+            bbperc = res['bbperc_200']
             redis_data[f'{pair}:{interval}'] = \
             {
              'distance_200': distance_200,
