@@ -1,8 +1,8 @@
 {{if eq .base_env "stag"}}
 {
-"any-long": ["any-long"],
-"any-short": ["any-short"],
-"any-long-short": ["any-long", "any-short", "alert"],
+"any-long": ["any-long", "alert"],
+"any-short": ["any-short", "alert"],
+"any-long-short": ["any-long", "any-short"],
 
 "alert": ["alert"],
 "route": []
