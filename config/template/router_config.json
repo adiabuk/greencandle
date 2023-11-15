@@ -2,7 +2,7 @@
 {
 "any-long": ["any-long"],
 "any-short": ["any-short"],
-"any-long-short": ["any-long", "any-short"],
+"any-long-short": ["any-long", "any-short", "alert"],
 
 "alert": ["alert"],
 "route": []
@@ -36,8 +36,8 @@
 "any2-1h-short": ["any2-1h-short"],
 "any2-1h-long-short": ["any2-1h-long", "any2-1h-short"],
 
-"any-1m-long": ["any-1m-long", "alert"],
-"any-1m-short": ["any-1m-short", "alert"],
+"any-1m-long": ["any-1m-long"],
+"any-1m-short": ["any-1m-short"],
 "any-1m-long-short": ["any-1m-long", "any-1m-short"],
 
 "any-5m-long": ["any-5m-long", "alert"],
