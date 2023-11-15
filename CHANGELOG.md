@@ -1,5 +1,12 @@
 # Releases
 
+# 6.41
+* add bbperc ind to agg data
+* add new user in alert container
+* additional audio alerts
+* alert on step1 data only
+* Bump urllib3 from 2.0.3 to 2.0.7
+
 # 6.40
 * reloading live sheet should reload fresh data
 * update db schema with charset and view changes
