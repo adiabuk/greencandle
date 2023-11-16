@@ -1,4 +1,4 @@
-FROM  amrox/python:3.9.2-buster
+FROM  amrox/python:3.9.2-buster-new
 
 RUN apt update && apt-get -y install vim mpg321 gstreamer-1.0 libgirepository1.0-dev gcc libcairo2-dev pkg-config python3-dev gir1.2-gtk-3.0
 
