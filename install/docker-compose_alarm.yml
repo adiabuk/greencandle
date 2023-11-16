@@ -95,7 +95,7 @@ services:
   alarm-be-alert:
     container_name: alarm-be-alert
     hostname: alarm-be-alert
-    image: amrox/alert:${TAG}
+    image: amrox/alert:latest
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "python -u /srv/alert/webhook.py"
@@ -110,7 +110,6 @@ services:
       retries: 5
     devices:
       - /dev/ttyACM0:/dev/ttyACM0
-      - /run/user/1000/pulse:/run/user/1000/pulse
     environment:
       - CONFIG_ENV=alarm
       - DB=false
