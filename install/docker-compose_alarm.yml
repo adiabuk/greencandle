@@ -110,7 +110,7 @@ services:
       retries: 5
     devices:
       - /dev/ttyACM0:/dev/ttyACM0
-      - /dev/snd:/dev/snd
+      - /run/user/1000/pulse:/run/user/1000/pulse
     environment:
       - CONFIG_ENV=alarm
       - DB=false
