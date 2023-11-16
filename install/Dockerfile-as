@@ -1,14 +1,14 @@
-FROM  amrox/python:3.9.2-buster-new
+FROM amrox/python:3.10
 ADD ./alert /srv/alert
 ADD ./config /opt/config
 ADD ./install /opt/install
-ADD ./alert/pulse-client.conf /etc/pulse/client.conf
-ADD ./alert/libao.conf /etc/libao.conf
 
 RUN apt update -y && apt install -y pulseaudio-utils
 RUN pip install -r /srv/alert/requirements.txt
 RUN mkdir /opt/output
 RUN cp /opt/install/docker-entrypoint.sh /
+ADD ./alert/pulse-client.conf /etc/pulse/client.conf
+ADD ./alert/libao.conf /etc/libao.conf
 RUN useradd -ms /bin/bash dockeraudio
 ARG BRANCH
 ARG COMMIT
@@ -17,5 +17,4 @@ ENV COMMIT_SHA=$COMMIT
 ENV VERSION=$BRANCH
 ENV BUILD_DATE=$DATE
 
-USER dockeraudio
 CMD ["python", "/srv/alert/webhook.py"]
