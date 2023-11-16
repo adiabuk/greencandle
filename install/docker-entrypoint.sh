@@ -64,4 +64,11 @@ if [[ ! -f /installed ]]; then
   fi
 fi
 touch /installed
-bash -c "$@";
+
+if [[ "$HOSTNAME" == *"alert"* ]]; then
+    su $user -c '$@';
+    sleep infinity
+else
+    bash -c "$@";
+fi
+

@@ -85,7 +85,7 @@ def play_mp3(path):
     Use 5% volume for out-of-hours alerts, otherwise 10% volume
     """
     volume = '-g100'
-    subprocess.Popen(['mpg123', volume, '-q', path], user="dockeraudio").wait()
+    subprocess.Popen(['mpg123', volume, '-q', path]).wait()
 
 def main():
     """
