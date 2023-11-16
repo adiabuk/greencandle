@@ -66,7 +66,7 @@ fi
 touch /installed
 
 if [[ "$HOSTNAME" == *"alert"* ]]; then
-    su $user -c '$@';
+    su dockeraudio -c 'python -u /srv/alert/webhook.py '
     sleep infinity
 else
     bash -c "$@";
