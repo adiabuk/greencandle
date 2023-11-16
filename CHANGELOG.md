@@ -1,5 +1,11 @@
 # Releases
 
+# 6.42
+* Update python/debian alert base image
+* Switch from alsa to pulseaudio as non-root user for alert
+* don't include alert image in automated builds
+* move alerting from test to stag
+
 # 6.41
 * add bbperc ind to agg data
 * add new user in alert container
