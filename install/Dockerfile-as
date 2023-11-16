@@ -2,8 +2,8 @@ FROM  amrox/python:3.9.2-buster-new
 ADD ./alert /srv/alert
 ADD ./config /opt/config
 ADD ./install /opt/install
-ADD ./pulse-client.conf /etc/pulse/client.conf
-ADD ./libao.conf /etc/libao.conf
+ADD ./alert/pulse-client.conf /etc/pulse/client.conf
+ADD ./alert/libao.conf /etc/libao.conf
 
 RUN apt update -y && apt install -y pubseaudio-utils
 RUN pip install -r /srv/alert/requirements.txt
