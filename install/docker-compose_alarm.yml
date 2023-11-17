@@ -118,6 +118,7 @@ services:
       - /run/dbus/:/run/dbus/
       - /dev/shm:/dev/shm
       - /run/user:/run/user
+      - /run/user/1000/pulse:/run/user/1000/pulse
       - /var/run:/var/run
       - /var/local:/var/local
       - /tmp/.X11-unix:/tmp/.X11-unix
