@@ -204,6 +204,40 @@ class Engine(dict):
         """
         self.get_bb_perc(pair, index, localconfig, ema=True)
 
+    def get_macd(self, pair, index=None, localconfig=None):
+        """ get macd """
+
+        func, timef = localconfig  # split tuple
+        short_term, long_term, signal_period = timef.split(',')
+
+        # Calculate MACD
+
+        # Calculate short-term and long-term EMAs
+        short_ema = self.dataframes[pair]['close'].ewm(span=int(short_term), adjust=False).mean()
+        long_ema = self.dataframes[pair]['close'].ewm(span=int(long_term), adjust=False).mean()
+
+        # Calculate MACD Line
+        macd_line = short_ema - long_ema
+
+        # Calculate Signal Line
+        signal_line = macd_line.ewm(span=int(signal_period), adjust=False).mean()
+
+        # Calculate MACD Histogram
+        macd_histogram = macd_line - signal_line
+
+        scheme = {}
+        try:
+            scheme["data"] = macd_line.iloc[-1], signal_line.iloc[-1]
+            scheme["symbol"] = pair
+            scheme["event"] = f"{func}_{short_term}"
+            open_time = str(self.dataframes[pair].iloc[-1]["openTime"])
+            scheme["open_time"] = open_time
+
+            self.schemes.append(scheme)
+
+        except Exception as exc:
+            LOGGER.warning("Overall FAILURE in macd: %s", str(exc))
+
     def get_bb_perc(self, pair, index=None, localconfig=None, ema=False):
         """get bb %"""
         if index is None:

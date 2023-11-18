@@ -122,7 +122,8 @@ class Graph():
                 LOGGER.debug("Creating OHLC graph")
                 if value.empty:  # empty dataframe:
                     print(f'Unable to find {name} data for {self.pair}, passing...')
-                    return
+                    pass
+                    #return
                 value["time"] = pandas.to_datetime(value["openTime"], unit="ms")
                 item = go.Candlestick(x=value.time,
                                       open=value.open,
@@ -203,6 +204,17 @@ class Graph():
                 item2 = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                    y=stoch_d,
                                    name=name+'-d')
+            elif 'MACD' in name:
+                row = 2
+                LOGGER.debug("Creating MACD graph")
+                macd, signal = zip(*value.value)
+                item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
+                                  y=macd,
+                                  name='macd')
+                item2 = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
+                                   y=signal,
+                                   name='signal')
+
 
             elif 'STOCH' in name and 'RSI' not in name:
                 # add stochf graph in second subply (below) if it exists

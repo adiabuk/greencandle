@@ -21,7 +21,13 @@ Usage:
 res[0].HA_open > res[0].HA_close # red candle
 res[0].HA_open < res[0].HA_close # green candle
 
-## bbperc bbperc
+## MACD
+Not yet verified
+Usage: get_macd;MACD;<fast_length>,<slow_lengeth>,<signal_smoothing>
+eg: get_macd;MACD;12,26,9
+
+
+## bbperc
 VERIFIED to be equal to tradingview
 get_bbperc;name;<period>,<std dev>
 
