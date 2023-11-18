@@ -1658,3 +1658,367 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/:/var/run
+
+  data-be-analyse-1m-short5:
+    container_name: data-be-analyse-1m-short5
+    hostname: data-be-analyse-1m-short5
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2g
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "analyse_data"
+    logging:
+      driver: journald
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get3_1m
+    environment:
+      - VPN_IP=$VPN_IP
+      - ALERT=True
+      - CONFIG_ENV=data/be/short/short5/1m
+      - DB=true
+      - ROUTER_FORWARD=True
+      - NSCA=True
+    healthcheck:
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      start_period: 1h
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-analyse-1m-long5:
+    container_name: data-be-analyse-1m-long5
+    hostname: data-be-analyse-1m-long5
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2g
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "analyse_data"
+    logging:
+      driver: journald
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get3_1m
+    environment:
+      - VPN_IP=$VPN_IP
+      - ALERT=True
+      - CONFIG_ENV=data/be/long/long5/1m
+      - DB=true
+      - ROUTER_FORWARD=True
+      - NSCA=True
+    healthcheck:
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      start_period: 1h
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-analyse-5m-short5:
+    container_name: data-be-analyse-5m-short5
+    hostname: data-be-analyse-5m-short5
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2g
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "analyse_data"
+    logging:
+      driver: journald
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_5m
+    environment:
+      - VPN_IP=$VPN_IP
+      - ALERT=True
+      - CONFIG_ENV=data/be/short/short5/5m
+      - DB=true
+      - ROUTER_FORWARD=True
+    healthcheck:
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      start_period: 1h
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-analyse-5m-long5:
+    container_name: data-be-analyse-5m-long5
+    hostname: data-be-analyse-5m-long5
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2g
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "analyse_data"
+    logging:
+      driver: journald
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_5m
+    environment:
+      - VPN_IP=$VPN_IP
+      - ALERT=True
+      - CONFIG_ENV=data/be/long/long5/5m
+      - DB=true
+      - ROUTER_FORWARD=True
+    healthcheck:
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      start_period: 1h
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-analyse-1h-short5:
+    container_name: data-be-analyse-1h-short5
+    hostname: data-be-analyse-1h-short5
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2g
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "analyse_data"
+    logging:
+      driver: journald
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_1h
+    environment:
+      - VPN_IP=$VPN_IP
+      - ALERT=True
+      - CONFIG_ENV=data/be/short/short5/1h
+      - DB=true
+      - ROUTER_FORWARD=True
+    healthcheck:
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      start_period: 1h
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-analyse-1h-long5:
+    container_name: data-be-analyse-1h-long5
+    hostname: data-be-analyse-1h-long5
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2g
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "analyse_data"
+    logging:
+      driver: journald
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_1h
+    environment:
+      - VPN_IP=$VPN_IP
+      - ALERT=True
+      - CONFIG_ENV=data/be/long/long5/1h
+      - DB=true
+      - ROUTER_FORWARD=True
+    healthcheck:
+      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      start_period: 1h
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-analyse-4h-short5:
+    container_name: data-be-analyse-4h-short5
+    hostname: data-be-analyse-4h-short5
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2g
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh analyse_data
+    logging:
+      driver: journald
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_4h
+    environment:
+      - VPN_IP=$VPN_IP
+      - ALERT=True
+      - CONFIG_ENV=data/be/short/short5/4h
+      - DB=true
+      - ROUTER_FORWARD=True
+    healthcheck:
+      test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      start_period: 1h
+      interval: 30m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-analyse-4h-long5:
+    container_name: data-be-analyse-4h-long5
+    hostname: data-be-analyse-4h-long5
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2g
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh analyse_data
+    logging:
+      driver: journald
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_4h
+    environment:
+      - VPN_IP=$VPN_IP
+      - ALERT=True
+      - CONFIG_ENV=data/be/long/long5/4h
+      - DB=true
+      - ROUTER_FORWARD=True
+    healthcheck:
+      test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      start_period: 1h
+      interval: 30m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-analyse-12h-short5:
+    container_name: data-be-analyse-12h-short5
+    hostname: data-be-analyse-12h-short5
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2g
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh analyse_data
+    logging:
+      driver: journald
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_12h
+    environment:
+      - VPN_IP=$VPN_IP
+      - ALERT=True
+      - CONFIG_ENV=data/be/short/short5/12h
+      - DB=true
+      - ROUTER_FORWARD=True
+    healthcheck:
+      test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      start_period: 1h
+      interval: 30m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-analyse-12h-long5:
+    container_name: data-be-analyse-12h-long5
+    hostname: data-be-analyse-12h-long5
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2g
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh analyse_data
+    logging:
+      driver: journald
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_12h
+    environment:
+      - VPN_IP=$VPN_IP
+      - ALERT=True
+      - CONFIG_ENV=data/be/long/long5/12h
+      - DB=true
+      - ROUTER_FORWARD=True
+    healthcheck:
+      test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      start_period: 1h
+      interval: 30m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+

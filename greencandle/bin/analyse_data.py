@@ -105,7 +105,8 @@ def get_match_name(matches):
     name_lookup = [['stx'],
                    ['distance', 'bb'],
                    ['candle_low', 'candle_zero', 'candle_very_low', 'HA_flip'],
-                   ['HA']
+                   ['HA'],
+                   ['MACD'],
                    ]
     for match in matches:
         match_names.append(name_lookup[container_num-1][match-1])
