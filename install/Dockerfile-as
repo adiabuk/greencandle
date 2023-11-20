@@ -9,7 +9,6 @@ RUN mkdir /opt/output
 RUN cp /opt/install/docker-entrypoint.sh /
 ADD ./alert/pulse-client.conf /etc/pulse/client.conf
 ADD ./alert/libao.conf /etc/libao.conf
-RUN useradd -ms /bin/bash dockeraudio
 ARG BRANCH
 ARG COMMIT
 ARG DATE
