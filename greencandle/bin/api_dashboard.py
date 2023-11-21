@@ -240,14 +240,19 @@ def get_agg():
     all_data = []
     redis = Redis(db=3)
     keys = redis.conn.keys()
+    columns = ['distance_200', 'candle_size', 'avg_candles', 'sum_candles', 'macd_xover',
+               'middle_200', 'bb_size', 'stoch_flat', 'num', 'bb_size', 'bbperc_diff', 'bbperc',
+               'stx_diff', 'date']
     for key in keys:
         cur_data = redis.conn.hgetall(key)
         decoded = {k.decode():v.decode() for k,v in cur_data.items()}
         pair, interval = key.decode().split(':')
+        sort_data = dict(sorted((x for x in decoded.items() if x[0] in columns),
+                                key=lambda pair: columns.index(pair[0])))
         current_row = {}
         current_row.update({'pair': get_tv_link(pair, interval, anchor=True),
                             'interval':interval})
-        for function, value in decoded.items():
+        for function, value in sort_data.items():
             current_value = '' if 'None' in value else value
             current_row.update({function:current_value})
         all_data.append(current_row)
