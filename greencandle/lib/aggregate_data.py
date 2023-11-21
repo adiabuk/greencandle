@@ -16,6 +16,23 @@ from greencandle.lib.logger import get_logger
 
 LOGGER = get_logger(__name__)
 
+def get_macd_xover(res, last_res, timeframe=12):
+    """ get MACD crossover long or short"""
+
+    xover = 0
+    try:
+        if res[f'MACD_{timeframe}'][0] < res[f'MACD{timeframe}'][1] and \
+                last_res[f'MACD_{timeframe}'][0] > last_res[f'MACD{timeframe}'][1]:
+            xover = -1   # short
+        elif res[f'MACD_{timeframe}'][0] > res[f'MACD{timeframe}'][1] and \
+                last_res[f'MACD_{timeframe}'][0] < last_res[f'MACD{timeframe}'][1]:
+            xover = 1  # long
+        else:
+            xover = 0  # no cross
+    except:
+        xover = 0
+    return xover
+
 def get_bb_size(res, timeframe='200'):
     """
     percent between upper and lower bb
@@ -28,7 +45,6 @@ def get_bb_size(res, timeframe='200'):
         bb_diff = ''
 
     return bb_diff
-
 
 def get_indicator_value(res, indicator):
     """
@@ -238,6 +254,7 @@ def aggregate_data(key, pairs, interval, data, items):
             candle_size = get_candle_size(res)
             stoch_flat = get_stoch_flat(res, last_res)
             bb_size = get_bb_size(res)
+            macd_xover = get_macd_xover(res, last_res, '12')
             bbperc_diff = get_bbperc_diff(res, last_res)[-1]
             stx_diff = get_stx_diff(last_res, third_res)
             avg_candles = get_avg_candles(data[interval][pair])
@@ -255,6 +272,7 @@ def aggregate_data(key, pairs, interval, data, items):
              'middle_200': middle_200,
              'stoch_flat': stoch_flat,
              'bbperc': bbperc,
+             'macd_xover': macd_xover,
              'bb_size': bb_size,
              'stx_diff': stx_diff,
              'bbperc_diff': bbperc_diff,
