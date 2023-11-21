@@ -21,11 +21,11 @@ def get_macd_xover(res, last_res, timeframe=12):
 
     xover = 0
     try:
-        if res[f'MACD_{timeframe}'][0] < res[f'MACD{timeframe}'][1] and \
-                last_res[f'MACD_{timeframe}'][0] > last_res[f'MACD{timeframe}'][1]:
+        if res[f'MACD_{timeframe}'][0] < res[f'MACD_{timeframe}'][1] and \
+                last_res[f'MACD_{timeframe}'][0] > last_res[f'MACD_{timeframe}'][1]:
             xover = -1   # short
         elif res[f'MACD_{timeframe}'][0] > res[f'MACD{timeframe}'][1] and \
-                last_res[f'MACD_{timeframe}'][0] < last_res[f'MACD{timeframe}'][1]:
+                last_res[f'MACD_{timeframe}'][0] < last_res[f'MACD_{timeframe}'][1]:
             xover = 1  # long
         else:
             xover = 0  # no cross
