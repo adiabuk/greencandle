@@ -241,8 +241,8 @@ def get_agg():
     redis = Redis(db=3)
     keys = redis.conn.keys()
     columns = ['distance_200', 'candle_size', 'avg_candles', 'sum_candles', 'macd_xover',
-               'middle_200', 'bb_size', 'stoch_flat', 'num', 'bb_size', 'bbperc_diff', 'bbperc',
-               'stx_diff', 'date']
+               'macd_diff', 'middle_200', 'bb_size', 'stoch_flat', 'num', 'bb_size',
+               'bbperc_diff', 'bbperc', 'stx_diff', 'date']
     for key in keys:
         cur_data = redis.conn.hgetall(key)
         decoded = {k.decode():v.decode() for k,v in cur_data.items()}

@@ -138,6 +138,18 @@ def get_candle_size(res):
     except:
         return None
 
+def get_macd_diff(res, timeframe=12):
+    """
+    get perc diff between macd and signal lines
+    """
+
+    try:
+        diff = perc_diff(res[f'MACD_{timeframe}'][0], res[f'MACD_{timeframe}'][1])
+    except:
+        diff = 0
+    return round(diff, 4)
+
+
 def get_middle_distance(res, timeframe='200'):
     """
     get distance between to middle bollinger band as a percentage
@@ -255,6 +267,7 @@ def aggregate_data(key, pairs, interval, data, items):
             stoch_flat = get_stoch_flat(res, last_res)
             bb_size = get_bb_size(res)
             macd_xover = get_macd_xover(res, last_res, '12')
+            macd_diff = get_macd_diff(res, '12')
             bbperc_diff = get_bbperc_diff(res, last_res)[-1]
             stx_diff = get_stx_diff(last_res, third_res)
             avg_candles = get_avg_candles(data[interval][pair])
@@ -273,6 +286,7 @@ def aggregate_data(key, pairs, interval, data, items):
              'stoch_flat': stoch_flat,
              'bbperc': bbperc,
              'macd_xover': macd_xover,
+             'macd_diff': macd_diff,
              'bb_size': bb_size,
              'stx_diff': stx_diff,
              'bbperc_diff': bbperc_diff,
