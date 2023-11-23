@@ -144,11 +144,10 @@ def get_macd_diff(res, timeframe=12):
     """
 
     try:
-        diff = perc_diff(res[f'MACD_{timeframe}'][0], res[f'MACD_{timeframe}'][1])
+        diff = perc_diff(res[f'MACD_{timeframe}'][1], res[f'MACD_{timeframe}'][0])
     except:
         diff = 0
     return round(diff, 4)
-
 
 def get_middle_distance(res, timeframe='200'):
     """
