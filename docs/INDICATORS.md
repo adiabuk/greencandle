@@ -22,10 +22,11 @@ res[0].HA_open > res[0].HA_close # red candle
 res[0].HA_open < res[0].HA_close # green candle
 
 ## MACD
-Not yet verified
+VERIFIED to be equal to tradingview
 Usage: get_macd;MACD;<fast_length>,<slow_lengeth>,<signal_smoothing>
 eg: get_macd;MACD;12,26,9
 
+Redis output: (macd, signal, histogram) tupple
 
 ## bbperc
 VERIFIED to be equal to tradingview
