@@ -1,5 +1,19 @@
 # Releases
 
+# 6.43
+* update macd doc
+* remove higher timeframe macd analysis containers
+* update pulse socket location to use system service and use root
+* add missing usd value in balance
+* add diff between macd and signal agg data
+* sort columns in agg table
+* allow an extra min for lock file healthcheck
+* remove delisted asset TOMO
+* add additional pair for analysis
+* add alerts for macd and bb/distance triggers
+* add MACD and histogram data analysis with volume & RSI
+* add macd indicator with with histogram
+
 # 6.42
 * Update python/debian alert base image
 * Switch from alsa to pulseaudio as non-root user for alert
