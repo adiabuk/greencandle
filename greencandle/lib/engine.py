@@ -227,7 +227,7 @@ class Engine(dict):
 
         scheme = {}
         try:
-            scheme["data"] = macd_line.iloc[-1], signal_line.iloc[-1]
+            scheme["data"] = macd_line.iloc[-1], signal_line.iloc[-1], macd_histogram.iloc[-1]
             scheme["symbol"] = pair
             scheme["event"] = f"{func}_{short_term}"
             open_time = str(self.dataframes[pair].iloc[-1]["openTime"])
