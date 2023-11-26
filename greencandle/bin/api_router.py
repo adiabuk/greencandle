@@ -103,9 +103,7 @@ def respond():
             payload['edited'] = "yes"
 
         payload['pair'] = payload['pair'].lower()
-        if 'env' not in payload or payload['env'] == env:
-            send_trade(payload, container)
-        elif ':' in container:
+        if ':' in container:
             new_env, new_strategy = container.split(':')
             payload['env'] = new_env
             payload['strategy'] = new_strategy
@@ -116,6 +114,8 @@ def respond():
             else:
                 forward(payload)
 
+        elif 'env' not in payload or payload['env'] == env:
+            send_trade(payload, container)
         else:
             payload['host'] = '10.8.0.1'
             forward(payload)
