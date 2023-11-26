@@ -16,7 +16,7 @@ from greencandle.lib.logger import get_logger
 
 LOGGER = get_logger(__name__)
 
-def get_macd_xover(res, last_res, timeframe=12):
+def get_macd_xover(res, last_res, timeframe=19):
     """ get MACD crossover long or short"""
 
     xover = 0
@@ -138,7 +138,7 @@ def get_candle_size(res):
     except:
         return None
 
-def get_macd_diff(res, timeframe=12):
+def get_macd_diff(res, timeframe=19):
     """
     get perc diff between macd and signal lines
     """
@@ -265,8 +265,8 @@ def aggregate_data(key, pairs, interval, data, items):
             candle_size = get_candle_size(res)
             stoch_flat = get_stoch_flat(res, last_res)
             bb_size = get_bb_size(res)
-            macd_xover = get_macd_xover(res, last_res, '12')
-            macd_diff = get_macd_diff(res, '12')
+            macd_xover = get_macd_xover(res, last_res, '19')
+            macd_diff = get_macd_diff(res, '19')
             bbperc_diff = get_bbperc_diff(res, last_res)[-1]
             stx_diff = get_stx_diff(last_res, third_res)
             avg_candles = get_avg_candles(data[interval][pair])
