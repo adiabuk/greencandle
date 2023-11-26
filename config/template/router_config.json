@@ -40,9 +40,9 @@
 "any-1m-short": ["any-1m-short"],
 "any-1m-long-short": ["any-1m-long", "any-1m-short"],
 
-"any-5m-long": ["any-5m-long", "alert"],
-"any-5m-short": ["any-5m-short", "alert"],
-"any-5m-long-short": ["any-5m-long", "any-5m-short"],
+"any-5m-long": ["any-5m-long"],
+"any-5m-short": ["any-5m-short"],
+"any-5m-long-short": ["any-5m-long", "any-5m-short", "alert"],
 
 
 "any-1h-long": ["any-1h-long"],
@@ -97,23 +97,14 @@
 "forward3-long": ["test:any2-1h-long"],
 "forward3-short": ["test:any2-1h-short"],
 
-"forward4": ["test:any-1m-long-short", "alert"],
-"forward4-long": ["test:any-1m-long", "alert"],
-"forward4-short": ["test:any-1m-short", "alert"],
-"forward5": ["test:any-5m-long-short", "alert"],
-"forward5-long": ["test:any-5m-long", "alert"],
-"forward5-short": ["test:any-5m-short", "alert"],
-
-"forward6": ["test:any-1h-long-short"],
-"forward6-long": ["test:any-1h-long"],
-"forward6-short": ["test:any-1h-short"],
-
 "forward7": ["test:any3-1m-long-short", "prod:any-1m-long", "prod:any-1m-short"],
 "forward8": ["test:any3-5m-long-short", "prod:any-5m-long", "prod:any-5m-short"],
 
 "forward9": ["test:any2-1m-long-short"],
 "forward10": ["test:any2-5m-long-short"],
 "forward11": ["alert"],
+"1m-5": ["test:any-1m-long-short"],
+"5m-5": ["test:any-5m-long-short"],
 "alert": ["alert"],
 "route": []
 }
