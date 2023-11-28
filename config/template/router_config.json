@@ -104,6 +104,14 @@
 
 "1m-5": ["test:any-1m-long-short"],
 "5m-5": ["test:any-5m-long-short"],
+
+"1m-6": ["test-any3-1m-long-short"],
+"5m-6": ["test-any3-5m-long-short"],
+"1h-6": ["test-any3-1h-long-short"],
+"4h-6": ["test-any3-4h-long-short"],
+"12h-6": ["test-any3-12h-long-short"],
+
+
 "alert": ["alert"],
 "route": []
 }
