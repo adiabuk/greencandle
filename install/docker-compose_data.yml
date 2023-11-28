@@ -1683,7 +1683,7 @@ services:
       - CONFIG_ENV=data/be/short/short5/1m
       - DB=true
       - ROUTER_FORWARD=True
-      - NSCA=True
+      - STORE_IN_DB=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -1720,7 +1720,7 @@ services:
       - CONFIG_ENV=data/be/long/long5/1m
       - DB=true
       - ROUTER_FORWARD=True
-      - NSCA=True
+      - STORE_IN_DB=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -1757,6 +1757,7 @@ services:
       - CONFIG_ENV=data/be/short/short5/5m
       - DB=true
       - ROUTER_FORWARD=True
+      - STORE_IN_DB=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -1793,6 +1794,7 @@ services:
       - CONFIG_ENV=data/be/long/long5/5m
       - DB=true
       - ROUTER_FORWARD=True
+      - STORE_IN_DB=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
