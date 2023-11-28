@@ -83,24 +83,9 @@
 {{else if eq .base_env "data"}}
 {
 "any-long-short": ["forward"],
-"forward1": ["test:any2-1m-long-short"],
-"forward1-short": ["test:any2-1m-short"],
-"forward1-long": ["test:any2-1m-long"],
-
-"forward2": ["test:any2-5m-long-short"],
-"forward2-long": ["test:any2-5m-long"],
-"forward2-short": ["test:any2-5m-short"],
-
-"forward3": ["test:any2-1h-long-short"],
-"forward3-long": ["test:any2-1h-long"],
-"forward3-short": ["test:any2-1h-short"],
 
 "1m-4": ["test:any3-1m-long-short"],
 "5m-4": ["test:any3-5m-long-short"],
-
-"forward9": ["test:any2-1m-long-short"],
-"forward10": ["test:any2-5m-long-short"],
-"forward11": ["alert"],
 
 "1m-5": ["test:any-1m-long-short"],
 "5m-5": ["test:any-5m-long-short"],
