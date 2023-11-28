@@ -2,6 +2,5 @@
   "divisor": "3",
   "name": "data-cron",
   "rate_indicator": "1",
-  "no_of_klines": "350",
-  "logging_output": "stdout"
+  "no_of_klines": "350"
 }
