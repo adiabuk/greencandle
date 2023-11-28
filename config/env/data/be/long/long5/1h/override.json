@@ -1,8 +1,5 @@
 {
   "interval": "1h",
   "name": "data-be-analyse-1h-long5",
-  "slack_alerts": "data_step1",
-  "slack_balance": "data_step1",
-  "slack_notifications": "data_step1",
-  "time_between_trades": "3h"
+   "time_between_trades": "3h"
 }

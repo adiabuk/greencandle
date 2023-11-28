@@ -1,9 +1,6 @@
 {
   "interval": "5m",
   "name": "data-be-analyse-5m-long5",
-  "slack_alerts": "data_step1",
-  "slack_balance": "data_step1",
-  "slack_notifications": "data_step1",
   "time_between_trades": "30m",
   "api_forward": "5m-5"
 }
