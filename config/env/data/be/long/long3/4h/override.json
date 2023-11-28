@@ -1,8 +1,0 @@
-{
-  "name": "data-be-analyse-4h-long3",
-  "interval": "4h",
-  "time_between_trades": "8h",
-  "open_rule1": "0.1 \u003c agg.avg_candles \u003c 3 and perc_diff(agg.avg_candles, agg.candle_size) \u003e 300 and res[0].numTrades \u003e 50 and res[0].STX_22[0] == 1 and res[0].close \u003e res[1].close and agg.bb_size \u003e 1",
-  "open_rule2": "agg.avg_candles == 0 and agg.candle_size \u003e 1 and res[0].numTrades \u003e 50 and res[0].STX_22[0] == 1 and res[0].close \u003e res[1].close and agg.bb_size \u003e 1",
-  "open_rule3": "0 \u003c agg.avg_candles \u003c 0.1 and perc_diff(agg.avg_candles, agg.candle_size) \u003e 1000 and res[0].numTrades \u003e 50 and res[0].STX_22[0] == 1 and res[0].close \u003e res[1].close and agg.bb_size \u003e 1"
-}
