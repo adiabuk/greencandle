@@ -211,7 +211,15 @@ def get_dataframes(pairs, interval=None, no_of_klines=None, max_workers=50):
 
     # extract results
     for pair, value in results.items():
-        non_empty = [x for x in value.result() if x['numTrades'] != 0]
+        try:
+            non_empty = [x for x in value.result() if x['numTrades'] != 0]
+        except TypeError:
+            start_time = int(time.time()*1000) - int((int(no_of_klines)*10) * \
+                    TF2MIN[interval]*60000)
+            more_data = get_all_klines(pair, interval=interval, start_time=start_time,
+                                       no_of_klines=int(no_of_klines))
+            non_empty = [x for x in more_data if x['numTrades'] != 0][-int(no_of_klines)]
         dataframe[pair] = pandas.DataFrame(non_empty)
+
     pool.shutdown(wait=True)
     return dataframe
