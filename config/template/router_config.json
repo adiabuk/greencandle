@@ -95,8 +95,8 @@
 "forward3-long": ["test:any2-1h-long"],
 "forward3-short": ["test:any2-1h-short"],
 
-"forward7": ["test:any3-1m-long-short", "prod:any-1m-long", "prod:any-1m-short"],
-"forward8": ["test:any3-5m-long-short", "prod:any-5m-long", "prod:any-5m-short"],
+"1m-4": ["test:any3-1m-long-short"],
+"5m-4": ["test:any3-5m-long-short"],
 
 "forward9": ["test:any2-1m-long-short"],
 "forward10": ["test:any2-5m-long-short"],
