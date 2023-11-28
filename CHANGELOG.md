@@ -1,5 +1,14 @@
 # Releases
 
+# 6.44
+* forward bbperc to test only
+* create and forward MACD trade closes to test env
+* update balance in dashboard every 10mins
+* check avg candle size in MACD strategy
+* revert removal of RSI/BB until implementation of celery
+* fix ordering for forward rule checker
+* remove rsi/bbperc from macd rule and tweak forwarding rules
+
 # 6.43
 * update macd doc
 * remove higher timeframe macd analysis containers
