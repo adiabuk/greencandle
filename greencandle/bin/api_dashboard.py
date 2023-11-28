@@ -426,7 +426,7 @@ def main():
     if config.main.base_env.strip() != 'data':
         scheduler = BackgroundScheduler() # Create Scheduler
         scheduler.add_job(func=get_additional_details, trigger="interval", seconds=5)
-        scheduler.add_job(func=get_balance, trigger="interval", minutes=30)
+        scheduler.add_job(func=get_balance, trigger="interval", minutes=10)
         scheduler.add_job(func=get_live, trigger="interval", minutes=2)
         get_balance()
         scheduler.start() # Start Scheduler
