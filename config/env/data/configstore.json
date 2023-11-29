@@ -241,7 +241,7 @@
       "is_secret": false
     },
     "logging_output": {
-      "value": "stdout",
+      "value": "journald",
       "is_binary": false,
       "is_secret": false
     },
