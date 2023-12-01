@@ -197,7 +197,8 @@ def analyse_pair(pair, redis):
 
             if CHECK_REDIS_PAIR and result=='OPEN':
                 redis4 = Redis(db=CHECK_REDIS_PAIR)
-                redis4.conn.srem(f'{INTERVAL}:{DIRECTION}', f'{pair}-{reversal}')
+                redis4.conn.srem(f'{INTERVAL}:{DIRECTION}', f'{pair}:{reversal}')
+                LOGGER.debug("removing %s:%s %s-%s", INTERVAL, DIRECTION, pair, reversal)
 
 
             if ROUTER_FORWARD:
