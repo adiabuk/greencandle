@@ -346,6 +346,15 @@ class ProdRunner():
             # skip pair if empty dataframe (no new trades in kline)
             if len(new_dataframes[pair]) == 0:
                 continue
+            if len(self.dataframes[pair]) == 0:
+
+                df2 = self.dataframes[pair].append(pandas.Series(data['recent'][pair]),
+                                                   ignore_index=True,
+                                                   verify_integrity=True).tail(max_klines)
+                self.dataframes[pair] = df2
+                continue
+
+
             if pair in data['closed'] and self.dataframes[pair].iloc[-1]['openTime'] == \
                     data['closed'][pair]['openTime'] and \
               self.dataframes[pair].iloc[-1]['numTrades'] < data['closed'][pair]['numTrades']:
