@@ -26,6 +26,7 @@ export VPN_IP=$(ip -4 addr show tun0 | grep -Po 'inet \K[\d.]+'|| echo localhost
 export SECRET_KEY=$(hexdump -vn16 -e'4/4 "%08X" 1 "\n"' /dev/urandom)
 export COMPOSE="docker compose --ansi never -f ./install/docker-compose_${env}.yml -p ${env}"
 
+echo "$TAG,$env,$COMMIT,`date` start" >> /var/local/deploy.txt
 $COMPOSE pull
 base=$(yq r install/docker-compose_${env}.yml services | grep -v '^ .*' | sed 's/:.*$//'|grep 'base')
 
@@ -53,5 +54,5 @@ done
 export COMMIT=`docker exec ${env}-base-mysql  bash -c 'echo "$COMMIT_SHA"'`
 
 # log tag, env short commit sha, and date to log file
-echo "$TAG,$env,$COMMIT,`date`" >> /var/local/deploy.txt
+echo "$TAG,$env,$COMMIT,`date` finish" >> /var/local/deploy.txt
 echo DONE
