@@ -1139,6 +1139,7 @@ services:
       - CONFIG_ENV=data/be/short/short6/1m
       - DB=true
       - CHECK_REDIS_PAIR=5
+      - STORE_IN_DB=True
       - ROUTER_FORWARD=True
       - NSCA=True
     healthcheck:
@@ -1177,6 +1178,7 @@ services:
       - CONFIG_ENV=data/be/long/long6/1m
       - DB=true
       - CHECK_REDIS_PAIR=5
+      - STORE_IN_DB=True
       - ROUTER_FORWARD=True
       - NSCA=True
     healthcheck:
@@ -1214,6 +1216,7 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/short/short6/5m
       - DB=true
+      - STORE_IN_DB=True
       - CHECK_REDIS_PAIR=5
       - ROUTER_FORWARD=True
     healthcheck:
@@ -1251,6 +1254,7 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/long/long6/5m
       - DB=true
+      - STORE_IN_DB=True
       - CHECK_REDIS_PAIR=5
       - ROUTER_FORWARD=True
     healthcheck:
@@ -1287,6 +1291,7 @@ services:
       - VPN_IP=$VPN_IP
       - ALERT=True
       - CONFIG_ENV=data/be/short/short6/1h
+      - STORE_IN_DB=True
       - DB=true
       - CHECK_REDIS_PAIR=5
       - ROUTER_FORWARD=True
@@ -1324,6 +1329,7 @@ services:
       - VPN_IP=$VPN_IP
       - ALERT=True
       - CONFIG_ENV=data/be/long/long6/1h
+      - STORE_IN_DB=True
       - DB=true
       - CHECK_REDIS_PAIR=5
       - ROUTER_FORWARD=True
@@ -1362,6 +1368,7 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/short/short6/4h
       - DB=true
+      - STORE_IN_DB=True
       - CHECK_REDIS_PAIR=5
       - ROUTER_FORWARD=True
     healthcheck:
@@ -1400,6 +1407,7 @@ services:
       - CONFIG_ENV=data/be/long/long6/4h
       - DB=true
       - CHECK_REDIS_PAIR=5
+      - STORE_IN_DB=True
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -1437,6 +1445,7 @@ services:
       - CONFIG_ENV=data/be/short/short6/12h
       - DB=true
       - CHECK_REDIS_PAIR=5
+      - STORE_IN_DB=True
       - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -1475,6 +1484,7 @@ services:
       - DB=true
       - CHECK_REDIS_PAIR=5
       - ROUTER_FORWARD=True
+      - STORE_IN_DB=True
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h

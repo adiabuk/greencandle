@@ -1,3 +1,5 @@
 {
-  "open_rule1": "res[0].MACD_19[2] \u003e res[1].MACD_19[2]"
+  "open_rule1": "res[0].MACD_19[2] \u003e res[1].MACD_19[2]",
+  "close_rule1": "res[0].close > \u003e res[0].bb[0]",
+  "close_rule2": "res[0].bbperc_200 \u003e 3"
 }
