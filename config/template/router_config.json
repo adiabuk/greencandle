@@ -94,7 +94,7 @@
 "1m-4": ["test:any3-1m-long-short"],
 "5m-4": ["test:any3-5m-long-short"],
 
-"1m-5": ["test:any-1m-long-short"],
+"1m-5": ["test:any-1m-long-short", "prod:any2-1m-long-short"],
 "5m-5": ["test:any-5m-long-short"],
 
 "1m-6": ["test:any3-1m-long-short", "prod:any-1m-long-short"],
