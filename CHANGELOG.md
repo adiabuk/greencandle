@@ -1,5 +1,25 @@
 # Releases
 
+# 6.45
+* log deployment start/finish
+* add prod forwarding rules for bb & MACD
+* add close rules for bbperc/direction trades
+* still add data to df even if no prev data
+* ensure pair is being removed from redis after trade is opened
+* use correct 12h api forwarding rule
+* group daily profit view by both open and close times
+* remove local volume from get containers
+* fix router config
+* move macd strategy to separate slack channel
+* set check var for new containers
+* add new strategy name for slack
+* remove unused router and forward rules
+* replace HA check with MACD check
+* loosen restrictions for MACD rule
+* remove de-listed asset
+* alert for 1m test
+* get more candles if empty dataframe (req'd for some small timeframe pairs)
+
 # 6.44
 * forward bbperc to test only
 * create and forward MACD trade closes to test env
