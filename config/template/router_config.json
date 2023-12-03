@@ -12,15 +12,23 @@
 
 "any3-1m-long": ["any3-1m-long"],
 "any3-1m-short": ["any3-1m-short"],
-"any3-1m-long-short": ["any3-1m-long", "any3-1m-short"],
+"any3-1m-long-short": ["any3-1m-long", "any3-1m-short", "alert"],
 
 "any3-5m-long": ["any3-5m-long"],
 "any3-5m-short": ["any3-5m-short"],
-"any3-5m-long-short": ["any3-5m-long", "any3-5m-short"],
+"any3-5m-long-short": ["any3-5m-long", "any3-5m-short", "alert"],
 
 "any3-1h-long": ["any3-1h-long"],
 "any3-1h-short": ["any3-1h-short"],
-"any3-1h-long-short": ["any3-1h-long", "any3-1h-short"],
+"any3-1h-long-short": ["any3-1h-long", "any3-1h-short", "alert"],
+
+"any3-4h-long": ["any3-4h-long"],
+"any3-4h-short": ["any3-4h-short"],
+"any3-4h-long-short": ["any3-4h-long", "any3-4h-short", "alert"],
+
+"any3-12h-long": ["any3-12h-long"],
+"any3-12h-short": ["any3-12h-short"],
+"any3-12h-long-short": ["any3-12h-long", "any3-12h-short", "alert"],
 
 "any2-1m-long": ["any2-1m-long"],
 "any2-1m-short": ["any2-1m-short"],
@@ -93,6 +101,9 @@
 
 "1m-4": ["test:any3-1m-long-short"],
 "5m-4": ["test:any3-5m-long-short"],
+"1h-4": ["test:any3-1h-long-short"],
+"4h-4": ["test:any3-4h-long-short"],
+"12h-4": ["test:any3-12h-long-short"],
 
 "1m-5": ["test:any-1m-long-short", "prod:any2-1m-long-short"],
 "5m-5": ["test:any-5m-long-short"],
