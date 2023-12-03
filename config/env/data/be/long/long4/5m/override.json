@@ -1,5 +1,5 @@
 {
-  "api_forward": "forward8",
+  "api_forward": "5m-4",
   "interval": "5m",
   "name": "data-be-analyse-5m-long4",
   "slack_alerts": "data_ha",

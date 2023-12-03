@@ -1,5 +1,6 @@
 {
   "name": "data-be-analyse-4h-short4",
+  "api_forward": "4h-4",
   "interval": "4h",
   "slack_alerts": "data_ha",
   "slack_balance": "data_ha",
