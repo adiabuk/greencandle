@@ -890,8 +890,8 @@ class Trade():
                             asset=base)
                     except BinanceException as binex:
                         self.logger.critical("Borrow error-open %s: %s while trying to borrow "
-                                             "short %s %s %s", pair, str(borrow_res),
-                                             amount_to_borrow, base, str(binex))
+                                             "short %s %s", pair, amount_to_borrow,
+                                             base, str(binex))
                         return False
 
                     self.logger.info("Borrow result for pair %s/short: %s", pair, borrow_res)
