@@ -191,7 +191,8 @@ def get_binance_cross():
             if key == "BTC":
                 bcoin = float(current_value)
                 bitcoin_totals += bcoin
-                usd_totals += bcoin *float(prices["BTCUSDT"])
+                usd = bcoin *float(prices["BTCUSDT"])
+                usd_totals += usd
 
             elif key in ("USDT", "LBUSD", "BUSD"):
                 bcoin = float(current_value) / float(prices["BTCUSDT"])
