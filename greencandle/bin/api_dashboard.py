@@ -157,12 +157,14 @@ def action():
     close = request.args.get('close')
     take = request.args.get('tp') if 'tp' in request.args else None
     stop = request.args.get('sl') if 'sl' in request.args else None
-    send_trade(pair, strategy, trade_action, take=take, stop=stop)
+    usd = request.args.get('usd') if 'usd' in request.args else None
+
+    send_trade(pair, strategy, trade_action, take=take, stop=stop, usd=usd)
     if close:
         return '<button type="button" onclick="window.close()">Close Tab</button>'
     return redirect(url_for('trade'))
 
-def send_trade(pair, strategy, trade_action, take=None, stop=None):
+def send_trade(pair, strategy, trade_action, take=None, stop=None, usd=None):
     """
     Create OPEN/CLOSE post request and send to API router
     """
@@ -172,7 +174,9 @@ def send_trade(pair, strategy, trade_action, take=None, stop=None):
                "strategy": strategy,
                "manual": True,
                "tp": take,
-               "sl": stop}
+               "sl": stop,
+               "usd": usd}
+
     api_token = config.web.api_token
     url = f"http://router:1080/{api_token}"
     try:
