@@ -31,6 +31,7 @@ def add_to_queue(req, test=False):
                 eval(config.main.take_profit_perc)
     stop_loss = float(req['sl']) if 'sl' in req and req['sl'] else \
                 eval(config.main.stop_loss_perc)
+    usd = float(req['usd']) if 'usd' in req and req['usd'] else None
 
     if not pair:
         send_slack_message("alerts", "Missing pair for api trade")
@@ -46,7 +47,7 @@ def add_to_queue(req, test=False):
         return
 
     title = config.main.name + "-manual" if "manual" in req else config.main.name
-    item = [(pair, current_time, current_price, title, action)]
+    item = [(pair, current_time, current_price, title, action, usd)]
     trade = Trade(interval=config.main.interval, test_data=False, test_trade=test, config=config)
 
     try:

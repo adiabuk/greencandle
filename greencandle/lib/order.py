@@ -415,11 +415,11 @@ class Trade():
 
         return return_dict
 
-    def get_total_amount_to_use(self, dbase, pair=None, account=None):
+    def get_total_amount_to_use(self, dbase, pair=None, account=None, max_usd=None):
         """ Get total amount to use as sum of balance_to_use and loan_to_use """
 
 
-        max_from_db = dbase.get_var_value('max_trade_usd')
+        max_from_db = max_usd if max_usd else dbase.get_var_value('max_trade_usd')
         total_max = int(max_from_db) if max_from_db else int(self.config.main.max_trade_usd)
         balance_to_use = self.get_balance_to_use(dbase, account, pair)
         # set default loan to use as 0, may be overwritten if non-spot and not enough balance to
@@ -449,7 +449,6 @@ class Trade():
                         balance_to_use['symbol_name'] else \
                         quote2base(total_remaining, balance_to_use['symbol_name']+'USDT')
 
-
         return_dict = {"balance_amt": balance_to_use['symbol'],
                        "loan_amt": loan_to_use['symbol']
                        }
@@ -465,9 +464,10 @@ class Trade():
 
         dbase = Mysql(test=self.test_data, interval=self.interval)
 
-        for pair, current_time, current_price, event, _ in long_list:
+        for pair, current_time, current_price, event, _, max_usd in long_list:
             pair = pair.strip()
-            total_amt_to_use = self.get_total_amount_to_use(dbase, account='margin', pair=pair)
+            total_amt_to_use = self.get_total_amount_to_use(dbase, account='margin', pair=pair,
+                                                            max_usd=max_usd)
             amount_to_borrow = total_amt_to_use['loan_amt']
             current_quote_bal = total_amt_to_use['balance_amt']
 
@@ -851,10 +851,11 @@ class Trade():
         self.logger.info("We have %s potential items to open short", len(short_list))
         dbase = Mysql(test=self.test_data, interval=self.interval)
 
-        for pair, current_time, current_price, event, _ in short_list:
+        for pair, current_time, current_price, event, _, max_usd in short_list:
             base = get_base(pair)
 
-            total_amount_to_use = self.get_total_amount_to_use(dbase, account='margin', pair=pair)
+            total_amount_to_use = self.get_total_amount_to_use(dbase, account='margin', pair=pair,
+                                                               max_usd=max_usd)
             current_base_bal = total_amount_to_use['balance_amt']
             amount_to_borrow = total_amount_to_use['loan_amt']
 
