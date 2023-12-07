@@ -924,3 +924,73 @@ services:
       - /var/run:/var/run
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
+
+  prod-be-api-any-lt-cross-long:
+    container_name: prod-be-api-any-lt-cross-long
+    hostname: prod-be-api-any-lt-cross-long
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600m
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "touch /var/local/borrow_drain; backend_api api & backend_api queue"
+    logging:
+      driver: journald
+    environment:
+      - VPN_IP=$VPN_IP
+      - intermittent="true"
+      - CONFIG_ENV=prod/be/any/lt/cross-long
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - prod-base-mysql:mysql
+      - prod-base-redis:redis
+    depends_on:
+      - prod-base-mysql
+      - prod-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history
+
+  prod-be-api-any-lt-cross-short:
+    container_name: prod-be-api-any-lt-cross-short
+    hostname: prod-be-api-any-lt-cross-short
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600m
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "touch /var/local/borrow_drain; backend_api api & backend_api queue"
+    logging:
+      driver: journald
+    environment:
+      - VPN_IP=$VPN_IP
+      - intermittent="true"
+      - CONFIG_ENV=prod/be/any/lt/cross-short
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - prod-base-mysql:mysql
+      - prod-base-redis:redis
+    depends_on:
+      - prod-base-mysql
+      - prod-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history
