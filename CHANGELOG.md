@@ -1,5 +1,15 @@
 # Releases
 
+# 6.46
+* add prod long term trade containers
+* allow borrow to be turned off using lock file
+* pass override max_usd value through api
+* add usd amt to trade dashboard
+* calculate usd value separately in cross balance
+* no borrow result if exception raised
+* complete remaining api forwards to test env with alerts
+* add missing upper timeframe prod config
+
 # 6.45
 * log deployment start/finish
 * add prod forwarding rules for bb & MACD
