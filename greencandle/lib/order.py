@@ -338,7 +338,7 @@ class Trade():
         orig_base = get_base(pair)
         orig_quote = get_quote(pair)
         orig_direction = self.config.main.trade_direction
-
+        borrow_drain = Path('/var/local/drain/borrow_drain').is_file()
         # get current borrowed
         mode = "isolated" if str2bool(self.config.main.isolated) else "cross"
         rows = dbase.get_current_borrowed(pair if mode == 'isolated' else '', mode)
@@ -393,6 +393,11 @@ class Trade():
             final_usd = sub_perc(1, total / float(self.config.main.divisor))
             return_dict['usd'] = final_usd
             return_dict['symbol'] = final_symbol
+            return return_dict
+
+        if borrow_drain:
+            return_dict['usd'] = 0
+            return_dict['symbol'] = 0
             return return_dict
 
         # Use 99% of amount determined by divisor
