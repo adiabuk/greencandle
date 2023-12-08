@@ -335,6 +335,8 @@ services:
       - prod-be-api-any2-1m-cross-short:any2-1m-short
       - prod-be-api-any2-5m-cross-long:any2-5m-long
       - prod-be-api-any2-5m-cross-short:any2-5m-short
+      - prod-be-api-any-lt-cross-long:any-lt-long
+      - prod-be-api-any-lt-cross-short:any-lt-short
 
     depends_on:
       - prod-base-mysql
