@@ -218,7 +218,7 @@ def get_dataframes(pairs, interval=None, no_of_klines=None, max_workers=50):
                     TF2MIN[interval]*60000)
             more_data = get_all_klines(pair, interval=interval, start_time=start_time,
                                        no_of_klines=int(no_of_klines))
-            non_empty = [x for x in more_data if x['numTrades'] != 0][-int(no_of_klines)]
+            non_empty = [x for x in more_data if x['numTrades'] != 0][-int(no_of_klines):]
         dataframe[pair] = pandas.DataFrame(non_empty)
 
     pool.shutdown(wait=True)
