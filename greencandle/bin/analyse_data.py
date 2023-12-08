@@ -102,7 +102,7 @@ def get_match_name(matches):
     except ValueError:
         container_num = 1
 
-    name_lookup = [['stx'],
+    name_lookup = [['bbperc_diff', 'very_high_bbperc'],
                    ['distance', 'bb'],
                    ['candle_low', 'candle_zero', 'candle_very_low', 'HA_flip'],
                    ['HA'],

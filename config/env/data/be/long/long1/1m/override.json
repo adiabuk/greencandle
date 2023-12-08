@@ -1,0 +1,9 @@
+{
+  "api_forward": "1m-1",
+  "interval": "1m",
+  "name": "data-be-analyse-1m-long1",
+  "slack_alerts": "data_bbperc",
+  "slack_balance": "data_bbperc",
+  "slack_notifications": "data_bbperc",
+  "time_between_trades": "15m"
+}
