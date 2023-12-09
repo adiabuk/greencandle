@@ -25,15 +25,18 @@ if [[ ! -f /installed ]]; then
     base_env=$(configstore package get $CONFIG_ENV base_env --basedir /opt/config)
     echo "$base_env ($VERSION)" > /var/www/html/env.txt
     cp /opt/output/{*.html,*.css,*.js,*.jpg} /var/www/html
-    cp /opt/config/raw/main.css /opt/config/raw/50x.html /opt/config/raw/favicon-${base_env}.ico /var/www/html
+    cp /opt/config/raw/main.css /opt/config/raw/50x.html /var/www/html
+    cp /opt/config/raw/favicon-${base_env}.ico  /var/www/html/favicon.ico
     > /etc/nginx/sites-available/default
 
   elif [[ "$HOSTNAME" == *"api"* ]]; then
     mkdir -p /etc/gcapi /var/www/html
     base_env=$(configstore package get $CONFIG_ENV base_env --basedir /opt/config)
     echo "$base_env ($VERSION)" > /var/www/html/env.txt
-    cp /opt/config/raw/main.css /opt/config/raw/50x.html /opt/config/raw/favicon-${base_env}.ico /var/www/html
+    cp /opt/config/raw/main.css /opt/config/raw/50x.html /var/www/html
+    cp /opt/config/raw/favicon-${base_env}.ico  /var/www/html/favicon.ico
     cp /opt/config/raw/* /etc/gcapi/
+
   elif [[ "$HOSTNAME" == *"redis"* ]]; then
     cp /opt/output/redis.conf /etc
 
