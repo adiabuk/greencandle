@@ -190,7 +190,7 @@ def parallel_test(pairs, interval, data_dir, indicators):
                 LOGGER.debug("Items to close")
                 drawdowns[pair] = redis.get_drawdown(pair)['perc']
                 drawups[pair] = redis.get_drawup(pair)['perc']
-                closes.append((pair, current_time, current_price, event, 0))
+                closes.append((pair, current_time, current_price, event, 0, None))
 
         trade.close_trade(closes, drawdowns=drawdowns, drawups=drawups)
         trade.open_trade(opens)
@@ -264,7 +264,7 @@ class ProdRunner():
                              pair, result, open_price, current_price, current_time)
                 if result == "CLOSE":
                     LOGGER.debug("Items to close")
-                    closes.append((pair, current_time, current_price, event, 0))
+                    closes.append((pair, current_time, current_price, event, 0, None))
                     drawdowns[pair] = redis.get_drawdown(pair)['perc']
                     drawups[pair] = redis.get_drawup(pair)['perc']
                     if alert:
