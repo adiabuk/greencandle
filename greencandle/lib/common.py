@@ -240,13 +240,13 @@ def get_tv_link(pair, interval=None, anchor=False):
                 f"&interval={convert_to_minutes(interval)}|{pair.strip()}>")
     return f"<https://www.tradingview.com/chart/?symbol=BINANCE:{pair.strip()}|{pair.strip()}>"
 
-def get_trade_link(pair, strategy, action, string, port=8888, anchor=False):
+def get_trade_link(pair, strategy, action, string, port=8888, anchor=False, short=True):
     """Get trade link for forced trade"""
-    url = os.environ['VPN_IP'] + ":" + port
+    url = "" if short else "http://" + os.environ['VPN_IP'] + ":" + port
     if anchor:
-        return Markup(f'<a href="http://{url.strip()}/action?pair={pair.strip()}&strategy='
+        return Markup(f'<a href="{url}/action?pair={pair.strip()}&strategy='
                       f'{strategy.strip()}&action={action.strip()}&close=true" target="_blank">'
                       f'{string.strip()}</a>')
 
-    return (f"<http://{url.strip()}/action?pair={pair.strip()}&strategy={strategy.strip()}"
+    return (f"<{url}/action?pair={pair.strip()}&strategy={strategy.strip()}"
             f"&action={action.strip()}&close=true|{string.strip()}>")
