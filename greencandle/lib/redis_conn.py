@@ -355,7 +355,8 @@ class Redis():
                                                  address).decode())[key]
                 return item
             except KeyError as keyerr:
-                self.logger.warning("Unable to get key for %s: %s %s", address, key, str(keyerr))
+                self.logger.warning("Unable to get key for %s %s: %s %s", pair, address,
+                                    key, str(keyerr))
                 return None
         item = self.conn.hget(address, key)
         return item
