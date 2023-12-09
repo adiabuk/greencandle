@@ -346,7 +346,8 @@ class ProdRunner():
             # skip pair if empty dataframe (no new trades in kline)
             if len(new_dataframes[pair]) == 0:
                 continue
-            if len(self.dataframes[pair]) == 0:
+
+            if pair not in self.dataframes or len(self.dataframes[pair]) == 0:
 
                 df2 = self.dataframes[pair].append(pandas.Series(data['recent'][pair]),
                                                    ignore_index=True,
