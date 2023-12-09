@@ -48,6 +48,7 @@ def main():
         try:
             if 'isolated' in name:
                 bal_amount = balances['isolated'][pair][get_base(pair)]
+
             elif 'cross' in name:
 
                 if 'long' in direction:

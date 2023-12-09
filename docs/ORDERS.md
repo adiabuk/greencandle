@@ -10,6 +10,7 @@ list of tuples containing the following:
 * current_price: *current price of trading pair*
 * event: *type of buy/sell from redis.Redis.get_action/get_intermittent eg StopLoss*
 * action: str  1 for long, -1 for short
+* max_usd: int max usd to use for given trade
 
 # Type of order
 

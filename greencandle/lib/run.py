@@ -95,7 +95,7 @@ def perform_data(pair, interval, data_dir, indicators):
         redis.update_drawup(pair, current_candle)
         action = 1 if config.main.trade_direction == 'long' else -1
         if result == "OPEN":
-            opens.append((pair, current_time, current_price, event, action))
+            opens.append((pair, current_time, current_price, event, action, None))
             LOGGER.debug("Items to open: %s", opens)
             trade_result = trade.open_trade(opens)
             if trade_result:
