@@ -1,5 +1,21 @@
 # Releases
 
+# 6.47
+* add test env 12h and 4h containers and adjust all tpsl
+* increase log verbosity when no candles downloaded
+* remove de-listed pair PERLUSDT
+* custom favicon for each env
+* detect non-existent df, as well as empty
+* add pair to redis log
+* check num of trades in new strategy
+* short url without host for web
+* ensure we capture extra new argument in list of trades when closing
+* BUGFIX: et slice, not index of df list
+* fix data strategy rules bbperc
+* big change in bbperc strategy
+* add prod lt router entries and assocs
+* add additional timeframe for macd check
+
 # 6.46
 * add prod long term trade containers
 * allow borrow to be turned off using lock file
