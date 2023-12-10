@@ -11,7 +11,7 @@ import os
 import pickle
 import time
 import datetime
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ProcessPoolExecutor
 import pandas
 from greencandle.lib.binance import Binance
 from greencandle.lib import config
@@ -182,7 +182,7 @@ def to_csv(pair, data):
         dict_writer.writeheader()
         dict_writer.writerows(reversed(data))
 
-def get_dataframes(pairs, interval=None, no_of_klines=None, max_workers=50):
+def get_dataframes(pairs, interval=None, no_of_klines=None, max_workers=30):
     """
     Get details from binance API
 
@@ -197,29 +197,37 @@ def get_dataframes(pairs, interval=None, no_of_klines=None, max_workers=50):
     if not no_of_klines:
         no_of_klines = config.main.no_of_klines
 
-    pool = ThreadPoolExecutor(max_workers=max_workers)
+    pool = ProcessPoolExecutor(max_workers=max_workers)
+    futures = []
+
     dataframe = {}
-    results = {}
     for pair in pairs:
-        event = {}
-        event["symbol"] = pair
-        event["data"] = {}
-        start_time = int(time.time()*1000) - int(int(no_of_klines) * TF2MIN[interval]*60000)
+        futures.append(pool.submit(get_non_empty, pair=pair, interval=interval,
+                                   no_of_klines=int(no_of_klines)))
 
-        results[pair] = pool.submit(get_all_klines, pair=pair, interval=interval,
-                                    start_time=start_time, no_of_klines=int(no_of_klines))
+    pool.shutdown(wait=False)
+    for item in futures:
+        pair, dframe = item.result()
+        dataframe[pair] = dframe
 
-    # extract results
-    for pair, value in results.items():
-        try:
-            non_empty = [x for x in value.result() if x['numTrades'] != 0]
-        except TypeError:
-            start_time = int(time.time()*1000) - int((int(no_of_klines)*10) * \
-                    TF2MIN[interval]*60000)
-            more_data = get_all_klines(pair, interval=interval, start_time=start_time,
-                                       no_of_klines=int(no_of_klines)*10)
-            non_empty = [x for x in more_data if x['numTrades'] != 0][-int(no_of_klines):]
-        dataframe[pair] = pandas.DataFrame(non_empty)
-
-    pool.shutdown(wait=True)
     return dataframe
+
+def get_non_empty(pair, interval, no_of_klines):
+    """
+    Get candles for given pair | interval
+    and filter out empty data, ensuring we have enough candles
+    specified by no_of_klines
+    """
+    count = 0
+    initial_klines = no_of_klines
+
+    while count <= initial_klines:
+
+        start_time = int(time.time()*1000) - int((int(no_of_klines)) * \
+                TF2MIN[interval]*60000)
+        klines = get_all_klines(pair, interval=interval, start_time=start_time,
+                                no_of_klines=no_of_klines)
+        non_empty = [x for x in klines if x['numTrades'] != 0][-no_of_klines:]
+        count = len(non_empty)
+        no_of_klines += initial_klines
+    return pair, pandas.DataFrame(non_empty)
