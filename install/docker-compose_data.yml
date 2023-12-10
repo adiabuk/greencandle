@@ -91,7 +91,7 @@ services:
     container_name: data-be-get_12h
     hostname: data-be-get_12h
     image: amrox/greencandle:${TAG}
-    mem_limit: 1000m
+    mem_limit: 2000m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -159,7 +159,7 @@ services:
     container_name: data-be-get_4h
     hostname: data-be-get_4h
     image: amrox/greencandle:${TAG}
-    mem_limit: 1000m
+    mem_limit: 2000m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -227,7 +227,7 @@ services:
     container_name: data-be-get_1h
     hostname: data-be-get_1h
     image: amrox/greencandle:${TAG}
-    mem_limit: 1000m
+    mem_limit: 2000m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -295,7 +295,7 @@ services:
     container_name: data-be-get1_1m
     hostname: data-be-get1_1m
     image: amrox/greencandle:${TAG}
-    mem_limit: 1000m
+    mem_limit: 2000m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -327,7 +327,7 @@ services:
     container_name: data-be-get2_1m
     hostname: data-be-get2_1m
     image: amrox/greencandle:${TAG}
-    mem_limit: 1000m
+    mem_limit: 2000m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -359,7 +359,7 @@ services:
     container_name: data-be-get3_1m
     hostname: data-be-get3_1m
     image: amrox/greencandle:${TAG}
-    mem_limit: 1000m
+    mem_limit: 2000m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -391,7 +391,7 @@ services:
     container_name: data-be-get4_1m
     hostname: data-be-get4_1m
     image: amrox/greencandle:${TAG}
-    mem_limit: 1000m
+    mem_limit: 2000m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -459,7 +459,7 @@ services:
     container_name: data-be-get_5m
     hostname: data-be-get_5m
     image: amrox/greencandle:${TAG}
-    mem_limit: 1000m
+    mem_limit: 2000m
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
