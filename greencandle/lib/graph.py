@@ -207,7 +207,7 @@ class Graph():
             elif 'MACD' in name:
                 row = 2
                 LOGGER.debug("Creating MACD graph")
-                macd, signal = zip(*value.value)
+                macd, signal, _ = zip(*value.value)
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=macd,
                                   name='macd')
