@@ -600,9 +600,10 @@ class Trade():
 
         dbase = Mysql(test=self.test_data, interval=self.interval)
 
-        for pair, current_time, current_price, event, _ in buy_list:
+        for pair, current_time, current_price, event, _, max_usd in buy_list:
             quote_amount = self.get_total_amount_to_use(dbase, account='binance',
-                                                        pair=pair)['balance_amt']
+                                                        pair=pair, max_usd=max_usd
+                                                        )['balance_amt']
             quote = get_quote(pair)
 
             if quote_amount <= 0:
@@ -698,6 +699,8 @@ class Trade():
         else:
             net_perc = None
             usd_net_profit = None
+            drawup = None
+            drawdown = None
 
         send_slack_trade(channel='trades', event=kwargs.event, perc=perc,
                          pair=kwargs.pair, action=kwargs.action, price=kwargs.fill_price,

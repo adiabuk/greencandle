@@ -142,7 +142,7 @@ def send_slack_trade(**kwargs):
                             f'• USD quote: {kwargs.usd_quote}\n'
                             f'• Net perc: {kwargs.net_perc}\n'
                             f'• Net usd_profit: {kwargs.net_profit}\n'
-                            f'• du/dd: {kwargs.drawup} {kwargs.drawdown}\n'
+                            f'• du/dd: {kwargs.drawup}/{kwargs.drawdown}\n'
                             f'{time_string}'),
                   "short":"false"
                  }]}]}
