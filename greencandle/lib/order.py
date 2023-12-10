@@ -691,8 +691,9 @@ class Trade():
 
         if 'id' in kwargs:
             dbase = Mysql()
-            net_perc, usd_net_profit =dbase.fetch_sql_data(f"select net_perc, usd_net_profit from "
-                                                           f"profit where id={kwargs.id}",
+            net_perc, usd_net_profit, drawup, drawdown = \
+                    dbase.fetch_sql_data(f"select net_perc, usd_net_profit, drawup_perc, "
+                                         f"drawdown_perc from profit where id={kwargs.id}",
                                                             header=False)[0]
         else:
             net_perc = None
@@ -702,7 +703,8 @@ class Trade():
                          pair=kwargs.pair, action=kwargs.action, price=kwargs.fill_price,
                          usd_profit=kwargs.usd_profit, quote=kwargs.quote, usd_quote=usd_quote,
                          open_time=kwargs.open_time, close_time=kwargs.close_time,
-                         net_perc=net_perc, usd_net_profit=usd_net_profit)
+                         net_perc=net_perc, usd_net_profit=usd_net_profit,
+                         drawup=drawup, drawdown=drawdown)
 
     def __get_result_details(self, current_price, trade_result):
         """
