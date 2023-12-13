@@ -75,7 +75,7 @@ def analyse_loop():
         for pair in common:
             # close trade when so we can re-fire open signal
             trade = Trade(interval=INTERVAL, test_trade=True, test_data=False, config=config)
-            details = [[pair[0], "2020-01-01 00:00:00", "1", "reopen", "0"]]
+            details = [[pair[0], "2020-01-01 00:00:00", "1", "reopen", "0", 'None']]
             if pair[1] != 'reversal':
                 trade.close_trade(details)
 
