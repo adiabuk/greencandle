@@ -92,7 +92,7 @@ def start_ws():
     """
     Start websocket app
     """
-    sock = "wss://stream.binance.com:9443/stream?streams=" + PAIR_STRING.lstrip('/')
+    sock = "wss://stream.binance.com:443/stream?streams=" + PAIR_STRING.lstrip('/')
 
     socket = websocket.WebSocketApp(sock, on_open=on_open, on_close=on_close,
                                     on_message=on_message, on_error=on_error)
