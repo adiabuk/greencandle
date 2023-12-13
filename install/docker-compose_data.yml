@@ -677,6 +677,25 @@ services:
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
+      - data-be-analyse-12h-short1:12h-short1
+      - data-be-analyse-4h-long1:4h-long1
+      - data-be-analyse-4h-short1:4h-short1
+      - data-be-analyse-1h-long1:1h-long1
+      - data-be-analyse-1h-short1:1h-short1
+      - data-be-analyse-5m-long1:5m-long1
+      - data-be-analyse-5m-short1:5m-short1
+      - data-be-analyse-1m-long1:1m-long1
+      - data-be-analyse-1m-short1:1m-long1
+      - data-be-analyse-12h-long6:12h-long6
+      - data-be-analyse-12h-short6:12h-short6
+      - data-be-analyse-4h-long6:4h-long6
+      - data-be-analyse-4h-short6:4h-short6
+      - data-be-analyse-1h-long6:1h-long6
+      - data-be-analyse-1h-short6:1h-short6
+      - data-be-analyse-5m-long6:5m-long6
+      - data-be-analyse-5m-short6:5m-short6
+      - data-be-analyse-1m-long6:1m-long6
+      - data-be-analyse-1m-short6:1m-short6
     depends_on:
       - data-base-mysql
       - data-base-redis
@@ -1970,5 +1989,3 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/:/var/run
-
-
