@@ -1,4 +1,4 @@
-#pylint: disable=no-member,broad-except,too-many-locals,too-many-statements,consider-using-with
+#pylint: disable=no-member,broad-except,too-many-locals,too-many-statements,consider-using-with, logging-fstring-interpolation
 
 """
 Perform run for test & prod
@@ -326,7 +326,7 @@ class ProdRunner():
                     closed_di = None
 
                 if not (recent_di or closed_di):
-                    LOGGER.error("No candle data for pair %s - remove from config", pair)
+                    LOGGER.error(f"No candle data for pair {pair} - remove from config")
                     continue
 
                 dframe = pandas.DataFrame(columns=recent_di.keys())
