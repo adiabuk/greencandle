@@ -326,7 +326,7 @@ class ProdRunner():
                     closed_di = None
 
                 if not (recent_di or closed_di):
-                    LOGGER.critical("No candle data for pair %s - remove from config", pair)
+                    LOGGER.error("No candle data for pair %s - remove from config", pair)
                     continue
 
                 dframe = pandas.DataFrame(columns=recent_di.keys())
