@@ -269,6 +269,8 @@ def get_live():
     """
     global LIVE
 
+    if config.main.base_env.strip() == 'data':
+        return None
     all_data = []
     mt3 = 0
     mt5 = 0
@@ -333,7 +335,7 @@ def live():
         return render_template('data.html', files=files)
     if request.method == 'POST':
         req = request.form['submit']
-        results, order = files[req]
+        results, order =files[req]
         if results == []:
             return render_template('error.html', message="No available data")
         fieldnames = list(results[0].keys())
