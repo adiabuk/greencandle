@@ -139,7 +139,7 @@ def analyse_pair(pair, redis):
         event = 'reversal'
 
         if result in ('OPEN', 'CLOSE'):
-            LOGGER.debug("Trades to %s", result.lower())
+            LOGGER.info("Trades to %s", result.lower())
             now = datetime.now()
             items = redis.get_items(pair, INTERVAL)
             data = redis.get_item(f"{pair}:{INTERVAL}", items[-1]).decode()
