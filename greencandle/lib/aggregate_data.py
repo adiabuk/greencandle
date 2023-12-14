@@ -295,7 +295,6 @@ def aggregate_data(key, pairs, interval, data, items):
         # save to redis, overwriting previous value
         redis3 = Redis(db=3)
         for item, value in redis_data.items():
-            LOGGER.critical("AMROX %s %s", value, type(value))
             value = {k:str(v) for k, v in value.items()}
             redis3.conn.hmset(item, value)
 

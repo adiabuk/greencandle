@@ -4,6 +4,7 @@
 Collect OHLC and strategy data for later analysis
 """
 import os
+import time
 from pathlib import Path
 import setproctitle
 from greencandle.lib import config
@@ -73,6 +74,7 @@ def main():
     while True:
         get_data()
         collect_agg_data(interval)
+
 
 if __name__ == '__main__':
     main()
