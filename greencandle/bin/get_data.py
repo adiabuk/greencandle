@@ -4,6 +4,7 @@
 Collect OHLC and strategy data for later analysis
 """
 import os
+import requests
 import time
 from pathlib import Path
 import setproctitle
@@ -59,6 +60,21 @@ def main():
     name = config.main.name.split('-')[-1]
     Path(f'/var/run/{config.main.base_env}-data-{interval}-{name}').touch()
 
+    local_pairs = set(config.main.pairs.split())
+    while True:
+        # Don't start analysing until all pairs are available
+        request = requests.get("http://stream:5000/all", timeout=10)
+        if not request.ok:
+            LOGGER.critical("Unable to fetch data from streaming server")
+        data = request.json()
+        remote_pairs = set(data['recent'].keys())
+        if local_pairs.issubset(remote_pairs):
+            # we're done
+            break
+        # not enough pairs,
+        LOGGER.info("Waiting for more pairs to become available local:%s, remote:%s",
+                    len(local_pairs), len(remote_pairs))
+        time.sleep(5)
 
     # only fetch historic indicator data for higher timeframes
     # as it will take hours/days to catch up in real time
