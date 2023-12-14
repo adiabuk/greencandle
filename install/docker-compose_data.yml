@@ -52,10 +52,10 @@ services:
       - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
-  data-be-stream_12h:
-    container_name: data-be-stream_12h
-    hostname: data-be-stream_12h
-    image: amrox/greencandle:${TAG}
+  data-fe-stream_12h:
+    container_name: data-fe-stream_12h
+    hostname: data-fe-stream_12h
+    image: amrox/greencandle:latest
     mem_limit: 200m
     pull_policy: always
     restart: always
@@ -100,7 +100,7 @@ services:
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-be-stream_12h:stream
+      - data-fe-stream_12h:stream
     depends_on:
       - data-base-mysql
       - data-base-redis
@@ -119,10 +119,10 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-  data-be-stream_4h:
-    container_name: data-be-stream_4h
-    hostname: data-be-stream_4h
-    image: amrox/greencandle:${TAG}
+  data-fe-stream_4h:
+    container_name: data-fe-stream_4h
+    hostname: data-fe-stream_4h
+    image: amrox/greencandle:latest
     mem_limit: 200m
     pull_policy: always
     restart: always
@@ -168,7 +168,7 @@ services:
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-be-stream_4h:stream
+      - data-fe-stream_4h:stream
     depends_on:
       - data-base-mysql
       - data-base-redis
@@ -187,10 +187,10 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-  data-be-stream_1h:
-    container_name: data-be-stream_1h
-    hostname: data-be-stream_1h
-    image: amrox/greencandle:${TAG}
+  data-fe-stream_1h:
+    container_name: data-fe-stream_1h
+    hostname: data-fe-stream_1h
+    image: amrox/greencandle:latest
     mem_limit: 200m
     pull_policy: always
     restart: always
@@ -236,7 +236,7 @@ services:
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-be-stream_1h:stream
+      - data-fe-stream_1h:stream
     depends_on:
       - data-base-mysql
       - data-base-redis
@@ -255,10 +255,10 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-  data-be-stream_1m:
-    container_name: data-be-stream_1m
-    hostname: data-be-stream_1m
-    image: amrox/greencandle:${TAG}
+  data-fe-stream_1m:
+    container_name: data-fe-stream_1m
+    hostname: data-fe-stream_1m
+    image: amrox/greencandle:latest
     mem_limit: 200m
     pull_policy: always
     restart: always
@@ -304,7 +304,7 @@ services:
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-be-stream_1m:stream
+      - data-fe-stream_1m:stream
     depends_on:
       - data-base-mysql
       - data-base-redis
@@ -336,7 +336,7 @@ services:
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-be-stream_1m:stream
+      - data-fe-stream_1m:stream
     depends_on:
       - data-base-mysql
       - data-base-redis
@@ -368,7 +368,7 @@ services:
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-be-stream_1m:stream
+      - data-fe-stream_1m:stream
     depends_on:
       - data-base-mysql
       - data-base-redis
@@ -400,7 +400,7 @@ services:
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-be-stream_1m:stream
+      - data-fe-stream_1m:stream
     depends_on:
       - data-base-mysql
       - data-base-redis
@@ -419,10 +419,10 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-  data-be-stream_5m:
-    container_name: data-be-stream_5m
-    hostname: data-be-stream_5m
-    image: amrox/greencandle:${TAG}
+  data-fe-stream_5m:
+    container_name: data-fe-stream_5m
+    hostname: data-fe-stream_5m
+    image: amrox/greencandle:latest
     mem_limit: 200m
     pull_policy: always
     restart: always
@@ -468,7 +468,7 @@ services:
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-be-stream_5m:stream
+      - data-fe-stream_5m:stream
     depends_on:
       - data-base-mysql
       - data-base-redis
@@ -1970,5 +1970,3 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/:/var/run
-
-
