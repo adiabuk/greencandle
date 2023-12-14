@@ -205,7 +205,7 @@ def analyse_pair(pair, redis):
                 url = f"http://router:1080/{config.web.api_token}"
                 forward_strategy = config.web.forward
                 payload = {"pair": pair,
-                           "text": f"forwarding trade from {config.main.name}",
+                           "text": f"forwarding {result.lower()} trade from {config.main.name}",
                            "action": str(action),
                            "env": config.main.name,
                            "price": current_price,
