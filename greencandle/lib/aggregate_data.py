@@ -87,9 +87,9 @@ def get_bbperc_diff(res, last_res):
         bb_from = last_res['bbperc_200']
         bb_to = res['bbperc_200']
         diff = abs(bb_from - bb_to)
-        return f'{bb_from:.2f}', f'{bb_to:.2f}', f'{diff:.2f}'
+        return round(bb_from, 4), round(bb_to, 4), round(diff, 4)
     except (TypeError, KeyError):
-        return None, None, None
+        return -1, -1, -1
 
 def get_stx_diff(res, last_res):
     """
@@ -295,6 +295,7 @@ def aggregate_data(key, pairs, interval, data, items):
         # save to redis, overwriting previous value
         redis3 = Redis(db=3)
         for item, value in redis_data.items():
+            LOGGER.critical("AMROX %s %s", value, type(value))
             value = {k:str(v) for k, v in value.items()}
             redis3.conn.hmset(item, value)
 
