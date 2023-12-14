@@ -58,7 +58,7 @@ services:
     image: amrox/greencandle:latest
     mem_limit: 200m
     pull_policy: always
-    restart: always
+    restart: on-failure
     entrypoint: /docker-entrypoint.sh stream_data
     logging:
       driver: journald
@@ -125,7 +125,7 @@ services:
     image: amrox/greencandle:latest
     mem_limit: 200m
     pull_policy: always
-    restart: always
+    restart: on-failure
     entrypoint: /docker-entrypoint.sh stream_data
     logging:
       driver: journald
@@ -193,7 +193,7 @@ services:
     image: amrox/greencandle:latest
     mem_limit: 200m
     pull_policy: always
-    restart: always
+    restart: on-failure
     entrypoint: /docker-entrypoint.sh stream_data
     logging:
       driver: journald
@@ -261,7 +261,7 @@ services:
     image: amrox/greencandle:latest
     mem_limit: 200m
     pull_policy: always
-    restart: always
+    restart: on-failure
     entrypoint: /docker-entrypoint.sh stream_data
     logging:
       driver: journald
@@ -425,7 +425,7 @@ services:
     image: amrox/greencandle:latest
     mem_limit: 200m
     pull_policy: always
-    restart: always
+    restart: on-failure
     entrypoint: /docker-entrypoint.sh stream_data
     logging:
       driver: journald
