@@ -65,14 +65,19 @@ def analyse_loop():
                        redis4.conn.smembers(f'{INTERVAL}:{DIRECTION}')]
 
         dbase = Mysql(interval=INTERVAL)
-        open_pairs = dbase.fetch_sql_data(f'select pair, comment from trades where '
+        open_pairs = dbase.fetch_sql_data(f'select pair, comment, 999999 from trades where '
                                           f'`interval`="{INTERVAL}" and name="{config.main.name}" '
                                           f'and close_price is null', header=False)
         open_pairs = {tuple(x) for x in open_pairs}
         redis_pairs = {tuple(x) for x in redis_pairs}
-        pairs = list(redis_pairs.union(open_pairs))
+        # check if pair to be analysed is already open
 
-        common = list(redis_pairs.intersection(open_pairs))
+        # union
+        pairs = redis_pairs + [x for x in open_pairs if (x[0] not in [y[0] for y in redis_pairs])]
+        
+        # intersection
+        common = [x for x in redis_pairs if (x[0] in [y[0] for y in open_pairs])]
+
         for pair in common:
             # close trade when so we can re-fire open signal
             trade = Trade(interval=INTERVAL, test_trade=True, test_data=False, config=config)
@@ -81,6 +86,7 @@ def analyse_loop():
                 trade.close_trade( details)
 
     else:
+        # not being fetched from redis db
         pairs = [(pair, 'normal', 999999) for pair in PAIRS]
 
     for pair, reversal, expire in pairs:
@@ -139,7 +145,7 @@ def analyse_pair(pair, reversal, redis):
     try:
         result, _, current_time, current_price, match = \
                 redis.get_rule_action(pair=pair, interval=INTERVAL)
-        event = 'reversal'
+        event = reversal
 
         if result in ('OPEN', 'CLOSE'):
             LOGGER.info("Trades to %s", result.lower())
