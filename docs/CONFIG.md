@@ -24,8 +24,7 @@
 ## [redis]  *Redis keystore database*
 * **redis_host** *redis hostname/IP*
 * **redis_port** *redis port*
-* **redis_expire** *{True|False} redis key expiry*
-* **redis_expiry_seconds** *Redis key expiry seconds*
+* **redis_expiry_seconds** *Redis key expiry seconds - active if > 0*
 
 ##[pairs]  *Pairs for all strategies in current environment - used by FE containers*
 

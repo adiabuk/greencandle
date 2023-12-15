@@ -328,7 +328,7 @@ class Redis():
             value['current_time'] = epoch2date(time.time())
             result = self.conn.hmset(key, {close: json.dumps(value)})
 
-        if str2bool(config.redis.redis_expire):
+        if expiry > 0:
             self.conn.expire(key, expiry)
         return result
 

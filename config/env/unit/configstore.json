@@ -310,13 +310,8 @@
       "is_binary": false,
       "is_secret": false
     },
-    "redis_expire": {
-      "value": "false",
-      "is_binary": false,
-      "is_secret": false
-    },
     "redis_expiry_seconds": {
-      "value": "1036800",
+      "value": "0",
       "is_binary": false,
       "is_secret": false
     },

@@ -10,7 +10,7 @@ from greencandle.lib.common import AttributeDict
 
 REQUIRED_CONFIG = {'database':['db_host', 'db_user', 'db_password', 'db_database'],
                    'email': ['email_from', 'email_to', 'email_password', 'email_active'],
-                   'redis': ['redis_host', 'redis_port', 'redis_expire', 'redis_expiry_seconds'],
+                   'redis': ['redis_host', 'redis_port', 'redis_expiry_seconds'],
                    'slack': ['url'],
                    'accounts': [],
                    'main': ['logging_level', 'max_trades', 'divisor', 'name', 'open_rule1',
