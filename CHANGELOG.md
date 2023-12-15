@@ -1,5 +1,31 @@
 # Releases
 
+# 6.48
+* only forward trades to single redis db
+* expire redis set members if not used after given time
+* remove unused config, strategies and config items
+* combine step1/step2 slack channels
+* wait for stream before fetching data
+* move stream-checker to get containers
+* restart policy for stream containers only on failure
+* don't restart stream containers on each deployment
+* add open|close result to trade forward notif
+* BUGFIX: initial MACD data out of sync
+* ensure bbperc_diff agg always returns numerical for parsing
+* use fstring for error level logging
+* increase data env trigger verbosity
+* raise log severity for critical errors
+* fix reopen_trade in analyser
+* use 443 stream port
+* BUGFIX: missing trade param for spot trade and undeclared du/dd
+* add du/dd to slack trade notif
+* increase mem limit for get containers
+* ensure we return at least the specified number of candles, and speed up
+* increase no_of_klines when increasing date range
+* account for MACD histogram when creating graph
+* add favicon for alarm env
+* increase deploy time nagios downtime
+
 # 6.47
 * add test env 12h and 4h containers and adjust all tpsl
 * increase log verbosity when no candles downloaded
