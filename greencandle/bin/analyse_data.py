@@ -84,19 +84,19 @@ def analyse_loop():
         pairs = [(pair, 'normal', 999999) for pair in PAIRS]
 
     for pair, reversal, expire in pairs:
-        if int(time.time()) - int(expire) > int(config.redis.redis_expiry_seconds) and \
-        int(config.redis.redis_expiry_seconds) > 0:
+        if CHECK_REDIS_PAIR and int(time.time()) - int(expire) > \
+                int(config.redis.redis_expiry_seconds) and \
+                int(config.redis.redis_expiry_seconds) > 0:
             LOGGER.info("trade expired %s - removing from redis", pair)
             redis4.conn.srem(f'{INTERVAL}:{DIRECTION}', f'{pair}:{reversal}:{expire}')
         else:
-            analyse_pair(pair, redis)
+            analyse_pair(pair, reversal, redis)
     LOGGER.debug("End of current loop")
     del redis
     if CHECK_REDIS_PAIR:
         time.sleep(5)
     else:
         time.sleep(1)
-    del redis4
 
 def get_match_name(matches):
     """
@@ -119,13 +119,10 @@ def get_match_name(matches):
         match_names.append(name_lookup[container_num-1][match-1])
     return ','.join(match_names)
 
-def analyse_pair(pair, redis):
+def analyse_pair(pair, reversal, redis):
     """
     Analysis of individual pair
     """
-    pair, reversal, _ = pair  # split tuple
-    pair = pair.strip()
-
 
     supported = ""
     if DIRECTION != "short":
