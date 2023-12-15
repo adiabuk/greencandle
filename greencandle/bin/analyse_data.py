@@ -79,11 +79,15 @@ def analyse_loop():
             if pair[1] != 'reversal':
                 trade.close_trade(details)
 
-        del redis4
     else:
         pairs = [(pair, 'normal') for pair in PAIRS]
 
-    for pair in pairs:
+    for pair, reversal, expire in pairs:
+        if int(time.time()) - int(expire) > int(config.redis.redis_expiry_seconds) and \
+        int(config.redis.redis_expiry_seconds) > 0:
+            LOGGER.info("trade expired %s - removing from redis", pair)
+            redis4.conn.srem(f'{INTERVAL}:{DIRECTION}', f'{pair}:{reversal}:{expire}')
+
         analyse_pair(pair, redis)
     LOGGER.debug("End of current loop")
     del redis
@@ -91,6 +95,7 @@ def analyse_loop():
         time.sleep(5)
     else:
         time.sleep(1)
+    del redis4
 
 def get_match_name(matches):
     """
@@ -226,7 +231,8 @@ def analyse_pair(pair, redis):
                     # add to redis set
                     LOGGER.info("Adding %s to %s:%s set", pair, INTERVAL, DIRECTION)
                     redis4 = Redis(db=forward_db)
-                    redis4.conn.sadd(f'{INTERVAL}:{DIRECTION}', f'{pair}:normal')
+                    now = int(time.time())
+                    redis4.conn.sadd(f'{INTERVAL}:{DIRECTION}', f'{pair}:normal:{now}')
                     del redis4
 
             LOGGER.info("Trade alert: %s %s %s (%s)", pair, INTERVAL,
