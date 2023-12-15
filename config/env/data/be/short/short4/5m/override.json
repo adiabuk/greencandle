@@ -1,9 +1,0 @@
-{
-  "api_forward": "5m-4",
-  "interval": "5m",
-  "name": "data-be-analyse-5m-short4",
-  "slack_alerts": "data_ha",
-  "slack_balance": "data_ha",
-  "slack_notifications": "data_ha",
-  "time_between_trades": "30m"
-}

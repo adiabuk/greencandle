@@ -1,4 +1,0 @@
-{
-  "close_rule1": "res[0].bbperc_200 \u003e 2 and res[0].close \u003e res[0].bb_200[0]",
-  "open_rule1": "res[0].HA_close \u003e res[0].HA_open and res[1].HA_close \u003e res[1].HA_open and res[2].HA_close \u003e res[2].HA_open"
-}
