@@ -68,13 +68,13 @@ def analyse_loop():
         open_pairs = dbase.fetch_sql_data(f'select pair, comment, 999999 from trades where '
                                           f'`interval`="{INTERVAL}" and name="{config.main.name}" '
                                           f'and close_price is null', header=False)
-        open_pairs = {tuple(x) for x in open_pairs}
-        redis_pairs = {tuple(x) for x in redis_pairs}
+        open_pairs = [tuple(x) for x in open_pairs]
+        redis_pairs = [tuple(x) for x in redis_pairs]
         # check if pair to be analysed is already open
 
         # union
         pairs = redis_pairs + [x for x in open_pairs if (x[0] not in [y[0] for y in redis_pairs])]
-        
+
         # intersection
         common = [x for x in redis_pairs if (x[0] in [y[0] for y in open_pairs])]
 
