@@ -2,8 +2,5 @@
   "api_forward": "1m-6",
   "interval": "1m",
   "name": "data-be-analyse-1m-long6",
-  "slack_alerts": "data_step2",
-  "slack_balance": "data_step2",
-  "slack_notifications": "data_step2",
   "time_between_trades": "15m"
 }

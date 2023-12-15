@@ -1,9 +1,6 @@
 {
   "name": "data-be-analyse-12h-short6",
   "interval": "12h",
-  "slack_alerts": "data_step2",
-  "slack_balance": "data_step2",
-  "slack_notifications": "data_step2",
   "time_between_trades": "12h",
   "api_forward": "12h-6"
 }
