@@ -45,6 +45,7 @@ if sys.argv[-1] != "--help":
     REDIS_FORWARD = [int(x) for x in os.environ['REDIS_FORWARD'].split(',')] if 'REDIS_FORWARD' \
             in os.environ else False
 
+@GET_EXCEPTIONS
 def analyse_loop():
     """
     Gather data from redis and analyze
@@ -77,10 +78,10 @@ def analyse_loop():
             trade = Trade(interval=INTERVAL, test_trade=True, test_data=False, config=config)
             details = [[pair[0], "2020-01-01 00:00:00", "1", "reopen", "0", 'None']]
             if pair[1] != 'reversal':
-                trade.close_trade(details)
+                trade.close_trade( details)
 
     else:
-        pairs = [(pair, 'normal') for pair in PAIRS]
+        pairs = [(pair, 'normal', 999999) for pair in PAIRS]
 
     for pair, reversal, expire in pairs:
         if int(time.time()) - int(expire) > int(config.redis.redis_expiry_seconds) and \
