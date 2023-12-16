@@ -836,11 +836,14 @@ class Trade():
                                          symbol_name=quote, commission=commission_usd,
                                          order_id=order_id, comment=event)
             if result:
-                open_time, profit = \
-                        dbase.fetch_sql_data(f"select p.open_time, p.usd_profit from trades t, "
-                                             f"profit p where p.id=t.id and t.pair='{pair}' and "
-                                             f"t.closed_by='{name}' order by t.id desc "
-                                             f"limit 1", header=False)[0]
+                query = (f"select p.open_time, p.usd_profit from trades t, profit p where "
+                         f"p.id=t.id and t.pair='{pair}' and t.closed_by='{name}' order "
+                         f"by t.id desc limit 1")
+                try:
+                    open_time, profit = dbase.fetch_sql_data(query, header=False)[0]
+                except IndexError:
+                    self.logger.error("Unable to fetch opentime/profit: %s", query)
+                    return False
 
                 self.__send_notifications(pair=pair, close_time=current_time, perc=perc_inc,
                                           fill_price=current_price, interval=self.interval,
