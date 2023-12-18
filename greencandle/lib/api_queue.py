@@ -97,8 +97,13 @@ def add_to_queue(req, test=False):
             redis.update_drawup(pair, current_candle, event="open")
 
     elif action_str == 'CLOSE':
+        current_candle = dataframes[pair].iloc[-1]
+        redis.update_drawdown(pair, current_candle)
+        redis.update_drawup(pair, current_candle)
+
         drawdown = redis.get_drawdown(pair)['perc']
         drawup = redis.get_drawup(pair)['perc']
         result = trade.close_trade(item, drawdowns={pair:drawdown}, drawups={pair:drawup})
+
         if not result and not test:
             LOGGER.error(f"Unable to close trade {item}")
