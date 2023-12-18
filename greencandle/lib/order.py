@@ -1,4 +1,4 @@
-#pylint: disable=no-member,too-many-locals,too-many-lines,broad-except
+#pylint: disable=no-member,too-many-locals,too-many-lines,broad-except,logging-fstring-interpolation
 """
 Buy/Sell orders
 """
@@ -842,7 +842,7 @@ class Trade():
                 try:
                     open_time, profit = dbase.fetch_sql_data(query, header=False)[0]
                 except IndexError:
-                    self.logger.error("Unable to fetch opentime/profit: %s", query)
+                    self.logger.error(f"Unable to fetch opentime/profit: {query}")
                     return False
 
                 self.__send_notifications(pair=pair, close_time=current_time, perc=perc_inc,
