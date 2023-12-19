@@ -42,6 +42,15 @@
 "any2-1h-short": ["any2-1h-short"],
 "any2-1h-long-short": ["any2-1h-long", "any2-1h-short"],
 
+"any2-4h-long": ["any2-4h-long"],
+"any2-4h-short": ["any2-4h-short"],
+"any2-4h-long-short": ["any2-4h-long", "any2-4h-short", "alert"],
+
+"any2-12h-long": ["any2-12h-long"],
+"any2-12h-short": ["any2-12h-short"],
+"any2-12h-long-short": ["any2-12h-long", "any2-12h-short", "alert"],
+
+
 "any-1m-long": ["any-1m-long"],
 "any-1m-short": ["any-1m-short"],
 "any-1m-long-short": ["any-1m-long", "any-1m-short", "alert"],
