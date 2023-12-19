@@ -116,7 +116,7 @@ def get_match_name(matches):
 
     name_lookup = [['bbperc_diff', 'very_high_bbperc'],
                    ['distance', 'bb'],
-                   ['candle_low', 'candle_zero', 'candle_very_low', 'HA_flip'],
+                   ['MACD-alt-check'],
                    ['HA'],
                    ['MACD'],
                    ['MACD-check'],
