@@ -599,7 +599,7 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV=test/be/any/long/3/12h
+      - CONFIG_ENV=test/be/any/long/2/12h
       - ALERT="True"
       - intermittent="true"
       - DB=true
@@ -638,7 +638,7 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV=test/be/any/short/3/12h
+      - CONFIG_ENV=test/be/any/short/2/12h
       - ALERT="True"
       - intermittent="true"
       - DB=true
@@ -664,6 +664,7 @@ services:
       - /var/run:/var/run
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
+
   test-be-api-any2-4h-cross-long:
     container_name: test-be-api-any2-4h-cross-long
     hostname: test-be-api-any2-4h-cross-long
@@ -676,7 +677,7 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV=test/be/any/long/3/4h
+      - CONFIG_ENV=test/be/any/long/2/4h
       - ALERT="True"
       - intermittent="true"
       - DB=true
@@ -715,7 +716,7 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV=test/be/any/short/3/4h
+      - CONFIG_ENV=test/be/any/short/2/4h
       - ALERT="True"
       - intermittent="true"
       - DB=true
@@ -741,6 +742,7 @@ services:
       - /var/run:/var/run
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
+
   test-be-api-any2-1h-cross-long:
     container_name: test-be-api-any2-1h-cross-long
     hostname: test-be-api-any2-1h-cross-long
@@ -753,7 +755,7 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV=test/be/any/long/3/1h
+      - CONFIG_ENV=test/be/any/long/2/1h
       - ALERT="True"
       - intermittent="true"
       - DB=true
@@ -792,7 +794,7 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV=test/be/any/short/3/1h
+      - CONFIG_ENV=test/be/any/short/2/1h
       - ALERT="True"
       - intermittent="true"
       - DB=true
@@ -831,7 +833,7 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV=test/be/any/long/3/1m
+      - CONFIG_ENV=test/be/any/long/2/1m
       - ALERT="True"
       - intermittent="true"
       - DB=true
@@ -870,7 +872,7 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV=test/be/any/short/3/1m
+      - CONFIG_ENV=test/be/any/short/2/1m
       - ALERT="True"
       - intermittent="true"
       - DB=true
@@ -909,7 +911,7 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV=test/be/any/long/3/5m
+      - CONFIG_ENV=test/be/any/long/2/5m
       - ALERT="True"
       - intermittent="true"
       - DB=true
@@ -948,7 +950,7 @@ services:
       driver: journald
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV=test/be/any/short/3/5m
+      - CONFIG_ENV=test/be/any/short/2/5m
       - ALERT="True"
       - intermittent="true"
       - DB=true
@@ -974,6 +976,7 @@ services:
       - /var/run:/var/run
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
+
   test-be-api-any3-12h-cross-long:
     container_name: test-be-api-any3-12h-cross-long
     hostname: test-be-api-any3-12h-cross-long
@@ -1051,6 +1054,7 @@ services:
       - /var/run:/var/run
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
+
   test-be-api-any3-4h-cross-long:
     container_name: test-be-api-any3-4h-cross-long
     hostname: test-be-api-any3-4h-cross-long
@@ -1128,6 +1132,7 @@ services:
       - /var/run:/var/run
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
+
   test-be-api-any3-1h-cross-long:
     container_name: test-be-api-any3-1h-cross-long
     hostname: test-be-api-any3-1h-cross-long
