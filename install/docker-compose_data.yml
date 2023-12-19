@@ -776,7 +776,7 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/short/short2/1m
       - DB=true
-      - REDIS_FORWARD=5
+      - REDIS_FORWARD=4,5
       - NSCA=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -813,7 +813,7 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/long/long2/1m
       - DB=true
-      - REDIS_FORWARD=5
+      - REDIS_FORWARD=4,5
       - NSCA=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
@@ -850,7 +850,7 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/short/short2/5m
       - DB=true
-      - REDIS_FORWARD=5
+      - REDIS_FORWARD=4,5
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -886,7 +886,7 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/long/long2/5m
       - DB=true
-      - REDIS_FORWARD=5
+      - REDIS_FORWARD=4,5
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -922,7 +922,7 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/short/short2/1h
       - DB=true
-      - REDIS_FORWARD=5
+      - REDIS_FORWARD=4,5
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -958,7 +958,7 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/long/long2/1h
       - DB=true
-      - REDIS_FORWARD=5
+      - REDIS_FORWARD=4,5
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -994,7 +994,7 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/short/short2/4h
       - DB=true
-      - REDIS_FORWARD=5
+      - REDIS_FORWARD=4,5
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -1030,7 +1030,7 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/long/long2/4h
       - DB=true
-      - REDIS_FORWARD=5
+      - REDIS_FORWARD=4,5
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -1066,7 +1066,7 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/short/short2/12h
       - DB=true
-      - REDIS_FORWARD=5
+      - REDIS_FORWARD=4,5
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -1102,7 +1102,7 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/long/long2/12h
       - DB=true
-      - REDIS_FORWARD=5
+      - REDIS_FORWARD=4,5
     healthcheck:
       test: find /var/local/  -mmin -15 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
