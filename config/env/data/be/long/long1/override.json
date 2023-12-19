@@ -1,4 +1,4 @@
 {
-  "open_rule1": "agg.bbperc_diff \u003e 100 and res[0].bbperc_200 \u003c 2 and res[0].numTrades \u003e 50",
+  "open_rule1": "agg.bbperc_diff \u003e 1.5 and res[0].bbperc_200 \u003c -2 and res[0].numTrades \u003e 50",
   "open_rule2": "res[0].bbperc_200 \u003c -4.5 and res[0].numTrades \u003e 50"
 }
