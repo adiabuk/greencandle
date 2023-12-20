@@ -67,7 +67,7 @@ def analyse_loop():
         dbase = Mysql(interval=INTERVAL)
         open_pairs = dbase.fetch_sql_data(f'select pair, comment, 999999 from trades where '
                                           f'`interval`="{INTERVAL}" and name="{config.main.name}" '
-                                          f'and clos e_price is null', header=False)
+                                          f'and close_price is null', header=False)
         open_pairs = [tuple(x) for x in open_pairs]
         redis_pairs = [tuple(x) for x in redis_pairs]
 
