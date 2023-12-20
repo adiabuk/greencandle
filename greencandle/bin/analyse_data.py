@@ -67,7 +67,7 @@ def analyse_loop():
         dbase = Mysql(interval=INTERVAL)
         open_pairs = dbase.fetch_sql_data(f'select pair, comment, 999999 from trades where '
                                           f'`interval`="{INTERVAL}" and name="{config.main.name}" '
-                                          f'and close_price is null', header=False)
+                                          f'and clos e_price is null', header=False)
         open_pairs = [tuple(x) for x in open_pairs]
         redis_pairs = [tuple(x) for x in redis_pairs]
 
@@ -77,7 +77,7 @@ def analyse_loop():
             if int(config.redis.redis_expiry_seconds) > 0 and \
                     int(time.time()) > (int(config.redis.redis_expiry_seconds)  + int(expire)):
 
-                LOGGER.info("trade expired %s - removing from redis", pair)
+                LOGGER.info("trade expired %s - removing from redis db:%s", pair, CHECK_REDIS_PAIR)
                 redis4.conn.srem(f'{INTERVAL}:{DIRECTION}', f'{pair}:{reversal}:{expire}')
                 redis_pairs.remove((pair, reversal, expire))
                 # remove from redis_pairs
@@ -239,8 +239,10 @@ def analyse_pair(pair, reversal, redis):
                 for forward_db in REDIS_FORWARD:
                     redis4 = Redis(db=forward_db)
                     # add to redis set
-                    LOGGER.info("Adding %s to %s:%s set", pair, INTERVAL, DIRECTION)
-                    redis_pairs = [x.decode().split(':') for x in redis4.conn.smembers(f'{INTERVAL}:{DIRECTION}')]
+                    LOGGER.info("new forward trade adding %s to %s:%s set db %s",
+                                pair, INTERVAL, DIRECTION, forward_db)
+                    redis_pairs = [x.decode().split(':') for x
+                                   in redis4.conn.smembers(f'{INTERVAL}:{DIRECTION}')]
 
                     # check pair doesn't already exist
                     if not [el for el in redis_pairs if el[0] == pair and el[1] == 'normal']:
