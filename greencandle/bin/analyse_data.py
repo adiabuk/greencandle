@@ -70,7 +70,18 @@ def analyse_loop():
                                           f'and close_price is null', header=False)
         open_pairs = [tuple(x) for x in open_pairs]
         redis_pairs = [tuple(x) for x in redis_pairs]
+
         # check if pair to be analysed is already open
+
+        for pair, reversal, expire in redis_pairs:
+            if int(config.redis.redis_expiry_seconds) > 0 and \
+                    int(time.time()) > (int(config.redis.redis_expiry_seconds)  + int(expire)):
+
+                LOGGER.info("trade expired %s - removing from redis", pair)
+                redis4.conn.srem(f'{INTERVAL}:{DIRECTION}', f'{pair}:{reversal}:{expire}')
+                redis_pairs.remove(pair, reversal, expire)
+                # remove from redis_pairs
+
 
         # union
         pairs = redis_pairs + [x for x in open_pairs if (x[0] not in [y[0] for y in redis_pairs])]
@@ -83,20 +94,14 @@ def analyse_loop():
             trade = Trade(interval=INTERVAL, test_trade=True, test_data=False, config=config)
             details = [[pair[0], "2020-01-01 00:00:00", "1", "reopen", "0", 'None']]
             if pair[1] != 'reversal':
-                trade.close_trade( details)
+                trade.close_trade(details)
 
     else:
         # not being fetched from redis db
         pairs = [(pair, 'normal', 999999) for pair in PAIRS]
 
-    for pair, reversal, expire in open_pairs:
-        if CHECK_REDIS_PAIR and int(time.time()) - int(expire) > \
-                int(config.redis.redis_expiry_seconds) and \
-                int(config.redis.redis_expiry_seconds) > 0:
-            LOGGER.info("trade expired %s - removing from redis", pair)
-            redis4.conn.srem(f'{INTERVAL}:{DIRECTION}', f'{pair}:{reversal}:{expire}')
-        else:
-            analyse_pair(pair, reversal, redis)
+    for pair, reversal, expire in pairs:
+        analyse_pair(pair, reversal, redis)
     LOGGER.debug("End of current loop")
     del redis
     if CHECK_REDIS_PAIR:
