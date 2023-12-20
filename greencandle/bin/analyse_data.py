@@ -79,7 +79,7 @@ def analyse_loop():
 
                 LOGGER.info("trade expired %s - removing from redis", pair)
                 redis4.conn.srem(f'{INTERVAL}:{DIRECTION}', f'{pair}:{reversal}:{expire}')
-                redis_pairs.remove(pair, reversal, expire)
+                redis_pairs.remove((pair, reversal, expire))
                 # remove from redis_pairs
 
 
