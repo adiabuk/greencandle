@@ -237,11 +237,15 @@ def analyse_pair(pair, reversal, redis):
 
             if REDIS_FORWARD:
                 for forward_db in REDIS_FORWARD:
+                    redis4 = Redis(db=forward_db)
                     # add to redis set
                     LOGGER.info("Adding %s to %s:%s set", pair, INTERVAL, DIRECTION)
-                    redis4 = Redis(db=forward_db)
-                    now = int(time.time())
-                    redis4.conn.sadd(f'{INTERVAL}:{DIRECTION}', f'{pair}:normal:{now}')
+                    redis_pairs = [x.decode().split(':') for x in redis4.conn.smembers(f'{INTERVAL}:{DIRECTION}')]
+
+                    # check pair doesn't already exist
+                    if not [el for el in redis_pairs if el[0] == pair and el[1] == 'normal']:
+                        now = int(time.time())
+                        redis4.conn.sadd(f'{INTERVAL}:{DIRECTION}', f'{pair}:normal:{now}')
                     del redis4
 
             LOGGER.info("Trade alert: %s %s %s (%s)", pair, INTERVAL,
