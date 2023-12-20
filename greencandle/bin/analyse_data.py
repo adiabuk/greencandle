@@ -89,7 +89,7 @@ def analyse_loop():
         # not being fetched from redis db
         pairs = [(pair, 'normal', 999999) for pair in PAIRS]
 
-    for pair, reversal, expire in pairs:
+    for pair, reversal, expire in open_pairs:
         if CHECK_REDIS_PAIR and int(time.time()) - int(expire) > \
                 int(config.redis.redis_expiry_seconds) and \
                 int(config.redis.redis_expiry_seconds) > 0:
