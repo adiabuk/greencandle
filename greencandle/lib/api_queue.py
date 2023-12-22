@@ -60,6 +60,11 @@ def add_to_queue(req, test=False):
         action_str = str(action).upper().strip()
 
     redis = Redis(db=2)
+    try:
+        dataframes = get_dataframes([pair], interval=interval, no_of_klines=klines)
+    except IndexError:
+        return
+
     if action_str == 'OPEN':
         if 'get_trend' in os.environ:
             url = f"http://trend:6001/get_trend?pair={pair}"
@@ -83,10 +88,6 @@ def add_to_queue(req, test=False):
 
         interval = "1m" if config.main.interval.endswith("s") else config.main.interval
         klines = 60 if interval.endswith('s') or interval.endswith('m') else 5
-        try:
-            dataframes = get_dataframes([pair], interval=interval, no_of_klines=klines)
-        except IndexError:
-            return
         result = trade.open_trade(item, stop=stop_loss)
         if result or test:
             redis.update_on_entry(item[0][0], 'take_profit_perc', take_profit)
