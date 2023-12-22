@@ -48,7 +48,8 @@ def add_to_queue(req, test=False):
 
     title = config.main.name + "-manual" if "manual" in req else config.main.name
     item = [(pair, current_time, current_price, title, action, usd)]
-    trade = Trade(interval=config.main.interval, test_data=False, test_trade=test, config=config)
+    interval = config.main.interval
+    trade = Trade(interval=interval, test_data=False, test_trade=test, config=config)
 
     try:
         if (config.main.trade_direction == 'long' and float(action) > 0) or \
@@ -61,6 +62,8 @@ def add_to_queue(req, test=False):
 
     redis = Redis(db=2)
     try:
+        interval = "1m" if config.main.interval.endswith("s") else config.main.interval
+        klines = 60 if interval.endswith('s') or interval.endswith('m') else 5
         dataframes = get_dataframes([pair], interval=interval, no_of_klines=klines)
     except IndexError:
         return
@@ -86,8 +89,6 @@ def add_to_queue(req, test=False):
                 LOGGER.info(message)
                 return
 
-        interval = "1m" if config.main.interval.endswith("s") else config.main.interval
-        klines = 60 if interval.endswith('s') or interval.endswith('m') else 5
         result = trade.open_trade(item, stop=stop_loss)
         if result or test:
             redis.update_on_entry(item[0][0], 'take_profit_perc', take_profit)
