@@ -246,7 +246,7 @@ def get_agg():
     keys = redis.conn.keys()
     columns = ['distance_200', 'candle_size', 'avg_candles', 'sum_candles', 'macd_xover',
                'macd_diff', 'middle_200', 'bb_size', 'stoch_flat', 'num', 'bb_size',
-               'bbperc_diff', 'bbperc', 'stx_diff', 'date']
+               'bbperc_diff', 'bbperc', 'atrp', 'stx_diff', 'date']
     for key in keys:
         cur_data = redis.conn.hgetall(key)
         decoded = {k.decode():v.decode() for k,v in cur_data.items()}
@@ -419,7 +419,6 @@ def get_balance():
         all_results.append({'key': f'{key} free', 'usd': format_usd(usd_free),
                             'val': f'{val:.5f}'})
     BALANCE = all_results
-
 
 @arg_decorator
 def main():
