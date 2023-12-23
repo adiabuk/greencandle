@@ -228,7 +228,8 @@ class Engine(dict):
 
         scheme = {}
         try:
-            scheme["data"] = macd_line.iloc[index], signal_line.iloc[index], macd_histogram.iloc[index]
+            scheme["data"] = (macd_line.iloc[index], signal_line.iloc[index],
+                              macd_histogram.iloc[index])
             scheme["symbol"] = pair
             scheme["event"] = f"{func}_{short_term}"
             open_time = str(self.dataframes[pair].iloc[index]["openTime"])
@@ -391,6 +392,68 @@ class Engine(dict):
         self.schemes.append(scheme)
         LOGGER.debug("Done Getting TSI for %s - %s", pair, scheme['open_time'])
 
+    def get_atr_perc(self, pair, index=None, localconfig=None):
+        """
+        Get ATR percentage
+        """
+
+        def williams_ma(data, period):
+            """
+            Williams moving average
+            """
+            data = pandas.DataFrame(data)
+            return data.rolling(period).apply(lambda x: ((numpy.arange(period)+1)*x).sum()/( \
+                    numpy.arange(period)+1).sum(), raw=True)
+
+        def hull_ma(data, period):
+            """
+            Hull moving average
+            """
+            data = pandas.DataFrame(data)
+            return williams_ma(williams_ma(data, period//2).multiply(2).sub(williams_ma(data,
+                                                                                        period)),
+                               int(numpy.sqrt(period)))
+
+        func, timef = localconfig  # split tuple
+        length, lookback = timef.split(',')
+
+        scheme = {}
+        if index is None:
+            index = -1
+            data = talib.TRANGE(high=self.dataframes[pair].high.values.astype(float),
+                              low=self.dataframes[pair].low.values.astype(float),
+                              close=self.dataframes[pair].close.values.astype(float))
+        else:
+            data = talib.TRANGE(high=self.dataframes[pair].high.values.astype(float)[:index +1],
+                              low=self.dataframes[pair].low.values.astype(float)[:index +1],
+                              close=self.dataframes[pair].close.values.astype(float)[:index +1])
+
+
+        atrpercent = hull_ma(data, int(length))
+
+        col_one_list = atrpercent[0].tolist()[-int(lookback)+1:]
+        current = col_one_list.pop()
+        count = 0
+        for item in col_one_list:
+            if item <= current:
+                count +=1
+
+        rank = 100 * count / int(lookback)
+
+
+        scheme["symbol"] = pair
+        scheme["event"] = f"{func}_{length}"
+        scheme["open_time"] = str(self.dataframes[pair].iloc[index]["openTime"])
+        scheme["data"] = rank
+        self.schemes.append(scheme)
+        LOGGER.debug("Done Getting ATR rankfor %s - %s", pair, scheme['open_time'])
+
+
+
+
+
+
+
     @get_exceptions
     def get_atr(self, pair, index=None, localconfig=None):
         """
@@ -549,10 +612,10 @@ class Engine(dict):
         klines = self.__make_data_tupple(pair, index)
         func, timeperiod = localconfig
         close = klines[-1]
-        first = talib.WMA(close, int(timeperiod)/2)
-        second = talib.WMA(close, int(timeperiod))
+        first = talib.williams_ma(close, int(timeperiod)/2)
+        second = talib.williams_ma(close, int(timeperiod))
 
-        result = talib.WMA((2 * first) - second, round(math.sqrt(int(timeperiod))))[-1]
+        result = talib.williams_ma((2 * first) - second, round(math.sqrt(int(timeperiod))))[-1]
         if result > close[-1]:
             trigger = "SELL"
         else:
