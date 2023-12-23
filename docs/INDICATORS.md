@@ -28,6 +28,14 @@ eg: get_macd;MACD;12,26,9
 
 Redis output: (macd, signal, histogram) tupple
 
+## ATR
+
+## ATR PERC
+Not yet verified
+usage: get_atr_perc;ATRp;<ATR length><Period lookback>
+Returns: int percentage
+
+
 ## bbperc
 VERIFIED to be equal to tradingview
 get_bbperc;name;<period>,<std dev>
