@@ -275,7 +275,7 @@ def aggregate_data(key, pairs, interval, data, items):
             date = get_ohlc_attr(res, 'openTime')
             humandate = epoch2date(int(int(date)/1000))
             bbperc = res['bbperc_200']
-            atrp = res['ATRP_30']
+            atrp = res['ATRp_30']
             redis_data[f'{pair}:{interval}'] = \
             {
              'distance_200': distance_200,
