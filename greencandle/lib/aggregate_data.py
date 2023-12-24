@@ -312,13 +312,11 @@ def collect_agg_data(interval):
     config.create_config()
     pairs = config.main.pairs.split()
     items = defaultdict(dict)
-    res = defaultdict(dict)
-    last_res = defaultdict(dict)
-    third_res = defaultdict(dict)
+    data = defaultdict(dict)
 
     ###
     # Collect timeframes (milliepochs) for each pair/interval
-    samples = 6
+    samples = 30
     for pair in pairs:
         try:
             items[interval][pair] = redis.get_items(pair=pair,
@@ -328,14 +326,14 @@ def collect_agg_data(interval):
 
     # Collect data for each pair/interval
     for pair in pairs:
-        res[interval][pair] = {}
+        data[interval][pair] = {}
 
         for item in items[interval][pair]:
             try:
-                res[interval][pair][item] = json.loads(redis.get_item(f'{pair}:{interval}',
-                                                                      item).decode())
+                data[interval][pair][item] = json.loads(redis.get_item(f'{pair}:{interval}',
+                                                                       item).decode())
             except:
                 continue
     ###
-    aggregate_data('redis', pairs, interval, res, items)
+    aggregate_data('redis', pairs, interval, data, items)
     LOGGER.debug("Finishing aggregate run")
