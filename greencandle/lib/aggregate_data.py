@@ -16,6 +16,20 @@ from greencandle.lib.logger import get_logger
 
 LOGGER = get_logger(__name__)
 
+def get_empty_count(res):
+    """
+    Get number of empty (zero trade) enties in sample given
+    """
+    count = 0
+
+    for _, item in res.items():
+        try:
+            if int(item['ohlc']['numTrades']) < 1:
+                count +=1
+        except:
+            continue
+    return count
+
 def get_macd_xover(res, last_res, timeframe=19):
     """ get MACD crossover long or short"""
 
@@ -276,6 +290,7 @@ def aggregate_data(key, pairs, interval, data, items):
             humandate = epoch2date(int(int(date)/1000))
             bbperc = res['bbperc_200']
             atrp = res['ATRp_30']
+            empty_count = get_empty_count(data[interval][pair])
             redis_data[f'{pair}:{interval}'] = \
             {
              'distance_200': distance_200,
@@ -290,6 +305,7 @@ def aggregate_data(key, pairs, interval, data, items):
              'bb_size': bb_size,
              'stx_diff': stx_diff,
              'bbperc_diff': bbperc_diff,
+             'empty_count': empty_count,
              'atrp': atrp,
              'num': num,
              'date': humandate}
@@ -316,7 +332,7 @@ def collect_agg_data(interval):
 
     ###
     # Collect timeframes (milliepochs) for each pair/interval
-    samples = 30
+    samples = 20
     for pair in pairs:
         try:
             items[interval][pair] = redis.get_items(pair=pair,
