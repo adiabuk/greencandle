@@ -1,5 +1,26 @@
 # Releases
 
+# 6.49
+* increase mem limit for data env mysql
+* increase expiry of redis db3 set contents
+* filter out pairs with recent 0 trades in all data notifs
+* add empty_count to data dashboard
+* no of df rows with no trades as agg data
+* collect more agg data for aggregrate
+* add ATR perc to data env and dashboard
+* test new ATR perc method and add docs
+* declare dataframes before open|close functions
+* increase bbperc trigger to 2
+* add logging when adding/removing to redis set
+* avoid redis set dupes with different expiry times
+* check for expiry on redis_trades only
+* add new test containers and router assocs
+* add alternate MACD check
+* Revert "only forward to single redis db"
+* update drawup/down on trade close
+* log error when unable to fetch info of closed trade
+* git commit hash from git for start of deployment
+
 # 6.48
 * only forward trades to single redis db
 * expire redis set members if not used after given time
