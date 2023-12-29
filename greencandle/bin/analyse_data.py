@@ -76,8 +76,8 @@ def analyse_loop():
         for pair, reversal, expire in redis_pairs:
             if int(config.redis.redis_expiry_seconds) > 0 and \
                     int(time.time()) > (int(config.redis.redis_expiry_seconds)  + int(expire)):
-
-                LOGGER.info("trade expired %s - removing from redis db:%s", pair, CHECK_REDIS_PAIR)
+                LOGGER.info("trade expired %s:%s:%s - removing from redis db:%s", pair, reversal,
+                            expire, CHECK_REDIS_PAIR)
                 redis4.conn.srem(f'{INTERVAL}:{DIRECTION}', f'{pair}:{reversal}:{expire}')
                 redis_pairs.remove((pair, reversal, expire))
                 # remove from redis_pairs
@@ -101,7 +101,7 @@ def analyse_loop():
         pairs = [(pair, 'normal', 999999) for pair in PAIRS]
 
     for pair, reversal, expire in pairs:
-        analyse_pair(pair, reversal, redis)
+        analyse_pair(pair, reversal, expire, redis)
     LOGGER.debug("End of current loop")
     del redis
     if CHECK_REDIS_PAIR:
@@ -130,7 +130,7 @@ def get_match_name(matches):
         match_names.append(name_lookup[container_num-1][match-1])
     return ','.join(match_names)
 
-def analyse_pair(pair, reversal, redis):
+def analyse_pair(pair, reversal, expire, redis):
     """
     Analysis of individual pair
     """
@@ -211,9 +211,9 @@ def analyse_pair(pair, reversal, redis):
 
             if CHECK_REDIS_PAIR and result=='OPEN':
                 redis4 = Redis(db=CHECK_REDIS_PAIR)
-                redis4.conn.srem(f'{INTERVAL}:{DIRECTION}', f'{pair}:{reversal}')
-                LOGGER.info("removing %s:%s %s-%s", INTERVAL, DIRECTION, pair, reversal)
-
+                redis4.conn.srem(f'{INTERVAL}:{DIRECTION}', f'{pair}:{reversal}:{expire}')
+                LOGGER.info("trade opening %s:%s:%s - removing from redis db:%s", pair, reversal,
+                            expire, CHECK_REDIS_PAIR)
             if ROUTER_FORWARD:
                 url = f"http://router:1080/{config.web.api_token}"
                 forward_strategy = config.web.forward
