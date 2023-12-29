@@ -183,8 +183,9 @@ def analyse_pair(pair, reversal, expire, redis):
                    f"{INTERVAL} {config.main.name} ({supported.strip()}) - {current_time} "
                    f"Data: {data} Agg: {agg}")
 
-            send_slack_message("notifications", msg, emoji=True,
-                               icon=f':{INTERVAL}-{DIRECTION}:')
+            if result == 'OPEN':
+                send_slack_message("notifications", msg, emoji=True,
+                                   icon=f':{INTERVAL}-{DIRECTION}:')
             if 'NSCA' in os.environ:
                 send_nsca(status=0, host_name='hp', service_name=config.main.name,
                           text_output="OK", remote_host='10.8.0.1')
