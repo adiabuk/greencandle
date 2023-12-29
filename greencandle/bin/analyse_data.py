@@ -212,8 +212,7 @@ def analyse_pair(pair, reversal, redis):
             if CHECK_REDIS_PAIR and result=='OPEN':
                 redis4 = Redis(db=CHECK_REDIS_PAIR)
                 redis4.conn.srem(f'{INTERVAL}:{DIRECTION}', f'{pair}:{reversal}')
-                LOGGER.debug("removing %s:%s %s-%s", INTERVAL, DIRECTION, pair, reversal)
-
+                LOGGER.info("removing %s:%s %s-%s", INTERVAL, DIRECTION, pair, reversal)
 
             if ROUTER_FORWARD:
                 url = f"http://router:1080/{config.web.api_token}"
