@@ -1,5 +1,12 @@
 # Releases
 
+# 6.49.1
+* BUGFIX: entry not being removed from redis set & increase log verbosity
+* remove alternate MACD containers
+* add macd xover close rule with RSI
+* BUGFIX: fix anchor link for dashboard
+* add RSI as 3rd close rule to main 2step strategy
+
 # 6.49
 * increase mem limit for data env mysql
 * increase expiry of redis db3 set contents
