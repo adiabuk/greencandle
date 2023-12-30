@@ -9,8 +9,8 @@
   "pairs": "any",
   "perc_at_timeout": "5",
   "stop_loss_perc": "5",
-  "take_profit_perc": "5",
-  "time_in_trade": "5Y",
-  "trailing_start": "0",
-  "trailing_stop_loss_perc": "0"
+  "take_profit_perc": "9",
+  "time_in_trade": "12h",
+  "trailing_start": "8",
+  "trailing_stop_loss_perc": "2"
 }
