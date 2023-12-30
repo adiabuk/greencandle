@@ -8,10 +8,13 @@
 Run {{ script }}
 <form action="/run?command={{script}}" method="post">
 {% for item in args %}
-<!-- Loop through args and create a text box for each using name to identify box.
-  contents with be retrieved later and associated with the name ->
+<!--
+Loop through args and create a text box for each using name to identify box.
+  contents with be retrieved later and associated with the name 
+-->
 {{item}}: <input type="text" name="{{item}}"  maxlength="4" size="4">
 {% endfor %}
+
   <button name="actionBtn" type="submit">Run</button>
 </form>
   <hr>
