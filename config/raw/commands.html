@@ -2,6 +2,22 @@
 {% block content %}
 <div>
 	<h1> Commands </h1>
+
+<!-- Command with args -->
+{% for script, args in arg_scripts.items() %}
+Run {{ script }}
+<form action="/run?command={{script}}" method="post">
+{% for item in args %}
+<!-- Loop through args and create a text box for each using name to identify box.
+  contents with be retrieved later and associated with the name ->
+{{item}}: <input type="text" name="{{item}}"  maxlength="4" size="4">
+{% endfor %}
+  <button name="actionBtn" type="submit">Run</button>
+</form>
+  <hr>
+{% endfor %}
+
+<!-- Command with no args -->
 {% for script in scripts %}
 Run {{ script }}
 <form action="/run?command={{script}}" method="post">
@@ -9,5 +25,6 @@ Run {{ script }}
 </form>
   <hr>
 {% endfor %}
+
 </div>
 {% endblock %}

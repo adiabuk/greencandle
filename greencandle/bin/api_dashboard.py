@@ -6,6 +6,7 @@ Flask module for manipulating API trades and displaying relevent graphs
 """
 import re
 import os
+import sys
 import json
 import subprocess
 from collections import defaultdict
@@ -43,6 +44,7 @@ LIVE = []
 
 SCRIPTS = ["write_balance", "get_quote_balance", "repay_debts", "get_risk", "get_trade_status",
            "get_hour_profit", "repay_debts", "balance_graph", "test_close", "close_all"]
+ARG_SCRIPTS = {"close_all": ['name_filter', 'threshold']}
 
 def get_pairs(env=config.main.base_env):
     """
@@ -95,7 +97,7 @@ def healthcheck():
 @login_required
 def commands():
     """Run commands locally"""
-    return render_template('commands.html', scripts=SCRIPTS)
+    return render_template('commands.html', scripts=SCRIPTS, arg_scripts=ARG_SCRIPTS)
 
 @APP.route('/internal', methods=["GET"])
 @login_required
@@ -123,8 +125,17 @@ def run():
     Run command from web
     """
     command = request.args.get('command')
+    args = request.form.to_dict(flat=False)
+    args.popitem() #remove submit button
+
     if command.strip() in SCRIPTS:
         subprocess.Popen(command)
+    if any(command.strip() in sublist for sublist in ARG_SCRIPTS):
+        for key, value in args.items():
+            # add args to command
+            command += f' --{key} {value}'
+        args = {key: value[0] for key, value in args.items()}
+        subprocess.Popen(command.split())
     return redirect(url_for('commands'))
 
 @APP.route('/charts', methods=["GET"])
