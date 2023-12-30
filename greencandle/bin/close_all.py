@@ -3,25 +3,31 @@
 Close all trades
 """
 import os
-import sys
 import json
+import argparse
+import argcomplete
 import requests
 from greencandle.lib.mysql import Mysql
-from greencandle.lib.common import get_short_name, arg_decorator, perc_diff
+from greencandle.lib.common import get_short_name, perc_diff
 from greencandle.lib import config
 
-@arg_decorator
 def main():
     """
-    Close all trades in current environment if net_perc is higher than arg
-    Threshold is 0.3 if no arg supplied
+    Close all trades in current environment if perc is higher than threshold
+    Threshold is 0.3 if no threshold supplied
     Usage close_all <net_perc>
     """
+    parser = argparse.ArgumentParser("Close trades in scope")
+    parser.add_argument("-f", "--name_filter", required=False, default="")
+    parser.add_argument("-t", "--threshold", required=False, default=0.3)
+    argcomplete.autocomplete(parser)
+    args = parser.parse_args()
+
     config.create_config()
     env = config.main.base_env
     url = f"http://router:1080/{config.web.api_token}"
     dbase = Mysql()
-    open_trades = dbase.get_open_trades()
+    open_trades = dbase.get_open_trades(name_filter=args.name_filter)
     stream = os.environ['STREAM']
     stream_req = requests.get(stream, timeout=10)
     prices = stream_req.json()
@@ -32,7 +38,7 @@ def main():
         perc = perc_diff(open_price, current_price)
         perc = -perc if direction== 'short' else perc
 
-        if float(perc) > (float(sys.argv[1]) if len(sys.argv) > 1 else 0.3):
+        if float(perc) > float(args.threshold):
             short_name = get_short_name(name, env, direction)
             print(f"Closing {pair} {name} {direction} from {open_time} @ {perc}%")
             payload = {"pair": pair,
