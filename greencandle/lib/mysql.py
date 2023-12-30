@@ -169,7 +169,8 @@ class Mysql():
         query = (f"select open_time, `interval`, pair, name, open_price, direction from "
                  f"trades where close_price is null and name like '%{name_filter}%';")
         raw = self.fetch_sql_data(query, header=False)
-        return raw
+
+        return raw if raw else []
 
     def insert_api_trade(self, **kwargs):
         """
