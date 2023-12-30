@@ -1,5 +1,18 @@
 # Releases
 
+# 6.50
+* return empty list if no trades, not NoneType
+* run close_all as arg only
+* Run commands with args from UI
+* add name filter to close_trade script
+* add MACD upper timeframes assocs to test env
+* add missing prod router assocs
+* match prod config to test
+* allow list of open trades to be filtered by name
+* use middle bb for close of bb & macd trades
+* only send slack notif for trade opens
+* fix anchor link target
+
 # 6.49.1
 * BUGFIX: entry not being removed from redis set & increase log verbosity
 * remove alternate MACD containers
