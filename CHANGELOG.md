@@ -1,5 +1,13 @@
 # Releases
 
+# 6.50.1
+* increase verbosity of some errors
+* BUGFIX: no repay_result if operation resulted in exception
+* return True, for soft errors to not spam slack with alerts
+* reduce TP and SL for 1m|5m main test strategy
+* BUGFIX: missing quote in anchor link
+* reintroduce alternate MACD containers data env
+
 # 6.50
 * return empty list if no trades, not NoneType
 * run close_all as arg only
