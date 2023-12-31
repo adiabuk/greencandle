@@ -2,7 +2,7 @@
   "interval": "5m",
   "name": "test-be-api-any3-5m-cross",
   "trade_direction": "long",
-  "take_profit_perc": "8",
+  "take_profit_perc": "6",
   "stop_loss_perc": "1",
   "trailing_start": "5.5",
   "trailing_stop_loss_perc": "1",
