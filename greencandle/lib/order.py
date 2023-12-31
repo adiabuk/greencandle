@@ -973,7 +973,7 @@ class Trade():
 
             if not quantity:
                 self.logger.info("close_spot_long: unable to find quantity for %s", pair)
-                return False
+                return True
 
             open_price, quote_in, _, _, _, _ = dbase.get_trade_value(pair)[0]
             if not open_price:
@@ -1052,7 +1052,7 @@ class Trade():
             quantity = dbase.get_quantity(pair)
             if not quantity:
                 self.logger.info("close_margin_long: unable to find quantity for %s", pair)
-                return False
+                return True
 
             open_price, quote_in, _, _, borrowed, _, = dbase.get_trade_value(pair)[0]
             if not open_price:

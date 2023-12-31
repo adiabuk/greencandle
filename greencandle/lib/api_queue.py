@@ -109,3 +109,6 @@ def add_to_queue(req, test=False):
 
         if not result and not test:
             LOGGER.error(f"Unable to close trade {item}")
+        else:
+            LOGGER.info(f"Unable to close trade {item}")
+
