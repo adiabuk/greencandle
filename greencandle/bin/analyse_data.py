@@ -250,7 +250,7 @@ def analyse_pair(pair, reversal, expire, redis):
                         redis4.conn.sadd(f'{INTERVAL}:{DIRECTION}', f'{pair}:normal:{now}')
                     del redis4
 
-            LOGGER.info("Trade alert: %s %s %s (%s)", pair, INTERVAL,
+            LOGGER.info("Trade alert: %s %s %s %s (%s)",result, pair, INTERVAL,
                         DIRECTION, supported.strip())
     except Exception as err_msg:
         LOGGER.critical("Error with pair %s %s", pair, str(err_msg))
