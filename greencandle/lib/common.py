@@ -232,7 +232,7 @@ def get_tv_link(pair, interval=None, anchor=False):
 
     if anchor:
         return Markup(f'<a href="https://www.tradingview.com/chart/?symbol=BINANCE:{pair.strip()}'
-                      f'&interval={convert_to_minutes(interval)} target="_blank">{pair}</a>')
+                      f'&interval={convert_to_minutes(interval)}" target="_blank">{pair}</a>')
 
     if interval:
         return (f"<https://www.tradingview.com/chart/?symbol=BINANCE:{pair.strip()}"
