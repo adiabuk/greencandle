@@ -806,8 +806,8 @@ class Trade():
                             isolated=str2bool(self.config.main.isolated),
                             asset=base)
                     except BinanceException as binex:
-                        self.logger.critical("Repay error-close short %s: %s %s",
-                                             pair, repay_result, str(binex))
+                        self.logger.critical("Repay error-close short %s: %s",
+                                             pair, str(binex))
                         self.logger.critical("Params: %s, %s, %s %s", pair, borrowed,
                                           self.config.main.isolated, base)
 
@@ -1093,8 +1093,8 @@ class Trade():
                             isolated=str2bool(self.config.main.isolated),
                             asset=quote)
                     except BinanceException as binex:
-                        self.logger.critical("Repay error-close %s: %s %s",
-                                             pair, repay_result, str(binex))
+                        self.logger.critical("Repay error-close %s: %s",
+                                             pair, str(binex))
                         self.logger.critical("Params: %s, %s, %s %s", pair, borrowed,
                                           self.config.main.isolated, quote)
                     self.logger.info("Repay result for %s: %s", pair, repay_result)
