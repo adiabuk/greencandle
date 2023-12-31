@@ -510,7 +510,7 @@ class Trade():
                             isolated=str2bool(self.config.main.isolated),
                             asset=quote)
                     except BinanceException as binex:
-                        self.logger.critical("Borrow error-open long %s: %s while trying to "
+                        self.logger.error("Borrow error-open long %s: %s while trying to "
                                              "borrow %s %s: %s", pair, str(borrow_res),
                                              amount_to_borrow, quote, str(binex))
                         return False
@@ -523,7 +523,7 @@ class Trade():
                                                             isolated=str2bool(
                                                                 self.config.main.isolated))
                 except BinanceException as binex:
-                    self.logger.critical("Trade error-open %s %s: %s",
+                    self.logger.error("Trade error-open %s %s: %s",
                                       self.config.main.trade_direction, pair, str(binex))
                     self.logger.critical("%s/long Vars: base quantity:%s, quote_quantity: %s "
                                          "quote bal:%s, quote_borrowed: %s", pair, amt_str,
@@ -626,7 +626,7 @@ class Trade():
                                                           test=self.test_trade)
 
                 except BinanceException as binex:
-                    self.logger.critical("Trade error-open %s: %s", pair, str(binex))
+                    self.logger.error("Trade error-open %s: %s", pair, str(binex))
                     self.logger.critical("Vars: quantity:%s, bal:%s", amt_str, quote_amount)
                     return False
 
@@ -787,7 +787,7 @@ class Trade():
                                                                 self.config.main.isolated))
 
                 except BinanceException as binex:
-                    self.logger.critical("Trade error-close short %s: %s", pair, str(binex))
+                    self.logger.error("Trade error-close short %s: %s", pair, str(binex))
                     return False
                 self.logger.info("%s close margin short result: %s", pair, trade_result)
 
@@ -806,8 +806,8 @@ class Trade():
                             isolated=str2bool(self.config.main.isolated),
                             asset=base)
                     except BinanceException as binex:
-                        self.logger.critical("Repay error-close short %s: %s",
-                                             pair, str(binex))
+                        self.logger.error("Repay error-close short %s: %s",
+                                          pair, str(binex))
                         self.logger.critical("Params: %s, %s, %s %s", pair, borrowed,
                                           self.config.main.isolated, base)
 
@@ -850,7 +850,7 @@ class Trade():
                                           event=event, action='CLOSE', usd_profit=profit,
                                           quote=quote_out, open_time=open_time, id=result)
             else:
-                self.logger.critical("Close short Failed %s:%s", name, pair)
+                self.logger.error("Close short Failed %s:%s", name, pair)
                 send_slack_message("alerts", f"Close short Failed {name}:{pair}")
 
         del dbase
@@ -903,7 +903,7 @@ class Trade():
                             isolated=str2bool(self.config.main.isolated),
                             asset=base)
                     except BinanceException as binex:
-                        self.logger.critical("Borrow error-open %s: %s while trying to borrow "
+                        self.logger.error("Borrow error-open %s: %s while trying to borrow "
                                              "short %s %s", pair, amount_to_borrow,
                                              base, str(binex))
                         return False
@@ -916,7 +916,7 @@ class Trade():
                                                             isolated=str2bool(
                                                                 self.config.main.isolated))
                 except BinanceException as binex:
-                    self.logger.critical("Short Trade error-open %s: %s", pair, str(binex))
+                    self.logger.error("Short Trade error-open %s: %s", pair, str(binex))
                     self.logger.critical("%s/short Vars: quantity:%s, bal:%s, borrowed: %s",
                                       pair, amt_str, current_base_bal, amount_to_borrow)
                     return False
@@ -993,7 +993,7 @@ class Trade():
                         order_type=self.client.market, test=self.test_trade)
 
                 except BinanceException as binex:
-                    self.logger.critical("Long Trade error-close %s: %s", pair, str(binex))
+                    self.logger.error("Long Trade error-close %s: %s", pair, str(binex))
                     return False
 
                 self.logger.info("%s close spot long result: %s", pair, trade_result)
@@ -1033,7 +1033,7 @@ class Trade():
                                               event=event, action='CLOSE', usd_profit=profit,
                                               quote=quote_out, open_time=open_time, id=result)
                 else:
-                    self.logger.critical("Close spot long Failed %s:%s", name, pair)
+                    self.logger.error("Close spot long Failed %s:%s", name, pair)
                     send_slack_message("alerts", f"Close spot long Failed {name}:{pair}")
                     return False
         del dbase
@@ -1074,7 +1074,7 @@ class Trade():
                                                             isolated=str2bool(
                                                                 self.config.main.isolated))
                 except BinanceException as binex:
-                    self.logger.critical("Margin long Trade error-close %s: %s", pair, str(binex))
+                    self.logger.error("Margin long Trade error-close %s: %s", pair, str(binex))
                     return False
 
                 self.logger.info("%s close margin long result: %s", pair, trade_result)
@@ -1093,8 +1093,7 @@ class Trade():
                             isolated=str2bool(self.config.main.isolated),
                             asset=quote)
                     except BinanceException as binex:
-                        self.logger.critical("Repay error-close %s: %s",
-                                             pair, str(binex))
+                        self.logger.error("Repay error-close %s: %s", pair, str(binex))
                         self.logger.critical("Params: %s, %s, %s %s", pair, borrowed,
                                           self.config.main.isolated, quote)
                     self.logger.info("Repay result for %s: %s", pair, repay_result)
@@ -1134,7 +1133,7 @@ class Trade():
                                           event=event, action='CLOSE', usd_profit=profit,
                                           quote=quote_out, open_time=open_time, id=result)
             else:
-                self.logger.critical("Close margin long Failed %s:%s", name, pair)
+                self.logger.error("Close margin long Failed %s:%s", name, pair)
                 send_slack_message("alerts", f"Close margin long Failed {name}:{pair}")
                 return False
 
