@@ -131,6 +131,7 @@ services:
       - /dev/log:/dev/log
       - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
+      - /root/.bashrc:/root/.bashrc
       - /root/.ipython:/root/.ipython
 
   prod-fe-cron:
