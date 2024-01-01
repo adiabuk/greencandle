@@ -70,6 +70,7 @@
 {{else if eq .base_env "prod"}}
 {
 "any-lt-long-short": ["any-lt-long", "any-lt-short"],
+"any-man-long-short": ["any-man-long", "any-man-short"],
 "any-1m-long" : ["any-1m-long"],
 "any-1m-short" : ["any-1m-short"],
 "any-1m-long-short": ["any-1m-short", "any-1m-long"],

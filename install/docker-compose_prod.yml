@@ -338,6 +338,8 @@ services:
       - prod-be-api-any2-5m-cross-short:any2-5m-short
       - prod-be-api-any-lt-cross-long:any-lt-long
       - prod-be-api-any-lt-cross-short:any-lt-short
+      - prod-be-api-any-man-cross-long:any-man-long
+      - prod-be-api-any-man-cross-short:any-man-short
 
     depends_on:
       - prod-base-mysql
@@ -977,6 +979,76 @@ services:
       - VPN_IP=$VPN_IP
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/lt/cross-short
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - prod-base-mysql:mysql
+      - prod-base-redis:redis
+    depends_on:
+      - prod-base-mysql
+      - prod-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history
+
+  prod-be-api-any-man-cross-long:
+    container_name: prod-be-api-any-man-cross-long
+    hostname: prod-be-api-any-man-cross-long
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600m
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "touch /var/local/borrow_drain; backend_api api & backend_api queue"
+    logging:
+      driver: journald
+    environment:
+      - VPN_IP=$VPN_IP
+      - intermittent="true"
+      - CONFIG_ENV=prod/be/any/man/cross-long
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - prod-base-mysql:mysql
+      - prod-base-redis:redis
+    depends_on:
+      - prod-base-mysql
+      - prod-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history
+
+  prod-be-api-any-man-cross-short:
+    container_name: prod-be-api-any-man-cross-short
+    hostname: prod-be-api-any-man-cross-short
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600m
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "touch /var/local/borrow_drain; backend_api api & backend_api queue"
+    logging:
+      driver: journald
+    environment:
+      - VPN_IP=$VPN_IP
+      - intermittent="true"
+      - CONFIG_ENV=prod/be/any/man/cross-short
       - DB=true
     ports:
       - 20000
