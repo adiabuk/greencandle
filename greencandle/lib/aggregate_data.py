@@ -36,10 +36,11 @@ def get_artp_equal(res):
     Use last 10 items
     """
     count = 0
-    for _, item in res.items():
+    for item in list(res.items())[-10:]:
         try:
             if float(item['ATRp_30']) > 75:
                 count +=1
+
         except:
             continue
     return count
