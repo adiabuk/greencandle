@@ -30,6 +30,20 @@ def get_empty_count(res):
             continue
     return count
 
+def get_artp_equal(res):
+    """
+    Number of candles where ATRp > 75
+    Use last 10 items
+    """
+    count = 0
+    for _, item in res.items():
+        try:
+            if float(item['ATRp_30']) > 75:
+                count +=1
+        except:
+            continue
+    return count
+
 def get_macd_xover(res, last_res, timeframe=19):
     """ get MACD crossover long or short"""
 
@@ -273,6 +287,7 @@ def aggregate_data(key, pairs, interval, data, items):
             res = data[interval][pair][current_item[-1]]
             last_res = data[interval][pair][current_item[-2]]
             third_res = data[interval][pair][current_item[-3]]
+            last_10 = data[interval][pair][current_item[-10:]]
 
             distance_200 = get_distance(res, '200')[-1]
             middle_200 = get_middle_distance(res, '200')[-1]
@@ -291,6 +306,7 @@ def aggregate_data(key, pairs, interval, data, items):
             bbperc = res['bbperc_200']
             atrp = res['ATRp_30']
             empty_count = get_empty_count(data[interval][pair])
+            artp_equal = get_artp_equal(last_10)
             redis_data[f'{pair}:{interval}'] = \
             {
              'distance_200': distance_200,
@@ -308,6 +324,7 @@ def aggregate_data(key, pairs, interval, data, items):
              'empty_count': empty_count,
              'atrp': atrp,
              'num': num,
+             'atrp_equal': artp_equal,
              'date': humandate}
 
         # save to redis, overwriting previous value
