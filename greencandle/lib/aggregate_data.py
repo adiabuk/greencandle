@@ -288,7 +288,6 @@ def aggregate_data(key, pairs, interval, data, items):
             res = data[interval][pair][current_item[-1]]
             last_res = data[interval][pair][current_item[-2]]
             third_res = data[interval][pair][current_item[-3]]
-            last_10 = data[interval][pair][current_item[-10:]]
 
             distance_200 = get_distance(res, '200')[-1]
             middle_200 = get_middle_distance(res, '200')[-1]
@@ -307,7 +306,7 @@ def aggregate_data(key, pairs, interval, data, items):
             bbperc = res['bbperc_200']
             atrp = res['ATRp_30']
             empty_count = get_empty_count(data[interval][pair])
-            artp_equal = get_artp_equal(last_10)
+            artp_equal = get_artp_equal(data)
             redis_data[f'{pair}:{interval}'] = \
             {
              'distance_200': distance_200,
