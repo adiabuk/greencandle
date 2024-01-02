@@ -30,7 +30,7 @@ def get_empty_count(res):
             continue
     return count
 
-def get_artp_equal(res):
+def get_atrp_equal(res):
     """
     Number of candles where ATRp > 75
     Use last 10 items
@@ -38,7 +38,7 @@ def get_artp_equal(res):
     count = 0
     for item in list(res.items())[-10:]:
         try:
-            if float(item['ATRp_30']) > 75:
+            if float(item[-1]['ATRp_30']) > 75:
                 count +=1
 
         except:
@@ -306,7 +306,7 @@ def aggregate_data(key, pairs, interval, data, items):
             bbperc = res['bbperc_200']
             atrp = res['ATRp_30']
             empty_count = get_empty_count(data[interval][pair])
-            artp_equal = get_artp_equal(data)
+            atrp_equal = get_atrp_equal(data[interval][pair])
             redis_data[f'{pair}:{interval}'] = \
             {
              'distance_200': distance_200,
@@ -324,7 +324,7 @@ def aggregate_data(key, pairs, interval, data, items):
              'empty_count': empty_count,
              'atrp': atrp,
              'num': num,
-             'atrp_equal': artp_equal,
+             'atrp_equal': atrp_equal,
              'date': humandate}
 
         # save to redis, overwriting previous value
