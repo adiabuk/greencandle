@@ -1,6 +1,5 @@
 {
   "interval": "1m",
-  "name": "data-be-analyse-1m-long5",
+  "name": "data-be-analyse-1m-long2",
   "time_between_trades": "15m",
-  "api_forward": "1m-5"
 }
