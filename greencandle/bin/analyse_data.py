@@ -82,7 +82,6 @@ def analyse_loop():
                 redis_pairs.remove((pair, reversal, expire))
                 # remove from redis_pairs
 
-
         # union
         pairs = redis_pairs + [x for x in open_pairs if (x[0] not in [y[0] for y in redis_pairs])]
 
@@ -120,8 +119,7 @@ def get_match_name(matches):
         container_num = 1
 
     name_lookup = [['distance', 'bb', 'bbperc_diff', 'bbperc_extreme'],
-                   [],
-                   [],
+                   ['atrp_change'],
                    [],
                    ['MACD'],
                    ['MACD_slowdown']
