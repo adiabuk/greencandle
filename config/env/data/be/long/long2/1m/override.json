@@ -1,5 +1,5 @@
 {
   "interval": "1m",
   "name": "data-be-analyse-1m-long2",
-  "time_between_trades": "15m",
+  "time_between_trades": "15m"
 }
