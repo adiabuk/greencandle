@@ -119,12 +119,11 @@ def get_match_name(matches):
     except ValueError:
         container_num = 1
 
-    name_lookup = [['bbperc_diff', 'very_high_bbperc'],
-                   ['distance', 'bb'],
-                   ['MACD-alt-check'],
-                   ['HA'],
-                   ['MACD'],
-                   ['MACD-check'],
+    name_lookup = [['distance', 'bb', 'bbperc_diff', 'bbperc_extreme'],
+                   [],
+                   [],
+                   [],
+                   ['MACD']
                    ]
     for match in matches:
         match_names.append(name_lookup[container_num-1][match-1])
