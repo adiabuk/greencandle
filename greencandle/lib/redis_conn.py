@@ -616,25 +616,26 @@ class Redis():
         except Exception:  # hack for unit tests still using pickled zlib objects
             return pickle.loads(zlib.decompress(raw[-1]))
 
-    def get_rule_action(self, pair, interval):
+    @staticmethod
+    def get_float(var):
+        """
+        try to convert var into float
+        otherwise return unmodified
+        """
+        try:
+            return float(var)
+        except ValueError:
+            return var
+
+    def get_rule_action(self, pair, interval, check_reversal=False):
         """
         get only rule results, without checking tp/sl etc.
         """
 
-        def get_float(var):
-            """
-            try to convert var into float
-            otherwise return unmodified
-            """
-            try:
-                return float(var)
-            except ValueError:
-                return var
-
         # fetch latest agg data and make available as AttributeDict
         redis3 = Redis(interval=interval, db=3)
         raw = redis3.conn.hgetall(f'{pair}:{interval}')
-        agg = AttributeDict({k.decode():get_float(v.decode()) for k, v in raw.items()})
+        agg = AttributeDict({k.decode():self.get_float(v.decode()) for k, v in raw.items()})
         del redis3
 
         rules = {'open': [], 'close':[]}
@@ -664,7 +665,6 @@ class Redis():
             datax.update(ohlc)
             res.append(datax)
 
-
         for seq in range(1, 5):
             current_config = None
             for rule in "open", "close":
@@ -687,6 +687,8 @@ class Redis():
             open_price = None
         winning_open = self.get_rules(rules, 'open')
         winning_close = self.get_rules(rules, 'close')
+        reversal = eval(config.main.reversal_rule) if check_reversal else False
+
         if any(rules['open']) and not open_price:
             result = 'OPEN'
         elif any(rules['close']) and open_price:
@@ -700,7 +702,8 @@ class Redis():
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_epoch))
 
         return result, event, current_time, current_price, {'close': winning_close,
-                                                            'open': winning_open}
+                                                            'open': winning_open,
+                                                            'reversal': reversal}
 
     def get_action(self, pair, interval):
         """

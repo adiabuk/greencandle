@@ -326,6 +326,11 @@
       "is_binary": false,
       "is_secret": false
     },
+    "reversal_rule": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
     "slack_active": {
       "value": "true",
       "is_binary": false,
