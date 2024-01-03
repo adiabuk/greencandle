@@ -1,9 +1,6 @@
 {
   "name": "data-be-analyse-4h-long1",
   "interval": "4h",
-  "slack_alerts": "data_bbperc",
-  "slack_balance": "data_bbperc",
-  "slack_notifications": "data_bbperc",
   "time_between_trades": "8h",
   "api_forward": "4h-1"
 }

@@ -1,0 +1,7 @@
+{
+  "api_forward": "12h-6",
+  "interval": "12h",
+  "name": "data-be-analyse-12h-short6",
+  "redis_expiry_seconds": "432000",
+  "time_between_trades": "12h"
+}
