@@ -131,10 +131,10 @@ def run():
     if command.strip() in SCRIPTS:
         subprocess.Popen(command)
     if any(command.strip() in sublist for sublist in ARG_SCRIPTS):
+        args = {key: value[0] for key, value in args.items() if value[0].strip() !=""}
         for key, value in args.items():
             # add args to command
             command += f' --{key} {value}'
-        args = {key: value[0] for key, value in args.items() if value[0].strip() !=""}
         subprocess.Popen(command.split())
     return redirect(url_for('commands'))
 
