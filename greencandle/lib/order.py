@@ -768,7 +768,7 @@ class Trade():
 
             if not quantity:
                 self.logger.info("close_margin_short: unable to get quantity for %s", pair)
-                return False
+                return True
 
             perc_inc = - (perc_diff(open_price, current_price))
             quote_out = sub_perc(perc_inc, quote_in)
