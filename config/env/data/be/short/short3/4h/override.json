@@ -1,0 +1,6 @@
+{
+  "open_rule1": "agg.distance_200 \u003e 14 and res[0].RSI_14 \u003e 75 and res[0].numTrades \u003e 50 and agg.bb_size \u003e 1 and agg.empty_count \u003c 1",
+  "name": "data-be-analyse-4h-short3",
+  "interval": "4h",
+  "time_between_trades": "8h"
+}

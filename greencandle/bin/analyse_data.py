@@ -120,7 +120,7 @@ def get_match_name(matches):
 
     name_lookup = [['distance', 'bb', 'bbperc_diff', 'bbperc_extreme'],
                    ['atrp_change'],
-                   [],
+                   ['old_distance', 'old_bb', "old_bbperc_diff", "old_bbperc_extreme"],
                    ['MACD'],
                    ['MACD_slowdown']
                    ]
