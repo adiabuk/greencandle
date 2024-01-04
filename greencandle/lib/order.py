@@ -142,7 +142,6 @@ class Trade():
                 send_slack_message("trades", f"Pair {item[0]} not in db_pairs, skipping...")
             elif self.is_in_drain() and not self.test_data:
                 self.logger.warning("strategy is in drain for pair %s, skipping...", item[0])
-                send_slack_message("trades", f"strategy is in drain, skipping {item[0]}")
                 return []
             elif self.is_float(item[4]) and \
                     ((float(item[4]) > 0 and self.config.main.trade_direction == "short") or \
