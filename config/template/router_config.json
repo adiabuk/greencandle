@@ -122,6 +122,9 @@
 "4h-6": ["test:any3-4h-long-short", "prod:any-4h-long-short"],
 "12h-6": ["test:any3-12h-long-short", "prod:any-12h-long-short"],
 
+"1m-2": ["alert"],
+"5m-2": ["alert"],
+
 "alert": ["alert"],
 "route": []
 }
