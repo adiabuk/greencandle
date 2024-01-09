@@ -4,7 +4,7 @@
   "name": "test-be-api-any3-1h-cross",
   "perc_at_timeout": "5",
   "stop_loss_perc": "5",
-  "take_profit_perc": "9",
+  "take_profit_perc": "5",
   "time_in_trade": "12h",
   "trade_direction": "long",
   "trailing_start": "8",
