@@ -774,7 +774,6 @@ services:
       - data-be-get3_1m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/short/short1/1m
       - REDIS_FORWARD=4
       - DB=true
@@ -811,7 +810,6 @@ services:
       - data-be-get3_1m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/long/long1/1m
       - REDIS_FORWARD=4
       - DB=true
@@ -848,7 +846,6 @@ services:
       - data-be-get_5m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/short/short1/5m
       - REDIS_FORWARD=4
       - DB=true
@@ -884,7 +881,6 @@ services:
       - data-be-get_5m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/long/long1/5m
       - REDIS_FORWARD=4
       - DB=true
@@ -920,7 +916,6 @@ services:
       - data-be-get_1h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/short/short1/1h
       - REDIS_FORWARD=4
       - DB=true
@@ -956,7 +951,6 @@ services:
       - data-be-get_1h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/long/long1/1h
       - REDIS_FORWARD=4
       - DB=true
@@ -992,7 +986,6 @@ services:
       - data-be-get_4h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/short/short1/4h
       - REDIS_FORWARD=4
       - DB=true
@@ -1028,7 +1021,6 @@ services:
       - data-be-get_4h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/long/long1/4h
       - REDIS_FORWARD=4
       - DB=true
@@ -1064,7 +1056,6 @@ services:
       - data-be-get_12h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/short/short1/12h
       - REDIS_FORWARD=4
       - DB=true
@@ -1100,7 +1091,6 @@ services:
       - data-be-get_12h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/long/long1/12h
       - REDIS_FORWARD=4
       - DB=true
@@ -1136,7 +1126,6 @@ services:
       - data-be-get3_1m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/short/short6/1m
       - DB=true
       - CHECK_REDIS_PAIR=4
@@ -1175,7 +1164,6 @@ services:
       - data-be-get3_1m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/long/long6/1m
       - DB=true
       - CHECK_REDIS_PAIR=4
@@ -1214,7 +1202,6 @@ services:
       - data-be-get_5m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/short/short6/5m
       - DB=true
       - STORE_IN_DB=True
@@ -1252,7 +1239,6 @@ services:
       - data-be-get_5m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/long/long6/5m
       - DB=true
       - STORE_IN_DB=True
@@ -1290,7 +1276,6 @@ services:
       - data-be-get_1h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/short/short6/1h
       - STORE_IN_DB=True
       - DB=true
@@ -1328,7 +1313,6 @@ services:
       - data-be-get_1h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/long/long6/1h
       - STORE_IN_DB=True
       - DB=true
@@ -1366,7 +1350,6 @@ services:
       - data-be-get_4h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/short/short6/4h
       - DB=true
       - STORE_IN_DB=True
@@ -1404,7 +1387,6 @@ services:
       - data-be-get_4h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/long/long6/4h
       - DB=true
       - CHECK_REDIS_PAIR=4
@@ -1442,7 +1424,6 @@ services:
       - data-be-get_12h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/short/short6/12h
       - DB=true
       - CHECK_REDIS_PAIR=4
@@ -1480,7 +1461,6 @@ services:
       - data-be-get_12h
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/long/long6/12h
       - DB=true
       - CHECK_REDIS_PAIR=4
@@ -1518,7 +1498,6 @@ services:
       - data-be-get3_1m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/short/short5/1m
       - DB=true
       - ROUTER_FORWARD=True
@@ -1555,7 +1534,6 @@ services:
       - data-be-get3_1m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/long/long5/1m
       - DB=true
       - ROUTER_FORWARD=True
@@ -1592,7 +1570,6 @@ services:
       - data-be-get_5m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/short/short5/5m
       - DB=true
       - ROUTER_FORWARD=True
@@ -1629,7 +1606,6 @@ services:
       - data-be-get_5m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/long/long5/5m
       - DB=true
       - ROUTER_FORWARD=True
@@ -1666,7 +1642,6 @@ services:
       - data-be-get3_1m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/long/long2/1m
       - DB=true
       - NSCA=True
@@ -1703,7 +1678,6 @@ services:
       - data-be-get_5m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/long/long2/5m
       - DB=true
       - ROUTER_FORWARD=True
@@ -1739,7 +1713,6 @@ services:
       - data-be-get3_1m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/short/short3/1m
       - DB=true
       - NSCA=True
@@ -1775,7 +1748,6 @@ services:
       - data-be-get_5m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/short/short3/5m
       - DB=true
     healthcheck:
@@ -1809,7 +1781,6 @@ services:
       - data-be-get3_1m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/long/long3/1m
       - DB=true
       - NSCA=True
@@ -1845,7 +1816,6 @@ services:
       - data-be-get_5m
     environment:
       - VPN_IP=$VPN_IP
-      - ALERT=True
       - CONFIG_ENV=data/be/long/long3/5m
       - DB=true
     healthcheck:
