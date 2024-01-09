@@ -1670,6 +1670,7 @@ services:
       - CONFIG_ENV=data/be/long/long2/1m
       - DB=true
       - NSCA=True
+      - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -1705,6 +1706,7 @@ services:
       - ALERT=True
       - CONFIG_ENV=data/be/long/long2/5m
       - DB=true
+      - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
