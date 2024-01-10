@@ -1,5 +1,34 @@
 # Releases
 
+# 6.51
+* alert env var superfluous in data env
+* Revert "adjust test env tpsl"
+* remove test alerts
+* alerts from data strategy
+* name lookup for new step 2 containers
+* don't alert if short trade not open
+* don't send drain msg to slack
+* recreate args dict, removing empty
+* fix cmd line args check
+* keep old strategies for reference
+* fix bb high/low check against middle
+* add more info to log
+* new data strategy - atrp increase 1m|5m
+* remove unused data containers
+* readd simplified step2 strategy
+* combine data strategies and add stochrsi|atrp checks
+* add reversal check rule to config
+* don't send all data to function
+* allow longer args in UI
+* use all data in main agg function
+* loop through list and get last 10 items
+* test artp agg of last 10 equal values
+* adjust tpsl for prod long term trades
+* add config for prod manual trades
+* add bashrc to all data containers
+* reorder web menu items
+* add open|close to trade alert log
+
 # 6.50.1
 * increase verbosity of some errors
 * BUGFIX: no repay_result if operation resulted in exception
