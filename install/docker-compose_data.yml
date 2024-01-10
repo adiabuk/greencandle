@@ -1765,7 +1765,7 @@ services:
       - /var/run/:/var/run
 
   data-be-analyse-1m-long3:
-    cont ainer_name: data-be-analyse-1m-long3
+    container_name: data-be-analyse-1m-long3
     hostname: data-be-analyse-1m-long3
     image: amrox/greencandle:${TAG}
     mem_limit: 2g
