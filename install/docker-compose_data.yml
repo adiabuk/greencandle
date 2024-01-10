@@ -1716,6 +1716,7 @@ services:
       - CONFIG_ENV=data/be/short/short3/1m
       - DB=true
       - NSCA=True
+      - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -1750,6 +1751,7 @@ services:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short3/5m
       - DB=true
+      - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -1761,8 +1763,9 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/:/var/run
+
   data-be-analyse-1m-long3:
-    container_name: data-be-analyse-1m-long3
+    cont ainer_name: data-be-analyse-1m-long3
     hostname: data-be-analyse-1m-long3
     image: amrox/greencandle:${TAG}
     mem_limit: 2g
@@ -1784,6 +1787,7 @@ services:
       - CONFIG_ENV=data/be/long/long3/1m
       - DB=true
       - NSCA=True
+      - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
@@ -1818,6 +1822,7 @@ services:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long3/5m
       - DB=true
+      - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 1h
