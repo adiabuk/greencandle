@@ -124,6 +124,8 @@
 
 "1m-2": ["alert"],
 "5m-2": ["alert"],
+"1m-3": ["alert"],
+"5m-3": ["alert"],
 
 "alert": ["alert"],
 "route": []
