@@ -1,5 +1,11 @@
 # Releases
 
+# 6.51.1
+* Fixes to unittests
+* only use upper bb for new atrp rule
+* BUGFIX: no stop loss if value <= 0
+* add rsi to agg UI
+
 # 6.51
 * alert env var superfluous in data env
 * Revert "adjust test env tpsl"
