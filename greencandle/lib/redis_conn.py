@@ -570,6 +570,8 @@ class Redis():
 
         if not open_price:
             return False
+        if stop_perc <= 0:
+            return False
         if direction == 'long' and self.test_data and immediate:
             check = current_low
         elif direction == 'short' and self.test_data and immediate:
