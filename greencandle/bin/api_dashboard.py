@@ -6,7 +6,6 @@ Flask module for manipulating API trades and displaying relevent graphs
 """
 import re
 import os
-import sys
 import json
 import subprocess
 from collections import defaultdict

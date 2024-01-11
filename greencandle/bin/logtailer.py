@@ -1,13 +1,13 @@
-#!/usr/bin/env python
+#pylint: disable=no-member
 """
 Flask module to provide web interface for tailing /var/log/greencandle.log
 """
 
 import os
-import sh
 import time
 from flask import Flask, render_template
 from flask_login import LoginManager, login_required
+import sh
 import setproctitle
 from greencandle.lib.common import arg_decorator
 from greencandle.lib.flask_auth import load_user, login as loginx, logout as logoutx

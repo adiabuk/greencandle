@@ -4,9 +4,9 @@
 Collect OHLC and strategy data for later analysis
 """
 import os
-import requests
 import time
 from pathlib import Path
+import requests
 import setproctitle
 from greencandle.lib import config
 from greencandle.lib.alerts import send_slack_message

@@ -5,7 +5,6 @@ Retrieve SL and TP from redis
 import sys
 from greencandle.lib.common import arg_decorator
 from greencandle.lib.redis_conn import Redis
-from greencandle.lib.mysql import Mysql
 
 @arg_decorator
 def main():
@@ -14,7 +13,6 @@ def main():
     Usage: get_draw <pair> <name> <direction> up|down
     """
 
-    dbase = Mysql()
     interval = sys.argv
     pair = sys.argv[1]
     name = sys.argv[2]
