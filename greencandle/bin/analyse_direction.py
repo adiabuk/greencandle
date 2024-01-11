@@ -20,7 +20,7 @@ from greencandle.lib.auth import binance_auth
 
 config.create_config()
 INTERVAL = config.main.interval
-NEW_INTERVAL = os.environ['INTERVAL']
+NEW_INTERVAL = os.environ['INTERVAL'] if 'INTERVAL' in os.environ else ''
 DIRECTION = config.main.trade_direction
 LOGGER = get_logger(__name__)
 PAIRS = config.main.pairs.split()
