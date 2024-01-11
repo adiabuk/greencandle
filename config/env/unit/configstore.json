@@ -101,9 +101,9 @@
       "is_secret": false
     },
     "auth_key": {
-      "value": "key",
+      "value": "0AT7S8l/jE5o8sXHcgTxnl1Ga0TPfC4VO5MY+zzwxs8c/O7x04O3/pMRlSlubYdyxpAUpE2ryzAFppCUO3flSG6YRXz5Nx29TQLeEw==",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "aws_access_key": {
       "value": "",
@@ -201,7 +201,7 @@
       "is_secret": false
     },
     "flask_auth": {
-      "value": "gAAAAABk8yoG2CVENYp9JNGa8kKTImDEkOVbLjJ46Iroq5T_8eQj0wrnSOA--6Gm7OBU15JHq8WwLdPZ6SsK5ShV3a8FeCtv2w==",
+      "value": "gAAAAABln_5q4JIJpYfP2lepK7kzb0sgYhE5503YHzHGI9xpyE6n6tnSLnBuXs1pr-nNa2bSk1_gENhLlPX2CjeRTFBd_J4R2A==",
       "is_binary": false,
       "is_secret": false
     },
