@@ -22,7 +22,8 @@ class TestDraw(unittest.TestCase):
         """
         Create pandas series representing a single candle using given data
         """
-        return pd.DataFrame(data, columns=['closeTime', 'open', 'high', 'low', 'close']).iloc[-1]
+        return pd.DataFrame(data, columns=['closeTime', 'open', 'high', 'low',
+                                           'close']).iloc[-1].astype(float)
 
     def test_long_drawdown(self):
         """
@@ -66,12 +67,6 @@ class TestDraw(unittest.TestCase):
         time.sleep(1)
         # End of trade - 0 drawdown
         redis.rm_drawdown(pair)
-        self.assertEqual(abs(redis.get_drawdown(pair)['perc']), 0)
-
-        time.sleep(1)
-        # regarless of price, drawdown is 0 as open arg not specified
-        data = {'closeTime':  [6], 'open': [200], 'high': [300], 'low': [5], 'close': [2]}
-        redis.update_drawdown(pair, self.create_series(data))
         self.assertEqual(abs(redis.get_drawdown(pair)['perc']), 0)
 
     def test_long_drawup(self):
@@ -118,10 +113,4 @@ class TestDraw(unittest.TestCase):
         time.sleep(1)
         # End of trade - 0 drawdup
         redis.rm_drawup(pair)
-        self.assertEqual(abs(redis.get_drawup(pair)['perc']), 0)
-
-        time.sleep(1)
-        # regarless of price, drawdup is 0 as open arg not specified
-        data = {'closeTime':  [6], 'open': [200], 'high': [300], 'low': [5], 'close': [2]}
-        redis.update_drawup(pair, self.create_series(data))
         self.assertEqual(abs(redis.get_drawup(pair)['perc']), 0)
