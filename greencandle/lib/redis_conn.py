@@ -483,7 +483,7 @@ class Redis():
         trailing_perc = float(config.main.trailing_stop_loss_perc)
         immediate = str2bool(config.main.immediate_trailing_stop)
 
-        if trailing_perc <= 0 or immediate:
+        if trailing_perc <= 0:
             return False
 
         direction = config.main.trade_direction
