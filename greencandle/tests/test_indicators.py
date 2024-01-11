@@ -21,7 +21,7 @@ LOGGER = get_logger(__name__)
 class TestIndicators(unittest.TestCase):
     """Test indicators are returning data"""
     def setUp(self):
-        os.system("configstore package process_templates unit/ind")
+        os.system("configstore package process_templates unit/ind /etc")
         self.pair = 'LINKUSDT'
         self.interval = '1h'
         self.path = '/data/test_data'

@@ -1,7 +1,7 @@
 {
   "close_rule1": "1\u003e1",
-  "indicators": "get_rsi;RSI;20 get_moving_averages;EMA;20 get_oscillators;STOCHF;20 get_bb;bb;20,4 get_bb_perc;bbperc;20,1 get_stochrsi;STOCHRSI;8,3,3 get_supertrend;STX;20,3",
-  "no_of_klines": "90",
+  "indicators": "get_rsi;RSI;14 get_moving_averages;EMA;20 get_oscillators;STOCHF;20 get_bb;bb;20,4 get_bb_perc;bbperc;20,1 get_stochrsi;STOCHRSI;8,3,3 get_supertrend;STX;20,3",
+  "no_of_klines": "23",
   "open_rule1": "1\u003e1",
   "pairs": "BTCUSDT",
   "rate_indicator": "EMA_20"

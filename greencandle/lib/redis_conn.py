@@ -187,7 +187,7 @@ class Redis():
         try:
             result = float(value.decode())
         except AttributeError:
-            result = float(config.main[name])
+            result = float(config.main[func])
         del redis1
         return result
 

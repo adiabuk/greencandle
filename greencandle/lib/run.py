@@ -63,6 +63,8 @@ def perform_data(pair, interval, data_dir, indicators):
     if not isinstance(dframe, pandas.DataFrame):
         return
     dbase = Mysql(test=True, interval=interval)
+    current_trade = False
+    print(len(dframe), CHUNK_SIZE)
     for beg in range(len(dframe) - CHUNK_SIZE):
         LOGGER.debug("IN LOOP %s", beg)
         trade = Trade(interval=interval, test_trade=True, test_data=True, config=config)
@@ -117,7 +119,7 @@ def perform_data(pair, interval, data_dir, indicators):
     LOGGER.info("Closing remaining item")
     closes = []
     if current_trade:
-        closes.append((pair, current_time, current_price, event, 0))
+        closes.append((pair, current_time, current_price, event, 0, 100))
         current_candle = dataframes[pair].iloc[-1]
 
         redis.update_drawdown(pair, current_candle)
@@ -203,6 +205,7 @@ def get_pickle_data(pair, data_dir, interval):
     """
     try:
         filename = glob(f"{data_dir}/{pair}_{interval}.p*")[0]
+        print(f"{data_dir}/{pair}_{interval}.p*")
     except IndexError:
         LOGGER.critical("Filename not found for %s %s", pair, interval)
         return None
