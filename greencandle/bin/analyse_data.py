@@ -52,7 +52,6 @@ def analyse_loop():
     """
     LOGGER.debug("Recently triggered: %s", str(TRIGGERED))
 
-    Path('/var/local/greencandle').touch()
     while glob.glob(f'/var/run/{config.main.base_env}-data-{INTERVAL}-*'):
         LOGGER.info("Waiting for initial data collection to complete for %s", INTERVAL)
         time.sleep(30)
@@ -102,6 +101,7 @@ def analyse_loop():
     for pair, reversal, expire in pairs:
         analyse_pair(pair, reversal, expire, redis)
     LOGGER.debug("End of current loop")
+    Path('/var/local/greencandle').touch()
     del redis
     if CHECK_REDIS_PAIR:
         time.sleep(5)
