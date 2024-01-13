@@ -176,7 +176,6 @@ class Trade():
         Main open trade method
         Will choose between spot/margin and long/short
         """
-
         items_list = self.check_pairs(items_list)
         if not items_list:
             self.logger.warning("No items to open trade with")
@@ -469,6 +468,10 @@ class Trade():
         dbase = Mysql(test=self.test_data, interval=self.interval)
 
         for pair, current_time, current_price, event, _, max_usd in long_list:
+            if stop > 50:
+                self.logger.error(f"stop loss to high to reserve funds, passing margin "
+                                  f"{pair}/long")
+                continue
             pair = pair.strip()
             total_amt_to_use = self.get_total_amount_to_use(dbase, account='margin', pair=pair,
                                                             max_usd=max_usd)
@@ -604,6 +607,7 @@ class Trade():
             quote_amount = self.get_total_amount_to_use(dbase, account='binance',
                                                         pair=pair, max_usd=max_usd
                                                         )['balance_amt']
+
             quote = get_quote(pair)
 
             if quote_amount <= 0:
@@ -865,6 +869,10 @@ class Trade():
         for pair, current_time, current_price, event, _, max_usd in short_list:
             base = get_base(pair)
 
+            if stop > 50:
+                self.logger.error(f"stop loss to high to reserve funds, passing margin "
+                                  f"{pair}/short")
+                continue
             total_amount_to_use = self.get_total_amount_to_use(dbase, account='margin', pair=pair,
                                                                max_usd=max_usd)
             current_base_bal = total_amount_to_use['balance_amt']
