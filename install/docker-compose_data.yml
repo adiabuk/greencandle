@@ -1852,7 +1852,7 @@ services:
     depends_on:
       - data-base-mysql
       - data-base-redis
-      - data-be-get3_1h
+      - data-be-get_1h
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short3/1h
@@ -2312,5 +2312,3 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/:/var/run
-
-
