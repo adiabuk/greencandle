@@ -1,0 +1,7 @@
+{
+  "close_rule1": "agg.macd_xover \u003c 0",
+  "open_rule1": "agg.macd_xover \u003e 0",
+  "slack_alerts": "data_old",
+  "slack_balance": "data_old",
+  "slack_notifications": "data_old"
+}
