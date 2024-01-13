@@ -1,5 +1,15 @@
 # Releases
 
+# 6.51.2
+* don't open trade with >50 stop_loss
+* use f-strings for error logging for slack notifs
+* all alert routing for step2-old strategy
+* fix dc deps
+* add new forwarding rule
+* forward rule for old strategy
+* no tpsl for stag env
+* touch check file at bottom of analyser loop
+
 # 6.51.1
 * Fixes to unittests
 * only use upper bb for new atrp rule
