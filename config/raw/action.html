@@ -8,7 +8,9 @@
     {% for strat, pairs in my_dic.items() %}
   <tr>
     <td>
+      {% if "any" in strat and "long-short" in strat %}	    
       {{strat}}
+      {% endif %}
     </td>
     <td>
       <table>
@@ -44,43 +46,7 @@
 			    </td>
 
 			  </form>
-       {% else %}
-			  <form action="/action">
-			    <td>
-			      <label for="fname">pair: </label>
-			      <input type="text" id="pair" name="pair">
-
-			      <label for="fname">usd: </label>
-			      <input type="text" id="usd" name="usd" maxlength="6" size="6">
-
-			      <label for="fname">tp: </label>
-			      <input type="text" id="tp" name="tp" maxlength="4" size="4">
-			      <label for="fname">sl: </label>
-			      <input type="text" id="sl" name="sl" maxlength="4" size="4">
-
-			    </td>
-			    <input type="hidden" name="strategy" value="{{strat}}" />
-			    <td>
-			      <input type="submit" name="action" value="open">
-
-			    </td>
-			    <td>
-			      <input type="submit" name="action" value="close">
-			    </td>
-			  </form>
-		  {% endif %}
-	  {% else %}
-		  <td>{{pair}}</td>
-		  <td>
-        <form action="/action?pair={{pair}}&strategy={{strat}}&action=open&tp={{tp}}&sl={{sl}}" method="post">
-		      <button name="actionBtn" type="submit">Open</button>
-		    </form>
-		  </td>
-		  <td>
-		    <form action="/action?pair={{pair}}&strategy={{strat}}&action=close" method="post">
-		      <button name="actionBtn" type="submit">Close</button>
-		    </form>
-		  </td>
+ 		  {% endif %}
           {% endif %}
 
         </tr>
