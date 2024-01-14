@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+<meta http-equiv="refresh" content="6">
+{% block content %}
+
+<form action="/extras">
+	<label for="fname">pair: </label>
+	<input type="text" id="pair" name="pair" maxlength="9" size="9">
+         <br>
+	 <label for="interval">interval</label>
+	<select name="interval" id="interval">
+	  <option value="1m">1m</option>
+	  <option value="5m">5m</option>
+	  <option value="1h">1h</option>
+	  <option value="4h">4h</option>
+	  <option value="12h">12h</option>
+	</select>
+		<br>
+
+	<label for="fname">action: </label>
+	<select name="action" id="action">
+	  <option value="open">open</option>
+	  <option value="close">close</option>
+	</select>
+	<br>
+	<label for="fname">rule: </label>
+	<textarea id="rule" name="rule" rows="4" cols="50"></textarea>
+	<br>
+	<label for="fname">forward to: </label>
+	<select name="forward_to" id="forward_to">
+	  <option value="test">test</option>
+	  <option value="stag">stag</option>
+	  <option value="prod">prod</option>
+	</select>
+	<br>
+	<input type="submit" name="submit" value="submit">
+</form>
+<hr>
+
+{% endblock %}

@@ -146,6 +146,17 @@ def charts():
 
     return render_template('charts.html', groups=groups)
 
+@APP.route("/extras", methods=['POST', 'GET'])
+@login_required
+def extras():
+    """
+    bla bla bla
+    """
+    if request.method == 'GET':
+        return render_template('extras.html')
+    if request.method == 'POST':
+        req = request.form['submit']
+
 @APP.route("/action", methods=['POST', 'GET'])
 @login_required
 def action():
