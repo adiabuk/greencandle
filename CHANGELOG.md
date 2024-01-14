@@ -1,5 +1,12 @@
 # Releases
 
+# 6.51.3
+* only show combined long/short entries in trade UI
+* BUGFIX:add individual routes for manual trades
+* BUGFIX: no result if exception caught
+* template for extras trade UI
+* confirmation rules for open|close old strategy step2
+
 # 6.51.2
 * don't open trade with >50 stop_loss
 * use f-strings for error logging for slack notifs
