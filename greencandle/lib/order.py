@@ -512,7 +512,7 @@ class Trade():
                             isolated=str2bool(self.config.main.isolated),
                             asset=quote)
                     except BinanceException as binex:
-                        self.logger.error(f"Borrow error-open long {pair}: {str(borrow_res)} while "
+                        self.logger.error(f"Borrow error-open long {pair} while "
                                           f"trying to borrow {amount_to_borrow} {quote}: "
                                           f"{str(binex)}")
                         return False
@@ -909,7 +909,7 @@ class Trade():
                             isolated=str2bool(self.config.main.isolated),
                             asset=base)
                     except BinanceException as binex:
-                        self.logger.error(f"Borrow error-open short {pair}: {str(borrow_res)} "
+                        self.logger.error(f"Borrow error-open short {pair} "
                                           f"while trying to borrow {amount_to_borrow} {base}: "
                                           f"{str(binex)}")
                         return False
