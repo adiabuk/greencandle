@@ -5,6 +5,7 @@
 Loop through extra trade rules in redis and process
 """
 
+import time
 import json
 import requests
 
@@ -12,11 +13,19 @@ from greencandle.lib import config
 from greencandle.lib.redis_conn import Redis, get_float
 from greencandle.lib.common import AttributeDict, arg_decorator
 
-
 @arg_decorator
 def main():
     """
     Retrieve extra trade rules from redis db6 and process
+    run in loop every 5 secs
+    """
+    while True:
+        check_rules()
+        time.sleep(5)
+
+def check_rules():
+    """
+    Loop through available rules
     """
 
     config.create_config()

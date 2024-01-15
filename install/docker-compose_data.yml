@@ -761,7 +761,7 @@ services:
     mem_limit: 2g
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "sleep infinity"
+    entrypoint: /docker-entrypoint.sh "extra_rules"
     logging:
       driver: journald
     links:
