@@ -43,6 +43,8 @@ def check_rules():
 
 
     for pair, interval, action, rule, forward_to in items:
+        if pair not in config.main.pairs.split():
+            continue
         item = redis.get_items(pair, interval)[-1]
         res = []
         raw = redis3.conn.hgetall(f'{pair}:{interval}')
