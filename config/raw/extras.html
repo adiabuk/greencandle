@@ -21,14 +21,11 @@
     <script type = "text/javascript"  src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script type = "text/javascript"  src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
     <script type = "text/javascript"  src="https://cdn.datatables.net/plug-ins/1.10.15/dataRender/datetime.js"></script>
-    <script src="excellentexport.js"></script>
   </head>
   <body>
     <div>
 	    <div class="card-body">
 
-		<a download="data.xls" href="#" onclick="return ExcellentExport.excel(this, 'proxies', 'Excel Data');">Export to Excel</a>
-        <a download="data.csv" href="#" onclick="return ExcellentExport.csv(this, 'proxies');">Export to CSV</a>
         <div style="display: flex;">
 	{% for file in files %}
 	<form method="post">
@@ -39,6 +36,7 @@
         </div>
         <div class="mt-4">
 
+<h2>Add trade rule</h2>
 <form action="/extras" method="post">
 	<label for="fname">pair: </label>
 	<input type="text" id="pair" name="pair" maxlength="9" size="9">
@@ -64,14 +62,16 @@
 	<br>
 	<label for="fname">forward to: </label>
 	<select name="forward_to" id="forward_to">
-	  <option value="test_extra">test</option>
-	  <option value="stag_extra">stag</option>
-	  <option value="prod_extra">prod</option>
+	  <option value="test_extra">test_extra</option>
+	  <option value="stag_extra">stag_extra</option>
+	  <option value="prod_extra">prod_extra</option>
 	</select>
 	<br>
 	<input type="submit" name="submit" value="Add to redis">
 </form>
 <hr>
+{% if data %}
+<h2>Current rules</h2>
 <table id="proxies" class="display table nowrap responsive" style="width: 100%">
 	<thead>
 		<tr>
@@ -84,13 +84,14 @@
 		{% for row in data %}
 		  <tr>
 		    {% for item in row.items() %}
-		      <td>{{ item[-1] }}</td>
+		      <td>{{ item[-1] |safe }}</td>
 		    {% endfor %}
 		  </tr>
 		    {% endfor %}
 
 	</tbody>
 </table>
+{% endif %}
 </div>
       </div>
     </div>

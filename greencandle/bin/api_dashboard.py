@@ -146,17 +146,38 @@ def charts():
 
     return render_template('charts.html', groups=groups)
 
+@APP.route("/xredis", methods=['POST'])
+@login_required
+def xredis():
+    """
+    delete key from redis
+    """
+    redis = Redis(db=6)
+    pair = request.args.get('pair')
+    interval = request.args.get('interval')
+    redis.conn.delete(f'{pair}:{interval}')
+
+    return redirect(url_for('extras'))
+
 @APP.route("/extras", methods=['POST', 'GET'])
 @login_required
 def extras():
     """
-    bla bla bla
+    Form for entring new open|close trade rules
+    and table for displaying current rules stored in redis
     """
+
     redis = Redis(db=6)
     data = []
     keys = redis.conn.keys()
     for key in keys:
-        data.append(json.loads(redis.conn.get(key).decode()))
+        current = json.loads(redis.conn.get(key).decode())
+        pair=current['pair']
+        interval=current['interval']
+        delete_button = (f'<form method=post action=/xredis?pair={pair}&interval={interval}><input '
+                          'type=submit name=save value=delete></form>')
+        current.update({'delete': delete_button})
+        data.append(current)
 
     if request.method == 'POST':
         args = request.form.to_dict(flat=False)
