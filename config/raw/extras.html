@@ -1,8 +1,45 @@
 {% extends "layout.html" %}
 <meta http-equiv="refresh" content="6">
 {% block content %}
+  <head>
+    <!-- Favicon -->
+    <!--link rel="shortcut icon" href="{{url_for('static', filename='images/favicon.ico')}}"-->
 
-<form action="/extras">
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script type = "text/javascript"  src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script type = "text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script type = "text/javascript"  src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Datatable -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+    <script type = "text/javascript"  src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script type = "text/javascript"  src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script type = "text/javascript"  src="https://cdn.datatables.net/plug-ins/1.10.15/dataRender/datetime.js"></script>
+    <script src="excellentexport.js"></script>
+  </head>
+  <body>
+    <div>
+	    <div class="card-body">
+
+		<a download="data.xls" href="#" onclick="return ExcellentExport.excel(this, 'proxies', 'Excel Data');">Export to Excel</a>
+        <a download="data.csv" href="#" onclick="return ExcellentExport.csv(this, 'proxies');">Export to CSV</a>
+        <div style="display: flex;">
+	{% for file in files %}
+	<form method="post">
+		<input type="hidden" name="submit" value="{{file}}" />
+		<button class="btn btn-success mt-2">{{file}}</button>
+	</form>
+	{% endfor %}
+        </div>
+        <div class="mt-4">
+
+<form action="/extras" method="post">
 	<label for="fname">pair: </label>
 	<input type="text" id="pair" name="pair" maxlength="9" size="9">
          <br>
@@ -27,13 +64,42 @@
 	<br>
 	<label for="fname">forward to: </label>
 	<select name="forward_to" id="forward_to">
-	  <option value="test">test</option>
-	  <option value="stag">stag</option>
-	  <option value="prod">prod</option>
+	  <option value="test_extra">test</option>
+	  <option value="stag_extra">stag</option>
+	  <option value="prod_extra">prod</option>
 	</select>
 	<br>
-	<input type="submit" name="submit" value="submit">
+	<input type="submit" name="submit" value="Add to redis">
 </form>
 <hr>
+<table id="proxies" class="display table nowrap responsive" style="width: 100%">
+	<thead>
+		<tr>
+			{% for header in data[0].keys() %}
+			<th>{{header}}</th>
+			{% endfor %}
+		</tr>
+	</thead>
+	<tbody>
+		{% for row in data %}
+		  <tr>
+		    {% for item in row.items() %}
+		      <td>{{ item[-1] }}</td>
+		    {% endfor %}
+		  </tr>
+		    {% endfor %}
+
+	</tbody>
+</table>
+</div>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript">
+    $('#proxies').DataTable( {
+	    "aaSorting": [[ {{ order_column }} ,'desc']]
+    } );
+  </script>
+
 
 {% endblock %}

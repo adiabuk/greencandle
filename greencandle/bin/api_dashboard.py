@@ -152,10 +152,20 @@ def extras():
     """
     bla bla bla
     """
-    if request.method == 'GET':
-        return render_template('extras.html')
+    redis = Redis(db=6)
+    data = []
+    keys = redis.conn.keys()
+    for key in keys:
+        data.append(json.loads(redis.conn.get(key).decode()))
+
     if request.method == 'POST':
-        req = request.form['submit']
+        args = request.form.to_dict(flat=False)
+        args = {key: value[0] for key, value in args.items() if value[0].strip() !=""}
+        args.popitem() #remove submit button
+        redis.conn.set(f"{args['pair']}:{args['interval']}", json.dumps(args))
+
+
+    return render_template('extras.html', data=data)
 
 @APP.route("/action", methods=['POST', 'GET'])
 @login_required

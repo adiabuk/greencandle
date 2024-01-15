@@ -17,6 +17,16 @@ from greencandle.lib import config
 from greencandle.lib.common import add_perc, sub_perc, AttributeDict, \
         perc_diff, convert_to_seconds, get_short_name, TF2MIN, epoch2date
 
+def get_float(var):
+    """
+    try to convert var into float
+    otherwise return unmodified
+    """
+    try:
+        return float(var)
+    except ValueError:
+        return var
+
 class Redis():
     """
     Redis object
@@ -618,17 +628,6 @@ class Redis():
         except Exception:  # hack for unit tests still using pickled zlib objects
             return pickle.loads(zlib.decompress(raw[-1]))
 
-    @staticmethod
-    def get_float(var):
-        """
-        try to convert var into float
-        otherwise return unmodified
-        """
-        try:
-            return float(var)
-        except ValueError:
-            return var
-
     def get_rule_action(self, pair, interval, check_reversal=False):
         """
         get only rule results, without checking tp/sl etc.
@@ -637,7 +636,7 @@ class Redis():
         # fetch latest agg data and make available as AttributeDict
         redis3 = Redis(interval=interval, db=3)
         raw = redis3.conn.hgetall(f'{pair}:{interval}')
-        agg = AttributeDict({k.decode():self.get_float(v.decode()) for k, v in raw.items()})
+        agg = AttributeDict({k.decode():get_float(v.decode()) for k, v in raw.items()})
         del redis3
 
         rules = {'open': [], 'close':[]}

@@ -74,39 +74,43 @@
 "any-man-long": ["any-man-long"],
 "any-man-short": ["any-man-short"],
 
-"any-1m-long" : ["any-1m-long"],
-"any-1m-short" : ["any-1m-short"],
+"any-1m-long": ["any-1m-long"],
+"any-1m-short": ["any-1m-short"],
 "any-1m-long-short": ["any-1m-short", "any-1m-long"],
 
-"any-5m-long" : ["any-5m-long"],
-"any-5m-short" : ["any-5m-short"],
+"any-5m-long": ["any-5m-long"],
+"any-5m-short": ["any-5m-short"],
 "any-5m-long-short": ["any-5m-short", "any-5m-long"],
 
-"any-1h-long" : ["any-1h-long"],
-"any-1h-short" : ["any-1h-short"],
+"any-1h-long": ["any-1h-long"],
+"any-1h-short": ["any-1h-short"],
 "any-1h-long-short": ["any-1h-short", "any-1h-long"],
 
-"any-4h-long" : ["any-4h-long"],
-"any-4h-short" : ["any-4h-short"],
+"any-4h-long": ["any-4h-long"],
+"any-4h-short": ["any-4h-short"],
 "any-4h-long-short": ["any-4h-short", "any-4h-long"],
 
-"any-12h-long" : ["any-12h-long"],
-"any-12h-short" : ["any-12h-short"],
+"any-12h-long": ["any-12h-long"],
+"any-12h-short": ["any-12h-short"],
 "any-12h-long-short": ["any-12h-short", "any-12h-long"],
 
-"any2-1h-long" : ["any2-1h-long"],
-"any2-1h-short" : ["any2-1h-short"],
+"any2-1h-long": ["any2-1h-long"],
+"any2-1h-short": ["any2-1h-short"],
 "any2-1h-long-short": ["any2-1h-short", "any2-1h-long"],
 
-"any2-5m-long" : ["any2-5m-long"],
-"any2-5m-short" : ["any2-5m-short"],
+"any2-5m-long": ["any2-5m-long"],
+"any2-5m-short": ["any2-5m-short"],
 "any2-5m-long-short": ["any2-5m-short", "any2-5m-long"],
 
-"any2-1m-long" : ["any2-1m-long"],
-"any2-1m-short" : ["any2-1m-short"],
+"any2-1m-long": ["any2-1m-long"],
+"any2-1m-short": ["any2-1m-short"],
 "any2-1m-long-short": ["any2-1m-short", "any2-1m-long"],
 
-"alert" : ["alert"],
+"prod_extra": ["prod:any-man-long-short", "alert"],
+"stag_extra": ["stag: any-long-short", "alert"],
+"test_extra" ["test:any2-1m-long-short", "test:any3-1m-long-short", "test:any2-5m-long-short","test:any3-5m-long-short", "alert"],
+
+"alert": ["alert"],
 "route": []
 }
 {{else if eq .base_env "data"}}
@@ -141,21 +145,21 @@
 }
 {{else if eq .base_env "per"}}
 {
-"any-spot-long" : ["per-be-api-any-spot-long"],
-"any-long" : ["per-be-api-any-spot-long", "per-be-api-any-cross-long"],
-"any-short" : ["per-be-api-any-cross-short"],
+"any-spot-long": ["per-be-api-any-spot-long"],
+"any-long": ["per-be-api-any-spot-long", "per-be-api-any-cross-long"],
+"any-short": ["per-be-api-any-cross-short"],
 "any-long-short": ["per-be-api-any-cross-short", "per-be-api-any-spot-long", "per-be-api-any-cross-long"],
 
-"any-cross-long" : ["per-be-api-any-cross-long"],
-"any-cross-short" : ["per-be-api-any-cross-short"],
+"any-cross-long": ["per-be-api-any-cross-long"],
+"any-cross-short": ["per-be-api-any-cross-short"],
 "any-cross-long-short": ["per-be-api-any-cross-short", "per-be-api-any-cross-long"],
 
-"alert" : ["alert"],
+"alert": ["alert"],
 "route": []
 }
 {{else if eq .base_env "alarm"}}
 {
-"alert" : ["alert"],
+"alert": ["alert"],
 "route": []
 }
 {{end}}
