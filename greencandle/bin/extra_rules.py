@@ -91,6 +91,7 @@ def check_rules():
                 requests.post(url, json.dumps(payload), timeout=10,
                               headers={'Content-Type': 'application/json'})
                 print(f"forwarding {pair} {interval} trade to: {forward_to}")
+                redis6.conn.delete(f'{pair}:{interval}')
 
             except requests.exceptions.RequestException:
                 pass
