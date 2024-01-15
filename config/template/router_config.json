@@ -106,10 +106,6 @@
 "any2-1m-short": ["any2-1m-short"],
 "any2-1m-long-short": ["any2-1m-short", "any2-1m-long"],
 
-"prod_extra": ["prod:any-man-long-short", "alert"],
-"stag_extra": ["stag: any-long-short", "alert"],
-"test_extra" ["test:any2-1m-long-short", "test:any3-1m-long-short", "test:any2-5m-long-short","test:any3-5m-long-short", "alert"],
-
 "alert": ["alert"],
 "route": []
 }
@@ -139,6 +135,10 @@
 "5m-2": ["alert"],
 "1m-3": ["alert"],
 "5m-3": ["alert"],
+
+"prod_extra": ["prod:any-man-long-short", "alert"],
+"stag_extra": ["stag: any-long-short", "alert"],
+"test_extra" ["test:any2-1m-long-short", "test:any3-1m-long-short", "test:any2-5m-long-short","test:any3-5m-long-short", "alert"],
 
 "alert": ["alert"],
 "route": []
