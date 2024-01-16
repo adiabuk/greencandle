@@ -1,4 +1,4 @@
-#pylint: disable=no-member,too-many-arguments,broad-except
+#pylint: disable=no-member
 """
 Common functions that don't belong anywhere else
 """
@@ -7,13 +7,10 @@ import os
 import sys
 import datetime
 from decimal import Decimal, InvalidOperation
-import requests
 import yaml
 from babel.numbers import format_currency
 import numpy
 from markupsafe import Markup
-from greencandle.lib import config
-
 
 QUOTES = ("BTC", "USDT", "ETH", "BNB", "GBP")
 
@@ -55,27 +52,6 @@ TF2MIN = {"1s": 1,
           "4h": 240,
           "12h": 720
           }
-
-def send_trade(pair, strategy, trade_action, take=None, stop=None, usd=None):
-    """
-    Create OPEN/CLOSE post request and send to API router
-    """
-    config.create_config()
-    payload = {"pair": pair,
-               "text": f"Manual {trade_action} action from API",
-               "action": trade_action,
-               "strategy": strategy,
-               "manual": True,
-               "tp": take,
-               "sl": stop,
-               "usd": usd}
-
-    api_token = config.web.api_token
-    url = f"http://router:1080/{api_token}"
-    try:
-        requests.post(url, json=payload, timeout=1)
-    except Exception:
-        pass
 
 def get_short_name(name, env, direction):
     """
