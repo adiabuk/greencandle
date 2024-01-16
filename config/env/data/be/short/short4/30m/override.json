@@ -1,0 +1,7 @@
+{
+  "api_forward": "30m-4",
+  "interval": "30m",
+  "name": "data-be-analyse-30m-short4",
+  "redis_expiry_seconds": "1200",
+  "time_between_trades": "15m"
+}
