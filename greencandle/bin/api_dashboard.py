@@ -21,7 +21,7 @@ from greencandle.lib.mysql import Mysql
 from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.binance_accounts import base2quote
 from greencandle.lib.common import (arg_decorator, divide_chunks, get_be_services, list_to_dict,
-                                    perc_diff, get_tv_link, get_trade_link, format_usd)
+                                    perc_diff, get_tv_link, get_trade_link, format_usd, send_trade)
 from greencandle.lib import config
 from greencandle.lib.flask_auth import load_user, login as loginx, logout as logoutx
 
@@ -219,26 +219,6 @@ def action():
     if close:
         return '<button type="button" onclick="window.close()">Close Tab</button>'
     return redirect(url_for('trade'))
-
-def send_trade(pair, strategy, trade_action, take=None, stop=None, usd=None):
-    """
-    Create OPEN/CLOSE post request and send to API router
-    """
-    payload = {"pair": pair,
-               "text": f"Manual {trade_action} action from API",
-               "action": trade_action,
-               "strategy": strategy,
-               "manual": True,
-               "tp": take,
-               "sl": stop,
-               "usd": usd}
-
-    api_token = config.web.api_token
-    url = f"http://router:1080/{api_token}"
-    try:
-        requests.post(url, json=payload, timeout=1)
-    except:
-        pass
 
 @APP.route('/trade', methods=["GET"])
 @login_required
