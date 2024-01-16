@@ -42,7 +42,7 @@ def check_rules():
         items.append(list(json.loads(redis6.conn.get(key).decode()).values()))
 
 
-    for pair, interval, action, rule, forward_to in items:
+    for pair, interval, action, usd, take, stop, rule, forward_to in items:
         if pair not in config.main.pairs.split():
             continue
         item = redis.get_items(pair, interval)[-1]
@@ -61,7 +61,7 @@ def check_rules():
             items = redis.get_items(pair=pair, interval=interval)
             _ = items[-5]
         except (ValueError, IndexError) as err:
-            print("Not enough data for %s: %s", pair, err)
+            print("Not enough data  for %s: %s", pair, err)
             print('HOLD', 'Not enough data', 0, 0, {'open':[], 'close':[]})
 
         for i in range(-1, -6, -1):
@@ -85,6 +85,9 @@ def check_rules():
                        "action": str(action),
                        "env": config.main.name,
                        "price": -1,
+                       "usd": usd,
+                       "tp": take,
+                       "sl": stop,
                        "strategy": forward_to}
 
             try:
