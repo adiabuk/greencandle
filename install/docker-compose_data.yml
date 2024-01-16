@@ -79,7 +79,7 @@ services:
       timeout: 30s
       retries: 5
     ports:
-      - 5005:5000
+      - 5007:5000
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws
@@ -119,7 +119,6 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-
   data-fe-stream_15m:
     container_name: data-fe-stream_15m
     hostname: data-fe-stream_15m
@@ -147,7 +146,7 @@ services:
       timeout: 30s
       retries: 5
     ports:
-      - 5005:5000
+      - 5006:5000
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws
@@ -186,7 +185,6 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/:/var/run
-
 
   data-fe-stream_4h:
     container_name: data-fe-stream_4h
