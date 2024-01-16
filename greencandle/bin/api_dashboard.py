@@ -170,6 +170,10 @@ def extras():
     redis = Redis(db=6)
     data = []
     keys = redis.conn.keys()
+    with open('/etc/router_config.json', 'r') as json_file:
+        router_config = json.load(json_file)
+    routes = [x for x in router_config.keys() if 'extra' in x]
+
     for key in keys:
         current = json.loads(redis.conn.get(key).decode())
         pair=current['pair']
@@ -186,7 +190,7 @@ def extras():
         redis.conn.set(f"{args['pair']}:{args['interval']}", json.dumps(args))
 
 
-    return render_template('extras.html', data=data)
+    return render_template('extras.html', data=data, routes=routes)
 
 @APP.route("/action", methods=['POST', 'GET'])
 @login_required

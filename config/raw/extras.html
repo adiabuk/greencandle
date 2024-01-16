@@ -71,9 +71,9 @@
 	<br>
 	<label for="fname">forward to: </label>
 	<select name="forward_to" id="forward_to">
-	  <option value="test_extra">test_extra</option>
-	  <option value="stag_extra">stag_extra</option>
-	  <option value="prod_extra">prod_extra</option>
+    {% for item in routes %}
+    <option value="{{item}}">{{item}}</option>
+    {% endfor %}
 	</select>
 	<br>
 	<input type="submit" name="submit" value="Add to redis">
