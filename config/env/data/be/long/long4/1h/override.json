@@ -3,5 +3,8 @@
   "interval": "1h",
   "name": "data-be-analyse-1h-long4",
   "redis_expiry_seconds": "40000",
-  "time_between_trades": "3h"
+  "time_between_trades": "3h",
+  "slack_alerts": "data_old_1h",
+  "slack_balance": "data_old_1h",
+  "slack_notifications": "data_old_1h"
 }
