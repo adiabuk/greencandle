@@ -188,7 +188,12 @@ def extras():
         args = request.form.to_dict(flat=False)
         args = {key: value[0] for key, value in args.items() if value[0].strip() !=""}
         args.popitem() #remove submit button
-        redis.conn.set(f"{args['pair']}:{args['interval']}", json.dumps(args))
+        args = defaultdict(str, args)  # enforce field with empty string if not present
+
+        fields = ['pair', 'interval', 'action', 'usd', 'tp', 'sl', 'rule', 'forward_to']
+        data_str = json.dumps({x:args[x] for x in fields})
+
+        redis.conn.set(f"{args['pair']}:{args['interval']}", data_str)
         time.sleep(2)
         return redirect(url_for('extras'))
 
@@ -213,7 +218,6 @@ def action():
     pair = request.args.get('pair')
     strategy = request.args.get('strategy')
     trade_action = int_action[request.args.get('action')]
-    close = request.args.get('close')
     take = request.args.get('tp') if 'tp' in request.args else None
     stop = request.args.get('sl') if 'sl' in request.args else None
     usd = request.args.get('usd') if 'usd' in request.args else None
