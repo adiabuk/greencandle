@@ -1,9 +1,9 @@
 {
   "api_forward": "1h-4",
-  "close_rule1": "int(res.STOCHRSI_8[0]) \u003c int(res.STOCHRSI_8[1])",
+  "close_rule1": "int(res[0].STOCHRSI_8[0]) \u003c int(res[0].STOCHRSI_8[1])",
   "interval": "1h",
   "name": "data-be-analyse-1h-long4",
-  "open_rule1": "int(res.STOCHRSI_8[0]) \u003e int(res.STOCHRSI_8[1])",
+  "open_rule1": "int(res[0].STOCHRSI_8[0]) \u003e int(res[0].STOCHRSI_8[1])",
   "redis_expiry_seconds": "40000",
   "slack_alerts": "data_old_1h",
   "slack_balance": "data_old_1h",
