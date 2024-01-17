@@ -1,5 +1,12 @@
 # Releases
 
+# 6.52.1
+* add missing 15m|30m config in data|test envs
+* allow extras to be routed to alert
+* ensure all fields are present in redis
+* allow for additional open|close rule in config
+* add new intervals to extras UI
+
 # 6.52
 * dont open new window when closing trade online
 * remove all 12h containers and introduce 15m|30m
