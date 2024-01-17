@@ -146,6 +146,11 @@
       "is_binary": false,
       "is_secret": false
     },
+    "close_rule5": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
     "db_database": {
       "value": "greencandle",
       "is_binary": false,
@@ -287,6 +292,11 @@
       "is_secret": false
     },
     "open_rule4": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "open_rule5": {
       "value": "",
       "is_binary": false,
       "is_secret": false

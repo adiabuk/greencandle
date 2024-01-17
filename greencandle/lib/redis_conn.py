@@ -666,7 +666,7 @@ class Redis():
             datax.update(ohlc)
             res.append(datax)
 
-        for seq in range(1, 5):
+        for seq in range(1, 6):
             current_config = None
             for rule in "open", "close":
                 try:
