@@ -1,5 +1,16 @@
 # Releases
 
+# 6.52
+* dont open new window when closing trade online
+* remove all 12h containers and introduce 15m|30m
+* add tpsl and usd amt to payload before forwarding
+* pass routes from router_config to ui
+* split prod long|short extra strategies
+* missing data long3 container
+* add ability to remove existing trade rule from redis (db6)
+* check extra rules in new single container and delete rule after match
+* extras UI fofor adding ad-hoc open|close triggers for any env
+
 # 6.51.3
 * only show combined long/short entries in trade UI
 * BUGFIX:add individual routes for manual trades
