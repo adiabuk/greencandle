@@ -1957,7 +1957,8 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long4/15m
-      - REDIS_FORWARD=5
+      - CHECK_REDIS_PAIR=5
+      - ROUTER_FORWARD=True
       - DB=true
       - NSCA=True
     healthcheck:
@@ -1993,7 +1994,8 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short4/15m
-      - REDIS_FORWARD=5
+      - CHECK_REDIS_PAIR=5
+      - ROUTER_FORWARD=True
       - DB=true
       - NSCA=True
     healthcheck:
@@ -2029,7 +2031,8 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long4/30m
-      - REDIS_FORWARD=5
+      - CHECK_REDIS_PAIR=5
+      - ROUTER_FORWARD=True
       - DB=true
       - NSCA=True
     healthcheck:
@@ -2065,9 +2068,10 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short4/30m
-      - REDIS_FORWARD=5
       - DB=true
       - NSCA=True
+      - CHECK_REDIS_PAIR=5
+      - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
       start_period: 30m
@@ -2209,8 +2213,8 @@ services:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short4/1m
       - DB=true
-      - CHECK_REDIS_PAIR=5
       - STORE_IN_DB=True
+      - CHECK_REDIS_PAIR=5
       - ROUTER_FORWARD=True
       - NSCA=True
     healthcheck:
