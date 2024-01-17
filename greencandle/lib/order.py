@@ -7,6 +7,7 @@ from collections import defaultdict
 import datetime
 import time
 import re
+import os
 from pathlib import Path
 from str2bool import str2bool
 from send_nsca3 import send_nsca
@@ -429,8 +430,8 @@ class Trade():
         # cover max, where loan is available
         loan_to_use = {'symbol': 0, 'usd': 0, 'symbol_name': balance_to_use['symbol_name']}
 
-        # if we have 3x balance available then use that rather than loan
-        if (balance_to_use['usd'] * 3) > total_max:
+        # if we have 3x balance or USE_BALANCE flag set then use balance rather than loan
+        if (balance_to_use['usd'] * 3) > total_max or 'USE_BALANCE' in os.environ:
             balance_to_use['usd'] = total_max
             if balance_to_use['symbol_name'] == 'USDT':
                 balance_to_use['symbol'] = balance_to_use['usd']

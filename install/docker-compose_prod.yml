@@ -1015,6 +1015,7 @@ services:
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/man/cross-long
       - DB=true
+      - USE_BALANCE=true
     ports:
       - 20000
     links:
@@ -1050,6 +1051,7 @@ services:
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/man/cross-short
       - DB=true
+      - USE_BALANCE=true
     ports:
       - 20000
     links:
