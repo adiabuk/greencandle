@@ -1,5 +1,10 @@
 # Releases
 
+# 6.52.2
+* don't repay prod loans periodically
+* fix html values in extras UI
+* use correct redis/routing vars for new analyse containers
+
 # 6.52.1
 * add missing 15m|30m config in data|test envs
 * allow extras to be routed to alert
