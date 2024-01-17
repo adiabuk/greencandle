@@ -173,7 +173,7 @@ def extras():
     keys = redis.conn.keys()
     with open('/etc/router_config.json', 'r') as json_file:
         router_config = json.load(json_file)
-    routes = [x for x in router_config.keys() if 'extra' in x]
+    routes = [x for x in router_config.keys() if ('extra' in x or 'alert' in x)]
 
     for key in keys:
         current = json.loads(redis.conn.get(key).decode())
