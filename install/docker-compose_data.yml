@@ -36,7 +36,9 @@ services:
       - SECRET_KEY=$SECRET_KEY
     entrypoint: /docker-entrypoint.sh logtailer
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
@@ -61,7 +63,9 @@ services:
     restart: on-failure
     entrypoint: /docker-entrypoint.sh stream_data
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
@@ -96,7 +100,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
@@ -128,7 +134,9 @@ services:
     restart: on-failure
     entrypoint: /docker-entrypoint.sh stream_data
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
@@ -163,7 +171,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
@@ -195,7 +205,9 @@ services:
     restart: on-failure
     entrypoint: /docker-entrypoint.sh stream_data
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
@@ -231,7 +243,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
@@ -263,7 +277,9 @@ services:
     restart: on-failure
     entrypoint: /docker-entrypoint.sh stream_data
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
@@ -299,7 +315,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
@@ -331,7 +349,9 @@ services:
     restart: on-failure
     entrypoint: /docker-entrypoint.sh stream_data
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
@@ -367,7 +387,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
@@ -399,7 +421,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
@@ -431,7 +455,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
@@ -463,7 +489,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
@@ -495,7 +523,9 @@ services:
     restart: on-failure
     entrypoint: /docker-entrypoint.sh stream_data
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
@@ -531,7 +561,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
@@ -567,7 +599,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "tail -f /dev/null"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
@@ -697,7 +731,9 @@ services:
       - CONFIG_ENV=data
       - SECRET_KEY=$SECRET_KEY
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     image: amrox/greencandle:${TAG}
     mem_limit: 200m
     pull_policy: always
@@ -763,7 +799,9 @@ services:
       - CONFIG_ENV=data
       - SECRET_KEY=$SECRET_KEY
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     image: amrox/greencandle:${TAG}
     mem_limit: 200m
     pull_policy: always
@@ -792,7 +830,9 @@ services:
       - DB=true
       - SECRET_KEY=$SECRET_KEY
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     image: amrox/greencandle:${TAG}
     mem_limit: 600m
     pull_policy: always
@@ -830,7 +870,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "extra_rules"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -864,7 +906,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -900,7 +944,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -936,7 +982,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -971,7 +1019,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -1006,7 +1056,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -1041,7 +1093,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -1076,7 +1130,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -1111,7 +1167,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -1146,7 +1204,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -1184,7 +1244,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -1222,7 +1284,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -1259,7 +1323,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -1296,7 +1362,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -1333,7 +1401,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -1370,7 +1440,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -1407,7 +1479,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -1444,7 +1518,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -1480,7 +1556,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -1516,7 +1594,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -1552,7 +1632,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -1588,7 +1670,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -1624,7 +1708,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -1659,7 +1745,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -1695,7 +1783,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -1730,7 +1820,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -1766,7 +1858,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -1801,7 +1895,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -1837,7 +1933,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -1873,7 +1971,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -1909,7 +2009,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -1945,7 +2047,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -1982,7 +2086,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -2019,7 +2125,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -2056,7 +2164,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -2093,7 +2203,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -2129,7 +2241,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -2165,7 +2279,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -2200,7 +2316,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -2238,7 +2356,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -2276,7 +2396,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -2313,7 +2435,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -2350,7 +2474,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -2387,7 +2513,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -2424,7 +2552,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
@@ -2461,7 +2591,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local3
     links:
       - data-be-api-router:router
       - data-base-mysql:mysql
