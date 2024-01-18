@@ -35,7 +35,9 @@ services:
       - SECRET_KEY=$SECRET_KEY
     entrypoint: /docker-entrypoint.sh logtailer
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local4
     ports:
       - 2000
     links:
@@ -112,7 +114,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "tail -f /dev/null"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local4
     links:
       - prod-base-mysql:mysql
       - prod-base-redis:redis
@@ -147,7 +151,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "cron -f"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local4
     links:
       - prod-base-mysql:mysql
       - prod-base-redis:redis
@@ -207,7 +213,9 @@ services:
       - CONFIG_ENV=prod/fe/api
       - SECRET_KEY=$SECRET_KEY
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local4
     image: amrox/greencandle:${TAG}
     mem_limit: 200m
     pull_policy: always
@@ -240,7 +248,9 @@ services:
       - CONFIG_ENV=prod/fe/api
       - SECRET_KEY=$SECRET_KEY
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local4
     image: amrox/greencandle:${TAG}
     mem_limit: 200m
     pull_policy: always
@@ -269,7 +279,9 @@ services:
       - DB=true
       - SECRET_KEY=$SECRET_KEY
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local4
     image: amrox/greencandle:${TAG}
     mem_limit: 600m
     pull_policy: always
@@ -361,7 +373,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local4
     environment:
       - VPN_IP=$VPN_IP
       - intermittent="true"
@@ -397,7 +411,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local4
     environment:
       - VPN_IP=$VPN_IP
       - intermittent="true"
@@ -433,7 +449,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local4
     environment:
       - VPN_IP=$VPN_IP
       - intermittent="true"
@@ -469,7 +487,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local4
     environment:
       - VPN_IP=$VPN_IP
       - intermittent="true"
@@ -505,7 +525,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local4
     environment:
       - VPN_IP=$VPN_IP
       - intermittent="true"
@@ -541,7 +563,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local4
     environment:
       - VPN_IP=$VPN_IP
       - intermittent="true"
@@ -577,7 +601,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local4
     environment:
       - VPN_IP=$VPN_IP
       - intermittent="true"
@@ -613,7 +639,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local4
     environment:
       - VPN_IP=$VPN_IP
       - intermittent="true"
@@ -649,7 +677,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local4
     environment:
       - VPN_IP=$VPN_IP
       - intermittent="true"
@@ -685,7 +715,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local4
     environment:
       - VPN_IP=$VPN_IP
       - intermittent="true"
@@ -721,7 +753,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local4
     environment:
       - VPN_IP=$VPN_IP
       - intermittent="true"
@@ -757,7 +791,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local4
     environment:
       - VPN_IP=$VPN_IP
       - intermittent="true"
@@ -793,7 +829,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local4
     environment:
       - VPN_IP=$VPN_IP
       - intermittent="true"
@@ -829,7 +867,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local4
     environment:
       - VPN_IP=$VPN_IP
       - intermittent="true"
@@ -865,7 +905,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "touch /var/local/borrow_drain; backend_api api & backend_api queue"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local4
     environment:
       - VPN_IP=$VPN_IP
       - intermittent="true"
@@ -900,7 +942,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "touch /var/local/borrow_drain; backend_api api & backend_api queue"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local4
     environment:
       - VPN_IP=$VPN_IP
       - intermittent="true"
@@ -935,7 +979,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "touch /var/local/borrow_drain; backend_api api & backend_api queue"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local4
     environment:
       - VPN_IP=$VPN_IP
       - intermittent="true"
@@ -971,7 +1017,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "touch /var/local/borrow_drain; backend_api api & backend_api queue"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local4
     environment:
       - VPN_IP=$VPN_IP
       - intermittent="true"
