@@ -34,7 +34,9 @@ services:
       - SECRET_KEY=$SECRET_KEY
     entrypoint: /docker-entrypoint.sh logtailer
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local5
     ports:
       - 2000
     links:
@@ -107,7 +109,9 @@ services:
       - DB=true
       - SECRET_KEY=$SECRET_KEY
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local5
     image: amrox/greencandle:${TAG}
     mem_limit: 600m
     pull_policy: always
@@ -149,7 +153,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "tail -f /dev/null"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local5
     links:
       - stag-base-mysql:mysql
       - stag-base-redis:redis
@@ -184,7 +190,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "cron -f"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local5
     links:
       - stag-base-mysql:mysql
       - stag-base-redis:redis
@@ -244,7 +252,9 @@ services:
       - CONFIG_ENV=stag/fe/api
       - SECRET_KEY=$SECRET_KEY
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local5
     image: amrox/greencandle:${TAG}
     mem_limit: 200m
     pull_policy: always
@@ -277,7 +287,9 @@ services:
       - CONFIG_ENV=stag/fe/api
       - SECRET_KEY=$SECRET_KEY
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local5
     image: amrox/greencandle:${TAG}
     mem_limit: 200m
     pull_policy: always
@@ -340,7 +352,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local5
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=stag/be/any/long
@@ -376,7 +390,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local5
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=stag/be/any/short
