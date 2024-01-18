@@ -35,6 +35,7 @@ services:
     entrypoint: /docker-entrypoint.sh logtailer
     logging:
       driver: syslog
+      syslog-facility: local2
     links:
       - test-base-mysql:mysql
       - test-base-redis:redis
@@ -103,6 +104,7 @@ services:
       - SECRET_KEY=$SECRET_KEY
     logging:
       driver: syslog
+      syslog-facility: local2
     image: amrox/greencandle:${TAG}
     mem_limit: 200m
     pull_policy: always
@@ -132,6 +134,7 @@ services:
       - SECRET_KEY=$SECRET_KEY
     logging:
       driver: syslog
+      syslog-facility: local2
     image: amrox/greencandle:${TAG}
     mem_limit: 600m
     pull_policy: always
@@ -168,6 +171,7 @@ services:
       - SECRET_KEY=$SECRET_KEY
     logging:
       driver: syslog
+      syslog-facility: local2
     image: amrox/greencandle:${TAG}
     mem_limit: 200m
     pull_policy: always
@@ -207,6 +211,7 @@ services:
     entrypoint: /docker-entrypoint.sh "tail -f /dev/null"
     logging:
       driver: syslog
+      syslog-facility: local2
     links:
       - test-base-mysql:mysql
       - test-base-redis:redis
@@ -243,6 +248,7 @@ services:
     entrypoint: /docker-entrypoint.sh "cron -f"
     logging:
       driver: syslog
+      syslog-facility: local2
     links:
       - test-base-mysql:mysql
       - test-base-redis:redis
@@ -364,6 +370,7 @@ services:
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
       driver: syslog
+      syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/1m
@@ -403,6 +410,7 @@ services:
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
       driver: syslog
+      syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/1m
@@ -442,6 +450,7 @@ services:
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
       driver: syslog
+      syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/5m
@@ -481,6 +490,7 @@ services:
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
       driver: syslog
+      syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/5m
@@ -520,6 +530,7 @@ services:
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
       driver: syslog
+      syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/1h
@@ -559,6 +570,7 @@ services:
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
       driver: syslog
+      syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/1h
@@ -598,6 +610,7 @@ services:
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
       driver: syslog
+      syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/2/30m
@@ -637,6 +650,7 @@ services:
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
       driver: syslog
+      syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/2/30m
@@ -676,6 +690,7 @@ services:
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
       driver: syslog
+      syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/2/15m
@@ -715,6 +730,7 @@ services:
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
       driver: syslog
+      syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/2/15m
@@ -754,6 +770,7 @@ services:
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
       driver: syslog
+      syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/2/4h
@@ -793,6 +810,7 @@ services:
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
       driver: syslog
+      syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/2/4h
@@ -832,6 +850,7 @@ services:
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
       driver: syslog
+      syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/2/1h
@@ -871,6 +890,7 @@ services:
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
       driver: syslog
+      syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/2/1h
@@ -910,6 +930,7 @@ services:
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
       driver: syslog
+      syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/2/1m
@@ -949,6 +970,7 @@ services:
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
       driver: syslog
+      syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/2/1m
@@ -988,6 +1010,7 @@ services:
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
       driver: syslog
+      syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/2/5m
@@ -1027,6 +1050,7 @@ services:
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
       driver: syslog
+      syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/2/5m
@@ -1066,6 +1090,7 @@ services:
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
       driver: syslog
+      syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/3/4h
@@ -1105,6 +1130,7 @@ services:
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
       driver: syslog
+      syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/3/4h
@@ -1144,6 +1170,7 @@ services:
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
       driver: syslog
+      syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/3/1h
@@ -1183,6 +1210,7 @@ services:
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
       driver: syslog
+      syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/3/1h
@@ -1222,6 +1250,7 @@ services:
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
       driver: syslog
+      syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/3/1m
@@ -1261,6 +1290,7 @@ services:
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
       driver: syslog
+      syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/3/1m
@@ -1300,6 +1330,7 @@ services:
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
       driver: syslog
+      syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/3/5m
@@ -1339,6 +1370,7 @@ services:
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
       driver: syslog
+      syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/3/5m
