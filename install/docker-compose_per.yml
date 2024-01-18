@@ -36,7 +36,9 @@ services:
       - SECRET_KEY=$SECRET_KEY
     entrypoint: /docker-entrypoint.sh logtailer
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local6
     ports:
       - 2000
     links:
@@ -113,7 +115,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "tail -f /dev/null"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local6
     links:
       - per-base-mysql:mysql
       - per-base-redis:redis
@@ -148,7 +152,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "cron -f"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local6
     links:
       - per-base-mysql:mysql
       - per-base-redis:redis
@@ -208,7 +214,9 @@ services:
       - CONFIG_ENV=per/fe/api
       - SECRET_KEY=$SECRET_KEY
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local6
     image: amrox/greencandle:${TAG}
     mem_limit: 200m
     pull_policy: always
@@ -241,7 +249,9 @@ services:
       - CONFIG_ENV=per/fe/api
       - SECRET_KEY=$SECRET_KEY
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local6
     image: amrox/greencandle:${TAG}
     mem_limit: 200m
     pull_policy: always
@@ -270,7 +280,9 @@ services:
       - DB=true
       - SECRET_KEY=$SECRET_KEY
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local6
     image: amrox/greencandle:${TAG}
     mem_limit: 600m
     pull_policy: always
@@ -347,7 +359,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local6
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=per/be/any/spot-long
@@ -382,7 +396,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local6
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=per/be/any/cross-long
@@ -417,7 +433,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local6
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=per/be/any/cross-short
