@@ -34,7 +34,9 @@ services:
       - SECRET_KEY=$SECRET_KEY
     entrypoint: /docker-entrypoint.sh logtailer
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     links:
       - test-base-mysql:mysql
       - test-base-redis:redis
@@ -102,7 +104,9 @@ services:
       - CONFIG_ENV=test/fe/api
       - SECRET_KEY=$SECRET_KEY
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     image: amrox/greencandle:${TAG}
     mem_limit: 200m
     pull_policy: always
@@ -131,7 +135,9 @@ services:
       - DB=true
       - SECRET_KEY=$SECRET_KEY
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     image: amrox/greencandle:${TAG}
     mem_limit: 600m
     pull_policy: always
@@ -167,7 +173,9 @@ services:
       - CONFIG_ENV=test/fe/api
       - SECRET_KEY=$SECRET_KEY
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     image: amrox/greencandle:${TAG}
     mem_limit: 200m
     pull_policy: always
@@ -206,7 +214,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "tail -f /dev/null"
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     links:
       - test-base-mysql:mysql
       - test-base-redis:redis
@@ -242,7 +252,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "cron -f"
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     links:
       - test-base-mysql:mysql
       - test-base-redis:redis
@@ -363,7 +375,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/1m
@@ -402,7 +416,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/1m
@@ -441,7 +457,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/5m
@@ -480,7 +498,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/5m
@@ -519,7 +539,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/1h
@@ -558,7 +580,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/1h
@@ -597,7 +621,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/2/30m
@@ -636,7 +662,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/2/30m
@@ -675,7 +703,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/2/15m
@@ -714,7 +744,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/2/15m
@@ -753,7 +785,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/2/4h
@@ -792,7 +826,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/2/4h
@@ -831,7 +867,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/2/1h
@@ -870,7 +908,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/2/1h
@@ -909,7 +949,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/2/1m
@@ -948,7 +990,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/2/1m
@@ -987,7 +1031,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/2/5m
@@ -1026,7 +1072,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/2/5m
@@ -1065,7 +1113,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/3/4h
@@ -1104,7 +1154,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/3/4h
@@ -1143,7 +1195,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/3/1h
@@ -1182,7 +1236,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/3/1h
@@ -1221,7 +1277,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/3/1m
@@ -1260,7 +1318,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/3/1m
@@ -1299,7 +1359,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/3/5m
@@ -1338,7 +1400,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
-      driver: journald
+      driver: fluentd
+      options:
+        tag: gc
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/3/5m
