@@ -9,6 +9,7 @@ import os
 import json
 import time
 import subprocess
+import logging
 from collections import defaultdict
 from datetime import timedelta
 import requests
@@ -493,6 +494,7 @@ def main():
         scheduler.add_job(func=get_balance, trigger="interval", minutes=10)
         scheduler.add_job(func=get_live, trigger="interval", minutes=2)
         get_balance()
+        logging.getLogger('apscheduler.executors.default').propagate = False
         scheduler.start() # Start Scheduler
     APP.run(debug=False, host='0.0.0.0', port=5000, threaded=True)
 

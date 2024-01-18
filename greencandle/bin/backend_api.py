@@ -7,6 +7,7 @@ API trading module
 import os
 import sys
 import atexit
+import logging
 from flask import Flask, request, Response
 from apscheduler.schedulers.background import BackgroundScheduler
 from rq import Queue, Worker
@@ -77,10 +78,10 @@ def main():
             scheduler = BackgroundScheduler()
             scheduler.add_job(func=intermittent_check, trigger="interval", seconds=60)
             scheduler.start()
+            logging.getLogger('apscheduler.executors.default').propagate = False
         APP.run(debug=False, host='0.0.0.0', port=20000, threaded=True)
     else:
         consume_queue()
-
 
     if "intermittent" in os.environ and sys.argv[-1] == 'api':
         # Shut down the scheduler when exiting the app
