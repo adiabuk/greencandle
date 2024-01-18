@@ -1,5 +1,16 @@
 # Releases
 
+# 6.53
+* Use syslog facilities for separating env logs
+* reduce slack notifications
+* increase interval between scheduled task runs
+* remove 12h config & prod containers
+* 5th open rule for bb touch upper|lower
+* use stochrsi for 1h data old strategy
+* separate 1h notifs into separate slack channel
+* use balance for margin manual prod trades
+* add another missing 15m test config dir
+
 # 6.52.2
 * don't repay prod loans periodically
 * fix html values in extras UI
