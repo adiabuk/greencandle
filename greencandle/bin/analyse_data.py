@@ -120,7 +120,7 @@ def get_match_name(matches):
 
     name_lookup = [['distance', 'bb', 'bbperc_diff', 'bbperc_extreme'], # new
                    ['atrp_change'], # new
-                   ['old_distance', 'old_bb', "old_bbperc_diff", "old_bbperc_extreme"], # old
+                   ['old_distance', 'old_bb', "old_bbperc_diff", "old_bbperc_extreme", bb_touch"],
                    [],
                    ['MACD_slowdown'], # current
                    ['MACD'] # new step2
@@ -152,7 +152,7 @@ def analyse_pair(pair, reversal, expire, redis):
         event = reversal
 
         if result in ('OPEN', 'CLOSE'):
-            LOGGER.info("Trades to %s for pair %s", result.lower(), pair)
+            LOGGER.debug("Trades to %s for pair %s", result.lower(), pair)
             now = datetime.now()
             items = redis.get_items(pair, INTERVAL)
             data = redis.get_item(f"{pair}:{INTERVAL}", items[-1]).decode()
@@ -249,7 +249,7 @@ def analyse_pair(pair, reversal, expire, redis):
                         redis4.conn.sadd(f'{INTERVAL}:{DIRECTION}', f'{pair}:normal:{now}')
                     del redis4
 
-            LOGGER.info("Trade alert: %s %s %s %s (%s)",result, pair, INTERVAL,
+            LOGGER.info("Trade alert: %s %s %s %s %s (%s)",result, pair, match_strs, INTERVAL,
                         DIRECTION, supported.strip())
     except Exception as err_msg:
         LOGGER.critical("Error with pair %s %s", pair, str(err_msg))
