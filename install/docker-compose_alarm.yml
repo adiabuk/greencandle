@@ -1,29 +1,15 @@
 version: "3.1"
 services:
-
-  gen-fe-cadvisor:
-    container_name: gen-fe-cadvisor
-    hostname: gen-fe-cadvisor
-    image: gcr.io/google_containers/cadvisor:v0.35.0
-    restart: always
-    volumes:
-      - /:/rootfs
-      - /var/run:/var/run
-      - /sys:/sys
-      - /var/lib/docker:/var/lib/docker
-      - /dev/disk:/dev/disk
-    healthcheck:
-      test: "printf 'GET /healthz HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc localhost 8080"
-      interval: 5m
-      timeout: 10s
-      retries: 5
-
   alarm-base-redis:
     container_name: alarm-base-redis
     hostname: alarm-base-redis
     image: amrox/gc-redis:${TAG}
     pull_policy: always
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local7
     links:
       - alarm-base-mysql:mysql
     ports:
@@ -43,6 +29,10 @@ services:
     hostname: alarm-base-mysql
     image: amrox/gc-mysql:${TAG}
     entrypoint: /docker-entrypoint.sh "--max-connections=5000"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local7
     pull_policy: always
     environment:
       - CONFIG_ENV=alarm
@@ -67,6 +57,10 @@ services:
     image: amrox/greencandle:${TAG}
     pull_policy: always
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local7
     healthcheck:
       test: curl -Isf http://127.1:1080/healthcheck
       interval: 5m
@@ -100,7 +94,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "python -u /srv/alert/webhook.py"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local7
     ports:
       - 20000:20000
     healthcheck:
