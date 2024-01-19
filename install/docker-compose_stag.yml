@@ -48,7 +48,7 @@ services:
       timeout: 10s
       retries: 5
     volumes:
-      - /var/log/greencandle.log:/var/log/greencandle.log
+      - /var/log/gc_stag.log:/var/log/greencandle.log
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run:/var/run
