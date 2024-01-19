@@ -1,5 +1,10 @@
 # Releases
 
+# 6.53.1
+* add volumes for new per-env log files - all envs
+* BUGFIX: avoid 302 for logtailer as it adds port to url
+* BUGFIX: use adjusted amount for short trade when no loan used
+
 # 6.53
 * Use syslog facilities for separating env logs
 * reduce slack notifications
