@@ -178,8 +178,9 @@ def extras():
 
     for key in keys:
         current = json.loads(redis.conn.get(key).decode())
+        pair = current['pair']
         interval=current['interval']
-        pair = get_tv_link(current['pair'], interval, anchor=True)
+        current['pair'] = get_tv_link(pair, interval, anchor=True)
 
         delete_button = (f'<form method=post action=/xredis?pair={pair}&interval={interval}><input '
                           'type=submit name=save value=delete></form>')
