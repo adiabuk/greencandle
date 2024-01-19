@@ -5,8 +5,8 @@
   "name": "data-be-analyse-1h-short4",
   "open_rule1": "int(res[0].STOCHRSI_8[1]) \u003e int(res[0].STOCHRSI_8[0])",
   "redis_expiry_seconds": "40000",
-  "slack_alerts": "data_old_1h",
-  "slack_balance": "data_old_1h",
-  "slack_notifications": "data_old_1h",
+  "slack_alerts": "",
+  "slack_balance": "",
+  "slack_notifications": "",
   "time_between_trades": "3h"
 }
