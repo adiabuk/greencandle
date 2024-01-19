@@ -31,7 +31,7 @@ $COMPOSE pull
 base=$(yq r install/docker-compose_${env}.yml services | grep -v '^ .*' | sed 's/:.*$//'|grep 'base')
 
 be=$(yq r install/docker-compose_${env}.yml services | grep -v '^ .*' | sed 's/:.*$//'|grep 'be')
-fe=$(yq r install/docker-compose_${env}.yml services | grep -v '^ .*' | sed 's/:.*$//'|grep 'fe')
+fe=$(yq r install/docker-compose_${env}.yml services | grep -v '^ .*' | sed 's/:.*$//'|grep 'fe')  || true
 all_be=$(docker ps | grep ${env}.*be |awk {'print $NF'}) || true
 all_fe=$(docker ps | grep ${env}.*fe |awk {'print $NF'} | grep -v stream) || true
 
