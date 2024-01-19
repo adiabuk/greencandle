@@ -33,8 +33,6 @@ def check_rules():
     redis3 = Redis(db=3)
     redis6 = Redis(db=6)
 
-    # pair, interval, action, rule, forward_to
-
     items = []
 
     keys = redis6.conn.keys()
