@@ -11,7 +11,7 @@ import time
 import subprocess
 import logging
 from collections import defaultdict
-from datetime import timedelta
+from datetime import timedelta, datetime
 import requests
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, render_template, request, Response, redirect, url_for, session, g
@@ -183,7 +183,7 @@ def extras():
         delete_button = (f'<form method=post action=/xredis?pair={pair}&interval={interval}><input '
                           'type=submit name=save value=delete></form>')
         current.update({'delete': delete_button})
-        add_time(datetime.datetime.fromtimestamp(int(key)).strftime('%c'))
+        add_time = datetime.fromtimestamp(int(key)).strftime('%c')
         current.update({'add_time': add_time})
         data.append(current)
 
