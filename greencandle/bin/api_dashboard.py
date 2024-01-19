@@ -183,6 +183,8 @@ def extras():
         delete_button = (f'<form method=post action=/xredis?pair={pair}&interval={interval}><input '
                           'type=submit name=save value=delete></form>')
         current.update({'delete': delete_button})
+        add_time(datetime.datetime.fromtimestamp(int(key)).strftime('%c'))
+        current.update({'add_time': add_time})
         data.append(current)
 
     if request.method == 'POST':
@@ -194,7 +196,7 @@ def extras():
         fields = ['pair', 'interval', 'action', 'usd', 'tp', 'sl', 'rule', 'forward_to']
         data_str = json.dumps({x:args[x] for x in fields})
 
-        redis.conn.set(f"{args['pair']}:{args['interval']}", data_str)
+        redis.conn.set(f"{str(int(time.time()))}", data_str)
         time.sleep(2)
         return redirect(url_for('extras'))
 
