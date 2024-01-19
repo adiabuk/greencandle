@@ -499,8 +499,8 @@ class Trade():
             if self.prod:
 
                 if float(amount_to_borrow) <= 0:
-                    self.logger.critical("Borrow amount is zero for pair open long %s. Continuing",
-                                         pair)
+                    self.logger.info("Borrow amount is zero for pair open long %s. Continuing",
+                                     pair)
                     amt_str = get_step_precision(pair, quote2base(current_quote_bal, pair))
                 else:  # amount to borrow
                     self.logger.info("Will attempt to borrow %s of %s for long pair %s Balance: %s",
@@ -896,8 +896,7 @@ class Trade():
 
             if self.prod:
                 if float(amount_to_borrow) <= 0:
-                    self.logger.critical("Borrow amount is zero for short pair %s.  Continuing",
-                                         pair)
+                    self.logger.info("Borrow amount is zero for short pair %s.  Continuing", pair)
                     amt_str = total_base_amount
 
                 else:  # amount to borrow
