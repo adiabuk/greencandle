@@ -898,7 +898,7 @@ class Trade():
                 if float(amount_to_borrow) <= 0:
                     self.logger.critical("Borrow amount is zero for short pair %s.  Continuing",
                                          pair)
-                    amt_str = current_base_bal
+                    amt_str = total_base_amount
 
                 else:  # amount to borrow
                     self.logger.info("Will attempt to borrow %s of %s for short pair %s "
