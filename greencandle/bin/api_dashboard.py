@@ -156,9 +156,8 @@ def xredis():
     delete key from redis
     """
     redis = Redis(db=6)
-    pair = request.args.get('pair')
-    interval = request.args.get('interval')
-    redis.conn.delete(f'{pair}:{interval}')
+    key = request.args.get('key')
+    redis.conn.delete(key)
 
     return redirect(url_for('extras'))
 
@@ -191,7 +190,7 @@ def extras():
         interval=current['interval']
         current['pair'] = get_tv_link(pair, interval, anchor=True)
 
-        delete_button = (f'<form method=post action=/xredis?pair={pair}&interval={interval}><input '
+        delete_button = (f'<form method=post action=/xredis?key={key}><input '
                           'type=submit name=save value=delete></form>')
         current.update({'delete': delete_button})
         add_time = datetime.fromtimestamp(int(key)).strftime('%c')
