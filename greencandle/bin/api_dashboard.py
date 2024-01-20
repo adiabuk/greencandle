@@ -1,10 +1,9 @@
 #!/usr/bin/env python
-#pylint: disable=bare-except,no-member,consider-using-with,too-many-locals,assigning-non-slot,global-statement
+#pylint: disable=bare-except,no-member,consider-using-with,too-many-locals,assigning-non-slot,global-statement,too-few-public-methods
 
 """
 Flask module for manipulating API trades and displaying relevent graphs
 """
-import ast
 import re
 import os
 import json
@@ -28,9 +27,31 @@ from greencandle.lib.common import (arg_decorator, divide_chunks, get_be_service
 from greencandle.lib import config
 from greencandle.lib.flask_auth import load_user, login as loginx, logout as logoutx
 
+class PrefixMiddleware():
+    """
+    add url prefix
+    """
+
+    def __init__(self, app, prefix=''):
+        self.app = app
+        self.prefix = prefix
+
+    def __call__(self, environ, start_response):
+
+        if environ['PATH_INFO'].startswith(self.prefix):
+            environ['PATH_INFO'] = environ['PATH_INFO'][len(self.prefix):]
+            environ['SCRIPT_NAME'] = self.prefix
+            return self.app(environ, start_response)
+        start_response('404', [('Content-Type', 'text/plain')])
+        return ["This url does not belong to the app.".encode()]
+
+
 config.create_config()
 APP = Flask(__name__, template_folder="/etc/gcapi", static_url_path='/',
             static_folder='/etc/gcapi')
+APP.wsgi_app = PrefixMiddleware(APP.wsgi_app, prefix='/dash')
+#APP.config["APPLICATION_ROOT"] = "/dash"
+
 LOGIN_MANAGER = LoginManager()
 LOGIN_MANAGER.init_app(APP)
 LOGIN_MANAGER.login_view = "login"
@@ -156,8 +177,9 @@ def xredis():
     delete key from redis
     """
     redis = Redis(db=6)
-    key = request.args.get('key')
-    redis.conn.delete(key)
+    pair = request.args.get('pair')
+    interval = request.args.get('interval')
+    redis.conn.delete(f'{pair}:{interval}')
 
     return redirect(url_for('extras'))
 
@@ -170,19 +192,11 @@ def extras():
     """
 
     redis = Redis(db=6)
-    redis7 = Redis(db=7)
-
     data = []
     keys = redis.conn.keys()
-    keys7 = redis7.conn.keys()
-    rules = []
-
     with open('/etc/router_config.json', 'r') as json_file:
         router_config = json.load(json_file)
     routes = [x for x in router_config.keys() if ('extra' in x or 'alert' in x)]
-
-    for key in keys7:
-        rules.append(ast.literal_eval(redis7.conn.get(key).decode()))
 
     for key in keys:
         current = json.loads(redis.conn.get(key).decode())
@@ -190,7 +204,7 @@ def extras():
         interval=current['interval']
         current['pair'] = get_tv_link(pair, interval, anchor=True)
 
-        delete_button = (f'<form method=post action=/xredis?key={key}><input '
+        delete_button = (f'<form method=post action=/xredis?pair={pair}&interval={interval}><input '
                           'type=submit name=save value=delete></form>')
         current.update({'delete': delete_button})
         add_time = datetime.fromtimestamp(int(key)).strftime('%c')
@@ -211,7 +225,7 @@ def extras():
         return redirect(url_for('extras'))
 
 
-    return render_template('extras.html', data=data, routes=routes, rules=rules)
+    return render_template('extras.html', data=data, routes=routes)
 
 @APP.route("/action", methods=['POST', 'GET'])
 @login_required
