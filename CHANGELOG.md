@@ -1,5 +1,15 @@
 # Releases
 
+# 6.54
+* switch all logs to lowercase and enforce with custom module
+* add log for extra rule processing
+* remove all prod trade routes except extra
+* single unified prefix for dashboard routes
+* use correct key for delete button
+* add saved rules to extras board
+* change to unified nsca service names
+* allow longer pair names in extras UI - 11 chars
+
 # 6.53.2
 * BUGFIX: use correct key when removing item from extras queue
 * BUGFIX test test close script for short margin
