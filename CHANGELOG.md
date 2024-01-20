@@ -1,5 +1,15 @@
 # Releases
 
+# 6.53.2
+* BUGFIX: use correct key when removing item from extras queue
+* BUGFIX test test close script for short margin
+* dont mix pair, and pair link
+* use tv link for pair in extras ui table
+* use epoch as extras redis key, and add to table as human-readable
+* remove last step2 old strategy slack notifications
+* reduce verbosity of zero-loan trade notification
+* dont fail deployments on envs without frontend
+
 # 6.53.1
 * add volumes for new per-env log files - all envs
 * BUGFIX: avoid 302 for logtailer as it adds port to url
