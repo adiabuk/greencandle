@@ -64,7 +64,7 @@ def main():
                 result2 = True
                 reason = "Not enough base amount"
 
-            elif "short" in direction and float(quote_in) < bal_amount:
+            elif "short" in direction and float(quote_in) > bal_amount:
                 result2 = True
                 reason = "Not enough base amount"
 
