@@ -113,7 +113,7 @@ class Mysql():
             self.__execute(cur, query)
             return cur.lastrowid if get_id else cur.rowcount
         except NameError as exc:
-            self.logger.critical("One or more expected variables not passed to DB %s", exc)
+            self.logger.critical("One or more expected variables not passed to db %s", exc)
             return False
         except MySQLdb.ProgrammingError:
             self.logger.critical("Syntax error in query: %s", query)
@@ -449,4 +449,4 @@ class Mysql():
                 try:
                     self.__run_sql_query(command)
                 except NameError:
-                    self.logger.critical("Expected variables not passed to insert into DB")
+                    self.logger.critical("Expected variables not passed to insert into db")

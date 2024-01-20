@@ -29,10 +29,10 @@ def send_trade(payload, host, subd='/webhook'):
     """
     url = f"http://{host}:20000/{subd}"
     try:
-        LOGGER.info("Calling url %s - %s ", url, str(payload))
+        LOGGER.info("calling url %s - %s ", url, str(payload))
         requests.post(url, json=payload, timeout=20)
     except Exception as exc:
-        LOGGER.critical("Unable to call url: %s - %s", url, str(exc))
+        LOGGER.critical("unable to call url: %s - %s", url, str(exc))
 
 @APP.route('/healthcheck', methods=["GET"])
 def healthcheck():
@@ -50,7 +50,7 @@ def forward(token):
     env = payload['env']
     payload['strategy'] = 'alert' if env == 'alarm' else payload['strategy']
     command = f"configstore package get --basedir /srv/greencandle/config {env} api_token"
-    LOGGER.info("Forwarding request to %s - %s ",env, str(payload))
+    LOGGER.info("forwarding request to %s - %s ",env, str(payload))
     token = os.popen(command).read().split()[0]
     payload['edited'] = "yes"
     url = f"https://{payload['host']}/{token}"
@@ -69,16 +69,16 @@ def respond():
     with open('/etc/router_config.json') as json_file:
         router_config = json.load(json_file)
     if payload['pair'] == 'No pair':
-        LOGGER.debug("Request received: %s", payload)
+        LOGGER.debug("request received: %s", payload)
     else:
-        LOGGER.info("Request received: %s", payload)
+        LOGGER.info("request received: %s", payload)
     try:
         containers = router_config[payload["strategy"].strip()]
     except TypeError:
-        LOGGER.critical("Invalid router_config or payload detected: %s", payload)
+        LOGGER.critical("invalid router_config or payload detected: %s", payload)
         return Response(status=500)
     except KeyError:
-        LOGGER.critical("Invalid or missing strategy %s", str(payload))
+        LOGGER.critical("invalid or missing strategy %s", str(payload))
         return Response(status=500)
 
     if payload["strategy"] == "route":
@@ -110,7 +110,7 @@ def respond():
             payload['host'] = '10.8.0.1'
             route_drain = Path(f'/var/local/drain/drain_{new_env}_{new_strategy}').is_file()
             if route_drain:
-                LOGGER.warning('Skipping forwarding to %s:%s due to drain', new_env, new_strategy)
+                LOGGER.warning('skipping forwarding to %s:%s due to drain', new_env, new_strategy)
             else:
                 forward(payload)
 
@@ -124,7 +124,7 @@ def respond():
     try:
         mysql.insert_api_trade(**request.json)
     except KeyError:
-        LOGGER.critical("Missing required field in json: %s", str(request.json))
+        LOGGER.critical("missing required field in json: %s", str(request.json))
 
     return Response(status=200)
 

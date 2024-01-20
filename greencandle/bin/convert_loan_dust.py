@@ -42,10 +42,10 @@ def main():
     # maximum 3 lists
     # The rest will be discarded, likely picked up on next run
     if len(li_of_lis) > 3:
-        logger.info("Some debts will be discarded in current run due to max size reached")
+        logger.info("some debts will be discarded in current run due to max size reached")
 
     for current_li in li_of_lis[:3]:
-        logger.info("Converting the following small debts to USD: %s", str(current_li))
+        logger.info("converting the following small debts to usd: %s", str(current_li))
         client.small_liability_exchange(current_li)
 
 if __name__ == '__main__':

@@ -8,14 +8,12 @@ from flask import Flask, request, Response
 from greencandle.lib import config
 from greencandle.lib.common import arg_decorator
 from greencandle.lib.redis_conn import Redis
-from greencandle.lib.logger import get_logger
 
 config.create_config()
 LONG = set()
 SHORT = set()
 ALL = defaultdict(dict)
 PAIRS = config.main.pairs.split()
-LOGGER = get_logger(__name__)
 APP = Flask(__name__, template_folder="/etc/gcapi", static_url_path='/',
             static_folder='/etc/gcapi')
 

@@ -103,7 +103,7 @@ class Graph():
         """
         Replace text with given dict criteria
         """
-        LOGGER.debug("Replace event data with colours")
+        LOGGER.debug("replace event data with colours")
         for i, j in dic.items():
             text = text.replace(i, j)
         return text
@@ -119,7 +119,7 @@ class Graph():
             row = 1
             col = 1
             if name == 'ohlc' or 'HA' in name:
-                LOGGER.debug("Creating OHLC graph")
+                LOGGER.debug("creating ohlc graph")
                 if value.empty:  # empty dataframe:
                     print(f'Unable to find {name} data for {self.pair}, passing...')
                     pass
@@ -137,7 +137,7 @@ class Graph():
                 item.increasing.line.color = 'green'
 
             elif 'STX' in name:
-                LOGGER.debug("Creating Supertrend graph")
+                LOGGER.debug("creating supertrend graph")
                 value['value'].astype(str)
                 if value.empty:  # empty dataframe
                     continue
@@ -149,7 +149,7 @@ class Graph():
                                   marker={'size':4, 'color':direction})
 
             elif name == 'event':
-                LOGGER.debug("Creating event graph")
+                LOGGER.debug("creating event graph")
                 # dataframe is mutable so we cannot reference exisiting values by hashing
                 # therefore we will substitute buy/sell with and rgb value for red/green
                 replace = {"OPEN": "rgb(0,255,0)", "BUY": "rgb(0,255,0)",
@@ -164,7 +164,7 @@ class Graph():
                                   marker={'size':16, 'color':value['result']})
 
             elif 'pivot' in name:
-                LOGGER.debug("Creating pivot graph")
+                LOGGER.debug("creating pivot graph")
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=value['value'],
                                   name=name,
@@ -172,7 +172,7 @@ class Graph():
 
             elif 'bb' in name and 'bbperc' not in name:
                 # add bb graph in first subply (above)
-                LOGGER.debug("Creating bb graph")
+                LOGGER.debug("creating bb graph")
                 bb_upper, bb_middle, bb_lower = zip(*value.value)
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=bb_upper,
@@ -187,7 +187,7 @@ class Graph():
             elif any(substring in name for substring in ['RSI', 'ATR', 'signal', 'tsi', 'bbperc']) \
                     and 'STOCH' not in name:
                 # add rsi graph in second subply (below) if it exists
-                LOGGER.debug("Creating RSI graph")
+                LOGGER.debug("creating rsi graph")
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=value['value'],
                                   name=name)
@@ -195,7 +195,7 @@ class Graph():
 
             elif 'STOCHRSI' in name:
                 # add stochrsi graph in second subply (below) if it exists
-                LOGGER.debug("Creating STOCHRSI graph %s", name)
+                LOGGER.debug("creating stochrsi graph %s", name)
                 row = 2
                 stoch_k, stoch_d = zip(*value.value)
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
@@ -206,7 +206,7 @@ class Graph():
                                    name=name+'-d')
             elif 'MACD' in name:
                 row = 2
-                LOGGER.debug("Creating MACD graph")
+                LOGGER.debug("creating macd graph")
                 macd, signal, _ = zip(*value.value)
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=macd,
@@ -218,7 +218,7 @@ class Graph():
 
             elif 'STOCH' in name and 'RSI' not in name:
                 # add stochf graph in second subply (below) if it exists
-                LOGGER.debug("Creating STOCH graph %s", name)
+                LOGGER.debug("creating stoch graph %s", name)
                 row = 2
                 value['k'] = value.value
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
@@ -226,33 +226,33 @@ class Graph():
                                   name=name+'-k')
 
             elif 'SHOOTINGSTAR' in name or 'SPINNINGTOP' in name:
-                LOGGER.debug("Creating shootingstar/spinningtop graph")
+                LOGGER.debug("creating shootingstar/spinningtop graph")
                 item = go.Bar(x=pandas.to_datetime(value["date"], unit="ms"),
                               y=value['value'],
                               name=name)
                 row = 2
 
             elif 'Sup_Res' in name:
-                LOGGER.debug("Creating sup/res graph")
+                LOGGER.debug("creating sup/res graph")
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=value['value'],
                                   mode='markers',
                                   name="Resistance")
 
             else:
-                LOGGER.debug("Creating other graph")
+                LOGGER.debug("creating other graph")
                 item = go.Scatter(x=pandas.to_datetime(value["date"], unit="ms"),
                                   y=value['value'],
                                   name=name)
 
             fig.append_trace(item, row, col)
-            LOGGER.debug("Adding item1 %s row:%s", item.name, row)
+            LOGGER.debug("adding item1 %s row:%s", item.name, row)
             if item2:
                 LOGGER.debug("Adding item2 %s row:%s", item2.name, row)
                 fig.append_trace(item2, row, col)
             if item3:
                 fig.append_trace(item3, row, col)
-                LOGGER.debug("Adding item3 %s row:%s", item3.name, row)
+                LOGGER.debug("adding item3 %s row:%s", item3.name, row)
 
             if (name == "ohlc" or 'HA' in name) and self.volume:
                 increasing_color = '#17BECF'
@@ -278,7 +278,7 @@ class Graph():
             item2 = None
             item3 = None
 
-        LOGGER.debug("Generating graph file")
+        LOGGER.debug("generating graph file")
         now = datetime.datetime.now()
         date = now.strftime('%Y-%m-%d_%H-%M-%S')
         env = config.main.base_env
@@ -286,13 +286,13 @@ class Graph():
         fig.update_layout(plot_bgcolor='black', xaxis=dict(showgrid=False),
               yaxis=dict(showgrid=False))
         py.plot(fig, filename=self.filename, auto_open=False)
-        LOGGER.debug("Done")
+        LOGGER.debug("done")
 
     def insert_data(self, dframe):
         """
         insert ohlc data for creating graphs
         """
-        LOGGER.debug("Inserting OHLC data info var")
+        LOGGER.debug("inserting ohlc data info var")
         self.data = {'ohlc': dframe}
 
     def get_data(self, ohlc_only=False):
@@ -312,20 +312,20 @@ class Graph():
             result_list = {}
             for ind in ind_list:
                 try:
-                    LOGGER.debug("Getting Data for %s", ind)
+                    LOGGER.debug("getting Data for %s", ind)
                     str_dict = redis.get_item(f'{self.pair}:{self.interval}',
                                               index_item).decode()
                     result_list[ind] = json.loads(str_dict)[ind]
                 except AttributeError:
                     pass
                 except KeyError:
-                    LOGGER.debug("No indicator data for %s %s", ind, index_item)
+                    LOGGER.debug("no indicator data for %s %s", ind, index_item)
                     continue
                 except ValueError:
-                    LOGGER.debug("Value Error while getting %s", ind)
+                    LOGGER.debug("value error while getting %s", ind)
                     result_list[int] = redis.get_item(index_item, ind).decode()
 
-            LOGGER.debug("Getting current prices")
+            LOGGER.debug("getting current prices")
             str_dict = redis.get_item(f'{self.pair}:{self.interval}',
                                       index_item).decode()
 
@@ -334,7 +334,7 @@ class Graph():
                 result_list['current_price'] = result_list['ohlc']['close']
 
             except (KeyError, AttributeError) as error:
-                LOGGER.critical("Error, unable to find ohlc data for %s %s %s",
+                LOGGER.critical("error, unable to find ohlc data for %s %s %s",
                                 index_item, ind, error)
             try:   #ha
                 result_list['HA_0'] = json.loads(str_dict)['HA_0']
@@ -342,7 +342,7 @@ class Graph():
             except KeyError:
                 pass
             try:  # event
-                LOGGER.debug("Getting trade events")
+                LOGGER.debug("getting trade events")
                 str_dict = redis.get_item(f'{self.pair}:{self.interval}', index_item).decode()
                 result_list['event'] = json.loads(str_dict)['event']
             except KeyError:  # no event for this time period, so skip
@@ -388,4 +388,4 @@ class Graph():
                                                                                   'current_price',
                                                                                   'date'])
         self.data = dataframes
-        LOGGER.debug("Done getting graph data")
+        LOGGER.debug("done getting graph data")

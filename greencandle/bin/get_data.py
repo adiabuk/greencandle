@@ -33,11 +33,11 @@ def get_data():
     """
     Get-data run
     """
-    LOGGER.debug("Starting prod run")
+    LOGGER.debug("starting prod run")
     interval = config.main.interval
     RUNNER.prod_loop(interval, test=True, data=True, analyse=False)
     keepalive()
-    LOGGER.debug("Finished prod run")
+    LOGGER.debug("finished prod run")
 
 @GET_EXCEPTIONS
 @arg_decorator
@@ -56,7 +56,7 @@ def main():
     interval = config.main.interval
     setproctitle.setproctitle(f"get_data-{interval}")
     send_slack_message('alerts', "Starting initial prod run")
-    LOGGER.info("Starting initial prod run")
+    LOGGER.info("starting initial prod run")
     name = config.main.name.split('-')[-1]
     Path(f'/var/run/{config.main.base_env}-data-{interval}-{name}').touch()
 
@@ -65,7 +65,7 @@ def main():
         # Don't start analysing until all pairs are available
         request = requests.get("http://stream:5000/all", timeout=10)
         if not request.ok:
-            LOGGER.critical("Unable to fetch data from streaming server")
+            LOGGER.critical("unable to fetch data from streaming server")
         data = request.json()
         remote_pairs = set(data['recent'].keys())
         if local_pairs.issubset(remote_pairs):
@@ -85,12 +85,11 @@ def main():
     if os.path.exists(f'/var/run/{config.main.base_env}-data-{interval}-{name}'):
         os.remove(f'/var/run/{config.main.base_env}-data-{interval}-{name}')
     send_slack_message('alerts', "Finished initial prod run")
-    LOGGER.info("Finished initial prod run")
+    LOGGER.info("finished initial prod run")
 
     while True:
         get_data()
         collect_agg_data(interval)
-
 
 if __name__ == '__main__':
     main()

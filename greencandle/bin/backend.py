@@ -44,7 +44,7 @@ def main():
 
     if not args.data:
         while glob.glob(f'/var/run/{config.main.base_env}-data-{interval}-*'):
-            LOGGER.info("Waiting for initial data collection to complete for %s", interval)
+            LOGGER.info("waiting for initial data collection to complete for %s", interval)
             time.sleep(30)
 
 
@@ -55,9 +55,9 @@ def main():
     @GET_EXCEPTIONS
     @sched.scheduled_job('interval', seconds=20)
     def get_price():
-        LOGGER.info("Starting Price check")
+        LOGGER.info("starting Price check")
         runner.prod_int_check(interval, args.test)
-        LOGGER.info("Finished Price check")
+        LOGGER.info("finished Price check")
 
     @GET_EXCEPTIONS
     @sched.scheduled_job('interval', minutes=30)
@@ -66,7 +66,7 @@ def main():
             return
         for pair in config.main.pairs.split():
             pair = pair.strip()
-            LOGGER.info("Creating graph for %s", pair)
+            LOGGER.info("creating graph for %s", pair)
             volume = 'vol' in config.main.indicators
             graph = Graph(test=False, pair=pair, interval=config.main.interval,
                           volume=volume)
@@ -83,21 +83,21 @@ def main():
     @GET_EXCEPTIONS
     @sched.scheduled_job('interval', seconds=int(config.main.check_interval))
     def prod_run():
-        LOGGER.info("Starting prod run")
+        LOGGER.info("starting prod run")
         runner.prod_loop(interval, args.test, data=args.data)
-        LOGGER.info("Finished prod run")
+        LOGGER.info("finished prod run")
 
     if args.data:
-        LOGGER.info("Starting initial prod run")
+        LOGGER.info("starting initial prod run")
         runner.prod_initial(interval) # initial run, before scheduling begins
-        LOGGER.info("Finished initial prod run")
+        LOGGER.info("finished initial prod run")
 
     try:
         sched.start()
     except KeyboardInterrupt:
-        LOGGER.warning("\nExiting on user command...")
+        LOGGER.warning("\nexiting on user command...")
         sys.exit(1)
 
 if __name__ == "__main__":
     main()
-    LOGGER.debug("COMPLETE")
+    LOGGER.debug("complete")

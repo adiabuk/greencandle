@@ -37,7 +37,7 @@ def analyse_loop():
     """
 
     while glob.glob(f'/var/run/{config.main.base_env}-data-{config.main.interval}-*'):
-        LOGGER.info("Waiting for initial data collection to complete for %s",
+        LOGGER.info("waiting for initial data collection to complete for %s",
                     config.main.interval)
         time.sleep(30)
 
@@ -45,7 +45,7 @@ def analyse_loop():
     redis = Redis()
     for pair in PAIRS:
         pair = pair.strip()
-        LOGGER.debug("Analysing pair: %s", pair)
+        LOGGER.debug("analysing pair: %s", pair)
         try:
             result = redis.get_action(pair=pair, interval=config.main.interval)
 
@@ -60,8 +60,8 @@ def analyse_loop():
                 ALL[pair]['action'] = 'close'
 
         except Exception as err_msg:
-            LOGGER.critical("Error with pair %s %s", pair, str(err_msg))
-    LOGGER.info("End of current loop")
+            LOGGER.critical("error with pair %s %s", pair, str(err_msg))
+    LOGGER.info("end of current loop")
     del redis
 
 @APP.route('/get_data', methods=["GET"])

@@ -66,7 +66,7 @@ def perform_data(pair, interval, data_dir, indicators):
     current_trade = False
     print(len(dframe), CHUNK_SIZE)
     for beg in range(len(dframe) - CHUNK_SIZE):
-        LOGGER.debug("IN LOOP %s", beg)
+        LOGGER.debug("in loop %s", beg)
         trade = Trade(interval=interval, test_trade=True, test_data=True, config=config)
 
         closes = []
@@ -386,7 +386,7 @@ class ProdRunner():
         """
         Loop through collection cycle (PROD)
         """
-        LOGGER.debug("Starting new prod loop with %s pairs", len(PAIRS))
+        LOGGER.debug("starting new prod loop with %s pairs", len(PAIRS))
         client = Binance()
         redis = Redis()
 

@@ -26,7 +26,7 @@ def main():
     if len(main_list) > 10:
         logger.info("Some assets will be discarded in current run due to max size reached")
     if len(main_list) > 0:
-        logger.info("Converting the following small assets to BNB: %s", str(main_list[:10]))
+        logger.info("Converting the following small assets to bnb: %s", str(main_list[:10]))
         client.small_dust_exchange(main_list[:10])
 
 if __name__ == '__main__':

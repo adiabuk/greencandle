@@ -42,14 +42,14 @@ def analyse_loop():
     """
     Gather data from redis and analyze
     """
-    LOGGER.debug("Recently triggered: %s", str(TRIGGERED))
+    LOGGER.debug("recently triggered: %s", str(TRIGGERED))
 
     Path('/var/local/greencandle').touch()
     while glob.glob(f'/var/run/{config.main.base_env}-data-{INTERVAL}-*'):
-        LOGGER.info("Waiting for initial data collection to complete for %s", INTERVAL)
+        LOGGER.info("waiting for initial data collection to complete for %s", INTERVAL)
         time.sleep(30)
 
-    LOGGER.debug("Start of current loop")
+    LOGGER.debug("start of current loop")
     redis = Redis()
     redis4=Redis(db=CHECK_REDIS_PAIR)
 
@@ -59,7 +59,7 @@ def analyse_loop():
 
     for pair in pairs:
         analyse_pair(pair, redis)
-    LOGGER.debug("End of current loop")
+    LOGGER.debug("end of current loop")
     del redis
     if CHECK_REDIS_PAIR:
         time.sleep(5)
@@ -72,7 +72,7 @@ def analyse_pair(pair, redis):
     """
     pair, reversal = pair
 
-    LOGGER.debug("Analysing pair: %s", pair)
+    LOGGER.debug("analysing pair: %s", pair)
 
     result = redis.get_rule_action(pair=pair, interval=INTERVAL)[0]
 
@@ -88,7 +88,7 @@ def analyse_pair(pair, redis):
         new_direction = directions[0]
 
     reversal = "reversal" if DIRECTION != new_direction else reversal
-    LOGGER.info("Adding %s to %s:%s set", pair, NEW_INTERVAL, new_direction)
+    LOGGER.info("adding %s to %s:%s set", pair, NEW_INTERVAL, new_direction)
     redis4 = Redis(db=REDIS_FORWARD[0])
     redis4.conn.sadd(f'{NEW_INTERVAL}:{new_direction}', f'{pair}:{reversal}')
     del redis4
@@ -106,7 +106,7 @@ def analyse_pair(pair, redis):
                                  f"Data: {data} Agg: {agg}",
                        emoji=True,
                        icon=f"{NEW_INTERVAL}-{new_direction}")
-    LOGGER.info("Trade alert: %s %s -> %s %s -> %s (%s)", pair, INTERVAL,NEW_INTERVAL, DIRECTION,
+    LOGGER.info("trade alert: %s %s -> %s %s -> %s (%s)", pair, INTERVAL,NEW_INTERVAL, DIRECTION,
                 new_direction, reversal)
 
 @arg_decorator

@@ -341,7 +341,7 @@ def collect_agg_data(interval):
     output data to csv files
     """
 
-    LOGGER.debug("Starting aggregate run")
+    LOGGER.debug("starting aggregate run")
     redis = Redis()
     key = sys.argv[1] if len(sys.argv) > 1 else None
     config.create_config()

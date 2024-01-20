@@ -50,13 +50,13 @@ def analyse_loop():
     """
     Gather data from redis and analyze
     """
-    LOGGER.debug("Recently triggered: %s", str(TRIGGERED))
+    LOGGER.debug("recently triggered: %s", str(TRIGGERED))
 
     while glob.glob(f'/var/run/{config.main.base_env}-data-{INTERVAL}-*'):
-        LOGGER.info("Waiting for initial data collection to complete for %s", INTERVAL)
+        LOGGER.info("waiting for initial data collection to complete for %s", INTERVAL)
         time.sleep(30)
 
-    LOGGER.debug("Start of current loop")
+    LOGGER.debug("start of current loop")
     redis = Redis()
     if CHECK_REDIS_PAIR:
         redis4=Redis(db=CHECK_REDIS_PAIR)
@@ -100,7 +100,7 @@ def analyse_loop():
 
     for pair, reversal, expire in pairs:
         analyse_pair(pair, reversal, expire, redis)
-    LOGGER.debug("End of current loop")
+    LOGGER.debug("end of current loop")
     Path('/var/local/greencandle').touch()
     del redis
     if CHECK_REDIS_PAIR:
@@ -145,14 +145,14 @@ def analyse_pair(pair, reversal, expire, redis):
         # don't analyse pair if spot/isolated/cross not supported
         return
 
-    LOGGER.debug("Analysing pair: %s", pair)
+    LOGGER.debug("analysing pair: %s", pair)
     try:
         result, _, current_time, current_price, match = \
                 redis.get_rule_action(pair=pair, interval=INTERVAL)
         event = reversal
 
         if result in ('OPEN', 'CLOSE'):
-            LOGGER.debug("Trades to %s for pair %s", result.lower(), pair)
+            LOGGER.debug("trades to %s for pair %s", result.lower(), pair)
             now = datetime.now()
             items = redis.get_items(pair, INTERVAL)
             data = redis.get_item(f"{pair}:{INTERVAL}", items[-1]).decode()
@@ -168,10 +168,10 @@ def analyse_pair(pair, reversal, expire, redis):
                 diff_in_hours = diff.total_seconds() / 3600
                 if str2bool(config.main.wait_between_trades) and diff.total_seconds() < \
                         convert_to_seconds(config.main.time_between_trades):
-                    LOGGER.debug("Skipping notification for %s %s as recently triggered",
+                    LOGGER.debug("skipping notification for %s %s as recently triggered",
                                  pair, INTERVAL)
                     return
-                LOGGER.debug("Triggering alert: last alert %s hours ago", diff_in_hours)
+                LOGGER.debug("triggering alert: last alert %s hours ago", diff_in_hours)
 
             TRIGGERED[pair] = now
             try:
@@ -249,10 +249,10 @@ def analyse_pair(pair, reversal, expire, redis):
                         redis4.conn.sadd(f'{INTERVAL}:{DIRECTION}', f'{pair}:normal:{now}')
                     del redis4
 
-            LOGGER.info("Trade alert: %s %s %s %s %s (%s)",result, pair, match_strs, INTERVAL,
+            LOGGER.info("trade alert: %s %s %s %s %s (%s)",result, pair, match_strs, INTERVAL,
                         DIRECTION, supported.strip())
     except Exception as err_msg:
-        LOGGER.critical("Error with pair %s %s", pair, str(err_msg))
+        LOGGER.critical("error with pair %s %s", pair, str(err_msg))
 
 @arg_decorator
 def main():

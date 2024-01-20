@@ -854,11 +854,11 @@ class Redis():
             self.logger.info("Unable to open trade %s due to time_between_trades", pair)
 
         if open_price and any(rules['open']) and any(rules['close']):
-            self.logger.warning('We ARE In a trade and have matched both open and '
+            self.logger.warning('We are In a trade and have matched both open and '
                                 'close rules for %s', pair)
             both = True
         elif not open_price and any(rules['open']) and any(rules['close']):
-            self.logger.warning('We are NOT in a trade and have matched both open and '
+            self.logger.warning('We are not in a trade and have matched both open and '
                                 'close rules for %s', pair)
             both = True
         else:

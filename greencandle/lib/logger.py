@@ -6,11 +6,21 @@ Generic logging class for greencandle modules
 
 import logging
 import traceback
+from copy import copy
 from cysystemd.journal import JournaldLogHandler
 from greencandle.lib import config
 from greencandle.lib.alerts import send_slack_message
 
 config.create_config()
+
+class CustomFormatter(logging.Formatter):
+    """Enforce lowercase logs"""
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+    def format(self, record):
+        record = copy(record)
+        record.msg = record.msg.lower()
+        return super().format(record)
 
 class OneLineFormatter(logging.Formatter):
     """logging formatter for exceptions"""
@@ -79,7 +89,7 @@ def get_logger(module_name=None):
     else:
         name = module_name.split('.')[-1]
         handler = NotifyOnCriticalStream()
-        formatter = logging.Formatter("%(asctime)s %(levelname)s %(name)s %(message)s",
+        formatter = CustomFormatter("%(asctime)s %(levelname)s %(name)s %(message)s",
                                       "%Y-%m-%d %H:%M:%S")
         handler.setFormatter(formatter)
 

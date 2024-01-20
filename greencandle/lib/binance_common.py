@@ -83,7 +83,7 @@ def get_all_klines(pair, interval=None, start_time=0, no_of_klines=1E1000):
             LOGGER.debug("Reached maximum number of candles")
             break
 
-        # Start time becomes 1 more than start time of last entry, +1, so that we don"t duplicate
+        # start time becomes 1 more than start time of last entry, +1, so that we don"t duplicate
         # entries
         try:
             start_time = current_section[-1]["openTime"] + 1
@@ -101,7 +101,7 @@ def get_all_klines(pair, interval=None, start_time=0, no_of_klines=1E1000):
 
     start = epoch2date(first_candle)
     end = epoch2date(last_candle)
-    LOGGER.debug("%s Start: %s, End: %s", pair, start, end)
+    LOGGER.debug("%s start: %s, End: %s", pair, start, end)
 
     return result[:no_of_klines] if no_of_klines != float("inf") else result
 
