@@ -161,18 +161,6 @@ def xredis():
 
     return redirect(url_for('extras'))
 
-def sredis():
-    """
-    save rule into redis set
-    """
-
-    redis = Redis.conn(db=7)
-    rule = request.args.get('rule')
-    redis.conn.sadd(rule.strip())
-
-    return redirect(url_for('extras'))
-
-
 @APP.route("/extras", methods=['POST', 'GET'])
 @login_required
 def extras():
@@ -195,10 +183,8 @@ def extras():
         current['pair'] = get_tv_link(pair, interval, anchor=True)
 
         delete_button = (f'<form method=post action=/xredis?pair={pair}&interval={interval}><input '
-                          'type=submit name=delete value=delete></form>')
-        save_button = (f'<form method=post action=/sredis?pair={pair}&interval={interval}><input '
-                        'type=submit name=save value=save></form>')
-        current.update({'action': f'{save_button}{delete_button}'})
+                          'type=submit name=save value=delete></form>')
+        current.update({'delete': delete_button})
         add_time = datetime.fromtimestamp(int(key)).strftime('%c')
         current.update({'add_time': add_time})
         data.append(current)
