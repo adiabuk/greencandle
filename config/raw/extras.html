@@ -102,6 +102,27 @@
 	</tbody>
 </table>
 {% endif %}
+
+<h2>Saved rules</h2>
+<table id="customers" class="display table nowrap responsive" style="width: 100%">
+	<thead>
+		<tr>
+			<th>Description</th>
+			<th>Rule</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for row in rules %}
+		  <tr>
+		    {% for item in row %}
+		      <td>{{ item }}</td>
+		    {% endfor %}
+		  </tr>
+		    {% endfor %}
+
+	</tbody>
+</table>
+
 </div>
       </div>
     </div>
