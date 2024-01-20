@@ -1,5 +1,8 @@
 # Releases
 
+# 6.54.1
+* BUGFIX: revert removal of nginx config elements
+
 # 6.54
 * switch all logs to lowercase and enforce with custom module
 * add log for extra rule processing
