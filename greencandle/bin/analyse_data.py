@@ -186,7 +186,7 @@ def analyse_pair(pair, reversal, expire, redis):
                 send_slack_message("notifications", msg, emoji=True,
                                    icon=f':{INTERVAL}-{DIRECTION}:')
             if 'NSCA' in os.environ:
-                send_nsca(status=0, host_name='hp', service_name=config.main.name,
+                send_nsca(status=0, host_name='hp', service_name=DIRECTION,
                           text_output="OK", remote_host='10.8.0.1')
 
             if DIRECTION == 'long' and result == 'OPEN':
