@@ -37,10 +37,10 @@ def check_rules():
 
     keys = redis6.conn.keys()
     for key in keys:
-        items.append(list(json.loads(redis6.conn.get(key).decode()).values()))
+        items.append(list(json.loads(redis6.conn.get(key).decode()).values()) + [key.decode()])
 
 
-    for pair, interval, action, usd, take, stop, rule, forward_to in items:
+    for pair, interval, action, usd, take, stop, rule, forward_to, key in items:
         if pair not in config.main.pairs.split():
             continue
         item = redis.get_items(pair, interval)[-1]
@@ -92,7 +92,7 @@ def check_rules():
                 requests.post(url, json.dumps(payload), timeout=10,
                               headers={'Content-Type': 'application/json'})
                 print(f"forwarding {pair} {interval} trade to: {forward_to}")
-                redis6.conn.delete(f'{pair}:{interval}')
+                redis6.conn.delete(key)
 
             except requests.exceptions.RequestException:
                 pass
