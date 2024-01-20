@@ -299,7 +299,7 @@ services:
       - prod-base-mysql
       - prod-base-redis
     healthcheck:
-      test: curl -Isf http://127.1:5000/healthcheck
+      test: curl -Isf http://127.1:5000/dash/healthcheck
       interval: 5m
       timeout: 10s
       retries: 5
