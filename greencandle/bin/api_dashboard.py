@@ -198,7 +198,7 @@ def extras():
                           'type=submit name=delete value=delete></form>')
         save_button = (f'<form method=post action=/sredis?pair={pair}&interval={interval}><input '
                         'type=submit name=save value=save></form>')
-        current.update({'tasks': f'{save_button}{delete_button}'})
+        current.update({'action': f'{save_button}{delete_button}'})
         add_time = datetime.fromtimestamp(int(key)).strftime('%c')
         current.update({'add_time': add_time})
         data.append(current)
