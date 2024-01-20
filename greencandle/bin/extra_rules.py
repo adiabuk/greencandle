@@ -12,6 +12,9 @@ import requests
 from greencandle.lib import config
 from greencandle.lib.redis_conn import Redis, get_float
 from greencandle.lib.common import AttributeDict, arg_decorator
+from greencandle.lib.logger import get_logger
+
+LOGGER = get_logger(__name__)
 
 @arg_decorator
 def main():
@@ -91,7 +94,10 @@ def check_rules():
             try:
                 requests.post(url, json.dumps(payload), timeout=10,
                               headers={'Content-Type': 'application/json'})
-                print(f"forwarding {pair} {interval} trade to: {forward_to}")
+
+                LOGGER.info("forwarding %s %s trade to: %s - rule: %s",
+                            pair, interval, forward_to, rule)
+
                 redis6.conn.delete(key)
 
             except requests.exceptions.RequestException:
