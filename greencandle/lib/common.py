@@ -243,9 +243,9 @@ def get_trade_link(pair, strategy, action, string, port=8888, anchor=False, shor
     """Get trade link for forced trade"""
     url = "" if short else "http://" + os.environ['VPN_IP'] + ":" + port
     if anchor:
-        return Markup(f'<a href="{url}/action?pair={pair.strip()}&strategy='
+        return Markup(f'<a href="{url}/dash/action?pair={pair.strip()}&strategy='
                       f'{strategy.strip()}&action={action.strip()}&close=true" target="_blank">'
                       f'{string.strip()}</a>')
 
-    return (f"<{url}/action?pair={pair.strip()}&strategy={strategy.strip()}"
+    return (f"<{url}/dash/action?pair={pair.strip()}&strategy={strategy.strip()}"
             f"&action={action.strip()}&close=true|{string.strip()}>")
