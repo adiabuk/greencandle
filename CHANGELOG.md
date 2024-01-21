@@ -1,5 +1,11 @@
 # Releases
 
+# 6.54.2
+* add saved rules to new extras table
+* capture candle closing well outside bb
+* fix remaining broken urls with prefix
+* fix dashboard healthcheck
+
 # 6.54.1
 * BUGFIX: revert removal of nginx config elements
 
