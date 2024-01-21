@@ -17,7 +17,7 @@
 
           {% if "any" in strat %}
           {% if "long-short" not in strat %}
-          <form action="/action">
+          <form action="/dash/action">
             <td>
               <label for="fname">pair: </label>
               <input type="text" id="pair" name="pair">
@@ -36,12 +36,12 @@
           {% else %}
           <td>{{pair}}</td>
           <td>
-            <form action="/action?pair={{pair}}&strategy={{strat}}&action=open" method="post">
+            <form action="/dash/action?pair={{pair}}&strategy={{strat}}&action=open" method="post">
               <button name="actionBtn" type="submit">Open</button>
             </form>
           </td>
           <td>
-            <form action="/action?pair={{pair}}&strategy={{strat}}&action=close" method="post">
+            <form action="/dash/action?pair={{pair}}&strategy={{strat}}&action=close" method="post">
               <button name="actionBtn" type="submit">Close</button>
             </form>
           </td>

@@ -6,7 +6,7 @@
 <!-- Command with args -->
 {% for script, args in arg_scripts.items() %}
 Run {{ script }}
-<form action="/run?command={{script}}" method="post">
+<form action="/dash/run?command={{script}}" method="post">
 {% for item in args %}
 <!--
 Loop through args and create a text box for each using name to identify box.
@@ -23,7 +23,7 @@ Loop through args and create a text box for each using name to identify box.
 <!-- Command with no args -->
 {% for script in scripts %}
 Run {{ script }}
-<form action="/run?command={{script}}" method="post">
+<form action="/dash/run?command={{script}}" method="post">
   <button name="actionBtn" type="submit">Run</button>
 </form>
   <hr>

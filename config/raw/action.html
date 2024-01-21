@@ -8,7 +8,7 @@
     {% for strat, pairs in my_dic.items() %}
   <tr>
     <td>
-      {% if "any" in strat and "long-short" in strat %}	    
+      {% if "any" in strat and "long-short" in strat %}
       {{strat}}
       {% endif %}
     </td>
@@ -19,7 +19,7 @@
 
           {% if "any" in strat %}
 		  {% if "long-short" in strat %}
-			  <form action="/action">
+			  <form action="/dash/action">
 			    <td>
 			      <label for="fname">pair: </label>
 			      <input type="text" id="pair" name="pair">
