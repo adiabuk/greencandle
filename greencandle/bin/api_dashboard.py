@@ -5,6 +5,7 @@
 Flask module for manipulating API trades and displaying relevent graphs
 """
 import re
+import ast
 import os
 import json
 import time
@@ -191,12 +192,17 @@ def extras():
     """
 
     redis = Redis(db=6)
+    redis7 = Redis(db=7)
     data = []
+    rules = []
     keys = redis.conn.keys()
+    keys7 = redis7.conn.keys()
     with open('/etc/router_config.json', 'r') as json_file:
         router_config = json.load(json_file)
     routes = [x for x in router_config.keys() if ('extra' in x or 'alert' in x)]
-
+    routes = [x for x in router_config.keys() if ('extra' in x or 'alert' in x)]
+    for key in keys7:
+        rules.append(ast.literal_eval(redis7.conn.get(key).decode()))
     for key in keys:
         current = json.loads(redis.conn.get(key).decode())
         pair = current['pair']
@@ -224,7 +230,7 @@ def extras():
         return redirect(url_for('extras'))
 
 
-    return render_template('extras.html', data=data, routes=routes)
+    return render_template('extras.html', data=data, routes=routes, rules=rules)
 
 @APP.route("/action", methods=['POST', 'GET'])
 @login_required
