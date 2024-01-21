@@ -3,5 +3,5 @@
   "interval": "5m",
   "name": "data-be-analyse-5m-long6",
   "redis_expiry_seconds": "4800",
-  "time_between_trades": "30m"
+  "time_between_trades": "1h"
 }
