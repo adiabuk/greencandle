@@ -1,5 +1,12 @@
 # Releases
 
+# 6.54.3
+* put html templates into static dir
+* use proxy pass to avoid adding of internal port to url
+* fix browspy http redirect
+* increase time between trade alerts in data env
+* add prefix to trade link
+
 # 6.54.2
 * add saved rules to new extras table
 * capture candle closing well outside bb
