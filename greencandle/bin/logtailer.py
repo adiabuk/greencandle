@@ -12,7 +12,7 @@ import setproctitle
 from greencandle.lib.common import arg_decorator
 from greencandle.lib.flask_auth import load_user, login as loginx, logout as logoutx
 
-APP = Flask(__name__, template_folder="/etc/gcapi", static_url_path='/',
+APP = Flask(__name__, template_folder="/var/ww/html", static_url_path='/',
             static_folder='/var/www/html')
 LOGIN_MANAGER = LoginManager()
 LOGIN_MANAGER.init_app(APP)

@@ -48,10 +48,9 @@ class PrefixMiddleware():
 
 
 config.create_config()
-APP = Flask(__name__, template_folder="/etc/gcapi", static_url_path='/',
-            static_folder='/etc/gcapi')
+APP = Flask(__name__, template_folder="/var/www/html", static_url_path='/',
+            static_folder='/var/www/html')
 APP.wsgi_app = PrefixMiddleware(APP.wsgi_app, prefix='/dash')
-#APP.config["APPLICATION_ROOT"] = "/dash"
 
 LOGIN_MANAGER = LoginManager()
 LOGIN_MANAGER.init_app(APP)

@@ -20,8 +20,8 @@ SHORT = set()
 ALL = defaultdict(dict)
 PAIRS = config.main.pairs.split()
 LOGGER = get_logger(__name__)
-APP = Flask(__name__, template_folder="/etc/gcapi", static_url_path='/',
-            static_folder='/etc/gcapi')
+APP = Flask(__name__, template_folder="/var/www/html", static_url_path='/',
+            static_folder='/var/www/html')
 
 @APP.route('/healthcheck', methods=["GET"])
 def healthcheck():
