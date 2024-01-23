@@ -254,6 +254,8 @@ def action():
     usd = request.args.get('usd') if 'usd' in request.args else None
 
     send_trade(pair, strategy, trade_action, take=take, stop=stop, usd=usd)
+    if close:
+        return '<button type="button" onclick="window.close()">Close Tab</button>'
     return redirect(url_for('trade'))
 
 def send_trade(pair, strategy, trade_action, take=None, stop=None, usd=None):
