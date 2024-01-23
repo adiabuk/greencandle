@@ -64,8 +64,8 @@ LOGIN = APP.route("/logout", methods=["GET", "POST"])(logoutx)
 
 VALUES = defaultdict(dict)
 BALANCE = []
+CURRENT_AMT = 0
 LIVE = []
-CURRENT_AMTS = 0
 
 SCRIPTS = ["write_balance", "get_quote_balance", "repay_debts", "get_risk", "get_trade_status",
            "get_hour_profit", "repay_debts", "balance_graph", "test_close"]
@@ -365,7 +365,7 @@ def get_live():
     Get live open trade details
     """
     global LIVE
-    global CURRENT_AMTS
+    global CURRENT_AMT
 
     if config.main.base_env.strip() == 'data':
         return None
@@ -389,14 +389,12 @@ def get_live():
         perc = -perc if direction == 'short' else perc
         net_perc = perc - commission
 
-        current_amt = (quote_in/100) * net_perc
+        current_amt = (float(quote_in)/100) * float(net_perc)
         current_quote = get_quote(pair)
         if current_quote == 'USDT':
-            usd_amt = current_amt
+            usd_amt += current_amt
         else:
-            usd_amt = base2quote(current_amt, current_quote+'USDT')
-        amts += usd_amt
-
+            usd_amt += base2quote(current_amt, current_quote+'USDT')
 
         if float(net_perc) > 3:
             mt3 += 1
@@ -426,10 +424,9 @@ def get_live():
                          "tp/sl": f"{take}/{stop}",
                          "du/dd": f"{round(drawup,2)}/{round(drawdown,2)}" })
     LIVE = all_data
-    CURRENT_AMTS = amts
+    CURRENT_AMT = usd_amt
     if mt3 > 0 or mt5 > 0:
         send_slack_message("balance", f"trades over 3%: {mt3}\ntrades over 5%: {mt5}")
-    send_slack_message("balance", f"Current trade value: {CURRENT_AMTS}")
     return LIVE
 
 @APP.route('/live', methods=['GET', 'POST'])
@@ -498,6 +495,7 @@ def get_balance():
     """
     Get cross margin quote amounts from exchange
     """
+    get_live()
     global BALANCE
     client=binance_auth()
     all_results = []
@@ -513,6 +511,8 @@ def get_balance():
 
     all_results.append({'key': 'avail_borrow', 'usd': format_usd(client.get_max_borrow()),
                         'val': ''})
+    all_results.append({'key': 'current_trade_value', 'usd': format_usd(CURRENT_AMT),
+                        'val': '0'})
     usd_debts_total = 0
     for key, val in debts.items():
         usd_debt = val if 'USD' in key else base2quote(val, key+'USDT')
