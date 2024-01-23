@@ -33,7 +33,7 @@ def main():
     prices = stream_req.json()
 
     for trade in open_trades:
-        open_time, _, pair, name, open_price, direction = trade
+        open_time, _, pair, name, open_price, direction, _ = trade
         current_price = prices['recent'][pair]['close']
         perc = perc_diff(open_price, current_price)
         perc = -perc if direction== 'short' else perc

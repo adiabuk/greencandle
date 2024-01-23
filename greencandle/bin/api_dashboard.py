@@ -379,7 +379,7 @@ def get_live():
     raw = dbase.get_open_trades()
     commission = float(dbase.get_complete_commission())
 
-    for open_time, interval, pair, name, open_price, direction in raw:
+    for open_time, interval, pair, name, open_price, direction, _ in raw:
         current_price = prices['recent'][pair]['close']
         perc = perc_diff(open_price, current_price)
         perc = -perc if direction == 'short' else perc
@@ -456,7 +456,7 @@ def get_additional_details():
     trades = dbase.get_open_trades()
     global VALUES
     for item in trades:
-        _, interval, pair, name, _, direction = item
+        _, interval, pair, name, _, direction, _ = item
 
         VALUES['drawup'][f"{pair}:{name}:{direction}"] = \
                 redis.get_drawup(pair, name=name, interval=interval, direction=direction)['perc']
