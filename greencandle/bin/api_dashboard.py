@@ -249,6 +249,7 @@ def action():
     pair = request.args.get('pair')
     strategy = request.args.get('strategy')
     trade_action = int_action[request.args.get('action')]
+    close = request.args.get('close')
     take = request.args.get('tp') if 'tp' in request.args else None
     stop = request.args.get('sl') if 'sl' in request.args else None
     usd = request.args.get('usd') if 'usd' in request.args else None
