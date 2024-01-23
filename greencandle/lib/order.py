@@ -422,7 +422,6 @@ class Trade():
     def get_total_amount_to_use(self, dbase, pair=None, account=None, max_usd=None):
         """ Get total amount to use as sum of balance_to_use and loan_to_use """
 
-
         max_from_db = max_usd if max_usd else dbase.get_var_value('max_trade_usd')
         total_max = int(max_from_db) if max_from_db else int(self.config.main.max_trade_usd)
         balance_to_use = self.get_balance_to_use(dbase, account, pair)
@@ -430,8 +429,10 @@ class Trade():
         # cover max, where loan is available
         loan_to_use = {'symbol': 0, 'usd': 0, 'symbol_name': balance_to_use['symbol_name']}
 
-        # if we have 3x balance or USE_BALANCE flag set then use balance rather than loan
-        if (balance_to_use['usd'] * 3) > total_max or 'USE_BALANCE' in os.environ:
+        # use balance only
+        if (balance_to_use['usd'] * 3) > total_max or \
+                ('USE_BALANCE' in os.environ and balance_to_use['usd'] > total_max):
+
             balance_to_use['usd'] = total_max
             if balance_to_use['symbol_name'] == 'USDT':
                 balance_to_use['symbol'] = balance_to_use['usd']
@@ -439,7 +440,8 @@ class Trade():
                 balance_to_use['symbol'] = quote2base(balance_to_use['usd'],
                                                       balance_to_use['symbol_name']+'USDT')
                 loan_to_use = {'symbol':0, 'usd':0, 'symbol_name': balance_to_use['symbol_name']}
-        else:
+
+        else: # use loan
 
             loan_to_use = self.get_amount_to_borrow(pair, dbase) if \
                     self.config.main.trade_type != 'spot' else {'usd': 0,
