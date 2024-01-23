@@ -26,6 +26,7 @@ from greencandle.lib.binance_accounts import base2quote
 from greencandle.lib.common import (arg_decorator, divide_chunks, get_be_services, list_to_dict,
                                     perc_diff, get_tv_link, get_trade_link, format_usd)
 from greencandle.lib import config
+from greencandle.lib.balance_common import get_quote
 from greencandle.lib.flask_auth import load_user, login as loginx, logout as logoutx
 
 class PrefixMiddleware():
@@ -64,6 +65,7 @@ LOGIN = APP.route("/logout", methods=["GET", "POST"])(logoutx)
 VALUES = defaultdict(dict)
 BALANCE = []
 LIVE = []
+CURRENT_AMTS = 0
 
 SCRIPTS = ["write_balance", "get_quote_balance", "repay_debts", "get_risk", "get_trade_status",
            "get_hour_profit", "repay_debts", "balance_graph", "test_close"]
@@ -363,12 +365,14 @@ def get_live():
     Get live open trade details
     """
     global LIVE
+    global CURRENT_AMTS
 
     if config.main.base_env.strip() == 'data':
         return None
     all_data = []
     mt3 = 0
     mt5 = 0
+    usd_amt = 0
 
     dbase = Mysql()
     stream = os.environ['STREAM']
@@ -379,12 +383,20 @@ def get_live():
                             reverse=False, str_filter='-be-')
     raw = dbase.get_open_trades()
     commission = float(dbase.get_complete_commission())
-
-    for open_time, interval, pair, name, open_price, direction, _ in raw:
+    for open_time, interval, pair, name, open_price, direction, quote_in in raw:
         current_price = prices['recent'][pair]['close']
         perc = perc_diff(open_price, current_price)
         perc = -perc if direction == 'short' else perc
         net_perc = perc - commission
+
+        current_amt = (quote_in/100) * net_perc
+        current_quote = get_quote(pair)
+        if current_quote == 'USDT':
+            usd_amt = current_amt
+        else:
+            usd_amt = base2quote(current_amt, current_quote+'USDT')
+        amts += usd_amt
+
 
         if float(net_perc) > 3:
             mt3 += 1
@@ -414,8 +426,10 @@ def get_live():
                          "tp/sl": f"{take}/{stop}",
                          "du/dd": f"{round(drawup,2)}/{round(drawdown,2)}" })
     LIVE = all_data
+    CURRENT_AMTS = amts
     if mt3 > 0 or mt5 > 0:
         send_slack_message("balance", f"trades over 3%: {mt3}\ntrades over 5%: {mt5}")
+    send_slack_message("balance", f"Current trade value: {CURRENT_AMTS}")
     return LIVE
 
 @APP.route('/live', methods=['GET', 'POST'])
