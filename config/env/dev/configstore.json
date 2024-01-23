@@ -270,6 +270,11 @@
       "is_binary": false,
       "is_secret": false
     },
+    "nginx_server": {
+      "value": "www.dev.amrox.loc",
+      "is_binary": false,
+      "is_secret": false
+    },
     "no_of_klines": {
       "value": "200",
       "is_binary": false,

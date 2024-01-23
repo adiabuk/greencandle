@@ -271,6 +271,11 @@
       "is_binary": false,
       "is_secret": false
     },
+    "nginx_server": {
+      "value": "www.per.amrox.loc",
+      "is_binary": false,
+      "is_secret": false
+    },
     "no_of_klines": {
       "value": "500",
       "is_binary": false,
