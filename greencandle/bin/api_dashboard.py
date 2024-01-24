@@ -447,12 +447,14 @@ def menu():
     length = get_pairs()[1]
     return render_template('menu.html', strats=length)
 
-def get_total_value():
+def get_total_values():
     """
-    Get total current value of open trades from DB and exchange
-    return value in USD
+    Get total current USD value of open trades from DB and exchange
+    and sum net perc.
+    return values as tupple
     """
     usd_amt = 0
+    total_net_perc = 0
     dbase = Mysql()
     raw = dbase.get_open_trades()
     commission = float(dbase.get_complete_commission())
@@ -471,9 +473,8 @@ def get_total_value():
             usd_amt += current_amt
         else:
             usd_amt += base2quote(current_amt, current_quote+'USDT')
-    return usd_amt
-
-
+        total_net_perc += net_perc
+    return usd_amt, total_net_perc
 
 def get_additional_details():
     """
@@ -525,10 +526,13 @@ def get_balance():
         if float(item['free']) > 0:
             free[item['asset']] = float(item['free'])
 
+    total_value, total_net_perc = get_total_values()
     all_results.append({'key': 'avail_borrow', 'usd': format_usd(client.get_max_borrow()),
                         'val': ''})
-    all_results.append({'key': 'current_trade_value', 'usd': format_usd(get_total_value()),
+    all_results.append({'key': 'current_trade_value', 'usd': format_usd(total_value),
                         'val': '0'})
+    all_results.append({'key': 'current_net_perc', 'usd': '',
+                        'val': round(total_net_perc, 4)})
     usd_debts_total = 0
     for key, val in debts.items():
         usd_debt = val if 'USD' in key else base2quote(val, key+'USDT')
