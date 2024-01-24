@@ -64,7 +64,6 @@ LOGIN = APP.route("/logout", methods=["GET", "POST"])(logoutx)
 
 VALUES = defaultdict(dict)
 BALANCE = []
-CURRENT_AMT = 0
 LIVE = []
 
 SCRIPTS = ["write_balance", "get_quote_balance", "repay_debts", "get_risk", "get_trade_status",
@@ -365,14 +364,12 @@ def get_live():
     Get live open trade details
     """
     global LIVE
-    global CURRENT_AMT
 
     if config.main.base_env.strip() == 'data':
         return None
     all_data = []
     mt3 = 0
     mt5 = 0
-    usd_amt = 0
 
     dbase = Mysql()
     stream = os.environ['STREAM']
@@ -383,18 +380,11 @@ def get_live():
                             reverse=False, str_filter='-be-')
     raw = dbase.get_open_trades()
     commission = float(dbase.get_complete_commission())
-    for open_time, interval, pair, name, open_price, direction, quote_in in raw:
+    for open_time, interval, pair, name, open_price, direction, _ in raw:
         current_price = prices['recent'][pair]['close']
         perc = perc_diff(open_price, current_price)
         perc = -perc if direction == 'short' else perc
         net_perc = perc - commission
-
-        current_amt = (float(quote_in)/100) * float(net_perc)
-        current_quote = get_quote(pair)
-        if current_quote == 'USDT':
-            usd_amt += current_amt
-        else:
-            usd_amt += base2quote(current_amt, current_quote+'USDT')
 
         if float(net_perc) > 3:
             mt3 += 1
@@ -424,7 +414,6 @@ def get_live():
                          "tp/sl": f"{take}/{stop}",
                          "du/dd": f"{round(drawup,2)}/{round(drawdown,2)}" })
     LIVE = all_data
-    CURRENT_AMT = usd_amt
     if mt3 > 0 or mt5 > 0:
         send_slack_message("balance", f"trades over 3%: {mt3}\ntrades over 5%: {mt5}")
     return LIVE
@@ -457,6 +446,34 @@ def menu():
     """
     length = get_pairs()[1]
     return render_template('menu.html', strats=length)
+
+def get_total_value():
+    """
+    Get total current value of open trades from DB and exchange
+    return value in USD
+    """
+    usd_amt = 0
+    dbase = Mysql()
+    raw = dbase.get_open_trades()
+    commission = float(dbase.get_complete_commission())
+    stream = os.environ['STREAM']
+    stream_req = requests.get(stream, timeout=10)
+    prices = stream_req.json()
+    for _, _, pair, _, open_price, direction, quote_in in raw:
+        current_price = prices['recent'][pair]['close']
+        perc = perc_diff(open_price, current_price)
+        perc = -perc if direction == 'short' else perc
+        net_perc = perc - commission
+
+        current_amt = (float(quote_in)/100) * float(net_perc)
+        current_quote = get_quote(pair)
+        if current_quote == 'USDT':
+            usd_amt += current_amt
+        else:
+            usd_amt += base2quote(current_amt, current_quote+'USDT')
+    return usd_amt
+
+
 
 def get_additional_details():
     """
@@ -495,7 +512,6 @@ def get_balance():
     """
     Get cross margin quote amounts from exchange
     """
-    get_live()
     global BALANCE
     client=binance_auth()
     all_results = []
@@ -511,7 +527,7 @@ def get_balance():
 
     all_results.append({'key': 'avail_borrow', 'usd': format_usd(client.get_max_borrow()),
                         'val': ''})
-    all_results.append({'key': 'current_trade_value', 'usd': format_usd(CURRENT_AMT),
+    all_results.append({'key': 'current_trade_value', 'usd': format_usd(get_total_value()),
                         'val': '0'})
     usd_debts_total = 0
     for key, val in debts.items():
