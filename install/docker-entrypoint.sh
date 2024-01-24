@@ -33,8 +33,7 @@ if [[ ! -f /installed ]]; then
     mkdir -p /var/www/html
     base_env=$(configstore package get $CONFIG_ENV base_env --basedir /opt/config)
     echo "$base_env ($VERSION)" > /var/www/html/env.txt
-    cp /opt/config/raw/main.css /opt/config/raw/50x.html /var/www/html
-    cp /opt/config/raw/favicon-${base_env}.ico  /var/www/html/favicon.ico
+    cp /opt/output/{*.html,*.css,*.js,*.jpg} /var/www/html
     cp /opt/config/raw/* /var/www/html/
 
   elif [[ "$HOSTNAME" == *"redis"* ]]; then
