@@ -1,5 +1,16 @@
 # Releases
 
+# 6.55
+* add missing data api forward strategies
+* update new strategy open rule
+* add total net perc and current trade value to balances UI
+* add previously removed close arg to display close window
+* try to serve static files from nginx
+* further increase time between trade notifs data env
+* check balance when picking between loan and avail amt
+* change of prod alerts
+* fix typo in template path
+
 # 6.54.3
 * put html templates into static dir
 * use proxy pass to avoid adding of internal port to url
