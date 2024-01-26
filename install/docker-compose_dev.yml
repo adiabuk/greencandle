@@ -31,6 +31,7 @@ services:
       - CONFIG_ENV=dev
       - DB=true
     hostname: dev-be-manual
+    working_dir: /data/scripts
     image: amrox/greencandle:${TAG}
     restart: always
     entrypoint: /docker-entrypoint.sh "tail -f /dev/null"

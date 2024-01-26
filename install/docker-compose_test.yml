@@ -204,6 +204,7 @@ services:
   test-be-manual:
     container_name: test-be-manual
     hostname: test-be-manual
+    working_dir: /data/scripts
     environment:
       - CONFIG_ENV=test/be/manual
       - DB=true

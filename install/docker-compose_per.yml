@@ -105,6 +105,7 @@ services:
   per-be-manual:
     container_name: per-be-manual
     hostname: per-be-manual
+    working_dir: /data/scripts
     environment:
       - CONFIG_ENV=per/be/manual
       - DB=true

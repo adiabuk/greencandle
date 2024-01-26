@@ -104,6 +104,7 @@ services:
   prod-be-manual:
     container_name: prod-be-manual
     hostname: prod-be-manual
+    working_dir: /data/scripts
     environment:
       - CONFIG_ENV=prod/be/manual
       - DB=true

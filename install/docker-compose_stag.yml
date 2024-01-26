@@ -143,6 +143,7 @@ services:
   stag-be-manual:
     container_name: stag-be-manual
     hostname: stag-be-manual
+    working_dir: /data/scripts
     environment:
       - CONFIG_ENV=stag/be/manual
       - DB=true

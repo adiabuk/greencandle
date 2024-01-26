@@ -589,6 +589,7 @@ services:
   data-be-manual:
     container_name: data-be-manual
     hostname: data-be-manual
+    working_dir: /data/scripts
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/manual
