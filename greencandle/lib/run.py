@@ -239,9 +239,7 @@ class ProdRunner():
             closes = []
             drawdowns = {}
             drawups = {}
-            pair = trade[0].strip()
-            open_price, _, open_time, _, _, _ = dbase.get_trade_value(pair)[0]
-
+            pair, open_time, open_price = trade
             klines = 60 if interval.endswith('s') or interval.endswith('m') else 5
             try:
                 current_candle = get_dataframes([pair],
@@ -249,7 +247,7 @@ class ProdRunner():
                                                 no_of_klines=klines)[pair].iloc[-1]
 
             except IndexError:
-                LOGGER.critical("Unable to get %s candles for %s while running %s prod_int_check",
+                LOGGER.critical("unable to get %s candles for %s while running %s prod_int_check",
                                 str(klines), pair, interval)
                 # Ensure we skip iteration so we don't update db/redis
                 # using values from previous loop

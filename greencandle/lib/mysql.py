@@ -277,7 +277,7 @@ class Mysql():
               a single list of pairs that we currently hold with the open time
         """
         cur = self.dbase.cursor()
-        command = (f'select pair, open_time from trades where close_price is NULL and '
+        command = (f'select pair, open_time, open_price from trades where close_price is NULL and '
                    f'`interval`="{self.interval}" and name in ("{config.main.name}","api") and '
                    f'direction like "%{direction}%"')
 

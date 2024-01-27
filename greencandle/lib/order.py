@@ -133,21 +133,21 @@ class Trade():
                     continue
 
             if (current_trades and [trade for trade in current_trades if item[0] in trade]):
-                self.logger.warning("We already have a trade of %s %s, skipping...",
+                self.logger.warning("we already have a trade of %s %s, skipping...",
                     self.config.main.trade_direction, item[0])
             elif not manual and (item[0] not in self.config.main.pairs and not self.test_data):
-                self.logger.critical("Pair %s not in main_pairs, skipping...", item[0])
+                self.logger.critical("pair %s not in main_pairs, skipping...", item[0])
             elif not manual and good_pairs and db_pairs and (item[0] not in db_pairs
                                                              and not self.test_data):
-                self.logger.warning("Pair %s not in db_pairs, skipping...", item[0])
-                send_slack_message("trades", f"Pair {item[0]} not in db_pairs, skipping...")
+                self.logger.warning("pair %s not in db_pairs, skipping...", item[0])
+                send_slack_message("trades", f"pair {item[0]} not in db_pairs, skipping...")
             elif self.is_in_drain() and not self.test_data:
                 self.logger.warning("strategy is in drain for pair %s, skipping...", item[0])
                 return []
             elif self.is_float(item[4]) and \
                     ((float(item[4]) > 0 and self.config.main.trade_direction == "short") or \
                     (float(item[4]) < 0 and self.config.main.trade_direction == "long")):
-                self.logger.info("Wrong trade direction %s", self.config.main.trade_direction)
+                self.logger.info("wrong trade direction %s", self.config.main.trade_direction)
             elif avail_slots <= 0:
                 pairs_str = ', '.join((x[0] for x in items_list))
                 self.logger.warning("Too many trades for %s, skipping:%s",
