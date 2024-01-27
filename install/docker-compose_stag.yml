@@ -361,6 +361,7 @@ services:
       - CONFIG_ENV=stag/be/any/long
       - intermittent="true"
       - DB=true
+      - STREAM=http://10.8.0.101:5006/all
     ports:
       - 20000
     links:
@@ -400,6 +401,7 @@ services:
       - intermittent="true"
       - DB=true
       - no_proxy=router
+      - STREAM=http://10.8.0.101:5006/all
     ports:
       - 20000
     links:

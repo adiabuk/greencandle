@@ -376,6 +376,7 @@ services:
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/1h/cross-long
       - DB=true
+      - STREAM=http://10.8.0.101:5003/all
     ports:
       - 20000
     links:
@@ -414,6 +415,7 @@ services:
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/1h/cross-short
       - DB=true
+      - STREAM=http://10.8.0.101:5003/all
     ports:
       - 20000
     links:
@@ -452,6 +454,7 @@ services:
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/4h/cross-long
       - DB=true
+      - STREAM=http://10.8.0.101:5004/all
     ports:
       - 20000
     links:
@@ -490,6 +493,7 @@ services:
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/4h/cross-short
       - DB=true
+      - STREAM=http://10.8.0.101:5004/all
     ports:
       - 20000
     links:
@@ -528,6 +532,7 @@ services:
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/1m/cross-long
       - DB=true
+      - STREAM=http://10.8.0.101:5001/all
     ports:
       - 20000
     links:
@@ -566,6 +571,7 @@ services:
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/1m/cross-short
       - DB=true
+      - STREAM=http://10.8.0.101:5001/all
     ports:
       - 20000
     links:
@@ -604,6 +610,7 @@ services:
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/5m/cross-long
       - DB=true
+      - STREAM=http://10.8.0.101:5002/all
     ports:
       - 20000
     links:
@@ -681,6 +688,7 @@ services:
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/lt/cross-long
       - DB=true
+      - STREAM=http://10.8.0.101:5001/all
     ports:
       - 20000
     links:
@@ -718,6 +726,7 @@ services:
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/lt/cross-short
       - DB=true
+      - STREAM=http://10.8.0.101:5001/all
     ports:
       - 20000
     links:
@@ -756,6 +765,7 @@ services:
       - CONFIG_ENV=prod/be/any/man/cross-long
       - DB=true
       - USE_BALANCE=true
+      - STREAM=http://10.8.0.101:5001/all
     ports:
       - 20000
     links:
@@ -794,6 +804,7 @@ services:
       - CONFIG_ENV=prod/be/any/man/cross-short
       - DB=true
       - USE_BALANCE=true
+      - STREAM=http://10.8.0.101:5001/all
     ports:
       - 20000
     links:

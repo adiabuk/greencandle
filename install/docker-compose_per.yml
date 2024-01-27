@@ -367,6 +367,7 @@ services:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=per/be/any/spot-long
       - DB=true
+      - STREAM=http://10.8.0.101:5001/all
     ports:
       - 20000
     links:
@@ -404,6 +405,7 @@ services:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=per/be/any/cross-long
       - DB=true
+      - STREAM=http://10.8.0.101:5001/all
     ports:
       - 20000
     links:
@@ -441,6 +443,7 @@ services:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=per/be/any/cross-short
       - DB=true
+      - STREAM=http://10.8.0.101:5001/all
     ports:
       - 20000
     links:
