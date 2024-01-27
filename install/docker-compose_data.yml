@@ -83,7 +83,7 @@ services:
       timeout: 30s
       retries: 5
     ports:
-      - 5007:5000
+      - 5004:5000
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws
@@ -154,7 +154,7 @@ services:
       timeout: 30s
       retries: 5
     ports:
-      - 5006:5000
+      - 5003:5000
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws
@@ -225,7 +225,7 @@ services:
       timeout: 30s
       retries: 5
     ports:
-      - 5004:5000
+      - 5006:5000
     volumes:
       - /mnt:/mnt
       - /data:/data
@@ -297,7 +297,7 @@ services:
       timeout: 10s
       retries: 5
     ports:
-      - 5003:5000
+      - 5005:5000
     volumes:
       - /mnt:/mnt
       - /data:/data
