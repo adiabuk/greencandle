@@ -241,10 +241,18 @@ class ProdRunner():
             drawups = {}
             pair, open_time, open_price = trade
             klines = 60 if interval.endswith('s') or interval.endswith('m') else 5
+
+            stream = os.environ['STREAM']
+            stream_req = requests.get(stream, timeout=10)
+            prices = stream_req.json()
+
             try:
-                current_candle = get_dataframes([pair],
-                                                interval=interval,
-                                                no_of_klines=klines)[pair].iloc[-1]
+                if 'recent' in prices and pair in prices['recent']:
+                    current_candle = pandas.Series(prices['recent'][pair])
+                else:
+                    current_candle = get_dataframes([pair],
+                                                    interval=interval,
+                                                    no_of_klines=klines)[pair].iloc[-1]
 
             except IndexError:
                 LOGGER.critical("unable to get %s candles for %s while running %s prod_int_check",
