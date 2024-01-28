@@ -9,7 +9,7 @@ import time
 import pickle
 import gzip
 from glob import glob
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 from collections import defaultdict
 import pandas
 import requests
@@ -231,20 +231,15 @@ class ProdRunner():
     @GET_EXCEPTIONS
     def prod_int_check(interval, test, alert=False):
         """Check price between candles for slippage below stoploss"""
-        dbase = Mysql(test=False, interval=interval)
-        redis = Redis()
-        current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
 
-        for trade in dbase.get_trades():
+        def check_pair(trade, prices, redis):
+            """
+            check individual pair
+            """
+            pair, open_time, open_price = trade
             closes = []
             drawdowns = {}
             drawups = {}
-            pair, open_time, open_price = trade
-            klines = 60 if interval.endswith('s') or interval.endswith('m') else 5
-
-            stream = os.environ['STREAM']
-            stream_req = requests.get(stream, timeout=10)
-            prices = stream_req.json()
 
             try:
                 if 'recent' in prices and pair in prices['recent']:
@@ -259,39 +254,52 @@ class ProdRunner():
                                 str(klines), pair, interval)
                 # Ensure we skip iteration so we don't update db/redis
                 # using values from previous loop
-                continue
+                return
 
-            if dbase.trade_in_context(pair, config.main.name, config.main.trade_direction):
-                redis.update_drawdown(pair, current_candle, open_time=open_time)
-                redis.update_drawup(pair, current_candle, open_time=open_time)
-                result, event, current_time, current_price = redis.get_intermittent(pair,
-                                                                                    open_price,
-                                                                                    current_candle,
-                                                                                    open_time)
+            redis.update_drawdown(pair, current_candle, open_time=open_time)
+            redis.update_drawup(pair, current_candle, open_time=open_time)
+            result, event, current_time, current_price = redis.get_intermittent(pair,
+                                                                                open_price,
+                                                                                current_candle,
+                                                                                open_time)
 
-                LOGGER.debug("%s int check result: %s Open:%s Current:%s Time:%s",
-                             pair, result, open_price, current_price, current_time)
-                if result == "CLOSE":
-                    LOGGER.debug("Items to close")
-                    closes.append((pair, current_time, current_price, event, 0, None))
-                    drawdowns[pair] = redis.get_drawdown(pair)['perc']
-                    drawups[pair] = redis.get_drawup(pair)['perc']
-                    if alert:
-                        payload = {"pair":pair, "strategy":"alert", "host": "alert",
-                                   "text": "Closing API trade according to TP/SL rules",
-                                   "action":"close"}
-                        url = f"http://router:1080/{config.web.api_token}"
-                        try:
-                            requests.post(url, json=payload, timeout=1)
-                        except Exception:
-                            pass
+            LOGGER.debug("%s int check result: %s Open:%s Current:%s Time:%s",
+                         pair, result, open_price, current_price, current_time)
+            if result == "CLOSE":
+                LOGGER.debug("Items to close")
+                closes.append((pair, current_time, current_price, event, 0, None))
+                drawdowns[pair] = redis.get_drawdown(pair)['perc']
+                drawups[pair] = redis.get_drawup(pair)['perc']
+                if alert:
+                    payload = {"pair":pair, "strategy":"alert", "host": "alert",
+                               "text": "Closing API trade according to TP/SL rules",
+                               "action":"close"}
+                    url = f"http://router:1080/{config.web.api_token}"
+                    try:
+                        requests.post(url, json=payload, timeout=1)
+                    except Exception:
+                        pass
 
-                    trade = Trade(interval=interval, test_trade=test,
-                                  test_data=False, config=config)
-                    trade.close_trade(closes, drawdowns=drawdowns, drawups=drawups)
+                trade = Trade(interval=interval, test_trade=test,
+                              test_data=False, config=config)
+                trade.close_trade(closes, drawdowns=drawdowns, drawups=drawups)
+
+        dbase = Mysql(test=False, interval=interval)
+        redis = Redis()
+        #current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
+        stream = os.environ['STREAM']
+        stream_req = requests.get(stream, timeout=10)
+        prices = stream_req.json()
+        klines = 60 if interval.endswith('s') or interval.endswith('m') else 5
+
+
+        for trade in dbase.get_trades():
+            check_pair(trade, prices, redis)
 
         del redis
         del dbase
+
+
 
     @GET_EXCEPTIONS
     def prod_initial(self, interval, test=False, first_run=True, no_of_runs=999):
