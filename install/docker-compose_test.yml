@@ -331,7 +331,6 @@ services:
       - test-base-mysql:mysql
       - test-base-redis:redis
       - test-be-api-any-1m-cross-long:any-1m-long
-      - test-be-api-any-1h-cross-long:any-1h-long
       - test-be-api-any-5m-cross-long:any-5m-long
       - test-be-api-any-15m-cross-long:any-15m-long
       - test-be-api-any-30m-cross-long:any-30m-long
