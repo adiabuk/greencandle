@@ -460,7 +460,7 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5001/all
+      - STREAM=http://10.8.0.101:5003/all
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -502,7 +502,7 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5001/all
+      - STREAM=http://10.8.0.101:5004/all
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -544,7 +544,7 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5007/all
+      - STREAM=http://10.8.0.101:5004/all
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
@@ -586,7 +586,7 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5007/all
+      - STREAM=http://10.8.0.101:5004/all
     extra_hosts:
       - "trend:10.8.0.101"
     ports:
