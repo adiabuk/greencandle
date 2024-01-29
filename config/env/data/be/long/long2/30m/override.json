@@ -1,0 +1,6 @@
+{
+  "interval": "30m",
+  "name": "data-be-analyse-30m-long2",
+  "api_forward": "30m-2",
+  "time_between_trades": "1h"
+}
