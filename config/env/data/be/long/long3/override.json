@@ -3,7 +3,7 @@
   "open_rule3": "agg.bbperc_diff \u003e 2 and res[0].bbperc_200 \u003c -2 and res[0].numTrades \u003e 50 and agg.empty_count \u003c 1",
   "open_rule4": "res[0].bbperc_200 \u003c -4.5 and res[0].numTrades \u003e 50 and agg.empty_count \u003c 1",
 
-  "slack_alerts": "data_old",
-  "slack_balance": "data_old",
-  "slack_notifications": "data_old"
+  "slack_alerts": "data_2steps",
+  "slack_balance": "data_2steps",
+  "slack_notifications": "data_2steps"
 }

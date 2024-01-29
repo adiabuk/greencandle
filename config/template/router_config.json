@@ -108,11 +108,6 @@
 {
 "any-long-short": ["forward"],
 
-"1m-6": ["test:any3-1m-long-short"],
-"5m-6": ["test:any3-5m-long-short"],
-"1h-6": ["test:any3-1h-long-short"],
-"4h-6": ["test:any3-4h-long-short"],
-
 "1m-4": ["test:any2-1m-long-short"],
 "5m-4": ["test:any2-5m-long-short"],
 "15m-4": ["test:any2-15m-long-short"],
@@ -120,8 +115,10 @@
 "1h-4": ["test:any2-1h-long-short"],
 "4h-4": ["test:any2-4h-long-short"],
 
-"1m-2": ["alert", "test:any-1m-long-short"],
-"5m-2": ["alert", "test:any-5m-long-short"],
+"1m-6": ["alert", "test:any-1m-long-short"],
+"5m-6": ["alert", "test:any-5m-long-short"],
+"15m-6": ["alert", "test:any-15m-long-short"],
+"30m-6": ["alert", "test:any-30m-long-short"],
 
 "1m-3": ["alert"],
 "5m-3": ["alert"],

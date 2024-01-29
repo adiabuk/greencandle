@@ -1,7 +1,5 @@
 {
   "close_rule1": "res[0].MACD_19[2] \u003c 0 and res[1].MACD_19[2] \u003c 0",
   "open_rule1": "res[0].MACD_19[2] \u003e 0 and res[1].MACD_19[2] \u003e 0",
-  "slack_alerts": "",
-  "slack_balance": "",
-  "slack_notifications": ""
+  "slack_active": "false",
 }
