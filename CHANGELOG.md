@@ -1,5 +1,21 @@
 # Releases
 
+# 6.56
+* leave more candles in redis after db cleanup
+* remove some 1m test containers and routes
+* add new data=>prod route and tweak config
+* cleanup redis db2 script and add to cron - all envs
+* fix checking of sufficient balance in order module
+* rename data channels and stratgy lookups to match
+* retain only single bb data strategy and add second step to RSI
+* add stream vars to api backend containers and use for intermittent checks
+* reduce prod and test containers
+* re-order stream container port mappings
+* simplify prod_int_check and speedup
+* replace macd strategy with rsi for 1m|5m|15m|30m for prod|test
+* add working dir to all manual containers
+* be more lenient with middle bb check
+
 # 6.55
 * add missing data api forward strategies
 * update new strategy open rule
