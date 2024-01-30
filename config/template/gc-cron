@@ -7,7 +7,7 @@ BASH_ENV=/container.env
 * * * * * /usr/bin/touch /var/run/cron > /proc/1/fd/1 2>/proc/1/fd/2 # healthcheck
 
 @reboot echo C.UTF-8 > /etc/default/locale
-@hourly /usr/local/bin/cleanup_redis 60 > /proc/1/fd/1 2>/proc/1/fd/2
+@hourly /usr/local/bin/cleanup_redis 120 > /proc/1/fd/1 2>/proc/1/fd/2
 @daily /usr/local/bin/cleanup_db2.py > /proc/1/fd/1 2>/proc/1/fd/2
 
 {{if eq .base_env "prod" }}
