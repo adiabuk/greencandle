@@ -430,8 +430,8 @@ class Trade():
         loan_to_use = {'symbol': 0, 'usd': 0, 'symbol_name': balance_to_use['symbol_name']}
 
         # use balance only
-        if (balance_to_use['usd'] * 3) > total_max or \
-                ('USE_BALANCE' in os.environ and balance_to_use['usd'] > total_max):
+        if balance_to_use['usd'] > (total_max *5) or \
+                ('USE_BALANCE' in os.environ and balance_to_use['usd'] > total_max*2):
 
             balance_to_use['usd'] = total_max
             if balance_to_use['symbol_name'] == 'USDT':
@@ -439,7 +439,7 @@ class Trade():
             else:
                 balance_to_use['symbol'] = quote2base(balance_to_use['usd'],
                                                       balance_to_use['symbol_name']+'USDT')
-                loan_to_use = {'symbol':0, 'usd':0, 'symbol_name': balance_to_use['symbol_name']}
+                loan_to_use = {'symbol': 0, 'usd': 0, 'symbol_name': balance_to_use['symbol_name']}
 
         else: # use loan
 
