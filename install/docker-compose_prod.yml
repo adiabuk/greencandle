@@ -377,6 +377,7 @@ services:
       - CONFIG_ENV=prod/be/any/1h/cross-long
       - DB=true
       - STREAM=http://10.8.0.101:5003/all
+      - USE_BALANCE=true
     ports:
       - 20000
     links:
@@ -416,6 +417,7 @@ services:
       - CONFIG_ENV=prod/be/any/1h/cross-short
       - DB=true
       - STREAM=http://10.8.0.101:5003/all
+      - USE_BALANCE=true
     ports:
       - 20000
     links:
@@ -455,6 +457,7 @@ services:
       - CONFIG_ENV=prod/be/any/4h/cross-long
       - DB=true
       - STREAM=http://10.8.0.101:5004/all
+      - USE_BALANCE=true
     ports:
       - 20000
     links:
@@ -494,6 +497,7 @@ services:
       - CONFIG_ENV=prod/be/any/4h/cross-short
       - DB=true
       - STREAM=http://10.8.0.101:5004/all
+      - USE_BALANCE=true
     ports:
       - 20000
     links:
@@ -533,6 +537,7 @@ services:
       - CONFIG_ENV=prod/be/any/1m/cross-long
       - DB=true
       - STREAM=http://10.8.0.101:5001/all
+      - USE_BALANCE=true
     ports:
       - 20000
     links:
@@ -572,6 +577,7 @@ services:
       - CONFIG_ENV=prod/be/any/1m/cross-short
       - DB=true
       - STREAM=http://10.8.0.101:5001/all
+      - USE_BALANCE=true
     ports:
       - 20000
     links:
@@ -611,6 +617,7 @@ services:
       - CONFIG_ENV=prod/be/any/5m/cross-long
       - DB=true
       - STREAM=http://10.8.0.101:5002/all
+      - USE_BALANCE=true
     ports:
       - 20000
     links:
@@ -650,6 +657,7 @@ services:
       - CONFIG_ENV=prod/be/any/5m/cross-short
       - DB=true
       - STREAM=http://10.8.0.101:5002/all
+      - USE_BALANCE=true
     ports:
       - 20000
     links:
@@ -689,6 +697,7 @@ services:
       - CONFIG_ENV=prod/be/any/lt/cross-long
       - DB=true
       - STREAM=http://10.8.0.101:5001/all
+      - USE_BALANCE=true
     ports:
       - 20000
     links:
@@ -727,6 +736,7 @@ services:
       - CONFIG_ENV=prod/be/any/lt/cross-short
       - DB=true
       - STREAM=http://10.8.0.101:5001/all
+      - USE_BALANCE=true
     ports:
       - 20000
     links:
