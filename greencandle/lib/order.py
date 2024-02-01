@@ -430,7 +430,7 @@ class Trade():
         loan_to_use = {'symbol': 0, 'usd': 0, 'symbol_name': balance_to_use['symbol_name']}
 
         # use balance only
-        if balance_to_use['usd'] > (total_max *5) or \
+        if self.test_trade or balance_to_use['usd'] > (total_max *5) or \
                 ('USE_BALANCE' in os.environ and balance_to_use['usd'] > total_max*2):
 
             balance_to_use['usd'] = total_max
@@ -442,7 +442,6 @@ class Trade():
                 loan_to_use = {'symbol': 0, 'usd': 0, 'symbol_name': balance_to_use['symbol_name']}
 
         else: # use loan
-
             loan_to_use = self.get_amount_to_borrow(pair, dbase) if \
                     self.config.main.trade_type != 'spot' else {'usd': 0,
                                                                 'symbol': 0,
