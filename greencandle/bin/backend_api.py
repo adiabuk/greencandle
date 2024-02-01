@@ -76,7 +76,7 @@ def main():
     if sys.argv[-1] == 'api':
         if "intermittent" in os.environ:
             scheduler = BackgroundScheduler()
-            scheduler.add_job(func=intermittent_check, trigger="interval", seconds=60)
+            scheduler.add_job(func=intermittent_check, trigger="interval", seconds=30)
             scheduler.start()
             logging.basicConfig(level=logging.ERROR)
         APP.run(debug=False, host='0.0.0.0', port=20000, threaded=True)
