@@ -10,6 +10,7 @@ from flask_login import LoginManager, login_required
 import sh
 import setproctitle
 from greencandle.lib.common import arg_decorator
+from greencandle.lib import config
 from greencandle.lib.flask_auth import load_user, login as loginx, logout as logoutx
 
 APP = Flask(__name__, template_folder="/var/www/html", static_url_path='/',
@@ -22,6 +23,8 @@ APP.config['SECRET_KEY'] = os.environ['SECRET_KEY'] if 'SECRET_KEY' in os.enviro
 load_user = LOGIN_MANAGER.user_loader(load_user)
 login = APP.route("/login", methods=["GET", "POST"])(loginx)
 logout = APP.route("/logout", methods=["GET", "POST"])(logoutx)
+config.create_config()
+env = config.main.base_env
 
 @APP.route('/')
 @login_required
@@ -37,9 +40,10 @@ def stream():
     """
     def generate():
         """ Generator for yielding log file contents """
+
         while True:
             try:
-                for line in sh.tail("-f", '/var/log/greencandle.log', _iter=True):
+                for line in sh.tail("-f", f'/var/log/gc_{env}.log', _iter=True):
                     yield line
                     time.sleep(1)
             except sh.ErrorReturnCode_1:
