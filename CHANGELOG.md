@@ -1,5 +1,19 @@
 # Releases
 
+# 6.57
+* cleanup and fix unit tests
+* don't fail with slack msg when no trade avail to close
+* don't try to send slack trade alert when config is empty
+* capture timeout exception if stream container not available and continue with api call
+* adjust prod timeout perc
+* use per-env log file for UI logtailer
+* add use_balance var to some prod containers
+* reduce delay between intermittent checks
+* always use 0 loan balance for test trades
+* tweak rsi close rule
+* increase rsi confirmation expiry & add 15m|30m containers
+* get hourly crypto sentiment screenshots
+
 # 6.56
 * leave more candles in redis after db cleanup
 * remove some 1m test containers and routes
