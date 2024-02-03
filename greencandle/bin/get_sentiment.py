@@ -30,7 +30,8 @@ def main():
 
     # select binance
     driver.find_element(By.CSS_SELECTOR, ".select-button").click()
-    driver.find_element(By.CSS_SELECTOR, "fieldset:nth-child(3) > .solid-button:nth-child(2)").click()
+    driver.find_element(By.CSS_SELECTOR, "fieldset:nth-child(3) > .solid-button:nth-child(2)"
+                        ).click()
 
     time.sleep(3)
     # hour
