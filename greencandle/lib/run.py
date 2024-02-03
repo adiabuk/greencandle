@@ -243,8 +243,11 @@ class ProdRunner():
             klines = 60 if interval.endswith('s') or interval.endswith('m') else 5
 
             stream = os.environ['STREAM']
-            stream_req = requests.get(stream, timeout=10)
-            prices = stream_req.json()
+            try:
+                stream_req = requests.get(stream, timeout=10)
+                prices = stream_req.json()
+            except requests.exceptions.ConnectTimeout:
+                prices = {}
 
             try:
                 if 'recent' in prices and pair in prices['recent']:
