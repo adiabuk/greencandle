@@ -91,6 +91,9 @@ def send_slack_trade(**kwargs):
 
     if not str2bool(config.slack.slack_active):
         return
+    if not config.slack[kwargs.channel]:
+        return
+
     if kwargs.action == 'OPEN':
         color = '#00fc22'
         services = list_to_dict(get_be_services(config.main.base_env),
