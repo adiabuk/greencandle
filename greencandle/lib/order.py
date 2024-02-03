@@ -759,7 +759,7 @@ class Trade():
         Returns True|False
         """
 
-        self.logger.info("We need to close margin short %s", short_list)
+        self.logger.info("we need to close margin short %s", short_list)
         dbase = Mysql(test=self.test_data, interval=self.interval)
         name = self.config.main.name
         for pair, current_time, current_price, event, _, _ in short_list:
@@ -768,7 +768,8 @@ class Trade():
 
             open_price, quote_in, _, base_in, borrowed, _ = dbase.get_trade_value(pair)[0]
             if not open_price:
-                return False
+                self.logger.info("No open trades found for short %s", pair)
+                return True
             # Quantity of base_asset we can buy back based on current price
             quantity = base_in
 
@@ -972,7 +973,7 @@ class Trade():
         Returns True|False
         """
 
-        self.logger.info("We need to close spot long %s", sell_list)
+        self.logger.info("we need to close spot long %s", sell_list)
         dbase = Mysql(test=self.test_data, interval=self.interval)
         name = self.config.main.name
         for pair, current_time, current_price, event, _, _ in sell_list:
@@ -984,7 +985,8 @@ class Trade():
 
             open_price, quote_in, _, _, _, _ = dbase.get_trade_value(pair)[0]
             if not open_price:
-                return False
+                self.logger.info("No open trades found for spot %s", pair)
+                return True
 
             perc_inc = perc_diff(open_price, current_price)
             quote_out = add_perc(perc_inc, quote_in)
@@ -1052,7 +1054,7 @@ class Trade():
         Returns True|False
         """
 
-        self.logger.info("We need to close margin long %s", sell_list)
+        self.logger.info("we need to close margin long %s", sell_list)
         dbase = Mysql(test=self.test_data, interval=self.interval)
         name = self.config.main.name
         for pair, current_time, current_price, event, _, _ in sell_list:
@@ -1063,7 +1065,8 @@ class Trade():
 
             open_price, quote_in, _, _, borrowed, _, = dbase.get_trade_value(pair)[0]
             if not open_price:
-                return False
+                self.logger.info("No open trades found for long %s", pair)
+                return True
 
             perc_inc = perc_diff(open_price, current_price)
             quote_out = add_perc(perc_inc, quote_in)
