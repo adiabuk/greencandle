@@ -383,7 +383,7 @@ services:
         syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV=test/be/any/long/1m
+      - CONFIG_ENV=test/be/any/long/3/1m
       - ALERT="True"
       - intermittent="true"
       - DB=true
@@ -425,7 +425,7 @@ services:
         syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV=test/be/any/long/5m
+      - CONFIG_ENV=test/be/any/long/3/5m
       - ALERT="True"
       - intermittent="true"
       - DB=true
@@ -467,7 +467,7 @@ services:
         syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV=test/be/any/long/15m
+      - CONFIG_ENV=test/be/any/long/3/15m
       - ALERT="True"
       - intermittent="true"
       - DB=true
@@ -509,7 +509,7 @@ services:
         syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV=test/be/any/long/30m
+      - CONFIG_ENV=test/be/any/long/3/30m
       - ALERT="True"
       - intermittent="true"
       - DB=true
@@ -551,7 +551,7 @@ services:
         syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV=test/be/any/short/1m
+      - CONFIG_ENV=test/be/any/short/3/1m
       - ALERT="True"
       - intermittent="true"
       - DB=true
@@ -593,7 +593,7 @@ services:
         syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV=test/be/any/short/5m
+      - CONFIG_ENV=test/be/any/short/3/5m
       - ALERT="True"
       - intermittent="true"
       - DB=true
@@ -635,7 +635,7 @@ services:
         syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV=test/be/any/short/15m
+      - CONFIG_ENV=test/be/any/short/3/15m
       - ALERT="True"
       - intermittent="true"
       - DB=true
@@ -677,7 +677,7 @@ services:
         syslog-facility: local2
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV=test/be/any/short/30m
+      - CONFIG_ENV=test/be/any/short/3/30m
       - ALERT="True"
       - intermittent="true"
       - DB=true
