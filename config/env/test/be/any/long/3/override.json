@@ -1,14 +1,9 @@
 {
   "max_trades": "100",
   "name": "test-be-api-any3-cross",
-  "perc_at_timeout": "0.3",
-  "immediate_stop": "true",
   "slack_alerts": "test2",
   "slack_balance": "test2",
   "slack_notifications": "test2",
   "slack_trades": "test2",
-  "take_profit_perc": "2",
-  "stop_loss_perc": "1",
-  "immediate_take_profit": "true",
   "trade_direction": "long"
 }
