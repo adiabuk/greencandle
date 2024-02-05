@@ -43,7 +43,7 @@ def stream():
 
         while True:
             try:
-                for line in sh.tail("-f", f'/var/log/greencandle.log', _iter=True):
+                for line in sh.tail("-f", f'/var/log/gc_{env}.log', _iter=True):
                     yield line
                     time.sleep(1)
             except sh.ErrorReturnCode_1:
