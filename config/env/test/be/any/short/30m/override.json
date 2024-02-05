@@ -1,0 +1,12 @@
+{
+  "immediate_trailing_stop": "true",
+  "interval": "30m",
+  "name": "test-be-api-any-30m-cross",
+  "perc_at_timeout": "3",
+  "stop_loss_perc": "10",
+  "take_profit_perc": "10",
+  "time_in_trade": "6h",
+  "trade_direction": "short",
+  "trailing_start": "8",
+  "trailing_stop_loss_perc": "2"
+}
