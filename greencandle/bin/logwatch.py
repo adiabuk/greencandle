@@ -39,7 +39,7 @@ def main():
     setproctitle.setproctitle("logwatch")
     env = config.main.base_env
     client = docker.from_env()
-    with open("/var/log/greencandle.log", "r") as logfile:
+    with open(f"/var/log/gc_{env}.log", "r") as logfile:
         loglines = follow(logfile)    # iterate over the generator
         for line in loglines:
             if "Traceback" in line:
