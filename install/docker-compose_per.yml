@@ -18,7 +18,7 @@ services:
       - /root/.aws:/root/.aws
       - /var/run:/var/run
     healthcheck:
-      test: ls /var/log/greencandle.log
+      test: ls /var/log/gc_per.log
       interval: 5m
       timeout: 10s
       retries: 5
@@ -50,7 +50,7 @@ services:
       timeout: 10s
       retries: 5
     volumes:
-      - /var/log/gc_per.log:/var/log/greencandle.log
+      - /var/log:/var/log
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run:/var/run
