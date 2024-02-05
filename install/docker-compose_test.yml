@@ -334,6 +334,10 @@ services:
       - test-be-api-any-5m-cross-long:any-5m-long
       - test-be-api-any-15m-cross-long:any-15m-long
       - test-be-api-any-30m-cross-long:any-30m-long
+      - test-be-api-any-1m-cross-short:any-1m-short
+      - test-be-api-any-5m-cross-short:any-5m-short
+      - test-be-api-any-15m-cross-short:any-15m-short
+      - test-be-api-any-30m-cross-short:any-30m-short
       - test-be-api-any3-1m-cross-long:any3-1m-long
       - test-be-api-any3-5m-cross-long:any3-5m-long
       - test-be-api-any3-15m-cross-long:any3-15m-long
@@ -701,6 +705,173 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
+  test-be-api-any-1m-cross-short:
+    container_name: test-be-api-any-1m-cross-short
+    hostname: test-be-api-any-1m-cross-short
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600m
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local2
+    environment:
+      - VPN_IP=$VPN_IP
+      - CONFIG_ENV=test/be/any/short/1m
+      - ALERT="True"
+      - intermittent="true"
+      - DB=true
+      - STREAM=http://10.8.0.101:5001/all
+    extra_hosts:
+      - "trend:10.8.0.101"
+    ports:
+      - 20000
+    links:
+      - test-base-mysql:mysql
+      - test-base-redis:redis
+    depends_on:
+      - test-base-mysql
+      - test-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  test-be-api-any-5m-cross-short:
+    container_name: test-be-api-any-5m-cross-short
+    hostname: test-be-api-any-5m-cross-short
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600m
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local2
+    environment:
+      - VPN_IP=$VPN_IP
+      - CONFIG_ENV=test/be/any/short/5m
+      - ALERT="True"
+      - intermittent="true"
+      - DB=true
+      - STREAM=http://10.8.0.101:5002/all
+    extra_hosts:
+      - "trend:10.8.0.101"
+    ports:
+      - 20000
+    links:
+      - test-base-mysql:mysql
+      - test-base-redis:redis
+    depends_on:
+      - test-base-mysql
+      - test-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  test-be-api-any-15m-cross-short:
+    container_name: test-be-api-any-15m-cross-short
+    hostname: test-be-api-any-15m-cross-short
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600m
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local2
+    environment:
+      - VPN_IP=$VPN_IP
+      - CONFIG_ENV=test/be/any/short/15m
+      - ALERT="True"
+      - intermittent="true"
+      - DB=true
+      - STREAM=http://10.8.0.101:5003/all
+    extra_hosts:
+      - "trend:10.8.0.101"
+    ports:
+      - 20000
+    links:
+      - test-base-mysql:mysql
+      - test-base-redis:redis
+    depends_on:
+      - test-base-mysql
+      - test-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  test-be-api-any-30m-cross-short:
+    container_name: test-be-api-any-30m-cross-short
+    hostname: test-be-api-any-30m-cross-short
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600m
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local2
+    environment:
+      - VPN_IP=$VPN_IP
+      - CONFIG_ENV=test/be/any/short/30m
+      - ALERT="True"
+      - intermittent="true"
+      - DB=true
+      - STREAM=http://10.8.0.101:5004/all
+    extra_hosts:
+      - "trend:10.8.0.101"
+    ports:
+      - 20000
+    links:
+      - test-base-mysql:mysql
+      - test-base-redis:redis
+    depends_on:
+      - test-base-mysql
+      - test-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
 
 
   test-be-api-any-1m-cross-long:
