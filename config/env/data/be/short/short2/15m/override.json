@@ -1,5 +1,5 @@
 {
-  "interval": "30m",
+  "interval": "15m",
   "name": "data-be-analyse-15m-short2",
   "api_forward": "15m-2",
   "time_between_trades": "1h"
