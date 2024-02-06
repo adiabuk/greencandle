@@ -431,7 +431,7 @@ class Trade():
 
         # use balance only
         if self.test_trade or balance_to_use['usd'] > (total_max *5) or \
-                ('USE_BALANCE' in os.environ and balance_to_use['usd'] > total_max*2):
+                ('USE_BALANCE' in os.environ and balance_to_use['usd'] > total_max):
 
             balance_to_use['usd'] = total_max
             if balance_to_use['symbol_name'] == 'USDT':
