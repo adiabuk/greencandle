@@ -1,7 +1,7 @@
 {
-  "api_forward": "30m.g-6",
-  "interval": "30m.g",
-  "name": "data-be-analyse-30m.g-long6",
+  "api_forward": "30m-6",
+  "interval": "30m",
+  "name": "data-be-analyse-30m-long6",
   "redis_expiry_seconds": "7200",
   "time_between_trades": "4h"
 }
