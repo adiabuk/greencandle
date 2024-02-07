@@ -116,20 +116,20 @@
 {
 "any-long-short": ["forward"],
 
-"1m-4": ["test:any2-1m-long-short"],
-"5m-4": ["test:any2-5m-long-short"],
-"15m-4": ["test:any2-15m-long-short"],
-"30m-4": ["test:any2-30m-long-short"],
-"1h-4": ["test:any2-1h-long-short"],
-"4h-4": ["test:any2-4h-long-short"],
+"1m-4": ["test:any2-1m-long-short", "prod:any-1m-long-short"],
+"5m-4": ["test:any2-5m-long-short", "prod:any-5m-long-short"],
+"15m-4": ["test:any2-15m-long-short", "prod:any-15m-long-short"],
+"30m-4": ["test:any2-30m-long-short", "prod:any-30m-long-short"],
+"1h-4": ["test:any2-1h-long-short", "prod:any-1h-long-short"],
+"4h-4": ["test:any2-4h-long-short", "prod:any-4h-long-short"],
 
-"1m-6": ["alert", "test:any-1m-long-short", "prod:any-1m-long-short"],
-"5m-6": ["alert", "test:any-5m-long-short", "prod:any-5m-long-short"],
+"1m-6": ["alert", "test:any-1m-long-short"],
+"5m-6": ["alert", "test:any-5m-long-short"],
 "15m-6": ["alert", "test:any-15m-long-short"],
 "30m-6": ["alert", "test:any-30m-long-short"],
 
-"1m-5": ["alert", "test:any3-1m-long-short"],
-"5m-5": ["alert", "test:any3-5m-long-short"],
+"1m-5": ["alert", "test:any3-1m-long-short", "prod:any-1m-long-short"],
+"5m-5": ["alert", "test:any3-5m-long-short", "prod:any-1m-long-short"],
 "15m-5": ["alert", "test:any3-15m-long-short"],
 "30m-5": ["alert", "test:any3-30m-long-short"],
 
