@@ -1,5 +1,17 @@
 # Releases
 
+# 6.58
+* prod routes
+* show slack alerts for first step data only
+* add some missing forwarding rules and config
+* fix rsi rules and intervals
+* don't look for double balance when choosing balance over loan
+* use correct log file for logwatch and logtailer
+* generic filenames not working for logtailer
+* compare rsi strategy with and without close rules
+* new rsi short strategies
+* tighten open rules for rsi
+
 # 6.57
 * cleanup and fix unit tests
 * don't fail with slack msg when no trade avail to close
