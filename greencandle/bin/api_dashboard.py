@@ -229,7 +229,6 @@ def extras():
         time.sleep(2)
         return redirect(url_for('extras'))
 
-
     return render_template('extras.html', data=data, routes=routes, rules=rules)
 
 @APP.route("/action", methods=['POST', 'GET'])
