@@ -494,9 +494,8 @@ class Trade():
             base_not_to_use = (quote2base(quote_to_use, pair)/100)*1+float(stop)
             self.logger.info('Leaving %s perc of base margin aside (%s %s)',
                              1+float(stop), base_not_to_use, get_base(pair))
-            self.logger.info("Opening margin long %s of %s with %s %s at %s",
-                             base_to_use, pair, current_quote_bal+amount_to_borrow, quote,
-                             current_price)
+            self.logger.info("TRADE: opening margin long %s base of %s with %s quote at %s price",
+                             base_to_use, pair, current_quote_bal+amount_to_borrow, current_price)
             if self.prod:
 
                 if float(amount_to_borrow) <= 0:
@@ -504,8 +503,6 @@ class Trade():
                                      pair)
                     amt_str = get_step_precision(pair, quote2base(current_quote_bal, pair))
                 else:  # amount to borrow
-                    self.logger.info("Will attempt to borrow %s of %s for long pair %s Balance: %s",
-                                     amount_to_borrow, quote, pair, current_quote_bal)
 
                     amt_str = base_to_use
                     try:
@@ -514,27 +511,30 @@ class Trade():
                             isolated=str2bool(self.config.main.isolated),
                             asset=quote)
                     except BinanceException as binex:
-                        self.logger.error(f"Borrow error-open long {pair} while "
+                        self.logger.error(f"TRADE: borrow error-open long {pair} while "
                                           f"trying to borrow {amount_to_borrow} {quote}: "
                                           f"{str(binex)}")
                         return False
 
-                    self.logger.info("Borrow result for pair %s/long: %s", pair, borrow_res)
+                    self.logger.info("TRADE: borrowed %s of %s for long pair %s Balance: %s "
+                                     "borrow_res: %s",
+                                     amount_to_borrow, quote, pair, current_quote_bal, borrow_res)
                 try:
                     trade_result = self.client.margin_order(symbol=pair, side=self.client.buy,
                                                             quantity=amt_str,
                                                             order_type=self.client.market,
                                                             isolated=str2bool(
                                                                 self.config.main.isolated))
+
                 except BinanceException as binex:
-                    self.logger.error(f"Trade error-open {self.config.main.trade_diection} "
+                    self.logger.error(f"TRADE: error-open {self.config.main.trade_diection} "
                                       f"{pair}: {str(binex)}")
 
                     self.logger.critical("%s/long Vars: base quantity:%s, quote_quantity: %s "
-                                         "quote bal:%s, quote_borrowed: %s", pair, amt_str,
+                                         "quote  bal:%s, quote_borrowed: %s", pair, amt_str,
                                          quote_to_use, current_quote_bal, amount_to_borrow)
                     return False
-                self.logger.info("%s open margin long result: %s", pair, trade_result)
+                self.logger.info("TRADE: %s open margin long result: %s", pair, trade_result)
 
                 # override values from exchange if in prod
                 fill_price, amt_str, quote_to_use, order_id = \
@@ -619,7 +619,7 @@ class Trade():
 
             amount = quote2base(quote_amount, pair)
 
-            self.logger.info("Opening spot long %s of %s with %s %s",
+            self.logger.info("TRADE: opening spot long %s base of %s with %s quote at %s price",
                              amount, pair, quote_amount, quote)
             self.logger.debug("amount to buy: %s, current_price: %s, amount:%s",
                               quote_amount, current_price, amount)
@@ -781,8 +781,9 @@ class Trade():
             perc_inc = - (perc_diff(open_price, current_price))
             quote_out = sub_perc(perc_inc, quote_in)
 
-            self.logger.info("Closing margin short %s of %s for %.15f %s",
-                             quantity, pair, float(current_price), quantity)
+            self.logger.info("TRADE: Closing margin short %s base of %s with %s quote "
+                             "for %.15f price",
+                             quantity, pair, quote_out, float(current_price))
             if self.prod and not self.test_data:
                 amt_str = get_step_precision(pair, quantity)
                 try:
@@ -805,19 +806,18 @@ class Trade():
                 repay = borrowed if avail > borrowed else avail
 
                 if float(repay) > 0:
-                    self.logger.info("Trying to repay: %s %s for pair short %s",
-                                     repay, base, pair)
                     try:
                         repay_result = self.client.margin_repay(
                             symbol=pair, quantity=repay,
                             isolated=str2bool(self.config.main.isolated),
                             asset=base)
                     except BinanceException as binex:
-                        self.logger.error(f"repay error-close {pair}: {str(binex)}")
+                        self.logger.error(f"TRADE: repay error-close {pair}: {str(binex)}")
                         self.logger.critical("Params: %s, %s, %s %s", pair, borrowed,
                                           self.config.main.isolated, base)
 
-                    self.logger.info("Repay result for short %s: %s", pair, repay_result)
+                    self.logger.info("TRADE: repaid: %s %s for pair short %s result: %s",
+                                     repay, base, pair, repay_result)
                 else:
                     self.logger.info("No borrowed funds to repay for short %s", pair)
 
@@ -856,7 +856,7 @@ class Trade():
                                           event=event, action='CLOSE', usd_profit=profit,
                                           quote=quote_out, open_time=open_time, id=result)
             else:
-                self.logger.error(f"close short Failed {name}:{pair}")
+                self.logger.error(f"TRADE: close short Failed {name}:{pair}")
 
         del dbase
         return True
@@ -893,7 +893,7 @@ class Trade():
             base_not_to_use = (quote2base(total_quote_amount, pair)/100)*1+float(stop)
             self.logger.info('Leaving %s perc of base margin aside (%s %s) for pair %s',
                              1+float(stop), base_not_to_use, get_base(pair), pair)
-            self.logger.info("Opening margin short %s of %s with %s at %s",
+            self.logger.info("TRADE: opening margin short %s base of %s with %s quote at %s price",
                              total_base_amount, pair, total_quote_amount, current_price)
 
             if self.prod:
@@ -902,8 +902,6 @@ class Trade():
                     amt_str = total_base_amount
 
                 else:  # amount to borrow
-                    self.logger.info("Will attempt to borrow %s of %s for short pair %s "
-                                     "Balance: %s", amount_to_borrow, base, pair, total_base_amount)
                     amt_str = total_base_amount
                     try:
                         borrow_res = self.client.margin_borrow(
@@ -911,12 +909,15 @@ class Trade():
                             isolated=str2bool(self.config.main.isolated),
                             asset=base)
                     except BinanceException as binex:
-                        self.logger.error(f"Borrow error-open short {pair} "
+                        self.logger.error(f"TRADE: Borrow error-open short {pair} "
                                           f"while trying to borrow {amount_to_borrow} {base}: "
                                           f"{str(binex)}")
                         return False
 
-                    self.logger.info("Borrow result for pair %s/short: %s", pair, borrow_res)
+                    self.logger.info("TRADE: borrowed %s of %s for short pair %s "
+                                     "Balance: %s, borrow_res:%s",
+                                     amount_to_borrow, base, pair, total_base_amount,
+                                     borrow_res)
                 try:
                     trade_result = self.client.margin_order(symbol=pair, side=self.client.sell,
                                                             quantity=amt_str,
@@ -924,7 +925,7 @@ class Trade():
                                                             isolated=str2bool(
                                                                 self.config.main.isolated))
                 except BinanceException as binex:
-                    self.logger.error("Short Trade error-open %s: %s", pair, str(binex))
+                    self.logger.error("TRADE: Short Trade error-open %s: %s", pair, str(binex))
                     self.logger.critical("%s/short Vars: quantity:%s, bal:%s, borrowed: %s",
                                       pair, amt_str, current_base_bal, amount_to_borrow)
                     return False
@@ -991,8 +992,8 @@ class Trade():
             perc_inc = perc_diff(open_price, current_price)
             quote_out = add_perc(perc_inc, quote_in)
 
-            self.logger.info("Closing spot long %s of %s for %.15f %s",
-                             quantity, pair, float(current_price), quote_out)
+            self.logger.info("TRADE: closing spot long %s of %s with %s quote for %.15f price",
+                             quantity, pair, quote_out, float(current_price))
             if self.prod and not self.test_data:
 
                 amt_str = get_step_precision(pair, quantity)
@@ -1002,7 +1003,7 @@ class Trade():
                         order_type=self.client.market, test=self.test_trade)
 
                 except BinanceException as binex:
-                    self.logger.error(f"Long Trade error-close {pair}: {str(binex)}")
+                    self.logger.error(f"TRADE: Long Trade error-close {pair}: {str(binex)}")
                     return False
 
                 self.logger.info("%s close spot long result: %s", pair, trade_result)
@@ -1042,8 +1043,7 @@ class Trade():
                                               event=event, action='CLOSE', usd_profit=profit,
                                               quote=quote_out, open_time=open_time, id=result)
                 else:
-                    self.logger.error(f"Close spot long Failed {name}:{pair}")
-                    send_slack_message("alerts", f"Close spot long Failed {name}:{pair}")
+                    self.logger.error(f"TRADE: Close spot long Failed {name}:{pair}")
                     return False
         del dbase
         return True
@@ -1071,8 +1071,9 @@ class Trade():
             perc_inc = perc_diff(open_price, current_price)
             quote_out = add_perc(perc_inc, quote_in)
 
-            self.logger.info("Closing margin long %s of %s for %.15f %s",
-                             quantity, pair, float(current_price), quote_out)
+            self.logger.info("TRADE: closing margin long %s base of %s with %s quote "
+                             "for %.15f price",
+                             quantity, pair, quote_out, float(current_price))
             quote = get_quote(pair)
 
             if self.prod:
@@ -1084,7 +1085,7 @@ class Trade():
                                                             isolated=str2bool(
                                                                 self.config.main.isolated))
                 except BinanceException as binex:
-                    self.logger.error(f"Margin long Trade error-close pair: {str(binex)}")
+                    self.logger.error(f"TRADE: margin long Trade error-close pair: {str(binex)}")
                     return False
 
                 self.logger.info("%s close margin long result: %s", pair, trade_result)
@@ -1096,17 +1097,18 @@ class Trade():
                 repay = borrowed if avail > borrowed else avail
 
                 if float(repay) > 0:
-                    self.logger.info("Trying to repay: %s %s for pair %s", repay, quote, pair)
                     try:
                         repay_result = self.client.margin_repay(
                             symbol=pair, quantity=repay,
                             isolated=str2bool(self.config.main.isolated),
                             asset=quote)
                     except BinanceException as binex:
-                        self.logger.error(f"Repay error-close {pair}: {str(binex)}")
+                        self.logger.error(f"TRADE: repay error-close {pair}: {str(binex)}")
                         self.logger.critical("Params: %s, %s, %s %s", pair, borrowed,
                                           self.config.main.isolated, quote)
-                    self.logger.info("Repay result for %s: %s", pair, repay_result)
+
+                    self.logger.info("TRADE: repaid: %s %s for pair %s result: %s",
+                                     repay, quote, pair, repay_result)
                 else:
                     self.logger.info("No borrowed funds to repay for %s", pair)
 
@@ -1143,8 +1145,7 @@ class Trade():
                                           event=event, action='CLOSE', usd_profit=profit,
                                           quote=quote_out, open_time=open_time, id=result)
             else:
-                self.logger.error(f"Close margin long Failed {name}: {pair}")
-                send_slack_message("alerts", f"Close margin long Failed {name}:{pair}")
+                self.logger.error(f"TRADE: close margin long failed {name}: {pair}")
                 return False
 
         del dbase
