@@ -1,4 +1,4 @@
-#pylint: disable=no-member,too-many-locals,too-many-lines,broad-except,logging-fstring-interpolation
+pylint: disable=no-member,too-many-locals,too-many-lines,broad-except,logging-fstring-interpolation
 """
 Buy/Sell orders
 """
@@ -802,6 +802,7 @@ class Trade():
                 actual_borrowed = self.get_borrowed(pair=pair, symbol=base)
                 borrowed = float(actual_borrowed) if float(borrowed) > float(actual_borrowed) else \
                     float(borrowed)
+                time.sleep(10) # wait a while before re-fetching balance
                 avail = self.get_avail_asset(base)
                 repay = borrowed if avail > borrowed else avail
 
@@ -1093,6 +1094,7 @@ class Trade():
                 borrowed = float(actual_borrowed) if float(borrowed) > float(actual_borrowed) else \
                         float(borrowed)
 
+                time.sleep(10) # wait a while before re-fetching balance
                 avail = self.get_avail_asset(quote)
                 repay = borrowed if avail > borrowed else avail
 
