@@ -1,5 +1,13 @@
 # Releases
 
+# 6.58.1
+* wait a few secs after closing trade before fetching new balance
+* marker to easily locate trade-related logs in prod|data envs
+* forward to 5m trades correct prod container
+* add 50-period EMA to data env
+* filter out zero volume pairs in touch strategy
+* no slack for short step2 data env
+
 # 6.58
 * prod routes
 * show slack alerts for first step data only
