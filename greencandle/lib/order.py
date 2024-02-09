@@ -1,4 +1,4 @@
-pylint: disable=no-member,too-many-locals,too-many-lines,broad-except,logging-fstring-interpolation
+#pylint: disable=no-member,too-many-locals,too-many-lines,broad-except,logging-fstring-interpolation
 """
 Buy/Sell orders
 """
