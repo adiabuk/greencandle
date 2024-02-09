@@ -95,7 +95,7 @@ def check_rules():
                 requests.post(url, json.dumps(payload), timeout=10,
                               headers={'Content-Type': 'application/json'})
 
-                LOGGER.info("forwarding %s %s trade to: %s - rule: %s",
+                LOGGER.info("TRADE: forwarding %s %s trade to: %s - rule: %s",
                             pair, interval, forward_to, rule)
 
                 redis6.conn.delete(key)
