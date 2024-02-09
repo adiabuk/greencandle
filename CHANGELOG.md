@@ -1,5 +1,8 @@
 # Releases
 
+# 6.58.2
+* fix typo
+
 # 6.58.1
 * wait a few secs after closing trade before fetching new balance
 * marker to easily locate trade-related logs in prod|data envs
