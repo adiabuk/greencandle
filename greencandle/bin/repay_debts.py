@@ -43,7 +43,11 @@ def main():
             if asset in open_set and debt_type == 'borrowed':
                 logger.info("Skipping %s due to open trade", asset)
             else:
-                if not list_only:
+                if list_only:
+
+                    logger.info("amount to pay: %s of %s %s",
+                                to_pay, asset, debt_type)
+                else:
                     result = client.margin_repay(symbol=asset, asset=asset,
                                                  quantity=to_pay, isolated=False)
                     logger.info("TRADE: repaid %s of %s %s result: %s",
