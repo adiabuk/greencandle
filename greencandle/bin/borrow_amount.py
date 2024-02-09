@@ -6,6 +6,7 @@ import sys
 from greencandle.lib.auth import binance_auth
 from greencandle.lib import config
 from greencandle.lib.mysql import Mysql
+from greencandle.lib.logger import get_logger
 from greencandle.lib.binance_accounts import quote2base
 from greencandle.lib.binance import BinanceException
 from greencandle.lib.common import Bcolours, arg_decorator
@@ -19,6 +20,7 @@ def main():
     Usage: borrow_amount <asset> (eg. BTC)
     """
     config.create_config()
+    logger = get_logger("manual_borrow")
     client = binance_auth()
     dbase = Mysql()
     usd_amount = dbase.get_var_value('max_trade_usd')
@@ -30,8 +32,10 @@ def main():
     try:
         borrow_res = client.margin_borrow(symbol=None, quantity=amount, isolated=False,
                                           asset=symbol)
-        print(borrow_res)
+        logger.info("TRADE: borrowed %s of %s usd: %s result: %s",
+                    amount, symbol, usd_amount, borrow_res)
         print(f'{Bcolours.OKGREEN}DONE{Bcolours.ENDC}')
+
     except BinanceException as ex:
         print(ex)
         print(f'{Bcolours.FAIL}FAILED{Bcolours.ENDC}')

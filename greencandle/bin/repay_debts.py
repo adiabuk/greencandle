@@ -43,10 +43,11 @@ def main():
             if asset in open_set and debt_type == 'borrowed':
                 logger.info("Skipping %s due to open trade", asset)
             else:
-                logger.info("Attempting to pay off Cross %s of %s", to_pay, asset)
                 if not list_only:
                     result = client.margin_repay(symbol=asset, asset=asset,
                                                  quantity=to_pay, isolated=False)
+                    logger.info("TRADE: repaid %s of %s %s result: %s",
+                                to_pay, asset, debt_type, result)
                     if debt_type == 'interest':
                         usd = to_pay if 'USD' in asset else base2quote(to_pay, asset+'USDT',
                                                                            prices=prices)
@@ -55,8 +56,6 @@ def main():
                                                      asset_amt=to_pay,
                                                      usd_amt=usd,
                                                      gbp_amt=gbp)
-
-                    logger.info("Repay result for %s: %s", asset, result)
 
 if __name__ == '__main__':
     main()
