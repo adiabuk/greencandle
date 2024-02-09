@@ -129,7 +129,7 @@
 "30m-6": ["alert", "test:any-30m-long-short"],
 
 "1m-5": ["alert", "test:any3-1m-long-short", "prod:any-1m-long-short"],
-"5m-5": ["alert", "test:any3-5m-long-short", "prod:any-1m-long-short"],
+"5m-5": ["alert", "test:any3-5m-long-short", "prod:any-5m-long-short"],
 "15m-5": ["alert", "test:any3-15m-long-short"],
 "30m-5": ["alert", "test:any3-30m-long-short"],
 
