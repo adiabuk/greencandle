@@ -7,5 +7,5 @@
   "slack_alerts": "data_2steps_1h",
   "slack_balance": "data_2steps_1h",
   "slack_notifications": "data_2steps_1h",
-  "time_between_trades": "3h"
+  "time_between_trades": "6h"
 }
