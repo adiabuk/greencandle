@@ -172,7 +172,7 @@
       "is_secret": false
     },
     "divisor": {
-      "value": "1.1",
+      "value": "1",
       "is_binary": false,
       "is_secret": false
     },

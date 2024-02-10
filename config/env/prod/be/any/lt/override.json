@@ -1,12 +1,11 @@
 {
-  "divisor": "3",
   "drain_range": "00:00 - 00:00",
   "immediate_stop": "true",
-  "name": "prod-be-api-any-lt-cross",
   "immediate_take_profit": "true",
   "immediate_trailing_stop": "true",
   "interval": "1m",
   "max_trades": "60",
+  "name": "prod-be-api-any-lt-cross",
   "pairs": "any",
   "perc_at_timeout": "5",
   "stop_loss_perc": "999",
