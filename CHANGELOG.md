@@ -1,5 +1,12 @@
 # Releases
 
+# 6.58.3
+* log amount source for trade open
+* BUGFIX: use non-greedy substitution to avoid losing random redis keys
+* BUGFIX: divisor causing double loans to fulfil max_trade
+* don't re-fire data 1h slack alerts as often
+* upgrade werkzeug and jinja2
+
 # 6.58.2
 * fix typo
 
