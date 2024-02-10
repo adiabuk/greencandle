@@ -434,6 +434,7 @@ class Trade():
                 ('USE_BALANCE' in os.environ and balance_to_use['usd'] > total_max):
 
             balance_to_use['usd'] = total_max
+
             if balance_to_use['symbol_name'] == 'USDT':
                 balance_to_use['symbol'] = balance_to_use['usd']
             else:
@@ -457,7 +458,8 @@ class Trade():
         return_dict = {"balance_amt": balance_to_use['symbol'],
                        "loan_amt": loan_to_use['symbol']
                        }
-
+        self.logger.info("TRADE: Balance/loan ratio for %s %s - %s", pair,
+                         self.config.main.trade_direction, return_dict)
         return return_dict
 
     def __open_margin_long(self, long_list, stop=0):
