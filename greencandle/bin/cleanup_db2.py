@@ -3,6 +3,7 @@
 Cleanup redis db2 from unused keys
 """
 
+import re
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.common import get_be_services, list_to_dict, Bcolours, arg_decorator
@@ -28,8 +29,11 @@ def main():
         try:
             pair, _, short = key.split(':')
             direction=short.split('-')[-1]
-            long_name = short_dict[short].rstrip(f'-{direction}')
+            #long_name = short_dict[short].rstrip(f'-{direction}')
+            long_name = re.sub(rf'-{direction}', '', short_dict[short])
+
             res = [i for i in open_trades if i[2]== pair and i[3]==long_name and i[5]==direction]
+            print(res)
             if not res:
                 print(f"{Bcolours.FAIL}{orig_key} not used...deleting{Bcolours.ENDC}")
                 redis.conn.delete(orig_key)   #delete here
