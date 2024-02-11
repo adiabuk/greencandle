@@ -123,6 +123,10 @@ class Trade():
         manual = "any" in self.config.main.name
         good_pairs = str2bool(self.config.main.good_pairs)
 
+        if self.is_in_drain() and not self.test_data:
+            self.logger.warning("strategy is in drain for pair %s, skipping...", items_list)
+            return []
+
         for item in items_list:
             if not self.test_trade:
                 account = 'margin' if 'margin' in self.config.main.trade_type else 'binance'
@@ -141,9 +145,8 @@ class Trade():
                                                              and not self.test_data):
                 self.logger.warning("pair %s not in db_pairs, skipping...", item[0])
                 send_slack_message("trades", f"pair {item[0]} not in db_pairs, skipping...")
-            elif self.is_in_drain() and not self.test_data:
-                self.logger.warning("strategy is in drain for pair %s, skipping...", item[0])
-                return []
+
+
             elif self.is_float(item[4]) and \
                     ((float(item[4]) > 0 and self.config.main.trade_direction == "short") or \
                     (float(item[4]) < 0 and self.config.main.trade_direction == "long")):
@@ -458,7 +461,7 @@ class Trade():
         return_dict = {"balance_amt": balance_to_use['symbol'],
                        "loan_amt": loan_to_use['symbol']
                        }
-        self.logger.info("TRADE: Balance/loan ratio for %s %s - %s", pair,
+        self.logger.info("TRADE: balance/loan ratio for %s %s - %s", pair,
                          self.config.main.trade_direction, return_dict)
         return return_dict
 
