@@ -1,5 +1,10 @@
 # Releases
 
+# 6.58.4
+* only update redis if trade open was successful
+* BUGFIX: cleanup db2 script not running
+* check drain status before balance etc
+
 # 6.58.3
 * log amount source for trade open
 * BUGFIX: use non-greedy substitution to avoid losing random redis keys
