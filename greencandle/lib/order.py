@@ -576,7 +576,7 @@ class Trade():
                                           quote=quote_to_use, close_time='N/A')
 
         del dbase
-        return True
+        return "opened"
 
     @staticmethod
     @GET_EXCEPTIONS
@@ -679,7 +679,7 @@ class Trade():
                                               quote=quote_amount, close_time='N/A')
 
         del dbase
-        return True
+        return "opened"
 
     def __send_notifications(self, perc=None, **kwargs):
         """
@@ -865,7 +865,7 @@ class Trade():
                 self.logger.error(f"TRADE: close short Failed {name}:{pair}")
 
         del dbase
-        return True
+        return "opened"
 
     def __open_margin_short(self, short_list, stop):
         """
@@ -972,7 +972,7 @@ class Trade():
                                           event=event, action='OPEN', usd_profit='N/A',
                                           quote=total_quote_amount, close_time='N/A')
         del dbase
-        return True
+        return "opened"
 
     def __close_spot_long(self, sell_list, drawdowns=None, drawups=None):
         """
@@ -1052,7 +1052,7 @@ class Trade():
                     self.logger.error(f"TRADE: Close spot long Failed {name}:{pair}")
                     return False
         del dbase
-        return True
+        return "closed"
 
     def __close_margin_long(self, sell_list, drawdowns=None, drawups=None):
         """
@@ -1156,4 +1156,4 @@ class Trade():
                 return False
 
         del dbase
-        return True
+        return "closed"

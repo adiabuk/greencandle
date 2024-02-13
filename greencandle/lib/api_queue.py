@@ -90,7 +90,7 @@ def add_to_queue(req, test=False):
                 return
 
         result = trade.open_trade(item, stop=stop_loss)
-        if result or test:
+        if result == "opened" or test:
             redis.update_on_entry(item[0][0], 'take_profit_perc', take_profit)
             redis.update_on_entry(item[0][0], 'stop_loss_perc', stop_loss)
 
@@ -99,7 +99,7 @@ def add_to_queue(req, test=False):
             redis.update_drawup(pair, current_candle, event="open")
 
     elif action_str == 'CLOSE':
-        current_candle = dataframes[pair].iloc[-1]
+        current_candle = datafr ames[pair].iloc[-1]
         redis.update_drawdown(pair, current_candle)
         redis.update_drawup(pair, current_candle)
 
@@ -111,4 +111,3 @@ def add_to_queue(req, test=False):
             LOGGER.error(f"Unable to close trade {item}")
         else:
             LOGGER.info(f"Unable to close trade {item}")
-
