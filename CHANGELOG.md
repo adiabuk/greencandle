@@ -1,5 +1,8 @@
 # Releases
 
+# 6.58.5
+* fix typo
+
 # 6.58.4
 * only update redis if trade open was successful
 * BUGFIX: cleanup db2 script not running
