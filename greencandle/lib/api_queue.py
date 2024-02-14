@@ -10,6 +10,7 @@ from time import strftime, gmtime
 import requests
 from greencandle.lib import config
 from greencandle.lib.redis_conn import Redis
+from greencandle.lib.mysql import Mysql
 from greencandle.lib.binance_common import get_current_price, get_dataframes
 from greencandle.lib.order import Trade
 from greencandle.lib.logger import get_logger
@@ -61,6 +62,7 @@ def add_to_queue(req, test=False):
         action_str = str(action).upper().strip()
 
     redis = Redis(db=2)
+    dbase = Mysql(interval=config.main.interval)
     try:
         interval = "1m" if config.main.interval.endswith("s") else config.main.interval
         klines = 60 if interval.endswith('s') or interval.endswith('m') else 5
@@ -98,7 +100,7 @@ def add_to_queue(req, test=False):
             redis.update_drawdown(pair, current_candle, event="open")
             redis.update_drawup(pair, current_candle, event="open")
 
-    elif action_str == 'CLOSE':
+    elif action_str == 'CLOSE' and dbase.get_quantity(pair):
         current_candle = dataframes[pair].iloc[-1]
         redis.update_drawdown(pair, current_candle)
         redis.update_drawup(pair, current_candle)
@@ -107,7 +109,8 @@ def add_to_queue(req, test=False):
         drawup = redis.get_drawup(pair)['perc']
         result = trade.close_trade(item, drawdowns={pair:drawdown}, drawups={pair:drawup})
 
-        if not result and not test:
-            LOGGER.error(f"Unable to close trade {item}")
-        else:
-            LOGGER.info(f"Unable to close trade {item}")
+        if not result:
+            if test:
+                LOGGER.info(f"Unable to close trade {item}")
+            else:
+                LOGGER.error(f"Unable to close trade {item}")

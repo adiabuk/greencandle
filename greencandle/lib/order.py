@@ -865,7 +865,7 @@ class Trade():
                 self.logger.error(f"TRADE: close short Failed {name}:{pair}")
 
         del dbase
-        return "opened"
+        return "closed"
 
     def __open_margin_short(self, short_list, stop):
         """
