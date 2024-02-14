@@ -1,5 +1,9 @@
 # Releases
 
+# 6.58.6
+* check we have a trade to close before updating tpsl
+* fix cron syntax
+
 # 6.58.5
 * fix typo
 
