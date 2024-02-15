@@ -80,6 +80,15 @@ class Mysql():
         self.run_sql_statement(f'delete from {table_name}')
 
     @get_exceptions
+    def get_extra_loans(self):
+        """
+        Get list of symbols with have loans but awaiting trade
+        """
+        raw_list = self.fetch_sql_data('select symbol from extra_loans where date_removed is null',
+                                       header=False)
+        return [sub for item in raw_list for sub in item] # flatten list of lists
+
+    @get_exceptions
     def fetch_sql_data(self, query, header=True):
         """"
         Fetch SQL data for totals and return dict

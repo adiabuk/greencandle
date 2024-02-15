@@ -30,6 +30,8 @@ def main():
 
     dbase = Mysql()
     open_set = dbase.get_main_open_assets()
+    extra_list = dbase.get_extra_loans()
+
     prices = client.prices() if debt_type == 'interest' else None
 
     logger.info("%s items with debts", len(debt_assets))
@@ -40,7 +42,7 @@ def main():
             if to_pay <= 0:
                 logger.info("Skipping %s due to insuficent funds", asset)
                 continue
-            if asset in open_set and debt_type == 'borrowed':
+            if (asset in extra_list or asset in open_set) and debt_type == 'borrowed':
                 logger.info("Skipping %s due to open trade", asset)
             else:
                 if list_only:
