@@ -161,6 +161,24 @@ CREATE TABLE `exchange` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `extra_loans`
+--
+
+DROP TABLE IF EXISTS `extra_loans`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `extra_loans` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `symbol` varchar(6) DEFAULT NULL,
+  `date_added` datetime DEFAULT current_timestamp(),
+  `date_removed` datetime DEFAULT NULL,
+  `borrowed` varchar(30) DEFAULT '0',
+  `borrowed_usd` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Temporary table structure for view `profit`
 --
 
@@ -220,28 +238,6 @@ SET character_set_client = utf8;
 SET character_set_client = @saved_cs_client;
 
 --
--- Temporary table structure for view `profit_daily`
---
-
-DROP TABLE IF EXISTS `profit_daily`;
-/*!50001 DROP VIEW IF EXISTS `profit_daily`*/;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profit_daily` AS SELECT 
- 1 AS `date(close_time)`,
- 1 AS `dayname(close_time)`,
- 1 AS `sum_net_perc`,
- 1 AS `avg_net_perc`,
- 1 AS `max_net_perc`,
- 1 AS `min_net_perc`,
- 1 AS `count`,
- 1 AS `net_loss`,
- 1 AS `perc_profitable`,
- 1 AS `net_perc_profitable`,
- 1 AS `usd_net_profit`*/;
-SET character_set_client = @saved_cs_client;
-
---
 -- Temporary table structure for view `profit_daily_breakdown_close`
 --
 
@@ -277,6 +273,50 @@ SET character_set_client = utf8;
  1 AS `net_perc`,
  1 AS `direction`,
  1 AS `net_perc_profitable`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `profit_daily_by_close`
+--
+
+DROP TABLE IF EXISTS `profit_daily_by_close`;
+/*!50001 DROP VIEW IF EXISTS `profit_daily_by_close`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `profit_daily_by_close` AS SELECT 
+ 1 AS `date`,
+ 1 AS `day`,
+ 1 AS `sum_net_perc`,
+ 1 AS `avg_net_perc`,
+ 1 AS `max_net_perc`,
+ 1 AS `min_net_perc`,
+ 1 AS `count`,
+ 1 AS `net_loss`,
+ 1 AS `perc_profitable`,
+ 1 AS `net_perc_profitable`,
+ 1 AS `usd_net_profit`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `profit_daily_by_open`
+--
+
+DROP TABLE IF EXISTS `profit_daily_by_open`;
+/*!50001 DROP VIEW IF EXISTS `profit_daily_by_open`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `profit_daily_by_open` AS SELECT 
+ 1 AS `date`,
+ 1 AS `day`,
+ 1 AS `sum_net_perc`,
+ 1 AS `avg_net_perc`,
+ 1 AS `max_net_perc`,
+ 1 AS `min_net_perc`,
+ 1 AS `count`,
+ 1 AS `net_loss`,
+ 1 AS `perc_profitable`,
+ 1 AS `net_perc_profitable`,
+ 1 AS `usd_net_profit`*/;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -779,24 +819,6 @@ ALTER DATABASE `greencandle` CHARACTER SET utf8 COLLATE utf8_general_ci ;
 /*!50001 SET collation_connection      = @saved_col_connection */;
 
 --
--- Final view structure for view `profit_daily`
---
-
-/*!50001 DROP VIEW IF EXISTS `profit_daily`*/;
-/*!50001 SET @saved_cs_client          = @@character_set_client */;
-/*!50001 SET @saved_cs_results         = @@character_set_results */;
-/*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8mb3 */;
-/*!50001 SET character_set_results     = utf8mb3 */;
-/*!50001 SET collation_connection      = utf8mb3_general_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `profit_daily` AS select cast(`profit`.`close_time` as date) AS `date(close_time)`,dayname(`profit`.`close_time`) AS `dayname(close_time)`,sum(cast(`profit`.`net_perc` as decimal(12,2))) AS `sum_net_perc`,avg(cast(`profit`.`net_perc` as decimal(12,2))) AS `avg_net_perc`,max(cast(`profit`.`net_perc` as decimal(12,2))) AS `max_net_perc`,min(cast(`profit`.`net_perc` as decimal(12,2))) AS `min_net_perc`,count(0) AS `count`,sum(case when `profit`.`net_perc` < 0 then 1 else 0 end) AS `net_loss`,sum(case when `profit`.`net_perc` > 0 then 1 else 0 end) / count(0) * 100 AS `perc_profitable`,sum(case when `profit`.`net_perc` > 0 then 1 else 0 end) / count(0) * 100 AS `net_perc_profitable`,sum(cast(`profit`.`usd_net_profit` as decimal(12,2))) AS `usd_net_profit` from `profit` group by cast(`profit`.`close_time` as date) order by cast(`profit`.`close_time` as date) desc */;
-/*!50001 SET character_set_client      = @saved_cs_client */;
-/*!50001 SET character_set_results     = @saved_cs_results */;
-/*!50001 SET collation_connection      = @saved_col_connection */;
-
---
 -- Final view structure for view `profit_daily_breakdown_close`
 --
 
@@ -828,6 +850,42 @@ ALTER DATABASE `greencandle` CHARACTER SET utf8 COLLATE utf8_general_ci ;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
 /*!50001 VIEW `profit_daily_breakdown_open` AS select dayname(`profit`.`open_time`) AS `dayname`,`profit`.`interval` AS `interval`,cast(`profit`.`open_time` as date) AS `date`,`profit`.`name` AS `name`,count(0) AS `count`,sum(`profit`.`net_perc`) AS `net_perc`,`profit`.`direction` AS `direction`,sum(case when `profit`.`net_perc` > 0 then 1 else -1 end) / count(0) * 100 AS `net_perc_profitable` from `profit` group by `profit`.`name`,`profit`.`direction`,cast(`profit`.`open_time` as date) order by cast(`profit`.`open_time` as date) desc,sum(`profit`.`net_perc`) desc */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `profit_daily_by_close`
+--
+
+/*!50001 DROP VIEW IF EXISTS `profit_daily_by_close`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb3 */;
+/*!50001 SET character_set_results     = utf8mb3 */;
+/*!50001 SET collation_connection      = utf8mb3_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `profit_daily_by_close` AS select cast(`profit`.`close_time` as date) AS `date`,dayname(`profit`.`close_time`) AS `day`,sum(cast(`profit`.`net_perc` as decimal(12,2))) AS `sum_net_perc`,avg(cast(`profit`.`net_perc` as decimal(12,2))) AS `avg_net_perc`,max(cast(`profit`.`net_perc` as decimal(12,2))) AS `max_net_perc`,min(cast(`profit`.`net_perc` as decimal(12,2))) AS `min_net_perc`,count(0) AS `count`,sum(case when `profit`.`net_perc` < 0 then 1 else 0 end) AS `net_loss`,sum(case when `profit`.`net_perc` > 0 then 1 else 0 end) / count(0) * 100 AS `perc_profitable`,sum(case when `profit`.`net_perc` > 0 then 1 else 0 end) / count(0) * 100 AS `net_perc_profitable`,sum(cast(`profit`.`usd_net_profit` as decimal(12,2))) AS `usd_net_profit` from `profit` group by cast(`profit`.`close_time` as date) order by cast(`profit`.`close_time` as date) desc */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `profit_daily_by_open`
+--
+
+/*!50001 DROP VIEW IF EXISTS `profit_daily_by_open`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb3 */;
+/*!50001 SET character_set_results     = utf8mb3 */;
+/*!50001 SET collation_connection      = utf8mb3_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `profit_daily_by_open` AS select cast(`profit`.`close_time` as date) AS `date`,dayname(`profit`.`close_time`) AS `day`,sum(cast(`profit`.`net_perc` as decimal(12,2))) AS `sum_net_perc`,avg(cast(`profit`.`net_perc` as decimal(12,2))) AS `avg_net_perc`,max(cast(`profit`.`net_perc` as decimal(12,2))) AS `max_net_perc`,min(cast(`profit`.`net_perc` as decimal(12,2))) AS `min_net_perc`,count(0) AS `count`,sum(case when `profit`.`net_perc` < 0 then 1 else 0 end) AS `net_loss`,sum(case when `profit`.`net_perc` > 0 then 1 else 0 end) / count(0) * 100 AS `perc_profitable`,sum(case when `profit`.`net_perc` > 0 then 1 else 0 end) / count(0) * 100 AS `net_perc_profitable`,sum(cast(`profit`.`usd_net_profit` as decimal(12,2))) AS `usd_net_profit` from `profit` group by cast(`profit`.`open_time` as date) order by cast(`profit`.`open_time` as date) desc */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -967,7 +1025,7 @@ ALTER DATABASE `greencandle` CHARACTER SET utf8 COLLATE utf8_general_ci ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-24 11:16:25
+-- Dump completed on 2024-02-15 22:18:02
 -- MySQL dump 10.13  Distrib 5.7.42, for Linux (x86_64)
 --
 -- Host: 10.8.0.101    Database: greencandle
@@ -1006,7 +1064,7 @@ CREATE TABLE `variables` (
 
 LOCK TABLES `variables` WRITE;
 /*!40000 ALTER TABLE `variables` DISABLE KEYS */;
-INSERT INTO `variables` VALUES ('commission','0.15'),('start_time','01:30'),('end_time','08:30'),('max_trade_usd','3000'),('filter','%any3%');
+INSERT INTO `variables` VALUES ('commission','0.15'),('start_time','01:30'),('end_time','08:30'),('max_trade_usd','3000'),('filter','%%'),('c','d');
 /*!40000 ALTER TABLE `variables` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1043,4 +1101,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-24 11:16:27
+-- Dump completed on 2024-02-15 22:18:04
