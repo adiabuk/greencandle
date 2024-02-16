@@ -4,5 +4,8 @@
   "name": "data-be-analyse-30m-long3",
   "open_rule1": "agg.distance_200 \u003e 4 and res[0].RSI_14 \u003c 25 and res[0].numTrades \u003e 50 and agg.bb_size \u003e 1 and agg.empty_count \u003c 1",
   "open_rule5": "res[0].close \u003c sub_perc(5, res[0].bb_200[2]) and agg.empty_count \u003c 1",
-  "time_between_trades": "4h"
+  "time_between_trades": "4h",
+  "slack_alerts": "data_2steps_hi",
+  "slack_balance": "data_2steps_hi",
+  "slack_notifications": "data_2steps_hi"
 }
