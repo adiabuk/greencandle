@@ -138,6 +138,7 @@
 "15m-3": ["alert"],
 "30m-3": ["alert"],
 "1h-3": ["alert"],
+"4h-3": ["alert"],
 
 "prod_extra_long": ["prod:any-man-long"],
 "prod_extra_short": ["prod:any-man-short"],
