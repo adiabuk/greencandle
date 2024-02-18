@@ -34,6 +34,7 @@ def main():
                                           asset=symbol)
         logger.info("TRADE: borrowed %s of %s usd: %s result: %s",
                     amount, symbol, usd_amount, borrow_res)
+        dbase.insert_extra_loan(symbol, amount, usd_amount)
         print(f'{Bcolours.OKGREEN}DONE{Bcolours.ENDC}')
 
     except BinanceException as ex:

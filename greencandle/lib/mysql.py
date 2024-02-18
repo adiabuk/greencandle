@@ -80,6 +80,26 @@ class Mysql():
         self.run_sql_statement(f'delete from {table_name}')
 
     @get_exceptions
+    def insert_extra_loan(self, symbol, borrowed, borrowed_usd):
+        """
+        Insert extra loan into db
+        """
+        command = (f"insert into extra_loans (symbol, borrowed, borrowed_usd) values "
+                   f"('{symbol}', '{borrowed}', '{borrowed_usd}')")
+
+        self.__run_sql_query(command, get_id=False)
+
+    @get_exceptions
+    def get_extra_loan_amt(self, symbol):
+        """
+        Get amount borrowed for a specific symbol
+        """
+        command = (f"select borrowed from extra_loans where date_removed is null and "
+                   f"symbol = '{symbol}' order by date_added desc limit 1")
+        result = self.fetch_sql_data(command, header=False)
+        return result[0] if result else []
+
+    @get_exceptions
     def get_extra_loans(self):
         """
         Get list of symbols with have loans but awaiting trade
