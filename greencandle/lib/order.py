@@ -431,6 +431,7 @@ class Trade():
         # set default loan to use as 0, may be overwritten if non-spot and not enough balance to
         # cover max, where loan is available
         loan_to_use = {'symbol': 0, 'usd': 0, 'symbol_name': balance_to_use['symbol_name']}
+        prev_loan = dbase.get_extra_loan_amt(balance_to_use['symbol_name'])
 
         # use balance only
         if self.test_trade or balance_to_use['usd'] > (total_max *5) or \
@@ -438,12 +439,14 @@ class Trade():
 
             balance_to_use['usd'] = total_max
 
+
             if balance_to_use['symbol_name'] == 'USDT':
                 balance_to_use['symbol'] = balance_to_use['usd']
             else:
                 balance_to_use['symbol'] = quote2base(balance_to_use['usd'],
                                                       balance_to_use['symbol_name']+'USDT')
                 loan_to_use = {'symbol': 0, 'usd': 0, 'symbol_name': balance_to_use['symbol_name']}
+
 
         else: # use loan
             loan_to_use = self.get_amount_to_borrow(pair, dbase) if \
@@ -459,8 +462,10 @@ class Trade():
                         quote2base(total_remaining, balance_to_use['symbol_name']+'USDT')
 
         return_dict = {"balance_amt": balance_to_use['symbol'],
-                       "loan_amt": loan_to_use['symbol']
+                       "loan_amt": loan_to_use['symbol'],
+                       "preloan_amt": prev_loan
                        }
+
         self.logger.info("TRADE: balance/loan ratio for %s %s - %s", pair,
                          self.config.main.trade_direction, return_dict)
         return return_dict
@@ -484,11 +489,10 @@ class Trade():
                                                             max_usd=max_usd)
             amount_to_borrow = total_amt_to_use['loan_amt']
             current_quote_bal = total_amt_to_use['balance_amt']
+            preloan_amt= total_amt_to_use['preloan_amt']
 
             quote = get_quote(pair)
 
-            borrowed_usd = amount_to_borrow if quote == 'USDT' else \
-                    base2quote(amount_to_borrow, quote + 'USDT')
             # amt in base
             quote_to_use = current_quote_bal + amount_to_borrow
 
@@ -501,10 +505,15 @@ class Trade():
                              1+float(stop), base_not_to_use, get_base(pair))
             self.logger.info("TRADE: opening margin long %s base of %s with %s quote at %s price",
                              base_to_use, pair, current_quote_bal+amount_to_borrow, current_price)
+
+            tot_borrowed = preloan_amt + amount_to_borrow
+            tot_borrowed_usd = tot_borrowed if quote == 'USDT' else \
+                    base2quote(tot_borrowed, quote+'USDT')
+
             if self.prod:
 
                 if float(amount_to_borrow) <= 0:
-                    self.logger.info("Borrow amount is zero for pair open long %s. Continuing",
+                    self.logger.info("Borrow amount is zero for pair %s open long. Continuing",
                                      pair)
                     amt_str = get_step_precision(pair, quote2base(current_quote_bal, pair))
                 else:  # amount to borrow
@@ -564,7 +573,7 @@ class Trade():
 
                 dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
                                    quote_amount=quote_to_use, base_amount=amt_str,
-                                   borrowed=amount_to_borrow, borrowed_usd=borrowed_usd,
+                                   borrowed=tot_borrowed, borrowed_usd=tot_borrowed_usd,
                                    divisor=self.config.main.divisor,
                                    direction=self.config.main.trade_direction,
                                    symbol_name=quote, commission=str(commission_usd),
@@ -886,9 +895,8 @@ class Trade():
                                                                max_usd=max_usd)
             current_base_bal = total_amount_to_use['balance_amt']
             amount_to_borrow = total_amount_to_use['loan_amt']
+            preloan_amt = total_amount_to_use['preloan_amt']
 
-            borrowed_usd = amount_to_borrow if base == 'USDT' else \
-                    base2quote(amount_to_borrow, base+'USDT')
 
             # allow 1% + stoploss incase trade goes in wrong direction
             total_base_amount = get_step_precision(pair, sub_perc(1+float(stop), amount_to_borrow +
@@ -901,6 +909,10 @@ class Trade():
                              1+float(stop), base_not_to_use, get_base(pair), pair)
             self.logger.info("TRADE: opening margin short %s base of %s with %s quote at %s price",
                              total_base_amount, pair, total_quote_amount, current_price)
+
+            tot_borrowed = preloan_amt + amount_to_borrow
+            tot_borrowed_usd = tot_borrowed if base == 'USDT' else \
+                    base2quote(tot_borrowed, base+'USDT')
 
             if self.prod:
                 if float(amount_to_borrow) <= 0:
@@ -960,8 +972,8 @@ class Trade():
 
                 dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
                                    quote_amount=total_quote_amount,
-                                   base_amount=amt_str, borrowed=amount_to_borrow,
-                                   borrowed_usd=borrowed_usd,
+                                   base_amount=amt_str, borrowed=tot_borrowed,
+                                   borrowed_usd=tot_borrowed_usd,
                                    divisor=self.config.main.divisor,
                                    direction=self.config.main.trade_direction,
                                    symbol_name=get_quote(pair), commission=str(commission_usd),
