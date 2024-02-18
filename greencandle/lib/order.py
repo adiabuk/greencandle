@@ -509,6 +509,7 @@ class Trade():
             tot_borrowed = preloan_amt + amount_to_borrow
             tot_borrowed_usd = tot_borrowed if quote == 'USDT' else \
                     base2quote(tot_borrowed, quote+'USDT')
+            dbase.update_extra_loan(quote)
 
             if self.prod:
 
@@ -913,6 +914,8 @@ class Trade():
             tot_borrowed = preloan_amt + amount_to_borrow
             tot_borrowed_usd = tot_borrowed if base == 'USDT' else \
                     base2quote(tot_borrowed, base+'USDT')
+            dbase.update_extra_loan(base)
+
 
             if self.prod:
                 if float(amount_to_borrow) <= 0:

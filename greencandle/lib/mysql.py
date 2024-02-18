@@ -112,8 +112,8 @@ class Mysql():
         """
         update extra loan record with date
         """
-        command = (f"update extra_loans set date_removed=now() where symbol='{symbol}' order by "
-                   "date_added desc")
+        command = (f"update extra_loans set date_removed=now() where symbol='{symbol}' and "
+                   "date_removed is NULL order by date_added desc")
         self.__run_sql_query(command, get_id=False)
 
     @get_exceptions
