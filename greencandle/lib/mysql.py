@@ -97,7 +97,7 @@ class Mysql():
         command = (f"select borrowed from extra_loans where date_removed is null and "
                    f"symbol = '{symbol}' order by date_added desc limit 1")
         result = self.fetch_sql_data(command, header=False)
-        return result[0] if result else []
+        return float(result[0][0]) if result else None
 
     @get_exceptions
     def get_extra_loans(self):
