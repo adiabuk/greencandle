@@ -108,6 +108,14 @@ class Mysql():
                                        header=False)
         return [sub for item in raw_list for sub in item] # flatten list of lists
 
+    def update_extra_loan(self, symbol):
+        """
+        update extra loan record with date
+        """
+        command = (f"update extra_loans set date_removed=now() where symbol='{symbol}' order by "
+                   "date_added desc")
+        self.__run_sql_query(command, get_id=False)
+
     @get_exceptions
     def fetch_sql_data(self, query, header=True):
         """"
