@@ -1,0 +1,6 @@
+{
+  "interval": "15m",
+  "name": "data-be-analyse-15m-long9",
+  "redis_expiry_seconds": "36000",
+  "time_between_trades": "1h"
+}

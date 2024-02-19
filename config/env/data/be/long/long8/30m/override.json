@@ -1,0 +1,5 @@
+{
+  "interval": "30m",
+  "name": "data-be-analyse-30m-long8",
+  "time_between_trades": "1h"
+}
