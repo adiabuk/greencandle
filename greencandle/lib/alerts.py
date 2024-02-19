@@ -6,6 +6,7 @@ Functions for sending alerts
 import json
 import smtplib
 from datetime import datetime
+from pathlib import Path
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import requests
@@ -48,7 +49,8 @@ def send_slack_message(channel, message, emoji=None, icon=None, name=None):
     """
     if not config.slack[channel]:
         return
-    if not str2bool(config.slack.slack_active):
+    if not str2bool(config.slack.slack_active) or \
+    Path(f'/var/local/drain/{config.main.base_env}_slack_drain').is_file():
         return
     if not icon:
         icon = f":{config.main.trade_direction}:" if emoji else ":robot_face:"
