@@ -1,5 +1,6 @@
 {
   "interval": "5m",
   "name": "data-be-analyse-5m-long8",
-  "time_between_trades": "1h"
+  "time_between_trades": "1h",
+  "open_rule1": "res[0].low \u003c res[0].EMA_50 and perc_diff(x['bb_200'][1], x['EMA_50']) \u003e 0.30"
 }
