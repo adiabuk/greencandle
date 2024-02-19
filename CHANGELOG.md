@@ -1,5 +1,16 @@
 # Releases
 
+# 6.59
+* allow drain file for slack alerts per-env using shared /var/local dir
+* use extra loans table when manually borrowing, and update when opening trade
+* return float loan amt if avail
+* long trend EMA_50|EMA_200|golden_cross strategies for USD with MACD confirmation
+* disassociate 15m|30m from prod
+* add 4h entry in router config
+* separate slack alerts for visibility
+* missing 4h forward rule
+* add new loans db table, for pre-borrow query and update schema
+
 # 6.58.6
 * check we have a trade to close before updating tpsl
 * fix cron syntax
