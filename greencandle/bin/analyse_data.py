@@ -101,7 +101,7 @@ def analyse_loop():
     for pair, reversal, expire in pairs:
         analyse_pair(pair, reversal, expire, redis)
     LOGGER.debug("end of current loop")
-    Path('/var/local/greencandle').touch()
+    Path(f'/var/local/lock/{config.main.name}').touch()
     del redis
     if CHECK_REDIS_PAIR:
         time.sleep(5)
