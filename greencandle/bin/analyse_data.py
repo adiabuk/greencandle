@@ -123,7 +123,8 @@ def get_match_name(matches):
                    ['distance', 'bb', "bbperc_diff", "bbperc_extreme", "touch"],
                    ['bb_confirm'],
                    ['MACD_slowdown'],
-                   ['RSI_confirm']
+                   ['RSI_confirm'],
+                   ['trend_confirm']
                    ]
     for match in matches:
         match_names.append(name_lookup[container_num-1][match-1])
