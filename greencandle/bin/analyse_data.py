@@ -125,7 +125,8 @@ def get_match_name(matches):
                    ['MACD_slowdown'],
                    ['RSI_confirm'],
                    ['trend_confirm'],
-                   ['trend_50']
+                   ['trend_50'],
+                   ['trend_50_confirm']
                    ]
     for match in matches:
         match_names.append(name_lookup[container_num-1][match-1])
