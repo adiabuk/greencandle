@@ -103,8 +103,5 @@ def check_rules():
             except requests.exceptions.RequestException:
                 pass
 
-        else:
-            print("no")
-
 if __name__ == '__main__':
     main()
