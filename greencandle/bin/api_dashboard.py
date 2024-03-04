@@ -385,7 +385,7 @@ def get_live():
         perc = -perc if direction == 'short' else perc
         net_perc = perc - commission
 
-        if float(net_perc) > 3:
+        if 3 < float(net_perc) < 5:
             mt3 += 1
         if float(net_perc) > 5:
             mt5 += 1
