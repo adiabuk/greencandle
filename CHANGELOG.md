@@ -1,5 +1,17 @@
 # Releases
 
+# 6.59.1
+* missing individual lt router entries
+* don't dupe trades greater than 3 & 5 in notif
+* data strategy - price crosses over MAs
+* remove noisy debug log
+* ensure we are still in trend when confirming
+* remove delisted pair
+* check increasing volume new trend strategies
+* EMA_50 strategy confirmation name
+* small syntax fixes
+* ensure EMA-50 and EMA-200 are not together
+
 # 6.59
 * allow drain file for slack alerts per-env using shared /var/local dir
 * use extra loans table when manually borrowing, and update when opening trade
