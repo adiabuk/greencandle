@@ -1,6 +1,5 @@
 {
   "name": "data-be-analyse-4h-short1",
   "interval": "4h",
-  "time_between_trades": "8h",
-  "api_forward": "4h-1"
+  "time_between_trades": "8h"
 }

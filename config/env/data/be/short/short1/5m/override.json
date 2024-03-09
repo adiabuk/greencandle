@@ -1,6 +1,7 @@
 {
-  "api_forward": "5m-1",
   "interval": "5m",
   "name": "data-be-analyse-5m-short1",
-  "time_between_trades": "4h"
+  "open_rule1": "res[0].high \u003e res[0].bb_200[1] and perc_diff(res[0].bb_200[1], res[0].EMA_50) \u003c -0.30 and res[0].EMA_50 \u003c res[1].EMA_50 \u003c res[2].EMA_50",
+  "open_rule3": "res[0].close \u003c res[0].bb_200[1] and res[0].close \u003c res[0].EMA_50 and (res[1].close \u003e res[1].bb_200[1] or res[1].close \u003e res[1].EMA_50)",
+  "time_between_trades": "1h"
 }
