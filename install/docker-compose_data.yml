@@ -1453,8 +1453,6 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-
-
   data-be-analyse-5m-short1:
     container_name: data-be-analyse-5m-short1
     hostname: data-be-analyse-5m-short1
@@ -1477,7 +1475,7 @@ services:
       - data-be-get_5m
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV=data/be/long/short1/5m
+      - CONFIG_ENV=data/be/short/short1/5m
       - DB=true
       - REDIS_FORWARD=9
     healthcheck:
@@ -1515,7 +1513,7 @@ services:
       - data-be-get_15m
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV=data/be/long/short1/15m
+      - CONFIG_ENV=data/be/short/short1/15m
       - DB=true
       - REDIS_FORWARD=9
     healthcheck:
@@ -1553,7 +1551,7 @@ services:
       - data-be-get_30m
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV=data/be/long/short1/30m
+      - CONFIG_ENV=data/be/short/short1/30m
       - DB=true
       - REDIS_FORWARD=9
     healthcheck:
@@ -1591,7 +1589,7 @@ services:
       - data-be-get_1h
     environment:
       - VPN_IP=$VPN_IP
-      - CONFIG_ENV=data/be/long/short1/1h
+      - CONFIG_ENV=data/be/short/short1/1h
       - DB=true
       - REDIS_FORWARD=9
     healthcheck:
@@ -1606,7 +1604,6 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/:/var/run
-
 
   data-be-analyse-5m-long7:
     container_name: data-be-analyse-5m-long7
