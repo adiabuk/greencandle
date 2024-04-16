@@ -180,6 +180,7 @@ services:
     image: amrox/webserver:${TAG}
     mem_limit: 200m
     pull_policy: always
+    network_mode: host
     restart: always
     healthcheck:
       test: curl -Isf 127.1:4444
@@ -189,8 +190,6 @@ services:
     environment:
       - CONFIG_ENV=per
       - DB=false
-    ports:
-      - 4444:4444
     links:
       - per-fe-api-dashboard:api_dash
       - per-base-mysql:mysql

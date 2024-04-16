@@ -698,6 +698,7 @@ services:
     mem_limit: 200m
     pull_policy: always
     restart: always
+    network_mode: host
     healthcheck:
       test: curl -Isf 127.1:7777
       interval: 5m
@@ -707,8 +708,6 @@ services:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=data
       - DB=false
-    ports:
-      - 7777:7777
     links:
       - data-fe-api-dashboard:api_dash
       - data-base-mysql:mysql
