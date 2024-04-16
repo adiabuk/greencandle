@@ -279,7 +279,6 @@ services:
     hostname: test-fe-webserver
     image: amrox/webserver:${TAG}
     mem_limit: 200m
-    network_mode: host
     pull_policy: always
     restart: always
     healthcheck:
@@ -290,6 +289,8 @@ services:
     environment:
       - CONFIG_ENV=test
       - DB=false
+    ports:
+      - 5555:5555
     links:
       - test-fe-api-dashboard:api_dash
       - test-gen-be-logtailer-api:logs

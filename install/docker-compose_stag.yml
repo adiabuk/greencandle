@@ -219,7 +219,6 @@ services:
     mem_limit: 200m
     pull_policy: always
     restart: always
-    network_mode: host
     healthcheck:
       test: curl -Isf 127.1:3333
       interval: 5m
@@ -228,6 +227,8 @@ services:
     environment:
       - CONFIG_ENV=stag
       - DB=false
+    ports:
+      - 3333:3333
     links:
       - stag-fe-api-dashboard:api_dash
       - stag-base-mysql:mysql

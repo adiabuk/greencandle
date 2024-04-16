@@ -180,7 +180,6 @@ services:
     mem_limit: 200m
     pull_policy: always
     restart: always
-    network_mode: host
     healthcheck:
       test: curl -Isf 127.1:1111
       interval: 5m
@@ -189,6 +188,8 @@ services:
     environment:
       - CONFIG_ENV=prod/fe
       - DB=false
+    ports:
+      - 1111:1111
     links:
       - prod-fe-api-dashboard:api_dash
       - prod-base-mysql:mysql
