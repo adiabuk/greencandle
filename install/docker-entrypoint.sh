@@ -51,7 +51,7 @@ if [[ ! -f /installed ]]; then
     pip install ipython
   elif [[ "$HOSTNAME" == *"unit"* ]]; then
     echo "mysql mysql-unit" > /etc/host.aliases
-    echo "redis redis-unit" > /etc/host.aliases
+    echo "redis redis-unit" >> /etc/host.aliases
     export HOSTALIASES=/etc/host.aliases
 
   fi
