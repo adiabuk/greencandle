@@ -109,7 +109,7 @@ services:
     environment:
       - CONFIG_ENV=per/be/manual
       - DB=true
-      - STREAM=http://10.8.0.101:5001/all
+      - STREAM=http://data:5001/all
     image: amrox/greencandle:${TAG}
     mem_limit: 500m
     pull_policy: always
@@ -276,7 +276,7 @@ services:
     hostname: per-fe-api-dashboard
     environment:
       - VPN_IP=$VPN_IP
-      - STREAM=http://10.8.0.101:5001/all
+      - STREAM=http://data:5001/all
       - CONFIG_ENV=per/fe/api
       - DB=true
       - SECRET_KEY=$SECRET_KEY
@@ -367,7 +367,7 @@ services:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=per/be/any/spot-long
       - DB=true
-      - STREAM=http://10.8.0.101:5001/all
+      - STREAM=http://data:5001/all
     ports:
       - 20000
     links:
@@ -405,7 +405,7 @@ services:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=per/be/any/cross-long
       - DB=true
-      - STREAM=http://10.8.0.101:5001/all
+      - STREAM=http://data:5001/all
     ports:
       - 20000
     links:
@@ -443,7 +443,7 @@ services:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=per/be/any/cross-short
       - DB=true
-      - STREAM=http://10.8.0.101:5001/all
+      - STREAM=http://data:5001/all
     ports:
       - 20000
     links:

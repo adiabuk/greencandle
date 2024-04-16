@@ -108,7 +108,7 @@ services:
     environment:
       - CONFIG_ENV=prod/be/manual
       - DB=true
-      - STREAM=http://10.8.0.101:5001/all
+      - STREAM=http://data:5001/all
     image: amrox/greencandle:${TAG}
     mem_limit: 500m
     pull_policy: always
@@ -275,7 +275,7 @@ services:
     hostname: prod-fe-api-dashboard
     environment:
       - VPN_IP=$VPN_IP
-      - STREAM=http://10.8.0.101:5001/all
+      - STREAM=http://data:5001/all
       - CONFIG_ENV=prod/fe/api
       - DB=true
       - SECRET_KEY=$SECRET_KEY
@@ -376,7 +376,7 @@ services:
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/1h/cross-long
       - DB=true
-      - STREAM=http://10.8.0.101:5003/all
+      - STREAM=http://data:5003/all
       - USE_BALANCE=true
     ports:
       - 20000
@@ -416,7 +416,7 @@ services:
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/1h/cross-short
       - DB=true
-      - STREAM=http://10.8.0.101:5003/all
+      - STREAM=http://data:5003/all
       - USE_BALANCE=true
     ports:
       - 20000
@@ -456,7 +456,7 @@ services:
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/4h/cross-long
       - DB=true
-      - STREAM=http://10.8.0.101:5004/all
+      - STREAM=http://data:5004/all
       - USE_BALANCE=true
     ports:
       - 20000
@@ -496,7 +496,7 @@ services:
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/4h/cross-short
       - DB=true
-      - STREAM=http://10.8.0.101:5004/all
+      - STREAM=http://data:5004/all
       - USE_BALANCE=true
     ports:
       - 20000
@@ -536,7 +536,7 @@ services:
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/1m/cross-long
       - DB=true
-      - STREAM=http://10.8.0.101:5001/all
+      - STREAM=http://data:5001/all
       - USE_BALANCE=true
     ports:
       - 20000
@@ -576,7 +576,7 @@ services:
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/1m/cross-short
       - DB=true
-      - STREAM=http://10.8.0.101:5001/all
+      - STREAM=http://data:5001/all
       - USE_BALANCE=true
     ports:
       - 20000
@@ -616,7 +616,7 @@ services:
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/5m/cross-long
       - DB=true
-      - STREAM=http://10.8.0.101:5002/all
+      - STREAM=http://data:5002/all
       - USE_BALANCE=true
     ports:
       - 20000
@@ -656,7 +656,7 @@ services:
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/5m/cross-short
       - DB=true
-      - STREAM=http://10.8.0.101:5002/all
+      - STREAM=http://data:5002/all
       - USE_BALANCE=true
     ports:
       - 20000
@@ -696,7 +696,7 @@ services:
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/lt/cross-long
       - DB=true
-      - STREAM=http://10.8.0.101:5001/all
+      - STREAM=http://data:5001/all
       - USE_BALANCE=true
     ports:
       - 20000
@@ -735,7 +735,7 @@ services:
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/lt/cross-short
       - DB=true
-      - STREAM=http://10.8.0.101:5001/all
+      - STREAM=http://data:5001/all
       - USE_BALANCE=true
     ports:
       - 20000
@@ -775,7 +775,7 @@ services:
       - CONFIG_ENV=prod/be/any/man/cross-long
       - DB=true
       - USE_BALANCE=true
-      - STREAM=http://10.8.0.101:5001/all
+      - STREAM=http://data:5001/all
     ports:
       - 20000
     links:
@@ -814,7 +814,7 @@ services:
       - CONFIG_ENV=prod/be/any/man/cross-short
       - DB=true
       - USE_BALANCE=true
-      - STREAM=http://10.8.0.101:5001/all
+      - STREAM=http://data:5001/all
     ports:
       - 20000
     links:

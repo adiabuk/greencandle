@@ -827,7 +827,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=data
-      - STREAM=http://10.8.0.101:5001/all
+      - STREAM=http://data:5001/all
       - DB=true
       - SECRET_KEY=$SECRET_KEY
     logging:

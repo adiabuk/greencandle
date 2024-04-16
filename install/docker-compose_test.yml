@@ -129,7 +129,7 @@ services:
     container_name: test-fe-api-dashboard
     hostname: test-fe-api-dashboard
     environment:
-      - STREAM=http://10.8.0.101:5001/all
+      - STREAM=http://data:5001/all
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/fe/api
       - DB=true
@@ -208,7 +208,7 @@ services:
     environment:
       - CONFIG_ENV=test/be/manual
       - DB=true
-      - STREAM=http://10.8.0.101:5001/all
+      - STREAM=http://data:5001/all
     image: amrox/greencandle:${TAG}
     mem_limit: 500m
     pull_policy: always
@@ -387,9 +387,9 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5001/all
+      - STREAM=http://data:5001/all
     extra_hosts:
-      - "trend:10.8.0.101"
+      - "trend:data"
     ports:
       - 20000
     links:
@@ -429,9 +429,9 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5002/all
+      - STREAM=http://data:5002/all
     extra_hosts:
-      - "trend:10.8.0.101"
+      - "trend:data"
     ports:
       - 20000
     links:
@@ -471,9 +471,9 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5003/all
+      - STREAM=http://data:5003/all
     extra_hosts:
-      - "trend:10.8.0.101"
+      - "trend:data"
     ports:
       - 20000
     links:
@@ -513,9 +513,9 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5004/all
+      - STREAM=http://data:5004/all
     extra_hosts:
-      - "trend:10.8.0.101"
+      - "trend:data"
     ports:
       - 20000
     links:
@@ -555,9 +555,9 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5001/all
+      - STREAM=http://data:5001/all
     extra_hosts:
-      - "trend:10.8.0.101"
+      - "trend:data"
     ports:
       - 20000
     links:
@@ -597,9 +597,9 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5002/all
+      - STREAM=http://data:5002/all
     extra_hosts:
-      - "trend:10.8.0.101"
+      - "trend:data"
     ports:
       - 20000
     links:
@@ -639,9 +639,9 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5003/all
+      - STREAM=http://data:5003/all
     extra_hosts:
-      - "trend:10.8.0.101"
+      - "trend:data"
     ports:
       - 20000
     links:
@@ -681,9 +681,9 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5004/all
+      - STREAM=http://data:5004/all
     extra_hosts:
-      - "trend:10.8.0.101"
+      - "trend:data"
     ports:
       - 20000
     links:
@@ -723,9 +723,9 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5001/all
+      - STREAM=http://data:5001/all
     extra_hosts:
-      - "trend:10.8.0.101"
+      - "trend:data"
     ports:
       - 20000
     links:
@@ -765,9 +765,9 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5002/all
+      - STREAM=http://data:5002/all
     extra_hosts:
-      - "trend:10.8.0.101"
+      - "trend:data"
     ports:
       - 20000
     links:
@@ -807,9 +807,9 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5003/all
+      - STREAM=http://data:5003/all
     extra_hosts:
-      - "trend:10.8.0.101"
+      - "trend:data"
     ports:
       - 20000
     links:
@@ -849,9 +849,9 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5004/all
+      - STREAM=http://data:5004/all
     extra_hosts:
-      - "trend:10.8.0.101"
+      - "trend:data"
     ports:
       - 20000
     links:
@@ -892,9 +892,9 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5001/all
+      - STREAM=http://data:5001/all
     extra_hosts:
-      - "trend:10.8.0.101"
+      - "trend:data"
     ports:
       - 20000
     links:
@@ -934,9 +934,9 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5002/all
+      - STREAM=http://data:5002/all
     extra_hosts:
-      - "trend:10.8.0.101"
+      - "trend:data"
     ports:
       - 20000
     links:
@@ -976,9 +976,9 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5003/all
+      - STREAM=http://data:5003/all
     extra_hosts:
-      - "trend:10.8.0.101"
+      - "trend:data"
     ports:
       - 20000
     links:
@@ -1018,9 +1018,9 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5004/all
+      - STREAM=http://data:5004/all
     extra_hosts:
-      - "trend:10.8.0.101"
+      - "trend:data"
     ports:
       - 20000
     links:
@@ -1060,9 +1060,9 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5004/all
+      - STREAM=http://data:5004/all
     extra_hosts:
-      - "trend:10.8.0.101"
+      - "trend:data"
     ports:
       - 20000
     links:
@@ -1102,9 +1102,9 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5004/all
+      - STREAM=http://data:5004/all
     extra_hosts:
-      - "trend:10.8.0.101"
+      - "trend:data"
     ports:
       - 20000
     links:
@@ -1144,9 +1144,9 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5006/all
+      - STREAM=http://data:5006/all
     extra_hosts:
-      - "trend:10.8.0.101"
+      - "trend:data"
     ports:
       - 20000
     links:
@@ -1186,9 +1186,9 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5006/all
+      - STREAM=http://data:5006/all
     extra_hosts:
-      - "trend:10.8.0.101"
+      - "trend:data"
     ports:
       - 20000
     links:
@@ -1228,9 +1228,9 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5006/all
+      - STREAM=http://data:5006/all
     extra_hosts:
-      - "trend:10.8.0.101"
+      - "trend:data"
     ports:
       - 20000
     links:
@@ -1270,9 +1270,9 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5006/all
+      - STREAM=http://data:5006/all
     extra_hosts:
-      - "trend:10.8.0.101"
+      - "trend:data"
     ports:
       - 20000
     links:
@@ -1312,9 +1312,9 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5005/all
+      - STREAM=http://data:5005/all
     extra_hosts:
-      - "trend:10.8.0.101"
+      - "trend:data"
     ports:
       - 20000
     links:
@@ -1354,9 +1354,9 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5005/all
+      - STREAM=http://data:5005/all
     extra_hosts:
-      - "trend:10.8.0.101"
+      - "trend:data"
     ports:
       - 20000
     links:
@@ -1396,9 +1396,9 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5001/all
+      - STREAM=http://data:5001/all
     extra_hosts:
-      - "trend:10.8.0.101"
+      - "trend:data"
     ports:
       - 20000
     links:
@@ -1438,9 +1438,9 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5001/all
+      - STREAM=http://data:5001/all
     extra_hosts:
-      - "trend:10.8.0.101"
+      - "trend:data"
     ports:
       - 20000
     links:
@@ -1480,9 +1480,9 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5002/all
+      - STREAM=http://data:5002/all
     extra_hosts:
-      - "trend:10.8.0.101"
+      - "trend:data"
     ports:
       - 20000
     links:
@@ -1522,9 +1522,9 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5002/all
+      - STREAM=http://data:5002/all
     extra_hosts:
-      - "trend:10.8.0.101"
+      - "trend:data"
     ports:
       - 20000
     links:

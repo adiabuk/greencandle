@@ -105,7 +105,7 @@ services:
     environment:
       - VPN_IP=$VPN_IP
       - CONFIG_ENV=stag/fe/api
-      - STREAM=http://10.8.0.101:5001/all
+      - STREAM=http://data:5001/all
       - DB=true
       - SECRET_KEY=$SECRET_KEY
     logging:
@@ -147,7 +147,7 @@ services:
     environment:
       - CONFIG_ENV=stag/be/manual
       - DB=true
-      - STREAM=http://10.8.0.101:5001/all
+      - STREAM=http://data:5001/all
     image: amrox/greencandle:${TAG}
     mem_limit: 500m
     pull_policy: always
@@ -361,7 +361,7 @@ services:
       - CONFIG_ENV=stag/be/any/long
       - intermittent="true"
       - DB=true
-      - STREAM=http://10.8.0.101:5006/all
+      - STREAM=http://data:5006/all
     ports:
       - 20000
     links:
@@ -401,7 +401,7 @@ services:
       - intermittent="true"
       - DB=true
       - no_proxy=router
-      - STREAM=http://10.8.0.101:5006/all
+      - STREAM=http://data:5006/all
     ports:
       - 20000
     links:
