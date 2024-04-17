@@ -50,7 +50,7 @@ def send_slack_message(channel, message, emoji=None, icon=None, name=None):
     if not config.slack[channel]:
         return
     if not str2bool(config.slack.slack_active) or \
-    Path(f'/var/local/drain/{config.main.base_env}_slack_drain').is_file():
+    Path(f'/var/local/drain/drain_{config.main.base_env}_slack').is_file():
         return
     if not icon:
         icon = f":{config.main.trade_direction}:" if emoji else ":robot_face:"
