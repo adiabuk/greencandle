@@ -35,7 +35,7 @@ def main():
 
     send_nsca(status=status, host_name='hp', service_name='cross_margin_risk',
               text_output=f'{msg} risk value is {round(value, 2)};|risk={round(value, 2)}',
-              remote_host='10.8.0.1')
+              remote_host='10.0.0.212')
 
     print(value)
 
