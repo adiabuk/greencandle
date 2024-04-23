@@ -56,25 +56,27 @@ class TestGc(unittest.TestCase):
         time.sleep(3)
         self.driver.find_element(By.LINK_TEXT, "Main Page").click()
         self.driver.find_element(By.CSS_SELECTOR, ".hamburger:nth-child(3)").click()
+        time.sleep(1)
 
         # trade
         self.driver.find_element(By.CSS_SELECTOR, "li:nth-child(1) > a").click()
         self.driver.find_element(By.LINK_TEXT, "Main Page").click()
         self.driver.find_element(By.CSS_SELECTOR, ".hamburger:nth-child(3)").click()
-        time.sleep(3)
-        self.driver.save_screenshot("child2.png")
+        time.sleep(1)
 
         # live data spreadsheet
         self.driver.find_element(By.CSS_SELECTOR, "li:nth-child(2) > a").click()
         self.driver.find_element(By.LINK_TEXT, "Main Page").click()
         self.driver.find_element(By.CSS_SELECTOR, ".hamburger:nth-child(3)").click()
+        time.sleep(1)
 
         # Run commands
         self.driver.find_element(By.CSS_SELECTOR, "li:nth-child(3) > a").click()
         self.driver.find_element(By.LINK_TEXT, "Main Page").click()
-        time.sleep(3)
+        time.sleep(1)
         self.driver.find_element(By.CSS_SELECTOR, ".hamburger:nth-child(3)").click()
 
+        time.sleep(1)
         # Tail GC logs
         self.driver.find_element(By.CSS_SELECTOR, "li:nth-child(4) > a").click()
         self.driver.back()
