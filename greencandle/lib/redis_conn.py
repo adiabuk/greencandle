@@ -4,6 +4,7 @@
 """
 Store and retrieve items from redis
 """
+import os
 import json
 import time
 import zlib
@@ -682,10 +683,14 @@ class Redis():
                                                                items[seq])
                         continue
         dbase = Mysql(interval=config.main.interval)
-        try:
-            open_price = dbase.get_trade_value(pair)[0][0]
-        except IndexError:
+        if config.main.base_env == "data" and not bool('STORE_IN_DB' in os.environ):
             open_price = None
+        else:
+            try:
+                open_price = dbase.get_trade_value(pair)[0][0]
+            except IndexError:
+                open_price = None
+
         winning_open = self.get_rules(rules, 'open')
         winning_close = self.get_rules(rules, 'close')
         reversal = eval(config.main.reversal_rule) if check_reversal else False
