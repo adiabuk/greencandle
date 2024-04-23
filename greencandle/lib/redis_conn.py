@@ -175,6 +175,8 @@ class Redis():
                                config.main.base_env,
                                direction)
         key = f"{pair}:{func}:{short}"
+        if 'perc' in func:
+            self.logger.info(f"Setting redis key {key} to {value}")
         redis1.conn.set(key, value)
         del redis1
 
