@@ -43,6 +43,7 @@ class TestGc(unittest.TestCase):
         self.driver.set_window_size(1666, 900)
         # Menu
         self.driver.find_element(By.CSS_SELECTOR, ".hamburger:nth-child(3)").click()
+
         # trade
         self.driver.find_element(By.CSS_SELECTOR, "li:nth-child(1) > a").click()
 
@@ -56,28 +57,33 @@ class TestGc(unittest.TestCase):
         self.driver.find_element(By.LINK_TEXT, "Main Page").click()
         self.driver.find_element(By.CSS_SELECTOR, ".hamburger:nth-child(3)").click()
 
-        # charts
+        # trade
+        self.driver.find_element(By.CSS_SELECTOR, "li:nth-child(1) > a").click()
+        self.driver.find_element(By.LINK_TEXT, "Main Page").click()
+        self.driver.find_element(By.CSS_SELECTOR, ".hamburger:nth-child(3)").click()
+        time.sleep(3)
+        self.driver.save_screenshot("child2.png")
+
+        # live data spreadsheet
         self.driver.find_element(By.CSS_SELECTOR, "li:nth-child(2) > a").click()
         self.driver.find_element(By.LINK_TEXT, "Main Page").click()
         self.driver.find_element(By.CSS_SELECTOR, ".hamburger:nth-child(3)").click()
 
         # Run commands
         self.driver.find_element(By.CSS_SELECTOR, "li:nth-child(3) > a").click()
-        self.driver.save_screenshot("failure2.png")
-        self.driver.find_element(By.LINK_TEXT, "Main Page").click()
-        self.driver.find_element(By.CSS_SELECTOR, ".hamburger:nth-child(3)").click()
-
-        # Tail syslog
-        self.driver.find_element(By.CSS_SELECTOR, "li:nth-child(4) > a").click()
         self.driver.find_element(By.LINK_TEXT, "Main Page").click()
         time.sleep(3)
         self.driver.find_element(By.CSS_SELECTOR, ".hamburger:nth-child(3)").click()
 
-        # CAdvisor
+        # Tail GC logs
+        self.driver.find_element(By.CSS_SELECTOR, "li:nth-child(4) > a").click()
+        self.driver.back()
+
+        # Jenkins CI
         self.driver.find_element(By.CSS_SELECTOR, "li:nth-child(5) > a").click()
         self.driver.back()
 
-        # Docker hub
+        # Docker Hub
         self.driver.find_element(By.CSS_SELECTOR, "li:nth-child(6) > a").click()
         self.driver.back()
 
@@ -85,21 +91,17 @@ class TestGc(unittest.TestCase):
         self.driver.find_element(By.CSS_SELECTOR, "li:nth-child(7) > a").click()
         self.driver.back()
 
-        # Certs
-        self.driver.find_element(By.CSS_SELECTOR, "li:nth-child(8) > a").click()
-        self.driver.find_element(By.LINK_TEXT, "Main Page").click()
-        self.driver.find_element(By.CSS_SELECTOR, ".hamburger:nth-child(3)").click()
-
         # Local files
-        self.driver.find_element(By.CSS_SELECTOR, "li:nth-child(9) > a").click()
+        self.driver.find_element(By.CSS_SELECTOR, "li:nth-child(8) > a").click()
+        self.driver.back()
 
-        # graphs dir
-        self.driver.find_element(By.LINK_TEXT, "graphs").click()
-        self.driver.find_element(By.LINK_TEXT, "Main Page").click()
-        self.driver.find_element(By.CSS_SELECTOR, ".hamburger:nth-child(3)").click()
+        # Nagios - SKIP
 
-        # trade
-        self.driver.find_element(By.CSS_SELECTOR, "li:nth-child(1) > a").click()
+        # GC Versions - SKIP
+
+        # Extra Trade Actions
+        self.driver.find_element(By.CSS_SELECTOR, "li:nth-child(11) > a").click()
+        #self.driver.back()
 
         # logout
         self.driver.find_element(By.LINK_TEXT, "logout").click()
