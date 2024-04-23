@@ -475,6 +475,15 @@ def get_total_values():
         total_net_perc += net_perc
     return usd_amt, total_net_perc
 
+@APP.route('/values')
+@login_required
+def get_values():
+    """
+    return raw contents of global values var
+    """
+    return VALUES
+
+
 def get_additional_details():
     """
     Get tp/sl and drawup/drawdown from redis and mysql
