@@ -682,11 +682,11 @@ class Redis():
                                             "%s mepoch: %s", pair, rule, current_config, error,
                                                                items[seq])
                         continue
-        dbase = Mysql(interval=config.main.interval)
         if config.main.base_env == "data" and not bool('STORE_IN_DB' in os.environ):
             open_price = None
         else:
             try:
+                dbase = Mysql(interval=config.main.interval)
                 open_price = dbase.get_trade_value(pair)[0][0]
             except IndexError:
                 open_price = None
