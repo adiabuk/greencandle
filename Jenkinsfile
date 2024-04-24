@@ -11,6 +11,9 @@ pipeline {
 
     options {
         buildDiscarder(logRotator(numToKeepStr: '5'))
+        disableConcurrentBuilds()
+        buildBlocker (useBuildBlocker: true, blockLevel: 'NODE', scanQueueFor: 'ALL', blockingJobs: 'deploy-.*')
+        timeout(time: 1, unit: 'HOURS')
     }
 
     stages {
