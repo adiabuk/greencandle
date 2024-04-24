@@ -906,7 +906,7 @@ services:
     container_name: data-be-api-router
     hostname: data-be-api-router
     extra_hosts:
-      - "alert:10.8.0.104"
+      - "alert:local.amrox.loc"
     image: amrox/greencandle:${TAG}
     mem_limit: 200m
     pull_policy: always

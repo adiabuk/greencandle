@@ -327,7 +327,7 @@ services:
     ports:
       - 1082:1080
     extra_hosts:
-      - "alert:10.8.0.1"
+      - "alert:local.amrox.loc"
     links:
       - stag-base-mysql:mysql
       - stag-base-redis:redis

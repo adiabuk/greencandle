@@ -92,7 +92,7 @@
       "is_secret": false
     },
     "api_forward": {
-      "value": "test,10.8.0.101:1084,bb-any-long-short",
+      "value": "test,local.amrox.loc:1084,bb-any-long-short",
       "is_binary": false,
       "is_secret": false
     },

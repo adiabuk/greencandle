@@ -14,7 +14,7 @@ def main():
     Import pairs from remote db
     """
     dbase = Mysql()
-    dbase2 = Mysql(host='10.8.0.101', port=3308)
+    dbase2 = Mysql(host='local.amrox.loc', port=3308)
 
 
     # fetch from remote db
