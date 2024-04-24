@@ -36,7 +36,6 @@ pipeline {
                  }
              }
         }
-
         stage("run tests") {
             steps {
                 echo "run all tests"
@@ -49,7 +48,6 @@ pipeline {
                 }
             }
         }
-
         stage("Push to registry") {
             steps {
                 echo "pushing all"
@@ -61,6 +59,12 @@ pipeline {
                      ]
                 }
             }
+        }
+        stage("cleanup network") {
+            steps {
+                echo 'cleaning up unused docker networks'
+                sh "sudo docker network prune -f"
+                 }
         }
     }
 
