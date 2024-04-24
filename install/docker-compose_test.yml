@@ -1,6 +1,4 @@
-version: "3.1"
 services:
-
   test-gen-be-logwatch:
     container_name: test-gen-be-logwatch
     hostname: test-gen-be-logwatch

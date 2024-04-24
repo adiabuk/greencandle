@@ -1,6 +1,4 @@
-version: "3.7"
 services:
-
   ###### Start Gen
   prod-gen-be-logwatch:
     container_name: prod-gen-be-logwatch

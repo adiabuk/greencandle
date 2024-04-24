@@ -1,6 +1,4 @@
-version: "3.1"
 services:
-
   dev-fe-cron:
     container_name: dev-fe-cron
     hostname: dev-fe-cron

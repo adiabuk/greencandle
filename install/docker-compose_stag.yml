@@ -1,6 +1,4 @@
-version: "3.1"
 services:
-
   stag-gen-be-logwatch:
     container_name: stag-gen-be-logwatch
     hostname: stag-gen-be-logwatch
