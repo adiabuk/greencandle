@@ -169,7 +169,7 @@ class Trade():
         else:
             status = 3
         try:
-            send_nsca(status=status, host_name='hp', service_name=f"slots_{self.config.main.name}",
+            send_nsca(status=status, host_name='jenkins1', service_name=f"slots_{self.config.main.name}",
                       text_output=f"Avail Slots:{avail_slots}", remote_host='10.8.0.1')
         except Exception:
             self.logger.warning("Unable to push stats to nagios")
