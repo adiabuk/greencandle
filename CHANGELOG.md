@@ -1,5 +1,26 @@
 # Releases
 
+# 7.0
+* cleanup unused networks on build host after gc build
+* Fix names and hosts used for nagios NSCA pushes
+* all pairs for upper timeframe ema golden/death cross
+* add crossover containers analysis for upper timeframes
+* add 1w/12h data containers for long term strategies
+* updated initial bootstrap script for new environment
+* INFO log when setting tpsl in redis
+* get raw global trades var from api dashboard
+* reduce load on data db by removing unnecessary queries
+* updated selenium with new menu items
+* remove unused UI menu items
+* fix UI logout link
+* fix routing destination
+* remove extra hosts from test env
+* slack drain file should follow naming convention
+* temp hack for unit test host resolution
+* remove delisted pair
+* fix config env for new short containers
+* short trend strategy
+
 # 6.59.1
 * missing individual lt router entries
 * don't dupe trades greater than 3 & 5 in notif
