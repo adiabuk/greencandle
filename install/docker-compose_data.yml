@@ -54,6 +54,77 @@ services:
       - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
+  data-fe-stream_1w:
+    container_name: data-fe-stream_1w
+    hostname: data-fe-stream_1w
+    image: amrox/greencandle:latest
+    mem_limit: 200m
+    pull_policy: always
+    restart: on-failure
+    entrypoint: /docker-entrypoint.sh stream_data
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local3
+    links:
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+    environment:
+      - VPN_IP=$VPN_IP
+      - CONFIG_ENV=data/be/get_data/1w
+      - DB=true
+    healthcheck:
+      test: /mnt/nagios_checks/check_milliepoch -u http://127.1:5000 -w 43500 -c 43560 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      start_period: 10m
+      interval: 10m
+      timeout: 30s
+      retries: 5
+    ports:
+      - 5004:5000
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+      - /mnt:/mnt
+
+  data-be-get_1w:
+    container_name: data-be-get_1w
+    hostname: data-be-get_1w
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2000m
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh get_data
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local3
+    links:
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+      - data-fe-stream_1w:stream
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+    environment:
+      - VPN_IP=$VPN_IP
+      - CONFIG_ENV=data/be/get_data/1w
+      - DB=true
+    healthcheck:
+      test: find /var/local/lock/gc_get_1w.lock  -mmin -3 ||exit 1
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
   data-fe-stream_30m:
     container_name: data-fe-stream_30m
     hostname: data-fe-stream_30m
