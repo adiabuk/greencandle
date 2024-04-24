@@ -11,9 +11,24 @@ apt-get update
 apt-get install software-properties-common
 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys CC86BB64
 
+# Add Docker's official GPG key:
+apt-get install ca-certificates curl
+install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  tee /etc/apt/sources.list.d/docker.list > /dev/null
+
 # Setup local env
 apt-get -y update
-apt-get -y install docker.io ntpdate mysql-client screen atop jq iotop ntp awscli vim atop htop automake autotools-dev fuse g++ git libcurl4-gnutls-dev libfuse-dev libssl-dev libxml2-dev make pkg-config bsdmainutils
+apt-get -y install ntpdate mysql-client screen  jq ntp awscli vim automake autotools-dev fuse g++ git libcurl5-gnutls-dev libfuse-dev libssl-dev libxml2-dev make pkg-config bsdmainutils reptyr psmisc lsof nmap command-not-found bind9-dnsutils libxml2-utils ipmitool smartmontools net-tools htop atop iotop dstat mosh python-is-python3 ethtool
+
+apt-get -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
 apt autoremove --purge -y snapd emacs
 apt-get dist-upgrade -y
 apt-get clean; apt-get autoclean; rm -rf /var/lib/apt/lists/*
@@ -34,12 +49,6 @@ rm -rf /tmp/s3fs-fuse
 wget "https://www.dropbox.com/sh/l22jyonei087h4o/AAChfqr_j4ydTDjILz0Q62Y2a/configstore-2.5.0-linux-amd64.tar.gz?dl=0" -O /tmp/configstore-2.5.0-linux-amd64.tar.gz
 tar zxvf /tmp/configstore-2.5.0-linux-amd64.tar.gz -C /usr/local/bin
 rm -rf /tmp/configstore-2.5.0-linux-amd64.tar.gz
-
-mkdir -p /usr/lib/docker/cli-plugins
-# download the CLI into the plugins directory
-curl -sSL https://github.com/docker/compose/releases/download/v2.9.0/docker-compose-linux-x86_64 -o /usr/lib/docker/cli-plugins/docker-compose
-# make the CLI executable
-chmod +x /usr/lib/docker/cli-plugins/docker-compose
 
 wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/3.0.0-beta/yq_linux_amd64
 
