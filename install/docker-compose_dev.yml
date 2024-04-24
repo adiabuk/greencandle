@@ -196,7 +196,7 @@ services:
     container_name: dev-be-api-router
     hostname: dev-be-api-router
     extra_hosts:
-      - "alert:local.amrox.loc"
+      - "alert:10.0.0.212"
     image: amrox/greencandle:${TAG}
     mem_limit: 200m
     pull_policy: always
