@@ -1,6 +1,7 @@
 {
-  "name": "data-be-analyse-4h-long1",
-  "interval": "4h",
+  "interval": "12h",
+  "name": "data-be-analyse-12h-crossng1",
+  "pairs": "ONTBTC",
   "time_between_trades": "8h",
   "slack_alerts": "data_trend_cross",
   "slack_balance": "data_trend_cross",

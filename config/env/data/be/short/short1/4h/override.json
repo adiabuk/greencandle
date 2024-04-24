@@ -1,5 +1,8 @@
 {
   "name": "data-be-analyse-4h-short1",
   "interval": "4h",
-  "time_between_trades": "8h"
+  "time_between_trades": "8h",
+  "slack_alerts": "data_trend_cross",
+  "slack_balance": "data_trend_cross",
+  "slack_notifications": "data_trend_cross"
 }
