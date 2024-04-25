@@ -187,21 +187,21 @@ class Trade():
 
         if self.config.main.trade_type == "spot":
             if self.config.main.trade_direction == "long":
-                self.__open_spot_long(items_list)
+                result = self.__open_spot_long(items_list)
             else:
                 raise InvalidTradeError("Invalid trade direction for spot")
 
         elif self.config.main.trade_type == "margin":
             if self.config.main.trade_direction == "long":
-                self.__open_margin_long(items_list, stop)
+                result = self.__open_margin_long(items_list, stop)
             elif self.config.main.trade_direction == "short":
-                self.__open_margin_short(items_list, stop)
+                result = self.__open_margin_short(items_list, stop)
             else:
                 raise InvalidTradeError("Invalid trade direction")
 
         else:
             raise InvalidTradeError("Invalid trade type")
-        return True
+        return result
 
     def close_trade(self, items_list, drawdowns=None, drawups=None):
         """
