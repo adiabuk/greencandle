@@ -1,5 +1,12 @@
 # Releases
 
+# 7.0.1
+* capture trade result to update tpsl on success
+* don't allow negative epoch values
+* add 1w to min conversion dict
+* remove superfluous version in docker compose files
+* block on any other running job & add 1hr build timeout
+
 # 7.0
 * cleanup unused networks on build host after gc build
 * Fix names and hosts used for nagios NSCA pushes
