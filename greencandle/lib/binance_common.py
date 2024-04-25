@@ -150,7 +150,7 @@ def get_data(startdate, intervals, pairs, days, outputdir, extra):
             actual_start_epoch = given_start_epoch - additional_seconds
             klines_in_a_day = daily_minutes * (1/klines_multiplier[interval])
             total_klines = int(klines_in_a_day) * int(days) + number_of_extra_klines
-            start_mepoch = int(actual_start_epoch * 1000)
+            start_mepoch = max(int(actual_start_epoch * 1000), 0)
             ###################################
 
             LOGGER.debug("Getting %s klines for %s %s - %s days", total_klines, pair, interval,
