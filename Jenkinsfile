@@ -66,7 +66,7 @@ pipeline {
         stage("cleanup network") {
             steps {
                 echo 'cleaning up unused docker networks'
-                sh "sudo docker network prune -f"
+                sh "sudo docker network prune -f || true"
                  }
         }
     }
