@@ -12,7 +12,7 @@ pipeline {
     options {
         buildDiscarder(logRotator(numToKeepStr: '5'))
         disableConcurrentBuilds()
-        buildBlocker (useBuildBlocker: true, blockLevel: 'NODE', scanQueueFor: 'ALL', blockingJobs: '.*')
+        buildBlocker (useBuildBlocker: true, blockLevel: 'GLOBAL', scanQueueFor: 'ALL', blockingJobs: '.*')
         timeout(time: 1, unit: 'HOURS')
     }
 
