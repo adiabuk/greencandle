@@ -64,7 +64,8 @@ TF2MIN = {"1s": 1,
           "2h": 120,
           "3h": 180,
           "4h": 240,
-          "12h": 720
+          "12h": 720,
+          "1w": 10080
           }
 
 def get_short_name(name, env, direction):
