@@ -116,7 +116,6 @@ def main():
     trade in correct trend.
     Required: CONFIG_ENV var and config:
     Env Vars:
-      * VPN_IP
       * CHECK_REDIS_PAIR
       * REDIS_FORWARD
       * INTERVAL (interval of previous and next containers, not current)

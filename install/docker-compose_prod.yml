@@ -141,7 +141,6 @@ services:
     container_name: prod-fe-cron
     hostname: prod-fe-cron
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=prod/fe/cron
       - DB=true
     image: amrox/greencandle:${TAG}
@@ -272,7 +271,6 @@ services:
     container_name: prod-fe-api-dashboard
     hostname: prod-fe-api-dashboard
     environment:
-      - VPN_IP=$VPN_IP
       - STREAM=http://data:5001/all
       - CONFIG_ENV=prod/fe/api
       - DB=true
@@ -370,7 +368,6 @@ services:
       options:
         syslog-facility: local4
     environment:
-      - VPN_IP=$VPN_IP
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/1h/cross-long
       - DB=true
@@ -410,7 +407,6 @@ services:
       options:
         syslog-facility: local4
     environment:
-      - VPN_IP=$VPN_IP
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/1h/cross-short
       - DB=true
@@ -450,7 +446,6 @@ services:
       options:
         syslog-facility: local4
     environment:
-      - VPN_IP=$VPN_IP
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/4h/cross-long
       - DB=true
@@ -490,7 +485,6 @@ services:
       options:
         syslog-facility: local4
     environment:
-      - VPN_IP=$VPN_IP
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/4h/cross-short
       - DB=true
@@ -530,7 +524,6 @@ services:
       options:
         syslog-facility: local4
     environment:
-      - VPN_IP=$VPN_IP
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/1m/cross-long
       - DB=true
@@ -570,7 +563,6 @@ services:
       options:
         syslog-facility: local4
     environment:
-      - VPN_IP=$VPN_IP
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/1m/cross-short
       - DB=true
@@ -610,7 +602,6 @@ services:
       options:
         syslog-facility: local4
     environment:
-      - VPN_IP=$VPN_IP
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/5m/cross-long
       - DB=true
@@ -650,7 +641,6 @@ services:
       options:
         syslog-facility: local4
     environment:
-      - VPN_IP=$VPN_IP
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/5m/cross-short
       - DB=true
@@ -690,7 +680,6 @@ services:
       options:
         syslog-facility: local4
     environment:
-      - VPN_IP=$VPN_IP
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/lt/cross-long
       - DB=true
@@ -729,7 +718,6 @@ services:
       options:
         syslog-facility: local4
     environment:
-      - VPN_IP=$VPN_IP
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/lt/cross-short
       - DB=true
@@ -768,7 +756,6 @@ services:
       options:
         syslog-facility: local4
     environment:
-      - VPN_IP=$VPN_IP
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/man/cross-long
       - DB=true
@@ -807,7 +794,6 @@ services:
       options:
         syslog-facility: local4
     environment:
-      - VPN_IP=$VPN_IP
       - intermittent="true"
       - CONFIG_ENV=prod/be/any/man/cross-short
       - DB=true

@@ -141,7 +141,6 @@ services:
     container_name: per-fe-cron
     hostname: per-fe-cron
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=per/fe/cron
       - DB=true
     image: amrox/greencandle:${TAG}
@@ -272,7 +271,6 @@ services:
     container_name: per-fe-api-dashboard
     hostname: per-fe-api-dashboard
     environment:
-      - VPN_IP=$VPN_IP
       - STREAM=http://data:5001/all
       - CONFIG_ENV=per/fe/api
       - DB=true
@@ -361,7 +359,6 @@ services:
       options:
         syslog-facility: local6
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=per/be/any/spot-long
       - DB=true
       - STREAM=http://data:5001/all
@@ -399,7 +396,6 @@ services:
       options:
         syslog-facility: local6
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=per/be/any/cross-long
       - DB=true
       - STREAM=http://data:5001/all
@@ -437,7 +433,6 @@ services:
       options:
         syslog-facility: local6
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=per/be/any/cross-short
       - DB=true
       - STREAM=http://data:5001/all

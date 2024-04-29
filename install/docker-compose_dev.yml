@@ -102,7 +102,6 @@ services:
       - dev-base-mysql
       - dev-base-redis
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=dev
       - DB=true
     healthcheck:
@@ -140,7 +139,6 @@ services:
       - dev-base-redis
       - dev-be-get_1m
     environment:
-      - VPN_IP=$VPN_IP
       - ALERT=True
       - STORE_IN_DB=True
       - CONFIG_ENV=dev
@@ -175,7 +173,6 @@ services:
       - dev-base-mysql
       - dev-base-redis
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=dev
       - DB=true
     healthcheck:

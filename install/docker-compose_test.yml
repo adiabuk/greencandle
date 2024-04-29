@@ -128,7 +128,6 @@ services:
     hostname: test-fe-api-dashboard
     environment:
       - STREAM=http://data:5001/all
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/fe/api
       - DB=true
       - SECRET_KEY=$SECRET_KEY
@@ -242,7 +241,6 @@ services:
     container_name: test-fe-cron
     hostname: test-fe-cron
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/fe/cron
       - DB=true
     image: amrox/greencandle:${TAG}
@@ -378,7 +376,6 @@ services:
       options:
         syslog-facility: local2
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/3/1m
       - ALERT="True"
       - intermittent="true"
@@ -418,7 +415,6 @@ services:
       options:
         syslog-facility: local2
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/3/5m
       - ALERT="True"
       - intermittent="true"
@@ -458,7 +454,6 @@ services:
       options:
         syslog-facility: local2
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/3/15m
       - ALERT="True"
       - intermittent="true"
@@ -498,7 +493,6 @@ services:
       options:
         syslog-facility: local2
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/3/30m
       - ALERT="True"
       - intermittent="true"
@@ -538,7 +532,6 @@ services:
       options:
         syslog-facility: local2
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/3/1m
       - ALERT="True"
       - intermittent="true"
@@ -578,7 +571,6 @@ services:
       options:
         syslog-facility: local2
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/3/5m
       - ALERT="True"
       - intermittent="true"
@@ -618,7 +610,6 @@ services:
       options:
         syslog-facility: local2
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/3/15m
       - ALERT="True"
       - intermittent="true"
@@ -658,7 +649,6 @@ services:
       options:
         syslog-facility: local2
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/3/30m
       - ALERT="True"
       - intermittent="true"
@@ -698,7 +688,6 @@ services:
       options:
         syslog-facility: local2
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/1m
       - ALERT="True"
       - intermittent="true"
@@ -738,7 +727,6 @@ services:
       options:
         syslog-facility: local2
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/5m
       - ALERT="True"
       - intermittent="true"
@@ -778,7 +766,6 @@ services:
       options:
         syslog-facility: local2
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/15m
       - ALERT="True"
       - intermittent="true"
@@ -818,7 +805,6 @@ services:
       options:
         syslog-facility: local2
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/30m
       - ALERT="True"
       - intermittent="true"
@@ -859,7 +845,6 @@ services:
       options:
         syslog-facility: local2
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/1m
       - ALERT="True"
       - intermittent="true"
@@ -899,7 +884,6 @@ services:
       options:
         syslog-facility: local2
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/5m
       - ALERT="True"
       - intermittent="true"
@@ -939,7 +923,6 @@ services:
       options:
         syslog-facility: local2
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/15m
       - ALERT="True"
       - intermittent="true"
@@ -979,7 +962,6 @@ services:
       options:
         syslog-facility: local2
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/30m
       - ALERT="True"
       - intermittent="true"
@@ -1019,7 +1001,6 @@ services:
       options:
         syslog-facility: local2
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/2/30m
       - ALERT="True"
       - intermittent="true"
@@ -1059,7 +1040,6 @@ services:
       options:
         syslog-facility: local2
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/2/30m
       - ALERT="True"
       - intermittent="true"
@@ -1099,7 +1079,6 @@ services:
       options:
         syslog-facility: local2
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/2/15m
       - ALERT="True"
       - intermittent="true"
@@ -1139,7 +1118,6 @@ services:
       options:
         syslog-facility: local2
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/2/15m
       - ALERT="True"
       - intermittent="true"
@@ -1179,7 +1157,6 @@ services:
       options:
         syslog-facility: local2
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/2/4h
       - ALERT="True"
       - intermittent="true"
@@ -1219,7 +1196,6 @@ services:
       options:
         syslog-facility: local2
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/2/4h
       - ALERT="True"
       - intermittent="true"
@@ -1259,7 +1235,6 @@ services:
       options:
         syslog-facility: local2
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/2/1h
       - ALERT="True"
       - intermittent="true"
@@ -1299,7 +1274,6 @@ services:
       options:
         syslog-facility: local2
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/2/1h
       - ALERT="True"
       - intermittent="true"
@@ -1339,7 +1313,6 @@ services:
       options:
         syslog-facility: local2
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/2/1m
       - ALERT="True"
       - intermittent="true"
@@ -1379,7 +1352,6 @@ services:
       options:
         syslog-facility: local2
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/2/1m
       - ALERT="True"
       - intermittent="true"
@@ -1419,7 +1391,6 @@ services:
       options:
         syslog-facility: local2
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/long/2/5m
       - ALERT="True"
       - intermittent="true"
@@ -1459,7 +1430,6 @@ services:
       options:
         syslog-facility: local2
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=test/be/any/short/2/5m
       - ALERT="True"
       - intermittent="true"

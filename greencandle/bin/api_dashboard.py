@@ -395,7 +395,7 @@ def get_live():
 
         short_name = services[trade_direction]
         close_link = get_trade_link(pair, short_name, 'close', 'close_now',
-                              config.web.nginx_port, anchor=True, short=True)
+                                    anchor=True, short_url=True)
         take = get_value('take', pair, name, direction)
         stop = get_value('stop', pair, name, direction)
         drawup = get_value('drawup', pair, name, direction)

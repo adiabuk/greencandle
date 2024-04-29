@@ -8,7 +8,6 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/cron
       - DB=false
     volumes:
@@ -71,7 +70,6 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/get_data/12h
       - DB=true
     healthcheck:
@@ -109,7 +107,6 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/get_data/12h
       - DB=true
     healthcheck:
@@ -142,7 +139,6 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/get_data/1w
       - DB=true
     healthcheck:
@@ -180,7 +176,6 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/get_data/1w
       - DB=true
     healthcheck:
@@ -213,7 +208,6 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/get_data/30m
       - DB=true
     healthcheck:
@@ -251,7 +245,6 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/get_data/30m
       - DB=true
     healthcheck:
@@ -284,7 +277,6 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/get_data/15m
       - DB=true
     healthcheck:
@@ -322,7 +314,6 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/get_data/15m
       - DB=true
     healthcheck:
@@ -355,7 +346,6 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/get_data/4h
       - DB=true
     healthcheck:
@@ -394,7 +384,6 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/get_data/4h
       - DB=true
     healthcheck:
@@ -427,7 +416,6 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/get_data/1h
       - DB=true
     healthcheck:
@@ -466,7 +454,6 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/get_data/1h
       - DB=true
     healthcheck:
@@ -499,7 +486,6 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/get_data/1m
       - DB=true
     healthcheck:
@@ -538,7 +524,6 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/get_data/1m/1
       - DB=true
     healthcheck:
@@ -572,7 +557,6 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/get_data/1m/2
       - DB=true
     healthcheck:
@@ -606,7 +590,6 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/get_data/1m/3
       - DB=true
     healthcheck:
@@ -640,7 +623,6 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/get_data/1m/4
       - DB=true
     healthcheck:
@@ -673,7 +655,6 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/get_data/5m
       - DB=true
     healthcheck:
@@ -712,7 +693,6 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/get_data/5m
       - DB=true
     healthcheck:
@@ -731,7 +711,6 @@ services:
     hostname: data-be-manual
     working_dir: /data/scripts
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/manual
       - DB=true
     image: amrox/greencandle:${TAG}
@@ -768,7 +747,6 @@ services:
   data-fe-cron:
     container_name: data-fe-cron
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/cron
       - DB=true
     hostname: data-fe-cron
@@ -821,7 +799,6 @@ services:
     ports:
       - 3309:3306
     environment:
-      - VPN_IP=$VPN_IP
       - MYSQL_ROOT_PASSWORD=password
       - CONFIG_ENV=data
       - DB=true
@@ -844,7 +821,6 @@ services:
       timeout: 5s
       retries: 5
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data
       - DB=false
     ports:
@@ -965,7 +941,6 @@ services:
     container_name: data-fe-api-dashboard
     hostname: data-fe-api-dashboard
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data
       - STREAM=http://data:5001/all
       - DB=true
@@ -1023,7 +998,6 @@ services:
       - data-base-redis
       - data-be-get3_1m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/extras
       - DB=true
     healthcheck:
@@ -1060,7 +1034,6 @@ services:
       - data-base-redis
       - data-be-get3_1m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short6/1m
       - DB=true
       - CHECK_REDIS_PAIR=4
@@ -1101,7 +1074,6 @@ services:
       - data-base-redis
       - data-be-get3_1m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long6/1m
       - DB=true
       - CHECK_REDIS_PAIR=4
@@ -1142,7 +1114,6 @@ services:
       - data-base-redis
       - data-be-get_5m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short6/5m
       - DB=true
       - STORE_IN_DB=True
@@ -1182,7 +1153,6 @@ services:
       - data-base-redis
       - data-be-get_5m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long6/5m
       - DB=true
       - STORE_IN_DB=True
@@ -1222,7 +1192,6 @@ services:
       - data-base-redis
       - data-be-get_15m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long6/15m
       - DB=true
       - STORE_IN_DB=True
@@ -1262,7 +1231,6 @@ services:
       - data-base-redis
       - data-be-get_30m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long6/30m
       - DB=true
       - STORE_IN_DB=True
@@ -1302,7 +1270,6 @@ services:
       - data-base-redis
       - data-be-get_1h
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short6/1h
       - STORE_IN_DB=True
       - DB=true
@@ -1342,7 +1309,6 @@ services:
       - data-base-redis
       - data-be-get_1h
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long6/1h
       - STORE_IN_DB=True
       - DB=true
@@ -1382,7 +1348,6 @@ services:
       - data-base-redis
       - data-be-get_4h
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short6/4h
       - DB=true
       - STORE_IN_DB=True
@@ -1422,7 +1387,6 @@ services:
       - data-base-redis
       - data-be-get_4h
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long6/4h
       - DB=true
       - CHECK_REDIS_PAIR=4
@@ -1462,7 +1426,6 @@ services:
       - data-base-redis
       - data-be-get_5m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long1/5m
       - DB=true
       - REDIS_FORWARD=9
@@ -1500,7 +1463,6 @@ services:
       - data-base-redis
       - data-be-get_15m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long1/15m
       - DB=true
       - REDIS_FORWARD=9
@@ -1538,7 +1500,6 @@ services:
       - data-base-redis
       - data-be-get_1w
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short1/1w
       - DB=True
     healthcheck:
@@ -1576,7 +1537,6 @@ services:
       - data-base-redis
       - data-be-get_1w
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long1/1w
       - DB=True
     healthcheck:
@@ -1614,7 +1574,6 @@ services:
       - data-base-redis
       - data-be-get_12h
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long1/12h
       - DB=True
     healthcheck:
@@ -1651,7 +1610,6 @@ services:
       - data-base-redis
       - data-be-get_12h
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short1/12h
       - DB=True
     healthcheck:
@@ -1688,7 +1646,6 @@ services:
       - data-base-redis
       - data-be-get_4h
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long1/4h
       - DB=True
     healthcheck:
@@ -1725,7 +1682,6 @@ services:
       - data-base-redis
       - data-be-get_4h
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short1/4h
       - DB=True
     healthcheck:
@@ -1762,7 +1718,6 @@ services:
       - data-base-redis
       - data-be-get_30m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long1/30m
       - DB=true
       - REDIS_FORWARD=9
@@ -1800,7 +1755,6 @@ services:
       - data-base-redis
       - data-be-get_1h
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long1/1h
       - DB=true
       - REDIS_FORWARD=9
@@ -1838,7 +1792,6 @@ services:
       - data-base-redis
       - data-be-get_5m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short1/5m
       - DB=true
       - REDIS_FORWARD=9
@@ -1876,7 +1829,6 @@ services:
       - data-base-redis
       - data-be-get_15m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short1/15m
       - DB=true
       - REDIS_FORWARD=9
@@ -1914,7 +1866,6 @@ services:
       - data-base-redis
       - data-be-get_30m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short1/30m
       - DB=true
       - REDIS_FORWARD=9
@@ -1952,7 +1903,6 @@ services:
       - data-base-redis
       - data-be-get_1h
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short1/1h
       - DB=true
       - REDIS_FORWARD=9
@@ -1990,7 +1940,6 @@ services:
       - data-base-redis
       - data-be-get_5m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long7/5m
       - DB=true
       - CHECK_REDIS_PAIR=9
@@ -2028,7 +1977,6 @@ services:
       - data-base-redis
       - data-be-get_15m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long7/15m
       - DB=true
       - CHECK_REDIS_PAIR=9
@@ -2066,7 +2014,6 @@ services:
       - data-base-redis
       - data-be-get_30m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long7/30m
       - DB=true
       - CHECK_REDIS_PAIR=9
@@ -2104,7 +2051,6 @@ services:
       - data-base-redis
       - data-be-get_5m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long8/5m
       - DB=true
       - REDIS_FORWARD=10
@@ -2142,7 +2088,6 @@ services:
       - data-base-redis
       - data-be-get_15m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long8/15m
       - DB=true
       - REDIS_FORWARD=10
@@ -2180,7 +2125,6 @@ services:
       - data-base-redis
       - data-be-get_30m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long8/30m
       - DB=true
       - REDIS_FORWARD=10
@@ -2218,7 +2162,6 @@ services:
       - data-base-redis
       - data-be-get_5m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long9/5m
       - DB=true
       - CHECK_REDIS_PAIR=10
@@ -2256,7 +2199,6 @@ services:
       - data-base-redis
       - data-be-get_15m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long9/15m
       - DB=true
       - CHECK_REDIS_PAIR=10
@@ -2294,7 +2236,6 @@ services:
       - data-base-redis
       - data-be-get_30m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long9/30m
       - DB=true
       - CHECK_REDIS_PAIR=10
@@ -2332,7 +2273,6 @@ services:
       - data-base-redis
       - data-be-get3_1m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long2/1m
       - DB=true
       - NSCA=True
@@ -2371,7 +2311,6 @@ services:
       - data-base-redis
       - data-be-get_5m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long2/5m
       - DB=true
       - REDIS_FORWARD=4,8
@@ -2409,7 +2348,6 @@ services:
       - data-base-redis
       - data-be-get_15m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long2/15m
       - DB=true
       - REDIS_FORWARD=4,8
@@ -2447,7 +2385,6 @@ services:
       - data-base-redis
       - data-be-get_30m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long2/30m
       - DB=true
       - REDIS_FORWARD=4,8
@@ -2485,7 +2422,6 @@ services:
       - data-base-redis
       - data-be-get3_1m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short2/1m
       - DB=true
       - NSCA=True
@@ -2524,7 +2460,6 @@ services:
       - data-base-redis
       - data-be-get_5m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short2/5m
       - DB=true
       - REDIS_FORWARD=4,8
@@ -2562,7 +2497,6 @@ services:
       - data-base-redis
       - data-be-get_15m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short2/15m
       - DB=true
       - REDIS_FORWARD=4,8
@@ -2600,7 +2534,6 @@ services:
       - data-base-redis
       - data-be-get_30m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short2/30m
       - DB=true
       - REDIS_FORWARD=4,8
@@ -2638,7 +2571,6 @@ services:
       - data-base-redis
       - data-be-get3_1m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short3/1m
       - ROUTER_FORWARD=True
       - REDIS_FORWARD=5
@@ -2678,7 +2610,6 @@ services:
       - data-base-redis
       - data-be-get_5m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short3/5m
       - DB=true
       - REDIS_FORWARD=5
@@ -2717,7 +2648,6 @@ services:
       - data-base-redis
       - data-be-get3_1m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long3/1m
       - DB=true
       - NSCA=True
@@ -2757,7 +2687,6 @@ services:
       - data-base-redis
       - data-be-get_5m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long3/5m
       - DB=true
       - REDIS_FORWARD=5
@@ -2796,7 +2725,6 @@ services:
       - data-base-redis
       - data-be-get_1h
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long3/1h
       - REDIS_FORWARD=5
       - ROUTER_FORWARD=True
@@ -2836,7 +2764,6 @@ services:
       - data-base-redis
       - data-be-get_1h
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short3/1h
       - REDIS_FORWARD=5
       - ROUTER_FORWARD=True
@@ -2876,7 +2803,6 @@ services:
       - data-base-redis
       - data-be-get_15m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long3/15m
       - ROUTER_FORWARD=True
       - REDIS_FORWARD=5
@@ -2916,7 +2842,6 @@ services:
       - data-base-redis
       - data-be-get_15m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short3/15m
       - REDIS_FORWARD=5
       - ROUTER_FORWARD=True
@@ -2956,7 +2881,6 @@ services:
       - data-base-redis
       - data-be-get_15m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long4/15m
       - CHECK_REDIS_PAIR=5
       - ROUTER_FORWARD=True
@@ -2996,7 +2920,6 @@ services:
       - data-base-redis
       - data-be-get_15m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short4/15m
       - CHECK_REDIS_PAIR=5
       - ROUTER_FORWARD=True
@@ -3036,7 +2959,6 @@ services:
       - data-base-redis
       - data-be-get_30m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long4/30m
       - CHECK_REDIS_PAIR=5
       - ROUTER_FORWARD=True
@@ -3076,7 +2998,6 @@ services:
       - data-base-redis
       - data-be-get_30m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short4/30m
       - DB=true
       - NSCA=True
@@ -3116,7 +3037,6 @@ services:
       - data-base-redis
       - data-be-get_30m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long3/30m
       - REDIS_FORWARD=5
       - ROUTER_FORWARD=True
@@ -3156,7 +3076,6 @@ services:
       - data-base-redis
       - data-be-get_30m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short3/30m
       - REDIS_FORWARD=5
       - ROUTER_FORWARD=True
@@ -3196,7 +3115,6 @@ services:
       - data-base-redis
       - data-be-get_4h
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short3/4h
       - DB=true
       - REDIS_FORWARD=5
@@ -3235,7 +3153,6 @@ services:
       - data-base-redis
       - data-be-get3_1m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short4/1m
       - DB=true
       - STORE_IN_DB=True
@@ -3276,7 +3193,6 @@ services:
       - data-base-redis
       - data-be-get3_1m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long4/1m
       - DB=true
       - CHECK_REDIS_PAIR=5
@@ -3317,7 +3233,6 @@ services:
       - data-base-redis
       - data-be-get_5m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short4/5m
       - DB=true
       - STORE_IN_DB=True
@@ -3357,7 +3272,6 @@ services:
       - data-base-redis
       - data-be-get_5m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long4/5m
       - DB=true
       - STORE_IN_DB=True
@@ -3397,7 +3311,6 @@ services:
       - data-base-redis
       - data-be-get_1h
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short4/1h
       - STORE_IN_DB=True
       - DB=true
@@ -3437,7 +3350,6 @@ services:
       - data-base-redis
       - data-be-get_1h
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long4/1h
       - STORE_IN_DB=True
       - DB=true
@@ -3477,7 +3389,6 @@ services:
       - data-base-redis
       - data-be-get_4h
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short4/4h
       - DB=true
       - STORE_IN_DB=True
@@ -3517,7 +3428,6 @@ services:
       - data-base-redis
       - data-be-get_4h
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long4/4h
       - DB=true
       - CHECK_REDIS_PAIR=5
@@ -3557,7 +3467,6 @@ services:
       - data-base-redis
       - data-be-get3_1m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short5/1m
       - DB=true
       - CHECK_REDIS_PAIR=8
@@ -3597,7 +3506,6 @@ services:
       - data-base-redis
       - data-be-get3_1m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long5/1m
       - DB=true
       - CHECK_REDIS_PAIR=8
@@ -3637,7 +3545,6 @@ services:
       - data-base-redis
       - data-be-get_5m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short5/5m
       - DB=true
       - CHECK_REDIS_PAIR=8
@@ -3676,7 +3583,6 @@ services:
       - data-base-redis
       - data-be-get_5m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long5/5m
       - DB=true
       - CHECK_REDIS_PAIR=8
@@ -3715,7 +3621,6 @@ services:
       - data-base-redis
       - data-be-get_15m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long5/15m
       - DB=true
       - CHECK_REDIS_PAIR=8
@@ -3754,7 +3659,6 @@ services:
       - data-base-redis
       - data-be-get_30m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long5/30m
       - DB=true
       - CHECK_REDIS_PAIR=8
@@ -3793,7 +3697,6 @@ services:
       - data-base-redis
       - data-be-get_15m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short5/15m
       - DB=true
       - CHECK_REDIS_PAIR=8
@@ -3833,7 +3736,6 @@ services:
       - data-base-redis
       - data-be-get_30m
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short5/30m
       - DB=true
       - CHECK_REDIS_PAIR=8
@@ -3873,7 +3775,6 @@ services:
       - data-base-redis
       - data-be-get_1h
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short5/1h
       - DB=true
       - CHECK_REDIS_PAIR=8
@@ -3912,7 +3813,6 @@ services:
       - data-base-redis
       - data-be-get_1h
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long5/1h
       - DB=true
       - CHECK_REDIS_PAIR=8
@@ -3951,7 +3851,6 @@ services:
       - data-base-redis
       - data-be-get_4h
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/short/short5/4h
       - DB=true
       - CHECK_REDIS_PAIR=8
@@ -3990,7 +3889,6 @@ services:
       - data-base-redis
       - data-be-get_4h
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=data/be/long/long5/4h
       - DB=true
       - CHECK_REDIS_PAIR=8

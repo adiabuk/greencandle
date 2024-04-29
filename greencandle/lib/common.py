@@ -3,7 +3,6 @@
 Common functions that don't belong anywhere else
 """
 
-import os
 import sys
 import datetime
 from decimal import Decimal, InvalidOperation
@@ -11,6 +10,8 @@ import yaml
 from babel.numbers import format_currency
 import numpy
 from markupsafe import Markup
+from greencandle.lib import config
+config.create_config()
 
 class Bcolours:
     """
@@ -254,9 +255,9 @@ def get_tv_link(pair, interval=None, anchor=False):
                 f"&interval={convert_to_minutes(interval)}|{pair.strip()}>")
     return f"<https://www.tradingview.com/chart/?symbol=BINANCE:{pair.strip()}|{pair.strip()}>"
 
-def get_trade_link(pair, strategy, action, string, port=8888, anchor=False, short=False):
+def get_trade_link(pair, strategy, action, string, anchor=False, short_url=False):
     """Get trade link for forced trade"""
-    url = "" if short else "http://" + os.environ['VPN_IP'] + ":" + port
+    url = "" if short_url else f"http://www.{config.main.base_env}.amrox.loc/"
     if anchor:
         return Markup(f'<a href="{url}/dash/action?pair={pair.strip()}&strategy='
                       f'{strategy.strip()}&action={action.strip()}&close=true" target="_blank">'

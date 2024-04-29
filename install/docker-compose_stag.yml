@@ -101,7 +101,6 @@ services:
     container_name: stag-fe-api-dashboard
     hostname: stag-fe-api-dashboard
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=stag/fe/api
       - STREAM=http://data:5001/all
       - DB=true
@@ -180,7 +179,6 @@ services:
     container_name: stag-fe-cron
     hostname: stag-fe-cron
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=stag/fe/cron
       - DB=true
     image: amrox/greencandle:${TAG}
@@ -355,7 +353,6 @@ services:
       options:
         syslog-facility: local5
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=stag/be/any/long
       - intermittent="true"
       - DB=true
@@ -394,7 +391,6 @@ services:
       options:
         syslog-facility: local5
     environment:
-      - VPN_IP=$VPN_IP
       - CONFIG_ENV=stag/be/any/short
       - intermittent="true"
       - DB=true
