@@ -105,7 +105,8 @@ def send_slack_trade(**kwargs):
         try:
             short_name = services[trade_direction]
 
-            link = get_trade_link(kwargs.pair, short_name, 'close', 'close_now')
+            link = get_trade_link(kwargs.pair, short_name, 'close', 'close_now',
+                                  base_env=config.main.base_env)
         except KeyError:
             link = "API - no link"
         close_string = f"• Close: {link}\n"
