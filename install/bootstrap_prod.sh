@@ -25,7 +25,7 @@ echo \
 
 # Setup local env
 apt-get -y update
-apt-get -y install ntpdate mysql-client screen  jq ntp awscli vim automake autotools-dev fuse g++ git libcurl5-gnutls-dev libfuse-dev libssl-dev libxml2-dev make pkg-config bsdmainutils reptyr psmisc lsof nmap command-not-found bind9-dnsutils libxml2-utils ipmitool smartmontools net-tools htop atop iotop dstat mosh python-is-python3 ethtool
+apt-get -y install ntpdate mysql-client screen  jq ntp awscli vim automake autotools-dev fuse g++ git libcurl5-gnutls-dev libfuse-dev libssl-dev libxml2-dev make pkg-config bsdmainutils reptyr psmisc lsof nmap command-not-found bind9-dnsutils libxml2-utils ipmitool smartmontools net-tools htop atop iotop dstat mosh python-is-python3 ethtool python3-pip
 
 apt-get -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
@@ -92,4 +92,5 @@ mkswap /swapfile
 swapon /swapfile
 echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
 ln -sf /usr/share/zoneinfo/Etc/UTC /etc/localtime
+pip install pexpect ipython
 reboot
