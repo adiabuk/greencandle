@@ -1,5 +1,13 @@
 # Releases
 
+# 7.0.2
+* remove some data->prod assocs
+* updated bootstrap script
+* swap superfluous vpn_ip env var for base_env config and fix trade links
+* fix name in config
+* block job from running globally, if others running not node level
+* don't fail job if network prune fails
+
 # 7.0.1
 * capture trade result to update tpsl on success
 * don't allow negative epoch values
