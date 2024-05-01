@@ -62,6 +62,7 @@ def main():
                                                      asset_amt=to_pay,
                                                      usd_amt=usd,
                                                      gbp_amt=gbp)
-
+        else:
+            logger.info("Skipping %s due to insuficent funds", asset)
 if __name__ == '__main__':
     main()
