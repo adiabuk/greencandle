@@ -1534,7 +1534,7 @@ services:
     depends_on:
       - data-base-mysql
       - data-base-redis
-      - data-be-get_1m
+      - data-be-get1_1m
     environment:
       - CONFIG_ENV=data/be/long/long1/1m
       - DB=true
@@ -1825,7 +1825,7 @@ services:
     depends_on:
       - data-base-mysql
       - data-base-redis
-      - data-be-get_1m
+      - data-be-get1_1m
     environment:
       - CONFIG_ENV=data/be/short/short1/1m
       - DB=true
