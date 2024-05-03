@@ -237,7 +237,7 @@
       "is_secret": false
     },
     "interval": {
-      "value": "4h",
+      "value": "1m",
       "is_binary": false,
       "is_secret": false
     },
