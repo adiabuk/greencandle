@@ -1,0 +1,6 @@
+{
+  "open_rule1": "res[0].close \u003e add_perc(1, res[0].bb_200[0]) and agg.empty_count \u003c 1",
+  "interval": "1m",
+  "name": "data-be-analyse-1m-short10",
+  "time_between_trades": "4h"
+}
