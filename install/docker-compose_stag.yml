@@ -356,7 +356,7 @@ services:
       - CONFIG_ENV=stag/be/any/long
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5006/all
+      - STREAM=http://data:5001/all
     ports:
       - 20000
     links:
@@ -395,7 +395,7 @@ services:
       - intermittent="true"
       - DB=true
       - no_proxy=router
-      - STREAM=http://data:5006/all
+      - STREAM=http://data:5001/all
     ports:
       - 20000
     links:
