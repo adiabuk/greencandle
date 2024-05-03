@@ -1,6 +1,7 @@
 {
-  "open_rule1": "res[0].close \u003c sub_perc(1, res[0].bb_200[2]) and agg.empty_count \u003c 1",
+  "api_forward": "1m-10",
   "interval": "1m",
   "name": "data-be-analyse-1m-long10",
+  "open_rule1": "res[0].close \u003c sub_perc(1, res[0].bb_200[2]) and agg.empty_count \u003c 1",
   "time_between_trades": "4h"
 }
