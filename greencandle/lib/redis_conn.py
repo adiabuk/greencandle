@@ -254,14 +254,14 @@ class Redis():
 
         if config.main.trade_direction == 'long':
             # if min price already exists and current price is lower, or there is no min price yet.
-            price = current_price if self.in_current_candle(open_time) else current_low
+            price = current_price
             if (min_price and float(price) < float(min_price)) or not min_price:
                 data = {"min_price": price, "orig_price": orig_price}
                 self.logger.debug("setting drawdown for long %s", pair)
                 self.__add_price(key, data)
 
         elif config.main.trade_direction == 'short':
-            price = current_price if self.in_current_candle(open_time) else current_high
+            price = current_price
             if (min_price and float(price) > float(min_price)) or not min_price:
                 data = {"min_price": price, "orig_price": orig_price}
                 self.logger.debug("setting drawdown for short %s", pair)
@@ -292,14 +292,14 @@ class Redis():
             orig_price = current_price
 
         if config.main.trade_direction == 'long':
-            price = current_price if self.in_current_candle(open_time) else current_high
+            price = current_price
             if (max_price and float(price) > float(max_price)) or not max_price:
                 data = {"max_price": price, "orig_price": orig_price}
                 self.logger.debug("setting drawup for long %s", pair)
                 self.__add_price(key, data)
 
         elif config.main.trade_direction == 'short':
-            price = current_price if self.in_current_candle(open_time) else current_low
+            price = current_price
             if (max_price and float(price) < float(max_price)) or not max_price:
                 data = {"max_price": price, "orig_price": orig_price}
                 self.logger.debug("setting drawup for short %s", pair)
