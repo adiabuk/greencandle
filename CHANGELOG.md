@@ -1,5 +1,11 @@
 # Releases
 
+# 7.0.3
+* use 1m default interval in stag
+* re-add 1m containers for trend
+* ensure we parse dust debts when repaying
+* increase prod tp
+
 # 7.0.2
 * remove some data->prod assocs
 * updated bootstrap script
