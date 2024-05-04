@@ -2348,7 +2348,7 @@ services:
       - CONFIG_ENV=data/be/short/short10/1m
       - DB=true
       - NSCA=True
-      - REDIS_FORWARD=4,8
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1m-short10 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -2385,7 +2385,7 @@ services:
     environment:
       - CONFIG_ENV=data/be/short/short10/5m
       - DB=true
-      - REDIS_FORWARD=4,8
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-5m-short10 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -2423,7 +2423,7 @@ services:
       - CONFIG_ENV=data/be/long/long10/1m
       - DB=true
       - NSCA=True
-      - REDIS_FORWARD=4,8
+      - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1m-long10 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -2460,7 +2460,7 @@ services:
     environment:
       - CONFIG_ENV=data/be/long/long10/5m
       - DB=true
-      - REDIS_FORWARD=4,8
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-5m-long10 2>&1 |grep . ||exit 1
       start_period: 1h
