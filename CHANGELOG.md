@@ -1,5 +1,13 @@
 # Releases
 
+# 7.1
+* Forward touch strategy to stag & prod
+* allow re-trigger for touch strategy
+* use only local favicon
+* move touch strategy to separate container
+* only use current price when setting draw up/down
+* use 1m stream data for stag
+
 # 7.0.3
 * use 1m default interval in stag
 * re-add 1m containers for trend
