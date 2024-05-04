@@ -120,9 +120,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-  data-fe-stream_1w:
-    container_name: data-fe-stream_1w
-    hostname: data-fe-stream_1w
+  data-fe-stream_1d:
+    container_name: data-fe-stream_1d
+    hostname: data-fe-stream_1d
     image: amrox/greencandle:latest
     mem_limit: 200m
     pull_policy: always
@@ -139,7 +139,7 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
-      - CONFIG_ENV=data/be/get_data/1w
+      - CONFIG_ENV=data/be/get_data/1d
       - DB=true
     healthcheck:
       test: /mnt/nagios_checks/check_milliepoch -u http://127.1:5000 -w 43500 -c 43560 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
@@ -156,9 +156,9 @@ services:
       - /var/run/:/var/run
       - /mnt:/mnt
 
-  data-be-get_1w:
-    container_name: data-be-get_1w
-    hostname: data-be-get_1w
+  data-be-get_1d:
+    container_name: data-be-get_1d
+    hostname: data-be-get_1d
     image: amrox/greencandle:${TAG}
     mem_limit: 2000m
     pull_policy: always
@@ -171,15 +171,15 @@ services:
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-fe-stream_1w:stream
+      - data-fe-stream_1d:stream
     depends_on:
       - data-base-mysql
       - data-base-redis
     environment:
-      - CONFIG_ENV=data/be/get_data/1w
+      - CONFIG_ENV=data/be/get_data/1d
       - DB=true
     healthcheck:
-      test: find /var/local/lock/gc_get_1w.lock  -mmin -3 ||exit 1
+      test: find /var/local/lock/gc_get_1d.lock  -mmin -3 ||exit 1
       interval: 5m
       timeout: 10s
       retries: 5
@@ -1479,9 +1479,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-  data-be-analyse-1w-short1:
-    container_name: data-be-analyse-1w-short1
-    hostname: data-be-analyse-1w-short1
+  data-be-analyse-1d-short1:
+    container_name: data-be-analyse-1d-short1
+    hostname: data-be-analyse-1d-short1
     image: amrox/greencandle:${TAG}
     mem_limit: 2g
     pull_policy: always
@@ -1498,12 +1498,12 @@ services:
     depends_on:
       - data-base-mysql
       - data-base-redis
-      - data-be-get_1w
+      - data-be-get_1d
     environment:
-      - CONFIG_ENV=data/be/short/short1/1w
+      - CONFIG_ENV=data/be/short/short1/1d
       - DB=True
     healthcheck:
-      test: find /var/local/lock  -mmin -2 -name data-be-analyse-1w-short1 2>&1 |grep . ||exit 1
+      test: find /var/local/lock  -mmin -2 -name data-be-analyse-1d-short1 2>&1 |grep . ||exit 1
       start_period: 1h
       interval: 30m
       timeout: 10s
@@ -1552,9 +1552,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-  data-be-analyse-1w-long1:
-    container_name: data-be-analyse-1w-long1
-    hostname: data-be-analyse-1w-long1
+  data-be-analyse-1d-long1:
+    container_name: data-be-analyse-1d-long1
+    hostname: data-be-analyse-1d-long1
     image: amrox/greencandle:${TAG}
     mem_limit: 2g
     pull_policy: always
@@ -1571,12 +1571,12 @@ services:
     depends_on:
       - data-base-mysql
       - data-base-redis
-      - data-be-get_1w
+      - data-be-get_1d
     environment:
-      - CONFIG_ENV=data/be/long/long1/1w
+      - CONFIG_ENV=data/be/long/long1/1d
       - DB=True
     healthcheck:
-      test: find /var/local/lock  -mmin -2 -name data-be-analyse-1w-long1 2>&1 |grep . ||exit 1
+      test: find /var/local/lock  -mmin -2 -name data-be-analyse-1d-long1 2>&1 |grep . ||exit 1
       start_period: 1h
       interval: 30m
       timeout: 10s
