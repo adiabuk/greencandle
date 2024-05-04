@@ -1,5 +1,10 @@
 # Releases
 
+# 7.1.1
+* use 1d instead of 1w in data env
+* increase stag tp
+* allow prod 1m/5m containers to use loans
+
 # 7.1
 * Forward touch strategy to stag & prod
 * allow re-trigger for touch strategy
