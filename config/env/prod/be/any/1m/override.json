@@ -7,7 +7,7 @@
   "max_trades": "60",
   "pairs": "any",
   "perc_at_timeout": "0.35",
-  "stop_loss_perc": "2",
+  "stop_loss_perc": "-1",
   "take_profit_perc": "2",
   "time_in_trade": "10h",
   "trailing_start": "5.5",
