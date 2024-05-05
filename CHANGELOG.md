@@ -1,5 +1,12 @@
 # Releases
 
+# 7.1.2
+* wait longer before starting healthchecks on upper tf get containers
+* simplify data notification config, default inactive
+* new data rule -approaching overbought/oversold
+* don't forward rsi rules to other data containers
+* allow forwarding of 5m touch rule
+
 # 7.1.1
 * use 1d instead of 1w in data env
 * increase stag tp
