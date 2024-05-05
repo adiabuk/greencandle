@@ -3,8 +3,5 @@
   "interval": "30m",
   "name": "data-be-analyse-30m-short3",
   "open_rule1": "agg.distance_200 \u003e 4 and res[0].RSI_14 \u003e 75 and res[0].numTrades \u003e 50 and agg.bb_size \u003e 1 and agg.empty_count \u003c 1",
-  "time_between_trades": "4h",
-  "slack_alerts": "data_2steps_hi",
-  "slack_balance": "data_2steps_hi",
-  "slack_notifications": "data_2steps_hi"
+  "time_between_trades": "4h"
 }

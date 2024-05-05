@@ -1,7 +1,4 @@
 {
   "close_rule1": "res[0].close \u003e res[0].EMA_50",
-  "slack_active": "false",
-  "slack_alerts": "",
-  "slack_balance": "",
-  "slack_notifications": ""
+  "slack_active": "true"
 }
