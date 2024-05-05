@@ -2349,6 +2349,7 @@ services:
       - data-be-get3_1m
     environment:
       - CONFIG_ENV=data/be/short/short10/1m
+      - STORE_IN_DB=True
       - DB=true
       - NSCA=True
       - ROUTER_FORWARD=true
@@ -2387,6 +2388,7 @@ services:
       - data-be-get_5m
     environment:
       - CONFIG_ENV=data/be/short/short10/5m
+      - STORE_IN_DB=True
       - DB=true
       - ROUTER_FORWARD=true
     healthcheck:
@@ -2423,6 +2425,7 @@ services:
       - data-base-redis
       - data-be-get3_1m
     environment:
+      - STORE_IN_DB=True
       - CONFIG_ENV=data/be/long/long10/1m
       - DB=true
       - NSCA=True
@@ -2462,6 +2465,7 @@ services:
       - data-be-get_5m
     environment:
       - CONFIG_ENV=data/be/long/long10/5m
+      - STORE_IN_DB=True
       - DB=true
       - ROUTER_FORWARD=true
     healthcheck:
