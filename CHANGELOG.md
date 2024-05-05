@@ -1,5 +1,11 @@
 # Releases
 
+# 7.1.3
+* tweaks to which data containers can alert to slack
+* re-enable repayments of borrowed funds
+* add 1d to min conversion dict
+* trigger close signal from touch strategy
+
 # 7.1.2
 * wait longer before starting healthchecks on upper tf get containers
 * simplify data notification config, default inactive
