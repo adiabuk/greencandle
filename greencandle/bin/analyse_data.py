@@ -122,15 +122,15 @@ def get_match_name(matches):
         container_num = 1
 
     name_lookup = [['trend_200', 'golden_cross', 'over_ma'],
-                   ['rsi', 'approach'],
+                   ['approach'],
                    ['distance', 'bb', "bbperc_diff", "bbperc_extreme"],
                    ['bb_confirm'],
                    ['MACD_slowdown'],
-                   ['RSI_confirm'],
+                   ['rsi'],
                    ['trend_confirm'],
                    ['trend_50'],
                    ['trend_50_confirm'],
-                   ['touch']
+                   ['touch'],
                    ]
     for match in matches:
         match_names.append(name_lookup[container_num-1][match-1])
