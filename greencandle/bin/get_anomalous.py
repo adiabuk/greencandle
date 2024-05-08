@@ -43,7 +43,7 @@ def main():
         msg = 'UNKNOWN'
 
     send_nsca(status=status, host_name='jenkins1', service_name='anomalous_symbols',
-              text_output=f'{msg} {len(anomalous)} anomalous pairs found in '
+              text_output=f'{msg} {len(anomalous)} anomalous symbols found in '
                           f'balance:{anomalous}|num={len(anomalous)}',
               remote_host='10.0.0.212')
 
