@@ -679,7 +679,7 @@ class Redis():
                 if current_config:
                     try:
                         rules[rule].append(eval(current_config))
-                    except (TypeError, KeyError) as error:
+                    except (TypeError, KeyError, ZeroDivisionError) as error:
                         self.logger.warning("Unable to eval config rule for pair %s: %s_rule: %s "
                                             "%s mepoch: %s", pair, rule, current_config, error,
                                                                items[seq])
@@ -814,7 +814,7 @@ class Redis():
                 if current_config:
                     try:
                         rules[rule].append(eval(current_config))
-                    except (TypeError, KeyError) as error:
+                    except (TypeError, KeyError, ZeroDivisionError) as error:
                         self.logger.warning("Unable to eval config rule for pair %s: %s_rule: %s "
                                             "%s mepoch: %s", pair, rule, current_config, error,
                                                                items[seq])
