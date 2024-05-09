@@ -1,6 +1,11 @@
 # Releases
 
+# 7.2.1
+* Undo upgrade of werkzeug
+
 # 7.2
+* security update werkzeug to 3.0.3
+* security update jinja2 to 3.1.4
 * route big_change strategy alerts to alarm env
 * catch ZeroDivisionError error in rules
 * fix wording in alert
