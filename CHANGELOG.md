@@ -1,5 +1,15 @@
 # Releases
 
+# 7.2
+* route big_change strategy alerts to alarm env
+* catch ZeroDivisionError error in rules
+* fix wording in alert
+* switch long/short rules for big change alert
+* script to check for anomalous symbols in balance
+* new data rule for preempting trade based on candle size
+* enable close signals for rsi => MACD strategy
+* re-enable rsi=>MACD strategy
+
 # 7.1.3
 * tweaks to which data containers can alert to slack
 * re-enable repayments of borrowed funds
