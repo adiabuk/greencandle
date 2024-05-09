@@ -137,12 +137,12 @@
 "15m-5": ["alert", "test:any3-15m-long-short"],
 "30m-5": ["alert", "test:any3-30m-long-short"],
 
-"1m-3": ["alert"],
-"5m-3": ["alert"],
-"15m-3": ["alert"],
-"30m-3": ["alert"],
-"1h-3": ["alert"],
-"4h-3": ["alert"],
+"1m-2": ["alert"],
+"5m-2": ["alert"],
+"15m-2": ["alert"],
+"30m-2": ["alert"],
+"1h-2": ["alert"],
+"4h-2": ["alert"],
 
 "prod_extra_long": ["prod:any-man-long"],
 "prod_extra_short": ["prod:any-man-short"],
