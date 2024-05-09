@@ -17,7 +17,7 @@ BASH_ENV=/container.env
 #33 * * * * /usr/local/bin/get_quote_balance > /proc/1/fd/1 2>/proc/1/fd/2
 05 * * * * sleep 120; /usr/local/bin/test_close > /proc/1/fd/1 2>/proc/1/fd/2
 0 * * * * /usr/local/bin/send_docker_alerts
-*/30 * * * * /usr/local/bin/get_anomalous.py > /proc/1/fd/1 2>/proc/1/fd/2
+*/30 * * * * /usr/local/bin/get_anomalous > /proc/1/fd/1 2>/proc/1/fd/2
 21 00 * * * /usr/local/bin/balance_graph > /proc/1/fd/1 2>/proc/1/fd/2
 59 23 * * * /usr/local/bin/report 4h /data/reports/report_$(date +"\%Y-\%m-\%d").xlsx > /proc/1/fd/1 2>/proc/1/fd/2
 @reboot /usr/local/bin/report 4h /data/reports/report_{{.base_env}}_$(date +"\%Y-\%m-\%d").xlsx > /proc/1/fd/1 2>/proc/1/fd/2
