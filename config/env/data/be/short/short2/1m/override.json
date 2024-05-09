@@ -1,6 +1,7 @@
 {
   "interval": "1m",
   "name": "data-be-analyse-1m-short2",
-  "time_between_trades": "1h",
-  "slack_active": "true"
+  "open_rule1": "agg.candle_size/agg.avg_candles \u003e 2 and res[0].close \u003e res[0].open and agg.candle_size \u003e 1",
+  "slack_active": "true",
+  "time_between_trades": "1h"
 }
