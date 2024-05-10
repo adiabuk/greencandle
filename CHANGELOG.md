@@ -1,5 +1,12 @@
 # Releases
 
+# 7.2.2
+* don't forward close trades for long, RSI/MACD strategy
+* remove all audio alerts except for big-change strategy
+* bump prod 1m tp to 3 and stag 1m to 4
+* split stag into 1m|5m
+* fix cron cmd for anonalous symbol check
+
 # 7.2.1
 * Undo upgrade of werkzeug
 
