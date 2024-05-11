@@ -1,5 +1,11 @@
 # Releases
 
+# 7.2.3
+* account for additional number of args when setting tpsl
+* allow tpsl to be set even if no trade exists
+* only show 'live' tabs in UI that are relevent to environment
+* add button to manually refresh balance in UI
+
 # 7.2.2
 * don't forward close trades for long, RSI/MACD strategy
 * remove all audio alerts except for big-change strategy
