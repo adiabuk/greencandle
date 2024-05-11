@@ -110,7 +110,7 @@ services:
       - CONFIG_ENV=data/be/get_data/12h
       - DB=true
     healthcheck:
-      start_period: 1h
+      start_period: 3h
       test: find /var/local/lock/gc_get_12h.lock  -mmin -3 ||exit 1
       interval: 5m
       timeout: 10s
@@ -180,7 +180,7 @@ services:
       - CONFIG_ENV=data/be/get_data/1d
       - DB=true
     healthcheck:
-      start_period: 1h
+      start_period: 3h
       test: find /var/local/lock/gc_get_1d.lock  -mmin -3 ||exit 1
       interval: 5m
       timeout: 10s
@@ -389,7 +389,7 @@ services:
       - CONFIG_ENV=data/be/get_data/4h
       - DB=true
     healthcheck:
-      start_period: 30m
+      start_period: 3h
       test: find /var/local/lock/gc_get_4h.lock  -mmin -3 ||exit 1
       interval: 5m
       timeout: 10s
