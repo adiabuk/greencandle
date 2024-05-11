@@ -423,7 +423,12 @@ def live():
     """
     route to live data
     """
-    files = {'open_trades': (get_live(), 4), 'aggregate': (get_agg(), 1), 'balance':(BALANCE, 1)}
+    files = {}
+    if config.main.base_env == 'data':
+        files['aggregate'] = (get_agg(), 1)
+    else:
+        files['open_trades'] =  (get_live(), 4)
+        files['balance'] = (BALANCE, 1)
 
     if request.method == 'GET':
         return render_template('data.html', files=files)
