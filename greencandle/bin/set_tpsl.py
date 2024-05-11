@@ -25,7 +25,7 @@ def main():
     direction = config.main.trade_direction
 
     if dbase.trade_in_context(pair, name, direction) or 'force' in sys.argv:
-        if len(sys.argv) == 4:
+        if len(sys.argv) >= 4:
             take_profit = sys.argv[2]
             stop_loss = sys.argv[3]
         else:
