@@ -14,7 +14,7 @@ def main():
     """
     Force adding of SL and TP to redis for given pair
     Execute without values to use defaults in config
-    Usage: set_tpsl <pair> [<take_profit> <stop_loss>]
+    Usage: set_tpsl <pair> <take_profit> <stop_loss> [force]
     """
 
     config.create_config()
@@ -24,7 +24,7 @@ def main():
     name = config.main.name
     direction = config.main.trade_direction
 
-    if dbase.trade_in_context(pair, name, direction):
+    if dbase.trade_in_context(pair, name, direction) or 'force' in sys.argv:
         if len(sys.argv) == 4:
             take_profit = sys.argv[2]
             stop_loss = sys.argv[3]
