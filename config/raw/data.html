@@ -6,7 +6,17 @@
 
     <!-- JQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
+    <script type=text/javascript>
+            $(function() {
+              $('a#refresh').bind('click', function() {
+                $.getJSON('/dash/refresh_balance',
+                    function(data) {
+                  //do nothing
+                });
+            return false;
+          });
+        });
+    </script>
     <!-- Bootstrap -->
     <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script type = "text/javascript"  src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
@@ -26,8 +36,9 @@
     <div>
 	    <div class="card-body">
 
-		<a download="data.xls" href="#" onclick="return ExcellentExport.excel(this, 'proxies', 'Excel Data');">Export to Excel</a>
+        <a download="data.xls" href="#" onclick="return ExcellentExport.excel(this, 'proxies', 'Excel Data');">Export to Excel</a>
         <a download="data.csv" href="#" onclick="return ExcellentExport.csv(this, 'proxies');">Export to CSV</a>
+        <a href=# id=refresh><button class='btn btn-default'>refresh_balance</button></a>
         <div style="display: flex;">
 	{% for file in files %}
 	<form method="post">

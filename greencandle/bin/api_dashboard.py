@@ -475,6 +475,15 @@ def get_total_values():
         total_net_perc += net_perc
     return usd_amt, total_net_perc
 
+@APP.route('/refresh_balance')
+@login_required
+def refresh_balance():
+    """
+    Route to manually call update_balance function and do nothing
+    """
+    get_balance()
+    return Response(status=200)
+
 @APP.route('/values')
 @login_required
 def get_values():
