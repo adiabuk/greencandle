@@ -140,10 +140,6 @@
 
 "1m-2": ["alert"],
 "5m-2": ["alert"],
-"15m-2": ["alert"],
-"30m-2": ["alert"],
-"1h-2": ["alert"],
-"4h-2": ["alert"],
 
 "prod_extra_long": ["prod:any-man-long"],
 "prod_extra_short": ["prod:any-man-short"],
