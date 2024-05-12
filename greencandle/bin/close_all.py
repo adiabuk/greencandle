@@ -28,8 +28,7 @@ def main():
     url = f"http://router:1080/{config.web.api_token}"
     dbase = Mysql()
     open_trades = dbase.get_open_trades(name_filter=args.name_filter)
-    stream = os.environ['STREAM']
-    stream_req = requests.get(stream, timeout=10)
+    stream_req = requests.get('http://stream/1m/all', timeout=10)
     prices = stream_req.json()
 
     for trade in open_trades:

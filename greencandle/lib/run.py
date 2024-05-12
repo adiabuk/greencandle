@@ -242,7 +242,7 @@ class ProdRunner():
             pair, open_time, open_price = trade
             klines = 60 if interval.endswith('s') or interval.endswith('m') else 5
 
-            stream = os.environ['STREAM']
+            stream = f'http://stream/{config.main.interval}/all'
             try:
                 stream_req = requests.get(stream, timeout=10)
                 prices = stream_req.json()

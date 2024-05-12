@@ -371,8 +371,7 @@ def get_live():
     mt5 = 0
 
     dbase = Mysql()
-    stream = os.environ['STREAM']
-    stream_req = requests.get(stream, timeout=10)
+    stream_req = requests.get("http://stream/1m/all", timeout=10)
     prices = stream_req.json()
 
     services = list_to_dict(get_be_services(config.main.base_env),
@@ -462,8 +461,7 @@ def get_total_values():
     dbase = Mysql()
     raw = dbase.get_open_trades()
     commission = float(dbase.get_complete_commission())
-    stream = os.environ['STREAM']
-    stream_req = requests.get(stream, timeout=10)
+    stream_req = requests.get('http://stream/1m/all', timeout=10)
     prices = stream_req.json()
     for _, _, pair, _, open_price, direction, quote_in in raw:
         current_price = prices['recent'][pair]['close']
