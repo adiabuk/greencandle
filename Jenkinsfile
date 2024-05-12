@@ -1,5 +1,4 @@
 pipeline {
-
     agent any
     environment {
         PATH = "/home/jenkins/.local/bin:${env.PATH}"
@@ -12,7 +11,7 @@ pipeline {
     options {
         buildDiscarder(logRotator(numToKeepStr: '5'))
         disableConcurrentBuilds()
-        buildBlocker (useBuildBlocker: true, blockLevel: 'GLOBAL', scanQueueFor: 'ALL', blockingJobs: '.*')
+        buildBlocker (useBuildBlocker: true, blockLevel: 'GLOBAL', scanQueueFor: 'DISABLED', blockingJobs: '.*')
         timeout(time: 1, unit: 'HOURS')
     }
 
