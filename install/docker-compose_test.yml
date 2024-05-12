@@ -127,7 +127,6 @@ services:
     container_name: test-fe-api-dashboard
     hostname: test-fe-api-dashboard
     environment:
-      - STREAM=http://data:5001/all
       - CONFIG_ENV=test/fe/api
       - DB=true
       - SECRET_KEY=$SECRET_KEY
@@ -205,7 +204,6 @@ services:
     environment:
       - CONFIG_ENV=test/be/manual
       - DB=true
-      - STREAM=http://data:5001/all
     image: amrox/greencandle:${TAG}
     mem_limit: 500m
     pull_policy: always
@@ -380,7 +378,6 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5001/all
     ports:
       - 20000
     links:
@@ -419,7 +416,6 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5002/all
     ports:
       - 20000
     links:
@@ -458,7 +454,6 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5003/all
     ports:
       - 20000
     links:
@@ -497,7 +492,6 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5004/all
     ports:
       - 20000
     links:
@@ -536,7 +530,6 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5001/all
     ports:
       - 20000
     links:
@@ -575,7 +568,6 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5002/all
     ports:
       - 20000
     links:
@@ -614,7 +606,6 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5003/all
     ports:
       - 20000
     links:
@@ -653,7 +644,6 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5004/all
     ports:
       - 20000
     links:
@@ -692,7 +682,6 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5001/all
     ports:
       - 20000
     links:
@@ -731,7 +720,6 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5002/all
     ports:
       - 20000
     links:
@@ -770,7 +758,6 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5003/all
     ports:
       - 20000
     links:
@@ -809,7 +796,6 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5004/all
     ports:
       - 20000
     links:
@@ -849,7 +835,6 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5001/all
     ports:
       - 20000
     links:
@@ -888,7 +873,6 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5002/all
     ports:
       - 20000
     links:
@@ -927,7 +911,6 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5003/all
     ports:
       - 20000
     links:
@@ -966,7 +949,6 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5004/all
     ports:
       - 20000
     links:
@@ -1005,7 +987,6 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5004/all
     ports:
       - 20000
     links:
@@ -1044,7 +1025,6 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5004/all
     ports:
       - 20000
     links:
@@ -1083,7 +1063,6 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5006/all
     ports:
       - 20000
     links:
@@ -1122,7 +1101,6 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5006/all
     ports:
       - 20000
     links:
@@ -1161,7 +1139,6 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5006/all
     ports:
       - 20000
     links:
@@ -1200,7 +1177,6 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5006/all
     ports:
       - 20000
     links:
@@ -1239,7 +1215,6 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5005/all
     ports:
       - 20000
     links:
@@ -1278,7 +1253,6 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5005/all
     ports:
       - 20000
     links:
@@ -1317,7 +1291,6 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5001/all
     ports:
       - 20000
     links:
@@ -1356,7 +1329,6 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5001/all
     ports:
       - 20000
     links:
@@ -1395,7 +1367,6 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5002/all
     ports:
       - 20000
     links:
@@ -1434,7 +1405,6 @@ services:
       - ALERT="True"
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5002/all
     ports:
       - 20000
     links:

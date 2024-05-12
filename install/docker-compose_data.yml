@@ -945,7 +945,6 @@ services:
     hostname: data-fe-api-dashboard
     environment:
       - CONFIG_ENV=data
-      - STREAM=http://data:5001/all
       - DB=true
       - SECRET_KEY=$SECRET_KEY
     logging:

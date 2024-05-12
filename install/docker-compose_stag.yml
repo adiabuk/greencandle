@@ -102,7 +102,6 @@ services:
     hostname: stag-fe-api-dashboard
     environment:
       - CONFIG_ENV=stag/fe/api
-      - STREAM=http://data:5001/all
       - DB=true
       - SECRET_KEY=$SECRET_KEY
     logging:
@@ -144,7 +143,6 @@ services:
     environment:
       - CONFIG_ENV=stag/be/manual
       - DB=true
-      - STREAM=http://data:5001/all
     image: amrox/greencandle:${TAG}
     mem_limit: 500m
     pull_policy: always
@@ -358,7 +356,6 @@ services:
       - CONFIG_ENV=stag/be/any/long/1m
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5001/all
     ports:
       - 20000
     links:
@@ -397,7 +394,6 @@ services:
       - intermittent="true"
       - DB=true
       - no_proxy=router
-      - STREAM=http://data:5001/all
     ports:
       - 20000
     links:
@@ -435,7 +431,6 @@ services:
       - CONFIG_ENV=stag/be/any/long/5m
       - intermittent="true"
       - DB=true
-      - STREAM=http://data:5001/all
     ports:
       - 20000
     links:
@@ -474,7 +469,6 @@ services:
       - intermittent="true"
       - DB=true
       - no_proxy=router
-      - STREAM=http://data:5001/all
     ports:
       - 20000
     links:
