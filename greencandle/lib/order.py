@@ -542,7 +542,7 @@ class Trade():
                                                                 self.config.main.isolated))
 
                 except BinanceException as binex:
-                    self.logger.error(f"TRADE: error-open {self.config.main.trade_diection} "
+                    self.logger.error(f"TRADE: error-open {self.config.main.trade_direction} "
                                       f"{pair}: {str(binex)}")
 
                     self.logger.critical("%s/long Vars: base quantity:%s, quote_quantity: %s "
