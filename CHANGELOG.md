@@ -1,5 +1,11 @@
 # Releases
 
+# 7.2.4
+* allow using loans on prod-upper timeframes
+* fix typo in config var name
+* wait even longer for upper timeframe get container healthchecks to start-data env
+* audio alerts for lower timeframes only
+
 # 7.2.3
 * account for additional number of args when setting tpsl
 * allow tpsl to be set even if no trade exists
