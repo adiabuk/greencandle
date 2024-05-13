@@ -8,6 +8,7 @@ if [[ -z $CONFIG_ENV ]]; then
 fi
 
 if [[ ! -f /installed ]]; then
+  [[ ! -d /var/local/drain ]] && mkdir -p /var/local/drain/
   declare -p | grep -Ev 'BASHOPTS|BASH_VERSINFO|EUID|PPID|SHELLOPTS|UID' > /container.env
   configstore package process_templates --ignore-role --basedir /opt/config $CONFIG_ENV /opt/output
   cp /opt/output/greencandle.ini /opt/output/send_nsca.cfg /opt/output/router_config.json /opt/output/alert.ini /etc

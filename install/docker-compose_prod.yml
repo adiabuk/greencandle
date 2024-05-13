@@ -656,7 +656,7 @@ services:
     mem_limit: 600m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "touch /var/local/borrow_drain; backend_api api & backend_api queue"
+    entrypoint: /docker-entrypoint.sh "touch /var/local/drain/borrow_drain; backend_api api & backend_api queue"
     logging:
       driver: syslog
       options:
@@ -693,7 +693,7 @@ services:
     mem_limit: 600m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "touch /var/local/borrow_drain; backend_api api & backend_api queue"
+    entrypoint: /docker-entrypoint.sh "touch /var/local/drain/borrow_drain; backend_api api & backend_api queue"
     logging:
       driver: syslog
       options:
@@ -730,7 +730,7 @@ services:
     mem_limit: 600m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "touch /var/local/borrow_drain; backend_api api & backend_api queue"
+    entrypoint: /docker-entrypoint.sh "touch /var/local/drain/borrow_drain; backend_api api & backend_api queue"
     logging:
       driver: syslog
       options:
@@ -767,7 +767,7 @@ services:
     mem_limit: 600m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "touch /var/local/borrow_drain; backend_api api & backend_api queue"
+    entrypoint: /docker-entrypoint.sh "touch /var/local/drain/borrow_drain; backend_api api & backend_api queue"
     logging:
       driver: syslog
       options:
