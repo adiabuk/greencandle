@@ -102,7 +102,6 @@ services:
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-fe-stream_12h:stream
     depends_on:
       - data-base-mysql
       - data-base-redis
@@ -172,7 +171,6 @@ services:
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-fe-stream_1d:stream
     depends_on:
       - data-base-mysql
       - data-base-redis
@@ -242,7 +240,6 @@ services:
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-fe-stream_30m:stream
     depends_on:
       - data-base-mysql
       - data-base-redis
@@ -311,7 +308,6 @@ services:
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-fe-stream_15m:stream
     depends_on:
       - data-base-mysql
       - data-base-redis
@@ -381,7 +377,6 @@ services:
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-fe-stream_4h:stream
     depends_on:
       - data-base-mysql
       - data-base-redis
@@ -452,7 +447,6 @@ services:
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-fe-stream_1h:stream
     depends_on:
       - data-base-mysql
       - data-base-redis
@@ -522,7 +516,6 @@ services:
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-fe-stream_1m:stream
     depends_on:
       - data-base-mysql
       - data-base-redis
@@ -555,7 +548,6 @@ services:
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-fe-stream_1m:stream
     depends_on:
       - data-base-mysql
       - data-base-redis
@@ -588,7 +580,6 @@ services:
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-fe-stream_1m:stream
     depends_on:
       - data-base-mysql
       - data-base-redis
@@ -621,7 +612,6 @@ services:
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-fe-stream_1m:stream
     depends_on:
       - data-base-mysql
       - data-base-redis
@@ -691,7 +681,6 @@ services:
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-fe-stream_5m:stream
     depends_on:
       - data-base-mysql
       - data-base-redis
