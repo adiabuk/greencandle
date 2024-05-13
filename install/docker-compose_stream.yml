@@ -1,7 +1,7 @@
 services:
-  data-fe-stream_1m:
-    container_name: data-fe-stream_1m
-    hostname: data-fe-stream_1m
+  stream-fe_1m:
+    container_name: stream-fe_1m
+    hostname: stream-fe_1m
     image: amrox/greencandle:latest
     mem_limit: 200m
     pull_policy: always
@@ -29,9 +29,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-  data-fe-stream_5m:
-    container_name: data-fe-stream_5m
-    hostname: data-fe-stream_5m
+  stream-fe_5m:
+    container_name: stream-fe_5m
+    hostname: stream-fe_5m
     image: amrox/greencandle:latest
     mem_limit: 200m
     pull_policy: always
@@ -59,9 +59,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-  data-fe-stream_15m:
-    container_name: data-fe-stream_15m
-    hostname: data-fe-stream_15m
+  stream-fe_15m:
+    container_name: stream-fe_15m
+    hostname: stream-fe_15m
     image: amrox/greencandle:latest
     mem_limit: 200m
     pull_policy: always
@@ -88,9 +88,9 @@ services:
       - /var/run/:/var/run
       - /mnt:/mnt
 
-  data-fe-stream_30m:
-    container_name: data-fe-stream_30m
-    hostname: data-fe-stream_30m
+  stream-fe_30m:
+    container_name: stream-fe_30m
+    hostname: stream-fe_30m
     image: amrox/greencandle:latest
     mem_limit: 200m
     pull_policy: always
@@ -117,9 +117,9 @@ services:
       - /var/run/:/var/run
       - /mnt:/mnt
 
-  data-fe-stream_1h:
-    container_name: data-fe-stream_1h
-    hostname: data-fe-stream_1h
+  stream-fe_1h:
+    container_name: stream-fe_1h
+    hostname: stream-fe_1h
     image: amrox/greencandle:latest
     mem_limit: 200m
     pull_policy: always
@@ -147,9 +147,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-  data-fe-stream_4h:
-    container_name: data-fe-stream_4h
-    hostname: data-fe-stream_4h
+  stream-fe_4h:
+    container_name: stream-fe_4h
+    hostname: stream-fe_4h
     image: amrox/greencandle:latest
     mem_limit: 200m
     pull_policy: always
@@ -177,9 +177,9 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-  data-fe-stream_12h:
-    container_name: data-fe-stream_12h
-    hostname: data-fe-stream_12h
+  stream-fe_12h:
+    container_name: stream-fe_12h
+    hostname: stream-fe_12h
     image: amrox/greencandle:latest
     mem_limit: 200m
     pull_policy: always
@@ -206,9 +206,9 @@ services:
       - /var/run/:/var/run
       - /mnt:/mnt
 
-  data-fe-stream_1d:
-    container_name: data-fe-stream_1d
-    hostname: data-fe-stream_1d
+  stream-fe_1d:
+    container_name: stream-fe_1d
+    hostname: stream-fe_1d
     image: amrox/greencandle:latest
     mem_limit: 200m
     pull_policy: always
