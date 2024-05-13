@@ -35,7 +35,7 @@ def add_to_queue(req, test=False):
     usd = float(req['usd']) if 'usd' in req and req['usd'] else None
 
     if not pair:
-        send_slack_message("alerts", "Missing pair for api trade")
+        LOGGER.error("Missing pair for api trade %s", str(req))
         return
 
     LOGGER.info("Request received: %s %s %s", pair, str(action), text)
