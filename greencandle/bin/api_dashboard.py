@@ -378,7 +378,7 @@ def get_live():
                             reverse=False, str_filter='-be-')
     raw = dbase.get_open_trades()
     commission = float(dbase.get_complete_commission())
-    for open_time, interval, pair, name, open_price, direction, _ in raw:
+    for open_time, interval, pair, name, open_price, direction, quote_in in raw:
         current_price = prices['recent'][pair]['close']
         perc = perc_diff(open_price, current_price)
         perc = -perc if direction == 'short' else perc
@@ -410,7 +410,8 @@ def get_live():
                          "open_price": '{:g}'.format(float(open_price)),
                          "current_price": '{:g}'.format(float(current_price)),
                          "tp/sl": f"{take}/{stop}",
-                         "du/dd": f"{round(drawup,2)}/{round(drawdown,2)}" })
+                         "du/dd": f"{round(drawup,2)}/{round(drawdown,2)}",
+                         "quote_in": quote_in})
     LIVE = all_data
     if mt3 > 0 or mt5 > 0:
         send_slack_message("balance", f"trades over 3%: {mt3}\ntrades over 5%: {mt5}")
