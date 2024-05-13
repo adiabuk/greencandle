@@ -496,13 +496,14 @@ class Trade():
             # amt in base
             quote_to_use = current_quote_bal + amount_to_borrow
 
+            reserve = 1 + float(stop) if float(stop) > 0 else 2
             # allow 1% + stoploss incase trade goes in wrong direction
-            base_to_use = get_step_precision(pair, sub_perc(1+float(stop),
+            base_to_use = get_step_precision(pair, sub_perc(reserve,
                                                             quote2base(quote_to_use, pair)))
 
-            base_not_to_use = (quote2base(quote_to_use, pair)/100)*1+float(stop)
-            self.logger.info('Leaving %s perc of base margin aside (%s %s)',
-                             1+float(stop), base_not_to_use, get_base(pair))
+            base_not_to_use = (quote2base(quote_to_use, pair)/100)*reserve
+            self.logger.info('leaving %s perc of base margin aside (%s %s)',
+                             reserve, base_not_to_use, get_base(pair))
             self.logger.info("TRADE: opening margin long %s base of %s with %s quote at %s price",
                              base_to_use, pair, current_quote_bal+amount_to_borrow, current_price)
 
@@ -899,15 +900,16 @@ class Trade():
             preloan_amt = total_amount_to_use['preloan_amt']
 
 
+            reserve = 1 + float(stop) if float(stop) > 0 else 2
             # allow 1% + stoploss incase trade goes in wrong direction
-            total_base_amount = get_step_precision(pair, sub_perc(1+float(stop), amount_to_borrow +
+            total_base_amount = get_step_precision(pair, sub_perc(reserve, amount_to_borrow +
                                                                   current_base_bal))
 
             total_quote_amount = base2quote(total_base_amount, pair)
 
-            base_not_to_use = (quote2base(total_quote_amount, pair)/100)*1+float(stop)
+            base_not_to_use = (quote2base(total_quote_amount, pair)/100)*reserve
             self.logger.info('Leaving %s perc of base margin aside (%s %s) for pair %s',
-                             1+float(stop), base_not_to_use, get_base(pair), pair)
+                             reserve, base_not_to_use, get_base(pair), pair)
             self.logger.info("TRADE: opening margin short %s base of %s with %s quote at %s price",
                              total_base_amount, pair, total_quote_amount, current_price)
 
@@ -930,7 +932,7 @@ class Trade():
                             isolated=str2bool(self.config.main.isolated),
                             asset=base)
                     except BinanceException as binex:
-                        self.logger.error(f"TRADE: Borrow error-open short {pair} "
+                        self.logger.error(f"TRADE: borrow error-open short {pair} "
                                           f"while trying to borrow {amount_to_borrow} {base}: "
                                           f"{str(binex)}")
                         return False
@@ -946,7 +948,7 @@ class Trade():
                                                             isolated=str2bool(
                                                                 self.config.main.isolated))
                 except BinanceException as binex:
-                    self.logger.error("TRADE: Short Trade error-open %s: %s", pair, str(binex))
+                    self.logger.error("TRADE: short trade error-open %s: %s", pair, str(binex))
                     self.logger.critical("%s/short Vars: quantity:%s, bal:%s, borrowed: %s",
                                       pair, amt_str, current_base_bal, amount_to_borrow)
                     return False
