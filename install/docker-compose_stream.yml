@@ -10,7 +10,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local3
+        syslog-facility: local7
     environment:
       - CONFIG_ENV=data/be/get_data/1m
     healthcheck:
@@ -40,7 +40,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local3
+        syslog-facility: local7
     environment:
       - CONFIG_ENV=data/be/get_data/5m
     healthcheck:
@@ -70,7 +70,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local3
+        syslog-facility: local7
     environment:
       - CONFIG_ENV=data/be/get_data/15m
     healthcheck:
@@ -99,7 +99,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local3
+        syslog-facility: local7
     environment:
       - CONFIG_ENV=data/be/get_data/30m
     healthcheck:
@@ -128,7 +128,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local3
+        syslog-facility: local7
     environment:
       - CONFIG_ENV=data/be/get_data/1h
     healthcheck:
@@ -158,7 +158,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local3
+        syslog-facility: local7
     environment:
       - CONFIG_ENV=data/be/get_data/4h
     healthcheck:
@@ -188,7 +188,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local3
+        syslog-facility: local7
     environment:
       - CONFIG_ENV=data/be/get_data/12h
     healthcheck:
@@ -217,7 +217,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local3
+        syslog-facility: local7
     environment:
       - CONFIG_ENV=data/be/get_data/1d
     healthcheck:
@@ -234,5 +234,3 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
       - /mnt:/mnt
-
-
