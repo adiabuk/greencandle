@@ -63,7 +63,7 @@ def main():
     local_pairs = set(config.main.pairs.split())
     while True:
         # Don't start analysing until all pairs are available
-        request = requests.get("http://stream/{config.main.interval}/all", timeout=10)
+        request = requests.get(f"http://stream/{config.main.interval}/all", timeout=10)
         if not request.ok:
             LOGGER.critical("unable to fetch data from streaming server")
         data = request.json()
