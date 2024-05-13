@@ -44,9 +44,6 @@ $COMPOSE up -d $fe
 for container in $be; do
   $COMPOSE up -d $container
   sleep 1
-  if [[ "$container" == *"get"* ]]; then
-    sleep 2
-  fi
 
 done
 
