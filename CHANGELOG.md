@@ -1,5 +1,14 @@
 # Releases
 
+# 7.3
+* split stream containers into separate environment
+* min reserve in case no stop loss entered
+* show empty pair as error in logs
+* add quote_in to open_trades spreadsheet UI
+* detect loan anomalies in prod
+* re-enable long big-change strategy
+* make buildblocker not scan queue
+
 # 7.2.4
 * allow using loans on prod-upper timeframes
 * fix typo in config var name
