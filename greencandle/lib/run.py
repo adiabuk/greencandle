@@ -318,7 +318,7 @@ class ProdRunner():
         Fetch new dataframe data and append to existing structure
         """
 
-        request = requests.get("http://stream:5000/all", timeout=10)
+        request = requests.get(f"http://stream/{config.main.interval}/all", timeout=10)
         if not request.ok:
             LOGGER.critical("Unable to fetch data from streaming server")
             return request.ok
