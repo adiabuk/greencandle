@@ -27,9 +27,9 @@ export COMPOSE="docker compose --ansi never -f ./install/docker-compose_${env}.y
 
 echo "$TAG,$env,$COMMIT,`date` start" >> /var/local/deploy.txt
 $COMPOSE pull
-base=$(yq r install/docker-compose_${env}.yml services | grep -v '^ .*' | sed 's/:.*$//'|grep 'base')
+base=$(yq r install/docker-compose_${env}.yml services | grep -v '^ .*' | sed 's/:.*$//'|grep 'base') || true
 
-be=$(yq r install/docker-compose_${env}.yml services | grep -v '^ .*' | sed 's/:.*$//'|grep 'be')
+be=$(yq r install/docker-compose_${env}.yml services | grep -v '^ .*' | sed 's/:.*$//'|grep 'be') || true
 fe=$(yq r install/docker-compose_${env}.yml services | grep -v '^ .*' | sed 's/:.*$//'|grep 'fe')  || true
 all_be=$(docker ps | grep ${env}.*be |awk {'print $NF'}) || true
 all_fe=$(docker ps | grep ${env}.*fe |awk {'print $NF'} | grep -v stream) || true
