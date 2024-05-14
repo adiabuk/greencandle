@@ -4,6 +4,9 @@
 "any-short": ["any-1m-short"],
 "any-1m-long-short": ["any-1m-long", "any-1m-short"],
 "any-5m-long-short": ["any-5m-long", "any-5m-short"],
+"any2-long": ["any2-1m-long"],
+"any2-short": ["any2-1m-short"],
+"any2-1m-long-short": ["any2-1m-long", "any2-1m-short"],
 
 "alert": ["alert"],
 "route": []
