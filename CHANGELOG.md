@@ -1,5 +1,10 @@
 # Releases
 
+# 7.3.1
+* add 2nd set of stag trade containers
+* ensure drain file for borrow is in correct location
+* remove extra delay during data env deployments
+
 # 7.3
 * split stream containers into separate environment
 * min reserve in case no stop loss entered
