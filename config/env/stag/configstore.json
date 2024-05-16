@@ -257,7 +257,7 @@
       "is_secret": false
     },
     "max_trades": {
-      "value": "10",
+      "value": "1000",
       "is_binary": false,
       "is_secret": false
     },
