@@ -1,5 +1,10 @@
 # Releases
 
+# 7.3.2
+* show max_borrow amount after failing to borrow for short trade
+* allow more trades in stag globally
+* avg_candle aggregate should be last 5 candles before current candle
+
 # 7.3.1
 * add 2nd set of stag trade containers
 * ensure drain file for borrow is in correct location
