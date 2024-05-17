@@ -4,7 +4,6 @@
   "immediate_stop": "false",
   "immediate_take_profit": "false",
   "interval": "1m",
-  "max_trades": "100",
   "name": "test-api-any",
   "pairs": "any",
   "perc_at_timeout": "999",

@@ -1,5 +1,4 @@
 {
-  "max_trades": "100",
   "name": "test-be-api-any3-cross",
   "slack_alerts": "test2",
   "slack_balance": "test2",

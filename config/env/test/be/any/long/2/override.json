@@ -1,5 +1,4 @@
 {
-  "max_trades": "100",
   "name": "test-be-api-any2-cross",
   "perc_at_timeout": "0.3",
   "immediate_stop": "true",

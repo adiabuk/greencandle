@@ -1,5 +1,4 @@
 {
-  "max_trades": "100",
   "name": "test-be-api-any3-cross",
   "immediate_stop": "true",
   "immediate_take_profit": "true",
