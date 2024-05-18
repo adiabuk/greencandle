@@ -17,7 +17,7 @@ from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.binance_accounts import get_binance_spot, base2quote, quote2base, \
-        get_binance_isolated, get_binance_cross
+        get_binance_isolated, get_binance_cross, get_max_borrow
 from greencandle.lib.balance_common import get_base, get_quote, get_step_precision
 from greencandle.lib.common import perc_diff, add_perc, sub_perc, AttributeDict, QUOTES
 from greencandle.lib.alerts import send_slack_trade, send_slack_message
@@ -111,6 +111,7 @@ class Trade():
         Check we can trade which each of given trading pairs
         Return filtered list
         """
+
         dbase = Mysql(test=self.test_data, interval=self.interval)
         current_trades = dbase.get_trades(direction=self.config.main.trade_direction)
         avail_slots = int(self.config.main.max_trades) - len(current_trades)
@@ -128,7 +129,15 @@ class Trade():
             return []
 
         for item in items_list:
+
             if not self.test_trade:
+
+
+                if self.config.main.trade_type != 'spot':
+                    max_borrow, max_borrow_usd = get_max_borrow(item[0])
+                    self.logger.info(f"max borrow for {item[0]} {self.config.main.trade_direction} "
+                                     f"is {max_borrow} / {max_borrow_usd}USD")
+
                 account = 'margin' if 'margin' in self.config.main.trade_type else 'binance'
                 totals = self.get_total_amount_to_use(dbase, item[0], account=account)
                 if sum(totals.values()) == 0:
@@ -169,7 +178,8 @@ class Trade():
         else:
             status = 3
         try:
-            send_nsca(status=status, host_name='jenkins1', service_name=f"slots_{self.config.main.name}",
+            send_nsca(status=status, host_name='jenkins1',
+                      service_name=f"slots_{self.config.main.name}",
                       text_output=f"Avail Slots:{avail_slots}", remote_host='local.amrox.loc')
         except Exception:
             self.logger.warning("Unable to push stats to nagios")
@@ -339,7 +349,6 @@ class Trade():
         return_dict = {}
         orig_base = get_base(pair)
         orig_quote = get_quote(pair)
-        orig_direction = self.config.main.trade_direction
         borrow_drain = Path('/var/local/drain/borrow_drain').is_file()
         # get current borrowed
         mode = "isolated" if str2bool(self.config.main.isolated) else "cross"
@@ -356,10 +365,7 @@ class Trade():
             # get aggregated total borrowed in USD
 
         # get (addiontal) amount we can borrow
-        asset = orig_quote if orig_direction == 'long' else orig_base
-        max_borrow = self.client.get_max_borrow(asset=asset, isolated_pair=pair,
-                                                isolated=str2bool(self.config.main.isolated))
-        max_borrow_usd = max_borrow if 'USD' in asset else base2quote(max_borrow, asset+'USDT')
+        _, max_borrow_usd = get_max_borrow(pair)
 
         # sum of total borrowed and total borrowable
         total = (float(borrowed_usd) + float(max_borrow_usd))

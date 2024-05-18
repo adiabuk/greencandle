@@ -6,7 +6,8 @@ Get/Convert Balances from Binance
 
 from collections import defaultdict
 import cryptocompare
-from greencandle.lib.balance_common import default_to_regular, get_quote
+from str2bool import str2bool
+from greencandle.lib.balance_common import default_to_regular, get_quote, get_base
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.logger import get_logger
 from greencandle.lib import config
@@ -14,6 +15,18 @@ from greencandle.lib import config
 config.create_config()
 BITCOIN = {}
 LOGGER = get_logger(__name__)
+
+def get_max_borrow(pair):
+    """
+    Get max amount we can borrow based on direction and cross/isolated
+    Return in asset amount and USD
+    """
+    client = binance_auth()
+    asset = get_quote(pair) if config.main.trade_direction == 'long' else get_base(pair)
+    max_borrow = client.get_max_borrow(asset=asset, isolated_pair=pair,
+                                       isolated=str2bool(config.main.isolated))
+    max_usd_borrow = max_borrow if 'USD' in asset else base2quote(max_borrow, asset+'USDT')
+    return max_borrow, max_usd_borrow
 
 def get_cross_assets_with_debt(debt_type='borrowed', amount=False):
     """
