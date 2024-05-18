@@ -356,13 +356,11 @@ class Trade():
             # get aggregated total borrowed in USD
 
         # get (addiontal) amount we can borrow
-        if str2bool(self.config.main.isolated):
-            asset = orig_quote if orig_direction == 'long' else orig_base
-            max_borrow = self.client.get_max_borrow(asset=asset, isolated_pair=pair)
-            max_borrow_usd = max_borrow if 'USD' in asset else base2quote(max_borrow, asset+'USDT')
-        else:
-            # cross always returns USD
-            max_borrow_usd = self.client.get_max_borrow()
+        asset = orig_quote if orig_direction == 'long' else orig_base
+        max_borrow = self.client.get_max_borrow(asset=asset, isolated_pair=pair,
+                                                isolated=str2bool(self.config.main.isolated))
+        max_borrow_usd = max_borrow if 'USD' in asset else base2quote(max_borrow, asset+'USDT')
+
         # sum of total borrowed and total borrowable
         total = (float(borrowed_usd) + float(max_borrow_usd))
 
