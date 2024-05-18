@@ -8,7 +8,7 @@ import time
 from flask import Flask, render_template
 from flask_login import LoginManager, login_required
 import sh
-import setproctitle
+from setproctitle import setproctitle
 from greencandle.lib.common import arg_decorator
 from greencandle.lib import config
 from greencandle.lib.flask_auth import load_user, login as loginx, logout as logoutx
@@ -54,7 +54,7 @@ def stream():
 @arg_decorator
 def main():
     """Web interface for current host gc logs"""
-    setproctitle.setproctitle("logtailer")
+    setproctitle(f"{config.main.base_env}-logtailer")
     APP.run(debug=False, host='0.0.0.0', port=2000, threaded=True)
 
 if __name__ == '__main__':

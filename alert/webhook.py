@@ -9,7 +9,7 @@ from pathlib import Path
 from datetime import datetime, time
 import subprocess
 from flask import Flask, request, Response
-import setproctitle
+from setproctitle import setproctitle
 from alertlibs import create_polly_voice, create_google_voice, lights
 
 APP = Flask(__name__)
@@ -92,7 +92,7 @@ def main():
     Main function
     start Flask APP on port 20000
     """
-    setproctitle.setproctitle("alert")
+    setproctitle("gc-alert")
     APP.run(debug=False, host='0.0.0.0', port=20000, threaded=False)
 if __name__ == "__main__":
     main()

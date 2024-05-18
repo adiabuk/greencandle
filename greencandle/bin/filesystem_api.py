@@ -1,11 +1,14 @@
+#!/usr/bin env python
+#pylint: disable=no-member
 
 """
 Filesystem interface
 """
 
 import browsepy
-import setproctitle
+from setproctitle import setproctitle
 from greencandle.lib.common import arg_decorator
+from greencandle.lib import config
 
 browsepy.app.config.update(
     APPLICATION_ROOT="/data",
@@ -18,7 +21,8 @@ def main():
     """
     Web UI for browsing /data dir
     """
-    setproctitle.setproctitle("filesystem_api")
+    config.create_config()
+    setproctitle(f"{config.main.base_env}-filesystem_api")
     browsepy.app.run(host='0.0.0.0', port=6000, debug=False, threaded=True)
 
 if __name__ == '__main__':

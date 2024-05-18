@@ -7,7 +7,7 @@ Run module with test data
 
 import argparse
 import argcomplete
-import setproctitle
+from setproctitle import setproctitle
 
 from greencandle.lib import config
 from greencandle.lib.logger import get_logger, exception_catcher
@@ -22,7 +22,7 @@ def main():
     Run test for all pairs and intervals defined in config
     """
 
-    setproctitle.setproctitle("greencandle-test")
+    setproctitle(f"{config.main.base_env}-gc-backend-test")
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--interval")
     group = parser.add_mutually_exclusive_group(required=True)

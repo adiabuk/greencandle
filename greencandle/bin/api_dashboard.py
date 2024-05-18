@@ -17,7 +17,7 @@ import requests
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, render_template, request, Response, redirect, url_for, session, g
 from flask_login import LoginManager, login_required, current_user
-import setproctitle
+from setproctitle import setproctitle
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.mysql import Mysql
@@ -574,7 +574,7 @@ def get_balance():
 def main():
     """API for interacting with trading system"""
 
-    setproctitle.setproctitle("api_dashboard")
+    setproctitle(f"{config.main.base_env}-api_dashboard")
 
     if config.main.base_env.strip() != 'data':
         scheduler = BackgroundScheduler() # Create Scheduler

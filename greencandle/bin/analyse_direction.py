@@ -10,7 +10,7 @@ import time
 import glob
 import sys
 from pathlib import Path
-import setproctitle
+from setproctitle import setproctitle
 from greencandle.lib import config
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.logger import get_logger, exception_catcher
@@ -122,7 +122,7 @@ def main():
 
     Usage: analyse_direction
     """
-    setproctitle.setproctitle(f"analyse_direction-{INTERVAL}")
+    setproctitle(f"{config.main.base_env}-analyse_direction-{INTERVAL}")
 
     while True:
         analyse_loop()

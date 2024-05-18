@@ -5,7 +5,7 @@ Follow log files and alert on Error
 import time
 import os
 import docker
-import setproctitle
+from setproctitle import setproctitle
 from greencandle.lib import config
 from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.common import arg_decorator
@@ -36,8 +36,8 @@ def main():
     Usage: logwatch
     """
     config.create_config()
-    setproctitle.setproctitle("logwatch")
     env = config.main.base_env
+    setproctitle(f"{env}-logwatch")
     client = docker.from_env()
     with open(f"/var/log/gc_{env}.log", "r") as logfile:
         loglines = follow(logfile)    # iterate over the generator

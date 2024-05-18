@@ -11,7 +11,7 @@ import logging
 from flask import Flask, request, Response
 from apscheduler.schedulers.background import BackgroundScheduler
 from rq import Queue, Worker
-import setproctitle
+from setproctitle import setproctitle
 from greencandle.lib import config
 from greencandle.lib.run import ProdRunner
 from greencandle.lib.redis_conn import Redis
@@ -72,7 +72,7 @@ def main():
     Usage: backend_api [--test] [api|queue]
     """
     test_str = '-test' if TEST else ''
-    setproctitle.setproctitle(f"backend_api-{sys.argv[-1]}{test_str}")
+    setproctitle(f"{config.main.base_env}-backend_api-{sys.argv[-1]}{test_str}")
     if sys.argv[-1] == 'api':
         if "intermittent" in os.environ:
             scheduler = BackgroundScheduler()

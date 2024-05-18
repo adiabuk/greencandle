@@ -13,7 +13,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 import requests
-import setproctitle
+from setproctitle import setproctitle
 from str2bool import str2bool
 from send_nsca3 import send_nsca
 from greencandle.lib import config
@@ -272,7 +272,7 @@ def main():
     fwd_str = "-forward" if ROUTER_FORWARD else ''
     container_no = config.main.name[-1]
 
-    setproctitle.setproctitle(f"analyse_data{container_no}-{INTERVAL}{fwd_str}")
+    setproctitle(f"{config.main.base_env}-analyse_data{container_no}-{INTERVAL}{fwd_str}")
 
     while True:
         analyse_loop()

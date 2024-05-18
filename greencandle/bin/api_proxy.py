@@ -1,11 +1,14 @@
 #!/usr/bin/env python
+#pylint: disable=no-member
+
 """
 Flask based web proxy
 """
 from flask import Flask, request, Response
 import requests
-import setproctitle
+from setproctitle import setproctitle
 from greencandle.lib.common import arg_decorator
+from greencandle.lib import config
 
 APP = Flask(__name__, static_url_path='/not_static')
 
@@ -48,7 +51,8 @@ def proxy(path="/"):
 def main():
     """proxy api/web requests to another hosts"""
 
-    setproctitle.setproctitle("api_proxy")
+    config.create_config()
+    setproctitle(f"{config.main.base_env}-api_proxy")
     APP.run(debug=False, host='0.0.0.0', port=5000)
 
 if __name__ == '__main__':

@@ -15,7 +15,7 @@ from pathlib import Path
 import argcomplete
 
 from apscheduler.schedulers.blocking import BlockingScheduler
-import setproctitle
+from setproctitle import setproctitle
 from greencandle.lib import config
 
 from greencandle.lib.graph import Graph
@@ -40,7 +40,7 @@ def main():
 
     interval = args.interval if args.interval else str(config.main.interval)
     test_str = "(test)" if args.test else "(live)"
-    setproctitle.setproctitle(f"greencandle-backend_{interval}{test_str}")
+    setproctitle(f"{config.main.base_env}-gc-backend_{interval}{test_str}")
 
     if not args.data:
         while glob.glob(f'/var/run/{config.main.base_env}-data-{interval}-*'):

@@ -7,7 +7,7 @@ import os
 import time
 from pathlib import Path
 import requests
-import setproctitle
+from setproctitle import setproctitle
 from greencandle.lib import config
 from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.run import ProdRunner
@@ -54,7 +54,7 @@ def main():
     """
 
     interval = config.main.interval
-    setproctitle.setproctitle(f"get_data-{interval}")
+    setproctitle(f"{config.main.base_env}-get_data-{interval}")
     send_slack_message('alerts', "Starting initial prod run")
     LOGGER.info("starting initial prod run")
     name = config.main.name.split('-')[-1]

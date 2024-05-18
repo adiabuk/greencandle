@@ -10,7 +10,7 @@ import logging
 import threading
 import websocket
 from flask import Flask, request, Response
-import setproctitle
+fromsetproctitle import setproctitle
 from greencandle.lib import config
 from greencandle.lib.logger import get_logger
 from greencandle.lib.common import arg_decorator
@@ -115,7 +115,7 @@ def main():
 
     For use in data environment, uses pairs and interval within scope
     """
-    setproctitle.setproctitle(f"stream_data-{INTERVAL}")
+    setproctitle(f"{config.env.base_env}-stream_data-{INTERVAL}")
     t_flask = threading.Thread(target=start_flask)
     t_ws = threading.Thread(target=start_ws)
 
