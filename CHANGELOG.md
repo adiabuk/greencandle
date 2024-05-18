@@ -1,5 +1,10 @@
 # Releases
 
+# 7.4
+* log max amount we can borrow, even if in drain
+* get borrowable amount in asset currency
+* allow more trades in test globally
+
 # 7.3.2
 * show max_borrow amount after failing to borrow for short trade
 * allow more trades in stag globally
