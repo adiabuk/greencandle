@@ -339,6 +339,7 @@ services:
       - prod-be-api-any-lt-cross-short:any-lt-short
       - prod-be-api-any-man-cross-long:any-man-long
       - prod-be-api-any-man-cross-short:any-man-short
+      - prod-be-api-loan:api-loan
 
     depends_on:
       - prod-base-mysql
@@ -796,3 +797,39 @@ services:
       - /dev/log:/dev/log
       - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
+
+  prod-be-api-loan:
+    container_name: prod-be-api-loan
+    hostname: prod-be-api-loan
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600m
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "loan_api"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local4
+    environment:
+      - intermittent="true"
+      - CONFIG_ENV=prod/be
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - prod-base-mysql:mysql
+      - prod-base-redis:redis
+    depends_on:
+      - prod-base-mysql
+      - prod-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history     - /root/.bash_history:/root/.bash_history
