@@ -132,12 +132,6 @@ class Trade():
 
             if not self.test_trade:
 
-
-                if self.config.main.trade_type != 'spot':
-                    max_borrow, max_borrow_usd = get_max_borrow(item[0])
-                    self.logger.info(f"max borrow for {item[0]} {self.config.main.trade_direction} "
-                                     f"is {max_borrow} / {max_borrow_usd}USD")
-
                 account = 'margin' if 'margin' in self.config.main.trade_type else 'binance'
                 totals = self.get_total_amount_to_use(dbase, item[0], account=account)
                 if sum(totals.values()) == 0:
@@ -365,7 +359,13 @@ class Trade():
             # get aggregated total borrowed in USD
 
         # get (addiontal) amount we can borrow
-        _, max_borrow_usd = get_max_borrow(pair)
+        try:
+            _, max_borrow_usd = get_max_borrow(pair)
+        except BinanceException as binex:
+            self.logger.error(f"TRADE: borrow error-open "
+                              f"{self.config.main.trade_direction} {pair} while "
+                              f"trying to fetch borrow amount: {str(binex)}")
+            max_borrow_usd = 0
 
         # sum of total borrowed and total borrowable
         total = (float(borrowed_usd) + float(max_borrow_usd))
