@@ -124,13 +124,20 @@ class Trade():
         manual = "any" in self.config.main.name
         good_pairs = str2bool(self.config.main.good_pairs)
 
+        if self.is_in_drain() and not self.test_data:
+            self.logger.warning("strategy is in drain for pair %s, skipping...", items_list)
+            return []
+
         for item in items_list:
 
             if not self.test_trade:
+
+
                 if self.config.main.trade_type != 'spot':
                     max_borrow, max_borrow_usd = get_max_borrow(item[0])
                     self.logger.info(f"max borrow for {item[0]} {self.config.main.trade_direction} "
                                      f"is {max_borrow} / {max_borrow_usd}USD")
+
                 account = 'margin' if 'margin' in self.config.main.trade_type else 'binance'
                 totals = self.get_total_amount_to_use(dbase, item[0], account=account)
                 if sum(totals.values()) == 0:
@@ -138,35 +145,27 @@ class Trade():
                                         self.config.main.trade_direction, item[0])
                     continue
 
-                if self.is_in_drain():
-                    self.logger.warning("strategy is in drain for pair %s, skipping...", items_list)
-                    continue
-
             if (current_trades and [trade for trade in current_trades if item[0] in trade]):
                 self.logger.warning("we already have a trade of %s %s, skipping...",
                     self.config.main.trade_direction, item[0])
-                continue
             elif not manual and (item[0] not in self.config.main.pairs and not self.test_data):
                 self.logger.critical("pair %s not in main_pairs, skipping...", item[0])
-                continue
             elif not manual and good_pairs and db_pairs and (item[0] not in db_pairs
                                                              and not self.test_data):
                 self.logger.warning("pair %s not in db_pairs, skipping...", item[0])
                 send_slack_message("trades", f"pair {item[0]} not in db_pairs, skipping...")
-                continue
+
 
             elif self.is_float(item[4]) and \
                     ((float(item[4]) > 0 and self.config.main.trade_direction == "short") or \
                     (float(item[4]) < 0 and self.config.main.trade_direction == "long")):
                 self.logger.info("wrong trade direction %s", self.config.main.trade_direction)
-                continue
             elif avail_slots <= 0:
                 pairs_str = ', '.join((x[0] for x in items_list))
                 self.logger.warning("Too many trades for %s, skipping:%s",
                                     self.config.main.trade_direction, pairs_str)
                 msg = f"Too many {self.config.main.trade_direction} trades, skipping {pairs_str}"
                 send_slack_message("alerts", msg)
-                continue
             else:
                 final_list.append(item)
                 avail_slots -= 1
