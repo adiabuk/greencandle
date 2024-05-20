@@ -339,7 +339,7 @@ services:
       - prod-be-api-any-lt-cross-short:any-lt-short
       - prod-be-api-any-man-cross-long:any-man-long
       - prod-be-api-any-man-cross-short:any-man-short
-      - prod-be-api-loan:api-loan
+      - prod-fe-api-loan:api-loan
 
     depends_on:
       - prod-base-mysql
@@ -798,9 +798,9 @@ services:
       - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
-  prod-be-api-loan:
-    container_name: prod-be-api-loan
-    hostname: prod-be-api-loan
+  prod-fe-api-loan:
+    container_name: prod-fe-api-loan
+    hostname: prod-fe-api-loan
     image: amrox/greencandle:${TAG}
     mem_limit: 600m
     pull_policy: always
