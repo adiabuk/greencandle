@@ -27,10 +27,10 @@ def respond():
     LOGGER.info("Request received: %s", str(data))
     client = binance_auth()
     if int(data['action']) == -1:
-        asset = get_base(data['pair'])
+        asset = get_base(data['pair'].upper())
         direction = "short"
     else:
-        asset = get_quote(data['pair'])
+        asset = get_quote(data['pair'].upper())
         direction = "long"
     try:
         max_borrow = client.get_max_borrow(asset=asset)
