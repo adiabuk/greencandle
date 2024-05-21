@@ -36,11 +36,12 @@ def respond():
 
         try:
             max_borrow = client.get_max_borrow(asset=asset)
+            max_usd_only_borrow = client.get_max_borrow(asset='USDT')
             max_usd_borrow = max_borrow if 'USD' in asset else base2quote(max_borrow, asset+'USDT')
         except BinanceException:
             LOGGER.warning("Binance excption - no funds available")
-        LOGGER.info("Borrow amount for %s %s is %s %s (%s USD)", data['pair'], direction, max_borrow,
-                    asset, max_usd_borrow)
+        LOGGER.info("Borrow amount for %s %s is %s %s (%s USD), usd_only:%s", data['pair'],
+                    direction, max_borrow, asset, max_usd_borrow, max_usd_only_borrow)
     except Exception as err:
         LOGGER.warning("Error: %s", str(err))
 
