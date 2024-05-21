@@ -23,22 +23,26 @@ def respond():
     """
     Default route to trade
     """
-    data = request.json
-    LOGGER.info("Request received: %s", str(data))
-    client = binance_auth()
-    if int(data['action']) == -1:
-        asset = get_base(data['pair'].upper())
-        direction = "short"
-    else:
-        asset = get_quote(data['pair'].upper())
-        direction = "long"
     try:
-        max_borrow = client.get_max_borrow(asset=asset)
-        max_usd_borrow = max_borrow if 'USD' in asset else base2quote(max_borrow, asset+'USDT')
-    except BinanceException:
-        LOGGER.warning("Binance excption - no funds available")
-    LOGGER.info("Borrow amount for %s %s is %s %s (%s USD)", data['pair'], direction, max_borrow,
-                asset, max_usd_borrow)
+        data = request.json
+        LOGGER.info("Request received: %s", str(data))
+        client = binance_auth()
+        if int(data['action']) == -1:
+            asset = get_base(data['pair'].upper())
+            direction = "short"
+        elif int(data['action']) == 1:
+            asset = get_quote(data['pair'].upper())
+            direction = "long"
+
+        try:
+            max_borrow = client.get_max_borrow(asset=asset)
+            max_usd_borrow = max_borrow if 'USD' in asset else base2quote(max_borrow, asset+'USDT')
+        except BinanceException:
+            LOGGER.warning("Binance excption - no funds available")
+        LOGGER.info("Borrow amount for %s %s is %s %s (%s USD)", data['pair'], direction, max_borrow,
+                    asset, max_usd_borrow)
+    except Exception as err:
+        LOGGER.warning("Error: %s", str(err))
 
     return Response(status=200)
 
