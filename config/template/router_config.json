@@ -115,8 +115,8 @@
 "any2-1m-long": ["any2-1m-long"],
 "any2-1m-short": ["any2-1m-short"],
 "any2-1m-long-short": ["any2-1m-short", "any2-1m-long"],
-"api-loan": ["api-loan"],
 
+"api-loan": ["api-loan"],
 "alert": ["alert"],
 "route": []
 }
@@ -142,8 +142,8 @@
 "15m-5": ["test:any3-15m-long-short"],
 "30m-5": ["test:any3-30m-long-short"],
 
-"1m-2": ["alert"],
-"5m-2": ["alert"],
+"1m-2": ["alert", "prod:api-loan"],
+"5m-2": ["alert", "prod:api-loan"],
 
 "prod_extra_long": ["prod:any-man-long"],
 "prod_extra_short": ["prod:any-man-short"],
