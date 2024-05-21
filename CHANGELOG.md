@@ -1,5 +1,10 @@
 # Releases
 
+# 7.5
+* cleanup forwarding of some strategies
+* add prod loan container to prod and forward relevant trades for analysis
+* add env name to proctitle
+
 # 7.4
 * log max amount we can borrow, even if in drain
 * get borrowable amount in asset currency
