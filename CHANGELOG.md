@@ -1,5 +1,12 @@
 # Releases
 
+# 7.6
+* add eth as anomaly exception as it can be quote
+* add close rule for touch strategy
+* fix stag strategy names
+* also forward big-change strategy to loan container
+* set max_borrow to zero if no funds
+
 # 7.5
 * cleanup forwarding of some strategies
 * add prod loan container to prod and forward relevant trades for analysis
