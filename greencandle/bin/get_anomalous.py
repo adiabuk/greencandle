@@ -18,7 +18,7 @@ def main():
 
     balances = bal.get_balance()['margin']
 
-    actual = {key for key in balances if key not in ('TOTALS', 'BNB', 'USDT', 'BTC')
+    actual = {key for key in balances if key not in ('TOTALS', 'BNB', 'USDT', 'BTC', 'ETH')
               and balances[key]['USD'] > 10}
     expected = {get_base(x[2]) for x in dbase.get_open_trades() }
 
