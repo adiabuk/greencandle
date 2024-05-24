@@ -793,7 +793,6 @@ class Trade():
             # Quantity of base_asset we can buy back based on current price
             quantity = base_in
 
-
             if not quantity:
                 self.logger.info("close_margin_short: unable to get quantity for %s", pair)
                 return True
@@ -825,6 +824,9 @@ class Trade():
                 time.sleep(10) # wait a while before re-fetching balance
                 avail = self.get_avail_asset(base)
                 repay = borrowed if avail > borrowed else avail
+                repay_drain = Path(f'/var/local/drain/repay_drain').is_file()
+                if repay_drain:
+                    repay = 0
 
                 if float(repay) > 0:
                     try:
@@ -1124,6 +1126,9 @@ class Trade():
                 time.sleep(10) # wait a while before re-fetching balance
                 avail = self.get_avail_asset(quote)
                 repay = borrowed if avail > borrowed else avail
+                repay_drain = Path(f'/var/local/drain/repay_drain').is_file()
+                if repay_drain:
+                    repay = 0
 
                 if float(repay) > 0:
                     try:
