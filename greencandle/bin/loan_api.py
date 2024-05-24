@@ -25,7 +25,6 @@ def respond():
     """
     try:
         data = request.json
-        LOGGER.info("Request received: %s", str(data))
         client = binance_auth()
         if int(data['action']) == -1:
             asset = get_base(data['pair'].upper())
@@ -33,6 +32,10 @@ def respond():
         elif int(data['action']) == 1:
             asset = get_quote(data['pair'].upper())
             direction = "long"
+        else:
+            return Response(status=200)
+
+        LOGGER.info("Request received: %s", str(data))
 
         try:
             max_usd_only_borrow = client.get_max_borrow(asset='USDT')
@@ -42,8 +45,9 @@ def respond():
             max_borrow = 0
             max_usd_borrow = 0
             LOGGER.warning("Binance excption - no funds available")
-        LOGGER.info("Borrow amount for %s %s is %s %s (%s USD), usd_only:%s", data['pair'],
-                    direction, max_borrow, asset, max_usd_borrow, max_usd_only_borrow)
+        LOGGER.info("Borrow amount for %s %s is %s %s (%s USD), usd_only:%s, %s", data['pair'],
+                    direction, max_borrow, asset, max_usd_borrow, max_usd_only_borrow,
+                    data['strategy'])
     except Exception as err:
         LOGGER.warning("Error: %s", str(err))
 
