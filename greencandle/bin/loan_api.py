@@ -45,9 +45,9 @@ def respond():
             max_borrow = 0
             max_usd_borrow = 0
             LOGGER.warning("Binance excption - no funds available")
+        origin = data['text'].split()[-1]
         LOGGER.info("Borrow amount for %s %s is %s %s (%s USD), usd_only:%s, %s", data['pair'],
-                    direction, max_borrow, asset, max_usd_borrow, max_usd_only_borrow,
-                    data['strategy'])
+                    direction, max_borrow, asset, max_usd_borrow, max_usd_only_borrow, origin)
     except Exception as err:
         LOGGER.warning("Error: %s", str(err))
 
