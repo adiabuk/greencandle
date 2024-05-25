@@ -4,8 +4,6 @@ services:
       context: ..
       dockerfile: install/Dockerfile-gc
     container_name: unit-runner-$id
-    tmpfs:
-      - /srv
     environment:
       - CONFIG_ENV=unit
       - BUILD_ID=$id
