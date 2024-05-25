@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-member
+#pylint: disable=no-member,no-name-in-module,broad-except
 
 """
 API for tracking which pairs aren't tradable overtime

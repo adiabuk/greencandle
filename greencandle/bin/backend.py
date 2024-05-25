@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint:disable=no-member,unused-variable
+#pylint:disable=no-member,unused-variable,no-name-in-module
 #PYTHON_ARGCOMPLETE_OK
 
 """

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-member,broad-except
+#pylint: disable=no-member,broad-except,no-name-in-module
 
 """
 API routing module

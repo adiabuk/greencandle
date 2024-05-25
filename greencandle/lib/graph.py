@@ -122,8 +122,6 @@ class Graph():
                 LOGGER.debug("creating ohlc graph")
                 if value.empty:  # empty dataframe:
                     print(f'Unable to find {name} data for {self.pair}, passing...')
-                    pass
-                    #return
                 value["time"] = pandas.to_datetime(value["openTime"], unit="ms")
                 item = go.Candlestick(x=value.time,
                                       open=value.open,

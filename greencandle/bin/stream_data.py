@@ -1,4 +1,4 @@
-#pylint: disable=no-member,unused-argument
+#pylint: disable=no-member,unused-argument,no-name-in-module
 
 """
 Stream candle data from binance and make latest data available through flask
@@ -10,7 +10,7 @@ import logging
 import threading
 import websocket
 from flask import Flask, request, Response
-fromsetproctitle import setproctitle
+from setproctitle import setproctitle
 from greencandle.lib import config
 from greencandle.lib.logger import get_logger
 from greencandle.lib.common import arg_decorator

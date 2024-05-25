@@ -1,8 +1,7 @@
-#pylint: disable=no-member
+#pylint: disable=no-member,too-many-locals
 """
 Close all trades
 """
-import os
 import json
 import argparse
 import argcomplete

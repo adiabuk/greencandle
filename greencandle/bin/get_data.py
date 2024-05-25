@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-member
+#pylint: disable=no-member,no-name-in-module
 """
 Collect OHLC and strategy data for later analysis
 """

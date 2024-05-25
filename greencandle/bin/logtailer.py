@@ -1,4 +1,4 @@
-#pylint: disable=no-member
+#pylint: disable=no-member,no-name-in-module
 """
 Flask module to provide web interface for tailing /var/log/greencandle.log
 """

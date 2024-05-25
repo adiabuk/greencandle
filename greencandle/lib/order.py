@@ -824,7 +824,7 @@ class Trade():
                 time.sleep(10) # wait a while before re-fetching balance
                 avail = self.get_avail_asset(base)
                 repay = borrowed if avail > borrowed else avail
-                repay_drain = Path(f'/var/local/drain/repay_drain').is_file()
+                repay_drain = Path('/var/local/drain/repay_drain').is_file()
                 if repay_drain:
                     repay = 0
 
@@ -1126,7 +1126,7 @@ class Trade():
                 time.sleep(10) # wait a while before re-fetching balance
                 avail = self.get_avail_asset(quote)
                 repay = borrowed if avail > borrowed else avail
-                repay_drain = Path(f'/var/local/drain/repay_drain').is_file()
+                repay_drain = Path('/var/local/drain/repay_drain').is_file()
                 if repay_drain:
                     repay = 0
 

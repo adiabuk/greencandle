@@ -1,4 +1,4 @@
-#pylint: disable=no-member
+#pylint: disable=no-member,no-name-in-module
 """
 Follow log files and alert on Error
 """

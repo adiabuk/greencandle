@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=bare-except,no-member,consider-using-with,too-many-locals,assigning-non-slot,global-statement,too-few-public-methods
+#pylint: disable=bare-except,no-member,consider-using-with,too-many-locals,global-statement,too-few-public-methods,assigning-non-slot,no-name-in-module
 
 """
 Flask module for manipulating API trades and displaying relevent graphs
