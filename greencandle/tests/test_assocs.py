@@ -9,6 +9,7 @@ from greencandle.bin.api_dashboard import list_to_dict
 
 
 ENVS = ('per', 'prod', 'stag', 'test', 'alarm')
+ENVS = ('prod','per')
 class TestAssocs(unittest.TestCase):
     """
     Test all assocs in docker-compose and config

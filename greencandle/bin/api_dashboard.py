@@ -293,7 +293,7 @@ def trade():
 
     env = config.main.base_env
     links_list = get_be_services(env)
-    links_dict = list_to_dict(links_list, reverse=True, str_filter='-be-')
+    links_dict = list_to_dict(links_list, reverse=True, str_filter='-be-api-any-')
 
     my_dic = defaultdict(set)
     for strat, short_name in router_config.items():

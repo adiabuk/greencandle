@@ -71,10 +71,6 @@
 "any-30m-short": ["any-30m-short"],
 "any-30m-long-short": ["any-30m-long", "any-30m-short"],
 
-"any-1h-long": ["any-1h-long"],
-"any-1h-short": ["any-1h-short"],
-"any-1h-long-short": ["any-1h-long", "any-1m-short"],
-
 "alert": ["alert"],
 "route": []
 }
@@ -103,18 +99,6 @@
 "any-4h-long": ["any-4h-long"],
 "any-4h-short": ["any-4h-short"],
 "any-4h-long-short": ["any-4h-short", "any-4h-long"],
-
-"any2-1h-long": ["any2-1h-long"],
-"any2-1h-short": ["any2-1h-short"],
-"any2-1h-long-short": ["any2-1h-short", "any2-1h-long"],
-
-"any2-5m-long": ["any2-5m-long"],
-"any2-5m-short": ["any2-5m-short"],
-"any2-5m-long-short": ["any2-5m-short", "any2-5m-long"],
-
-"any2-1m-long": ["any2-1m-long"],
-"any2-1m-short": ["any2-1m-short"],
-"any2-1m-long-short": ["any2-1m-short", "any2-1m-long"],
 
 "api-loan": ["api-loan"],
 "alert": ["alert"],
