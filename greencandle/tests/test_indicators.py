@@ -8,6 +8,7 @@ values which are none null/none
 import os
 import json
 import unittest
+from datetime import datetime, timedelta
 from greencandle.lib.logger import get_logger
 from greencandle.lib.binance_common import get_data
 from greencandle.lib.run import perform_data
@@ -25,7 +26,9 @@ class TestIndicators(unittest.TestCase):
         self.pair = 'LINKUSDT'
         self.interval = '1h'
         self.path = '/data/test_data'
-        get_data('2023-01-01', [self.interval], [self.pair], 1, self.path, extra=0)
+
+        recent_date = (datetime.today() - timedelta(days=3)).strftime("%Y-%m-%d")
+        get_data(recent_date, [self.interval], [self.pair], 1, self.path, extra=0)
 
     def test_indicators(self):
         """
