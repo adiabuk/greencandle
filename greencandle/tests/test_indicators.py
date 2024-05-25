@@ -27,7 +27,8 @@ class TestIndicators(unittest.TestCase):
         self.interval = '1h'
         self.path = '/data/test_data'
 
-        recent_date = (datetime.today() - timedelta(days=3)).strftime("%Y-%m-%d")
+        #recent_date = (datetime.today() - timedelta(days=3)).strftime("%Y-%m-%d")
+        recent_date = '2024-05-25'
         get_data(recent_date, [self.interval], [self.pair], 1, self.path, extra=0)
 
     def test_indicators(self):
