@@ -98,7 +98,7 @@ def respond():
             # add environment name to text
 
             if 'environment' not in payload['text']:
-                payload['text'] += f'.{env} environment'
+                payload['text'] += f'. {env} environment'
 
             payload['edited'] = "yes"
 
