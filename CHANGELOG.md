@@ -1,5 +1,11 @@
 # Releases
 
+# 7.7
+* Enable and fix some unit tests
+* better log filters for loan container
+* allow drain file for loan repayments + enable for prod manual containers
+* add strategy to log in loan api prod
+
 # 7.6
 * add eth as anomaly exception as it can be quote
 * add close rule for touch strategy
