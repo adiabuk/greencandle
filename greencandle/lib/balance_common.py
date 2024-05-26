@@ -3,7 +3,7 @@
 
 import math
 from collections import defaultdict
-from greencandle.lib.binance import Binance
+import requests
 from greencandle.lib.common import QUOTES
 
 def default_to_regular(ddict):
@@ -27,28 +27,11 @@ def get_base(pair):
     quote = get_quote(pair)
     return pair.replace(quote, "")
 
-def flatten(flat):
-    """
-    traverse tree to find flatten-able object
-    cast to list to avoid RuntimeError-dict size changed
-    """
-    for item_key, item_val in list(flat.items()):  # second level
-        if item_key == "filters":
-            for i in item_val:
-                for key, val in i.items():
-                    if key != "filterType" and key not in flat:
-                        flat[key] = val
-
-    del flat["filters"]
-    return flat
-
 def get_step_precision(item, amount):
     """
     Get/apply precision required for trading pair from exchange
     """
-    client = Binance()
-    exchange_info = client.exchange_info()[item]
-    flat = flatten(exchange_info)
-    step_size = float(flat['stepSize'])
+    req = requests.get(f'http://stream/binance/exchange_info?pair={item}', timeout=10)
+    step_size = float(req.json()['stepSize'])
     precision = int(round(-math.log(step_size, 10), 0))
     return round(float(amount), precision)
