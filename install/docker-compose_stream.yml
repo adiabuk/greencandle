@@ -1,5 +1,35 @@
 services:
   stream-fe_1m:
+    container_name: stream-fe_binance
+    hostname: stream-fe_1m
+    image: amrox/greencandle:latest
+    mem_limit: 200m
+    pull_policy: always
+    restart: on-failure
+    entrypoint: /docker-entrypoint.sh stream_binance
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local7
+    environment:
+      - CONFIG_ENV=data/be/get_data/
+    healthcheck:
+      test: echo
+      start_period: 5m
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    ports:
+      - 6000:5000
+    volumes:
+      - /mnt:/mnt
+      - /data:/data
+      - /var/local:/var/local
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+ stream-fe_1m:
     container_name: stream-fe_1m
     hostname: stream-fe_1m
     image: amrox/greencandle:latest
