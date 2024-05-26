@@ -7,7 +7,8 @@ Sell a particular trade immediately
 
 import sys
 import time
-from greencandle.lib.common import arg_decorator, get_local_price
+from greencandle.lib.common import arg_decorator
+from greencandle.lib.binance_accounts import get_local_price
 from greencandle.lib import config
 from greencandle.lib.order import Trade
 

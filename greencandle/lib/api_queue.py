@@ -11,10 +11,11 @@ import requests
 from greencandle.lib import config
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.mysql import Mysql
+from greencandle.lib.binance_accounts import get_local_price
 from greencandle.lib.binance_common import get_dataframes
 from greencandle.lib.order import Trade
 from greencandle.lib.logger import get_logger
-from greencandle.lib.common import get_trade_link, get_tv_link, get_local_price
+from greencandle.lib.common import get_trade_link, get_tv_link
 from greencandle.lib.alerts import send_slack_message
 
 config.create_config()

@@ -5,10 +5,10 @@ Get/Convert Balances from Binance
 """
 
 from collections import defaultdict
+import requests
 import cryptocompare
 from str2bool import str2bool
 from greencandle.lib.balance_common import default_to_regular, get_quote, get_base
-from greencandle.lib.common import get_local_price
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.logger import get_logger
 from greencandle.lib import config
@@ -16,6 +16,19 @@ from greencandle.lib import config
 config.create_config()
 BITCOIN = {}
 LOGGER = get_logger(__name__)
+
+def get_local_price(pair):
+    """
+    Get current price of asset from local 1m stream
+    """
+
+    stream_req = requests.get(f"http://stream/1m/recent?pair={pair}", timeout=10)
+    try:
+        price = float(stream_req.json()['close'])
+    except ValueError:
+        client = binance_auth()
+        price = float(client.prices()[pair])
+    return price
 
 def get_max_borrow(pair):
     """

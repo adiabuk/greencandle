@@ -6,12 +6,10 @@ Common functions that don't belong anywhere else
 import sys
 import datetime
 from decimal import Decimal, InvalidOperation
-import requests
 import yaml
 from babel.numbers import format_currency
 import numpy
 from markupsafe import Markup
-from greencandle.lib.auth import binance_auth
 
 class Bcolours:
     """
@@ -69,20 +67,6 @@ TF2MIN = {"1s": 1,
           "1d": 1440,
           "1w": 10080
           }
-
-def get_local_price(pair):
-    """
-    Get current price of asset from local 1m stream
-    """
-
-    stream_req = requests.get(f"http://stream/1m/recent?pair={pair}", timeout=10)
-    try:
-        price = float(stream_req.json()['close'])
-    except ValueError:
-        client = binance_auth()
-        price = float(client.prices()[pair])
-    return price
-
 
 def get_short_name(name, env, direction):
     """
