@@ -2,7 +2,7 @@ services:
   stream-fe_1m:
     container_name: stream-fe_binance
     hostname: stream-fe_1m
-    image: amrox/greencandle:latest
+    image: amrox/greencandle:${TAG}
     mem_limit: 200m
     pull_policy: always
     restart: on-failure
@@ -32,7 +32,7 @@ services:
  stream-fe_1m:
     container_name: stream-fe_1m
     hostname: stream-fe_1m
-    image: amrox/greencandle:latest
+    image: amrox/greencandle:${TAG}
     mem_limit: 200m
     pull_policy: always
     restart: on-failure
@@ -62,7 +62,7 @@ services:
   stream-fe_5m:
     container_name: stream-fe_5m
     hostname: stream-fe_5m
-    image: amrox/greencandle:latest
+    image: amrox/greencandle:${TAG}
     mem_limit: 200m
     pull_policy: always
     restart: on-failure
@@ -92,7 +92,7 @@ services:
   stream-fe_15m:
     container_name: stream-fe_15m
     hostname: stream-fe_15m
-    image: amrox/greencandle:latest
+    image: amrox/greencandle:${TAG}
     mem_limit: 200m
     pull_policy: always
     restart: on-failure
@@ -121,7 +121,7 @@ services:
   stream-fe_30m:
     container_name: stream-fe_30m
     hostname: stream-fe_30m
-    image: amrox/greencandle:latest
+    image: amrox/greencandle:${TAG}
     mem_limit: 200m
     pull_policy: always
     restart: on-failure
@@ -150,7 +150,7 @@ services:
   stream-fe_1h:
     container_name: stream-fe_1h
     hostname: stream-fe_1h
-    image: amrox/greencandle:latest
+    image: amrox/greencandle:${TAG}
     mem_limit: 200m
     pull_policy: always
     restart: on-failure
@@ -180,7 +180,7 @@ services:
   stream-fe_4h:
     container_name: stream-fe_4h
     hostname: stream-fe_4h
-    image: amrox/greencandle:latest
+    image: amrox/greencandle:${TAG}
     mem_limit: 200m
     pull_policy: always
     restart: on-failure
@@ -210,7 +210,7 @@ services:
   stream-fe_12h:
     container_name: stream-fe_12h
     hostname: stream-fe_12h
-    image: amrox/greencandle:latest
+    image: amrox/greencandle:${TAG}
     mem_limit: 200m
     pull_policy: always
     restart: on-failure
@@ -239,7 +239,7 @@ services:
   stream-fe_1d:
     container_name: stream-fe_1d
     hostname: stream-fe_1d
-    image: amrox/greencandle:latest
+    image: amrox/greencandle:${TAG}
     mem_limit: 200m
     pull_policy: always
     restart: on-failure
