@@ -84,9 +84,9 @@
 "any-man-long": ["any-man-long", "alert"],
 "any-man-short": ["any-man-short", "alert"],
 
-"any-1m-long": ["any-1m-long", "api-loan"],
-"any-1m-short": ["any-1m-short", "api-loan"],
-"any-1m-long-short": ["any-1m-short", "any-1m-long", "api-loan"],
+"any-1m-long": ["any-1m-long"],
+"any-1m-short": ["any-1m-short"],
+"any-1m-long-short": ["any-1m-short", "any-1m-long"],
 
 "any-5m-long": ["any-5m-long", "api-loan"],
 "any-5m-short": ["any-5m-short", "api-loan"],
@@ -119,8 +119,8 @@
 "5m-6":  ["test:any-5m-long-short"],
 "15m-6": ["test:any-15m-long-short"],
 "30m-6": ["test:any-30m-long-short"],
-"1m-10": ["stag:any-1m-long-short", "prod:any-1m-short", "prod:api-loan", "alert"],
-"5m-10": ["stag:any-1m-long-short", "prod:any-5m-short", "prod:api-loan", "alert"],
+"1m-10": ["alert", "stag:any-1m-long-short", "prod:any-1m-short", "prod:api-loan"],
+"5m-10": ["alert", "stag:any-1m-long-short", "prod:any-5m-short", "prod:api-loan"],
 "1m-5":  ["test:any3-1m-long-short"],
 "5m-5":  ["test:any3-5m-long-short"],
 "15m-5": ["test:any3-15m-long-short"],
