@@ -11,6 +11,7 @@ import yaml
 from babel.numbers import format_currency
 import numpy
 from markupsafe import Markup
+from greencandle.lib.auth import binance_auth
 
 class Bcolours:
     """
@@ -75,7 +76,11 @@ def get_local_price(pair):
     """
 
     stream_req = requests.get(f"http://stream/1m/recent?pair={pair}", timeout=10)
-    price = float(stream_req.json()['close'])
+    try:
+        price = float(stream_req.json()['close'])
+    except ValueError:
+        client = binance_auth()
+        price = float(client.prices()[pair])
     return price
 
 
