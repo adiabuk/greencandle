@@ -11,10 +11,10 @@ import requests
 from greencandle.lib import config
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.mysql import Mysql
-from greencandle.lib.binance_common import get_current_price, get_dataframes
+from greencandle.lib.binance_common import get_dataframes
 from greencandle.lib.order import Trade
 from greencandle.lib.logger import get_logger
-from greencandle.lib.common import get_trade_link, get_tv_link
+from greencandle.lib.common import get_trade_link, get_tv_link, get_local_price
 from greencandle.lib.alerts import send_slack_message
 
 config.create_config()
@@ -41,7 +41,7 @@ def add_to_queue(req, test=False):
     LOGGER.info("Request received: %s %s %s", pair, str(action), text)
     current_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     try:
-        current_price = get_current_price(pair)
+        current_price = get_local_price(pair)
     except KeyError:
         message = f"Unable to get price for {pair}"
         send_slack_message("alerts", message)

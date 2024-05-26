@@ -32,8 +32,6 @@ def main():
     open_set = dbase.get_main_open_assets()
     extra_list = dbase.get_extra_loans()
 
-    prices = client.prices() if debt_type == 'interest' else None
-
     logger.info("%s items with debts", len(debt_assets))
     for asset, debt, free in debt_assets:
 
@@ -55,9 +53,8 @@ def main():
                     logger.info("TRADE: repaid %s of %s %s result: %s",
                                 to_pay, asset, debt_type, result)
                     if debt_type == 'interest':
-                        usd = to_pay if 'USD' in asset else base2quote(to_pay, asset+'USDT',
-                                                                           prices=prices)
-                        gbp = usd2gbp(prices) * usd
+                        usd = to_pay if 'USD' in asset else base2quote(to_pay, asset+'USDT')
+                        gbp = usd2gbp() * usd
                         dbase.add_commission_payment(asset=asset,
                                                      asset_amt=to_pay,
                                                      usd_amt=usd,

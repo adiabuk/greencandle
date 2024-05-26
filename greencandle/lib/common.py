@@ -6,6 +6,7 @@ Common functions that don't belong anywhere else
 import sys
 import datetime
 from decimal import Decimal, InvalidOperation
+import requests
 import yaml
 from babel.numbers import format_currency
 import numpy
@@ -67,6 +68,16 @@ TF2MIN = {"1s": 1,
           "1d": 1440,
           "1w": 10080
           }
+
+def get_local_price(pair):
+    """
+    Get current price of asset from local 1m stream
+    """
+
+    stream_req = requests.get(f"http://stream/1m/recent?pair={pair}", timeout=10)
+    price = float(stream_req.json()['close'])
+    return price
+
 
 def get_short_name(name, env, direction):
     """

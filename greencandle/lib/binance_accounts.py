@@ -8,6 +8,7 @@ from collections import defaultdict
 import cryptocompare
 from str2bool import str2bool
 from greencandle.lib.balance_common import default_to_regular, get_quote, get_base
+from greencandle.lib.common import get_local_price
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.logger import get_logger
 from greencandle.lib import config
@@ -63,13 +64,12 @@ def get_cross_margin_level():
     total_free = 0
     total_debt = 0
     details = client.get_cross_margin_details()
-    prices = client.prices()
     for item in details['userAssets']:
         asset = item['asset']
         debt = float(item['borrowed']) + float(item['interest'])
-        usd_debt = base2quote(debt, asset+'USDT', prices) if 'USD' not in asset else debt
+        usd_debt = base2quote(debt, asset+'USDT') if 'USD' not in asset else debt
         free = item['free']
-        usd_free = base2quote(free, asset+'USDT', prices) if 'USD' not in asset else free
+        usd_free = base2quote(free, asset+'USDT') if 'USD' not in asset else free
         total_free += float(usd_free)
         total_debt += float(usd_debt)
     try:
@@ -77,29 +77,26 @@ def get_cross_margin_level():
     except ZeroDivisionError:
         return 999
 
-def quote2base(amount, pair, prices=None):
+def quote2base(amount, pair):
     """
     convert quote amount to base amount
     """
-    client = binance_auth()
-    prices = prices if prices else client.prices()
-    return float(amount) / float(prices[pair])
+    price = get_local_price(pair)
+    return float(amount) / price
 
-def base2quote(amount, pair, prices=None):
+def base2quote(amount, pair):
     """
     convert base amount to quote amount
     """
-    client = binance_auth()
-    prices = prices if prices else client.prices()
-    return float(amount) * float(prices[pair])
+    price = get_local_price(pair)
+    return float(amount) * price
 
-def usd2gbp(prices=None):
+def usd2gbp():
     """
     Get usd/gbp rate
     """
-    client = binance_auth()
-    prices = prices if prices else client.prices()
-    return  1/float(prices['GBPUSDT'])
+    price = get_local_price('GBPUSDT')
+    return  1/price
 
 def get_current_isolated():
     """Get balance for isolated accounts"""
@@ -126,8 +123,6 @@ def get_binance_isolated():
 
 
     isolated = get_current_isolated()
-    client = binance_auth()
-    prices = client.prices()
     for key, val in isolated.items():
         current_quote = get_quote(key)
         for quote, amount in val.items():
@@ -136,26 +131,26 @@ def get_binance_isolated():
             gbp = 0
             if quote == "BTC":
                 bcoin = float(amount)
-                usd = float(amount) / float(prices["BTCUSDT"])
+                usd = float(amount) / get_local_price('BTCUSDT')
 
             elif "USD" in quote:
-                bcoin = float(amount) / float(prices["BTCUSDT"])
+                bcoin = float(amount) / get_local_price('BTCUSDT')
                 usd = float(amount)
 
             elif quote == 'GBP':
-                bcoin = float(amount) / float(prices["BTCGBP"])
-                usd = bcoin / float(prices["BTCUSDT"])
+                bcoin = float(amount) / get_local_price('BTCGBP')
+                usd = bcoin / get_local_price('BTCUSDT')
 
             else:  # other currencies that need converting to USDT
                 try:
                     LOGGER.debug("Converting currency %s", key)
-                    bcoin = float(amount) * float(prices[quote+"USDT"])  # value in USDT
-                    usd = float(bcoin) * float(prices["BTCUSDT"])
+                    bcoin = float(amount) * get_local_price(quote+'USDT')  # value in USDT
+                    usd = float(bcoin) * get_local_price('BTCUSDT')
                 except KeyError:
                     LOGGER.critical("Error: Unable to quantify isolated currency: %s", quote)
                     continue
 
-            gbp = usd2gbp(prices) * usd
+            gbp = usd2gbp() * usd
 
             bitcoin_total += bcoin
             usd_total += usd
@@ -169,7 +164,7 @@ def get_binance_isolated():
     result["isolated"]["TOTALS"]["BTC"] = bitcoin_total
     result["isolated"]["TOTALS"]["USD"] = usd_total
     result["isolated"]["TOTALS"]["count"] = "N/A"
-    gbp_total = usd2gbp(prices) * usd_total
+    gbp_total = usd2gbp() * usd_total
     result["isolated"]["TOTALS"]["GBP"] = gbp_total
 
     return default_to_regular(result)
@@ -186,7 +181,6 @@ def get_binance_cross():
 
     client = binance_auth()
     all_balances = client.margin_balances()
-    prices = client.prices()
     bitcoin_totals = 0
     usd_totals = 0
     gbp_total = 0
@@ -204,26 +198,26 @@ def get_binance_cross():
             if key == "BTC":
                 bcoin = float(current_value)
                 bitcoin_totals += bcoin
-                usd = bcoin *float(prices["BTCUSDT"])
+                usd = bcoin * get_local_price('BTCUSDT')
                 usd_totals += usd
 
             elif key in ("USDT", "LBUSD", "BUSD"):
-                bcoin = float(current_value) / float(prices["BTCUSDT"])
+                bcoin = float(current_value) / get_local_price('BTCUSDT')
                 bitcoin_totals += bcoin
-                usd_totals += bcoin *float(prices["BTCUSDT"])
+                usd_totals += bcoin * get_local_price('BTCUSDT')
                 usd = current_value
 
             elif key == "GBP":
-                bcoin = float(current_value) / float(prices["BTCGBP"])
+                bcoin = float(current_value) / get_local_price('BTCGBP')
                 bitcoin_totals += bcoin
-                usd_totals += bcoin *float(prices["BTCUSDT"])
+                usd_totals += bcoin * get_local_price('BTCUSDT')
 
             else:  # other currencies that need converting to USDT
                 try:
                     LOGGER.debug("Converting currency %s", key)
-                    usd = float(current_value) * float(prices[key+"USDT"])  # value in USDT
+                    usd = float(current_value) * get_local_price(key+'USDT')  # value in USDT
                     usd_totals += usd
-                    bcoin = usd / float(prices["BTCUSDT"])
+                    bcoin = usd / get_local_price('BTCUSDT')
                     bitcoin_totals += bcoin
 
                 except KeyError:
@@ -232,18 +226,18 @@ def get_binance_cross():
 
             add_value(key, bcoin)
 
-            gbp = usd2gbp(prices) * usd
+            gbp = usd2gbp() * usd
             usd_total += usd
             gbp_total += gbp
             result["margin"][key]["BTC"] = bcoin
             result["margin"][key]["USD"] = usd
             result["margin"][key]["GBP"] = gbp
 
-    usd_total = bitcoin_totals * float(prices["BTCUSDT"])
+    usd_total = bitcoin_totals * get_local_price('BTCUSDT')
     result["margin"]["TOTALS"]["BTC"] = bitcoin_totals
     result["margin"]["TOTALS"]["USD"] = usd_total
     result["margin"]["TOTALS"]["count"] = "N/A"
-    gbp_total = usd2gbp(prices) * usd_total
+    gbp_total = usd2gbp() * usd_total
     result["margin"]["TOTALS"]["GBP"] = gbp_total
     add_value("USD", usd_total)
     add_value("GBP", gbp_total)
@@ -303,7 +297,7 @@ def get_binance_spot():
             add_value(key, bcoin)
 
             usd = bcoin *float(prices["BTCUSDT"])
-            gbp = usd2gbp(prices) * usd
+            gbp = usd2gbp() * usd
             usd_total += usd
             gbp_total += gbp
             result["binance"][key]["BTC"] = bcoin
@@ -314,7 +308,7 @@ def get_binance_spot():
         result["binance"]["TOTALS"]["BTC"] = bitcoin_totals
         result["binance"]["TOTALS"]["USD"] = usd_total
         result["binance"]["TOTALS"]["count"] = "N/A"
-        gbp_total = usd2gbp(prices) * usd_total
+        gbp_total = usd2gbp() * usd_total
         result["binance"]["TOTALS"]["GBP"] = gbp_total
         add_value("USD", usd_total)
         add_value("GBP", gbp_total)

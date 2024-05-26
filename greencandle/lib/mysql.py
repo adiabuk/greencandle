@@ -5,9 +5,8 @@ Push/Pull crypto signals and data to mysql
 """
 import datetime
 import MySQLdb
-from greencandle.lib.binance import Binance
 from greencandle.lib import config
-from greencandle.lib.common import AttributeDict
+from greencandle.lib.common import AttributeDict, get_local_price
 from greencandle.lib.balance_common import get_base, get_quote
 from greencandle.lib.logger import get_logger, exception_catcher
 
@@ -328,9 +327,8 @@ class Mysql():
         """
         if self.test:
             return (1, 1)
-        client = Binance()
-        usd_rate = client.prices()[quote + 'USDT'] if quote != 'USDT' else 1
-        gbp_rate = float(usd_rate)/float(client.prices()['GBPUSDT'])
+        usd_rate = get_local_price(quote + 'USDT') if quote != 'USDT' else 1
+        gbp_rate = usd_rate / get_local_price('GBPUSDT')
         return (usd_rate, gbp_rate)
 
     @get_exceptions
