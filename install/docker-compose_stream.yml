@@ -1,7 +1,7 @@
 services:
-  stream-fe_1m:
+  stream-fe_binance:
     container_name: stream-fe_binance
-    hostname: stream-fe_1m
+    hostname: stream-fe_binance
     image: amrox/greencandle:${TAG}
     mem_limit: 200m
     pull_policy: always
@@ -29,7 +29,7 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
- stream-fe_1m:
+  stream-fe_1m:
     container_name: stream-fe_1m
     hostname: stream-fe_1m
     image: amrox/greencandle:${TAG}
