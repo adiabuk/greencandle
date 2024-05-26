@@ -4,7 +4,7 @@
 Fetch non-sensitive data from binance and provide via API endpoints
 """
 import logging
-from flask import Flask, request
+from flask import Flask, request, Response
 from apscheduler.schedulers.background import BackgroundScheduler
 from setproctitle import setproctitle
 from greencandle.lib import config
@@ -48,8 +48,11 @@ def get_exchange_info():
     """
     fetch exchange info from global var and return
     """
-    pair = request.args.get('pair')
-    return EXCHANGE_INFO[pair]
+    try:
+        pair = request.args.get('pair')
+        return EXCHANGE_INFO[pair]
+    except KeyError:
+        return Response(status=501)
 
 @arg_decorator
 def main():
