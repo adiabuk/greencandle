@@ -39,7 +39,7 @@ def main():
     """
     API for providing non-sensitive binance data fetched peridically
     """
-    setproctitle(f"{config.env.base_env}-stream_data-{INTERVAL}")
+    setproctitle(f"{config.main.base_env}-stream_binance")
     scheduler = BackgroundScheduler()
     scheduler.add_job(func=get_binance_info, trigger='interval', minutes=10)
     logging.basicConfig(level=logging.ERROR)
@@ -49,7 +49,6 @@ def main():
         log.setLevel(logging.ERROR)
         log.disabled = True
     APP.run(debug=False, host='0.0.0.0', port=5000, threaded=True)
-
 
 if __name__ == '__main__':
     main()
