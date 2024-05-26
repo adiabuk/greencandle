@@ -35,7 +35,7 @@ def respond():
         else:
             return Response(status=200)
 
-        LOGGER.info("Request received: %s", str(data))
+        LOGGER.debug("Request received: %s", str(data))
 
         try:
             max_usd_only_borrow = client.get_max_borrow(asset='USDT')

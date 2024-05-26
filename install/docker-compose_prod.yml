@@ -812,7 +812,7 @@ services:
         syslog-facility: local4
     environment:
       - intermittent="true"
-      - CONFIG_ENV=prod/be
+      - CONFIG_ENV=prod/be/loan
       - DB=true
     ports:
       - 20000
