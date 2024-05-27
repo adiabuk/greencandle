@@ -43,12 +43,12 @@ def check_last_hour():
         current = datetime.strptime(string, fmt).replace(datetime.now().year)
         last_hour_date_time = datetime.now() - timedelta(hours = 1)
 
-        if current > last_hour_date_time and 'CRITICAL' in line:
+        if current > last_hour_date_time and any(status in line for status in ['CRIT', 'ERR']):
             count += 1
-    if count > 200:
+    if count > 100:
         status = 2
         msg = "CRITICAL"
-    elif count > 100:
+    elif count > 50:
         status = 1
         msg = "WARNING"
     else:
@@ -58,8 +58,6 @@ def check_last_hour():
     send_nsca(status=status, host_name="jenkins1", service_name=f"critical_logs_{env}",
               text_output=f"{msg}: {count} critical entries in {env} logfile",
               remote_host='nagios.amrox.loc')
-
-    print(count)
 
 def watch_log():
     """
@@ -79,7 +77,6 @@ def watch_log():
                     name = f"unknown - {container_id}"
                 if name.startswith(env) or container_id.startswith(env):
                     send_slack_message("alerts", f"Unhandled exception found in {name} container")
-
 
 @arg_decorator
 def main():
