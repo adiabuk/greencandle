@@ -1,5 +1,4 @@
 {
   "pairs": "any",
-  "stop_loss_perc": "-1",
   "take_profit_perc": "4"
 }

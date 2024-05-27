@@ -377,7 +377,7 @@
       "is_secret": true
     },
     "stop_loss_perc": {
-      "value": "20",
+      "value": "-1",
       "is_binary": false,
       "is_secret": false
     },
