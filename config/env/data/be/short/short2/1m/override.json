@@ -1,5 +1,6 @@
 {
   "interval": "1m",
+  "api_forward": "1m-2",
   "name": "data-be-analyse-1m-short2",
   "open_rule1": "agg.candle_size/agg.avg_candles \u003e 2 and res[0].close \u003e res[0].open and agg.candle_size \u003e 1",
   "slack_active": "true",

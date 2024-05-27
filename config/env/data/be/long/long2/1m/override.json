@@ -3,5 +3,6 @@
   "name": "data-be-analyse-1m-long2",
   "open_rule1": "agg.candle_size/agg.avg_candles \u003e 2 and res[0].close \u003c res[0].open and agg.candle_size \u003e 1",
   "slack_active": "true",
+  "api_forward": "1m-2",
   "time_between_trades": "1h"
 }
