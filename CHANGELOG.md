@@ -1,5 +1,17 @@
 # Releases
 
+# 7.8
+* get stepsize and prices from local api to reduce time
+* create api to provide stepsize
+* allow building stream env using different versions
+* use traditional method if price value not in stream
+* add GBPUSDT pair to data env to allow for local currency conversion
+* reduce number of external api calls to get prices
+* add interval/direction to text payload from data env
+* cleanup route ordering - alert goes first
+* use match name in api req when forwarding trade
+* forward trades from touch strategy to alarm env
+
 # 7.7
 * Enable and fix some unit tests
 * better log filters for loan container
