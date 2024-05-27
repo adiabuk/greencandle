@@ -1,5 +1,10 @@
 # Releases
 
+# 7.8.1
+* fix typo in router config stag
+* check for error occurrences in logwatch
+* remove pair not available in stream
+
 # 7.8
 * get stepsize and prices from local api to reduce time
 * create api to provide stepsize
