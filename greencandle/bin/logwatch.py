@@ -36,7 +36,8 @@ def check_last_hour():
     """
     env = config.main.base_env
     logfile = open(f"/var/log/gc_{env}.log", 'r').readlines()
-    count = 0
+    err_count= 0
+    warn_count = 0
     for line in logfile:
         string = " ".join(line.split()[:3])
         fmt = "%b %d %H:%M:%S"
@@ -44,20 +45,25 @@ def check_last_hour():
         last_hour_date_time = datetime.now() - timedelta(hours = 1)
 
         if current > last_hour_date_time and any(status in line for status in ['CRIT', 'ERR']):
-            count += 1
-    if count > 100:
+            err_count += 1
+        if current > last_hour_date_time and "WARN" in line:
+            warn_count += 1
+
+    if err_count > 50:
         status = 2
         msg = "CRITICAL"
-    elif count > 50:
+        text = f'{msg} {err_count} ERROR/CRITICAL entries in {env} logfile'
+    elif warn_count > 50:
         status = 1
         msg = "WARNING"
+        text = f'{msg} {warn_count} WARN entries in {env} logfile'
     else:
         status = 0
         msg = "OK"
+        text = 'No major issues in {env} logfile'
 
     send_nsca(status=status, host_name="jenkins1", service_name=f"critical_logs_{env}",
-              text_output=f"{msg}: {count} critical entries in {env} logfile",
-              remote_host='nagios.amrox.loc')
+              text_output=text, remote_host='nagios.amrox.loc')
 
 def watch_log():
     """
