@@ -265,8 +265,8 @@ class ProdRunner():
                 continue
 
             if dbase.trade_in_context(pair, config.main.name, config.main.trade_direction):
-                redis.update_drawdown(pair, current_candle, open_time=open_time)
-                redis.update_drawup(pair, current_candle, open_time=open_time)
+                redis.update_drawdown(pair, current_candle)
+                redis.update_drawup(pair, current_candle)
                 result, event, current_time, current_price = redis.get_intermittent(pair,
                                                                                     open_price,
                                                                                     current_candle,

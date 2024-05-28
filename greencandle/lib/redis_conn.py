@@ -176,7 +176,7 @@ class Redis():
                                direction)
         key = f"{pair}:{func}:{short}"
         if 'perc' in func:
-            self.logger.info(f"Setting redis key {key} to {value}")
+            self.logger.info("Setting redis key %s to %s", key, value)
         redis1.conn.set(key, value)
         del redis1
 
@@ -225,7 +225,7 @@ class Redis():
         future_time = open_time + timedelta(minutes=TF2MIN[config.main.interval])
         return bool(future_time > current_time)
 
-    def update_drawdown(self, pair, current_candle, event=None, open_time=None):
+    def update_drawdown(self, pair, current_candle, event=None):
         """
         Update minimum price for current asset.  Create redis record if it doesn't exist.
         """
@@ -267,7 +267,7 @@ class Redis():
                 self.logger.debug("setting drawdown for short %s", pair)
                 self.__add_price(key, data)
 
-    def update_drawup(self, pair, current_candle, event=None, open_time=None):
+    def update_drawup(self, pair, current_candle, event=None):
         """
         Update maximum price for current asset.  Create redis record if it doesn't exist.
         """
