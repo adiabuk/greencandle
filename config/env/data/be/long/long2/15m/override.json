@@ -3,5 +3,5 @@
   "interval": "15m",
   "name": "data-be-analyse-15m-long2",
   "open_rule2": "agg.candle_size/agg.avg_candles \u003e 2 and res[0].close \u003c res[0].open and agg.candle_size \u003e 3",
-  "time_between_trades": "1h"
+  "time_between_trades": "15m"
 }
