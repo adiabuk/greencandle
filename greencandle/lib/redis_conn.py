@@ -679,10 +679,13 @@ class Redis():
                 if current_config:
                     try:
                         rules[rule].append(eval(current_config))
-                    except (TypeError, KeyError, ZeroDivisionError) as error:
+                    except (TypeError, KeyError) as error:
                         self.logger.warning("Unable to eval config rule for pair %s: %s_rule: %s "
                                             "%s mepoch: %s", pair, rule, current_config, error,
                                                                items[seq])
+                        continue
+                    except ZeroDivisionError:
+                        rules[rule].append(False)
                         continue
         if config.main.base_env == "data" and not bool('STORE_IN_DB' in os.environ):
             open_price = None
@@ -695,6 +698,7 @@ class Redis():
 
         winning_open = self.get_rules(rules, 'open')
         winning_close = self.get_rules(rules, 'close')
+
         reversal = eval(config.main.reversal_rule) if check_reversal else False
 
         if any(rules['open']) and not open_price:
@@ -814,11 +818,15 @@ class Redis():
                 if current_config:
                     try:
                         rules[rule].append(eval(current_config))
-                    except (TypeError, KeyError, ZeroDivisionError) as error:
+                    except (TypeError, KeyError) as error:
                         self.logger.warning("Unable to eval config rule for pair %s: %s_rule: %s "
                                             "%s mepoch: %s", pair, rule, current_config, error,
                                                                items[seq])
                         continue
+                    except ZeroDivisionError:
+                        rules[rule].append(False)
+                        continue
+
         close_timeout = False
         able_to_open = True
 
