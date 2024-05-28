@@ -52,15 +52,15 @@ def check_last_hour():
     if err_count > 50:
         status = 2
         msg = "CRITICAL"
-        text = f'{msg} {err_count} ERROR/CRITICAL entries in {env} logfile'
+        text = f'{msg}: {err_count} ERROR/CRITICAL entries in {env} logfile, warn: {warn_count}'
     elif warn_count > 50:
         status = 1
         msg = "WARNING"
-        text = f'{msg} {warn_count} WARN entries in {env} logfile'
+        text = f'{msg}: {warn_count} WARN entries in {env} logfile, err:crit: {err_count}'
     else:
         status = 0
         msg = "OK"
-        text = 'No major issues in {env} logfile'
+        text = f'{msg}: No major issues in {env} logfile, warn:{warn_count}, err/crit: {err_count}'
 
     send_nsca(status=status, host_name="jenkins1", service_name=f"critical_logs_{env}",
               text_output=text, remote_host='nagios.amrox.loc')
