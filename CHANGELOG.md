@@ -1,5 +1,15 @@
 # Releases
 
+# 7.8.2
+* small lint fixes
+* ignore divide by zero error when evaluating rule results
+* alert for increased warnings in log file
+* reduce wait time for big candle strategy to a single candle
+* out bigchange rule when outside bb
+* also check for error occurrences in log, and reduce threshold
+* no stop_loss globally in stag env
+* 1m big-change forward rule not in place
+
 # 7.8.1
 * fix typo in router config stag
 * check for error occurrences in logwatch
