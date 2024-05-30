@@ -1,5 +1,9 @@
 # Releases
 
+# 7.8.4
+* forward to correct stag interval
+* reduce warn logs on all api apps
+
 # 7.8.3
 * lower log urgency for certain types of eval errors
 * filter out pairs with recent empty candles
