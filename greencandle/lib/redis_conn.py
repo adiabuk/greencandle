@@ -679,13 +679,16 @@ class Redis():
                 if current_config:
                     try:
                         rules[rule].append(eval(current_config))
-                    except (TypeError, KeyError) as error:
+                    except KeyError as error:
                         self.logger.warning("Unable to eval config rule for pair %s: %s_rule: %s "
                                             "%s mepoch: %s", pair, rule, current_config, error,
                                                                items[seq])
                         continue
-                    except ZeroDivisionError:
+                    except (ZeroDivisionError, TypeError) as error:
                         rules[rule].append(False)
+                        self.logger.debug("Unable to eval config rule for pair %s: %s_rule: %s "
+                                          "%s mepoch: %s", pair, rule, current_config, error,
+                                          items[seq])
                         continue
         if config.main.base_env == "data" and not bool('STORE_IN_DB' in os.environ):
             open_price = None
