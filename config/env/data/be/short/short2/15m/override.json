@@ -2,6 +2,6 @@
   "api_forward": "15m-2",
   "interval": "15m",
   "name": "data-be-analyse-15m-short2",
-  "open_rule1": "agg.candle_size/agg.avg_candles \u003e 2 and res[0].close \u003e res[0].open and agg.candle_size \u003e 3",
+  "open_rule1": "agg.empty_count \u003c 1 and agg.candle_size/agg.avg_candles \u003e 2 and res[0].close \u003e res[0].open and agg.candle_size \u003e 3",
   "time_between_trades": "15m"
 }
