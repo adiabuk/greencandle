@@ -1,5 +1,10 @@
 # Releases
 
+# 7.8.3
+* lower log urgency for certain types of eval errors
+* filter out pairs with recent empty candles
+* fix nsca msg for logwatcher
+
 # 7.8.2
 * small lint fixes
 * ignore divide by zero error when evaluating rule results
