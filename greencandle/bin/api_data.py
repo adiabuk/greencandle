@@ -6,6 +6,7 @@ Flask module for manipulating API trades and displaying relevent graphs
 import atexit
 import time
 import glob
+import logging
 from collections import defaultdict
 from flask import Flask, request, Response
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -108,6 +109,7 @@ def main():
     scheduler.add_job(func=analyse_loop, trigger="interval",
                       seconds=int(config.main.check_interval))
     scheduler.start()
+    logging.basicConfig(level=logging.Error)
     APP.run(debug=False, host='0.0.0.0', port=6000, threaded=True)
 
     atexit.register(scheduler.shutdown)

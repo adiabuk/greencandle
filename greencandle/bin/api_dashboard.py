@@ -582,8 +582,8 @@ def main():
         scheduler.add_job(func=get_balance, trigger="interval", minutes=10)
         scheduler.add_job(func=get_live, trigger="interval", minutes=2)
         get_balance()
-        logging.basicConfig(level=logging.ERROR)
         scheduler.start() # Start Scheduler
+    logging.basicConfig(level=logging.ERROR)
     APP.run(debug=False, host='0.0.0.0', port=5000, threaded=True)
 
 if __name__ == '__main__':

@@ -4,7 +4,7 @@
 """
 Filesystem interface
 """
-
+import logging
 import browsepy
 from setproctitle import setproctitle
 from greencandle.lib.common import arg_decorator
@@ -21,6 +21,7 @@ def main():
     """
     Web UI for browsing /data dir
     """
+    logging.basicConfig(level=logging.ERROR)
     config.create_config()
     setproctitle(f"{config.main.base_env}-filesystem_api")
     browsepy.app.run(host='0.0.0.0', port=6000, debug=False, threaded=True)

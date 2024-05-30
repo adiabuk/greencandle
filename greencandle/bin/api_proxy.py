@@ -4,6 +4,7 @@
 """
 Flask based web proxy
 """
+import logging
 from flask import Flask, request, Response
 import requests
 from setproctitle import setproctitle
@@ -53,6 +54,7 @@ def main():
 
     config.create_config()
     setproctitle(f"{config.main.base_env}-api_proxy")
+    logging.basicConfig(level=logging.Error)
     APP.run(debug=False, host='0.0.0.0', port=5000)
 
 if __name__ == '__main__':

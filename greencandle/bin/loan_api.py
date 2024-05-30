@@ -4,6 +4,7 @@
 """
 API for tracking which pairs aren't tradable overtime
 """
+import logging
 from flask import Flask, request, Response
 from setproctitle import setproctitle
 from greencandle.lib import config
@@ -68,6 +69,7 @@ def main():
     fetching maximum loanable amount
     """
     setproctitle(f"{config.main.base_env}-amount_api")
+    logging.basicConfig(level=logging.ERROR)
     APP.run(debug=False, host='0.0.0.0', port=20000, threaded=True)
 
 if __name__ == "__main__":

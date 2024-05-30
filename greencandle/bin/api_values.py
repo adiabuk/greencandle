@@ -3,6 +3,7 @@
 """
 Flask module for getting indicator values
 """
+import logging
 from collections import defaultdict
 from flask import Flask, request, Response
 from greencandle.lib import config
@@ -44,7 +45,7 @@ def main():
     """
     API for determining getting values from various strategies and timeframes
     """
-
+    logging.basicConfig(level=logging.ERROR)
     APP.run(debug=False, host='0.0.0.0', port=6000, threaded=True)
 
 if __name__ == '__main__':

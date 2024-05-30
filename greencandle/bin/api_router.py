@@ -9,6 +9,7 @@ import sys
 import os
 import json
 from pathlib import Path
+import logging
 import requests
 from flask import Flask, request, Response
 from setproctitle import setproctitle
@@ -138,6 +139,7 @@ def main():
     """
 
     setproctitle(f"{config.main.base_env}-api_router")
+    logging.basicConfig(level=logging.ERROR)
     APP.run(debug=False, host='0.0.0.0', port=1080, threaded=True)
 if __name__ == "__main__":
     main()
