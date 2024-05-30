@@ -120,7 +120,7 @@
 "15m-6": ["test:any-15m-long-short"],
 "30m-6": ["test:any-30m-long-short"],
 "1m-10": ["alert", "stag:any-1m-long-short", "prod:any-1m-short", "prod:api-loan"],
-"5m-10": ["alert", "stag:any-1m-long-short", "prod:any-5m-short", "prod:api-loan"],
+"5m-10": ["alert", "stag:any-5m-long-short", "prod:any-5m-short", "prod:api-loan"],
 "1m-5":  ["test:any3-1m-long-short"],
 "5m-5":  ["test:any3-5m-long-short"],
 "15m-5": ["test:any3-15m-long-short"],
