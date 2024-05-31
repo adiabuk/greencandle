@@ -5,7 +5,7 @@
   "immediate_trailing_stop": "true",
   "interval": "1m",
   "max_trades": "60",
-  "name": "prod-be-api-any-man-cross",
+  "name": "stag-be-api-any-man-cross",
   "pairs": "any",
   "perc_at_timeout": "5",
   "stop_loss_perc": "5.5",
