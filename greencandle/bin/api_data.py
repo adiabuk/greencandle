@@ -109,7 +109,7 @@ def main():
     scheduler.add_job(func=analyse_loop, trigger="interval",
                       seconds=int(config.main.check_interval))
     scheduler.start()
-    logging.basicConfig(level=logging.Error)
+    logging.basicConfig(level=logging.ERROR)
     APP.run(debug=False, host='0.0.0.0', port=6000, threaded=True)
 
     atexit.register(scheduler.shutdown)

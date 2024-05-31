@@ -54,7 +54,7 @@ def main():
 
     config.create_config()
     setproctitle(f"{config.main.base_env}-api_proxy")
-    logging.basicConfig(level=logging.Error)
+    logging.basicConfig(level=logging.ERROR)
     APP.run(debug=False, host='0.0.0.0', port=5000)
 
 if __name__ == '__main__':
