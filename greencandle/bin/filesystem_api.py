@@ -21,9 +21,13 @@ def main():
     """
     Web UI for browsing /data dir
     """
-    logging.basicConfig(level=logging.ERROR)
     config.create_config()
     setproctitle(f"{config.main.base_env}-filesystem_api")
+    logging.basicConfig(level=logging.ERROR)
+    if float(config.main.logging_level) > 10:
+        log = logging.getLogger('werkzeug')
+        log.setLevel(logging.ERROR)
+        log.disabled = True
     browsepy.app.run(host='0.0.0.0', port=6000, debug=False, threaded=True)
 
 if __name__ == '__main__':

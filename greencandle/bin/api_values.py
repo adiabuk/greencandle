@@ -46,6 +46,10 @@ def main():
     API for determining getting values from various strategies and timeframes
     """
     logging.basicConfig(level=logging.ERROR)
+    if float(config.main.logging_level) > 10:
+        log = logging.getLogger('werkzeug')
+        log.setLevel(logging.ERROR)
+        log.disabled = True
     APP.run(debug=False, host='0.0.0.0', port=6000, threaded=True)
 
 if __name__ == '__main__':

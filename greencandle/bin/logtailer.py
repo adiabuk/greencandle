@@ -5,6 +5,7 @@ Flask module to provide web interface for tailing /var/log/greencandle.log
 
 import os
 import time
+import logging
 from flask import Flask, render_template
 from flask_login import LoginManager, login_required
 import sh
@@ -55,6 +56,12 @@ def stream():
 def main():
     """Web interface for current host gc logs"""
     setproctitle(f"{config.main.base_env}-logtailer")
+
+    logging.basicConfig(level=logging.ERROR)
+    if float(config.main.logging_level) > 10:
+        log = logging.getLogger('werkzeug')
+        log.setLevel(logging.ERROR)
+        log.disabled = True
     APP.run(debug=False, host='0.0.0.0', port=2000, threaded=True)
 
 if __name__ == '__main__':

@@ -78,7 +78,11 @@ def main():
             scheduler = BackgroundScheduler()
             scheduler.add_job(func=intermittent_check, trigger="interval", seconds=30)
             scheduler.start()
-            logging.basicConfig(level=logging.ERROR)
+        if float(config.main.logging_level) > 10:
+            log = logging.getLogger('werkzeug')
+            log.setLevel(logging.ERROR)
+            log.disabled = True
+        logging.basicConfig(level=logging.ERROR)
         APP.run(debug=False, host='0.0.0.0', port=20000, threaded=True)
     else:
         consume_queue()

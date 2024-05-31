@@ -584,6 +584,10 @@ def main():
         get_balance()
         scheduler.start() # Start Scheduler
     logging.basicConfig(level=logging.ERROR)
+    if float(config.main.logging_level) > 10:
+        log = logging.getLogger('werkzeug')
+        log.setLevel(logging.ERROR)
+        log.disabled = True
     APP.run(debug=False, host='0.0.0.0', port=5000, threaded=True)
 
 if __name__ == '__main__':

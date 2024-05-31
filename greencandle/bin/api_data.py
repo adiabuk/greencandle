@@ -110,6 +110,10 @@ def main():
                       seconds=int(config.main.check_interval))
     scheduler.start()
     logging.basicConfig(level=logging.ERROR)
+    if float(config.main.logging_level) > 10:
+        log = logging.getLogger('werkzeug')
+        log.setLevel(logging.ERROR)
+        log.disabled = True
     APP.run(debug=False, host='0.0.0.0', port=6000, threaded=True)
 
     atexit.register(scheduler.shutdown)
