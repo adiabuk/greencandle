@@ -39,7 +39,10 @@ class Binance():
         """Get latest prices for all symbols."""
         pair_str = f"?symbol={pair}" if pair else ""
         data = self.request("GET", f"/api/v3/ticker/price{pair_str}")
-        return {d["symbol"]: d["price"] for d in data}
+        if pair:
+            return {pair: data['price']}
+        else:
+            return {d["symbol"]: d["price"] for d in data}
 
     def tickers(self):
         """Get best price/qty on the order book for all symbols."""
