@@ -40,12 +40,7 @@ docker rm $all_fe $all_be || true
 
 $COMPOSE up -d $base
 $COMPOSE up -d $fe
-
-for container in $be; do
-  $COMPOSE up -d $container
-  sleep 1
-
-done
+$COMPOSE up -d $be
 
 export COMMIT=`docker exec ${env}-base-mysql  bash -c 'echo "$COMMIT_SHA"'`
 
