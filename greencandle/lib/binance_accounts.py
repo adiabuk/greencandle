@@ -23,11 +23,14 @@ def get_local_price(pair):
     """
 
     stream_req = requests.get(f"http://stream/1m/recent?pair={pair}", timeout=10)
+    if 'GBP' in pair:
+        client = binance_auth()
+        return float(client.prices(pair)[pair])
     try:
         price = float(stream_req.json()['close'])
     except ValueError:
         client = binance_auth()
-        price = float(client.prices()[pair])
+        price = float(client.prices(pair)[pair])
     return price
 
 def get_max_borrow(pair):

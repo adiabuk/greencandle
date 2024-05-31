@@ -35,9 +35,10 @@ class Binance():
         self.options = {"apiKey":api_key, "secret":secret}
         self.logger = get_logger(__name__)
 
-    def prices(self):
+    def prices(self, pair=None):
         """Get latest prices for all symbols."""
-        data = self.request("GET", "/api/v1/ticker/allPrices")
+        pair_str = f"?symbol={pair}" if pair else ""
+        data = self.request("GET", f"/api/v3/ticker/price{pair_str}")
         return {d["symbol"]: d["price"] for d in data}
 
     def tickers(self):
