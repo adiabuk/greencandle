@@ -44,7 +44,8 @@ def check_last_hour():
         current = datetime.strptime(string, fmt).replace(datetime.now().year)
         last_hour_date_time = datetime.now() - timedelta(hours = 1)
 
-        if current > last_hour_date_time and any(status in line for status in ['CRIT', 'ERR']):
+        if current > last_hour_date_time and any(status in line for status in ['CRIT', 'ERR',
+                                                                               'Traceback']):
             err_count += 1
         if current > last_hour_date_time and "WARN" in line:
             warn_count += 1
