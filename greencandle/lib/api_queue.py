@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-member,eval-used,broad-except,too-many-locals,too-many-statements,logging-fstring-interpolation,lost-exception
+#pylint: disable=no-member,eval-used,broad-except,too-many-locals,too-many-statements,logging-fstring-interpolation
 
 """
 Function for adding to redis queue
@@ -67,16 +67,17 @@ def add_to_queue(req, test=False):
     try:
         stream_req = requests.get(f'http://stream/{config.main.interval}/recent/pair={pair}',
                                   timeout=10)
-        current_candle = pandas.Series(stream_req.json)
+        current_candle = pandas.Series(stream_req.json())
     except requests.exceptions.RequestException:
         LOGGER.critical("Unable to get candle from stream, trying conventional method")
-        interval = "1m" if config.main.interval.endswith("s") else config.main.interval
-        klines = 60 if interval.endswith('s') or interval.endswith('m') else 5
-        dataframes = get_dataframes([pair], interval=interval, no_of_klines=klines)
-        current_candle = dataframes[pair].iloc[-1]
-    finally:
-        LOGGER.critical("Unable to get candle from binance, giving up")
-        return
+        try:
+            interval = "1m" if config.main.interval.endswith("s") else config.main.interval
+            klines = 60 if interval.endswith('s') or interval.endswith('m') else 5
+            dataframes = get_dataframes([pair], interval=interval, no_of_klines=klines)
+            current_candle = dataframes[pair].iloc[-1]
+        except IndexError:
+            LOGGER.critical("Unable to get candle from binance, giving up")
+            return
 
     if action_str == 'OPEN':
         if 'get_trend' in os.environ:
