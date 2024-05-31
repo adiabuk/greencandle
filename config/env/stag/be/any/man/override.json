@@ -1,0 +1,16 @@
+{
+  "drain_range": "00:00 - 00:00",
+  "immediate_stop": "true",
+  "immediate_take_profit": "true",
+  "immediate_trailing_stop": "true",
+  "interval": "1m",
+  "max_trades": "60",
+  "name": "prod-be-api-any-man-cross",
+  "pairs": "any",
+  "perc_at_timeout": "5",
+  "stop_loss_perc": "5.5",
+  "take_profit_perc": "20",
+  "time_in_trade": "10h",
+  "trailing_start": "10",
+  "trailing_stop_loss_perc": "1"
+}
