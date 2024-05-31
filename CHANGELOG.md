@@ -1,5 +1,9 @@
 # Releases
 
+# 7.8.6
+* match prod & stag container names
+* reduce werkzeug logs
+
 # 7.8.5
 * update deploy help string
 * no delay between be container deployments
