@@ -65,7 +65,7 @@ def add_to_queue(req, test=False):
     redis = Redis(db=2)
     dbase = Mysql(interval=config.main.interval)
     try:
-        stream_req = requests.get(f'http://stream/{config.main.interval}/recent/pair={pair}',
+        stream_req = requests.get(f'http://stream/{config.main.interval}/recent?pair={pair}',
                                   timeout=10)
         current_candle = pandas.Series(stream_req.json())
     except requests.exceptions.RequestException:
