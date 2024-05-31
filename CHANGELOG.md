@@ -1,5 +1,12 @@
 # Releases
 
+# 7.8.7
+* speed up fetching of rate pair for each trade action
+* use nested try block
+* try to get candle from stream first before trying conventional method
+* validate action var contents in json payload
+* use correct CONFIG_ENV and URL for stag env manual container
+
 # 7.8.6
 * match prod & stag container names
 * reduce werkzeug logs
