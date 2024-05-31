@@ -81,6 +81,11 @@ def respond():
     except KeyError:
         LOGGER.critical("invalid or missing strategy %s", str(payload))
         return Response(status=500)
+    if not any(valid in str(payload['action']).strip() for valid in ['0', '1', '-1',
+                                                                     'open', 'close']):
+        LOGGER.critical("Invalid action detected in payload %s", str(payload))
+        return Response(status=500)
+
 
     if payload["strategy"] == "route":
         Path(f'/var/run/router-{config.main.base_env}').touch()
