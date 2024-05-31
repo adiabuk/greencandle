@@ -11,7 +11,7 @@ do
 done
 
 if [[ -z $env ]]; then
-  echo "Usage $0 -e [stag|prod|per|test|data|dev] -v <version>"
+  echo "Usage $0 -e [stag|prod|per|test|data|dev|stream] -v <version>"
   exit 1
 elif [[ -z $version ]]; then
   version=$(python greencandle/version.py)
