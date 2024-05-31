@@ -1,5 +1,11 @@
 # Releases
 
+# 7.8.5
+* update deploy help string
+* no delay between be container deployments
+* look for number of uncaught exceptions in logwatcher
+* fix logging syntax
+
 # 7.8.4
 * forward to correct stag interval
 * reduce warn logs on all api apps
