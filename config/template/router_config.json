@@ -136,8 +136,9 @@
 
 "prod_extra_long": ["prod:any-man-long"],
 "prod_extra_short": ["prod:any-man-short"],
-"stag_extra_long": ["stag:any-1m-long"],
-"stag_extra_short": ["stag:any-1m-short"],
+"stag_extra_long": ["stag:any-man-long"],
+"stag_extra_short": ["stag:any-man-short"],
+
 
 "alert": ["alert"],
 "route": []
