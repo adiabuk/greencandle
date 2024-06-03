@@ -404,6 +404,7 @@ class Trade():
         if borrow_drain:
             return_dict['usd'] = 0
             return_dict['symbol'] = 0
+            self.logger.info("Will skip borrow for pair %s due to borrow drain", pair)
             return return_dict
 
         # Use 99% of amount determined by divisor
@@ -826,6 +827,8 @@ class Trade():
                 repay = borrowed if avail > borrowed else avail
                 repay_drain = Path('/var/local/drain/repay_drain').is_file()
                 if repay_drain:
+                    self.logger.info("Will skip repaying for pair %s due to repay drain",
+                                     pair)
                     repay = 0
 
                 if float(repay) > 0:
@@ -1128,6 +1131,8 @@ class Trade():
                 repay = borrowed if avail > borrowed else avail
                 repay_drain = Path('/var/local/drain/repay_drain').is_file()
                 if repay_drain:
+                    self.logger.info("Will skip repaying for pair %s due to repay drain",
+                                     pair)
                     repay = 0
 
                 if float(repay) > 0:
