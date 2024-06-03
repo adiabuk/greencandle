@@ -1,5 +1,9 @@
 # Releases
 
+# 7.8.8
+* match stag extras link to prod
+* log when skipping borrow or repay due to drain
+
 # 7.8.7
 * speed up fetching of rate pair for each trade action
 * use nested try block
