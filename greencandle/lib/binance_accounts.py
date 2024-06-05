@@ -79,8 +79,9 @@ def get_cross_margin_level():
 
     total_free = 0
     total_debt = 0
-    details = [item for item in client.get_cross_margin_details() if item['netAsset'] != 0]
-    for item in details['userAssets']:
+    details = [item for item in client.get_cross_margin_details()['userAssets']
+               if item['netAsset'] != '0']
+    for item in details:
         asset = item['asset']
         debt = float(item['borrowed']) + float(item['interest'])
         usd_debt = base2quote(debt, asset+'USDT') if 'USD' not in asset else debt
