@@ -1,5 +1,10 @@
 # Releases
 
+# 7.8.9
+* filter out margin details for loop speedup
+* extras forward rule to alert
+* re-enable trade forwards to test env
+
 # 7.8.8
 * match stag extras link to prod
 * log when skipping borrow or repay due to drain
