@@ -736,6 +736,7 @@ services:
       - CONFIG_ENV=data/be/short/short6/1m
       - DB=true
       - REDIS_FORWARD=8
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1m-short6 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -773,6 +774,7 @@ services:
       - CONFIG_ENV=data/be/long/long6/1m
       - DB=true
       - REDIS_FORWARD=8
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1m-long6 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -810,6 +812,7 @@ services:
       - CONFIG_ENV=data/be/short/short6/5m
       - DB=true
       - REDIS_FORWARD=8
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-5m-short6 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -847,6 +850,7 @@ services:
       - CONFIG_ENV=data/be/long/long6/5m
       - DB=true
       - REDIS_FORWARD=8
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-5m-long6 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -884,6 +888,7 @@ services:
       - CONFIG_ENV=data/be/long/long6/15m
       - DB=true
       - REDIS_FORWARD=8
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-15m-long6 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -921,6 +926,7 @@ services:
       - CONFIG_ENV=data/be/long/long6/30m
       - DB=true
       - REDIS_FORWARD=8
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-30m-long6 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -958,6 +964,7 @@ services:
       - CONFIG_ENV=data/be/short/short6/1h
       - STORE_IN_DB=True
       - REDIS_FORWARD=8
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1h-short6 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -995,6 +1002,7 @@ services:
       - CONFIG_ENV=data/be/long/long6/1h
       - STORE_IN_DB=True
       - REDIS_FORWARD=8
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1h-long6 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -1032,6 +1040,7 @@ services:
       - CONFIG_ENV=data/be/short/short6/4h
       - DB=true
       - REDIS_FORWARD=8
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-4h-short6 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -1069,6 +1078,7 @@ services:
       - CONFIG_ENV=data/be/long/long6/4h
       - DB=true
       - REDIS_FORWARD=8
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-4h-long6 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -2776,6 +2786,7 @@ services:
       - CHECK_REDIS_PAIR=5
       - DB=true
       - NSCA=True
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-15m-long4 2>&1 |grep . ||exit 1
       start_period: 15m
@@ -2814,6 +2825,7 @@ services:
       - CHECK_REDIS_PAIR=5
       - DB=true
       - NSCA=True
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-15m-short4 2>&1 |grep . ||exit 1
       start_period: 15m
@@ -2852,6 +2864,7 @@ services:
       - CHECK_REDIS_PAIR=5
       - DB=true
       - NSCA=True
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-30m-long4 2>&1 |grep . ||exit 1
       start_period: 30m
@@ -2890,6 +2903,7 @@ services:
       - DB=true
       - NSCA=True
       - CHECK_REDIS_PAIR=5
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-30m-short4 2>&1 |grep . ||exit 1
       start_period: 30m
@@ -3042,6 +3056,7 @@ services:
       - STORE_IN_DB=True
       - CHECK_REDIS_PAIR=5
       - NSCA=True
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1m-short4 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -3081,6 +3096,7 @@ services:
       - CHECK_REDIS_PAIR=5
       - STORE_IN_DB=True
       - NSCA=True
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1m-long4 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -3119,6 +3135,7 @@ services:
       - DB=true
       - STORE_IN_DB=True
       - CHECK_REDIS_PAIR=5
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-5m-short4 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -3157,6 +3174,7 @@ services:
       - DB=true
       - STORE_IN_DB=True
       - CHECK_REDIS_PAIR=5
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-5m-long4 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -3195,6 +3213,7 @@ services:
       - STORE_IN_DB=True
       - DB=true
       - CHECK_REDIS_PAIR=5
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1h-short4  2>&1 |grep . ||exit 1
       start_period: 1h
@@ -3233,6 +3252,7 @@ services:
       - STORE_IN_DB=True
       - DB=true
       - CHECK_REDIS_PAIR=5
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1h-long4  2>&1 |grep . ||exit 1
       start_period: 1h
@@ -3271,6 +3291,7 @@ services:
       - DB=true
       - STORE_IN_DB=True
       - CHECK_REDIS_PAIR=5
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-4h-short4  2>&1 |grep . ||exit 1
       start_period: 1h
@@ -3309,6 +3330,7 @@ services:
       - DB=true
       - CHECK_REDIS_PAIR=5
       - STORE_IN_DB=True
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-4h-long4  2>&1 |grep . ||exit 1
       start_period: 1h
@@ -3348,6 +3370,7 @@ services:
       - CHECK_REDIS_PAIR=8
       - NSCA=True
       - STORE_IN_DB=True
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1m-short5  2>&1 |grep . ||exit 1
       start_period: 1h
@@ -3386,6 +3409,7 @@ services:
       - DB=true
       - CHECK_REDIS_PAIR=8
       - NSCA=True
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1m-long5  2>&1 |grep . ||exit 1
       start_period: 1h
@@ -3424,6 +3448,7 @@ services:
       - DB=true
       - CHECK_REDIS_PAIR=8
       - STORE_IN_DB=True
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1m-short5  2>&1 |grep . ||exit 1
       start_period: 1h
@@ -3498,6 +3523,7 @@ services:
       - CONFIG_ENV=data/be/long/long5/15m
       - DB=true
       - CHECK_REDIS_PAIR=8
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-15m-long5  2>&1 |grep . ||exit 1
       start_period: 1h
@@ -3535,6 +3561,7 @@ services:
       - CONFIG_ENV=data/be/long/long5/30m
       - DB=true
       - CHECK_REDIS_PAIR=8
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-30m-long5  2>&1 |grep . ||exit 1
       start_period: 1h
@@ -3573,6 +3600,7 @@ services:
       - DB=true
       - CHECK_REDIS_PAIR=8
       - STORE_IN_DB=True
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-15m-short5  2>&1 |grep . ||exit 1
       start_period: 15m
@@ -3611,6 +3639,7 @@ services:
       - DB=true
       - CHECK_REDIS_PAIR=8
       - STORE_IN_DB=True
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-30m-short5  2>&1 |grep . ||exit 1
       start_period: 30m
@@ -3649,6 +3678,7 @@ services:
       - DB=true
       - CHECK_REDIS_PAIR=8
       - STORE_IN_DB=True
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1h-short5  2>&1 |grep . ||exit 1
       start_period: 1h
@@ -3686,6 +3716,7 @@ services:
       - CONFIG_ENV=data/be/long/long5/1h
       - DB=true
       - CHECK_REDIS_PAIR=8
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1h-long5  2>&1 |grep . ||exit 1
       start_period: 1h
@@ -3724,6 +3755,7 @@ services:
       - DB=true
       - CHECK_REDIS_PAIR=8
       - STORE_IN_DB=True
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-4h-short5  2>&1 |grep . ||exit 1
       start_period: 1h
@@ -3761,6 +3793,7 @@ services:
       - CONFIG_ENV=data/be/long/long5/4h
       - DB=true
       - CHECK_REDIS_PAIR=8
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-4h-long5  2>&1 |grep . ||exit 1
       start_period: 1h
