@@ -79,7 +79,7 @@ def get_cross_margin_level():
 
     total_free = 0
     total_debt = 0
-    details = client.get_cross_margin_details()
+    details = [item for item in client.get_cross_margin_details() if item['netAsset'] != 0]
     for item in details['userAssets']:
         asset = item['asset']
         debt = float(item['borrowed']) + float(item['interest'])
