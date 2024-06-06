@@ -235,7 +235,7 @@ class ProdRunner():
         redis = Redis()
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
 
-        for trade in dbase.get_trades():
+        for trade in dbase.get_trades(config.main.trade_direction):
             closes = []
             drawdowns = {}
             drawups = {}
@@ -264,34 +264,33 @@ class ProdRunner():
                 # using values from previous loop
                 continue
 
-            if dbase.trade_in_context(pair, config.main.name, config.main.trade_direction):
-                redis.update_drawdown(pair, current_candle)
-                redis.update_drawup(pair, current_candle)
-                result, event, current_time, current_price = redis.get_intermittent(pair,
-                                                                                    open_price,
-                                                                                    current_candle,
-                                                                                    open_time)
+            redis.update_drawdown(pair, current_candle)
+            redis.update_drawup(pair, current_candle)
+            result, event, current_time, current_price = redis.get_intermittent(pair,
+                                                                                open_price,
+                                                                                current_candle,
+                                                                                open_time)
 
-                LOGGER.debug("%s int check result: %s Open:%s Current:%s Time:%s",
-                             pair, result, open_price, current_price, current_time)
-                if result == "CLOSE":
-                    LOGGER.debug("Items to close")
-                    closes.append((pair, current_time, current_price, event, 0, None))
-                    drawdowns[pair] = redis.get_drawdown(pair)['perc']
-                    drawups[pair] = redis.get_drawup(pair)['perc']
-                    if alert:
-                        payload = {"pair":pair, "strategy":"alert", "host": "alert",
-                                   "text": "Closing API trade according to TP/SL rules",
-                                   "action":"close"}
-                        url = f"http://router:1080/{config.web.api_token}"
-                        try:
-                            requests.post(url, json=payload, timeout=1)
-                        except Exception:
-                            pass
+            LOGGER.debug("%s int check result: %s Open:%s Current:%s Time:%s",
+                         pair, result, open_price, current_price, current_time)
+            if result == "CLOSE":
+                LOGGER.debug("Items to close")
+                closes.append((pair, current_time, current_price, event, 0, None))
+                drawdowns[pair] = redis.get_drawdown(pair)['perc']
+                drawups[pair] = redis.get_drawup(pair)['perc']
+                if alert:
+                    payload = {"pair":pair, "strategy":"alert", "host": "alert",
+                               "text": "Closing API trade according to TP/SL rules",
+                               "action":"close"}
+                    url = f"http://router:1080/{config.web.api_token}"
+                    try:
+                        requests.post(url, json=payload, timeout=1)
+                    except Exception:
+                        pass
 
-                    trade = Trade(interval=interval, test_trade=test,
-                                  test_data=False, config=config)
-                    trade.close_trade(closes, drawdowns=drawdowns, drawups=drawups)
+                trade = Trade(interval=interval, test_trade=test,
+                              test_data=False, config=config)
+                trade.close_trade(closes, drawdowns=drawdowns, drawups=drawups)
 
         del redis
         del dbase
