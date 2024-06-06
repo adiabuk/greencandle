@@ -1,5 +1,9 @@
 # Releases
 
+# 7.8.10
+* increase interval between intermittent checks in backend
+* fix dict key in margin details
+
 # 7.8.9
 * filter out margin details for loop speedup
 * extras forward rule to alert
