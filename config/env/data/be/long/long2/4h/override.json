@@ -1,5 +1,6 @@
 {
-  "name": "data-be-analyse-4h-long2",
   "interval": "4h",
+  "name": "data-be-analyse-4h-long2",
+  "open_rule1": "",
   "time_between_trades": "4h"
 }
