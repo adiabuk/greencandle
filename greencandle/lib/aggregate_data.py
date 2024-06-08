@@ -294,7 +294,7 @@ def aggregate_data(key, pairs, interval, data, items):
             candle_size = get_candle_size(res)
             stoch_flat = get_stoch_flat(res, last_res)
             bb_size = get_bb_size(res)
-            macd_xover = get_macd_xover(res, last_res, '19')
+            macd_xover = get_macd_xover(last_res, third_res,'19')
             macd_diff = get_macd_diff(res, '19')
             bbperc_diff = get_bbperc_diff(res, last_res)[-1]
             stx_diff = get_stx_diff(last_res, third_res)
