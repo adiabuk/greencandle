@@ -1,5 +1,12 @@
 # Releases
 
+# 7.9
+* remove old big-change rule
+* check STOCHRSI, after RSI as confirmation
+* forward more trades to api-loan and alerts
+* fix tp perc for test 1m
+* check context outside loop to speed up intermittent checks
+
 # 7.8.10
 * increase interval between intermittent checks in backend
 * fix dict key in margin details
