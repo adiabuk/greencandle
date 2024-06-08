@@ -125,7 +125,7 @@ def get_match_name(matches):
                    ['big_change', 'big_change_outside'],
                    ['distance', 'bb', "bbperc_diff", "bbperc_extreme"],
                    ['bb_confirm'],
-                   ['MACD_slowdown'],
+                   ['STOCHRSI_check'],
                    ['rsi'],
                    ['trend_confirm'],
                    ['trend_50'],
