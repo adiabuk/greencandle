@@ -33,10 +33,11 @@ def respond():
         elif int(data['action']) == 1:
             asset = get_quote(data['pair'].upper())
             direction = "long"
-        else:
-            return Response(status=200)
 
         LOGGER.debug("Request received: %s", str(data))
+        if not direction == 'short':
+            LOGGER.debug("Skipping non-short trade")
+            return Response(status=200)
 
         try:
             max_usd_only_borrow = client.get_max_borrow(asset='USDT')
