@@ -131,9 +131,6 @@
 "15m-5": ["test:any3-15m-long-short"],
 "30m-5": ["test:any3-30m-long-short"],
 
-"1m-2": ["alert", "prod:api-loan"],
-"5m-2": ["alert", "prod:api-loan"],
-
 "prod_extra_long": ["prod:any-man-long"],
 "prod_extra_short": ["prod:any-man-short"],
 "stag_extra_long": ["stag:any-man-long"],
