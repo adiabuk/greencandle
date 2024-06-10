@@ -12,5 +12,6 @@
   "take_profit_perc": "20",
   "time_in_trade": "10h",
   "trailing_start": "10",
-  "trailing_stop_loss_perc": "1"
+  "trailing_stop_loss_perc": "1",
+  "logging_level": "10"
 }
