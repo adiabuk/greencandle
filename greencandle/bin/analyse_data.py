@@ -13,9 +13,9 @@ import sys
 from datetime import datetime
 from pathlib import Path
 import requests
-from setproctitle import setproctitle
-from str2bool import str2bool
 from send_nsca3 import send_nsca
+from str2bool import str2bool
+from setproctitle import setproctitle
 from greencandle.lib import config
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.mysql import Mysql
@@ -121,8 +121,8 @@ def get_match_name(matches):
     except ValueError:
         container_num = 1
 
-    name_lookup = [['trend_200', 'golden_cross', 'over_ma'],
-                   ['big_change_outside', 'ema_trend'],
+    name_lookup = [['trend_200', 'golden_cross', 'over_ma', 'big_change_outside'],
+                   ['ema_trend'],
                    ['distance', 'bb', "bbperc_diff", "bbperc_extreme"],
                    ['bb_confirm'],
                    ['STOCHRSI_check'],
