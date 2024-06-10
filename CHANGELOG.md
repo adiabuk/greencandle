@@ -1,5 +1,11 @@
 # Releases
 
+# 7.9.1
+* increase verbosity for prod man strat containers
+* skip non-short trade in loan api
+* add 5EMA ribbon rule to data env
+* get macd xover 1 timeframe back
+
 # 7.9
 * remove old big-change rule
 * check STOCHRSI, after RSI as confirmation
