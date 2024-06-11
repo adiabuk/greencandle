@@ -123,7 +123,7 @@
 "any-long-short": ["forward"],
 
 "1m-4": ["alert", "test:any2-1m-long-short", "prod:any-1m-long-short", "stag:any2-1m-long-short"],
-"5m-4": ["alert", "test:any2-5m-long-short", "prod:any-1m-long-short", "stag:any2-1m-long-short"],
+"5m-4": ["alert", "test:any2-5m-long-short", "prod:any-5m-long-short", "stag:any2-5m-long-short"],
 "15m-4": ["test:any2-15m-long-short"],
 "30m-4": ["test:any2-30m-long-short"],
 "1h-4": ["test:any2-1h-long-short"],
