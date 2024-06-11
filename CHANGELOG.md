@@ -1,5 +1,13 @@
 # Releases
 
+# 7.10.1
+* allow stag manual container to retrieve data from redis data env
+* fix ema close_rule
+* allow close_all script to filter by direction
+* add /var/local volume to all manual containers to have drain visibility
+* forward trades to new stag containers
+* tweak test env tp
+
 # 7.10
 * New EMA ribbon rules long/short - 1m to 4h
 * forward to test, prod, and alarm envs
