@@ -1,5 +1,11 @@
 # Releases
 
+# 7.10
+* New EMA ribbon rules long/short - 1m to 4h
+* forward to test, prod, and alarm envs
+* Tweak and enable close rules for violating EMA200
+* cleanup dupe router rules
+
 # 7.9.1
 * increase verbosity for prod man strat containers
 * skip non-short trade in loan api
