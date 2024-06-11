@@ -4,7 +4,6 @@
   "close_rule3": "res[0].low \u003c res[0].EMA_55",
   "divisor": "3",
   "indicators": "get_moving_averages;EMA;2 get_moving_averages;EMA;69 get_moving_averages;EMA;8 get_moving_averages;EMA;13 get_moving_averages;EMA;21 get_moving_averages;EMA;55 get_moving_averages;EMA;100 get_moving_averages;EMA;20 get_tsi;tsi;25 get_tsi;signal;25 get_pivot;pivot;1",
-  "logging_level": "20",
   "max_trades": "1000",
   "name": "test-api",
   "open_rule1": "res[0].EMA_2 \u003e res[0].EMA_69 and res[1].EMA_2 \u003c res[1].EMA_69",
