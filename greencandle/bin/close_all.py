@@ -18,6 +18,7 @@ def main():
     """
     parser = argparse.ArgumentParser("Close trades in scope")
     parser.add_argument("-f", "--name_filter", required=False, default="")
+    parser.add_argument("-d", "--direction_filter", required=False, default="")
     parser.add_argument("-t", "--threshold", required=False, default=0.3)
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
@@ -26,7 +27,8 @@ def main():
     env = config.main.base_env
     url = f"http://router:1080/{config.web.api_token}"
     dbase = Mysql()
-    open_trades = dbase.get_open_trades(name_filter=args.name_filter)
+    open_trades = dbase.get_open_trades(name_filter=args.name_filter,
+                                        direction_filter=args.direction_filter)
     stream_req = requests.get('http://stream/1m/all', timeout=10)
     prices = stream_req.json()
 

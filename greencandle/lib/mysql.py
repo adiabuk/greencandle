@@ -199,12 +199,13 @@ class Mysql():
 
         return result
 
-    def get_open_trades(self, name_filter=""):
+    def get_open_trades(self, name_filter="", direction_filter=""):
         """
         get_details of open trades
         """
         query = (f"select open_time, `interval`, pair, name, open_price, direction, quote_in from "
-                 f"trades where close_price is null and name like '%{name_filter}%';")
+                 f"trades where close_price is null and name like '%{name_filter}%' and "
+                 f"`direction` like '%{direction_filter}%';")
         raw = self.fetch_sql_data(query, header=False)
 
         return raw if raw else []
