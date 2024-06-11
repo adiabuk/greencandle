@@ -443,6 +443,7 @@ services:
       - /root/.bash_history:/root/.bash_history
       - /root/.bashrc:/root/.bashrc
       - /root/.ipython:/root/.ipython
+      - /var/local:/var/local
 
   data-fe-cron:
     container_name: data-fe-cron

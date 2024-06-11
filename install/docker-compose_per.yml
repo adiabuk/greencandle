@@ -135,6 +135,7 @@ services:
       - /root/.bash_history:/root/.bash_history
       - /root/.bashrc:/root/.bashrc
       - /root/.ipython:/root/.ipython
+      - /var/local:/var/local
 
   per-fe-cron:
     container_name: per-fe-cron
