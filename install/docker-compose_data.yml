@@ -2189,6 +2189,7 @@ services:
       - CONFIG_ENV=data/be/short/short2/1m
       - DB=true
       - NSCA=True
+      - STORE_IN_DB=True
       - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1m-short2 2>&1 |grep . ||exit 1
@@ -2226,6 +2227,7 @@ services:
     environment:
       - CONFIG_ENV=data/be/short/short2/5m
       - DB=true
+      - STORE_IN_DB=True
       - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-5m-short2 2>&1 |grep . ||exit 1
@@ -2263,6 +2265,8 @@ services:
     environment:
       - CONFIG_ENV=data/be/short/short2/15m
       - DB=true
+      - STORE_IN_DB=True
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-15m-short2 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -2299,6 +2303,8 @@ services:
     environment:
       - CONFIG_ENV=data/be/short/short2/30m
       - DB=true
+      - STORE_IN_DB=True
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-30m-short2 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -2335,6 +2341,8 @@ services:
     environment:
       - CONFIG_ENV=data/be/short/short2/1h
       - DB=true
+      - STORE_IN_DB=True
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1h-short2 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -2371,6 +2379,8 @@ services:
     environment:
       - CONFIG_ENV=data/be/short/short2/4h
       - DB=true
+      - STORE_IN_DB=True
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-4h-short2 2>&1 |grep . ||exit 1
       start_period: 4h
@@ -2409,6 +2419,7 @@ services:
       - DB=true
       - NSCA=True
       - ROUTER_FORWARD=true
+      - STORE_IN_DB=True
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1m-long2 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -2446,6 +2457,7 @@ services:
       - CONFIG_ENV=data/be/long/long2/5m
       - DB=true
       - ROUTER_FORWARD=true
+      - STORE_IN_DB=True
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-5m-long2 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -2482,6 +2494,8 @@ services:
     environment:
       - CONFIG_ENV=data/be/long/long2/15m
       - DB=true
+      - ROUTER_FORWARD=true
+      - STORE_IN_DB=True
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-15m-long2 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -2518,6 +2532,8 @@ services:
     environment:
       - CONFIG_ENV=data/be/long/long2/30m
       - DB=true
+      - STORE_IN_DB=True
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-30m-long2 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -2554,6 +2570,8 @@ services:
     environment:
       - CONFIG_ENV=data/be/long/long2/1h
       - DB=true
+      - STORE_IN_DB=True
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1h-long2 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -2590,6 +2608,8 @@ services:
     environment:
       - CONFIG_ENV=data/be/long/long2/4h
       - DB=true
+      - STORE_IN_DB=True
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-4h-long2 2>&1 |grep . ||exit 1
       start_period: 4h
