@@ -125,7 +125,7 @@ class Trade():
         good_pairs = str2bool(self.config.main.good_pairs)
 
         if self.is_in_drain() and not self.test_data:
-            self.logger.warning("strategy is in drain for pair %s, skipping...", items_list)
+            self.logger.info("strategy is in drain for pair %s, skipping...", items_list)
             return []
 
         for item in items_list:
