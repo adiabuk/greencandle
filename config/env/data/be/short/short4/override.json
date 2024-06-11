@@ -1,4 +1,4 @@
 {
-  "close_rule1": "res[0].MACD_19[2] \u003e 0 and res[1].MACD_19[2] \u003e 0",
-  "open_rule1": "res[0].MACD_19[2] \u003c 0 and res[1].MACD_19[2] \u003c 0"
+  "close_rule1": "res[0].MACD_19[0] \u003e res[0].MACD_19[1]",
+  "open_rule1": "res[0].MACD_19[0] \u003c res[0].MACD_19[1]"
 }

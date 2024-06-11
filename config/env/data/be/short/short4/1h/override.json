@@ -1,9 +1,7 @@
 {
   "api_forward": "1h-4",
-  "close_rule1": "int(res[0].STOCHRSI_8[0]) \u003e int(res[0].STOCHRSI_8[1])",
   "interval": "1h",
   "name": "data-be-analyse-1h-short4",
-  "open_rule1": "int(res[0].STOCHRSI_8[1]) \u003e int(res[0].STOCHRSI_8[0])",
   "redis_expiry_seconds": "40000",
   "time_between_trades": "3h"
 }
