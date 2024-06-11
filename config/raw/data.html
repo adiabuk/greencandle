@@ -74,7 +74,11 @@
   </body>
   <script type="text/javascript">
     $('#proxies').DataTable( {
-	    "aaSorting": [[ {{ order_column }} ,'desc']]
+	    "aaSorting": [[ {{ order_column }} ,'desc']],
+      lengthMenu: [
+        [-1, 10, 25, 50],
+        ['All', 10, 25, 50]
+        ]
     } );
   </script>
 
