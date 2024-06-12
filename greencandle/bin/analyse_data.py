@@ -236,11 +236,11 @@ def analyse_pair(pair, reversal, expire, redis):
                     requests.post(url, json.dumps(payload), timeout=10,
                                   headers={'Content-Type': 'application/json'})
                     LOGGER.info("forwarding %s %s/%s trade to: %s match:%s",
-                                pair, INTERVAL, DIRECTION,
-                                forward_strategy, match_strs)
+                                pair, INTERVAL, DIRECTION, forward_strategy, match_strs)
 
                 except requests.exceptions.RequestException:
-                    pass
+                    LOGGER.warning("Unable to forward trade %s %s/%s trade to: %s match:%s",
+                                    pair, INTERVAL, DIRECTION, forward_strategy, match_strs)
 
             if REDIS_FORWARD:
                 for forward_db in REDIS_FORWARD:
