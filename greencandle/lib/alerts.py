@@ -72,6 +72,11 @@ def send_slack_trade(**kwargs):
     """
     Send trade notification in slack
     """
+
+    if not str2bool(config.slack.slack_active) or \
+    Path(f'/var/local/drain/drain_{config.main.base_env}_slack').is_file():
+        return
+
     valid_keys = ["channel", "event", "pair", "action", "price", "perc", "usd_profit", "quote",
                   "open_time", "close_time", "drawup", "drawdown"]
     kwargs = AttributeDict(kwargs)
