@@ -892,7 +892,7 @@ class Trade():
         Get item details and attempt to open margin short trade according to config
         Returns True|False
         """
-        self.logger.info("We have %s potential items to open short", len(short_list))
+        self.logger.info("We need to open margin short %s", short_list)
         dbase = Mysql(test=self.test_data, interval=self.interval)
 
         for pair, current_time, current_price, event, _, max_usd in short_list:
