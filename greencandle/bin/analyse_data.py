@@ -154,9 +154,10 @@ def analyse_pair(pair, reversal, expire, redis):
 
     LOGGER.debug("analysing pair: %s", pair)
     try:
-        result, _, current_time, current_price, match = \
-                redis.get_rule_action(pair=pair, interval=INTERVAL)
+        output = redis.get_rule_action(pair=pair, interval=INTERVAL)
+        result, _, current_time, current_price, match = output
         event = reversal
+        LOGGER.debug("analysis result for %s is %s", pair, str(output))
 
         if result in ('OPEN', 'CLOSE'):
             LOGGER.debug("trades to %s for pair %s", result.lower(), pair)
