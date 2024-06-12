@@ -480,7 +480,7 @@ class Trade():
         Get item details and attempt to trade according to config
         Returns True|False
         """
-        self.logger.info("We have %s potential items to long", len(long_list))
+        self.logger.info("We need to open margin long %s", long_list)
 
         dbase = Mysql(test=self.test_data, interval=self.interval)
 
@@ -622,7 +622,7 @@ class Trade():
         Get item details and attempt to trade according to config
         Returns True|False
         """
-        self.logger.info("We have %s potential items to open spot long", len(buy_list))
+        self.logger.info("We need to open spot long %s", buy_list)
 
         dbase = Mysql(test=self.test_data, interval=self.interval)
 
