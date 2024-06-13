@@ -49,7 +49,8 @@ if [[ ! -f /installed ]]; then
 
 
   elif [[ "$HOSTNAME" == *"manual"* ]]; then
-    pip install ipython
+    apt update; apt install less screen; pip install ipython
+
   elif [[ "$HOSTNAME" == *"unit"* ]]; then
     echo "mysql mysql-unit" > /etc/host.aliases
     echo "redis redis-unit" >> /etc/host.aliases
