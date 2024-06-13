@@ -2378,8 +2378,8 @@ services:
       - REDIS_FORWARD=5
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-4h-short2 2>&1 |grep . ||exit 1
-      start_period: 4h
-      interval: 4h
+      start_period: 1h
+      interval: 1h
       timeout: 10s
       retries: 5
     volumes:
@@ -2415,8 +2415,8 @@ services:
       - REDIS_FORWARD=5
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-12h-short2 2>&1 |grep . ||exit 1
-      start_period: 12h
-      interval: 12h
+      start_period: 1h
+      interval: 1h
       timeout: 10s
       retries: 5
     volumes:
@@ -2452,8 +2452,8 @@ services:
       - REDIS_FORWARD=5
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1d-short2 2>&1 |grep . ||exit 1
-      start_period: 1d
-      interval: 1d
+      start_period: 1h
+      interval: 1h
       timeout: 10s
       retries: 5
     volumes:
@@ -2675,8 +2675,8 @@ services:
       - REDIS_FORWARD=5
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-4h-long2 2>&1 |grep . ||exit 1
-      start_period: 4h
-      interval: 4h
+      start_period: 1h
+      interval: 1h
       timeout: 10s
       retries: 5
     volumes:
@@ -2712,8 +2712,8 @@ services:
       - REDIS_FORWARD=5
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-12h-long2 2>&1 |grep . ||exit 1
-      start_period: 12h
-      interval: 12h
+      start_period: 1h
+      interval: 1h
       timeout: 10s
       retries: 5
     volumes:
@@ -2749,8 +2749,8 @@ services:
       - REDIS_FORWARD=5
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1d-long2 2>&1 |grep . ||exit 1
-      start_period: 1d
-      interval: 1d
+      start_period: 1h
+      interval: 1h
       timeout: 10s
       retries: 5
     volumes:
