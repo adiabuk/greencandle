@@ -72,15 +72,17 @@ Redis output: EMA value, float
 
 <MA> can be MA|SMA|EMA|WMA
 
-
+## RSI
+VERIFIED to be equal to tradingview
+get_RSI;RSI;14
+<function>;<string><RSI length>
+Usage: res[0].RSI_14[0]
+Redis output: RSI value, float
 
 ## pivot
 to be verified
 
 ## TSI
-to be verified
-
-## RSI
 to be verified
 
 ## envelope
