@@ -1,5 +1,23 @@
 # Releases
 
+# 7.11
+* update docs for verified RSI indicator
+* use trailing stop loss and increase take_profit - stag env
+* filter out overbought/oversold pairs when entering EMA ribbon trade and confirmation
+* fix incorrect intervals in stag
+* allow slack drain to also inhibit slack trade notifs
+* disable wait between trades for confirmation container
+* output result of analysis to log in debug
+* unified logging msg for open/close methods
+* close trade when ema ribbon broken
+* log when unable to forward trade to data router
+* fix forwarding rules
+* ensure we are still in trend when confirming
+* display all entries on dashboard spreadsheet by default
+* debug logging for all test env
+* confirmation check after ema ribbon trigger
+* reduce verbosity of drain warning
+
 # 7.10.1
 * allow stag manual container to retrieve data from redis data env
 * fix ema close_rule
