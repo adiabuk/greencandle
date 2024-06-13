@@ -49,7 +49,7 @@ if [[ ! -f /installed ]]; then
 
 
   elif [[ "$HOSTNAME" == *"manual"* ]]; then
-    apt update; apt install less screen; pip install ipython
+    apt update; apt -y install less screen; pip install ipython
 
   elif [[ "$HOSTNAME" == *"unit"* ]]; then
     echo "mysql mysql-unit" > /etc/host.aliases
