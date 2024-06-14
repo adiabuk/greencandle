@@ -3,5 +3,5 @@
   "interval": "1m",
   "name": "data-be-analyse-1m-short2",
   "slack_active": "true",
-  "time_between_trades": "1m"
+  "time_between_trades": "1h"
 }
