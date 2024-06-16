@@ -1,5 +1,17 @@
 # Releases
 
+# 7.11.1
+* send open trade issues to nagios
+* remove prod from data routing
+* loan anomaly script should calculate new USD value of each loan
+* port config in dev env
+* remove new non-trading pair
+* simplify & reduce fire rate ribbon trades as often
+* increase mem limit for data logwatch
+* decrease EMA55 to EMA 34
+* add upper timeframe ema ribbon containers
+* add a couple of pkgs to manual containers
+
 # 7.11
 * update docs for verified RSI indicator
 * use trailing stop loss and increase take_profit - stag env
