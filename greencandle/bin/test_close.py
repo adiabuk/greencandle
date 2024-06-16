@@ -4,6 +4,7 @@
 Check current open trades for ability to close
 """
 import sys
+from send_nsca3 import send_nsca
 from str2bool import str2bool
 from greencandle.lib.mysql import Mysql
 from greencandle.lib import config
@@ -91,9 +92,17 @@ def main():
 
     str_pairs = '\n'.join(map(str, pairs))
     if str_pairs:
-        send_slack_message("alerts", f"Issues with open trades:\n {str_pairs}",
+        status=1
+        text_output = "Issue with open_trades:\n{str_pairs}"
+        send_slack_message("alerts", text_output,
                            name=sys.argv[0].rsplit('/', maxsplit=1)[-1])
-        print(f"Issue with open_trades:\n{str_pairs}")
+    else:
+        status=0
+        text_output = "No issues with open trades"
+
+    print(text_output)
+    send_nsca(status=status, host_name='jenkins1', service_name='open_trades',
+              text_output=text_output, remote_host='nagios.amrox.loc')
 
 if __name__ == '__main__':
     main()
