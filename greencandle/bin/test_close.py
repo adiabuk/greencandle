@@ -93,7 +93,7 @@ def main():
     str_pairs = '\n'.join(map(str, pairs))
     if str_pairs:
         status=1
-        text_output = "Issue with open_trades:\n{str_pairs}"
+        text_output = f"Issue with open_trades:\n{str_pairs}"
         send_slack_message("alerts", text_output,
                            name=sys.argv[0].rsplit('/', maxsplit=1)[-1])
     else:
@@ -102,7 +102,7 @@ def main():
 
     print(text_output)
     send_nsca(status=status, host_name='jenkins1', service_name='open_trades',
-              text_output=text_output, remote_host='nagios.amrox.loc')
+              text_output=text_output.replace('\n',' '), remote_host='nagios.amrox.loc')
 
 if __name__ == '__main__':
     main()
