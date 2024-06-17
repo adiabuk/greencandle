@@ -459,7 +459,7 @@ class Trade():
                                                                 'symbol': 0,
                                                                 'symbol_name':
                                                                 balance_to_use['symbol_name']}
-            total_remaining = total_max - balance_to_use['usd']
+            total_remaining = max(total_max - balance_to_use['usd'], 0)
             if loan_to_use['usd'] > total_remaining:
                 loan_to_use['usd'] = total_remaining
                 loan_to_use['symbol'] = total_remaining if 'USD' in \
