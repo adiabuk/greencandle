@@ -30,7 +30,7 @@ def main():
         actual_debts += float(usd_debt)
     dbase = Mysql()
     trade_debts = dbase.fetch_sql_data('select pair, borrowed, direction from trades where '
-                                       'close_price is NULL and borrowed !=0', header=False)
+                                       'close_price is NULL and borrowed > 0', header=False)
     for pair, borrowed, direction in trade_debts:
         base = get_base(pair)
         quote = get_quote(pair)
