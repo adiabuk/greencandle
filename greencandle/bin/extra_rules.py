@@ -74,6 +74,13 @@ def check_rules():
             ohlc = redis.get_current(name, items[i])[-1]
             for item in ['open', 'high', 'low', 'close']:
                 ohlc[item] = float(ohlc[item])
+            ha_raw = redis.get_current(name, items[i], 'HA_0')[-1]
+            if ha_raw:
+                ha_ohlc={}
+                for item in ['open', 'high', 'low', 'close']:
+                    ha_ohlc[f'HA_{item}'] = float(ha_raw[item])
+                datax.update(ha_ohlc)
+
 
             datax.update(ohlc)
             res.append(datax)
