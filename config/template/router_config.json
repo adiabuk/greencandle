@@ -144,8 +144,13 @@
 
 "prod_extra_long": ["prod:any-man-long"],
 "prod_extra_short": ["prod:any-man-short"],
+
+"prod_extra_loan_long": ["prod:any-1h-long"],
+"prod_extra_loan_short": ["prod:any-1h-short"],
+
 "stag_extra_long": ["stag:any-man-long"],
 "stag_extra_short": ["stag:any-man-short"],
+
 "alert_extra": ["alert"],
 
 "alert": ["alert"],
