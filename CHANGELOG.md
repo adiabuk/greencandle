@@ -1,5 +1,13 @@
 # Releases
 
+# 7.11.2
+* remove non-trading pairs
+* add additional extras router forward
+* update top level dict with HA items for extra rules eval
+* calculate loan anomalies with positive loans only
+* ensure we never return negative loan amt
+* fix formatting of nsca output for test_close script
+
 # 7.11.1
 * send open trade issues to nagios
 * remove prod from data routing
