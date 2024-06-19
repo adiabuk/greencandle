@@ -191,15 +191,16 @@ def extras():
     and table for displaying current rules stored in redis
     """
 
-    redis = Redis(db=6)
-    redis7 = Redis(db=7)
-    data = []
+    redis = Redis(db=6)  # current_rules
+    redis7 = Redis(db=7) # saved_rules
+    redis11 = Redis(db=11) # triggered_rules
+    data = defaultdict(list)
     rules = []
     keys = redis.conn.keys()
     keys7 = redis7.conn.keys()
+    keys11 = redis11.conn.keys()
     with open('/etc/router_config.json', 'r') as json_file:
         router_config = json.load(json_file)
-    routes = [x for x in router_config.keys() if ('extra' in x or 'alert' in x)]
     routes = [x for x in router_config.keys() if ('extra' in x or 'alert' in x)]
     for key in keys7:
         rules.append(ast.literal_eval(redis7.conn.get(key).decode()))
@@ -214,7 +215,21 @@ def extras():
         current.update({'delete': delete_button})
         add_time = datetime.fromtimestamp(int(key)).strftime('%c')
         current.update({'add_time': add_time})
-        data.append(current)
+        data['current'].append(current)
+
+    for key in keys11:
+        processed = json.loads(redis.conn.get(key).decode())
+        pair = processed['pair']
+        interval = processed['interval']
+        processed['pair'] = get_tv_link(pair, interval, anchor=True)
+
+        delete_button = (f'<form method=post action=/dash/xredis?key={key.decode()}><input '
+                          'type=submit name=save value=delete></form>')
+        processed.update({'delete': delete_button})
+        add_time = datetime.fromtimestamp(int(key)).strftime('%c')
+        processed.update({'add_time': add_time})
+        data['processed'].append(processed)
+
 
     if request.method == 'POST':
         args = request.form.to_dict(flat=False)

@@ -32,9 +32,10 @@ def check_rules():
     """
 
     config.create_config()
-    redis = Redis()
-    redis3 = Redis(db=3)
-    redis6 = Redis(db=6)
+    redis = Redis() # ohlc
+    redis3 = Redis(db=3) # agg
+    redis6 = Redis(db=6) # current rules
+    redis11 = Redis(db=11) # processed rules
 
     items = []
 
@@ -105,7 +106,12 @@ def check_rules():
                 LOGGER.info("TRADE: forwarding %s %s trade to: %s - rule: %s",
                             pair, interval, forward_to, rule)
 
+                data = {"pair":pair, "interval": interval, "action": action, "usd": usd,
+                        "take": take, "stop": stop, "rule": rule, "forward_to": forward_to}
+
+                redis6.conn.set(f"{str(int(time.time()))}", json.dumps(data))
                 redis6.conn.delete(key)
+
 
             except requests.exceptions.RequestException:
                 pass

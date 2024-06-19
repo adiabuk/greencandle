@@ -80,18 +80,41 @@
 	<input type="submit" name="submit" value="Add to redis">
 </form>
 <hr>
-{% if data %}
+{% if data['current'] %}
 <h2>Current rules</h2>
 <table id="customers" class="display table nowrap responsive" style="width: 100%">
 	<thead>
 		<tr>
-			{% for header in data[0].keys() %}
+			{% for header in data['current'][0].keys() %}
 			<th>{{header}}</th>
 			{% endfor %}
 		</tr>
 	</thead>
 	<tbody>
-		{% for row in data %}
+		{% for row in data['current'] %}
+		  <tr>
+		    {% for item in row.items() %}
+		      <td>{{ item[-1] |safe }}</td>
+		    {% endfor %}
+		  </tr>
+		    {% endfor %}
+
+	</tbody>
+</table>
+{% endif %}
+
+{% if data['processed'] %}
+<h2>Processed rules</h2>
+<table id="customers" class="display table nowrap responsive" style="width: 100%">
+	<thead>
+		<tr>
+			{% for header in data['processed'][0].keys() %}
+			<th>{{header}}</th>
+			{% endfor %}
+		</tr>
+	</thead>
+	<tbody>
+		{% for row in data['processed'] %}
 		  <tr>
 		    {% for item in row.items() %}
 		      <td>{{ item[-1] |safe }}</td>
