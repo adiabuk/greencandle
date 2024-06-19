@@ -109,7 +109,7 @@ def check_rules():
                 data = {"pair":pair, "interval": interval, "action": action, "usd": usd,
                         "take": take, "stop": stop, "rule": rule, "forward_to": forward_to}
 
-                redis6.conn.set(f"{str(int(time.time()))}", json.dumps(data))
+                redis11.conn.set(f"{str(int(time.time()))}", json.dumps(data))
                 redis6.conn.delete(key)
 
 

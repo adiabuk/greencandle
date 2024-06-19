@@ -218,7 +218,7 @@ def extras():
         data['current'].append(current)
 
     for key in keys11:
-        processed = json.loads(redis.conn.get(key).decode())
+        processed = json.loads(redis11.conn.get(key).decode())
         pair = processed['pair']
         interval = processed['interval']
         processed['pair'] = get_tv_link(pair, interval, anchor=True)
