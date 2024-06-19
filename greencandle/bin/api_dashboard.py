@@ -177,8 +177,9 @@ def xredis():
     """
     delete key from redis
     """
-    redis = Redis(db=6)
     key = request.args.get('key')
+    redis_db = int(request.args.get('db'))
+    redis = Redis(db=redis_db)
     redis.conn.delete(key)
 
     return redirect(url_for('extras'))
@@ -210,7 +211,7 @@ def extras():
         interval=current['interval']
         current['pair'] = get_tv_link(pair, interval, anchor=True)
 
-        delete_button = (f'<form method=post action=/dash/xredis?key={key.decode()}><input '
+        delete_button = (f'<form method=post action=/dash/xredis?key={key.decode()}&db=6><input '
                           'type=submit name=save value=delete></form>')
         current.update({'delete': delete_button})
         add_time = datetime.fromtimestamp(int(key)).strftime('%c')
@@ -223,7 +224,7 @@ def extras():
         interval = processed['interval']
         processed['pair'] = get_tv_link(pair, interval, anchor=True)
 
-        delete_button = (f'<form method=post action=/dash/xredis?key={key.decode()}><input '
+        delete_button = (f'<form method=post action=/dash/xredis?key={key.decode()}&db=11><input '
                           'type=submit name=save value=delete></form>')
         processed.update({'delete': delete_button})
         add_time = datetime.fromtimestamp(int(key)).strftime('%c')
