@@ -383,8 +383,8 @@ def get_live():
     if config.main.base_env.strip() == 'data':
         return None
     all_data = []
-    mt3 = 0
     mt5 = 0
+    mt10 = 0
 
     dbase = Mysql()
     stream_req = requests.get("http://stream/1m/all", timeout=10)
@@ -400,10 +400,10 @@ def get_live():
         perc = -perc if direction == 'short' else perc
         net_perc = perc - commission
 
-        if 3 < float(net_perc) < 5:
-            mt3 += 1
-        if float(net_perc) > 5:
+        if 5 < float(net_perc) < 10:
             mt5 += 1
+        if float(net_perc) > 10:
+            mt10 += 1
 
         trade_direction = f"{name}-{direction}" if \
                 not (name.endswith('long') or name.endswith('short')) else name
@@ -429,8 +429,8 @@ def get_live():
                          "du/dd": f"{round(drawup,2)}/{round(drawdown,2)}",
                          "quote_in": quote_in})
     LIVE = all_data
-    if mt3 > 0 or mt5 > 0:
-        send_slack_message("balance", f"trades over 3%: {mt3}\ntrades over 5%: {mt5}")
+    if mt5 > 0 or mt10 > 0:
+        send_slack_message("balance", f"trades over 5%: {mt5}\ntrades over 7%: {mt10}")
     return LIVE
 
 @APP.route('/live', methods=['GET', 'POST'])
