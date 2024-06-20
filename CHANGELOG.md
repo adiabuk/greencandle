@@ -1,5 +1,14 @@
 # Releases
 
+# 7.11.3
+* reduce no of balance notifs
+* add relevant info to test_close script
+* use total_max amount for balance as well as loan
+* allow delete button to delete entry from assoc redis db
+* fix redis dbs in extra trades ui and container
+* add processed extra rules to new redis db & display in table
+* cleanup old pairs from redis data env (cron)
+
 # 7.11.2
 * remove non-trading pairs
 * add additional extras router forward
