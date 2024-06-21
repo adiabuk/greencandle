@@ -8,7 +8,6 @@
   "name": "prod-be-api-any-lt-cross",
   "pairs": "any",
   "perc_at_timeout": "5",
-  "stop_loss_perc": "999",
   "take_profit_perc": "999",
   "time_in_trade": "1Y",
   "trailing_start": "50",
