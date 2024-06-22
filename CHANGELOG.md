@@ -1,5 +1,12 @@
 # Releases
 
+# 7.11.4
+* reduce mysql balance logging to debug
+* skip ETHW when calculating balance as unable to convert
+* add delete button to saved rules table
+* script to add rule to redis db7
+* no stop loss in prod env unless specified through api
+
 # 7.11.3
 * reduce no of balance notifs
 * add relevant info to test_close script
