@@ -300,10 +300,12 @@ def get_binance_spot():
                         ('TWT', curr='USD')['TWT']['USD']) \
                         / float(prices["BTCUSDT"])
                 bitcoin_totals += bcoin
+            elif key == 'ETHW':
+                LOGGER.debug("skipping coin: %s", key)
+                continue
 
             else:  # other currencies that need converting to BTC
                 try:
-                    key = "ETH" if key == "ETHW" else key
                     LOGGER.debug("Converting spot currency %s %s", key, str(current_value))
                     bcoin = float(current_value) * float(prices[key+"BTC"])  # value in BTC
                     bitcoin_totals += bcoin
