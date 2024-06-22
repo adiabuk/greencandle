@@ -476,7 +476,7 @@ class Mysql():
                                f'"{data["count"]}", "{coin}", (select id from '
                                f'exchange where name="{exchange}"))')
                 except KeyError:
-                    self.logger.info(" ".join(["Unable to find coin:", coin,
+                    self.logger.debug(" ".join(["Unable to find coin:", coin,
                                                exchange, "KEYERROR"]))
                     continue
                 except IndexError:
