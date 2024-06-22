@@ -132,13 +132,14 @@
 		<tr>
 			<th>Description</th>
 			<th>Rule</th>
+			<th>Delete</th>
 		</tr>
 	</thead>
 	<tbody>
 		{% for row in rules %}
 		  <tr>
 		    {% for item in row %}
-		      <td>{{ item }}</td>
+		      <td>{{ item | safe }}</td>
 		    {% endfor %}
 		  </tr>
 		    {% endfor %}

@@ -203,8 +203,13 @@ def extras():
     with open('/etc/router_config.json', 'r') as json_file:
         router_config = json.load(json_file)
     routes = [x for x in router_config.keys() if ('extra' in x or 'alert' in x)]
+
     for key in keys7:
         rules.append(ast.literal_eval(redis7.conn.get(key).decode()))
+        delete_button = (f'<form method=post action=/dash/xredis?key={key.decode()}&db=7><input '
+                          'type=submit name=save value=delete></form>')
+        rules[-1].append(delete_button)
+
     for key in keys:
         current = json.loads(redis.conn.get(key).decode())
         pair = current['pair']
@@ -231,7 +236,6 @@ def extras():
         processed.update({'add_time': add_time})
         data['processed'].append(processed)
 
-
     if request.method == 'POST':
         args = request.form.to_dict(flat=False)
         args = {key: value[0] for key, value in args.items() if value[0].strip() !=""}
@@ -244,7 +248,6 @@ def extras():
         redis.conn.set(f"{str(int(time.time()))}", data_str)
         time.sleep(2)
         return redirect(url_for('extras'))
-
     return render_template('extras.html', data=data, routes=routes, rules=rules)
 
 @APP.route("/action", methods=['POST', 'GET'])
