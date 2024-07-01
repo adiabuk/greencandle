@@ -119,4 +119,3 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - /etc/localtime:/etc/localtime:ro
       - /root/.bash_history:/root/.bash_history
-

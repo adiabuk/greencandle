@@ -493,7 +493,7 @@ services:
     container_name: data-base-mysql
     hostname: data-base-mysql
     image: amrox/gc-mysql:${TAG}
-    mem_limit: 500m
+    mem_limit: 1g
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "--max-connections=5000"
