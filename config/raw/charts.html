@@ -1,15 +1,20 @@
 <html>
+  <body>
+    {% for group in groups %}
+      <div>
+        {% for item in group %}
 
-<body>
-
-{% for group in groups %}
-<div>
-{% for item in group %}
-<iframe frameborder="0" height="48.9%" marginheight="0" marginwidth="0" src="https://dwq4do82y8xi7.cloudfront.net/widgetembed/?symbol=BINANCE%3A{{item}}&interval=H&symboledit=1&toolbarbg=f1f3f6&hideideas=1&studies=&theme=White&style=1&timezone=exchange"
-            width="49.85%">
-    </iframe>
-{% endfor %}
-</div>
-{% endfor %}
-</body>
+          <iframe
+            frameborder="0"
+            height="48.9%"
+            marginheight="0"
+            marginwidth="0"
+            src="https://dwq4do82y8xi7.cloudfront.net/widgetembed/?symbol=BINANCE%3A{{item}}&interval=H&symboledit=1&toolbarbg=f1f3f6&hideideas=1&studies=&theme=White&style=1&timezone=exchange"
+            width="49.85%"
+          >
+          </iframe>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </body>
 </html>

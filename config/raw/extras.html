@@ -1,161 +1,314 @@
 {% extends "layout.html" %}
-<meta http-equiv="refresh" content="6">
-{% block content %}
-  <head>
-    <!-- Favicon -->
-    <!--link rel="shortcut icon" href="{{url_for('static', filename='images/favicon.ico')}}"-->
+<meta content="6" http-equiv="refresh">
+  {% block content %}
+    <head>
+      <!-- Favicon -->
 
-    <!-- JQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <!--link rel="shortcut icon" href="{{url_for('static', filename='images/favicon.ico')}}"-->
+      <!-- JQuery -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
+        
+      </script>
+      <!-- Bootstrap -->
 
-    <!-- Bootstrap -->
-    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script type = "text/javascript"  src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script type = "text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script type = "text/javascript"  src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+      <link
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        rel="stylesheet"
+        type="text/css"
+      >
 
-    <!-- Datatable -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
-    <script type = "text/javascript"  src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-    <script type = "text/javascript"  src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
-    <script type = "text/javascript"  src="https://cdn.datatables.net/plug-ins/1.10.15/dataRender/datetime.js"></script>
-  </head>
-  <body>
-    <div>
-	    <div class="card-body">
+        <script
+          src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+          type= "text/javascript"
+        >
+          
+        </script>
 
-        <div style="display: flex;">
-	{% for file in files %}
-	<form method="post">
-		<input type="hidden" name="submit" value="{{file}}" />
-		<button class="btn btn-success mt-2">{{file}}</button>
-	</form>
-	{% endfor %}
+        <script
+          src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+          type= "text/javascript"
+        >
+          
+        </script>
+
+        <script
+          src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
+          type= "text/javascript"
+        >
+          
+        </script>
+        <!-- Datatable -->
+
+        <link
+          href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"
+          rel="stylesheet"
+          type="text/css"
+        >
+
+          <link
+            href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css"
+            rel="stylesheet"
+            type="text/css"
+          >
+
+            <script
+              src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"
+            >
+              
+            </script>
+
+            <script
+              src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"
+              type= "text/javascript"
+            >
+              
+            </script>
+
+            <script
+              src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"
+              type= "text/javascript"
+            >
+              
+            </script>
+
+            <script
+              src="https://cdn.datatables.net/plug-ins/1.10.15/dataRender/datetime.js"
+              type= "text/javascript"
+            >
+              
+            </script>
+          </head>
+          <body>
+            <div>
+              <div class="card-body">
+                <div style="display: flex;">
+                  {% for file in files %}
+                    <form method="post">
+                      <input name="submit" type="hidden" value="{{file}}"/>
+                      <button class="btn btn-success mt-2">
+                        {{ file }}
+                      </button>
+                    </form>
+                  {% endfor %}
+                </div>
+                <div class="mt-4">
+                  <h2>
+                    Add trade rule
+                  </h2>
+                  <form action="/dash/extras" method="post">
+                    <label for="fname">
+                      pair:
+                    </label>
+                    <input id="pair" maxlength="11" name="pair" size="11" type="text">
+                      <br>
+                        <label for="interval">
+                          interval
+                        </label>
+                        <select id="interval" name="interval">
+                          <option value="1m">
+                            1m
+                          </option>
+                          <option value="5m">
+                            5m
+                          </option>
+                          <option value="15m">
+                            15m
+                          </option>
+                          <option value="30m">
+                            30m
+                          </option>
+                          <option value="1h">
+                            1h
+                          </option>
+                          <option value="4h">
+                            4h
+                          </option>
+                        </select>
+                        <br>
+                          <label for="fname">
+                            action:
+                          </label>
+                          <select id="action" name="action">
+                            <option value="open">
+                              open
+                            </option>
+                            <option value="close">
+                              close
+                            </option>
+                          </select>
+                          <br>
+                            <label for="fname">
+                              usd:
+                            </label>
+
+                            <input
+                              id="usd"
+                              maxlength="6"
+                              name="usd"
+                              size="6"
+                              type="text"
+                            >
+                              <br>
+                                <label for="fname">
+                                  tp:
+                                </label>
+
+                                <input
+                                  id="tp"
+                                  maxlength="4"
+                                  name="tp"
+                                  size="4"
+                                  type="text"
+                                >
+                                  <br>
+                                    <label for="fname">
+                                      sl:
+                                    </label>
+
+                                    <input
+                                      id="sl"
+                                      maxlength="4"
+                                      name="sl"
+                                      size="4"
+                                      type="text"
+                                    >
+                                      <br>
+                                        <label for="fname">
+                                          rule:
+                                        </label>
+
+                                        <textarea
+                                          cols="50"
+                                          id="rule"
+                                          name="rule"
+                                          rows="4"
+                                        >
+                                        </textarea>
+                                        <br>
+                                          <label for="fname">
+                                            forward to:
+                                          </label>
+                                          <select id="forward_to" name="forward_to">
+                                            {% for item in routes %}
+                                              <option value="{{item}}">
+                                                {{ item }}
+                                              </option>
+                                            {% endfor %}
+                                          </select>
+                                          <br>
+
+                                            <input
+                                              name="submit"
+                                              type="submit"
+                                              value="Add to redis"
+                                            >
+                                            </form>
+                                            <hr>
+                                              {% if data['current'] %}
+                                                <h2>
+                                                  Current rules
+                                                </h2>
+
+                                                <table
+                                                  class="display table nowrap responsive"
+                                                  id="customers"
+                                                  style="width: 100%"
+                                                >
+                                                  <thead>
+                                                    <tr>
+                                                      {% for header in data['current'][0].keys() %}
+                                                        <th>
+                                                          {{ header }}
+                                                        </th>
+                                                      {% endfor %}
+                                                    </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                    {% for row in data['current'] %}
+                                                      <tr>
+                                                        {% for item in row.items() %}
+                                                          <td>
+                                                            {{ item[-1] |safe }}
+                                                          </td>
+                                                        {% endfor %}
+                                                      </tr>
+                                                    {% endfor %}
+                                                  </tbody>
+                                                </table>
+                                              {% endif %}
+                                              {% if data['processed'] %}
+                                                <h2/>
+                                                Processed rules
+                                              </h2>
+
+                                              <table
+                                                class="display table nowrap responsive"
+                                                id="customers"
+                                                style="width: 100%"
+                                              />
+                                              <thead/>
+                                              <tr/>
+                                              {% for header in data['processed'][0].keys() %}
+                                                <th/>
+                                                {{ header }}
+                                              </th>
+                                            {% endfor %}
+                                          </tr>
+                                        </thead>
+                                        <tbody/>
+                                        {% for row in data['processed'] %}
+                                          <tr/>
+                                          {% for item in row.items() %}
+                                            <td/>
+                                            {{ item[-1] |safe }}
+                                          </td>
+                                        {% endfor %}
+                                      </tr>
+                                    {% endfor %}
+                                  </tbody>
+                                </table>
+                              {% endif %}
+                              <h2/>
+                              Saved rules
+                            </h2>
+
+                            <table
+                              class="display table nowrap responsive"
+                              id="customers"
+                              style="width: 100%"
+                            />
+                            <thead/>
+                            <tr/>
+                            <th/>
+                            Description
+                          </th>
+                          <th/>
+                          Rule
+                        </th>
+                        <th/>
+                        Delete
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody/>
+                  {% for row in rules %}
+                    <tr/>
+                    {% for item in row %}
+                      <td/>
+                      {{ item | safe }}
+                    </td>
+                  {% endfor %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
-        <div class="mt-4">
-
-<h2>Add trade rule</h2>
-<form action="/dash/extras" method="post">
-	<label for="fname">pair: </label>
-	<input type="text" id="pair" name="pair" maxlength="11" size="11">
-         <br>
-	 <label for="interval">interval</label>
-	<select name="interval" id="interval">
-	  <option value="1m">1m</option>
-	  <option value="5m">5m</option>
-	  <option value="15m">15m</option>
-	  <option value="30m">30m</option>
-	  <option value="1h">1h</option>
-	  <option value="4h">4h</option>
-	</select>
-		<br>
-
-	<label for="fname">action: </label>
-	<select name="action" id="action">
-	  <option value="open">open</option>
-	  <option value="close">close</option>
-	</select>
-  <br>
-                                <label for="fname">usd: </label>
-                              <input type="text" id="usd" name="usd" maxlength="6" size="6">
-                              <br>
-                              <label for="fname">tp: </label>
-                              <input type="text" id="tp" name="tp" maxlength="4" size="4">
-                              <br>
-                              <label for="fname">sl: </label>
-                              <input type="text" id="sl" name="sl" maxlength="4" size="4">
-	<br>
-	<label for="fname">rule: </label>
-	<textarea id="rule" name="rule" rows="4" cols="50"></textarea>
-	<br>
-	<label for="fname">forward to: </label>
-	<select name="forward_to" id="forward_to">
-    {% for item in routes %}
-    <option value="{{item}}">{{item}}</option>
-    {% endfor %}
-	</select>
-	<br>
-	<input type="submit" name="submit" value="Add to redis">
-</form>
-<hr>
-{% if data['current'] %}
-<h2>Current rules</h2>
-<table id="customers" class="display table nowrap responsive" style="width: 100%">
-	<thead>
-		<tr>
-			{% for header in data['current'][0].keys() %}
-			<th>{{header}}</th>
-			{% endfor %}
-		</tr>
-	</thead>
-	<tbody>
-		{% for row in data['current'] %}
-		  <tr>
-		    {% for item in row.items() %}
-		      <td>{{ item[-1] |safe }}</td>
-		    {% endfor %}
-		  </tr>
-		    {% endfor %}
-
-	</tbody>
-</table>
-{% endif %}
-
-{% if data['processed'] %}
-<h2>Processed rules</h2>
-<table id="customers" class="display table nowrap responsive" style="width: 100%">
-	<thead>
-		<tr>
-			{% for header in data['processed'][0].keys() %}
-			<th>{{header}}</th>
-			{% endfor %}
-		</tr>
-	</thead>
-	<tbody>
-		{% for row in data['processed'] %}
-		  <tr>
-		    {% for item in row.items() %}
-		      <td>{{ item[-1] |safe }}</td>
-		    {% endfor %}
-		  </tr>
-		    {% endfor %}
-
-	</tbody>
-</table>
-{% endif %}
-
-<h2>Saved rules</h2>
-<table id="customers" class="display table nowrap responsive" style="width: 100%">
-	<thead>
-		<tr>
-			<th>Description</th>
-			<th>Rule</th>
-			<th>Delete</th>
-		</tr>
-	</thead>
-	<tbody>
-		{% for row in rules %}
-		  <tr>
-		    {% for item in row %}
-		      <td>{{ item | safe }}</td>
-		    {% endfor %}
-		  </tr>
-		    {% endfor %}
-
-	</tbody>
-</table>
-
-</div>
       </div>
     </div>
   </body>
   <script type="text/javascript">
     $('#proxies').DataTable( {
-	    "aaSorting": [[ {{ order_column }} ,'desc']]
+    "aaSorting": [[ {{ order_column }} ,'desc']]
     } );
   </script>
-
-
 {% endblock %}

@@ -1,58 +1,74 @@
 {% extends "layout.html" %}
-<meta http-equiv="refresh" content="6">
-{% block content %}
-<table border=0, id="customers">
-  <tr>
-    <th>strategy</th>
-    <th>action</th>
-    {% for strat, pairs in my_dic.items() %}
-  <tr>
-    <td>
-      {{strat}}
-    </td>
-    <td>
-      <table>
-        {% for pair in pairs %}
-        <tr>
-
-          {% if "any" in strat %}
-          {% if "long-short" not in strat %}
-          <form action="/dash/action">
+<meta content="6" http-equiv="refresh">
+  {% block content %}
+    <table border=0,  id="customers">
+      <tr>
+        <th>
+          strategy
+        </th>
+        <th>
+          action
+        </th>
+        {% for strat, pairs in my_dic.items() %}
+          <tr>
             <td>
-              <label for="fname">pair: </label>
-              <input type="text" id="pair" name="pair">
-            </td>
-
-            <input type="hidden" name="strategy" value="{{strat}}" />
-            <td>
-              <input type="submit" name="action" value="open">
-
+              {{ strat }}
             </td>
             <td>
-              <input type="submit" name="action" value="close">
-            </td>
-          </form>
-          {% endif %}
-          {% else %}
-          <td>{{pair}}</td>
-          <td>
-            <form action="/dash/action?pair={{pair}}&strategy={{strat}}&action=open" method="post">
-              <button name="actionBtn" type="submit">Open</button>
-            </form>
-          </td>
-          <td>
-            <form action="/dash/action?pair={{pair}}&strategy={{strat}}&action=close" method="post">
-              <button name="actionBtn" type="submit">Close</button>
-            </form>
-          </td>
-          {% endif %}
+              <table>
+                {% for pair in pairs %}
+                  <tr>
+                    {% if "any" in strat %}
+                      {% if "long-short" not in strat %}
+                        <form action="/dash/action">
+                          <td>
+                            <label for="fname">
+                              pair:
+                            </label>
+                            <input id="pair" name="pair" type="text">
+                            </td>
+                            <input name="strategy" type="hidden" value="{{strat}}"/>
+                            <td>
+                              <input name="action" type="submit" value="open">
+                              </td>
+                              <td>
+                                <input name="action" type="submit" value="close">
+                                </td>
+                              </form>
+                            {% endif %}
+                            {% else %}
+                            <td>
+                              {{ pair }}
+                            </td>
+                            <td>
 
-        </tr>
-        {% endfor %}
-    </td>
-</table>
-</td>
-</tr>
-{% endfor %}
-</table>
+                              <form
+                                action="/dash/action?pair={{pair}}&strategy={{strat}}&action=open"
+                                method="post"
+                              >
+                                <button name="actionBtn" type="submit"/>
+                                Open
+                              </button>
+                            </form>
+                          </td>
+                          <td/>
+
+                          <form
+                            action="/dash/action?pair={{pair}}&strategy={{strat}}&action=close"
+                            method="post"
+                          />
+                          <button name="actionBtn" type="submit"/>
+                          Close
+                        </button>
+                      </form>
+                    </td>
+                  {% endif %}
+                </tr>
+              {% endfor %}
+            </td>
+          </table>
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
 {% endblock %}

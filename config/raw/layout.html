@@ -1,54 +1,65 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-Control"/>
+    <meta content="no-cache" http-equiv="Pragma"/>
+    <meta content="0" http-equiv="Expires"/>
+    <link href="{{ url_for('static', filename='main.css') }}" rel="stylesheet">
+      {% if 'live' not in url_for(request.endpoint) %}
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        {% endif %}
+        <title>
+          Greencandle
+        </title>
 
-<head>
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
-    {% if 'live' not in url_for(request.endpoint) %}
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% endif %}
-    <title>Greencandle</title>
-
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-           jQuery.get('env.txt', function(data) {
-           $("span").text('Greencandle-' + data);
-           document.title = ('Greencandle-' + data);
-           });
-            $('#customers td.y_n').each(function() {
-                if ($(this).text() < 0) {
-                    $(this).css('background-color', '#f00');
-                }
-            });
-        });
-    </script>
-
-</head>
-
-<body>
-
-    <header>
-        <div class="container">
-          <h1 class="logo"><span>Greencandle</span></h1>
-            <strong><nav>
-      <ul class="menu">
-        <li>
-          <a href="/" target="_self">Main Page</a> |
-          <a href="/dash/logout" target="_self">logout</a>
-        </li>
-      </ul>
-    </nav></strong>
+        <script
+          src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.js"
+          type="text/javascript"
+        >
+          
+        </script>
+        <script type="text/javascript">
+          $(document).ready(function() {
+          jQuery.get('env.txt', function(data) {
+          $("span").text('Greencandle-' + data);
+          document.title = ('Greencandle-' + data);
+          });
+          $('#customers td.y_n').each(function() {
+          if ($(this).text() < 0) {
+          $(this).css('background-color', '#f00');
+          }
+          });
+          });
+        </script>
+      </head>
+      <body>
+        <header>
+          <div class="container">
+            <h1 class="logo">
+              <span>
+                Greencandle
+              </span>
+            </h1>
+            <strong>
+              <nav>
+                <ul class="menu">
+                  <li>
+                    <a href="/" target="_self">
+                      Main Page
+                    </a>
+                    |
+                    <a href="/dash/logout" target="_self"/>
+                    logout
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </strong>
         </div>
-
-    </header>
-
-    <div class="container" style="max-width:2140px;">
-        {% block content %} {% endblock %}
+      </header>
+      <div class="container" style="max-width:2140px;"/>
+      {% block content %}
+      {% endblock %}
     </div>
-
-</body>
-
+  </body>
 </html>

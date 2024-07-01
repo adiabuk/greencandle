@@ -1,60 +1,86 @@
 {% extends "layout.html" %}
-<meta http-equiv="refresh" content="6">
-{% block content %}
-<table border=0, id="customers">
-  <tr>
-    <th>strategy</th>
-    <th>action</th>
-    {% for strat, pairs in my_dic.items() %}
-  <tr>
-    <td>
-      {% if "any" in strat and "long-short" in strat %}
-      {{strat}}
-      {% endif %}
-    </td>
-    <td>
-      <table>
-        {% for pair in pairs %}
-        <tr>
+<meta content="6" http-equiv="refresh">
+  {% block content %}
+    <table border=0,  id="customers">
+      <tr>
+        <th>
+          strategy
+        </th>
+        <th>
+          action
+        </th>
+        {% for strat, pairs in my_dic.items() %}
+          <tr>
+            <td>
+              {% if "any" in strat and "long-short" in strat %}
+                {{ strat }}
+              {% endif %}
+            </td>
+            <td>
+              <table>
+                {% for pair in pairs %}
+                  <tr>
+                    {% if "any" in strat %}
+                      {% if "long-short" in strat %}
+                        <form action="/dash/action">
+                          <td>
+                            <label for="fname">
+                              pair:
+                            </label>
+                            <input id="pair" name="pair" type="text">
+                              <label for="fname">
+                                usd:
+                              </label>
 
-          {% if "any" in strat %}
-		  {% if "long-short" in strat %}
-			  <form action="/dash/action">
-			    <td>
-			      <label for="fname">pair: </label>
-			      <input type="text" id="pair" name="pair">
+                              <input
+                                id="usd"
+                                maxlength="6"
+                                name="usd"
+                                size="6"
+                                type="text"
+                              >
+                                <label for="fname">
+                                  tp:
+                                </label>
 
-			      <label for="fname">usd: </label>
-			      <input type="text" id="usd" name="usd" maxlength="6" size="6">
+                                <input
+                                  id="tp"
+                                  maxlength="4"
+                                  name="tp"
+                                  size="4"
+                                  type="text"
+                                >
+                                  <label for="fname"/>
+                                  sl:
+                                </label>
 
-			      <label for="fname">tp: </label>
-			      <input type="text" id="tp" name="tp" maxlength="4" size="4">
-			      <label for="fname">sl: </label>
-			      <input type="text" id="sl" name="sl" maxlength="4" size="4">
-			    </td>
-
-			    <input type="hidden" name="strategy" value="{{strat}}" />
-			    <td>
-			      <input type="submit" name="action" value="short">
-
-			    </td>
-			    <td>
-			      <input type="submit" name="action" value="long">
-			    </td>
-          <td>
-			      <input type="submit" name="action" value="close">
-			    </td>
-
-			  </form>
- 		  {% endif %}
-          {% endif %}
-
-        </tr>
-        {% endfor %}
-    </td>
-</table>
-</td>
-</tr>
-{% endfor %}
-</table>
+                                <input
+                                  id="sl"
+                                  maxlength="4"
+                                  name="sl"
+                                  size="4"
+                                  type="text"
+                                />
+                              </td>
+                              <input name="strategy" type="hidden" value="{{strat}}"/>
+                              <td/>
+                              <input name="action" type="submit" value="short"/>
+                            </td>
+                            <td/>
+                            <input name="action" type="submit" value="long"/>
+                          </td>
+                          <td/>
+                          <input name="action" type="submit" value="close"/>
+                        </td>
+                      </form>
+                    {% endif %}
+                  {% endif %}
+                </tr>
+              {% endfor %}
+            </td>
+          </table>
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
 {% endblock %}
