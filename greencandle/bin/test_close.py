@@ -63,11 +63,11 @@ def main():
             if "long" in direction and sub_perc(dbase.get_complete_commission(),
                                            float(base_in)) > bal_amount:
                 result2 = True
-                reason = f"Not enough base amount: in:{base_in}, bal:{bal_amount}"
+                reason = f"Not enough base amount for long: in:{base_in}, bal:{bal_amount}"
 
             elif "short" in direction and float(quote_in) > bal_amount:
                 result2 = True
-                reason = f"Not enough quote amount: in:{quote_in} bal:{bal_amount}"
+                reason = f"Not enough quote amount for short: in:{quote_in} bal:{bal_amount}"
 
             # Check if enough BNB
             quote = get_quote(pair)
