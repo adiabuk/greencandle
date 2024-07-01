@@ -1,5 +1,12 @@
 # Releases
 
+# 7.11.5
+* removal of delisted pairs
+* reformat jinja templates using vsot tool
+* increase mysql mem limit to 1g
+* add long/short to test_close message
+* 10 entries in UI spreadsheet as default, but keep All option
+
 # 7.11.4
 * reduce mysql balance logging to debug
 * skip ETHW when calculating balance as unable to convert
