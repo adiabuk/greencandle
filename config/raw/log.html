@@ -1,8 +1,15 @@
-{% extends "layout.html" %}
-{% block content %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta name="generator" content=
+"HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 107), see www.w3.org">
+<title></title>
+</head>
+<body>
+{% extends "layout.html" %} {% block content %}
 <p>This is all the output:</p>
 <ul id="output"></ul>
-<script>
+<script type="text/javascript">
     var output = document.getElementById('output');
 
     var xhr = new XMLHttpRequest();
@@ -39,6 +46,6 @@
   function scrollWin() {
       window.scrollTo(0,999999);
   }
-</script>
-
-{% endblock %}
+</script>{% endblock %}
+</body>
+</html>

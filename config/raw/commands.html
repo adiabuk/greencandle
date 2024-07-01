@@ -1,33 +1,31 @@
-{% extends "layout.html" %}
-{% block content %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta name="generator" content=
+"HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 107), see www.w3.org">
+<title></title>
+</head>
+<body>
+{% extends "layout.html" %} {% block content %}
 <div>
-	<h1> Commands </h1>
-
+<h1>Commands</h1>
 <!-- Command with args -->
-{% for script, args in arg_scripts.items() %}
-Run {{ script }}
-<form action="/dash/run?command={{script}}" method="post">
-{% for item in args %}
-<!--
+{% for script, args in arg_scripts.items() %} Run {{ script }}
+<form action="/dash/run?command={{script}}" method="post">{% for
+item in args %} <!--
 Loop through args and create a text box for each using name to identify box.
   contents with be retrieved later and associated with the name
 -->
-{{item}}: <input type="text" name="{{item}}"  maxlength="6" size="6">
-{% endfor %}
-
-  <button name="actionBtn" type="submit">Run</button>
-</form>
-  <hr>
-{% endfor %}
-
-<!-- Command with no args -->
-{% for script in scripts %}
-Run {{ script }}
+{{item}}: <input type="text" name="{{item}}" maxlength="6" size=
+"6"> {% endfor %} <button name="actionBtn" type=
+"submit">Run</button></form>
+<hr>
+{% endfor %} <!-- Command with no args -->
+{% for script in scripts %} Run {{ script }}
 <form action="/dash/run?command={{script}}" method="post">
-  <button name="actionBtn" type="submit">Run</button>
-</form>
-  <hr>
-{% endfor %}
-
-</div>
+<button name="actionBtn" type="submit">Run</button></form>
+<hr>
+{% endfor %}</div>
 {% endblock %}
+</body>
+</html>

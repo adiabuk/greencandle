@@ -1,87 +1,92 @@
-{% extends "layout.html" %}
-<meta http-equiv="refresh" content="6"> {% block content %}
-test_data: {{ test }}, test_trade: {{ test_trade }}
-<H1 class="logo">Open Trades</h1>
-
-<table border=0, id="customers">
-    <tr>
-        <th>Pair</th>
-        <th>Buy Price</th>
-        <th>Buy Time</th>
-        <th>Current Price</th>
-        <th>Perc</th>
-        <th>Matched Rules</th>
-        <th>Sell Now</th>
-        <th>Strategy</th>
-        <th>Link</th>
-        <th>Local Graph</th>
-    </tr>
-    {% for k, v in versions.items() %}
-    <tr>
-        <td class="y_n">{{ k }}</td>
-        <td class="y_n">{{ v['open_price'] }}</td>
-        <td class="y_n">{{ v['open_time'] }}</td>
-        <td class="y_n">{{ v['current_price'] }}</td>
-        <td class="y_n">{{ v['perc'] }}</td>
-        <td class="y_n">{{ v['matching'] }}</td>
-        <td class="y_n">
-            <form action="close?pair={{ k }}&name={{ v['name'] }}&price={{ v['current_price'] }}" method="post">
-                <button name="button" type="submit">SELL</button>
-            </form>
-        </td>
-        <td class="y_n">{{ v['strategy'] }}</td>
-        <td class="y_n"> <a target="_blank" href="https://uk.tradingview.com/chart?symbol=BINANCE%3A{{ k }}">Trading View</a> </td>
-        <td class="y_n"> <a target="_blank" href="/data/graphs/{{ v['graph'] }}"><img src="/data/graphs/{{ v['thumbnail'] }}"></a></td>
-    </tr>
-
-    {% endfor %}
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta name="generator" content=
+"HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 107), see www.w3.org">
+<meta http-equiv="refresh" content="6">
+<title></title>
+</head>
+<body>
+{% extends "layout.html" %} {% block content %} test_data: {{ test
+}}, test_trade: {{ test_trade }}
+<h1 class="logo">Open Trades</h1>
+{% for k, v in versions.items() %} {% endfor %}
+<table border="0," id="customers">
+<tr>
+<th>Pair</th>
+<th>Buy Price</th>
+<th>Buy Time</th>
+<th>Current Price</th>
+<th>Perc</th>
+<th>Matched Rules</th>
+<th>Sell Now</th>
+<th>Strategy</th>
+<th>Link</th>
+<th>Local Graph</th>
+</tr>
+<tr>
+<td class="y_n">{{ k }}</td>
+<td class="y_n">{{ v['open_price'] }}</td>
+<td class="y_n">{{ v['open_time'] }}</td>
+<td class="y_n">{{ v['current_price'] }}</td>
+<td class="y_n">{{ v['perc'] }}</td>
+<td class="y_n">{{ v['matching'] }}</td>
+<td class="y_n">
+<form action=
+"close?pair={{%20k%20}}&amp;name={{%20v['name']%20}}&amp;price={{%20v['current_price']%20}}"
+method="post"><button name="button" type=
+"submit">SELL</button></form>
+</td>
+<td class="y_n">{{ v['strategy'] }}</td>
+<td class="y_n"><a target="_blank" href=
+"https://uk.tradingview.com/chart?symbol=BINANCE%3A{{%20k%20}}">Trading
+View</a></td>
+<td class="y_n"><a target="_blank" href=
+"/data/graphs/{{%20v['graph']%20}}"><img src=
+"/data/graphs/{{%20v['thumbnail']%20}}"></a></td>
+</tr>
 </table>
 <hr>
-
-<H1 class="logo">Closed Trades</h1>
-
-<table border=0, id="customers">
-    <tr>
-        <th>pair</th>
-        <th>Link</th>
-        <th>Buy</th>
-        <th>Matched Rules</th>
-        <th>Strategy</th>
-        <th>Local Graph</th>
-    </tr>
-
-    {% for k, v in all.items() %}
-    <tr>
-        <td class="y_n">{{ k }}</td>
-        <td class="y_n"> <a target="_blank" href="https://uk.tradingview.com/chart?symbol=BINANCE%3A{{ k }}">Trading View</a> </td>
-        <td class="y_n">
-          <form action="open?pair={{ k }}&name="None" method="post">
-          <button name="button" type=submit">BUY</button>
-          </form>
-        </td>
-        <td class="y_n">{{ v['matching'] }}</td>
-        <td class="y_n">{{ v['strategy'] }}</td>
-        <td class="y_n"> <a target="_blank" href="/data/graphs/{{ v['graph'] }}"><img src="/data/graphs/{{ v['thumbnail'] }}"></a></td>
-
-    </tr>
-    {% endfor %}
-
+<h1 class="logo">Closed Trades</h1>
+{% for k, v in all.items() %} {% endfor %}
+<table border="0," id="customers">
+<tr>
+<th>pair</th>
+<th>Link</th>
+<th>Buy</th>
+<th>Matched Rules</th>
+<th>Strategy</th>
+<th>Local Graph</th>
+</tr>
+<tr>
+<td class="y_n">{{ k }}</td>
+<td class="y_n"><a target="_blank" href=
+"https://uk.tradingview.com/chart?symbol=BINANCE%3A{{%20k%20}}">Trading
+View</a></td>
+<td class="y_n">
+<form action="open?pair={{%20k%20}}&amp;name=" method="post">
+<button name="button" type="submit&quot;">BUY</button></form>
+</td>
+<td class="y_n">{{ v['matching'] }}</td>
+<td class="y_n">{{ v['strategy'] }}</td>
+<td class="y_n"><a target="_blank" href=
+"/data/graphs/{{%20v['graph']%20}}"><img src=
+"/data/graphs/{{%20v['thumbnail']%20}}"></a></td>
+</tr>
 </table>
-
-
-<H1 class="logo">Rules</h1>
-<table border=0, id="rules">
-	<tr>
-        <th>name</th>
-        <th>rule</th>
-	</tr>
-	{% for k, v in rules.items() %}
-	<tr>
-		<td class="y_n">{{ k }}</td>
-		<td class="y_n">{{ v }}</td>
-        </tr>
-	{% endfor%}
+<h1 class="logo">Rules</h1>
+{% for k, v in rules.items() %} {% endfor%}
+<table border="0," id="rules">
+<tr>
+<th>name</th>
+<th>rule</th>
+</tr>
+<tr>
+<td class="y_n">{{ k }}</td>
+<td class="y_n">{{ v }}</td>
+</tr>
 </table>
-
-<hr> {% endblock %}
+<hr>
+{% endblock %}
+</body>
+</html>
