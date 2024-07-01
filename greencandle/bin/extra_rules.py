@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-member,eval-used,unused-variable
+#pylint: disable=no-member,eval-used,unused-variable,broad-except
 
 """
 Loop through extra trade rules in redis and process
@@ -8,7 +8,7 @@ Loop through extra trade rules in redis and process
 import time
 import json
 import requests
-
+from send_nsca3 import send_nsca
 from greencandle.lib import config
 from greencandle.lib.redis_conn import Redis, get_float
 from greencandle.lib.common import AttributeDict, arg_decorator
@@ -46,6 +46,10 @@ def check_rules():
 
     for pair, interval, action, usd, take, stop, rule, forward_to, key in items:
         if pair not in config.main.pairs.split():
+            msg = f'Unknown pair: {pair}'
+            LOGGER.info(msg)
+            send_nsca(status=2, host_name='jenkins1', service_name='extra_rules', text_output=msg,
+                      remote_host='local.amrox.loc')
             continue
         item = redis.get_items(pair, interval)[-1]
         res = []
@@ -86,7 +90,15 @@ def check_rules():
             datax.update(ohlc)
             res.append(datax)
         ###
-        if eval(rule):
+        try:
+            evalled = eval(rule)
+        except Exception as err:
+            msg = f"Unable to eval rule {str(rule)} for {pair} {interval}"
+            LOGGER.info(msg)
+            send_nsca(status=2, host_name='jenkins1', service_name='extra_rules', text_output=msg,
+                      remote_host='local.amrox.loc')
+            continue
+        if evalled:
             print(pair, interval)
             url = f"http://router:1080/{config.web.api_token}"
             payload = {"pair": pair,
