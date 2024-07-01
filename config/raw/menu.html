@@ -1,22 +1,15 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-<head>
-<meta name="generator" content=
-"HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 107), see www.w3.org">
+{% extends "layout.html" %}
 <meta http-equiv="refresh" content="6">
-<title></title>
-</head>
-<body>
-{% extends "layout.html" %} {% block content %} {% for k, v in
-strats.items() %} {% endfor %}
-<table border="0," id="customers">
-<tr>
-<td class="y_n">
-<h3><a target="_blank" href="/charts?config_env={{k}}">{{k}}
-({{v}})</a></h3>
-</td>
-</tr>
+{% block content %}
+<table border=0, id="customers">
+   {% for k, v in strats.items() %}
+   <tr>
+      <td class="y_n">
+         <h3>
+            <a target="_blank" href="/charts?config_env={{k}}">{{k}} ({{v}})</a>
+         </h3>
+      </td>
+   </tr>
+   {% endfor %}
 </table>
 {% endblock %}
-</body>
-</html>

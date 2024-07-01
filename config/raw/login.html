@@ -1,18 +1,9 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
-<html>
-<head>
-<meta name="generator" content=
-"HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 107), see www.w3.org">
-<title></title>
-</head>
-<body>
-{% extends "layout.html" %} {% block content %}
-<h1>Auth</h1>
+{% extends "layout.html" %}
+{% block content %}
+<H1> Auth</H1>
 <form action="" method="post">
-<p>username: <input type="text" name="username"></p>
-<p>password: <input type="password" name="password"></p>
-<p><input type="submit" value="Login"></p>
+  <p>username: <input type=text name=username>
+  <p>password: <input type=password name=password>
+  <p><input type=submit value=Login>
 </form>
 {% endblock %}
-</body>
-</html>
