@@ -826,12 +826,12 @@ class Trade():
                 except BinanceException as binex:
                     self.logger.error(f"Trade error-close {pair}: {str(binex)}")
                     return False
-                self.logger.info("%s close margin short result: %s", pair, trade_result)
+                self.logger.info("TRADE: %s close margin short result: %s", pair, trade_result)
 
                 actual_borrowed = self.get_borrowed(pair=pair, symbol=base)
                 borrowed = float(actual_borrowed) if float(borrowed) > float(actual_borrowed) else \
                     float(borrowed)
-                time.sleep(10) # wait a while before re-fetching balance
+                time.sleep(5) # wait a while before re-fetching balance
                 avail = self.get_avail_asset(base)
                 repay = borrowed if avail > borrowed else avail
                 repay_drain = Path('/var/local/drain/repay_drain').is_file()
@@ -1135,7 +1135,7 @@ class Trade():
                 borrowed = float(actual_borrowed) if float(borrowed) > float(actual_borrowed) else \
                         float(borrowed)
 
-                time.sleep(10) # wait a while before re-fetching balance
+                time.sleep(5) # wait a while before re-fetching balance
                 avail = self.get_avail_asset(quote)
                 repay = borrowed if avail > borrowed else avail
                 repay_drain = Path('/var/local/drain/repay_drain').is_file()
