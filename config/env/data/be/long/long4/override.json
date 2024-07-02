@@ -1,6 +1,6 @@
 {
-  "close_rule1": "res[0].STOCHRSI_8[0] \u003c res[0].STOCHRSI_8[1] and res[1].STOCHRSI_8[0] \u003e res[1].STOCHRSI_8[1]",
+  "close_rule1": "(res[1].STOCHRSI_8[0] \u003c res[1].STOCHRSI_8[1] and res[2].STOCHRSI_8[0] \u003e res[2].STOCHRSI_8[1]) or (res[1].HA_close \u003c res[1].HA_open and res[2].HA_close \u003c res[2].HA_open)",
   "logging_level": "10",
-  "open_rule1": "(res[0].STOCHRSI_8[0] \u003c 50 and res[0].STOCHRSI_8[0] \u003e res[0].STOCHRSI_8[1] and res[1].STOCHRSI_8[0] \u003c res[1].STOCHRSI_8[1]) or (res[0].HA_close \u003e res[0].HA_open and res[1].HA_close \u003e res[1].HA_open)",
+  "open_rule1": "(res[1].STOCHRSI_8[0] \u003c 50 and res[1].STOCHRSI_8[0] \u003e res[1].STOCHRSI_8[1] and res[2].STOCHRSI_8[0] \u003c res[2].STOCHRSI_8[1]) or (res[1].HA_close \u003e res[1].HA_open and res[2].HA_close \u003e res[2].HA_open)",
   "wait_between_trades": "false"
 }
