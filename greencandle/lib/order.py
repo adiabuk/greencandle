@@ -9,8 +9,8 @@ import time
 import re
 import os
 from pathlib import Path
-from str2bool import str2bool
 from send_nsca3 import send_nsca
+from str2bool import str2bool
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.binance import BinanceException
 from greencandle.lib.logger import get_logger, exception_catcher
@@ -728,8 +728,8 @@ class Trade():
 
         if 'id' in kwargs:
             dbase = Mysql()
-            net_perc, usd_net_profit, drawup, drawdown = \
-                    dbase.fetch_sql_data(f"select net_perc, usd_net_profit, drawup_perc, "
+            perc, net_perc, usd_net_profit, drawup, drawdown = \
+                    dbase.fetch_sql_data(f"select perc, net_perc, usd_net_profit, drawup_perc, "
                                          f"drawdown_perc from profit where id={kwargs.id}",
                                                             header=False)[0]
         else:
@@ -886,7 +886,7 @@ class Trade():
                     self.logger.error(f"Unable to fetch opentime/profit: {query}")
                     return False
 
-                self.__send_notifications(pair=pair, close_time=current_time, perc=perc_inc,
+                self.__send_notifications(pair=pair, close_time=current_time,
                                           fill_price=current_price, interval=self.interval,
                                           event=event, action='CLOSE', usd_profit=profit,
                                           quote=quote_out, open_time=open_time, id=result)
@@ -1080,7 +1080,7 @@ class Trade():
                                                              f"t.closed_by='{name}' order by "
                                                              f"t.id desc limit 1", header=False)[0]
 
-                    self.__send_notifications(pair=pair, close_time=current_time, perc=perc_inc,
+                    self.__send_notifications(pair=pair, close_time=current_time,
                                               fill_price=fill_price, interval=self.interval,
                                               event=event, action='CLOSE', usd_profit=profit,
                                               quote=quote_out, open_time=open_time, id=result)
@@ -1188,7 +1188,7 @@ class Trade():
                                                          f"t.closed_by='{name}' order by t.id desc "
                                                          f"limit 1", header=False)[0]
 
-                self.__send_notifications(pair=pair, close_time=current_time, perc=perc_inc,
+                self.__send_notifications(pair=pair, close_time=current_time,
                                           fill_price=fill_price, interval=self.interval,
                                           event=event, action='CLOSE', usd_profit=profit,
                                           quote=quote_out, open_time=open_time, id=result)
