@@ -1,5 +1,5 @@
 {
   "close_rule1": "res[0].STOCHRSI_8[0] \u003e res[0].STOCHRSI_8[1] and res[1].STOCHRSI_8[0] \u003c res[1].STOCHRSI_8[1]",
-  "open_rule1": "res[0].STOCHRSI_8[0] \u003c res[0].STOCHRSI_8[1] and res[1].STOCHRSI_8[0] \u003e res[1].STOCHRSI_8[1]",
+  "open_rule1": "(res[0].STOCHRSI_8[0] \u003e 50 and res[0].STOCHRSI_8[0] \u003c res[0].STOCHRSI_8[1] and res[1].STOCHRSI_8[0] \u003e res[1].STOCHRSI_8[1]) or (res[0].HA_close \u003c res[0].HA_open and res[1].HA_close \u003c res[1].HA_open)",
   "wait_between_trades": "false"
 }
