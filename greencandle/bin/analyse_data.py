@@ -124,7 +124,7 @@ def get_match_name(matches):
     name_lookup = [['trend_200', 'golden_cross', 'over_ma', 'big_change_outside'],
                    ['ema_trend'],
                    ['distance', 'bb', "bbperc_diff", "bbperc_extreme"],
-                   ['macd_check'],
+                   ['STOCHRSI_flip'],
                    ['STOCHRSI_check'],
                    ['rsi'],
                    ['trend_confirm'],
