@@ -1,5 +1,14 @@
 # Releases
 
+# 7.11.6
+* check for borrow drain first before preceeding with other checks
+* enable debug logs for data env strategy
+* check for overbought/oversold STOCHRSI and 2 conseq HA candles using closed candles
+* don't want too long when closing trade and re-fetching results
+* get perc from db query after closing trade
+* use stochrsi in direction of trend for ribbon confirmation
+* report when unable to eval extra rule or pair
+
 # 7.11.5
 * removal of delisted pairs
 * reformat jinja templates using vsot tool
