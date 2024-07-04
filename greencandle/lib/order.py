@@ -354,6 +354,13 @@ class Trade():
         orig_base = get_base(pair)
         orig_quote = get_quote(pair)
         borrow_drain = Path('/var/local/drain/borrow_drain').is_file()
+
+        if borrow_drain:
+            return_dict['usd'] = 0
+            return_dict['symbol'] = 0
+            self.logger.info("Will skip borrow for pair %s due to borrow drain", pair)
+            return return_dict
+
         # get current borrowed
         mode = "isolated" if str2bool(self.config.main.isolated) else "cross"
         rows = dbase.get_current_borrowed(pair if mode == 'isolated' else '', mode)
@@ -411,11 +418,6 @@ class Trade():
             return_dict['symbol'] = final_symbol
             return return_dict
 
-        if borrow_drain:
-            return_dict['usd'] = 0
-            return_dict['symbol'] = 0
-            self.logger.info("Will skip borrow for pair %s due to borrow drain", pair)
-            return return_dict
 
         # Use 99% of amount determined by divisor
         # and check if we have exceeded max_borrable amount
