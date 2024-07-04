@@ -200,6 +200,7 @@ def extras():
     keys = redis.conn.keys()
     keys7 = redis7.conn.keys()
     keys11 = redis11.conn.keys()
+    time_format = "%Y-%m-%d %H:%M:%S"
     with open('/etc/router_config.json', 'r') as json_file:
         router_config = json.load(json_file)
     routes = [x for x in router_config.keys() if ('extra' in x or 'alert' in x)]
@@ -219,7 +220,7 @@ def extras():
         delete_button = (f'<form method=post action=/dash/xredis?key={key.decode()}&db=6><input '
                           'type=submit name=save value=delete></form>')
         current.update({'delete': delete_button})
-        add_time = datetime.fromtimestamp(int(key)).strftime('%c')
+        add_time = datetime.fromtimestamp(int(key)).strftime(time_format)
         current.update({'add_time': add_time})
         data['current'].append(current)
 
@@ -232,7 +233,7 @@ def extras():
         delete_button = (f'<form method=post action=/dash/xredis?key={key.decode()}&db=11><input '
                           'type=submit name=save value=delete></form>')
         processed.update({'delete': delete_button})
-        add_time = datetime.fromtimestamp(int(key)).strftime('%c')
+        add_time = datetime.fromtimestamp(int(key)).strftime(time_format)
         processed.update({'add_time': add_time})
         data['processed'].append(processed)
 

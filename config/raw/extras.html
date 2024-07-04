@@ -211,7 +211,7 @@
 
                                                 <table
                                                   class="display table nowrap responsive"
-                                                  id="customers"
+                                                  id="bydate"
                                                   style="width: 100%"
                                                 >
                                                   <thead>
@@ -243,7 +243,7 @@
 
                                               <table
                                                 class="display table nowrap responsive"
-                                                id="customers"
+                                                id="bydate"
                                                 style="width: 100%"
                                               />
                                               <thead/>
@@ -274,7 +274,7 @@
 
                             <table
                               class="display table nowrap responsive"
-                              id="customers"
+                              id="byname"
                               style="width: 100%"
                             />
                             <thead/>
@@ -307,8 +307,14 @@
     </div>
   </body>
   <script type="text/javascript">
-    $('#proxies').DataTable( {
-    "aaSorting": [[ {{ order_column }} ,'desc']]
+    $('#bydate').DataTable( {
+    "aaSorting": [[9,'desc']]
     } );
+  </script>
+  <script type="text/javascript">
+    $('#byname').DataTable( {
+    "aaSorting": [[0,'asc']]
+    } );
+
   </script>
 {% endblock %}
