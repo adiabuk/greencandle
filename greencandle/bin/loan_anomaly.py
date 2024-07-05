@@ -31,6 +31,8 @@ def main():
     dbase = Mysql()
     trade_debts = dbase.fetch_sql_data('select pair, borrowed, direction from trades where '
                                        'close_price is NULL and borrowed > 0', header=False)
+    extra_debts_usd = dbase.fetch_sql_data('select sum(borrowed_usd) from extra_loans where '
+                                           'date_removed is null', header=False)[0][0]
     for pair, borrowed, direction in trade_debts:
         base = get_base(pair)
         quote = get_quote(pair)
@@ -42,7 +44,7 @@ def main():
         elif direction == 'short':
             trade_usd +=  base2quote(borrowed, base+'USDT')
 
-    diff = actual_debts - trade_usd
+    diff = actual_debts - (trade_usd + (extra_debts_usd if extra_debts_usd else 0))
     if diff > 2000:
         msg = "CRITICAL"
         status = 2
