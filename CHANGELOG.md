@@ -1,5 +1,11 @@
 # Releases
 
+# 7.11.7
+* add usd trade value and amount for each trade in open_trades spreadsheet
+* add current trade amt to balance spreadsheet
+* include extra debts in debt anomaly calculation
+* use standard time format and sort all tables in extras UI
+
 # 7.11.6
 * check for borrow drain first before preceeding with other checks
 * enable debug logs for data env strategy
