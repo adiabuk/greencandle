@@ -47,7 +47,6 @@ class PrefixMiddleware():
         start_response('404', [('Content-Type', 'text/plain')])
         return ["This url does not belong to the app.".encode()]
 
-
 config.create_config()
 APP = Flask(__name__, template_folder="/var/www/html", static_url_path='/',
             static_folder='/var/www/html')
@@ -477,8 +476,9 @@ def get_total_values():
     and sum net perc.
     return values as tupple
     """
-    usd_amt = 0
+    usd_trade_value = 0
     total_net_perc = 0
+    usd_trade_amount = 0
     dbase = Mysql()
     raw = dbase.get_open_trades()
     commission = float(dbase.get_complete_commission())
@@ -493,11 +493,13 @@ def get_total_values():
         current_amt = (float(quote_in)/100) * float(net_perc)
         current_quote = get_quote(pair)
         if current_quote == 'USDT':
-            usd_amt += current_amt
+            usd_trade_value += current_amt
+            usd_trade_amount += quote_in
         else:
-            usd_amt += base2quote(current_amt, current_quote+'USDT')
+            usd_trade_value += base2quote(current_amt, current_quote+'USDT')
+            usd_trade_amount += base2quote(quote_in, current_quote+'USDT')
         total_net_perc += net_perc
-    return usd_amt, total_net_perc
+    return usd_trade_value, total_net_perc, usd_trade_amount
 
 @APP.route('/refresh_balance')
 @login_required
@@ -567,10 +569,12 @@ def get_balance():
         if float(item['free']) > 0:
             free[item['asset']] = float(item['free'])
 
-    total_value, total_net_perc = get_total_values()
+    total_value, total_net_perc, usd_trade_amount = get_total_values()
     all_results.append({'key': 'avail_borrow', 'usd': format_usd(client.get_max_borrow()),
                         'val': ''})
     all_results.append({'key': 'current_trade_value', 'usd': format_usd(total_value),
+                        'val': '0'})
+    all_results.append({'key': 'current_trade_amount', 'usd': format_usd(usd_trade_amount),
                         'val': '0'})
     all_results.append({'key': 'current_net_perc', 'usd': '',
                         'val': round(total_net_perc, 4)})
