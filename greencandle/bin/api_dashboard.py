@@ -439,7 +439,7 @@ def get_live():
                          "usd_net_value": format_usd(usd_net_value)})
     LIVE = all_data
     if mt5 > 0 or mt10 > 0:
-        send_slack_message("balance", f"trades over 5%: {mt5}\ntrades over 7%: {mt10}")
+        send_slack_message("balance", f"trades over 5%: {mt5}\ntrades over 10%: {mt10}")
     return LIVE
 
 @APP.route('/live', methods=['GET', 'POST'])
