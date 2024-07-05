@@ -499,8 +499,8 @@ def get_total_values():
         current_amt = (float(quote_in)/100) * float(net_perc)
         current_quote = get_quote(pair)
         if current_quote == 'USDT':
-            usd_trade_value += current_amt
-            usd_trade_amount += quote_in
+            usd_trade_value += float(current_amt)
+            usd_trade_amount += float(quote_in)
         else:
             usd_trade_value += base2quote(current_amt, current_quote+'USDT')
             usd_trade_amount += base2quote(quote_in, current_quote+'USDT')
