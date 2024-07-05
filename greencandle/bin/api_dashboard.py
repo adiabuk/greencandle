@@ -47,6 +47,7 @@ class PrefixMiddleware():
         start_response('404', [('Content-Type', 'text/plain')])
         return ["This url does not belong to the app.".encode()]
 
+
 config.create_config()
 APP = Flask(__name__, template_folder="/var/www/html", static_url_path='/',
             static_folder='/var/www/html')
@@ -398,6 +399,7 @@ def get_live():
     raw = dbase.get_open_trades()
     commission = float(dbase.get_complete_commission())
     for open_time, interval, pair, name, open_price, direction, quote_in in raw:
+        current_quote = get_quote(pair)
         current_price = prices['recent'][pair]['close']
         perc = perc_diff(open_price, current_price)
         perc = -perc if direction == 'short' else perc
@@ -418,6 +420,8 @@ def get_live():
         stop = get_value('stop', pair, name, direction)
         drawup = get_value('drawup', pair, name, direction)
         drawdown = get_value('drawdown', pair, name, direction)
+        usd_in = quote_in if 'USD' in current_quote else base2quote(quote_in, current_quote+'USDT')
+        usd_net_value = (float(usd_in)/100)*net_perc
 
         all_data.append({"pair": get_tv_link(pair, interval, anchor=True),
                          "interval": interval,
@@ -430,7 +434,9 @@ def get_live():
                          "current_price": '{:g}'.format(float(current_price)),
                          "tp/sl": f"{take}/{stop}",
                          "du/dd": f"{round(drawup,2)}/{round(drawdown,2)}",
-                         "quote_in": quote_in})
+                         "quote_in": quote_in,
+                         "usd_in": format_usd(usd_in),
+                         "usd_net_value": format_usd(usd_net_value)})
     LIVE = all_data
     if mt5 > 0 or mt10 > 0:
         send_slack_message("balance", f"trades over 5%: {mt5}\ntrades over 7%: {mt10}")
