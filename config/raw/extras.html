@@ -210,7 +210,7 @@
 
                                                 <table
                                                   class="display table nowrap responsive"
-                                                  id="bydate"
+                                                  id="current"
                                                   style="width: 100%"
                                                 >
                                                   <thead>
@@ -242,7 +242,7 @@
 
                                               <table
                                                 class="display table nowrap responsive"
-                                                id="bydate"
+                                                id="processed"
                                                 style="width: 100%"
                                               />
                                               <thead/>
@@ -273,7 +273,7 @@
 
                             <table
                               class="display table nowrap responsive"
-                              id="byname"
+                              id="saved"
                               style="width: 100%"
                             />
                             <thead/>
@@ -306,12 +306,18 @@
     </div>
   </body>
   <script type="text/javascript">
-    $('#bydate').DataTable( {
+    $('#current').DataTable( {
     "aaSorting": [[9,'desc']]
     } );
   </script>
   <script type="text/javascript">
-    $('#byname').DataTable( {
+    $('#processed').DataTable( {
+    "aaSorting": [[9,'desc']]
+    } );
+  </script>
+
+  <script type="text/javascript">
+    $('#saved').DataTable( {
     "aaSorting": [[0,'asc']]
     } );
 
