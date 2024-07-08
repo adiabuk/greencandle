@@ -96,7 +96,7 @@ def perform_data(pair, interval, data_dir, indicators):
         redis.update_drawdown(pair, current_candle)
         redis.update_drawup(pair, current_candle)
         action = 1 if config.main.trade_direction == 'long' else -1
-        if result == "OPEN":
+        if result == "OPEN" and not_current_trade:
             opens.append((pair, current_time, current_price, event, action, None))
             LOGGER.debug("Items to open: %s", opens)
             trade_result = trade.open_trade(opens)
@@ -106,8 +106,8 @@ def perform_data(pair, interval, data_dir, indicators):
             else:
                 LOGGER.info("Unable to open trade")
 
-        elif result == "CLOSE":
-            closes.append((pair, current_time, current_price, event, 0))
+        elif result == "CLOSE" and current_trade:
+            closes.append((pair, current_time, current_price, event, 0, 100))
             LOGGER.debug("Items to close: %s", closes)
             drawdown = redis.get_drawdown(pair)['perc']
             drawup = redis.get_drawup(pair)['perc']

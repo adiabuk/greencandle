@@ -421,10 +421,10 @@ class Redis():
         except TypeError:
             return result
 
-    def __log_event(self, pair, event, current_time, data):
+    def __log_event(self, pair, event, current_time, data, agg):
         """Send event data to logger"""
 
-        message = f'EVENT:({pair}) {event} time:{current_time} data:{data}'
+        message = f'EVENT:({pair}) {event} time:{current_time} data:{data} agg:{agg}'
 
         if any(status in event for status in ['NOITEM', 'HOLD']):
             self.logger.debug(message)
@@ -483,7 +483,7 @@ class Redis():
             result = "NOITEM"
             event = self.get_event_str(result)
 
-        self.__log_event(pair=pair, event=event, current_time=current_time, data=0)
+        self.__log_event(pair=pair, event=event, current_time=current_time, data=0, agg=0)
 
         return (result, event, current_time, current_price)
 
@@ -735,6 +735,11 @@ class Redis():
         """
         main_indicators = config.main.indicators.split()
 
+        redis3 = Redis(interval=interval, db=3)
+        raw = redis3.conn.hgetall(f'{pair}:{interval}')
+        agg = AttributeDict({k.decode():get_float(v.decode()) for k, v in raw.items()})
+        del redis3
+
         ind_list = []
         for i in main_indicators:
             if 'vol' in i:
@@ -762,6 +767,13 @@ class Redis():
             ohlc = self.get_current(name, items[i])[-1]
             for item in ['open', 'high', 'low', 'close']:
                 ohlc[item] = float(ohlc[item])
+
+            ha_raw = self.get_current(name, items[i], 'HA_0')[-1]
+            if ha_raw:
+                ha_ohlc={}
+                for item in ['open', 'high', 'low', 'close']:
+                    ha_ohlc[f'HA_{item}'] = float(ha_raw[item])
+                datax.update(ha_ohlc)
 
             datax.update(ohlc)
             res.append(datax)
@@ -945,7 +957,8 @@ class Redis():
             result = 'NOITEM'
             event = self.get_event_str(result)
 
-        self.__log_event(pair=pair, event=event, current_time=current_time, data=str(res[0]))
+        self.__log_event(pair=pair, event=event, current_time=current_time, data=str(res[0]),
+                         agg=str(agg))
 
         winning_close = self.get_rules(rules, 'close')
         winning_open = self.get_rules(rules, 'open')
