@@ -1,5 +1,16 @@
 # Releases
 
+# 7.11.8
+* slack msgs only for macd volume
+* allow more data in redis results & convert volume to float
+* MACD volume strategy long&short
+* list of None's evals as True, so check 1st item
+* fixes for backend_test
+* remove non-trading pairs
+* fix slack msg perc
+* separate javascript func for each table to sort
+* remove spaces in html textbox
+
 # 7.11.7
 * add usd trade value and amount for each trade in open_trades spreadsheet
 * add current trade amt to balance spreadsheet
