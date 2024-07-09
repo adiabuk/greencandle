@@ -650,7 +650,7 @@ class Redis():
             ind = split[1]+'_' +split[2].split(',')[0]
             ind_list.append(ind)
         items = self.get_items(pair, interval)
-        for i in range(-1, -5, -1): # from, to, increment
+        for i in range(-1, -6, -1): # from, to, increment
             # look backwards through last 3 items of redis data
             datax = AttributeDict()
             for indicator in ind_list:
