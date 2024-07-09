@@ -1,0 +1,5 @@
+{
+  "interval": "5m",
+  "name": "data-be-analyse-5m-short7",
+  "time_between_trades": "4h"
+}
