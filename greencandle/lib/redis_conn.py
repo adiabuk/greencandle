@@ -657,7 +657,7 @@ class Redis():
                 datax[indicator] = self.get_result(items[i], indicator, pair, interval)
             name = f"{pair}:{interval}"
             ohlc = self.get_current(name, items[i])[-1]
-            for item in ['open', 'high', 'low', 'close']:
+            for item in ['open', 'high', 'low', 'close', 'volume']:
                 ohlc[item] = float(ohlc[item])
             ha_raw = self.get_current(name, items[i], 'HA_0')[-1]
             if ha_raw:
@@ -765,7 +765,7 @@ class Redis():
 
             # Floatify each of the ohlc elements before adding
             ohlc = self.get_current(name, items[i])[-1]
-            for item in ['open', 'high', 'low', 'close']:
+            for item in ['open', 'high', 'low', 'close', 'volume']:
                 ohlc[item] = float(ohlc[item])
 
             ha_raw = self.get_current(name, items[i], 'HA_0')[-1]
