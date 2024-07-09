@@ -1,0 +1,3 @@
+{
+  "open_rule1": "res[0].volume \u003e (res[1].volume+ res[2].volume+ res[3].volume+ res[4].volume)/4*40 and res[0].MACD_19[0] \u003e res[0].MACD_19[1] and (res[1].MACD_19[0] \u003c res[1].MACD_19[1] or res[2].MACD_19[0] \u003c res[2].MACD_19[1] or res[3].MACD_19[0] \u003c res[3].MACD_19[1])"
+}
