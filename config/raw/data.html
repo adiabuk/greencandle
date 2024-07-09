@@ -50,16 +50,18 @@
       <!-- Datatable -->
 
       <link
-        href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"
+        href="jquery.dataTables.min.css"
         rel="stylesheet"
         type="text/css"
       >
 
-        <link
-          href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css"
+        <!-- <link
+          href="https://cdn.datatables.net/responsive/2.2.3/css/dataTables.responsive.min.css"
           rel="stylesheet"
           type="text/css"
-        >
+	  > -->
+
+        <link href="{{ url_for('static', filename='dataTables.responsive.min.css') }}" rel="stylesheet" type="text/css">
 
           <script
             src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"
@@ -90,6 +92,22 @@
           <script src="excellentexport.js">
             
           </script>
+
+<style>
+
+
+    .out-of-stock{ background-color: #f44336; color: #222;}
+
+    .high-stock{ background-color: #8bc34a; color: #222; }
+
+    .medium-stock{ background-color: #ffa726; color: #222; }
+
+    .low-stock{ background-color: #ff7043; color: #222; }
+
+    .link { color: black; font-size: 14px}
+
+</style>
+
         </head>
         <body>
           <div>
@@ -137,17 +155,17 @@
                       <tr>
                         {% for header in results[0].keys() %}
                           <th>
-                            {{ header }}
+			  {{ header }}
                           </th>
                         {% endfor %}
                       </tr>
                     </thead>
                     <tbody>
                       {% for row in results %}
-                        <tr/>
+		      <tr class="product-row" >
                         {% for index in range(0, len(fieldnames)) %}
-                          <td/>
-                          {{ row[fieldnames[index]] }}
+			<td class="{{fieldnames[index]}}"/>
+				<div> {{ row[fieldnames[index]] }}</div>
                         </td>
                       {% endfor %}
                     </tr>
@@ -168,5 +186,50 @@
       ]
       } );
     </script>
+
+<script>
+
+  // Select all elements with the class "product-row"
+  const rows = document.querySelectorAll(".product-row");
+
+  // Loop through each "product-row" element
+  for(let i = 0; i < rows.length; i++){
+
+      // Get the stock value of the current product
+ const stock = rows[i].querySelector(".net_perc").textContent;
+
+// Add a class to the current element based on stock value
+      // Product is out of stock
+      if(stock == 0){
+          rows[i].classList.add("out-of-stock");
+        }
+
+       // Product has low stock
+      else if(stock < 0 ){
+          rows[i].classList.toggle("low-stock");
+	  //reloadCss();
+        }
+
+      // Product has medium stock
+      else if(stock >= 5 && stock < 10){
+          rows[i].classList.add("medium-stock");
+         }
+
+       // Product has high stock
+      else { rows[i].classList.add("high-stock"); }
+
+  }
+function reloadCss()
+{
+    var links = document.getElementsByTagName("link");
+    for (var cl in links)
+    {
+        var link = links[cl];
+        if (link.rel === "stylesheet")
+            link.href += "";
+    }
+}
+</script>
+
   </html>
 {% endblock %}

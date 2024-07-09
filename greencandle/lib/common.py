@@ -258,7 +258,7 @@ def get_trade_link(pair, strategy, action, string, anchor=False, short_url=False
     """Get trade link for forced trade"""
     url = "" if short_url else f"http://www.{base_env}.amrox.loc/"
     if anchor:
-        return Markup(f'<a href="{url}/dash/action?pair={pair.strip()}&strategy='
+        return Markup(f'<a class="link" href="{url}/dash/action?pair={pair.strip()}&strategy='
                       f'{strategy.strip()}&action={action.strip()}&close=true" target="_blank">'
                       f'{string.strip()}</a>')
 
