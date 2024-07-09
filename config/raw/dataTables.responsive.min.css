@@ -1,13 +1,10 @@
 table.dataTable.dtr-inline.collapsed>tbody>tr>td.child,table.dataTable.dtr-inline.collapsed>tbody>tr>th.child,table.dataTable.dtr-inline.collapsed>tbody>tr>td.dataTables_empty{
-	color: #fff;
 	cursor:default !important;
 }
 table.dataTable.dtr-inline.collapsed>tbody>tr>td.child:before,table.dataTable.dtr-inline.collapsed>tbody>tr>th.child:before,table.dataTable.dtr-inline.collapsed>tbody>tr>td.dataTables_empty:before{
-	color: #fff;
 	display: none !important
 }
 table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td:first-child,table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>th:first-child{
-	color: #fff;
 	position: relative;
 	padding-left: 30px;
 	cursor: pointer
@@ -19,7 +16,6 @@ table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td:first-child:before,
 	width: 14px;
 	display: block;
 	position: absolute;
-	color: #fff;
 	border: 2px solid white;
 	border-radius: 14px;
 	box-shadow: 0 0 3px #444;
@@ -33,15 +29,12 @@ table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td:first-child:before,
 }
 table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td:first-child:before,table.dataTable.dtr-inline.collapsed>tbody>tr.parent>th:first-child:before{
 	content: '-';
-	color: #fff;
 	background-color: #d33333
 }
 table.dataTable.dtr-inline.collapsed.compact>tbody>tr>td:first-child,table.dataTable.dtr-inline.collapsed.compact>tbody>tr>th:first-child{
-	color: #fff;
 	padding-left: 27px
 }
 table.dataTable.dtr-inline.collapsed.compact>tbody>tr>td:first-child:before,table.dataTable.dtr-inline.collapsed.compact>tbody>tr>th:first-child:before{
-	color: #fff;
 	top: 5px;
 	left: 4px;
 	height: 14px;
@@ -52,7 +45,6 @@ table.dataTable.dtr-inline.collapsed.compact>tbody>tr>td:first-child:before,tabl
 }
 table.dataTable.dtr-column>tbody>tr>td.control,table.dataTable.dtr-column>tbody>tr>th.control{
 	position: relative;
-	color: #fff;
 	cursor: pointer
 }
 table.dataTable.dtr-column>tbody>tr>td.control:before,table.dataTable.dtr-column>tbody>tr>th.control:before{
@@ -64,7 +56,6 @@ table.dataTable.dtr-column>tbody>tr>td.control:before,table.dataTable.dtr-column
 	margin-left: -10px;
 	display: block;
 	position: absolute;
-	color: #fff;
 	border: 2px solid white;
 	border-radius: 14px;
 	box-shadow: 0 0 3px #444;
@@ -78,7 +69,6 @@ table.dataTable.dtr-column>tbody>tr>td.control:before,table.dataTable.dtr-column
 }
 table.dataTable.dtr-column>tbody>tr.parent td.control:before,table.dataTable.dtr-column>tbody>tr.parent th.control:before{
 	content: '-';
-	color: #fff;
 	background-color: #d33333
 }
 table.dataTable>tbody>tr.child{
