@@ -2,6 +2,5 @@
   "api_forward": "5m-2",
   "interval": "5m",
   "name": "data-be-analyse-5m-long2",
-  "slack_active": "true",
   "time_between_trades": "5h"
 }
