@@ -952,10 +952,9 @@ class Trade():
                             isolated=str2bool(self.config.main.isolated),
                             asset=base)
                     except BinanceException as binex:
-                        max_borrow = self.client.get_max_borrow(base)
                         self.logger.error(f"TRADE: borrow error-open short {pair} "
                                           f"while trying to borrow {amount_to_borrow} {base}: "
-                                          f"{str(binex)}, max_borrow:{max_borrow}")
+                                          f"{str(binex)}")
                         return False
 
                     self.logger.info("TRADE: borrowed %s of %s for short pair %s "
