@@ -260,7 +260,7 @@ def get_trade_link(pair, strategy, action, string, anchor=False, short_url=False
     if anchor:
         return Markup(f'<a class="link" href="{url}/dash/action?pair={pair.strip()}&strategy='
                       f'{strategy.strip()}&action={action.strip()}&close=true" target="_blank" '
-                      f'onclick="if (!confirm(\'Are you sure?\')) return false;>'
+                      f'onclick="if (!confirm(\'Are you sure?\')) return false;">'
                       f'{string.strip()}</a>')
 
     return (f"<{url}/dash/action?pair={pair.strip()}&strategy={strategy.strip()}"
