@@ -55,12 +55,6 @@
         type="text/css"
       >
 
-        <!-- <link
-          href="https://cdn.datatables.net/responsive/2.2.3/css/dataTables.responsive.min.css"
-          rel="stylesheet"
-          type="text/css"
-	  > -->
-
         <link href="{{ url_for('static', filename='dataTables.responsive.min.css') }}" rel="stylesheet" type="text/css">
 
           <script
@@ -68,19 +62,17 @@
           >
             
           </script>
-
           <script
             src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"
             type= "text/javascript"
           >
-            
+
           </script>
 
           <script
             src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"
             type= "text/javascript"
           >
-            
           </script>
 
           <script
@@ -96,15 +88,15 @@
 <style>
 
 
-    .out-of-stock{ background-color: #f44336; color: #222;}
+    .zero-profit{ background-color: #f44336; color: #222;}
 
-    .high-stock{ background-color: #8bc34a; color: #222; }
+    .high-profit{ background-color: #8bc34a; color: #222; }
 
-    .medium-stock{ background-color: #ffa726; color: #222; }
+    .medium-profit{ background-color: #ffa726; color: #222; }
 
-    .low-stock{ background-color: #ff7043; color: #222; }
+    .low-profit{ background-color: #ff7043; color: #222; }
 
-    .link { color: black; font-size: 14px}
+    .link { color: black; font-size: 16px}
 
 </style>
 
@@ -181,44 +173,45 @@
       $('#proxies').DataTable( {
       "aaSorting": [[ {{ order_column }} ,'desc']],
       lengthMenu: [
-      [10, 25, 50, 100, -1],
-      [10, 25, 50, 100, 'All']
+      [-1, 10, 25, 50, 100],
+      ['All', 10, 25, 50, 100]
       ]
       } );
-    </script>
 
-<script>
-
+function updateColours()
+{
   // Select all elements with the class "product-row"
   const rows = document.querySelectorAll(".product-row");
 
   // Loop through each "product-row" element
   for(let i = 0; i < rows.length; i++){
 
-      // Get the stock value of the current product
- const stock = rows[i].querySelector(".net_perc").textContent;
+      // Get the profit value of the current product
+ const profit = rows[i].querySelector(".net_perc").textContent;
 
-// Add a class to the current element based on stock value
-      // Product is out of stock
-      if(stock == 0){
-          rows[i].classList.add("out-of-stock");
+// Add a class to the current element based on profit value
+      // Product is out of profit
+      if(profit == 0){
+          rows[i].classList.add("zero-profit");
         }
 
-       // Product has low stock
-      else if(stock < 0 ){
-          rows[i].classList.toggle("low-stock");
-	  //reloadCss();
+       // Product has low profit
+      else if(profit < -1 ){
+          rows[i].classList.toggle("low-profit");
+	  reloadCss();
         }
 
-      // Product has medium stock
-      else if(stock >= 5 && stock < 10){
-          rows[i].classList.add("medium-stock");
+      // Product has medium profit
+      else if(profit >= -1 && profit < 1){
+          rows[i].classList.add("medium-profit");
          }
 
-       // Product has high stock
-      else { rows[i].classList.add("high-stock"); }
+       // Product has high profit
+      else { rows[i].classList.add("high-profit"); }
 
   }
+}
+updateColours();
 function reloadCss()
 {
     var links = document.getElementsByTagName("link");
@@ -229,6 +222,7 @@ function reloadCss()
             link.href += "";
     }
 }
+
 </script>
 
   </html>
