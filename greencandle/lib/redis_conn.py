@@ -440,6 +440,8 @@ class Redis():
         current_high = current_candle.high
         current_low = current_candle.low
 
+        self.update_drawup(pair, current_candle)
+        self.update_drawdown(pair, current_candle)
         high_price = self.get_drawup(pair)['price']
         low_price = self.get_drawdown(pair)['price']
 
