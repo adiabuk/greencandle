@@ -246,7 +246,7 @@ class ProdRunner():
             try:
                 stream_req = requests.get(stream, timeout=10)
                 prices = stream_req.json()
-            except requests.exceptions.ConnectTimeout:
+            except (requests.exceptions.ConnectTimeout, ValueError):
                 prices = {}
 
             try:
