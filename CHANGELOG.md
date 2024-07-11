@@ -1,5 +1,13 @@
 # Releases
 
+# 7.11.9
+* confirmation dialog for API UI trades
+* fix dc file
+* Colour for trade entries in UI
+* add strategy name to new macd/vol strategy containers
+* filter out pairs with missing data
+* add long container for MACD volume
+
 # 7.11.8
 * slack msgs only for macd volume
 * allow more data in redis results & convert volume to float
