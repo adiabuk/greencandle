@@ -4387,7 +4387,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      -
+      - /var/run/:/var/run
 
   data-be-analyse-4h-short11:
     container_name: data-be-analyse-4h-short11
@@ -4459,4 +4459,4 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
-      - /var/run/:/var/run /var/run/:/var/run
+      - /var/run/:/var/run
