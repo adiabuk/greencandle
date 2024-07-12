@@ -6,7 +6,7 @@
   "interval": "5m",
   "max_trades": "60",
   "pairs": "any",
-  "perc_at_timeout": "1",
+  "perc_at_timeout": "2",
   "take_profit_perc": "3",
   "time_in_trade": "10h",
   "trailing_start": "8",
