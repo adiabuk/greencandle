@@ -4172,3 +4172,291 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/:/var/run
+
+  data-be-analyse-15m-short11:
+    container_name: data-be-analyse-15m-short11
+    hostname: data-be-analyse-15m-short11
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2g
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "analyse_data"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local3
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_15m
+    environment:
+      - CONFIG_ENV=data/be/short/short11/15m
+      - DB=true
+    healthcheck:
+      test: find /var/local/lock  -mmin -2 -name data-be-analyse-15m-short11 2>&1 |grep . ||exit 1
+      start_period: 1h
+      interval: 10m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /var/local:/var/local
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-analyse-15m-long11:
+    container_name: data-be-analyse-15m-long11
+    hostname: data-be-analyse-15m-long11
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2g
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "analyse_data"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local3
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_15m
+    environment:
+      - CONFIG_ENV=data/be/long/long11/15m
+      - DB=true
+    healthcheck:
+      test: find /var/local/lock  -mmin -2 -name data-be-analyse-15m-long11 2>&1 |grep . ||exit 1
+      start_period: 1h
+      interval: 10m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /var/local:/var/local
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-analyse-30m-short11:
+    container_name: data-be-analyse-30m-short11
+    hostname: data-be-analyse-30m-short11
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2g
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "analyse_data"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local3
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_30m
+    environment:
+      - CONFIG_ENV=data/be/short/short11/30m
+      - DB=true
+    healthcheck:
+      test: find /var/local/lock  -mmin -2 -name data-be-analyse-30m-short11 2>&1 |grep . ||exit 1
+      start_period: 1h
+      interval: 10m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /var/local:/var/local
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-analyse-30m-long11:
+    container_name: data-be-analyse-30m-long11
+    hostname: data-be-analyse-30m-long11
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2g
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "analyse_data"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local3
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_30m
+    environment:
+      - CONFIG_ENV=data/be/long/long11/30m
+      - DB=true
+    healthcheck:
+      test: find /var/local/lock  -mmin -2 -name data-be-analyse-30m-long11 2>&1 |grep . ||exit 1
+      start_period: 1h
+      interval: 10m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /var/local:/var/local
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-analyse-1h-short11:
+    container_name: data-be-analyse-1h-short11
+    hostname: data-be-analyse-1h-short11
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2g
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "analyse_data"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local3
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_1h
+    environment:
+      - CONFIG_ENV=data/be/short/short11/1h
+      - DB=true
+    healthcheck:
+      test: find /var/local/lock  -mmin -2 -name data-be-analyse-1h-short11 2>&1 |grep . ||exit 1
+      start_period: 1h
+      interval: 10m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /var/local:/var/local
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-analyse-1h-long11:
+    container_name: data-be-analyse-1h-long11
+    hostname: data-be-analyse-1h-long11
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2g
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "analyse_data"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local3
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_1h
+    environment:
+      - CONFIG_ENV=data/be/long/long11/1h
+      - DB=true
+    healthcheck:
+      test: find /var/local/lock  -mmin -2 -name data-be-analyse-1h-long11 2>&1 |grep . ||exit 1
+      start_period: 1h
+      interval: 10m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /var/local:/var/local
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      -
+
+  data-be-analyse-4h-short11:
+    container_name: data-be-analyse-4h-short11
+    hostname: data-be-analyse-4h-short11
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2g
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "analyse_data"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local3
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_4h
+    environment:
+      - CONFIG_ENV=data/be/short/short11/4h
+      - DB=true
+    healthcheck:
+      test: find /var/local/lock  -mmin -2 -name data-be-analyse-4h-short11 2>&1 |grep . ||exit 1
+      start_period: 1h
+      interval: 10m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /var/local:/var/local
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-analyse-4h-long11:
+    container_name: data-be-analyse-4h-long11
+    hostname: data-be-analyse-4h-long11
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2g
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "analyse_data"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local3
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_4h
+    environment:
+      - CONFIG_ENV=data/be/long/long11/4h
+      - DB=true
+    healthcheck:
+      test: find /var/local/lock  -mmin -2 -name data-be-analyse-4h-long11 2>&1 |grep . ||exit 1
+      start_period: 1h
+      interval: 10m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /var/local:/var/local
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run /var/run/:/var/run
