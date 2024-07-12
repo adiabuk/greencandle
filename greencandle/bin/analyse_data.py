@@ -117,7 +117,7 @@ def get_match_name(matches):
     """
     match_names = []
     try:
-        container_num = int(config.main.name[-1])
+        container_num = int(config.main.name[len(config.main.name.rstrip('0123456789')):])
     except ValueError:
         container_num = 1
 
