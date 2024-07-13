@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `accounts`;
 /*!50001 DROP VIEW IF EXISTS `accounts`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `accounts` AS SELECT 
+/*!50001 CREATE VIEW `accounts` AS SELECT
  1 AS `open_time`,
  1 AS `close_time`,
  1 AS `open_price`,
@@ -47,7 +47,7 @@ DROP TABLE IF EXISTS `accounts2`;
 /*!50001 DROP VIEW IF EXISTS `accounts2`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `accounts2` AS SELECT 
+/*!50001 CREATE VIEW `accounts2` AS SELECT
  1 AS `id`,
  1 AS `open_time`,
  1 AS `close_time`,
@@ -141,7 +141,7 @@ DROP TABLE IF EXISTS `commission_paid_daily`;
 /*!50001 DROP VIEW IF EXISTS `commission_paid_daily`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `commission_paid_daily` AS SELECT 
+/*!50001 CREATE VIEW `commission_paid_daily` AS SELECT
  1 AS `sum(gbp_amt)`,
  1 AS `date`*/;
 SET character_set_client = @saved_cs_client;
@@ -186,7 +186,7 @@ DROP TABLE IF EXISTS `profit`;
 /*!50001 DROP VIEW IF EXISTS `profit`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profit` AS SELECT 
+/*!50001 CREATE VIEW `profit` AS SELECT
  1 AS `id`,
  1 AS `day`,
  1 AS `open_time`,
@@ -229,7 +229,7 @@ DROP TABLE IF EXISTS `profit_by_dayname_diretion`;
 /*!50001 DROP VIEW IF EXISTS `profit_by_dayname_diretion`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profit_by_dayname_diretion` AS SELECT 
+/*!50001 CREATE VIEW `profit_by_dayname_diretion` AS SELECT
  1 AS `day_name`,
  1 AS `sum(
 		net_perc)`,
@@ -245,7 +245,7 @@ DROP TABLE IF EXISTS `profit_daily_breakdown_close`;
 /*!50001 DROP VIEW IF EXISTS `profit_daily_breakdown_close`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profit_daily_breakdown_close` AS SELECT 
+/*!50001 CREATE VIEW `profit_daily_breakdown_close` AS SELECT
  1 AS `dayname`,
  1 AS `interval`,
  1 AS `date`,
@@ -264,7 +264,7 @@ DROP TABLE IF EXISTS `profit_daily_breakdown_open`;
 /*!50001 DROP VIEW IF EXISTS `profit_daily_breakdown_open`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profit_daily_breakdown_open` AS SELECT 
+/*!50001 CREATE VIEW `profit_daily_breakdown_open` AS SELECT
  1 AS `dayname`,
  1 AS `interval`,
  1 AS `date`,
@@ -283,7 +283,7 @@ DROP TABLE IF EXISTS `profit_daily_by_close`;
 /*!50001 DROP VIEW IF EXISTS `profit_daily_by_close`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profit_daily_by_close` AS SELECT 
+/*!50001 CREATE VIEW `profit_daily_by_close` AS SELECT
  1 AS `date`,
  1 AS `day`,
  1 AS `sum_net_perc`,
@@ -305,7 +305,7 @@ DROP TABLE IF EXISTS `profit_daily_by_open`;
 /*!50001 DROP VIEW IF EXISTS `profit_daily_by_open`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profit_daily_by_open` AS SELECT 
+/*!50001 CREATE VIEW `profit_daily_by_open` AS SELECT
  1 AS `date`,
  1 AS `day`,
  1 AS `sum_net_perc`,
@@ -327,7 +327,7 @@ DROP TABLE IF EXISTS `profit_hourly`;
 /*!50001 DROP VIEW IF EXISTS `profit_hourly`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profit_hourly` AS SELECT 
+/*!50001 CREATE VIEW `profit_hourly` AS SELECT
  1 AS `date`,
  1 AS `day`,
  1 AS `hour`,
@@ -348,7 +348,7 @@ DROP TABLE IF EXISTS `profit_monthly`;
 /*!50001 DROP VIEW IF EXISTS `profit_monthly`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profit_monthly` AS SELECT 
+/*!50001 CREATE VIEW `profit_monthly` AS SELECT
  1 AS `date`,
  1 AS `usd_profit`,
  1 AS `usd_net_profit`,
@@ -365,7 +365,7 @@ DROP TABLE IF EXISTS `profit_weekly`;
 /*!50001 DROP VIEW IF EXISTS `profit_weekly`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profit_weekly` AS SELECT 
+/*!50001 CREATE VIEW `profit_weekly` AS SELECT
  1 AS `week_no`,
  1 AS `week_commencing`,
  1 AS `count`,
@@ -383,7 +383,7 @@ DROP TABLE IF EXISTS `profitable_all`;
 /*!50001 DROP VIEW IF EXISTS `profitable_all`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profitable_all` AS SELECT 
+/*!50001 CREATE VIEW `profitable_all` AS SELECT
  1 AS `pair`,
  1 AS `name`,
  1 AS `total`,
@@ -411,7 +411,7 @@ DROP TABLE IF EXISTS `profitable_by_name`;
 /*!50001 DROP VIEW IF EXISTS `profitable_by_name`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profitable_by_name` AS SELECT 
+/*!50001 CREATE VIEW `profitable_by_name` AS SELECT
  1 AS `name`,
  1 AS `total`,
  1 AS `profit`,
@@ -437,7 +437,7 @@ DROP TABLE IF EXISTS `profitable_by_name_date`;
 /*!50001 DROP VIEW IF EXISTS `profitable_by_name_date`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profitable_by_name_date` AS SELECT 
+/*!50001 CREATE VIEW `profitable_by_name_date` AS SELECT
  1 AS `name`,
  1 AS `direction`,
  1 AS `date`,
@@ -465,7 +465,7 @@ DROP TABLE IF EXISTS `profitable_hours`;
 /*!50001 DROP VIEW IF EXISTS `profitable_hours`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `profitable_hours` AS SELECT 
+/*!50001 CREATE VIEW `profitable_hours` AS SELECT
  1 AS `hour`,
  1 AS `hour_perc`,
  1 AS `net_hour_perc`,
@@ -497,12 +497,12 @@ CREATE TABLE `trades` (
   `quote_out` varchar(40) DEFAULT NULL,
   `name` varchar(40) DEFAULT NULL,
   `closed_by` varchar(40) DEFAULT NULL,
-  `drawdown_perc` varchar(4) DEFAULT NULL,
+  `drawdown_perc` varchar(6) DEFAULT NULL,
   `borrowed` varchar(30) DEFAULT '0',
   `borrowed_usd` varchar(30) DEFAULT NULL,
   `divisor` varchar(3) DEFAULT '0',
   `direction` varchar(30) DEFAULT NULL,
-  `drawup_perc` varchar(4) DEFAULT NULL,
+  `drawup_perc` varchar(6) DEFAULT NULL,
   `open_usd_rate` varchar(30) DEFAULT NULL,
   `open_gbp_rate` varchar(30) DEFAULT NULL,
   `close_usd_rate` varchar(30) DEFAULT NULL,
