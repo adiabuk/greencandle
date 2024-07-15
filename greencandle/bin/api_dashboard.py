@@ -452,7 +452,7 @@ def live():
     if config.main.base_env == 'data':
         files['aggregate'] = (get_agg(), 1)
     else:
-        files['open_trades'] =  (get_live(), 4)
+        files['open_trades'] =  (get_live(), 5)
         files['balance'] = (BALANCE, 1)
 
     if request.method == 'GET':
