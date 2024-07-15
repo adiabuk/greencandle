@@ -1,5 +1,17 @@
 # Releases
 
+# 7.11.10
+* order open trades by net_perc
+* remove delisted pair
+* new volume rule with confirmation on 4h
+* allow more chars in drawup/drawdown db columns
+* increase prod timeout perc
+* add more intervals to volume strategy
+* match more than one digit for container number matching
+* Capture jsondecodeerror/valuerror extracting data from stream
+* don't try to get borrow amount twice
+* ensure drawup/drawdown is set before retrieving
+
 # 7.11.9
 * confirmation dialog for API UI trades
 * fix dc file
