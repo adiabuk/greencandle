@@ -1,5 +1,10 @@
 # Releases
 
+# 7.11.11
+* increase timeout duration/amount for 4h prod
+* fixes for db view to use open_time
+* remove applied db changes
+
 # 7.11.10
 * order open trades by net_perc
 * remove delisted pair
