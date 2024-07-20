@@ -93,9 +93,9 @@ class Balance(dict):
         if phemex:
             phemex = get_phemex_values()
             combined_dict.update(phemex)
-        else:
-            phemex = self.get_empty_values('phemex')
-            combined_dict.update(phemex)
+        #else:
+        #    phemex = self.get_empty_values('phemex')
+        #    combined_dict.update(phemex)
 
         if coinbase:
             try:
@@ -159,13 +159,17 @@ class Balance(dict):
             phemex_usd = 0
         totals_btc = float(binance_btc) + float(phemex_btc)
         totals_usd = float(binance_usd) + float(phemex_usd)
+        if phemex:
+            balances = [f"Phemex USD = ${phemex_usd:,.2f}",
+                        f"Phemex BTC = ฿{round(phemex_btc, 5)}",
+                        f"Binance USD = ${binance_usd:,.2f}",
+                        f"Binance BTC = ฿{round(binance_btc, 5)}"]
 
-        balances = [f"Binance USD = ${binance_usd:,.2f}",
-                    f"Binance BTC = ฿{round(binance_btc, 5)}",
-                    f"Phemex USD = ${phemex_usd:,.2f}",
-                    f"Phemex BTC = ฿{round(phemex_btc, 5)}",
-                    f"TOTAL USD = ${totals_usd:,.2f}",
-                    f"TOTAL BTC = ฿{round(totals_btc, 5)}"]
+        else:
+            balances = []
+
+        balances += [f"TOTAL USD = ${totals_usd:,.2f}",
+                     f"TOTAL BTC = ฿{round(totals_btc, 5)}"]
 
         bal_str = '\n'.join(balances) + '\n'
         return bal_str

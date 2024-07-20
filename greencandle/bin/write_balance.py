@@ -30,6 +30,7 @@ def main():
     prices = balance.get_balance(margin=True, phemex=phemex)
     balance.save_balance(prices)
     bal_str = balance.get_saved_balance(prices)
+    print(bal_str)
 
     send_slack_message('balance', bal_str, name=sys.argv[0].rsplit('/', maxsplit=1)[-1])
 
