@@ -1,11 +1,18 @@
 {% extends "layout.html" %}
 {% block content %}
+
+  {% if alert %}
+    <script>
+	window.alert("{{ alert }}");
+    </script>
+  {% endif %}
+
   <div>
     <h1>
       Commands
     </h1>
     <!-- Command with args -->
-    {% for script, args in arg_scripts.items() %}
+        {% for script, args in arg_scripts.items() %}
       Run {{ script }}
       <form action="/dash/run?command={{script}}" method="post">
         {% for item in args %}

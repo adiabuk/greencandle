@@ -121,7 +121,7 @@ def healthcheck():
 @login_required
 def commands():
     """Run commands locally"""
-    return render_template('commands.html', scripts=SCRIPTS, arg_scripts=ARG_SCRIPTS)
+    return render_template('commands.html', scripts=SCRIPTS, arg_scripts=ARG_SCRIPTS, alert=None)
 
 @APP.route('/internal', methods=["GET"])
 @login_required
@@ -151,16 +151,19 @@ def run():
     command = request.args.get('command')
     args = request.form.to_dict(flat=False)
     args.popitem() #remove submit button
+    output = None
 
     if command.strip() in SCRIPTS:
-        subprocess.Popen(command)
-    if any(command.strip() in sublist for sublist in ARG_SCRIPTS):
+        output = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    elif any(command.strip() in sublist for sublist in ARG_SCRIPTS):
         args = {key: value[0] for key, value in args.items() if value[0].strip() !=""}
         for key, value in args.items():
             # add args to command
             command += f' --{key} {value}'
-        subprocess.Popen(command.split())
-    return redirect(url_for('commands'))
+        output = subprocess.Popen(command.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    alert = output.stdout.read().decode() + output.stderr.read().decode() if output else "No output"
+    return render_template('commands.html', scripts=SCRIPTS, arg_scripts=ARG_SCRIPTS,
+                           alert=f'{command.strip()}: {alert}')
 
 @APP.route('/charts', methods=["GET"])
 @login_required
