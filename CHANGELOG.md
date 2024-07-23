@@ -1,5 +1,12 @@
 # Releases
 
+# 7.11.12
+* fail pairs test after testing all pairs
+* remove more delisted pairs
+* remove delisted pair
+* alert output of command triggered in UI
+* reduce balance output and print to console
+
 # 7.11.11
 * increase timeout duration/amount for 4h prod
 * fixes for db view to use open_time
