@@ -39,9 +39,17 @@ class TestPair(unittest.TestCase):
 
         client = Binance()
         info = client.exchange_info()
+        bad_pairs = []
         for pair in set(pairs):
             pair = pair.strip()
             if pair not in ("None", "any"):
                 print("Testing pair " + pair)
                 self.assertIn(pair, info)
-                self.assertEqual(info[pair]['status'], 'TRADING')
+                try:
+                    self.assertEqual(info[pair]['status'], 'TRADING')
+                except:
+                    print(f"FAIL: {pair}")
+                    bad_pairs.append(pair)
+        if bad_pairs:
+            self.fail(f"bad pairs: {bad_pairs}")
+
