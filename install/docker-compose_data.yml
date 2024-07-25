@@ -4499,4 +4499,152 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
+  data-be-analyse-5m-short12:
+    container_name: data-be-analyse-5m-short12
+    hostname: data-be-analyse-5m-short12
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2g
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "analyse_data"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local3
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_5m
+    environment:
+      - CONFIG_ENV=data/be/short/short12/5m
+      - DB=true
+      - REDIS_FORWARD=4
+    healthcheck:
+      test: find /var/local/lock  -mmin -2 -name data-be-analyse-5m-short12 2>&1 |grep . ||exit 1
+      start_period: 1h
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /var/local:/var/local
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-analyse-5m-long12:
+    container_name: data-be-analyse-5m-long12
+    hostname: data-be-analyse-5m-long12
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2g
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "analyse_data"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local3
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_5m
+    environment:
+      - CONFIG_ENV=data/be/long/long12/5m
+      - DB=true
+      - REDIS_FORWARD=4
+    healthcheck:
+      test: find /var/local/lock  -mmin -2 -name data-be-analyse-5m-long12 2>&1 |grep . ||exit 1
+      start_period: 1h
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /var/local:/var/local
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-analyse-5m-short13:
+    container_name: data-be-analyse-5m-short13
+    hostname: data-be-analyse-5m-short13
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2g
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "analyse_data"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local3
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_5m
+    environment:
+      - CONFIG_ENV=data/be/short/short13/5m
+      - DB=true
+      - CHECK_REDIS_PAIR=4
+    healthcheck:
+      test: find /var/local/lock  -mmin -2 -name data-be-analyse-5m-short13 2>&1 |grep . ||exit 1
+      start_period: 1h
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /var/local:/var/local
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-analyse-5m-long13:
+    container_name: data-be-analyse-5m-long13
+    hostname: data-be-analyse-5m-long13
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2g
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "analyse_data"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local3
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_5m
+    environment:
+      - CONFIG_ENV=data/be/long/long13/5m
+      - DB=true
+      - CHECK_REDIS_PAIR=4
+    healthcheck:
+      test: find /var/local/lock  -mmin -2 -name data-be-analyse-5m-long13 2>&1 |grep . ||exit 1
+      start_period: 1h
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /var/local:/var/local
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
 

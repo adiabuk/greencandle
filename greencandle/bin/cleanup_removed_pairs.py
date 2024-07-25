@@ -15,7 +15,7 @@ def main():
     config.create_config()
     pairs = config.main.pairs.split()
 
-    redis_dbs = [5, 8, 9, 10]
+    redis_dbs = [4, 5, 8, 9, 10]
 
     for rdb in redis_dbs:
         redis=Redis(db=rdb)

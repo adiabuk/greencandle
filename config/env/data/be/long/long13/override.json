@@ -1,0 +1,5 @@
+{
+  "api_forward": "5m-13",
+  "close_rule": "res[0].RSI_14 \u003e 75",
+  "open_rule1": "res[1].MACD_19[0] \u003c res[1].MACD_19[1] and res[0].MACD_19[0] \u003e res[0].MACD_19[1]"
+}
