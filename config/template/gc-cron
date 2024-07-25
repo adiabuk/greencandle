@@ -25,6 +25,7 @@ BASH_ENV=/container.env
 10 */2 * * * /usr/local/bin/repay_debts interest > /proc/1/fd/1 2>/proc/1/fd/2
 @hourly /usr/local/bin/repay_debts borrowed > /proc/1/fd/1 2>/proc/1/fd/2
 @hourly /usr/local/bin/loan_anomaly > /proc/1/fd/1 2>/proc/1/fd/2
+@@reboot /usr/local/bin/cleanup_removed_pairs > /proc/1/fd/1 2>/proc/1/fd/2
 30 * * * * /usr/bin/find /data/graphs -type f -mtime +1 -delete > /proc/1/fd/1 2>/proc/1/fd/2
 #15 * * * * /usr/local/bin/collect_pairs > /proc/1/fd/1 2>/proc/1/fd/2
 @hourly /usr/local/bin/get_bnb > /proc/1/fd/1 2>/proc/1/fd/2
