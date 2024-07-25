@@ -4597,6 +4597,7 @@ services:
       - CONFIG_ENV=data/be/short/short13/5m
       - DB=true
       - CHECK_REDIS_PAIR=4
+      - STORE_IN_DB=True
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-5m-short13 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -4634,6 +4635,7 @@ services:
       - CONFIG_ENV=data/be/long/long13/5m
       - DB=true
       - CHECK_REDIS_PAIR=4
+      - STORE_IN_DB=True
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-5m-long13 2>&1 |grep . ||exit 1
       start_period: 1h
