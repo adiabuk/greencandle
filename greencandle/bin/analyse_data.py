@@ -131,7 +131,9 @@ def get_match_name(matches):
                    ['trend_50'],
                    ['trend_50_confirm'],
                    ['touch'],
-                   ['MACD_volume', 'EMA_volume']
+                   ['MACD_volume', 'EMA_volume'],
+                   ['bb30'],
+                   ['macd_flip']
                    ]
     for match in matches:
         match_names.append(name_lookup[container_num-1][match-1])
