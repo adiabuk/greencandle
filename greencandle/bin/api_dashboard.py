@@ -161,9 +161,19 @@ def run():
             # add args to command
             command += f' --{key} {value}'
         output = subprocess.Popen(command.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    alert = output.stdout.read().decode() + output.stderr.read().decode() if output else "No output"
+    alert = process_subp_output(output) if output else "No output"
     return render_template('commands.html', scripts=SCRIPTS, arg_scripts=ARG_SCRIPTS,
                            alert=f'{command.strip()}: {alert}')
+
+def process_subp_output(output):
+    """
+    Concat stdout/stderr from subprocess buffer and remove line breaks
+    """
+
+    return output.stdout.read().decode().replace('\n', ' ').replace('\r','') + \
+           output.stderr.read().decode().replace('\n', ' ').replace('\r','')
+
+
 
 @APP.route('/charts', methods=["GET"])
 @login_required
