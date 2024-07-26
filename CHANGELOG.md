@@ -1,5 +1,9 @@
 # Releases
 
+# 7.12.1
+* remove linebreaks from command output to display in alert window
+* fix data cron syntax
+
 # 7.12
 * filter out trades with low volume and missing candles
 * tweak stag config tp and trailing sl
