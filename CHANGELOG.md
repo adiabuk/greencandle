@@ -1,5 +1,13 @@
 # Releases
 
+# 7.12
+* filter out trades with low volume and missing candles
+* tweak stag config tp and trailing sl
+* add close rules
+* add new strategy names
+* new data bb/macd rule with stag env forward
+* cleanup residual removed pairs from redis using cron
+
 # 7.11.12
 * fail pairs test after testing all pairs
 * remove more delisted pairs
