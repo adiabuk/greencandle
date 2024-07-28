@@ -1,7 +1,7 @@
 {
   "name": "stag-be-api-any2-5m-cross",
   "interval": "5m",
-  "take_profit_perc": "4",
+  "take_profit_perc": "5",
   "stop_loss_perc": "2",
   "trailing_start": "2",
   "trailing_stop_loss_perc": "1",
