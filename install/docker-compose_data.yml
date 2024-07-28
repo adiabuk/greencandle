@@ -2035,9 +2035,7 @@ services:
     environment:
       - CONFIG_ENV=data/be/short/short10/1m
       - STORE_IN_DB=True
-      - DB=true
       - NSCA=True
-      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1m-short10 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -2074,8 +2072,6 @@ services:
     environment:
       - CONFIG_ENV=data/be/short/short10/5m
       - STORE_IN_DB=True
-      - DB=true
-      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-5m-short10 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -2110,11 +2106,9 @@ services:
       - data-base-redis
       - data-be-get3_1m
     environment:
-      - STORE_IN_DB=True
       - CONFIG_ENV=data/be/long/long10/1m
       - DB=true
       - NSCA=True
-      - ROUTER_FORWARD=True
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1m-long10 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -2150,9 +2144,7 @@ services:
       - data-be-get_5m
     environment:
       - CONFIG_ENV=data/be/long/long10/5m
-      - STORE_IN_DB=True
       - DB=true
-      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-5m-long10 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -4650,5 +4642,3 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/:/var/run
-
-

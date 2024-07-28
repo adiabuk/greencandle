@@ -1,8 +1,6 @@
 {
-  "api_forward": "5m-10",
   "interval": "5m",
   "name": "data-be-analyse-5m-long10",
   "open_rule1": "res[0].close \u003c sub_perc(2, res[0].bb_200[2]) and agg.empty_count \u003c 1",
   "time_between_trades": "20m",
-  "api_forward": "5m-10"
 }
