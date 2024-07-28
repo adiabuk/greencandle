@@ -1,5 +1,13 @@
 # Releases
 
+# 7.12.2
+* Tweaks to new strategy (tpsl/candle_size/close_rule)
+* only open if we haven't yet reached middle bollinger band
+* disable api forwarding for old stag strategy from data env
+* slack notifs for new strategy
+* only use USDT quote pairs for new bb strategy
+* fix macd flip open rule for short
+
 # 7.12.1
 * remove linebreaks from command output to display in alert window
 * fix data cron syntax
