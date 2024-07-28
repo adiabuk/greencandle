@@ -246,7 +246,7 @@ def analyse_pair(pair, reversal, expire, redis):
                     LOGGER.warning("Unable to forward trade %s %s/%s trade to: %s match:%s",
                                     pair, INTERVAL, DIRECTION, forward_strategy, match_strs)
 
-            if REDIS_FORWARD:
+            if result == 'OPEN' and REDIS_FORWARD:
                 for forward_db in REDIS_FORWARD:
                     redis4 = Redis(db=forward_db)
                     # add to redis set
