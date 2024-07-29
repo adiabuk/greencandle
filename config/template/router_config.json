@@ -139,6 +139,7 @@
 "30m-5": ["test:any3-30m-long-short"],
 
 "5m-13": ["alert", "stag:any2-5m-long-short"],
+"5m-14": ["alert", "stag:any-5m-long-short"],
 
 "prod_extra_long": ["prod:any-man-long"],
 "prod_extra_short": ["prod:any-man-short"],
