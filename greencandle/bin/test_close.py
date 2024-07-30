@@ -36,7 +36,7 @@ def main():
     balances = bal.get_balance(phemex=phemex)
     pairs = []
     prices = client.prices()
-    #for trade in open_trades:
+    count = 0
     for pair, base_in, quote_in, name, direction in open_trades:
         result = False
         result2 = False
@@ -56,7 +56,6 @@ def main():
                     bal_amount = balances['margin'][get_base(pair)]['gross_count']
                 else:
                     bal_amount = balances['margin'][get_quote(pair)]['gross_count']
-                    #bal_amount = quote2base(quote_in, pair)
 
             else:
                 bal_amount = balances['binance'][get_base(pair)]['count']
@@ -88,11 +87,12 @@ def main():
             result2 = True
             reason = f"Unable to get balance: {str(key_err)}"
         if result or result2 or result3:
+            count += 1
             pairs.append(f"{pair} ({name}): {reason}")
 
     str_pairs = '\n'.join(map(str, pairs))
     if str_pairs:
-        status=1
+        status=1 if count == 1 else 2
         text_output = f"Issue with open_trades:\n{str_pairs}"
         send_slack_message("alerts", text_output,
                            name=sys.argv[0].rsplit('/', maxsplit=1)[-1])
