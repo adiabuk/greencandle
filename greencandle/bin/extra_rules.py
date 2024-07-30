@@ -34,7 +34,7 @@ def check_rules():
     config.create_config()
     redis = Redis() # ohlc
     redis3 = Redis(db=3) # agg
-    redis6 = Redis(db=6) # current rules
+    redis6 = Redis(db=12) # current rules
     redis11 = Redis(db=11) # processed rules
 
     items = []

@@ -205,7 +205,7 @@ def extras():
     and table for displaying current rules stored in redis
     """
 
-    redis = Redis(db=6)  # current_rules
+    redis = Redis(db=12)  # current_rules
     redis7 = Redis(db=7) # saved_rules
     redis11 = Redis(db=11) # triggered_rules
     data = defaultdict(list)
@@ -230,7 +230,7 @@ def extras():
         interval=current['interval']
         current['pair'] = get_tv_link(pair, interval, anchor=True)
 
-        delete_button = (f'<form method=post action=/dash/xredis?key={key.decode()}&db=6><input '
+        delete_button = (f'<form method=post action=/dash/xredis?key={key.decode()}&db=12><input '
                           'type=submit name=save value=delete></form>')
         current.update({'delete': delete_button})
         add_time = datetime.fromtimestamp(int(key)).strftime(time_format)
