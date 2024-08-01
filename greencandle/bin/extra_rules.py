@@ -100,7 +100,7 @@ def check_rules():
             continue
         action_int = {'short': '-1',
                       'long': '1',
-                      'close' '0'}
+                      'close': '0'}
         if evalled:
             print(pair, interval)
             url = f"http://router:1080/{config.web.api_token}"
