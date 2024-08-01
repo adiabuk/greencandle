@@ -9,6 +9,7 @@
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
 
       </script>
+
       <!-- Bootstrap -->
 
       <link
@@ -77,6 +78,20 @@
             >
 
             </script>
+	  <script type=text/javascript>
+	      function filter() {
+		var keyword = document.getElementById("search").value;
+		var select = document.getElementById("forward_to");
+		for (var i = 0; i < select.length; i++) {
+		    var txt = select.options[i].text;
+		    if (!txt.match(keyword)) {
+			$(select.options[i]).attr('disabled', 'disabled').hide();
+		     } else {
+			$(select.options[i]).removeAttr('disabled').show();
+	             }
+		  }
+               }
+	  </script>
           </head>
           <body>
             <div>
@@ -190,7 +205,9 @@
                                           <label for="fname">
                                             forward to:
                                           </label>
-                                          <select id="forward_to" name="forward_to">
+					  <input type="text" id="search" name="search" style="margin: 10px;width: 165px;" onkeyup="filter()">
+					  <br>
+                                          <select id="forward_to" name="forward_to" size=10>
                                             {% for item in routes %}
                                               <option value="{{item}}">
                                                 {{ item }}
