@@ -216,7 +216,7 @@ def extras():
     time_format = "%Y-%m-%d %H:%M:%S"
     with open('/etc/router_config.json', 'r') as json_file:
         router_config = json.load(json_file)
-    routes = [x for x in router_config.keys() if ('extra' in x or 'alert' in x)]
+    routes = [x for x in router_config.keys() if 'extra' in x]
 
     for key in keys7:
         rules.append(ast.literal_eval(redis7.conn.get(key).decode()))

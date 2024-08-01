@@ -98,12 +98,15 @@ def check_rules():
             send_nsca(status=2, host_name='jenkins1', service_name='extra_rules', text_output=msg,
                       remote_host='local.amrox.loc')
             continue
+        action_int = {'short': '-1',
+                      'long': '1',
+                      'close' '0'}
         if evalled:
             print(pair, interval)
             url = f"http://router:1080/{config.web.api_token}"
             payload = {"pair": pair,
                        "text": f"forwarding {action.lower()} trade from extras dashboard",
-                       "action": str(action),
+                       "action": action_int[action],
                        "env": config.main.name,
                        "price": -1,
                        "usd": usd,
