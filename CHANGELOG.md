@@ -1,5 +1,16 @@
 # Releases
 
+# 7.13
+* filter forward_to dropdown based on textbox. eg prod|stag
+* allow for more strategies in extras UI and add long|short|close actions
+* add bb close rule to data strategy
+* remove untradable pairs (no volume even at upper timeframes)
+* critical alert if more than one open trade issue
+* fix redis db conflict introduced in last release
+* 1perc RSI stategy for comparison
+* keep api_requests config within each interval subdir for consistency
+* only forward open signals to alternate strategy using redis
+
 # 7.12.2
 * Tweaks to new strategy (tpsl/candle_size/close_rule)
 * only open if we haven't yet reached middle bollinger band
