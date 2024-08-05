@@ -1,5 +1,12 @@
 # Releases
 
+# 7.13.1
+* increase all prod timeout perc
+* static port assignment for loan api
+* reduce expiry time to 1h
+* use RSI and trend for bb cross confirm
+* add 12h and 1d as extras trade options
+
 # 7.13
 * filter forward_to dropdown based on textbox. eg prod|stag
 * allow for more strategies in extras UI and add long|short|close actions
