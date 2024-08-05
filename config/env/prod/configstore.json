@@ -312,7 +312,7 @@
       "is_secret": false
     },
     "perc_at_timeout": {
-      "value": "0",
+      "value": "20",
       "is_binary": false,
       "is_secret": false
     },

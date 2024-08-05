@@ -8,7 +8,7 @@
   "max_trades": "60",
   "name": "prod-be-api-any-man-cross",
   "pairs": "any",
-  "perc_at_timeout": "5",
+  "perc_at_timeout": "20",
   "take_profit_perc": "20",
   "time_in_trade": "10h",
   "trailing_start": "10",
