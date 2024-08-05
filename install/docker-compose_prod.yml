@@ -816,7 +816,7 @@ services:
       - CONFIG_ENV=prod/be/loan
       - DB=true
     ports:
-      - 20000
+      - 20001:20000
     links:
       - prod-base-mysql:mysql
       - prod-base-redis:redis
