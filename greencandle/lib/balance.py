@@ -167,7 +167,7 @@ class Balance(dict):
         else:
             balances = {}
 
-        balances += {"total_USD": f"${totals_usd:,.2f}",
-                     "total_BTC": f"฿{round(totals_btc, 5)}"}
+        balances["total_USD"] = f"${totals_usd:,.2f}"
+        balance["total_BTC"] = f"฿{round(totals_btc, 5)}"
 
         return balances
