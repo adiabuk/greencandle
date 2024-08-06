@@ -22,7 +22,7 @@ from greencandle.lib.redis_conn import Redis
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.alerts import send_slack_message
-from greencandle.lib.binance_accounts import base2quote
+from greencandle.lib.binance_accounts import base2quote, get_cross_margin_level
 from greencandle.lib.common import (arg_decorator, divide_chunks, get_be_services, list_to_dict,
                                     perc_diff, get_tv_link, get_trade_link, format_usd)
 from greencandle.lib import config
@@ -582,6 +582,7 @@ def get_balance():
     details = client.get_cross_margin_details()
     balance = Balance(test=False)
     wallet = balance.get_saved_balance()
+    risk = get_cross_margin_level()
     debts = {}
     free = {}
     for item in details['userAssets']:
@@ -603,6 +604,8 @@ def get_balance():
 
     all_results.append({'key': 'current_balance', 'usd': wallet['total_USD'],
                         'val': wallet['total_BTC']})
+    all_results.append({'key': 'risk', 'usd': 0,
+                        'val': risk})
 
     usd_debts_total = 0
     for key, val in debts.items():
