@@ -29,9 +29,10 @@ def main():
     phemex = config.accounts.account2_type == 'phemex'
     prices = balance.get_balance(margin=True, phemex=phemex)
     balance.save_balance(prices)
-    bal_str = balance.get_saved_balance(prices)
-    print(bal_str)
+    balances = balance.get_saved_balance(prices)
+    bal_str = f"USD: {balances['total_USD']}, BTC: {balances['total_BTC']}"
 
+    print(bal_str)
     send_slack_message('balance', bal_str, name=sys.argv[0].rsplit('/', maxsplit=1)[-1])
 
 if __name__ == "__main__":

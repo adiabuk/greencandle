@@ -135,7 +135,6 @@ class Balance(dict):
                     return False
             return True
 
-
     def get_saved_balance(self, balance=None):
         """print live balance"""
 
@@ -160,16 +159,15 @@ class Balance(dict):
         totals_btc = float(binance_btc) + float(phemex_btc)
         totals_usd = float(binance_usd) + float(phemex_usd)
         if phemex:
-            balances = [f"Phemex USD = ${phemex_usd:,.2f}",
-                        f"Phemex BTC = ฿{round(phemex_btc, 5)}",
-                        f"Binance USD = ${binance_usd:,.2f}",
-                        f"Binance BTC = ฿{round(binance_btc, 5)}"]
+            balances = {"phemex_USD": f"${phemex_usd:,.2f}",
+                        "phemex_BTC": f"฿{round(phemex_btc, 5)}",
+                        "binance_USD": f"${binance_usd:,.2f}",
+                        "binance_BTC": f"฿{round(binance_btc, 5)}"}
 
         else:
-            balances = []
+            balances = {}
 
-        balances += [f"TOTAL USD = ${totals_usd:,.2f}",
-                     f"TOTAL BTC = ฿{round(totals_btc, 5)}"]
+        balances += {"total_USD": f"${totals_usd:,.2f}",
+                     "total_BTC": f"฿{round(totals_btc, 5)}"}
 
-        bal_str = '\n'.join(balances) + '\n'
-        return bal_str
+        return balances
