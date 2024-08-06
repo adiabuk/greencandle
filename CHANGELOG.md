@@ -1,5 +1,14 @@
 # Releases
 
+# 7.13.2
+* don't autoroute to loan api
+* cleanup loan api,add client output and get req
+* remove low volume pair
+* add cross-margin risk to balances UI dash
+* add wallet total balance to balances UI dash
+* perc timeout at upper level prod only
+* fix rule syntax
+
 # 7.13.1
 * increase all prod timeout perc
 * static port assignment for loan api
