@@ -27,6 +27,7 @@ from greencandle.lib.common import (arg_decorator, divide_chunks, get_be_service
                                     perc_diff, get_tv_link, get_trade_link, format_usd)
 from greencandle.lib import config
 from greencandle.lib.balance_common import get_quote
+from greencandle.lib.balance import Balance
 from greencandle.lib.flask_auth import load_user, login as loginx, logout as logoutx
 
 class PrefixMiddleware():
@@ -579,6 +580,8 @@ def get_balance():
     client=binance_auth()
     all_results = []
     details = client.get_cross_margin_details()
+    balance = Balance(test=False)
+    wallet = balance.get_saved_balance()
     debts = {}
     free = {}
     for item in details['userAssets']:
@@ -597,6 +600,10 @@ def get_balance():
                         'val': '0'})
     all_results.append({'key': 'current_net_perc', 'usd': '',
                         'val': round(total_net_perc, 4)})
+
+    all_results.append({'key': 'current_balance', 'usd': wallet['total_USD'],
+                        'val': wallet['total_BTC']})
+
     usd_debts_total = 0
     for key, val in debts.items():
         usd_debt = val if 'USD' in key else base2quote(val, key+'USDT')
