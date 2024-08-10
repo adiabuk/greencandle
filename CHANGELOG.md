@@ -1,5 +1,10 @@
 # Releases
 
+# 7.14
+* add verified CCI with graphs and docs
+* turn off slack alerts for dev env
+* keep only top level logging config
+
 # 7.13.2
 * don't autoroute to loan api
 * cleanup loan api,add client output and get req
