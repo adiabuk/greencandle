@@ -79,6 +79,14 @@ get_RSI;RSI;14
 Usage: res[0].RSI_14[0]
 Redis output: RSI value, float
 
+## TSI
+VERIFIED to be equal to tradingview
+get_cci;CCI;100
+<function>;<string><CCI length>
+Usage: res[0].CCI_199
+
+Redis output: RSI value, float
+
 ## pivot
 to be verified
 

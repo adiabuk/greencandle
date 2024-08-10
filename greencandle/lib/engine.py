@@ -369,6 +369,29 @@ class Engine(dict):
         LOGGER.debug("done getting pivot for %s - %s", pair, scheme['open_time'])
 
     @get_exceptions
+    def get_cci(self, pair, index=None, localconfig=None):
+        """
+        Get CCI osscilator
+        """
+        index = -1
+        func, timeperiod = localconfig
+        cci = ta.cci(self.dataframes[pair].high.astype(float),
+                     self.dataframes[pair].low.astype(float),
+                     self.dataframes[pair].close.astype(float),
+                     length=float(timeperiod))
+        scheme = {}
+        result = float(cci.iloc[index])
+        LOGGER.info("AMROX %s", str(result))
+        scheme["data"] = result
+        scheme["symbol"] = pair
+        scheme["event"] = f"{func}_{timeperiod}"
+
+        scheme["open_time"] = str(self.dataframes[pair].iloc[index]["openTime"])
+
+        self.schemes.append(scheme)
+        LOGGER.debug("done getting cci For %s - %s", pair, scheme['open_time'])
+
+    @get_exceptions
     def get_tsi(self, pair, index=None, localconfig=None):
         """
         Get TSI osscilator
