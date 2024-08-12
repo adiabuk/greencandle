@@ -373,7 +373,8 @@ class Engine(dict):
         """
         Get CCI osscilator
         """
-        index = -1
+        if index is None:
+            index = -1
         func, timeperiod = localconfig
         cci = ta.cci(self.dataframes[pair].high.astype(float),
                      self.dataframes[pair].low.astype(float),
