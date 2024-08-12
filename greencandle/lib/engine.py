@@ -381,7 +381,6 @@ class Engine(dict):
                      length=float(timeperiod))
         scheme = {}
         result = float(cci.iloc[index])
-        LOGGER.info("AMROX %s", str(result))
         scheme["data"] = result
         scheme["symbol"] = pair
         scheme["event"] = f"{func}_{timeperiod}"
