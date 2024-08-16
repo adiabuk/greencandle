@@ -17,8 +17,8 @@ REQUIRED_CONFIG = {'database':['db_host', 'db_user', 'db_password', 'db_database
                             'wait_between_trades', 'time_between_trades', 'logging_output',
                             'interval', 'close_rule1', 'drain', 'no_of_klines', 'pairs',
                             'stop_loss_perc', 'take_profit_perc', 'indicators',
-                            'rate_indicator', 'trailing_stop_loss_perc', 'time_in_trade',
-                            'immediate_stop', 'immediate_trailing_stop', 'immediate_take_profit']}
+                            'trailing_stop_loss_perc', 'time_in_trade', 'immediate_stop',
+                            'immediate_trailing_stop', 'immediate_take_profit']}
 
 def create_config():
     """

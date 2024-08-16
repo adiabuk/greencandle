@@ -61,4 +61,3 @@
 * **indicators** *List of indicators and values - see seperate doc*
 * **open_rule{1-3}** *Rules to open trade - see seperate doc*
 * **close_rule{1-3}** *Rules to close trade - see seperate doc*
-* **rate_indicator** *indicator to use for tracking slope increase/decrease*

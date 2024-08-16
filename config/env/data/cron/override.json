@@ -1,6 +1,5 @@
 {
   "divisor": "3",
   "name": "data-cron",
-  "rate_indicator": "1",
   "no_of_klines": "350"
 }

@@ -1,18 +1,16 @@
 {
   "check_interval": "20",
   "close_rule1": "res[0].tsi_25 \u003c res[0].signal_25 and res[1].tsi_25 \u003e res[1].signal_25",
-  "close_rule2": "res[0].perc_rate \u003c 0",
   "divisor": "3",
   "immediate_stop": "true",
   "immediate_take_profit": "true",
+  "immediate_trailing_stop": "true",
   "indicators": "get_moving_averages;EMA;20 get_tsi;tsi;25 get_tsi;signal;25 get_pivot;pivot;1",
   "interval": "15m",
   "open_rule1": "res[0].tsi_25 \u003e res[0].signal_25 and res[1].tsi_25 \u003c res[1].signal_25 and res[0].close \u003e res[0].pivot_1",
-  "rate_indicator": "EMA_20",
   "stop_loss_perc": "10",
   "take_profit_perc": "10",
   "time_in_trade": "45m",
   "trailing_start": "1",
-  "immediate_trailing_stop": "true",
   "trailing_stop_loss_perc": "0.1"
 }

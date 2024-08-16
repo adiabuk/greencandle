@@ -321,11 +321,6 @@
       "is_binary": false,
       "is_secret": false
     },
-    "rate_indicator": {
-      "value": "EMA_2",
-      "is_binary": false,
-      "is_secret": false
-    },
     "redis_expiry_seconds": {
       "value": "0",
       "is_binary": false,

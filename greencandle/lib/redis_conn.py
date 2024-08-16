@@ -807,22 +807,6 @@ class Redis():
         current_price = float(res[0].close)
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(current_epoch))
 
-        # rate of Moving Average increate/decreate based on indicator
-        # specified in the rate_indicator config option - best with EMA_500
-        rate_indicator = config.main.rate_indicator
-
-        for i in range(0, 5):
-            # loop through first 4 results (can't use 5th as we will need
-            # following item which doesn't exist
-            res[i]['perc_rate'] = float(perc_diff(float(res[i+1][rate_indicator]),
-                                                  float(res[i][rate_indicator]))) \
-                                        if res[i][rate_indicator] and \
-                                        res[i+1][rate_indicator] else 0
-            res[i]['rate'] = float(float(res[i][rate_indicator]) - \
-                                   float(res[i+1][rate_indicator])) \
-                                   if res[i][rate_indicator] and \
-                                   res[i+1][rate_indicator] else 0
-
         rules = {'open': [], 'close': []}
         for seq in range(1, 10):
             current_config = None
