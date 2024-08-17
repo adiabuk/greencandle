@@ -50,11 +50,16 @@ def check_last_hour():
         if current > last_hour_date_time and "WARN" in line:
             warn_count += 1
 
+    log_warn = {"prod": 50,
+                "data": 50,
+                "stag": 100,
+                "test": 1000}
+
     if err_count > 50:
         status = 2
         msg = "CRITICAL"
         text = f'{msg}: {err_count} ERROR/CRITICAL entries in {env} logfile, warn: {warn_count}'
-    elif warn_count > 50:
+    elif warn_count > log_warn[env]:
         status = 1
         msg = "WARNING"
         text = f'{msg}: {warn_count} WARN entries in {env} logfile, err:crit: {err_count}'
