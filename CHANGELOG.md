@@ -1,5 +1,16 @@
 # Releases
 
+# 7.14.1
+* cleanup command formatting in data dc file
+* increase lockfile time in analyser healthchecks
+* remove rate indicator from config and redis
+* allow for larger log files (increase mem) in data env
+* ensure we collect enough data/candles for analyser
+* allow historic cci data to be saved appropriately
+* remove debug logging in data env
+* add cci_100 indicator
+* warning if risk value is lte 2
+
 # 7.14
 * add verified CCI with graphs and docs
 * turn off slack alerts for dev env
