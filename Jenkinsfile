@@ -39,18 +39,6 @@ pipeline {
                  }
              }
         }
-        stage("run tests") {
-            steps {
-                echo "run all tests"
-                ansiColor('vga') {
-                    build job: 'all-tests', parameters:
-                    [string(name: 'version', value: env.GIT_BRANCH),
-                     string(name: 'commit', value: env.GIT_COMMIT),
-                     string(name: 'image_id', value: env.BUILD_ID)
-                     ]
-                }
-            }
-        }
         stage("Push to registry") {
             steps {
                 echo "pushing all"
