@@ -1,7 +1,7 @@
 FROM python:3.9.0
 
 RUN apt-get update && \
-    apt-get -y install vim cron netcat default-mysql-client bsdmainutils libssl-dev libsystemd-dev xvfb xauth iceweasel --no-install-recommends && \
+    apt-get -y install vim cron netcat default-mysql-client bsdmainutils libssl-dev libsystemd-dev xvfb xauth iceweasel sudo --no-install-recommends && \
     wget "https://www.dropbox.com/sh/l22jyonei087h4o/AAAVa_B_sDXtWZu17RzazsA2a/geckodriver-v0.26.0-linux64.tar.gz?dl=0" -O /tmp/geckodriver-v0.26.0-linux64.tar.gz && \
     tar zxvf /tmp/geckodriver-v0.26.0-linux64.tar.gz -C /usr/local/bin && \
     rm -rf /tmp/geckodriver-v0.26.0-linux64.tar.gz  && \
