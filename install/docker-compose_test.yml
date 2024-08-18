@@ -3,7 +3,7 @@ services:
     container_name: test-gen-be-logwatch
     hostname: test-gen-be-logwatch
     image: amrox/greencandle:${TAG}
-    mem_limit: 200m
+    mem_limit: 1g
     restart: always
     entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
     environment:
@@ -23,7 +23,7 @@ services:
     container_name: test-gen-be-logtailer-api
     hostname: test-gen-be-logtailer-api
     image: amrox/greencandle:${TAG}
-    mem_limit: 300m
+    mem_limit: 1g
     pull_policy: always
     restart: always
     environment:
