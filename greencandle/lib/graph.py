@@ -182,7 +182,8 @@ class Graph():
                                    y=bb_lower,
                                    name=name+'-lower')
 
-            elif any(substring in name for substring in ['RSI', 'ATR', 'signal', 'tsi', 'bbperc', 'CCI']) \
+            elif any(substring in name for substring in ['RSI', 'ATR', 'signal',
+                                                         'tsi', 'bbperc', 'CCI']) \
                     and 'STOCH' not in name:
                 # add rsi graph in second subply (below) if it exists
                 LOGGER.debug("creating rsi graph")

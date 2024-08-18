@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-member,eval-used,unused-variable,broad-except
+#pylint: disable=no-member,eval-used,unused-variable,broad-except,too-many-locals
 
 """
 Loop through extra trade rules in redis and process
@@ -42,7 +42,6 @@ def check_rules():
     keys = redis6.conn.keys()
     for key in keys:
         items.append(list(json.loads(redis6.conn.get(key).decode()).values()) + [key.decode()])
-
 
     for pair, interval, action, usd, take, stop, rule, forward_to, key in items:
         if pair not in config.main.pairs.split():
