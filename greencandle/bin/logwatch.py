@@ -52,7 +52,7 @@ def check_last_hour():
 
     log_warn = {"prod": 50,
                 "data": 50,
-                "stag": 100,
+                "stag": 200,
                 "test": 1000}
 
     if err_count > 50:
