@@ -91,7 +91,7 @@ class TestMysql(OrderedTest):
         self.assertIs(len(today), 7)
         self.assertIs(today[0], None)
         self.assertIs(today[1], None)
-        self.dbase.get_active_trades()   # No exception
+        self.dbase.get_open_trades()   # No exception
         date1 = (datetime.datetime.now() - datetime.timedelta(minutes=15,
                                                               hours=1)).strftime("%Y-%m-%d "
                                                                                  "%H:%M:%S")
