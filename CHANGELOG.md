@@ -1,5 +1,12 @@
 # Releases
 
+# 7.14.2
+* lint
+* tweak risk alert thresholds
+* SQL syntax and lint fixes
+* run tests outside of build process
+* different warn log values for different envs to reduce false alarms
+
 # 7.14.1
 * cleanup command formatting in data dc file
 * increase lockfile time in analyser healthchecks
