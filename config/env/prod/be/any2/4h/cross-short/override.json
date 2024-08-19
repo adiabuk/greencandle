@@ -1,4 +1,5 @@
 {
+  "name": "prod-be-api-any2-4h-cross",
   "trade_direction": "short",
   "trade_isolated": "false",
   "trade_type": "margin"

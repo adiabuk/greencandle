@@ -7,7 +7,6 @@ from collections import defaultdict
 import datetime
 import time
 import re
-import os
 from pathlib import Path
 from send_nsca3 import send_nsca
 from str2bool import str2bool
@@ -452,7 +451,7 @@ class Trade():
 
         # use balance only
         if self.test_trade or balance_to_use['usd'] > (total_max *5) or \
-                ('USE_BALANCE' in os.environ and balance_to_use['usd'] > total_max):
+                (str2bool(self.config.main.balance_only) and balance_to_use['usd'] > total_max):
 
             balance_to_use['usd'] = total_max
 

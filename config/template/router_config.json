@@ -90,14 +90,6 @@
 }
 {{else if eq .base_env "prod"}}
 {
-"any-lt-long-short": ["any-lt-long", "any-lt-short"],
-"any-lt-long": ["any-lt-long"],
-"any-lt-short": ["any-lt-short"],
-
-"any-man-long-short": ["any-man-long", "any-man-short", "alert"],
-"any-man-long": ["any-man-long", "alert"],
-"any-man-short": ["any-man-short", "alert"],
-
 "any-1m-long": ["any-1m-long"],
 "any-1m-short": ["any-1m-short"],
 "any-1m-long-short": ["any-1m-short", "any-1m-long"],
@@ -113,6 +105,30 @@
 "any-4h-long": ["any-4h-long"],
 "any-4h-short": ["any-4h-short"],
 "any-4h-long-short": ["any-4h-short", "any-4h-long"],
+
+"any-1d-long": ["any-1d-long"],
+"any-1d-short": ["any-1d-short"],
+"any-1d-long-short": ["any-1d-short", "any-1d-long"],
+
+"any2-1m-long": ["any2-1m-long"],
+"any2-1m-short": ["any2-1m-short"],
+"any2-1m-long-short": ["any2-1m-short", "any2-1m-long"],
+
+"any2-5m-long": ["any2-5m-long"],
+"any2-5m-short": ["any2-5m-short"],
+"any2-5m-long-short": ["any2-5m-short", "any2-5m-long"],
+
+"any2-1h-long": ["any2-1h-long"],
+"any2-1h-short": ["any2-1h-short"],
+"any2-1h-long-short": ["any2-1h-short", "any2-1h-long"],
+
+"any2-4h-long": ["any2-4h-long"],
+"any2-4h-short": ["any2-4h-short"],
+"any2-4h-long-short": ["any2-4h-short", "any2-4h-long"],
+
+"any2-1d-long": ["any2-1d-long"],
+"any2-1d-short": ["any2-1d-short"],
+"any2-1d-long-short": ["any2-1d-short", "any2-1d-long"],
 
 "api-loan": ["api-loan"],
 "alert": ["alert"],

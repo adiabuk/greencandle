@@ -116,6 +116,11 @@
       "is_binary": false,
       "is_secret": true
     },
+    "balance_only": {
+      "value": "False",
+      "is_binary": false,
+      "is_secret": false
+    },
     "base_env": {
       "value": "alarm",
       "is_binary": false,
