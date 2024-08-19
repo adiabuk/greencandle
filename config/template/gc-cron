@@ -11,6 +11,7 @@ BASH_ENV=/container.env
 @hourly /usr/local/bin/cleanup_db2 > /proc/1/fd/1 2>/proc/1/fd/2
 
 {{if eq .base_env "prod" }}
+@weekly /usr/local/bin/cleanup_db0.py > /proc/1/fd/1 2>/proc/1/fd/2
 @reboot /usr/local/bin/clear_redis 1 > /proc/1/fd/1 2>/proc/1/fd/2
 */3 * * * * /usr/local/bin/get_risk > /proc/1/fd/1 2>/proc/1/fd/2
 32 * * * * /usr/local/bin/write_balance > /proc/1/fd/1 2>/proc/1/fd/2
@@ -34,6 +35,7 @@ BASH_ENV=/container.env
 30 */7 * * * /usr/local/bin/convert_small_dust > /proc/1/fd/1 2>/proc/1/fd/2
 
 {{else if eq .base_env "per" }}
+@weekly /usr/local/bin/cleanup_db0.py > /proc/1/fd/1 2>/proc/1/fd/2
 @reboot /usr/local/bin/clear_redis 1 > /proc/1/fd/1 2>/proc/1/fd/2
 32 * * * * /usr/local/bin/write_balance > /proc/1/fd/1 2>/proc/1/fd/2
 #33 * * * * /usr/local/bin/get_quote_balance > /proc/1/fd/1 2>/proc/1/fd/2
@@ -42,12 +44,14 @@ BASH_ENV=/container.env
 30 * * * * /usr/bin/find /data/graphs -type f -mtime +1 -delete > /proc/1/fd/1 2>/proc/1/fd/2
 
 {{else if eq .base_env "stag" }}
+@weekly /usr/local/bin/cleanup_db0.py > /proc/1/fd/1 2>/proc/1/fd/2
 @reboot /usr/local/bin/clear_redis 1 > /proc/1/fd/1 2>/proc/1/fd/2
 0 * * * * /usr/local/bin/send_docker_alerts
 03 * * * * /usr/local/bin/get_hour_profit > /proc/1/fd/1 2>/proc/1/fd/2
 #00 * * * * /usr/local/bin/populate_pairs
 
 {{else if eq .base_env "test"}}
+@weekly /usr/local/bin/cleanup_db0.py > /proc/1/fd/1 2>/proc/1/fd/2
 @reboot /usr/local/bin/clear_redis 1 > /proc/1/fd/1 2>/proc/1/fd/2
 03 * * * * /usr/local/bin/get_hour_profit > /proc/1/fd/1 2>/proc/1/fd/2
 #15 * * * * /usr/local/bin/collect_pairs > /proc/1/fd/1 2>/proc/1/fd/2
