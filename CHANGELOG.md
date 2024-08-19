@@ -1,5 +1,13 @@
 # Releases
 
+# 7.15
+* yaml formatting
+* remove lt/man prod containers in favour of any2 containers with more tfs
+* fix mysql unit tests
+* increase max memory for test env log servers
+* tweak stag critical logs alert count
+* add sudo to base image
+
 # 7.14.2
 * lint
 * tweak risk alert thresholds
