@@ -763,7 +763,7 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-prod-be-api-any2-1m-cross-long:
+  prod-be-api-any2-1m-cross-long:
     container_name: prod-be-api-any2-1m-cross-long
     hostname: prod-be-api-any2-1m-cross-long
     image: amrox/greencandle:${TAG}
@@ -1132,5 +1132,3 @@ prod-be-api-any2-1m-cross-long:
       - /var/run:/var/run
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
-
-
