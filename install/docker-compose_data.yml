@@ -55,7 +55,7 @@ services:
     container_name: data-be-get_12h
     hostname: data-be-get_12h
     image: amrox/greencandle:${TAG}
-    mem_limit: 2000m
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -88,7 +88,7 @@ services:
     container_name: data-be-get_1d
     hostname: data-be-get_1d
     image: amrox/greencandle:${TAG}
-    mem_limit: 2000m
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -121,7 +121,7 @@ services:
     container_name: data-be-get_30m
     hostname: data-be-get_30m
     image: amrox/greencandle:${TAG}
-    mem_limit: 2000m
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -153,7 +153,7 @@ services:
     container_name: data-be-get_15m
     hostname: data-be-get_15m
     image: amrox/greencandle:${TAG}
-    mem_limit: 2000m
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -185,7 +185,7 @@ services:
     container_name: data-be-get_4h
     hostname: data-be-get_4h
     image: amrox/greencandle:${TAG}
-    mem_limit: 2000m
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -218,7 +218,7 @@ services:
     container_name: data-be-get_1h
     hostname: data-be-get_1h
     image: amrox/greencandle:${TAG}
-    mem_limit: 2000m
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -250,7 +250,7 @@ services:
     container_name: data-be-get1_1m
     hostname: data-be-get1_1m
     image: amrox/greencandle:${TAG}
-    mem_limit: 2000m
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -282,7 +282,7 @@ services:
     container_name: data-be-get2_1m
     hostname: data-be-get2_1m
     image: amrox/greencandle:${TAG}
-    mem_limit: 2000m
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -314,7 +314,7 @@ services:
     container_name: data-be-get3_1m
     hostname: data-be-get3_1m
     image: amrox/greencandle:${TAG}
-    mem_limit: 2000m
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -346,7 +346,7 @@ services:
     container_name: data-be-get4_1m
     hostname: data-be-get4_1m
     image: amrox/greencandle:${TAG}
-    mem_limit: 2000m
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -378,7 +378,7 @@ services:
     container_name: data-be-get_5m
     hostname: data-be-get_5m
     image: amrox/greencandle:${TAG}
-    mem_limit: 2000m
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh get_data
@@ -414,7 +414,7 @@ services:
       - CONFIG_ENV=data/manual
       - DB=true
     image: amrox/greencandle:${TAG}
-    mem_limit: 500m
+    mem_limit: 500M
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "tail -f /dev/null"
@@ -452,7 +452,7 @@ services:
       - DB=true
     hostname: data-fe-cron
     image: amrox/greencandle:${TAG}
-    mem_limit: 5g
+    mem_limit: 5G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "cron -f"
@@ -476,7 +476,7 @@ services:
     container_name: data-base-redis
     hostname: data-base-redis
     image: amrox/gc-redis:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     ports:
@@ -493,7 +493,7 @@ services:
     container_name: data-base-mysql
     hostname: data-base-mysql
     image: amrox/gc-mysql:${TAG}
-    mem_limit: 1g
+    mem_limit: 1G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "--max-connections=5000"
@@ -513,7 +513,7 @@ services:
     container_name: data-fe-webserver
     hostname: data-fe-webserver
     image: amrox/webserver:${TAG}
-    mem_limit: 200m
+    mem_limit: 200M
     pull_policy: always
     restart: always
     healthcheck:
@@ -553,7 +553,7 @@ services:
       options:
         syslog-facility: local3
     image: amrox/greencandle:${TAG}
-    mem_limit: 200m
+    mem_limit: 200M
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh api_proxy
@@ -583,7 +583,7 @@ services:
     extra_hosts:
       - "alert:10.0.0.212"
     image: amrox/greencandle:${TAG}
-    mem_limit: 200m
+    mem_limit: 200M
     pull_policy: always
     restart: always
     healthcheck:
@@ -621,7 +621,7 @@ services:
       options:
         syslog-facility: local3
     image: amrox/greencandle:${TAG}
-    mem_limit: 200m
+    mem_limit: 200M
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh filesystem_api
@@ -650,7 +650,7 @@ services:
       options:
         syslog-facility: local3
     image: amrox/greencandle:${TAG}
-    mem_limit: 600m
+    mem_limit: 600M
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh api_dashboard
@@ -681,7 +681,7 @@ services:
     container_name: data-be-analyse-extra
     hostname: data-be-analyse-extra
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "extra_rules"
@@ -717,7 +717,7 @@ services:
     container_name: data-be-analyse-1m-short6
     hostname: data-be-analyse-1m-short6
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -755,7 +755,7 @@ services:
     container_name: data-be-analyse-1m-long6
     hostname: data-be-analyse-1m-long6
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -793,7 +793,7 @@ services:
     container_name: data-be-analyse-5m-short6
     hostname: data-be-analyse-5m-short6
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -831,7 +831,7 @@ services:
     container_name: data-be-analyse-5m-long6
     hostname: data-be-analyse-5m-long6
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -869,7 +869,7 @@ services:
     container_name: data-be-analyse-15m-long6
     hostname: data-be-analyse-15m-long6
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -907,7 +907,7 @@ services:
     container_name: data-be-analyse-30m-long6
     hostname: data-be-analyse-30m-long6
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -945,7 +945,7 @@ services:
     container_name: data-be-analyse-1h-short6
     hostname: data-be-analyse-1h-short6
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -983,7 +983,7 @@ services:
     container_name: data-be-analyse-1h-long6
     hostname: data-be-analyse-1h-long6
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -1021,7 +1021,7 @@ services:
     container_name: data-be-analyse-4h-short6
     hostname: data-be-analyse-4h-short6
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -1059,7 +1059,7 @@ services:
     container_name: data-be-analyse-4h-long6
     hostname: data-be-analyse-4h-long6
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -1097,7 +1097,7 @@ services:
     container_name: data-be-analyse-5m-long1
     hostname: data-be-analyse-5m-long1
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -1134,7 +1134,7 @@ services:
     container_name: data-be-analyse-15m-long1
     hostname: data-be-analyse-15m-long1
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -1171,7 +1171,7 @@ services:
     container_name: data-be-analyse-1d-short1
     hostname: data-be-analyse-1d-short1
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -1207,7 +1207,7 @@ services:
     container_name: data-be-analyse-1m-long1
     hostname: data-be-analyse-1m-long1
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -1244,7 +1244,7 @@ services:
     container_name: data-be-analyse-1d-long1
     hostname: data-be-analyse-1d-long1
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -1280,7 +1280,7 @@ services:
     container_name: data-be-analyse-12h-long1
     hostname: data-be-analyse-12h-long1
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -1316,7 +1316,7 @@ services:
     container_name: data-be-analyse-12h-short1
     hostname: data-be-analyse-12h-short1
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -1352,7 +1352,7 @@ services:
     container_name: data-be-analyse-4h-long1
     hostname: data-be-analyse-4h-long1
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -1388,7 +1388,7 @@ services:
     container_name: data-be-analyse-4h-short1
     hostname: data-be-analyse-4h-short1
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -1424,7 +1424,7 @@ services:
     container_name: data-be-analyse-30m-long1
     hostname: data-be-analyse-30m-long1
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -1461,7 +1461,7 @@ services:
     container_name: data-be-analyse-1h-long1
     hostname: data-be-analyse-1h-long1
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -1498,7 +1498,7 @@ services:
     container_name: data-be-analyse-1m-short1
     hostname: data-be-analyse-1m-short1
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -1535,7 +1535,7 @@ services:
     container_name: data-be-analyse-5m-short1
     hostname: data-be-analyse-5m-short1
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -1572,7 +1572,7 @@ services:
     container_name: data-be-analyse-15m-short1
     hostname: data-be-analyse-15m-short1
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -1609,7 +1609,7 @@ services:
     container_name: data-be-analyse-30m-short1
     hostname: data-be-analyse-30m-short1
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -1646,7 +1646,7 @@ services:
     container_name: data-be-analyse-1h-short1
     hostname: data-be-analyse-1h-short1
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -1683,7 +1683,7 @@ services:
     container_name: data-be-analyse-5m-long7
     hostname: data-be-analyse-5m-long7
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -1720,7 +1720,7 @@ services:
     container_name: data-be-analyse-15m-long7
     hostname: data-be-analyse-15m-long7
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -1757,7 +1757,7 @@ services:
     container_name: data-be-analyse-30m-long7
     hostname: data-be-analyse-30m-long7
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -1794,7 +1794,7 @@ services:
     container_name: data-be-analyse-5m-long8
     hostname: data-be-analyse-5m-long8
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -1831,7 +1831,7 @@ services:
     container_name: data-be-analyse-15m-long8
     hostname: data-be-analyse-15m-long8
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -1868,7 +1868,7 @@ services:
     container_name: data-be-analyse-30m-long8
     hostname: data-be-analyse-30m-long8
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -1905,7 +1905,7 @@ services:
     container_name: data-be-analyse-5m-long9
     hostname: data-be-analyse-5m-long9
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -1942,7 +1942,7 @@ services:
     container_name: data-be-analyse-15m-long9
     hostname: data-be-analyse-15m-long9
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -1979,7 +1979,7 @@ services:
     container_name: data-be-analyse-30m-long9
     hostname: data-be-analyse-30m-long9
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -2016,7 +2016,7 @@ services:
     container_name: data-be-analyse-1m-short10
     hostname: data-be-analyse-1m-short10
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -2053,7 +2053,7 @@ services:
     container_name: data-be-analyse-5m-short10
     hostname: data-be-analyse-5m-short10
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -2089,7 +2089,7 @@ services:
     container_name: data-be-analyse-1m-long10
     hostname: data-be-analyse-1m-long10
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -2126,7 +2126,7 @@ services:
     container_name: data-be-analyse-5m-long10
     hostname: data-be-analyse-5m-long10
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -2162,7 +2162,7 @@ services:
     container_name: data-be-analyse-1m-short2
     hostname: data-be-analyse-1m-short2
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -2200,7 +2200,7 @@ services:
     container_name: data-be-analyse-5m-short2
     hostname: data-be-analyse-5m-short2
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -2237,7 +2237,7 @@ services:
     container_name: data-be-analyse-15m-short2
     hostname: data-be-analyse-15m-short2
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -2274,7 +2274,7 @@ services:
     container_name: data-be-analyse-30m-short2
     hostname: data-be-analyse-30m-short2
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -2311,7 +2311,7 @@ services:
     container_name: data-be-analyse-1h-short2
     hostname: data-be-analyse-1h-short2
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -2348,7 +2348,7 @@ services:
     container_name: data-be-analyse-4h-short2
     hostname: data-be-analyse-4h-short2
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -2385,7 +2385,7 @@ services:
     container_name: data-be-analyse-12h-short2
     hostname: data-be-analyse-12h-short2
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -2422,7 +2422,7 @@ services:
     container_name: data-be-analyse-1d-short2
     hostname: data-be-analyse-1d-short2
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -2459,7 +2459,7 @@ services:
     container_name: data-be-analyse-1m-long2
     hostname: data-be-analyse-1m-long2
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -2497,7 +2497,7 @@ services:
     container_name: data-be-analyse-5m-long2
     hostname: data-be-analyse-5m-long2
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -2534,7 +2534,7 @@ services:
     container_name: data-be-analyse-15m-long2
     hostname: data-be-analyse-15m-long2
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -2571,7 +2571,7 @@ services:
     container_name: data-be-analyse-30m-long2
     hostname: data-be-analyse-30m-long2
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -2608,7 +2608,7 @@ services:
     container_name: data-be-analyse-1h-long2
     hostname: data-be-analyse-1h-long2
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -2645,7 +2645,7 @@ services:
     container_name: data-be-analyse-4h-long2
     hostname: data-be-analyse-4h-long2
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -2682,7 +2682,7 @@ services:
     container_name: data-be-analyse-12h-long2
     hostname: data-be-analyse-12h-long2
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -2719,7 +2719,7 @@ services:
     container_name: data-be-analyse-1d-long2
     hostname: data-be-analyse-1d-long2
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -2756,7 +2756,7 @@ services:
     container_name: data-be-analyse-1m-short3
     hostname: data-be-analyse-1m-short3
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -2793,7 +2793,7 @@ services:
     container_name: data-be-analyse-5m-short3
     hostname: data-be-analyse-5m-short3
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -2829,7 +2829,7 @@ services:
     container_name: data-be-analyse-1m-long3
     hostname: data-be-analyse-1m-long3
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -2866,7 +2866,7 @@ services:
     container_name: data-be-analyse-5m-long3
     hostname: data-be-analyse-5m-long3
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -2902,7 +2902,7 @@ services:
     container_name: data-be-analyse-1h-long3
     hostname: data-be-analyse-1h-long3
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -2939,7 +2939,7 @@ services:
     container_name: data-be-analyse-1h-short3
     hostname: data-be-analyse-1h-short3
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -2976,7 +2976,7 @@ services:
     container_name: data-be-analyse-15m-long3
     hostname: data-be-analyse-15m-long3
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -3013,7 +3013,7 @@ services:
     container_name: data-be-analyse-15m-short3
     hostname: data-be-analyse-15m-short3
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -3050,7 +3050,7 @@ services:
     container_name: data-be-analyse-15m-long4
     hostname: data-be-analyse-15m-long4
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -3090,7 +3090,7 @@ services:
     container_name: data-be-analyse-15m-short4
     hostname: data-be-analyse-15m-short4
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -3130,7 +3130,7 @@ services:
     container_name: data-be-analyse-30m-long4
     hostname: data-be-analyse-30m-long4
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -3170,7 +3170,7 @@ services:
     container_name: data-be-analyse-30m-short4
     hostname: data-be-analyse-30m-short4
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -3210,7 +3210,7 @@ services:
     container_name: data-be-analyse-30m-long3
     hostname: data-be-analyse-30m-long3
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -3247,7 +3247,7 @@ services:
     container_name: data-be-analyse-30m-short3
     hostname: data-be-analyse-30m-short3
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -3284,7 +3284,7 @@ services:
     container_name: data-be-analyse-4h-short3
     hostname: data-be-analyse-4h-short3
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -3320,7 +3320,7 @@ services:
     container_name: data-be-analyse-1m-short4
     hostname: data-be-analyse-1m-short4
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -3360,7 +3360,7 @@ services:
     container_name: data-be-analyse-1m-long4
     hostname: data-be-analyse-1m-long4
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -3400,7 +3400,7 @@ services:
     container_name: data-be-analyse-5m-short4
     hostname: data-be-analyse-5m-short4
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -3439,7 +3439,7 @@ services:
     container_name: data-be-analyse-5m-long4
     hostname: data-be-analyse-5m-long4
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -3478,7 +3478,7 @@ services:
     container_name: data-be-analyse-1h-short4
     hostname: data-be-analyse-1h-short4
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -3517,7 +3517,7 @@ services:
     container_name: data-be-analyse-1h-long4
     hostname: data-be-analyse-1h-long4
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -3556,7 +3556,7 @@ services:
     container_name: data-be-analyse-4h-short4
     hostname: data-be-analyse-4h-short4
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -3595,7 +3595,7 @@ services:
     container_name: data-be-analyse-4h-long4
     hostname: data-be-analyse-4h-long4
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -3634,7 +3634,7 @@ services:
     container_name: data-be-analyse-1m-short5
     hostname: data-be-analyse-1m-short5
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -3674,7 +3674,7 @@ services:
     container_name: data-be-analyse-1m-long5
     hostname: data-be-analyse-1m-long5
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -3713,7 +3713,7 @@ services:
     container_name: data-be-analyse-5m-short5
     hostname: data-be-analyse-5m-short5
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -3752,7 +3752,7 @@ services:
     container_name: data-be-analyse-5m-long5
     hostname: data-be-analyse-5m-long5
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -3789,7 +3789,7 @@ services:
     container_name: data-be-analyse-15m-long5
     hostname: data-be-analyse-15m-long5
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -3827,7 +3827,7 @@ services:
     container_name: data-be-analyse-30m-long5
     hostname: data-be-analyse-30m-long5
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -3865,7 +3865,7 @@ services:
     container_name: data-be-analyse-15m-short5
     hostname: data-be-analyse-15m-short5
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -3904,7 +3904,7 @@ services:
     container_name: data-be-analyse-30m-short5
     hostname: data-be-analyse-30m-short5
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -3943,7 +3943,7 @@ services:
     container_name: data-be-analyse-1h-short5
     hostname: data-be-analyse-1h-short5
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -3982,7 +3982,7 @@ services:
     container_name: data-be-analyse-1h-long5
     hostname: data-be-analyse-1h-long5
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -4020,7 +4020,7 @@ services:
     container_name: data-be-analyse-4h-short5
     hostname: data-be-analyse-4h-short5
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -4059,7 +4059,7 @@ services:
     container_name: data-be-analyse-4h-long5
     hostname: data-be-analyse-4h-long5
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh analyse_data
@@ -4097,7 +4097,7 @@ services:
     container_name: data-be-analyse-5m-short11
     hostname: data-be-analyse-5m-short11
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -4133,7 +4133,7 @@ services:
     container_name: data-be-analyse-5m-long11
     hostname: data-be-analyse-5m-long11
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -4169,7 +4169,7 @@ services:
     container_name: data-be-analyse-15m-short11
     hostname: data-be-analyse-15m-short11
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -4205,7 +4205,7 @@ services:
     container_name: data-be-analyse-15m-long11
     hostname: data-be-analyse-15m-long11
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -4241,7 +4241,7 @@ services:
     container_name: data-be-analyse-30m-short11
     hostname: data-be-analyse-30m-short11
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -4277,7 +4277,7 @@ services:
     container_name: data-be-analyse-30m-long11
     hostname: data-be-analyse-30m-long11
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -4313,7 +4313,7 @@ services:
     container_name: data-be-analyse-1h-short11
     hostname: data-be-analyse-1h-short11
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -4349,7 +4349,7 @@ services:
     container_name: data-be-analyse-1h-long11
     hostname: data-be-analyse-1h-long11
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -4385,7 +4385,7 @@ services:
     container_name: data-be-analyse-4h-short11
     hostname: data-be-analyse-4h-short11
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -4421,7 +4421,7 @@ services:
     container_name: data-be-analyse-4h-long11
     hostname: data-be-analyse-4h-long11
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -4458,7 +4458,7 @@ services:
     container_name: data-be-analyse-4h-long7
     hostname: data-be-analyse-4h-long7
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -4495,7 +4495,7 @@ services:
     container_name: data-be-analyse-5m-short12
     hostname: data-be-analyse-5m-short12
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -4532,7 +4532,7 @@ services:
     container_name: data-be-analyse-5m-long12
     hostname: data-be-analyse-5m-long12
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -4569,7 +4569,7 @@ services:
     container_name: data-be-analyse-5m-short13
     hostname: data-be-analyse-5m-short13
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -4608,7 +4608,7 @@ services:
     container_name: data-be-analyse-5m-long13
     hostname: data-be-analyse-5m-long13
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -4647,7 +4647,7 @@ services:
     container_name: data-be-analyse-5m-short14
     hostname: data-be-analyse-5m-short14
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -4686,7 +4686,7 @@ services:
     container_name: data-be-analyse-5m-long14
     hostname: data-be-analyse-5m-long14
     image: amrox/greencandle:${TAG}
-    mem_limit: 2g
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"

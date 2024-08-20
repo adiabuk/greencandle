@@ -4,7 +4,7 @@ services:
     container_name: per-gen-be-logwatch
     hostname: per-gen-be-logwatch
     image: amrox/greencandle:${TAG}
-    mem_limit: 200m
+    mem_limit: 200M
     restart: always
     entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
     environment:
@@ -24,7 +24,7 @@ services:
     container_name: per-gen-be-logtailer-api
     hostname: per-gen-be-logtailer-api
     image: amrox/greencandle:${TAG}
-    mem_limit: 300m
+    mem_limit: 300M
     pull_policy: always
     restart: always
     environment:
@@ -58,7 +58,7 @@ services:
     container_name: per-base-redis
     hostname: per-base-redis
     image: amrox/gc-redis:${TAG}
-    mem_limit: 300m
+    mem_limit: 300M
     pull_policy: always
     restart: always
     links:
@@ -79,7 +79,7 @@ services:
     container_name: per-base-mysql
     hostname: per-base-mysql
     image: amrox/gc-mysql:${TAG}
-    mem_limit: 1g
+    mem_limit: 1G
     pull_policy: always
     entrypoint: /docker-entrypoint.sh "--max-connections=5000"
     environment:
@@ -107,7 +107,7 @@ services:
       - CONFIG_ENV=per/be/manual
       - DB=true
     image: amrox/greencandle:${TAG}
-    mem_limit: 500m
+    mem_limit: 500M
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "tail -f /dev/null"
@@ -144,7 +144,7 @@ services:
       - CONFIG_ENV=per/fe/cron
       - DB=true
     image: amrox/greencandle:${TAG}
-    mem_limit: 5g
+    mem_limit: 5G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "cron -f"
@@ -174,7 +174,7 @@ services:
     container_name: per-fe-webserver
     hostname: per-fe-webserver
     image: amrox/webserver:${TAG}
-    mem_limit: 200m
+    mem_limit: 200M
     pull_policy: always
     restart: always
     healthcheck:
@@ -215,7 +215,7 @@ services:
       options:
         syslog-facility: local6
     image: amrox/greencandle:${TAG}
-    mem_limit: 200m
+    mem_limit: 200M
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh api_proxy
@@ -250,7 +250,7 @@ services:
       options:
         syslog-facility: local6
     image: amrox/greencandle:${TAG}
-    mem_limit: 200m
+    mem_limit: 200M
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh filesystem_api
@@ -279,7 +279,7 @@ services:
       options:
         syslog-facility: local6
     image: amrox/greencandle:${TAG}
-    mem_limit: 600m
+    mem_limit: 600M
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh api_dashboard
@@ -310,7 +310,7 @@ services:
     container_name: per-be-api-router
     hostname: per-be-api-router
     image: amrox/greencandle:${TAG}
-    mem_limit: 200m
+    mem_limit: 200M
     pull_policy: always
     restart: always
     extra_hosts:
@@ -349,7 +349,7 @@ services:
     container_name: per-be-api-any-spot-long
     hostname: per-be-api-any-spot-long
     image: amrox/greencandle:${TAG}
-    mem_limit: 600m
+    mem_limit: 600M
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
@@ -385,7 +385,7 @@ services:
     container_name: per-be-api-any-cross-long
     hostname: per-be-api-any-cross-long
     image: amrox/greencandle:${TAG}
-    mem_limit: 600m
+    mem_limit: 600M
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
@@ -421,7 +421,7 @@ services:
     container_name: per-be-api-any-cross-short
     hostname: per-be-api-any-cross-short
     image: amrox/greencandle:${TAG}
-    mem_limit: 600m
+    mem_limit: 600M
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"

@@ -89,7 +89,7 @@ services:
     container_name: dev-be-stream_1m
     hostname: dev-be-stream_1m
     image: amrox/greencandle:${TAG}
-    mem_limit: 200m
+    mem_limit: 200M
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh stream_data
@@ -124,7 +124,7 @@ services:
     container_name: dev-be-analyse-1m-short1
     hostname: dev-be-analyse-1m-short1
     image: amrox/greencandle:${TAG}
-    mem_limit: 500m
+    mem_limit: 500M
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
@@ -193,7 +193,7 @@ services:
     extra_hosts:
       - "alert:10.0.0.212"
     image: amrox/greencandle:${TAG}
-    mem_limit: 200m
+    mem_limit: 200M
     pull_policy: always
     restart: always
     healthcheck:
