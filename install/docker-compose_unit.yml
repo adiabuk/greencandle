@@ -38,7 +38,7 @@ services:
       - 20000
     healthcheck:
       test: nc -z 127.1 20000 || exit 1
-      interval: 10
+      interval: 10s
       timeout: 10s
       retries: 5
     volumes:

@@ -100,7 +100,7 @@ def make_docker_case(container, checks=None):
 
         def tearDown(self):
             self.logger.info("Cleanup up docker instances")
-            command = ("TAG={} docker-compose -f {} -p {} down"
+            command = ("TAG={} docker compose -f {} -p {} down"
                        .format(get_tag(), self.compose_file, self.build_id))
             self.run_subprocess(command)
 
@@ -108,7 +108,7 @@ def make_docker_case(container, checks=None):
             """Start Instance"""
 
             self.logger.info("Starting instance %s", container)
-            command = "TAG={} docker-compose -f {} -p {}  up -d {} ".format(
+            command = "TAG={} docker compose -f {} -p {}  up -d {} ".format(
                 get_tag(), self.compose_file, self.build_id, container)
             return_code, out, err = self.run_subprocess(command)
             if err:
