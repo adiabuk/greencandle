@@ -68,7 +68,7 @@ def check_last_hour():
         msg = "OK"
         text = f'{msg}: No major issues in {env} logfile, warn:{warn_count}, err/crit: {err_count}'
 
-    send_nsca(status=status, host_name="jenkins1", service_name=f"critical_logs_{env}",
+    send_nsca(status=status, host_name="jenkins", service_name=f"critical_logs_{env}",
               text_output=text, remote_host='nagios.amrox.loc')
 
 def watch_log():

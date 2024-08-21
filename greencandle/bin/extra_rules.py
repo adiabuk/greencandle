@@ -47,7 +47,7 @@ def check_rules():
         if pair not in config.main.pairs.split():
             msg = f'Unknown pair: {pair}'
             LOGGER.info(msg)
-            send_nsca(status=2, host_name='jenkins1', service_name='extra_rules', text_output=msg,
+            send_nsca(status=2, host_name='jenkins', service_name='extra_rules', text_output=msg,
                       remote_host='local.amrox.loc')
             continue
         item = redis.get_items(pair, interval)[-1]
@@ -94,7 +94,7 @@ def check_rules():
         except Exception as err:
             msg = f"Unable to eval rule {str(rule)} for {pair} {interval}"
             LOGGER.info(msg)
-            send_nsca(status=2, host_name='jenkins1', service_name='extra_rules', text_output=msg,
+            send_nsca(status=2, host_name='jenkins', service_name='extra_rules', text_output=msg,
                       remote_host='local.amrox.loc')
             continue
         action_int = {'short': '-1',

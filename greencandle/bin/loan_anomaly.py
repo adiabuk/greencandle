@@ -60,7 +60,7 @@ def main():
 
     text_output = (f'{msg}: actual: {format_usd(actual_debts)}, '
                    f'in trade:{format_usd(trade_usd)}, diff:{format_usd(diff)}')
-    send_nsca(status=status, host_name='jenkins1', service_name='debt_anomaly',
+    send_nsca(status=status, host_name='jenkins', service_name='debt_anomaly',
               text_output=f'{text_output}|diff={diff}', remote_host='nagios.amrox.loc')
     print(text_output)
     sys.exit(status)

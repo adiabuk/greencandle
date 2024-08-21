@@ -33,7 +33,7 @@ def main():
         status = 3
         msg = "UNKNOWN"
 
-    send_nsca(status=status, host_name='jenkins1', service_name='cross_margin_risk',
+    send_nsca(status=status, host_name='jenkins', service_name='cross_margin_risk',
               text_output=f'{msg} risk value is {round(value, 2)};|risk={round(value, 2)}',
               remote_host='10.0.0.212')
 
