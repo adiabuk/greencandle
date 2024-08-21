@@ -1,5 +1,13 @@
 # Releases
 
+# 7.15.1
+* remove deprecated containers from stag env
+* add extra dashboard trade assocs
+* fixes to running docker containers for unit tests
+* remove relisted pair
+* mem limit metric needs to be uppercase
+* cleanup db0 in all envs except data
+
 # 7.15
 * yaml formatting
 * remove lt/man prod containers in favour of any2 containers with more tfs
