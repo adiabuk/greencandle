@@ -10,6 +10,7 @@ services:
       - DB=true
       - id=$id
       - test=$test
+      - image_id=$image_id
     hostname: unit
     image: greencandle-${image_id}
     restart: always
@@ -28,6 +29,7 @@ services:
       retries: 5
     volumes:
       - /data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
       - /root/.aws:/root/.aws
 
   cron:
