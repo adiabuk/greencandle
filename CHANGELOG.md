@@ -1,5 +1,8 @@
 # Releases
 
+# 7.15.2
+* change nsca hostname to alias
+
 # 7.15.1
 * remove deprecated containers from stag env
 * add extra dashboard trade assocs
