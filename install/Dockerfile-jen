@@ -14,7 +14,7 @@ RUN apt-get update && \
         git default-libmysqlclient-dev python3-dev xvfb iceweasel redis-tools cron \
         bsdmainutils libssl-dev gcc libsystemd-dev libjpeg-dev zlib1g-dev libffi-dev libsqlite3-dev liblzma-dev
 
-RUN  wget https://www.python.org/ftp/python/3.9.0/Python-3.9.0.tgz
+RUN  wget https://local.amrox.loc/files/Python-3.9.0.tgz
 RUN tar -xf Python-3.9.0.tgz && cd Python-3.9.0 && \
     ./configure --prefix=/usr/local --enable-optimizations --enable-shared LDFLAGS="-Wl,-rpath /usr/local/lib" && \
     make altinstall && cd .. && rm -rf Python-3.9.0.tgz && rm -rf Python-3.9.0 && \

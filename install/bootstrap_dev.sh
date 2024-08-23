@@ -23,7 +23,7 @@ apt-get -y install docker.io netcat ntpdate mysql-client screen atop jq iotop nt
 sed -i '/*.emerg/ s/./#&/' /etc/rsyslog.d/50-default.conf
 echo "ForwardToWall=no" >> /etc/systemd/journald.conf
 
-curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | sudo bash -s -- --mariadb-server-version=10.8
+curl -LsS http://local.amrox.loc/files/mariadb_repo_setup | sudo bash -s -- --mariadb-server-version=10.8
 
 mkdir -p /usr/lib/docker/cli-plugins
 # download the CLI into the plugins directory
@@ -41,7 +41,7 @@ libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
 libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl
 
 export PYENV_ROOT="/opt/pyenv"
-curl -s -S -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
+curl -s -S -L http://local.amrox.loc/files/pyenv-installer | bash
 
 cat << \EOF >> ~/.bashrc
 export ConEmuDefaultCp=65001
