@@ -46,11 +46,11 @@ make install
 cd -
 rm -rf /tmp/s3fs-fuse
 
-wget "https://www.dropbox.com/sh/l22jyonei087h4o/AAChfqr_j4ydTDjILz0Q62Y2a/configstore-2.5.0-linux-amd64.tar.gz?dl=0" -O /tmp/configstore-2.5.0-linux-amd64.tar.gz
+wget "http://local.amrox.loc/files/configstore-2.5.0-linux-amd64.tar.gz" -O /tmp/configstore-2.5.0-linux-amd64.tar.gz
 tar zxvf /tmp/configstore-2.5.0-linux-amd64.tar.gz -C /usr/local/bin
 rm -rf /tmp/configstore-2.5.0-linux-amd64.tar.gz
 
-wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/3.0.0-beta/yq_linux_amd64
+wget -qO /usr/local/bin/yq http://local.amrox.loc/files/yq_3
 
 echo "export HOSTNAME" >> ~/.bashrc
 

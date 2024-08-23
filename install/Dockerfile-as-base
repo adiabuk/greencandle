@@ -4,7 +4,7 @@ RUN apt update && apt-get -y install vim mpg321 gstreamer-1.0 libgirepository1.0
 
 RUN pip install Jinja2==3.0.1 boto3==1.17.13 Flask==2.0.2 playsound==1.2.2 vext==0.7.4 pgi==0.0.11.2 pyserial==3.5 pycairo==1.20.1 PyGObject==3.42.0
 
-RUN wget "https://www.dropbox.com/sh/l22jyonei087h4o/AAChfqr_j4ydTDjILz0Q62Y2a/configstore-2.5.0-linux-amd64.tar.gz?dl=0" -O /tmp/configstore-2.5.0-linux-amd64.tar.gz
+RUN wget "http://local.amrox.loc/files/configstore-2.5.0-linux-amd64.tar.gz" -O /tmp/configstore-2.5.0-linux-amd64.tar.gz
 RUN tar zxvf /tmp/configstore-2.5.0-linux-amd64.tar.gz -C /usr/local/bin
 RUN rm -rf /tmp/configstore-2.5.0-linux-amd64.tar.gz
 RUN rm -rf /var/lib/mysql

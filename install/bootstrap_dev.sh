@@ -27,11 +27,11 @@ curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | sudo bash -
 
 mkdir -p /usr/lib/docker/cli-plugins
 # download the CLI into the plugins directory
-curl -sSL https://github.com/docker/compose/releases/download/v2.9.0/docker-compose-linux-x86_64 -o /usr/lib/docker/cli-plugins/docker-compose
+curl -sSL http://local.amrox.loc/files/docker-compose-2.9.0 -o /usr/lib/docker/cli-plugins/docker-compose
 # make the CLI executable
 chmod +x /usr/lib/docker/cli-plugins/docker-compose
 
-wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/3.0.0-beta/yq_linux_amd64
+wget -qO /usr/local/bin/yq http://local.amrox.loc/files/yq_3
 
 echo "export HOSTNAME" >> ~/.bashrc
 
@@ -65,13 +65,13 @@ pyenv global 3.7.0
 chmod o+w /opt/pyenv/shims /opt/pyenv/versions
 
 if [[ ! -f /usr/local/bin/configstore ]]; then
-    wget "https://www.dropbox.com/sh/l22jyonei087h4o/AAChfqr_j4ydTDjILz0Q62Y2a/configstore-2.5.0-linux-amd64.tar.gz?dl=0" -O /tmp/configstore-2.5.0-linux-amd64.tar.gz
+    wget "http://local.amrox.loc/files/configstore-2.5.0-linux-amd64.tar.gz" -O /tmp/configstore-2.5.0-linux-amd64.tar.gz
     tar zxvf /tmp/configstore-2.5.0-linux-amd64.tar.gz -C /usr/local/bin
     rm -rf /tmp/configstore-2.5.0-linux-amd64.tar.gz
 fi
 
 if [[ ! -d /usr/include/ta-lib ]]; then
-  wget "https://www.dropbox.com/sh/l22jyonei087h4o/AABz_MIHb3a8ZPWv0gbhkDAia/ta-lib-0.4.0-src.tar.gz?dl=0" -O /tmp/ta-lib-0.4.0-src.tar.gz
+  wget "http://local.amrox.loc/files/ta-lib-0.4.0-src.tar.gz" -O /tmp/ta-lib-0.4.0-src.tar.gz
   tar zxvf /tmp/ta-lib-0.4.0-src.tar.gz -C /tmp
   cd /tmp/ta-lib
   ./configure --prefix=/usr
