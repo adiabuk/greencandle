@@ -1,5 +1,9 @@
 # Releases
 
+# 7.15.5
+* Add stag 1h routes
+* fix json syntax
+
 # 7.15.4
 * fix extras forwarding rule and add stag 1h
 * add 1h stag strategy with to tp or sl
