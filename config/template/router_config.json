@@ -158,7 +158,7 @@
 
 "extra_stag-any-1m": ["stag:any-1m-long-short"],
 "extra_stag-any-5m": ["stag:any-5m-long-short"],
-"extra_stag-any-1h": ["stagr:any-1h-long-short"],
+"extra_stag-any-1h": ["stag:any-1h-long-short"],
 "extra_stag-any2-1m": ["stag:any2-1m-long-short"],
 "extra_stag-any2-5m": ["stag:any2-5m-long-short"],
 
