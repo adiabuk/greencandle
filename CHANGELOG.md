@@ -1,5 +1,10 @@
 # Releases
 
+# 7.15.4
+* fix extras forwarding rule and add stag 1h
+* add 1h stag strategy with to tp or sl
+* add 7-period RSI to data env
+
 # 7.15.3
 * free up stag containers for manual tests
 * more files from local repo
