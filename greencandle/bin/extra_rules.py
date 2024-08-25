@@ -43,8 +43,10 @@ def check_rules():
     for key in keys:
         items.append(list(json.loads(redis6.conn.get(key).decode()).values()) + [key.decode()])
 
+    items = [x.strip() for x in items]
     for pair, interval, action, usd, take, stop, rule, forward_to, key in items:
-        if pair not in config.main.pairs.split():
+
+        if pair.upper() not in config.main.pairs.split():
             msg = f'Unknown pair: {pair}'
             LOGGER.info(msg)
             send_nsca(status=2, host_name='jenkins', service_name='extra_rules', text_output=msg,
