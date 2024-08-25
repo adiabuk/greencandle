@@ -1,5 +1,10 @@
 # Releases
 
+# 7.15.3
+* free up stag containers for manual tests
+* more files from local repo
+* download files from local repo
+
 # 7.15.2
 * change nsca hostname to alias
 
