@@ -43,7 +43,7 @@ def check_rules():
     for key in keys:
         items.append(list(json.loads(redis6.conn.get(key).decode()).values()) + [key.decode()])
 
-    items = [item.strip() for rule in items for item in rule]
+    items = [[item.strip() for item in rule] for rule in items]
     for pair, interval, action, usd, take, stop, rule, forward_to, key in items:
 
         if pair.upper() not in config.main.pairs.split():
