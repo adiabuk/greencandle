@@ -133,7 +133,7 @@ def get_match_name(matches):
                    ['touch'],
                    ['MACD_volume', 'EMA_volume'],
                    ['bb30'],
-                   ['RSI-uptrend', 'RSI-downtrend']
+                   ['RSI_flip']
                    ]
     for match in matches:
         match_names.append(name_lookup[container_num-1][match-1])
