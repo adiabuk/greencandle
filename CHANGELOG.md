@@ -1,5 +1,12 @@
 # Releases
 
+# 7.16
+* new containers for longterm RSI flip alerts
+* turn off slack for bb strategy
+* remove delisted pair
+* strip white space from UI entry - extras dashboard from redis nested list
+* fix typo in strategy container name
+
 # 7.15.5
 * Add stag 1h routes
 * fix json syntax
