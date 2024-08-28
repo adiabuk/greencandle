@@ -4666,9 +4666,6 @@ services:
     environment:
       - CONFIG_ENV=data/be/short/short14/1d
       - DB=true
-      - CHECK_REDIS_PAIR=6
-      - STORE_IN_DB=True
-      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1d-short14 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -4705,9 +4702,6 @@ services:
     environment:
       - CONFIG_ENV=data/be/long/long14/1d
       - DB=true
-      - CHECK_REDIS_PAIR=6
-      - STORE_IN_DB=True
-      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1d-long14 2>&1 |grep . ||exit 1
       start_period: 1h
