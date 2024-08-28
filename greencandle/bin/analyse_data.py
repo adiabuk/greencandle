@@ -132,7 +132,7 @@ def get_match_name(matches):
                    ['rsi'],
                    ['empty7'],
                    ['empty8'],
-                   ['empty9']
+                   ['empty9'],
                    ['trend_50_confirm'],
                    ['touch'],
                    ['MACD_volume', 'EMA_volume'],
