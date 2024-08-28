@@ -1,5 +1,13 @@
 # Releases
 
+# 7.17
+* set ~5 hr expiry for 1d
+* new RSI cross-interval data strategy
+* no redis checking or DB storage for RSI flip strategy
+* fix RSI rules to not use EMA
+* disable bb rule slack notifs
+* further fix nested list comprehension
+
 # 7.16
 * new containers for longterm RSI flip alerts
 * turn off slack for bb strategy

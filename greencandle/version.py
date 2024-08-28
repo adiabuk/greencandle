@@ -1,7 +1,7 @@
 """
 Package version
 """
-__version__ = '7.16'
+__version__ = '7.17'
 
 if __name__ == '__main__':
     print(__version__)
