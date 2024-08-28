@@ -130,8 +130,9 @@ def get_match_name(matches):
                    ['STOCHRSI_flip'],
                    ['STOCHRSI_check'],
                    ['rsi'],
-                   ['trend_confirm'],
-                   ['trend_50'],
+                   ['empty7'],
+                   ['empty8'],
+                   ['empty9']
                    ['trend_50_confirm'],
                    ['touch'],
                    ['MACD_volume', 'EMA_volume'],
