@@ -1,0 +1,5 @@
+{
+  "open_rule1": "res[0].EMA_7 \u003c 40",
+  "slack_active": "false",
+  "time_between_trades": "5h"
+}

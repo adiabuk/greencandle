@@ -41,6 +41,8 @@ if sys.argv[-1] != "--help":
     STORE_IN_DB = bool('STORE_IN_DB' in os.environ)
     CHECK_REDIS_PAIR = int(os.environ['CHECK_REDIS_PAIR']) if 'CHECK_REDIS_PAIR' in \
             os.environ else False
+    CHECK_REDIS_INTERVAL = os.environ['CHECK_REDIS_INTERVAL'] if 'CHECK_REDIS_INTERVAL' in \
+            os.environ else False
     ROUTER_FORWARD = bool('ROUTER_FORWARD' in os.environ)
     REDIS_FORWARD = [int(x) for x in os.environ['REDIS_FORWARD'].split(',')] if 'REDIS_FORWARD' \
             in os.environ else False
@@ -60,8 +62,9 @@ def analyse_loop():
     redis = Redis()
     if CHECK_REDIS_PAIR:
         redis4=Redis(db=CHECK_REDIS_PAIR)
+        new_interval = CHECK_REDIS_INTERVAL if CHECK_REDIS_INTERVAL else INTERVAL
         redis_pairs = [x.decode().split(':') for x in
-                       redis4.conn.smembers(f'{INTERVAL}:{DIRECTION}')]
+                       redis4.conn.smembers(f'{new_interval}:{DIRECTION}')]
         if STORE_IN_DB:
             dbase = Mysql(interval=INTERVAL)
             open_pairs = dbase.fetch_sql_data(f'select pair, comment, 999999 from trades where '
@@ -133,7 +136,9 @@ def get_match_name(matches):
                    ['touch'],
                    ['MACD_volume', 'EMA_volume'],
                    ['bb30'],
-                   ['RSI_flip']
+                   ['RSI_flip'],
+                   ['RSI_1d'],
+                   ['RSI_1h'],
                    ]
     for match in matches:
         match_names.append(name_lookup[container_num-1][match-1])
