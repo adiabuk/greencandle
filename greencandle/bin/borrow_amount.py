@@ -17,13 +17,17 @@ def main():
     Borrow amount from exchange
     Amount is fixed from db 'max_trade_usd' value
     will be converted into equivalent of asset amount required
-    Usage: borrow_amount <asset> (eg. BTC)
+
+    Optional usd trade amount - default is value from db (max_trade_usd)
+
+    Usage: borrow_amount <asset> [<amount>]
     """
     config.create_config()
     logger = get_logger("manual_borrow")
     client = binance_auth()
     dbase = Mysql()
-    usd_amount = dbase.get_var_value('max_trade_usd')
+
+    usd_amount = sys.argv[2] if len(sys.argv) == 3 else dbase.get_var_value('max_trade_usd')
     print(f'usd amount to borrow: {usd_amount}')
     symbol = sys.argv[1]
 
@@ -41,7 +45,6 @@ def main():
     except BinanceException as ex:
         print(ex)
         print(f'{Bcolours.FAIL}FAILED{Bcolours.ENDC}')
-
 
 if __name__ == '__main__':
     main()
