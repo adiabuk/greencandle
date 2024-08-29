@@ -241,7 +241,7 @@ def get_tv_link(pair, interval=None, anchor=False):
     Return Tradingview hyperlink for slack notifications
     """
 
-    minutes_per_unit = {"s":1, "m": 1, "h": 60, "d": 1400, "w": 10080}
+    minutes_per_unit = {"s":1, "m": 1, "h": 60, "d": 1440, "w": 10080}
     def convert_to_minutes(time_string):
         return int(time_string[:-1]) * minutes_per_unit[time_string[-1]]
 
