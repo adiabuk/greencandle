@@ -1,5 +1,6 @@
 {
   "interval": "1d",
   "name": "data-be-analyse-1d-long14",
+  "time_between_trades": "12h",
   "slack_active": "true"
 }
