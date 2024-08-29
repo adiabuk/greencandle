@@ -54,9 +54,13 @@ def analyse_loop():
     """
     LOGGER.debug("recently triggered: %s", str(TRIGGERED))
 
-    while glob.glob(f'/var/run/{config.main.base_env}-data-{INTERVAL}-*'):
+    lock_file= f'/var/run/{config.main.base_env}-data-{INTERVAL}-*'
+    while glob.glob(lock_file):
         LOGGER.info("waiting for initial data collection to complete for %s", INTERVAL)
+        if not glob.glob(lock_file):
+            LOGGER.info("initial data collection is now complete for %s", INTERVAL)
         time.sleep(30)
+
 
     LOGGER.debug("start of current loop")
     redis = Redis()
