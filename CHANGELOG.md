@@ -1,5 +1,12 @@
 # Releases
 
+# 7.17.1
+* allow optionally specifying usd borrow amount at CLI
+* force option for debt repayment
+* filter out low volume trades for RSI entrypoint
+* allow USDT to be borrowed from CLI
+* set 12h between RSI flip signals
+
 # 7.17
 * set ~5 hr expiry for 1d
 * new RSI cross-interval data strategy
