@@ -19,13 +19,14 @@ def main():
     off as much as possible
     Run from cron periodically in given environment
 
-    usage: repay_debts borrowed|interest [--list]
+    usage: repay_debts borrowed|interest [--list] [--force]
     """
     client = binance_auth()
     debt_type = sys.argv[1]
     logger = get_logger(f"repay_debts_{debt_type}")
     debt_assets = get_cross_assets_with_debt(debt_type=debt_type, amount=True)
 
+    force = bool('--force' in sys.argv)
     list_only = bool('--list' in sys.argv)
 
     dbase = Mysql()
@@ -40,7 +41,7 @@ def main():
             if to_pay <= 0:
                 logger.info("Skipping %s due to insuficent funds", asset)
                 continue
-            if (asset in extra_list or asset in open_set) and debt_type == 'borrowed':
+            if (asset in extra_list or asset in open_set) and debt_type == 'borrowed' not force:
                 logger.info("Skipping %s due to open trade", asset)
             else:
                 if list_only:
