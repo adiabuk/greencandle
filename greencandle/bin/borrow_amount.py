@@ -26,7 +26,8 @@ def main():
     usd_amount = dbase.get_var_value('max_trade_usd')
     print(f'usd amount to borrow: {usd_amount}')
     symbol = sys.argv[1]
-    amount = quote2base(usd_amount, symbol + 'USDT')
+
+    amount = usd_amount if symbol == 'USDT' else quote2base(usd_amount, symbol + 'USDT')
     print(f'base amount to borrow: {amount}')
 
     try:
