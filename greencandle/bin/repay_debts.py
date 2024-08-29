@@ -41,7 +41,7 @@ def main():
             if to_pay <= 0:
                 logger.info("Skipping %s due to insuficent funds", asset)
                 continue
-            if (asset in extra_list or asset in open_set) and debt_type == 'borrowed' not force:
+            if (asset in extra_list or asset in open_set) and debt_type == 'borrowed' and not force:
                 logger.info("Skipping %s due to open trade", asset)
             else:
                 if list_only:
