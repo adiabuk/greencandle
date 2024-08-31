@@ -1,5 +1,11 @@
 # Releases
 
+# 7.17.2
+* fix double rsi short interval
+* which for analyser lock file then loop until done, logging if in loop
+* fix syntax error
+* correct number of mins in a day globally
+
 # 7.17.1
 * allow optionally specifying usd borrow amount at CLI
 * force option for debt repayment
