@@ -55,12 +55,14 @@ def analyse_loop():
     LOGGER.debug("recently triggered: %s", str(TRIGGERED))
 
     lock_file= f'/var/run/{config.main.base_env}-data-{INTERVAL}-*'
-    while True:
-        LOGGER.info("waiting for initial data collection to complete for %s", INTERVAL)
-        if not glob.glob(lock_file):
-            LOGGER.info("finished initial data collection for %s", INTERVAL)
-            break
-        time.sleep(30)
+
+    if glob.glob(lock_file):
+        while True:
+            LOGGER.info("waiting for initial data collection to complete for %s", INTERVAL)
+            if not glob.glob(lock_file):
+                LOGGER.info("finished initial data collection for %s", INTERVAL)
+                break
+            time.sleep(30)
 
 
     LOGGER.debug("start of current loop")
