@@ -320,8 +320,9 @@ class ProdRunner():
         request = requests.get(f"http://stream/{config.main.interval}/all", timeout=10)
         if not request.ok:
             LOGGER.critical("Unable to fetch data from streaming server")
-            return request.ok
-        data = request.json()
+            data = {'recent':{}, 'closed': {}}
+        else:
+            data = request.json()
         if len(data['recent'].keys()) < len(PAIRS):
             LOGGER.info("Insufficient data in stream, reverting to conventional method")
             klines = 60 if interval.endswith('s') or interval.endswith('m') else 5
