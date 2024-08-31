@@ -1192,7 +1192,7 @@ services:
       - DB=True
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-1d-short1 2>&1  | grep . || exit 1
-      start_period: 1h
+      start_period: 2h
       interval: 30m
       timeout: 10s
       retries: 5
@@ -1265,7 +1265,7 @@ services:
       - DB=True
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-1d-long1 2>&1  | grep . || exit 1
-      start_period: 1h
+      start_period: 2h
       interval: 30m
       timeout: 10s
       retries: 5
@@ -2444,7 +2444,7 @@ services:
       - REDIS_FORWARD=5
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-1d-short2 2>&1  | grep . || exit 1
-      start_period: 1h
+      start_period: 2h
       interval: 1h
       timeout: 10s
       retries: 5
@@ -2741,7 +2741,7 @@ services:
       - REDIS_FORWARD=5
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-1d-long2 2>&1  | grep . || exit 1
-      start_period: 1h
+      start_period: 2h
       interval: 1h
       timeout: 10s
       retries: 5
@@ -4668,7 +4668,7 @@ services:
       - DB=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1d-short14 2>&1 |grep . ||exit 1
-      start_period: 1h
+      start_period: 2h
       interval: 5m
       timeout: 10s
       retries: 5
@@ -4704,7 +4704,7 @@ services:
       - DB=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1d-long14 2>&1 |grep . ||exit 1
-      start_period: 1h
+      start_period: 2h
       interval: 5m
       timeout: 10s
       retries: 5
@@ -4741,7 +4741,7 @@ services:
       - REDIS_FORWARD=13
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1d-short15 2>&1 |grep . ||exit 1
-      start_period: 1h
+      start_period: 2h
       interval: 5m
       timeout: 10s
       retries: 5
@@ -4778,7 +4778,7 @@ services:
       - REDIS_FORWARD=13
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1d-long15 2>&1 |grep . ||exit 1
-      start_period: 1h
+      start_period: 2h
       interval: 5m
       timeout: 10s
       retries: 5
