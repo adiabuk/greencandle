@@ -322,6 +322,12 @@ class ProdRunner():
             LOGGER.critical("Unable to fetch data from streaming server")
             return request.ok
         data = request.json()
+        if len(data['recent'].keys()) < len(PAIRS):
+            LOGGER.info("Insufficient data in stream, reverting to conventional method")
+            klines = 60 if interval.endswith('s') or interval.endswith('m') else 5
+            dataframes = get_dataframes([PAIRS], interval=interval, no_of_klines=klines)
+            for pair in PAIRS:
+                data['recent'][pair] = dict(dataframes[pair].iloc[-1])
 
         new_dataframes = defaultdict(dict)
         for pair in PAIRS:
