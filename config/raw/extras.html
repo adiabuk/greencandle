@@ -91,7 +91,21 @@
 	             }
 		  }
                }
+	       function populate(pair, interval, action, usd, take, stop, rule, forward) {
+                 document.getElementById('pair').value=pair;
+                 document.getElementById('interval').value=interval;
+                 document.getElementById('action').value=action;
+                 document.getElementById('usd').value=usd;
+                 document.getElementById('tp').value=take;
+                 document.getElementById('sl').value=stop;
+                 document.getElementById('rule').value=rule;
+                 document.getElementById('search').value=forward;
+                 document.getElementById('forward_to').value=forward;
+		 
+                 return;
+               }
 	  </script>
+
           </head>
           <body>
             <div>
@@ -338,7 +352,7 @@
   </script>
   <script type="text/javascript">
     $('#processed').DataTable( {
-    "aaSorting": [[9,'desc']]
+    "aaSorting": [[10,'desc']]
     } );
   </script>
 

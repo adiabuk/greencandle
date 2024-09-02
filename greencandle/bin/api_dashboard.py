@@ -24,7 +24,8 @@ from greencandle.lib.mysql import Mysql
 from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.binance_accounts import base2quote, get_cross_margin_level
 from greencandle.lib.common import (arg_decorator, divide_chunks, get_be_services, list_to_dict,
-                                    perc_diff, get_tv_link, get_trade_link, format_usd)
+                                    perc_diff, get_tv_link, get_trade_link, format_usd,
+                                    AttributeDict)
 from greencandle.lib import config
 from greencandle.lib.balance_common import get_quote
 from greencandle.lib.balance import Balance
@@ -239,13 +240,19 @@ def extras():
         data['current'].append(current)
 
     for key in keys11:
-        processed = json.loads(redis11.conn.get(key).decode())
+        processed = AttributeDict(json.loads(redis11.conn.get(key).decode()))
         pair = processed['pair']
         interval = processed['interval']
         processed['pair'] = get_tv_link(pair, interval, anchor=True)
 
         delete_button = (f'<form method=post action=/dash/xredis?key={key.decode()}&db=11><input '
                           'type=submit name=save value=delete></form>')
+
+        readd_button = (f'<button onclick="javascript:populate(\'{pair}\', \'{interval}\', '
+                        f'\'{processed.action}\', \'{processed.usd}\', \'{processed.take}\', '
+                        f'\'{processed.stop}\', \'{processed.rule}\', '
+                        f'\'{processed.forward_to}\')">re_addd</button>')
+        processed.update({'re_add': readd_button})
         processed.update({'delete': delete_button})
         add_time = datetime.fromtimestamp(int(key)).strftime(time_format)
         processed.update({'add_time': add_time})
