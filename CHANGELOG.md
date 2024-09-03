@@ -1,5 +1,13 @@
 # Releases
 
+# 7.17.3
+* small formatting fix
+* repopulate extras fields from prev processed items
+* fix strategy name
+* wait an extra hour before beginning 1d analyser health checks
+* don't try to access json data if request failed
+* get all data from binance API if insufficient data in stream
+
 # 7.17.2
 * fix double rsi short interval
 * which for analyser lock file then loop until done, logging if in loop
