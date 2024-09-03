@@ -75,7 +75,8 @@ def check_rules():
         for i in range(-1, -6, -1):
             datax = AttributeDict()
             for indicator in ind_list:
-                datax[indicator] = redis.get_result(items[i], indicator, pair, interval)
+                datax[indicator] = redis.get_result(items[i], indicator, pair.upper().strip(),
+                                                    interval)
 
             # Floatify each of the ohlc elements before adding
             ohlc = redis.get_current(name, items[i])[-1]
