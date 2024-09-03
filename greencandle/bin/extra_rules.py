@@ -7,6 +7,7 @@ Loop through extra trade rules in redis and process
 
 import time
 import json
+from datetime import datetime
 import requests
 from send_nsca3 import send_nsca
 from greencandle.lib import config
@@ -87,9 +88,9 @@ def check_rules():
                     ha_ohlc[f'HA_{item}'] = float(ha_raw[item])
                 datax.update(ha_ohlc)
 
-
             datax.update(ohlc)
             res.append(datax)
+            current_minute = datetime.now().minute
         ###
         try:
             evalled = eval(rule)
