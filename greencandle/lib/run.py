@@ -326,7 +326,7 @@ class ProdRunner():
         if len(data['recent'].keys()) < len(PAIRS):
             LOGGER.info("Insufficient data in stream, reverting to conventional method")
             klines = 60 if interval.endswith('s') or interval.endswith('m') else 5
-            dataframes = get_dataframes([PAIRS], interval=interval, no_of_klines=klines)
+            dataframes = get_dataframes(PAIRS, interval=interval, no_of_klines=klines)
             for pair in PAIRS:
                 data['recent'][pair] = dict(dataframes[pair].iloc[-1])
 
@@ -394,7 +394,6 @@ class ProdRunner():
                 self.dataframes[pair].iloc[-1] = pandas.Series(data['recent'][pair])
 
         gc.collect()
-        return None
 
     @GET_EXCEPTIONS
     def prod_loop(self, interval, test=False, data=True, analyse=True):
