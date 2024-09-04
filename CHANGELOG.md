@@ -1,5 +1,11 @@
 # Releases
 
+# 7.17.4
+* remove pairs from data env that don't support cross margin
+* add bb+rsi rule in double rsi strategy
+* limit pair fields in UI to uppercase and no whitespace and enforce when using as key
+* add current time(min) to extras to enable scheduling of checks
+
 # 7.17.3
 * small formatting fix
 * repopulate extras fields from prev processed items
