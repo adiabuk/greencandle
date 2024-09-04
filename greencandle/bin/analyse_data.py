@@ -146,7 +146,7 @@ def get_match_name(matches):
                    ['bb30'],
                    ['RSI_flip'],
                    ['RSI_1d'],
-                   ['RSI_1h'],
+                   ['RSI_1h', 'RSI_1h+bb'],
                    ]
     for match in matches:
         match_names.append(name_lookup[container_num-1][match-1])
