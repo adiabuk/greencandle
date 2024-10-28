@@ -4590,7 +4590,6 @@ services:
       - DB=true
       - CHECK_REDIS_PAIR=4
       - STORE_IN_DB=True
-      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock -mmin -3 -name data-be-analyse-5m-short13 2>&1  | grep . || exit 1
       start_period: 1h
@@ -4629,7 +4628,6 @@ services:
       - DB=true
       - CHECK_REDIS_PAIR=4
       - STORE_IN_DB=True
-      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock -mmin -3 -name data-be-analyse-5m-long13 2>&1  | grep . || exit 1
       start_period: 1h
