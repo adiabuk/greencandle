@@ -108,7 +108,7 @@ def get_data(startdate, intervals, pairs, days, outputdir, extra):
 
     # For testing we use 50 klines buffer to calculate trends/averages etc.
     # so we need to add 50 more klines to the end (total_klines) so that we
-    #still end up with the exact number of lines for the days specified
+    # still end up with the exact number of lines for the days specified
     number_of_extra_klines = extra
 
     klines_multiplier = {"1d": 720,
@@ -214,7 +214,7 @@ def get_non_empty(pair, interval, no_of_klines):
     count = 0
     initial_klines = no_of_klines
 
-    while count <= initial_klines:
+    while count < 1:
 
         start_time = int(time.time()*1000) - int((int(no_of_klines)) * \
                 TF2MIN[interval]*60000)
