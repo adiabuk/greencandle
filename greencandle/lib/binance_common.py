@@ -214,7 +214,7 @@ def get_non_empty(pair, interval, no_of_klines):
     count = 0
     initial_klines = no_of_klines
 
-    while count <= initial_klines:
+    while count <= initial_klines and no_of_klines < 1000:
 
         start_time = int(time.time()*1000) - int((int(no_of_klines)) * \
                 TF2MIN[interval]*60000)
