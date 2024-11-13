@@ -373,22 +373,26 @@ class Engine(dict):
         """
         Get CCI osscilator
         """
-        if index is None:
-            index = -1
-        func, timeperiod = localconfig
-        cci = ta.cci(self.dataframes[pair].high.astype(float),
-                     self.dataframes[pair].low.astype(float),
-                     self.dataframes[pair].close.astype(float),
-                     length=float(timeperiod))
-        scheme = {}
-        result = float(cci.iloc[index])
-        scheme["data"] = result
-        scheme["symbol"] = pair
-        scheme["event"] = f"{func}_{timeperiod}"
-
-        scheme["open_time"] = str(self.dataframes[pair].iloc[index]["openTime"])
-
-        self.schemes.append(scheme)
+        try:
+            if index is None:
+                index = -1
+            func, timeperiod = localconfig
+            cci = ta.cci(self.dataframes[pair].high.astype(float),
+                         self.dataframes[pair].low.astype(float),
+                         self.dataframes[pair].close.astype(float),
+                         length=float(timeperiod))
+            scheme = {}
+            result = float(cci.iloc[index])
+            scheme["data"] = result
+            scheme["symbol"] = pair
+            scheme["event"] = f"{func}_{timeperiod}"
+    
+            scheme["open_time"] = str(self.dataframes[pair].iloc[index]["openTime"])
+    
+            self.schemes.append(scheme)
+    
+        except (IndexError, KeyError, AttributeError) as exc:
+            LOGGER.warning("failure In cci %si for pair", str(exc), pair)
         LOGGER.debug("done getting cci For %s - %s", pair, scheme['open_time'])
 
     @get_exceptions
