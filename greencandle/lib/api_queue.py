@@ -69,7 +69,7 @@ def add_to_queue(req, test=False):
                                   timeout=10)
         current_candle = pandas.Series(stream_req.json())
     except requests.exceptions.RequestException:
-        LOGGER.critical("Unable to get candle from stream, trying conventional method")
+        LOGGER.critical("Unable to get candle for %s from stream, trying conventional method", pair)
         try:
             interval = "1m" if config.main.interval.endswith("s") else config.main.interval
             klines = 60 if interval.endswith('s') or interval.endswith('m') else 5
