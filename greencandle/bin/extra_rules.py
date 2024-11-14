@@ -11,6 +11,7 @@ from datetime import datetime
 import requests
 from send_nsca3 import send_nsca
 from greencandle.lib import config
+from greencandle.lib.common import perc_diff
 from greencandle.lib.redis_conn import Redis, get_float
 from greencandle.lib.common import AttributeDict, arg_decorator
 from greencandle.lib.logger import get_logger
@@ -35,14 +36,14 @@ def check_rules():
     config.create_config()
     redis = Redis() # ohlc
     redis3 = Redis(db=3) # agg
-    redis6 = Redis(db=12) # current rules
+    redis12 = Redis(db=12) # current rules
     redis11 = Redis(db=11) # processed rules
 
     items = []
 
-    keys = redis6.conn.keys()
+    keys = redis12.conn.keys()
     for key in keys:
-        items.append(list(json.loads(redis6.conn.get(key).decode()).values()) + [key.decode()])
+        items.append(list(json.loads(redis12.conn.get(key).decode()).values()) + [key.decode()])
 
     items = [[item.strip() for item in rule] for rule in items]
     for pair, interval, action, usd, take, stop, rule, forward_to, key in items:
@@ -92,6 +93,10 @@ def check_rules():
             datax.update(ohlc)
             res.append(datax)
             current_minute = datetime.now().minute
+
+        def distance_to(num):
+            return abs(perc_diff(num, res[0].close))
+
         ###
         try:
             evalled = eval(rule)
@@ -113,8 +118,8 @@ def check_rules():
                        "env": config.main.name,
                        "price": -1,
                        "usd": usd,
-                       "tp": take,
-                       "sl": stop,
+                       "tp": eval(take),
+                       "sl": eval(stop),
                        "strategy": forward_to}
 
             try:
@@ -128,7 +133,7 @@ def check_rules():
                         "take": take, "stop": stop, "rule": rule, "forward_to": forward_to}
 
                 redis11.conn.set(f"{str(int(time.time()))}", json.dumps(data))
-                redis6.conn.delete(key)
+                redis12.conn.delete(key)
 
 
             except requests.exceptions.RequestException:

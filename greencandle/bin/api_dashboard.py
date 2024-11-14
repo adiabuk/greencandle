@@ -453,7 +453,7 @@ def get_live():
                          "close": close_link,
                          "open_price": '{:g}'.format(float(open_price)),
                          "current_price": '{:g}'.format(float(current_price)),
-                         "tp/sl": f"{take}/{stop}",
+                         "tp/sl": f"{take:.2f}/{stop:.2f}",
                          "du/dd": f"{round(drawup,2)}/{round(drawdown,2)}",
                          "quote_in": quote_in,
                          "usd_in": format_usd(usd_in),
