@@ -186,8 +186,10 @@ class Engine(dict):
             close = float(self.dataframes[pair].iloc[location]["close"])
             if close <= 0:
                 LOGGER.critical("zero size dataframe found")
+                return
         except Exception:
             LOGGER.critical("non-float dataframe found")
+            return
 
         scheme['data'] = self.dataframes[pair].iloc[location].to_dict()
         for key, val in scheme['data'].items():
@@ -239,6 +241,7 @@ class Engine(dict):
 
         except Exception as exc:
             LOGGER.warning("overall failure in macd: %s", str(exc))
+            return
 
         LOGGER.debug("done getting macd for %s - %s: %s", pair, scheme['open_time'], scheme['data'])
 
@@ -282,6 +285,7 @@ class Engine(dict):
             perc = None
             ema_result = None
             LOGGER.debug("overall Exception getting bb perc: %s seq: %s", exc, index)
+            return
         scheme = {}
         try:
             scheme["data"] = ema_result if ema else perc
@@ -293,6 +297,7 @@ class Engine(dict):
 
         except KeyError as exc:
             LOGGER.warning("key failure In bb perc : %s", str(exc))
+            return
 
         LOGGER.debug("done getting bb perc for %s - %s", pair, open_time)
 
@@ -321,6 +326,7 @@ class Engine(dict):
         except Exception as exc:
             res = [None, None, None]
             LOGGER.debug("overall Exception getting bollinger bands: %s seq: %s", exc, index)
+            return
         try:
             scheme = {}
             scheme["open_time"] = open_time
@@ -331,6 +337,7 @@ class Engine(dict):
 
         except KeyError as exc:
             LOGGER.warning("key failure in bollinger bands: %s", str(exc))
+            return
 
         LOGGER.debug("done getting bb for %s - %s", pair, open_time)
 
@@ -393,6 +400,7 @@ class Engine(dict):
     
         except (IndexError, KeyError, AttributeError) as exc:
             LOGGER.warning("failure In cci %s for pair", str(exc), pair)
+            return
         LOGGER.debug("done getting cci For %s - %s", pair, scheme['open_time'])
 
     @get_exceptions
@@ -591,8 +599,8 @@ class Engine(dict):
 
         except (IndexError, KeyError) as exc:
             LOGGER.warning("failure In stochrsi %s", str(exc))
-        else:
-            LOGGER.debug("done getting stochrsi For %s - %s", pair, scheme['open_time'])
+            return
+	LOGGER.debug("done getting stochrsi For %s - %s", pair, scheme['open_time'])
 
     @get_exceptions
     def get_envelope(self, pair, index=None, localconfig=None):
@@ -623,6 +631,7 @@ class Engine(dict):
 
         except KeyError as exc:
             LOGGER.warning("key failure In envelope  %s", str(exc))
+            return
         LOGGER.debug("done getting envelope for %s - %s", pair, scheme['open_time'])
 
     @get_exceptions
@@ -654,6 +663,7 @@ class Engine(dict):
 
         except KeyError as exc:
             LOGGER.warning("key failure In moving averages: %s", str(exc))
+            return
 
         LOGGER.debug("done getting ma for %s - %s", pair, scheme['open_time'])
 
@@ -687,6 +697,7 @@ class Engine(dict):
 
         except Exception as exc:
             LOGGER.debug("overall exception getting ema: %s seq: %s", exc, index)
+            return
         scheme = {}
         try:
 
@@ -699,6 +710,7 @@ class Engine(dict):
 
         except KeyError as exc:
             LOGGER.warning("key failure in moving averages : %s", str(exc))
+            return
 
         LOGGER.debug("done getting moving averages for %s - %s", pair, open_time)
 
@@ -756,6 +768,7 @@ class Engine(dict):
 
         except KeyError as error:
             LOGGER.warning("key failure while getting oscillators: %s", str(error))
+            return
         LOGGER.debug("done getting oscillators for %s - %s", pair, scheme['open_time'])
 
     @get_exceptions
