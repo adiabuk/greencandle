@@ -139,7 +139,8 @@ def check_rules():
                 redis12.conn.delete(key)
                 if rule2.strip() != "" and action != "close":
                     fields = ['pair', 'interval', 'action', 'usd', 'tp', 'sl', 'rule', 'rule2', 'forward_to']
-                    data_dict = {'pair':pair, 'interval':interval, 'action': 'close', 'tp':'', 'sl':'', 'rule', rule2, 'rule2': '', 'forward_to': forward_to}
+                    data_dict = {'pair':pair, 'interval':interval, 'action': 'close', 'tp':'',
+                                 'sl':'', 'rule': rule2, 'rule2': '', 'forward_to': forward_to}
 
                     data2 = {"pair":pair, "interval": interval, "action": "close", "usd": "",
                             "take": "", "stop": "", "rule": rule2,
