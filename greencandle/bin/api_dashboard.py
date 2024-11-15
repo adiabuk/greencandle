@@ -264,7 +264,7 @@ def extras():
         args.popitem() #remove submit button
         args = defaultdict(str, args)  # enforce field with empty string if not present
 
-        fields = ['pair', 'interval', 'action', 'usd', 'tp', 'sl', 'rule', 'forward_to']
+        fields = ['pair', 'interval', 'action', 'usd', 'tp', 'sl', 'rule', 'rule2', 'forward_to']
         data_str = json.dumps({x:args[x] for x in fields})
 
         redis.conn.set(f"{str(int(time.time()))}", data_str)
