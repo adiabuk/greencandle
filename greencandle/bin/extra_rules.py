@@ -121,8 +121,8 @@ def check_rules():
                        "env": config.main.name,
                        "price": -1,
                        "usd": usd,
-                       "tp": eval(take),
-                       "sl": eval(stop),
+                       "tp": eval(take) if take else take,
+                       "sl": eval(stop) if stop else stop,
                        "strategy": forward_to}
 
             try:
