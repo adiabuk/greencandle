@@ -393,11 +393,11 @@ class Engine(dict):
             scheme["data"] = result
             scheme["symbol"] = pair
             scheme["event"] = f"{func}_{timeperiod}"
-    
+
             scheme["open_time"] = str(self.dataframes[pair].iloc[index]["openTime"])
-    
+
             self.schemes.append(scheme)
-    
+
         except (IndexError, KeyError, AttributeError) as exc:
             LOGGER.warning("failure In cci %s for pair", str(exc), pair)
             return
@@ -600,7 +600,7 @@ class Engine(dict):
         except (IndexError, KeyError) as exc:
             LOGGER.warning("failure In stochrsi %s", str(exc))
             return
-	LOGGER.debug("done getting stochrsi For %s - %s", pair, scheme['open_time'])
+        LOGGER.debug("done getting stochrsi For %s - %s", pair, scheme['open_time'])
 
     @get_exceptions
     def get_envelope(self, pair, index=None, localconfig=None):
