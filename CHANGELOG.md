@@ -1,5 +1,22 @@
 # Releases
 
+# 8.0
+* remove unused cci indicator and 1m containers for now - data env
+* more mem req'd for data cron web scraper
+* turn off debug logging on test env
+* add close rule to UI to queue once open rule has triggered
+* return after capturing indicator exception
+* allow setting tp/sl perc on trade open based on price
+* fix cron cleanup entries
+* cron nagios alert for missing redis tpsl
+* improve logging when fetching from stream fails
+* reduce max number of klines
+* remove vagrant synced folder
+* refresh pairs from updated upstream cross list
+* remove delisted and unwanted pair
+* don't forward data trades to stag
+* Add redis db13 for cleanup
+
 # 7.17.4
 * remove pairs from data env that don't support cross margin
 * add bb+rsi rule in double rsi strategy
