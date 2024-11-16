@@ -452,7 +452,7 @@ services:
       - DB=true
     hostname: data-fe-cron
     image: amrox/greencandle:${TAG}
-    mem_limit: 5G
+    mem_limit: 10G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "cron -f"
