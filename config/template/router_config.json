@@ -150,8 +150,6 @@
 "15m-5": ["test:any3-15m-long-short"],
 "30m-5": ["test:any3-30m-long-short"],
 
-"5m-13": ["alert", "stag:any2-5m-long-short"],
-
 "extra_stag-any-5m": ["stag:any-5m-long-short"],
 "extra_stag-any-1h": ["stag:any-1h-long-short"],
 "extra_stag-any2-5m": ["stag:any2-5m-long-short"],
