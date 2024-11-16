@@ -47,9 +47,6 @@ def check_rules():
 
     items = [[item.strip() for item in rule] for rule in items]
     for pair, interval, action, usd, take, stop, rule, rule2, forward_to, key in items:
-        LOGGER.info("AMROX %s %s %s", rule, rule2, pair)
-        if rule2.strip() == "":
-            LOGGER.info("AMROX empty rule2")
 
         if pair.upper() not in config.main.pairs.split():
             msg = f'Unknown pair: {pair}'
@@ -137,8 +134,9 @@ def check_rules():
 
                 redis11.conn.set(f"{str(int(time.time()))}", json.dumps(data))
                 redis12.conn.delete(key)
+
+                # add close rule after open rule has triggered (if exists)
                 if rule2.strip() != "" and action != "close":
-                    fields = ['pair', 'interval', 'action', 'usd', 'tp', 'sl', 'rule', 'rule2', 'forward_to']
                     data_dict = {'pair':pair, 'interval':interval, 'action': 'close', 'tp':'',
                                  'sl':'', 'rule': rule2, 'rule2': '', 'forward_to': forward_to}
 
@@ -147,7 +145,6 @@ def check_rules():
                             "rule2": "", "forward_to": forward_to}
                     data_str=json.dumps(data2)
                     redis12.conn.set(f"{str(int(time.time()))}", data_str)
-
 
             except requests.exceptions.RequestException:
                 pass
