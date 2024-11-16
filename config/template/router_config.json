@@ -136,38 +136,30 @@
 }
 {{else if eq .base_env "data"}}
 {
-"any-long-short": ["forward"],
 
-"1m-4": ["alert", "test:any2-1m-long-short"],
 "5m-4": ["alert", "test:any2-5m-long-short"],
 "15m-4": ["test:any2-15m-long-short"],
 "30m-4": ["test:any2-30m-long-short"],
 "1h-4": ["test:any2-1h-long-short"],
 "4h-4": ["test:any2-4h-long-short"],
 
-"1m-6":  ["test:any-1m-long-short"],
 "5m-6":  ["test:any-5m-long-short"],
 "15m-6": ["test:any-15m-long-short"],
 "30m-6": ["test:any-30m-long-short"],
-"1m-5":  ["test:any3-1m-long-short"],
 "5m-5":  ["test:any3-5m-long-short"],
 "15m-5": ["test:any3-15m-long-short"],
 "30m-5": ["test:any3-30m-long-short"],
 
 "5m-13": ["alert", "stag:any2-5m-long-short"],
 
-"extra_stag-any-1m": ["stag:any-1m-long-short"],
 "extra_stag-any-5m": ["stag:any-5m-long-short"],
 "extra_stag-any-1h": ["stag:any-1h-long-short"],
-"extra_stag-any2-1m": ["stag:any2-1m-long-short"],
 "extra_stag-any2-5m": ["stag:any2-5m-long-short"],
 
-"extra_prod-any-1m": ["prod:any-1m-long-short"],
 "extra_prod-any-5m": ["prod:any-5m-long-short"],
 "extra_prod-any-1h": ["prod:any-1h-long-short"],
 "extra_prod-any-4h": ["prod:any-4h-long-short"],
 "extra_prod-any-1d": ["prod:any-1d-long-short"],
-"extra_prod-any2-1m": ["prod:any2-1m-long-short"],
 "extra_prod-any2-5m": ["prod:any2-5m-long-short"],
 "extra_prod-any2-1h": ["prod:any2-1h-long-short"],
 "extra_prod-any2-4h": ["prod:any2-4h-long-short"],
