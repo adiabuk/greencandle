@@ -11,6 +11,7 @@ import json
 import time
 import subprocess
 import logging
+from time import gmtime, strftime
 from collections import defaultdict
 from datetime import timedelta, datetime
 import requests
@@ -67,10 +68,60 @@ LOGIN = APP.route("/logout", methods=["GET", "POST"])(logoutx)
 VALUES = defaultdict(dict)
 BALANCE = []
 LIVE = []
+DOUBLERSI={}
 
 SCRIPTS = ["write_balance", "get_quote_balance", "repay_debts", "get_risk", "get_trade_status",
            "get_hour_profit", "repay_debts", "balance_graph", "test_close"]
 ARG_SCRIPTS = {"close_all": ['name_filter', 'threshold']}
+
+def get_doublersi():
+    """
+    RSI strategy data using 2 timeframes
+    """
+    global DOUBLERSI
+    config.create_config()
+    redis = Redis()
+    now = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+    for pair in config.main.pairs.split():
+        try:
+            item = redis.get_items(pair, '1d')[-1]
+            x = json.loads(redis.get_item(f'{pair}:1d', item).decode())
+
+            item2 = redis.get_items(pair, '1h')[-1]
+            x2 = json.loads(redis.get_item(f'{pair}:1h', item2).decode())
+
+            if x['RSI_7'] > 60 and x2['RSI_7'] < 40 and \
+                    float(x2['ohlc']['low']) < x2['bb_30'][2]:
+                direction='long'
+                print('long')
+
+            elif x['RSI_7'] < 40 and x2['RSI_7'] > 60 and \
+                    float(x2['ohlc']['high']) > x2['bb_30'][0]:
+                direction='short'
+                print('short')
+            else:
+                continue
+
+            DOUBLERSI[pair] = {'day': x['RSI_7'],
+                             'hour': x2['RSI_7'],
+                             'time': now,
+                             'direction': direction}
+        except Exception as e:
+            print("bad %s",e, pair)
+
+    sort = sorted(DOUBLERSI,key=lambda x:DOUBLERSI[x]['time'])
+    DOUBLERSI = dict(list(sort.items())[:50])
+
+def get_doublersi_list():
+    """
+    Fetch most recent double rsi data and format for displaying
+    in UI spreadsheet
+    """
+    x = []
+    for pair, di in DOUBLERSI.items():
+        di['pair'] = get_tv_link(pair, '1h', anchor=True)
+        x.append(di)
+    return x
 
 def get_pairs(env=config.main.base_env):
     """
@@ -396,7 +447,10 @@ def get_agg():
             current_value = '' if 'None' in value else value
             current_row.update({function:current_value})
         all_data.append(current_row)
-
+    # AMROX
+    x = open('/tmp/a.out', 'w')
+    x.write(str(all_data))
+    x.close()
     return all_data
 
 def get_live():
@@ -472,6 +526,7 @@ def live():
     files = {}
     if config.main.base_env == 'data':
         files['aggregate'] = (get_agg(), 1)
+        files['double_rsi'] = (get_doublersi_list(), 1)
     else:
         files['open_trades'] =  (get_live(), 5)
         files['balance'] = (BALANCE, 1)
@@ -481,6 +536,7 @@ def live():
     if request.method == 'POST':
         req = request.form['submit']
         results, order =files[req]
+
         if results == []:
             return render_template('error.html', message="No available data")
         fieldnames = list(results[0].keys())
@@ -636,13 +692,17 @@ def main():
 
     setproctitle(f"{config.main.base_env}-api_dashboard")
 
+    scheduler = BackgroundScheduler() # Create Scheduler
     if config.main.base_env.strip() != 'data':
-        scheduler = BackgroundScheduler() # Create Scheduler
         scheduler.add_job(func=get_additional_details, trigger="interval", seconds=15)
         scheduler.add_job(func=get_balance, trigger="interval", minutes=10)
         scheduler.add_job(func=get_live, trigger="interval", minutes=2)
         get_balance()
-        scheduler.start() # Start Scheduler
+    else:
+        scheduler.add_job(func=get_doublersi, trigger="interval", minutes=3)
+        get_doublersi()
+    scheduler.start() # Start Scheduler
+
     logging.basicConfig(level=logging.ERROR)
     if float(config.main.logging_level) > 10:
         log = logging.getLogger('werkzeug')
