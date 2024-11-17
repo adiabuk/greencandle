@@ -79,6 +79,7 @@ def get_doublersi():
     RSI strategy data using 2 timeframes
     """
     global DOUBLERSI
+    sorted_dict = {}
     config.create_config()
     redis = Redis()
     now = strftime("%Y-%m-%d %H:%M:%S", gmtime())
@@ -110,7 +111,10 @@ def get_doublersi():
             print("bad %s",e, pair)
 
     sort = sorted(DOUBLERSI,key=lambda x:DOUBLERSI[x]['time'])
-    DOUBLERSI = dict(list(sort.items())[:50])
+    for key in sort:
+        sorted_dict[key] = DOUBLERSI[key]
+
+    DOUBLERSI = dict(list(sorted_dict.items())[:50])
 
 def get_doublersi_list():
     """
