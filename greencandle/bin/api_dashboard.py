@@ -127,7 +127,7 @@ def get_doublersi_list():
     for key_pair, di in DOUBLERSI.items():
         di['pair'] = get_tv_link(key_pair, '1h', anchor=True)
 
-        x.append(sorted(di.items(), key=lambda pair: index_map[pair[0]]))
+        x.append(dict(sorted(di.items(), key=lambda pair: index_map[pair[0]])))
     return x
 
 def get_pairs(env=config.main.base_env):
