@@ -114,13 +114,16 @@ def get_doublersi():
 
 def get_doublersi_list():
     """
-    Fetch most recent double rsi data and format for displaying
-    in UI spreadsheet
+    Get latest double rsi data and re-format for spreadsheet
     """
     x = []
-    for pair, di in DOUBLERSI.items():
-        di['pair'] = get_tv_link(pair, '1h', anchor=True)
-        x.append(di)
+
+    columns = ['pair', 'direction', 'day', 'hour', 'time']
+    index_map = {v: i for i, v in enumerate(columns)}
+    for key_pair, di in DOUBLERSI.items():
+        di['pair'] = get_tv_link(key_pair, '1h', anchor=True)
+
+        x.append(sorted(di.items(), key=lambda pair: index_map[pair[0]]))
     return x
 
 def get_pairs(env=config.main.base_env):
@@ -225,8 +228,6 @@ def process_subp_output(output):
 
     return output.stdout.read().decode().replace('\n', ' ').replace('\r','') + \
            output.stderr.read().decode().replace('\n', ' ').replace('\r','')
-
-
 
 @APP.route('/charts', methods=["GET"])
 @login_required
@@ -447,10 +448,6 @@ def get_agg():
             current_value = '' if 'None' in value else value
             current_row.update({function:current_value})
         all_data.append(current_row)
-    # AMROX
-    x = open('/tmp/a.out', 'w')
-    x.write(str(all_data))
-    x.close()
     return all_data
 
 def get_live():
