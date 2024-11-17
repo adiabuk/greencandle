@@ -527,7 +527,7 @@ def live():
     files = {}
     if config.main.base_env == 'data':
         files['aggregate'] = (get_agg(), 1)
-        files['double_rsi'] = (get_doublersi_list(), 1)
+        files['double_rsi'] = (get_doublersi_list(), 4)
     else:
         files['open_trades'] =  (get_live(), 5)
         files['balance'] = (BALANCE, 1)
