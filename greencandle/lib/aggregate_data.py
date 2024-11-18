@@ -304,7 +304,7 @@ def aggregate_data(key, pairs, interval, data, items):
             date = get_ohlc_attr(res, 'openTime')
             humandate = epoch2date(int(int(date)/1000))
             bbperc = res['bbperc_200']
-            rsi = 'f{res['RSI_7']:.2f}'
+            rsi = 'f{res["RSI_7"]:.2f}'
             atrp = res['ATRp_30']
             empty_count = get_empty_count(data[interval][pair])
             atrp_equal = get_atrp_equal(data[interval][pair])
