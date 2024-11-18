@@ -1,5 +1,14 @@
 # Releases
 
+# 8.1
+* limit rsi agg data to 2dp and change to RSI7
+* reorder agg data columns
+* fetch agg data in bg to speed up page loads
+* reverse rsi ui data to del older items+limit to 100
+* add nagios perf data to logwatch
+* add double rsi dual tf strategy data to UI spreadsheet
+* remove stag router rule from data
+
 # 8.0
 * remove unused cci indicator and 1m containers for now - data env
 * more mem req'd for data cron web scraper
