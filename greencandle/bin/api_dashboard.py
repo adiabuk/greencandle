@@ -112,7 +112,7 @@ def get_doublersi():
     for key in sort:
         sorted_dict[key] = DOUBLERSI[key]
 
-    DOUBLERSI = dict(list(sorted_dict.items())[:50])
+    DOUBLERSI = dict(list(sorted_dict.items()).reverse()[:100])
 
 def get_doublersi_list():
     """
