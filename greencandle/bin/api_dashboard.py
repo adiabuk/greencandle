@@ -94,12 +94,10 @@ def get_doublersi():
             if x['RSI_7'] > 60 and x2['RSI_7'] < 40 and \
                     float(x2['ohlc']['low']) < x2['bb_30'][2]:
                 direction='long'
-                print('long')
 
             elif x['RSI_7'] < 40 and x2['RSI_7'] > 60 and \
                     float(x2['ohlc']['high']) > x2['bb_30'][0]:
                 direction='short'
-                print('short')
             else:
                 continue
 
