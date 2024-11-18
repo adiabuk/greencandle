@@ -69,6 +69,7 @@ VALUES = defaultdict(dict)
 BALANCE = []
 LIVE = []
 DOUBLERSI={}
+AGG_DATA = []
 
 SCRIPTS = ["write_balance", "get_quote_balance", "repay_debts", "get_risk", "get_trade_status",
            "get_hour_profit", "repay_debts", "balance_graph", "test_close"]
@@ -431,6 +432,7 @@ def get_agg():
     """
     collate aggregate data from redis
     """
+    global AGG_DATA
     all_data = []
     redis = Redis(db=3)
     keys = redis.conn.keys()
@@ -450,7 +452,7 @@ def get_agg():
             current_value = '' if 'None' in value else value
             current_row.update({function:current_value})
         all_data.append(current_row)
-    return all_data
+    AGG_DATA = all_data
 
 def get_live():
     """
@@ -524,7 +526,7 @@ def live():
     """
     files = {}
     if config.main.base_env == 'data':
-        files['aggregate'] = (get_agg(), 1)
+        files['aggregate'] = (AGG_DATA, 1)
         files['double_rsi'] = (get_doublersi_list(), 4)
     else:
         files['open_trades'] =  (get_live(), 5)
@@ -699,6 +701,7 @@ def main():
         get_balance()
     else:
         scheduler.add_job(func=get_doublersi, trigger="interval", minutes=3)
+        scheduler.add_job(func=get_agg, trigger="interval", minutes=2)
         get_doublersi()
     scheduler.start() # Start Scheduler
 
