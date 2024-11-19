@@ -1,5 +1,11 @@
 # Releases
 
+# 8.1.1
+* temporarily stop web scraping on data env
+* capture error with testing trade on exchange
+* fix typo and syntax error
+* remove reversal of double rsi list
+
 # 8.1
 * limit rsi agg data to 2dp and change to RSI7
 * reorder agg data columns
