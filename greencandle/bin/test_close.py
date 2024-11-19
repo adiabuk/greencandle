@@ -8,6 +8,7 @@ from send_nsca3 import send_nsca
 from str2bool import str2bool
 from greencandle.lib.mysql import Mysql
 from greencandle.lib import config
+from greencandle.lib.binance import BinanceException
 from greencandle.lib.balance_common import get_step_precision
 from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.balance_common import get_base, get_quote
@@ -41,9 +42,13 @@ def main():
         result = False
         result2 = False
         result3 = False
-        result = client.spot_order(symbol=pair, side=client.sell,
-                                   quantity=get_step_precision(pair, base_in),
-                                   order_type=client.market, test=True)
+        try:
+            result = client.spot_order(symbol=pair, side=client.sell,
+                                       quantity=get_step_precision(pair, base_in),
+                                       order_type=client.market, test=True)
+        except BinanceException:
+            result = True
+            reason = "Unable to test exchange trade"
         print(f"Testing {pair} from {name}, result: {str(result)}")
         print("comparing amount with available balance...")
         try:
