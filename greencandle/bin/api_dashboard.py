@@ -656,11 +656,13 @@ def get_balance():
         if float(item['free']) > 0:
             free[item['asset']] = float(item['free'])
 
+    now = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     total_value, total_net_perc, usd_trade_amount = get_total_values()
     all_results.append({'key': 'avail_borrow', 'usd': format_usd(client.get_max_borrow()),
                         'val': ''})
     all_results.append({'key': 'current_trade_value', 'usd': format_usd(total_value),
                         'val': '0'})
+    all_results.append({'key': 'last_updated', 'usd': '', 'val': now})
     all_results.append({'key': 'current_trade_amount', 'usd': format_usd(usd_trade_amount),
                         'val': '0'})
     all_results.append({'key': 'current_net_perc', 'usd': '',
