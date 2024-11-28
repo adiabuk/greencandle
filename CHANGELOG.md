@@ -1,5 +1,10 @@
 # Releases
 
+# 8.1.2
+* extend timeout for prod-any containers
+* add time updated field to balance ui
+* cleanup vagrant file
+
 # 8.1.1
 * temporarily stop web scraping on data env
 * capture error with testing trade on exchange
