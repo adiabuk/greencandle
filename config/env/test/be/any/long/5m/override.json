@@ -4,6 +4,7 @@
   "name": "test-be-api-any-5m-cross",
   "perc_at_timeout": "3",
   "stop_loss_perc": "4",
+  "slack_trades": "test"
   "take_profit_perc": "2",
   "time_in_trade": "6h",
   "trade_direction": "long",
