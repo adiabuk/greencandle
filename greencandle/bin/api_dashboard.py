@@ -92,12 +92,10 @@ def get_doublersi():
             item2 = redis.get_items(pair, '1h')[-1]
             x2 = json.loads(redis.get_item(f'{pair}:1h', item2).decode())
 
-            if x['RSI_7'] > 60 and x2['RSI_7'] < 40 and \
-                    float(x2['ohlc']['low']) < x2['bb_30'][2]:
+            if x['RSI_7'] > 60 and x2['RSI_7'] < 40 :
                 direction='long'
 
-            elif x['RSI_7'] < 40 and x2['RSI_7'] > 60 and \
-                    float(x2['ohlc']['high']) > x2['bb_30'][0]:
+            elif x['RSI_7'] < 40 and x2['RSI_7'] > 60:
                 direction='short'
             else:
                 continue
