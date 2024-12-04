@@ -163,6 +163,15 @@
 "extra_prod-any2-4h": ["prod:any2-4h-long-short"],
 "extra_prod-any2-1d": ["prod:any2-1d-long-short"],
 
+"extra_per-any-5m": ["per:any-5m-long-short"],
+"extra_per-any-1h": ["per:any-1h-long-short"],
+"extra_per-any-4h": ["per:any-4h-long-short"],
+"extra_per-any-1d": ["per:any-1d-long-short"],
+"extra_per-any2-5m": ["per:any2-5m-long-short"],
+"extra_per-any2-1h": ["per:any2-1h-long-short"],
+"extra_per-any2-4h": ["per:any2-4h-long-short"],
+"extra_per-any2-1d": ["per:any2-1d-long-short"],
+
 "extra_alert": ["alert"],
 
 "alert": ["alert"],
