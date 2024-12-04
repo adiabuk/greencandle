@@ -397,7 +397,7 @@ services:
       - CONFIG_ENV=per/be/loan
       - DB=true
     ports:
-      - 20001:20000
+      - 20002:20000
     links:
       - per-base-mysql:mysql
       - per-base-redis:redis
