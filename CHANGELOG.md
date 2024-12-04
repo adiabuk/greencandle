@@ -1,5 +1,13 @@
 # Releases
 
+# 8.2
+* don't trade with stable coin as base
+* single cron config for both prod and per envs
+* new per env config
+* don't check bb in double rsi UI rule
+* remove delisted pairs
+* separate test env trade notifications
+
 # 8.1.2
 * extend timeout for prod-any containers
 * add time updated field to balance ui
