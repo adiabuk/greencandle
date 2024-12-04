@@ -10,7 +10,7 @@ BASH_ENV=/container.env
 @hourly /usr/local/bin/cleanup_redis 120 > /proc/1/fd/1 2>/proc/1/fd/2
 @hourly /usr/local/bin/cleanup_db2 > /proc/1/fd/1 2>/proc/1/fd/2
 
-{{if eq .base_env "prod" }}
+{{if eq .production "true" }}
 @weekly /usr/local/bin/cleanup_db0 > /proc/1/fd/1 2>/proc/1/fd/2
 @reboot /usr/local/bin/clear_redis 1 > /proc/1/fd/1 2>/proc/1/fd/2
 */3 * * * * /usr/local/bin/get_risk > /proc/1/fd/1 2>/proc/1/fd/2
@@ -34,16 +34,6 @@ BASH_ENV=/container.env
 @daily /usr/bin/find /data/reports -name "*.xlsx" -mtime +1 -delete
 20 */7 * * * /usr/local/bin/convert_loan_dust > /proc/1/fd/1 2>/proc/1/fd/2
 30 */7 * * * /usr/local/bin/convert_small_dust > /proc/1/fd/1 2>/proc/1/fd/2
-
-{{else if eq .base_env "per" }}
-@weekly /usr/local/bin/cleanup_db0 > /proc/1/fd/1 2>/proc/1/fd/2
-@reboot /usr/local/bin/clear_redis 1 > /proc/1/fd/1 2>/proc/1/fd/2
-32 * * * * /usr/local/bin/write_balance > /proc/1/fd/1 2>/proc/1/fd/2
-#33 * * * * /usr/local/bin/get_quote_balance > /proc/1/fd/1 2>/proc/1/fd/2
-0 * * * * /usr/local/bin/send_docker_alerts
-@hourly /usr/local/bin/check_tpsl > /proc/1/fd/1 2>/proc/1/fd/2
-21 00 * * * /usr/local/bin/balance_graph > /proc/1/fd/1 2>/proc/1/fd/2
-30 * * * * /usr/bin/find /data/graphs -type f -mtime +1 -delete > /proc/1/fd/1 2>/proc/1/fd/2
 
 {{else if eq .base_env "stag" }}
 @weekly /usr/local/bin/cleanup_db0 > /proc/1/fd/1 2>/proc/1/fd/2
