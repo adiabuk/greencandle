@@ -345,9 +345,40 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  per-be-api-any-spot-long:
-    container_name: per-be-api-any-spot-long
-    hostname: per-be-api-any-spot-long
+  per-be-api-loan:
+    container_name: per-be-api-loan
+    hostname: per-be-api-loan
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600M
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "loan_api"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local4
+    environment:
+      - intermittent="true"
+      - CONFIG_ENV=per/be/loan
+      - DB=true
+    ports:
+      - 20001:20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history     - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any-1m-cross-long:
+    container_name: per-be-api-any-1m-cross-long
+    hostname: per-be-api-any-1m-cross-long
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
@@ -356,9 +387,10 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local6
+        syslog-facility: local4
     environment:
-      - CONFIG_ENV=per/be/any/spot-long
+      - intermittent="true"
+      - CONFIG_ENV=per/be/any/1m/cross-long
       - DB=true
     ports:
       - 20000
@@ -381,9 +413,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  per-be-api-any-cross-long:
-    container_name: per-be-api-any-cross-long
-    hostname: per-be-api-any-cross-long
+  per-be-api-any-1m-cross-short:
+    container_name: per-be-api-any-1m-cross-short
+    hostname: per-be-api-any-1m-cross-short
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
@@ -392,9 +424,10 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local6
+        syslog-facility: local4
     environment:
-      - CONFIG_ENV=per/be/any/cross-long
+      - intermittent="true"
+      - CONFIG_ENV=per/be/any/1m/cross-short
       - DB=true
     ports:
       - 20000
@@ -417,9 +450,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  per-be-api-any-cross-short:
-    container_name: per-be-api-any-cross-short
-    hostname: per-be-api-any-cross-short
+  per-be-api-any-5m-cross-long:
+    container_name: per-be-api-any-5m-cross-long
+    hostname: per-be-api-any-5m-cross-long
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
@@ -428,9 +461,639 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local6
+        syslog-facility: local4
     environment:
-      - CONFIG_ENV=per/be/any/cross-short
+      - intermittent="true"
+      - CONFIG_ENV=per/be/any/5m/cross-long
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any-5m-cross-short:
+    container_name: per-be-api-any-5m-cross-short
+    hostname: per-be-api-any-5m-cross-short
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600M
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local4
+    environment:
+      - intermittent="true"
+      - CONFIG_ENV=per/be/any/5m/cross-short
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any-1h-cross-long:
+    container_name: per-be-api-any-1h-cross-long
+    hostname: per-be-api-any-1h-cross-long
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600M
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local4
+    environment:
+      - intermittent="true"
+      - CONFIG_ENV=per/be/any/1h/cross-long
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any-1h-cross-short:
+    container_name: per-be-api-any-1h-cross-short
+    hostname: per-be-api-any-1h-cross-short
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600M
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local4
+    environment:
+      - intermittent="true"
+      - CONFIG_ENV=per/be/any/1h/cross-short
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any-4h-cross-long:
+    container_name: per-be-api-any-4h-cross-long
+    hostname: per-be-api-any-4h-cross-long
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600M
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local4
+    environment:
+      - intermittent="true"
+      - CONFIG_ENV=per/be/any/4h/cross-long
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any-4h-cross-short:
+    container_name: per-be-api-any-4h-cross-short
+    hostname: per-be-api-any-4h-cross-short
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600M
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local4
+    environment:
+      - intermittent="true"
+      - CONFIG_ENV=per/be/any/4h/cross-short
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any-1d-cross-long:
+    container_name: per-be-api-any-1d-cross-long
+    hostname: per-be-api-any-1d-cross-long
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600M
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local4
+    environment:
+      - intermittent="true"
+      - CONFIG_ENV=per/be/any/1d/cross-long
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any-1d-cross-short:
+    container_name: per-be-api-any-1d-cross-short
+    hostname: per-be-api-any-1d-cross-short
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600M
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local4
+    environment:
+      - intermittent="true"
+      - CONFIG_ENV=per/be/any/1d/cross-short
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any2-1m-cross-long:
+    container_name: per-be-api-any2-1m-cross-long
+    hostname: per-be-api-any2-1m-cross-long
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600M
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local4
+    environment:
+      - intermittent="true"
+      - CONFIG_ENV=per/be/any2/1m/cross-long
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any2-1m-cross-short:
+    container_name: per-be-api-any2-1m-cross-short
+    hostname: per-be-api-any2-1m-cross-short
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600M
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local4
+    environment:
+      - intermittent="true"
+      - CONFIG_ENV=per/be/any2/1m/cross-short
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any2-5m-cross-long:
+    container_name: per-be-api-any2-5m-cross-long
+    hostname: per-be-api-any2-5m-cross-long
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600M
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local4
+    environment:
+      - intermittent="true"
+      - CONFIG_ENV=per/be/any2/5m/cross-long
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any2-5m-cross-short:
+    container_name: per-be-api-any2-5m-cross-short
+    hostname: per-be-api-any2-5m-cross-short
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600M
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local4
+    environment:
+      - intermittent="true"
+      - CONFIG_ENV=per/be/any2/5m/cross-short
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any2-1h-cross-long:
+    container_name: per-be-api-any2-1h-cross-long
+    hostname: per-be-api-any2-1h-cross-long
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600M
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local4
+    environment:
+      - intermittent="true"
+      - CONFIG_ENV=per/be/any2/1h/cross-long
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any2-1h-cross-short:
+    container_name: per-be-api-any2-1h-cross-short
+    hostname: per-be-api-any2-1h-cross-short
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600M
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local4
+    environment:
+      - intermittent="true"
+      - CONFIG_ENV=per/be/any2/1h/cross-short
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any2-4h-cross-long:
+    container_name: per-be-api-any2-4h-cross-long
+    hostname: per-be-api-any2-4h-cross-long
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600M
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local4
+    environment:
+      - intermittent="true"
+      - CONFIG_ENV=per/be/any2/4h/cross-long
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any2-4h-cross-short:
+    container_name: per-be-api-any2-4h-cross-short
+    hostname: per-be-api-any2-4h-cross-short
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600M
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local4
+    environment:
+      - intermittent="true"
+      - CONFIG_ENV=per/be/any2/4h/cross-short
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any2-1d-cross-long:
+    container_name: per-be-api-any2-1d-cross-long
+    hostname: per-be-api-any2-1d-cross-long
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600M
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local4
+    environment:
+      - intermittent="true"
+      - CONFIG_ENV=per/be/any2/1d/cross-long
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any2-1d-cross-short:
+    container_name: per-be-api-any2-1d-cross-short
+    hostname: per-be-api-any2-1d-cross-short
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600M
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local4
+    environment:
+      - intermittent="true"
+      - CONFIG_ENV=per/be/any2/1d/cross-short
       - DB=true
     ports:
       - 20000
