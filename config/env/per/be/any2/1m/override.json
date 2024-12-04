@@ -1,0 +1,14 @@
+{
+  "divisor": "3",
+  "drain_range": "00:00 - 00:00",
+  "immediate_stop": "false",
+  "immediate_take_profit": "false",
+  "immediate_trailing_stop": "false",
+  "interval": "1m",
+  "max_trades": "20",
+  "pairs": "any",
+  "take_profit_perc": "2",
+  "time_in_trade": "4h",
+  "trailing_start": "0",
+  "trailing_stop_loss_perc": "0"
+}

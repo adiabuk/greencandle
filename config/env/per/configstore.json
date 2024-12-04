@@ -12,12 +12,12 @@
       "is_secret": false
     },
     "account1_key": {
-      "value": "+HQZMqc+olfCppvOyBt5Ntk3m1z2HTVu4PkVbUxxi6xEfS9mBeOQEcmfFPkDxefYnVq7E9TXFgpwyEokfCqrT9VCsvCLBgS4E4EUgcDnwZL42zt7Tv8HVBok2XLsM5V9nxCrPFML8sg=",
+      "value": "mAW5etSEEl4DFQCTsNUrQWtme3nrOY3h5As3giGCtqrIeCXN/mk3Uc3NY0oxxnAYThMlhMX4E5lgZJvZIzTz0p8lqbjvRkaswxFJ6i1iMod3b2iE0+kMYINzRK3DTXgK5HENC0uamJ4=",
       "is_binary": false,
       "is_secret": true
     },
     "account1_secret": {
-      "value": "bvUBAOQGhRYJlccqJGibe88dD0Sykven320r5HRV7bPUVwVGXK3L8NJFJhDV5gcA8xNg5o+ziwS/SZAdbc6V+Opwhzqbagy6OOiHwSsqf1ZrsKMgfoqImncMDG6BLN7NdcO9hXqsirk=",
+      "value": "c4Ak9sV4L76A9cYWIQ2Sn4JSBzdR6Xm/ly8l1/hHThGV3dfIdXzKoZTdkttlCuccRCTyWl7B6E2N8EgG5XC9lvhoRjo9Hb928tNnhw3vDwxFMXAlBn6xoV6MzzPePwF/xVRS2EfIV5o=",
       "is_binary": false,
       "is_secret": true
     },
@@ -97,12 +97,12 @@
       "is_secret": false
     },
     "api_token": {
-      "value": "i9HPFvdgksHvYRbvgA+6kEDUpHXCSWSWNo3CNgh+Dg/y7ihdnOh1iuz/JGr2mTK/",
+      "value": "aLv1g2gD+l3IwLJN8sDyf+l6kJ+1g8cNt+mJThYglR3Osvy+EeYoGY+EIX4J8i4Q",
       "is_binary": false,
       "is_secret": true
     },
     "auth_key": {
-      "value": "sUlyBpepbpOpDoB+opV6aenhdZFErXhN6p7X3ZuL3yZ74NqgFy/nb2MoG/ltfvxzYlhbbmu0fNNYZBu5arsNU79brecjWnwHC9Ae1w==",
+      "value": "u29K9Nov3Y7xJIgQ7xhWS7/BHBlGbx3vCEyS/u7ZI07Edyw3JTwtoZs6ji409VnPog/T3sAxQ7PYXZpklS7e6eG4rJMw9UIWtIKJSQ==",
       "is_binary": true,
       "is_secret": true
     },
@@ -177,12 +177,12 @@
       "is_secret": false
     },
     "divisor": {
-      "value": "3",
+      "value": "1",
       "is_binary": false,
       "is_secret": false
     },
     "drain": {
-      "value": "true",
+      "value": "false",
       "is_binary": false,
       "is_secret": false
     },
@@ -212,7 +212,7 @@
       "is_secret": false
     },
     "flask_auth": {
-      "value": "hmLFTwk64Q/QbQw1+B3SktZdoDiO6mWs3TZ/BinaGXa8YL/S+1KSzI911d9KN3lAgQ/etMaRPBtFVLVQVoskbRbu2FqNi6QPev5JUa0Wvx6VbXfBWXYF1ja/rkFFvpGRlMMsg7igtel7p/Olrc0u/NycVspnSHAxwv2J4EGUaC+WtBuO6oXQYfCjMtwexuhzZDmPuhemUTP0rV2gqzEy8YQm+srq8rFX8cZuBicMcmM=",
+      "value": "hIiqZfNSFrzbtRRRkVNwJCf3x2BRin9kj0LZrgbpPGX7eFTX61LNpGzFQrNbltT8TDdda54I8AdJwNaWtCjkW7SAhZTSIR8Wacy/JmmoCtTY6w0knElN4Z1sYAgzLw33ncec8nEJrvVHxiRkIOU8B6Rfv+CbwiK963ZdM37VmmIEUAuEF9Yd6qbLUDeWGQ5mrWti9ypCtYu1w5Cde7cuJM8VDcz9Cm8hW0Jfm79BxC0=",
       "is_binary": false,
       "is_secret": true
     },
@@ -272,7 +272,7 @@
       "is_secret": false
     },
     "nginx_port": {
-      "value": "4444",
+      "value": "1111",
       "is_binary": false,
       "is_secret": false
     },
@@ -317,7 +317,7 @@
       "is_secret": false
     },
     "perc_at_timeout": {
-      "value": "0",
+      "value": "20",
       "is_binary": false,
       "is_secret": false
     },
@@ -372,12 +372,12 @@
       "is_secret": false
     },
     "slack_url": {
-      "value": "MxFuByTc5GJrbH78yCftsEXe4uxTiYGk0miQvSCA9xjbRG7r6AJpPLr144pG88ik+5nYh7cnaV57+Ffl79qPmVLjZbfx1a915U4XbEGdU+Xass+Px9QeSE297DeV50TP4ghCSVl8B17lrCROZbuaZu/I1cO49EtyJV1+4A==",
+      "value": "S5LFQYDDy0Rn6NwzMNcnkSBg6qIMMqql3T0HV7JXNq4llD0hT+7w6k5c/qWG7xaqEv5bK4uQ7z/+mhlOBOHp2mk7ub9n2BUBQSgHGjw1fr2RgViWgrmsGBAlYNLE6c1jRSDCYZqBUWp1/9hygTuXZ3C6vxHo9Ki4/OjOaA==",
       "is_binary": false,
       "is_secret": true
     },
     "stop_loss_perc": {
-      "value": "20",
+      "value": "-1",
       "is_binary": false,
       "is_secret": false
     },
@@ -387,12 +387,12 @@
       "is_secret": false
     },
     "time_between_trades": {
-      "value": "3h",
+      "value": "1h",
       "is_binary": false,
       "is_secret": false
     },
     "time_in_trade": {
-      "value": "52w",
+      "value": "5Y",
       "is_binary": false,
       "is_secret": false
     },

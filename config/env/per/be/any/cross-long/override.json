@@ -1,7 +1,0 @@
-{
-  "divisor": "20",
-  "max_trades": "10",
-  "name": "per-be-api-any-cross-long",
-  "trade_isolated": "false",
-  "trade_type": "margin"
-}
