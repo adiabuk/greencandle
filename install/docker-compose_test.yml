@@ -818,7 +818,6 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-
   test-be-api-any-1m-cross-long:
     container_name: test-be-api-any-1m-cross-long
     hostname: test-be-api-any-1m-cross-long
