@@ -1,7 +1,7 @@
 {
   "drain_range": "00:00 - 00:00",
   "immediate_stop": "false",
-  "immediate_take_profit": "false",,
+  "immediate_take_profit": "false",
   "immediate_trailing_stop": "true",
   "interval": "5m",
   "max_trades": "3",
