@@ -1,5 +1,10 @@
 # Releases
 
+# 8.2.1
+* remove having clause from balance update query
+* forward 5m trades to prod - max 3
+* different settings for 5m trades in prod/per envs
+
 # 8.2
 * don't trade with stable coin as base
 * single cron config for both prod and per envs
