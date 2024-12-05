@@ -1,5 +1,9 @@
 # Releases
 
+# 8.2.2
+* forward 5m short trades to test env only
+* fix json syntax in prod env
+
 # 8.2.1
 * remove having clause from balance update query
 * forward 5m trades to prod - max 3
