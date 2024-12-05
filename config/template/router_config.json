@@ -143,7 +143,7 @@
 "1h-4": ["test:any2-1h-long-short"],
 "4h-4": ["test:any2-4h-long-short"],
 
-"5m-6":  ["test:any-5m-long-short"],
+"5m-6":  ["test:any-5m-long-short", "prod:any-5m-long-short"],
 "15m-6": ["test:any-15m-long-short"],
 "30m-6": ["test:any-30m-long-short"],
 "5m-5":  ["test:any3-5m-long-short"],
