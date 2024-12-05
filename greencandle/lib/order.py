@@ -162,11 +162,9 @@ class Trade():
             else:
                 final_list.append(item)
                 avail_slots -= 1
-        if avail_slots >= 10:
+        if avail_slots >= 1:
             status = 0
-        elif avail_slots < 2:
-            status = 2
-        elif avail_slots < 10:
+        elif avail_slots < 1:
             status = 1
         else:
             status = 3
