@@ -25,8 +25,7 @@ def main():
 
     # Update balance summary and clean out old balance records
     update = ("insert into balance_summary (select ctime, sum(usd) as usd, sum(btc) as btc "
-              "from balance where coin='TOTALS' and date(ctime) != CURDATE() group by ctime "
-              "HAVING count(0)=(select count(0) from exchange))")
+              "from balance where coin='TOTALS' and date(ctime) != CURDATE() group by ctimer) ")
 
     # Delete old records
     delete = "delete from balance where date(ctime) != CURDATE()"

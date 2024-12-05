@@ -67,7 +67,7 @@ def respond():
     Default route to trade
     """
     payload = request.json
-    with open('/etc/router_config.json') as json_file:
+    with open('/etc/router_config.json', 'r') as json_file:
         router_config = json.load(json_file)
     if payload['pair'] == 'No pair':
         LOGGER.debug("request received: %s", payload)
