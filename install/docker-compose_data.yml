@@ -3203,6 +3203,7 @@ services:
       - CONFIG_ENV=data/be/long/long5/5m
       - DB=true
       - CHECK_REDIS_PAIR=8
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock -mmin -5 -name data-be-analyse-5m-long5  2>&1  | grep . || exit 1
       start_period: 1h
