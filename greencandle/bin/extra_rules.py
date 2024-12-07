@@ -93,6 +93,7 @@ def check_rules():
             datax.update(ohlc)
             res.append(datax)
             current_minute = datetime.now().minute
+            current_hour = datetime.now().hour
 
         def distance_to(num):
             return abs(perc_diff(num, res[0].close))
