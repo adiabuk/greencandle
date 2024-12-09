@@ -305,7 +305,10 @@ def aggregate_data(key, pairs, interval, data, items):
             humandate = epoch2date(int(int(date)/1000))
             bbperc = res['bbperc_200']
             rsi = f'{res["RSI_7"]:.2f}'
-            cci = f'{res["CCI_100"]:.2f}'
+            try:
+                cci = f'{res["CCI_100"]:.2f}'
+            except KeyError:
+                cci = 0
             atrp = res['ATRp_30']
             empty_count = get_empty_count(data[interval][pair])
             atrp_equal = get_atrp_equal(data[interval][pair])
