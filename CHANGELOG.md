@@ -1,5 +1,20 @@
 # Releases
 
+# 8.2.3
+* dd 150 EMA to date env
+* add 1m extra rules for data->prod
+* use fstring for lint fix
+* default cci when missing value in aggregate UI
+* add cci to dashboard
+* re-enable CCI indicator
+* remove bad performing and delisted pairs
+* extra step for doubleRSI rule, wait for open outside bb
+* only alert on double RSI rule when reached top/bottom bb
+* allow hour arg in extra rules UI
+* forward 2nd stage 5m trades to test env
+* fix sql syntax
+* only alert when there are no trade slots remaining
+
 # 8.2.2
 * forward 5m short trades to test env only
 * fix json syntax in prod env
