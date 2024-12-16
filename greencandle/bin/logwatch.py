@@ -3,6 +3,7 @@
 Follow log files and alert on Error and high occurances of errors
 """
 from datetime import datetime, timedelta
+import re
 import time
 import os
 import docker
@@ -30,7 +31,7 @@ def follow(thefile):
 
         yield line
 
-def check_last_hour():
+def check_last_hour_err():
     """
     Check number of errors logged in last hour and report to nagios via NSCA
     """
@@ -73,6 +74,43 @@ def check_last_hour():
     send_nsca(status=status, host_name="jenkins", service_name=f"critical_logs_{env}",
               text_output=text, remote_host='nagios.amrox.loc')
 
+
+def check_last_hour_occ():
+    """
+    Check number of strategy entries logged in last hour and report to nagios via NSCA
+    """
+    env = config.main.base_env
+    logfile = open(f"/var/log/gc_{env}.log", 'r').readlines()
+    count= 0
+    for line in logfile:
+        string = " ".join(line.split()[:3])
+        fmt = "%b %d %H:%M:%S"
+        current = datetime.strptime(string, fmt).replace(datetime.now().year)
+        last_hour_date_time = datetime.now() - timedelta(hours = 1)
+        regexes = [".*long17.*alert", ".*short17.*alert"]
+        combined = "(" + ")|(".join(regexes) + ")"
+
+        if current > last_hour_date_time and re.match(combined, line):
+            count += 1
+
+    perf = f"|count={count};;;;"
+
+    if count > 50:
+        status = 2
+        msg = "CRITICAL"
+        text = f'{msg}: {count} long17|short17 entries in {env} logfile, count:{count}{perf}'
+    elif count > 20:
+        status = 1
+        msg = "WARNING"
+        text = f'{msg}: {count} long17|short17 entries in {env} logfile, count:{count}{perf}'
+    else:
+        status = 0
+        msg = "OK"
+        text = f'{msg}: {count} long17|short17 entries in {env} logfile, count:{count}{perf}'
+
+    send_nsca(status=status, host_name="data", service_name=f"strategy17_count_{env}",
+              text_output=text, remote_host='nagios.amrox.loc')
+
 def watch_log():
     """
     watch logs for exceptions
@@ -104,7 +142,9 @@ def main():
     env = config.main.base_env
     setproctitle(f"{env}-logwatch")
     scheduler = BackgroundScheduler()
-    scheduler.add_job(func=check_last_hour, trigger="interval", minutes=5)
+    scheduler.add_job(func=check_last_hour_err, trigger="interval", minutes=5)
+    if env == 'data':
+        scheduler.add_job(func=check_last_hour_occ, trigger="interval", minutes=5)
     scheduler.start()
     watch_log()
 
