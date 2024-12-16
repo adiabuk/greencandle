@@ -98,15 +98,15 @@ def check_last_hour_occ():
     if count > 50:
         status = 2
         msg = "CRITICAL"
-        text = f'{msg}: {count} long17|short17 entries in {env} logfile, count:{count}{perf}'
+        text = f'{msg}: {count} long17/short17 entries in {env} logfile, count:{count}{perf}'
     elif count > 20:
         status = 1
         msg = "WARNING"
-        text = f'{msg}: {count} long17|short17 entries in {env} logfile, count:{count}{perf}'
+        text = f'{msg}: {count} long17/short17 entries in {env} logfile, count:{count}{perf}'
     else:
         status = 0
         msg = "OK"
-        text = f'{msg}: {count} long17|short17 entries in {env} logfile, count:{count}{perf}'
+        text = f'{msg}: {count} long17/short17 entries in {env} logfile, count:{count}{perf}'
 
     send_nsca(status=status, host_name="data", service_name=f"strategy17_count_{env}",
               text_output=text, remote_host='nagios.amrox.loc')
