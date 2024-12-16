@@ -1,5 +1,11 @@
 # Releases
 
+# 8.2.4
+* add 15m and 30m prod containers
+* disable long/short 14 strategy slack notifs
+* fix nagios/nsca syntax
+* alert on number of strategy17 entries in log per hour
+
 # 8.2.3
 * dd 150 EMA to date env
 * add 1m extra rules for data->prod
