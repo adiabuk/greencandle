@@ -318,7 +318,7 @@ def aggregate_data(key, pairs, interval, data, items):
             atrp = res['ATRp_30']
             empty_count = get_empty_count(data[interval][pair])
             atrp_equal = get_atrp_equal(data[interval][pair])
-            atr_avg_dist = get_atr_avg_dist(res["ATR_14"])
+            atr_avg_dist = f'{get_atr_avg_dist(res["ATR_14"]):.2f}'
             redis_data[f'{pair}:{interval}'] = \
             {
              'distance_200': distance_200,
