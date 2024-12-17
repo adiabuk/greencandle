@@ -43,7 +43,7 @@ def get_4atr(res):
     get perc between close and close+4xatr
     """
     close = float(res['ohlc']['close'])
-    atr4 = float(res['ATR_14'])*4
+    atr4 = float(res['ATR_14'][0])*4
     diff = perc_diff(close, close+atr4)
     return 0 if math.isnan(diff) else diff
 
