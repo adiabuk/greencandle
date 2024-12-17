@@ -29,6 +29,11 @@ eg: get_macd;MACD;12,26,9
 Redis output: (macd, signal, histogram) tupple
 
 ## ATR
+VERIFIED to be equal to tradingview
+Usage: get_atr;ATR;timeframe
+eg get_atr;ATR;14
+Redis output (ATR, EMA50) tupple
+
 
 ## ATR PERC
 Not yet verified
