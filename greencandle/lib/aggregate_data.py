@@ -38,6 +38,15 @@ def get_atr_avg_dist(item):
     result = perc_diff(item[1], item[0])
     return 0 if math.isnan(result) else result
 
+def get_4atr(res):
+    """
+    get perc between close and close+4xatr
+    """
+    close = float(res['ohlc']['close'])
+    atr4 = float(res['ATR_14'])*4
+    diff = perc_diff(close, close+atr4)
+    return 0 if math.isnan(diff) else diff
+
 def get_atrp_equal(res):
     """
     Number of candles where ATRp > 75
@@ -321,6 +330,7 @@ def aggregate_data(key, pairs, interval, data, items):
             empty_count = get_empty_count(data[interval][pair])
             atrp_equal = get_atrp_equal(data[interval][pair])
             atr_avg_dist = f'{get_atr_avg_dist(res["ATR_14"]):.2f}'
+            atr_4 = f'{get_4atr(res):.2f}'
             redis_data[f'{pair}:{interval}'] = \
             {
              'distance_200': distance_200,
@@ -331,6 +341,7 @@ def aggregate_data(key, pairs, interval, data, items):
              'stoch_flat': stoch_flat,
              'atr_avg_dist': atr_avg_dist,
              'bbperc': bbperc,
+             'atr_4': atr_4,
              'macd_xover': macd_xover,
              'macd_diff': macd_diff,
              'bb_size': bb_size,
