@@ -504,10 +504,12 @@ class Engine(dict):
         atr = talib.ATR(high=self.dataframes[pair].high.values.astype(float),
                         low=self.dataframes[pair].low.values.astype(float),
                         close=self.dataframes[pair].close.values.astype(float), timeperiod=14)
+        atr_ema = talib.EMA(atr, timeperiod=50)
         scheme["symbol"] = pair
         scheme["event"] = f"{func}_{timeperiod}"
         scheme["open_time"] = str(self.dataframes[pair].iloc[index]["openTime"])
-        scheme["data"] = float(atr[index]) if atr[index] != None else None
+        scheme["data"] = (float(atr[index]), float(atr_ema[-1])) if atr[index] != None else (None,
+                                                                                             None)
         self.schemes.append(scheme)
         LOGGER.debug("done getting atr For %s - %s", pair, scheme['open_time'])
 
