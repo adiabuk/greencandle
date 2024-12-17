@@ -30,11 +30,11 @@ def get_empty_count(res):
             continue
     return count
 
-def get_atr_avg_dist(res):
+def get_atr_avg_dist(item):
     """
     Get distance between ATR and it's EMA in %
     """
-    return perc_diff(res['ATR_14'][1], res['ATR_14'][0])
+    return perc_diff(item[1], item[0])
 
 def get_atrp_equal(res):
     """
@@ -318,7 +318,7 @@ def aggregate_data(key, pairs, interval, data, items):
             atrp = res['ATRp_30']
             empty_count = get_empty_count(data[interval][pair])
             atrp_equal = get_atrp_equal(data[interval][pair])
-            atr_avg_dist = get_atr_avg_dist(data[interval][pair])
+            atr_avg_dist = get_atr_avg_dist(res["ATR_14"])
             redis_data[f'{pair}:{interval}'] = \
             {
              'distance_200': distance_200,
