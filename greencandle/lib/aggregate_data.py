@@ -4,6 +4,7 @@
 get data for all timeframes and pairs
 output data to csv files
 """
+import math
 import json
 import sys
 import os
@@ -34,7 +35,8 @@ def get_atr_avg_dist(item):
     """
     Get distance between ATR and it's EMA in %
     """
-    return perc_diff(item[1], item[0])
+    result = perc_diff(item[1], item[0])
+    return 0 if math.isnan(result) else result
 
 def get_atrp_equal(res):
     """
