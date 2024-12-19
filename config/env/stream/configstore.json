@@ -371,9 +371,9 @@
       "is_secret": false
     },
     "slack_url": {
-      "value": "",
+      "value": "xBSyL8kz0HN9PhLvTP3vyVzP8Hti7yjCunE36bm8eBGQW2XT2xLNcsXW7Ka/rf8SgwH7sXNtllyX8xqZVHK8cv64GMez/PNKZn7FaLhnGXjCEa3U7CPPbS4kopI=",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "stop_loss_perc": {
       "value": "",
