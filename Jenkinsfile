@@ -18,7 +18,7 @@ pipeline {
     stages {
         stage("Start") {
             steps {
-                slackSend color: "#808080", message: "Starting build\nRepo: ${env.GIT_REPO_NAME}\nCommit: ${SHORT_COMMIT}\nBranch: ${env.GIT_BRANCH}\nURL: (<${env.BUILD_URL}|Open>)"
+                mattermostSend color: "#808080", message: "Starting build\nRepo: ${env.GIT_REPO_NAME}\nCommit: ${SHORT_COMMIT}\nBranch: ${env.GIT_BRANCH}\nURL: (<${env.BUILD_URL}|Open>)"
             }
         }
         stage("Mute Nagios Notifications") {
@@ -67,9 +67,9 @@ pipeline {
             """
         }
         success {
-            slackSend color: "good", message: "Repo: ${env.GIT_REPO_NAME}\nResult: ${currentBuild.currentResult}\nCommit: ${SHORT_COMMIT}\nBranch: ${env.GIT_BRANCH}\nExecution time: ${currentBuild.durationString.replace(' and counting', '')}\nURL: (<${env.BUILD_URL}|Open>)"
+            mattermostSend color: "good", message: "Repo: ${env.GIT_REPO_NAME}\nResult: ${currentBuild.currentResult}\nCommit: ${SHORT_COMMIT}\nBranch: ${env.GIT_BRANCH}\nExecution time: ${currentBuild.durationString.replace(' and counting', '')}\nURL: (<${env.BUILD_URL}|Open>)"
         }
-        failure { slackSend color: "danger", message: "Repo: ${env.GIT_REPO_NAME}\nResult: ${currentBuild.currentResult}\nCommit: ${SHORT_COMMIT}\nBranch: ${env.GIT_BRANCH}\nExecution time: ${currentBuild.durationString.replace(' and counting', '')}\nURL: (<${env.BUILD_URL}|Open>)"
+        failure { mattermostSend color: "danger", message: "Repo: ${env.GIT_REPO_NAME}\nResult: ${currentBuild.currentResult}\nCommit: ${SHORT_COMMIT}\nBranch: ${env.GIT_BRANCH}\nExecution time: ${currentBuild.durationString.replace(' and counting', '')}\nURL: (<${env.BUILD_URL}|Open>)"
         }
     }
 }
