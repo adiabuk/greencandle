@@ -414,7 +414,7 @@ services:
       - CONFIG_ENV=data/manual
       - DB=true
     image: amrox/greencandle:${TAG}
-    mem_limit: 500M
+    mem_limit: 2G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "tail -f /dev/null"
