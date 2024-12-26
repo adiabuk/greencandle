@@ -1,5 +1,17 @@
 # Releases
 
+# 8.2.5
+* remove delisted pairs
+* increase mem limit for stream binance container
+* migrate from slack to mattermost
+* add perc to 4xATR
+* rearrange agg entries
+* return 0 if agg result is nan
+* round number to 2dp
+* add atr distance perc to EMA agg
+* add ATR indicator to data env when closed outside bb
+* add EMA to ATR indicator and update docs
+
 # 8.2.4
 * add 15m and 30m prod containers
 * disable long/short 14 strategy slack notifs
