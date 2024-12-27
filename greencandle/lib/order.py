@@ -213,6 +213,10 @@ class Trade():
         if not items_list:
             self.logger.warning("No items to close trade with")
             return False
+        if Path(f'/var/local/drain/{self.config.main.base_env}_drain_close').is_file():
+            self.logger.info("strategy is in close drain for pair %s, skipping...", items_list)
+            return False
+
 
         for item in items_list:
 
