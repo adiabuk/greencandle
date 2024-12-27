@@ -13,6 +13,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 import requests
+from concurrent.futures import ThreadPoolExecutor
 from send_nsca3 import send_nsca
 from str2bool import str2bool
 from setproctitle import setproctitle
@@ -65,7 +66,7 @@ def analyse_loop():
             time.sleep(30)
 
 
-    LOGGER.debug("start of current loop")
+    LOGGER.info("start of current loop")
     redis = Redis()
     if CHECK_REDIS_PAIR:
         redis4=Redis(db=CHECK_REDIS_PAIR)
@@ -110,10 +111,12 @@ def analyse_loop():
     else:
         # not being fetched from redis db
         pairs = [(pair, 'normal', 999999) for pair in PAIRS]
-
-    for pair, reversal, expire in pairs:
-        analyse_pair(pair, reversal, expire, redis)
-    LOGGER.debug("end of current loop")
+    with ThreadPoolExecutor(max_workers=100) as pool:
+        for pair, reversal, expire in pairs:
+            pool.submit(analyse_pair, pair, reversal, expire, redis)
+            #analyse_pair(pair, reversal, expire, redis)
+    pool.shutdown(wait=True)
+    LOGGER.info("end of current loop")
     Path(f'/var/local/lock/{config.main.name}').touch()
     del redis
     if CHECK_REDIS_PAIR:
