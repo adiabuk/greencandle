@@ -583,7 +583,7 @@ services:
     extra_hosts:
       - "alert:10.0.0.212"
     image: amrox/greencandle:${TAG}
-    mem_limit: 200M
+    mem_limit: 500M
     pull_policy: always
     restart: always
     healthcheck:
