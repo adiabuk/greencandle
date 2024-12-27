@@ -1,5 +1,12 @@
 # Releases
 
+# 8.2.6
+* implement drain for trade closes
+* speed up analysis loop by 2min per run
+* remove some more badly performing pairs
+* remove low volume pairs
+* increase manual data container mem limit
+
 # 8.2.5
 * remove delisted pairs
 * increase mem limit for stream binance container
