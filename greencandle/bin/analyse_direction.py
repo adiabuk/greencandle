@@ -94,7 +94,7 @@ def analyse_pair(pair, redis):
     del redis4
 
     redis0 = Redis(db=0)
-    items = redis0.get_items(pair, INTERVAL)
+    items = redis0.get_intervals(pair, INTERVAL)
     data = redis0.get_item(f"{pair}:{INTERVAL}", items[-1]).decode()
     redis3 = Redis(db=3)
     raw_agg = redis3.conn.hgetall(f"{pair}:{INTERVAL}")

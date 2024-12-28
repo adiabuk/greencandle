@@ -54,7 +54,7 @@ def check_rules():
             send_nsca(status=2, host_name='jenkins', service_name='extra_rules', text_output=msg,
                       remote_host='local.amrox.loc')
             continue
-        item = redis.get_items(pair.upper().strip(), interval)[-1]
+        item = redis.get_intervals(pair.upper().strip(), interval)[-1]
         res = []
         raw = redis3.conn.hgetall(f'{pair}:{interval}')
         agg = AttributeDict({k.decode():get_float(v.decode()) for k, v in raw.items()})
@@ -67,7 +67,7 @@ def check_rules():
             ind_list.append(ind)
 
         try:
-            items = redis.get_items(pair=pair, interval=interval)
+            items = redis.get_intervals(pair=pair, interval=interval)
             _ = items[-5]
         except (ValueError, IndexError) as err:
             print("Not enough data  for %s: %s", pair, err)

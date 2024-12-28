@@ -22,7 +22,7 @@ Main keys are categorized by pair and interval in the following format:
 Add data to redis
 Takes ohlc and indicator data from engine module and send it to redis
 
-* get_items
+* get_intervals
 Get list of sorted keys (mepoch) for a given pair/interval
 * get_item
 Get an item using pair, interval and item (mepoch)

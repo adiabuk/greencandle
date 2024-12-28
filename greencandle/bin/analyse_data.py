@@ -182,7 +182,7 @@ def analyse_pair(pair, reversal, expire, redis):
         if result in ('OPEN', 'CLOSE'):
             LOGGER.debug("trades to %s for pair %s", result.lower(), pair)
             now = datetime.now()
-            items = redis.get_items(pair, INTERVAL)
+            items = redis.get_intervals(pair, INTERVAL)
             data = redis.get_item(f"{pair}:{INTERVAL}", items[-1]).decode()
             redis3 = Redis(db=3)
             raw_agg = redis3.conn.hgetall(f"{pair}:{INTERVAL}")

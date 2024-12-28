@@ -299,7 +299,7 @@ class Graph():
         redis = Redis()
         list_of_series = []
         list_of_series2 = []
-        index = redis.get_items(self.pair, self.interval)
+        index = redis.get_intervals(self.pair, self.interval)
         ind_list = []
         main_indicators = [] if ohlc_only else config.main.indicators.split()
         for i in main_indicators:

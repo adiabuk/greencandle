@@ -380,7 +380,7 @@ def collect_agg_data(interval):
     samples = 20
     for pair in pairs:
         try:
-            items[interval][pair] = redis.get_items(pair=pair,
+            items[interval][pair] = redis.get_intervals(pair=pair,
                                                     interval=interval)[-int(samples):]
         except:
             continue

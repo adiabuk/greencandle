@@ -345,7 +345,7 @@ class Redis():
             self.conn.expire(key, expiry)
         return result
 
-    def get_items(self, pair, interval):
+    def get_intervals(self, pair, interval):
         """
         Get sorted list of available keys for a given trading pair/interval
         eg.
@@ -626,7 +626,7 @@ class Redis():
         """
         Get final reconstructed candle data
         """
-        last_item = self.get_items(pair, interval)[-1]
+        last_item = self.get_intervals(pair, interval)[-1]
         raw = self.get_current(f'{pair}:{interval}', last_item)
         try:
             return raw[-1]
@@ -651,7 +651,7 @@ class Redis():
             split = i.split(';')
             ind = split[1]+'_' +split[2].split(',')[0]
             ind_list.append(ind)
-        items = self.get_items(pair, interval)
+        items = self.get_intervals(pair, interval)
         for i in range(-1, -6, -1): # from, to, increment
             # look backwards through last 3 items of redis data
             datax = AttributeDict()
@@ -754,7 +754,7 @@ class Redis():
         name = f"{pair}:{interval}"
         # loop backwards through last 5 items
         try:
-            items = self.get_items(pair=pair, interval=interval)
+            items = self.get_intervals(pair=pair, interval=interval)
             _ = items[-5]
         except (ValueError, IndexError) as err:
             self.logger.warning("Not enough data for %s: %s", pair, err)

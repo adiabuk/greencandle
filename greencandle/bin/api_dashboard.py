@@ -86,10 +86,10 @@ def get_doublersi():
     now = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     for pair in config.main.pairs.split():
         try:
-            item = redis.get_items(pair, '1d')[-1]
+            item = redis.get_intervals(pair, '1d')[-1]
             x = json.loads(redis.get_item(f'{pair}:1d', item).decode())
 
-            item2 = redis.get_items(pair, '1h')[-1]
+            item2 = redis.get_intervals(pair, '1h')[-1]
             x2 = json.loads(redis.get_item(f'{pair}:1h', item2).decode())
 
             if x['RSI_7'] > 60 and x2['RSI_7'] < 40 :

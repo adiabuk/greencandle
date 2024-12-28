@@ -27,7 +27,7 @@ def main():
         for pair in pairs:
             pair = pair.strip()
             logger.debug("Analysing pair %s:%s", pair, interval)
-            items = redis.get_items(pair, interval)
+            items = redis.get_intervals(pair, interval)
             for item in items[:-num]:
                 redis.conn.hdel(f'{pair}:{interval}', item)
                 count += 1

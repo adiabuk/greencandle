@@ -93,7 +93,7 @@ def get_stoch():
     """
     pair = request.args.get('pair')
     redis = Redis()
-    items = redis.get_items(pair, config.main.interval)[-2:]
+    items = redis.get_intervals(pair, config.main.interval)[-2:]
     result1 = redis.get_item(items[0], 'STOCHRSI_14')
     result2 = redis.get_item(items[1], 'STOCHRSI_14')
     return (result1, result2)

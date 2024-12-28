@@ -87,7 +87,7 @@ class Trade():
         self.logger.debug('Strategy - Adding to redis')
         redis = Redis()
         try:
-            mepoch = redis.get_items(kwargs.pair, kwargs.interval)[-1]
+            mepoch = redis.get_intervals(kwargs.pair, kwargs.interval)[-1]
         except IndexError:
             # if unable to get latest time from redis
             mepoch = int(time.time()*1000)

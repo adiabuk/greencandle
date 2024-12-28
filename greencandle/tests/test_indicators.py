@@ -41,7 +41,7 @@ class TestIndicators(unittest.TestCase):
         perform_data(self.pair, self.interval, self.path, main_indicators)
 
         redis = Redis()
-        items = redis.get_items(self.pair, self.interval)
+        items = redis.get_intervals(self.pair, self.interval)
 
         # get last entry from redis
         results = json.loads(redis.get_item('{}:{}'.format(self.pair, self.interval),
