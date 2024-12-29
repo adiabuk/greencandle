@@ -55,5 +55,6 @@ BASH_ENV=/container.env
 #@hourly /usr/local/bin/get_sentiment > /proc/1/fd/1 2>/proc/1/fd/2
 @hourly /usr/local/bin/cleanup_data_pairs > /proc/1/fd/1 2>/proc/1/fd/2
 @reboot /usr/local/bin/cleanup_removed_pairs > /proc/1/fd/1 2>/proc/1/fd/2
+* */12 * * * /data/scripts/get_twitter_posts.py >/proc/1/fd/1 2>/proc/1/fd/2
 
 {{end}}
