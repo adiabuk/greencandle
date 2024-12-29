@@ -397,4 +397,5 @@ def collect_agg_data(interval):
                 continue
     ###
     aggregate_data('redis', pairs, interval, data, items)
+    del redis
     LOGGER.debug("Finishing aggregate run")

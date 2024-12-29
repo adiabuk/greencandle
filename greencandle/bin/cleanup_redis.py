@@ -32,6 +32,7 @@ def main():
                 redis.conn.hdel(f'{pair}:{interval}', item)
                 count += 1
     logger.info("Deleted %s keys", count)
+    del redis
 
 
 if __name__ == '__main__':
