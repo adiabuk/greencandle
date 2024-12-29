@@ -66,7 +66,7 @@ def analyse_loop():
             time.sleep(30)
 
 
-    LOGGER.info("start of current loop")
+    LOGGER.debug("start of current loop")
     redis = Redis()
     if CHECK_REDIS_PAIR:
         redis4=Redis(db=CHECK_REDIS_PAIR)
@@ -116,7 +116,7 @@ def analyse_loop():
             pool.submit(analyse_pair, pair, reversal, expire, redis)
             #analyse_pair(pair, reversal, expire, redis)
     pool.shutdown(wait=True)
-    LOGGER.info("end of current loop")
+    LOGGER.debug("end of current loop")
     Path(f'/var/local/lock/{config.main.name}').touch()
     del redis
     if CHECK_REDIS_PAIR:
