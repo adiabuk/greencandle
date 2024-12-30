@@ -111,7 +111,7 @@ def analyse_loop():
     else:
         # not being fetched from redis db
         pairs = [(pair, 'normal', 999999) for pair in PAIRS]
-    with ThreadPoolExecutor(max_workers=100) as pool:
+    with ThreadPoolExecutor(max_workers=50) as pool:
         for pair, reversal, expire in pairs:
             pool.submit(analyse_pair, pair, reversal, expire, redis)
             #analyse_pair(pair, reversal, expire, redis)
