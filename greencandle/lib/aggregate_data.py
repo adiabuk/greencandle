@@ -288,7 +288,7 @@ def get_sum_candles(data):
         return round(sum(diffs), 6)
     return 0
 
-def aggregate_data(key, pairs, interval, data, items):
+def aggregate_data(key, pairs, interval, data):
     """
     create aggregate spreadsheets for given key using collected data
     """
@@ -301,10 +301,10 @@ def aggregate_data(key, pairs, interval, data, items):
     if key in ('all', 'redis'):
         redis_data = defaultdict()
         for pair in pairs:
-            current_item = items[interval][pair]
-            res = data[interval][pair][current_item[-1]]
-            last_res = data[interval][pair][current_item[-2]]
-            third_res = data[interval][pair][current_item[-3]]
+            item_list = list(data[interval][pair].keys())
+            res = data[interval][pair][item_list[-1]]
+            last_res = data[interval][pair][item_list[-2]]
+            third_res = data[interval][pair][item_list[-3]]
 
             distance_200 = get_distance(res, '200')[-1]
             middle_200 = get_middle_distance(res, '200')[-1]
@@ -372,30 +372,14 @@ def collect_agg_data(interval):
     key = sys.argv[1] if len(sys.argv) > 1 else None
     config.create_config()
     pairs = config.main.pairs.split()
-    items = defaultdict(dict)
-    data = defaultdict(dict)
+    data = defaultdict(lambda: defaultdict(dict))
+    #####
 
-    ###
-    # Collect timeframes (milliepochs) for each pair/interval
-    samples = 20
-    for pair in pairs:
-        try:
-            items[interval][pair] = redis.get_intervals(pair=pair,
-                                                    interval=interval)[-int(samples):]
-        except:
-            continue
-
-    # Collect data for each pair/interval
-    for pair in pairs:
-        data[interval][pair] = {}
-
-        for item in items[interval][pair]:
-            try:
-                data[interval][pair][item] = json.loads(redis.get_item(f'{pair}:{interval}',
-                                                                       item).decode())
-            except:
-                continue
-    ###
-    aggregate_data('redis', pairs, interval, data, items)
+    for key in redis.conn.keys(f'*:{interval}'):
+        for item,value  in redis.conn.hgetall(key).items():
+            pair = key.decode().split(':')[0]
+            data[interval][pair][item.decode()] = json.loads(value.decode())
+    aggregate_data('redis', pairs, interval, data)
+    #####
     del redis
     LOGGER.debug("Finishing aggregate run")
