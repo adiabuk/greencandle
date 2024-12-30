@@ -379,7 +379,7 @@ def collect_agg_data(interval):
         for item,value  in redis.conn.hgetall(key).items():
             pair = key.decode().split(':')[0]
             output = json.loads(value.decode())
-            data[interval][pair][item.decode()] = sorted(output.items())
+            data[interval][pair][item.decode()] = dict(sorted(output.items()))
     aggregate_data('redis', pairs, interval, data)
     #####
     del redis
