@@ -1,5 +1,16 @@
 # Releases
 
+# 8.3
+* reduce start time for healthchecks
+* speed up aggregate run by reducing redis connections
+* remove unused data strategies
+* reduce concurrent analyser threads
+* cleanup redis objects when complete
+* downgrade start/end of analysis loop log entries
+* temp cron script in data env - twice daily
+* rename get_items method to get_intervals
+* increase data api router mem
+
 # 8.2.6
 * implement drain for trade closes
 * speed up analysis loop by 2min per run
