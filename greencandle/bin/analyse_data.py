@@ -240,6 +240,7 @@ def analyse_pair(pair, reversal, expire, redis):
             if CHECK_REDIS_PAIR and result=='OPEN':
                 redis4 = Redis(db=CHECK_REDIS_PAIR)
                 redis4.conn.srem(f'{INTERVAL}:{DIRECTION}', f'{pair}:{reversal}:{expire}')
+                del redis4
                 LOGGER.info("trade opening %s:%s:%s - removing from redis db:%s", pair, reversal,
                             expire, CHECK_REDIS_PAIR)
             if ROUTER_FORWARD:
