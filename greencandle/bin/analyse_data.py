@@ -12,8 +12,8 @@ import json
 import sys
 from datetime import datetime
 from pathlib import Path
-import requests
 from concurrent.futures import ThreadPoolExecutor
+import requests
 from send_nsca3 import send_nsca
 from str2bool import str2bool
 from setproctitle import setproctitle
@@ -39,14 +39,17 @@ if sys.argv[-1] != "--help":
     CLIENT = binance_auth()
     ISOLATED = CLIENT.get_isolated_margin_pairs()
     CROSS = CLIENT.get_cross_margin_pairs()
-    STORE_IN_DB = bool('STORE_IN_DB' in os.environ)
-    CHECK_REDIS_PAIR = int(os.environ['CHECK_REDIS_PAIR']) if 'CHECK_REDIS_PAIR' in \
-            os.environ else False
-    CHECK_REDIS_INTERVAL = os.environ['CHECK_REDIS_INTERVAL'] if 'CHECK_REDIS_INTERVAL' in \
-            os.environ else False
-    ROUTER_FORWARD = bool('ROUTER_FORWARD' in os.environ)
-    REDIS_FORWARD = [int(x) for x in os.environ['REDIS_FORWARD'].split(',')] if 'REDIS_FORWARD' \
-            in os.environ else False
+else:
+    ISOLATED = None
+    CROSS = None
+STORE_IN_DB = bool('STORE_IN_DB' in os.environ)
+CHECK_REDIS_PAIR = int(os.environ['CHECK_REDIS_PAIR']) if 'CHECK_REDIS_PAIR' in \
+        os.environ else False
+CHECK_REDIS_INTERVAL = os.environ['CHECK_REDIS_INTERVAL'] if 'CHECK_REDIS_INTERVAL' in \
+        os.environ else False
+ROUTER_FORWARD = bool('ROUTER_FORWARD' in os.environ)
+REDIS_FORWARD = [int(x) for x in os.environ['REDIS_FORWARD'].split(',')] if 'REDIS_FORWARD' \
+        in os.environ else False
 
 @GET_EXCEPTIONS
 def analyse_loop():

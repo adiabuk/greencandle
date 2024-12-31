@@ -519,6 +519,8 @@ class Redis():
             result = float(check) >= sub_perc(float(trailing_perc), float(low_price)) and \
                     (self.test_data or float(current_price) < sub_perc(float(trailing_start),
                                                                        float(open_price)))
+        else:
+            result = None
 
         if result:
             high_price = low_price if direction == "short" else high_price
@@ -539,6 +541,8 @@ class Redis():
             result = float(current_price) > add_perc(float(perc), float(open_price))
         elif direction == 'short':
             result = float(current_price) < sub_perc(float(perc), float(open_price))
+        else:
+            result = None
         return result
 
     def __get_take_profit(self, current_price, current_high, open_price, pair):
@@ -567,6 +571,9 @@ class Redis():
             result = float(check) > add_perc(float(profit_perc), float(open_price))
         elif direction == 'short':
             result = float(check) < sub_perc(float(profit_perc), float(open_price))
+        else:
+            self.logger.warning("invalid direction: %s", direction)
+            return False
 
         if result:
             self.logger.info("TakeProfit reached current_high: %s current_price: %s "
@@ -598,6 +605,9 @@ class Redis():
             result = float(check) < sub_perc(float(stop_perc), float(open_price))
         elif direction == 'short':
             result = float(check) > add_perc(float(stop_perc), float(open_price))
+        else:
+            self.logger.warning("invalid direction: %s", direction)
+            return False
 
         if result:
             self.logger.info("StopLoss reached current_low: %s current_price: %s "
@@ -837,6 +847,8 @@ class Redis():
             sell_epoch = int(open_epoch) + int(convert_to_seconds(config.main.time_in_trade))
             close_timeout = current_epoch > sell_epoch
             close_timeout_price = self.__get_timeout_profit(open_price, current_price)
+        else:
+            close_timeout_price = None
 
         if not open_price and str2bool(config.main.wait_between_trades):
             try:
