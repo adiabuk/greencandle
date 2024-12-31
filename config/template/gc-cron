@@ -1,61 +1,62 @@
 SHELL=/bin/bash
 BASH_ENV=/container.env
+REDIR = ">/proc/1/fd/1 2>/proc/1/fd/2"
 
 # minute hour day_of_month month day_of_week command
 
-@reboot /usr/bin/touch /var/run/cron > /proc/1/fd/1 2>/proc/1/fd/2 # healthcheck
-* * * * * /usr/bin/touch /var/run/cron > /proc/1/fd/1 2>/proc/1/fd/2 # healthcheck
+@reboot /usr/bin/touch /var/run/cron ${REDIR}
+* * * * * /usr/bin/touch /var/run/cron ${REDIR}
 
 @reboot echo C.UTF-8 > /etc/default/locale
-@hourly /usr/local/bin/cleanup_redis 120 > /proc/1/fd/1 2>/proc/1/fd/2
-@hourly /usr/local/bin/cleanup_db2 > /proc/1/fd/1 2>/proc/1/fd/2
+@hourly /usr/local/bin/cleanup_redis 120 ${REDIR}
+@hourly /usr/local/bin/cleanup_db2 ${REDIR}
 
 {{if eq .production "true" }}
-@weekly /usr/local/bin/cleanup_db0 > /proc/1/fd/1 2>/proc/1/fd/2
-@reboot /usr/local/bin/clear_redis 1 > /proc/1/fd/1 2>/proc/1/fd/2
-*/3 * * * * /usr/local/bin/get_risk > /proc/1/fd/1 2>/proc/1/fd/2
-32 * * * * /usr/local/bin/write_balance > /proc/1/fd/1 2>/proc/1/fd/2
-#33 * * * * /usr/local/bin/get_quote_balance > /proc/1/fd/1 2>/proc/1/fd/2
-05 * * * * sleep 120; /usr/local/bin/test_close > /proc/1/fd/1 2>/proc/1/fd/2
+@weekly /usr/local/bin/cleanup_db0 ${REDIR}
+@reboot /usr/local/bin/clear_redis 1 ${REDIR}
+*/3 * * * * /usr/local/bin/get_risk ${REDIR}
+32 * * * * /usr/local/bin/write_balance ${REDIR}
+#33 * * * * /usr/local/bin/get_quote_balance ${REDIR}
+05 * * * * sleep 120; /usr/local/bin/test_close ${REDIR}
 0 * * * * /usr/local/bin/send_docker_alerts
-*/30 * * * * /usr/local/bin/get_anomalous > /proc/1/fd/1 2>/proc/1/fd/2
-21 00 * * * /usr/local/bin/balance_graph > /proc/1/fd/1 2>/proc/1/fd/2
-59 23 * * * /usr/local/bin/report 4h /data/reports/report_$(date +"\%Y-\%m-\%d").xlsx > /proc/1/fd/1 2>/proc/1/fd/2
-@reboot /usr/local/bin/report 4h /data/reports/report_{{.base_env}}_$(date +"\%Y-\%m-\%d").xlsx > /proc/1/fd/1 2>/proc/1/fd/2
-03 * * * * /usr/local/bin/get_hour_profit > /proc/1/fd/1 2>/proc/1/fd/2
-10 */2 * * * /usr/local/bin/repay_debts interest > /proc/1/fd/1 2>/proc/1/fd/2
-@hourly /usr/local/bin/repay_debts borrowed > /proc/1/fd/1 2>/proc/1/fd/2
-@hourly /usr/local/bin/loan_anomaly > /proc/1/fd/1 2>/proc/1/fd/2
-@hourly /usr/local/bin/check_tpsl > /proc/1/fd/1 2>/proc/1/fd/2
-30 * * * * /usr/bin/find /data/graphs -type f -mtime +1 -delete > /proc/1/fd/1 2>/proc/1/fd/2
-#15 * * * * /usr/local/bin/collect_pairs > /proc/1/fd/1 2>/proc/1/fd/2
-@hourly /usr/local/bin/get_bnb > /proc/1/fd/1 2>/proc/1/fd/2
+*/30 * * * * /usr/local/bin/get_anomalous ${REDIR}
+21 00 * * * /usr/local/bin/balance_graph ${REDIR}
+59 23 * * * /usr/local/bin/report 4h /data/reports/report_$(date +"\%Y-\%m-\%d").xlsx ${REDIR}
+@reboot /usr/local/bin/report 4h /data/reports/report_{{.base_env}}_$(date +"\%Y-\%m-\%d").xlsx ${REDIR}
+03 * * * * /usr/local/bin/get_hour_profit ${REDIR}
+10 */2 * * * /usr/local/bin/repay_debts interest ${REDIR}
+@hourly /usr/local/bin/repay_debts borrowed ${REDIR}
+@hourly /usr/local/bin/loan_anomaly ${REDIR}
+@hourly /usr/local/bin/check_tpsl ${REDIR}
+30 * * * * /usr/bin/find /data/graphs -type f -mtime +1 -delete ${REDIR}
+#15 * * * * /usr/local/bin/collect_pairs ${REDIR}
+@hourly /usr/local/bin/get_bnb ${REDIR}
 @daily /usr/bin/find /data/mysql -name "*.gz" -mtime +1 -delete
 @daily /usr/bin/find /data/reports -name "*.xlsx" -mtime +1 -delete
-20 */7 * * * /usr/local/bin/convert_loan_dust > /proc/1/fd/1 2>/proc/1/fd/2
-30 */7 * * * /usr/local/bin/convert_small_dust > /proc/1/fd/1 2>/proc/1/fd/2
+20 */7 * * * /usr/local/bin/convert_loan_dust ${REDIR}
+30 */7 * * * /usr/local/bin/convert_small_dust ${REDIR}
 
 {{else if eq .base_env "stag" }}
-@weekly /usr/local/bin/cleanup_db0 > /proc/1/fd/1 2>/proc/1/fd/2
-@reboot /usr/local/bin/clear_redis 1 > /proc/1/fd/1 2>/proc/1/fd/2
-@hourly /usr/local/bin/check_tpsl > /proc/1/fd/1 2>/proc/1/fd/2
+@weekly /usr/local/bin/cleanup_db0 ${REDIR}
+@reboot /usr/local/bin/clear_redis 1 ${REDIR}
+@hourly /usr/local/bin/check_tpsl ${REDIR}
 0 * * * * /usr/local/bin/send_docker_alerts
-03 * * * * /usr/local/bin/get_hour_profit > /proc/1/fd/1 2>/proc/1/fd/2
+03 * * * * /usr/local/bin/get_hour_profit ${REDIR}
 #00 * * * * /usr/local/bin/populate_pairs
 
 {{else if eq .base_env "test"}}
-@weekly /usr/local/bin/cleanup_db0 > /proc/1/fd/1 2>/proc/1/fd/2
-@reboot /usr/local/bin/clear_redis 1 > /proc/1/fd/1 2>/proc/1/fd/2
-@hourly /usr/local/bin/check_tpsl > /proc/1/fd/1 2>/proc/1/fd/2
-03 * * * * /usr/local/bin/get_hour_profit > /proc/1/fd/1 2>/proc/1/fd/2
-#15 * * * * /usr/local/bin/collect_pairs > /proc/1/fd/1 2>/proc/1/fd/2
+@weekly /usr/local/bin/cleanup_db0 ${REDIR}
+@reboot /usr/local/bin/clear_redis 1 ${REDIR}
+@hourly /usr/local/bin/check_tpsl ${REDIR}
+03 * * * * /usr/local/bin/get_hour_profit ${REDIR}
+#15 * * * * /usr/local/bin/collect_pairs ${REDIR}
 
 {{else if eq .base_env "data"}}
-@daily /usr/bin/find /data -type f -name ".*" -delete
-#@hourly /usr/local/bin/get_sentiment > /proc/1/fd/1 2>/proc/1/fd/2
-@hourly /usr/local/bin/cleanup_data_pairs > /proc/1/fd/1 2>/proc/1/fd/2
-@reboot /usr/local/bin/cleanup_removed_pairs > /proc/1/fd/1 2>/proc/1/fd/2
-00 */12 * * * /data/scripts/get_twitter_posts.py >/proc/1/fd/1 2>/proc/1/fd/2
-10 * * * * /usr/local/bin/check_data_freshness > /proc/1/fd/1 2>/proc/1/fd/2
+@daily /usr/bin/find /data -type f -name ".*" -delete ${REDIR}
+#@hourly /usr/local/bin/get_sentiment ${REDIR}
+@hourly /usr/local/bin/cleanup_data_pairs ${REDIR}
+@reboot /usr/local/bin/cleanup_removed_pairs ${REDIR}
+00 */12 * * * /data/scripts/get_twitter_posts.py ${REDIR}
+10 * * * * /usr/local/bin/check_data_freshness ${REDIR}
 
 {{end}}

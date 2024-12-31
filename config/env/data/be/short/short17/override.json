@@ -1,6 +1,5 @@
 {
   "open_rule1": "res[0].open \u003e res[0].bb_30[0]",
-  "open_rule2": "res[0].open \u003e res[0].bb_30[0] and perc_diff(res[0].ATR_14[1], res[0].ATR_14[0]) \u003e 20",
   "slack_active": "true",
   "time_between_trades": "5h"
 }

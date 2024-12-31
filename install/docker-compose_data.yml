@@ -713,6 +713,79 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
+  data-be-analyse-1h-short2:
+    container_name: data-be-analyse-1h-short2
+    hostname: data-be-analyse-1h-short2
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2g
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "analyse_data"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local3
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_1h
+    environment:
+      - CONFIG_ENV=data/be/short/short2/1h
+      - ROUTER_FORWARD=true
+      - DB=true
+    healthcheck:
+      test: find /var/local/lock  -mmin -2 -name data-be-analyse-1h-short2 2>&1 |grep . ||exit 1
+      start_period: 1h
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /var/local:/var/local
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-analyse-1h-long2:
+    container_name: data-be-analyse-1h-long2
+    hostname: data-be-analyse-1h-long2
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2g
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "analyse_data"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local3
+    links:
+      - data-be-api-router:router
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_1h
+    environment:
+      - CONFIG_ENV=data/be/long/long2/1h
+      - ROUTER_FORWARD=true
+      - DB=true
+    healthcheck:
+      test: find /var/local/lock  -mmin -2 -name data-be-analyse-1h-long2 2>&1 |grep . ||exit 1
+      start_period: 1h
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /var/local:/var/local
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
   data-be-analyse-5m-short6:
     container_name: data-be-analyse-5m-short6
     hostname: data-be-analyse-5m-short6

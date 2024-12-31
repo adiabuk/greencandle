@@ -135,7 +135,7 @@ def get_match_name(matches):
         container_num = 1
 
     name_lookup = [['trend_200', 'golden_cross', 'over_ma', 'big_change_outside'],
-                   ['empty2'],
+                   ['multi_ind'],
                    ['distance', 'bb', "bbperc_diff", "bbperc_extreme"],
                    ['empty4'],
                    ['STOCHRSI_check'],
