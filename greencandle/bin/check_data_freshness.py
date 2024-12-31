@@ -29,8 +29,8 @@ def main():
             item = redis.get_intervals(pair, interval)[-1]
 
             current = AttributeDict(json.loads(redis.get_item(f'{pair}:{interval}', item).decode()))
-            hour = datetime.datetime.fromtimestamp(
-                    int(current.ohlc['openTime'])/1000).strftime('%H')
+            hour = int(datetime.datetime.fromtimestamp(
+                    int(current.ohlc['openTime'])/1000).strftime('%H'))
             all_times.add(hour)
 
         except Exception:
