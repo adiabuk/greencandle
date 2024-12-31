@@ -45,7 +45,7 @@ def main():
     send_nsca(status=status, host_name='jenkins', service_name='anomalous_symbols',
               text_output=f'{msg} {len(anomalous)} anomalous symbols found in '
                           f'balance:{anomalous}|num={len(anomalous)}',
-              remote_host='10.0.0.212')
+              remote_host='nagios.amrox.loc')
 
 if __name__ == '__main__':
     main()

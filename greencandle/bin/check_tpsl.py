@@ -38,7 +38,7 @@ def main():
         status = 0
     env = config.main.base_env
     send_nsca(status=status, host_name='jenkins', service_name=f'{env}_tpsl', text_output=msg,
-              remote_host='10.0.0.212')
+              remote_host='nagios.amrox.loc')
 
 
 if __name__ == '__main__':

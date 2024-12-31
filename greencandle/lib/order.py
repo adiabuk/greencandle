@@ -171,7 +171,7 @@ class Trade():
         try:
             send_nsca(status=status, host_name='jenkins',
                       service_name=f"slots_{self.config.main.name}",
-                      text_output=f"Avail Slots:{avail_slots}", remote_host='local.amrox.loc')
+                      text_output=f"Avail Slots:{avail_slots}", remote_host='nagios.amrox.loc')
         except Exception:
             self.logger.warning("Unable to push stats to nagios")
         return final_list
