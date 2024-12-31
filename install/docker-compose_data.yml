@@ -1993,7 +1993,6 @@ services:
     environment:
       - CONFIG_ENV=data/be/long/long3/1h
       - DB=true
-      - NSCA=True
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-1h-long3 2>&1  | grep . || exit 1
       start_period: 1h
@@ -2030,7 +2029,6 @@ services:
     environment:
       - CONFIG_ENV=data/be/short/short3/1h
       - DB=true
-      - NSCA=True
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-1h-short3 2>&1  | grep . || exit 1
       start_period: 1h
@@ -2067,7 +2065,6 @@ services:
     environment:
       - CONFIG_ENV=data/be/long/long3/15m
       - DB=true
-      - NSCA=True
     healthcheck:
       test: find /var/local/lock -mmin -5 -name data-be-analyse-15m-long3 2>&1  | grep . || exit 1
       start_period: 15m
@@ -2104,7 +2101,6 @@ services:
     environment:
       - CONFIG_ENV=data/be/short/short3/15m
       - DB=true
-      - NSCA=True
     healthcheck:
       test: find /var/local/lock -mmin -5 -name data-be-analyse-15m-short3 2>&1  | grep . || exit 1
       start_period: 15m
@@ -2141,7 +2137,6 @@ services:
     environment:
       - CONFIG_ENV=data/be/long/long3/30m
       - DB=true
-      - NSCA=True
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-30m-long3 2>&1  | grep . || exit 1
       start_period: 30m
@@ -2178,7 +2173,6 @@ services:
     environment:
       - CONFIG_ENV=data/be/short/short3/30m
       - DB=true
-      - NSCA=True
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-30m-short3 2>&1  | grep . || exit 1
       start_period: 30m
@@ -3409,6 +3403,7 @@ services:
       - CONFIG_ENV=data/be/short/short17/1h
       - DB=true
       - CHECK_REDIS_PAIR=10
+      - NSCA=True
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1h-short17 2>&1 |grep . ||exit 1
       start_period: 1h
@@ -3446,6 +3441,7 @@ services:
       - CONFIG_ENV=data/be/long/long17/1h
       - DB=true
       - CHECK_REDIS_PAIR=10
+      - NSCA=True
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1h-long17 2>&1 |grep . ||exit 1
       start_period: 1h
