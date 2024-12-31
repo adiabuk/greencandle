@@ -145,7 +145,7 @@
 {{else if eq .base_env "data"}}
 {
 
-"1h-2" ["stag:any-1h-long-short"],
+"1h-2": ["stag:any-1h-long-short"],
 "5m-4": ["alert", "test:any2-5m-long-short"],
 "15m-4": ["test:any2-15m-long-short"],
 "30m-4": ["test:any2-30m-long-short"],
