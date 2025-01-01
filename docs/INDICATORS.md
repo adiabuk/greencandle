@@ -52,8 +52,8 @@ Usage: res[0].bbperc_200
 VERIFIED to be equal to tradingview
 get_stochrsi;STOCHRSI;8,5,3
 <RSI length>,<STOCH length>,<k/d SMOOTH>
-Usage: res[0].STOCHRSI_8[0] #for k
-Usage: res[0].STOCHRSI_8[1] #for d
+Usage: res[0].STOCHRSI_14[0] #for k
+Usage: res[0].STOCHRSI_14[1] #for d
 
 Redis output: (k,d) tupple
 

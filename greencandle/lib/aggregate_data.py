@@ -112,13 +112,13 @@ def get_stoch_flat(res, last_res):
     Get stoch value if k,d maxed out or bottomed out
     """
     try:
-        if round(sum(res['STOCHRSI_8'])/2) >= 100 and \
-                round(sum(last_res['STOCHRSI_8'])/2) >= 100:
-            value = f"{sum(res['STOCHRSI_8'])/2:.2f}"
+        if round(sum(res['STOCHRSI_14'])/2) >= 100 and \
+                round(sum(last_res['STOCHRSI_14'])/2) >= 100:
+            value = f"{sum(res['STOCHRSI_14'])/2:.2f}"
 
-        elif round(sum(res['STOCHRSI_8'])/2) <= 0 and \
-                round(sum(last_res['STOCHRSI_8'])/2) <= 0:
-            value = f"{sum(res['STOCHRSI_8'])/2:.2f}"
+        elif round(sum(res['STOCHRSI_14'])/2) <= 0 and \
+                round(sum(last_res['STOCHRSI_14'])/2) <= 0:
+            value = f"{sum(res['STOCHRSI_14'])/2:.2f}"
         else:
             value = None
         return value
