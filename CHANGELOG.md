@@ -1,5 +1,16 @@
 # Releases
 
+# 8.4
+* new script to split exisiting open trade into 2
+* cleanup data env config
+* allow mysql method to return column headers
+* fix var scope for lint
+* turn timestamp back into int for comparision
+* new strategy with RSI/STOCHRSI/CCI/ATR
+* check data freshness cron alert using NSCA
+* use consistent nsca hostnames throughout
+* check liveness of different strategy
+
 # 8.3
 * reduce start time for healthchecks
 * speed up aggregate run by reducing redis connections
