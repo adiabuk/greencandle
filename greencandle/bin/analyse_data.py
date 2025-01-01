@@ -141,7 +141,7 @@ def get_match_name(matches):
                    ['multi_ind'],
                    ['distance', 'bb', "bbperc_diff", "bbperc_extreme"],
                    ['empty4'],
-                   ['STOCHRSI_check'],
+                   ['STOCHRSI_flip'],
                    ['rsi'],
                    ['empty7'],
                    ['empty8'],
