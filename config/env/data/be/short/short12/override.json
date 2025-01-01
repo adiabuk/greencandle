@@ -1,4 +1,3 @@
 {
-  "open_rule1": "agg.empty_count \u003c 1 and agg.candle_size \u003e 0.2 and res[0].numTrades \u003e 100 and res[1].close \u003e res[1].bb_30[0]",
-  "slack_active": "false"
+  "open_rule1": "agg.empty_count \u003c 1 and agg.candle_size \u003e 0.2 and res[0].numTrades \u003e 100 and res[1].close \u003e res[1].bb_30[0]"
 }

@@ -1,5 +1,4 @@
 {
   "open_rule1": "res[0].open \u003e res[0].bb_30[0]",
-  "slack_active": "true",
   "time_between_trades": "5h"
 }

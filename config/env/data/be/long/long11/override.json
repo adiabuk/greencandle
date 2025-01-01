@@ -1,5 +1,4 @@
 {
   "open_rule1": "res[0].numTrades \u003e 50 and agg.bb_size \u003e 1 and agg.empty_count \u003c 1 and res[0].volume \u003e (res[1].volume+ res[2].volume+ res[3].volume+ res[4].volume)/4*40 and res[0].MACD_19[0] \u003e res[0].MACD_19[1] and (res[1].MACD_19[0] \u003c res[1].MACD_19[1] or res[2].MACD_19[0] \u003c res[2].MACD_19[1] or res[3].MACD_19[0] \u003c res[3].MACD_19[1])",
-  "open_rule2": "res[0].volume \u003e (res[1].volume + res[2].volume + res[3].volume + res[4].volume)/4 and res[0].high \u003e res[0].EMA_8 and res[0].low \u003c res[0].EMA_21 and res[0].close \u003c res[0].open and res[0].HA_close \u003c res[0].HA_open and res[0].close \u003e res[0].bb_200[2]",
-  "slack_active": "false"
+  "open_rule2": "res[0].volume \u003e (res[1].volume + res[2].volume + res[3].volume + res[4].volume)/4 and res[0].high \u003e res[0].EMA_8 and res[0].low \u003c res[0].EMA_21 and res[0].close \u003c res[0].open and res[0].HA_close \u003c res[0].HA_open and res[0].close \u003e res[0].bb_200[2]"
 }
