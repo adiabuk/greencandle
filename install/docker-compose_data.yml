@@ -735,7 +735,7 @@ services:
       - data-be-get_1h
     environment:
       - CONFIG_ENV=data/be/short/short2/1h
-      - REDIS_FOWARD=8
+      - REDIS_FORWARD=8
       - DB=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1h-short2 2>&1 |grep . ||exit 1
@@ -772,7 +772,7 @@ services:
       - data-be-get_1h
     environment:
       - CONFIG_ENV=data/be/long/long2/1h
-      - REDIS_FOWARD=8
+      - REDIS_FORWARD=8
       - DB=true
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1h-long2 2>&1 |grep . ||exit 1
