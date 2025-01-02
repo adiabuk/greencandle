@@ -1,4 +1,4 @@
 {
   "close_rule1": "res[0].STOCHRSI_14[0] \u003c 5",
-  "open_rule1": "perc_diff(res[0].ATR_14[1], res[0].ATR_14[0]) \u003e 20 and res[0].RSI_14 \u003e 70 and 200\u003c res[0].CCI_100 \u003c 400 and res[0].STOCHRSI_14[0] \u003e 90"
+  "open_rule1": "perc_diff(res[0].ATR_14[1], res[0].ATR_14[0]) \u003e 20 and res[0].RSI_14 \u003e 70 and 200\u003c res[0].CCI_100 \u003c 400 and res[0].STOCHRSI_14[0] \u003e 90 and (all(x \u003c400 for x in [res[y].CCI_100 for y in range(0,5)]))"
 }
