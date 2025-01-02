@@ -1,4 +1,4 @@
 {
   "close_rule1": "res[0].STOCHRSI_14[0] \u003e res[0].STOCHRSI_14[1] and res[1].STOCHRSI_14[0] \u003c res[1].STOCHRSI_14[1] and res[0].STOCHRSI_14[0] \u003c 20",
-  "open_rule1": "res[0].STOCHRSI_14[0] \u003c res[0].STOCHRSI_14[1] and res[1].STOCHRSI_14[0] \u003e res[1].STOCHRSI_14[1] and res[0].STOCHRSI_14[0] \u003e 80 and (all(x \u003c400 for x in [res[y].CCI_100 for y in range(0,5)]))"
+  "open_rule1": "res[0].STOCHRSI_14[0] \u003c res[0].STOCHRSI_14[1] and res[1].STOCHRSI_14[0] \u003e res[1].STOCHRSI_14[1] and res[0].STOCHRSI_14[0] \u003e 80 and all(x \u003c400 for x in [res[y].CCI_100 for y in range(0,5)])"
 }
