@@ -63,16 +63,16 @@ def main():
     print('\n')
     print("Original")
     print(f"pair: {data['pair']}, id: {data['id']}, name: {data['name']}, interval: "
-           "{data['interval']}")
+          f"{data['interval']}")
     print(f"base_in: {data['base_in']}, quote_in: {data['quote_in']}")
     print('\n')
     print("first record:")
     print(f"base_in: {first_base_in}, quote_in: {first_quote_in}, name: {data['name']}, "
-           "{data['interval']}")
+          f"{data['interval']}")
     print('\n')
     print("second record:")
     print(f"base_in: {second_base_in}, quote_in: {second_quote_in}, name: {new_name}, "
-           "interval: {new_interval}")
+          f"interval: {new_interval}")
     print('\n')
     proceed = input('Would you like to proceed?(y/n) ').lower()
     if proceed == 'y':
