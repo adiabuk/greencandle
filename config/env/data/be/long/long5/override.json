@@ -1,4 +1,4 @@
 {
   "close_rule1": "res[0].STOCHRSI_14[0] \u003c res[0].STOCHRSI_14[1] and res[1].STOCHRSI_14[0] \u003e res[1].STOCHRSI_14[1] and res[0].STOCHRSI_14[0] \u003e 80",
-  "open_rule1": "res[0].STOCHRSI_14[0] \u003e res[0].STOCHRSI_14[1] and res[1].STOCHRSI_14[0] \u003c res[1].STOCHRSI_14[1] and res[0].STOCHRSI_14[0] \u003c 20"
+  "open_rule1": "res[1].STOCHRSI_14[0] \u003e res[1].STOCHRSI_14[1] and res[2].STOCHRSI_14[0] \u003c res[2].STOCHRSI_14[1] and res[1].STOCHRSI_14[0] \u003c 20"
 }
