@@ -1,4 +1,4 @@
 {
-  "open_rule1": "res[0].close \u003c res[0].EMA_150 and res[1].close \u003c res[1].EMA_150 and res[0].RSI_7 \u003e 70",
+  "open_rule1": "res[0].close \u003c res[0].EMA_150 and res[1].close \u003c res[1].EMA_150 and res[0].RSI_7 \u003e 50",
   "slack_active": "true"
 }
