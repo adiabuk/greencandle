@@ -1908,7 +1908,6 @@ services:
       - DB=true
       - STORE_IN_DB=True
       - CHECK_REDIS_PAIR=8
-      - STORE_IN_DB=True
       - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-1h-short5  2>&1  | grep . || exit 1
