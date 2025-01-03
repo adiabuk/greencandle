@@ -72,7 +72,7 @@ res[0].close > res[0].STX_23[1]
 VERIFIED to be equal to tradingview
 get_moving_averages;EMA;8
 <function>;<MA><timeframe>
-Usage: res[0].EMA_8[0]
+Usage: res[0].EMA_8
 Redis output: EMA value, float
 
 <MA> can be MA|SMA|EMA|WMA
@@ -81,7 +81,7 @@ Redis output: EMA value, float
 VERIFIED to be equal to tradingview
 get_RSI;RSI;14
 <function>;<string><RSI length>
-Usage: res[0].RSI_14[0]
+Usage: res[0].RSI_14
 Redis output: RSI value, float
 
 ## CCI
