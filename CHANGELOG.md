@@ -1,5 +1,21 @@
 # Releases
 
+# 8.4.1
+* slack trades for both stage1 and stage2 strategies
+* add alternate 1h containers to stag env to mirror prod
+* fix missing f-string to split_trade script
+* fix doc accuracy
+* 2nd first-stage strategy for in-trend non-reversal (above/below mid-RSI_7)
+* check previous candles individually rather than using all()
+* wait 5 more mins before checking hourly data freshness in cron
+* ensure CCI has not recently been too high for both levels of strategy
+* enable trade closures to be forwarded
+* add close rule for stochrsi crossover
+* check if stochrsi k is <> 80/20
+* repurpose stochrsi strategy as 2nd level check-multi-ind strategy
+* remove unused data analysis containers
+* use increase STOCHRSI to 14 to match RSI in all data env
+
 # 8.4
 * new script to split exisiting open trade into 2
 * cleanup data env config
