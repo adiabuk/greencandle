@@ -1906,7 +1906,6 @@ services:
     environment:
       - CONFIG_ENV=data/be/short/short5/1h
       - DB=true
-      - STORE_IN_DB=True
       - CHECK_REDIS_PAIR=8
       - ROUTER_FORWARD=true
     healthcheck:
@@ -1945,7 +1944,6 @@ services:
     environment:
       - CONFIG_ENV=data/be/long/long5/1h
       - DB=true
-      - STORE_IN_DB=True
       - CHECK_REDIS_PAIR=8
       - ROUTER_FORWARD=true
     healthcheck:
