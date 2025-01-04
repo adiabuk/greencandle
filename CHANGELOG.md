@@ -1,5 +1,13 @@
 # Releases
 
+# 8.4.2
+* cleanup double entries in yaml dc config
+* filter out pairs with low volume, or empty candles
+* disable close rules for 2nd stage data strategy, for now
+* use correct interval for new containers
+* fix close rule for 2nd stage short
+* wait for closed candle when checking STOCHRSI confirmation
+
 # 8.4.1
 * slack trades for both stage1 and stage2 strategies
 * add alternate 1h containers to stag env to mirror prod
