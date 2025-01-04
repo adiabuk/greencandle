@@ -1982,7 +1982,6 @@ services:
     environment:
       - CONFIG_ENV=data/be/short/short10/1h
       - REDIS_FORWARD=8
-      - CONFIG_ENV=data/be/long/long10/1h
       - DB=true
     healthcheck:
       test: find /var/local/lock -mmin -3 -name data-be-analyse-1h-short10 2>&1  | grep . || exit 1
