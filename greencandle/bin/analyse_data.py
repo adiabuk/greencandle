@@ -237,6 +237,22 @@ def analyse_pair(pair, reversal, expire, redis):
                 if reversal == 'normal':
                     LOGGER.info("closing normal trade for %s", pair)
                     trade.close_trade(details)
+
+                    current_name = config.main.name
+                    current_direction = config.main.trade_direction
+                    new_name = current_name.replace('short', 'long') if \
+                            current_direction=='short' else current_name.replace('long', 'short')
+                    new_direction = current_direction.replace('short', 'long') if \
+                            current_direction=='short' else current_name.replace('long', 'short')
+                    command = (f"delete from trades where name like '%{current_name}%' "
+                               f"and direction='{current_direction}'")
+                    command2 = (f"delete from trades where name like '%{new_name}%' "
+                                f"and direction='{new_direction}'")
+                    dbase = Mysql()
+                    dbase.run_sql_statement(command)
+                    dbase.run_sql_statement(command2)
+                    del dbase
+
                 else:
                     LOGGER.info("not closing reversal trade for %s", pair)
 
