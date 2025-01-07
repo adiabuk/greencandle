@@ -1,5 +1,22 @@
 # Releases
 
+# 8.5
+* remove auto forward data->prod
+* ensure we allow data trade closures if not receiving pairs from redis
+* add ema150 xover rule
+* fix close rule RSI criteria
+* remove delisted pair
+* check match of at least 1 trend indicator
+* adjust tpsl stag 1h
+* increase RSI7 threshold
+* add second trend check and ATR+ volume/missing data
+* add 250 period RSI for trend analysis and increase no. of fetched candles
+* remove data trades in both direction when any direction is closed
+* add stag env any2 assocs
+* combine in-trend strategy
+* extend expiry time for 2nd stage strategy
+* fix rule config syntax
+
 # 8.4.2
 * cleanup double entries in yaml dc config
 * filter out pairs with low volume, or empty candles
