@@ -55,7 +55,7 @@ def check_last_hour_err():
                 "data": 50,
                 "stag": 500,
                 "test": 1000}
-    perf = f"|warn={warn_count};;;;err_count={err_count}"
+    perf = f"|warn={warn_count} err={err_count};;;;"
     if err_count > 50:
         status = 2
         msg = "CRITICAL"
