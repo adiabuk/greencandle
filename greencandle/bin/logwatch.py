@@ -81,32 +81,33 @@ def check_last_hour_occ():
     """
     env = config.main.base_env
     logfile = open(f"/var/log/gc_{env}.log", 'r').readlines()
-    count= 0
+    long_count=0
+    short_count=0
     for line in logfile:
         string = " ".join(line.split()[:3])
         fmt = "%b %d %H:%M:%S"
         current = datetime.strptime(string, fmt).replace(datetime.now().year)
         last_hour_date_time = datetime.now() - timedelta(hours = 1)
-        regexes = [".*long17.*alert", ".*short17.*alert"]
-        combined = "(" + ")|(".join(regexes) + ")"
-
-        if current > last_hour_date_time and re.match(combined, line):
-            count += 1
-
-    perf = f"|count={count};;;;"
-
-    if count > 50:
+        long="(.*long17.*alert)"
+        short="(.*short17.*alert)"
+        if current > last_hour_date_time and re.match(long, line):
+            long_count += 1
+        if current > last_hour_date_time and re.match(short, line):
+            short_count += 1
+    warn=20
+    crit=50
+    perf = f"|low={long_count} high={short_count};{warn};{crit};;"
+    count_text = f"stragegy17 levels low:{long_count},high:{short_count}"
+    if long_count > crit or short_count > crit:
         status = 2
         msg = "CRITICAL"
-        text = f'{msg}: {count} long17/short17 entries in {env} logfile, count:{count}{perf}'
-    elif count > 20:
+    elif long_count > warn or short_count > warn:
         status = 1
         msg = "WARNING"
-        text = f'{msg}: {count} long17/short17 entries in {env} logfile, count:{count}{perf}'
     else:
         status = 0
         msg = "OK"
-        text = f'{msg}: {count} long17/short17 entries in {env} logfile, count:{count}{perf}'
+    text = f'{msg}: {count_text}{perf}'
 
     send_nsca(status=status, host_name="data", service_name=f"strategy17_count_{env}",
               text_output=text, remote_host='nagios.amrox.loc')
