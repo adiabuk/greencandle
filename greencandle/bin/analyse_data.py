@@ -137,7 +137,7 @@ def get_match_name(matches):
     except ValueError:
         container_num = 1
 
-    name_lookup = [['trend_200', 'golden_cross', 'over_ma', 'big_change_outside'],
+    name_lookup = [['trend_200', 'golden_cross', 'ema_xover', 'big_change_outside'],
                    ['multi_ind'],
                    ['distance', 'bb', "bbperc_diff", "bbperc_extreme"],
                    ['empty4'],
