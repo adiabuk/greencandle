@@ -82,6 +82,8 @@ def check_last_hour_occ():
     logfile = open(f"/var/log/gc_{env}.log", 'r').readlines()
     low_count=0
     high_count=0
+    long_cross=0
+    short_cross=0
     for line in logfile:
         string = " ".join(line.split()[:3])
         fmt = "%b %d %H:%M:%S"
@@ -89,8 +91,8 @@ def check_last_hour_occ():
         last_hour_date_time = datetime.now() - timedelta(hours = 1)
         low_match="(.*long17.*alert)"
         high_match="(.*short17.*alert)"
-        long_xover="(long.*xover.*1h)"
-        short_xover="(short.*xover.*1h)"
+        long_xover="(.*long.*xover.*1h)"
+        short_xover="(.*short.*xover.*1h)"
         if current > last_hour_date_time and re.match(low_match, line):
             low_count += 1
         if current > last_hour_date_time and re.match(high_match, line):
