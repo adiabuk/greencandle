@@ -71,20 +71,21 @@ def analyse_loop():
 
     LOGGER.debug("start of current loop")
     redis = Redis()
+    if STORE_IN_DB:
+        dbase = Mysql(interval=INTERVAL)
+        open_pairs = dbase.fetch_sql_data(f'select pair, comment, 999999 from trades where '
+                                          f'`interval`="{INTERVAL}" and '
+                                          f'name="{config.main.name}" and '
+                                          f'close_price is null', header=False)
+        open_pairs = [tuple(x) for x in open_pairs]
+    else:
+        open_pairs = []
+
     if CHECK_REDIS_PAIR:
         redis4=Redis(db=CHECK_REDIS_PAIR)
         new_interval = CHECK_REDIS_INTERVAL if CHECK_REDIS_INTERVAL else INTERVAL
         redis_pairs = [x.decode().split(':') for x in
                        redis4.conn.smembers(f'{new_interval}:{DIRECTION}')]
-        if STORE_IN_DB:
-            dbase = Mysql(interval=INTERVAL)
-            open_pairs = dbase.fetch_sql_data(f'select pair, comment, 999999 from trades where '
-                                              f'`interval`="{INTERVAL}" and '
-                                              f'name="{config.main.name}" and '
-                                              f'close_price is null', header=False)
-            open_pairs = [tuple(x) for x in open_pairs]
-        else:
-            open_pairs = []
         redis_pairs = [tuple(x) for x in redis_pairs]
 
         # check if pair to be analysed is already open
