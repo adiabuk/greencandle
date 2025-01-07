@@ -74,43 +74,68 @@ def check_last_hour_err():
     send_nsca(status=status, host_name="jenkins", service_name=f"critical_logs_{env}",
               text_output=text, remote_host='nagios.amrox.loc')
 
-
 def check_last_hour_occ():
     """
     Check number of strategy entries logged in last hour and report to nagios via NSCA
     """
     env = config.main.base_env
     logfile = open(f"/var/log/gc_{env}.log", 'r').readlines()
-    long_count=0
-    short_count=0
+    low_count=0
+    high_count=0
     for line in logfile:
         string = " ".join(line.split()[:3])
         fmt = "%b %d %H:%M:%S"
         current = datetime.strptime(string, fmt).replace(datetime.now().year)
         last_hour_date_time = datetime.now() - timedelta(hours = 1)
-        long="(.*long17.*alert)"
-        short="(.*short17.*alert)"
-        if current > last_hour_date_time and re.match(long, line):
-            long_count += 1
-        if current > last_hour_date_time and re.match(short, line):
-            short_count += 1
-    warn=20
-    crit=50
-    perf = f"|low={long_count} high={short_count};{warn};{crit};;"
-    count_text = f"stragegy17 levels low:{long_count},high:{short_count}"
-    if long_count > crit or short_count > crit:
+        low_match="(.*long17.*alert)"
+        high_match="(.*short17.*alert)"
+        long_xover="(long.*xover.*1h)"
+        short_xover="(short.*xover.*1h)"
+        if current > last_hour_date_time and re.match(low_match, line):
+            low_count += 1
+        if current > last_hour_date_time and re.match(high_match, line):
+            high_count += 1
+        if current > last_hour_date_time and re.match(long_xover, line):
+            long_cross += 1
+        if current > last_hour_date_time and re.match(short_xover, line):
+            short_cross += 1
+
+    levels_warn=20
+    levels_crit=50
+    xover_warn=10
+    xover_crit=20
+    levels_perf = f"|low={low_count} high={high_count};{levels_warn};{levels_crit};;"
+    levels_text = f"stragegy17 levels low:{low_count},high:{high_count}"
+    if low_count > levels_crit or high_count > levels_crit:
         status = 2
         msg = "CRITICAL"
-    elif long_count > warn or short_count > warn:
+    elif low_count > levels_warn or high_count > levels_warn:
         status = 1
         msg = "WARNING"
     else:
         status = 0
         msg = "OK"
-    text = f'{msg}: {count_text}{perf}'
+    text = f'{msg}: {levels_text}{levels_perf}'
+
+    xover_perf = f"|long={long_cross} short={short_cross};{xover_warn};{xover_crit};;"
+    xover_text = f"xover long:{long_cross},short:{short_cross}"
+    if long_cross > xover_crit or short_cross > xover_crit:
+        status = 2
+        msg = "CRITICAL"
+    elif long_cross > xover_warn or short_cross > xover_warn:
+        status = 1
+        msg = "WARNING"
+    else:
+        status = 0
+        msg = "OK"
+    xover_full_text = f'{msg}: {xover_text}{xover_perf}'
+
 
     send_nsca(status=status, host_name="data", service_name=f"strategy17_count_{env}",
               text_output=text, remote_host='nagios.amrox.loc')
+
+    send_nsca(status=status, host_name="data", service_name=f"xover_count_{env}",
+              text_output=xover_full_text, remote_host='nagios.amrox.loc')
 
 def watch_log():
     """
