@@ -36,7 +36,7 @@ def check_last_hour_err():
     Check number of errors logged in last hour and report to nagios via NSCA
     """
     env = config.main.base_env
-    logfile = open(f"/var/log/gc_{env}.log", 'r').readlines()
+    logfile = reversed(open(f"/var/log/gc_{env}.log", 'r').readlines())
     err_count= 0
     warn_count = 0
     for line in logfile:
@@ -45,11 +45,13 @@ def check_last_hour_err():
         current = datetime.strptime(string, fmt).replace(datetime.now().year)
         last_hour_date_time = datetime.now() - timedelta(hours = 1)
 
-        if current > last_hour_date_time and any(status in line for status in ['CRIT', 'ERR',
-                                                                               'Traceback']):
-            err_count += 1
-        if current > last_hour_date_time and "WARN" in line:
-            warn_count += 1
+        if current > last_hour_date_time:
+            if any(status in line for status in ['CRIT', 'ERR', 'Traceback']):
+                err_count += 1
+            if "WARN" in line:
+                warn_count += 1
+        else:
+            break
 
     log_warn = {"prod": 50,
                 "data": 50,
@@ -79,7 +81,7 @@ def check_last_hour_occ():
     Check number of strategy entries logged in last hour and report to nagios via NSCA
     """
     env = config.main.base_env
-    logfile = open(f"/var/log/gc_{env}.log", 'r').readlines()
+    logfile = reversed(open(f"/var/log/gc_{env}.log", 'r').readlines())
     low_count=0
     high_count=0
     long_cross=0
@@ -93,14 +95,18 @@ def check_last_hour_occ():
         high_match="(.*short17.*alert)"
         long_xover="(.*long.*xover.*1h)"
         short_xover="(.*short.*xover.*1h)"
-        if current > last_hour_date_time and re.match(low_match, line):
-            low_count += 1
-        if current > last_hour_date_time and re.match(high_match, line):
-            high_count += 1
-        if current > last_hour_date_time and re.match(long_xover, line):
-            long_cross += 1
-        if current > last_hour_date_time and re.match(short_xover, line):
-            short_cross += 1
+
+        if current > last_hour_date_time:
+            if re.match(low_match, line):
+                low_count += 1
+            if  re.match(high_match, line):
+                high_count += 1
+            if re.match(long_xover, line):
+                long_cross += 1
+            if re.match(short_xover, line):
+                short_cross += 1
+        else:
+            break
 
     levels_warn=20
     levels_crit=50
