@@ -77,7 +77,7 @@ def main():
         time.sleep(5)
 
     # initial run, before scheduling begins - 6 candles
-    RUNNER.prod_initial(interval, test=True, first_run=True, no_of_runs=6)
+    RUNNER.prod_initial(interval, test=True, first_run=True, no_of_runs=7)
     if os.path.exists(f'/var/run/{config.main.base_env}-data-{interval}-{name}'):
         os.remove(f'/var/run/{config.main.base_env}-data-{interval}-{name}')
     send_slack_message('alerts', "Finished initial prod run")

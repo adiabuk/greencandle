@@ -1,5 +1,6 @@
 {
   "check_interval": "*",
   "name": "data-be-get_5m",
+  "no_of_klines": "400",
   "interval": "5m"
 }
