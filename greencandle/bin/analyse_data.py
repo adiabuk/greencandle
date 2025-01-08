@@ -148,7 +148,7 @@ def get_match_name(matches):
                    ['empty8'],
                    ['empty9'],
                    ['low_rsi_in_trend'],
-                   ['touch'],
+                   ['empty11'],
                    ['MACD_volume', 'EMA_volume'],
                    ['bb30'],
                    ['RSI_flip'],
