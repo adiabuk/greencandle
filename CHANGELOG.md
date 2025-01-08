@@ -1,5 +1,14 @@
 # Releases
 
+# 8.5.1
+* remove unused analyse containers
+* improve lint
+* get more initial data to account for lower performing pairs
+* fix error count nsca perf
+* add crossover entries alert to logwatch
+* fix golden/death cross rule to use EMA_200, not bb_200
+* split strategy alert into low/high with graph
+
 # 8.5
 * remove auto forward data->prod
 * ensure we allow data trade closures if not receiving pairs from redis
