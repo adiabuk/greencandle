@@ -41,8 +41,7 @@ class Binance():
         data = self.request("GET", f"/api/v3/ticker/price{pair_str}")
         if pair:
             return {pair: data['price']}
-        else:
-            return {d["symbol"]: d["price"] for d in data}
+        return {d["symbol"]: d["price"] for d in data}
 
     def tickers(self):
         """Get best price/qty on the order book for all symbols."""
@@ -472,7 +471,7 @@ class Binance():
         Make request to API and return result
         """
         session = self.retry_session(retries=5)
-        resp = session.request(method, self.endpoint + path, params=params, timeout=60)
+        resp = session.request(method, self.endpoint + path, params=params, timeout=120)
         try:
             data = resp.json()
         except:
@@ -501,7 +500,7 @@ class Binance():
 
         session = self.retry_session(retries=5)
         resp = session.request(method,
-                               self.endpoint + path + "?" + query, timeout=60,
+                               self.endpoint + path + "?" + query, timeout=120,
                                headers={"X-MBX-APIKEY": self.options["apiKey"]})
         try:
             data = resp.json()
