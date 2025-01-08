@@ -1,0 +1,63 @@
+services:
+  backtest-be-manual:
+    container_name: backtest-be-manual
+    environment:
+      - CONFIG_ENV=backtest
+      - DB=true
+    hostname: backtest-be-manual
+    working_dir: /data/scripts
+    image: amrox/greencandle:${TAG}
+    restart: always
+    entrypoint: /docker-entrypoint.sh "tail -f /backtest/null"
+    links:
+      - backtest-base-mysql:mysql
+      - backtest-base-redis:redis
+      - backtest-be-stream_1m:stream
+    depends_on:
+      - backtest-base-mysql
+      - backtest-base-redis
+    healthcheck:
+      test: ls || exit 1
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+
+  backtest-base-redis:
+    container_name: backtest-base-redis
+    hostname: backtest-base-redis
+    image: amrox/gc-redis:${TAG}
+    ports:
+      - 6384:6379
+    environment:
+      - CONFIG_ENV=backtest
+    restart: always
+    links:
+      - backtest-base-mysql:mysql
+    entrypoint: /docker-entrypoint.sh redis-server /etc/redis.conf
+    healthcheck:
+      test: redis-cli ping
+      interval: 5m
+      timeout: 10s
+      retries: 5
+
+  backtest-base-mysql:
+    container_name: backtest-base-mysql
+    hostname: backtest-base-mysql
+    image: amrox/gc-mysql:${TAG}
+    ports:
+      - 3310:3306
+    entrypoint: /docker-entrypoint.sh mysqld
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - CONFIG_ENV=backtest
+      - DB=true
+    restart: always
+    healthcheck:
+      test: echo 'SELECT version();'| mysql -uroot -ppassword
+      interval: 5m
+      timeout: 10s
+      retries: 5
+

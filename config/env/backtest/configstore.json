@@ -1,0 +1,429 @@
+{
+  "version": 3,
+  "region": "",
+  "role": "",
+  "is_insecure": true,
+  "data_key": "OfvuQJ0Cis1CvnFV2KTTYv3WCPKXOIord3OBDc0kwcU=",
+  "data": {
+    "account1_endpoint": {
+      "value": "https://api.binance.com",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account1_key": {
+      "value": "rgzmSqV0b/yZRGBxS+jXIx5hiQYh4sJDetnDelO3GCX9qMaj6TqRO3f4WO+xA8gBOaOxv7mjkau5rR1hadSbNDmhA+tgi/wEKQSrMtHsvEKyuDvXQJI9keMYnAFQwoj9eG+O/YH5E8g=",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "account1_secret": {
+      "value": "ipn58tyVmBic/3hcfBB/FsH7jBwzs5/HUHHG0HI+Mm3VBn8XqvpZlaok+xYYD8i+9lU6f9t8piR6axImZ6Ch7geC5dYIFcE6oumjDKaDFu2ejfDtdhqBsIR5WrbhT+WMqIkrpa97/II=",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "account1_type": {
+      "value": "binance",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account2_endpoint": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account2_key": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account2_secret": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account2_type": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account3_endpoint": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account3_key": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account3_secret": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account3_type": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account4_endpoint": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account4_key": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account4_secret": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account4_type": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "account_debug": {
+      "value": "False",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "api_forward": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "api_token": {
+      "value": "tqo/11oUw30IKayrW8ffKRnFrc84bY2z",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "auth_key": {
+      "value": "aXXMGI59gAEY1HivKAFeYiTcKXIb9O5g+igqHQzhojL4Bp6dS52HUL+RO8lTdggyW323ZaHBiO/8WvX1LKjgOMHEaP67awwrouAWjw==",
+      "is_binary": true,
+      "is_secret": true
+    },
+    "aws_access_key": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "aws_secret_key": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "balance_only": {
+      "value": "False",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "base_env": {
+      "value": "backtest",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "check_interval": {
+      "value": "59",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "close_rule1": {
+      "value": "res[0].HA_open \u003c res[0].HA_close",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "close_rule2": {
+      "value": "1\u003e1",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "close_rule3": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "close_rule4": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "close_rule5": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "db_database": {
+      "value": "greencandle",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "db_host": {
+      "value": "mysql",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "db_password": {
+      "value": "password",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "db_user": {
+      "value": "root",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "divisor": {
+      "value": "2",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "drain": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "drain_range": {
+      "value": "00:00 - 00:00",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "email_active": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "email_from": {
+      "value": "a@b.c",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "email_password": {
+      "value": "password",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "email_to": {
+      "value": "a@b.c",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "flask_auth": {
+      "value": "MjM3BmTBh8MLCA+XODbPanqehvqOJb2j84yOxqdyA7BYH9lSC9Vt5oWUeIK1fx12hJGOsmjCpyFRnO0w3DLcW5D03J45YRcmy42QnYa97roVKnRoUKRVVnbcfzpZVLonvPOp2sqNsDNk7tL7PAuvaOJ7zEnyCuo/7ArZ/dlRFX+lc5jnGxmLT3jeLgIB+XaIxiXJfz/ddxE=",
+      "is_binary": true,
+      "is_secret": true
+    },
+    "good_pairs": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "immediate_stop": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "immediate_take_profit": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "immediate_trailing_stop": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "indicators": {
+      "value": "get_moving_averages;EMA;200 get_ha;HA;0",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "interval": {
+      "value": "1m",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "logging_level": {
+      "value": "10",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "logging_output": {
+      "value": "stdout",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "max_trade_usd": {
+      "value": "500000",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "max_trades": {
+      "value": "2",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "name": {
+      "value": "test",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "nginx_port": {
+      "value": "7777",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "nginx_server": {
+      "value": "www.backtest.amrox.loc",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "no_of_klines": {
+      "value": "200",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "open_rule1": {
+      "value": "res[0].HA_open \u003e res[0].HA_close",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "open_rule2": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "open_rule3": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "open_rule4": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "open_rule5": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "pairs": {
+      "value": "BTCUSDT",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "perc_at_timeout": {
+      "value": "0",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "production": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "redis_expiry_seconds": {
+      "value": "0",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "redis_host": {
+      "value": "redis",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "redis_port": {
+      "value": "6379",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "reversal_rule": {
+      "value": "",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "slack_active": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "slack_alerts": {
+      "value": "backtest",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "slack_balance": {
+      "value": "backtest",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "slack_notifications": {
+      "value": "backtest",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "slack_trades": {
+      "value": "backtest",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "slack_url": {
+      "value": "rDKy2QxFcCvq/jqTdaWX4FMKwzLrBzAXAQMr5JtM/5tsi67vAI+mf5QHtpclvL70VP0xAP51LOYPczM1pKt4Sv6J8VItvKgeRB9//ZNe9Q4XfJrwczFBkAUw8O8=",
+      "is_binary": false,
+      "is_secret": true
+    },
+    "stop_loss_perc": {
+      "value": "20",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "take_profit_perc": {
+      "value": "0",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "time_between_trades": {
+      "value": "3h",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "time_in_trade": {
+      "value": "52w",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "trade_direction": {
+      "value": "long",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "trade_isolated": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "trade_type": {
+      "value": "spot",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "trailing_start": {
+      "value": "0",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "trailing_stop_loss_perc": {
+      "value": "0",
+      "is_binary": false,
+      "is_secret": false
+    },
+    "wait_between_trades": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    }
+  }
+}

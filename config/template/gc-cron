@@ -56,7 +56,7 @@ REDIR = ">/proc/1/fd/1 2>/proc/1/fd/2"
 #@hourly /usr/local/bin/get_sentiment ${REDIR}
 @hourly /usr/local/bin/cleanup_data_pairs ${REDIR}
 @reboot /usr/local/bin/cleanup_removed_pairs ${REDIR}
-00 */12 * * * /data/scripts/get_twitter_posts.py ${REDIR}
+#00 */12 * * * /data/scripts/get_twitter_posts.py ${REDIR}
 15 * * * * /usr/local/bin/check_data_freshness ${REDIR}
 
 {{end}}
