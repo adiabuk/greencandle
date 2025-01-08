@@ -12,7 +12,6 @@ services:
     links:
       - backtest-base-mysql:mysql
       - backtest-base-redis:redis
-      - backtest-be-stream_1m:stream
     depends_on:
       - backtest-base-mysql
       - backtest-base-redis
