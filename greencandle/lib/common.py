@@ -148,12 +148,21 @@ def arg_decorator(func):
 
 class AttributeDict(dict):
     """Access dictionary keys like attributes"""
-    def __getattr__(self, attr):
-        return self[attr]
-    def __setattr__(self, attr, value):
-        self[attr] = value
+    def __init__(self, *args, **kwargs):
+        def from_nested_dict(data):
+            """ Construct nested AttrDicts from nested dictionaries. """
+            if not isinstance(data, dict):
+                return data
+            return AttributeDict({key: from_nested_dict(data[key])
+                                for key in data})
+
+        super().__init__(*args, **kwargs)
+        self.__dict__ = self
+
+        for key in self.keys():
+            self[key] = from_nested_dict(self[key])
+
     def __del_attr__(self, attr):
-        #del self[attr]
         self.pop(attr, None)
 
 def percent(perc, num):
