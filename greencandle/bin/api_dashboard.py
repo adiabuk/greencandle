@@ -308,8 +308,8 @@ def extras():
                           'type=submit name=save value=delete></form>')
 
         readd_button = (f'<button onclick="javascript:populate(\'{pair}\', \'{interval}\', '
-                        f'\'{processed.action}\', \'{processed.usd}\', \'{processed.take}\', '
-                        f'\'{processed.stop}\', \'{processed.rule}\', '
+                        f'\'{processed.action}\', \'{processed.usd}\', \'{processed.tp}\', '
+                        f'\'{processed.sl}\', \'{processed.rule}\', '
                         f'\'{processed.forward_to}\')">re_addd</button>')
         processed.update({'re_add': readd_button})
         processed.update({'delete': delete_button})

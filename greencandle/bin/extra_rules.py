@@ -46,7 +46,7 @@ def check_rules():
         items.append(list(json.loads(redis12.conn.get(key).decode()).values()) + [key.decode()])
 
     items = [[item.strip() for item in rule] for rule in items]
-    for pair, interval, action, usd, take, stop, rule, rule2, forward_to, key in items:
+    for pair, interval, action, usd, tp, sl, rule, rule2, forward_to, key in items:
 
         if pair.upper() not in config.main.pairs.split():
             msg = f'Unknown pair: {pair}'
@@ -119,8 +119,8 @@ def check_rules():
                        "env": config.main.name,
                        "price": -1,
                        "usd": usd,
-                       "tp": eval(take) if take else take,
-                       "sl": eval(stop) if stop else stop,
+                       "tp": eval(tp) if tp else tp,
+                       "sl": eval(sl) if sl else sl,
                        "strategy": forward_to}
 
             try:
@@ -131,7 +131,7 @@ def check_rules():
                             pair, interval, forward_to, rule)
 
                 data = {"pair":pair, "interval": interval, "action": action, "usd": usd,
-                        "take": take, "stop": stop, "rule": rule, "rule2": rule2, "forward_to": forward_to}
+                        "tp": tp, "sl": sl, "rule": rule, "rule2": rule2, "forward_to": forward_to}
 
                 redis11.conn.set(f"{str(int(time.time()))}", json.dumps(data))
                 redis12.conn.delete(key)
@@ -142,7 +142,7 @@ def check_rules():
                                  'sl':'', 'rule': rule2, 'rule2': '', 'forward_to': forward_to}
 
                     data2 = {"pair":pair, "interval": interval, "action": "close", "usd": "",
-                            "take": "", "stop": "", "rule": rule2,
+                            "tp": "", "sl": "", "rule": rule2,
                             "rule2": "", "forward_to": forward_to}
                     data_str=json.dumps(data2)
                     redis12.conn.set(f"{str(int(time.time()))}", data_str)
