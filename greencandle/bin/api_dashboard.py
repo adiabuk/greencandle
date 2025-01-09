@@ -280,13 +280,19 @@ def extras():
         rules[-1].append(delete_button)
 
     for key in keys:
-        current = json.loads(redis.conn.get(key).decode())
+        current = AttributeDict(json.loads(redis.conn.get(key).decode()))
         pair = current['pair']
         interval=current['interval']
         current['pair'] = get_tv_link(pair, interval, anchor=True)
 
         delete_button = (f'<form method=post action=/dash/xredis?key={key.decode()}&db=12><input '
                           'type=submit name=save value=delete></form>')
+        readd_button = (f'<button onclick="javascript:populate(\'{pair}\', \'{interval}\', '
+                        f'\'{current.action}\', \'{current.usd}\', \'{current.tp}\', '
+                        f'\'{current.sl}\', \'{current.rule}\', \'{current.rule2}\', '
+                        f'\'{current.forward_to}\')">re_addd</button>')
+
+        current.update({'re_add': readd_button})
         current.update({'delete': delete_button})
         add_time = datetime.fromtimestamp(int(key)).strftime(time_format)
         current.update({'add_time': add_time})
@@ -693,17 +699,14 @@ def main():
     """API for interacting with trading system"""
 
     setproctitle(f"{config.main.base_env}-api_dashboard")
-
     scheduler = BackgroundScheduler() # Create Scheduler
     if config.main.base_env.strip() != 'data':
         scheduler.add_job(func=get_additional_details, trigger="interval", seconds=15)
         scheduler.add_job(func=get_balance, trigger="interval", minutes=10)
         scheduler.add_job(func=get_live, trigger="interval", minutes=2)
-        get_balance()
     else:
         scheduler.add_job(func=get_doublersi, trigger="interval", minutes=3)
         scheduler.add_job(func=get_agg, trigger="interval", minutes=2)
-        get_doublersi()
     scheduler.start() # Start Scheduler
 
     logging.basicConfig(level=logging.ERROR)
