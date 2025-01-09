@@ -85,7 +85,8 @@ def get_be_services(env):
     Get long/short services from docker-compose file
     """
 
-    with open(f"/srv/greencandle/install/docker-compose_{env}.yml", "r") as stream:
+    with open(f"/srv/greencandle/install/docker-compose_{env}.yml", "r",
+              encoding="utf-8") as stream:
         try:
             output = yaml.safe_load(stream)
         except yaml.YAMLError as exc:
@@ -98,7 +99,8 @@ def get_worker_containers(env):
     Get list of worker containers in given environments
     """
     containers = []
-    with open(f'/srv/greencandle/install/docker-compose_{env}.yml', 'r') as stream:
+    with open(f'/srv/greencandle/install/docker-compose_{env}.yml', 'r',
+              encoding="utf-8") as stream:
         output = yaml.safe_load(stream)
         keys = list(output['services'].keys())
         for key in keys:
