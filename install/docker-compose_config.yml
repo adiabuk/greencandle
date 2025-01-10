@@ -9,6 +9,8 @@ services:
     image: amrox/greencandle:${TAG}
     restart: always
     entrypoint: /docker-entrypoint.sh "tail -f /dev/null"
+    ports:
+      - 6000:6000
     links:
       - config-base-mysql:mysql
       - config-base-redis:redis
