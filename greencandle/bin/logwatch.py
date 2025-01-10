@@ -72,8 +72,8 @@ def check_last_hour_err():
         msg = "OK"
         text = (f'{msg}: No major issues in {env} logfile, warn:{warn_count}, err/crit:'
                 f'{err_count}{perf}')
-
-    send_nsca(status=status, host_name="jenkins", service_name=f"critical_logs_{env}",
+    host = "data" if env == "data" else "jenkins"
+    send_nsca(status=status, host_name=host, service_name=f"critical_logs_{env}",
               text_output=text, remote_host='nagios.amrox.loc')
 
 def check_last_hour_occ():
