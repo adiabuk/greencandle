@@ -1,5 +1,9 @@
 # Releases
 
+# 8.6.1
+* fixes to indicator names in open and close rules
+* expose port in config env for testing of api
+
 # 8.6
 * ensure logwatch alert for data env goes to correct host
 * add env name to risk alert to support multiple envs
