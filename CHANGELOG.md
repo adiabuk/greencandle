@@ -1,5 +1,24 @@
 # Releases
 
+# 8.6
+* ensure logwatch alert for data env goes to correct host
+* add env name to risk alert to support multiple envs
+* modify scripts dir location
+* exit trade when trend broken
+* don't overwrite alarm levels with separate alarm in logwatch
+* compare strategy with/without STOCH reversal in stag env
+* cleanup some lint
+* upgrade AttributeDict class to support nested dicts
+* unify tpsl var/column names in extras and dashboard/html template
+* allow populating extras fields from current entries
+* add rule2 (close_rule) to processed list in extras UI
+* add stag any2 1h to data extras UI
+* add tradingview pip to reqs
+* reverse reading of log file so we don't read the entire file
+* add new env for config api
+* add new env for backtesting
+* fix json syntax
+
 # 8.5.1
 * remove unused analyse containers
 * improve lint
