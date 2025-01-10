@@ -1,5 +1,11 @@
 # Releases
 
+# 8.6.2
+* enable trade closures for stage 2 strategy
+* add drain checker script to cron in all envs
+* script to check for drains in given env
+* don't expire trades in 2-step strategy for 24 hours
+
 # 8.6.1
 * fixes to indicator names in open and close rules
 * expose port in config env for testing of api
