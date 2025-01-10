@@ -3,6 +3,6 @@
   "interval": "1h",
   "slack_active": "true",
   "name": "data-be-analyse-1h-short5",
-  "redis_expiry_seconds": "50000",
+  "redis_expiry_seconds": "86400",
   "time_between_trades": "3h"
 }
