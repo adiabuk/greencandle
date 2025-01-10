@@ -10,6 +10,7 @@ REDIR = ">/proc/1/fd/1 2>/proc/1/fd/2"
 @reboot echo C.UTF-8 > /etc/default/locale
 @hourly /usr/local/bin/cleanup_redis 120 ${REDIR}
 @hourly /usr/local/bin/cleanup_db2 ${REDIR}
+@hourly /usr/bin/check_env_drain ${REDIR}
 
 {{if eq .production "true" }}
 @weekly /usr/local/bin/cleanup_db0 ${REDIR}
