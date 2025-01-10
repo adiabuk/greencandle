@@ -125,6 +125,9 @@ def check_last_hour_occ():
         msg = "OK"
     text = f'{msg}: {levels_text}{levels_perf}'
 
+    send_nsca(status=status, host_name="data", service_name=f"strategy17_count_{env}",
+              text_output=text, remote_host='nagios.amrox.loc')
+
     xover_perf = f"|long={long_cross} short={short_cross};{xover_warn};{xover_crit};;"
     xover_text = f"xover long:{long_cross},short:{short_cross}"
     if long_cross > xover_crit or short_cross > xover_crit:
@@ -138,9 +141,6 @@ def check_last_hour_occ():
         msg = "OK"
     xover_full_text = f'{msg}: {xover_text}{xover_perf}'
 
-
-    send_nsca(status=status, host_name="data", service_name=f"strategy17_count_{env}",
-              text_output=text, remote_host='nagios.amrox.loc')
 
     send_nsca(status=status, host_name="data", service_name=f"xover_count_{env}",
               text_output=xover_full_text, remote_host='nagios.amrox.loc')
