@@ -7,12 +7,15 @@ Send cross margin risk level to nagios periodically
 from send_nsca3 import send_nsca
 from greencandle.lib.common import arg_decorator
 from greencandle.lib.binance_accounts import get_cross_margin_level
+from greencandle.lib import config
 
 @arg_decorator
 def main():
     """
     Send cross margin risk level to nagios periodically
     """
+    config.create_config()
+    env = config.main.base_env
     try:
         value = float(get_cross_margin_level())
     except ValueError:
@@ -33,7 +36,7 @@ def main():
         status = 3
         msg = "UNKNOWN"
 
-    send_nsca(status=status, host_name='jenkins', service_name='cross_margin_risk',
+    send_nsca(status=status, host_name='jenkins', service_name=f'{env}-cross_margin_risk',
               text_output=f'{msg} risk value is {round(value, 2)};|risk={round(value, 2)}',
               remote_host='nagios.amrox.loc')
 
