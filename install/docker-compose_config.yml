@@ -28,7 +28,6 @@ services:
     container_name: config-fe-api-config
     environment:
       - CONFIG_ENV=config
-      - DB=true
     hostname: config-fe-api-config
     working_dir: /data/scripts
     image: amrox/greencandle:${TAG}
