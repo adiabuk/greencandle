@@ -57,6 +57,8 @@ services:
     environment:
       - CONFIG_ENV=config
     restart: always
+    volumes:
+      - /data
     links:
       - config-base-mysql:mysql
     healthcheck:
