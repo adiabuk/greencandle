@@ -1,5 +1,16 @@
 # Releases
 
+# 8.7
+* add save options to redis cli
+* add execute perms on redis module
+* add json module to redis image and use for drain config api
+* add drain/config api for providing and storing drain status
+* continue build if muting nagios fails
+* new script to collect tv sentiment data,run for 5m,1h,1d in data cron for alerting
+* set correct tpsl for any2 stag containers
+* fix cron script path
+* only look at k value of stochastic
+
 # 8.6.2
 * enable trade closures for stage 2 strategy
 * add drain checker script to cron in all envs
