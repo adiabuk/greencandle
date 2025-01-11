@@ -24,7 +24,7 @@ services:
       - /data:/data
       - /root/.aws:/root/.aws
 
-config-fe-api-config:
+  config-fe-api-config:
     container_name: config-fe-api-config
     environment:
       - CONFIG_ENV=config
