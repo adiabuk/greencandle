@@ -9,8 +9,6 @@ services:
     image: amrox/greencandle:${TAG}
     restart: always
     entrypoint: /docker-entrypoint.sh "tail -f /dev/null"
-    ports:
-      - 6000:6000
     links:
       - config-base-mysql:mysql
       - config-base-redis:redis
@@ -22,6 +20,31 @@ services:
       interval: 5m
       timeout: 10s
       retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+
+config-fe-api-config:
+    container_name: config-fe-api-config
+    environment:
+      - CONFIG_ENV=config
+      - DB=true
+    hostname: config-fe-api-config
+    working_dir: /data/scripts
+    image: amrox/greencandle:${TAG}
+    restart: always
+    entrypoint: /docker-entrypoint.sh api_config
+    links:
+      - config-base-redis:redis
+    depends_on:
+      - config-base-redis
+    healthcheck:
+      test: curl -Isf http://127.1:6000/healthcheck
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    ports:
+      - 6000:6000
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws
@@ -60,4 +83,3 @@ services:
       interval: 5m
       timeout: 10s
       retries: 5
-
