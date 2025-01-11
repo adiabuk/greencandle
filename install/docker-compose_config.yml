@@ -59,7 +59,7 @@ services:
     restart: always
     links:
       - config-base-mysql:mysql
-    entrypoint: /usr/local/bin/docker-entrypoint.sh redis-server --loadmodule /srv/redis/rejson.so
+    entrypoint: /usr/local/bin/docker-entrypoint.sh redis-server --loadmodule /srv/redis/rejson.so --save "30 1 300 100 60 10000"
     healthcheck:
       test: redis-cli ping
       interval: 5m
