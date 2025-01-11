@@ -51,16 +51,15 @@ services:
   config-base-redis:
     container_name: config-base-redis
     hostname: config-base-redis
-    image: redis/redis-stack
+    image: amrox/gc-redis:${TAG}
     ports:
       - 6385:6379
     environment:
       - CONFIG_ENV=config
     restart: always
-    volumes:
-      - /data
     links:
       - config-base-mysql:mysql
+    entrypoint: /usr/local/bin/docker-entrypoint.sh redis-server --loadmodule /srv/redis/rejson.so
     healthcheck:
       test: redis-cli ping
       interval: 5m
