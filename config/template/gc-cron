@@ -1,63 +1,67 @@
 SHELL=/bin/bash
 BASH_ENV=/container.env
-REDIR = ">/proc/1/fd/1 2>/proc/1/fd/2"
-
+REDIR=">/proc/1/fd/1 2>/proc/1/fd/2"
+SCRIPT_DIR=/usr/local/bin
 # minute hour day_of_month month day_of_week command
 
 @reboot /usr/bin/touch /var/run/cron ${REDIR}
 * * * * * /usr/bin/touch /var/run/cron ${REDIR}
 
 @reboot echo C.UTF-8 > /etc/default/locale
-@hourly /usr/local/bin/cleanup_redis 120 ${REDIR}
-@hourly /usr/local/bin/cleanup_db2 ${REDIR}
-@hourly /usr/local/bin/check_env_drain ${REDIR}
+@hourly ${SCRIPT_DIR}/cleanup_redis 120 ${REDIR}
+@hourly ${SCRIPT_DIR}/cleanup_db2 ${REDIR}
+@hourly ${SCRIPT_DIR}/check_env_drain ${REDIR}
 
 {{if eq .production "true" }}
-@weekly /usr/local/bin/cleanup_db0 ${REDIR}
-@reboot /usr/local/bin/clear_redis 1 ${REDIR}
-*/3 * * * * /usr/local/bin/get_risk ${REDIR}
-32 * * * * /usr/local/bin/write_balance ${REDIR}
-#33 * * * * /usr/local/bin/get_quote_balance ${REDIR}
-05 * * * * sleep 120; /usr/local/bin/test_close ${REDIR}
-0 * * * * /usr/local/bin/send_docker_alerts
-*/30 * * * * /usr/local/bin/get_anomalous ${REDIR}
-21 00 * * * /usr/local/bin/balance_graph ${REDIR}
-59 23 * * * /usr/local/bin/report 4h /data/reports/report_$(date +"\%Y-\%m-\%d").xlsx ${REDIR}
-@reboot /usr/local/bin/report 4h /data/reports/report_{{.base_env}}_$(date +"\%Y-\%m-\%d").xlsx ${REDIR}
-03 * * * * /usr/local/bin/get_hour_profit ${REDIR}
-10 */2 * * * /usr/local/bin/repay_debts interest ${REDIR}
-@hourly /usr/local/bin/repay_debts borrowed ${REDIR}
-@hourly /usr/local/bin/loan_anomaly ${REDIR}
-@hourly /usr/local/bin/check_tpsl ${REDIR}
+@weekly ${SCRIPT_DIR}/cleanup_db0 ${REDIR}
+@reboot ${SCRIPT_DIR}/clear_redis 1 ${REDIR}
+*/3 * * * * ${SCRIPT_DIR}/get_risk ${REDIR}
+32 * * * * ${SCRIPT_DIR}/write_balance ${REDIR}
+#33 * * * * ${SCRIPT_DIR}/get_quote_balance ${REDIR}
+05 * * * * sleep 120; ${SCRIPT_DIR}/test_close ${REDIR}
+0 * * * * ${SCRIPT_DIR}/send_docker_alerts
+*/30 * * * * ${SCRIPT_DIR}/get_anomalous ${REDIR}
+21 00 * * * ${SCRIPT_DIR}/balance_graph ${REDIR}
+59 23 * * * ${SCRIPT_DIR}/report 4h /data/reports/report_$(date +"\%Y-\%m-\%d").xlsx ${REDIR}
+@reboot ${SCRIPT_DIR}/report 4h /data/reports/report_{{.base_env}}_$(date +"\%Y-\%m-\%d").xlsx ${REDIR}
+03 * * * * ${SCRIPT_DIR}/get_hour_profit ${REDIR}
+10 */2 * * * ${SCRIPT_DIR}/repay_debts interest ${REDIR}
+@hourly ${SCRIPT_DIR}/repay_debts borrowed ${REDIR}
+@hourly ${SCRIPT_DIR}/loan_anomaly ${REDIR}
+@hourly ${SCRIPT_DIR}/check_tpsl ${REDIR}
 30 * * * * /usr/bin/find /data/graphs -type f -mtime +1 -delete ${REDIR}
-#15 * * * * /usr/local/bin/collect_pairs ${REDIR}
-@hourly /usr/local/bin/get_bnb ${REDIR}
+#15 * * * * ${SCRIPT_DIR}/collect_pairs ${REDIR}
+@hourly ${SCRIPT_DIR}/get_bnb ${REDIR}
 @daily /usr/bin/find /data/mysql -name "*.gz" -mtime +1 -delete
 @daily /usr/bin/find /data/reports -name "*.xlsx" -mtime +1 -delete
-20 */7 * * * /usr/local/bin/convert_loan_dust ${REDIR}
-30 */7 * * * /usr/local/bin/convert_small_dust ${REDIR}
+20 */7 * * * ${SCRIPT_DIR}/convert_loan_dust ${REDIR}
+30 */7 * * * ${SCRIPT_DIR}/convert_small_dust ${REDIR}
 
 {{else if eq .base_env "stag" }}
-@weekly /usr/local/bin/cleanup_db0 ${REDIR}
-@reboot /usr/local/bin/clear_redis 1 ${REDIR}
-@hourly /usr/local/bin/check_tpsl ${REDIR}
-0 * * * * /usr/local/bin/send_docker_alerts
-03 * * * * /usr/local/bin/get_hour_profit ${REDIR}
-#00 * * * * /usr/local/bin/populate_pairs
+@weekly ${SCRIPT_DIR}/cleanup_db0 ${REDIR}
+@reboot ${SCRIPT_DIR}/clear_redis 1 ${REDIR}
+@hourly ${SCRIPT_DIR}/check_tpsl ${REDIR}
+0 * * * * ${SCRIPT_DIR}/send_docker_alerts
+03 * * * * ${SCRIPT_DIR}/get_hour_profit ${REDIR}
+#00 * * * * ${SCRIPT_DIR}/populate_pairs
 
 {{else if eq .base_env "test"}}
-@weekly /usr/local/bin/cleanup_db0 ${REDIR}
-@reboot /usr/local/bin/clear_redis 1 ${REDIR}
-@hourly /usr/local/bin/check_tpsl ${REDIR}
-03 * * * * /usr/local/bin/get_hour_profit ${REDIR}
-#15 * * * * /usr/local/bin/collect_pairs ${REDIR}
+@weekly ${SCRIPT_DIR}/cleanup_db0 ${REDIR}
+@reboot ${SCRIPT_DIR}/clear_redis 1 ${REDIR}
+@hourly ${SCRIPT_DIR}/check_tpsl ${REDIR}
+03 * * * * ${SCRIPT_DIR}/get_hour_profit ${REDIR}
+#15 * * * * ${SCRIPT_DIR}/collect_pairs ${REDIR}
 
 {{else if eq .base_env "data"}}
 @daily /usr/bin/find /data -type f -name ".*" -delete ${REDIR}
-#@hourly /usr/local/bin/get_sentiment ${REDIR}
-@hourly /usr/local/bin/cleanup_data_pairs ${REDIR}
-@reboot /usr/local/bin/cleanup_removed_pairs ${REDIR}
+#@hourly ${SCRIPT_DIR}/get_sentiment ${REDIR}
+@hourly ${SCRIPT_DIR}/cleanup_data_pairs ${REDIR}
+@reboot ${SCRIPT_DIR}/cleanup_removed_pairs ${REDIR}
 #00 */12 * * * /data/scripts/static/get_twitter_posts.py ${REDIR}
-15 * * * * /usr/local/bin/check_data_freshness ${REDIR}
+15 * * * * ${SCRIPT_DIR}/check_data_freshness ${REDIR}
+@hourly ${SCRIPT_DIR}/get_tv_stats 5m ${REDIR}
+@hourly ${SCRIPT_DIR}/get_tv_stats 1h ${REDIR}
+@hourly ${SCRIPT_DIR}/get_tv_stats 1d ${REDIR}
+
 
 {{end}}
