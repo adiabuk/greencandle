@@ -51,7 +51,8 @@ def check_rules():
         if pair.upper() not in config.main.pairs.split():
             msg = f'Unknown pair: {pair}'
             LOGGER.info(msg)
-            send_nsca(status=2, host_name='jenkins', service_name='extra_rules', text_output=msg,
+            send_nsca(status=2, host_name='jenkins',
+                      service_name=f'{config.main.base_env}_extra_rules', text_output=msg,
                       remote_host='nagios.amrox.loc')
             continue
         item = redis.get_intervals(pair.upper().strip(), interval)[-1]

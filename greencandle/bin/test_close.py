@@ -15,7 +15,6 @@ from greencandle.lib.balance_common import get_base, get_quote
 from greencandle.lib.common import arg_decorator, sub_perc
 from greencandle.lib.balance import Balance
 from greencandle.lib.auth import binance_auth
-config.create_config()
 
 @arg_decorator
 def main():
@@ -27,6 +26,7 @@ def main():
     Usage: test_close
     """
     client = binance_auth()
+    config.create_config()
 
     dbase = Mysql()
     query = "select pair, base_in, quote_in, name, direction from trades where close_price is NULL"
@@ -106,7 +106,8 @@ def main():
         text_output = "No issues with open trades"
 
     print(text_output)
-    send_nsca(status=status, host_name='jenkins', service_name='open_trades',
+    send_nsca(status=status, host_name='jenkins',
+              service_name=f'{config.main.base_env}open_trades',
               text_output=text_output.replace('\n',' '), remote_host='nagios.amrox.loc')
 
 if __name__ == '__main__':

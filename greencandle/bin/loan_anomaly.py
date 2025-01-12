@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+#pylint: disable=no-member
 """
 Get anomalies with debts and send nsca alert to nagios
 """
@@ -9,12 +10,14 @@ from greencandle.lib.common import format_usd, arg_decorator
 from greencandle.lib.binance_accounts import base2quote
 from greencandle.lib.balance_common import get_base, get_quote
 from greencandle.lib.mysql import Mysql
+from greencandle.lib import config
 
 @arg_decorator
 def main():
     """
     Get difference between actual debts from exchange and debts from open db trades"
     """
+    config.create_config()
     client=binance_auth()
     details = client.get_cross_margin_details()
     debts = {}
@@ -60,8 +63,9 @@ def main():
 
     text_output = (f'{msg}: actual: {format_usd(actual_debts)}, '
                    f'in trade:{format_usd(trade_usd)}, diff:{format_usd(diff)}')
-    send_nsca(status=status, host_name='jenkins', service_name='debt_anomaly',
-              text_output=f'{text_output}|diff={diff}', remote_host='nagios.amrox.loc')
+    send_nsca(status=status, host_name='jenkins',
+              service_name=f'{config.main.base_env}_loan_anomaly',
+              text_output=f'{text_output}|diff={diff};;;;', remote_host='nagios.amrox.loc')
     print(text_output)
     sys.exit(status)
 

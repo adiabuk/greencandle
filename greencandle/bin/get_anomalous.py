@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+#pylint: disable=no-member
 """
 Get list of symbols that have a balance yet don't have an associated trade
 """
@@ -7,6 +8,7 @@ from greencandle.lib.common import arg_decorator
 from greencandle.lib.balance import Balance
 from greencandle.lib.balance_common import get_base
 from greencandle.lib.mysql import Mysql
+from greencandle.lib import config
 
 @arg_decorator
 def main():
@@ -15,6 +17,7 @@ def main():
     """
     dbase = Mysql()
     bal = Balance(test=False)
+    config.create_config()
 
     balances = bal.get_balance()['margin']
 
@@ -42,7 +45,8 @@ def main():
         status = 3
         msg = 'UNKNOWN'
 
-    send_nsca(status=status, host_name='jenkins', service_name='anomalous_symbols',
+    send_nsca(status=status, host_name='jenkins',
+              service_name=f'{config.main.base_env}_anomalous_symbols',
               text_output=f'{msg} {len(anomalous)} anomalous symbols found in '
                           f'balance:{anomalous}|num={len(anomalous)}',
               remote_host='nagios.amrox.loc')
