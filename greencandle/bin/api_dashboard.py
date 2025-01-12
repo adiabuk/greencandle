@@ -528,13 +528,13 @@ def get_live():
         send_slack_message("balance", f"trades over 5%: {mt5}\ntrades over 10%: {mt10}")
     net_perc_profitable = net_profitable/len(raw)*100
 
-    if net_perc_profitable < 20:
+    if net_perc_profitable <= 20 or net_perc_profitable >= 20:
         status = 2
         msg = "CRITICAL"
-    elif net_perc_profitable <= 10:
+    elif net_perc_profitable <= 5 or net_perc_profitable >= 5:
         status = 1
         msg = "WARNING"
-    elif net_perc_profitable > 20:
+    elif -5 < net_perc_profitable < 5:
         status = 0
         msg = "OK"
     else:
@@ -718,13 +718,13 @@ def get_balance():
         usd_free = val if 'USD' in key else base2quote(val, key+'USDT')
         all_results.append({'key': f'{key} free', 'usd': format_usd(usd_free),
                             'val': f'{val:.5f}'})
-    if current_net_perc < -25:
+    if current_net_perc < -20 or current_net_perc > 20:
         status = 2
         msg = "CRITICAL"
-    elif current_net_perc <= 0:
+    elif current_net_perc <= 10 or current_net_perc >= 10:
         status = 1
         msg = "WARNING"
-    elif current_net_perc > 0:
+    elif 10 < current_net_perc < 10:
         status = 0
         msg = "OK"
     else:
