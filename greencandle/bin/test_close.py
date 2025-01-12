@@ -107,7 +107,7 @@ def main():
 
     print(text_output)
     send_nsca(status=status, host_name='jenkins',
-              service_name=f'{config.main.base_env}open_trades',
+              service_name=f'{config.main.base_env}_open_trades',
               text_output=text_output.replace('\n',' '), remote_host='nagios.amrox.loc')
 
 if __name__ == '__main__':
