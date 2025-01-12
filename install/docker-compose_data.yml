@@ -2060,7 +2060,7 @@ services:
     environment:
       - CONFIG_ENV=data/be/short/short13/5m
       - DB=true
-      - CHECK_REDIS_PAIR=4
+      - ROUTER_FORWARD=true
       - STORE_IN_DB=True
     healthcheck:
       test: find /var/local/lock -mmin -3 -name data-be-analyse-5m-short13 2>&1  | grep . || exit 1
@@ -2098,7 +2098,7 @@ services:
     environment:
       - CONFIG_ENV=data/be/long/long13/5m
       - DB=true
-      - CHECK_REDIS_PAIR=4
+      - ROUTER_FORWARD=true
       - STORE_IN_DB=True
     healthcheck:
       test: find /var/local/lock -mmin -3 -name data-be-analyse-5m-long13 2>&1  | grep . || exit 1
