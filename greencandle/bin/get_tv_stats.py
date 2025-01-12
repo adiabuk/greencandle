@@ -57,7 +57,7 @@ def main():
     else:
         status = 3
         msg = "UNKNOWN"
-    text = f"{msg}: current sentiment is {most}|{perf};{warn};{crit};;"
+    text = f"{msg}: current sentiment is {most}: {stats}|{perf};{warn};{crit};;"
 
     host = "data" if env == "data" else "jenkins"
     send_nsca(status=status, host_name=host, service_name=f"{env}_tv_stats_{interval}",
