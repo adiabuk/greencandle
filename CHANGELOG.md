@@ -1,5 +1,16 @@
 # Releases
 
+# 8.7.2
+* add ema sentiment script to data cron
+* remove pairs causing issues with indicators
+* fix open trades alert name
+* add stats count to text output
+* save tv stats to file during each run
+* rename and re-enable sentiment script in data env
+* decrease tpsl in stag env
+* add stochrsi close_rule for stage 2 strategy
+* round perc_profitable to 4 digits
+
 # 8.7.1
 * ensure prod env alerts are separate from per env
 * fix some lint
