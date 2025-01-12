@@ -526,7 +526,7 @@ def get_live():
     LIVE = all_data
     if mt5 > 0 or mt10 > 0:
         send_slack_message("balance", f"trades over 5%: {mt5}\ntrades over 10%: {mt10}")
-    net_perc_profitable = net_profitable/len(raw)*100
+    net_perc_profitable = round(net_profitable/len(raw)*100, 4)
 
     if net_perc_profitable <= 20 or net_perc_profitable >= 20:
         status = 2
