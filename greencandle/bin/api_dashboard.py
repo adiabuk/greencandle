@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=bare-except,no-member,consider-using-with,too-many-locals,global-statement,too-few-public-methods,assigning-non-slot,no-name-in-module
+#pylint:disable=no-member,consider-using-with,too-many-locals,global-statement,too-few-public-methods,assigning-non-slot,no-name-in-module,broad-exception-caught
 
 """
 Flask module for manipulating API trades and displaying relevent graphs
@@ -135,7 +135,8 @@ def get_pairs(env=config.main.base_env):
 
     Usage: api_dashboard
     """
-    docker_compose = open(f"/srv/greencandle/install/docker-compose_{env}.yml", "r")
+    docker_compose = open(f"/srv/greencandle/install/docker-compose_{env}.yml", "r",
+                          encoding="utf-8")
     pairs_dict = {}
     names = {}
     length = defaultdict(int)
@@ -270,7 +271,7 @@ def extras():
     keys7 = redis7.conn.keys()
     keys11 = redis11.conn.keys()
     time_format = "%Y-%m-%d %H:%M:%S"
-    with open('/etc/router_config.json', 'r') as json_file:
+    with open('/etc/router_config.json', 'r', encoding="utf-8") as json_file:
         router_config = json.load(json_file)
     routes = [x for x in router_config.keys() if 'extra' in x]
 
@@ -377,7 +378,7 @@ def send_trade(pair, strategy, trade_action, take=None, stop=None, usd=None):
     url = f"http://router:1080/{api_token}"
     try:
         requests.post(url, json=payload, timeout=1)
-    except:
+    except Exception:
         pass
 
 @APP.route('/trade', methods=["GET"])
@@ -389,7 +390,7 @@ def trade():
     pairs, _, names = get_pairs()
 
     rev_names = {v: k for k, v in names.items()}
-    with open('/etc/router_config.json', 'r') as json_file:
+    with open('/etc/router_config.json', 'r', encoding="utf-8") as json_file:
         router_config = json.load(json_file)
 
     env = config.main.base_env
@@ -515,8 +516,8 @@ def get_live():
                          "perc": f'{round(perc,4)}',
                          "net_perc": f'{round(net_perc,4)}',
                          "close": close_link,
-                         "open_price": '{:g}'.format(float(open_price)),
-                         "current_price": '{:g}'.format(float(current_price)),
+                         "open_price": open_price,
+                         "current_price": current_price,
                          "tp/sl": f"{take:.2f}/{stop:.2f}",
                          "du/dd": f"{round(drawup,2)}/{round(drawdown,2)}",
                          "quote_in": quote_in,
@@ -542,7 +543,8 @@ def get_live():
 
     text = (f"{msg}: {net_perc_profitable}% of open trades are "
            f"profitable|net_profitable={net_perc_profitable};20;10;;")
-    send_nsca(status=status, host_name="jenkins", service_name=f"{env}_open_profitable",
+    send_nsca(status=status, host_name="jenkins",
+              service_name=f"{config.main.base_env}_open_profitable",
               text_output=text, remote_host="nagios.amrox.loc")
 
     return LIVE
@@ -640,7 +642,6 @@ def get_additional_details():
     dbase = Mysql()
 
     trades = dbase.get_open_trades()
-    global VALUES
     for item in trades:
         _, interval, pair, name, _, direction, _ = item
 
@@ -687,6 +688,7 @@ def get_balance():
 
     now = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     total_value, total_net_perc, usd_trade_amount = get_total_values()
+    current_net_perc = round(total_net_perc, 4)
     all_results.append({'key': 'avail_borrow', 'usd': format_usd(client.get_max_borrow()),
                         'val': ''})
     all_results.append({'key': 'current_trade_value', 'usd': format_usd(total_value),
@@ -695,7 +697,7 @@ def get_balance():
     all_results.append({'key': 'current_trade_amount', 'usd': format_usd(usd_trade_amount),
                         'val': '0'})
     all_results.append({'key': 'current_net_perc', 'usd': '',
-                        'val': round(total_net_perc, 4)})
+                        'val': current_net_perc})
 
     all_results.append({'key': 'current_balance', 'usd': wallet['total_USD'],
                         'val': wallet['total_BTC']})
@@ -716,7 +718,6 @@ def get_balance():
         usd_free = val if 'USD' in key else base2quote(val, key+'USDT')
         all_results.append({'key': f'{key} free', 'usd': format_usd(usd_free),
                             'val': f'{val:.5f}'})
-
     if current_net_perc < -25:
         status = 2
         msg = "CRITICAL"
@@ -730,11 +731,10 @@ def get_balance():
         status = 3
         msg = "UNKNOWN"
 
-    text = f"{msg}: Current_net_perc is {current_net_perc}%|net_perc={net_perc};0;-25;;"
-    send_nsca(status=status, host_name="jenkins", service_name=f"{env}_open_net_perc",
+    text = f"{msg}: Current_net_perc is {current_net_perc}%|net_perc={current_net_perc};0;-25;;"
+    send_nsca(status=status, host_name="jenkins",
+              service_name=f"{config.main.base_env}_open_net_perc",
               text_output=text, remote_host="nagios.amrox.loc")
-
-
 
 
     BALANCE = all_results
