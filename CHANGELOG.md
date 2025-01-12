@@ -1,5 +1,13 @@
 # Releases
 
+# 8.7.1
+* ensure prod env alerts are separate from per env
+* fix some lint
+* add alerts for open trades profitable/total perc - +ve and -ve
+* add tpsl rule globally in data env and fix lint
+* return current dataset after checking for match for calculation of tpsl
+* BUGFIX: don't store 1st stage trades in db
+
 # 8.7
 * add save options to redis cli
 * add execute perms on redis module
