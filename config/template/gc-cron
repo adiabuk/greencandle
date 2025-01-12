@@ -54,7 +54,7 @@ SCRIPT_DIR=/usr/local/bin
 
 {{else if eq .base_env "data"}}
 @daily /usr/bin/find /data -type f -name ".*" -delete ${REDIR}
-#@hourly ${SCRIPT_DIR}/get_sentiment ${REDIR}
+@hourly ${SCRIPT_DIR}/get_bub_sentiment ${REDIR}
 @hourly ${SCRIPT_DIR}/cleanup_data_pairs ${REDIR}
 @reboot ${SCRIPT_DIR}/cleanup_removed_pairs ${REDIR}
 #00 */12 * * * /data/scripts/static/get_twitter_posts.py ${REDIR}

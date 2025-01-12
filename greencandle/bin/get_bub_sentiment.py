@@ -23,10 +23,9 @@ def main():
     driver.implicitly_wait(30)
     base_url = "https://cryptobubbles.net/"
     dt_stamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    path = '/data/sentiment/'
+    path = '/data/bub_sentiment/'
     driver.get(base_url)
     driver.set_window_size(1666, 900)
-
 
     # select binance
     driver.find_element(By.CSS_SELECTOR, ".select-button").click()
