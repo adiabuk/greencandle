@@ -1,6 +1,7 @@
 {
-  "close_rule1": "res[0].RSI_7 \u003e 80 and res[1].RSI_7 \u003c 80",
-  "close_rule2": "res[1].close \u003c res[1].EMA_150",
+  "close_rule1": "res[2].STOCHRSI_14[0] \u003e95 and res[1].STOCHRSI_14[0] \u003c 95",
+  "close_rule2": "res[0].RSI_7 \u003e 80 and res[1].RSI_7 \u003c 80",
+  "close_rule3": "res[1].close \u003c res[1].EMA_150",
   "open_rule1": "res[2].STOCHRSI_14[0] \u003c 5 and res[1].STOCHRSI_14[0] \u003e 5 and res[0].close \u003e res[0].EMA_150",
   "slack_active": "true"
 }
