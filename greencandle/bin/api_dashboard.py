@@ -19,6 +19,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, render_template, request, Response, redirect, url_for, session, g
 from flask_login import LoginManager, login_required, current_user
 from setproctitle import setproctitle
+from send_nsca3 import send_nsca
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.mysql import Mysql
@@ -479,12 +480,15 @@ def get_live():
                             reverse=False, str_filter='-be-')
     raw = dbase.get_open_trades()
     commission = float(dbase.get_complete_commission())
+    net_profitable = 0
     for open_time, interval, pair, name, open_price, direction, quote_in in raw:
         current_quote = get_quote(pair)
         current_price = prices['recent'][pair]['close']
         perc = perc_diff(open_price, current_price)
         perc = -perc if direction == 'short' else perc
         net_perc = perc - commission
+        if net_perc > 0:
+            net_profitable += 1
 
         if 5 < float(net_perc) < 10:
             mt5 += 1
@@ -521,6 +525,26 @@ def get_live():
     LIVE = all_data
     if mt5 > 0 or mt10 > 0:
         send_slack_message("balance", f"trades over 5%: {mt5}\ntrades over 10%: {mt10}")
+    net_perc_profitable = net_profitable/len(raw)*100
+
+    if net_perc_profitable < 20:
+        status = 2
+        msg = "CRITICAL"
+    elif net_perc_profitable <= 10:
+        status = 1
+        msg = "WARNING"
+    elif net_perc_profitable > 20:
+        status = 0
+        msg = "OK"
+    else:
+        status = 3
+        msg = "UNKNOWN"
+
+    text = (f"{msg}: {net_perc_profitable}% of open trades are "
+           f"profitable|net_profitable={net_perc_profitable};20;10;;")
+    send_nsca(status=status, host_name="jenkins", service_name=f"{env}_open_profitable",
+              text_output=text, remote_host="nagios.amrox.loc")
+
     return LIVE
 
 @APP.route('/live', methods=['GET', 'POST'])
@@ -692,6 +716,27 @@ def get_balance():
         usd_free = val if 'USD' in key else base2quote(val, key+'USDT')
         all_results.append({'key': f'{key} free', 'usd': format_usd(usd_free),
                             'val': f'{val:.5f}'})
+
+    if current_net_perc < -25:
+        status = 2
+        msg = "CRITICAL"
+    elif current_net_perc <= 0:
+        status = 1
+        msg = "WARNING"
+    elif current_net_perc > 0:
+        status = 0
+        msg = "OK"
+    else:
+        status = 3
+        msg = "UNKNOWN"
+
+    text = f"{msg}: Current_net_perc is {current_net_perc}%|net_perc={net_perc};0;-25;;"
+    send_nsca(status=status, host_name="jenkins", service_name=f"{env}_open_net_perc",
+              text_output=text, remote_host="nagios.amrox.loc")
+
+
+
+
     BALANCE = all_results
 
 @arg_decorator
