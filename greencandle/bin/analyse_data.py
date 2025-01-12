@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-member,global-statement,too-many-locals,broad-except,no-name-in-module
+#pylint: disable=no-member,global-statement,too-many-locals,broad-except,no-name-in-module,eval-used,unused-variable,unused-import
 
 """
 Analyze available data from redis
@@ -22,7 +22,7 @@ from greencandle.lib.redis_conn import Redis
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.alerts import send_slack_message
-from greencandle.lib.common import get_tv_link, arg_decorator, convert_to_seconds
+from greencandle.lib.common import get_tv_link, arg_decorator, convert_to_seconds, perc_diff
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.order import Trade
 
@@ -265,10 +265,13 @@ def analyse_pair(pair, reversal, expire, redis):
                             expire, CHECK_REDIS_PAIR)
             if ROUTER_FORWARD:
                 url = f"http://router:1080/{config.web.api_token}"
+                res = match['res']
                 forward_strategy = config.web.forward
                 payload = {"pair": pair,
                            "text": (f"forwarding {result.lower()} trade from "
                                     f"{match_strs}/{INTERVAL}/{DIRECTION}"),
+                           "tp": eval(config.main.take_profit_perc),
+                           "sl": eval(config.main.stop_loss_perc),
                            "action": str(action),
                            "env": config.main.name,
                            "price": current_price,
