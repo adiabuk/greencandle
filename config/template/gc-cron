@@ -62,6 +62,8 @@ SCRIPT_DIR=/usr/local/bin
 @hourly ${SCRIPT_DIR}/get_tv_stats 5m ${REDIR}
 @hourly ${SCRIPT_DIR}/get_tv_stats 1h ${REDIR}
 @hourly ${SCRIPT_DIR}/get_tv_stats 1d ${REDIR}
+@hourly /data/scripts/static/sentiment_1h.py ${REDIR}
+
 
 
 {{end}}
