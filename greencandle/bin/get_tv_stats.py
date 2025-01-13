@@ -27,7 +27,9 @@ def main():
     pairs = ['binance:' + s for s in config.main.pairs.split()]
     analysis = get_multiple_analysis(screener="crypto", interval=interval, symbols=pairs)
     for v in analysis.values():
-        if 'BUY' in v.summary['RECOMMENDATION']:
+        if v is None:
+            continue
+        elif 'BUY' in v.summary['RECOMMENDATION']:
             stats.buy += 1
         elif 'SELL' in v.summary['RECOMMENDATION']:
             stats.sell += 1
