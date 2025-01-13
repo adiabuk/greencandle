@@ -1,5 +1,11 @@
 # Releases
 
+# 8.7.3
+* fix tpsl rules
+* skip delisted pair in tv analysis
+* remove delisted pairs
+* catch exception when no open trades exist
+
 # 8.7.2
 * add ema sentiment script to data cron
 * remove pairs causing issues with indicators
