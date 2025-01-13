@@ -376,12 +376,12 @@
       "is_secret": true
     },
     "stop_loss_perc": {
-      "value": "abs(perc_diff(res[0].close,(res[0].close+res[0].ATR_14)))",
+      "value": "abs(perc_diff(res[0].close,(res[0].close+res[0].ATR_14[0])))",
       "is_binary": false,
       "is_secret": false
     },
     "take_profit_perc": {
-      "value": "abs(perc_diff(res[0].close,(res[0].close+(2*res[0].ATR_14))))",
+      "value": "abs(perc_diff(res[0].close,(res[0].close+(2*res[0].ATR_14[0]))))",
       "is_binary": false,
       "is_secret": false
     },
