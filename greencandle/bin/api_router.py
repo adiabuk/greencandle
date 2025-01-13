@@ -43,11 +43,10 @@ def healthcheck():
     """
     return Response(status=200)
 
-def forward(token):
+def forward(payload):
     """
     Forward request to another environment
     """
-    payload = request.json
     env = payload['env']
     payload['strategy'] = 'alert' if env == 'alarm' else payload['strategy']
     command = f"configstore package get --basedir /srv/greencandle/config {env} api_token"
