@@ -1,4 +1,4 @@
-#pylint: disable=no-member,no-name-in-module
+#pylint: disable=no-member,no-name-in-module,consider-using-with
 """
 Follow log files and alert on Error and high occurances of errors
 """
@@ -36,7 +36,7 @@ def check_last_hour_err():
     Check number of errors logged in last hour and report to nagios via NSCA
     """
     env = config.main.base_env
-    logfile = reversed(open(f"/var/log/gc_{env}.log", 'r').readlines())
+    logfile = reversed(open(f"/var/log/gc_{env}.log", 'r', encoding="utf-8").readlines())
     err_count= 0
     warn_count = 0
     for line in logfile:
@@ -81,7 +81,7 @@ def check_last_hour_occ():
     Check number of strategy entries logged in last hour and report to nagios via NSCA
     """
     env = config.main.base_env
-    logfile = reversed(open(f"/var/log/gc_{env}.log", 'r').readlines())
+    logfile = reversed(open(f"/var/log/gc_{env}.log", 'r', encoding="utf-8").readlines())
     low_count=0
     high_count=0
     long_cross=0
@@ -151,7 +151,7 @@ def watch_log():
     """
     env = config.main.base_env
     client = docker.from_env()
-    with open(f"/var/log/gc_{env}.log", "r") as logfile:
+    with open(f"/var/log/gc_{env}.log", "r", encoding="utf-8") as logfile:
         loglines = follow(logfile)    # iterate over the generator
         for line in loglines:
             if "Traceback" in line:
