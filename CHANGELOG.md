@@ -1,5 +1,14 @@
 # Releases
 
+# 8.7.4
+* new mm channel for data env alerts
+* update balance dashboard more often
+* exclude 1m from error log alerts
+* fix some lint
+* Add missing data route
+* Allow 1st stage long/short trades to fire more often
+* Use modified router request payload
+
 # 8.7.3
 * fix tpsl rules
 * skip delisted pair in tv analysis
