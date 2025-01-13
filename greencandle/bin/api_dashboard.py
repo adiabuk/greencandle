@@ -750,7 +750,7 @@ def main():
     scheduler = BackgroundScheduler() # Create Scheduler
     if config.main.base_env.strip() != 'data':
         scheduler.add_job(func=get_additional_details, trigger="interval", seconds=15)
-        scheduler.add_job(func=get_balance, trigger="interval", minutes=10)
+        scheduler.add_job(func=get_balance, trigger="interval", minutes=5)
         scheduler.add_job(func=get_live, trigger="interval", minutes=2)
     else:
         scheduler.add_job(func=get_doublersi, trigger="interval", minutes=3)
