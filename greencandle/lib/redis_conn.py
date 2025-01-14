@@ -682,7 +682,7 @@ class Redis():
             res.append(datax)
         redis15 = Redis(interval=interval, db=15)
         # get last 5 items in sentiment list and reverse
-        raw_sent = redis.conn.lrange(f'{pair}:{interval}',-5,-1)
+        raw_sent = redis15.conn.lrange(f'{pair}:{interval}',-5,-1)
         sent = [x.decode() for x in redis.conn.lrange('LITUSDT:1h',-5,-1)]
         del redis15
         sent.decode()
