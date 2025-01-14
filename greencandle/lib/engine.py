@@ -399,7 +399,7 @@ class Engine(dict):
             self.schemes.append(scheme)
 
         except (IndexError, KeyError, AttributeError) as exc:
-            LOGGER.warning("failure In cci %s for pair %s", str(exc), pair)
+            LOGGER.debug("failure In cci %s for pair %s", str(exc), pair)
             return
         LOGGER.debug("done getting cci For %s - %s", pair, scheme['open_time'])
 
