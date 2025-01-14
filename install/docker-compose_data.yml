@@ -3,7 +3,7 @@ services:
     container_name: data-gen-be-logwatch
     hostname: data-gen-be-logwatch
     image: amrox/greencandle:${TAG}
-    mem_limit: 2G
+    mem_limit: 4G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
