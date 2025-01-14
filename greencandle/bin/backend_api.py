@@ -76,7 +76,7 @@ def main():
     if sys.argv[-1] == 'api':
         if "intermittent" in os.environ:
             scheduler = BackgroundScheduler()
-            scheduler.add_job(func=intermittent_check, trigger="interval", seconds=45)
+            scheduler.add_job(func=intermittent_check, trigger="interval", seconds=15)
             scheduler.start()
         if float(config.main.logging_level) > 10:
             log = logging.getLogger('werkzeug')
