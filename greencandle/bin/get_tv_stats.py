@@ -29,7 +29,7 @@ def main():
     for v in analysis.values():
         if v is None:
             continue
-        elif 'BUY' in v.summary['RECOMMENDATION']:
+        if 'BUY' in v.summary['RECOMMENDATION']:
             stats.buy += 1
         elif 'SELL' in v.summary['RECOMMENDATION']:
             stats.sell += 1
