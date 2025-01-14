@@ -54,6 +54,7 @@ def check_last_hour_err():
             break
 
     log_warn = {"prod": 50,
+                "per": 50,
                 "data": 50,
                 "stag": 500,
                 "test": 1000}
