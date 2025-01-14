@@ -8,6 +8,7 @@ import json
 from datetime import datetime
 from send_nsca3 import send_nsca
 from tradingview_ta import get_multiple_analysis
+from greencandle.lib.redis_conn import Redis
 from greencandle.lib.common import arg_decorator, AttributeDict
 from greencandle.lib import config
 
@@ -19,6 +20,7 @@ def main():
     using available pairs and given interval
     interval is taken from argument, otherwise 1h is used
     """
+    redis = Redis(db=15)
     dt_stamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     stats = AttributeDict({'buy':0, 'sell':0, 'neutral':0})
     config.create_config()
@@ -36,6 +38,7 @@ def main():
         if 'NEUTRAL' in v.summary['RECOMMENDATION']:
             stats.neutral += 1
 
+        redis.conn.rpush(f"{v.summary['symbol']}:{interval}", v.summary['RECOMMENDATION'])
         filename = f'/data/tv_sentiment/{v.symbol}_{interval}_summary_{dt_stamp}.json'
         with open(filename, 'w', encoding="utf-8") as f:
             json.dump(v.summary, f)
@@ -60,7 +63,6 @@ def main():
         status = 3
         msg = "UNKNOWN"
     text = f"{msg}: current sentiment is {most}: {stats}|{perf};{warn};{crit};;"
-
     host = "data" if env == "data" else "jenkins"
     send_nsca(status=status, host_name=host, service_name=f"{env}_tv_stats_{interval}",
               text_output=text, remote_host="nagios.amrox.loc")
