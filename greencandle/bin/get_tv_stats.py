@@ -22,7 +22,7 @@ def main():
     """
     redis = Redis(db=15)
     dt_stamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    stats = AttributeDict({'buy':0, 'sell':0, 'neutral':0})
+    stats = AttributeDict({'STRONG_BUY':0, 'BUY':0, 'STRONG_SELL':0, 'SELL':0, 'NEUTRAL':0})
     config.create_config()
     env = config.main.base_env
     interval = sys.argv[1] if len(sys.argv) > 1 else '1h'
@@ -31,38 +31,28 @@ def main():
     for v in analysis.values():
         if v is None:
             continue
-        if 'BUY' in v.summary['RECOMMENDATION']:
-            stats.buy += 1
-        elif 'SELL' in v.summary['RECOMMENDATION']:
-            stats.sell += 1
-        if 'NEUTRAL' in v.summary['RECOMMENDATION']:
-            stats.neutral += 1
+        stats[v.summary['RECOMMENDATION']] +=1
 
         redis.conn.rpush(f"{v.symbol}:{interval}", v.summary['RECOMMENDATION'])
         filename = f'/data/tv_sentiment/{v.symbol}_{interval}_summary_{dt_stamp}.json'
         with open(filename, 'w', encoding="utf-8") as f:
             json.dump(v.summary, f)
 
-    print(stats)
     most = max(stats, key=stats.get)
 
-    perf = ' '.join(f'{key}={value}' for key, value in stats.items())
-    print(perf)
-    warn = 100
-    crit = 200
-    if stats[most] > crit:
+    if 'STRONG' in most:
         status = 2
         msg = "CRITICAL"
-    elif stats[most] > warn:
+    elif most in ['BUY', 'SELL']:
         status = 1
         msg = "WARNING"
-    elif stats[most] < 100:
+    elif 'NEUTRAL' in most:
         status = 0
         msg = "OK"
     else:
         status = 3
         msg = "UNKNOWN"
-    text = f"{msg}: current sentiment is {most}: {stats}|{perf};{warn};{crit};;"
+    text = f"{msg}: current sentiment is {most}: {stats}"
     host = "data" if env == "data" else "jenkins"
     send_nsca(status=status, host_name=host, service_name=f"{env}_tv_stats_{interval}",
               text_output=text, remote_host="nagios.amrox.loc")
