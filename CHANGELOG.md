@@ -1,5 +1,19 @@
 # Releases
 
+# 8.7.5
+* silence cci errors
+* make logwatch work on per env
+* use correct redis instance for tv data
+* allow for previous stochrsi k-value to trigger trade
+* ensure stage1 has ATR higher than it's EMA
+* tighten stage1 thresholds
+* make sentiment data available for analysis
+* add overvall tv stats to redis
+* critical alert for tv stats when strong buy/sell
+* add tv stats to redis
+* fix some more lint
+* run intermittent check more often
+
 # 8.7.4
 * new mm channel for data env alerts
 * update balance dashboard more often
