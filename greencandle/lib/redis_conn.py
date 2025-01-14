@@ -680,6 +680,12 @@ class Redis():
 
             datax.update(ohlc)
             res.append(datax)
+        redis15 = Redis(interval=interval, db=15)
+        # get last 5 items in sentiment list and reverse
+        raw_sent = redis.conn.lrange(f'{pair}:{interval}',-5,-1)
+        sent = [x.decode() for x in redis.conn.lrange('LITUSDT:1h',-5,-1)]
+        del redis15
+        sent.decode()
 
         for seq in range(1, 6):
             current_config = None
