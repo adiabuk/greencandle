@@ -54,6 +54,7 @@ def main():
         msg = "UNKNOWN"
     text = f"{msg}: current sentiment is {most}: {stats}"
     host = "data" if env == "data" else "jenkins"
+    redis.conn.rpush(f"all:{interval}", most)
     send_nsca(status=status, host_name=host, service_name=f"{env}_tv_stats_{interval}",
               text_output=text, remote_host="nagios.amrox.loc")
     print(text)
