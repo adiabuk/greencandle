@@ -38,7 +38,7 @@ def main():
         if 'NEUTRAL' in v.summary['RECOMMENDATION']:
             stats.neutral += 1
 
-        redis.conn.rpush(f"{v.summary['symbol']}:{interval}", v.summary['RECOMMENDATION'])
+        redis.conn.rpush(f"{v.symbol}:{interval}", v.summary['RECOMMENDATION'])
         filename = f'/data/tv_sentiment/{v.symbol}_{interval}_summary_{dt_stamp}.json'
         with open(filename, 'w', encoding="utf-8") as f:
             json.dump(v.summary, f)
