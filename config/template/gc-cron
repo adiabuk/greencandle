@@ -36,6 +36,7 @@ SCRIPT_DIR=/usr/local/bin
 @daily /usr/bin/find /data/reports -name "*.xlsx" -mtime +1 -delete
 20 */7 * * * ${SCRIPT_DIR}/convert_loan_dust ${REDIR}
 30 */7 * * * ${SCRIPT_DIR}/convert_small_dust ${REDIR}
+@hourly ${SCRIPT_DIR}/find_balance_outlier ${REDIR}
 
 {{else if eq .base_env "stag" }}
 @weekly ${SCRIPT_DIR}/cleanup_db0 ${REDIR}
