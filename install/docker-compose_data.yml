@@ -1912,6 +1912,7 @@ services:
       - ROUTER_FORWARD=true
       - REDIS_FORWARD=8
       - DB=true
+      - STORE_IN_DB=True
     healthcheck:
       test: find /var/local/lock -mmin -3 -name data-be-analyse-1h-short10 2>&1  | grep . || exit 1
       start_period: 1h
@@ -1950,6 +1951,7 @@ services:
       - DB=true
       - ROUTER_FORWARD=true
       - REDIS_FORWARD=8
+      - STORE_IN_DB=True
     healthcheck:
       test: find /var/local/lock -mmin -3 -name data-be-analyse-1h-long10 2>&1  | grep . || exit 1
       start_period: 1h
