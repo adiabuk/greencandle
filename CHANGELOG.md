@@ -1,5 +1,16 @@
 # Releases
 
+# 8.7.7
+* find number of pairs above/below EMA150 and send to nagios
+* find outliers in balance db table, run in cron
+* fix data mm notification location
+* remove a couple of unused data containers
+* get one more item of indicator data from redis (6 in total)
+* ensure all debt related checks are in prod scope only-dashboard
+* remove bubble sentiment script from data cron
+* reduce EMA crossover false alarms
+* lower no-trade log to debug
+
 # 8.7.6
 * open straight away if completely side of EMA, otherwise use stage2
 * wait for entire bb to be above/below ema150 for this rule
