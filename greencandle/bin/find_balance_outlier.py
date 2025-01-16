@@ -26,8 +26,10 @@ def main():
     med = median(values)
     results = []
     for value in values:
-
-        results.append(round(abs(perc_diff(value, med)),2) > 10)
+        try:
+            results.append(round(abs(perc_diff(value, med)),2) > 10)
+        except ZeroDivisionError:
+            results.append(0)
 
     status = 2 if any(results) else 0
     msg = "CRITICAL: outliers found in balances" if any(results) else \
