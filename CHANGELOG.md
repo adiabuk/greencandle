@@ -1,5 +1,18 @@
 # Releases
 
+# 8.7.6
+* open straight away if completely side of EMA, otherwise use stage2
+* wait for entire bb to be above/below ema150 for this rule
+* add close rules for 1st step
+* cleanup config in stag/test envs
+* ensure only prod envs query exchange for balance/risk values
+* forward data env alerts from all containers to mm
+* slightly reduce dashboard job run frequency
+* don't send mm msgs regarding stat/end run when fetching data
+* fix short rule syntax
+* remove previously added ATR check
+* more mem for data logwatch
+
 # 8.7.5
 * silence cci errors
 * make logwatch work on per env
