@@ -1,7 +1,6 @@
 {
-  "api_forward": "1h-4",
   "interval": "1h",
   "name": "data-be-analyse-1h-short4",
-  "redis_expiry_seconds": "40000",
-  "time_between_trades": "3h"
+  "api_forward": "1h-4",
+  "time_between_trades": "5m"
 }

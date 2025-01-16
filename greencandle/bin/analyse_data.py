@@ -141,7 +141,7 @@ def get_match_name(matches):
     name_lookup = [['trend_200', 'golden_cross', 'ema_xover', 'big_change_outside'],
                    ['multi_ind'],
                    ['distance', 'bb', "bbperc_diff", "bbperc_extreme"],
-                   ['empty4'],
+                   ['low_rsi_in_trend_near_EMA'],
                    ['STOCHRSI_flip', 'RSI_close-rule', 'broken_trend'],
                    ['rsi'],
                    ['empty7'],
