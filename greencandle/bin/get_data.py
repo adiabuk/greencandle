@@ -9,7 +9,6 @@ from pathlib import Path
 import requests
 from setproctitle import setproctitle
 from greencandle.lib import config
-from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.run import ProdRunner
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.common import arg_decorator
@@ -55,7 +54,6 @@ def main():
 
     interval = config.main.interval
     setproctitle(f"{config.main.base_env}-get_data-{interval}")
-    send_slack_message('alerts', "Starting initial prod run")
     LOGGER.info("starting initial prod run")
     name = config.main.name.split('-')[-1]
     Path(f'/var/run/{config.main.base_env}-data-{interval}-{name}').touch()
@@ -80,7 +78,6 @@ def main():
     RUNNER.prod_initial(interval, test=True, first_run=True, no_of_runs=7)
     if os.path.exists(f'/var/run/{config.main.base_env}-data-{interval}-{name}'):
         os.remove(f'/var/run/{config.main.base_env}-data-{interval}-{name}')
-    send_slack_message('alerts', "Finished initial prod run")
     LOGGER.info("finished initial prod run")
 
     while True:
