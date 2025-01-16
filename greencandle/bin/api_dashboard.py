@@ -14,6 +14,7 @@ import logging
 from time import gmtime, strftime
 from collections import defaultdict
 from datetime import timedelta, datetime
+from str2bool import str2bool
 import requests
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, render_template, request, Response, redirect, url_for, session, g
@@ -674,38 +675,41 @@ def get_balance():
     Get cross margin quote amounts from exchange
     """
     global BALANCE
-    client=binance_auth()
     all_results = []
-    details = client.get_cross_margin_details()
-    balance = Balance(test=False)
-    wallet = balance.get_saved_balance()
-    risk = get_cross_margin_level()
-    debts = {}
-    free = {}
-    for item in details['userAssets']:
-        debt = float(item['borrowed']) + float(item['interest'])
-        if debt > 0:
-            debts[item['asset']] = debt
-        if float(item['free']) > 0:
-            free[item['asset']] = float(item['free'])
 
     now = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+
     total_value, total_net_perc, usd_trade_amount = get_total_values()
     current_net_perc = round(total_net_perc, 4)
-    all_results.append({'key': 'avail_borrow', 'usd': format_usd(client.get_max_borrow()),
-                        'val': ''})
+    if str2bool(config.main.production):
+        debts = {}
+        free = {}
+        risk = get_cross_margin_level()
+        balance = Balance(test=False)
+        wallet = balance.get_saved_balance()
+        client=binance_auth()
+        details = client.get_cross_margin_details()
+        for item in details['userAssets']:
+            debt = float(item['borrowed']) + float(item['interest'])
+            if debt > 0:
+                debts[item['asset']] = debt
+            if float(item['free']) > 0:
+                free[item['asset']] = float(item['free'])
+
+        all_results.append({'key': 'avail_borrow', 'usd': format_usd(client.get_max_borrow()),
+                            'val': ''})
+        all_results.append({'key': 'risk', 'usd': 0,
+                            'val': risk})
+        all_results.append({'key': 'current_balance', 'usd': wallet['total_USD'],
+                            'val': wallet['total_BTC']})
+
     all_results.append({'key': 'current_trade_value', 'usd': format_usd(total_value),
                         'val': '0'})
-    all_results.append({'key': 'last_updated', 'usd': '', 'val': now})
     all_results.append({'key': 'current_trade_amount', 'usd': format_usd(usd_trade_amount),
                         'val': '0'})
     all_results.append({'key': 'current_net_perc', 'usd': '',
                         'val': current_net_perc})
-
-    all_results.append({'key': 'current_balance', 'usd': wallet['total_USD'],
-                        'val': wallet['total_BTC']})
-    all_results.append({'key': 'risk', 'usd': 0,
-                        'val': risk})
+    all_results.append({'key': 'last_updated', 'usd': '', 'val': now})
 
     usd_debts_total = 0
     for key, val in debts.items():
