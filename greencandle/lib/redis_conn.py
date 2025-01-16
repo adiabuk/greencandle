@@ -662,7 +662,7 @@ class Redis():
             ind = split[1]+'_' +split[2].split(',')[0]
             ind_list.append(ind)
         items = self.get_intervals(pair, interval)
-        for i in range(-1, -6, -1): # from, to, increment
+        for i in range(-1, -7, -1): # from, to, increment
             # look backwards through last 3 items of redis data
             datax = AttributeDict()
             for indicator in ind_list:
@@ -777,7 +777,7 @@ class Redis():
             self.logger.warning("Not enough data for %s: %s", pair, err)
             return ('HOLD', 'Not enough data', 0, 0, {'open':[], 'close':[]})
 
-        for i in range(-1, -6, -1):
+        for i in range(-1, -7, -1):
             datax = AttributeDict()
             for indicator in ind_list:
                 datax[indicator] = self.get_result(items[i], indicator, pair, self.interval)
