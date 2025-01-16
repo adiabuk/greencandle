@@ -346,7 +346,7 @@
       "is_secret": false
     },
     "slack_active": {
-      "value": "false",
+      "value": "true",
       "is_binary": false,
       "is_secret": false
     },
@@ -356,12 +356,12 @@
       "is_secret": false
     },
     "slack_balance": {
-      "value": "data",
+      "value": "",
       "is_binary": false,
       "is_secret": false
     },
     "slack_notifications": {
-      "value": "data",
+      "value": "notifications",
       "is_binary": false,
       "is_secret": false
     },
