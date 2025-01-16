@@ -702,6 +702,21 @@ def get_balance():
                             'val': risk})
         all_results.append({'key': 'current_balance', 'usd': wallet['total_USD'],
                             'val': wallet['total_BTC']})
+        usd_debts_total = 0
+        for key, val in debts.items():
+            usd_debt = val if 'USD' in key else base2quote(val, key+'USDT')
+            all_results.append({'key': f'{key} debt', 'usd': f'{format_usd(usd_debt)}',
+                                'val': f'{val:.5f}'})
+            usd_debts_total += usd_debt
+        if usd_debts_total > 0:
+            all_results.append({'key':'total_debts', 'usd': f'{format_usd(usd_debts_total)}',
+                                'val': ''})
+
+        for key, val in free.items():
+            usd_free = val if 'USD' in key else base2quote(val, key+'USDT')
+            all_results.append({'key': f'{key} free', 'usd': format_usd(usd_free),
+                                'val': f'{val:.5f}'})
+
 
     all_results.append({'key': 'current_trade_value', 'usd': format_usd(total_value),
                         'val': '0'})
@@ -711,20 +726,6 @@ def get_balance():
                         'val': current_net_perc})
     all_results.append({'key': 'last_updated', 'usd': '', 'val': now})
 
-    usd_debts_total = 0
-    for key, val in debts.items():
-        usd_debt = val if 'USD' in key else base2quote(val, key+'USDT')
-        all_results.append({'key': f'{key} debt', 'usd': f'{format_usd(usd_debt)}',
-                            'val': f'{val:.5f}'})
-        usd_debts_total += usd_debt
-    if usd_debts_total > 0:
-        all_results.append({'key':'total_debts', 'usd': f'{format_usd(usd_debts_total)}',
-                            'val': ''})
-
-    for key, val in free.items():
-        usd_free = val if 'USD' in key else base2quote(val, key+'USDT')
-        all_results.append({'key': f'{key} free', 'usd': format_usd(usd_free),
-                            'val': f'{val:.5f}'})
     if current_net_perc < -20 or current_net_perc > 20:
         status = 2
         msg = "CRITICAL"
