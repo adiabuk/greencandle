@@ -183,7 +183,7 @@ class Trade():
         """
         items_list = self.check_pairs(items_list)
         if not items_list:
-            self.logger.warning("No items to open trade with")
+            self.logger.debug("no items to open trade with")
             return False
 
         if self.config.main.trade_type == "spot":
@@ -211,7 +211,7 @@ class Trade():
         """
         additional_trades = []
         if not items_list:
-            self.logger.warning("No items to close trade with")
+            self.logger.debug("no items to open trade with")
             return False
         if Path(f'/var/local/drain/{self.config.main.base_env}_drain_close').is_file():
             self.logger.info("strategy is in close drain for pair %s, skipping...", items_list)
