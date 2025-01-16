@@ -347,7 +347,7 @@
       "is_secret": false
     },
     "slack_active": {
-      "value": "false",
+      "value": "true",
       "is_binary": false,
       "is_secret": false
     },
