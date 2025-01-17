@@ -737,7 +737,9 @@ class Redis():
         return result, event, current_time, current_price, {'close': winning_close,
                                                             'open': winning_open,
                                                             'reversal': reversal,
-                                                            'res': res}
+                                                            'res': res,
+                                                            'agg': agg,
+                                                            'sent': sent}
 
     def get_action(self, pair, interval):
         """

@@ -176,22 +176,19 @@ def analyse_pair(pair, reversal, expire, redis):
         # don't analyse pair if spot/isolated/cross not supported
         return
 
-    LOGGER.debug("analysing pair: %s", pair)
+t    LOGGER.debug("analysing pair: %s", pair)
     try:
         output = redis.get_rule_action(pair=pair, interval=INTERVAL)
         result, _, current_time, current_price, match = output
         event = reversal
+        res = match['res'][0]
+        sent = match['match']
+        agg = match['agg']
         LOGGER.debug("analysis result for %s is %s", pair, str(output))
 
         if result in ('OPEN', 'CLOSE'):
             LOGGER.debug("trades to %s for pair %s", result.lower(), pair)
             now = datetime.now()
-            items = redis.get_intervals(pair, INTERVAL)
-            data = redis.get_item(f"{pair}:{INTERVAL}", items[-1]).decode()
-            redis3 = Redis(db=3)
-            raw_agg = redis3.conn.hgetall(f"{pair}:{INTERVAL}")
-            agg = {k.decode():v.decode() for k,v in raw_agg.items()}
-            del redis3
 
             # Only alert on a given pair once per hour
             # for each strategy
@@ -212,7 +209,7 @@ def analyse_pair(pair, reversal, expire, redis):
                 match_strs = match[result.lower()]
             msg = (f"{result.lower()}, {match_strs}: {get_tv_link(pair, INTERVAL)} "
                    f"{INTERVAL} {config.main.name} ({supported.strip()}) - {current_time} "
-                   f"Data: {data} Agg: {agg}")
+                   f"Data: {res[0]} Agg: {agg} sent: {sent}")
 
             if result == 'OPEN':
                 send_slack_message("notifications", msg, emoji=True,
@@ -265,7 +262,6 @@ def analyse_pair(pair, reversal, expire, redis):
                             expire, CHECK_REDIS_PAIR)
             if ROUTER_FORWARD:
                 url = f"http://router:1080/{config.web.api_token}"
-                res = match['res']
                 forward_strategy = config.web.forward
                 payload = {"pair": pair,
                            "text": (f"forwarding {result.lower()} trade from "
