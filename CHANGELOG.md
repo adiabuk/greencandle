@@ -1,5 +1,11 @@
 # Releases
 
+# 8.7.8
+* move ema_xover to separate strategy and forward 15m to stag w/tpsl
+* remove unused config and switch to 5m for current prices
+* remove all 1m strategies/containers from all envs
+* filter out erroneous balance entries when updating balance summary
+
 # 8.7.7
 * find number of pairs above/below EMA150 and send to nagios
 * find outliers in balance db table, run in cron
