@@ -176,7 +176,7 @@ def analyse_pair(pair, reversal, expire, redis):
         # don't analyse pair if spot/isolated/cross not supported
         return
 
-t    LOGGER.debug("analysing pair: %s", pair)
+    LOGGER.debug("analysing pair: %s", pair)
     try:
         output = redis.get_rule_action(pair=pair, interval=INTERVAL)
         result, _, current_time, current_price, match = output
