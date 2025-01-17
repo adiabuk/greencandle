@@ -29,7 +29,7 @@ def main():
     dbase = Mysql()
     open_trades = dbase.get_open_trades(name_filter=args.name_filter,
                                         direction_filter=args.direction_filter)
-    stream_req = requests.get('http://stream/1m/all', timeout=10)
+    stream_req = requests.get('http://stream/5m/all', timeout=10)
     prices = stream_req.json()
 
     for trade in open_trades:

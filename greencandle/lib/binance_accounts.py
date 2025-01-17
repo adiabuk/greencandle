@@ -19,10 +19,10 @@ LOGGER = get_logger(__name__)
 
 def get_local_price(pair):
     """
-    Get current price of asset from local 1m stream
+    Get current price of asset from local 5m stream
     """
 
-    stream_req = requests.get(f"http://stream/1m/recent?pair={pair}", timeout=10)
+    stream_req = requests.get(f"http://stream/5m/recent?pair={pair}", timeout=10)
     if 'GBP' in pair:
         client = binance_auth()
         return float(client.prices(pair)[pair])
