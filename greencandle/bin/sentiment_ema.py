@@ -32,30 +32,30 @@ def main():
     config.create_config()
     redis = Redis()
 
-    up_hour = []
-    down_hour = []
-    interval = '1h'
+    up = []
+    down = []
+    interval = sys.argv[1] if len(sys.argv) > 1 else '1h'
     for pair in config.main.pairs.split():
         try:
-            hour_item = redis.get_intervals(pair, interval)[-1]
-            hour_x = json.loads(redis.get_item(f'{pair}:{interval}', hour_item).decode())
+            item = redis.get_intervals(pair, interval)[-1]
+            x = json.loads(redis.get_item(f'{pair}:{interval}', item).decode())
 
 
-            if float(hour_x['ohlc']['close']) > hour_x['EMA_150']:
-                up_hour.append(pair)
+            if float(x['ohlc']['close']) > x['EMA_150']:
+                up.append(pair)
             else:
-                down_hour.append(pair)
+                down.append(pair)
 
         except Exception as e:
             print("bad %s",e, pair)
 
     dt_stamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    filename = f'/data/ema_stats/ema_1h_{dt_stamp}.json'
-    max_direction = get_max(up_hour, down_hour)
-    up_perc=round(len(up_hour)/len(config.main.pairs.split())*100,2)
-    down_perc=round(len(down_hour)/len(config.main.pairs.split())*100,2)
+    filename = f'/data/ema_stats/ema_{interval}_{dt_stamp}.json'
+    max_direction = get_max(up, down)
+    up_perc=round(len(up)/len(config.main.pairs.split())*100,2)
+    down_perc=round(len(down)/len(config.main.pairs.split())*100,2)
     data = {'max': max_direction, 'up_perc': up_perc, 'down_perc': down_perc,
-            'date': dt_stamp, 'up_list': up_hour, 'down_list': down_hour}
+            'date': dt_stamp, 'up_list': up, 'down_list': down}
 
     with open(filename, 'w', encoding='utf-8') as f:
         json.dump(data, f)
