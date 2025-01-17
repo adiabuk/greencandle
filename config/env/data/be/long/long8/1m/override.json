@@ -1,6 +1,0 @@
-{
-  "interval": "1m",
-  "slack_alerts": "",
-  "name": "data-be-analyse-1m-long8",
-  "time_between_trades": "1h"
-}

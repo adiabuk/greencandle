@@ -1,7 +1,0 @@
-{
-  "api_forward": "1m-2",
-  "interval": "1m",
-  "slack_alerts": "",
-  "name": "data-be-analyse-1m-short2",
-  "time_between_trades": "1h"
-}

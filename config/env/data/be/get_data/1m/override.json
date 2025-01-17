@@ -1,7 +1,0 @@
-{
-  "check_interval": "*",
-  "interval": "1m",
-  "slack_alerts": "",
-  "no_of_klines": "500",
-  "name": "data-be-get_1m"
-}
