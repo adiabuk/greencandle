@@ -29,36 +29,6 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-  stream-fe_1m:
-    container_name: stream-fe_1m
-    hostname: stream-fe_1m
-    image: amrox/greencandle:${TAG}
-    mem_limit: 200M
-    pull_policy: always
-    restart: on-failure
-    entrypoint: /docker-entrypoint.sh stream_data
-    logging:
-      driver: syslog
-      options:
-        syslog-facility: local7
-    environment:
-      - CONFIG_ENV=data/be/get_data/1m
-    healthcheck:
-      test: /mnt/nagios_checks/check_milliepoch -u http://127.1:5000 -w 120 -c 180 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
-      start_period: 5m
-      interval: 5m
-      timeout: 10s
-      retries: 5
-    ports:
-      - 5001:5000
-    volumes:
-      - /mnt:/mnt
-      - /data:/data
-      - /var/local:/var/local
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run/:/var/run
-
   stream-fe_5m:
     container_name: stream-fe_5m
     hostname: stream-fe_5m

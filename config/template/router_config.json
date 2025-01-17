@@ -1,7 +1,5 @@
 {{if eq .base_env "stag"}}
 {
-"any-1m-long": ["any-1m-long"],
-"any-1m-short": ["any-1m-short"],
 
 "any-5m-long": ["any-5m-long"],
 "any-5m-short": ["any-5m-short"],
@@ -9,12 +7,8 @@
 "any-1h-long": ["any-1h-long"],
 "any-1h-short": ["any-1h-short"],
 
-"any-1m-long-short": ["any-1m-long", "any-1m-short"],
 "any-5m-long-short": ["any-5m-long", "any-5m-short"],
 "any-1h-long-short": ["any-1h-long", "any-1h-short"],
-
-"any2-1m-long": ["any2-1m-long"],
-"any2-1m-short": ["any2-1m-short"],
 
 "any2-5m-long": ["any2-5m-long"],
 "any2-5m-short": ["any2-5m-short"],
@@ -22,7 +16,6 @@
 "any2-1h-long": ["any2-1h-long"],
 "any2-1h-short": ["any2-1h-short"],
 
-"any2-1m-long-short": ["any2-1m-long", "any2-1m-short"],
 "any2-5m-long-short": ["any2-5m-long", "any2-5m-short"],
 "any2-1h-long-short": ["any2-1h-long", "any2-1h-short"],
 
@@ -31,10 +24,6 @@
 }
 {{else if eq .base_env "test"}}
 {
-
-"any2-1m-long": ["any2-1m-long"],
-"any2-1m-short": ["any2-1m-short"],
-"any2-1m-long-short": ["any2-1m-long", "any2-1m-short"],
 
 "any2-5m-long": ["any2-5m-long"],
 "any2-5m-short": ["any2-5m-short"],
@@ -56,10 +45,6 @@
 "any2-4h-short": ["any2-4h-short"],
 "any2-4h-long-short": ["any2-4h-long", "any2-4h-short"],
 
-"any3-1m-long": ["any3-1m-long"],
-"any3-1m-short": ["any3-1m-short"],
-"any3-1m-long-short": ["any3-1m-long", "any3-1m-short"],
-
 "any3-5m-long": ["any3-5m-long"],
 "any3-5m-short": ["any3-5m-short"],
 "any3-5m-long-short": ["any3-5m-long", "any3-5m-short"],
@@ -71,11 +56,6 @@
 "any3-30m-long": ["any3-30m-long"],
 "any3-30m-short": ["any3-30m-short"],
 "any3-30m-long-short": ["any3-30m-long", "any3-30m-short"],
-
-
-"any-1m-long": ["any-1m-long"],
-"any-1m-short": ["any-1m-short"],
-"any-1m-long-short": ["any-1m-long", "any-1m-short"],
 
 "any-5m-long": ["any-5m-long"],
 "any-5m-short": ["any-5m-short"],
@@ -94,10 +74,6 @@
 }
 {{else if eq .base_env "prod"}}
 {
-"any-1m-long": ["any-1m-long"],
-"any-1m-short": ["any-1m-short"],
-"any-1m-long-short": ["any-1m-short", "any-1m-long"],
-
 "any-5m-long": ["any-5m-long"],
 "any-5m-short": ["any-5m-short"],
 "any-5m-long-short": ["any-5m-short", "any-5m-long"],
@@ -113,10 +89,6 @@
 "any-1d-long": ["any-1d-long"],
 "any-1d-short": ["any-1d-short"],
 "any-1d-long-short": ["any-1d-short", "any-1d-long"],
-
-"any2-1m-long": ["any2-1m-long"],
-"any2-1m-short": ["any2-1m-short"],
-"any2-1m-long-short": ["any2-1m-short", "any2-1m-long"],
 
 "any2-5m-long": ["any2-5m-long"],
 "any2-5m-short": ["any2-5m-short"],
@@ -161,18 +133,16 @@
 "15m-6": ["test:any-15m-long-short"],
 "30m-6": ["test:any-30m-long-short"],
 "1h-6": ["test:any-30m-long-short"],
-  
+
 "extra_stag-any-5m": ["stag:any-5m-long-short"],
 "extra_stag-any-1h": ["stag:any-1h-long-short"],
 "extra_stag-any2-5m": ["stag:any2-5m-long-short"],
 "extra_stag-any2-1h": ["stag:any2-1h-long-short"],
 
-"extra_prod-any-1m": ["prod:any-1m-long-short"],
 "extra_prod-any-5m": ["prod:any-5m-long-short"],
 "extra_prod-any-1h": ["prod:any-1h-long-short"],
 "extra_prod-any-4h": ["prod:any-4h-long-short"],
 "extra_prod-any-1d": ["prod:any-1d-long-short"],
-"extra_prod-any2-1m": ["prod:any2-1m-long-short"],
 "extra_prod-any2-5m": ["prod:any2-5m-long-short"],
 "extra_prod-any2-1h": ["prod:any2-1h-long-short"],
 "extra_prod-any2-4h": ["prod:any2-4h-long-short"],
