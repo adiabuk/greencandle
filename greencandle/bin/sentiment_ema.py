@@ -73,7 +73,7 @@ def main():
         msg="OK"
 
     text = f"{msg}: Direction is {max_direction}: {details}"
-    send_nsca(status=status, host_name='data', service_name='EMA_150',
+    send_nsca(status=status, host_name='data', service_name=f'EMA_150_{interval}',
               text_output=text, remote_host='nagios.amrox.loc')
     print(text)
     sys.exit(status)
