@@ -182,7 +182,7 @@ def analyse_pair(pair, reversal, expire, redis):
         result, _, current_time, current_price, match = output
         event = reversal
         res = match['res'][0]
-        sent = match['match']
+        sent = match['sent']
         agg = match['agg']
         LOGGER.debug("analysis result for %s is %s", pair, str(output))
 
