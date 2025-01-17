@@ -138,13 +138,13 @@ def get_match_name(matches):
     except ValueError:
         container_num = 1
 
-    name_lookup = [['trend_200', 'golden_cross', 'ema_xover', 'big_change_outside'],
+    name_lookup = [['trend_200', 'golden_cross', 'big_change_outside'],
                    ['multi_ind'],
                    ['distance', 'bb', "bbperc_diff", "bbperc_extreme"],
                    ['low_rsi_in_trend_near_EMA'],
                    ['STOCHRSI_flip', 'RSI_close-rule', 'broken_trend'],
                    ['rsi'],
-                   ['empty7'],
+                   ['ema_xover'],
                    ['empty8'],
                    ['empty9'],
                    ['low_rsi_in_trend'],

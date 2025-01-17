@@ -330,10 +330,14 @@ services:
       - stag-be-api-any-1h-cross-short:any-1h-short
       - stag-be-api-any-5m-cross-long:any-5m-long
       - stag-be-api-any-5m-cross-short:any-5m-short
+      - stag-be-api-any-15m-cross-long:any-15m-long
+      - stag-be-api-any-15m-cross-short:any-15m-short
       - stag-be-api-any2-1h-cross-long:any2-1h-long
       - stag-be-api-any2-1h-cross-short:any2-1h-short
       - stag-be-api-any2-5m-cross-long:any2-5m-long
       - stag-be-api-any2-5m-cross-short:any2-5m-short
+      - stag-be-api-any2-15m-cross-long:any2-15m-long
+      - stag-be-api-any2-15m-cross-short:any2-15m-short
     depends_on:
       - stag-base-mysql
       - stag-base-redis
@@ -420,6 +424,80 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
+  stag-be-api-any-15m-cross-long:
+    container_name: stag-be-api-any-15m-cross-long
+    hostname: stag-be-api-any-15m-cross-long
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600M
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local5
+    environment:
+      - CONFIG_ENV=stag/be/any/long/15m
+      - intermittent="true"
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
+    depends_on:
+      - stag-base-mysql
+      - stag-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  stag-be-api-any-15m-cross-short:
+    container_name: stag-be-api-any-15m-cross-short
+    hostname: stag-be-api-any-15m-cross-short
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600M
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local5
+    environment:
+      - CONFIG_ENV=stag/be/any/short/15m
+      - intermittent="true"
+      - DB=true
+      - no_proxy=router
+    ports:
+      - 20000
+    links:
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
+    depends_on:
+      - stag-base-mysql
+      - stag-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
   stag-be-api-any-1h-cross-long:
     container_name: stag-be-api-any-1h-cross-long
     hostname: stag-be-api-any-1h-cross-long
@@ -621,6 +699,81 @@ services:
         syslog-facility: local5
     environment:
       - CONFIG_ENV=stag/be/any2/short/5m
+      - intermittent="true"
+      - DB=true
+      - no_proxy=router
+    ports:
+      - 20000
+    links:
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
+    depends_on:
+      - stag-base-mysql
+      - stag-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  stag-be-api-any2-15m-cross-long:
+    container_name: stag-be-api-any2-15m-cross-long
+    hostname: stag-be-api-any2-15m-cross-long
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600M
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local5
+    environment:
+      - CONFIG_ENV=stag/be/any2/long/15m
+      - intermittent="true"
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - stag-base-mysql:mysql
+      - stag-base-redis:redis
+    depends_on:
+      - stag-base-mysql
+      - stag-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  stag-be-api-any2-15m-cross-short:
+    container_name: stag-be-api-any2-15m-cross-short
+    hostname: stag-be-api-any2-15m-cross-short
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600M
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local5
+    environment:
+      - CONFIG_ENV=stag/be/any2/short/15m
       - intermittent="true"
       - DB=true
       - no_proxy=router

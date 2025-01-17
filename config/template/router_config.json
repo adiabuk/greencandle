@@ -4,19 +4,27 @@
 "any-5m-long": ["any-5m-long"],
 "any-5m-short": ["any-5m-short"],
 
+"any-15m-long": ["any-15m-long"],
+"any-15m-short": ["any-15m-short"],
+
 "any-1h-long": ["any-1h-long"],
 "any-1h-short": ["any-1h-short"],
 
 "any-5m-long-short": ["any-5m-long", "any-5m-short"],
+"any-15m-long-short": ["any-15m-long", "any-15m-short"],
 "any-1h-long-short": ["any-1h-long", "any-1h-short"],
 
 "any2-5m-long": ["any2-5m-long"],
 "any2-5m-short": ["any2-5m-short"],
 
+"any2-15m-long": ["any2-15m-long"],
+"any2-15m-short": ["any2-15m-short"],
+
 "any2-1h-long": ["any2-1h-long"],
 "any2-1h-short": ["any2-1h-short"],
 
 "any2-5m-long-short": ["any2-5m-long", "any2-5m-short"],
+"any2-15m-long-short": ["any2-15m-long", "any2-15m-short"],
 "any2-1h-long-short": ["any2-1h-long", "any2-1h-short"],
 
 "alert": ["alert"],
@@ -121,6 +129,7 @@
 {{else if eq .base_env "data"}}
 {
 
+"15m-7": ["stag:any-15m-long-short"],
 "1h-10": ["stag:any-1h-long-short"],
 "1h-5": ["stag:any2-1h-long-short"],
 "5m-4": ["alert", "test:any2-5m-long-short"],
