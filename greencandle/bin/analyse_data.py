@@ -180,7 +180,7 @@ def analyse_pair(pair, reversal, expire, redis):
     output = redis.get_rule_action(pair=pair, interval=INTERVAL)
     result, _, current_time, current_price, match = output
     event = reversal
-    res = match['res'][0]
+    res = match['res']
     sent = match['sent']
     agg = match['agg']
     LOGGER.debug("analysis result for %s is %s", pair, str(output))
@@ -208,7 +208,7 @@ def analyse_pair(pair, reversal, expire, redis):
             match_strs = match[result.lower()]
         msg = (f"{result.lower()}, {match_strs}: {get_tv_link(pair, INTERVAL)} "
                f"{INTERVAL} {config.main.name} ({supported.strip()}) - {current_time}\n"
-               f"Data: {res}\nAgg: {agg}\nsent: {sent}")
+               f"Data: {res[0]}\nAgg: {agg}\nsent: {sent}")
 
         if result == 'OPEN':
             send_slack_message("notifications", msg, emoji=True,
