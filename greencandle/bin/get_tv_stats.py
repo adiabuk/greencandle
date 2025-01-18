@@ -61,9 +61,9 @@ def main():
     print(text)
     registry = CollectorRegistry()
     #stats = AttributeDict({'STRONG_BUY':0, 'BUY':0, 'STRONG_SELL':0, 'SELL':0, 'NEUTRAL':0})
-    g1 = Gauge(f'tv_strong-buy_{interval}', 'TV strong-buy sentiment {interval}',
+    g1 = Gauge(f'tv_strong_buy_{interval}', 'TV strong-buy sentiment {interval}',
                registry=registry)
-    g2 = Gauge(f'tv_strong-sell_{interval}', 'TV strong-sell sentiment {interval}',
+    g2 = Gauge(f'tv_strong_sell_{interval}', 'TV strong-sell sentiment {interval}',
                registry=registry)
     g3 = Gauge(f'tv_buy_{interval}', 'TV buy sentiment {interval}', registry=registry)
     g4 = Gauge(f'tv_sell_{interval}', 'TV buy sentiment {interval}', registry=registry)
