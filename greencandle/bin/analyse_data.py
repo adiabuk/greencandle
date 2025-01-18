@@ -177,131 +177,128 @@ def analyse_pair(pair, reversal, expire, redis):
         return
 
     LOGGER.debug("analysing pair: %s", pair)
-    try:
-        output = redis.get_rule_action(pair=pair, interval=INTERVAL)
-        result, _, current_time, current_price, match = output
-        event = reversal
-        res = match['res'][0]
-        sent = match['sent']
-        agg = match['agg']
-        LOGGER.debug("analysis result for %s is %s", pair, str(output))
+    output = redis.get_rule_action(pair=pair, interval=INTERVAL)
+    result, _, current_time, current_price, match = output
+    event = reversal
+    res = match['res'][0]
+    sent = match['sent']
+    agg = match['agg']
+    LOGGER.debug("analysis result for %s is %s", pair, str(output))
 
-        if result in ('OPEN', 'CLOSE'):
-            LOGGER.debug("trades to %s for pair %s", result.lower(), pair)
-            now = datetime.now()
+    if result in ('OPEN', 'CLOSE'):
+        LOGGER.debug("trades to %s for pair %s", result.lower(), pair)
+        now = datetime.now()
 
-            # Only alert on a given pair once per hour
-            # for each strategy
-            if pair in TRIGGERED:
-                diff = now - TRIGGERED[pair]
-                diff_in_hours = diff.total_seconds() / 3600
-                if str2bool(config.main.wait_between_trades) and diff.total_seconds() < \
-                        convert_to_seconds(config.main.time_between_trades):
-                    LOGGER.debug("skipping notification for %s %s as recently triggered",
-                                 pair, INTERVAL)
-                    return
-                LOGGER.debug("triggering alert: last alert %s hours ago", diff_in_hours)
+        # Only alert on a given pair once per hour
+        # for each strategy
+        if pair in TRIGGERED:
+            diff = now - TRIGGERED[pair]
+            diff_in_hours = diff.total_seconds() / 3600
+            if str2bool(config.main.wait_between_trades) and diff.total_seconds() < \
+                    convert_to_seconds(config.main.time_between_trades):
+                LOGGER.debug("skipping notification for %s %s as recently triggered",
+                             pair, INTERVAL)
+                return
+            LOGGER.debug("triggering alert: last alert %s hours ago", diff_in_hours)
 
-            TRIGGERED[pair] = now
-            try:
-                match_strs = get_match_name(match[result.lower()])
-            except IndexError:
-                match_strs = match[result.lower()]
-            msg = (f"{result.lower()}, {match_strs}: {get_tv_link(pair, INTERVAL)} "
-                   f"{INTERVAL} {config.main.name} ({supported.strip()}) - {current_time} "
-                   f"Data: {res} Agg: {agg} sent: {sent}")
+        TRIGGERED[pair] = now
+        try:
+            match_strs = get_match_name(match[result.lower()])
+        except IndexError:
+            match_strs = match[result.lower()]
+        msg = (f"{result.lower()}, {match_strs}: {get_tv_link(pair, INTERVAL)} "
+               f"{INTERVAL} {config.main.name} ({supported.strip()}) - {current_time} "
+               f"Data: {res} Agg: {agg} sent: {sent}")
 
-            if result == 'OPEN':
-                send_slack_message("notifications", msg, emoji=True,
-                                   icon=f':{INTERVAL}-{DIRECTION}:')
-            if 'NSCA' in os.environ:
-                send_nsca(status=0, host_name='data', service_name=f"data_{DIRECTION}",
-                          text_output="OK", remote_host='nagios.amrox.loc')
+        if result == 'OPEN':
+            send_slack_message("notifications", msg, emoji=True,
+                               icon=f':{INTERVAL}-{DIRECTION}:')
+        if 'NSCA' in os.environ:
+            send_nsca(status=0, host_name='data', service_name=f"data_{DIRECTION}",
+                      text_output="OK", remote_host='nagios.amrox.loc')
 
-            if DIRECTION == 'long' and result == 'OPEN':
-                action = 1
-            elif DIRECTION == 'short' and result == 'OPEN':
-                action = -1
+        if DIRECTION == 'long' and result == 'OPEN':
+            action = 1
+        elif DIRECTION == 'short' and result == 'OPEN':
+            action = -1
+        else:
+            action = 0
+
+
+        details = [[pair, current_time, current_price, event, action, None]]
+        trade = Trade(interval=INTERVAL, test_trade=True, test_data=False, config=config)
+        if result == 'OPEN' and STORE_IN_DB:
+            LOGGER.info("opening data trade for %s", pair)
+            trade.open_trade(details)
+        elif result == 'CLOSE' and STORE_IN_DB:
+            if reversal == 'normal':
+                LOGGER.info("closing normal trade for %s", pair)
+                trade.close_trade(details)
+
+                current_name = config.main.name
+                current_direction = config.main.trade_direction
+                new_name = current_name.replace('short', 'long') if \
+                        current_direction=='short' else current_name.replace('long', 'short')
+                new_direction = current_direction.replace('short', 'long') if \
+                        current_direction=='short' else current_name.replace('long', 'short')
+                command = (f"delete from trades where name like '%{current_name}%' "
+                           f"and direction='{current_direction}'")
+                command2 = (f"delete from trades where name like '%{new_name}%' "
+                            f"and direction='{new_direction}'")
+                dbase = Mysql()
+                dbase.run_sql_statement(command)
+                dbase.run_sql_statement(command2)
+                del dbase
+
             else:
-                action = 0
+                LOGGER.info("not closing reversal trade for %s", pair)
 
+        if CHECK_REDIS_PAIR and result=='OPEN':
+            redis4 = Redis(db=CHECK_REDIS_PAIR)
+            redis4.conn.srem(f'{INTERVAL}:{DIRECTION}', f'{pair}:{reversal}:{expire}')
+            del redis4
+            LOGGER.info("trade opening %s:%s:%s - removing from redis db:%s", pair, reversal,
+                        expire, CHECK_REDIS_PAIR)
+        if ROUTER_FORWARD:
+            url = f"http://router:1080/{config.web.api_token}"
+            forward_strategy = config.web.forward
+            payload = {"pair": pair,
+                       "text": (f"forwarding {result.lower()} trade from "
+                                f"{match_strs}/{INTERVAL}/{DIRECTION}"),
+                       "tp": eval(config.main.take_profit_perc),
+                       "sl": eval(config.main.stop_loss_perc),
+                       "action": str(action),
+                       "env": config.main.name,
+                       "price": current_price,
+                       "strategy": forward_strategy}
 
-            details = [[pair, current_time, current_price, event, action, None]]
-            trade = Trade(interval=INTERVAL, test_trade=True, test_data=False, config=config)
-            if result == 'OPEN' and STORE_IN_DB:
-                LOGGER.info("opening data trade for %s", pair)
-                trade.open_trade(details)
-            elif result == 'CLOSE' and STORE_IN_DB:
-                if reversal == 'normal':
-                    LOGGER.info("closing normal trade for %s", pair)
-                    trade.close_trade(details)
+            try:
+                requests.post(url, json.dumps(payload), timeout=10,
+                              headers={'Content-Type': 'application/json'})
+                LOGGER.info("forwarding %s %s/%s trade to: %s match:%s",
+                            pair, INTERVAL, DIRECTION, forward_strategy, match_strs)
 
-                    current_name = config.main.name
-                    current_direction = config.main.trade_direction
-                    new_name = current_name.replace('short', 'long') if \
-                            current_direction=='short' else current_name.replace('long', 'short')
-                    new_direction = current_direction.replace('short', 'long') if \
-                            current_direction=='short' else current_name.replace('long', 'short')
-                    command = (f"delete from trades where name like '%{current_name}%' "
-                               f"and direction='{current_direction}'")
-                    command2 = (f"delete from trades where name like '%{new_name}%' "
-                                f"and direction='{new_direction}'")
-                    dbase = Mysql()
-                    dbase.run_sql_statement(command)
-                    dbase.run_sql_statement(command2)
-                    del dbase
-
-                else:
-                    LOGGER.info("not closing reversal trade for %s", pair)
-
-            if CHECK_REDIS_PAIR and result=='OPEN':
-                redis4 = Redis(db=CHECK_REDIS_PAIR)
-                redis4.conn.srem(f'{INTERVAL}:{DIRECTION}', f'{pair}:{reversal}:{expire}')
-                del redis4
-                LOGGER.info("trade opening %s:%s:%s - removing from redis db:%s", pair, reversal,
-                            expire, CHECK_REDIS_PAIR)
-            if ROUTER_FORWARD:
-                url = f"http://router:1080/{config.web.api_token}"
-                forward_strategy = config.web.forward
-                payload = {"pair": pair,
-                           "text": (f"forwarding {result.lower()} trade from "
-                                    f"{match_strs}/{INTERVAL}/{DIRECTION}"),
-                           "tp": eval(config.main.take_profit_perc),
-                           "sl": eval(config.main.stop_loss_perc),
-                           "action": str(action),
-                           "env": config.main.name,
-                           "price": current_price,
-                           "strategy": forward_strategy}
-
-                try:
-                    requests.post(url, json.dumps(payload), timeout=10,
-                                  headers={'Content-Type': 'application/json'})
-                    LOGGER.info("forwarding %s %s/%s trade to: %s match:%s",
+            except requests.exceptions.RequestException:
+                LOGGER.warning("Unable to forward trade %s %s/%s trade to: %s match:%s",
                                 pair, INTERVAL, DIRECTION, forward_strategy, match_strs)
 
-                except requests.exceptions.RequestException:
-                    LOGGER.warning("Unable to forward trade %s %s/%s trade to: %s match:%s",
-                                    pair, INTERVAL, DIRECTION, forward_strategy, match_strs)
+        if result == 'OPEN' and REDIS_FORWARD:
+            for forward_db in REDIS_FORWARD:
+                redis4 = Redis(db=forward_db)
+                # add to redis set
+                LOGGER.info("new forward trade adding %s to %s:%s set db %s",
+                            pair, INTERVAL, DIRECTION, forward_db)
+                redis_pairs = [x.decode().split(':') for x
+                               in redis4.conn.smembers(f'{INTERVAL}:{DIRECTION}')]
 
-            if result == 'OPEN' and REDIS_FORWARD:
-                for forward_db in REDIS_FORWARD:
-                    redis4 = Redis(db=forward_db)
-                    # add to redis set
-                    LOGGER.info("new forward trade adding %s to %s:%s set db %s",
-                                pair, INTERVAL, DIRECTION, forward_db)
-                    redis_pairs = [x.decode().split(':') for x
-                                   in redis4.conn.smembers(f'{INTERVAL}:{DIRECTION}')]
+                # check pair doesn't already exist
+                if not [el for el in redis_pairs if el[0] == pair and el[1] == 'normal']:
+                    now = int(time.time())
+                    redis4.conn.sadd(f'{INTERVAL}:{DIRECTION}', f'{pair}:normal:{now}')
+                del redis4
 
-                    # check pair doesn't already exist
-                    if not [el for el in redis_pairs if el[0] == pair and el[1] == 'normal']:
-                        now = int(time.time())
-                        redis4.conn.sadd(f'{INTERVAL}:{DIRECTION}', f'{pair}:normal:{now}')
-                    del redis4
-
-            LOGGER.info("trade alert: %s %s %s %s %s (%s)",result, pair, match_strs, INTERVAL,
-                        DIRECTION, supported.strip())
-    except Exception as err_msg:
-        LOGGER.critical("error with pair %s %s", pair, str(err_msg))
+        LOGGER.info("trade alert: %s %s %s %s %s (%s)",result, pair, match_strs, INTERVAL,
+                    DIRECTION, supported.strip())
 
 @arg_decorator
 def main():
