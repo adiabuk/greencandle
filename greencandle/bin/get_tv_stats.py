@@ -8,6 +8,7 @@ import json
 from datetime import datetime
 from send_nsca3 import send_nsca
 from tradingview_ta import get_multiple_analysis
+from prometheus_client import CollectorRegistry, Gauge, push_to_gateway
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.common import arg_decorator, AttributeDict
 from greencandle.lib import config
@@ -58,6 +59,25 @@ def main():
     send_nsca(status=status, host_name=host, service_name=f"{env}_tv_stats_{interval}",
               text_output=text, remote_host="nagios.amrox.loc")
     print(text)
+    registry = CollectorRegistry()
+    #stats = AttributeDict({'STRONG_BUY':0, 'BUY':0, 'STRONG_SELL':0, 'SELL':0, 'NEUTRAL':0})
+    g1 = Gauge(f'tv_strong-buy_{interval}', 'TV strong-buy sentiment {interval}',
+               registry=registry)
+    g2 = Gauge(f'tv_strong-sell_{interval}', 'TV strong-sell sentiment {interval}',
+               registry=registry)
+    g3 = Gauge(f'tv_buy_{interval}', 'TV buy sentiment {interval}', registry=registry)
+    g4 = Gauge(f'tv_sell_{interval}', 'TV buy sentiment {interval}', registry=registry)
+    g5 = Gauge(f'tv_neutral_{interval}', 'TV neutral sentiment {interval}', registry=registry)
+    g6 = Gauge(f'tv_sentiment_{interval}', 'TV highest sentiment {interval}', registry=registry)
+
+    g1.set(stats.STRONG_BUY)
+    g2.set(stats.STRONG_SELL)
+    g3.set(stats.BUY)
+    g4.set(stats.SELL)
+    g5.set(stats.NEUTRAL)
+    g6.set(most)
+    push_to_gateway('jenkins:9091', job='data_metrics', registry=registry)
+
     sys.exit(status)
 
 if __name__ == '__main__':
