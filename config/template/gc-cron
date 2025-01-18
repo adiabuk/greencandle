@@ -61,7 +61,7 @@ SCRIPT_DIR=/usr/local/bin
 #00 */12 * * * /data/scripts/static/get_twitter_posts.py ${REDIR}
 15 * * * * ${SCRIPT_DIR}/check_data_freshness ${REDIR}
 */5 * * * * ${SCRIPT_DIR}/get_tv_stats 5m ${REDIR}
-*/5 * * * * ${SCRIPT_DIR}/get_tv_stats 15m ${REDIR}
+*/15 * * * * ${SCRIPT_DIR}/get_tv_stats 15m ${REDIR}
 */30 * * * * ${SCRIPT_DIR}/get_tv_stats 1h ${REDIR}
 @hourly ${SCRIPT_DIR}/get_tv_stats 1d ${REDIR}
 */5 * * * * ${SCRIPT_DIR}/sentiment_ema 5m ${REDIR}
