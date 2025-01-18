@@ -209,7 +209,7 @@ def analyse_pair(pair, reversal, expire, redis):
                 match_strs = match[result.lower()]
             msg = (f"{result.lower()}, {match_strs}: {get_tv_link(pair, INTERVAL)} "
                    f"{INTERVAL} {config.main.name} ({supported.strip()}) - {current_time} "
-                   f"Data: {res[0]} Agg: {agg} sent: {sent}")
+                   f"Data: {res} Agg: {agg} sent: {sent}")
 
             if result == 'OPEN':
                 send_slack_message("notifications", msg, emoji=True,
