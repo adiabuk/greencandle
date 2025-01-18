@@ -16,6 +16,7 @@ from collections import defaultdict
 from datetime import timedelta, datetime
 from str2bool import str2bool
 import requests
+from prometheus_client import CollectorRegistry, Gauge, push_to_gateway
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, render_template, request, Response, redirect, url_for, session, g
 from flask_login import LoginManager, login_required, current_user
@@ -545,8 +546,15 @@ def get_live():
         status = 3
         msg = "UNKNOWN"
 
+    env = config.main.base_env
     text = (f"{msg}: {net_perc_profitable}% of open trades are "
            f"profitable|net_profitable={net_perc_profitable};20;10;;")
+    registry = CollectorRegistry()
+    g1 = Gauge(f'open_profitable_{env}', 'perc of open profitable trades in {env}',
+                  registry=registry)
+    g1.set(net_perc_profitable)
+    push_to_gateway('jenkins:9091', job='{env}_metrics', registry=registry)
+
     send_nsca(status=status, host_name="jenkins",
               service_name=f"{config.main.base_env}_open_profitable",
               text_output=text, remote_host="nagios.amrox.loc")
@@ -739,9 +747,16 @@ def get_balance():
         status = 3
         msg = "UNKNOWN"
 
+    env = config.env.base_env
     text = f"{msg}: Current_net_perc is {current_net_perc}%|net_perc={current_net_perc};0;-25;;"
+
+    registry = CollectorRegistry()
+    g1 = Gauge(f'open_net_perc_{env}', 'net perc for open trades {env} env', registry=registry)
+    g1.set(current_net_perc)
+    push_to_gateway('jenkins:9091', job='{env}_metrics', registry=registry)
+
     send_nsca(status=status, host_name="jenkins",
-              service_name=f"{config.main.base_env}_open_net_perc",
+              service_name=f"{env}_open_net_perc",
               text_output=text, remote_host="nagios.amrox.loc")
 
 
