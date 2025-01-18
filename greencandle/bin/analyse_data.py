@@ -207,8 +207,8 @@ def analyse_pair(pair, reversal, expire, redis):
         except IndexError:
             match_strs = match[result.lower()]
         msg = (f"{result.lower()}, {match_strs}: {get_tv_link(pair, INTERVAL)} "
-               f"{INTERVAL} {config.main.name} ({supported.strip()}) - {current_time} "
-               f"Data: {res} Agg: {agg} sent: {sent}")
+               f"{INTERVAL} {config.main.name} ({supported.strip()}) - {current_time}\n"
+               f"Data: {res}\nAgg: {agg}\nsent: {sent}")
 
         if result == 'OPEN':
             send_slack_message("notifications", msg, emoji=True,
