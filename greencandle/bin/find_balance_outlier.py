@@ -14,7 +14,7 @@ from greencandle.lib import config
 def main():
     """
     Get all values from balance table and find outliers
-    An outlier is a value that's more than 10% more than the average (median value)
+    An outlier is a value that's more than 20% more than the average (median value)
     Send to nagios via NSCA
     """
 
@@ -27,7 +27,7 @@ def main():
     results = []
     for value in values:
         try:
-            results.append(round(abs(perc_diff(value, med)),2) > 10)
+            results.append(round(abs(perc_diff(value, med)),2) > 20)
         except ZeroDivisionError:
             results.append(0)
 
