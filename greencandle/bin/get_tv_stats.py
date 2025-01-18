@@ -68,14 +68,12 @@ def main():
     g3 = Gauge(f'tv_buy_{interval}', 'TV buy sentiment {interval}', registry=registry)
     g4 = Gauge(f'tv_sell_{interval}', 'TV buy sentiment {interval}', registry=registry)
     g5 = Gauge(f'tv_neutral_{interval}', 'TV neutral sentiment {interval}', registry=registry)
-    g6 = Gauge(f'tv_sentiment_{interval}', 'TV highest sentiment {interval}', registry=registry)
 
     g1.set(stats.STRONG_BUY)
     g2.set(stats.STRONG_SELL)
     g3.set(stats.BUY)
     g4.set(stats.SELL)
     g5.set(stats.NEUTRAL)
-    g6.set(most)
     push_to_gateway('jenkins:9091', job='data_metrics', registry=registry)
 
     sys.exit(status)
