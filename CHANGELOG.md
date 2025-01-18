@@ -1,5 +1,16 @@
 # Releases
 
+# 8.7.9
+* add strategy17/tv/ema sentiment data env stats to prometheus
+* add open trade stats from all envs to prometheus
+* adjust frequency of ema and tv stat cron runs
+* increase available intervals of ema and tv stats
+* increase balance outlier threshold
+* remove dupe data cron
+* formatting and structure cleanup of mm message in data env
+* reduce redis calls by passing back data after rule analysis
+* increase SL for EMA 15m rule
+
 # 8.7.8
 * move ema_xover to separate strategy and forward 15m to stag w/tpsl
 * remove unused config and switch to 5m for current prices
