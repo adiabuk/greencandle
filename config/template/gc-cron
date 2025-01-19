@@ -24,7 +24,7 @@ SCRIPT_DIR=/usr/local/bin
 21 00 * * * ${SCRIPT_DIR}/balance_graph ${REDIR}
 59 23 * * * ${SCRIPT_DIR}/report 4h /data/reports/report_$(date +"\%Y-\%m-\%d").xlsx ${REDIR}
 @reboot ${SCRIPT_DIR}/report 4h /data/reports/report_{{.base_env}}_$(date +"\%Y-\%m-\%d").xlsx ${REDIR}
-03 * * * * ${SCRIPT_DIR}/get_hour_profit ${REDIR}
+*/5 * * * * ${SCRIPT_DIR}/get_hour_profit ${REDIR}
 10 */2 * * * ${SCRIPT_DIR}/repay_debts interest ${REDIR}
 @hourly ${SCRIPT_DIR}/repay_debts borrowed ${REDIR}
 @hourly ${SCRIPT_DIR}/loan_anomaly ${REDIR}
@@ -43,14 +43,14 @@ SCRIPT_DIR=/usr/local/bin
 @reboot ${SCRIPT_DIR}/clear_redis 1 ${REDIR}
 @hourly ${SCRIPT_DIR}/check_tpsl ${REDIR}
 0 * * * * ${SCRIPT_DIR}/send_docker_alerts
-03 * * * * ${SCRIPT_DIR}/get_hour_profit ${REDIR}
+*/5 * * * * ${SCRIPT_DIR}/get_hour_profit ${REDIR}
 #00 * * * * ${SCRIPT_DIR}/populate_pairs
 
 {{else if eq .base_env "test"}}
 @weekly ${SCRIPT_DIR}/cleanup_db0 ${REDIR}
 @reboot ${SCRIPT_DIR}/clear_redis 1 ${REDIR}
 @hourly ${SCRIPT_DIR}/check_tpsl ${REDIR}
-03 * * * * ${SCRIPT_DIR}/get_hour_profit ${REDIR}
+*/5 * * * * ${SCRIPT_DIR}/get_hour_profit ${REDIR}
 #15 * * * * ${SCRIPT_DIR}/collect_pairs ${REDIR}
 
 {{else if eq .base_env "data"}}
