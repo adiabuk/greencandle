@@ -747,7 +747,7 @@ def get_balance():
         status = 3
         msg = "UNKNOWN"
 
-    env = config.env.base_env
+    env = config.main.base_env
     text = f"{msg}: Current_net_perc is {current_net_perc}%|net_perc={current_net_perc};0;-25;;"
 
     registry = CollectorRegistry()
