@@ -532,13 +532,13 @@ def get_live():
     text = (f"{msg}: {net_perc_profitable}% of open trades are "
            f"profitable|net_profitable={net_perc_profitable};20;10;;")
     registry = CollectorRegistry()
-    g1 = Gauge(f'open_profitable_{env}', 'perc of open profitable trades in {env}',
+    g1 = Gauge(f'open_profitable_{env}', f'perc of open profitable trades in {env}',
                   registry=registry)
     g1.set(net_perc_profitable)
-    push_to_gateway('jenkins:9091', job='{env}_metrics', registry=registry)
+    push_to_gateway('jenkins:9091', job=f'{env}_metrics', registry=registry)
 
     send_nsca(status=status, host_name="jenkins",
-              service_name=f"{config.main.base_env}_open_profitable",
+              service_name=f"{env}_open_profitable",
               text_output=text, remote_host="nagios.amrox.loc")
 
     return LIVE
@@ -745,31 +745,30 @@ def get_balance():
     text = f"{msg}: Current_net_perc is {current_net_perc}%|net_perc={current_net_perc};0;-25;;"
 
     registry = CollectorRegistry()
-    g1 = Gauge(f'open_net_perc_{env}', 'net perc for open trades {env} env', registry=registry)
+    g1 = Gauge(f'open_net_perc_{env}', f'net perc for open trades {env} env', registry=registry)
     g1.set(current_net_perc)
-    g2 = Gauge(f'open_net_profit_{env}', 'net profit for open trades {env} env', registry=registry)
+    g2 = Gauge(f'open_net_profit_{env}', f'net profit for open trades {env} env', registry=registry)
     g2.set(total_value)
-    g3 = Gauge(f'risk_factor_{env}', 'risk factor for {env} env', registry=registry)
+    g3 = Gauge(f'risk_factor_{env}', f'risk factor for {env} env', registry=registry)
     g3.set(risk)
-    g4 = Gauge(f'max_borrow_usd_{env}', 'available borrow amount in usd for {env} env',
+    g4 = Gauge(f'max_borrow_usd_{env}', f'available borrow amount in usd for {env} env',
                registry=registry)
     g4.set(max_borrow_usd)
 
-    g5 = Gauge(f'total_debts_usd_{env}', 'current debts in usd for {env} env', registry=registry)
+    g5 = Gauge(f'total_debts_usd_{env}', f'current debts in usd for {env} env', registry=registry)
     g5.set(total_debts_usd)
-    g6 = Gauge(f'current_balance_usd_{env}', 'current balance in usd for {env} env',
+    g6 = Gauge(f'current_balance_usd_{env}', f'current balance in usd for {env} env',
                registry=registry)
     g6.set(current_balance_usd)
 
-    g7 = Gauge(f'current_balance_btc_{env}', 'current balance in btc for {env} env',
+    g7 = Gauge(f'current_balance_btc_{env}', f'current balance in btc for {env} env',
                registry=registry)
     g7.set(current_balance_btc)
-    push_to_gateway('jenkins:9091', job='{env}_metrics', registry=registry)
+    push_to_gateway('jenkins:9091', job=f'{env}_metrics', registry=registry)
 
     send_nsca(status=status, host_name="jenkins",
               service_name=f"{env}_open_net_perc",
               text_output=text, remote_host="nagios.amrox.loc")
-
 
     BALANCE = all_results
 
