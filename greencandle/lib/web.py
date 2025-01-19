@@ -1,6 +1,7 @@
 """
 Libraries for use in API modules
 """
+import requests
 
 class PrefixMiddleware():
     """
@@ -19,3 +20,12 @@ class PrefixMiddleware():
             return self.app(environ, start_response)
         start_response('404', [('Content-Type', 'text/plain')])
         return ["This url does not belong to the app.".encode()]
+
+def get_drain(env, interval, direction):
+    """
+    Get drain status from api for given env,interval,direction
+    """
+    url = (f'http://config.amrox.loc/drain/get_value?env={env}&direction={direction}'
+          f'&interval={interval}')
+    req = requests.get(url, timeout=2)
+    return req.json()['result']
