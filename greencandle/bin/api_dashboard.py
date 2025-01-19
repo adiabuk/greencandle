@@ -753,6 +753,9 @@ def get_balance():
     registry = CollectorRegistry()
     g1 = Gauge(f'open_net_perc_{env}', 'net perc for open trades {env} env', registry=registry)
     g1.set(current_net_perc)
+    g2 = Gauge(f'open_net_profit_{env}', 'net profit for open trades {env} env', registry=registry)
+    g2.set(total_value)
+
     push_to_gateway('jenkins:9091', job='{env}_metrics', registry=registry)
 
     send_nsca(status=status, host_name="jenkins",
