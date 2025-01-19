@@ -75,7 +75,6 @@ class Trade():
             return time_str >= time_range[0] or time_str <= time_range[1]
         return (time_range[0] <= time_str <= time_range[1]) if drain else api_drain
 
-
     def __send_redis_trade(self, **kwargs):
         """
         Send trade event to redis
@@ -217,7 +216,10 @@ class Trade():
         if not items_list:
             self.logger.debug("no items to open trade with")
             return False
-        if Path(f'/var/local/drain/{self.config.main.base_env}_drain_close').is_file():
+        if get_drain(env=self.config.main.base_env,
+                     interval=self.config.main.interval,
+                     direction='close'):
+
             self.logger.info("strategy is in close drain for pair %s, skipping...", items_list)
             return False
 
