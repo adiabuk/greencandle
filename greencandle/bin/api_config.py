@@ -103,7 +103,7 @@ def get_value():
     struct = get_struct(env)
 
     try:
-        action = 'close' if direction = 'close' else 'open'
+        action = 'close' if direction == 'close' else 'open'
         top_result = struct[f'top_{action}']
     except KeyError:
         top_result = False
