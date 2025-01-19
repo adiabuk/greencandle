@@ -1,3 +1,4 @@
+#pylint: disable=too-few-public-methods
 """
 Libraries for use in API modules
 """
@@ -20,6 +21,16 @@ class PrefixMiddleware():
             return self.app(environ, start_response)
         start_response('404', [('Content-Type', 'text/plain')])
         return ["This url does not belong to the app.".encode()]
+
+def set_drain(**kwargs):
+    """
+    enable disable drain value for a given env/interval/direction
+    Mandatory args: env, value, direction
+    Optional args: interval (without direction global value will be set/unset
+    """
+
+    url = 'http://config.amrox.loc/drain/set_value'
+    requests.post(url, json=kwargs, timeout=2)
 
 def get_drain(env, interval, direction):
     """
