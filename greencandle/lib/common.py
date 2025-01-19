@@ -3,6 +3,7 @@
 Common functions that don't belong anywhere else
 """
 
+import re
 import sys
 import datetime
 from decimal import Decimal, InvalidOperation
@@ -276,3 +277,27 @@ def get_trade_link(pair, strategy, action, string, anchor=False, short_url=False
 
     return (f"<{url}/dash/action?pair={pair.strip()}&strategy={strategy.strip()}"
             f"&action={action.strip()}&close=true|{string.strip()}>")
+
+def price2float(price: str) -> float:
+    """
+    convert price with symbols to float
+    """
+
+    # clean the price string
+    trimmer = re.compile(r'[^\d.,]+')
+    trimmed = trimmer.sub('', price)
+
+    # figure out the separator which will always be "," or "." and at position -3 if it exists
+    decimal_separator = trimmed[-3:][0]
+    if decimal_separator not in [".", ","]:
+        decimal_separator = None
+
+    # re-clean now that we know which separator is the correct one
+    trimer = re.compile(rf'[^\d{decimal_separator}]+')
+    trimmed = trimer.sub('', price)
+
+    if decimal_separator == ",":
+        trimmed = trimmed.replace(",", ".")
+
+    result = float(trimmed)
+    return result

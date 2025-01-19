@@ -29,7 +29,7 @@ from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.binance_accounts import base2quote, get_cross_margin_level
 from greencandle.lib.common import (arg_decorator, divide_chunks, get_be_services, list_to_dict,
                                     perc_diff, get_tv_link, get_trade_link, format_usd,
-                                    AttributeDict)
+                                    AttributeDict, price2float)
 from greencandle.lib import config
 from greencandle.lib.web import PrefixMiddleware
 from greencandle.lib.balance_common import get_quote
@@ -759,11 +759,11 @@ def get_balance():
     g5.set(total_debts_usd)
     g6 = Gauge(f'current_balance_usd_{env}', f'current balance in usd for {env} env',
                registry=registry)
-    g6.set(current_balance_usd)
+    g6.set(price2float(current_balance_usd))
 
     g7 = Gauge(f'current_balance_btc_{env}', f'current balance in btc for {env} env',
                registry=registry)
-    g7.set(current_balance_btc)
+    g7.set(price2float(current_balance_btc))
     push_to_gateway('jenkins:9091', job=f'{env}_metrics', registry=registry)
 
     send_nsca(status=status, host_name="jenkins",
