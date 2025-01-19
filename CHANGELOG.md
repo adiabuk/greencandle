@@ -1,5 +1,9 @@
 # Releases
 
+# 8.7.10
+* push usd current net profit to prometheus
+* fix typo in config name stopping net perc status from being exported
+
 # 8.7.9
 * add strategy17/tv/ema sentiment data env stats to prometheus
 * add open trade stats from all envs to prometheus
