@@ -1,4 +1,4 @@
-#pylint: disable=no-member,too-many-locals,too-many-lines,broad-except,logging-fstring-interpolation
+#pylint: disable=no-member,too-many-locals,too-many-lines,broad-except,consider-using-f-string,logging-fstring-interpolation
 """
 Buy/Sell orders
 """
@@ -125,7 +125,7 @@ class Trade():
         good_pairs = str2bool(self.config.main.good_pairs)
 
         if self.is_in_drain() and not self.test_data:
-            msg = "strategy is in drain for pair {str(items_list)}, skipping..."
+            msg = "strategy is in drain for pair %s, skipping..." % str(items_list)
             self.logger.info(msg)
             send_slack_message("alerts", msg)
             return []
