@@ -15,6 +15,7 @@ from greencandle.lib.binance import BinanceException
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.redis_conn import Redis
+from greencandle.lib.web import get_drain
 from greencandle.lib.binance_accounts import get_binance_spot, base2quote, quote2base, \
         get_binance_isolated, get_binance_cross, get_max_borrow
 from greencandle.lib.balance_common import get_base, get_quote, get_step_precision
@@ -67,12 +68,13 @@ class Trade():
         start, end = re.findall(r"\d\d:\d\d\s?-\s?\d\d:\d\d", raw_range)[0].split('-')
         time_range = (start.strip(), end.strip())
         drain = str2bool(self.config.main.drain)
-        env_drain = Path(f'/var/local/drain/{self.config.main.base_env}_drain').is_file()
-        local_drain = Path(f'/var/local/drain/drain_{self.config.main.name}-'
-                           f'{self.config.main.trade_direction}').is_file()
+        api_drain = get_drain(env=self.config.main.base_env,
+                              interval=self.config.main.interval,
+                              direction=self.config.main.trade_direction)
         if time_range[1] < time_range[0]:
             return time_str >= time_range[0] or time_str <= time_range[1]
-        return (time_range[0] <= time_str <= time_range[1]) if drain else (env_drain or local_drain)
+        return (time_range[0] <= time_str <= time_range[1]) if drain else api_drain
+
 
     def __send_redis_trade(self, **kwargs):
         """
@@ -124,7 +126,9 @@ class Trade():
         good_pairs = str2bool(self.config.main.good_pairs)
 
         if self.is_in_drain() and not self.test_data:
-            self.logger.info("strategy is in drain for pair %s, skipping...", items_list)
+            msg = "strategy is in drain for pair {str(items_list)}, skipping...")
+            self.logger.info(msg)
+            send_slack_message("alerts", msg)
             return []
 
         for item in items_list:
