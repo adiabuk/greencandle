@@ -689,6 +689,15 @@ def get_balance():
 
     total_value, total_net_perc, usd_trade_amount = get_total_values()
     current_net_perc = round(total_net_perc, 4)
+
+    # default values for non-prod envs
+    risk = 999
+    max_borrow_usd = 0
+    total_debts_usd = 0
+    current_balance_usd = 0
+    current_balance_btc = 0
+    ###
+
     if str2bool(config.main.production):
         debts = {}
         free = {}
@@ -703,21 +712,24 @@ def get_balance():
                 debts[item['asset']] = debt
             if float(item['free']) > 0:
                 free[item['asset']] = float(item['free'])
+        max_borrow_usd = client.get_max_borrow()
+        current_balance_usd = wallet['total_USD']
+        current_balance_btc = wallet['total_BTC']
 
-        all_results.append({'key': 'avail_borrow', 'usd': format_usd(client.get_max_borrow()),
+        all_results.append({'key': 'avail_borrow', 'usd': format_usd(max_borrow_usd),
                             'val': ''})
         all_results.append({'key': 'risk', 'usd': 0,
                             'val': risk})
-        all_results.append({'key': 'current_balance', 'usd': wallet['total_USD'],
-                            'val': wallet['total_BTC']})
-        usd_debts_total = 0
+        all_results.append({'key': 'current_balance', 'usd': current_balance_btc,
+                            'val': current_balance_btc})
+        total_debts_usd = 0
         for key, val in debts.items():
             usd_debt = val if 'USD' in key else base2quote(val, key+'USDT')
             all_results.append({'key': f'{key} debt', 'usd': f'{format_usd(usd_debt)}',
                                 'val': f'{val:.5f}'})
-            usd_debts_total += usd_debt
-        if usd_debts_total > 0:
-            all_results.append({'key':'total_debts', 'usd': f'{format_usd(usd_debts_total)}',
+            total_debts_usd += usd_debt
+        if total_debts_usd > 0:
+            all_results.append({'key':'total_debts', 'usd': f'{format_usd(total_debts_usd)}',
                                 'val': ''})
 
         for key, val in free.items():
@@ -755,7 +767,21 @@ def get_balance():
     g1.set(current_net_perc)
     g2 = Gauge(f'open_net_profit_{env}', 'net profit for open trades {env} env', registry=registry)
     g2.set(total_value)
+    g3 = Gauge(f'risk_factor_{env}', 'risk factor for {env} env', registry=registry)
+    g3.set(risk)
+    g4 = Gauge(f'max_borrow_usd_{env}', 'available borrow amount in usd for {env} env',
+               registry=registry)
+    g4.set(max_borrow_usd)
 
+    g5 = Gauge(f'total_debts_usd_{env}', 'current debts in usd for {env} env', registry=registry)
+    g5.set(total_debts_usd)
+    g6 = Gauge(f'current_balance_usd_{env}', 'current balance in usd for {env} env',
+               registry=registry)
+    g6.set(current_balance_usd)
+
+    g7 = Gauge(f'current_balance_btc_{env}', 'current balance in btc for {env} env',
+               registry=registry)
+    g7.set(current_balance_btc)
     push_to_gateway('jenkins:9091', job='{env}_metrics', registry=registry)
 
     send_nsca(status=status, host_name="jenkins",
