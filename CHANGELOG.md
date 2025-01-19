@@ -1,5 +1,9 @@
 # Releases
 
+# 8.8
+* add recently closed trade stats to prometheus
+* push balance/risk/debts stats to prometheus
+
 # 8.7.10
 * push usd current net profit to prometheus
 * fix typo in config name stopping net perc status from being exported
