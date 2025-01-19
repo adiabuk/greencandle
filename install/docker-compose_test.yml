@@ -348,7 +348,7 @@ services:
     depends_on:
       - test-base-mysql
       - test-base-redis
-    entrypoint: /docker-entrypoint.sh "api_router backend_api --test api & backend_api --test queue"
+    entrypoint: /docker-entrypoint.sh api_router --test
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws
