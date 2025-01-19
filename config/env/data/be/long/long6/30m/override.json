@@ -1,5 +1,4 @@
 {
-  "api_forward": "30m-6",
   "interval": "30m",
   "name": "data-be-analyse-30m-long6",
   "redis_expiry_seconds": "14400",
