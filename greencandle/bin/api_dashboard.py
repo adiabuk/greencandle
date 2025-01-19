@@ -31,28 +31,10 @@ from greencandle.lib.common import (arg_decorator, divide_chunks, get_be_service
                                     perc_diff, get_tv_link, get_trade_link, format_usd,
                                     AttributeDict)
 from greencandle.lib import config
+from greencandle.lib.web import PrefixMiddleware
 from greencandle.lib.balance_common import get_quote
 from greencandle.lib.balance import Balance
 from greencandle.lib.flask_auth import load_user, login as loginx, logout as logoutx
-
-class PrefixMiddleware():
-    """
-    add url prefix
-    """
-
-    def __init__(self, app, prefix=''):
-        self.app = app
-        self.prefix = prefix
-
-    def __call__(self, environ, start_response):
-
-        if environ['PATH_INFO'].startswith(self.prefix):
-            environ['PATH_INFO'] = environ['PATH_INFO'][len(self.prefix):]
-            environ['SCRIPT_NAME'] = self.prefix
-            return self.app(environ, start_response)
-        start_response('404', [('Content-Type', 'text/plain')])
-        return ["This url does not belong to the app.".encode()]
-
 
 config.create_config()
 APP = Flask(__name__, template_folder="/var/www/html", static_url_path='/',

@@ -8,9 +8,11 @@ from str2bool import str2bool
 from redis.commands.json.path import Path
 from greencandle.lib.common import AttributeDict, arg_decorator
 from greencandle.lib.redis_conn import Redis
+from greencandle.lib.web import PrefixMiddleware
 
 APP = Flask(__name__, template_folder="/var/www/html", static_url_path='/',
             static_folder='/var/www/html')
+APP.wsgi_app = PrefixMiddleware(APP.wsgi_app, prefix='/drain')
 
 DEF_STRUCT = {"top_open": False,
           "top_close": False,
