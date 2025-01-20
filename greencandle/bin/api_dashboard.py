@@ -453,6 +453,7 @@ def get_live():
 
     if config.main.base_env.strip() == 'data':
         return None
+
     all_data = []
     mt5 = 0
     mt10 = 0
@@ -535,6 +536,10 @@ def get_live():
     g1 = Gauge(f'open_profitable_{env}', f'perc of open profitable trades in {env}',
                   registry=registry)
     g1.set(net_perc_profitable)
+    g2 = Gauge(f'num_open_trades_{env}', f'number of open trades in {env}',
+                  registry=registry)
+    g2.set(len(raw))
+
     push_to_gateway('jenkins:9091', job=f'{env}_metrics', registry=registry)
 
     send_nsca(status=status, host_name="jenkins",
