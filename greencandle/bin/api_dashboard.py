@@ -627,7 +627,6 @@ def get_values():
     """
     return VALUES
 
-
 def get_additional_details():
     """
     Get tp/sl and drawup/drawdown from redis and mysql
@@ -719,7 +718,6 @@ def get_balance():
             all_results.append({'key': f'{key} free', 'usd': format_usd(usd_free),
                                 'val': f'{val:.5f}'})
 
-
     all_results.append({'key': 'current_trade_value', 'usd': format_usd(total_value),
                         'val': '0'})
     all_results.append({'key': 'current_trade_amount', 'usd': format_usd(usd_trade_amount),
@@ -763,7 +761,7 @@ def get_balance():
 
     g7 = Gauge(f'current_balance_btc_{env}', f'current balance in btc for {env} env',
                registry=registry)
-    g7.set(price2float(current_balance_btc))
+    g7.set(price2float(current_balance_btc)) if current_balance_btc else g7.set(0)
     push_to_gateway('jenkins:9091', job=f'{env}_metrics', registry=registry)
 
     send_nsca(status=status, host_name="jenkins",
@@ -780,7 +778,7 @@ def main():
     scheduler = BackgroundScheduler() # Create Scheduler
     if config.main.base_env.strip() != 'data':
         scheduler.add_job(func=get_additional_details, trigger="interval", minutes=1)
-        scheduler.add_job(func=get_balance, trigger="interval", minutes=5)
+        scheduler.add_job(func=get_balance, trigger="interval", minutes=3)
         scheduler.add_job(func=get_live, trigger="interval", minutes=3)
     else:
         scheduler.add_job(func=get_doublersi, trigger="interval", minutes=3)
