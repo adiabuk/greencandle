@@ -78,7 +78,7 @@ def send_slack_trade(**kwargs):
         return
 
     valid_keys = ["channel", "event", "pair", "action", "price", "perc", "usd_profit", "quote",
-                  "open_time", "close_time", "drawup", "drawdown"]
+                  "open_time", "close_time", "drawup", "drawdown", "comment"]
     kwargs = AttributeDict(kwargs)
     for key in valid_keys:
         if key not in kwargs:
@@ -117,6 +117,7 @@ def send_slack_trade(**kwargs):
         close_string = f"• Close: {link}\n"
         quote_string = f"• Quote in: {float(kwargs.quote):.4f}\n"
         time_string = f"• Open_time: {kwargs.open_time} "
+        comment = ""
     elif kwargs.action == 'CLOSE':
         color = '#fc0303' # red
         close_string = ""
@@ -126,11 +127,13 @@ def send_slack_trade(**kwargs):
         delta = str(closet-opent)
         time_string = (f"• Open_time: {kwargs.open_time}\n• Close_time: {kwargs.close_time}\n"
                        f"• Trade time: {delta}\n")
+        comment = f"• Comment: {kwargs.comment}\n"
     else:
         color = '#ff7f00'
         close_string = ""
         quote_string = ""
         time_string = ""
+        comment = ""
 
     icon = f":{config.main.trade_direction}:"
 
@@ -153,6 +156,7 @@ def send_slack_trade(**kwargs):
                             f'• Net perc: {kwargs.net_perc}\n'
                             f'• Net usd_profit: {kwargs.net_profit}\n'
                             f'• du/dd: {kwargs.drawup}/{kwargs.drawdown}\n'
+                            f'{comment}'
                             f'{time_string}'),
                   "short":"false"
                  }]}]}
