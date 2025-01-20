@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint:disable=no-member,consider-using-with,too-many-locals,global-statement,too-few-public-methods,assigning-non-slot,no-name-in-module,broad-exception-caught
+#pylint:disable=no-member,consider-using-with,too-many-locals,global-statement,too-few-public-methods,assigning-non-slot,no-name-in-module,broad-exception-caught,expression-not-assigned
 
 """
 Flask module for manipulating API trades and displaying relevent graphs
@@ -746,20 +746,20 @@ def get_balance():
 
     registry = CollectorRegistry()
     g1 = Gauge(f'open_net_perc_{env}', f'net perc for open trades {env} env', registry=registry)
-    g1.set(current_net_perc)
+    g1.set(current_net_perc) if current_net_perc else g1.set(0)
     g2 = Gauge(f'open_net_profit_{env}', f'net profit for open trades {env} env', registry=registry)
-    g2.set(total_value)
+    g2.set(total_value) if total_value else g2.set(0)
     g3 = Gauge(f'risk_factor_{env}', f'risk factor for {env} env', registry=registry)
-    g3.set(risk)
+    g3.set(risk) if risk else g3.set(0)
     g4 = Gauge(f'max_borrow_usd_{env}', f'available borrow amount in usd for {env} env',
                registry=registry)
-    g4.set(max_borrow_usd)
+    g4.set(max_borrow_usd) if max_borrow_usd else g4.set(0)
 
     g5 = Gauge(f'total_debts_usd_{env}', f'current debts in usd for {env} env', registry=registry)
-    g5.set(total_debts_usd)
+    g5.set(total_debts_usd) if total_debts_usd else g5.set(0)
     g6 = Gauge(f'current_balance_usd_{env}', f'current balance in usd for {env} env',
                registry=registry)
-    g6.set(price2float(current_balance_usd))
+    g6.set(price2float(current_balance_usd)) if current_balance_usd else g6.set(0)
 
     g7 = Gauge(f'current_balance_btc_{env}', f'current balance in btc for {env} env',
                registry=registry)
