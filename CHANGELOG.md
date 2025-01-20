@@ -1,5 +1,22 @@
 # Releases
 
+# 8.9
+* 2 new db views for profit by direction & hourly direction with updated schema
+* rename db query, typo
+* send no. of open trades to prometheus
+* add comment from db to trade close output
+* ensure empty/null/non-numeric values are not being sent to prometheus
+* remove temporary redis config overrides in stag manual container
+* methods to drain/undrain environments/strategies
+* don't use fstrings for logger
+* forward data trades to stag and test envs for comparison
+* determine if we are looking for open or close drain
+* use correct entrypoint for test env router
+* use API for checking drain status before trading or closing trades
+* method for fetching drain status in current scope
+* change drain api prefix
+* run hourly profit script every 5mins for stats collection
+
 # 8.8
 * add recently closed trade stats to prometheus
 * push balance/risk/debts stats to prometheus
