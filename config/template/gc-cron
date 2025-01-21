@@ -1,6 +1,6 @@
 SHELL=/bin/bash
 BASH_ENV=/container.env
-REDIR=">/proc/1/fd/1 2>/proc/1/fd/2"
+REDIR="&>> /var/log/cron.log"
 SCRIPT_DIR=/usr/local/bin
 # minute hour day_of_month month day_of_week command
 

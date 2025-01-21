@@ -44,7 +44,7 @@ services:
     hostname: cron
     image: greencandle-${image_id}
     restart: always
-    entrypoint: /docker-entrypoint.sh cron -f
+    entrypoint: /docker-entrypoint.sh "touch /var/log/cron.log && cron && tail -f /var/log/cron.log"
     links:
       - mysql-unit:mysql
       - redis-unit:redis

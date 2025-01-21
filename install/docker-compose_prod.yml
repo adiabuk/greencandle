@@ -147,7 +147,7 @@ services:
     mem_limit: 5G
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "cron -f"
+    entrypoint: /docker-entrypoint.sh "touch /var/log/cron.log && cron && tail -f /var/log/cron.log"
     logging:
       driver: syslog
       options:

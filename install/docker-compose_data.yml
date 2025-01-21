@@ -327,7 +327,7 @@ services:
     mem_limit: 10G
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh "cron -f"
+    entrypoint: /docker-entrypoint.sh "touch /var/log/cron.log && cron && tail -f /var/log/cron.log"
     links:
       - data-base-mysql:mysql
       - data-base-redis:redis
