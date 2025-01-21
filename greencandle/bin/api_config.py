@@ -63,11 +63,11 @@ def set_value():
     payload = AttributeDict(request.json)
     action = 'close' if payload.direction == 'close' else 'open'
     struct = get_struct(payload.env)
-    if 'interval' in payload:
+    if 'interval' in payload and payload.interval:
         struct[f'tf_{payload.interval}'][payload.direction] = str2bool(str(payload.value)) if \
                 payload.value is not None else False
     else:
-        struct[f'top_{action}'] = payload.value if str2bool(str(payload.value)) is not None \
+        struct[f'top_{action}'] = str2bool(str(payload.value)) if payload.value is not None \
                 else False
     set_struct(payload.env, struct)
     return Response(status=200)
