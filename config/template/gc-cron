@@ -1,72 +1,73 @@
 SHELL=/bin/bash
 BASH_ENV=/container.env
-SCRIPT_DIR=/usr/local/bin
+SCRIPTS_DIR=/usr/local/bin
 # minute hour day_of_month month day_of_week command
 
+@reboot ${SCRIPTS_DIR}/push_version &>> /var/log/cron.log
 @reboot /usr/bin/touch /var/run/cron &>> /var/log/cron.log
 * * * * * /usr/bin/touch /var/run/cron &>> /var/log/cron.log
 
 @reboot echo C.UTF-8 > /etc/default/locale
-@hourly ${SCRIPT_DIR}/cleanup_redis 120 &>> /var/log/cron.log
-@hourly ${SCRIPT_DIR}/cleanup_db2 &>> /var/log/cron.log
-@hourly ${SCRIPT_DIR}/check_env_drain &>> /var/log/cron.log
+@hourly ${SCRIPTS_DIR}/cleanup_redis 120 &>> /var/log/cron.log
+@hourly ${SCRIPTS_DIR}/cleanup_db2 &>> /var/log/cron.log
+@hourly ${SCRIPTS_DIR}/check_env_drain &>> /var/log/cron.log
 
 {{if eq .production "true" }}
-@weekly ${SCRIPT_DIR}/cleanup_db0 &>> /var/log/cron.log
-@reboot ${SCRIPT_DIR}/clear_redis 1 &>> /var/log/cron.log
-*/3 * * * * ${SCRIPT_DIR}/get_risk &>> /var/log/cron.log
-32 * * * * ${SCRIPT_DIR}/write_balance &>> /var/log/cron.log
-#33 * * * * ${SCRIPT_DIR}/get_quote_balance &>> /var/log/cron.log
-05 * * * * sleep 120; ${SCRIPT_DIR}/test_close &>> /var/log/cron.log
-0 * * * * ${SCRIPT_DIR}/send_docker_alerts
-*/30 * * * * ${SCRIPT_DIR}/get_anomalous &>> /var/log/cron.log
-21 00 * * * ${SCRIPT_DIR}/balance_graph &>> /var/log/cron.log
-59 23 * * * ${SCRIPT_DIR}/report 4h /data/reports/report_$(date +"\%Y-\%m-\%d").xlsx &>> /var/log/cron.log
-@reboot ${SCRIPT_DIR}/report 4h /data/reports/report_{{.base_env}}_$(date +"\%Y-\%m-\%d").xlsx &>> /var/log/cron.log
-*/5 * * * * ${SCRIPT_DIR}/get_hour_profit &>> /var/log/cron.log
-10 */2 * * * ${SCRIPT_DIR}/repay_debts interest &>> /var/log/cron.log
-@hourly ${SCRIPT_DIR}/repay_debts borrowed &>> /var/log/cron.log
-@hourly ${SCRIPT_DIR}/loan_anomaly &>> /var/log/cron.log
-@hourly ${SCRIPT_DIR}/check_tpsl &>> /var/log/cron.log
+@weekly ${SCRIPTS_DIR}/cleanup_db0 &>> /var/log/cron.log
+@reboot ${SCRIPTS_DIR}/clear_redis 1 &>> /var/log/cron.log
+*/3 * * * * ${SCRIPTS_DIR}/get_risk &>> /var/log/cron.log
+32 * * * * ${SCRIPTS_DIR}/write_balance &>> /var/log/cron.log
+#33 * * * * ${SCRIPTS_DIR}/get_quote_balance &>> /var/log/cron.log
+05 * * * * sleep 120; ${SCRIPTS_DIR}/test_close &>> /var/log/cron.log
+0 * * * * ${SCRIPTS_DIR}/send_docker_alerts
+*/30 * * * * ${SCRIPTS_DIR}/get_anomalous &>> /var/log/cron.log
+21 00 * * * ${SCRIPTS_DIR}/balance_graph &>> /var/log/cron.log
+59 23 * * * ${SCRIPTS_DIR}/report 4h /data/reports/report_$(date +"\%Y-\%m-\%d").xlsx &>> /var/log/cron.log
+@reboot ${SCRIPTS_DIR}/report 4h /data/reports/report_{{.base_env}}_$(date +"\%Y-\%m-\%d").xlsx &>> /var/log/cron.log
+*/5 * * * * ${SCRIPTS_DIR}/get_hour_profit &>> /var/log/cron.log
+10 */2 * * * ${SCRIPTS_DIR}/repay_debts interest &>> /var/log/cron.log
+@hourly ${SCRIPTS_DIR}/repay_debts borrowed &>> /var/log/cron.log
+@hourly ${SCRIPTS_DIR}/loan_anomaly &>> /var/log/cron.log
+@hourly ${SCRIPTS_DIR}/check_tpsl &>> /var/log/cron.log
 30 * * * * /usr/bin/find /data/graphs -type f -mtime +1 -delete &>> /var/log/cron.log
-#15 * * * * ${SCRIPT_DIR}/collect_pairs &>> /var/log/cron.log
-@hourly ${SCRIPT_DIR}/get_bnb &>> /var/log/cron.log
+#15 * * * * ${SCRIPTS_DIR}/collect_pairs &>> /var/log/cron.log
+@hourly ${SCRIPTS_DIR}/get_bnb &>> /var/log/cron.log
 @daily /usr/bin/find /data/mysql -name "*.gz" -mtime +1 -delete
 @daily /usr/bin/find /data/reports -name "*.xlsx" -mtime +1 -delete
-20 */7 * * * ${SCRIPT_DIR}/convert_loan_dust &>> /var/log/cron.log
-30 */7 * * * ${SCRIPT_DIR}/convert_small_dust &>> /var/log/cron.log
-@hourly ${SCRIPT_DIR}/find_balance_outlier &>> /var/log/cron.log
+20 */7 * * * ${SCRIPTS_DIR}/convert_loan_dust &>> /var/log/cron.log
+30 */7 * * * ${SCRIPTS_DIR}/convert_small_dust &>> /var/log/cron.log
+@hourly ${SCRIPTS_DIR}/find_balance_outlier &>> /var/log/cron.log
 
 {{else if eq .base_env "stag" }}
-@weekly ${SCRIPT_DIR}/cleanup_db0 &>> /var/log/cron.log
-@reboot ${SCRIPT_DIR}/clear_redis 1 &>> /var/log/cron.log
-@hourly ${SCRIPT_DIR}/check_tpsl &>> /var/log/cron.log
-0 * * * * ${SCRIPT_DIR}/send_docker_alerts
-*/5 * * * * ${SCRIPT_DIR}/get_hour_profit &>> /var/log/cron.log
-#00 * * * * ${SCRIPT_DIR}/populate_pairs
+@weekly ${SCRIPTS_DIR}/cleanup_db0 &>> /var/log/cron.log
+@reboot ${SCRIPTS_DIR}/clear_redis 1 &>> /var/log/cron.log
+@hourly ${SCRIPTS_DIR}/check_tpsl &>> /var/log/cron.log
+0 * * * * ${SCRIPTS_DIR}/send_docker_alerts
+*/5 * * * * ${SCRIPTS_DIR}/get_hour_profit &>> /var/log/cron.log
+#00 * * * * ${SCRIPTS_DIR}/populate_pairs
 
 {{else if eq .base_env "test"}}
-@weekly ${SCRIPT_DIR}/cleanup_db0 &>> /var/log/cron.log
-@reboot ${SCRIPT_DIR}/clear_redis 1 &>> /var/log/cron.log
-@hourly ${SCRIPT_DIR}/check_tpsl &>> /var/log/cron.log
-*/5 * * * * ${SCRIPT_DIR}/get_hour_profit &>> /var/log/cron.log
-#15 * * * * ${SCRIPT_DIR}/collect_pairs &>> /var/log/cron.log
+@weekly ${SCRIPTS_DIR}/cleanup_db0 &>> /var/log/cron.log
+@reboot ${SCRIPTS_DIR}/clear_redis 1 &>> /var/log/cron.log
+@hourly ${SCRIPTS_DIR}/check_tpsl &>> /var/log/cron.log
+*/5 * * * * ${SCRIPTS_DIR}/get_hour_profit &>> /var/log/cron.log
+#15 * * * * ${SCRIPTS_DIR}/collect_pairs &>> /var/log/cron.log
 
 {{else if eq .base_env "data"}}
 @daily /usr/bin/find /data -type f -name ".*" -delete &>> /var/log/cron.log
-#@hourly ${SCRIPT_DIR}/get_bub_sentiment &>> /var/log/cron.log
-@hourly ${SCRIPT_DIR}/cleanup_data_pairs &>> /var/log/cron.log
-@reboot ${SCRIPT_DIR}/cleanup_removed_pairs &>> /var/log/cron.log
+#@hourly ${SCRIPTS_DIR}/get_bub_sentiment &>> /var/log/cron.log
+@hourly ${SCRIPTS_DIR}/cleanup_data_pairs &>> /var/log/cron.log
+@reboot ${SCRIPTS_DIR}/cleanup_removed_pairs &>> /var/log/cron.log
 #00 */12 * * * /data/scripts/static/get_twitter_posts.py &>> /var/log/cron.log
-15 * * * * ${SCRIPT_DIR}/check_data_freshness &>> /var/log/cron.log
-*/5 * * * * ${SCRIPT_DIR}/get_tv_stats 5m &>> /var/log/cron.log
-*/15 * * * * ${SCRIPT_DIR}/get_tv_stats 15m &>> /var/log/cron.log
-*/30 * * * * ${SCRIPT_DIR}/get_tv_stats 1h &>> /var/log/cron.log
-@hourly ${SCRIPT_DIR}/get_tv_stats 1d &>> /var/log/cron.log
-*/5 * * * * ${SCRIPT_DIR}/sentiment_ema 5m &>> /var/log/cron.log
-*/5 * * * * ${SCRIPT_DIR}/sentiment_ema 15m &>> /var/log/cron.log
-*/15 * * * * ${SCRIPT_DIR}/sentiment_ema 1h &>> /var/log/cron.log
-*/15 * * * * ${SCRIPT_DIR}/sentiment_ema 1d &>> /var/log/cron.log
+15 * * * * ${SCRIPTS_DIR}/check_data_freshness &>> /var/log/cron.log
+*/5 * * * * ${SCRIPTS_DIR}/get_tv_stats 5m &>> /var/log/cron.log
+*/15 * * * * ${SCRIPTS_DIR}/get_tv_stats 15m &>> /var/log/cron.log
+*/30 * * * * ${SCRIPTS_DIR}/get_tv_stats 1h &>> /var/log/cron.log
+@hourly ${SCRIPTS_DIR}/get_tv_stats 1d &>> /var/log/cron.log
+*/5 * * * * ${SCRIPTS_DIR}/sentiment_ema 5m &>> /var/log/cron.log
+*/5 * * * * ${SCRIPTS_DIR}/sentiment_ema 15m &>> /var/log/cron.log
+*/15 * * * * ${SCRIPTS_DIR}/sentiment_ema 1h &>> /var/log/cron.log
+*/15 * * * * ${SCRIPTS_DIR}/sentiment_ema 1d &>> /var/log/cron.log
 
 
 
