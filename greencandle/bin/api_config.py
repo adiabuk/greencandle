@@ -4,7 +4,7 @@
 Flask module for getting fetching and setting drain status
 """
 from flask import Flask, request, Response
-#from str2bool import str2bool
+from str2bool import str2bool
 from redis.commands.json.path import Path
 from greencandle.lib.common import AttributeDict, arg_decorator
 from greencandle.lib.redis_conn import Redis
@@ -64,12 +64,12 @@ def set_value():
     action = 'close' if payload.direction == 'close' else 'open'
     struct = get_struct(payload.env)
     if 'interval' in payload:
-        struct[f'tf_{payload.interval}'][payload.direction] = payload.value if \
+        struct[f'tf_{payload.interval}'][payload.direction] = str2bool(str(payload.value)) if \
                 payload.value is not None else False
-        set_struct(payload.env, struct)
     else:
-        struct[f'top_{action}'] = payload.value if payload.value is not None \
+        struct[f'top_{action}'] = payload.value if str2bool(str(payload.value)) is not None \
                 else False
+    set_struct(payload.env, struct)
     return Response(status=200)
 
 @APP.route('/get_envs', methods=["GET"])
