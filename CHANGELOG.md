@@ -1,5 +1,12 @@
 # Releases
 
+# 8.9.1
+* Ensure cron logs are visible
+* fixes to setting of drain config in api
+* push gc version details to prometheus on container start using cron
+* remove redir var from cron and write all output to local logfile
+* testing cron in dev env
+
 # 8.9
 * 2 new db views for profit by direction & hourly direction with updated schema
 * rename db query, typo
