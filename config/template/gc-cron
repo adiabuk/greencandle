@@ -60,7 +60,8 @@ STATIC_DIR=/data/scripts/static
 @hourly ${SCRIPTS_DIR}/cleanup_data_pairs &>> /var/log/cron.log
 @reboot ${SCRIPTS_DIR}/cleanup_removed_pairs &>> /var/log/cron.log
 #00 */12 * * * ${STATIC_DIR}/get_twitter_posts.py &>> /var/log/cron.log
-*/5 * * * * ${SCRIPTS_DIR}/tv_drain stag &>> /var/log/cron.log
+*/5 * * * * ${SCRIPTS_DIR}/tv_drain stag 1h &>> /var/log/cron.log
+*/5 * * * * ${SCRIPTS_DIR}/tv_drain stag 15m &>> /var/log/cron.log
 15 * * * * ${SCRIPTS_DIR}/check_data_freshness &>> /var/log/cron.log
 */5 * * * * ${SCRIPTS_DIR}/get_tv_stats 5m &>> /var/log/cron.log
 */15 * * * * ${SCRIPTS_DIR}/get_tv_stats 15m &>> /var/log/cron.log
