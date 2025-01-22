@@ -1,5 +1,10 @@
 # Releases
 
+# 8.9.2
+* set/unset 1h stag trend depending on overall trend direction
+* manual drain script
+* update drain api url
+
 # 8.9.1
 * Ensure cron logs are visible
 * fixes to setting of drain config in api
