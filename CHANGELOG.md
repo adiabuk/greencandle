@@ -1,5 +1,9 @@
 # Releases
 
+# 8.9.4
+* use own method for pushing metrics to prometheus
+* don't log debug information
+
 # 8.9.3
 * automatic drain/undrain for 1h and 15m -staging
 * increase data env default ATR tpsl affecting 1h strategies
