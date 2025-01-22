@@ -1,5 +1,12 @@
 # Releases
 
+# 8.9.3
+* automatic drain/undrain for 1h and 15m -staging
+* increase data env default ATR tpsl affecting 1h strategies
+* ensure no print statements used in cron scripts for better logging
+* remove unused debug script
+* add 30m EMA and TV metric collection in data cron
+
 # 8.9.2
 * set/unset 1h stag trend depending on overall trend direction
 * manual drain script
