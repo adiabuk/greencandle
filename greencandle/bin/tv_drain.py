@@ -16,12 +16,13 @@ def main():
     Check that trading in opposite direction is blocked in drain api
     If not, set drain.
     Also set drain for both directions if result is neutral, or not available
+    Usage: tv_drain [env] [interval]
     """
 
     logger = get_logger(__name__)
-    redis=Redis(db=15)
-    interval='1h'
-    env=sys.argv[1]
+    redis = Redis(db=15)
+    env = sys.argv[1]
+    interval = sys.argv[2]
     current = redis.conn.lrange(f'all:{interval}', -20,-1)[-1].decode()
     current_drain = get_drain_env(env)
 
