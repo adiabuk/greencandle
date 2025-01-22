@@ -12,7 +12,7 @@ from prometheus_client import CollectorRegistry, Gauge, push_to_gateway
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.common import arg_decorator, AttributeDict
 from greencandle.lib import config
-
+from greencandle.lib.logger import get_logger
 
 @arg_decorator
 def main():
@@ -21,6 +21,8 @@ def main():
     using available pairs and given interval
     interval is taken from argument, otherwise 1h is used
     """
+
+    logger = get_logger(__name__)
     redis = Redis(db=15)
     dt_stamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     stats = AttributeDict({'STRONG_BUY':0, 'BUY':0, 'STRONG_SELL':0, 'SELL':0, 'NEUTRAL':0})
@@ -56,11 +58,12 @@ def main():
     text = f"{msg}: current sentiment is {most}: {stats}"
     host = "data" if env == "data" else "jenkins"
     redis.conn.rpush(f"all:{interval}", most)
+
     send_nsca(status=status, host_name=host, service_name=f"{env}_tv_stats_{interval}",
               text_output=text, remote_host="nagios.amrox.loc")
-    print(text)
+    logger.info("current sentiment for %s is %s, stats:%s", interval, most, stats)
+
     registry = CollectorRegistry()
-    #stats = AttributeDict({'STRONG_BUY':0, 'BUY':0, 'STRONG_SELL':0, 'SELL':0, 'NEUTRAL':0})
     g1 = Gauge(f'tv_strong_buy_{interval}', 'TV strong-buy sentiment {interval}',
                registry=registry)
     g2 = Gauge(f'tv_strong_sell_{interval}', 'TV strong-sell sentiment {interval}',

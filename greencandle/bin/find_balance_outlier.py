@@ -9,6 +9,7 @@ from send_nsca3 import send_nsca
 from greencandle.lib.common import perc_diff, arg_decorator
 from greencandle.lib.mysql import Mysql
 from greencandle.lib import config
+from greencandle.lib.logger import get_logger
 
 @arg_decorator
 def main():
@@ -18,6 +19,7 @@ def main():
     Send to nagios via NSCA
     """
 
+    logger = get_logger(__name__)
     config.create_config()
     dbase = Mysql()
     raw_values = dbase.fetch_sql_data("select usd from balance where coin='TOTALS' "
@@ -38,7 +40,7 @@ def main():
     send_nsca(status=status, host_name='jenkins',
               service_name=f'{config.main.base_env}-balance_outliers',
               text_output=msg, remote_host='nagios.amrox.loc')
-    print(msg)
+    logger.info(msg)
     sys.exit(status)
 
 if __name__ == '__main__':

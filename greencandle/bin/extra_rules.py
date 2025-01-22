@@ -71,8 +71,7 @@ def check_rules():
             items = redis.get_intervals(pair=pair, interval=interval)
             _ = items[-5]
         except (ValueError, IndexError) as err:
-            print("Not enough data  for %s: %s", pair, err)
-            print('HOLD', 'Not enough data', 0, 0, {'open':[], 'close':[]})
+            LOGGER.info("Not enough data  for %s: %s", pair, err)
 
         for i in range(-1, -6, -1):
             datax = AttributeDict()
@@ -112,7 +111,6 @@ def check_rules():
                       'long': '1',
                       'close': '0'}
         if evalled:
-            print(pair, interval)
             url = f"http://router:1080/{config.web.api_token}"
             payload = {"pair": pair,
                        "text": f"forwarding {action.lower()} trade from extras dashboard",

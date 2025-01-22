@@ -10,6 +10,7 @@ from send_nsca3 import send_nsca
 from greencandle.lib import config
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.common import AttributeDict, arg_decorator
+from greencandle.lib.logger import get_logger
 
 @arg_decorator
 def main():
@@ -18,6 +19,7 @@ def main():
     has received an update for the current timeframe
     Run using cron a few mins past each hour
     """
+    logger = get_logger(__name__)
     config.create_config()
     redis = Redis()
     interval = '1h'
@@ -53,7 +55,7 @@ def main():
 
     send_nsca(status=status, host_name='data', service_name='data_1h_freshness',
               text_output=msg, remote_host='nagios.amrox.loc')
-    print(msg)
+    logger.info(msg)
     sys.exit(status)
 
 if __name__ == '__main__':

@@ -9,12 +9,15 @@ from greencandle.lib.balance import Balance
 from greencandle.lib.balance_common import get_base
 from greencandle.lib.mysql import Mysql
 from greencandle.lib import config
+from greencandle.lib.logger import get_logger
 
 @arg_decorator
 def main():
     """
     Get list of symbols that have a balance that don't have an associated open trade
     """
+
+    logger = get_logger(__name__)
     dbase = Mysql()
     bal = Balance(test=False)
     config.create_config()
@@ -26,7 +29,7 @@ def main():
     expected = {get_base(x[2]) for x in dbase.get_open_trades() }
 
     anomalous = actual - expected
-    print(anomalous, len(anomalous))
+    logger.info(anomalous, len(anomalous))
     try:
         int(len(anomalous))  # to catch any errors
         if len(anomalous) == 0:

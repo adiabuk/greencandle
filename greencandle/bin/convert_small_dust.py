@@ -14,7 +14,7 @@ def main():
     Find and convert small assets without open trades to BNB
     """
 
-    logger = get_logger("convert_small_dust")
+    logger = get_logger(__name__)
     dbase = Mysql()
     client = binance_auth()
     dust_set = client.get_dustable_set()
@@ -22,7 +22,6 @@ def main():
 
     # get dust assets which are not in a trade
     main_list = list(set(dust_set - open_set))
-    print(main_list, len(main_list))
     if len(main_list) > 10:
         logger.info("Some assets will be discarded in current run due to max size reached")
     if len(main_list) > 0:

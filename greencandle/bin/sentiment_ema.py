@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-member
+#pylint: disable=no-member,broad-exception-caught
 """
 Get number of pairs above and below EMA_150
 """
@@ -12,6 +12,7 @@ from prometheus_client import CollectorRegistry, Gauge, push_to_gateway
 from greencandle.lib import config
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.common import arg_decorator
+from greencandle.lib.logger import get_logger
 
 def get_max(up, down):
     """
@@ -30,6 +31,8 @@ def main():
     depending on whether the majority of pairs are above or below the 150 EMA
     Send to nagios via NSCA
     """
+
+    logger = get_logger(__name__)
     config.create_config()
     redis = Redis()
 
@@ -48,7 +51,7 @@ def main():
                 down.append(pair)
 
         except Exception as e:
-            print("bad %s",e, pair)
+            logger.info("bad %s %s",str(e), pair)
 
     dt_stamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     filename = f'/data/ema_stats/ema_{interval}_{dt_stamp}.json'
@@ -75,7 +78,7 @@ def main():
     text = f"{msg}: Direction is {max_direction}: {details}"
     send_nsca(status=status, host_name='data', service_name=f'EMA_150_{interval}',
               text_output=text, remote_host='nagios.amrox.loc')
-    print(text)
+    logger.info("EMA direction is %s for %s, details %s", max_direction, interval, details)
     registry = CollectorRegistry()
     g = Gauge(f'EMA_150_up_{interval}', 'number of pairs above EMA_150', registry=registry)
     g2 = Gauge(f'EMA_150_down_{interval}', 'number of pairs below EMA_150', registry=registry)

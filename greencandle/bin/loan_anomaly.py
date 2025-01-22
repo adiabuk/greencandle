@@ -11,16 +11,20 @@ from greencandle.lib.binance_accounts import base2quote
 from greencandle.lib.balance_common import get_base, get_quote
 from greencandle.lib.mysql import Mysql
 from greencandle.lib import config
+from greencandle.lib.logger import get_logger
 
 @arg_decorator
 def main():
     """
     Get difference between actual debts from exchange and debts from open db trades"
     """
+
+    logger = get_logger(__name__)
     config.create_config()
     client=binance_auth()
     details = client.get_cross_margin_details()
     debts = {}
+
     for item in details['userAssets']:
         debt = float(item['borrowed'])
         if debt > 0:
@@ -66,7 +70,7 @@ def main():
     send_nsca(status=status, host_name='jenkins',
               service_name=f'{config.main.base_env}_loan_anomaly',
               text_output=f'{text_output}|diff={diff};;;;', remote_host='nagios.amrox.loc')
-    print(text_output)
+    logger.info(text_output)
     sys.exit(status)
 
 if __name__ == '__main__':
