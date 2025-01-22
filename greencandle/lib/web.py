@@ -40,3 +40,11 @@ def get_drain(env, interval, direction):
           f'&interval={interval}')
     req = requests.get(url, timeout=2)
     return req.json()['result']
+
+def get_drain_env(env):
+    """
+    get drain json for entire given environment
+    """
+    url = f'http://config.amrox.loc/drain/get_env?env={env}'
+    req = requests.get(url, timeout=2)
+    return req.json()
