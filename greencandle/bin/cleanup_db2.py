@@ -33,7 +33,6 @@ def main():
             long_name = re.sub(rf'-{direction}', '', short_dict[short])
 
             res = [i for i in open_trades if i[2]== pair and i[3]==long_name and i[5]==direction]
-            logger.info(res)
             if not res:
                 logger.info("%s not used...deleting", orig_key)
                 redis.conn.delete(orig_key)   #delete here
