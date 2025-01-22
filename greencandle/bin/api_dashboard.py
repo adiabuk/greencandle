@@ -16,7 +16,6 @@ from collections import defaultdict
 from datetime import timedelta, datetime
 from str2bool import str2bool
 import requests
-from prometheus_client import CollectorRegistry, Gauge, push_to_gateway
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, render_template, request, Response, redirect, url_for, session, g
 from flask_login import LoginManager, login_required, current_user
@@ -31,7 +30,7 @@ from greencandle.lib.common import (arg_decorator, divide_chunks, get_be_service
                                     perc_diff, get_tv_link, get_trade_link, format_usd,
                                     AttributeDict, price2float)
 from greencandle.lib import config
-from greencandle.lib.web import PrefixMiddleware
+from greencandle.lib.web import PrefixMiddleware, push_prom_data
 from greencandle.lib.balance_common import get_quote
 from greencandle.lib.balance import Balance
 from greencandle.lib.flask_auth import load_user, login as loginx, logout as logoutx
@@ -532,15 +531,9 @@ def get_live():
     env = config.main.base_env
     text = (f"{msg}: {net_perc_profitable}% of open trades are "
            f"profitable|net_profitable={net_perc_profitable};20;10;;")
-    registry = CollectorRegistry()
-    g1 = Gauge(f'open_profitable_{env}', f'perc of open profitable trades in {env}',
-                  registry=registry)
-    g1.set(net_perc_profitable)
-    g2 = Gauge(f'num_open_trades_{env}', f'number of open trades in {env}',
-                  registry=registry)
-    g2.set(len(raw))
 
-    push_to_gateway('jenkins:9091', job=f'{env}_metrics', registry=registry)
+    push_prom_data(f'open_profitable_{env}', net_perc_profitable)
+    push_prom_data(f'num_open_trades_{env}', len(raw))
 
     send_nsca(status=status, host_name="jenkins",
               service_name=f"{env}_open_profitable",
@@ -747,28 +740,16 @@ def get_balance():
     env = config.main.base_env
     text = f"{msg}: Current_net_perc is {current_net_perc}%|net_perc={current_net_perc};0;-25;;"
 
-    registry = CollectorRegistry()
-    g1 = Gauge(f'open_net_perc_{env}', f'net perc for open trades {env} env', registry=registry)
-    g1.set(current_net_perc) if current_net_perc else g1.set(0)
-    g2 = Gauge(f'open_net_profit_{env}', f'net profit for open trades {env} env', registry=registry)
-    g2.set(total_value) if total_value else g2.set(0)
-    g3 = Gauge(f'risk_factor_{env}', f'risk factor for {env} env', registry=registry)
-    g3.set(risk) if risk else g3.set(0)
-    g4 = Gauge(f'max_borrow_usd_{env}', f'available borrow amount in usd for {env} env',
-               registry=registry)
-    g4.set(max_borrow_usd) if max_borrow_usd else g4.set(0)
-
-    g5 = Gauge(f'total_debts_usd_{env}', f'current debts in usd for {env} env', registry=registry)
-    g5.set(total_debts_usd) if total_debts_usd else g5.set(0)
-    g6 = Gauge(f'current_balance_usd_{env}', f'current balance in usd for {env} env',
-               registry=registry)
-    g6.set(price2float(current_balance_usd)) if current_balance_usd else g6.set(0)
-
-    g7 = Gauge(f'current_balance_btc_{env}', f'current balance in btc for {env} env',
-               registry=registry)
-    g7.set(price2float(current_balance_btc)) if current_balance_btc else g7.set(0)
-    push_to_gateway('jenkins:9091', job=f'{env}_metrics', registry=registry)
-
+    prom_data = {f'open_net_perc_{env}': current_net_perc,
+                 f'open_net_profit_{env}': total_value,
+                 f'risk_factor_{env}': risk,
+                 f'max_borrow_usd_{env}': max_borrow_usd,
+                 f'total_debts_usd_{env}': total_debts_usd,
+                 f'total_debts_usd_{env}': total_debts_usd,
+                 f'current_balance_usd_{env}': price2float(current_balance_usd),
+                 f'current_balance_btc_{env}': price2float(current_balance_btc)}
+    for k, v in prom_data.items():
+        push_prom_data(k,v)
     send_nsca(status=status, host_name="jenkins",
               service_name=f"{env}_open_net_perc",
               text_output=text, remote_host="nagios.amrox.loc")

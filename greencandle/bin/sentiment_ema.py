@@ -8,11 +8,11 @@ import json
 from datetime import datetime
 import numpy as np
 from send_nsca3 import send_nsca
-from prometheus_client import CollectorRegistry, Gauge, push_to_gateway
 from greencandle.lib import config
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.common import arg_decorator
 from greencandle.lib.logger import get_logger
+from greencandle.lib.web import push_prom_data
 
 def get_max(up, down):
     """
@@ -79,12 +79,10 @@ def main():
     send_nsca(status=status, host_name='data', service_name=f'EMA_150_{interval}',
               text_output=text, remote_host='nagios.amrox.loc')
     logger.info("EMA direction is %s for %s, details %s", max_direction, interval, details)
-    registry = CollectorRegistry()
-    g = Gauge(f'EMA_150_up_{interval}', 'number of pairs above EMA_150', registry=registry)
-    g2 = Gauge(f'EMA_150_down_{interval}', 'number of pairs below EMA_150', registry=registry)
-    g.set(up_perc)
-    g2.set(down_perc)
-    push_to_gateway('jenkins:9091', job='data_metrics', registry=registry)
+
+    push_prom_data(f'EMA_150_up_{interval}', up_perc)
+    push_prom_data(f'EMA_150_down_{interval}', down_perc)
+
     sys.exit(status)
 
 if __name__ == '__main__':

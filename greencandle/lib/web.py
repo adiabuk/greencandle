@@ -1,8 +1,9 @@
-#pylint: disable=too-few-public-methods
+#pylint: disable=too-few-public-methods,no-member
 """
 Libraries for use in API modules
 """
 import requests
+from greencandle.lib import config
 
 class PrefixMiddleware():
     """
@@ -48,3 +49,15 @@ def get_drain_env(env):
     url = f'http://config.amrox.loc/drain/get_env?env={env}'
     req = requests.get(url, timeout=2)
     return req.json()
+
+def push_prom_data(metric_name, value):
+    """
+    Push metric to pushgateway for prometheus
+    """
+    value = 0 if (value is None or value == '') else value
+    config.create_config()
+    job_name = f"{config.main.base_env}_metrics"
+    headers = {'X-Requested-With': 'gc requests', 'Content-type': 'text/xml'}
+    url = f"http://jenkins:9091/metrics/job/{job_name}"
+    data = f"{metric_name} {value}\n"
+    requests.post(url, headers=headers, data=data, timeout=10)

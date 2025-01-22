@@ -6,12 +6,12 @@ Get profit from prvious hour and send to slack
 
 import sys
 from datetime import datetime
-from prometheus_client import CollectorRegistry, Gauge, push_to_gateway
 from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.logger import exception_catcher
 from greencandle.lib.common import format_usd, arg_decorator
 from greencandle.lib import config
 from greencandle.lib.mysql import Mysql
+from greencandle.lib.web import push_prom_data
 
 GET_EXCEPTIONS = exception_catcher((Exception))
 
@@ -46,21 +46,14 @@ def main():
         if 0 < now.minute < 10:
             send_slack_message('balance', message, name=sys.argv[0].rsplit('/', maxsplit=1)[-1])
 
-    registry = CollectorRegistry()
-    g1 = Gauge(f'closed_profit_perc_hour_{env}', 'number of pairs above EMA_150', registry=registry)
-    g1.set(total_net_perc) if total_net_perc else g1.set(0)
-    g2 = Gauge(f'closed_profit_perc_day_{env}', 'number of pairs above EMA_150', registry=registry)
-    g2.set(todays_net_total) if todays_net_total else g2.set(0)
-    g3 = Gauge(f'closed_net_avg_hour_{env}', 'number of pairs above EMA_150', registry=registry)
-    g3.set(avg_perc) if avg_perc else g3.set(0)
-    g4 = Gauge(f'closed_net_avg_day_{env}', 'number of pairs above EMA_150', registry=registry)
-    g4.set(todays_avg) if todays_avg else g4.set(0)
-    g5 = Gauge(f'closed_net_profit_hour_{env}', 'number of pairs above EMA_150', registry=registry)
-    g5.set(usd_profit) if usd_profit else g5.set(0)
-    g6 = Gauge(f'closed_net_profit_day_{env}', 'number of pairs above EMA_150', registry=registry)
-    g6.set(todays_usd) if todays_usd else g6.set(0)
-
-    push_to_gateway('jenkins:9091', job=f'{env}_metrics', registry=registry)
+    prom_data = {f'closed_profit_perc_hour_{env}': total_net_perc,
+                 f'closed_profit_perc_day_{env}': todays_net_total,
+                 f'closed_net_avg_hour_{env}': avg_perc,
+                 f'closed_net_avg_day_{env}': todays_avg,
+                 f'closed_net_profit_hour_{env}': usd_profit,
+                 f'closed_net_profit_day_{env}': todays_usd}
+    for k, v in prom_data.items():
+        push_prom_data(k, v)
 
 if __name__ == "__main__":
     main()

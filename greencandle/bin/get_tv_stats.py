@@ -8,11 +8,11 @@ import json
 from datetime import datetime
 from send_nsca3 import send_nsca
 from tradingview_ta import get_multiple_analysis
-from prometheus_client import CollectorRegistry, Gauge, push_to_gateway
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.common import arg_decorator, AttributeDict
 from greencandle.lib import config
 from greencandle.lib.logger import get_logger
+from greencandle.lib.web import push_prom_data
 
 @arg_decorator
 def main():
@@ -63,21 +63,13 @@ def main():
               text_output=text, remote_host="nagios.amrox.loc")
     logger.info("current sentiment for %s is %s, stats:%s", interval, most, stats)
 
-    registry = CollectorRegistry()
-    g1 = Gauge(f'tv_strong_buy_{interval}', 'TV strong-buy sentiment {interval}',
-               registry=registry)
-    g2 = Gauge(f'tv_strong_sell_{interval}', 'TV strong-sell sentiment {interval}',
-               registry=registry)
-    g3 = Gauge(f'tv_buy_{interval}', 'TV buy sentiment {interval}', registry=registry)
-    g4 = Gauge(f'tv_sell_{interval}', 'TV buy sentiment {interval}', registry=registry)
-    g5 = Gauge(f'tv_neutral_{interval}', 'TV neutral sentiment {interval}', registry=registry)
-
-    g1.set(stats.STRONG_BUY)
-    g2.set(stats.STRONG_SELL)
-    g3.set(stats.BUY)
-    g4.set(stats.SELL)
-    g5.set(stats.NEUTRAL)
-    push_to_gateway('jenkins:9091', job='data_metrics', registry=registry)
+    prom_data = {f'tv_strong_buy_{interval}': stats.STRONG_BUY,
+                 f'tv_strong_sell_{interval}':  stats.STRONG_SELL,
+                 f'tv_buy_{interval}': stats.BUY,
+                 f'tv_sell_{interval}': stats.SELL,
+                 f'tv_neutral_{interval}': stats.NEUTRAL}
+    for k, v in prom_data.items():
+        push_prom_data(k, v)
 
     sys.exit(status)
 

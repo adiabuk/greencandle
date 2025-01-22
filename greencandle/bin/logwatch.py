@@ -7,13 +7,13 @@ import re
 import time
 import os
 import docker
-from prometheus_client import CollectorRegistry, Gauge, push_to_gateway
 from apscheduler.schedulers.background import BackgroundScheduler
 from send_nsca3 import send_nsca
 from setproctitle import setproctitle
 from greencandle.lib import config
 from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.common import arg_decorator
+from greencandle.lib.web import push_prom_data
 
 def follow(thefile):
     """
@@ -129,12 +129,10 @@ def check_last_hour_occ():
 
     send_nsca(status=status, host_name="data", service_name=f"strategy17_count_{env}",
               text_output=text, remote_host='nagios.amrox.loc')
-    registry = CollectorRegistry()
-    g = Gauge('strategy17_up_1h', 'strategy17 up count', registry=registry)
-    g2 = Gauge('strategy17_down_1h', 'strategy17 down count', registry=registry)
-    g.set(high_count)
-    g2.set(low_count)
-    push_to_gateway('jenkins:9091', job='data_metrics', registry=registry)
+
+    push_prom_data('strategy17_up_1h', high_count)
+    push_prom_data('strategy17_down_1h', low_count)
+
     xover_perf = f"|long={long_cross} short={short_cross};{xover_warn};{xover_crit};;"
     xover_text = f"xover long:{long_cross},short:{short_cross}"
     if long_cross > xover_crit or short_cross > xover_crit:
