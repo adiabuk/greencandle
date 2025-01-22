@@ -1,6 +1,7 @@
 SHELL=/bin/bash
 BASH_ENV=/container.env
 SCRIPTS_DIR=/usr/local/bin
+STATIC_DIR=/data/scripts/static
 # minute hour day_of_month month day_of_week command
 
 @reboot ${SCRIPTS_DIR}/push_version &>> /var/log/cron.log
@@ -58,7 +59,8 @@ SCRIPTS_DIR=/usr/local/bin
 #@hourly ${SCRIPTS_DIR}/get_bub_sentiment &>> /var/log/cron.log
 @hourly ${SCRIPTS_DIR}/cleanup_data_pairs &>> /var/log/cron.log
 @reboot ${SCRIPTS_DIR}/cleanup_removed_pairs &>> /var/log/cron.log
-#00 */12 * * * /data/scripts/static/get_twitter_posts.py &>> /var/log/cron.log
+#00 */12 * * * ${STATIC_DIR}/get_twitter_posts.py &>> /var/log/cron.log
+*/5 * * * * ${STATIC_DIR}/tv_drain.py stag &>> /var/log/cron.log
 15 * * * * ${SCRIPTS_DIR}/check_data_freshness &>> /var/log/cron.log
 */5 * * * * ${SCRIPTS_DIR}/get_tv_stats 5m &>> /var/log/cron.log
 */15 * * * * ${SCRIPTS_DIR}/get_tv_stats 15m &>> /var/log/cron.log
