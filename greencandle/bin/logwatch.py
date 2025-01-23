@@ -77,6 +77,8 @@ def check_last_hour_err():
     host = "data" if env == "data" else "jenkins"
     send_nsca(status=status, host_name=host, service_name=f"critical_logs_{env}",
               text_output=text, remote_host='nagios.amrox.loc')
+    push_prom_data(f'gc_logfile_err_{env}', err_count)
+    push_prom_data(f'gc_logfile_warn_{env}', warn_count)
 
 def check_last_hour_occ():
     """
