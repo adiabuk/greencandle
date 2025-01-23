@@ -16,16 +16,8 @@ def main():
     Check that trading in opposite direction is blocked in drain api
     If not, set drain.
     Also set drain for both directions if result is neutral, or not available
-    Usage: tv_drain [env] [interval]
+    Usage: tv_drain [env] [interval] [check_intervals]
     """
-
-    logger = get_logger(__name__)
-    redis = Redis(db=15)
-    env = sys.argv[1]
-    interval = sys.argv[2]
-    current = redis.conn.lrange(f'all:{interval}', -20,-1)[-1].decode()
-    current_drain = get_drain_env(env)
-
 
     def get_and_set(direction, status):
         """
@@ -36,10 +28,22 @@ def main():
             logger.info("Setting %s %s %s to %s", env, interval, direction, status)
             set_drain(env=env, interval=interval, direction=direction, value=status)
 
-    if 'SELL' in current:
+
+    env = sys.argv[1]
+    current_drain = get_drain_env(env)
+    logger = get_logger(__name__)
+    redis = Redis(db=15)
+    interval = sys.argv[2]
+    check_intervals = sys.argv[3].split(',')
+    results = []
+    for check_interval in check_intervals:
+        current = redis.conn.lrange(f'all:{check_interval}', -20,-1)[-1].decode()
+        results.append(current)
+
+    if 'SELL' in str(current):
         get_and_set('long', True)
         get_and_set('short', False)
-    elif 'BUY' in current:
+    elif 'BUY' in str(current):
         get_and_set('long', False)
         get_and_set('short', True)
     else:
