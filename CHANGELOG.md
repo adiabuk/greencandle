@@ -1,5 +1,13 @@
 # Releases
 
+# 8.9.5
+* run intermittent checks less often to reduce log warnings
+* print msg when starting app from docker
+* BUGFIX: can't iterate bool type
+* push err/warn count per env to prometheus
+* tweak test env config
+* don't try to convert NoneType to float
+
 # 8.9.4
 * use own method for pushing metrics to prometheus
 * don't log debug information
