@@ -5,6 +5,7 @@ STATIC_DIR=/data/scripts/static
 # minute hour day_of_month month day_of_week command
 
 @reboot ${SCRIPTS_DIR}/push_version &>> /var/log/cron.log
+@hourly ${SCRIPTS_DIR}/push_version &>> /var/log/cron.log
 @reboot /usr/bin/touch /var/run/cron &>> /var/log/cron.log
 * * * * * /usr/bin/touch /var/run/cron &>> /var/log/cron.log
 
