@@ -76,5 +76,5 @@ if [[ ! -f /installed ]]; then
   fi
 fi
 touch /installed
-
+echo "Starting app..."
 bash -c "$@";
