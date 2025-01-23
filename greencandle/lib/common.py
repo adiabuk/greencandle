@@ -282,7 +282,8 @@ def price2float(price: str) -> float:
     """
     convert price with symbols to float
     """
-
+    if not price:
+        return None
     # clean the price string
     trimmer = re.compile(r'[^\d.,]+')
     trimmed = trimmer.sub('', price)
