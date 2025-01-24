@@ -82,7 +82,6 @@ def count_struct(struct):
                 traverse(value)
             else:
                 if isinstance(value, bool) and value:
-                    print("AMROX", value)
                     TRUE_VALUES+=1
     traverse(struct)
     return TRUE_VALUES
