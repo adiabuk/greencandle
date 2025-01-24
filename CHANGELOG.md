@@ -1,5 +1,14 @@
 # Releases
 
+# 8.9.7
+* decorator timer to send method run times to promethus
+* allow changing prometheus job name before pushing
+* further reduce frequency of int_check runs
+* get count and paths of drains in given env for prometheus
+* move function to traverse json to web module and nest in func
+* get drain structure for all environments from redis via api endpoint
+* check either rsi7 or strochrsi14 before ema cross
+
 # 8.9.6
 * check if all timeframes match trend, otherwise drain both
 * ensure stochrsi still has some way to go after ema cross
