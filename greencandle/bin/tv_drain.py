@@ -40,10 +40,10 @@ def main():
         current = redis.conn.lrange(f'all:{check_interval}', -20,-1)[-1].decode()
         results.append(current)
 
-    if 'SELL' in str(current):
+    if all("SELL" in item for item in results):
         get_and_set('long', True)
         get_and_set('short', False)
-    elif 'BUY' in str(current):
+    elif all("BUY" in item for item in results):
         get_and_set('long', False)
         get_and_set('short', True)
     else:
