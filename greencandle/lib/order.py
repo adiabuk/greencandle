@@ -21,6 +21,7 @@ from greencandle.lib.binance_accounts import get_binance_spot, base2quote, quote
 from greencandle.lib.balance_common import get_base, get_quote, get_step_precision
 from greencandle.lib.common import perc_diff, add_perc, sub_perc, AttributeDict, QUOTES
 from greencandle.lib.alerts import send_slack_trade, send_slack_message
+from greencandle.lib.web import decorator_timer
 
 GET_EXCEPTIONS = exception_catcher((Exception))
 
@@ -32,6 +33,7 @@ class InvalidTradeError(Exception):
 class Trade():
     """Buy & Sell class"""
 
+    @decorator_timer
     def __init__(self, interval=None, test_data=False, test_trade=False, config=None):
         self.logger = get_logger(__name__)
         self.test_data = test_data
@@ -41,6 +43,7 @@ class Trade():
         self.client = binance_auth()
         self.interval = interval
 
+    @decorator_timer
     @staticmethod
     def is_float(element: any) -> bool:
         """
@@ -56,6 +59,7 @@ class Trade():
         except ValueError:
             return False
 
+    @decorator_timer
     def is_in_drain(self):
         """
         Check if current scope is in drain given date range, and current time
@@ -75,6 +79,7 @@ class Trade():
             return time_str >= time_range[0] or time_str <= time_range[1]
         return (time_range[0] <= time_str <= time_range[1]) if drain else api_drain
 
+    @decorator_timer
     def __send_redis_trade(self, **kwargs):
         """
         Send trade event to redis
@@ -106,6 +111,7 @@ class Trade():
             redis.rm_drawdown(kwargs.pair)
         del redis
 
+    @decorator_timer
     def check_pairs(self, items_list):
         """
         Check we can trade which each of given trading pairs
@@ -179,6 +185,7 @@ class Trade():
             self.logger.warning("Unable to push stats to nagios")
         return final_list
 
+    @decorator_timer
     def open_trade(self, items_list, stop=0):
         """
         Main open trade method
@@ -207,6 +214,7 @@ class Trade():
             raise InvalidTradeError("Invalid trade type")
         return result
 
+    @decorator_timer
     def close_trade(self, items_list, drawdowns=None, drawups=None):
         """
         Main close trade method
@@ -259,6 +267,7 @@ class Trade():
 
         return result
 
+    @decorator_timer
     def get_borrowed(self, pair, symbol):
         """
         get amount borrowed from exchange for both cross and isolated modes
@@ -283,6 +292,7 @@ class Trade():
                 return float(details['assets'][0]['baseAsset']['borrowed'])
         return 0
 
+    @decorator_timer
     def get_avail_asset(self, symbol):
         """
         Get amount of available asset in wallet
@@ -297,6 +307,7 @@ class Trade():
         except KeyError:
             return 0
 
+    @decorator_timer
     def get_balance_to_use(self, dbase, account=None, pair=None, total_max=0):
         """
         Choose between spot/cross/isolated/test balances
@@ -350,6 +361,7 @@ class Trade():
                        "usd": return_usd}
         return return_dict
 
+    @decorator_timer
     def get_amount_to_borrow(self, pair, dbase):
         """
         Get amount to borrow based on pair, and trade direction
@@ -446,6 +458,7 @@ class Trade():
 
         return return_dict
 
+    @decorator_timer
     def get_total_amount_to_use(self, dbase, pair=None, account=None, max_usd=None):
         """ Get total amount to use as sum of balance_to_use and loan_to_use """
 
@@ -493,6 +506,7 @@ class Trade():
                          self.config.main.trade_direction, return_dict)
         return return_dict
 
+    @decorator_timer
     def __open_margin_long(self, long_list, stop=0):
         """
         Get item details and attempt to trade according to config
@@ -612,6 +626,7 @@ class Trade():
         del dbase
         return "opened"
 
+    @decorator_timer
     @staticmethod
     @GET_EXCEPTIONS
     def get_test_balance(dbase, account=None):
@@ -635,6 +650,7 @@ class Trade():
             balance[account][quote]['count'] = max(last_value, balance[account][quote]['count'])
         return balance
 
+    @decorator_timer
     def __open_spot_long(self, buy_list):
         """
         Get item details and attempt to trade according to config
@@ -715,6 +731,7 @@ class Trade():
         del dbase
         return "opened"
 
+    @decorator_timer
     def __send_notifications(self, perc=None, **kwargs):
         """
         Pass given data to trade notification functions
@@ -755,6 +772,7 @@ class Trade():
                          net_perc=net_perc, usd_net_profit=usd_net_profit,
                          drawup=drawup, drawdown=drawdown, comment=comment)
 
+    @decorator_timer
     def __get_result_details(self, current_price, trade_result):
         """
         Extract price, base/quote amt and order id from exchange transaction dict
@@ -777,6 +795,7 @@ class Trade():
 
         return [None] * 4
 
+    @decorator_timer
     def __get_commission(self, trade_result):
         """
         Extract and collate commission from trade result dict
@@ -793,6 +812,7 @@ class Trade():
                                             fill['commissionAsset']+'USDT')
         return usd_total
 
+    @decorator_timer
     def __close_margin_short(self, short_list, drawdowns=None, drawups=None):
         """
         Get item details and attempt to close margin short trade according to config
@@ -906,6 +926,7 @@ class Trade():
         del dbase
         return "closed"
 
+    @decorator_timer
     def __open_margin_short(self, short_list, stop):
         """
         Get item details and attempt to open margin short trade according to config
@@ -1019,6 +1040,7 @@ class Trade():
         del dbase
         return "opened"
 
+    @decorator_timer
     def __close_spot_long(self, sell_list, drawdowns=None, drawups=None):
         """
         Get item details and attempt to close spot trade according to config
@@ -1099,6 +1121,7 @@ class Trade():
         del dbase
         return "closed"
 
+    @decorator_timer
     def __close_margin_long(self, sell_list, drawdowns=None, drawups=None):
         """
         Get item details and attempt to close margin long trade according to config

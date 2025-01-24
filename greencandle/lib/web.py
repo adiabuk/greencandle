@@ -2,9 +2,10 @@
 """
 Libraries for use in API modules
 """
+from time import time
 import requests
 from greencandle.lib import config
-
+config.create_config()
 TRUE_VALUES = 0
 
 class PrefixMiddleware():
@@ -57,7 +58,6 @@ def push_prom_data(metric_name, value, job_name=None):
     Push metric to pushgateway for prometheus
     """
     value = 0 if (value is None or value == '') else value
-    config.create_config()
     job_name = f"{config.main.base_env}_metrics" if not job_name else job_name
     headers = {'X-Requested-With': 'gc requests', 'Content-type': 'text/xml'}
     url = f"http://jenkins:9091/metrics/job/{job_name}"
@@ -97,3 +97,17 @@ def find_paths(nested_dict, value, prepath=()):
             yield path
         elif hasattr(v, 'items'): # v is a dict
             yield from find_paths(v, value, path)
+
+def decorator_timer(some_function):
+    """
+    Decorator to send function execution time to prometheus
+    """
+    def wrapper(*args, **kwargs):
+        t1 = time()
+        result = some_function(*args, **kwargs)
+        end = time()-t1
+        metric_name = f'{some_function.__name__}_{config.main.name}'.replace('-','_')
+        push_prom_data(metric_name=metric_name,
+                       value=str(end), job_name=f'gc_{config.main.base_env}_metrics')
+        return result
+    return wrapper

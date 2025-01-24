@@ -25,6 +25,7 @@ from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.common import get_tv_link, arg_decorator, convert_to_seconds, perc_diff
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.order import Trade
+from greencandle.lib.web import decorator_timer
 
 config.create_config()
 INTERVAL = config.main.interval
@@ -52,6 +53,7 @@ REDIS_FORWARD = [int(x) for x in os.environ['REDIS_FORWARD'].split(',')] if 'RED
         in os.environ else False
 
 @GET_EXCEPTIONS
+@decorator_timer
 def analyse_loop():
     """
     Gather data from redis and analyze
@@ -128,6 +130,7 @@ def analyse_loop():
     else:
         time.sleep(1)
 
+@decorator_timer
 def get_match_name(matches):
     """
     get a list of matching rule names based on container number, and matching rule number
@@ -160,6 +163,7 @@ def get_match_name(matches):
         match_names.append(name_lookup[container_num-1][match-1])
     return ','.join(match_names)
 
+@decorator_timer
 def analyse_pair(pair, reversal, expire, redis):
     """
     Analysis of individual pair
@@ -300,7 +304,6 @@ def analyse_pair(pair, reversal, expire, redis):
         LOGGER.info("trade alert: %s %s %s %s %s (%s)",result, pair, match_strs, INTERVAL,
                     DIRECTION, supported.strip())
 
-@arg_decorator
 def main():
     """
     Analyse data from redis and alert to slack if there are current trade opportunities
