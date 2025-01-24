@@ -1,5 +1,11 @@
 # Releases
 
+# 8.9.6
+* check if all timeframes match trend, otherwise drain both
+* ensure stochrsi still has some way to go after ema cross
+* check trend of intervals above and below when draining/undraining
+* need to push version periodically
+
 # 8.9.5
 * run intermittent checks less often to reduce log warnings
 * print msg when starting app from docker
