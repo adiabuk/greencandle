@@ -52,13 +52,13 @@ def get_drain_env(env):
     req = requests.get(url, timeout=2)
     return req.json()
 
-def push_prom_data(metric_name, value):
+def push_prom_data(metric_name, value, job_name=None):
     """
     Push metric to pushgateway for prometheus
     """
     value = 0 if (value is None or value == '') else value
     config.create_config()
-    job_name = f"{config.main.base_env}_metrics"
+    job_name = f"{config.main.base_env}_metrics" if not job_name else job_name
     headers = {'X-Requested-With': 'gc requests', 'Content-type': 'text/xml'}
     url = f"http://jenkins:9091/metrics/job/{job_name}"
     data = f"{metric_name} {value}\n"
