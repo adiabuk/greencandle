@@ -8,23 +8,23 @@ from str2bool import str2bool
 from redis.commands.json.path import Path
 from greencandle.lib.common import AttributeDict, arg_decorator
 from greencandle.lib.redis_conn import Redis
-from greencandle.lib.web import PrefixMiddleware
+from greencandle.lib.web import PrefixMiddleware, find_paths
 
 APP = Flask(__name__, template_folder="/var/www/html", static_url_path='/',
             static_folder='/var/www/html')
 APP.wsgi_app = PrefixMiddleware(APP.wsgi_app, prefix='/drain')
 
 DEF_STRUCT = {"top_open": False,
-          "top_close": False,
-          "tf_1m": {"long": False, "short":False, "close": False},
-          "tf_5m": {"long": False, "short":False, "close": False},
-          "tf_15m": {"long": False, "short":False, "close": False},
-          "tf_30m": {"long": False, "short":False, "close": False},
-          "tf_1h": {"long": False, "short":False, "close": False},
-          "tf_4h": {"long": False, "short":False, "close": False},
-          "tf_12h": {"long": False, "short":False, "close": False},
-          "tf_1d": {"long": False, "short":False, "close": False}
-          }
+              "top_close": False,
+              "tf_1m": {"long": False, "short":False, "close": False},
+              "tf_5m": {"long": False, "short":False, "close": False},
+              "tf_15m": {"long": False, "short":False, "close": False},
+              "tf_30m": {"long": False, "short":False, "close": False},
+              "tf_1h": {"long": False, "short":False, "close": False},
+              "tf_4h": {"long": False, "short":False, "close": False},
+              "tf_12h": {"long": False, "short":False, "close": False},
+              "tf_1d": {"long": False, "short":False, "close": False}
+              }
 
 ENVS = ["prod", "stag", "per", "data", "test"]
 
@@ -56,6 +56,16 @@ def get_all_envs():
     for env in ENVS:
         entire[env] = get_struct(env)
     return entire
+
+@APP.route('/drain_count', methods=["GET"])
+def get_drain_count():
+    """
+    Get drain count and
+    """
+    env = request.args.get('env', False)
+    struct = get_struct(env)
+    paths = tuple(find_paths(struct, True))
+    return {'count': len(paths), 'result': paths}
 
 @APP.route('/healthcheck', methods=["GET"])
 def healthcheck():

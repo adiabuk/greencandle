@@ -85,3 +85,11 @@ def count_struct(struct):
                     TRUE_VALUES+=1
     traverse(struct)
     return TRUE_VALUES
+
+def find_paths(nested_dict, value, prepath=()):
+    for k, v in nested_dict.items():
+        path = prepath + (k,)
+        if v == value: # found value
+            yield path
+        elif hasattr(v, 'items'): # v is a dict
+            yield from find_paths(v, value, path)
