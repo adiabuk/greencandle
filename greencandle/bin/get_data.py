@@ -41,7 +41,6 @@ def get_data():
     LOGGER.debug("finished prod run")
 
 @GET_EXCEPTIONS
-@arg_decorator
 def main():
     """
     Collect data:

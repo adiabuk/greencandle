@@ -130,7 +130,6 @@ def analyse_loop():
     else:
         time.sleep(1)
 
-@decorator_timer
 def get_match_name(matches):
     """
     get a list of matching rule names based on container number, and matching rule number

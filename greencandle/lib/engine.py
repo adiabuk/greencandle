@@ -49,7 +49,6 @@ class Engine(dict):
         super().__init__()
         LOGGER.debug("finished fetching raw data")
 
-    @decorator_timer
     def __make_data_tupple(self, pair, index):
         """
         Transform dataframe to tupple of of floats
@@ -63,7 +62,6 @@ class Engine(dict):
         return ohlc
 
     @staticmethod
-    @decorator_timer
     def __renamed_dataframe_columns(klines=None):
         """
         Return dataframe with ordered/renamed coulumns
@@ -83,7 +81,6 @@ class Engine(dict):
         return dataframe
 
     @staticmethod
-    @decorator_timer
     def get_operator_fn(symbol):
         """
         Get operator function from string
@@ -99,7 +96,6 @@ class Engine(dict):
             }[symbol]
 
     @get_exceptions
-    @decorator_timer
     def __add_schemes(self):
         """ add scheme to correct structure """
         final_scheme = defaultdict(lambda: defaultdict(dict))
@@ -119,8 +115,8 @@ class Engine(dict):
 
         self.schemes = []
 
-    @get_exceptions
     @decorator_timer
+    @get_exceptions
     def get_data(self, localconfig=None, first_run=False, no_of_runs=999):
         """
         Iterate through data and trading pairs to extract data
@@ -207,14 +203,12 @@ class Engine(dict):
         scheme["open_time"] = str(self.dataframes[pair].iloc[location]["openTime"])
         self.schemes.append(scheme)
 
-    @decorator_timer
     def get_bb_perc_ema(self, pair, index=None, localconfig=None):
         """
         Get EMA of bbperc
         """
         self.get_bb_perc(pair, index, localconfig, ema=True)
 
-    @decorator_timer
     def get_macd(self, pair, index=None, localconfig=None):
         """ get macd """
 
@@ -254,7 +248,6 @@ class Engine(dict):
 
         LOGGER.debug("done getting macd for %s - %s: %s", pair, scheme['open_time'], scheme['data'])
 
-    @decorator_timer
     def get_bb_perc(self, pair, index=None, localconfig=None, ema=False):
         """get bb %"""
         if index is None:
@@ -311,7 +304,6 @@ class Engine(dict):
 
         LOGGER.debug("done getting bb perc for %s - %s", pair, open_time)
 
-    @decorator_timer
     def get_bb(self, pair, index=None, localconfig=None):
         """get bollinger bands"""
         if index is None:
@@ -353,7 +345,6 @@ class Engine(dict):
         LOGGER.debug("done getting bb for %s - %s", pair, open_time)
 
     @get_exceptions
-    @decorator_timer
     def get_pivot(self, pair, index=None, localconfig=None):
         """
         Get pivot points based on previous day data
@@ -388,7 +379,6 @@ class Engine(dict):
         LOGGER.debug("done getting pivot for %s - %s", pair, scheme['open_time'])
 
     @get_exceptions
-    @decorator_timer
     def get_cci(self, pair, index=None, localconfig=None):
         """
         Get CCI osscilator
@@ -417,7 +407,6 @@ class Engine(dict):
         LOGGER.debug("done getting cci For %s - %s", pair, scheme['open_time'])
 
     @get_exceptions
-    @decorator_timer
     def get_tsi(self, pair, index=None, localconfig=None):
         """
         Get TSI osscilator
@@ -441,7 +430,6 @@ class Engine(dict):
         self.schemes.append(scheme)
         LOGGER.debug("done getting tsi For %s - %s", pair, scheme['open_time'])
 
-    @decorator_timer
     def get_atr_perc(self, pair, index=None, localconfig=None):
         """
         Get ATR percentage
@@ -499,7 +487,6 @@ class Engine(dict):
         LOGGER.debug("done getting atr rankfor %s - %s", pair, scheme['open_time'])
 
     @get_exceptions
-    @decorator_timer
     def get_atr(self, pair, index=None, localconfig=None):
         """
         get Average True Range values for given pair
@@ -530,7 +517,6 @@ class Engine(dict):
         LOGGER.debug("done getting atr For %s - %s", pair, scheme['open_time'])
 
     @get_exceptions
-    @decorator_timer
     def get_rsi(self, pair, index=None, localconfig=None):
         """
         get RSI oscillator values for given pair
@@ -561,7 +547,6 @@ class Engine(dict):
         LOGGER.debug("done getting rsi For %s - %s", pair, scheme['open_time'])
 
     @get_exceptions
-    @decorator_timer
     def get_stochrsi(self, pair, index=None, localconfig=None):
         """
         get Stochastic RSI values for given pair
@@ -623,7 +608,6 @@ class Engine(dict):
         LOGGER.debug("done getting stochrsi For %s - %s", pair, scheme['open_time'])
 
     @get_exceptions
-    @decorator_timer
     def get_envelope(self, pair, index=None, localconfig=None):
         """
         Get envelope strategy
@@ -656,7 +640,6 @@ class Engine(dict):
         LOGGER.debug("done getting envelope for %s - %s", pair, scheme['open_time'])
 
     @get_exceptions
-    @decorator_timer
     def get_hma(self, pair, index=None, localconfig=None):
         """
         Calculate Hull Moving Average using Weighted Moving Average
@@ -690,7 +673,6 @@ class Engine(dict):
         LOGGER.debug("done getting ma for %s - %s", pair, scheme['open_time'])
 
     @get_exceptions
-    @decorator_timer
     def get_moving_averages(self, pair, index=None, localconfig=None):
         """
         Apply moving averages to klines and get BUY/SELL triggers
@@ -738,7 +720,6 @@ class Engine(dict):
         LOGGER.debug("done getting moving averages for %s - %s", pair, open_time)
 
     @get_exceptions
-    @decorator_timer
     def get_oscillators(self, pair, index=None, localconfig=None):
         """
 
@@ -796,7 +777,6 @@ class Engine(dict):
         LOGGER.debug("done getting oscillators for %s - %s", pair, scheme['open_time'])
 
     @get_exceptions
-    @decorator_timer
     def get_indicators(self, pair, index=None, localconfig=None):
         """
 
@@ -834,7 +814,6 @@ class Engine(dict):
         LOGGER.debug("done getting indicators for %s - %s", pair, scheme['open_time'])
 
     @get_exceptions
-    @decorator_timer
     def get_ha(self, pair, index=None, localconfig=None):
         """
         Get Heikin-Ashi candles
@@ -881,7 +860,6 @@ class Engine(dict):
         LOGGER.debug("done getting heiken ashi for %s - %s", pair, scheme['open_time'])
 
     @get_exceptions
-    @decorator_timer
     def get_supertrend(self, pair, index=None, localconfig=None):
         """
         Get the super trend oscillator values for a given pair
