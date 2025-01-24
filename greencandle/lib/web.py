@@ -1,9 +1,11 @@
-#pylint: disable=too-few-public-methods,no-member
+#pylint: disable=too-few-public-methods,no-member,global-statement
 """
 Libraries for use in API modules
 """
 import requests
 from greencandle.lib import config
+
+TRUE_VALUES = 0
 
 class PrefixMiddleware():
     """
@@ -61,3 +63,26 @@ def push_prom_data(metric_name, value):
     url = f"http://jenkins:9091/metrics/job/{job_name}"
     data = f"{metric_name} {value}\n"
     requests.post(url, headers=headers, data=data, timeout=10)
+
+def count_struct(struct):
+    """
+    Get number of True values in a dict structure
+    Reset global var to zero each time we called so it's not using module level aggregation
+    """
+    global TRUE_VALUES
+    TRUE_VALUES = 0
+    def traverse(struct):
+        """
+        Recursive function to traverse nested dict and get count of number of "True" boolean values
+        Function needs a global var defined outside of scope to maintain count as we traverse
+        """
+        global TRUE_VALUES
+        for value in struct.values():
+            if isinstance(value, dict):
+                traverse(value)
+            else:
+                if isinstance(value, bool) and value:
+                    print("AMROX", value)
+                    TRUE_VALUES+=1
+    traverse(struct)
+    return TRUE_VALUES

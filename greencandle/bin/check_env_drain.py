@@ -9,22 +9,7 @@ from send_nsca3 import send_nsca
 from greencandle.lib import config
 from greencandle.lib.common import arg_decorator
 from greencandle.lib.logger import get_logger
-
-TRUE_VALUES = 0
-
-def traverse_and_count(struct):
-    """
-    Recursive function to traverse nested dict and get count of number of "True" boolean values
-    Function needs a global var defined outside of scope to maintain count as we traverse
-    """
-    global TRUE_VALUES
-    for value in struct.values():
-        if isinstance(value, dict):
-            traverse_and_count(value)
-        else:
-            if isinstance(value, bool) and value:
-                TRUE_VALUES+=1
-    return TRUE_VALUES
+from greencandle.lib.web import count_struct
 
 @arg_decorator
 def main():
@@ -39,7 +24,7 @@ def main():
     config.create_config()
     env = config.main.base_env
     a = requests.get(f'http://config.amrox.loc/drain/get_env?env={env}', timeout=10)
-    count = traverse_and_count(a.json())
+    count = count_struct(a.json())
 
     if count > 3:
         status = 2
