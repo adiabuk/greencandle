@@ -29,7 +29,6 @@ class Engine(dict):
     """ Represent events created from data & indicators """
 
     get_exceptions = exception_catcher((Exception))
-    @decorator_timer
     def __init__(self, dataframes, interval=None, test=False, redis=None):
         """
         Initialize class
