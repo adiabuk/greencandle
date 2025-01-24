@@ -60,11 +60,11 @@ def get_all_envs():
 @APP.route('/drain_count', methods=["GET"])
 def get_drain_count():
     """
-    Get drain count and
+    Get drain count and intervals/direction for given env
     """
     env = request.args.get('env', False)
     struct = get_struct(env)
-    paths = tuple(find_paths(struct, True))
+    paths = [':'.join(item).lstrip('tf_') for item in find_paths(struct, True)]
     return {'count': len(paths), 'result': paths}
 
 @APP.route('/healthcheck', methods=["GET"])

@@ -87,6 +87,10 @@ def count_struct(struct):
     return TRUE_VALUES
 
 def find_paths(nested_dict, value, prepath=()):
+    """
+    Use generator to yield paths in nested dict
+    having a given value
+    """
     for k, v in nested_dict.items():
         path = prepath + (k,)
         if v == value: # found value
