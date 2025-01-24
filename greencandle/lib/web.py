@@ -106,7 +106,7 @@ def decorator_timer(some_function):
         t1 = time()
         result = some_function(*args, **kwargs)
         end = time()-t1
-        metric_name = f'{some_function.__name__}_{config.main.name}'.replace('-','_')
+        metric_name = f'gc_time_{some_function.__name__}_{config.main.name}'.replace('-','_')
         push_prom_data(metric_name=metric_name,
                        value=str(end), job_name=f'gc_{config.main.base_env}_metrics')
         return result
