@@ -20,6 +20,7 @@ import talib
 from greencandle.lib.common import make_float
 from greencandle.lib.binance_common import get_all_klines
 from greencandle.lib.logger import get_logger, exception_catcher
+from greencandle.lib.web import decorator_timer
 
 LOGGER = get_logger(__name__)
 CROSS_DATA = {}  # data from different time period
@@ -28,6 +29,7 @@ class Engine(dict):
     """ Represent events created from data & indicators """
 
     get_exceptions = exception_catcher((Exception))
+    @decorator_timer
     def __init__(self, dataframes, interval=None, test=False, redis=None):
         """
         Initialize class
@@ -48,6 +50,7 @@ class Engine(dict):
         super().__init__()
         LOGGER.debug("finished fetching raw data")
 
+    @decorator_timer
     def __make_data_tupple(self, pair, index):
         """
         Transform dataframe to tupple of of floats
@@ -60,6 +63,7 @@ class Engine(dict):
                 make_float(local.close))
         return ohlc
 
+    @decorator_timer
     @staticmethod
     def __renamed_dataframe_columns(klines=None):
         """
@@ -79,6 +83,7 @@ class Engine(dict):
             dataframe.columns.values[index] = item
         return dataframe
 
+    @decorator_timer
     @staticmethod
     def get_operator_fn(symbol):
         """
@@ -94,6 +99,7 @@ class Engine(dict):
             ">" : operator.gt,
             }[symbol]
 
+    @decorator_timer
     @get_exceptions
     def __add_schemes(self):
         """ add scheme to correct structure """
@@ -114,6 +120,7 @@ class Engine(dict):
 
         self.schemes = []
 
+    @decorator_timer
     @get_exceptions
     def get_data(self, localconfig=None, first_run=False, no_of_runs=999):
         """
@@ -159,6 +166,7 @@ class Engine(dict):
         LOGGER.debug("done getting data")
         return self
 
+    @decorator_timer
     def send_ohlcs(self, pair, first_run, no_of_runs=999):
         """Send ohcls data to redis"""
         scheme = {}
@@ -200,12 +208,14 @@ class Engine(dict):
         scheme["open_time"] = str(self.dataframes[pair].iloc[location]["openTime"])
         self.schemes.append(scheme)
 
+    @decorator_timer
     def get_bb_perc_ema(self, pair, index=None, localconfig=None):
         """
         Get EMA of bbperc
         """
         self.get_bb_perc(pair, index, localconfig, ema=True)
 
+    @decorator_timer
     def get_macd(self, pair, index=None, localconfig=None):
         """ get macd """
 
@@ -245,6 +255,7 @@ class Engine(dict):
 
         LOGGER.debug("done getting macd for %s - %s: %s", pair, scheme['open_time'], scheme['data'])
 
+    @decorator_timer
     def get_bb_perc(self, pair, index=None, localconfig=None, ema=False):
         """get bb %"""
         if index is None:
@@ -301,6 +312,7 @@ class Engine(dict):
 
         LOGGER.debug("done getting bb perc for %s - %s", pair, open_time)
 
+    @decorator_timer
     def get_bb(self, pair, index=None, localconfig=None):
         """get bollinger bands"""
         if index is None:
@@ -341,6 +353,7 @@ class Engine(dict):
 
         LOGGER.debug("done getting bb for %s - %s", pair, open_time)
 
+    @decorator_timer
     @get_exceptions
     def get_pivot(self, pair, index=None, localconfig=None):
         """
@@ -375,6 +388,7 @@ class Engine(dict):
         self.schemes.append(scheme)
         LOGGER.debug("done getting pivot for %s - %s", pair, scheme['open_time'])
 
+    @decorator_timer
     @get_exceptions
     def get_cci(self, pair, index=None, localconfig=None):
         """
@@ -403,6 +417,7 @@ class Engine(dict):
             return
         LOGGER.debug("done getting cci For %s - %s", pair, scheme['open_time'])
 
+    @decorator_timer
     @get_exceptions
     def get_tsi(self, pair, index=None, localconfig=None):
         """
@@ -427,6 +442,7 @@ class Engine(dict):
         self.schemes.append(scheme)
         LOGGER.debug("done getting tsi For %s - %s", pair, scheme['open_time'])
 
+    @decorator_timer
     def get_atr_perc(self, pair, index=None, localconfig=None):
         """
         Get ATR percentage
@@ -483,6 +499,7 @@ class Engine(dict):
         self.schemes.append(scheme)
         LOGGER.debug("done getting atr rankfor %s - %s", pair, scheme['open_time'])
 
+    @decorator_timer
     @get_exceptions
     def get_atr(self, pair, index=None, localconfig=None):
         """
@@ -513,6 +530,7 @@ class Engine(dict):
         self.schemes.append(scheme)
         LOGGER.debug("done getting atr For %s - %s", pair, scheme['open_time'])
 
+    @decorator_timer
     @get_exceptions
     def get_rsi(self, pair, index=None, localconfig=None):
         """
@@ -543,6 +561,7 @@ class Engine(dict):
         self.schemes.append(scheme)
         LOGGER.debug("done getting rsi For %s - %s", pair, scheme['open_time'])
 
+    @decorator_timer
     @get_exceptions
     def get_stochrsi(self, pair, index=None, localconfig=None):
         """
@@ -604,6 +623,7 @@ class Engine(dict):
             return
         LOGGER.debug("done getting stochrsi For %s - %s", pair, scheme['open_time'])
 
+    @decorator_timer
     @get_exceptions
     def get_envelope(self, pair, index=None, localconfig=None):
         """
@@ -636,6 +656,7 @@ class Engine(dict):
             return
         LOGGER.debug("done getting envelope for %s - %s", pair, scheme['open_time'])
 
+    @decorator_timer
     @get_exceptions
     def get_hma(self, pair, index=None, localconfig=None):
         """
@@ -669,6 +690,7 @@ class Engine(dict):
 
         LOGGER.debug("done getting ma for %s - %s", pair, scheme['open_time'])
 
+    @decorator_timer
     @get_exceptions
     def get_moving_averages(self, pair, index=None, localconfig=None):
         """
@@ -716,6 +738,7 @@ class Engine(dict):
 
         LOGGER.debug("done getting moving averages for %s - %s", pair, open_time)
 
+    @decorator_timer
     @get_exceptions
     def get_oscillators(self, pair, index=None, localconfig=None):
         """
@@ -773,6 +796,7 @@ class Engine(dict):
             return
         LOGGER.debug("done getting oscillators for %s - %s", pair, scheme['open_time'])
 
+    @decorator_timer
     @get_exceptions
     def get_indicators(self, pair, index=None, localconfig=None):
         """
@@ -810,6 +834,7 @@ class Engine(dict):
         self.schemes.append(scheme)
         LOGGER.debug("done getting indicators for %s - %s", pair, scheme['open_time'])
 
+    @decorator_timer
     @get_exceptions
     def get_ha(self, pair, index=None, localconfig=None):
         """
@@ -856,6 +881,7 @@ class Engine(dict):
         self.schemes.append(scheme)
         LOGGER.debug("done getting heiken ashi for %s - %s", pair, scheme['open_time'])
 
+    @decorator_timer
     @get_exceptions
     def get_supertrend(self, pair, index=None, localconfig=None):
         """

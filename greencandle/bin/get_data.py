@@ -13,6 +13,7 @@ from greencandle.lib.run import ProdRunner
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.common import arg_decorator
 from greencandle.lib.aggregate_data  import collect_agg_data
+from greencandle.lib.web import decorator_timer
 
 config.create_config()
 LOGGER = get_logger(__name__)
@@ -28,6 +29,7 @@ def keepalive():
     Path(f'/var/local/lock/gc_get_{config.main.interval}.lock').touch()
 
 @GET_EXCEPTIONS
+@decorator_timer
 def get_data():
     """
     Get-data run
