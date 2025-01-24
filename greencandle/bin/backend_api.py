@@ -18,6 +18,7 @@ from greencandle.lib.redis_conn import Redis
 from greencandle.lib.common import arg_decorator
 from greencandle.lib.logger import get_logger
 from greencandle.lib.api_queue import add_to_queue
+from greencandle.lib.web import decorator_timer
 
 config.create_config()
 TEST = bool(len(sys.argv) > 1 and sys.argv[1] == '--test')
@@ -53,6 +54,7 @@ def healthcheck():
     """
     return Response(status=200)
 
+@decorator_timer
 def intermittent_check():
     """
     Check for SL/TP
