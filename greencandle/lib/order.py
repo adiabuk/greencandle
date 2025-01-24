@@ -33,7 +33,6 @@ class InvalidTradeError(Exception):
 class Trade():
     """Buy & Sell class"""
 
-    @decorator_timer
     def __init__(self, interval=None, test_data=False, test_trade=False, config=None):
         self.logger = get_logger(__name__)
         self.test_data = test_data
