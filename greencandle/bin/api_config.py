@@ -47,6 +47,16 @@ def set_struct(env, struct):
     redis = Redis()
     redis.conn.json().set(env, Path.root_path(), struct)
 
+@APP.route('/get_all', methods=["GET"])
+def get_all_envs():
+    """
+    Get entire drain structure for all envs
+    """
+    entire = {}
+    for env in ENVS:
+        entire[env] = get_struct(env)
+    return entire
+
 @APP.route('/healthcheck', methods=["GET"])
 def healthcheck():
     """
