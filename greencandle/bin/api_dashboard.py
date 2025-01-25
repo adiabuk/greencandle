@@ -59,6 +59,7 @@ SCRIPTS = ["write_balance", "get_quote_balance", "repay_debts", "get_risk", "get
            "get_hour_profit", "repay_debts", "balance_graph", "test_close"]
 ARG_SCRIPTS = {"close_all": ['name_filter', 'threshold']}
 
+@decorator_timer
 def get_doublersi():
     """
     RSI strategy data using 2 timeframes
