@@ -5,8 +5,10 @@ Libraries for use in API modules
 from time import time
 import requests
 from greencandle.lib import config
+from greencandle.lib.logger import get_logger
 config.create_config()
 TRUE_VALUES = 0
+LOGGER = get_logger(__name__)
 
 class PrefixMiddleware():
     """
@@ -62,7 +64,10 @@ def push_prom_data(metric_name, value, job_name=None):
     headers = {'X-Requested-With': 'gc requests', 'Content-type': 'text/xml'}
     url = f"http://jenkins:9091/metrics/job/{job_name}"
     data = f"{metric_name.replace('-','_')} {value}\n"
-    requests.post(url, headers=headers, data=data, timeout=10)
+    try:
+        requests.post(url, headers=headers, data=data, timeout=10)
+    except (requests.exceptions.ReadTimeout, requests.exceptions.connectionerror):
+        LOGGER.critical("Unable to push metric %s", metric_name)
 
 def count_struct(struct):
     """
