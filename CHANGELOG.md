@@ -1,5 +1,12 @@
 # Releases
 
+# 8.9.10
+* add timer decorator to doublersi func
+* BUGFIX: ensure object to be transformed to lcase is a string
+* prune mm posts in postgres hourly from data cron
+* log and continue if unable to push to prometheus
+* add pg8000 pip for accessing external postgresql server
+
 # 8.9.9
 * fix of git structure integrity
 
