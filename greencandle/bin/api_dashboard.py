@@ -12,7 +12,7 @@ import time
 import subprocess
 import logging
 from time import gmtime, strftime
-from collections import defaultdict
+from collections import defaultdict, Counter
 from datetime import timedelta, datetime
 from str2bool import str2bool
 import requests
@@ -30,7 +30,7 @@ from greencandle.lib.common import (arg_decorator, divide_chunks, get_be_service
                                     perc_diff, get_tv_link, get_trade_link, format_usd,
                                     AttributeDict, price2float)
 from greencandle.lib import config
-from greencandle.lib.web import PrefixMiddleware, push_prom_data
+from greencandle.lib.web import PrefixMiddleware, push_prom_data, decorator_timer
 from greencandle.lib.balance_common import get_quote
 from greencandle.lib.balance import Balance
 from greencandle.lib.flask_auth import load_user, login as loginx, logout as logoutx
@@ -175,7 +175,6 @@ def interal():
         filename = os.path.split(page)[-1]
         return render_template('image.html', filename=filename)
     return render_template('internal.html', page=resp.content.decode())
-
 
 @APP.route('/iframe', methods=["GET"])
 @login_required
@@ -417,6 +416,7 @@ def get_value(item, pair, name, direction):
     except KeyError:
         return -1
 
+@decorator_timer
 def get_agg():
     """
     collate aggregate data from redis
@@ -444,6 +444,7 @@ def get_agg():
         all_data.append(current_row)
     AGG_DATA = all_data
 
+@decorator_timer
 def get_live():
     """
     Get live open trade details
@@ -591,11 +592,13 @@ def get_total_values():
     commission = float(dbase.get_complete_commission())
     stream_req = requests.get('http://stream/5m/all', timeout=10)
     prices = stream_req.json()
-    for _, _, pair, _, open_price, direction, quote_in in raw:
+    names = []
+    for _, _, pair, name, open_price, direction, quote_in in raw:
         current_price = prices['recent'][pair]['close']
         perc = perc_diff(open_price, current_price)
         perc = -perc if direction == 'short' else perc
         net_perc = perc - commission
+        names.append(name)
 
         current_amt = (float(quote_in)/100) * float(net_perc)
         current_quote = get_quote(pair)
@@ -606,6 +609,9 @@ def get_total_values():
             usd_trade_value += base2quote(current_amt, current_quote+'USDT')
             usd_trade_amount += base2quote(quote_in, current_quote+'USDT')
         total_net_perc += net_perc
+    name_count = dict(Counter(names))
+    for key, val in name_count.items():
+        push_prom_data(f'num_open_trades_{key}_{config.main.base_env}', val)
     return usd_trade_value, total_net_perc, usd_trade_amount
 
 @APP.route('/refresh_balance')
@@ -625,6 +631,7 @@ def get_values():
     """
     return VALUES
 
+@decorator_timer
 def get_additional_details():
     """
     Get tp/sl and drawup/drawdown from redis and mysql
@@ -657,6 +664,7 @@ def get_additional_details():
         except KeyError:
             pass
 
+@decorator_timer
 def get_balance():
     """
     Get cross margin quote amounts from exchange

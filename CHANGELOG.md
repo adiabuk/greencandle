@@ -1,5 +1,10 @@
 # Releases
 
+# 8.9.8
+* format prometheus metric name globally before pushing
+* push num of open trades per strategy to prometheus
+* get some api dashboard timer stats
+
 # 8.9.7
 * decorator timer to send method run times to promethus
 * allow changing prometheus job name before pushing
