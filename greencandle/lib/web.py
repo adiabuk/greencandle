@@ -66,7 +66,7 @@ def push_prom_data(metric_name, value, job_name=None):
     data = f"{metric_name.replace('-','_')} {value}\n"
     try:
         requests.post(url, headers=headers, data=data, timeout=10)
-    except (requests.exceptions.ReadTimeout, requests.exceptions.connectionerror):
+    except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError):
         LOGGER.critical("Unable to push metric %s", metric_name)
 
 def count_struct(struct):
