@@ -1,5 +1,8 @@
 # Releases
 
+# 8.9.9
+* fix of git structure integrity
+
 # 8.9.8
 * format prometheus metric name globally before pushing
 * push num of open trades per strategy to prometheus
