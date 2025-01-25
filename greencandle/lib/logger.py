@@ -19,7 +19,7 @@ class CustomFormatter(logging.Formatter):
         super().__init__(*args, **kwargs)
     def format(self, record):
         record = copy(record)
-        record.msg = record.msg.lower()
+        record.msg = str(record.msg).lower()
         return super().format(record)
 
 class OneLineFormatter(logging.Formatter):
