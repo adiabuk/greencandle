@@ -51,3 +51,4 @@ send_nsca3==0.1.6.0
 sh==2.0.6
 tradingview-ta==3.3.0
 prometheus-client==0.21.1
+pg8000==1.31.2
