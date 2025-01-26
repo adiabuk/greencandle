@@ -1,122 +1,114 @@
 #!/usr/bin/env python
-#pylint: disable=no-member,broad-except
+#pylint: disable=no-member,no-name-in-module,global-statement
 """
-Flask module for manipulating API trades and displaying relevent graphs
+Collect OHLC and strategy data for later analysis
 """
-import atexit
+import os
 import time
-import glob
+from pathlib import Path
 import logging
-from collections import defaultdict
-from flask import Flask, request, Response
+import requests
+from setproctitle import setproctitle
+from flask import Flask
 from apscheduler.schedulers.background import BackgroundScheduler
 from greencandle.lib import config
+from greencandle.lib.run import ProdRunner
+from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.common import arg_decorator
-from greencandle.lib.redis_conn import Redis
-from greencandle.lib.logger import get_logger
+from greencandle.lib.aggregate_data  import collect_agg_data
+from greencandle.lib.web import decorator_timer
 
 config.create_config()
-LONG = set()
-SHORT = set()
-ALL = defaultdict(dict)
-PAIRS = config.main.pairs.split()
 LOGGER = get_logger(__name__)
+PAIRS = config.main.pairs.split()
+MAIN_INDICATORS = config.main.indicators.split()
+GET_EXCEPTIONS = exception_catcher((Exception))
+RUNNER = ProdRunner()
 APP = Flask(__name__, template_folder="/var/www/html", static_url_path='/',
             static_folder='/var/www/html')
-
-@APP.route('/healthcheck', methods=["GET"])
-def healthcheck():
-    """
-    Docker healthcheck
-    Return 200
-    """
-    return Response(status=200)
-
-def analyse_loop():
-    """
-    Gather data from redis and analyze
-    """
-
-    while glob.glob(f'/var/run/{config.main.base_env}-data-{config.main.interval}-*'):
-        LOGGER.info("waiting for initial data collection to complete for %s",
-                    config.main.interval)
-        time.sleep(30)
-
-
-    redis = Redis()
-    for pair in PAIRS:
-        pair = pair.strip()
-        LOGGER.debug("analysing pair: %s", pair)
-        try:
-            result = redis.get_rule_action(pair=pair, interval=config.main.interval)
-
-            ALL[pair]['date'] = result[2]
-            if result[4]['open'] and not result[4]['close']:
-                LONG.add(pair)
-                SHORT.discard(pair)
-                ALL[pair]['action'] = 'open'
-            elif result[4]['close'] and not result[4]['open']:
-                SHORT.add(pair)
-                LONG.discard(pair)
-                ALL[pair]['action'] = 'close'
-
-        except Exception as err_msg:
-            LOGGER.critical("error with pair %s %s", pair, str(err_msg))
-    LOGGER.info("end of current loop")
-    del redis
+DATA = {}
 
 @APP.route('/get_data', methods=["GET"])
-def get_data():
-    """
-    Get data for all pairs including date last updated
-    """
-    return ALL
-
-@APP.route('/get_trend', methods=["GET"])
 def get_trend():
     """
-    open/close actions for API trades
+    return all data for current interval
     """
-    pair = request.args.get('pair')
-    if pair in LONG:
-        return "long"
-    if pair in SHORT:
-        return "short"
-    if not pair:
-        return {"long": list(LONG), "short": list(SHORT)}
-    return "Invalid Pair"
+    return DATA
 
-@APP.route('/get_stoch', methods=["GET"])
-def get_stoch():
+def keepalive():
     """
-    Return stochastic values for given pair
+    Periodically touch file for docker healthcheck
     """
-    pair = request.args.get('pair')
-    redis = Redis()
-    items = redis.get_intervals(pair, config.main.interval)[-2:]
-    result1 = redis.get_item(items[0], 'STOCHRSI_14')
-    result2 = redis.get_item(items[1], 'STOCHRSI_14')
-    return (result1, result2)
+    Path(f'/var/local/lock/gc_get_{config.main.interval}.lock').touch()
 
+@GET_EXCEPTIONS
+@decorator_timer
+def get_data():
+    """
+    Get-data run
+    """
+    global DATA
+    LOGGER.debug("starting prod run")
+    interval = config.main.interval
+    DATA = RUNNER.prod_loop(interval, test=True, data=True, analyse=False)
+    keepalive()
+    LOGGER.debug("finished prod run")
+
+
+@GET_EXCEPTIONS
 @arg_decorator
 def main():
     """
-    API for determining entrypoint for given pair
-    according to open/close rules.
+    Collect data:
+    * OHLCs
+    * Indicators
+
+    This is stored on redis, and analysed by other services later.
+    This service runs in a loop and executes periodically depending on timeframe used
+
+    Usage: get_data
     """
 
+    interval = config.main.interval
+    setproctitle(f"{config.main.base_env}-get_data-{interval}")
+    LOGGER.info("starting initial prod run")
+    name = config.main.name.split('-')[-1]
+    Path(f'/var/run/{config.main.base_env}-data-{interval}-{name}').touch()
+
+    local_pairs = set(config.main.pairs.split())
+    while True:
+        # Don't start analysing until all pairs are available
+        pairs_request = requests.get(f"http://stream/{config.main.interval}/all", timeout=10)
+        if not pairs_request.ok:
+            LOGGER.critical("unable to fetch data from streaming server")
+        data = pairs_request.json()
+        remote_pairs = set(data['recent'].keys())
+        if local_pairs.issubset(remote_pairs):
+            # we're done
+            break
+        # not enough pairs,
+        LOGGER.info("Waiting for more pairs to become available local:%s, remote:%s",
+                    len(local_pairs), len(remote_pairs))
+        time.sleep(5)
+
+    # initial run, before scheduling begins - 6 candles
+    RUNNER.prod_initial(interval, test=True, first_run=True, no_of_runs=7)
+    if os.path.exists(f'/var/run/{config.main.base_env}-data-{interval}-{name}'):
+        os.remove(f'/var/run/{config.main.base_env}-data-{interval}-{name}')
+    LOGGER.info("finished initial prod run")
+
     scheduler = BackgroundScheduler()
-    scheduler.add_job(func=analyse_loop, trigger="interval",
+    scheduler.add_job(func=get_data, trigger="interval",
+                      seconds=int(config.main.check_interval))
+    scheduler.add_job(func=collect_agg_data, args=[interval], trigger="interval",
                       seconds=int(config.main.check_interval))
     scheduler.start()
-    logging.basicConfig(level=logging.ERROR)
+
     if float(config.main.logging_level) > 10:
         log = logging.getLogger('werkzeug')
         log.setLevel(logging.ERROR)
         log.disabled = True
     APP.run(debug=False, host='0.0.0.0', port=6000, threaded=True)
-
-    atexit.register(scheduler.shutdown)
 
 if __name__ == '__main__':
     main()

@@ -403,6 +403,7 @@ class ProdRunner():
         LOGGER.debug("starting new prod loop with %s pairs", len(PAIRS))
         client = Binance()
         redis = Redis()
+        data = defaultdict(dict)
 
         if data:
             self.append_data(interval)
@@ -419,8 +420,10 @@ class ProdRunner():
 
             for pair in PAIRS:
                 pair = pair.strip()
-                result, event, current_time, current_price, _ = \
+                result, event, current_time, current_price, match = \
                         redis.get_rule_action(pair=pair, interval=interval)
+                for item in ('res', 'agg', 'sent'):
+                    data[pair][item] = match[item]
 
                 current_candle = redis.get_last_candle(pair, interval)
                 client = binance_auth()
@@ -453,3 +456,4 @@ class ProdRunner():
             del trade
         del client
         del redis
+        return data if analyse else True
