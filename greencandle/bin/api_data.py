@@ -114,8 +114,8 @@ def main():
     scheduler.add_job(func=collect_agg_data, args=[interval], trigger="interval", seconds=400)
     #scheduler.add_job(func=collect_all_data, trigger="interval", seconds=30)
 
-    for pair in PAIRS:
-        scheduler.add_job(func=collect_data, args=[pair], trigger="interval", seconds=5)
+    for seq, pair in enumerate(PAIRS):
+        scheduler.add_job(func=collect_data, args=[pair], trigger="interval", seconds=60, misfire_grace_time=1000, id=str(seq))
     scheduler.start()
     time.sleep(30)
     # initial job only needs to run once - so remove once it has been scheduled and run has begun
