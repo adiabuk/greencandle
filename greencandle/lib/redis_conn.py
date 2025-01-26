@@ -673,6 +673,7 @@ class Redis():
             datax.update(ohlc)
             res.append(datax)
         return res, items
+
     def get_sentiment(self, pair, interval):
         """
         get sentiment from redis
@@ -708,7 +709,6 @@ class Redis():
         del redis3
 
         rules = {'open': [], 'close':[]}
-        #xxx
         res, items = self.get_indicators(pair, interval)
         sent = self.get_sentiment(pair, interval)
         agg = self.get_agg(pair, interval)

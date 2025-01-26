@@ -37,7 +37,7 @@ def get_trend():
     """
     return DATA
 
-def collect_data():
+def collect_all_data():
     """
     Collect all available data for all pairs
     """
@@ -47,7 +47,6 @@ def collect_data():
         DATA[pair]['res'] = redis.get_indicators(pair, interval)
         DATA[pair]['agg'] = redis.get_agg(pair, interval)
         DATA[pair]['sent'] = redis.get_sentiment(pair, interval)
-
 
 def keepalive():
     """
@@ -66,7 +65,6 @@ def get_data():
     RUNNER.prod_loop(interval, test=True, data=True, analyse=False)
     keepalive()
     LOGGER.debug("finished prod run")
-
 
 @GET_EXCEPTIONS
 @arg_decorator
@@ -115,7 +113,7 @@ def main():
                       seconds=120)
     scheduler.add_job(func=collect_agg_data, args=[interval], trigger="interval",
                       seconds=400)
-    scheduler.add_job(func=collect_data, args=[interval], trigger="interval",
+    scheduler.add_job(func=collect_all_data, trigger="interval",
                       seconds=30)
     scheduler.start()
 
