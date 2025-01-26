@@ -58,6 +58,8 @@ services:
     mem_limit: 2G
     pull_policy: always
     restart: always
+    ports:
+      - 6007:6000
     entrypoint: /docker-entrypoint.sh api_data
     logging:
       driver: syslog
@@ -91,6 +93,8 @@ services:
     mem_limit: 2G
     pull_policy: always
     restart: always
+    ports:
+      - 6006:6000
     entrypoint: /docker-entrypoint.sh api_data
     logging:
       driver: syslog
@@ -124,6 +128,8 @@ services:
     mem_limit: 2G
     pull_policy: always
     restart: always
+    ports:
+      - 6005:6000
     entrypoint: /docker-entrypoint.sh api_data
     logging:
       driver: syslog
@@ -156,6 +162,8 @@ services:
     mem_limit: 2G
     pull_policy: always
     restart: always
+    ports:
+      - 6004:6000
     entrypoint: /docker-entrypoint.sh api_data
     logging:
       driver: syslog
@@ -188,6 +196,8 @@ services:
     mem_limit: 2G
     pull_policy: always
     restart: always
+    ports:
+      - 6003:6000
     entrypoint: /docker-entrypoint.sh api_data
     logging:
       driver: syslog
@@ -221,6 +231,8 @@ services:
     mem_limit: 2G
     pull_policy: always
     restart: always
+    ports:
+      - 6002:6000
     entrypoint: /docker-entrypoint.sh api_data
     logging:
       driver: syslog
@@ -253,6 +265,8 @@ services:
     mem_limit: 2G
     pull_policy: always
     restart: always
+    ports:
+      - 6001:6000
     entrypoint: /docker-entrypoint.sh api_data
     logging:
       driver: syslog
