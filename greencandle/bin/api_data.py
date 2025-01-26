@@ -109,7 +109,7 @@ def main():
 
     job = scheduler.add_job(func=RUNNER.prod_initial, args=[interval, True, True, 7 ],
                             trigger='interval', seconds=500,
-                            next_run=datetime.now()+timedelta(seconds=10))
+                            next_run_time=datetime.now()+timedelta(seconds=10))
     scheduler.add_job(func=get_data, trigger="interval", seconds=120)
     scheduler.add_job(func=collect_agg_data, args=[interval], trigger="interval", seconds=400)
     #scheduler.add_job(func=collect_all_data, trigger="interval", seconds=30)
