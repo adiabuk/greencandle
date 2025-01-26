@@ -45,7 +45,7 @@ def collect_data(pair):
     """
     redis = Redis()
     interval = config.main.interval
-    DATA[pair]['res'] = redis.get_indicators(pair, interval, num=2)
+    DATA[pair]['res'] = redis.get_indicators(pair, interval, num=2)[0][0]
     DATA[pair]['agg'] = redis.get_agg_data(pair, interval)
     DATA[pair]['sent'] = redis.get_sentiment(pair, interval)
 
@@ -112,11 +112,13 @@ def main():
                             next_run_time=datetime.now()+timedelta(seconds=10))
     scheduler.add_job(func=get_data, trigger="interval", seconds=120, misfire_grace_time=1000)
 
-    scheduler.add_job(func=collect_agg_data, args=[interval], trigger="interval", seconds=400, misfire_grace_time=1000)
+    scheduler.add_job(func=collect_agg_data, args=[interval], trigger="interval",
+                      seconds=400, misfire_grace_time=1000)
     #scheduler.add_job(func=collect_all_data, trigger="interval", seconds=30)
 
     for seq, pair in enumerate(PAIRS):
-        scheduler.add_job(func=collect_data, args=[pair], trigger="interval", seconds=60, misfire_grace_time=1000, id=str(seq))
+        scheduler.add_job(func=collect_data, args=[pair], trigger="interval",
+                          seconds=60, misfire_grace_time=1000, id=str(seq))
     scheduler.start()
     time.sleep(30)
     # initial job only needs to run once - so remove once it has been scheduled and run has begun
