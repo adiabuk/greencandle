@@ -46,7 +46,7 @@ def collect_all_data():
     interval = config.main.interval
     for pair in PAIRS:
         DATA[pair]['res'] = redis.get_indicators(pair, interval)
-        DATA[pair]['agg'] = redis.get_agg(pair, interval)
+        DATA[pair]['agg'] = redis.get_agg_data(pair, interval)
         DATA[pair]['sent'] = redis.get_sentiment(pair, interval)
 
 def keepalive():
