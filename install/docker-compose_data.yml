@@ -58,7 +58,7 @@ services:
     mem_limit: 2G
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh get_data
+    entrypoint: /docker-entrypoint.sh api_data
     logging:
       driver: syslog
       options:
@@ -91,7 +91,7 @@ services:
     mem_limit: 2G
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh get_data
+    entrypoint: /docker-entrypoint.sh api_data
     logging:
       driver: syslog
       options:
@@ -124,7 +124,7 @@ services:
     mem_limit: 2G
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh get_data
+    entrypoint: /docker-entrypoint.sh api_data
     logging:
       driver: syslog
       options:
@@ -156,7 +156,7 @@ services:
     mem_limit: 2G
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh get_data
+    entrypoint: /docker-entrypoint.sh api_data
     logging:
       driver: syslog
       options:
@@ -188,7 +188,7 @@ services:
     mem_limit: 2G
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh get_data
+    entrypoint: /docker-entrypoint.sh api_data
     logging:
       driver: syslog
       options:
@@ -221,7 +221,7 @@ services:
     mem_limit: 2G
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh get_data
+    entrypoint: /docker-entrypoint.sh api_data
     logging:
       driver: syslog
       options:
@@ -253,7 +253,7 @@ services:
     mem_limit: 2G
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh get_data
+    entrypoint: /docker-entrypoint.sh api_data
     logging:
       driver: syslog
       options:
