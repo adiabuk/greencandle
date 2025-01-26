@@ -643,18 +643,10 @@ class Redis():
         except Exception:  # hack for unit tests still using pickled zlib objects
             return pickle.loads(zlib.decompress(raw[-1]))
 
-    def get_rule_action(self, pair, interval, check_reversal=False):
+    def get_indicators(self, pair, interval):
         """
-        get only rule results, without checking tp/sl etc.
+        get indicator data
         """
-
-        # fetch latest agg data and make available as AttributeDict
-        redis3 = Redis(interval=interval, db=3)
-        raw = redis3.conn.hgetall(f'{pair}:{interval}')
-        agg = AttributeDict({k.decode():get_float(v.decode()) for k, v in raw.items()})
-        del redis3
-
-        rules = {'open': [], 'close':[]}
         res = []
         ind_list = []
         for i in config.main.indicators.split():
@@ -680,12 +672,46 @@ class Redis():
 
             datax.update(ohlc)
             res.append(datax)
+        return res, items
+    def get_sentiment(self, pair, interval):
+        """
+        get sentiment from redis
+        """
         redis15 = Redis(interval=interval, db=15)
         # get last 5 items in sentiment list and reverse
         raw_sent = redis15.conn.lrange(f'{pair}:{interval}',-5,-1)
         sent = [x.decode() for x in raw_sent]
         del redis15
         sent.reverse()
+        return sent
+
+    def get_agg_data(self, pair, interval):
+        """
+        fetch latest agg data and make available as AttributeDict
+        """
+
+        redis3 = Redis(interval=interval, db=3)
+        raw = redis3.conn.hgetall(f'{pair}:{interval}')
+        agg = AttributeDict({k.decode():get_float(v.decode()) for k, v in raw.items()})
+        del redis3
+        return agg
+
+    def get_rule_action(self, pair, interval, check_reversal=False):
+        """
+        get only rule results, without checking tp/sl etc.
+        """
+
+        # fetch latest agg data and make available as AttributeDict
+        redis3 = Redis(interval=interval, db=3)
+        raw = redis3.conn.hgetall(f'{pair}:{interval}')
+        agg = AttributeDict({k.decode():get_float(v.decode()) for k, v in raw.items()})
+        del redis3
+
+        rules = {'open': [], 'close':[]}
+        #xxx
+        res, items = self.get_indicators(pair, interval)
+        sent = self.get_sentiment(pair, interval)
+        agg = self.get_agg(pair, interval)
 
         for seq in range(1, 6):
             current_config = None

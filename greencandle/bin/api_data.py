@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-member,no-name-in-module,global-statement
+#pylint: disable=no-member,no-name-in-module
 """
 Collect OHLC and strategy data for later analysis
 """
@@ -7,12 +7,14 @@ import os
 import time
 from pathlib import Path
 import logging
+from collections import defaultdict
 import requests
 from setproctitle import setproctitle
 from flask import Flask
 from apscheduler.schedulers.background import BackgroundScheduler
 from greencandle.lib import config
 from greencandle.lib.run import ProdRunner
+from greencandle.lib.redis_conn import Redis
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.common import arg_decorator
 from greencandle.lib.aggregate_data  import collect_agg_data
@@ -26,7 +28,7 @@ GET_EXCEPTIONS = exception_catcher((Exception))
 RUNNER = ProdRunner()
 APP = Flask(__name__, template_folder="/var/www/html", static_url_path='/',
             static_folder='/var/www/html')
-DATA = {}
+DATA = defaultdict(dict)
 
 @APP.route('/get_data', methods=["GET"])
 def get_trend():
@@ -34,6 +36,18 @@ def get_trend():
     return all data for current interval
     """
     return DATA
+
+def collect_data():
+    """
+    Collect all available data for all pairs
+    """
+    redis = Redis()
+    interval = config.main.interval
+    for pair in PAIRS:
+        DATA[pair]['res'] = redis.get_indicators(pair, interval)
+        DATA[pair]['agg'] = redis.get_agg(pair, interval)
+        DATA[pair]['sent'] = redis.get_sentiment(pair, interval)
+
 
 def keepalive():
     """
@@ -47,10 +61,9 @@ def get_data():
     """
     Get-data run
     """
-    global DATA
     LOGGER.debug("starting prod run")
     interval = config.main.interval
-    DATA = RUNNER.prod_loop(interval, test=True, data=True, analyse=False)
+    RUNNER.prod_loop(interval, test=True, data=True, analyse=False)
     keepalive()
     LOGGER.debug("finished prod run")
 
@@ -99,9 +112,11 @@ def main():
 
     scheduler = BackgroundScheduler()
     scheduler.add_job(func=get_data, trigger="interval",
-                      seconds=int(config.main.check_interval))
+                      seconds=120)
     scheduler.add_job(func=collect_agg_data, args=[interval], trigger="interval",
-                      seconds=int(config.main.check_interval))
+                      seconds=400)
+    scheduler.add_job(func=collect_data, args=[interval], trigger="interval",
+                      seconds=30)
     scheduler.start()
 
     if float(config.main.logging_level) > 10:
