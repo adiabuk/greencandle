@@ -37,6 +37,7 @@ def get_trend():
     """
     return DATA
 
+@decorator_timer
 def collect_all_data():
     """
     Collect all available data for all pairs
