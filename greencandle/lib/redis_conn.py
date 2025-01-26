@@ -643,7 +643,7 @@ class Redis():
         except Exception:  # hack for unit tests still using pickled zlib objects
             return pickle.loads(zlib.decompress(raw[-1]))
 
-    def get_indicators(self, pair, interval):
+    def get_indicators(self, pair, interval, num=7):
         """
         get indicator data
         """
@@ -654,8 +654,8 @@ class Redis():
             ind = split[1]+'_' +split[2].split(',')[0]
             ind_list.append(ind)
         items = self.get_intervals(pair, interval)
-        for i in range(-1, -7, -1): # from, to, increment
-            # look backwards through last 3 items of redis data
+        for i in range(-1, -(num), -1): # from, to, increment
+            # look backwards through last x items of redis data
             datax = AttributeDict()
             for indicator in ind_list:
                 datax[indicator] = self.get_result(items[i], indicator, pair, interval)

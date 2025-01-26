@@ -301,6 +301,7 @@ class ProdRunner():
         Initial prod run - back-fetching data for tech analysis.
         """
 
+        LOGGER.info("starting initial prod run")
         redis = Redis()
         no_of_klines = config.main.no_of_klines
         LOGGER.debug("Getting %s klines", no_of_klines)
@@ -311,6 +312,7 @@ class ProdRunner():
 
         del redis
         del engine
+        LOGGER.info("finished initial prod run")
 
     def append_data(self, interval=None):
         """

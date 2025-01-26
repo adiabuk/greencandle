@@ -7,10 +7,11 @@ import os
 import time
 from pathlib import Path
 import logging
+from datetime import datetime, timedelta
 from collections import defaultdict
 import requests
 from setproctitle import setproctitle
-from flask import Flask
+from flask import Flask, jsonify
 from apscheduler.schedulers.background import BackgroundScheduler
 from greencandle.lib import config
 from greencandle.lib.run import ProdRunner
@@ -31,23 +32,22 @@ APP = Flask(__name__, template_folder="/var/www/html", static_url_path='/',
 DATA = defaultdict(dict)
 
 @APP.route('/get_data', methods=["GET"])
-def get_trend():
+def get_all_data():
     """
-    return all data for current interval
+    return all data for current interval/scope
     """
-    return DATA
+    return jsonify(DATA)
 
 @decorator_timer
-def collect_all_data():
+def collect_data(pair):
     """
     Collect all available data for all pairs
     """
     redis = Redis()
     interval = config.main.interval
-    for pair in PAIRS:
-        DATA[pair]['res'] = redis.get_indicators(pair, interval)
-        DATA[pair]['agg'] = redis.get_agg_data(pair, interval)
-        DATA[pair]['sent'] = redis.get_sentiment(pair, interval)
+    DATA[pair]['res'] = redis.get_indicators(pair, interval, num=2)
+    DATA[pair]['agg'] = redis.get_agg_data(pair, interval)
+    DATA[pair]['sent'] = redis.get_sentiment(pair, interval)
 
 def keepalive():
     """
@@ -83,7 +83,6 @@ def main():
 
     interval = config.main.interval
     setproctitle(f"{config.main.base_env}-get_data-{interval}")
-    LOGGER.info("starting initial prod run")
     name = config.main.name.split('-')[-1]
     Path(f'/var/run/{config.main.base_env}-data-{interval}-{name}').touch()
 
@@ -103,20 +102,24 @@ def main():
                     len(local_pairs), len(remote_pairs))
         time.sleep(5)
 
-    # initial run, before scheduling begins - 6 candles
-    RUNNER.prod_initial(interval, test=True, first_run=True, no_of_runs=7)
     if os.path.exists(f'/var/run/{config.main.base_env}-data-{interval}-{name}'):
         os.remove(f'/var/run/{config.main.base_env}-data-{interval}-{name}')
-    LOGGER.info("finished initial prod run")
 
     scheduler = BackgroundScheduler()
-    scheduler.add_job(func=get_data, trigger="interval",
-                      seconds=120)
-    scheduler.add_job(func=collect_agg_data, args=[interval], trigger="interval",
-                      seconds=400)
-    scheduler.add_job(func=collect_all_data, trigger="interval",
-                      seconds=30)
+
+    job = scheduler.add_job(func=RUNNER.prod_initial, args=[interval, True, True, 7 ],
+                            trigger='interval', seconds=500,
+                            next_run=datetime.now()+timedelta(seconds=10))
+    scheduler.add_job(func=get_data, trigger="interval", seconds=120)
+    scheduler.add_job(func=collect_agg_data, args=[interval], trigger="interval", seconds=400)
+    #scheduler.add_job(func=collect_all_data, trigger="interval", seconds=30)
+
+    for pair in PAIRS:
+        scheduler.add_job(func=collect_data, args=[pair], trigger="interval", seconds=5)
     scheduler.start()
+    time.sleep(30)
+    # initial job only needs to run once - so remove once it has been scheduled and run has begun
+    scheduler.remove_job(job.id)
 
     if float(config.main.logging_level) > 10:
         log = logging.getLogger('werkzeug')
