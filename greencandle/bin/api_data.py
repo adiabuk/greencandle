@@ -48,7 +48,7 @@ def analyse_loop():
         pair = pair.strip()
         LOGGER.debug("analysing pair: %s", pair)
         try:
-            result = redis.get_action(pair=pair, interval=config.main.interval)
+            result = redis.get_rule_action(pair=pair, interval=config.main.interval)
 
             ALL[pair]['date'] = result[2]
             if result[4]['open'] and not result[4]['close']:

@@ -88,8 +88,8 @@ def perform_data(pair, interval, data_dir, indicators):
                         interval=interval, test=True, redis=redis)
         engine.get_data(localconfig=indicators)
 
-        result, event, current_time, current_price, _ = redis.get_action(pair=pair,
-                                                                         interval=interval)
+        result, event, current_time, current_price, _ = redis.get_rule_action(pair=pair,
+                                                                              interval=interval)
         del engine
         current_trade = dbase.get_trade_value(pair)
         current_candle = dataframes[pair].iloc[-1]
@@ -173,8 +173,8 @@ def parallel_test(pairs, interval, data_dir, indicators):
                             interval=interval, test=True, redis=redis)
             engine.get_data(localconfig=indicators)
 
-            result, event, current_time, current_price, _ = redis.get_action(pair=pair,
-                                                                             interval=interval)
+            result, event, current_time, current_price, _ = redis.get_rule_action(pair=pair,
+                                                                                  interval=interval)
             current_candle = dataframe.iloc[-1]
             redis.update_drawdown(pair, current_candle)
             redis.update_drawup(pair, current_candle)
@@ -419,8 +419,9 @@ class ProdRunner():
 
             for pair in PAIRS:
                 pair = pair.strip()
-                result, event, current_time, current_price, _ = redis.get_action(pair=pair,
-                                                                                 interval=interval)
+                result, event, current_time, current_price, _ = \
+                        redis.get_rule_action(pair=pair, interval=interval)
+
                 current_candle = redis.get_last_candle(pair, interval)
                 client = binance_auth()
                 if result != "NOITEM":
