@@ -2,5 +2,6 @@
   "interval": "15m",
   "name": "data-be-analyse-15m-short7",
   "api_forward": "15m-7",
+  "slack_notifications": "data",
   "time_between_trades": "1h"
 }
