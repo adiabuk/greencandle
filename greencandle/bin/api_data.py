@@ -56,18 +56,6 @@ def keepalive():
     Path(f'/var/local/lock/gc_get_{config.main.interval}.lock').touch()
 
 @GET_EXCEPTIONS
-@decorator_timer
-def get_data():
-    """
-    Get-data run
-    """
-    LOGGER.info("starting prod run")
-    interval = config.main.interval
-    RUNNER.prod_loop(interval, test=True, data=True, analyse=False)
-    keepalive()
-    LOGGER.info("finished prod run")
-
-@GET_EXCEPTIONS
 @arg_decorator
 def main():
     """
@@ -110,8 +98,9 @@ def main():
     job = scheduler.add_job(func=RUNNER.prod_initial, args=[interval, True, True, 7 ],
                             trigger='interval', seconds=500,
                             next_run_time=datetime.now()+timedelta(seconds=10))
-    scheduler.add_job(func=get_data, trigger="interval", seconds=120, misfire_grace_time=1000)
-
+    scheduler.add_job(func=RUNNER.prod_loop, args=[interval, True, True, False],
+                      trigger="interval", seconds=120, misfire_grace_time=1000)
+    scheduler.add_job(func=keepalive, trigger="interval", seconds=120, misfire_grace_time=1000)
     scheduler.add_job(func=collect_agg_data, args=[interval], trigger="interval",
                       seconds=400, misfire_grace_time=1000)
     #scheduler.add_job(func=collect_all_data, trigger="interval", seconds=30)

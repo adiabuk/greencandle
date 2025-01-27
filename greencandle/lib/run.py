@@ -402,7 +402,7 @@ class ProdRunner():
         """
         Loop through collection cycle (PROD)
         """
-        LOGGER.debug("starting new prod loop with %s pairs", len(PAIRS))
+        LOGGER.info("starting new prod loop with %s pairs", len(PAIRS))
         client = Binance()
         redis = Redis()
 
@@ -455,3 +455,4 @@ class ProdRunner():
             del trade
         del client
         del redis
+        LOGGER.info("finished prod loop")
