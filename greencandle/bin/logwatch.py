@@ -47,9 +47,9 @@ def check_last_hour_err():
         last_hour_date_time = datetime.now() - timedelta(hours = 1)
 
         if current > last_hour_date_time:
-            if any(status in line for status in ['CRIT', 'ERR', 'Traceback']):
+            if any(status in line for status in ['CRIT', 'ERR', 'Traceback']) and '5m' not in line:
                 err_count += 1
-            if "WARN" in line:
+            if "WARN" in line and '5m' not in line:
                 warn_count += 1
         else:
             break
