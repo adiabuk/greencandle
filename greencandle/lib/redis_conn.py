@@ -711,7 +711,7 @@ class Redis():
         rules = {'open': [], 'close':[]}
         res, items = self.get_indicators(pair, interval)
         sent = self.get_sentiment(pair, interval)
-        agg = self.get_agg(pair, interval)
+        agg = self.get_agg_data(pair, interval)
 
         for seq in range(1, 6):
             current_config = None
