@@ -1,6 +1,7 @@
 {
   "interval": "5m",
   "name": "data-be-analyse-5m-long9",
+  "slack_alerts": "",
   "redis_expiry_seconds": "7200",
   "time_between_trades": "1h"
 }

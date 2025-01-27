@@ -1,5 +1,6 @@
 {
   "interval": "5m",
   "name": "data-be-analyse-5m-short12",
+  "slack_alerts": "",
   "time_between_trades": "1h"
 }

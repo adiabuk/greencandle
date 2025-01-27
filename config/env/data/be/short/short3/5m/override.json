@@ -1,6 +1,7 @@
 {
   "api_forward": "5m-3",
   "interval": "5m",
+  "slack_alerts": "",
   "name": "data-be-analyse-5m-short3",
   "open_rule1": "agg.distance_200 \u003e 4 and res[0].RSI_14 \u003e 75 and res[0].numTrades \u003e 50 and agg.bb_size \u003e 1 and agg.empty_count \u003c 1",
   "time_between_trades": "4h"
