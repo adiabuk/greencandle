@@ -55,7 +55,7 @@ services:
     container_name: data-be-get_12h
     hostname: data-be-get_12h
     image: amrox/greencandle:${TAG}
-    mem_limit: 2G
+    mem_limit: 3G
     pull_policy: always
     restart: always
     ports:
@@ -90,7 +90,7 @@ services:
     container_name: data-be-get_1d
     hostname: data-be-get_1d
     image: amrox/greencandle:${TAG}
-    mem_limit: 2G
+    mem_limit: 3G
     pull_policy: always
     restart: always
     ports:
@@ -125,7 +125,7 @@ services:
     container_name: data-be-get_30m
     hostname: data-be-get_30m
     image: amrox/greencandle:${TAG}
-    mem_limit: 2G
+    mem_limit: 3G
     pull_policy: always
     restart: always
     ports:
@@ -159,7 +159,7 @@ services:
     container_name: data-be-get_15m
     hostname: data-be-get_15m
     image: amrox/greencandle:${TAG}
-    mem_limit: 2G
+    mem_limit: 3G
     pull_policy: always
     restart: always
     ports:
@@ -193,7 +193,7 @@ services:
     container_name: data-be-get_4h
     hostname: data-be-get_4h
     image: amrox/greencandle:${TAG}
-    mem_limit: 2G
+    mem_limit: 3G
     pull_policy: always
     restart: always
     ports:
@@ -228,7 +228,7 @@ services:
     container_name: data-be-get_1h
     hostname: data-be-get_1h
     image: amrox/greencandle:${TAG}
-    mem_limit: 2G
+    mem_limit: 3G
     pull_policy: always
     restart: always
     ports:
@@ -262,7 +262,7 @@ services:
     container_name: data-be-get_5m
     hostname: data-be-get_5m
     image: amrox/greencandle:${TAG}
-    mem_limit: 2G
+    mem_limit: 3G
     pull_policy: always
     restart: always
     ports:
@@ -300,7 +300,7 @@ services:
       - CONFIG_ENV=data/manual
       - DB=true
     image: amrox/greencandle:${TAG}
-    mem_limit: 2G
+    mem_limit: 4G
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh "tail -f /dev/null"
@@ -362,7 +362,7 @@ services:
     container_name: data-base-redis
     hostname: data-base-redis
     image: amrox/gc-redis:${TAG}
-    mem_limit: 2G
+    mem_limit: 3G
     pull_policy: always
     restart: always
     ports:
