@@ -20,6 +20,7 @@ def main():
     parser.add_argument("-f", "--name_filter", required=False, default="")
     parser.add_argument("-d", "--direction_filter", required=False, default="")
     parser.add_argument("-t", "--threshold", required=False, default=0.3)
+    parser.add_argument("-p", "--pair", required=False, default="")
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
 
@@ -28,7 +29,8 @@ def main():
     url = f"http://router:1080/{config.web.api_token}"
     dbase = Mysql()
     open_trades = dbase.get_open_trades(name_filter=args.name_filter,
-                                        direction_filter=args.direction_filter)
+                                        direction_filter=args.direction_filter,
+                                        pair_filter=args.pair_filter)
     stream_req = requests.get('http://stream/5m/all', timeout=10)
     prices = stream_req.json()
 
