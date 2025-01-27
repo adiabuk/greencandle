@@ -1,5 +1,20 @@
 # Releases
 
+# 8.10
+* cleanup api data and tidy lint
+* remove slow performing coin and another creating log noise
+* increase mem for get-api/redis/manual data containers for additional data
+* mm data alerts only for forwarding strategies
+* use "HODL" consistently instead of "HOLD"
+* add id and grace_time, to allow tasks to run concurrently
+* speed up api by splitting data fetching by pair and run initial in bg
+* collect timer info for new data collector function
+* remove unused old dupe redis function
+* collect api data in separate func from main redis data collection
+* filename for archived script causes conflicts during build
+* collect hetzner traffic data hourly and send to prometheus
+* convert get_data into api module and test
+
 # 8.9.10
 * add timer decorator to doublersi func
 * BUGFIX: ensure object to be transformed to lcase is a string
