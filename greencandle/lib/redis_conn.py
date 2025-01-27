@@ -426,7 +426,7 @@ class Redis():
 
         message = f'EVENT:({pair}) {event} time:{current_time} data:{data} agg:{agg}'
 
-        if any(status in event for status in ['NOITEM', 'HOLD']):
+        if any(status in event for status in ['NOITEM', 'HODL']):
             self.logger.debug(message)
         else:
             self.logger.info(message)
@@ -479,7 +479,7 @@ class Redis():
                 event = self.get_event_str("TakeProfitIntermittent" + result)
 
             else:
-                result = "HOLD"
+                result = "HODL"
                 event = self.get_event_str(result)
         else:
             result = "NOITEM"

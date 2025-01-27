@@ -793,14 +793,14 @@ class Engine(dict):
         func, timeperiod = localconfig
         klines = self.__make_data_tupple(pair, index)
         scheme = {}
-        trends = {"HAMMER": {100: "BUY", 0:"HOLD"},
-                  "INVERTEDHAMMER": {100: "SELL", 0:"HOLD"},
-                  "ENGULFING": {-100:"SELL", 100:"BUY", 0:"HOLD"},
-                  "MORNINGSTAR": {-100:"SELL", 100:"BUY", 0:"HOLD"},
-                  "SHOOTINGSTAR": {-100:"SELL", 100:"BUY", 0:"HOLD"},
-                  "SPINNINGTOP": {-100:"SELL", 100:"BUY", 0:"HOLD"},
-                  "MARUBOZU": {-100:"SELL", 100:"BUY", 0:"HOLD"},
-                  "DOJI": {100: "HOLD", 0:"HOLD"}}
+        trends = {"HAMMER": {100: "BUY", 0:"HODL"},
+                  "INVERTEDHAMMER": {100: "SELL", 0:"HODL"},
+                  "ENGULFING": {-100:"SELL", 100:"BUY", 0:"HODL"},
+                  "MORNINGSTAR": {-100:"SELL", 100:"BUY", 0:"HODL"},
+                  "SHOOTINGSTAR": {-100:"SELL", 100:"BUY", 0:"HODL"},
+                  "SPINNINGTOP": {-100:"SELL", 100:"BUY", 0:"HODL"},
+                  "MARUBOZU": {-100:"SELL", 100:"BUY", 0:"HODL"},
+                  "DOJI": {100: "HODL", 0:"HODL"}}
 
         result = getattr(talib, "CDL" + func)(*klines).tolist()[-1]
 
