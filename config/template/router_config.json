@@ -134,7 +134,6 @@
 {
 
 "15m-7": ["stag:any-15m-long-short", "test:any-15m-long-short"],
-"1h-10": ["stag:any-1h-long-short", "test:any-1h-long-short"],
 "1h-5": ["stag:any2-1h-long-short", "test:any2-1h-long-short"],
 
 "extra_stag-any-5m": ["stag:any-5m-long-short"],
