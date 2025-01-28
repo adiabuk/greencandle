@@ -1,5 +1,3 @@
 {
-  "open_rule1": "res[0].close \u003c res[0].EMA_150 and res[1].close \u003c res[1].EMA_150 and res[2].close \u003c res[2].EMA_150 and res[3].close \u003e res[3].EMA_150 and res[4].close \u003e res[4].EMA_150 and res[5].close \u003e res[5].EMA_150 and (res[0].STOCHRSI_14[0] \u003e 20 or res[0].RSI_7 \u003e 30)",
-  "stop_loss_perc": "abs(perc_diff(res[0].close,(res[0].close+(2*res[0].ATR_14[0]))))",
-  "take_profit_perc": "abs(perc_diff(res[0].close,(res[0].close+(6*res[0].ATR_14[0]))))"
+  "open_rule1": "res[0].close \u003c res[0].EMA_150 and res[1].close \u003c res[1].EMA_150 and res[2].close \u003c res[2].EMA_150 and res[3].close \u003e res[3].EMA_150 and res[4].close \u003e res[4].EMA_150 and res[5].close \u003e res[5].EMA_150 and (res[0].STOCHRSI_14[0] \u003e 20 or res[0].RSI_7 \u003e 30)"
 }
