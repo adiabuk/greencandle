@@ -516,9 +516,9 @@ def get_live():
         stop = get_value('stop', pair, name, direction)
         dist_to_take = round(take - net_perc, 2)
         dist_to_stop = round(stop - net_perc, 2)
-        stochrsi = DATA[f'tf_{interval}'][pair].res.STOCHRSI_14[0]
-        rsi7 = DATA[f'tf_{interval}'][pair].res.RSI_7
-        ema150 = DATA[f'tf_{interval}'][pair].res.EMA_150
+        stochrsi = DATA[f'tf_{interval}'][pair].res[0].STOCHRSI_14[0]
+        rsi7 = DATA[f'tf_{interval}'][pair].res[0].RSI_7
+        ema150 = DATA[f'tf_{interval}'][pair].res[0].EMA_150
         if direction == 'long':
             bb_sell = float(current_price) > DATA[f'tf_{interval}'][pair]['res']['bb_30'][0]
             ema_trend = float(current_price) > ema150
