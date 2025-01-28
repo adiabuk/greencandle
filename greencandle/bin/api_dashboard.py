@@ -830,7 +830,7 @@ def get_data():
     extract candles & indicators from data api
     """
     for tf in ('15m', '1h'):
-        DATA[f'tf_{tf}'] = AttributeDict(requests.get('http://www.data.amrox.loc/data/{tf}',
+        DATA[f'tf_{tf}'] = AttributeDict(requests.get(f'http://www.data.amrox.loc/data/{tf}',
                                                       timeout=10).json())
 
 @arg_decorator
