@@ -10,7 +10,9 @@ import argcomplete
 
 from greencandle.lib import config
 from greencandle.lib.graph import parse_args
+from greencandle.lib.common import arg_decorator
 
+@arg_decorator
 def main():
     """Main function"""
     config.create_config()

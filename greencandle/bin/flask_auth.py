@@ -8,8 +8,9 @@ import sys
 import getpass
 from cryptography.fernet import Fernet
 from greencandle.lib import config
+from greencandle.lib.common import arg_decorator
 
-
+@arg_decorator
 def main():
     """
     encrypt and decrypt credentials for flask api modules

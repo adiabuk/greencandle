@@ -9,7 +9,9 @@ from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from pyvirtualdisplay import Display
+from greencandle.lib.common import arg_decorator
 
+@arg_decorator
 def main():
     """
     Set up display and browser

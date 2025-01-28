@@ -21,11 +21,13 @@ from greencandle.lib import config
 from greencandle.lib.graph import Graph
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.run import ProdRunner
+from greencandle.lib.common import arg_decorator
 
 config.create_config()
 GET_EXCEPTIONS = exception_catcher((Exception))
 LOGGER = get_logger(__name__)
 
+@arg_decorator
 def main():
     """ main function """
 
