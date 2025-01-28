@@ -45,7 +45,7 @@ def collect_data(pair):
     """
     redis = Redis()
     interval = config.main.interval
-    DATA[pair]['res'] = redis.get_indicators(pair, interval, num=3)[0][0]
+    DATA[pair]['res'] = redis.get_indicators(pair, interval, num=3)[0]
     DATA[pair]['agg'] = redis.get_agg_data(pair, interval)
     DATA[pair]['sent'] = redis.get_sentiment(pair, interval)
 
