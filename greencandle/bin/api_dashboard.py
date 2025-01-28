@@ -114,6 +114,7 @@ def get_doublersi_list():
         x.append(dict(sorted(di.items(), key=lambda pair: index_map[pair[0]])))
     return x
 
+@decorator_timer
 def get_pairs(env=config.main.base_env):
     """
     get details from docker_compose, configstore, and router config
@@ -346,6 +347,7 @@ def action():
         return '<button type="button" onclick="window.close()">Close Tab</button>'
     return redirect(url_for('trade'))
 
+@decorator_timer
 def send_trade(pair, strategy, trade_action, take=None, stop=None, usd=None):
     """
     Create OPEN/CLOSE post request and send to API router
@@ -828,6 +830,7 @@ def get_balance():
 
     BALANCE = all_results
 
+@decorator_timer
 def get_data():
     """
     extract candles & indicators from data api
