@@ -516,9 +516,17 @@ def get_live():
         stop = get_value('stop', pair, name, direction)
         dist_to_take = round(take - net_perc, 2)
         dist_to_stop = round(stop - net_perc, 2)
-        stochrsi = DATA[f'tf_{interval}'][pair].res[0].STOCHRSI_14[0]
-        rsi7 = DATA[f'tf_{interval}'][pair].res[0].RSI_7
-        ema150 = DATA[f'tf_{interval}'][pair].res[0].EMA_150
+        stochrsi = DATA[f'tf_{interval}'][pair].res[0]['STOCHRSI_14'][0]
+        stochrsi_last = DATA[f'tf_{interval}'][pair].res[1]['STOCHRSI_14'][0]
+        rsi7 = DATA[f'tf_{interval}'][pair].res[0]['RSI_7']
+        rsi7_last = DATA[f'tf_{interval}'][pair].res[1]['RSI_7']
+        ema150 = DATA[f'tf_{interval}'][pair].res[0]['EMA_150']
+        ha = DATA[f'tf_{interval}'][pair].res[0]['HA_close']
+        ha_last = DATA[f'tf_{interval}'][pair].res[1]['HA_close']
+
+        rsi_up = rsi7 > rsi7_last if direction == 'long' else rsi7 < rsi7_last
+        stoch_up = stochrsi > stochrsi_last if direction == 'long' else stochrsi < stochrsi_last
+        ha_up = ha > ha_last if direction == 'long' else ha < ha_last
         if direction == 'long':
             bb_sell = float(current_price) > DATA[f'tf_{interval}'][pair]['res']['bb_30'][0]
             ema_trend = float(current_price) > ema150
@@ -548,6 +556,9 @@ def get_live():
                             "rsi_sell": get_bool_colour(rsi_sell),
                             "bb_sell": get_bool_colour(bb_sell),
                             "stoch_sell": get_bool_colour(stoch_sell),
+                            "rsi_up": get_bool_colour(rsi_up),
+                            "stoch_up": get_bool_colour(stoch_up),
+                            "ha_up": get_bool_colour(ha_up),
                             "dist_to_take": dist_to_take,
                             "dist_to_stop": dist_to_stop,
                             "close": close_link,
