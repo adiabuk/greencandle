@@ -600,7 +600,7 @@ def get_live():
               service_name=f"{env}_open_profitable",
               text_output=text, remote_host="nagios.amrox.loc")
 
-    return LIVE, STATUS_DATA
+    return None
 
 @APP.route('/live', methods=['GET', 'POST'])
 @login_required
@@ -613,7 +613,7 @@ def live():
         files['aggregate'] = (AGG_DATA, 1)
         files['double_rsi'] = (get_doublersi_list(), 4)
     else:
-        files['open_trades'] =  (get_live()[0], 5)
+        files['open_trades'] =  (LIVE, 5)
         files['open_trade_status'] =  (STATUS_DATA, 5)
         files['balance'] = (BALANCE, 1)
 
@@ -675,13 +675,16 @@ def get_total_values():
         push_prom_data(f'num_open_trades_{key}_{config.main.base_env}', val)
     return usd_trade_value, total_net_perc, usd_trade_amount
 
-@APP.route('/refresh_balance')
+@APP.route('/refresh_data')
 @login_required
-def refresh_balance():
+def refresh_data():
     """
-    Route to manually call update_balance function and do nothing
+    Route to manually call functions to refresh all data
+    in the background and return nothing
     """
     get_balance()
+    get_live()
+    get_data()
     return Response(status=200)
 
 @APP.route('/values')
