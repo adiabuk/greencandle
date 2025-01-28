@@ -1,5 +1,16 @@
 # Releases
 
+# 8.11
+* add new open trade dashboard showing current status
+* add data from previous candle to api
+* merge 2 rsi strategies and add new close rules
+* add arg_decorator to all main functions
+* check bb_size, zero trades, and bb size in all forwarded strategies
+* check 1h sentiment for 15m strategies
+* 2:1 risk/reward throughout
+* ignore 5m from logwatch notifications and 5m mm alerts for data env
+* allow close trade script to filter by pair
+
 # 8.10
 * cleanup api data and tidy lint
 * remove slow performing coin and another creating log noise
