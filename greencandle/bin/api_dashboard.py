@@ -602,7 +602,7 @@ def get_live():
               service_name=f"{env}_open_profitable",
               text_output=text, remote_host="nagios.amrox.loc")
 
-    return None
+    return LIVE, STATUS_DATA
 
 @APP.route('/live', methods=['GET', 'POST'])
 @login_required
