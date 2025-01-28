@@ -154,7 +154,7 @@
 		      <tr class="product-row" >
                         {% for index in range(0, len(fieldnames)) %}
 			<td class="{{fieldnames[index]}}"/>
-				<div> {{ row[fieldnames[index]] }}</div>
+				<div> {{ row[fieldnames[index]] |safe }}</div>
                         </td>
                       {% endfor %}
                     </tr>

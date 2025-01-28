@@ -52,8 +52,10 @@ LOGIN = APP.route("/logout", methods=["GET", "POST"])(logoutx)
 VALUES = defaultdict(dict)
 BALANCE = []
 LIVE = []
+STATUS_DATA = []
 DOUBLERSI={}
 AGG_DATA = []
+DATA = AttributeDict()
 
 SCRIPTS = ["write_balance", "get_quote_balance", "repay_debts", "get_risk", "get_trade_status",
            "get_hour_profit", "repay_debts", "balance_graph", "test_close"]
@@ -445,17 +447,37 @@ def get_agg():
         all_data.append(current_row)
     AGG_DATA = all_data
 
+def get_trend_colour(value, direction):
+    """
+    get HTML red/green colour based on trend and direction
+    """
+    if direction == 'long':
+        colour = 'green' if 'SELL' not in value else 'red'
+    else:
+        colour = 'green' if 'BUY' not in value else 'red'
+
+    return f'<p style="font-weight:bold;color:{colour}">{value}</p>'
+
+def get_bool_colour(value):
+    """
+    get HTML red/green colour based on boolean result
+    """
+    colour = 'green' if value else 'red'
+    return f'<p style="font-weight:bold;color:{colour}">{value}</p>'
+
+
 @decorator_timer
 def get_live():
     """
     Get live open trade details
     """
-    global LIVE
+    global LIVE, STATUS_DATA
 
     if config.main.base_env.strip() == 'data':
         return None
 
     all_data = []
+    status_data = []
     mt5 = 0
     mt10 = 0
 
@@ -490,10 +512,46 @@ def get_live():
                                     anchor=True, short_url=True, base_env=config.main.base_env)
         take = get_value('take', pair, name, direction)
         stop = get_value('stop', pair, name, direction)
+        dist_to_take = take - net_perc
+        dist_to_stop = stop - net_perc
+        stochrsi = DATA[f'tf_{interval}'][pair].res.STOCHRSI_14[0]
+        rsi7 = DATA[f'tf_{interval}'][pair].res.RSI_7
+        ema150 = DATA[f'tf_{interval}'][pair].res.EMA_150
+        if direction == 'long':
+            bb_sell = float(current_price) > DATA[f'tf_{interval}'][pair]['res']['bb_30'][0]
+            ema_trend = float(current_price) > ema150
+            rsi_sell = rsi7 > 70
+            stoch_sell = stochrsi > 95
+        else:
+            bb_sell = float(current_price) < DATA[f'tf_{interval}'][pair]['res']['bb_30'][2]
+            ema_trend = float(current_price) < ema150
+            rsi_sell = rsi7 < 30
+            stoch_sell = stochrsi < 5
+
+        time_in_trade = str(datetime.now().replace(microsecond=0) -
+                            datetime.strptime(str(open_time), '%Y-%m-%d %H:%M:%S'))
+        tv_trend = get_trend_colour(DATA[f'tf_{interval}'][pair]['sent'][0], direction)
+
         drawup = get_value('drawup', pair, name, direction)
         drawdown = get_value('drawdown', pair, name, direction)
         usd_in = quote_in if 'USD' in current_quote else base2quote(quote_in, current_quote+'USDT')
         usd_net_value = (float(usd_in)/100)*net_perc
+
+        status_data.append({"pair": get_tv_link(pair, interval, anchor=True),
+                            "interval": interval,
+                            "time_in_trade": time_in_trade,
+                            "xnet_perc": f'{round(net_perc,4)}',
+                            "tv_trend": tv_trend,
+                            "ema_trend": get_bool_colour(ema_trend),
+                            "rsi_sell": get_bool_colour(rsi_sell),
+                            "bb_sell": get_bool_colour(bb_sell),
+                            "stoch_sell": get_bool_colour(stoch_sell),
+                            "dist_to_take": dist_to_take,
+                            "dist_to_stop": dist_to_stop,
+                            "close": close_link,
+                            "tp/sl": f"{take:.2f}/{stop:.2f}",
+                            "du/dd": f"{round(drawup,2)}/{round(drawdown,2)}",
+                            })
 
         all_data.append({"pair": get_tv_link(pair, interval, anchor=True),
                          "interval": interval,
@@ -510,6 +568,7 @@ def get_live():
                          "usd_in": format_usd(usd_in),
                          "usd_net_value": format_usd(usd_net_value)})
     LIVE = all_data
+    STATUS_DATA = status_data
     if mt5 > 0 or mt10 > 0:
         send_slack_message("balance", f"trades over 5%: {mt5}\ntrades over 10%: {mt10}")
     try:
@@ -541,7 +600,7 @@ def get_live():
               service_name=f"{env}_open_profitable",
               text_output=text, remote_host="nagios.amrox.loc")
 
-    return LIVE
+    return LIVE, STATUS_DATA
 
 @APP.route('/live', methods=['GET', 'POST'])
 @login_required
@@ -554,7 +613,8 @@ def live():
         files['aggregate'] = (AGG_DATA, 1)
         files['double_rsi'] = (get_doublersi_list(), 4)
     else:
-        files['open_trades'] =  (get_live(), 5)
+        files['open_trades'] =  (get_live()[0], 5)
+        files['open_trade_status'] =  (STATUS_DATA, 5)
         files['balance'] = (BALANCE, 1)
 
     if request.method == 'GET':
@@ -765,6 +825,14 @@ def get_balance():
 
     BALANCE = all_results
 
+def get_data():
+    """
+    extract candles & indicators from data api
+    """
+    for tf in ('15m', '1h'):
+        DATA[f'tf_{tf}'] = AttributeDict(requests.get('http://www.data.amrox.loc/data/{tf}',
+                                                      timeout=10).json())
+
 @arg_decorator
 def main():
     """API for interacting with trading system"""
@@ -775,6 +843,7 @@ def main():
         scheduler.add_job(func=get_additional_details, trigger="interval", minutes=1)
         scheduler.add_job(func=get_balance, trigger="interval", minutes=3)
         scheduler.add_job(func=get_live, trigger="interval", minutes=3)
+        scheduler.add_job(func=get_data, trigger="interval", minutes=3)
     else:
         scheduler.add_job(func=get_doublersi, trigger="interval", minutes=3)
         scheduler.add_job(func=get_agg, trigger="interval", minutes=3)
