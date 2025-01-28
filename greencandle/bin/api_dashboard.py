@@ -698,6 +698,7 @@ def refresh_data():
     get_balance()
     get_live()
     get_data()
+    get_additional_details()
     return Response(status=200)
 
 @APP.route('/values')
@@ -857,7 +858,7 @@ def main():
     setproctitle(f"{config.main.base_env}-api_dashboard")
     scheduler = BackgroundScheduler() # Create Scheduler
     if config.main.base_env.strip() != 'data':
-        scheduler.add_job(func=get_additional_details, trigger="interval", minutes=1)
+        scheduler.add_job(func=get_additional_details, trigger="interval", minutes=3)
         scheduler.add_job(func=get_balance, trigger="interval", minutes=3)
         scheduler.add_job(func=get_live, trigger="interval", minutes=3)
         scheduler.add_job(func=get_data, trigger="interval", minutes=3,
