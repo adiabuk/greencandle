@@ -1,5 +1,15 @@
 # Releases
 
+# 8.11.1
+* add more metrics to new dashboard
+* get first indicator item from list
+* get timer data from dashboard for prometheus
+* return all indicator data from api and fetch from env dashboards
+* link to refresh all dashboard data manually
+* cleanup and remove unused code
+* fetch data for dashboard straight away
+* fix missed fstring for data api url
+
 # 8.11
 * add new open trade dashboard showing current status
 * add data from previous candle to api
