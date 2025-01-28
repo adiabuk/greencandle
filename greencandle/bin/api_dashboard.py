@@ -512,8 +512,8 @@ def get_live():
                                     anchor=True, short_url=True, base_env=config.main.base_env)
         take = get_value('take', pair, name, direction)
         stop = get_value('stop', pair, name, direction)
-        dist_to_take = take - net_perc
-        dist_to_stop = stop - net_perc
+        dist_to_take = round(take - net_perc, 2)
+        dist_to_stop = round(stop - net_perc, 2)
         stochrsi = DATA[f'tf_{interval}'][pair].res.STOCHRSI_14[0]
         rsi7 = DATA[f'tf_{interval}'][pair].res.RSI_7
         ema150 = DATA[f'tf_{interval}'][pair].res.EMA_150
