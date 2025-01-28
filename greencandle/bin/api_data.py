@@ -103,7 +103,6 @@ def main():
     scheduler.add_job(func=keepalive, trigger="interval", seconds=120, misfire_grace_time=1000)
     scheduler.add_job(func=collect_agg_data, args=[interval], trigger="interval",
                       seconds=400, misfire_grace_time=1000)
-    #scheduler.add_job(func=collect_all_data, trigger="interval", seconds=30)
 
     for seq, pair in enumerate(PAIRS):
         scheduler.add_job(func=collect_data, args=[pair], trigger="interval",
