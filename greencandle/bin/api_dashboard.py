@@ -843,7 +843,8 @@ def main():
         scheduler.add_job(func=get_additional_details, trigger="interval", minutes=1)
         scheduler.add_job(func=get_balance, trigger="interval", minutes=3)
         scheduler.add_job(func=get_live, trigger="interval", minutes=3)
-        scheduler.add_job(func=get_data, trigger="interval", minutes=3)
+        scheduler.add_job(func=get_data, trigger="interval", minutes=3,
+                          next_run_time=datetime.now()+timedelta(seconds=10))
     else:
         scheduler.add_job(func=get_doublersi, trigger="interval", minutes=3)
         scheduler.add_job(func=get_agg, trigger="interval", minutes=3)
