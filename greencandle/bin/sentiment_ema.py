@@ -82,7 +82,8 @@ def main():
 
     push_prom_data(f'EMA_150_up_{interval}', up_perc)
     push_prom_data(f'EMA_150_down_{interval}', down_perc)
-
+    direction_value = {'up': 1, 'down': -1}
+    push_prom_data(f'EMA_150_all_value_{interval}', direction_value[max_direction])
     sys.exit(status)
 
 if __name__ == '__main__':

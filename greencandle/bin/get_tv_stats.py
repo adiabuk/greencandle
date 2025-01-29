@@ -25,7 +25,8 @@ def main():
     logger = get_logger(__name__)
     redis = Redis(db=15)
     dt_stamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    stats = AttributeDict({'STRONG_BUY':0, 'BUY':0, 'STRONG_SELL':0, 'SELL':0, 'NEUTRAL':0})
+    assocs = {'STRONG_BUY': 2, 'BUY': 1, 'NEUTRAL':0, 'SELL': -1, 'STRONG_SELL': -2}
+    stats = AttributeDict({x: 0 for x in assocs})  # set counter to 0
     config.create_config()
     env = config.main.base_env
     interval = sys.argv[1] if len(sys.argv) > 1 else '1h'
@@ -42,6 +43,7 @@ def main():
             json.dump(v.summary, f)
 
     most = max(stats, key=stats.get)
+    most_value = assocs[most]
 
     if 'STRONG' in most:
         status = 2
@@ -70,6 +72,7 @@ def main():
                  f'tv_neutral_{interval}': stats.NEUTRAL}
     for k, v in prom_data.items():
         push_prom_data(k, v)
+    push_prom_data(f'tv_all_value_{interval}', most_value)
 
     sys.exit(status)
 
