@@ -1,5 +1,13 @@
 # Releases
 
+# 8.11.2
+* don't use arg decorator if we are using argparse
+* fix args in close_all script and allow using arg from ui
+* return noting after closing trade from api
+* fix syntax error in 1h data rule-stage2
+* move exception decorator to get_rule_action as it's run in a thread
+* run dashboard additional details less often
+
 # 8.11.1
 * add more metrics to new dashboard
 * get first indicator item from list
