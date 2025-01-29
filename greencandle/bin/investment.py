@@ -7,9 +7,7 @@ Estimate monthly compound profit from starting investment
 
 import argparse
 import argcomplete
-from greencandle.lib.common import arg_decorator
 
-@arg_decorator
 def main():
     """ Main function """
     parser = argparse.ArgumentParser()

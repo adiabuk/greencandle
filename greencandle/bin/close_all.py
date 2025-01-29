@@ -7,10 +7,9 @@ import argparse
 import argcomplete
 import requests
 from greencandle.lib.mysql import Mysql
-from greencandle.lib.common import get_short_name, perc_diff, arg_decorator
+from greencandle.lib.common import get_short_name, perc_diff
 from greencandle.lib import config
 
-@arg_decorator
 def main():
     """
     Close all trades in current environment if perc is higher than threshold

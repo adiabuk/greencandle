@@ -12,13 +12,10 @@ from setproctitle import setproctitle
 from greencandle.lib import config
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.run import serial_test, parallel_test
-from greencandle.lib.common import arg_decorator
 
 config.create_config()
 LOGGER = get_logger(__name__)
-GET_EXCEPTIONS = exception_catcher((Exception))
 
-@arg_decorator
 def main():
     """
     Run test for all pairs and intervals defined in config

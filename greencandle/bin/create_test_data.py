@@ -11,9 +11,7 @@ import argcomplete
 
 from greencandle.lib import config
 from greencandle.lib.binance_common import get_data
-from greencandle.lib.common import arg_decorator
 
-@arg_decorator
 def main():
     """ Main function """
 
