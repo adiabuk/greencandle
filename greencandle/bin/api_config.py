@@ -3,6 +3,7 @@
 """
 Flask module for getting fetching and setting drain status
 """
+from datetime import datetime
 from flask import Flask, request, Response
 from str2bool import str2bool
 from redis.commands.json.path import Path
@@ -14,8 +15,8 @@ APP = Flask(__name__, template_folder="/var/www/html", static_url_path='/',
             static_folder='/var/www/html')
 APP.wsgi_app = PrefixMiddleware(APP.wsgi_app, prefix='/drain')
 
-DEF_STRUCT = {"top_open": False,
-              "top_close": False,
+DEF_STRUCT = {
+              "tf_top": {"long": False, "short":False, "close": False},
               "tf_1m": {"long": False, "short":False, "close": False},
               "tf_5m": {"long": False, "short":False, "close": False},
               "tf_15m": {"long": False, "short":False, "close": False},
@@ -60,12 +61,15 @@ def get_all_envs():
 @APP.route('/drain_count', methods=["GET"])
 def get_drain_count():
     """
-    Get drain count and intervals/direction for given env
+    Get drain count and
     """
     env = request.args.get('env', False)
     struct = get_struct(env)
-    paths = [':'.join(item).lstrip('tf_') for item in find_paths(struct, True)]
-    return {'count': len(paths), 'result': paths}
+    paths = [':'.join(item).rsplit('_', maxsplit=1)[-1] for item in find_paths(struct, True)]
+    current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    results = "none" if not paths else ", ".join(paths)
+    return {'count': len(paths), 'result': results, 'current_time': current_time,
+            'env': env}
 
 @APP.route('/healthcheck', methods=["GET"])
 def healthcheck():
@@ -81,14 +85,9 @@ def set_value():
     update a boolean drain value for a given env/direction/interval
     """
     payload = AttributeDict(request.json)
-    action = 'close' if payload.direction == 'close' else 'open'
     struct = get_struct(payload.env)
-    if 'interval' in payload and payload.interval:
-        struct[f'tf_{payload.interval}'][payload.direction] = str2bool(str(payload.value)) if \
+    struct[f'tf_{payload.interval}'][payload.direction] = str2bool(str(payload.value)) if \
                 payload.value is not None else False
-    else:
-        struct[f'top_{action}'] = str2bool(str(payload.value)) if payload.value is not None \
-                else False
     set_struct(payload.env, struct)
     return Response(status=200)
 
@@ -125,12 +124,7 @@ def get_value():
 
     struct = get_struct(env)
 
-    try:
-        action = 'close' if direction == 'close' else 'open'
-        top_result = struct[f'top_{action}']
-    except KeyError:
-        top_result = False
-    result = struct[f'tf_{interval}'][direction] or top_result
+    result = struct[f'tf_{interval}'][direction] or struct['tf_top'][direction]
     print(f"You provided {direction},{interval}, {env}.......{result}")
 
     return {'result':result}
