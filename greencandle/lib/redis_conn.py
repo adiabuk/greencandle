@@ -13,10 +13,12 @@ from datetime import datetime, timedelta
 import redis
 from str2bool import str2bool
 from greencandle.lib.mysql import Mysql
-from greencandle.lib.logger import get_logger
+from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib import config
 from greencandle.lib.common import add_perc, sub_perc, AttributeDict, \
         perc_diff, convert_to_seconds, get_short_name, TF2MIN, epoch2date
+
+GET_EXCEPTIONS = exception_catcher((Exception))
 
 def get_float(var):
     """
@@ -697,6 +699,7 @@ class Redis():
         del redis3
         return agg
 
+    @GET_EXCEPTIONS
     def get_rule_action(self, pair, interval, check_reversal=False):
         """
         get only rule results, without checking tp/sl etc.

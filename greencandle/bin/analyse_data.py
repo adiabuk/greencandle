@@ -52,7 +52,6 @@ ROUTER_FORWARD = bool('ROUTER_FORWARD' in os.environ)
 REDIS_FORWARD = [int(x) for x in os.environ['REDIS_FORWARD'].split(',')] if 'REDIS_FORWARD' \
         in os.environ else False
 
-@GET_EXCEPTIONS
 @decorator_timer
 def analyse_loop():
     """
@@ -69,7 +68,6 @@ def analyse_loop():
                 LOGGER.info("finished initial data collection for %s", INTERVAL)
                 break
             time.sleep(30)
-
 
     LOGGER.debug("start of current loop")
     redis = Redis()
