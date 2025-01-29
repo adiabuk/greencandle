@@ -344,7 +344,7 @@ def action():
 
     send_trade(pair, strategy, trade_action, take=take, stop=stop, usd=usd)
     if close:
-        return Response(status=200)
+        return '<button type="button" onclick="window.close()">Close Tab</button>'
     return redirect(url_for('trade'))
 
 @decorator_timer
