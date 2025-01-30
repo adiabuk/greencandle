@@ -1,5 +1,13 @@
 # Releases
 
+# 8.11.3
+* don't send individual EMA/tv stats to nagios
+* check aggregated tv stats from prometheus in data and send to nagios/stackstorm
+* get num/sum of open trades per direction/prom stat
+* allow drain at top level for long and short
+* Revert "return noting after closing trade from api"
+* get +ve/-ve value of overall EMA/TV status for prometheus
+
 # 8.11.2
 * don't use arg decorator if we are using argparse
 * fix args in close_all script and allow using arg from ui
