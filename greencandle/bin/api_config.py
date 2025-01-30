@@ -7,7 +7,8 @@ from datetime import datetime
 from flask import Flask, request, Response
 from str2bool import str2bool
 from redis.commands.json.path import Path
-from greencandle.lib.common import AttributeDict, arg_decorator
+from greencandle.lib.common import arg_decorator
+from greencandle.lib.objects import AttributeDict
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.web import PrefixMiddleware, find_paths
 

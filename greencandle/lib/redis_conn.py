@@ -15,8 +15,9 @@ from str2bool import str2bool
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib import config
-from greencandle.lib.common import add_perc, sub_perc, AttributeDict, \
-        perc_diff, convert_to_seconds, get_short_name, TF2MIN, epoch2date, is_in_drain
+from greencandle.lib.common import add_perc, sub_perc, \
+        perc_diff, convert_to_seconds, get_short_name, epoch2date, is_in_drain
+from greencandle.lib.objects import AttributeDict, TF2MIN
 
 GET_EXCEPTIONS = exception_catcher((Exception))
 

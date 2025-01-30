@@ -27,8 +27,8 @@ from greencandle.lib.mysql import Mysql
 from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.binance_accounts import base2quote, get_cross_margin_level
 from greencandle.lib.common import (arg_decorator, divide_chunks, get_be_services, list_to_dict,
-                                    perc_diff, get_tv_link, get_trade_link, format_usd,
-                                    AttributeDict, price2float)
+                                    perc_diff, get_tv_link, get_trade_link, format_usd, price2float)
+from greencandle.lib.objects import AttributeDict
 from greencandle.lib import config
 from greencandle.lib.web import PrefixMiddleware, push_prom_data, decorator_timer
 from greencandle.lib.balance_common import get_quote

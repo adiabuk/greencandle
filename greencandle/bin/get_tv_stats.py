@@ -8,7 +8,8 @@ import json
 from datetime import datetime
 from tradingview_ta import get_multiple_analysis
 from greencandle.lib.redis_conn import Redis
-from greencandle.lib.common import arg_decorator, AttributeDict
+from greencandle.lib.common import arg_decorator
+from greencandle.lib.objects import AttributeDict
 from greencandle.lib import config
 from greencandle.lib.logger import get_logger
 from greencandle.lib.web import push_prom_data

@@ -6,7 +6,7 @@ Push/Pull crypto signals and data to mysql
 import datetime
 import MySQLdb
 from greencandle.lib import config
-from greencandle.lib.common import AttributeDict
+from greencandle.lib.objects import AttributeDict
 from greencandle.lib.binance_accounts import get_local_price
 from greencandle.lib.balance_common import get_base, get_quote
 from greencandle.lib.logger import get_logger, exception_catcher

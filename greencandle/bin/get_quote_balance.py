@@ -8,7 +8,8 @@ import sys
 from greencandle.lib.balance import Balance
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.alerts import send_slack_message
-from greencandle.lib.common import QUOTES, arg_decorator, format_usd
+from greencandle.lib.common import arg_decorator, format_usd
+from greencandle.lib.objects import QUOTES
 from greencandle.lib.balance_common import get_quote, get_base
 from greencandle.lib.binance_accounts import base2quote
 from greencandle.lib import config

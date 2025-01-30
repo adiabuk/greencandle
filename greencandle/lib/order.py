@@ -17,7 +17,8 @@ from greencandle.lib.web import get_drain
 from greencandle.lib.binance_accounts import get_binance_spot, base2quote, quote2base, \
         get_binance_isolated, get_binance_cross, get_max_borrow
 from greencandle.lib.balance_common import get_base, get_quote, get_step_precision
-from greencandle.lib.common import perc_diff, add_perc, sub_perc, AttributeDict, QUOTES, is_in_drain
+from greencandle.lib.common import perc_diff, add_perc, sub_perc, is_in_drain
+from greencandle.lib.objects import AttributeDict, QUOTES
 from greencandle.lib.alerts import send_slack_trade, send_slack_message
 from greencandle.lib.web import decorator_timer
 

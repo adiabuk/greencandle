@@ -9,7 +9,8 @@ import json
 from send_nsca3 import send_nsca
 from greencandle.lib import config
 from greencandle.lib.redis_conn import Redis
-from greencandle.lib.common import AttributeDict, arg_decorator
+from greencandle.lib.common import arg_decorator
+from greencandle.lib.objects import AttributeDict
 from greencandle.lib.logger import get_logger
 
 @arg_decorator

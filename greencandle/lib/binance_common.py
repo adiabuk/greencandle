@@ -16,7 +16,8 @@ import pandas
 from greencandle.lib.binance import Binance
 from greencandle.lib import config
 from greencandle.lib.logger import get_logger
-from greencandle.lib.common import epoch2date, TF2MIN
+from greencandle.lib.objects import TF2MIN
+from greencandle.lib.common import epoch2date
 
 LOGGER = get_logger(__name__)
 

@@ -5,7 +5,7 @@ Get values from config file
 """
 from configparser import ConfigParser
 import numpy
-from greencandle.lib.common import AttributeDict
+from greencandle.lib.objects import AttributeDict
 
 
 REQUIRED_CONFIG = {'database':['db_host', 'db_user', 'db_password', 'db_database'],

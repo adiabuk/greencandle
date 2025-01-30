@@ -17,7 +17,7 @@ from PIL import Image
 from pyvirtualdisplay import Display
 from resizeimage import resizeimage
 from greencandle.lib import config
-from greencandle.lib.common import AttributeDict
+from greencandle.lib.objects import AttributeDict
 from greencandle.lib.redis_conn import Redis
 
 from greencandle.lib.logger import get_logger

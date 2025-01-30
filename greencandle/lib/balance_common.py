@@ -4,7 +4,7 @@
 import math
 from collections import defaultdict
 import requests
-from greencandle.lib.common import QUOTES
+from greencandle.lib.objects import QUOTES
 
 def default_to_regular(ddict):
     """
