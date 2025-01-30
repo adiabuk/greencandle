@@ -190,6 +190,11 @@
       "is_binary": false,
       "is_secret": false
     },
+    "drain_take_profit_perc": {
+      "value": "1",
+      "is_binary": false,
+      "is_secret": false
+    },
     "email_active": {
       "value": "",
       "is_binary": false,
