@@ -11,6 +11,9 @@ import yaml
 from babel.numbers import format_currency
 import numpy
 from markupsafe import Markup
+from str2bool import str2bool
+from greencandle.lib.web import get_drain
+from greencandle.lib import config
 
 class Bcolours:
     """
@@ -302,3 +305,22 @@ def price2float(price: str) -> float:
 
     result = float(trimmed)
     return result
+
+def is_in_drain():
+    """
+    Check if current scope is in drain given date range, and current time
+    Drain time is set in config (drain/drain_range)
+    """
+    config.create_config()
+    currentime = datetime.datetime.now()
+    time_str = currentime.strftime('%H:%M')
+    raw_range = config.main.drain_range.strip()
+    start, end = re.findall(r"\d\d:\d\d\s?-\s?\d\d:\d\d", raw_range)[0].split('-')
+    time_range = (start.strip(), end.strip())
+    drain = str2bool(config.main.drain)
+    api_drain = get_drain(env=config.main.base_env,
+                          interval=config.main.interval,
+                          direction=config.main.trade_direction)
+    if time_range[1] < time_range[0]:
+        return time_str >= time_range[0] or time_str <= time_range[1]
+    return (time_range[0] <= time_str <= time_range[1]) if drain else api_drain
