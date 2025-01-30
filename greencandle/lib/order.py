@@ -4,9 +4,7 @@ Buy/Sell orders
 """
 
 from collections import defaultdict
-import datetime
 import time
-import re
 from pathlib import Path
 from send_nsca3 import send_nsca
 from str2bool import str2bool
@@ -19,7 +17,7 @@ from greencandle.lib.web import get_drain
 from greencandle.lib.binance_accounts import get_binance_spot, base2quote, quote2base, \
         get_binance_isolated, get_binance_cross, get_max_borrow
 from greencandle.lib.balance_common import get_base, get_quote, get_step_precision
-from greencandle.lib.common import perc_diff, add_perc, sub_perc, AttributeDict, QUOTES
+from greencandle.lib.common import perc_diff, add_perc, sub_perc, AttributeDict, QUOTES, is_in_drain
 from greencandle.lib.alerts import send_slack_trade, send_slack_message
 from greencandle.lib.web import decorator_timer
 
@@ -56,25 +54,6 @@ class Trade():
             return True
         except ValueError:
             return False
-
-    def is_in_drain(self):
-        """
-        Check if current scope is in drain given date range, and current time
-        Drain time is set in config (drain/drain_range)
-        or by the existance of /var/local/drain/{env}_drain file
-        """
-        currentime = datetime.datetime.now()
-        time_str = currentime.strftime('%H:%M')
-        raw_range = self.config.main.drain_range.strip()
-        start, end = re.findall(r"\d\d:\d\d\s?-\s?\d\d:\d\d", raw_range)[0].split('-')
-        time_range = (start.strip(), end.strip())
-        drain = str2bool(self.config.main.drain)
-        api_drain = get_drain(env=self.config.main.base_env,
-                              interval=self.config.main.interval,
-                              direction=self.config.main.trade_direction)
-        if time_range[1] < time_range[0]:
-            return time_str >= time_range[0] or time_str <= time_range[1]
-        return (time_range[0] <= time_str <= time_range[1]) if drain else api_drain
 
     def __send_redis_trade(self, **kwargs):
         """
@@ -125,7 +104,7 @@ class Trade():
         manual = "any" in self.config.main.name
         good_pairs = str2bool(self.config.main.good_pairs)
 
-        if self.is_in_drain() and not self.test_data:
+        if is_in_drain() and not self.test_data:
             msg = "strategy is in drain for pair %s, skipping..." % str(items_list)
             self.logger.info(msg)
             send_slack_message("alerts", msg)

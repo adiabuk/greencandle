@@ -16,7 +16,7 @@ from greencandle.lib.mysql import Mysql
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib import config
 from greencandle.lib.common import add_perc, sub_perc, AttributeDict, \
-        perc_diff, convert_to_seconds, get_short_name, TF2MIN, epoch2date
+        perc_diff, convert_to_seconds, get_short_name, TF2MIN, epoch2date, is_in_drain
 
 GET_EXCEPTIONS = exception_catcher((Exception))
 
@@ -556,6 +556,10 @@ class Redis():
         profit_perc = self.get_on_entry(pair, 'take_profit_perc')
         if profit_perc <= 0:
             return False
+        if is_in_drain():
+            # override tp with drain tp if in drain
+            profit_perc = config.main.drain_take_profit_perc
+
         direction = config.main.trade_direction
         immediate = str2bool(config.main.immediate_take_profit)
 
