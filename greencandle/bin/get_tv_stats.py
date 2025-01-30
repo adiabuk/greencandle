@@ -6,7 +6,6 @@ check tv sentiment
 import sys
 import json
 from datetime import datetime
-from send_nsca3 import send_nsca
 from tradingview_ta import get_multiple_analysis
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.common import arg_decorator, AttributeDict
@@ -28,7 +27,6 @@ def main():
     assocs = {'STRONG_BUY': 2, 'BUY': 1, 'NEUTRAL':0, 'SELL': -1, 'STRONG_SELL': -2}
     stats = AttributeDict({x: 0 for x in assocs})  # set counter to 0
     config.create_config()
-    env = config.main.base_env
     interval = sys.argv[1] if len(sys.argv) > 1 else '1h'
     pairs = ['binance:' + s for s in config.main.pairs.split()]
     analysis = get_multiple_analysis(screener="crypto", interval=interval, symbols=pairs)
@@ -45,24 +43,8 @@ def main():
     most = max(stats, key=stats.get)
     most_value = assocs[most]
 
-    if 'STRONG' in most:
-        status = 2
-        msg = "CRITICAL"
-    elif most in ['BUY', 'SELL']:
-        status = 1
-        msg = "WARNING"
-    elif 'NEUTRAL' in most:
-        status = 0
-        msg = "OK"
-    else:
-        status = 3
-        msg = "UNKNOWN"
-    text = f"{msg}: current sentiment is {most}: {stats}"
-    host = "data" if env == "data" else "jenkins"
     redis.conn.rpush(f"all:{interval}", most)
 
-    send_nsca(status=status, host_name=host, service_name=f"{env}_tv_stats_{interval}",
-              text_output=text, remote_host="nagios.amrox.loc")
     logger.info("current sentiment for %s is %s, stats:%s", interval, most, stats)
 
     prom_data = {f'tv_strong_buy_{interval}': stats.STRONG_BUY,
@@ -73,8 +55,6 @@ def main():
     for k, v in prom_data.items():
         push_prom_data(k, v)
     push_prom_data(f'tv_all_value_{interval}', most_value)
-
-    sys.exit(status)
 
 if __name__ == '__main__':
     main()

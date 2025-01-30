@@ -7,7 +7,6 @@ import sys
 import json
 from datetime import datetime
 import numpy as np
-from send_nsca3 import send_nsca
 from greencandle.lib import config
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.common import arg_decorator
@@ -66,25 +65,12 @@ def main():
 
     details = f"up_perc: {up_perc}%, down_perc: {down_perc}%"
 
-    if up_perc > 60 or down_perc > 60:
-        status=2
-        msg="CRITICAL"
-    elif up_perc > 30 or down_perc > 30:
-        status=1
-        msg="WARNING"
-    else:
-        status=0
-        msg="OK"
-    text = f"{msg}: Direction is {max_direction}: {details}"
-    send_nsca(status=status, host_name='data', service_name=f'EMA_150_{interval}',
-              text_output=text, remote_host='nagios.amrox.loc')
     logger.info("EMA direction is %s for %s, details %s", max_direction, interval, details)
 
     push_prom_data(f'EMA_150_up_{interval}', up_perc)
     push_prom_data(f'EMA_150_down_{interval}', down_perc)
     direction_value = {'up': 1, 'down': -1}
     push_prom_data(f'EMA_150_all_value_{interval}', direction_value[max_direction])
-    sys.exit(status)
 
 if __name__ == '__main__':
     main()
