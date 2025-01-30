@@ -613,10 +613,10 @@ def get_live():
 
     push_prom_data(f'open_profitable_{env}', net_perc_profitable)
     push_prom_data(f'num_open_trades_{env}', len(raw))
-    push_prom_data(f'num_long_trades_{env}', len(long))
-    push_prom_data(f'num_short_trades_{env}', len(short))
-    push_prom_data(f'net_perc_long_trades_{env}', sum(long))
-    push_prom_data(f'net_perc_short_trades_{env}', sum(short))
+    push_prom_data(f'open_num_long_trades_{env}', len(long))
+    push_prom_data(f'open_num_short_trades_{env}', len(short))
+    push_prom_data(f'open_net_perc_long_trades_{env}', sum(long))
+    push_prom_data(f'open_net_perc_short_trades_{env}', sum(short))
 
     send_nsca(status=status, host_name="jenkins",
               service_name=f"{env}_open_profitable",
