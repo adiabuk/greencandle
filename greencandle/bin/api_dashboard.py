@@ -492,6 +492,8 @@ def get_live():
     raw = dbase.get_open_trades()
     commission = float(dbase.get_complete_commission())
     net_profitable = 0
+    long = []
+    short = []
     for open_time, interval, pair, name, open_price, direction, quote_in in raw:
         current_quote = get_quote(pair)
         current_price = prices['recent'][pair]['close']
@@ -532,11 +534,14 @@ def get_live():
             ema_trend = float(current_price) > ema150
             rsi_sell = rsi7 > 70
             stoch_sell = stochrsi > 95
+            long.append(float(net_perc))
+
         else:
             bb_sell = float(current_price) < DATA[f'tf_{interval}'][pair].res[0]['bb_30'][2]
             ema_trend = float(current_price) < ema150
             rsi_sell = rsi7 < 30
             stoch_sell = stochrsi < 5
+            short.append(float(net_perc))
 
         time_in_trade = str(datetime.now().replace(microsecond=0) -
                             datetime.strptime(str(open_time), '%Y-%m-%d %H:%M:%S'))
@@ -608,6 +613,10 @@ def get_live():
 
     push_prom_data(f'open_profitable_{env}', net_perc_profitable)
     push_prom_data(f'num_open_trades_{env}', len(raw))
+    push_prom_data(f'num_long_trades_{env}', len(long))
+    push_prom_data(f'num_short_trades_{env}', len(short))
+    push_prom_data(f'net_perc_long_trades_{env}', sum(long))
+    push_prom_data(f'net_perc_short_trades_{env}', sum(short))
 
     send_nsca(status=status, host_name="jenkins",
               service_name=f"{env}_open_profitable",
