@@ -556,7 +556,7 @@ class Redis():
         profit_perc = self.get_on_entry(pair, 'take_profit_perc')
         if profit_perc <= 0:
             return False
-        if is_in_drain():
+        if is_in_drain(config):
             # override tp with drain tp if in drain
             profit_perc = config.main.drain_take_profit_perc
 

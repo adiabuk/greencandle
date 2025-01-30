@@ -104,7 +104,7 @@ class Trade():
         manual = "any" in self.config.main.name
         good_pairs = str2bool(self.config.main.good_pairs)
 
-        if is_in_drain() and not self.test_data:
+        if is_in_drain(self.config) and not self.test_data:
             msg = "strategy is in drain for pair %s, skipping..." % str(items_list)
             self.logger.info(msg)
             send_slack_message("alerts", msg)

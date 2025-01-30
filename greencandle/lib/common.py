@@ -13,7 +13,6 @@ import numpy
 from markupsafe import Markup
 from str2bool import str2bool
 from greencandle.lib.web import get_drain
-from greencandle.lib import config
 
 class Bcolours:
     """
@@ -306,7 +305,7 @@ def price2float(price: str) -> float:
     result = float(trimmed)
     return result
 
-def is_in_drain():
+def is_in_drain(config):
     """
     Check if current scope is in drain given date range, and current time
     Drain time is set in config (drain/drain_range)
