@@ -856,6 +856,7 @@ def get_data():
     """
     extract candles & indicators from data api
     """
+    # FIXME: get list of intervals used in open trades
     for tf in ('15m', '1h', '1d'):
         DATA[f'tf_{tf}'] = AttributeDict(requests.get(f'http://www.data.amrox.loc/data/{tf}',
                                                       timeout=10).json())
