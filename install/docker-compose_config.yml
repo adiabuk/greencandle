@@ -43,7 +43,7 @@ services:
       timeout: 10s
       retries: 5
     ports:
-      - 6000:6000
+      - 6001:6000
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws
@@ -53,7 +53,7 @@ services:
     hostname: config-base-redis
     image: amrox/gc-redis:${TAG}
     ports:
-      - 6385:6379
+      - 6386:6379
     environment:
       - CONFIG_ENV=config
     restart: always
