@@ -9,7 +9,8 @@ from greencandle.lib.mysql import Mysql
 from greencandle.lib.logger import get_logger
 from greencandle.lib.binance_accounts import quote2base
 from greencandle.lib.binance import BinanceException
-from greencandle.lib.common import Bcolours, arg_decorator
+from greencandle.lib.common import arg_decorator
+from greencandle.lib.objects import Bcolours
 
 @arg_decorator
 def main():
