@@ -133,7 +133,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local8
+        syslog-facility: local1
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
     pull_policy: always
@@ -161,7 +161,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local8
+        syslog-facility: local1
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
     pull_policy: always
@@ -197,7 +197,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local8
+        syslog-facility: local1
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
@@ -296,7 +296,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local8
+        syslog-facility: local1
     ports:
       - 2000
     links:
