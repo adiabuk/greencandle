@@ -46,6 +46,7 @@ STATIC_DIR=/data/scripts/static
 @hourly ${SCRIPTS_DIR}/check_tpsl &>> /var/log/cron.log
 0 * * * * ${SCRIPTS_DIR}/send_docker_alerts
 */5 * * * * ${SCRIPTS_DIR}/get_hour_profit &>> /var/log/cron.log
+*/5 * * * * ${SCRIPTS_DIR}/check_against_trend
 #00 * * * * ${SCRIPTS_DIR}/populate_pairs
 
 {{else if eq .base_env "test"}}
@@ -53,6 +54,7 @@ STATIC_DIR=/data/scripts/static
 @reboot ${SCRIPTS_DIR}/clear_redis 1 &>> /var/log/cron.log
 @hourly ${SCRIPTS_DIR}/check_tpsl &>> /var/log/cron.log
 */5 * * * * ${SCRIPTS_DIR}/get_hour_profit &>> /var/log/cron.log
+*/5 * * * * ${SCRIPTS_DIR}/check_against_trend
 #15 * * * * ${SCRIPTS_DIR}/collect_pairs &>> /var/log/cron.log
 
 {{else if eq .base_env "data"}}
