@@ -1,5 +1,17 @@
 # Releases
 
+# 8.11.4
+* reduce drain tp in test env to minimum while avoid potential sliploss
+* refresh dev env for pre-release testing
+* move all drain-related funcs to web module to avoid circular imports
+* FIXME note to speed up dashboard
+* remove objects from common module to objects
+* add 1d candle data to dashboards
+* stop cron drain scripts
+* check drain status when opening, or checking tp
+* move drain checker module outside of trade class to use globally
+* add new config value for overriding take_profit during a drain
+
 # 8.11.3
 * don't send individual EMA/tv stats to nagios
 * check aggregated tv stats from prometheus in data and send to nagios/stackstorm
