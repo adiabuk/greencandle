@@ -1,5 +1,12 @@
 # Releases
 
+# 8.11.5
+* re-enable twitter script in data env
+* get number of trades against current trend for nagios alerts
+* fix broken import
+* log dev env to local1 facility
+* avoid port configs when moving envs to different hosts
+
 # 8.11.4
 * reduce drain tp in test env to minimum while avoid potential sliploss
 * refresh dev env for pre-release testing
