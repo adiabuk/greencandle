@@ -40,7 +40,7 @@ services:
     links:
       - dev-base-mysql:mysql
       - dev-base-redis:redis
-      - dev-be-stream_1m:stream
+      - dev-be-stream_15m:stream
     depends_on:
       - dev-base-mysql
       - dev-base-redis
@@ -89,9 +89,9 @@ services:
       timeout: 10s
       retries: 5
 
-  dev-be-stream_1m:
-    container_name: dev-be-stream_1m
-    hostname: dev-be-stream_1m
+  dev-be-stream_15m:
+    container_name: dev-be-stream_15m
+    hostname: dev-be-stream_15m
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
     pull_policy: always
@@ -124,9 +124,83 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-  dev-be-analyse-1m-short1:
-    container_name: dev-be-analyse-1m-short1
-    hostname: dev-be-analyse-1m-short1
+  dev-fe-api-proxy:
+    container_name: dev-fe-api-proxy
+    hostname: dev-fe-api-proxy
+    environment:
+      - CONFIG_ENV=dev/fe/api
+      - SECRET_KEY=$SECRET_KEY
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local5
+    image: amrox/greencandle:${TAG}
+    mem_limit: 200M
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh api_proxy
+    healthcheck:
+      test: curl -qsf http://127.1:5000 >/dev/null
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    links:
+      - dev-be-api-router:router
+      - dev-fe-api-filesystem:filesystem
+    ports:
+      - 5000
+    depends_on:
+      - dev-base-mysql
+      - dev-base-redis
+    volumes:
+      - /data:/data
+      - /dev/log:/dev/log
+      - /root/.aws:/root/.aws
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history
+
+  dev-fe-api-dashboard:
+    container_name: dev-fe-api-dashboard
+    hostname: dev-fe-api-dashboard
+    environment:
+      - CONFIG_ENV=dev
+      - DB=true
+      - SECRET_KEY=$SECRET_KEY
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local5
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600M
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh api_dashboard
+    links:
+      - dev-base-mysql:mysql
+      - dev-base-redis:redis
+      - dev-be-api-router:router
+      - dev-fe-api-filesystem:filesystem
+      - dev-fe-api-proxy:proxy
+    ports:
+      - 5000
+    depends_on:
+      - dev-base-mysql
+      - dev-base-redis
+    healthcheck:
+      test: curl -Isf http://127.1:5000/dash/healthcheck
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /dev/log:/dev/log
+      - /root/.aws:/root/.aws
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history
+
+  dev-be-analyse-15m-short1:
+    container_name: dev-be-analyse-15m-short1
+    hostname: dev-be-analyse-15m-short1
     image: amrox/greencandle:${TAG}
     mem_limit: 500M
     pull_policy: always
@@ -141,7 +215,7 @@ services:
     depends_on:
       - dev-base-mysql
       - dev-base-redis
-      - dev-be-get_1m
+      - dev-be-get_15m
     environment:
       - ALERT=True
       - STORE_IN_DB=True
@@ -159,20 +233,73 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-  dev-be-get_1m:
-    container_name: dev-be-get_1m
-    hostname: dev-be-get_1m
+  dev-gen-be-logwatch:
+    container_name: dev-gen-be-logwatch
+    hostname: dev-gen-be-logwatch
+    image: amrox/greencandle:${TAG}
+    mem_limit: 200M
+    restart: always
+    entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
+    environment:
+      - CONFIG_ENV=dev
+      - DB=false
+    volumes:
+      - /var/log:/var/log
+      - /root/.aws:/root/.aws
+      - /var/run:/var/run
+    healthcheck:
+      test: ls /var/log/gc_dev.log
+      interval: 5m
+      timeout: 10s
+      retries: 5
+
+  dev-gen-be-logtailer-api:
+    container_name: dev-gen-be-logtailer-api
+    hostname: dev-gen-be-logtailer-api
+    image: amrox/greencandle:${TAG}
+    mem_limit: 300M
+    pull_policy: always
+    restart: always
+    environment:
+      - CONFIG_ENV=dev
+      - DB=false
+      - SECRET_KEY=$SECRET_KEY
+    entrypoint: /docker-entrypoint.sh logtailer
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local5
+    ports:
+      - 2000
+    links:
+      - dev-base-mysql:mysql
+      - dev-base-redis:redis
+    healthcheck:
+      test: ls ||exit 1
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /var/log:/var/log
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history
+
+  dev-be-get_15m:
+    container_name: dev-be-get_15m
+    hostname: dev-be-get_15m
     image: amrox/greencandle:${TAG}
     mem_limit: 1000m
     pull_policy: always
     restart: always
-    entrypoint: /docker-entrypoint.sh get_data
+    entrypoint: /docker-entrypoint.sh api_data
     logging:
       driver: journald
     links:
       - dev-base-mysql:mysql
       - dev-base-redis:redis
-      - dev-be-stream_1m:stream
+      - dev-be-stream_15m:stream
     depends_on:
       - dev-base-mysql
       - dev-base-redis
@@ -180,7 +307,7 @@ services:
       - CONFIG_ENV=dev
       - DB=true
     healthcheck:
-      test: find /var/local/lock/gc_get_1m.lock  -mmin -2 ||exit 1
+      test: find /var/local/lock/gc_get_15m.lock  -mmin -2 ||exit 1
       interval: 5m
       timeout: 10s
       retries: 5
