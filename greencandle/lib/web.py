@@ -3,9 +3,13 @@
 Libraries for use in API modules
 """
 from time import time
+import re
+import datetime
 import requests
+from str2bool import str2bool
 from greencandle.lib import config
 from greencandle.lib.logger import get_logger
+
 config.create_config()
 TRUE_VALUES = 0
 LOGGER = get_logger(__name__)
@@ -37,6 +41,25 @@ def set_drain(**kwargs):
 
     url = 'http://config.amrox.loc/drain/set_value'
     requests.post(url, json=kwargs, timeout=2)
+
+def is_in_drain():
+    """
+    Check if current scope is in drain given date range, and current time
+    Drain time is set in config (drain/drain_range)
+    """
+    config.create_config()
+    currentime = datetime.datetime.now()
+    time_str = currentime.strftime('%H:%M')
+    raw_range = config.main.drain_range.strip()
+    start, end = re.findall(r"\d\d:\d\d\s?-\s?\d\d:\d\d", raw_range)[0].split('-')
+    time_range = (start.strip(), end.strip())
+    drain = str2bool(config.main.drain)
+    api_drain = get_drain(env=config.main.base_env,
+                          interval=config.main.interval,
+                          direction=config.main.trade_direction)
+    if time_range[1] < time_range[0]:
+        return time_str >= time_range[0] or time_str <= time_range[1]
+    return (time_range[0] <= time_str <= time_range[1]) if drain else api_drain
 
 def get_drain(env, interval, direction):
     """
