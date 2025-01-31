@@ -250,7 +250,7 @@ services:
       - CONFIG_ENV=dev
       - DB=true
     healthcheck:
-      test: find /var/local/  -mmin -2 -name greencandle 2>&1 |grep -q greencandle ||exit 1
+      test: find /var/local/lock -mmin -2 -name dev-be-analyse-15m-short1 2>&1  | grep . || exit 1
       start_period: 1h
       interval: 5m
       timeout: 10s
@@ -327,7 +327,6 @@ services:
     links:
       - dev-base-mysql:mysql
       - dev-base-redis:redis
-      - dev-be-stream_15m:stream
     depends_on:
       - dev-base-mysql
       - dev-base-redis
