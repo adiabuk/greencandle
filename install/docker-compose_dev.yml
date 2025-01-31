@@ -58,7 +58,7 @@ services:
     hostname: dev-base-redis
     image: amrox/gc-redis:${TAG}
     ports:
-      - 6379:6379
+      - 6382:6379
     environment:
       - CONFIG_ENV=dev
     restart: always
@@ -76,7 +76,7 @@ services:
     hostname: dev-base-mysql
     image: amrox/gc-mysql:${TAG}
     ports:
-      - 3306:3306
+      - 3309:3306
     entrypoint: /docker-entrypoint.sh mysqld
     environment:
       - MYSQL_ROOT_PASSWORD=password
