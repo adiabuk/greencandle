@@ -15,6 +15,7 @@ STATIC_DIR=/data/scripts/static
 @hourly ${SCRIPTS_DIR}/check_env_drain &>> /var/log/cron.log
 
 {{if eq .production "true" }}
+*/5 * * * * ${SCRIPTS_DIR}/check_against_trend
 @weekly ${SCRIPTS_DIR}/cleanup_db0 &>> /var/log/cron.log
 @reboot ${SCRIPTS_DIR}/clear_redis 1 &>> /var/log/cron.log
 */3 * * * * ${SCRIPTS_DIR}/get_risk &>> /var/log/cron.log
