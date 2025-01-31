@@ -192,7 +192,7 @@
       "is_secret": false
     },
     "drain_take_profit_perc": {
-      "value": "1",
+      "value": "0.25",
       "is_binary": false,
       "is_secret": false
     },
