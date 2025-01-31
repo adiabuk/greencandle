@@ -124,11 +124,39 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
+  dev-fe-api-filesystem:
+    container_name: dev-fe-api-filesystem
+    hostname: dev-fe-api-filesystem
+    environment:
+      - CONFIG_ENV=dev
+      - SECRET_KEY=$SECRET_KEY
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local5
+    image: amrox/greencandle:${TAG}
+    mem_limit: 200M
+    pull_policy: always
+    restart: always
+    entrypoint: /docker-entrypoint.sh filesystem_api
+    healthcheck:
+      test: curl -Isf http://127.1:6000
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    ports:
+      - 6000
+    volumes:
+      - /data:/data
+      - /dev/log:/dev/log
+      - /root/.aws:/root/.aws
+      - /var/run:/var/run
+
   dev-fe-api-proxy:
     container_name: dev-fe-api-proxy
     hostname: dev-fe-api-proxy
     environment:
-      - CONFIG_ENV=dev/fe/api
+      - CONFIG_ENV=dev
       - SECRET_KEY=$SECRET_KEY
     logging:
       driver: syslog
