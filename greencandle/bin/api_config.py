@@ -6,15 +6,19 @@ Flask module for getting fetching and setting drain status
 from datetime import datetime
 from flask import Flask, request, Response
 from str2bool import str2bool
+from send_nsca3 import send_nsca
 from redis.commands.json.path import Path
 from greencandle.lib.common import arg_decorator
 from greencandle.lib.objects import AttributeDict
 from greencandle.lib.redis_conn import Redis
-from greencandle.lib.web import PrefixMiddleware, find_paths
+from greencandle.lib.logger import get_logger
+from greencandle.lib.web import find_paths
 
+
+LOGGER = get_logger(__name__)
 APP = Flask(__name__, template_folder="/var/www/html", static_url_path='/',
             static_folder='/var/www/html')
-APP.wsgi_app = PrefixMiddleware(APP.wsgi_app, prefix='/drain')
+#APP.wsgi_app = PrefixMiddleware(APP.wsgi_app, prefix='/drain')
 
 DEF_STRUCT = {
               "tf_top": {"long": False, "short":False, "close": False},
@@ -49,7 +53,7 @@ def set_struct(env, struct):
     redis = Redis()
     redis.conn.json().set(env, Path.root_path(), struct)
 
-@APP.route('/get_all', methods=["GET"])
+@APP.route('/drain/get_all', methods=["GET"])
 def get_all_envs():
     """
     Get entire drain structure for all envs
@@ -59,7 +63,7 @@ def get_all_envs():
         entire[env] = get_struct(env)
     return entire
 
-@APP.route('/drain_count', methods=["GET"])
+@APP.route('/drain/drain_count', methods=["GET"])
 def get_drain_count():
     """
     Get drain count and
@@ -80,7 +84,7 @@ def healthcheck():
     """
     return Response(status=200)
 
-@APP.route('/set_value', methods=["POST"])
+@APP.route('/drain/set_value', methods=["POST"])
 def set_value():
     """
     update a boolean drain value for a given env/direction/interval
@@ -92,14 +96,14 @@ def set_value():
     set_struct(payload.env, struct)
     return Response(status=200)
 
-@APP.route('/get_envs', methods=["GET"])
+@APP.route('/drain/get_envs', methods=["GET"])
 def get_envs():
     """
     Return a list of supported envs
     """
     return ENVS
 
-@APP.route('/get_env', methods=["GET"])
+@APP.route('/drain/get_env', methods=["GET"])
 def get_env():
     """
     get structure for a given environment
@@ -110,7 +114,7 @@ def get_env():
     struct = get_struct(env)
     return struct
 
-@APP.route('/get_value', methods=["GET"])
+@APP.route('/drain/get_value', methods=["GET"])
 def get_value():
     """
     Get true/false value of drain status for a given env/direction/interval
@@ -129,6 +133,28 @@ def get_value():
     print(f"You provided {direction},{interval}, {env}.......{result}")
 
     return {'result':result}
+
+@APP.route('/nagios/push_alert', methods=["POST"])
+def push_nagios_alert():
+    """
+    Receive alert payload from grafana (or any other alert generator)
+    and forward to nagios via nsca
+    """
+    payload = request.json
+
+    for alert in payload['alerts']:
+        if not alert['values']:
+            continue
+        LOGGER.info('Processing incoming alert: %s %s %s', alert['labels']['alertname'],
+                    alert['status'], alert['values']['A'])
+        status = 2 if 'firing' in alert['status'] else 0
+
+        send_nsca(status=status, host_name='jenkins',
+                  service_name=alert['labels']['alertname'],
+                  text_output=f"Alert from webhook: {alert['values']['A']}",
+                  remote_host='nagios.amrox.loc')
+
+    return Response(status=200)
 
 @arg_decorator
 def main():

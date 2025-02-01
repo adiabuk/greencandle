@@ -38,7 +38,7 @@ services:
     depends_on:
       - config-base-redis
     healthcheck:
-      test: curl -Isf http://127.1:6000/drain/healthcheck
+      test: curl -Isf http://127.1:6000/healthcheck
       interval: 5m
       timeout: 10s
       retries: 5
