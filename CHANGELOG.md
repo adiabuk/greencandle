@@ -1,5 +1,15 @@
 # Releases
 
+# 8.11.7
+* 1G mem for logwatch, all envs
+* add missing containers to config env
+* remove debug logging from some containers
+* produce some output when done with close_all script to mark completion
+* remove print statement from config api
+* ensure all containers log to the correct local syslog facility
+* fix dep links for dev container
+* add arg decorator to data analyser
+
 # 8.11.6
 * get rate increase in test env and push to nagios/stackstorm
 * function to fetch prometheus data
