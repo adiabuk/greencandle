@@ -109,6 +109,7 @@ services:
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh stream_data
+    links:
       - dev-base-mysql:mysql
       - dev-base-redis:redis
     depends_on:
