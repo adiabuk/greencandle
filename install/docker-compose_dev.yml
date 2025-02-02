@@ -36,6 +36,10 @@ services:
     working_dir: /data/scripts
     image: amrox/greencandle:${TAG}
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local4
     entrypoint: /docker-entrypoint.sh "tail -f /dev/null"
     links:
       - dev-base-mysql:mysql
@@ -62,6 +66,10 @@ services:
     environment:
       - CONFIG_ENV=dev
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local4
     links:
       - dev-base-mysql:mysql
     entrypoint: /docker-entrypoint.sh redis-server /etc/redis.conf
@@ -78,6 +86,10 @@ services:
     ports:
       - 3309:3306
     entrypoint: /docker-entrypoint.sh mysqld
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local4
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - CONFIG_ENV=dev
@@ -97,9 +109,6 @@ services:
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh stream_data
-    logging:
-      driver: journald
-    links:
       - dev-base-mysql:mysql
       - dev-base-redis:redis
     depends_on:
@@ -133,7 +142,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local1
+        syslog-facility: local4
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
     pull_policy: always
@@ -161,7 +170,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local1
+        syslog-facility: local4
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
     pull_policy: always
@@ -197,7 +206,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local1
+        syslog-facility: local4
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
@@ -235,7 +244,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local4
     links:
       - dev-be-api-router:router
       - dev-base-mysql:mysql
@@ -268,6 +279,10 @@ services:
     mem_limit: 200M
     restart: always
     entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local4
     environment:
       - CONFIG_ENV=dev
       - DB=false
@@ -296,7 +311,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local1
+        syslog-facility: local4
     ports:
       - 2000
     links:
@@ -323,7 +338,9 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh api_data
     logging:
-      driver: journald
+      driver: syslog
+      options:
+        syslog-facility: local4
     links:
       - dev-base-mysql:mysql
       - dev-base-redis:redis
@@ -354,6 +371,10 @@ services:
     mem_limit: 200M
     pull_policy: always
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local4
     healthcheck:
       test: curl -Isf http://127.1:1080/healthcheck
       interval: 5m
