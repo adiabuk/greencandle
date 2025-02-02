@@ -301,6 +301,7 @@ def analyse_pair(pair, reversal, expire, redis):
         LOGGER.info("trade alert: %s %s %s %s %s (%s)",result, pair, match_strs, INTERVAL,
                     DIRECTION, supported.strip())
 
+@arg_decorator
 def main():
     """
     Analyse data from redis and alert to slack if there are current trade opportunities
