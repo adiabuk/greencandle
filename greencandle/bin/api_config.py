@@ -130,7 +130,7 @@ def get_value():
     struct = get_struct(env)
 
     result = struct[f'tf_{interval}'][direction] or struct['tf_top'][direction]
-    print(f"You provided {direction},{interval}, {env}.......{result}")
+    LOGGER.info("Fetching value for %s %s %s : %s", direction, interval, env, result)
 
     return {'result':result}
 
