@@ -1,5 +1,14 @@
 # Releases
 
+# 8.11.6
+* get rate increase in test env and push to nagios/stackstorm
+* function to fetch prometheus data
+* fix dev env logging
+* add dev to env list for drain config
+* add monitoring api endpoint to receive nagios data from grafana
+* add trend checker script to prod/per envs
+* fix failing containers in dev env
+
 # 8.11.5
 * re-enable twitter script in data env
 * get number of trades against current trend for nagios alerts
