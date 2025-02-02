@@ -5,7 +5,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local4
+        syslog-facility: local1
     environment:
       - CONFIG_ENV=dev
       - DB=true
@@ -39,7 +39,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local4
+        syslog-facility: local1
     entrypoint: /docker-entrypoint.sh "tail -f /dev/null"
     links:
       - dev-base-mysql:mysql
@@ -69,7 +69,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local4
+        syslog-facility: local1
     links:
       - dev-base-mysql:mysql
     entrypoint: /docker-entrypoint.sh redis-server /etc/redis.conf
@@ -89,7 +89,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local4
+        syslog-facility: local1
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - CONFIG_ENV=dev
@@ -108,6 +108,10 @@ services:
     mem_limit: 200M
     pull_policy: always
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local1
     entrypoint: /docker-entrypoint.sh stream_data
     links:
       - dev-base-mysql:mysql
@@ -143,7 +147,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local4
+        syslog-facility: local1
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
     pull_policy: always
@@ -171,7 +175,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local4
+        syslog-facility: local1
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
     pull_policy: always
@@ -207,7 +211,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local4
+        syslog-facility: local1
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
@@ -247,7 +251,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local4
+        syslog-facility: local1
     links:
       - dev-be-api-router:router
       - dev-base-mysql:mysql
@@ -283,7 +287,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local4
+        syslog-facility: local1
     environment:
       - CONFIG_ENV=dev
       - DB=false
@@ -312,7 +316,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local4
+        syslog-facility: local1
     ports:
       - 2000
     links:
@@ -341,7 +345,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local4
+        syslog-facility: local1
     links:
       - dev-base-mysql:mysql
       - dev-base-redis:redis
@@ -375,7 +379,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local4
+        syslog-facility: local1
     healthcheck:
       test: curl -Isf http://127.1:1080/healthcheck
       interval: 5m

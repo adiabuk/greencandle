@@ -4,6 +4,10 @@ services:
     environment:
       - CONFIG_ENV=config
       - DB=true
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local0
     hostname: config-be-manual
     working_dir: /data/scripts
     image: amrox/greencandle:${TAG}
@@ -28,6 +32,10 @@ services:
     container_name: config-fe-api-config
     environment:
       - CONFIG_ENV=config
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local0
     hostname: config-fe-api-config
     working_dir: /data/scripts
     image: amrox/greencandle:${TAG}
@@ -57,6 +65,10 @@ services:
     environment:
       - CONFIG_ENV=config
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local0
     links:
       - config-base-mysql:mysql
     entrypoint: /usr/local/bin/docker-entrypoint.sh redis-server --loadmodule /srv/redis/rejson.so --save "30 1 300 100 60 10000"
@@ -78,6 +90,10 @@ services:
       - CONFIG_ENV=config
       - DB=true
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local0
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
       interval: 5m

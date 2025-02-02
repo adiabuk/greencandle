@@ -61,6 +61,10 @@ services:
     mem_limit: 300M
     pull_policy: always
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local4
     links:
       - prod-base-mysql:mysql
     ports:
@@ -87,6 +91,10 @@ services:
       - MYSQL_ROOT_PASSWORD=password
       - DB=true
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local4
     ports:
       - 3306:3306
     healthcheck:
@@ -176,6 +184,10 @@ services:
     image: amrox/webserver:${TAG}
     mem_limit: 200M
     pull_policy: always
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local4
     restart: always
     healthcheck:
       test: curl -Isf 127.1:1111
@@ -315,6 +327,10 @@ services:
     mem_limit: 200M
     pull_policy: always
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local4
     healthcheck:
       test: curl -Isf http://127.1:1080/healthcheck
       interval: 5m

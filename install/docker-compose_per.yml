@@ -6,6 +6,10 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local6
     entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
     environment:
       - CONFIG_ENV=per/fe/cron
@@ -61,6 +65,10 @@ services:
     mem_limit: 300M
     pull_policy: always
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local6
     links:
       - per-base-mysql:mysql
     ports:
@@ -87,6 +95,10 @@ services:
       - MYSQL_ROOT_PASSWORD=password
       - DB=true
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local6
     ports:
       - 3307:3306
     healthcheck:
@@ -177,6 +189,10 @@ services:
     mem_limit: 200M
     pull_policy: always
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local6
     healthcheck:
       test: curl -Isf 127.1:4444
       interval: 5m
@@ -313,6 +329,10 @@ services:
     mem_limit: 200M
     pull_policy: always
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local6
     extra_hosts:
       - "alert:172.31.15.59"
     healthcheck:
@@ -383,7 +403,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local4
+        syslog-facility: local6
     environment:
       - intermittent="true"
       - CONFIG_ENV=per/be/loan
@@ -414,7 +434,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local4
+        syslog-facility: local6
     environment:
       - intermittent="true"
       - CONFIG_ENV=per/be/any/5m/cross-long
@@ -451,7 +471,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local4
+        syslog-facility: local6
     environment:
       - intermittent="true"
       - CONFIG_ENV=per/be/any/5m/cross-short
@@ -488,7 +508,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local4
+        syslog-facility: local6
     environment:
       - intermittent="true"
       - CONFIG_ENV=per/be/any/1h/cross-long
@@ -525,7 +545,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local4
+        syslog-facility: local6
     environment:
       - intermittent="true"
       - CONFIG_ENV=per/be/any/1h/cross-short
@@ -562,7 +582,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local4
+        syslog-facility: local6
     environment:
       - intermittent="true"
       - CONFIG_ENV=per/be/any/4h/cross-long
@@ -599,7 +619,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local4
+        syslog-facility: local6
     environment:
       - intermittent="true"
       - CONFIG_ENV=per/be/any/4h/cross-short
@@ -636,7 +656,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local4
+        syslog-facility: local6
     environment:
       - intermittent="true"
       - CONFIG_ENV=per/be/any/1d/cross-long
@@ -673,7 +693,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local4
+        syslog-facility: local6
     environment:
       - intermittent="true"
       - CONFIG_ENV=per/be/any/1d/cross-short
@@ -710,7 +730,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local4
+        syslog-facility: local6
     environment:
       - intermittent="true"
       - CONFIG_ENV=per/be/any2/5m/cross-long
@@ -747,7 +767,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local4
+        syslog-facility: local6
     environment:
       - intermittent="true"
       - CONFIG_ENV=per/be/any2/5m/cross-short
@@ -784,7 +804,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local4
+        syslog-facility: local6
     environment:
       - intermittent="true"
       - CONFIG_ENV=per/be/any2/1h/cross-long
@@ -821,7 +841,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local4
+        syslog-facility: local6
     environment:
       - intermittent="true"
       - CONFIG_ENV=per/be/any2/1h/cross-short
@@ -858,7 +878,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local4
+        syslog-facility: local6
     environment:
       - intermittent="true"
       - CONFIG_ENV=per/be/any2/4h/cross-long
@@ -895,7 +915,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local4
+        syslog-facility: local6
     environment:
       - intermittent="true"
       - CONFIG_ENV=per/be/any2/4h/cross-short
@@ -932,7 +952,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local4
+        syslog-facility: local6
     environment:
       - intermittent="true"
       - CONFIG_ENV=per/be/any2/1d/cross-long
@@ -969,7 +989,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-facility: local4
+        syslog-facility: local6
     environment:
       - intermittent="true"
       - CONFIG_ENV=per/be/any2/1d/cross-short

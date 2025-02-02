@@ -5,6 +5,10 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local5
     entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
     environment:
       - CONFIG_ENV=stag/fe/cron
@@ -59,6 +63,10 @@ services:
     mem_limit: 300M
     pull_policy: always
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local5
     links:
       - stag-base-mysql:mysql
     ports:
@@ -80,6 +88,10 @@ services:
     mem_limit: 1G
     pull_policy: always
     entrypoint: /docker-entrypoint.sh "--max-connections=5000"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local5
     environment:
       - CONFIG_ENV=stag
       - MYSQL_ROOT_PASSWORD=password
@@ -214,6 +226,10 @@ services:
     mem_limit: 200M
     pull_policy: always
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local5
     healthcheck:
       test: curl -Isf 127.1:3333
       interval: 5m
@@ -311,6 +327,10 @@ services:
     mem_limit: 200M
     pull_policy: always
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local5
     healthcheck:
       test: curl -Isf http://127.1:1080/healthcheck
       interval: 5m

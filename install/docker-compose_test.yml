@@ -57,6 +57,10 @@ services:
     mem_limit: 300M
     pull_policy: always
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local2
     links:
       - test-base-mysql:mysql
     ports:
@@ -78,6 +82,10 @@ services:
     mem_limit: 1G
     entrypoint: /docker-entrypoint.sh "--max-connections=5000"
     pull_policy: always
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local2
     environment:
       - CONFIG_ENV=test
       - MYSQL_ROOT_PASSWORD=password
@@ -276,6 +284,10 @@ services:
     mem_limit: 200M
     pull_policy: always
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local2
     healthcheck:
       test: curl -Isf 127.1:5555
       interval: 5m
@@ -310,6 +322,10 @@ services:
     mem_limit: 200M
     pull_policy: always
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local2
     healthcheck:
       test: curl -Isf http://127.1:1080/healthcheck
       interval: 5m

@@ -6,6 +6,10 @@ services:
     mem_limit: 4G
     pull_policy: always
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local3
     entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
     environment:
       - CONFIG_ENV=data/cron
@@ -341,6 +345,10 @@ services:
     mem_limit: 10G
     pull_policy: always
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local3
     entrypoint: /docker-entrypoint.sh "touch /var/log/cron.log && cron && tail -f /var/log/cron.log"
     links:
       - data-base-mysql:mysql
@@ -382,6 +390,10 @@ services:
     mem_limit: 1G
     pull_policy: always
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local3
     entrypoint: /docker-entrypoint.sh "--max-connections=5000"
     ports:
       - 3309:3306
@@ -402,6 +414,10 @@ services:
     mem_limit: 200M
     pull_policy: always
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local3
     healthcheck:
       test: curl -Isf 127.1:7777
       interval: 5m
@@ -469,6 +485,10 @@ services:
     extra_hosts:
       - "alert:10.0.0.212"
     image: amrox/greencandle:${TAG}
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: local3
     mem_limit: 500M
     pull_policy: always
     restart: always
