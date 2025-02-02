@@ -139,3 +139,12 @@ def decorator_timer(some_function):
                        value=str(end), job_name=f'gc_{config.main.base_env}_metrics')
         return result
     return wrapper
+
+def get_prom_value(query):
+    """
+    Get final value from prometheus using given query
+    """
+    url = "http://jenkins:9090/api/v1/query"
+    value = requests.post(f'{url}?query={query}',
+                          timeout=10).json()['data']['result'][0]['value'][-1]
+    return value
