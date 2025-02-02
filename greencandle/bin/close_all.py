@@ -52,6 +52,7 @@ def main():
 
             requests.post(url, json.dumps(payload), timeout=10,
                           headers={'Content-Type': 'application/json'})
+    print('done')
 
 if __name__ == "__main__":
     main()
