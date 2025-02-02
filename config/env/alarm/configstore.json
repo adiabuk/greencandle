@@ -252,7 +252,7 @@
       "is_secret": false
     },
     "logging_level": {
-      "value": "10",
+      "value": "20",
       "is_binary": false,
       "is_secret": false
     },

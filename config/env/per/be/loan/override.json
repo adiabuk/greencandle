@@ -2,5 +2,5 @@
   "logging_output": "stdout",
   "name": "per-be-api-loan",
   "slack_active": "false",
-  "logging_level": "10"
+  "logging_level": "20"
 }
