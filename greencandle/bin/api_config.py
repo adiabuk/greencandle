@@ -32,7 +32,7 @@ DEF_STRUCT = {
               "tf_1d": {"long": False, "short":False, "close": False}
               }
 
-ENVS = ["prod", "stag", "per", "data", "test"]
+ENVS = ["prod", "stag", "per", "data", "test", "dev"]
 
 def get_struct(env):
     """
