@@ -133,7 +133,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /root/.bash_history:/root/.bash_history
 
-config-gen-be-logwatch:
+  config-gen-be-logwatch:
     container_name: config-gen-be-logwatch
     hostname: config-gen-be-logwatch
     image: amrox/greencandle:${TAG}

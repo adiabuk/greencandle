@@ -10,6 +10,7 @@ services:
       - CONFIG_ENV=dev
       - DB=true
     image: amrox/greencandle:${TAG}
+    mem_limit: 1G
     restart: always
     entrypoint: /docker-entrypoint.sh "touch /var/log/cron.log && cron && tail -f /var/log/cron.log"
     links:
