@@ -1,6 +1,5 @@
 networks:
-  my_net:
-    external: true
+  dev_net:
 
 services:
   dev-fe-cron:
@@ -112,7 +111,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
     networks:
-      - my_net
+      - dev_net
     pull_policy: always
     restart: always
     logging:
