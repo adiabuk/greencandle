@@ -1,8 +1,20 @@
 networks:
   dev_net:
+    driver_opts:
+      com.docker.network.bridge.host_binding_ipv4: "173.20.0.1"
+    ipam:
+      config:
+        - subnet: "173.20.0.0/16"
+x-extra_hosts:
+  &default-extra_hosts
+  - "alert:10.0.0.212"
+  - "stream:173.20.0.1"
+  - "mysql:173.20.0.1"
+  - "redis:173.20.0.1"
 
 services:
   dev-fe-cron:
+    extra_hosts: *default-extra_hosts
     container_name: dev-fe-cron
     hostname: dev-fe-cron
     logging:
@@ -32,6 +44,7 @@ services:
       - /root/.aws:/root/.aws
 
   dev-be-manual:
+    extra_hosts: *default-extra_hosts
     container_name: dev-be-manual
     environment:
       - CONFIG_ENV=dev
@@ -62,6 +75,7 @@ services:
       - /root/.aws:/root/.aws
 
   dev-base-redis:
+    extra_hosts: *default-extra_hosts
     container_name: dev-base-redis
     hostname: dev-base-redis
     image: amrox/gc-redis:${TAG}
@@ -84,6 +98,7 @@ services:
       retries: 5
 
   dev-base-mysql:
+    extra_hosts: *default-extra_hosts
     container_name: dev-base-mysql
     hostname: dev-base-mysql
     image: amrox/gc-mysql:${TAG}
@@ -106,6 +121,7 @@ services:
       retries: 5
 
   dev-be-stream_15m:
+    extra_hosts: *default-extra_hosts
     container_name: dev-be-stream_15m
     hostname: dev-be-stream_15m
     image: amrox/greencandle:${TAG}
@@ -145,6 +161,7 @@ services:
       - /var/run/:/var/run
 
   dev-fe-api-filesystem:
+    extra_hosts: *default-extra_hosts
     container_name: dev-fe-api-filesystem
     hostname: dev-fe-api-filesystem
     environment:
@@ -173,6 +190,7 @@ services:
       - /var/run:/var/run
 
   dev-fe-api-proxy:
+    extra_hosts: *default-extra_hosts
     container_name: dev-fe-api-proxy
     hostname: dev-fe-api-proxy
     environment:
@@ -208,6 +226,7 @@ services:
       - /root/.bash_history:/root/.bash_history
 
   dev-fe-api-dashboard:
+    extra_hosts: *default-extra_hosts
     container_name: dev-fe-api-dashboard
     hostname: dev-fe-api-dashboard
     environment:
@@ -247,6 +266,7 @@ services:
       - /root/.bash_history:/root/.bash_history
 
   dev-be-analyse-15m-short1:
+    extra_hosts: *default-extra_hosts
     container_name: dev-be-analyse-15m-short1
     hostname: dev-be-analyse-15m-short1
     image: amrox/greencandle:${TAG}
@@ -284,6 +304,7 @@ services:
       - /var/run/:/var/run
 
   dev-gen-be-logwatch:
+    extra_hosts: *default-extra_hosts
     container_name: dev-gen-be-logwatch
     hostname: dev-gen-be-logwatch
     image: amrox/greencandle:${TAG}
@@ -308,6 +329,7 @@ services:
       retries: 5
 
   dev-gen-be-logtailer-api:
+    extra_hosts: *default-extra_hosts
     container_name: dev-gen-be-logtailer-api
     hostname: dev-gen-be-logtailer-api
     image: amrox/greencandle:${TAG}
@@ -341,6 +363,7 @@ services:
       - /root/.bash_history:/root/.bash_history
 
   dev-be-get_15m:
+    extra_hosts: *default-extra_hosts
     container_name: dev-be-get_15m
     hostname: dev-be-get_15m
     image: amrox/greencandle:${TAG}
@@ -377,10 +400,9 @@ services:
       - /var/run/:/var/run
 
   dev-be-api-router:
+    extra_hosts: *default-extra_hosts
     container_name: dev-be-api-router
     hostname: dev-be-api-router
-    extra_hosts:
-      - "alert:10.0.0.212"
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
     pull_policy: always
