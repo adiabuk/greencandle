@@ -1,4 +1,8 @@
 services:
+  networks:
+  my_net:
+    external: true
+
   dev-fe-cron:
     container_name: dev-fe-cron
     hostname: dev-fe-cron
@@ -107,6 +111,8 @@ services:
     hostname: dev-be-stream_15m
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
+    networks:
+      - my_net
     pull_policy: always
     restart: always
     logging:
@@ -130,7 +136,7 @@ services:
       timeout: 10s
       retries: 5
     ports:
-      - 5000
+      - 80:5000
     volumes:
       - /mnt:/mnt
       - /data:/data
@@ -343,6 +349,8 @@ services:
     pull_policy: always
     restart: always
     entrypoint: /docker-entrypoint.sh api_data
+    networks:
+      - my_net
     logging:
       driver: syslog
       options:
