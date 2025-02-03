@@ -20,7 +20,7 @@ services:
       - config-base-mysql
       - config-base-redis
     healthcheck:
-      config: ls || exit 1
+      test: ls || exit 1
       interval: 5m
       timeout: 10s
       retries: 5
@@ -46,7 +46,7 @@ services:
     depends_on:
       - config-base-redis
     healthcheck:
-      config: curl -Isf http://127.1:6000/healthcheck
+      test: curl -Isf http://127.1:6000/healthcheck
       interval: 5m
       timeout: 10s
       retries: 5
@@ -73,11 +73,10 @@ services:
       - config-base-mysql:mysql
     entrypoint: /usr/local/bin/docker-entrypoint.sh redis-server --loadmodule /srv/redis/rejson.so --save "30 1 300 100 60 10000"
     healthcheck:
-      config: redis-cli ping
+      test: redis-cli ping
       interval: 5m
       timeout: 10s
       retries: 5
-
   config-base-mysql:
     container_name: config-base-mysql
     hostname: config-base-mysql
@@ -95,7 +94,7 @@ services:
       options:
         syslog-facility: local0
     healthcheck:
-      config: echo 'SELECT version();'| mysql -uroot -ppassword
+      test: echo 'SELECT version();'| mysql -uroot -ppassword
       interval: 5m
       timeout: 10s
       retries: 5
@@ -122,7 +121,7 @@ services:
       - config-base-mysql
       - config-base-redis
     healthcheck:
-      config: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
+      test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
       interval: 5m
       timeout: 10s
       retries: 5
@@ -148,8 +147,7 @@ services:
       - /root/.aws:/root/.aws
       - /var/run:/var/run
     healthcheck:
-      config: ls /var/log/gc_config.log
+      test: ls /var/log/gc_config.log
       interval: 5m
       timeout: 10s
       retries: 5
-
