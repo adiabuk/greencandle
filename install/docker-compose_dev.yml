@@ -1,8 +1,8 @@
-services:
-  networks:
-    my_net:
-      external: true
+networks:
+  my_net:
+    external: true
 
+services:
   dev-fe-cron:
     container_name: dev-fe-cron
     hostname: dev-fe-cron
