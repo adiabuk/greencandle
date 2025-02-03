@@ -29,7 +29,7 @@ def main():
     expected = {get_base(x[2]) for x in dbase.get_open_trades() }
 
     anomalous = actual - expected
-    logger.info(anomalous, len(anomalous))
+    logger.info("Anamalous results: balance:%s num:%s "anomalous, len(anomalous))
     try:
         int(len(anomalous))  # to catch any errors
         if len(anomalous) == 0:
