@@ -15,6 +15,7 @@ import pandas
 import requests
 from greencandle.lib.binance import Binance
 from greencandle.lib.auth import binance_auth
+from greencandle.lib.web import decorator_timer
 from greencandle.lib.engine import Engine
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.mysql import Mysql
@@ -296,6 +297,7 @@ class ProdRunner():
         del dbase
 
     @GET_EXCEPTIONS
+    @decorator_timer
     def prod_initial(self, interval, test=False, first_run=True, no_of_runs=999):
         """
         Initial prod run - back-fetching data for tech analysis.
@@ -398,6 +400,7 @@ class ProdRunner():
         gc.collect()
 
     @GET_EXCEPTIONS
+    @decorator_timer
     def prod_loop(self, interval, test=False, data=True, analyse=True):
         """
         Loop through collection cycle (PROD)
