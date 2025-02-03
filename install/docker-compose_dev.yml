@@ -349,7 +349,7 @@ services:
     restart: always
     entrypoint: /docker-entrypoint.sh api_data
     networks:
-      - my_net
+      - dev_net
     logging:
       driver: syslog
       options:
