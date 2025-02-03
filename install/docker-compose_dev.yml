@@ -350,6 +350,7 @@ services:
     links:
       - dev-base-mysql:mysql
       - dev-base-redis:redis
+      - dev-be-stream_15m:stream
     depends_on:
       - dev-base-mysql
       - dev-base-redis
