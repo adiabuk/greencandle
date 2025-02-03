@@ -47,8 +47,6 @@ if [[ ! -f /installed ]]; then
     mkdir -p /srv/output
     cp /srv/alert/*.mp3 /srv/output/
 
-
-  elif [[ "$HOSTNAME" == *"manual"* ]]; then
     apt update; apt -y install less screen; pip install ipython
 
   elif [[ "$HOSTNAME" == *"unit"* ]]; then

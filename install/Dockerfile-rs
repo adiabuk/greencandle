@@ -3,7 +3,7 @@ FROM amrox/redis:7.2.0
 ADD . /srv/greencandle
 RUN cp -rv /srv/greencandle/config /opt/config
 RUN mkdir /opt/output /srv/redis && \
-    apt update && apt install -y wget  && \
+    apt update && apt-get install -y wget  && \
     wget "http://local.amrox.loc/files/rejson.so" -O /srv/redis/rejson.so && \
     wget "http://local.amrox.loc/files/configstore-2.5.0-linux-amd64.tar.gz" -O /tmp/configstore-2.5.0-linux-amd64.tar.gz && \
     tar zxvf /tmp/configstore-2.5.0-linux-amd64.tar.gz -C /usr/local/bin && \

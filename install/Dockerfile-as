@@ -3,7 +3,7 @@ ADD ./alert /srv/alert
 ADD ./config /opt/config
 ADD ./install /opt/install
 
-RUN apt update -y && apt install -y pulseaudio-utils
+RUN apt update -y && apt-get install -y pulseaudio-utils
 RUN pip install -r /srv/alert/requirements.txt
 RUN mkdir /opt/output
 RUN cp /opt/install/docker-entrypoint.sh /
