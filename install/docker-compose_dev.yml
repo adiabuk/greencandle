@@ -1,7 +1,7 @@
 services:
   networks:
-  my_net:
-    external: true
+    my_net:
+      external: true
 
   dev-fe-cron:
     container_name: dev-fe-cron
