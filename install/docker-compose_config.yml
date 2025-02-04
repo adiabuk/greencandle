@@ -51,7 +51,7 @@ services:
       timeout: 10s
       retries: 5
     ports:
-      - 6001:6000
+      - 7001:6000
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws
