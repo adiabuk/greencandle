@@ -1,5 +1,18 @@
 # Releases
 
+# 8.11.8
+* get dashboard data for intervals used in current trades
+* change config api port
+* network and hosts for all dev containers
+* fix docker compose config env syntax
+* internal network for dev env
+* use local stream server in dev env
+* add pairs to dev env
+* use correct names in dev env config
+* capture time for some runner methods
+* fix logging in script
+* move installs out of docker entry file and use stable apt interface
+
 # 8.11.7
 * 1G mem for logwatch, all envs
 * add missing containers to config env
