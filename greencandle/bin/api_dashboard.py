@@ -857,10 +857,11 @@ def get_data():
     extract candles & indicators from data api
     """
     dbase = Mysql()
-    intervals = set(fy[1] for y in dbase.get_open_trades())
+    intervals = set(y[1] for y in dbase.get_open_trades())
     for interval in intervals:
-        DATA[tf] = AttributeDict(requests.get(f'http://www.data.amrox.loc/data/{interval}',
-                                                      timeout=10).json())
+        DATA[f'tf_{interval}'] = \
+                AttributeDict(requests.get(f'http://www.data.amrox.loc/data/{interval}',
+                              timeout=10).json())
 
 @arg_decorator
 def main():
