@@ -3,6 +3,7 @@
 """
 Collect OHLC and strategy data for later analysis
 """
+import sys
 import os
 import time
 from pathlib import Path
@@ -19,7 +20,7 @@ from greencandle.lib.redis_conn import Redis
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.common import arg_decorator
 from greencandle.lib.aggregate_data  import collect_agg_data
-from greencandle.lib.web import decorator_timer
+from greencandle.lib.web import decorator_timer, push_prom_data
 
 config.create_config()
 LOGGER = get_logger(__name__)
@@ -37,6 +38,15 @@ def get_all_data():
     return all data for current interval/scope
     """
     return jsonify(DATA)
+
+def get_obj_size():
+    """
+    Get size of DATA object for prometheus
+    """
+    env = config.main.base_env
+    size = sys.getsizeof(DATA)
+    push_prom_data(f'data_get_size_{env}', size)
+
 
 @decorator_timer
 def collect_data(pair):
@@ -103,6 +113,8 @@ def main():
     scheduler.add_job(func=keepalive, trigger="interval", seconds=120, misfire_grace_time=1000)
     scheduler.add_job(func=collect_agg_data, args=[interval], trigger="interval",
                       seconds=400, misfire_grace_time=1000)
+    scheduler.add_job(get_obj_size, trigger="interval", seconds=300, misfire_grace_time=1000)
+
 
     for seq, pair in enumerate(PAIRS):
         scheduler.add_job(func=collect_data, args=[pair], trigger="interval",
