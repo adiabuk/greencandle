@@ -22,7 +22,7 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docke
 
 # Setup local env
 apt-get -y update
-apt-get -y install sudo dhcpcd ntpdate default-mysql-client screen  jq ntp awscli vim automake autotools-dev fuse g++ git libssl-dev libxml2-dev make pkg-config bsdmainutils reptyr psmisc lsof nmap command-not-found packagekit-command-not-found libxml2-utils ipmitool smartmontools net-tools htop atop iotop dstat mosh python-is-python3 ethtool python3-pip
+apt-get -y install sudo dhcpcd ntpdate default-mysql-client screen  jq ntp awscli vim automake autotools-dev fuse g++ git libssl-dev libxml2-dev make pkg-config bsdmainutils reptyr psmisc lsof nmap command-not-found packagekit-command-not-found libxml2-utils ipmitool smartmontools net-tools htop atop iotop dstat mosh python-is-python3 ethtool python3-pip mosh
 
 apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
