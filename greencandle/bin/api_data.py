@@ -3,6 +3,7 @@
 """
 Collect OHLC and strategy data for later analysis
 """
+import gc
 import sys
 import os
 import time
@@ -113,6 +114,7 @@ def main():
     scheduler.add_job(func=collect_agg_data, args=[interval], trigger="interval",
                       seconds=400, misfire_grace_time=1000)
     scheduler.add_job(get_obj_size, trigger="interval", seconds=300, misfire_grace_time=1000)
+    scheduler.add_job(gc.collect, trigger="interval", seconds=300, misfire_grace_time=1000)
 
 
     for seq, pair in enumerate(PAIRS):
