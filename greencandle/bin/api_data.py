@@ -43,10 +43,9 @@ def get_obj_size():
     """
     Get size of DATA object for prometheus
     """
-    env = config.main.base_env
+    name = config.main.name
     size = sys.getsizeof(DATA)
-    push_prom_data(f'data_get_size_{env}', size)
-
+    push_prom_data(f'{name}_get_size_data', size)
 
 @decorator_timer
 def collect_data(pair):
