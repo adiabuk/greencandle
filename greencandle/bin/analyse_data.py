@@ -5,6 +5,7 @@
 Analyze available data from redis
 Look for potential trades
 """
+import gc
 import os
 import time
 import glob
@@ -122,6 +123,7 @@ def analyse_loop():
     pool.shutdown(wait=True)
     LOGGER.debug("end of current loop")
     Path(f'/var/local/lock/{config.main.name}').touch()
+    gc.collect()
     del redis
     if CHECK_REDIS_PAIR:
         time.sleep(5)
