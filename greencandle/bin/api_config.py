@@ -20,7 +20,10 @@ APP = Flask(__name__, template_folder="/var/www/html", static_url_path='/',
             static_folder='/var/www/html')
 #APP.wsgi_app = PrefixMiddleware(APP.wsgi_app, prefix='/drain')
 
+ENVS = ["prod", "stag", "per", "data", "test", "dev"]
+
 DEF_STRUCT = {
+              "slack": False,
               "tf_top": {"long": False, "short":False, "close": False},
               "tf_1m": {"long": False, "short":False, "close": False},
               "tf_5m": {"long": False, "short":False, "close": False},
@@ -31,8 +34,6 @@ DEF_STRUCT = {
               "tf_12h": {"long": False, "short":False, "close": False},
               "tf_1d": {"long": False, "short":False, "close": False}
               }
-
-ENVS = ["prod", "stag", "per", "data", "test", "dev"]
 
 def get_struct(env):
     """
@@ -52,6 +53,23 @@ def set_struct(env, struct):
     """
     redis = Redis()
     redis.conn.json().set(env, Path.root_path(), struct)
+
+APP.route('/drain/get_slack', methods=["GET"])
+def get_slack_drain():
+    """
+    Get slack drain status for given env
+    """
+    env = request.args.get('env')
+    if env not in ENVS:
+        return Response(response=f'Invalid Environment: {env}', status=400)
+    struct = get_struct(env)
+
+    result = struct[f'tf_{env}']['slack']
+
+    return {'result':result}
+
+
+
 
 @APP.route('/drain/get_all', methods=["GET"])
 def get_all_envs():
