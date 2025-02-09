@@ -1,5 +1,6 @@
 {
-  "name": "data-be-analyse-4h-long9",
+  "check_interval": "480",
   "interval": "4h",
+  "name": "data-be-analyse-4h-long9",
   "time_between_trades": "8h"
 }

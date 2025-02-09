@@ -1,4 +1,5 @@
 {
+  "check_interval": "60",
   "interval": "15m",
   "name": "data-be-analyse-15m-short1",
   "open_rule1": "res[0].high \u003e res[0].bb_200[1] and perc_diff(res[0].bb_200[1], res[0].EMA_50) \u003c -1 and res[0].EMA_50 \u003c res[1].EMA_50 \u003c res[2].EMA_50",

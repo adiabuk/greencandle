@@ -1,6 +1,7 @@
 {
+  "api_forward": "1h-10",
+  "check_interval": "240",
   "interval": "1h",
   "name": "data-be-analyse-1h-short10",
-  "api_forward": "1h-10",
   "time_between_trades": "5m"
 }

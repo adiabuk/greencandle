@@ -1,7 +1,8 @@
 {
-  "open_rule1": "agg.distance_200 \u003e 14 and res[0].RSI_14 \u003c 25 and res[0].numTrades \u003e 50 and agg.bb_size \u003e 1 and agg.empty_count \u003c 1",
-  "name": "data-be-analyse-4h-long3",
   "api_forward": "4h-3",
+  "check_interval": "480",
   "interval": "4h",
+  "name": "data-be-analyse-4h-long3",
+  "open_rule1": "agg.distance_200 \u003e 14 and res[0].RSI_14 \u003c 25 and res[0].numTrades \u003e 50 and agg.bb_size \u003e 1 and agg.empty_count \u003c 1",
   "time_between_trades": "8h"
 }

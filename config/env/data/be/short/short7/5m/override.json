@@ -1,4 +1,5 @@
 {
+  "check_interval": "30",
   "interval": "5m",
   "name": "data-be-analyse-5m-short7",
   "slack_alerts": "",

@@ -1,5 +1,6 @@
 {
   "api_forward": "30m-3",
+  "check_interval": "120",
   "interval": "30m",
   "name": "data-be-analyse-30m-long3",
   "open_rule1": "agg.distance_200 \u003e 4 and res[0].RSI_14 \u003c 25 and res[0].numTrades \u003e 50 and agg.bb_size \u003e 1 and agg.empty_count \u003c 1",

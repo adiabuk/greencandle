@@ -1,7 +1,8 @@
 {
+  "check_interval": "30",
   "interval": "5m",
   "name": "data-be-analyse-5m-long8",
-  "slack_alerts": "",
   "open_rule1": "res[0].low \u003c res[0].EMA_50 and perc_diff(res[0].bb_200[1], res[0].EMA_50) \u003e 0.30 and res[0].EMA_50 \u003e res[1].EMA_50 \u003e res[2].EMA_50",
+  "slack_alerts": "",
   "time_between_trades": "1h"
 }

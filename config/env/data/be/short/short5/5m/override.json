@@ -1,8 +1,9 @@
 {
   "api_forward": "5m-5",
+  "check_interval": "30",
   "interval": "5m",
-  "slack_alerts": "",
   "name": "data-be-analyse-5m-short5",
   "redis_expiry_seconds": "7200",
+  "slack_alerts": "",
   "time_between_trades": "4h"
 }

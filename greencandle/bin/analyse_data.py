@@ -318,6 +318,8 @@ def main():
 
     while True:
         analyse_loop()
+        time.sleep(int(config.main.check_interval))
+
 
 if __name__ == "__main__":
     main()

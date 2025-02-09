@@ -1,4 +1,5 @@
 {
+  "check_interval": "60",
   "interval": "15m",
   "name": "data-be-analyse-15m-short11",
   "time_between_trades": "4h"
