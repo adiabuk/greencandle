@@ -13,6 +13,7 @@ import requests
 from str2bool import str2bool
 from greencandle.lib import config
 from greencandle.lib.objects import AttributeDict
+from greencandle.lib.web import get_drain_env
 from greencandle.lib.common import (format_usd, get_tv_link, get_trade_link,
                                     list_to_dict, get_be_services)
 
@@ -50,8 +51,8 @@ def send_slack_message(channel, message, emoji=None, icon=None, name=None):
     """
     if not config.slack[channel]:
         return
-    if not str2bool(config.slack.slack_active) or \
-    Path(f'/var/local/drain/drain_{config.main.base_env}_slack').is_file():
+    env = config.main.base_env
+    if not str2bool(config.slack.slack_active) or  get_drain_env(env)['slack']:
         return
     if not icon:
         icon = f":{config.main.trade_direction}:" if emoji else ":robot_face:"
