@@ -1,4 +1,4 @@
-FROM amrox/python:3.9.0-small
+FROM amrox/python:3.9.0-new
 
 ADD . /srv/greencandle
 RUN cd /srv/greencandle && python setup.py install && \
