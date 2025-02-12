@@ -1,4 +1,4 @@
-FROM python:3.9.0
+FROM python:3.13.2
 
 RUN install -m 0755 -d /etc/apt/keyrings && \
 curl -sS https://download.docker.com/linux/debian/gpg | gpg --dearmor > /usr/share/keyrings/docker-ce.gpg && \
