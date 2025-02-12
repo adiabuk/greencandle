@@ -4,7 +4,7 @@ RUN install -m 0755 -d /etc/apt/keyrings && \
 curl -sS https://download.docker.com/linux/debian/gpg | gpg --dearmor > /usr/share/keyrings/docker-ce.gpg && \
 chmod a+r /usr/share/keyrings/docker-ce.gpg && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-ce.gpg] https://download.docker.com/linux/debian buster stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
 RUN apt-get update && \
-    apt-get -y install screen vim cron netcat default-mysql-client bsdmainutils libssl-dev libsystemd-dev xvfb xauth iceweasel sudo docker-ce-cli docker-compose-plugin --no-install-recommends && \
+    apt-get -y install screen vim cron netcat-openbsd default-mysql-client bsdmainutils libssl-dev libsystemd-dev xvfb xauth firefox-esr sudo docker-ce-cli docker-compose-plugin --no-install-recommends && \
     wget "http://local.amrox.loc/files/geckodriver-v0.26.0-linux64.tar.gz" -O /tmp/geckodriver-v0.26.0-linux64.tar.gz && \
     tar zxvf /tmp/geckodriver-v0.26.0-linux64.tar.gz -C /usr/local/bin && \
     rm -rf /tmp/geckodriver-v0.26.0-linux64.tar.gz  && \
