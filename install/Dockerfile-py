@@ -15,7 +15,7 @@ RUN apt-get update && \
     tar zxvf /tmp/ta-lib-0.4.0-src.tar.gz -C /tmp && \
     cd /tmp/ta-lib; ./configure --prefix=/usr; make; make install && \
     wget https://github.com/adiabuk/greencandle/blob/master/requirements.txt -O /tmp/requirements.txt && \
-    pip install -r /tmp/requirements.txt
+    pip install -r /tmp/requirements.txt && \
     wget http://local.amrox.loc/files/talib.tgz -O /tmp/talib.tgz && \
     tar zxvf /tmp/talib.tgz -C /tmp && \
     cd /tmp/TA-Lib-ta-lib-python-5974b7f/ && python setup.py install && \

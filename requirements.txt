@@ -1,3 +1,4 @@
+setuptools==75.8.0
 urllib3==2.0.3
 APScheduler==3.6.1
 argcomplete==2.0.0
@@ -13,8 +14,8 @@ lib==3.0.0
 pyOpenSSL==22.0.0
 mysqlclient==2.1.0
 oauth==1.0.1
-pandas==1.1.5
-numpy==1.25.0
+pandas==2.2.3
+numpy==2.2.2
 Pillow>=6.2.2
 plotly==5.15.0
 python_resize_image==1.1.11
