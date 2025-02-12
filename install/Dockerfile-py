@@ -14,7 +14,7 @@ RUN apt-get update && \
     wget "http://local.amrox.loc/files/ta-lib-0.4.0-src.tar.gz" -O /tmp/ta-lib-0.4.0-src.tar.gz && \
     tar zxvf /tmp/ta-lib-0.4.0-src.tar.gz -C /tmp && \
     cd /tmp/ta-lib; ./configure --prefix=/usr; make; make install && \
-    git clone https://github.com/adiabuk/greencandle.git /tmp/greencandle && \
+    git clone -b dev https://github.com/adiabuk/greencandle.git /tmp/greencandle && \
     pip install -r /tmp/greencandle/requirements.txt && \
     wget http://local.amrox.loc/files/talib.tgz -O /tmp/talib.tgz && \
     tar zxvf /tmp/talib.tgz -C /tmp && \
