@@ -23,7 +23,7 @@ def main():
     i = Info(f'gc_version_{env}', 'version details', registry=registry)
     i.info({'version': version, 'build_date': build_date })
 
-    push_to_gateway('jenkins:9091', job=f'{env}_metrics', registry=registry)
+    push_to_gateway('prometheus:9091', job=f'{env}_metrics', registry=registry)
 
 if __name__ == "__main__":
     main()

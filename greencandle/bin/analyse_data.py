@@ -217,7 +217,7 @@ def analyse_pair(pair, reversal, expire, redis):
             send_slack_message("notifications", msg, emoji=True,
                                icon=f':{INTERVAL}-{DIRECTION}:')
         if 'NSCA' in os.environ:
-            send_nsca(status=0, host_name='data', service_name=f"data_{DIRECTION}",
+            send_nsca(status=0, host_name='datavault', service_name=f"data_{DIRECTION}",
                       text_output="OK", remote_host='nagios.amrox.loc')
 
         if DIRECTION == 'long' and result == 'OPEN':

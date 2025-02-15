@@ -67,7 +67,7 @@ def main():
 
     text_output = (f'{msg}: actual: {format_usd(actual_debts)}, '
                    f'in trade:{format_usd(trade_usd)}, diff:{format_usd(diff)}')
-    send_nsca(status=status, host_name='jenkins',
+    send_nsca(status=status, host_name='eaglenest',
               service_name=f'{config.main.base_env}_loan_anomaly',
               text_output=f'{text_output}|diff={diff};;;;', remote_host='nagios.amrox.loc')
     logger.info(text_output)

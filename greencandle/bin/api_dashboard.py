@@ -618,7 +618,7 @@ def get_live():
     push_prom_data(f'open_net_perc_long_trades_{env}', sum(long))
     push_prom_data(f'open_net_perc_short_trades_{env}', sum(short))
 
-    send_nsca(status=status, host_name="jenkins",
+    send_nsca(status=status, host_name="eaglenest",
               service_name=f"{env}_open_profitable",
               text_output=text, remote_host="nagios.amrox.loc")
 
@@ -845,7 +845,7 @@ def get_balance():
                  f'current_balance_btc_{env}': price2float(current_balance_btc)}
     for k, v in prom_data.items():
         push_prom_data(k,v)
-    send_nsca(status=status, host_name="jenkins",
+    send_nsca(status=status, host_name="eaglenest",
               service_name=f"{env}_open_net_perc",
               text_output=text, remote_host="nagios.amrox.loc")
 

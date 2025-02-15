@@ -52,7 +52,7 @@ def check_rules():
         if pair.upper() not in config.main.pairs.split():
             msg = f'Unknown pair: {pair}'
             LOGGER.info(msg)
-            send_nsca(status=2, host_name='jenkins',
+            send_nsca(status=2, host_name='eaglenest',
                       service_name=f'{config.main.base_env}_extra_rules', text_output=msg,
                       remote_host='nagios.amrox.loc')
             continue
@@ -105,7 +105,7 @@ def check_rules():
         except Exception as err:
             msg = f"Unable to eval rule {str(rule)} for {pair} {interval}"
             LOGGER.info(msg)
-            send_nsca(status=2, host_name='jenkins', service_name='extra_rules', text_output=msg,
+            send_nsca(status=2, host_name='eaglenest', service_name='extra_rules', text_output=msg,
                       remote_host='nagios.amrox.loc')
             continue
         action_int = {'short': '-1',

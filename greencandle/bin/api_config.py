@@ -167,7 +167,7 @@ def push_nagios_alert():
                     alert['status'], alert['values']['A'])
         status = 2 if 'firing' in alert['status'] else 0
 
-        send_nsca(status=status, host_name='jenkins',
+        send_nsca(status=status, host_name='eaglenest',
                   service_name=alert['labels']['alertname'],
                   text_output=f"Alert from webhook: {alert['values']['A']}",
                   remote_host='nagios.amrox.loc')

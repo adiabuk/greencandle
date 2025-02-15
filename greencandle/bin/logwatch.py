@@ -74,7 +74,7 @@ def check_last_hour_err():
         msg = "OK"
         text = (f'{msg}: No major issues in {env} logfile, warn:{warn_count}, err/crit:'
                 f'{err_count}{perf}')
-    host = "data" if env == "data" else "jenkins"
+    host = "datavault" if env == "data" else "eaglenest"
     send_nsca(status=status, host_name=host, service_name=f"critical_logs_{env}",
               text_output=text, remote_host='nagios.amrox.loc')
     push_prom_data(f'gc_logfile_err_{env}', err_count)
@@ -129,7 +129,7 @@ def check_last_hour_occ():
         msg = "OK"
     text = f'{msg}: {levels_text}{levels_perf}'
 
-    send_nsca(status=status, host_name="data", service_name=f"strategy17_count_{env}",
+    send_nsca(status=status, host_name="datavault", service_name=f"strategy17_count_{env}",
               text_output=text, remote_host='nagios.amrox.loc')
 
     push_prom_data('strategy17_up_1h', high_count)
@@ -149,7 +149,7 @@ def check_last_hour_occ():
     xover_full_text = f'{msg}: {xover_text}{xover_perf}'
 
 
-    send_nsca(status=status, host_name="data", service_name=f"xover_count_{env}",
+    send_nsca(status=status, host_name="datavault", service_name=f"xover_count_{env}",
               text_output=xover_full_text, remote_host='nagios.amrox.loc')
 
 def watch_log():

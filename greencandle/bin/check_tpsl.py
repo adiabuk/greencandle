@@ -37,7 +37,7 @@ def main():
         msg = "all pairs have tpsl"
         status = 0
     env = config.main.base_env
-    send_nsca(status=status, host_name='jenkins', service_name=f'{env}_tpsl', text_output=msg,
+    send_nsca(status=status, host_name='eaglenest', service_name=f'{env}_tpsl', text_output=msg,
               remote_host='nagios.amrox.loc')
 
 

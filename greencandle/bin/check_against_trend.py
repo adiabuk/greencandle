@@ -49,7 +49,7 @@ def main():
         status = 0
 
 
-    send_nsca(status=status, host_name='jenkins', service_name=f'{env}_against_trend',
+    send_nsca(status=status, host_name='eaglenest', service_name=f'{env}_against_trend',
               text_output=f'{msg} {total} number of trades against trend; long: '
                           f'{long_count}, short: {short_count};total={total};;;;',
               remote_host='nagios.amrox.loc')

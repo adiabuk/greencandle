@@ -54,7 +54,7 @@ def main():
         msg = "UNKNOWN: issue fetching data freshness: check redis and app"
         status = 3
 
-    send_nsca(status=status, host_name='data', service_name='data_1h_freshness',
+    send_nsca(status=status, host_name='datavault', service_name='data_1h_freshness',
               text_output=msg, remote_host='nagios.amrox.loc')
     logger.info(msg)
     sys.exit(status)

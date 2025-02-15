@@ -106,7 +106,7 @@ def main():
         text_output = "No issues with open trades"
 
     print(text_output)
-    send_nsca(status=status, host_name='jenkins',
+    send_nsca(status=status, host_name='eaglenest',
               service_name=f'{config.main.base_env}_open_trades',
               text_output=text_output.replace('\n',' '), remote_host='nagios.amrox.loc')
 

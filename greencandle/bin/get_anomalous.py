@@ -48,7 +48,7 @@ def main():
         status = 3
         msg = 'UNKNOWN'
 
-    send_nsca(status=status, host_name='jenkins',
+    send_nsca(status=status, host_name='eaglenest',
               service_name=f'{config.main.base_env}_anomalous_symbols',
               text_output=f'{msg} {len(anomalous)} anomalous symbols found in '
                           f'balance:{anomalous}|num={len(anomalous)}',

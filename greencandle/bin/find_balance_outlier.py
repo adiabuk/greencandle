@@ -37,7 +37,7 @@ def main():
     msg = "CRITICAL: outliers found in balances" if any(results) else \
             "OK: no issues with balance table"
 
-    send_nsca(status=status, host_name='jenkins',
+    send_nsca(status=status, host_name='eaglenest',
               service_name=f'{config.main.base_env}-balance_outliers',
               text_output=msg, remote_host='nagios.amrox.loc')
     logger.info(msg)

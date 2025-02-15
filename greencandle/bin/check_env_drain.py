@@ -38,7 +38,7 @@ def main():
     else:
         status = 3
         msg = "UNKNOWN"
-    host = "data" if env == "data" else "jenkins"
+    host = "datavault" if env == "data" else "eaglenest"
     text = f"{msg}: {count} drain entries found for {env} env"
     send_nsca(status=status, host_name=host, service_name=f"{env}_drain",
               text_output=text, remote_host="nagios.amrox.loc")
