@@ -8,11 +8,9 @@ import datetime
 import requests
 from str2bool import str2bool
 from greencandle.lib import config
-from greencandle.lib.logger import get_logger
 
 config.create_config()
 TRUE_VALUES = 0
-LOGGER = get_logger(__name__)
 
 class PrefixMiddleware():
     """
@@ -90,7 +88,7 @@ def push_prom_data(metric_name, value, job_name=None):
     try:
         requests.post(url, headers=headers, data=data, timeout=10)
     except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError):
-        LOGGER.critical("Unable to push metric %s", metric_name)
+        print("Unable to push metric")
 
 def count_struct(struct):
     """
