@@ -1,5 +1,17 @@
 # Releases
 
+# 8.12
+* use no DNS aliases for monitoring and cicd
+* single bootstrap file for debian bookworm
+* remove delisted pair
+* check if slack is on drain before sending message
+* pause between analysis runs depending on interval
+* allow drain of slack using api
+* manually run garbage collector for data fetching and analysing
+* add name to size metric
+* get size of global var for prometheus
+* DATA key needs to be tf_<interval>
+
 # 8.11.8
 * get dashboard data for intervals used in current trades
 * change config api port
