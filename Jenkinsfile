@@ -36,7 +36,7 @@ pipeline {
                 //sh "sudo ln -s . /srv/greencandle"
                 ansiColor('vga') {
                      sh 'git checkout $SHORT_COMMIT'
-                     sh 'docker-compose -f install/docker-compose_jenkins.yml -p $BUILD_ID build --build-arg BRANCH=$GIT_BRANCH --build-arg COMMIT=$SHORT_COMMIT --build-arg DATE="$(date)"'
+                     sh 'docker-compose -f install/docker-compose_jenkins.yml -p $BUILD_ID build --pull --build-arg BRANCH=$GIT_BRANCH --build-arg COMMIT=$SHORT_COMMIT --build-arg DATE="$(date)"'
                      //sh 'docker pull amrox/alert; docker tag amrox/alert alert-${image_id}'
                  }
              }
