@@ -85,6 +85,14 @@ rm -rf /usr/share/locale/
 chown amro:amro -R ~amro/.ssh
 chmod 600 /home/amro/.ssh/*
 usermod -a -G docker amro
+useradd -m  nagios -s /bin/bash
+mkdir /home/nagios/.ssh
+wget -qO /home/nagios/.ssh/authorized_keys http://local.amrox.loc/files/config/authorized_keys.nagios
+wget -qO /tmp/libssl1.1_1.1.1f-1ubuntu2_amd64.deb http://local.amrox.loc/files/config/libssl1.1_1.1.1f-1ubuntu2_amd64.deb
+dpkg -i /tmp/libssl1.1_1.1.1f-1ubuntu2_amd64.deb
+chown nagios:nagios -R ~nagios/.ssh
+
 touch /var/log/gc_test.log /var/log/gc_stag.log /var/log/gc_prod.log /var/log/gc_per.log /var/log/gc_stream.log;chown root:adm /var/log/gc_stag.log /var/log/gc_prod.log /var/log/gc_per.log /var/log/gc_stream.log
+
 
 #reboot
