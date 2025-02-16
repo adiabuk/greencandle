@@ -10,7 +10,7 @@ services:
       - id=$id
     hostname: cron
     image: greencandle-${image_id}
-    restart: always
+    restart: unless-stopped
     entrypoint: bash -c "cd /srv/greencandle;configstore package process_templates unit /opt/output; cp /opt/output/greencandle.ini /etc;crontab /opt/output/gc-cron;cron -f"
     healthcheck:
       test: find /var/run/  -mmin -2 -name cron 2>&1 |grep -q cron ||exit 1
@@ -32,7 +32,7 @@ services:
       - id=$id
     hostname: api
     image: greencandle-${image_id}
-    restart: always
+    restart: unless-stopped
     entrypoint: bash -c "cd /srv/greencandle;configstore package process_templates unit /etc;backend_api --test api"
     ports:
       - 20000
@@ -59,7 +59,7 @@ services:
     entrypoint: sh -c "rm -f /data/dump.rdb && redis-server"
     ports:
       - 6379
-    restart: always
+    restart: unless-stopped
     healthcheck:
       test: redis-cli ping
       interval: 10s
@@ -84,7 +84,7 @@ services:
       - DB=true
       - id=$id
     entrypoint: /docker-entrypoint.sh mysqld
-    restart: always
+    restart: unless-stopped
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
       interval: 10s

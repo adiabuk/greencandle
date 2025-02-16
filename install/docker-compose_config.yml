@@ -11,7 +11,7 @@ services:
     hostname: config-be-manual
     working_dir: /data/scripts
     image: amrox/greencandle:${TAG}
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "tail -f /dev/null"
     links:
       - config-base-mysql:mysql
@@ -39,7 +39,7 @@ services:
     hostname: config-fe-api-config
     working_dir: /data/scripts
     image: amrox/greencandle:${TAG}
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh api_config
     links:
       - config-base-redis:redis
@@ -64,7 +64,7 @@ services:
       - 6386:6379
     environment:
       - CONFIG_ENV=config
-    restart: always
+    restart: unless-stopped
     logging:
       driver: syslog
       options:
@@ -88,7 +88,7 @@ services:
       - MYSQL_ROOT_PASSWORD=password
       - CONFIG_ENV=config
       - DB=true
-    restart: always
+    restart: unless-stopped
     logging:
       driver: syslog
       options:
@@ -108,7 +108,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "touch /var/log/cron.log && cron && tail -f /var/log/cron.log"
     logging:
       driver: syslog
@@ -137,7 +137,7 @@ services:
     hostname: config-gen-be-logwatch
     image: amrox/greencandle:${TAG}
     mem_limit: 1G
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
     environment:
       - CONFIG_ENV=config

@@ -5,7 +5,7 @@ services:
     hostname: prod-gen-be-logwatch
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
     environment:
       - CONFIG_ENV=prod/fe/cron
@@ -26,7 +26,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 300M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     environment:
       - CONFIG_ENV=prod
       - DB=false
@@ -60,7 +60,7 @@ services:
     image: amrox/gc-redis:${TAG}
     mem_limit: 300M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     logging:
       driver: syslog
       options:
@@ -90,7 +90,7 @@ services:
       - CONFIG_ENV=prod/fe
       - MYSQL_ROOT_PASSWORD=password
       - DB=true
-    restart: always
+    restart: unless-stopped
     logging:
       driver: syslog
       options:
@@ -117,7 +117,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 500M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "tail -f /dev/null"
     logging:
       driver: syslog
@@ -154,7 +154,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 5G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "touch /var/log/cron.log && cron && tail -f /var/log/cron.log"
     logging:
       driver: syslog
@@ -188,7 +188,7 @@ services:
       driver: syslog
       options:
         syslog-facility: local4
-    restart: always
+    restart: unless-stopped
     healthcheck:
       test: curl -Isf 127.1:1111
       interval: 5m
@@ -229,7 +229,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh api_proxy
     healthcheck:
       test: curl -qsf http://127.1:5000 >/dev/null
@@ -264,7 +264,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh filesystem_api
     healthcheck:
       test: curl -Isf http://127.1:6000
@@ -293,7 +293,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh api_dashboard
     links:
       - prod-base-mysql:mysql
@@ -326,7 +326,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     logging:
       driver: syslog
       options:
@@ -384,7 +384,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "loan_api"
     logging:
       driver: syslog
@@ -415,7 +415,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: syslog
@@ -452,7 +452,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: syslog
@@ -489,7 +489,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: syslog
@@ -526,7 +526,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: syslog
@@ -563,7 +563,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: syslog
@@ -600,7 +600,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: syslog
@@ -637,7 +637,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: syslog
@@ -674,7 +674,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: syslog
@@ -711,7 +711,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: syslog
@@ -748,7 +748,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: syslog
@@ -785,7 +785,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: syslog
@@ -822,7 +822,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: syslog
@@ -859,7 +859,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: syslog
@@ -896,7 +896,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: syslog
@@ -933,7 +933,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: syslog
@@ -970,7 +970,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: syslog
@@ -1007,7 +1007,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: syslog
@@ -1044,7 +1044,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: syslog
@@ -1081,7 +1081,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: syslog
@@ -1118,7 +1118,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
     logging:
       driver: syslog

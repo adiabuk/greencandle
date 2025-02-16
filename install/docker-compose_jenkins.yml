@@ -13,7 +13,7 @@ services:
       - image_id=$image_id
     hostname: unit
     image: greencandle-${image_id}
-    restart: always
+    restart: unless-stopped
     entrypoint: tail -f /dev/null
     working_dir: /srv/greencandle
     links:
@@ -43,7 +43,7 @@ services:
       - CONFIG_ENV=unit
     hostname: cron
     image: greencandle-${image_id}
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "touch /var/log/cron.log && cron && tail -f /var/log/cron.log"
     links:
       - mysql-unit:mysql
@@ -71,7 +71,7 @@ services:
       - CONFIG_ENV=unit
     hostname: api
     image: greencandle-${image_id}
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint-api.sh backend_api
     links:
       - mysql-unit:mysql
@@ -101,7 +101,7 @@ services:
     image: gc-redis-${image_id}
     ports:
       - 6379
-    restart: always
+    restart: unless-stopped
     entrypoint: sh -c "rm -f /data/dump.rdb && redis-server"
     links:
       - mysql-unit:mysql
@@ -126,7 +126,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - CONFIG_ENV=unit
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh mysqld
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
@@ -145,7 +145,7 @@ services:
     image: webserver-${image_id}
     environment:
       - CONFIG_ENV=unit
-    restart: always
+    restart: unless-stopped
     healthcheck:
       test: ls
       interval: 1m

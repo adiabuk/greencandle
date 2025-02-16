@@ -26,7 +26,7 @@ services:
       - DB=true
     image: amrox/greencandle:${TAG}
     mem_limit: 1G
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "touch /var/log/cron.log && cron && tail -f /var/log/cron.log"
     links:
       - dev-base-mysql:mysql
@@ -52,7 +52,7 @@ services:
     hostname: dev-be-manual
     working_dir: /data/scripts
     image: amrox/greencandle:${TAG}
-    restart: always
+    restart: unless-stopped
     logging:
       driver: syslog
       options:
@@ -83,7 +83,7 @@ services:
       - 6382:6379
     environment:
       - CONFIG_ENV=dev
-    restart: always
+    restart: unless-stopped
     logging:
       driver: syslog
       options:
@@ -113,7 +113,7 @@ services:
       - MYSQL_ROOT_PASSWORD=password
       - CONFIG_ENV=dev
       - DB=true
-    restart: always
+    restart: unless-stopped
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
       interval: 5m
@@ -129,7 +129,7 @@ services:
     networks:
       - dev_net
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     logging:
       driver: syslog
       options:
@@ -174,7 +174,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh filesystem_api
     healthcheck:
       test: curl -Isf http://127.1:6000
@@ -203,7 +203,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh api_proxy
     healthcheck:
       test: curl -qsf http://127.1:5000 >/dev/null
@@ -240,7 +240,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh api_dashboard
     links:
       - dev-base-mysql:mysql
@@ -272,7 +272,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 500M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -309,7 +309,7 @@ services:
     hostname: dev-gen-be-logwatch
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
     logging:
       driver: syslog
@@ -335,7 +335,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 300M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     environment:
       - CONFIG_ENV=dev
       - DB=false
@@ -369,7 +369,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 1000m
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh api_data
     networks:
       - dev_net
@@ -406,7 +406,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     logging:
       driver: syslog
       options:

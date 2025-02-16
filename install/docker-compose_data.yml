@@ -5,7 +5,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 4G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     logging:
       driver: syslog
       options:
@@ -30,7 +30,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 1G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     environment:
       - CONFIG_ENV=data
       - DB=false
@@ -61,7 +61,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 3G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     ports:
       - 6007:6000
     entrypoint: /docker-entrypoint.sh api_data
@@ -96,7 +96,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 3G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     ports:
       - 6006:6000
     entrypoint: /docker-entrypoint.sh api_data
@@ -131,7 +131,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 3G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     ports:
       - 6005:6000
     entrypoint: /docker-entrypoint.sh api_data
@@ -165,7 +165,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 3G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     ports:
       - 6004:6000
     entrypoint: /docker-entrypoint.sh api_data
@@ -199,7 +199,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 3G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     ports:
       - 6003:6000
     entrypoint: /docker-entrypoint.sh api_data
@@ -234,7 +234,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 3G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     ports:
       - 6002:6000
     entrypoint: /docker-entrypoint.sh api_data
@@ -268,7 +268,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 3G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     ports:
       - 6001:6000
     entrypoint: /docker-entrypoint.sh api_data
@@ -306,7 +306,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 4G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "tail -f /dev/null"
     logging:
       driver: syslog
@@ -344,7 +344,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 10G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     logging:
       driver: syslog
       options:
@@ -372,7 +372,7 @@ services:
     image: amrox/gc-redis:${TAG}
     mem_limit: 3G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     ports:
       - 6382:6379
     links:
@@ -389,7 +389,7 @@ services:
     image: amrox/gc-mysql:${TAG}
     mem_limit: 1G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     logging:
       driver: syslog
       options:
@@ -413,7 +413,7 @@ services:
     image: amrox/webserver:${TAG}
     mem_limit: 200M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     logging:
       driver: syslog
       options:
@@ -457,7 +457,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh api_proxy
     healthcheck:
       test: curl -qsf http://127.1:5000 >/dev/null
@@ -491,7 +491,7 @@ services:
         syslog-facility: local3
     mem_limit: 500M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     healthcheck:
       test: curl -Isf http://127.1:1080/healthcheck
       interval: 5m
@@ -529,7 +529,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh filesystem_api
     healthcheck:
       test: curl -Isf http://127.1:6000
@@ -558,7 +558,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh api_dashboard
     links:
       - data-base-mysql:mysql
@@ -589,7 +589,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "extra_rules"
     logging:
       driver: syslog
@@ -625,7 +625,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -661,7 +661,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -697,7 +697,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -733,7 +733,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -769,7 +769,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -805,7 +805,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -841,7 +841,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -878,7 +878,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -915,7 +915,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -951,7 +951,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -987,7 +987,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -1023,7 +1023,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -1059,7 +1059,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -1095,7 +1095,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -1131,7 +1131,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -1168,7 +1168,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -1205,7 +1205,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -1242,7 +1242,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -1279,7 +1279,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -1316,7 +1316,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -1353,7 +1353,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -1389,7 +1389,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -1425,7 +1425,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -1461,7 +1461,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -1497,7 +1497,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -1533,7 +1533,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -1569,7 +1569,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -1605,7 +1605,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -1641,7 +1641,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -1680,7 +1680,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -1719,7 +1719,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -1756,7 +1756,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -1793,7 +1793,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -1830,7 +1830,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -1867,7 +1867,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -1905,7 +1905,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -1943,7 +1943,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2g
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -1979,7 +1979,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2g
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -2015,7 +2015,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2g
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -2052,7 +2052,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2g
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -2089,7 +2089,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2g
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -2128,7 +2128,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2g
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -2167,7 +2167,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2g
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -2205,7 +2205,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2g
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -2243,7 +2243,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -2279,7 +2279,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -2316,7 +2316,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -2352,7 +2352,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -2388,7 +2388,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -2424,7 +2424,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -2460,7 +2460,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -2496,7 +2496,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -2532,7 +2532,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -2568,7 +2568,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -2604,7 +2604,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -2640,7 +2640,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -2677,7 +2677,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog
@@ -2713,7 +2713,7 @@ services:
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
       driver: syslog

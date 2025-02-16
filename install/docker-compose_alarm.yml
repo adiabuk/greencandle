@@ -4,7 +4,7 @@ services:
     hostname: alarm-base-redis
     image: amrox/gc-redis:${TAG}
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     logging:
       driver: syslog
       options:
@@ -37,7 +37,7 @@ services:
       - CONFIG_ENV=alarm
       - MYSQL_ROOT_PASSWORD=password
       - DB=true
-    restart: always
+    restart: unless-stopped
     ports:
       - 3310:3306
     healthcheck:
@@ -55,7 +55,7 @@ services:
     hostname: alarm-be-api-router
     image: amrox/greencandle:${TAG}
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     logging:
       driver: syslog
       options:
@@ -90,7 +90,7 @@ services:
     hostname: alarm-be-alert
     image: amrox/alert:latest
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "python -u /srv/alert/webhook.py"
     logging:
       driver: syslog

@@ -7,7 +7,7 @@ services:
     hostname: backtest-be-manual
     working_dir: /data/scripts
     image: amrox/greencandle:${TAG}
-    restart: always
+    restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "tail -f /dev/null"
     links:
       - backtest-base-mysql:mysql
@@ -32,7 +32,7 @@ services:
       - 6384:6379
     environment:
       - CONFIG_ENV=backtest
-    restart: always
+    restart: unless-stopped
     links:
       - backtest-base-mysql:mysql
     entrypoint: /docker-entrypoint.sh redis-server /etc/redis.conf
@@ -53,7 +53,7 @@ services:
       - MYSQL_ROOT_PASSWORD=password
       - CONFIG_ENV=backtest
       - DB=true
-    restart: always
+    restart: unless-stopped
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
       interval: 5m
