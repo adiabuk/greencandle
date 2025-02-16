@@ -1,5 +1,10 @@
 # Releases
 
+# 8.12.1
+* don't start containers that were manually stopped
+* ensure we are using latest version of base image before building
+* avoid circular import in logger module
+
 # 8.12
 * use no DNS aliases for monitoring and cicd
 * single bootstrap file for debian bookworm
