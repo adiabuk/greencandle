@@ -1,8 +1,8 @@
 services:
   ###### Start Gen
-  prod-gen-be-logwatch:
-    container_name: prod-gen-be-logwatch
-    hostname: prod-gen-be-logwatch
+  prod-be-logwatch:
+    container_name: prod-be-logwatch
+    hostname: prod-be-logwatch
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
     restart: unless-stopped
@@ -20,9 +20,9 @@ services:
       timeout: 10s
       retries: 5
 
-  prod-gen-be-logtailer-api:
-    container_name: prod-gen-be-logtailer-api
-    hostname: prod-gen-be-logtailer-api
+  prod-be-logtailer-api:
+    container_name: prod-be-logtailer-api
+    hostname: prod-be-logtailer-api
     image: amrox/greencandle:${TAG}
     mem_limit: 300M
     pull_policy: always
@@ -203,7 +203,7 @@ services:
       - prod-fe-api-dashboard:api_dash
       - prod-base-mysql:mysql
       - prod-base-redis:redis
-      - prod-gen-be-logtailer-api:logs
+      - prod-be-logtailer-api:logs
       - prod-fe-api-proxy:proxy
     depends_on:
       - prod-base-mysql

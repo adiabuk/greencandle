@@ -303,10 +303,10 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-  dev-gen-be-logwatch:
+  dev-be-logwatch:
     extra_hosts: *default-extra_hosts
-    container_name: dev-gen-be-logwatch
-    hostname: dev-gen-be-logwatch
+    container_name: dev-be-logwatch
+    hostname: dev-be-logwatch
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
     restart: unless-stopped
@@ -328,10 +328,10 @@ services:
       timeout: 10s
       retries: 5
 
-  dev-gen-be-logtailer-api:
+  dev-be-logtailer-api:
     extra_hosts: *default-extra_hosts
-    container_name: dev-gen-be-logtailer-api
-    hostname: dev-gen-be-logtailer-api
+    container_name: dev-be-logtailer-api
+    hostname: dev-be-logtailer-api
     image: amrox/greencandle:${TAG}
     mem_limit: 300M
     pull_policy: always

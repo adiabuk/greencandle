@@ -132,9 +132,9 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /root/.bash_history:/root/.bash_history
 
-  config-gen-be-logwatch:
-    container_name: config-gen-be-logwatch
-    hostname: config-gen-be-logwatch
+  config-be-logwatch:
+    container_name: config-be-logwatch
+    hostname: config-be-logwatch
     image: amrox/greencandle:${TAG}
     mem_limit: 1G
     restart: unless-stopped

@@ -1,7 +1,7 @@
 services:
-  data-gen-be-logwatch:
-    container_name: data-gen-be-logwatch
-    hostname: data-gen-be-logwatch
+  data-be-logwatch:
+    container_name: data-be-logwatch
+    hostname: data-be-logwatch
     image: amrox/greencandle:${TAG}
     mem_limit: 4G
     pull_policy: always
@@ -24,9 +24,9 @@ services:
       timeout: 10s
       retries: 5
 
-  data-gen-be-logtailer-api:
-    container_name: data-gen-be-logtailer-api
-    hostname: data-gen-be-logtailer-api
+  data-be-logtailer-api:
+    container_name: data-be-logtailer-api
+    hostname: data-be-logtailer-api
     image: amrox/greencandle:${TAG}
     mem_limit: 1G
     pull_policy: always
@@ -432,7 +432,7 @@ services:
       - data-fe-api-dashboard:api_dash
       - data-base-mysql:mysql
       - data-base-redis:redis
-      - data-gen-be-logtailer-api:logs
+      - data-be-logtailer-api:logs
       - data-fe-api-proxy:proxy
     depends_on:
       - data-base-mysql

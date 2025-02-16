@@ -1,8 +1,8 @@
 services:
   ###### Start Gen
-  per-gen-be-logwatch:
-    container_name: per-gen-be-logwatch
-    hostname: per-gen-be-logwatch
+  per-be-logwatch:
+    container_name: per-be-logwatch
+    hostname: per-be-logwatch
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
     restart: unless-stopped
@@ -24,9 +24,9 @@ services:
       timeout: 10s
       retries: 5
 
-  per-gen-be-logtailer-api:
-    container_name: per-gen-be-logtailer-api
-    hostname: per-gen-be-logtailer-api
+  per-be-logtailer-api:
+    container_name: per-be-logtailer-api
+    hostname: per-be-logtailer-api
     image: amrox/greencandle:${TAG}
     mem_limit: 300M
     pull_policy: always
@@ -207,7 +207,7 @@ services:
       - per-fe-api-dashboard:api_dash
       - per-base-mysql:mysql
       - per-base-redis:redis
-      - per-gen-be-logtailer-api:logs
+      - per-be-logtailer-api:logs
       - per-fe-api-proxy:proxy
     depends_on:
       - per-base-mysql

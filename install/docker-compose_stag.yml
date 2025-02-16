@@ -1,7 +1,7 @@
 services:
-  stag-gen-be-logwatch:
-    container_name: stag-gen-be-logwatch
-    hostname: stag-gen-be-logwatch
+  stag-be-logwatch:
+    container_name: stag-be-logwatch
+    hostname: stag-be-logwatch
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
     restart: unless-stopped
@@ -23,9 +23,9 @@ services:
       timeout: 10s
       retries: 5
 
-  stag-gen-be-logtailer-api:
-    container_name: stag-gen-be-logtailer-api
-    hostname: stag-gen-be-logtailer-api
+  stag-be-logtailer-api:
+    container_name: stag-be-logtailer-api
+    hostname: stag-be-logtailer-api
     image: amrox/greencandle:${TAG}
     mem_limit: 300M
     pull_policy: always
@@ -244,7 +244,7 @@ services:
       - stag-fe-api-dashboard:api_dash
       - stag-base-mysql:mysql
       - stag-base-redis:redis
-      - stag-gen-be-logtailer-api:logs
+      - stag-be-logtailer-api:logs
       - stag-fe-api-proxy:proxy
     depends_on:
       - stag-base-mysql

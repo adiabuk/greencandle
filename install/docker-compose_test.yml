@@ -1,7 +1,7 @@
 services:
-  test-gen-be-logwatch:
-    container_name: test-gen-be-logwatch
-    hostname: test-gen-be-logwatch
+  test-be-logwatch:
+    container_name: test-be-logwatch
+    hostname: test-be-logwatch
     image: amrox/greencandle:${TAG}
     mem_limit: 1G
     restart: unless-stopped
@@ -19,9 +19,9 @@ services:
       timeout: 10s
       retries: 5
 
-  test-gen-be-logtailer-api:
-    container_name: test-gen-be-logtailer-api
-    hostname: test-gen-be-logtailer-api
+  test-be-logtailer-api:
+    container_name: test-be-logtailer-api
+    hostname: test-be-logtailer-api
     image: amrox/greencandle:${TAG}
     mem_limit: 1G
     pull_policy: always
@@ -300,7 +300,7 @@ services:
       - 5555:5555
     links:
       - test-fe-api-dashboard:api_dash
-      - test-gen-be-logtailer-api:logs
+      - test-be-logtailer-api:logs
       - test-base-mysql:mysql
       - test-base-redis:redis
       - test-fe-api-filesystem:filesystem
