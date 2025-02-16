@@ -789,7 +789,7 @@ services:
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-1h-short6 2>&1  | grep . || exit 1
       start_period: 1h
-      interval: 5m
+      interval: 30m
       timeout: 10s
       retries: 5
     volumes:
@@ -825,7 +825,7 @@ services:
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-1h-long6 2>&1  | grep . || exit 1
       start_period: 1h
-      interval: 5m
+      interval: 30m
       timeout: 10s
       retries: 5
     volumes:
@@ -935,7 +935,7 @@ services:
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-1d-short1 2>&1  | grep . || exit 1
       start_period: 2h
-      interval: 30m
+      interval: 1h
       timeout: 10s
       retries: 5
     volumes:
@@ -971,7 +971,7 @@ services:
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-1d-long1 2>&1  | grep . || exit 1
       start_period: 2h
-      interval: 30m
+      interval: 1d
       timeout: 10s
       retries: 5
     volumes:
@@ -1189,7 +1189,7 @@ services:
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-1h-long1 2>&1  | grep . || exit 1
       start_period: 1h
-      interval: 1h
+      interval: 30m
       timeout: 10s
       retries: 5
     volumes:
@@ -1337,7 +1337,7 @@ services:
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-1h-short1 2>&1  | grep . || exit 1
       start_period: 1h
-      interval: 1h
+      interval: 30m
       timeout: 10s
       retries: 5
     volumes:
@@ -1409,7 +1409,7 @@ services:
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-1h-long3 2>&1  | grep . || exit 1
       start_period: 1h
-      interval: 4h
+      interval: 30m
       timeout: 10s
       retries: 5
     volumes:
@@ -1445,7 +1445,7 @@ services:
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-1h-short3 2>&1  | grep . || exit 1
       start_period: 1h
-      interval: 4h
+      interval: 30m
       timeout: 10s
       retries: 5
     volumes:
@@ -1664,7 +1664,7 @@ services:
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-1h-short5  2>&1  | grep . || exit 1
       start_period: 1h
-      interval: 5m
+      interval: 30m
       timeout: 10s
       retries: 5
     volumes:
@@ -1703,7 +1703,7 @@ services:
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-1h-long5  2>&1  | grep . || exit 1
       start_period: 1h
-      interval: 5m
+      interval: 30m
       timeout: 10s
       retries: 5
     volumes:
@@ -1740,7 +1740,7 @@ services:
     healthcheck:
       test: find /var/local/lock -mmin -3 -name data-be-analyse-1h-short4 2>&1  | grep . || exit 1
       start_period: 1h
-      interval: 5m
+      interval: 30m
       timeout: 10s
       retries: 5
     volumes:
@@ -1777,7 +1777,7 @@ services:
     healthcheck:
       test: find /var/local/lock -mmin -3 -name data-be-analyse-1h-long4 2>&1  | grep . || exit 1
       start_period: 1h
-      interval: 5m
+      interval: 30m
       timeout: 10s
       retries: 5
     volumes:
@@ -1963,7 +1963,7 @@ services:
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1d-short14 2>&1 |grep . ||exit 1
       start_period: 2h
-      interval: 5m
+      interval: 1h
       timeout: 10s
       retries: 5
     volumes:
@@ -1999,7 +1999,7 @@ services:
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1d-long14 2>&1 |grep . ||exit 1
       start_period: 2h
-      interval: 5m
+      interval: 1h
       timeout: 10s
       retries: 5
     volumes:
@@ -2036,7 +2036,7 @@ services:
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1d-short15 2>&1 |grep . ||exit 1
       start_period: 2h
-      interval: 5m
+      interval: 1h
       timeout: 10s
       retries: 5
     volumes:
@@ -2073,7 +2073,7 @@ services:
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1d-long15 2>&1 |grep . ||exit 1
       start_period: 2h
-      interval: 5m
+      interval: 1h
       timeout: 10s
       retries: 5
     volumes:
@@ -2112,7 +2112,7 @@ services:
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1h-short16 2>&1 |grep . ||exit 1
       start_period: 1h
-      interval: 5m
+      interval: 30m
       timeout: 10s
       retries: 5
     volumes:
@@ -2151,7 +2151,7 @@ services:
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1h-long16 2>&1 |grep . ||exit 1
       start_period: 1h
-      interval: 5m
+      interval: 30m
       timeout: 10s
       retries: 5
     volumes:
@@ -2189,7 +2189,7 @@ services:
     healthcheck:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1h-short17 2>&1 |grep . ||exit 1
       start_period: 1h
-      interval: 5m
+      interval: 30m
       timeout: 10s
       retries: 5
     volumes:
@@ -2228,7 +2228,7 @@ services:
       test: find /var/local/lock  -mmin -2 -name data-be-analyse-1h-long17 2>&1 |grep . ||exit 1
       start_period: 1h
       interval: 5m
-      timeout: 10s
+      timeout: 30m
       retries: 5
     volumes:
       - /var/local:/var/local
@@ -2336,7 +2336,7 @@ services:
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-1d-short7 2>&1  | grep . || exit 1
       start_period: 2h
-      interval: 30m
+      interval: 1h
       timeout: 10s
       retries: 5
     volumes:
@@ -2372,7 +2372,7 @@ services:
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-1d-long7 2>&1  | grep . || exit 1
       start_period: 2h
-      interval: 30m
+      interval: 1h
       timeout: 10s
       retries: 5
     volumes:
@@ -2588,7 +2588,7 @@ services:
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-1h-long7 2>&1  | grep . || exit 1
       start_period: 1h
-      interval: 1h
+      interval: 30m
       timeout: 10s
       retries: 5
     volumes:
@@ -2733,7 +2733,7 @@ services:
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-1h-short7 2>&1  | grep . || exit 1
       start_period: 1h
-      interval: 1h
+      interval: 30m
       timeout: 10s
       retries: 5
     volumes:
