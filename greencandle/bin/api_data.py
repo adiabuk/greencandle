@@ -12,6 +12,7 @@ import logging
 from datetime import datetime, timedelta
 from collections import defaultdict
 import requests
+import requests_cache
 from setproctitle import setproctitle
 from flask import Flask, jsonify
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -32,6 +33,7 @@ RUNNER = ProdRunner()
 APP = Flask(__name__, template_folder="/var/www/html", static_url_path='/',
             static_folder='/var/www/html')
 DATA = defaultdict(dict)
+requests_cache.install_cache('requests_cache')
 
 @APP.route('/get_data', methods=["GET"])
 def get_all_data():

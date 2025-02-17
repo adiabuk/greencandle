@@ -15,6 +15,7 @@ from datetime import datetime
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
 import requests
+import requests_cache
 from send_nsca3 import send_nsca
 from str2bool import str2bool
 from setproctitle import setproctitle
@@ -36,6 +37,7 @@ PAIRS = config.main.pairs.split()
 MAIN_INDICATORS = config.main.indicators.split()
 GET_EXCEPTIONS = exception_catcher((Exception))
 TRIGGERED = {}
+requests_cache.install_cache('requests_cache')
 
 if sys.argv[-1] != "--help":
     CLIENT = binance_auth()
