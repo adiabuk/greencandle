@@ -971,7 +971,7 @@ services:
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-1d-long1 2>&1  | grep . || exit 1
       start_period: 2h
-      interval: 1d
+      interval: 1h
       timeout: 10s
       retries: 5
     volumes:
