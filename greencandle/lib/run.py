@@ -13,6 +13,7 @@ from concurrent.futures import ThreadPoolExecutor
 from collections import defaultdict
 import pandas
 import requests
+import requests_cache
 from greencandle.lib.binance import Binance
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.web import decorator_timer
@@ -30,6 +31,7 @@ CHUNK_SIZE = int(config.main.no_of_klines)
 GET_EXCEPTIONS = exception_catcher((Exception))
 PAIRS = config.main.pairs.split()
 MAIN_INDICATORS = config.main.indicators.split()
+SESSION = requests_cache.CachedSession('requests_cache')
 
 @GET_EXCEPTIONS
 def serial_test(pairs, intervals, data_dir, indicators):
@@ -245,7 +247,7 @@ class ProdRunner():
 
             stream = f'http://stream/{config.main.interval}/all'
             try:
-                stream_req = requests.get(stream, timeout=10)
+                stream_req = SESSION.get(stream, timeout=10)
                 prices = stream_req.json()
             except (requests.exceptions.ConnectTimeout, ValueError):
                 prices = {}
@@ -285,7 +287,7 @@ class ProdRunner():
                                "action":"close"}
                     url = f"http://router:1080/{config.web.api_token}"
                     try:
-                        requests.post(url, json=payload, timeout=1)
+                        SESSION.post(url, json=payload, timeout=1)
                     except Exception:
                         pass
 
@@ -321,7 +323,7 @@ class ProdRunner():
         Fetch new dataframe data and append to existing structure
         """
 
-        request = requests.get(f"http://stream/{config.main.interval}/all", timeout=10)
+        request = SESSION.get(f"http://stream/{config.main.interval}/all", timeout=10)
         if not request.ok:
             LOGGER.critical("Unable to fetch data from streaming server")
             data = {'recent':{}, 'closed': {}}

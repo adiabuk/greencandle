@@ -37,7 +37,7 @@ PAIRS = config.main.pairs.split()
 MAIN_INDICATORS = config.main.indicators.split()
 GET_EXCEPTIONS = exception_catcher((Exception))
 TRIGGERED = {}
-requests_cache.install_cache('requests_cache')
+SESSION = requests_cache.CachedSession('requests_cache')
 
 if sys.argv[-1] != "--help":
     CLIENT = binance_auth()
@@ -278,7 +278,7 @@ def analyse_pair(pair, reversal, expire, redis):
                        "strategy": forward_strategy}
 
             try:
-                requests.post(url, json.dumps(payload), timeout=10,
+                SESSION.post(url, json.dumps(payload), timeout=10,
                               headers={'Content-Type': 'application/json'})
                 LOGGER.info("forwarding %s %s/%s trade to: %s match:%s",
                             pair, INTERVAL, DIRECTION, forward_strategy, match_strs)

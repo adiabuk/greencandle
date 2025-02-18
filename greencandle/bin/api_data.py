@@ -11,7 +11,6 @@ from pathlib import Path
 import logging
 from datetime import datetime, timedelta
 from collections import defaultdict
-import requests
 import requests_cache
 from setproctitle import setproctitle
 from flask import Flask, jsonify
@@ -33,7 +32,7 @@ RUNNER = ProdRunner()
 APP = Flask(__name__, template_folder="/var/www/html", static_url_path='/',
             static_folder='/var/www/html')
 DATA = defaultdict(dict)
-requests_cache.install_cache('requests_cache')
+SESSION = requests_cache.CachedSession('requests_cache')
 
 @APP.route('/get_data', methods=["GET"])
 def get_all_data():
@@ -89,7 +88,7 @@ def main():
     local_pairs = set(config.main.pairs.split())
     while True:
         # Don't start analysing until all pairs are available
-        pairs_request = requests.get(f"http://stream/{config.main.interval}/all", timeout=10)
+        pairs_request = SESSION.get(f"http://stream/{config.main.interval}/all", timeout=10)
         if not pairs_request.ok:
             LOGGER.critical("unable to fetch data from streaming server")
         data = pairs_request.json()
