@@ -95,6 +95,7 @@ def main():
         remote_pairs = set(data['recent'].keys())
         if local_pairs.issubset(remote_pairs):
             # we're done
+            LOGGER.info("all pairs available from stream server, continuing")
             break
         # not enough pairs,
         LOGGER.info("Waiting for more pairs to become available local:%s, remote:%s",
