@@ -155,7 +155,7 @@ def get_match_name(matches):
                    ['empty10'],
                    ['empty11'],
                    ['MACD_volume', 'EMA_volume'],
-                   ['bb30'],
+                   ['empty_13'],
                    ['RSI_flip'],
                    ['RSI_1d'],
                    ['RSI_1h', 'RSI_1h+bb'],
