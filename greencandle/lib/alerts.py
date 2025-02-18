@@ -52,7 +52,7 @@ def send_slack_message(channel, message, emoji=None, icon=None, name=None):
     if not config.slack[channel]:
         return
     env = config.main.base_env
-    if not str2bool(config.slack.slack_active) or  get_drain_env(env)['slack']:
+    if not str2bool(config.slack.slack_active): # or  get_drain_env(env)['slack']:
         return
     if not icon:
         icon = f":{config.main.trade_direction}:" if emoji else ":robot_face:"
