@@ -3,7 +3,7 @@ services:
     container_name: alarm-base-redis
     hostname: alarm-base-redis
     image: amrox/gc-redis:${TAG}
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     logging:
       driver: syslog
@@ -32,7 +32,7 @@ services:
       driver: syslog
       options:
         syslog-facility: local7
-    pull_policy: always
+    pull_policy: unless-stopped
     environment:
       - CONFIG_ENV=alarm
       - MYSQL_ROOT_PASSWORD=password
@@ -54,7 +54,7 @@ services:
     container_name: alarm-be-api-router
     hostname: alarm-be-api-router
     image: amrox/greencandle:${TAG}
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     logging:
       driver: syslog
@@ -89,7 +89,7 @@ services:
     container_name: alarm-be-alert
     hostname: alarm-be-alert
     image: amrox/alert:latest
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "python -u /srv/alert/webhook.py"
     logging:

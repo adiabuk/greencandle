@@ -128,7 +128,7 @@ services:
     mem_limit: 200M
     networks:
       - dev_net
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     logging:
       driver: syslog
@@ -173,7 +173,7 @@ services:
         syslog-facility: local1
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh filesystem_api
     healthcheck:
@@ -202,7 +202,7 @@ services:
         syslog-facility: local1
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh api_proxy
     healthcheck:
@@ -239,7 +239,7 @@ services:
         syslog-facility: local1
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh api_dashboard
     links:
@@ -271,7 +271,7 @@ services:
     hostname: dev-be-analyse-15m-short1
     image: amrox/greencandle:${TAG}
     mem_limit: 500M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "analyse_data"
     logging:
@@ -334,7 +334,7 @@ services:
     hostname: dev-be-logtailer-api
     image: amrox/greencandle:${TAG}
     mem_limit: 300M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     environment:
       - CONFIG_ENV=dev
@@ -368,7 +368,7 @@ services:
     hostname: dev-be-get_15m
     image: amrox/greencandle:${TAG}
     mem_limit: 1000m
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh api_data
     networks:
@@ -405,7 +405,7 @@ services:
     hostname: dev-be-api-router
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     logging:
       driver: syslog

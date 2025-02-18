@@ -24,7 +24,7 @@ services:
     hostname: test-be-logtailer-api
     image: amrox/greencandle:${TAG}
     mem_limit: 1G
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     environment:
       - CONFIG_ENV=test
@@ -55,7 +55,7 @@ services:
     hostname: test-base-redis
     image: amrox/gc-redis:${TAG}
     mem_limit: 300M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     logging:
       driver: syslog
@@ -81,7 +81,7 @@ services:
     image: amrox/gc-mysql:${TAG}
     mem_limit: 1G
     entrypoint: /docker-entrypoint.sh "--max-connections=5000"
-    pull_policy: always
+    pull_policy: unless-stopped
     logging:
       driver: syslog
       options:
@@ -115,7 +115,7 @@ services:
         syslog-facility: local2
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh filesystem_api
     ports:
@@ -144,7 +144,7 @@ services:
         syslog-facility: local2
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh api_dashboard
     links:
@@ -182,7 +182,7 @@ services:
         syslog-facility: local2
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh api_proxy
     links:
@@ -214,7 +214,7 @@ services:
       - DB=true
     image: amrox/greencandle:${TAG}
     mem_limit: 500M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "tail -f /dev/null"
     logging:
@@ -252,7 +252,7 @@ services:
       - DB=true
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "touch /var/log/cron.log && cron && tail -f /var/log/cron.log"
     logging:
@@ -282,7 +282,7 @@ services:
     hostname: test-fe-webserver
     image: amrox/webserver:${TAG}
     mem_limit: 200M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     logging:
       driver: syslog
@@ -320,7 +320,7 @@ services:
     hostname: test-be-api-router
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     logging:
       driver: syslog
@@ -379,7 +379,7 @@ services:
     hostname: test-be-api-any3-5m-cross-long
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
@@ -417,7 +417,7 @@ services:
     hostname: test-be-api-any3-15m-cross-long
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
@@ -455,7 +455,7 @@ services:
     hostname: test-be-api-any3-30m-cross-long
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
@@ -493,7 +493,7 @@ services:
     hostname: test-be-api-any3-5m-cross-short
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
@@ -531,7 +531,7 @@ services:
     hostname: test-be-api-any3-15m-cross-short
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
@@ -569,7 +569,7 @@ services:
     hostname: test-be-api-any3-30m-cross-short
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
@@ -607,7 +607,7 @@ services:
     hostname: test-be-api-any-5m-cross-short
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
@@ -645,7 +645,7 @@ services:
     hostname: test-be-api-any-15m-cross-short
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
@@ -683,7 +683,7 @@ services:
     hostname: test-be-api-any-30m-cross-short
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
@@ -721,7 +721,7 @@ services:
     hostname: test-be-api-any-5m-cross-long
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
@@ -759,7 +759,7 @@ services:
     hostname: test-be-api-any-15m-cross-long
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
@@ -797,7 +797,7 @@ services:
     hostname: test-be-api-any-30m-cross-long
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
@@ -835,7 +835,7 @@ services:
     hostname: test-be-api-any2-30m-cross-long
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
@@ -873,7 +873,7 @@ services:
     hostname: test-be-api-any2-30m-cross-short
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
@@ -911,7 +911,7 @@ services:
     hostname: test-be-api-any2-15m-cross-long
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
@@ -949,7 +949,7 @@ services:
     hostname: test-be-api-any2-15m-cross-short
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
@@ -987,7 +987,7 @@ services:
     hostname: test-be-api-any2-4h-cross-long
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
@@ -1025,7 +1025,7 @@ services:
     hostname: test-be-api-any2-4h-cross-short
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
@@ -1063,7 +1063,7 @@ services:
     hostname: test-be-api-any-1h-cross-long
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
@@ -1101,7 +1101,7 @@ services:
     hostname: test-be-api-any-1h-cross-short
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
@@ -1139,7 +1139,7 @@ services:
     hostname: test-be-api-any2-1h-cross-long
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
@@ -1177,7 +1177,7 @@ services:
     hostname: test-be-api-any2-1h-cross-short
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
@@ -1215,7 +1215,7 @@ services:
     hostname: test-be-api-any2-5m-cross-long
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:
@@ -1253,7 +1253,7 @@ services:
     hostname: test-be-api-any2-5m-cross-short
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
     logging:

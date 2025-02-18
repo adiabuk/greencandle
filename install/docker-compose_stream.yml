@@ -4,7 +4,7 @@ services:
     hostname: stream-fe_binance
     image: amrox/greencandle:${TAG}
     mem_limit: 500M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: on-failure
     entrypoint: /docker-entrypoint.sh stream_binance
     logging:
@@ -34,7 +34,7 @@ services:
     hostname: stream-fe_5m
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: on-failure
     entrypoint: /docker-entrypoint.sh stream_data
     logging:
@@ -64,7 +64,7 @@ services:
     hostname: stream-fe_15m
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: on-failure
     entrypoint: /docker-entrypoint.sh stream_data
     logging:
@@ -93,7 +93,7 @@ services:
     hostname: stream-fe_30m
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: on-failure
     entrypoint: /docker-entrypoint.sh stream_data
     logging:
@@ -122,7 +122,7 @@ services:
     hostname: stream-fe_1h
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: on-failure
     entrypoint: /docker-entrypoint.sh stream_data
     logging:
@@ -152,7 +152,7 @@ services:
     hostname: stream-fe_4h
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: on-failure
     entrypoint: /docker-entrypoint.sh stream_data
     logging:
@@ -182,7 +182,7 @@ services:
     hostname: stream-fe_12h
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: on-failure
     entrypoint: /docker-entrypoint.sh stream_data
     logging:
@@ -211,7 +211,7 @@ services:
     hostname: stream-fe_1d
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: on-failure
     entrypoint: /docker-entrypoint.sh stream_data
     logging:

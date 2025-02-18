@@ -107,7 +107,7 @@ services:
       - DB=true
     image: amrox/greencandle:${TAG}
     mem_limit: 2G
-    pull_policy: always
+    pull_policy: unless-stopped
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh "touch /var/log/cron.log && cron && tail -f /var/log/cron.log"
     logging:
