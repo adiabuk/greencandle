@@ -38,9 +38,9 @@ all_fe=$(docker ps | grep ${env}.*fe |awk {'print $NF'} | grep -v stream) || tru
 docker stop $all_fe $all_be || true
 docker rm $all_fe $all_be || true
 
-$COMPOSE up -d $base
-$COMPOSE up -d $fe
-$COMPOSE up -d $be
+$COMPOSE up -d $base --force-recreate
+$COMPOSE up -d $fe --force-recreate
+$COMPOSE up -d $be --force-recreate
 
 export COMMIT=`docker exec ${env}-base-mysql  bash -c 'echo "$COMMIT_SHA"'`
 
