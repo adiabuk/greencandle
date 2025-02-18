@@ -44,21 +44,6 @@ wget -qO /etc/update-motd.d/99-figlet http://local.amrox.loc/files/config/99-fig
 echo "export HOSTNAME" >> ~/.bashrc
 
 wget -qO /etc/docker/daemon.json http://local.amrox.loc/files/config/daemon.json
-cat > /etc/docker/daemon.json << EOF
-{
-    "default-address-pools":[
-        {"base":"172.20.0.0/16","size":24},
-        {"base":"172.21.0.0/16","size":24}
-    ],
-  "live-restore": false,
-  "log-driver": "syslog",
-  "raw-logs": true,
-  "log-opts": {
-    "syslog-facility": "local1",
-    "tag": "{{.Name}}"
-  }
-}
-EOF
 
 # Start services
 systemctl start ntp
