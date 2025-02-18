@@ -9,7 +9,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local6
     entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
     environment:
@@ -40,7 +40,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local6
     ports:
       - 2000
@@ -70,7 +70,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local6
     links:
       - per-base-mysql:mysql
@@ -101,7 +101,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local6
     ports:
       - 3307:3306
@@ -130,7 +130,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local6
     links:
       - per-base-mysql:mysql
@@ -168,7 +168,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local6
     links:
       - per-base-mysql:mysql
@@ -198,7 +198,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local6
     healthcheck:
       test: curl -Isf 127.1:4444
@@ -236,7 +236,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local6
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
@@ -272,7 +272,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local6
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
@@ -302,7 +302,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local6
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
@@ -342,7 +342,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local6
     extra_hosts:
       - "alert:172.31.15.59"
@@ -414,7 +414,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local6
     environment:
       - intermittent="true"
@@ -446,7 +446,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local6
     environment:
       - intermittent="true"
@@ -484,7 +484,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local6
     environment:
       - intermittent="true"
@@ -522,7 +522,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local6
     environment:
       - intermittent="true"
@@ -560,7 +560,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local6
     environment:
       - intermittent="true"
@@ -598,7 +598,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local6
     environment:
       - intermittent="true"
@@ -636,7 +636,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local6
     environment:
       - intermittent="true"
@@ -674,7 +674,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local6
     environment:
       - intermittent="true"
@@ -712,7 +712,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local6
     environment:
       - intermittent="true"
@@ -750,7 +750,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local6
     environment:
       - intermittent="true"
@@ -788,7 +788,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local6
     environment:
       - intermittent="true"
@@ -826,7 +826,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local6
     environment:
       - intermittent="true"
@@ -864,7 +864,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local6
     environment:
       - intermittent="true"
@@ -902,7 +902,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local6
     environment:
       - intermittent="true"
@@ -940,7 +940,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local6
     environment:
       - intermittent="true"
@@ -978,7 +978,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local6
     environment:
       - intermittent="true"
@@ -1016,7 +1016,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local6
     environment:
       - intermittent="true"

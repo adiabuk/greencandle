@@ -8,7 +8,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local7
     links:
       - alarm-base-mysql:mysql
@@ -32,7 +32,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local7
     pull_policy: always
     environment:
@@ -61,7 +61,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local7
     healthcheck:
       test: curl -Isf http://127.1:1080/healthcheck
@@ -98,7 +98,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local7
     ports:
       - 20000:20000

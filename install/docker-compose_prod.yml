@@ -35,7 +35,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     ports:
       - 2000
@@ -65,7 +65,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     links:
       - prod-base-mysql:mysql
@@ -96,7 +96,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     ports:
       - 3306:3306
@@ -125,7 +125,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     links:
       - prod-base-mysql:mysql
@@ -163,7 +163,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     links:
       - prod-base-mysql:mysql
@@ -192,7 +192,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     restart: unless-stopped
     healthcheck:
@@ -231,7 +231,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
@@ -267,7 +267,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
@@ -297,7 +297,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
@@ -339,7 +339,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     healthcheck:
       test: curl -Isf http://127.1:1080/healthcheck
@@ -399,7 +399,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     environment:
       - intermittent="true"
@@ -431,7 +431,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     environment:
       - intermittent="true"
@@ -469,7 +469,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     environment:
       - intermittent="true"
@@ -507,7 +507,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     environment:
       - intermittent="true"
@@ -545,7 +545,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     environment:
       - intermittent="true"
@@ -583,7 +583,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     environment:
       - intermittent="true"
@@ -621,7 +621,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     environment:
       - intermittent="true"
@@ -659,7 +659,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     environment:
       - intermittent="true"
@@ -697,7 +697,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     environment:
       - intermittent="true"
@@ -735,7 +735,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     environment:
       - intermittent="true"
@@ -773,7 +773,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     environment:
       - intermittent="true"
@@ -811,7 +811,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     environment:
       - intermittent="true"
@@ -849,7 +849,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     environment:
       - intermittent="true"
@@ -887,7 +887,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     environment:
       - intermittent="true"
@@ -925,7 +925,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     environment:
       - intermittent="true"
@@ -963,7 +963,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     environment:
       - intermittent="true"
@@ -1001,7 +1001,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     environment:
       - intermittent="true"
@@ -1039,7 +1039,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     environment:
       - intermittent="true"
@@ -1077,7 +1077,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     environment:
       - intermittent="true"
@@ -1115,7 +1115,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     environment:
       - intermittent="true"
@@ -1153,7 +1153,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local4
     environment:
       - intermittent="true"

@@ -10,7 +10,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local7
     environment:
       - CONFIG_ENV=data/be/get_data/
@@ -41,7 +41,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local7
     environment:
       - CONFIG_ENV=data/be/get_data/5m
@@ -72,7 +72,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local7
     environment:
       - CONFIG_ENV=data/be/get_data/15m
@@ -102,7 +102,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local7
     environment:
       - CONFIG_ENV=data/be/get_data/30m
@@ -132,7 +132,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local7
     environment:
       - CONFIG_ENV=data/be/get_data/1h
@@ -163,7 +163,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local7
     environment:
       - CONFIG_ENV=data/be/get_data/4h
@@ -194,7 +194,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local7
     environment:
       - CONFIG_ENV=data/be/get_data/12h
@@ -224,7 +224,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local7
     environment:
       - CONFIG_ENV=data/be/get_data/1d

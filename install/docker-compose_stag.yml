@@ -8,7 +8,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local5
     entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
     environment:
@@ -39,7 +39,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local5
     ports:
       - 2000
@@ -68,7 +68,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local5
     links:
       - stag-base-mysql:mysql
@@ -94,7 +94,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local5
     environment:
       - CONFIG_ENV=stag
@@ -123,7 +123,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local5
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
@@ -168,7 +168,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local5
     links:
       - stag-base-mysql:mysql
@@ -206,7 +206,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local5
     links:
       - stag-base-mysql:mysql
@@ -236,7 +236,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local5
     healthcheck:
       test: curl -Isf 127.1:3333
@@ -274,7 +274,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local5
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
@@ -310,7 +310,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local5
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
@@ -340,7 +340,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local5
     healthcheck:
       test: curl -Isf http://127.1:1080/healthcheck
@@ -391,7 +391,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local5
     environment:
       - CONFIG_ENV=stag/be/any/long/5m
@@ -429,7 +429,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local5
     environment:
       - CONFIG_ENV=stag/be/any/short/5m
@@ -468,7 +468,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local5
     environment:
       - CONFIG_ENV=stag/be/any/long/15m
@@ -506,7 +506,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local5
     environment:
       - CONFIG_ENV=stag/be/any/short/15m
@@ -545,7 +545,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local5
     environment:
       - CONFIG_ENV=stag/be/any/long/1h
@@ -583,7 +583,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local5
     environment:
       - CONFIG_ENV=stag/be/any/short/1h
@@ -622,7 +622,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local5
     environment:
       - CONFIG_ENV=stag/be/any2/long/1h
@@ -660,7 +660,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local5
     environment:
       - CONFIG_ENV=stag/be/any2/short/1h
@@ -699,7 +699,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local5
     environment:
       - CONFIG_ENV=stag/be/any2/long/5m
@@ -737,7 +737,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local5
     environment:
       - CONFIG_ENV=stag/be/any2/short/5m
@@ -776,7 +776,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local5
     environment:
       - CONFIG_ENV=stag/be/any2/long/15m
@@ -814,7 +814,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: {{.Name}}
+        tag: "{{.Name}}"
         syslog-facility: local5
     environment:
       - CONFIG_ENV=stag/be/any2/short/15m
