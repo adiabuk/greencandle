@@ -7,6 +7,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local0
     hostname: config-be-manual
     working_dir: /data/scripts
@@ -35,6 +36,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local0
     hostname: config-fe-api-config
     working_dir: /data/scripts
@@ -68,6 +70,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local0
     links:
       - config-base-mysql:mysql
@@ -92,6 +95,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local0
     healthcheck:
       test: echo 'SELECT version();'| mysql -uroot -ppassword
@@ -113,6 +117,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local0
     links:
       - config-base-mysql:mysql

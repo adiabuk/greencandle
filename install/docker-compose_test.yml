@@ -34,6 +34,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     links:
       - test-base-mysql:mysql
@@ -60,6 +61,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     links:
       - test-base-mysql:mysql
@@ -85,6 +87,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     environment:
       - CONFIG_ENV=test
@@ -112,6 +115,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
@@ -141,6 +145,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
@@ -179,6 +184,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
@@ -220,6 +226,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     links:
       - test-base-mysql:mysql
@@ -258,6 +265,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     links:
       - test-base-mysql:mysql
@@ -287,6 +295,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     healthcheck:
       test: curl -Isf 127.1:5555
@@ -325,6 +334,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     healthcheck:
       test: curl -Isf http://127.1:1080/healthcheck
@@ -385,6 +395,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     environment:
       - CONFIG_ENV=test/be/any/long/3/5m
@@ -423,6 +434,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     environment:
       - CONFIG_ENV=test/be/any/long/3/15m
@@ -461,6 +473,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     environment:
       - CONFIG_ENV=test/be/any/long/3/30m
@@ -499,6 +512,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     environment:
       - CONFIG_ENV=test/be/any/short/3/5m
@@ -537,6 +551,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     environment:
       - CONFIG_ENV=test/be/any/short/3/15m
@@ -575,6 +590,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     environment:
       - CONFIG_ENV=test/be/any/short/3/30m
@@ -613,6 +629,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     environment:
       - CONFIG_ENV=test/be/any/short/5m
@@ -651,6 +668,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     environment:
       - CONFIG_ENV=test/be/any/short/15m
@@ -689,6 +707,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     environment:
       - CONFIG_ENV=test/be/any/short/30m
@@ -727,6 +746,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     environment:
       - CONFIG_ENV=test/be/any/long/5m
@@ -765,6 +785,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     environment:
       - CONFIG_ENV=test/be/any/long/15m
@@ -803,6 +824,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     environment:
       - CONFIG_ENV=test/be/any/long/30m
@@ -841,6 +863,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     environment:
       - CONFIG_ENV=test/be/any/long/2/30m
@@ -879,6 +902,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     environment:
       - CONFIG_ENV=test/be/any/short/2/30m
@@ -917,6 +941,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     environment:
       - CONFIG_ENV=test/be/any/long/2/15m
@@ -955,6 +980,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     environment:
       - CONFIG_ENV=test/be/any/short/2/15m
@@ -993,6 +1019,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     environment:
       - CONFIG_ENV=test/be/any/long/2/4h
@@ -1031,6 +1058,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     environment:
       - CONFIG_ENV=test/be/any/short/2/4h
@@ -1069,6 +1097,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     environment:
       - CONFIG_ENV=test/be/any/long/1h
@@ -1107,6 +1136,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     environment:
       - CONFIG_ENV=test/be/any/short/1h
@@ -1145,6 +1175,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     environment:
       - CONFIG_ENV=test/be/any/long/2/1h
@@ -1183,6 +1214,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     environment:
       - CONFIG_ENV=test/be/any/short/2/1h
@@ -1221,6 +1253,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     environment:
       - CONFIG_ENV=test/be/any/long/2/5m
@@ -1259,6 +1292,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local2
     environment:
       - CONFIG_ENV=test/be/any/short/2/5m

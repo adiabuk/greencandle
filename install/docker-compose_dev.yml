@@ -20,6 +20,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local1
     environment:
       - CONFIG_ENV=dev
@@ -56,6 +57,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local1
     entrypoint: /docker-entrypoint.sh "tail -f /dev/null"
     links:
@@ -87,6 +89,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local1
     links:
       - dev-base-mysql:mysql
@@ -108,6 +111,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local1
     environment:
       - MYSQL_ROOT_PASSWORD=password
@@ -133,6 +137,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local1
     entrypoint: /docker-entrypoint.sh stream_data
     links:
@@ -170,6 +175,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local1
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
@@ -199,6 +205,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local1
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
@@ -236,6 +243,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local1
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
@@ -277,6 +285,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local1
     links:
       - dev-be-api-router:router
@@ -314,6 +323,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local1
     environment:
       - CONFIG_ENV=dev
@@ -344,6 +354,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local1
     ports:
       - 2000
@@ -376,6 +387,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local1
     links:
       - dev-base-mysql:mysql
@@ -410,6 +422,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local1
     healthcheck:
       test: curl -Isf http://127.1:1080/healthcheck

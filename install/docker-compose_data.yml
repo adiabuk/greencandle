@@ -9,6 +9,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
     environment:
@@ -39,6 +40,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-base-mysql:mysql
@@ -68,6 +70,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-base-mysql:mysql
@@ -103,6 +106,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-base-mysql:mysql
@@ -138,6 +142,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-base-mysql:mysql
@@ -172,6 +177,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-base-mysql:mysql
@@ -206,6 +212,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-base-mysql:mysql
@@ -241,6 +248,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-base-mysql:mysql
@@ -275,6 +283,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-base-mysql:mysql
@@ -311,6 +320,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-base-mysql:mysql
@@ -348,6 +358,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     entrypoint: /docker-entrypoint.sh "touch /var/log/cron.log && cron && tail -f /var/log/cron.log"
     links:
@@ -393,6 +404,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     entrypoint: /docker-entrypoint.sh "--max-connections=5000"
     ports:
@@ -417,6 +429,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     healthcheck:
       test: curl -Isf 127.1:7777
@@ -453,6 +466,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
@@ -488,6 +502,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     mem_limit: 500M
     pull_policy: always
@@ -525,6 +540,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     image: amrox/greencandle:${TAG}
     mem_limit: 200M
@@ -554,6 +570,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
@@ -594,6 +611,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -630,6 +648,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -666,6 +685,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -702,6 +722,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -738,6 +759,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -774,6 +796,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -810,6 +833,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -846,6 +870,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -883,6 +908,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -920,6 +946,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -956,6 +983,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -992,6 +1020,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -1028,6 +1057,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -1064,6 +1094,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -1100,6 +1131,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -1136,6 +1168,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -1173,6 +1206,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -1210,6 +1244,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -1247,6 +1282,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -1284,6 +1320,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -1321,6 +1358,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -1358,6 +1396,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -1394,6 +1433,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -1430,6 +1470,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -1466,6 +1507,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -1502,6 +1544,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -1538,6 +1581,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -1574,6 +1618,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -1610,6 +1655,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -1646,6 +1692,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -1685,6 +1732,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -1724,6 +1772,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -1761,6 +1810,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -1798,6 +1848,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -1835,6 +1886,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -1872,6 +1924,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -1910,6 +1963,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -1948,6 +2002,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -1984,6 +2039,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -2020,6 +2076,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -2057,6 +2114,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -2094,6 +2152,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -2133,6 +2192,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -2172,6 +2232,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -2210,6 +2271,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -2248,6 +2310,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -2284,6 +2347,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -2321,6 +2385,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -2357,6 +2422,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -2393,6 +2459,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -2429,6 +2496,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -2465,6 +2533,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -2501,6 +2570,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -2537,6 +2607,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -2573,6 +2644,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -2609,6 +2681,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -2645,6 +2718,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -2682,6 +2756,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
@@ -2718,6 +2793,7 @@ services:
     logging:
       driver: syslog
       options:
+        tag: {{.Name}}
         syslog-facility: local3
     links:
       - data-be-api-router:router
