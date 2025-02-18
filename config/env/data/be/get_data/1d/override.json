@@ -1,5 +1,5 @@
 {
-  "check_interval": "*",
+  "check_interval": "5760",
   "name": "data-be-get_1d",
   "interval": "1d"
 }

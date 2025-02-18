@@ -32,7 +32,8 @@ RUNNER = ProdRunner()
 APP = Flask(__name__, template_folder="/var/www/html", static_url_path='/',
             static_folder='/var/www/html')
 DATA = defaultdict(dict)
-SESSION = requests_cache.CachedSession('requests_cache')
+SESSION = requests_cache.CachedSession('requests_cache',
+                                       expire_after=int(config.main.check_interval))
 
 @APP.route('/get_data', methods=["GET"])
 def get_all_data():

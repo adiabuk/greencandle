@@ -37,7 +37,8 @@ PAIRS = config.main.pairs.split()
 MAIN_INDICATORS = config.main.indicators.split()
 GET_EXCEPTIONS = exception_catcher((Exception))
 TRIGGERED = {}
-SESSION = requests_cache.CachedSession('requests_cache')
+SESSION = requests_cache.CachedSession('requests_cache',
+                                       expire_after=int(config.main.check_interval))
 
 if sys.argv[-1] != "--help":
     CLIENT = binance_auth()

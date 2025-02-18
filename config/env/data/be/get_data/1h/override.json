@@ -1,5 +1,5 @@
 {
-  "check_interval": "*",
+  "check_interval": "240",
   "name": "data-be-get_1h",
   "interval": "1h"
 }

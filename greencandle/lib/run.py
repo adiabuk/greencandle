@@ -31,7 +31,8 @@ CHUNK_SIZE = int(config.main.no_of_klines)
 GET_EXCEPTIONS = exception_catcher((Exception))
 PAIRS = config.main.pairs.split()
 MAIN_INDICATORS = config.main.indicators.split()
-SESSION = requests_cache.CachedSession('requests_cache')
+SESSION = requests_cache.CachedSession('requests_cache',
+                                       expire_after=int(config.main.check_interval))
 
 @GET_EXCEPTIONS
 def serial_test(pairs, intervals, data_dir, indicators):
