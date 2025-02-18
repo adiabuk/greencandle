@@ -115,8 +115,8 @@ class Engine(dict):
 
         self.schemes = []
 
-    @decorator_timer
     @get_exceptions
+    @decorator_timer
     def get_data(self, localconfig=None, first_run=False, no_of_runs=999):
         """
         Iterate through data and trading pairs to extract data
