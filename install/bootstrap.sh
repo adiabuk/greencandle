@@ -30,9 +30,9 @@ apt autoremove --purge -y snapd emacs linux-image-6.1.0-29-amd64 gcc-12 cpp-12 l
 apt-get dist-upgrade -y
 apt-get clean; apt-get autoclean; rm -rf /var/lib/apt/lists/*
 
-sed -i '/*.emerg/ s/./#&/' /etc/rsyslog.conf
-echo "ForwardToWall=no" >> /etc/systemd/journald.conf
 wget "http://local.amrox.loc/files/config/30-greencandle.conf" -O /etc/rsyslog.d/30-greencandle.conf
+wget "http://local.amrox.loc/files/config/rsyslog.conf" -O /etc/rsyslog.conf
+wget "http://local.amrox.loc/files/config/journald.conf" -O /etc/systemd/journald.conf
 wget "http://local.amrox.loc/files/configstore-2.5.0-linux-amd64.tar.gz" -O /tmp/configstore-2.5.0-linux-amd64.tar.gz
 tar zxvf /tmp/configstore-2.5.0-linux-amd64.tar.gz -C /usr/local/bin
 rm -rf /tmp/configstore-2.5.0-linux-amd64.tar.gz
@@ -43,6 +43,7 @@ wget -qO /etc/update-motd.d/99-figlet http://local.amrox.loc/files/config/99-fig
 
 echo "export HOSTNAME" >> ~/.bashrc
 
+wget -qO /etc/docker/daemon.json http://local.amrox.loc/files/config/daemon.json
 cat > /etc/docker/daemon.json << EOF
 {
     "default-address-pools":[
@@ -93,6 +94,6 @@ dpkg -i /tmp/libssl1.1_1.1.1f-1ubuntu2_amd64.deb
 chown nagios:nagios -R ~nagios/.ssh
 
 touch /var/log/gc_test.log /var/log/gc_stag.log /var/log/gc_prod.log /var/log/gc_per.log /var/log/gc_stream.log;chown root:adm /var/log/gc_stag.log /var/log/gc_prod.log /var/log/gc_per.log /var/log/gc_stream.log
-
+systemctl disable --now systemd-journald.service systemd-journald-audit.socket systemd-journald-dev-log.socket systemd-journald.socket
 
 #reboot
