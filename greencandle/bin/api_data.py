@@ -9,7 +9,6 @@ import os
 import time
 from pathlib import Path
 import logging
-from datetime import datetime, timedelta
 from collections import defaultdict
 import requests_cache
 from setproctitle import setproctitle
@@ -106,11 +105,9 @@ def main():
     if os.path.exists(f'/var/run/{config.main.base_env}-data-{interval}-{name}'):
         os.remove(f'/var/run/{config.main.base_env}-data-{interval}-{name}')
 
+    RUNNER.prod.loop(interval, True, True, True, 7)
     scheduler = BackgroundScheduler()
 
-    job = scheduler.add_job(func=RUNNER.prod_initial, args=[interval, True, True, 7 ],
-                            trigger='interval', seconds=500,
-                            next_run_time=datetime.now()+timedelta(seconds=10))
     scheduler.add_job(func=RUNNER.prod_loop, args=[interval, True, True, False],
                       trigger="interval", seconds=120, misfire_grace_time=1000)
     scheduler.add_job(func=keepalive, trigger="interval", seconds=120, misfire_grace_time=1000)
@@ -124,9 +121,6 @@ def main():
         scheduler.add_job(func=collect_data, args=[pair], trigger="interval",
                           seconds=60, misfire_grace_time=1000, id=str(seq))
     scheduler.start()
-    time.sleep(30)
-    # initial job only needs to run once - so remove once it has been scheduled and run has begun
-    scheduler.remove_job(job.id)
 
     if float(config.main.logging_level) > 10:
         log = logging.getLogger('werkzeug')
