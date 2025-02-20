@@ -105,7 +105,7 @@ def main():
     if os.path.exists(f'/var/run/{config.main.base_env}-data-{interval}-{name}'):
         os.remove(f'/var/run/{config.main.base_env}-data-{interval}-{name}')
 
-    RUNNER.prod.loop(interval, True, True, True, 7)
+    RUNNER.prod_loop(interval, True, True, True, 7)
     scheduler = BackgroundScheduler()
 
     scheduler.add_job(func=RUNNER.prod_loop, args=[interval, True, True, False],
