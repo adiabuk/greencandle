@@ -377,7 +377,7 @@ class ProdRunner():
                 df2 = self.dataframes[pair].append(pandas.Series(data['recent'][pair]),
                                                    ignore_index=True,
                                                    verify_integrity=True).tail(max_klines)
-                self.dataframes[pair] = df2[-300:]
+                self.dataframes[pair] = df2
                 continue
 
 
@@ -392,7 +392,7 @@ class ProdRunner():
                 df2 = self.dataframes[pair].append(pandas.Series(data['recent'][pair]),
                                                    ignore_index=True,
                                                    verify_integrity=True).tail(max_klines)
-                self.dataframes[pair] = df2[-300:]
+                self.dataframes[pair] = df2
 
             elif self.dataframes[pair].iloc[-1]['openTime'] == \
                     data['recent'][pair]['openTime'] and \
