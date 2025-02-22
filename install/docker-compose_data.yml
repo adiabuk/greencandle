@@ -369,7 +369,7 @@ services:
       - data-base-mysql
       - data-base-redis
     healthcheck:
-      test: find /var/run/ -mmin -2 -name cron 2>&1  | grep -q cron || exit 1
+      test: find /var/run/ -mmin -30 -name cron 2>&1  | grep -q cron || exit 1
       interval: 5m
       timeout: 10s
       retries: 5
@@ -662,7 +662,7 @@ services:
       - CONFIG_ENV=data/be/short/short6/5m
       - DB=true
     healthcheck:
-      test: find /var/local/lock -mmin -2 -name data-be-analyse-5m-short6 2>&1  | grep . || exit 1
+      test: find /var/local/lock -mmin -30 -name data-be-analyse-5m-short6 2>&1  | grep . || exit 1
       start_period: 1h
       interval: 5m
       timeout: 10s
@@ -1938,7 +1938,7 @@ services:
       - CONFIG_ENV=data/be/short/short14/1d
       - DB=true
     healthcheck:
-      test: find /var/local/lock  -mmin -2 -name data-be-analyse-1d-short14 2>&1 |grep . ||exit 1
+      test: find /var/local/lock  -mmin -30 -name data-be-analyse-1d-short14 2>&1 |grep . ||exit 1
       start_period: 2h
       interval: 1h
       timeout: 10s
@@ -1975,7 +1975,7 @@ services:
       - CONFIG_ENV=data/be/long/long14/1d
       - DB=true
     healthcheck:
-      test: find /var/local/lock  -mmin -2 -name data-be-analyse-1d-long14 2>&1 |grep . ||exit 1
+      test: find /var/local/lock  -mmin -30 -name data-be-analyse-1d-long14 2>&1 |grep . ||exit 1
       start_period: 2h
       interval: 1h
       timeout: 10s
@@ -2013,7 +2013,7 @@ services:
       - DB=true
       - REDIS_FORWARD=13
     healthcheck:
-      test: find /var/local/lock  -mmin -2 -name data-be-analyse-1d-short15 2>&1 |grep . ||exit 1
+      test: find /var/local/lock  -mmin -30 -name data-be-analyse-1d-short15 2>&1 |grep . ||exit 1
       start_period: 2h
       interval: 1h
       timeout: 10s
@@ -2051,7 +2051,7 @@ services:
       - DB=true
       - REDIS_FORWARD=13
     healthcheck:
-      test: find /var/local/lock  -mmin -2 -name data-be-analyse-1d-long15 2>&1 |grep . ||exit 1
+      test: find /var/local/lock  -mmin -30 -name data-be-analyse-1d-long15 2>&1 |grep . ||exit 1
       start_period: 2h
       interval: 1h
       timeout: 10s
@@ -2091,7 +2091,7 @@ services:
       - CHECK_REDIS_INTERVAL=1d
       - REDIS_FORWARD=10
     healthcheck:
-      test: find /var/local/lock  -mmin -2 -name data-be-analyse-1h-short16 2>&1 |grep . ||exit 1
+      test: find /var/local/lock  -mmin -30 -name data-be-analyse-1h-short16 2>&1 |grep . ||exit 1
       start_period: 1h
       interval: 30m
       timeout: 10s
@@ -2131,7 +2131,7 @@ services:
       - CHECK_REDIS_INTERVAL=1d
       - REDIS_FORWARD=10
     healthcheck:
-      test: find /var/local/lock  -mmin -2 -name data-be-analyse-1h-long16 2>&1 |grep . ||exit 1
+      test: find /var/local/lock  -mmin -30 -name data-be-analyse-1h-long16 2>&1 |grep . ||exit 1
       start_period: 1h
       interval: 30m
       timeout: 10s
@@ -2170,7 +2170,7 @@ services:
       - CHECK_REDIS_PAIR=10
       - NSCA=True
     healthcheck:
-      test: find /var/local/lock  -mmin -2 -name data-be-analyse-1h-short17 2>&1 |grep . ||exit 1
+      test: find /var/local/lock  -mmin -30 -name data-be-analyse-1h-short17 2>&1 |grep . ||exit 1
       start_period: 1h
       interval: 30m
       timeout: 10s
@@ -2209,7 +2209,7 @@ services:
       - CHECK_REDIS_PAIR=10
       - NSCA=True
     healthcheck:
-      test: find /var/local/lock  -mmin -2 -name data-be-analyse-1h-long17 2>&1 |grep . ||exit 1
+      test: find /var/local/lock  -mmin -30 -name data-be-analyse-1h-long17 2>&1 |grep . ||exit 1
       start_period: 1h
       interval: 5m
       timeout: 30m
