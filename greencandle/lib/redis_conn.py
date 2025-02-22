@@ -401,7 +401,7 @@ class Redis():
             data = json.loads(byte.decode("UTF-8"))[candle_type]
             current_price = data['close']
         except KeyError:
-            self.logger.critical("No Data for item %s %s", name, item)
+            self.logger.critical("No Data for item %s %s %s", name, item, candle_type)
             return None, None, None
         return current_price, item, data
 
@@ -651,7 +651,7 @@ class Redis():
         except Exception:  # hack for unit tests still using pickled zlib objects
             return pickle.loads(zlib.decompress(raw[-1]))
 
-    def get_indicators(self, pair, interval, num=7):
+    def get_indicators(self, pair, interval, num=7, get_ha=False):
         """
         get indicator data
         """
@@ -671,7 +671,7 @@ class Redis():
             ohlc = self.get_current(name, items[i])[-1]
             for item in ['open', 'high', 'low', 'close', 'volume']:
                 ohlc[item] = float(ohlc[item])
-            ha_raw = self.get_current(name, items[i], 'HA_0')[-1]
+            ha_raw = self.get_current(name, items[i], 'HA_0')[-1] if get_ha else False
             if ha_raw:
                 ha_ohlc={}
                 for item in ['open', 'high', 'low', 'close']:
