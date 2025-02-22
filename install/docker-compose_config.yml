@@ -141,7 +141,7 @@ services:
     container_name: config-be-logwatch
     hostname: config-be-logwatch
     image: amrox/greencandle:${TAG}
-    mem_limit: 1G
+    mem_limit: 4G
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh /usr/local/bin/logwatch
     environment:
