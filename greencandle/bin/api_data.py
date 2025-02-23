@@ -3,24 +3,15 @@
 """
 Collect OHLC and strategy data for later analysis
 """
-import gc
-import sys
-import os
-import time
 from pathlib import Path
 import logging
 from collections import defaultdict
-import requests_cache
 from setproctitle import setproctitle
-from flask import Flask, jsonify
-from apscheduler.schedulers.background import BackgroundScheduler
+from flask import Flask, request, Response
 from greencandle.lib import config
 from greencandle.lib.run import ProdRunner
-from greencandle.lib.redis_conn import Redis
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.common import arg_decorator
-from greencandle.lib.aggregate_data  import collect_agg_data
-from greencandle.lib.web import decorator_timer, push_prom_data
 
 config.create_config()
 LOGGER = get_logger(__name__)
@@ -30,41 +21,52 @@ GET_EXCEPTIONS = exception_catcher((Exception))
 RUNNER = ProdRunner()
 APP = Flask(__name__, template_folder="/var/www/html", static_url_path='/',
             static_folder='/var/www/html')
-DATA = defaultdict(dict)
-SESSION = requests_cache.CachedSession('requests_cache',
-                                       expire_after=int(config.main.check_interval))
+DATA = defaultdict(lambda: defaultdict(dict))
+
+@APP.route('/set_data', methods=["POST"])
+def set_data():
+    """
+    Update data
+    """
+    payload = request.json
+    print(payload)
+    data_type = payload['type']
+    pair = payload['pair']
+    interval = payload['interval']
+    data = payload['data']
+
+    DATA[pair][interval][data_type] = data
+    return Response(status=200)
 
 @APP.route('/get_data', methods=["GET"])
-def get_all_data():
+def get_data():
     """
-    return all data for current interval/scope
+    Retrieve data
     """
-    return jsonify(DATA)
-
-def get_obj_size():
-    """
-    Get size of DATA object for prometheus
-    """
-    name = config.main.name
-    size = sys.getsizeof(DATA)
-    push_prom_data(f'{name}_get_size_data', size)
-
-@decorator_timer
-def collect_data(pair):
-    """
-    Collect all available data for all pairs
-    """
-    redis = Redis()
-    interval = config.main.interval
-    DATA[pair]['res'] = redis.get_indicators(pair, interval, num=3)[0]
-    DATA[pair]['agg'] = redis.get_agg_data(pair, interval)
-    DATA[pair]['sent'] = redis.get_sentiment(pair, interval)
+    payload = request.json
+    pair = payload['pair']
+    data_type = payload['type']
+    interval = payload['interval']
+    print("xxx", pair, data_type, interval)
+    #return DATA
+    try:
+        return {"output": DATA[pair][interval][data_type]}
+    except KeyError:
+        return {}
 
 def keepalive():
     """
     Periodically touch file for docker healthcheck
     """
     Path(f'/var/local/lock/gc_get_{config.main.interval}.lock').touch()
+
+@APP.route('/healthcheck', methods=["GET"])
+def healthcheck():
+    """
+    Docker healthcheck
+    Return 200
+    """
+    return Response(status=200)
 
 @GET_EXCEPTIONS
 @arg_decorator
@@ -85,48 +87,12 @@ def main():
     name = config.main.name.split('-')[-1]
     Path(f'/var/run/{config.main.base_env}-data-{interval}-{name}').touch()
 
-    local_pairs = set(config.main.pairs.split())
-    while True:
-        # Don't start analysing until all pairs are available
-        pairs_request = SESSION.get(f"http://stream/{config.main.interval}/all", timeout=10)
-        if not pairs_request.ok:
-            LOGGER.critical("unable to fetch data from streaming server")
-        data = pairs_request.json()
-        remote_pairs = set(data['recent'].keys())
-        if local_pairs.issubset(remote_pairs):
-            # we're done
-            LOGGER.info("all pairs available from stream server, continuing")
-            break
-        # not enough pairs,
-        LOGGER.info("Waiting for more pairs to become available local:%s, remote:%s",
-                    len(local_pairs), len(remote_pairs))
-        time.sleep(5)
 
-
-    RUNNER.prod_initial(interval, test=False, first_run=True, no_of_runs=7)
-    if os.path.exists(f'/var/run/{config.main.base_env}-data-{interval}-{name}'):
-        os.remove(f'/var/run/{config.main.base_env}-data-{interval}-{name}')
-    scheduler = BackgroundScheduler()
-
-    scheduler.add_job(func=RUNNER.prod_loop, args=[interval, True, True, False],
-                      trigger="interval", seconds=120, misfire_grace_time=1000)
-    scheduler.add_job(func=keepalive, trigger="interval", seconds=120, misfire_grace_time=1000)
-    scheduler.add_job(func=collect_agg_data, args=[interval], trigger="interval",
-                      seconds=400, misfire_grace_time=1000)
-    scheduler.add_job(get_obj_size, trigger="interval", seconds=300, misfire_grace_time=1000)
-    scheduler.add_job(gc.collect, trigger="interval", seconds=300, misfire_grace_time=1000)
-
-
-    for seq, pair in enumerate(PAIRS):
-        scheduler.add_job(func=collect_data, args=[pair], trigger="interval",
-                          seconds=60, misfire_grace_time=1000, id=str(seq))
-    scheduler.start()
-
-    if float(config.main.logging_level) > 10:
-        log = logging.getLogger('werkzeug')
-        log.setLevel(logging.ERROR)
-        log.disabled = True
-    APP.run(debug=False, host='0.0.0.0', port=6000, threaded=True)
+    #if float(config.main.logging_level) > 10:
+    #    log = logging.getLogger('werkzeug')
+    #    log.setLevel(logging.ERROR)
+    #    log.disabled = True
+    APP.run(debug=True, host='0.0.0.0', port=6000, threaded=True)
 
 if __name__ == '__main__':
     main()
