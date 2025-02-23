@@ -684,7 +684,7 @@ class Redis():
         payload={'type':'res', 'pair':pair, 'interval':interval, 'data':res}
         requests.post('http://datavault:6000/set_data', timeout=10,
                       headers={'Content-Type': 'application/json'},
-                      data=json.dumps(res))
+                      data=json.dumps(payload))
         return res, items
 
     def get_sentiment(self, pair, interval):
@@ -701,7 +701,7 @@ class Redis():
         payload={'type':'sent', 'pair':pair, 'interval':interval, 'data':sent}
         requests.post('http://datavault:6000/set_data', timeout=10,
                       headers={'Content-Type': 'application/json'},
-                      data=json.dumps(res))
+                      data=json.dumps(payload))
         return sent
 
     def get_agg_data(self, pair, interval):
@@ -717,7 +717,7 @@ class Redis():
         payload={'type':'agg', 'pair':pair, 'interval':interval, 'data':agg}
         requests.post('http://datavault:6000/set_data', timeout=10,
                       headers={'Content-Type': 'application/json'},
-                      data=json.dumps(res))
+                      data=json.dumps(payload))
         return agg
 
     @GET_EXCEPTIONS
