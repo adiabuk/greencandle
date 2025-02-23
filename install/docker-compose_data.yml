@@ -600,6 +600,40 @@ services:
       - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
+  data-fe-api-data:
+    container_name: data-fe-api-data
+    hostname: data-fe-api-data
+    environment:
+      - CONFIG_ENV=data
+      - SECRET_KEY=$SECRET_KEY
+    logging:
+      driver: syslog
+      options:
+        tag: "{{.Name}}"
+        syslog-facility: local3
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2G
+    pull_policy: always
+    restart: unless-stopped
+    entrypoint: /docker-entrypoint.sh api_data
+    links:
+      - data-base-redis:redis
+    ports:
+      - 6000:6000
+    depends_on:
+      - data-base-redis
+    healthcheck:
+      test: curl -Isf http://127.1:6000/dash/healthcheck
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /dev/log:/dev/log
+      - /root/.aws:/root/.aws
+      - /var/run:/var/run
+      - /root/.bash_history:/root/.bash_history
+
   data-be-analyse-extra:
     container_name: data-be-analyse-extra
     hostname: data-be-analyse-extra

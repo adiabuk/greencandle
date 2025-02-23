@@ -11,6 +11,7 @@ import zlib
 import pickle
 from datetime import datetime, timedelta
 import redis
+import requests
 from str2bool import str2bool
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.logger import get_logger, exception_catcher
@@ -680,6 +681,10 @@ class Redis():
 
             datax.update(ohlc)
             res.append(datax)
+        payload={'type':'res', 'pair':pair, 'interval':interval, 'data':res}
+        requests.post('http://datavault:6000/set_data', timeout=10,
+                      headers={'Content-Type': 'application/json'},
+                      data=json.dumps(res))
         return res, items
 
     def get_sentiment(self, pair, interval):
@@ -692,6 +697,11 @@ class Redis():
         sent = [x.decode() for x in raw_sent]
         del redis15
         sent.reverse()
+
+        payload={'type':'sent', 'pair':pair, 'interval':interval, 'data':sent}
+        requests.post('http://datavault:6000/set_data', timeout=10,
+                      headers={'Content-Type': 'application/json'},
+                      data=json.dumps(res))
         return sent
 
     def get_agg_data(self, pair, interval):
@@ -703,6 +713,11 @@ class Redis():
         raw = redis3.conn.hgetall(f'{pair}:{interval}')
         agg = AttributeDict({k.decode():get_float(v.decode()) for k, v in raw.items()})
         del redis3
+
+        payload={'type':'agg', 'pair':pair, 'interval':interval, 'data':agg}
+        requests.post('http://datavault:6000/set_data', timeout=10,
+                      headers={'Content-Type': 'application/json'},
+                      data=json.dumps(res))
         return agg
 
     @GET_EXCEPTIONS
