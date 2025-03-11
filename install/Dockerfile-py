@@ -16,9 +16,9 @@ RUN apt-get update && \
     cd /tmp/ta-lib; ./configure --prefix=/usr; make; make install && \
     git clone -b dev https://github.com/adiabuk/greencandle.git /tmp/greencandle && \
     pip install -r /tmp/greencandle/requirements.txt && \
-    wget http://local.amrox.loc/files/talib.tgz -O /tmp/talib.tgz && \
-    tar zxvf /tmp/talib.tgz -C /tmp && \
-    cd /tmp/TA-Lib-ta-lib-python-5974b7f/ && python setup.py install && \
+    wget http://local.amrox.loc/files/TA_Lib-0.4.36.tar.gz -O /tmp/TA_Lib-0.4.36.tar.gz && \
+    tar zxvf /tmp/TA_Lib-0.4.36.tar.gz -C /tmp && \
+    cd /tmp/ta-lib-python-TA_Lib-0.4.36/ && python setup.py install && \
     apt purge -y gcc g++-8 libx265-165 mercurial-common && apt -y autoremove && apt autoclean && \
     apt-get clean; apt-get autoclean; rm -rf /var/lib/apt/lists/* && \
     mkdir -p /opt/output && cd / && rm -rf /tmp/*

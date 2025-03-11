@@ -34,9 +34,9 @@ RUN wget "http://local.amrox.loc/files/configstore-2.5.0-linux-amd64.tar.gz" -O 
     tar zxvf /tmp/ta-lib-0.4.0-src.tar.gz -C /tmp && \
     cd /tmp/ta-lib; /tmp/ta-lib/configure --prefix=/usr &&  make && make install; cd - && rm -rf /tmp/ta-lib && \
     pip install wheel numpy==1.25.0 setuptools-rust setuptools==59.8.0 pip==9.0.1 pytest==6.0.1 gitpython werkzeug==2.2.3 Flask==2.2.5 importlib-metadata==4.12.0 ccxt send_nsca3==0.1.6.0 && \
-wget http://local.amrox.loc/files/talib.tgz -O /tmp/talib.tgz && \
-    tar zxvf /tmp/talib.tgz -C /tmp && \
-    cd /tmp/TA-Lib-ta-lib-python-5974b7f/ && python setup.py install && \
+wget http://local.amrox.loc/files/TA_Lib-0.4.36.tar.gz -O /tmp/TA_Lib-0.4.36.tar.gz && \
+    tar zxvf /tmp/TA_Lib-0.4.36.tar.gz -C /tmp && \
+    cd /tmp/ta-lib-python-TA_Lib-0.4.36/ && python setup.py install && \
     git clone https://github.com/adiabuk/greencandle.git -b $GIT_BRANCH ~jenkins/greencandle && ln -s ~jenkins/greencandle /srv/greencandle && \
     cd /srv/greencandle; python setup.py install && \
     echo "jenkins ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
