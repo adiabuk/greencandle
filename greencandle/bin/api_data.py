@@ -8,7 +8,9 @@ import logging
 from collections import defaultdict
 from setproctitle import setproctitle
 from flask import Flask, request, Response
+from apscheduler.schedulers.background import BackgroundScheduler
 from greencandle.lib import config
+from greencandle.lib.redis_conn import Redis
 from greencandle.lib.run import ProdRunner
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.common import arg_decorator
@@ -23,20 +25,20 @@ APP = Flask(__name__, template_folder="/var/www/html", static_url_path='/',
             static_folder='/var/www/html')
 DATA = defaultdict(lambda: defaultdict(dict))
 
-@APP.route('/set_data', methods=["POST"])
+#@APP.route('/set_data', methods=["POST"])
 def set_data():
     """
     Update data
     """
-    payload = request.json
-    print(payload)
-    data_type = payload['type']
-    pair = payload['pair']
-    interval = payload['interval']
-    data = payload['data']
+    redis = Redis()
+    interval = config.main.interval
+    for pair in PAIRS:
+        DATA[pair]['res'] = redis.get_indicators(pair, interval, num=7, get_ha=False)[0]
+        DATA[pair]['agg'] = redis.get_agg(pair, interval)
+        DATA[pair]['sent'] = redis.get_sent(pair, interval)
 
-    DATA[pair][interval][data_type] = data
     return Response(status=200)
+
 
 @APP.route('/get_data', methods=["GET"])
 def get_data():
@@ -92,6 +94,9 @@ def main():
     #    log = logging.getLogger('werkzeug')
     #    log.setLevel(logging.ERROR)
     #    log.disabled = True
+    scheduler = BackgroundScheduler() # Create Scheduler
+    scheduler.add_job(func=get_data, trigger="interval", minutes=3)
+
     APP.run(debug=True, host='0.0.0.0', port=6000, threaded=True)
 
 if __name__ == '__main__':

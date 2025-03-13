@@ -57,42 +57,6 @@ services:
       - /var/run:/var/run
       - /root/.bash_history:/root/.bash_history
 
-  data-be-get_12h:
-    container_name: data-be-get_12h
-    hostname: data-be-get_12h
-    image: amrox/greencandle:${TAG}
-    mem_limit: 3G
-    pull_policy: always
-    restart: unless-stopped
-    ports:
-      - 6007:6000
-    entrypoint: /docker-entrypoint.sh get_data
-    logging:
-      driver: syslog
-      options:
-        tag: "{{.Name}}"
-        syslog-facility: local3
-    links:
-      - data-base-mysql:mysql
-      - data-base-redis:redis
-    depends_on:
-      - data-base-mysql
-      - data-base-redis
-    environment:
-      - CONFIG_ENV=data/be/get_data/12h
-      - DB=true
-    healthcheck:
-      start_period: 30m
-      test: find /var/local/lock/gc_get_12h.lock -mmin -3 || exit 1
-      interval: 5m
-      timeout: 10s
-      retries: 5
-    volumes:
-      - /data:/data
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run/:/var/run
-
   data-be-get_1d:
     container_name: data-be-get_1d
     hostname: data-be-get_1d
@@ -129,15 +93,15 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
-  data-be-get_30m:
-    container_name: data-be-get_30m
-    hostname: data-be-get_30m
+  data-be-get_12h:
+    container_name: data-be-get_12h
+    hostname: data-be-get_12h
     image: amrox/greencandle:${TAG}
     mem_limit: 3G
     pull_policy: always
     restart: unless-stopped
     ports:
-      - 6005:6000
+      - 6007:6000
     entrypoint: /docker-entrypoint.sh get_data
     logging:
       driver: syslog
@@ -151,45 +115,11 @@ services:
       - data-base-mysql
       - data-base-redis
     environment:
-      - CONFIG_ENV=data/be/get_data/30m
+      - CONFIG_ENV=data/be/get_data/12h
       - DB=true
     healthcheck:
-      test: find /var/local/lock/gc_get_30m.lock -mmin -3 || exit 1
-      interval: 5m
-      timeout: 10s
-      retries: 5
-    volumes:
-      - /data:/data
-      - /root/.aws:/root/.aws
-      - /dev/log:/dev/log
-      - /var/run/:/var/run
-
-  data-be-get_15m:
-    container_name: data-be-get_15m
-    hostname: data-be-get_15m
-    image: amrox/greencandle:${TAG}
-    mem_limit: 3G
-    pull_policy: always
-    restart: unless-stopped
-    ports:
-      - 6004:6000
-    entrypoint: /docker-entrypoint.sh get_data
-    logging:
-      driver: syslog
-      options:
-        tag: "{{.Name}}"
-        syslog-facility: local3
-    links:
-      - data-base-mysql:mysql
-      - data-base-redis:redis
-    depends_on:
-      - data-base-mysql
-      - data-base-redis
-    environment:
-      - CONFIG_ENV=data/be/get_data/15m
-      - DB=true
-    healthcheck:
-      test: find /var/local/lock/gc_get_15m.lock -mmin -3 || exit 1
+      start_period: 30m
+      test: find /var/local/lock/gc_get_12h.lock -mmin -3 || exit 1
       interval: 5m
       timeout: 10s
       retries: 5
@@ -270,6 +200,76 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
+  data-be-get_30m:
+    container_name: data-be-get_30m
+    hostname: data-be-get_30m
+    image: amrox/greencandle:${TAG}
+    mem_limit: 3G
+    pull_policy: always
+    restart: unless-stopped
+    ports:
+      - 6005:6000
+    entrypoint: /docker-entrypoint.sh get_data
+    logging:
+      driver: syslog
+      options:
+        tag: "{{.Name}}"
+        syslog-facility: local3
+    links:
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+    environment:
+      - CONFIG_ENV=data/be/get_data/30m
+      - DB=true
+    healthcheck:
+      test: find /var/local/lock/gc_get_30m.lock -mmin -3 || exit 1
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-get_15m:
+    container_name: data-be-get_15m
+    hostname: data-be-get_15m
+    image: amrox/greencandle:${TAG}
+    mem_limit: 3G
+    pull_policy: always
+    restart: unless-stopped
+    ports:
+      - 6004:6000
+    entrypoint: /docker-entrypoint.sh get_data
+    logging:
+      driver: syslog
+      options:
+        tag: "{{.Name}}"
+        syslog-facility: local3
+    links:
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+    environment:
+      - CONFIG_ENV=data/be/get_data/15m
+      - DB=true
+    healthcheck:
+      test: find /var/local/lock/gc_get_15m.lock -mmin -3 || exit 1
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
   data-be-get_5m:
     container_name: data-be-get_5m
     hostname: data-be-get_5m
@@ -296,6 +296,254 @@ services:
       - DB=true
     healthcheck:
       test: find /var/local/lock/gc_get_5m.lock -mmin -3 || exit 1
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-api-data_1d:
+    container_name: data-be-api-data_1d
+    hostname: data-be-api-data_1d
+    image: amrox/greencandle:${TAG}
+    mem_limit: 3G
+    pull_policy: always
+    restart: unless-stopped
+    ports:
+      - 6007:6000
+    entrypoint: /docker-entrypoint.sh api_data
+    logging:
+      driver: syslog
+      options:
+        tag: "{{.Name}}"
+        syslog-facility: local3
+    links:
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+    environment:
+      - CONFIG_ENV=data/be/api_data/1d
+      - DB=true
+    healthcheck:
+      start_period: 30m
+      test: curl -Isf http://127.1:6000/healthcheck
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-api-data_12h:
+    container_name: data-be-api-data_12h
+    hostname: data-be-api-data_12h
+    image: amrox/greencandle:${TAG}
+    mem_limit: 3G
+    pull_policy: always
+    restart: unless-stopped
+    ports:
+      - 6007:6000
+    entrypoint: /docker-entrypoint.sh api_data
+    logging:
+      driver: syslog
+      options:
+        tag: "{{.Name}}"
+        syslog-facility: local3
+    links:
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+    environment:
+      - CONFIG_ENV=data/be/api_data/12h
+      - DB=true
+    healthcheck:
+      start_period: 30m
+      test: curl -Isf http://127.1:6000/healthcheck
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-api-data_4h:
+    container_name: data-be-api-data_4h
+    hostname: data-be-api-data_4h
+    image: amrox/greencandle:${TAG}
+    mem_limit: 3G
+    pull_policy: always
+    restart: unless-stopped
+    ports:
+      - 6005:6000
+    entrypoint: /docker-entrypoint.sh api_data
+    logging:
+      driver: syslog
+      options:
+        tag: "{{.Name}}"
+        syslog-facility: local3
+    links:
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+    environment:
+      - CONFIG_ENV=data/be/api_data/4h
+      - DB=true
+    healthcheck:
+      start_period: 30m
+      test: curl -Isf http://127.1:6000/healthcheck
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-api-data_1h:
+    container_name: data-be-api-data_1h
+    hostname: data-be-api-data_1h
+    image: amrox/greencandle:${TAG}
+    mem_limit: 3G
+    pull_policy: always
+    restart: unless-stopped
+    ports:
+      - 6004:6000
+    entrypoint: /docker-entrypoint.sh api_data
+    logging:
+      driver: syslog
+      options:
+        tag: "{{.Name}}"
+        syslog-facility: local3
+    links:
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+    environment:
+      - CONFIG_ENV=data/be/api_data/1h
+      - DB=true
+    healthcheck:
+      test: curl -Isf http://127.1:6000/healthcheck
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-api-data_30m:
+    container_name: data-be-api-data_30m
+    hostname: data-be-api-data_30m
+    image: amrox/greencandle:${TAG}
+    mem_limit: 3G
+    pull_policy: always
+    restart: unless-stopped
+    ports:
+      - 6003:6000
+    entrypoint: /docker-entrypoint.sh api_data
+    logging:
+      driver: syslog
+      options:
+        tag: "{{.Name}}"
+        syslog-facility: local3
+    links:
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+    environment:
+      - CONFIG_ENV=data/be/api_data/30m
+      - DB=true
+    healthcheck:
+      test: curl -Isf http://127.1:6000/healthcheck
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-api-data_15m:
+    container_name: data-be-api-data_15m
+    hostname: data-be-api-data_15m
+    image: amrox/greencandle:${TAG}
+    mem_limit: 3G
+    pull_policy: always
+    restart: unless-stopped
+    ports:
+      - 6002:6000
+    entrypoint: /docker-entrypoint.sh api_data
+    logging:
+      driver: syslog
+      options:
+        tag: "{{.Name}}"
+        syslog-facility: local3
+    links:
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+    environment:
+      - CONFIG_ENV=data/be/api_data/15m
+      - DB=true
+    healthcheck:
+      test: curl -Isf http://127.1:6000/healthcheck
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-api-data_5m:
+    container_name: data-be-api-data_5m
+    hostname: data-be-api-data_5m
+    image: amrox/greencandle:${TAG}
+    mem_limit: 3G
+    pull_policy: always
+    restart: unless-stopped
+    ports:
+      - 6001:6000
+    entrypoint: /docker-entrypoint.sh api_data
+    logging:
+      driver: syslog
+      options:
+        tag: "{{.Name}}"
+        syslog-facility: local3
+    links:
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+    environment:
+      - CONFIG_ENV=data/be/api_data/5m
+      - DB=true
+    healthcheck:
+      test: curl -Isf http://127.1:6000/healthcheck
       interval: 5m
       timeout: 10s
       retries: 5
@@ -686,6 +934,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_5m:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -723,6 +972,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_5m:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -760,6 +1010,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_15m:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -797,6 +1048,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_30m:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -834,6 +1086,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_1h:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -871,6 +1124,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_1h:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -908,6 +1162,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_5m:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -946,6 +1201,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_15m:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -984,6 +1240,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_1d:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -1021,6 +1278,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_1d:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -1058,6 +1316,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_12h:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -1095,6 +1354,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_12h:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -1132,6 +1392,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_4h:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -1169,6 +1430,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_4h:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -1206,6 +1468,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_30m:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -1244,6 +1507,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_1h:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -1282,6 +1546,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_5m:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -1320,6 +1585,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_15m:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -1358,6 +1624,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_30m:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -1396,6 +1663,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_1h:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -1434,6 +1702,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_5m:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -1471,6 +1740,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_1h:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -1508,6 +1778,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_1h:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -1545,6 +1816,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_15m:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -1582,6 +1854,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_15m:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -1619,6 +1892,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_30m:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -1656,6 +1930,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_30m:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -1693,6 +1968,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_4h:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -1730,6 +2006,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_1h:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -1770,6 +2047,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_1h:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -1810,6 +2088,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_1h:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -1848,6 +2127,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_1h:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -1886,6 +2166,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_5m:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -1924,6 +2205,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_5m:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -1962,6 +2244,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_1d:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -1999,6 +2282,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_1d:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -2036,6 +2320,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_1d:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -2074,6 +2359,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_1d:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -2112,6 +2398,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_1h:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -2152,6 +2439,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_1h:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -2192,6 +2480,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_1h:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -2231,6 +2520,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_1h:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -2270,6 +2560,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_5m:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -2307,6 +2598,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_15m:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -2345,6 +2637,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_1d:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -2382,6 +2675,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_1d:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -2419,6 +2713,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_12h:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -2456,6 +2751,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_12h:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -2493,6 +2789,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_4h:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -2530,6 +2827,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_4h:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -2567,6 +2865,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_30m:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -2604,6 +2903,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_1h:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -2641,6 +2941,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_5m:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -2678,6 +2979,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_15m:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -2716,6 +3018,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_30m:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:
@@ -2753,6 +3056,7 @@ services:
         syslog-facility: local3
     links:
       - data-be-api-router:router
+      - data-be-api-data_1h:data
       - data-base-mysql:mysql
       - data-base-redis:redis
     depends_on:

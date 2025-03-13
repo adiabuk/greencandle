@@ -22,32 +22,29 @@ class TestStopMethods(unittest.TestCase):
         """
 
         config_env = 'unit/scalp'
-        os.system("configstore package process_templates {} /etc".format(config_env))
+        os.system(f"configstore package process_templates {config_env} /etc")
         config.create_config()
         redis = Redis(test_data=True, db=2)
 
         # current_high <= subperc(trailing_perc, high_price)
-        result = redis._Redis__get_trailing_stop(current_price=100, high_price=500,
-                                                 low_price=0, current_low=0,
-                                                 current_high=2, open_price=400)
+        result = redis._Redis__get_trailing_stop(high_price=500, low_price=0,
+                                                 ohlc=(400, 2, 0, 100))
         self.assertTrue(result)
 
         # current_high <=  subperc(trailing_perc, high_price)
-        result = redis._Redis__get_trailing_stop(current_price=1000, high_price=500,
-                                                 low_price=0, current_low=0,
-                                                 current_high=2000, open_price=4000)
+        result = redis._Redis__get_trailing_stop(high_price=500, low_price=0,
+                                                 ohlc=(4000, 2000,0, 1000))
+
         self.assertFalse(result)
 
         # current_high <=  subperc(trailing_perc, high_price)
-        result = redis._Redis__get_trailing_stop(current_price=90, high_price=50000,
-                                                 low_price=0, current_low=0,
-                                                 current_high=2000, open_price=4000)
+        result = redis._Redis__get_trailing_stop(high_price=50000, low_price=0,
+                                                 ohlc=(4000, 2000, 0, 90))
         self.assertTrue(result)
 
         # current_price <=  subperc(trailing_perc, high_price)
-        result = redis._Redis__get_trailing_stop(current_price=90, high_price='',
-                                                 low_price=0, current_low=0,
-                                                 current_high=2000, open_price=4000)
+        result = redis._Redis__get_trailing_stop(high_price='', low_price=0,
+                                                 ohlc=(4000,2000,0,90))
         print(result) # False
         self.assertFalse(result)
 
@@ -55,34 +52,30 @@ class TestStopMethods(unittest.TestCase):
         redis = Redis(test_data=False, db=2)
         # current_price <=  subperc(trailing_perc, high_price)
         # and current_price > addperc(trailing_perc, high_price)
-        result = redis._Redis__get_trailing_stop(current_price=90, high_price=500,
-                                                 low_price=0, current_low=0,
-                                                 current_high=2000, open_price=4000)
+        result = redis._Redis__get_trailing_stop(high_price=500, low_price=0,
+                                                 ohlc=(4000,200,0,90))
         self.assertFalse(result)
 
         # current_price <=  subperc(trailing_perc, high_price)
         # and current_price > addperc(trailing_perc, high_price)
-        result = redis._Redis__get_trailing_stop(current_price=3000, high_price=500,
-                                                 low_price=0, current_low=0,
-                                                 current_high=2000, open_price=4000)
+        result = redis._Redis__get_trailing_stop(high_price=500, low_price=0,
+                                                 ohlc=(4000,2000,0,3000))
         self.assertFalse(result)
 
         # current_price <=  subperc(trailing_perc, high_price) 498 <= (500-0.1%) ~499.5
         # and current_price > addperc(trailing_start, open_price)
-        result = redis._Redis__get_trailing_stop(current_price=498, high_price=500,
-                                                 low_price=0, current_low=0,
-                                                 current_high=4000, open_price=200)
+        result = redis._Redis__get_trailing_stop(high_price=500, low_price=0,
+                                                 ohlc=(200,4000,0,498))
         self.assertTrue(result)
 
         # current_price <=  subperc(trailing_perc, high_price) 498 <= (500-0.1%) ~499.5
         # and current_price > addperc(trailing_start, open_price)
-        result = redis._Redis__get_trailing_stop(current_price=498, high_price=500,
-                                                 low_price=0, current_low=0,
-                                                 current_high=4000, open_price=300)
+        result = redis._Redis__get_trailing_stop(high_price=500, low_price=0,
+                                                 ohlc=(300,4000,0,498))
         self.assertTrue(result)
 
         config_env = 'unit/scalp/alt'
-        os.system("configstore package process_templates {} /etc".format(config_env))
+        os.system(f"configstore package process_templates {config_env} /etc")
 
         config.create_config()
         #changes  check to current_high (from current_price)
@@ -90,25 +83,22 @@ class TestStopMethods(unittest.TestCase):
 
         # current_high <=  subperc(trailing_perc, high_price)
         # and current_price > addperc(trailing_start, open_price)
-        result = redis._Redis__get_trailing_stop(current_price=498, high_price=500,
-                                                 low_price=0, current_low=0,
-                                                 current_high=4000, open_price=300)
+        result = redis._Redis__get_trailing_stop(high_price=500, low_price=0,
+                                                 ohlc=(300,4000,0,498))
         self.assertFalse(result)
 
         # current_high <=  subperc(trailing_perc, high_price)
         # and current_price > addperc(trailing_start, open_price)
-        result = redis._Redis__get_trailing_stop(current_price=498, high_price=600,
-                                                 low_price=0, current_low=0,
-                                                 current_high=4000, open_price=300)
+        result = redis._Redis__get_trailing_stop(high_price=600, low_price=0,
+                                                 ohlc=(300,4000,0,498))
         self.assertFalse(result)
         #######
 
         #######
         # current_high <=  subperc(trailing_perc, high_price)
         # and current_price > addperc(trailing_start, open_price)
-        result = redis._Redis__get_trailing_stop(current_price=498, high_price=4000,
-                                                 low_price=0, current_low=0,
-                                                 current_high=600, open_price=300)
+        result = redis._Redis__get_trailing_stop(high_price=4000, low_price=0,
+                                                 ohlc=(300,600,0,498))
         self.assertTrue(result)
 
     def xtest_long_stop_loss(self):
@@ -117,7 +107,7 @@ class TestStopMethods(unittest.TestCase):
         """
 
         config_env = 'unit/scalp'
-        os.system("configstore package process_templates {} /etc".format(config_env))
+        os.system(f"configstore package process_templates {config_env} /etc")
         config.create_config()
         redis = Redis(test_data=True, db=2)
 
@@ -158,7 +148,7 @@ class TestStopMethods(unittest.TestCase):
         """
 
         config_env = 'unit/scalp'
-        os.system("configstore package process_templates {} /etc".format(config_env))
+        os.system(f"configstore package process_templates {config_env} /etc")
         config.create_config()
         redis = Redis(test_data=True, db=2)
 
@@ -178,7 +168,7 @@ class TestStopMethods(unittest.TestCase):
         self.assertFalse(result)
 
         config_env = 'unit/scalp/alt'
-        os.system("configstore package process_templates {} /etc".format(config_env))
+        os.system(f"configstore package process_templates {config_env} /etc")
         config.create_config()
         redis = Redis(test_data=False, db=2)
         # turn off immediate take profit- changes check to current_price

@@ -1,6 +1,4 @@
-#pylint: disable=eval-used,no-member,too-many-locals,too-many-branches,too-many-statements
-#pylint: disable=broad-except,too-many-arguments,invalid-name,unused-variable
-
+#pylint: disable=no-member,unused-variable,broad-exception-caught,unsubscriptable-object,eval-used
 """
 Store and retrieve items from redis
 """
@@ -9,9 +7,10 @@ import json
 import time
 import zlib
 import pickle
+#xpylint: disable=eval-used,no-member,too-many-locals,too-many-branches,too-many-statements
+#xpylint: disable=broad-except,too-many-arguments,invalid-name,unused-variable
 from datetime import datetime, timedelta
 import redis
-import requests
 from str2bool import str2bool
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.logger import get_logger, exception_catcher
@@ -454,8 +453,10 @@ class Redis():
 
         take_profit_rule = self.__get_take_profit(current_price, current_high, open_price, pair)
 
-        trailing_stop = self.__get_trailing_stop(current_price, high_price, low_price, current_high,
-                                                 current_low, open_price)
+        trailing_stop = self.__get_trailing_stop(low_price, high_price,  ohlc=(open_price,
+                                                                          current_high,current_low,
+                                                                          current_price))
+
 
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
 
@@ -494,12 +495,14 @@ class Redis():
 
         return (result, event, current_time, current_price)
 
-    def __get_trailing_stop(self, current_price, high_price, low_price, current_high, current_low,
-                            open_price):
+    def __get_trailing_stop(self, low_price, high_price, ohlc=None):
+
         """
         Check if we have reached trailing stop loss
         return True/False
         """
+
+        open_price, current_high, current_low, current_price = ohlc
         trailing_perc = float(config.main.trailing_stop_loss_perc)
         immediate = str2bool(config.main.immediate_trailing_stop)
 
@@ -681,10 +684,7 @@ class Redis():
 
             datax.update(ohlc)
             res.append(datax)
-        payload={'type':'res', 'pair':pair, 'interval':interval, 'data':res}
-        requests.post('http://datavault:6000/set_data', timeout=10,
-                      headers={'Content-Type': 'application/json'},
-                      data=json.dumps(payload))
+
         return res, items
 
     def get_sentiment(self, pair, interval):
@@ -698,10 +698,6 @@ class Redis():
         del redis15
         sent.reverse()
 
-        payload={'type':'sent', 'pair':pair, 'interval':interval, 'data':sent}
-        requests.post('http://datavault:6000/set_data', timeout=10,
-                      headers={'Content-Type': 'application/json'},
-                      data=json.dumps(payload))
         return sent
 
     def get_agg_data(self, pair, interval):
@@ -715,9 +711,6 @@ class Redis():
         del redis3
 
         payload={'type':'agg', 'pair':pair, 'interval':interval, 'data':agg}
-        requests.post('http://datavault:6000/set_data', timeout=10,
-                      headers={'Content-Type': 'application/json'},
-                      data=json.dumps(payload))
         return agg
 
     @GET_EXCEPTIONS
