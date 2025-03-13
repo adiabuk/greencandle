@@ -22,7 +22,7 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docke
 
 # Setup local env
 apt-get -y update
-apt-get -y install wget rsyslog sudo dhcpcd ntpdate screen  jq ntp awscli vim fuse git pkg-config bsdmainutils reptyr psmisc lsof nmap command-not-found packagekit-command-not-found libxml2-utils ipmitool net-tools htop atop iotop dstat mosh ethtool mosh figlet lolcat telnet
+apt-get -y install wget rsyslog sudo dhcpcd ntpdate screen  jq ntp awscli vim fuse git pkg-config bsdmainutils reptyr psmisc lsof nmap command-not-found packagekit-command-not-found libxml2-utils ipmitool net-tools htop atop iotop dstat mosh ethtool mosh figlet lolcat telnet nfs-common
 
 apt-get -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
