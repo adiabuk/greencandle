@@ -80,5 +80,5 @@ chown nagios:nagios -R ~nagios/.ssh
 
 touch /var/log/gc_test.log /var/log/gc_stag.log /var/log/gc_prod.log /var/log/gc_per.log /var/log/gc_stream.log;chown root:adm /var/log/gc_stag.log /var/log/gc_prod.log /var/log/gc_per.log /var/log/gc_stream.log
 systemctl disable --now systemd-journald.service systemd-journald-audit.socket systemd-journald-dev-log.socket systemd-journald.socket
-
+echo "en_GB.UTF-8 UTF-8" | sudo tee -a /etc/locale.gen; sudo locale-gen
 #reboot
