@@ -299,7 +299,7 @@ services:
     pull_policy: always
     restart: unless-stopped
     ports:
-      - 6007:6000
+      - 7007:6000
     entrypoint: /docker-entrypoint.sh api_data
     logging:
       driver: syslog
@@ -369,7 +369,7 @@ services:
     pull_policy: always
     restart: unless-stopped
     ports:
-      - 6005:6000
+      - 7005:6000
     entrypoint: /docker-entrypoint.sh api_data
     logging:
       driver: syslog
@@ -405,7 +405,7 @@ services:
     pull_policy: always
     restart: unless-stopped
     ports:
-      - 6004:6000
+      - 7004:6000
     entrypoint: /docker-entrypoint.sh api_data
     logging:
       driver: syslog
@@ -440,7 +440,7 @@ services:
     pull_policy: always
     restart: unless-stopped
     ports:
-      - 6003:6000
+      - 7003:6000
     entrypoint: /docker-entrypoint.sh api_data
     logging:
       driver: syslog
@@ -475,7 +475,7 @@ services:
     pull_policy: always
     restart: unless-stopped
     ports:
-      - 6002:6000
+      - 7002:6000
     entrypoint: /docker-entrypoint.sh api_data
     logging:
       driver: syslog
@@ -510,7 +510,7 @@ services:
     pull_policy: always
     restart: unless-stopped
     ports:
-      - 6001:6000
+      - 7001:6000
     entrypoint: /docker-entrypoint.sh api_data
     logging:
       driver: syslog
@@ -851,7 +851,7 @@ services:
     links:
       - data-base-redis:redis
     ports:
-      - 6000:6000
+      - 7000:6000
     depends_on:
       - data-base-redis
     healthcheck:
