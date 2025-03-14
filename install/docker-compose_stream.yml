@@ -34,7 +34,7 @@ services:
     container_name: stream-fe_5m
     hostname: stream-fe_5m
     image: amrox/greencandle:${TAG}
-    mem_limit: 200M
+    mem_limit: 2G
     pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh stream_data
@@ -65,7 +65,7 @@ services:
     container_name: stream-fe_15m
     hostname: stream-fe_15m
     image: amrox/greencandle:${TAG}
-    mem_limit: 200M
+    mem_limit: 2G
     pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh stream_data
@@ -95,7 +95,7 @@ services:
     container_name: stream-fe_30m
     hostname: stream-fe_30m
     image: amrox/greencandle:${TAG}
-    mem_limit: 200M
+    mem_limit: 2G
     pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh stream_data
@@ -125,7 +125,7 @@ services:
     container_name: stream-fe_1h
     hostname: stream-fe_1h
     image: amrox/greencandle:${TAG}
-    mem_limit: 200M
+    mem_limit: 2G
     pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh stream_data
@@ -156,7 +156,7 @@ services:
     container_name: stream-fe_4h
     hostname: stream-fe_4h
     image: amrox/greencandle:${TAG}
-    mem_limit: 200M
+    mem_limit: 2G
     pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh stream_data
@@ -187,7 +187,7 @@ services:
     container_name: stream-fe_12h
     hostname: stream-fe_12h
     image: amrox/greencandle:${TAG}
-    mem_limit: 200M
+    mem_limit: 2G
     pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh stream_data
@@ -217,7 +217,7 @@ services:
     container_name: stream-fe_1d
     hostname: stream-fe_1d
     image: amrox/greencandle:${TAG}
-    mem_limit: 200M
+    mem_limit: 2G
     pull_policy: always
     restart: on-failure
     entrypoint: /docker-entrypoint.sh stream_data
