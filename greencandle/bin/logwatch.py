@@ -42,7 +42,7 @@ def check_last_hour_err():
     warn_count = 0
     for line in logfile:
         string = " ".join(line.split()[:3])
-        fmt = "%b %d %H:%M:%S"
+        fmt = "%Y-%m-%d %H:%M:%S"
         current = datetime.strptime(string, fmt).replace(datetime.now().year)
         last_hour_date_time = datetime.now() - timedelta(hours = 1)
 
