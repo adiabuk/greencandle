@@ -28,7 +28,6 @@ services:
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws
-
   config-fe-api-config:
     container_name: config-fe-api-config
     environment:
@@ -53,11 +52,10 @@ services:
       timeout: 10s
       retries: 5
     ports:
-      - 7001:6000
+      - 8000:6000
     volumes:
       - /data:/data
       - /root/.aws:/root/.aws
-
   config-base-redis:
     container_name: config-base-redis
     hostname: config-base-redis
@@ -102,7 +100,6 @@ services:
       interval: 5m
       timeout: 10s
       retries: 5
-
   config-fe-cron:
     container_name: config-fe-cron
     hostname: config-fe-cron
@@ -136,7 +133,6 @@ services:
       - /dev/log:/dev/log
       - /var/run/docker.sock:/var/run/docker.sock
       - /root/.bash_history:/root/.bash_history
-
   config-be-logwatch:
     container_name: config-be-logwatch
     hostname: config-be-logwatch
