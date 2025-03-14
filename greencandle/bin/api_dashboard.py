@@ -174,7 +174,7 @@ def commands():
 def interal():
     """Load internal page"""
     page = "http://" + request.args.get('page')
-    resp = requests.get(page, timeout=20)
+    resp = requests.get(page, timeout=10)
     if page.endswith('png'):
         filename = os.path.split(page)[-1]
         return render_template('image.html', filename=filename)
@@ -364,7 +364,7 @@ def send_trade(pair, strategy, trade_action, take=None, stop=None, usd=None):
     api_token = config.web.api_token
     url = f"http://router:1080/{api_token}"
     try:
-        requests.post(url, json=payload, timeout=1)
+        requests.post(url, json=payload, timeout=10)
     except Exception:
         pass
 

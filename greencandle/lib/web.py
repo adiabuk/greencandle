@@ -38,7 +38,7 @@ def set_drain(**kwargs):
     """
 
     url = 'http://config.amrox.loc/drain/set_value'
-    requests.post(url, json=kwargs, timeout=2)
+    requests.post(url, json=kwargs, timeout=10)
 
 def is_in_drain():
     """
@@ -65,7 +65,7 @@ def get_drain(env, interval, direction):
     """
     url = (f'http://config.amrox.loc/drain/get_value?env={env}&direction={direction}'
           f'&interval={interval}')
-    req = requests.get(url, timeout=2)
+    req = requests.get(url, timeout=10)
     return req.json()['result']
 
 def get_drain_env(env):
@@ -73,7 +73,7 @@ def get_drain_env(env):
     get drain json for entire given environment
     """
     url = f'http://config.amrox.loc/drain/get_env?env={env}'
-    req = requests.get(url, timeout=2)
+    req = requests.get(url, timeout=10)
     return req.json()
 
 def push_prom_data(metric_name, value, job_name=None):

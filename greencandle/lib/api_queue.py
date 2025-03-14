@@ -83,7 +83,7 @@ def add_to_queue(req, test=False):
         if 'get_trend' in os.environ:
             url = f"http://trend:6001/get_trend?pair={pair}"
             try:
-                req = requests.get(url, timeout=1)
+                req = requests.get(url, timeout=10)
             except Exception:
                 LOGGER.critical("Unable to get trend from %s", url)
                 return

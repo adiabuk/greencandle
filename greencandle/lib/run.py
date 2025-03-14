@@ -288,7 +288,7 @@ class ProdRunner():
                                "action":"close"}
                     url = f"http://router:1080/{config.web.api_token}"
                     try:
-                        SESSION.post(url, json=payload, timeout=1)
+                        SESSION.post(url, json=payload, timeout=10)
                     except Exception:
                         pass
 

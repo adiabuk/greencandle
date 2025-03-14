@@ -31,7 +31,7 @@ def send_trade(payload, host, subd='/webhook'):
     url = f"http://{host}:20000/{subd}"
     try:
         LOGGER.info("calling url %s - %s ", url, str(payload))
-        requests.post(url, json=payload, timeout=20)
+        requests.post(url, json=payload, timeout=10)
     except Exception as exc:
         LOGGER.critical("unable to call url: %s - %s", url, str(exc))
 
@@ -55,7 +55,7 @@ def forward(payload):
     payload['edited'] = "yes"
     url = f"https://{payload['host']}/{token}"
     try:
-        requests.post(url, json=payload, timeout=5, verify=False)
+        requests.post(url, json=payload, timeout=10, verify=False)
     except requests.exceptions.RequestException:
         pass
     return Response(status=200)
