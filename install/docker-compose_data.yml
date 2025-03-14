@@ -335,6 +335,8 @@ services:
     pull_policy: always
     restart: unless-stopped
     entrypoint: /docker-entrypoint.sh api_data
+    ports:
+      - 7006:6000
     logging:
       driver: syslog
       options:
