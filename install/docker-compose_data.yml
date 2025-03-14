@@ -334,8 +334,6 @@ services:
     mem_limit: 3G
     pull_policy: always
     restart: unless-stopped
-    ports:
-      - 6007:6000
     entrypoint: /docker-entrypoint.sh api_data
     logging:
       driver: syslog
