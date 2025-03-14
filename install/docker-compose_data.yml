@@ -64,8 +64,6 @@ services:
     mem_limit: 3G
     pull_policy: always
     restart: unless-stopped
-    ports:
-      - 6006:6000
     entrypoint: /docker-entrypoint.sh get_data
     logging:
       driver: syslog
@@ -100,8 +98,6 @@ services:
     mem_limit: 3G
     pull_policy: always
     restart: unless-stopped
-    ports:
-      - 6007:6000
     entrypoint: /docker-entrypoint.sh get_data
     logging:
       driver: syslog
@@ -136,8 +132,6 @@ services:
     mem_limit: 3G
     pull_policy: always
     restart: unless-stopped
-    ports:
-      - 6003:6000
     entrypoint: /docker-entrypoint.sh get_data
     logging:
       driver: syslog
@@ -172,8 +166,6 @@ services:
     mem_limit: 3G
     pull_policy: always
     restart: unless-stopped
-    ports:
-      - 6002:6000
     entrypoint: /docker-entrypoint.sh get_data
     logging:
       driver: syslog
@@ -207,8 +199,6 @@ services:
     mem_limit: 3G
     pull_policy: always
     restart: unless-stopped
-    ports:
-      - 6005:6000
     entrypoint: /docker-entrypoint.sh get_data
     logging:
       driver: syslog
@@ -242,8 +232,6 @@ services:
     mem_limit: 3G
     pull_policy: always
     restart: unless-stopped
-    ports:
-      - 6004:6000
     entrypoint: /docker-entrypoint.sh get_data
     logging:
       driver: syslog
@@ -277,8 +265,6 @@ services:
     mem_limit: 3G
     pull_policy: always
     restart: unless-stopped
-    ports:
-      - 6001:6000
     entrypoint: /docker-entrypoint.sh get_data
     logging:
       driver: syslog
