@@ -48,6 +48,8 @@ def get_data():
     print("xxx", pair, data_type, interval)
 
     try:
+        if not (pair or data_type):
+            return jsonify(output=DATA)
         return jsonify(output=DATA[pair][data_type])
     except KeyError:
         return {}
