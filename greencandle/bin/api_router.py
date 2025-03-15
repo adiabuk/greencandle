@@ -98,7 +98,7 @@ def respond():
             # so we don't create an infinate API loop
             payload['strategy'] = 'alert'
             payload['env'] = 'alarm'
-            payload['host'] = 'local.amrox.loc'
+            payload['host'] = 'eaglenest.amrox.loc'
 
             # add environment name to text
 
@@ -112,7 +112,7 @@ def respond():
             new_env, new_strategy = container.split(':')
             payload['env'] = new_env
             payload['strategy'] = new_strategy
-            payload['host'] = 'local.amrox.loc'
+            payload['host'] = 'eaglenest.amrox.loc'
             route_drain = Path(f'/var/local/drain/drain_{new_env}_{new_strategy}').is_file()
             if route_drain:
                 LOGGER.warning('skipping forwarding to %s:%s due to drain', new_env, new_strategy)
@@ -122,7 +122,7 @@ def respond():
         elif 'env' not in payload or payload['env'] == env:
             send_trade(payload, container)
         else:
-            payload['host'] = 'local.amrox.loc'
+            payload['host'] = 'eaglenest.amrox.loc'
             forward(payload)
 
     mysql = Mysql()
