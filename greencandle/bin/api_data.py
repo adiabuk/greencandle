@@ -37,7 +37,6 @@ def set_data():
 
     return Response(status=200)
 
-
 @APP.route('/get_data', methods=["GET"])
 def get_data():
     """
@@ -93,6 +92,7 @@ def main():
     #    log.disabled = True
     scheduler = BackgroundScheduler() # Create Scheduler
     scheduler.add_job(func=set_data, trigger="interval", minutes=3)
+    scheduler.start()
 
     APP.run(debug=True, host='0.0.0.0', port=6000, threaded=True)
 
