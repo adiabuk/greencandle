@@ -52,7 +52,7 @@ def check_rules():
         if pair.upper() not in config.main.pairs.split():
             msg = f'Unknown pair: {pair}'
             LOGGER.info(msg)
-            send_nsca(status=2, host_name='eaglenest',
+            send_nsca(status=2, host_name='datavault',
                       service_name=f'{config.main.base_env}_extra_rules', text_output=msg,
                       remote_host='nagios.amrox.loc')
             continue
