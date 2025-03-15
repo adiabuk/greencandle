@@ -4,10 +4,9 @@
 Collect OHLC and strategy data for later analysis
 """
 from pathlib import Path
-import logging
 from collections import defaultdict
 from setproctitle import setproctitle
-from flask import Flask, request, Response
+from flask import Flask, request, Response, jsonify
 from apscheduler.schedulers.background import BackgroundScheduler
 from greencandle.lib import config
 from greencandle.lib.redis_conn import Redis
@@ -25,7 +24,6 @@ APP = Flask(__name__, template_folder="/var/www/html", static_url_path='/',
             static_folder='/var/www/html')
 DATA = defaultdict(lambda: defaultdict(dict))
 
-#@APP.route('/set_data', methods=["POST"])
 def set_data():
     """
     Update data
@@ -34,8 +32,8 @@ def set_data():
     interval = config.main.interval
     for pair in PAIRS:
         DATA[pair]['res'] = redis.get_indicators(pair, interval, num=7, get_ha=False)[0]
-        DATA[pair]['agg'] = redis.get_agg(pair, interval)
-        DATA[pair]['sent'] = redis.get_sent(pair, interval)
+        DATA[pair]['agg'] = redis.get_agg_data(pair, interval)
+        DATA[pair]['sent'] = redis.get_sentiment(pair, interval)
 
     return Response(status=200)
 
@@ -45,14 +43,13 @@ def get_data():
     """
     Retrieve data
     """
-    payload = request.json
-    pair = payload['pair']
-    data_type = payload['type']
-    interval = payload['interval']
+    pair = request.args.get('pair')
+    data_type = request.args.get('type')
+    interval = request.args.get('interval')
     print("xxx", pair, data_type, interval)
-    #return DATA
+
     try:
-        return {"output": DATA[pair][interval][data_type]}
+        return jsonify(output=DATA[pair][data_type])
     except KeyError:
         return {}
 
@@ -95,7 +92,7 @@ def main():
     #    log.setLevel(logging.ERROR)
     #    log.disabled = True
     scheduler = BackgroundScheduler() # Create Scheduler
-    scheduler.add_job(func=get_data, trigger="interval", minutes=3)
+    scheduler.add_job(func=set_data, trigger="interval", minutes=3)
 
     APP.run(debug=True, host='0.0.0.0', port=6000, threaded=True)
 
