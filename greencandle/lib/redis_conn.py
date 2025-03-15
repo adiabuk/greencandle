@@ -714,7 +714,8 @@ class Redis():
         return agg
 
     @GET_EXCEPTIONS
-    def get_rule_action(self, pair, interval, check_reversal=False):
+    def get_rule_action(self, pair, interval, check_reversal=False,
+                        res=None, agg=None, sent=None, items=None):
         """
         get only rule results, without checking tp/sl etc.
         """
@@ -722,13 +723,14 @@ class Redis():
         # fetch latest agg data and make available as AttributeDict
         redis3 = Redis(interval=interval, db=3)
         raw = redis3.conn.hgetall(f'{pair}:{interval}')
-        agg = AttributeDict({k.decode():get_float(v.decode()) for k, v in raw.items()})
+        #agg = AttributeDict({k.decode():get_float(v.decode()) for k, v in raw.items()})
         del redis3
 
         rules = {'open': [], 'close':[]}
-        res, items = self.get_indicators(pair, interval)
-        sent = self.get_sentiment(pair, interval)
-        agg = self.get_agg_data(pair, interval)
+        if not (res and items):
+            res, items = self.get_indicators(pair, interval)
+        sent = self.get_sentiment(pair, interval) if not sent else sent
+        agg = self.get_agg_data(pair, interval) if not agg else agg
 
         for seq in range(1, 6):
             current_config = None

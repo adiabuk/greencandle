@@ -61,6 +61,7 @@ def analyse_loop():
     """
     Gather data from redis and analyze
     """
+    global DATA
     LOGGER.debug("recently triggered: %s", str(TRIGGERED))
 
     lock_file= f'/var/run/{config.main.base_env}-data-{INTERVAL}-*'
@@ -119,10 +120,10 @@ def analyse_loop():
     else:
         # not being fetched from redis db
         pairs = [(pair, 'normal', 999999) for pair in PAIRS]
+    DATA = requests.get(f'http://www.data.amrox.loc/data/{INTERVAL}', timeout=10).json()['output']
     with ThreadPoolExecutor(max_workers=50) as pool:
         for pair, reversal, expire in pairs:
             pool.submit(analyse_pair, pair, reversal, expire, redis)
-            #analyse_pair(pair, reversal, expire, redis)
     pool.shutdown(wait=True)
     LOGGER.debug("end of current loop")
     Path(f'/var/local/lock/{config.main.name}').touch()
@@ -183,7 +184,11 @@ def analyse_pair(pair, reversal, expire, redis):
         return
 
     LOGGER.debug("analysing pair: %s", pair)
-    output = redis.get_rule_action(pair=pair, interval=INTERVAL)
+    res, items = DATA[pair]['res']
+    agg = DATA[pair]['agg']
+    sent = DATA[pair]['sent']
+    output = redis.get_rule_action(pair=pair, interval=INTERVAL, res=res, agg=agg, sent=sent,
+                                   items=items )
     result, _, current_time, current_price, match = output
     event = reversal
     res = match['res']

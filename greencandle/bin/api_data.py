@@ -31,7 +31,7 @@ def set_data():
     redis = Redis()
     interval = config.main.interval
     for pair in PAIRS:
-        DATA[pair]['res'] = redis.get_indicators(pair, interval, num=7, get_ha=False)[0]
+        DATA[pair]['res'], DATA[pair]['items'] = redis.get_indicators(pair, interval, num=7, get_ha=False)
         DATA[pair]['agg'] = redis.get_agg_data(pair, interval)
         DATA[pair]['sent'] = redis.get_sentiment(pair, interval)
 
