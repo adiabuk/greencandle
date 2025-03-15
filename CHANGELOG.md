@@ -1,5 +1,36 @@
 # Releases
 
+# 9.0
+* re-add Heikin-Ashi candles
+* use data api in all envs
+* logwatch support for dev and config envs
+* add api_data as seperate containers
+* forward router requests to correct api endpoint
+* use new logging date format
+* correct config api port
+* increase mem limit for stream containers
+* use default 10sec requests timeout throughout
+* remove port assignments in get containers and add to api
+* use new files from local repo
+* remove delisted pairs
+* increase mem to config env logwatch
+* retest old get_data module
+* remove lockfile after initial run is complete
+* start scheduler only after initial data run is complete
+* remove some unused indicators
+* change decorator order to get func name in logs
+* ensure we expire cached content and re-fetch
+* log when pairs available for streaming
+* ensure requests cache doesn't interfere with db operations
+* add logging tag to DC
+* recreate docker containers even if images are the same
+* don't overwrite docker daemon config
+* use new mattermost url
+* additions to bootstrap script: logging, monitoring, locale, nfs
+* use request caching in data env
+* rename logwatch containers
+* increase healthcheck intervals for 1h and 1d containers
+
 # 8.12.1
 * don't start containers that were manually stopped
 * ensure we are using latest version of base image before building
