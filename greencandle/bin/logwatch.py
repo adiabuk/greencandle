@@ -41,7 +41,7 @@ def check_last_hour_err():
     err_count= 0
     warn_count = 0
     for line in logfile:
-        string = " ".join(line.split()[:3])
+        string = " ".join(line.split()[:2])
         fmt = "%Y-%m-%d %H:%M:%S"
         current = datetime.strptime(string, fmt).replace(datetime.now().year)
         last_hour_date_time = datetime.now() - timedelta(hours = 1)
@@ -91,7 +91,7 @@ def check_last_hour_occ():
     long_cross=0
     short_cross=0
     for line in logfile:
-        string = " ".join(line.split()[:3])
+        string = " ".join(line.split()[:2])
         fmt = "%Y-%m-%d %H:%M:%S"
         current = datetime.strptime(string, fmt).replace(datetime.now().year)
         last_hour_date_time = datetime.now() - timedelta(hours = 1)
