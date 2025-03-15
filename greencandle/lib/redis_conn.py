@@ -655,7 +655,7 @@ class Redis():
         except Exception:  # hack for unit tests still using pickled zlib objects
             return pickle.loads(zlib.decompress(raw[-1]))
 
-    def get_indicators(self, pair, interval, num=7, get_ha=False):
+    def get_indicators(self, pair, interval, num=7):
         """
         get indicator data
         """
@@ -675,7 +675,7 @@ class Redis():
             ohlc = self.get_current(name, items[i])[-1]
             for item in ['open', 'high', 'low', 'close', 'volume']:
                 ohlc[item] = float(ohlc[item])
-            ha_raw = self.get_current(name, items[i], 'HA_0')[-1] if get_ha else False
+            ha_raw = self.get_current(name, items[i], 'HA_0')[-1]
             if ha_raw:
                 ha_ohlc={}
                 for item in ['open', 'high', 'low', 'close']:
