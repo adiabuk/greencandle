@@ -156,7 +156,7 @@ services:
       timeout: 10s
       retries: 5
     ports:
-      - 80:5000
+      - 5000:5000
     volumes:
       - /mnt:/mnt
       - /data:/data
