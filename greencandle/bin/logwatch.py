@@ -76,7 +76,7 @@ def check_last_hour_err():
         msg = "OK"
         text = (f'{msg}: No major issues in {env} logfile, warn:{warn_count}, err/crit:'
                 f'{err_count}{perf}')
-    host = "datavault" if env == "data" else "eaglenest"
+    host = "datavault" if env in ("data", "config") else "eaglenest"
     send_nsca(status=status, host_name=host, service_name=f"critical_logs_{env}",
               text_output=text, remote_host='nagios.amrox.loc')
     push_prom_data(f'gc_logfile_err_{env}', err_count)
