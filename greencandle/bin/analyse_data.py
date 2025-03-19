@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-member,eval-used,unused-import
+#pylint: disable=no-member,eval-used,unused-import,global-statement
 
 """
 Analyze available data from redis
@@ -39,6 +39,7 @@ GET_EXCEPTIONS = exception_catcher((Exception))
 TRIGGERED = {}
 SESSION = requests_cache.CachedSession('requests_cache',
                                        expire_after=int(config.main.check_interval))
+DATA = {}
 
 if sys.argv[-1] != "--help":
     CLIENT = binance_auth()
@@ -184,7 +185,8 @@ def analyse_pair(pair, reversal, expire, redis):
         return
 
     LOGGER.debug("analysing pair: %s", pair)
-    res, items = DATA[pair]['res']
+    res = DATA[pair]['res']
+    items = DATA[pair]['items']
     agg = DATA[pair]['agg']
     sent = DATA[pair]['sent']
     output = redis.get_rule_action(pair=pair, interval=INTERVAL, res=res, agg=agg, sent=sent,
