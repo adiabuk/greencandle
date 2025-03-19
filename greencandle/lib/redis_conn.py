@@ -732,7 +732,7 @@ class Redis():
         else:
             res = [AttributeDict(x) for x in res]
         sent = self.get_sentiment(pair, interval) if not sent else sent
-        agg = self.get_agg_data(pair, interval) if not agg else agg
+        agg = self.get_agg_data(pair, interval) if not agg else AttributeDict(agg)
 
         for seq in range(1, 6):
             current_config = None
