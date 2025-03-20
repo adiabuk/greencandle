@@ -66,7 +66,7 @@ def analyse_loop():
     global DATA
     LOGGER.debug("recently triggered: %s", str(TRIGGERED))
 
-    lock_file= f'/var/run/{config.main.base_env}-data-{INTERVAL}-*'
+    lock_file= f'/var/run/{config.main.base_env}-data-{INTERVAL}-get'
 
     if glob.glob(lock_file):
         while True:
@@ -188,7 +188,7 @@ def analyse_pair(pair, reversal, expire, redis):
     LOGGER.debug("analysing pair: %s", pair)
     res = [AttributeDict(x) for x in DATA[pair]['res']]
     items = DATA[pair]['items']
-    agg = attributeDict(DATA[pair]['agg'])
+    agg = AttributeDict(DATA[pair]['agg'])
     sent = DATA[pair]['sent']
     output = redis.get_rule_action(pair=pair, interval=INTERVAL, res=res, agg=agg, sent=sent,
                                    items=items )

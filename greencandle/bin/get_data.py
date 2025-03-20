@@ -57,8 +57,7 @@ def main():
     interval = config.main.interval
     setproctitle(f"{config.main.base_env}-get_data-{interval}")
     LOGGER.info("starting initial prod run")
-    name = config.main.name.split('-')[-1]
-    Path(f'/var/run/{config.main.base_env}-data-{interval}-{name}').touch()
+    Path(f'/var/run/{config.main.base_env}-data-{interval}-get').touch()
 
     local_pairs = set(config.main.pairs.split())
     while True:
