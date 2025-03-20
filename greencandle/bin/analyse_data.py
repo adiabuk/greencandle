@@ -28,6 +28,7 @@ from greencandle.lib.common import get_tv_link, arg_decorator, convert_to_second
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.order import Trade
 from greencandle.lib.web import decorator_timer
+from greencandle.lib.objects import AttributeDict
 
 config.create_config()
 INTERVAL = config.main.interval
@@ -185,9 +186,9 @@ def analyse_pair(pair, reversal, expire, redis):
         return
 
     LOGGER.debug("analysing pair: %s", pair)
-    res = DATA[pair]['res']
+    res = [AttributeDict(x) for x in DATA[pair]['res']]
     items = DATA[pair]['items']
-    agg = DATA[pair]['agg']
+    agg = attributeDict(DATA[pair]['agg'])
     sent = DATA[pair]['sent']
     output = redis.get_rule_action(pair=pair, interval=INTERVAL, res=res, agg=agg, sent=sent,
                                    items=items )

@@ -723,7 +723,6 @@ class Redis():
         # fetch latest agg data and make available as AttributeDict
         redis3 = Redis(interval=interval, db=3)
         raw = redis3.conn.hgetall(f'{pair}:{interval}')
-        #agg = AttributeDict({k.decode():get_float(v.decode()) for k, v in raw.items()})
         del redis3
 
         rules = {'open': [], 'close':[]}
