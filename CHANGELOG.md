@@ -1,5 +1,13 @@
 # Releases
 
+# 9.1
+* convert res/agg data AttributeDict in redis and analyser module
+* whoops, unpacking item which is separate
+* remove another delisted pair
+* use correct host for config env monitoring
+* don't bind anything to port 80
+* use correct host for extra rules alert
+
 # 9.0
 * re-add Heikin-Ashi candles
 * use data api in all envs
