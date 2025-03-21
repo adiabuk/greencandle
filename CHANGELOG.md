@@ -1,5 +1,10 @@
 # Releases
 
+# 9.1.1
+* increase requests timeout to 20s
+* remove badly performing pair
+* ensure we're using the same lock file for get/analyse
+
 # 9.1
 * convert res/agg data AttributeDict in redis and analyser module
 * whoops, unpacking item which is separate
