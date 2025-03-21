@@ -1,5 +1,10 @@
 # Releases
 
+# 9.1.2
+* case insensitive log check, without ignoring 5m containers
+* remove delisted pair
+* remove more badly performing pairs
+
 # 9.1.1
 * increase requests timeout to 20s
 * remove badly performing pair
