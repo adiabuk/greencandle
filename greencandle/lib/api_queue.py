@@ -66,7 +66,7 @@ def add_to_queue(req, test=False):
     dbase = Mysql(interval=config.main.interval)
     try:
         stream_req = requests.get(f'http://stream/{config.main.interval}/recent?pair={pair}',
-                                  timeout=10)
+                                  timeout=20)
         current_candle = pandas.Series(stream_req.json())
     except requests.exceptions.RequestException:
         LOGGER.critical("Unable to get candle for %s from stream, trying conventional method", pair)
@@ -83,7 +83,7 @@ def add_to_queue(req, test=False):
         if 'get_trend' in os.environ:
             url = f"http://trend:6001/get_trend?pair={pair}"
             try:
-                req = requests.get(url, timeout=10)
+                req = requests.get(url, timeout=20)
             except Exception:
                 LOGGER.critical("Unable to get trend from %s", url)
                 return

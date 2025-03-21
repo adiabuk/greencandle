@@ -122,7 +122,7 @@ def analyse_loop():
     else:
         # not being fetched from redis db
         pairs = [(pair, 'normal', 999999) for pair in PAIRS]
-    DATA = requests.get(f'http://www.data.amrox.loc/data/{INTERVAL}', timeout=10).json()['output']
+    DATA = requests.get(f'http://www.data.amrox.loc/data/{INTERVAL}', timeout=20).json()['output']
     with ThreadPoolExecutor(max_workers=50) as pool:
         for pair, reversal, expire in pairs:
             pool.submit(analyse_pair, pair, reversal, expire, redis)
@@ -284,7 +284,7 @@ def analyse_pair(pair, reversal, expire, redis):
                        "strategy": forward_strategy}
 
             try:
-                SESSION.post(url, json.dumps(payload), timeout=10,
+                SESSION.post(url, json.dumps(payload), timeout=20,
                               headers={'Content-Type': 'application/json'})
                 LOGGER.info("forwarding %s %s/%s trade to: %s match:%s",
                             pair, INTERVAL, DIRECTION, forward_strategy, match_strs)

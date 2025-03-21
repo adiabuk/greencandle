@@ -38,7 +38,7 @@ def set_drain(**kwargs):
     """
 
     url = 'http://config.amrox.loc/drain/set_value'
-    requests.post(url, json=kwargs, timeout=10)
+    requests.post(url, json=kwargs, timeout=20)
 
 def is_in_drain():
     """
@@ -65,7 +65,7 @@ def get_drain(env, interval, direction):
     """
     url = (f'http://config.amrox.loc/drain/get_value?env={env}&direction={direction}'
           f'&interval={interval}')
-    req = requests.get(url, timeout=10)
+    req = requests.get(url, timeout=20)
     return req.json()['result']
 
 def get_drain_env(env):
@@ -73,7 +73,7 @@ def get_drain_env(env):
     get drain json for entire given environment
     """
     url = f'http://config.amrox.loc/drain/get_env?env={env}'
-    req = requests.get(url, timeout=10)
+    req = requests.get(url, timeout=20)
     return req.json()
 
 def push_prom_data(metric_name, value, job_name=None):
@@ -86,7 +86,7 @@ def push_prom_data(metric_name, value, job_name=None):
     url = f"http://prometheus:9091/metrics/job/{job_name}"
     data = f"{metric_name.replace('-','_')} {value}\n"
     try:
-        requests.post(url, headers=headers, data=data, timeout=10)
+        requests.post(url, headers=headers, data=data, timeout=20)
     except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError):
         print("Unable to push metric")
 
@@ -144,5 +144,5 @@ def get_prom_value(query):
     """
     url = "http://prometheus:9090/api/v1/query"
     value = requests.post(f'{url}?query={query}',
-                          timeout=10).json()['data']['result'][0]['value'][-1]
+                          timeout=20).json()['data']['result'][0]['value'][-1]
     return value

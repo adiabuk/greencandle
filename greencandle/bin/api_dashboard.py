@@ -174,7 +174,7 @@ def commands():
 def interal():
     """Load internal page"""
     page = "http://" + request.args.get('page')
-    resp = requests.get(page, timeout=10)
+    resp = requests.get(page, timeout=20)
     if page.endswith('png'):
         filename = os.path.split(page)[-1]
         return render_template('image.html', filename=filename)
@@ -364,7 +364,7 @@ def send_trade(pair, strategy, trade_action, take=None, stop=None, usd=None):
     api_token = config.web.api_token
     url = f"http://router:1080/{api_token}"
     try:
-        requests.post(url, json=payload, timeout=10)
+        requests.post(url, json=payload, timeout=20)
     except Exception:
         pass
 
@@ -484,7 +484,7 @@ def get_live():
     mt10 = 0
 
     dbase = Mysql()
-    stream_req = requests.get("http://stream/5m/all", timeout=10)
+    stream_req = requests.get("http://stream/5m/all", timeout=20)
     prices = stream_req.json()
 
     services = list_to_dict(get_be_services(config.main.base_env),
@@ -673,7 +673,7 @@ def get_total_values():
     dbase = Mysql()
     raw = dbase.get_open_trades()
     commission = float(dbase.get_complete_commission())
-    stream_req = requests.get('http://stream/5m/all', timeout=10)
+    stream_req = requests.get('http://stream/5m/all', timeout=20)
     prices = stream_req.json()
     names = []
     for _, _, pair, name, open_price, direction, quote_in in raw:
@@ -861,7 +861,7 @@ def get_data():
     for interval in intervals:
         DATA[f'tf_{interval}'] = \
                 AttributeDict(requests.get(f'http://www.data.amrox.loc/data/{interval}',
-                              timeout=10).json()['output'])
+                              timeout=20).json()['output'])
 
 @arg_decorator
 def main():

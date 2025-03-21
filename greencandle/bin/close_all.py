@@ -31,7 +31,7 @@ def main():
     open_trades = dbase.get_open_trades(name_filter=args.name_filter,
                                         direction_filter=args.direction_filter,
                                         pair_filter=args.pair_filter)
-    stream_req = requests.get('http://stream/5m/all', timeout=10)
+    stream_req = requests.get('http://stream/5m/all', timeout=20)
     prices = stream_req.json()
 
     for trade in open_trades:
@@ -50,7 +50,7 @@ def main():
                        "env": env,
                        "strategy": short_name}
 
-            requests.post(url, json.dumps(payload), timeout=10,
+            requests.post(url, json.dumps(payload), timeout=20,
                           headers={'Content-Type': 'application/json'})
     print('done')
 

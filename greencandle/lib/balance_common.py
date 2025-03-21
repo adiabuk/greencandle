@@ -31,7 +31,7 @@ def get_step_precision(item, amount):
     """
     Get/apply precision required for trading pair from exchange
     """
-    req = requests.get(f'http://stream/binance/exchange_info?pair={item}', timeout=10)
+    req = requests.get(f'http://stream/binance/exchange_info?pair={item}', timeout=20)
     step_size = float(req.json()['stepSize'])
     precision = int(round(-math.log(step_size, 10), 0))
     return round(float(amount), precision)

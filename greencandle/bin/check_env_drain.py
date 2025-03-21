@@ -23,7 +23,7 @@ def main():
     logger = get_logger(__name__)
     config.create_config()
     env = config.main.base_env
-    a = requests.get(f'http://config.amrox.loc/drain/get_env?env={env}', timeout=10)
+    a = requests.get(f'http://config.amrox.loc/drain/get_env?env={env}', timeout=20)
     count = count_struct(a.json())
 
     if count > 3:

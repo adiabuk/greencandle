@@ -124,7 +124,7 @@ def check_rules():
                        "strategy": forward_to}
 
             try:
-                requests.post(url, json.dumps(payload), timeout=10,
+                requests.post(url, json.dumps(payload), timeout=20,
                               headers={'Content-Type': 'application/json'})
 
                 LOGGER.info("TRADE: forwarding %s %s trade to: %s - rule: %s",

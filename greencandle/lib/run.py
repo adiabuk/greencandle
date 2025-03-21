@@ -248,7 +248,7 @@ class ProdRunner():
 
             stream = f'http://stream/{config.main.interval}/all'
             try:
-                stream_req = SESSION.get(stream, timeout=10)
+                stream_req = SESSION.get(stream, timeout=20)
                 prices = stream_req.json()
             except (requests.exceptions.ConnectTimeout, ValueError):
                 prices = {}
@@ -288,7 +288,7 @@ class ProdRunner():
                                "action":"close"}
                     url = f"http://router:1080/{config.web.api_token}"
                     try:
-                        SESSION.post(url, json=payload, timeout=10)
+                        SESSION.post(url, json=payload, timeout=20)
                     except Exception:
                         pass
 
@@ -324,7 +324,7 @@ class ProdRunner():
         Fetch new dataframe data and append to existing structure
         """
 
-        request = SESSION.get(f"http://stream/{config.main.interval}/all", timeout=10)
+        request = SESSION.get(f"http://stream/{config.main.interval}/all", timeout=20)
         if not request.ok:
             LOGGER.critical("Unable to fetch data from streaming server")
             data = {'recent':{}, 'closed': {}}
