@@ -66,7 +66,7 @@ def analyse_loop():
     global DATA
     LOGGER.debug("recently triggered: %s", str(TRIGGERED))
 
-    lock_file= f'/var/run/{config.main.base_env}-data-{INTERVAL}-get'
+    lock_file= f'/var/run/{config.main.base_env}-{INTERVAL}-get'
 
     if glob.glob(lock_file):
         while True:

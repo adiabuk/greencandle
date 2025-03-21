@@ -77,8 +77,8 @@ def main():
 
     # initial run, before scheduling begins - 6 candles
     RUNNER.prod_initial(interval, test=True, first_run=True, no_of_runs=7)
-    if os.path.exists(f'/var/run/{config.main.base_env}-data-{interval}-{name}'):
-        os.remove(f'/var/run/{config.main.base_env}-data-{interval}-{name}')
+    if os.path.exists(f'/var/run/{config.main.base_env}-{interval}-get'):
+        os.remove(f'/var/run/{config.main.base_env}-{interval}-get')
     LOGGER.info("finished initial prod run")
 
     while True:
