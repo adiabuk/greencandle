@@ -5,7 +5,7 @@ COPY install/docker-entrypoint-mysql.sh /docker-entrypoint.sh
 COPY config /opt/config
 RUN chmod +x /docker-entrypoint.sh
 RUN apt update && apt-get install -y curl && \
-    apt -y clean && apt -y autoclean && apt -y autoremove && \
+    apt -y clean && apt -y autoclean && apt -y autoremove
 
 ENV MYSQL_PASSWORD=password
 ENV MYSQL_DATABASE=greencandle
