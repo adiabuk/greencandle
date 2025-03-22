@@ -142,6 +142,9 @@ def check_last_hour_occ():
     push_prom_data('strategy17_up_1h', high_count)
     push_prom_data('strategy17_down_1h', low_count)
 
+    push_prom_data('xover_long_1h', long_cross)
+    push_prom_data('xover_short_1h', short_cross)
+
     xover_perf = f"|long={long_cross} short={short_cross};{xover_warn};{xover_crit};;"
     xover_text = f"xover long:{long_cross},short:{short_cross}"
     if long_cross > xover_crit or short_cross > xover_crit:
