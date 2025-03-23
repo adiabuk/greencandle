@@ -1,5 +1,10 @@
 # Releases
 
+# 9.1.3
+* remove more badly performing pairs
+* add crossover 1h stats to prometheus
+* install curl in all containers
+
 # 9.1.2
 * case insensitive log check, without ignoring 5m containers
 * remove delisted pair
