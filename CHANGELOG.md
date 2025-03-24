@@ -1,5 +1,12 @@
 # Releases
 
+# 9.1.4
+* don't log flask python warnings
+* remove more badly performing pairs
+* allow api data scheduled job to run up to 2mins late
+* disable flask debugging in data api
+* remove requests_cache
+
 # 9.1.3
 * remove more badly performing pairs
 * add crossover 1h stats to prometheus
