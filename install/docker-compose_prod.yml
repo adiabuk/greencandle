@@ -349,7 +349,6 @@ services:
     environment:
       - CONFIG_ENV=prod/fe/api
       - DB=true
-      - PYTHONWARNINGS="ignore:Unverified HTTPS request"
     ports:
       - 1080:1080
     links:
