@@ -141,7 +141,7 @@ def main():
 
     Usage: api_router
     """
-
+    requests.packages.urllib3.disable_warnings()
     setproctitle(f"{config.main.base_env}-api_router")
     logging.basicConfig(level=logging.ERROR)
     if float(config.main.logging_level) > 10:
