@@ -15,7 +15,6 @@ from datetime import datetime
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
 import requests
-import requests_cache
 from send_nsca3 import send_nsca
 from str2bool import str2bool
 from setproctitle import setproctitle
@@ -38,8 +37,6 @@ PAIRS = config.main.pairs.split()
 MAIN_INDICATORS = config.main.indicators.split()
 GET_EXCEPTIONS = exception_catcher((Exception))
 TRIGGERED = {}
-SESSION = requests_cache.CachedSession('requests_cache',
-                                       expire_after=int(config.main.check_interval))
 DATA = {}
 
 if sys.argv[-1] != "--help":
@@ -284,7 +281,7 @@ def analyse_pair(pair, reversal, expire, redis):
                        "strategy": forward_strategy}
 
             try:
-                SESSION.post(url, json.dumps(payload), timeout=20,
+                requests.post(url, json.dumps(payload), timeout=20,
                               headers={'Content-Type': 'application/json'})
                 LOGGER.info("forwarding %s %s/%s trade to: %s match:%s",
                             pair, INTERVAL, DIRECTION, forward_strategy, match_strs)
