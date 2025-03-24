@@ -93,7 +93,7 @@ def main():
     #    log.setLevel(logging.ERROR)
     #    log.disabled = True
     scheduler = BackgroundScheduler() # Create Scheduler
-    scheduler.add_job(func=set_data, trigger="interval", minutes=3)
+    scheduler.add_job(func=set_data, trigger="interval", minutes=3, misfire_grace_time=120)
     scheduler.start()
 
     APP.run(debug=False, host='0.0.0.0', port=6000, threaded=True)
