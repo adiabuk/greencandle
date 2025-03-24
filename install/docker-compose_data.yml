@@ -749,6 +749,7 @@ services:
     environment:
       - CONFIG_ENV=data
       - DB=true
+      - PYTHONWARNINGS="ignore:Unverified HTTPS request"
     ports:
       - 1083:1080
     links:

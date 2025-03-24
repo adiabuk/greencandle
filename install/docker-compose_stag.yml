@@ -350,6 +350,7 @@ services:
     environment:
       - CONFIG_ENV=stag
       - DB=true
+      - PYTHONWARNINGS="ignore:Unverified HTTPS request"
     ports:
       - 1082:1080
     extra_hosts:

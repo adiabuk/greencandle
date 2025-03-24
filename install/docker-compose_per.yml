@@ -355,6 +355,7 @@ services:
       - CONFIG_ENV=per/fe/api
       - ALERT="True"
       - DB=true
+      - PYTHONWARNINGS="ignore:Unverified HTTPS request"
     ports:
       - 1081:1080
     links:
