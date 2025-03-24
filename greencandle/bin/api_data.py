@@ -96,7 +96,7 @@ def main():
     scheduler.add_job(func=set_data, trigger="interval", minutes=3)
     scheduler.start()
 
-    APP.run(debug=True, host='0.0.0.0', port=6000, threaded=True)
+    APP.run(debug=False, host='0.0.0.0', port=6000, threaded=True)
 
 if __name__ == '__main__':
     main()
