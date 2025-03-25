@@ -83,6 +83,7 @@ STATIC_DIR=/data/scripts/static
 */15 * * * * ${SCRIPTS_DIR}/sentiment_ema 1h &>> /var/log/cron.log
 */15 * * * * ${SCRIPTS_DIR}/sentiment_ema 1d &>> /var/log/cron.log
 
+@hourly ${STATIC_DIR}/rsi_cross.py &>> /var/log/cron.log
 
 
 {{end}}
