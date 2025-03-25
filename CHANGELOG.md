@@ -1,5 +1,11 @@
 # Releases
 
+# 9.1.5
+* add multi-ulti-interval router strategy
+* add rsi_cross cron to data env
+* add 2min misfire grace time to backend api scheduled job
+* try different warning suppression method
+
 # 9.1.4
 * don't log flask python warnings
 * remove more badly performing pairs
