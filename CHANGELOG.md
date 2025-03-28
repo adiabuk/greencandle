@@ -1,5 +1,10 @@
 # Releases
 
+# 9.1.6
+* remove delisted pairs
+* decrease tpsl for 1h in data env
+* get sentiment stats for 4h
+
 # 9.1.5
 * add multi-ulti-interval router strategy
 * add rsi_cross cron to data env
