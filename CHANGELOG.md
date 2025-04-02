@@ -1,5 +1,10 @@
 # Releases
 
+# 9.1.7
+* stop forwarding trades to test env
+* get ema 4h stats every 15mins
+* Use module name for arg decorator, not func
+
 # 9.1.6
 * remove delisted pairs
 * decrease tpsl for 1h in data env
