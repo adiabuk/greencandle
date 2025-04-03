@@ -142,6 +142,14 @@
 "extra_stag-any2-5m": ["stag:any2-5m-long-short"],
 "extra_stag-any2-1h": ["stag:any2-1h-long-short"],
 
+
+"extra_test-any-5m": ["test:any-5m-long-short"],
+"extra_test-any-15m": ["test:any-15m-long-short"],
+"extra_test-any-1h": ["test:any-1h-long-short"],
+"extra_test-any2-5m": ["test:any2-5m-long-short"],
+"extra_test-any2-15m": ["test:any2-15m-long-short"],
+"extra_test-any2-1h": ["test:any2-1h-long-short"],
+
 "extra_prod-any-5m": ["prod:any-5m-long-short"],
 "extra_prod-any-1h": ["prod:any-1h-long-short"],
 "extra_prod-any-4h": ["prod:any-4h-long-short"],
