@@ -1,6 +1,8 @@
 {
+  "interval": "1h",
   "name": "stag-be-api-any2-1h-cross",
-  "take_profit_perc": "5",
+  "perc_at_timeout": "2",
   "stop_loss_perc": "2.5",
-  "interval": "1h"
+  "take_profit_perc": "5",
+  "time_in_trade": "3h"
 }
