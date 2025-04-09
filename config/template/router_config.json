@@ -1,90 +1,47 @@
-{{if eq .base_env "stag"}}
+{{if eq .base_env "data"}}
 {
 
-"any-5m-long": ["any-5m-long"],
-"any-5m-short": ["any-5m-short"],
+"15m-7": ["stag:any-15m-long-short"],
+"1h-5": ["stag:any2-1h-long-short"],
+"5m-6": ["stag:any-5m-long-short"],
+"multi": ["stag:any-1h-long-short"],
 
-"any-15m-long": ["any-15m-long"],
-"any-15m-short": ["any-15m-short"],
+"extra_stag-any-5m": ["stag:any-5m-long-short"],
+"extra_stag-any-1h": ["stag:any-1h-long-short"],
+"extra_stag-any2-5m": ["stag:any2-5m-long-short"],
+"extra_stag-any2-1h": ["stag:any2-1h-long-short"],
 
-"any-1h-long": ["any-1h-long"],
-"any-1h-short": ["any-1h-short"],
+"extra_test-any-5m": ["test:any-5m-long-short"],
+"extra_test-any-15m": ["test:any-15m-long-short"],
+"extra_test-any-1h": ["test:any-1h-long-short"],
+"extra_test-any2-5m": ["test:any2-5m-long-short"],
+"extra_test-any2-15m": ["test:any2-15m-long-short"],
+"extra_test-any2-1h": ["test:any2-1h-long-short"],
 
-"any-5m-long-short": ["any-5m-long", "any-5m-short"],
-"any-15m-long-short": ["any-15m-long", "any-15m-short"],
-"any-1h-long-short": ["any-1h-long", "any-1h-short"],
+"extra_prod-any-5m": ["prod:any-5m-long-short"],
+"extra_prod-any-1h": ["prod:any-1h-long-short"],
+"extra_prod-any-1d": ["prod:any-1d-long-short"],
+"extra_prod-any2-5m": ["prod:any2-5m-long-short"],
+"extra_prod-any2-1h": ["prod:any2-1h-long-short"],
 
-"any2-5m-long": ["any2-5m-long"],
-"any2-5m-short": ["any2-5m-short"],
+"extra_per-any-5m": ["per:any-5m-long-short"],
+"extra_per-any-1h": ["per:any-1h-long-short"],
+"extra_per-any-1d": ["per:any-1d-long-short"],
+"extra_per-any2-5m": ["per:any2-5m-long-short"],
+"extra_per-any2-15m": ["per:any2-15m-long-short"],
+"extra_per-any2-1h": ["per:any2-1h-long-short"],
 
-"any2-15m-long": ["any2-15m-long"],
-"any2-15m-short": ["any2-15m-short"],
-
-"any2-1h-long": ["any2-1h-long"],
-"any2-1h-short": ["any2-1h-short"],
-
-"any2-5m-long-short": ["any2-5m-long", "any2-5m-short"],
-"any2-15m-long-short": ["any2-15m-long", "any2-15m-short"],
-"any2-1h-long-short": ["any2-1h-long", "any2-1h-short"],
+"extra_alert": ["alert"],
 
 "alert": ["alert"],
 "route": []
 }
-{{else if eq .base_env "test"}}
+{{else if eq .base_env "alarm"}}
 {
-
-"any2-5m-long": ["any2-5m-long"],
-"any2-5m-short": ["any2-5m-short"],
-"any2-5m-long-short": ["any2-5m-long", "any2-5m-short"],
-
-"any2-15m-long": ["any2-15m-long"],
-"any2-15m-short": ["any2-15m-short"],
-"any2-15m-long-short": ["any2-15m-long", "any2-15m-short"],
-
-"any2-30m-long": ["any2-30m-long"],
-"any2-30m-short": ["any2-30m-short"],
-"any2-30m-long-short": ["any2-30m-long", "any2-30m-short"],
-
-"any2-1h-long": ["any2-1h-long"],
-"any2-1h-short": ["any2-1h-short"],
-"any2-1h-long-short": ["any2-1h-long", "any2-1h-short"],
-
-"any2-4h-long": ["any2-4h-long"],
-"any2-4h-short": ["any2-4h-short"],
-"any2-4h-long-short": ["any2-4h-long", "any2-4h-short"],
-
-"any3-5m-long": ["any3-5m-long"],
-"any3-5m-short": ["any3-5m-short"],
-"any3-5m-long-short": ["any3-5m-long", "any3-5m-short"],
-
-"any3-15m-long": ["any3-15m-long"],
-"any3-15m-short": ["any3-15m-short"],
-"any3-15m-long-short": ["any3-15m-long", "any3-15m-short"],
-
-"any3-30m-long": ["any3-30m-long"],
-"any3-30m-short": ["any3-30m-short"],
-"any3-30m-long-short": ["any3-30m-long", "any3-30m-short"],
-
-"any-5m-long": ["any-5m-long"],
-"any-5m-short": ["any-5m-short"],
-"any-5m-long-short": ["any-5m-long", "any-5m-short"],
-
-"any-15m-long": ["any-15m-long"],
-"any-15m-short": ["any-15m-short"],
-"any-15m-long-short": ["any-15m-long", "any-15m-short"],
-
-"any-30m-long": ["any-30m-long"],
-"any-30m-short": ["any-30m-short"],
-"any-30m-long-short": ["any-30m-long", "any-30m-short"],
-
-"any-1h-long": ["any-1h-long"],
-"any-1h-short": ["any-1h-short"],
-"any-1h-long-short": ["any-1h-long", "any-1h-short"],
-
 "alert": ["alert"],
 "route": []
 }
-{{else if eq .base_env "prod"}}
+{{else}}
 {
 "any-5m-long": ["any-5m-long"],
 "any-5m-short": ["any-5m-short"],
@@ -93,10 +50,6 @@
 "any-1h-long": ["any-1h-long"],
 "any-1h-short": ["any-1h-short"],
 "any-1h-long-short": ["any-1h-short", "any-1h-long"],
-
-"any-4h-long": ["any-4h-long"],
-"any-4h-short": ["any-4h-short"],
-"any-4h-long-short": ["any-4h-short", "any-4h-long"],
 
 "any-1d-long": ["any-1d-long"],
 "any-1d-short": ["any-1d-short"],
@@ -110,88 +63,11 @@
 "any2-15m-short": ["any2-15m-short"],
 "any2-15m-long-short": ["any2-15m-short", "any2-15m-long"],
 
-"any2-5m-long": ["any2-30m-long"],
-"any2-5m-short": ["any2-30m-short"],
-"any2-5m-long-short": ["any2-30m-short", "any2-30m-long"],
-
 "any2-1h-long": ["any2-1h-long"],
 "any2-1h-short": ["any2-1h-short"],
 "any2-1h-long-short": ["any2-1h-short", "any2-1h-long"],
 
-"any2-4h-long": ["any2-4h-long"],
-"any2-4h-short": ["any2-4h-short"],
-"any2-4h-long-short": ["any2-4h-short", "any2-4h-long"],
-
-"any2-1d-long": ["any2-1d-long"],
-"any2-1d-short": ["any2-1d-short"],
-"any2-1d-long-short": ["any2-1d-short", "any2-1d-long"],
-
 "api-loan": ["api-loan"],
-"alert": ["alert"],
-"route": []
-}
-{{else if eq .base_env "data"}}
-{
-
-"15m-7": ["stag:any-15m-long-short"],
-"1h-5": ["stag:any2-1h-long-short"],
-"5m-6": ["stag:any-5m-long-short"],
-"multi": ["stag:any-1h-long-short"],
-
-"extra_stag-any-5m": ["stag:any-5m-long-short"],
-"extra_stag-any-1h": ["stag:any-1h-long-short"],
-"extra_stag-any2-5m": ["stag:any2-5m-long-short"],
-"extra_stag-any2-1h": ["stag:any2-1h-long-short"],
-
-
-"extra_test-any-5m": ["test:any-5m-long-short"],
-"extra_test-any-15m": ["test:any-15m-long-short"],
-"extra_test-any-1h": ["test:any-1h-long-short"],
-"extra_test-any2-5m": ["test:any2-5m-long-short"],
-"extra_test-any2-15m": ["test:any2-15m-long-short"],
-"extra_test-any2-1h": ["test:any2-1h-long-short"],
-
-"extra_prod-any-5m": ["prod:any-5m-long-short"],
-"extra_prod-any-1h": ["prod:any-1h-long-short"],
-"extra_prod-any-4h": ["prod:any-4h-long-short"],
-"extra_prod-any-1d": ["prod:any-1d-long-short"],
-"extra_prod-any2-5m": ["prod:any2-5m-long-short"],
-"extra_prod-any2-1h": ["prod:any2-1h-long-short"],
-"extra_prod-any2-4h": ["prod:any2-4h-long-short"],
-"extra_prod-any2-1d": ["prod:any2-1d-long-short"],
-
-"extra_per-any-5m": ["per:any-5m-long-short"],
-"extra_per-any-1h": ["per:any-1h-long-short"],
-"extra_per-any-4h": ["per:any-4h-long-short"],
-"extra_per-any-1d": ["per:any-1d-long-short"],
-"extra_per-any2-5m": ["per:any2-5m-long-short"],
-"extra_per-any2-15m": ["per:any2-15m-long-short"],
-"extra_per-any2-30m": ["per:any2-30m-long-short"],
-"extra_per-any2-1h": ["per:any2-1h-long-short"],
-"extra_per-any2-4h": ["per:any2-4h-long-short"],
-"extra_per-any2-1d": ["per:any2-1d-long-short"],
-
-"extra_alert": ["alert"],
-
-"alert": ["alert"],
-"route": []
-}
-{{else if eq .base_env "per"}}
-{
-"any-spot-long": ["per-be-api-any-spot-long"],
-"any-long": ["per-be-api-any-spot-long", "per-be-api-any-cross-long"],
-"any-short": ["per-be-api-any-cross-short"],
-"any-long-short": ["per-be-api-any-cross-short", "per-be-api-any-spot-long", "per-be-api-any-cross-long"],
-
-"any-cross-long": ["per-be-api-any-cross-long"],
-"any-cross-short": ["per-be-api-any-cross-short"],
-"any-cross-long-short": ["per-be-api-any-cross-short", "per-be-api-any-cross-long"],
-
-"alert": ["alert"],
-"route": []
-}
-{{else if eq .base_env "alarm"}}
-{
 "alert": ["alert"],
 "route": []
 }
