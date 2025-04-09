@@ -84,6 +84,7 @@ def analyse_loop():
                                           f'name="{config.main.name}" and '
                                           f'close_price is null', header=False)
         open_pairs = [tuple(x) for x in open_pairs]
+        del dbase
     else:
         open_pairs = []
 
