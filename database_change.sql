@@ -1,5 +1,7 @@
 # 9.2
 
+drop table if exists profit_by_dayname_diretion;
+
 drop view if exists profit_daily_breakdown_close;
 create view profit_daily_breakdown_close as
 SELECT
