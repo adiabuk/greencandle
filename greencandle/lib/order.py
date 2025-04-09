@@ -487,7 +487,7 @@ class Trade():
 
         for pair, current_time, current_price, event, _, max_usd in long_list:
             if stop > 50:
-                self.logger.error(f"stop loss to high to reserve funds, passing margin "
+                self.logger.error(f"stop loss too high to reserve funds, passing margin "
                                   f"{pair}/long")
                 continue
             pair = pair.strip()
@@ -904,7 +904,7 @@ class Trade():
             base = get_base(pair)
 
             if stop > 50:
-                self.logger.error(f"stop loss to high to reserve funds, passing margin "
+                self.logger.error(f"stop loss too high to reserve funds, passing margin "
                                   f"{pair}/short")
                 continue
             total_amount_to_use = self.get_total_amount_to_use(dbase, account='margin', pair=pair,
