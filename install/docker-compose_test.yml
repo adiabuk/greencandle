@@ -361,6 +361,7 @@ services:
       - test-be-api-any-1h-cross-short:any-1h-short
       - test-be-api-any2-5m-cross-long:any2-5m-long
       - test-be-api-any2-5m-cross-short:any2-5m-short
+      - test-be-manual:api-loan
     depends_on:
       - test-base-mysql
       - test-base-redis

@@ -370,6 +370,7 @@ services:
       - per-be-api-any2-5m-cross-short:any2-5m-short
       - per-be-api-any2-1h-cross-long:any2-1h-long
       - per-be-api-any2-1h-cross-short:any2-1h-short
+      - per-be-api-loan:api-loan
     depends_on:
       - per-base-mysql
       - per-base-redis
