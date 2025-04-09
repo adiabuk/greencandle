@@ -6,6 +6,8 @@ from time import time
 import re
 import datetime
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 from str2bool import str2bool
 from greencandle.lib import config
 
@@ -65,7 +67,8 @@ def get_drain(env, interval, direction):
     """
     url = (f'http://config.amrox.loc/drain/get_value?env={env}&direction={direction}'
           f'&interval={interval}')
-    req = requests.get(url, timeout=20)
+    session = retry_session(retries=5, backoff_factor=2)
+    req = session.request('GET', url, timeout=30)
     return req.json()['result']
 
 def get_drain_env(env):
@@ -73,7 +76,8 @@ def get_drain_env(env):
     get drain json for entire given environment
     """
     url = f'http://config.amrox.loc/drain/get_env?env={env}'
-    req = requests.get(url, timeout=20)
+    session = retry_session(retries=5, backoff_factor=2)
+    req = session.request('GET', url, timeout=30)
     return req.json()
 
 def push_prom_data(metric_name, value, job_name=None):
@@ -146,3 +150,20 @@ def get_prom_value(query):
     value = requests.post(f'{url}?query={query}',
                           timeout=20).json()['data']['result'][0]['value'][-1]
     return value
+
+def retry_session(retries, backoff_factor=0.3):
+    """
+    retry requests session
+    """
+    session = requests.Session()
+    retry = Retry(
+        total=retries,
+        read=retries,
+        connect=retries,
+        backoff_factor=backoff_factor,
+        allowed_methods=False,
+    )
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
+    return session

@@ -9,9 +9,7 @@ import hashlib
 import time
 import inspect
 from urllib.parse import urlencode
-from urllib3.util.retry import Retry
-import requests
-from requests.adapters import HTTPAdapter
+from greencandle.lib.web import retry_session
 from greencandle.lib.logger import get_logger
 
 class BinanceException(Exception):
@@ -448,29 +446,11 @@ class Binance():
         data = self.signed_request("GET", "/api/v3/myTrades", params)
         return data
 
-    @staticmethod
-    def retry_session(retries, session=None, backoff_factor=0.3):
-        """
-        retry requests session
-        """
-        session = session or requests.Session()
-        retry = Retry(
-            total=retries,
-            read=retries,
-            connect=retries,
-            backoff_factor=backoff_factor,
-            allowed_methods=False,
-        )
-        adapter = HTTPAdapter(max_retries=retry)
-        session.mount('http://', adapter)
-        session.mount('https://', adapter)
-        return session
-
     def request(self, method, path, params=None):
         """
         Make request to API and return result
         """
-        session = self.retry_session(retries=5)
+        session = retry_session(retries=5)
         resp = session.request(method, self.endpoint + path, params=params, timeout=120)
         try:
             data = resp.json()
@@ -498,7 +478,7 @@ class Binance():
                              hashlib.sha256).hexdigest()
         query += f"&signature={signature}"
 
-        session = self.retry_session(retries=5)
+        session = retry_session(retries=5)
         resp = session.request(method,
                                self.endpoint + path + "?" + query, timeout=120,
                                headers={"X-MBX-APIKEY": self.options["apiKey"]})
