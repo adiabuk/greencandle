@@ -1,5 +1,19 @@
 # Releases
 
+# 9.2
+* add profitable by name/direction view
+* fix column name in db dayname_direction view and update schema
+* use 20/80 rule for stochrsi
+* 1d RSI rules were wrong way round
+* repurpose RSI containers for 5m only and rename rule
+* remove incorrect old table
+* fix informational output from script
+* fix perc profitable in db views
+* set timeout for any2 strategy staging env
+* remove rsi strategy without EMA check, and add ATR for long
+* remove 1m from extras UI
+* test env extra rules
+
 # 9.1.7
 * stop forwarding trades to test env
 * get ema 4h stats every 15mins
