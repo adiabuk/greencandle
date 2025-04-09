@@ -19,8 +19,8 @@ class TestConfig(unittest.TestCase):
         final_envs = set()
         failed = set()
         for env in base_envs:
-            with open("install/docker-compose_{}.yml".format(env), 'r') as stream:
-                output = (yaml.safe_load(stream))
+            with open(f"install/docker-compose_{env}.yml", 'r', encoding='utf-8') as stream:
+                output = yaml.safe_load(stream)
             for _, val in output['services'].items():
                 try:
                     var = val['environment'][0].split("=")
@@ -30,13 +30,13 @@ class TestConfig(unittest.TestCase):
                     pass
         for env in final_envs:
             print(env)
-            os.system("configstore package process_templates {} /etc".format(env))
+            os.system(f"configstore package process_templates {env} /etc")
             try:
                 config.create_config()
             except AttributeError:
                 failed.add(env)
         if failed:
-            self.fail("The following envs have missing config: {}".format(failed))
+            self.fail(f"The following envs have missing config: {failed}")
 
     def test_config2(self):
         """

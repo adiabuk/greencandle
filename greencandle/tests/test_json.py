@@ -14,5 +14,5 @@ class TestJson(unittest.TestCase):
         """
         for filename in glob('config/env/**/*.json', recursive=True):
             print(f"Testing {filename}")
-            with open(filename) as handle:
+            with open(filename,  encoding='utf-8') as handle:
                 json.load(handle)

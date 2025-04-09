@@ -17,9 +17,9 @@ class TestScripts(unittest.TestCase):
         for filename in files:
             path = filename.split('.')[0].replace('/', '.')
             name = path.split('.')[-1]
-            string = "{0}={1}:main".format(name, path)
+            string = f"{name}={path}:main"
             entrypoints.append(string)
-            print("Running {}".format(name))
+            print(f"Running {name}")
             result = check_call([name, '--help'], stdout=DEVNULL, stderr=STDOUT)
             self.assertEqual(result, 0)
         return entrypoints
