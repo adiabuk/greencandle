@@ -83,7 +83,7 @@ def main():
     """
 
     interval = config.main.interval
-    setproctitle(f"{config.main.base_env}-get_data-{interval}")
+    setproctitle(f"{config.main.base_env}-api_data-{interval}")
     name = config.main.name.split('-')[-1]
     Path(f'/var/run/{config.main.base_env}-data-{interval}-{name}').touch()
 
