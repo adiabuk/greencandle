@@ -359,14 +359,14 @@ services:
       - stag-base-redis:redis
       - stag-be-api-any-1h-cross-long:any-1h-long
       - stag-be-api-any-1h-cross-short:any-1h-short
+      - stag-be-api-any-1d-cross-long:any-1d-long
+      - stag-be-api-any-1d-cross-short:any-1d-short
       - stag-be-api-any-5m-cross-long:any-5m-long
       - stag-be-api-any-5m-cross-short:any-5m-short
       - stag-be-api-any-15m-cross-long:any-15m-long
       - stag-be-api-any-15m-cross-short:any-15m-short
       - stag-be-api-any2-1h-cross-long:any2-1h-long
       - stag-be-api-any2-1h-cross-short:any2-1h-short
-      - stag-be-api-any2-5m-cross-long:any2-5m-long
-      - stag-be-api-any2-5m-cross-short:any2-5m-short
       - stag-be-manual:api-loan
     depends_on:
       - stag-base-mysql
@@ -687,9 +687,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  stag-be-api-any2-5m-cross-long:
-    container_name: stag-be-api-any2-5m-cross-long
-    hostname: stag-be-api-any2-5m-cross-long
+  stag-be-api-any-1d-cross-long:
+    container_name: stag-be-api-any-1d-cross-long
+    hostname: stag-be-api-any-1d-cross-long
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
@@ -701,7 +701,7 @@ services:
         tag: "{{.Name}}"
         syslog-facility: local5
     environment:
-      - CONFIG_ENV=stag/be/any2/long/5m
+      - CONFIG_ENV=stag/be/any/long/1d
       - intermittent="true"
       - DB=true
     ports:
@@ -725,9 +725,9 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
-  stag-be-api-any2-5m-cross-short:
-    container_name: stag-be-api-any2-5m-cross-short
-    hostname: stag-be-api-any2-5m-cross-short
+  stag-be-api-any-1d-cross-short:
+    container_name: stag-be-api-any-1d-cross-short
+    hostname: stag-be-api-any-1d-cross-short
     image: amrox/greencandle:${TAG}
     mem_limit: 600M
     pull_policy: always
@@ -739,7 +739,7 @@ services:
         tag: "{{.Name}}"
         syslog-facility: local5
     environment:
-      - CONFIG_ENV=stag/be/any2/short/5m
+      - CONFIG_ENV=stag/be/any/short/1d
       - intermittent="true"
       - DB=true
       - no_proxy=router
