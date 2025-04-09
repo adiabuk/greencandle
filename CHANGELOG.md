@@ -1,5 +1,18 @@
 # Releases
 
+# 9.2.1
+* add missing test containers
+* volumes for dev env manual container
+* fix some unit test lint
+* fix assocs unit tests
+* unify non-data env configs
+* allow api_forward stategy to be computed at runtime
+* add low volume filters to new data strategy
+* fix typo in logging; order module
+* move retry sessions to web module and use for get reqs
+* check correct interval from 1d to 5m container
+* remove previously applied db changes and update db schema
+
 # 9.2
 * add profitable by name/direction view
 * fix column name in db dayname_direction view and update schema
