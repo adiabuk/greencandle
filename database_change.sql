@@ -67,3 +67,55 @@ GROUP BY
 ORDER BY
 	cast(`profit`.`open_time` AS DATE) DESC,
 	sum(`profit`.`net_perc`) DESC;
+
+ drop view if exists profitable_by_name_direction;
+ create view profitable_by_name_direction as
+SELECT
+	`profit`.`name` AS `name`,
+	`profit`.`direction` AS `direction`,
+	count(0) AS `total`,
+	sum(
+		CASE
+			WHEN `profit`.`perc` > 0 THEN 1
+			ELSE 0
+		END
+	) AS `profit`,
+	sum(
+		CASE
+			WHEN `profit`.`net_perc` > 0 THEN 1
+			ELSE 0
+		END
+	) AS `net_profit`,
+	sum(
+		CASE
+			WHEN `profit`.`net_perc` < 0 THEN 1
+			ELSE 0
+		END
+	) AS `net_loss`,
+	sum(
+		CASE
+			WHEN `profit`.`perc` > 0 THEN 1
+			ELSE 0
+		END
+	) / count(0) * 100 AS `perc_profitable`,
+	sum(
+		CASE
+			WHEN `profit`.`net_perc` > 0 THEN 1
+			ELSE 0
+		END
+	) / count(0) * 100 AS `net_perc_profitable`,
+	sum(`profit`.`perc`) AS `total_perc`,
+	sum(`profit`.`perc`) / count(0) AS `per_trade`,
+	sum(`profit`.`net_perc`) AS `total_net_perc`,
+	sum(`profit`.`net_perc`) / count(0) AS `net_per_trade`,
+	max(`profit`.`perc`) AS `max(perc)`,
+	min(`profit`.`perc`) AS `min(perc)`,
+	max(`profit`.`net_perc`) AS `max(net_perc)`,
+	min(`profit`.`net_perc`) AS `min(net_perc)`
+FROM
+	`greencandle`.`profit`
+GROUP BY
+	`profit`.`name`,
+	`profit`.`direction`
+;
+
