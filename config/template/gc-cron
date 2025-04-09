@@ -11,10 +11,10 @@ STATIC_DIR=/data/scripts/static
 
 @reboot echo C.UTF-8 > /etc/default/locale
 @hourly ${SCRIPTS_DIR}/cleanup_redis 120 &>> /var/log/cron.log
-@hourly ${SCRIPTS_DIR}/cleanup_db2 &>> /var/log/cron.log
 @hourly ${SCRIPTS_DIR}/check_env_drain &>> /var/log/cron.log
 
 {{if eq .production "true" }}
+@hourly ${SCRIPTS_DIR}/cleanup_db2 &>> /var/log/cron.log
 */5 * * * * ${SCRIPTS_DIR}/check_against_trend
 @weekly ${SCRIPTS_DIR}/cleanup_db0 &>> /var/log/cron.log
 @reboot ${SCRIPTS_DIR}/clear_redis 1 &>> /var/log/cron.log
@@ -42,6 +42,7 @@ STATIC_DIR=/data/scripts/static
 @hourly ${SCRIPTS_DIR}/find_balance_outlier &>> /var/log/cron.log
 
 {{else if eq .base_env "stag" }}
+@hourly ${SCRIPTS_DIR}/cleanup_db2 &>> /var/log/cron.log
 @weekly ${SCRIPTS_DIR}/cleanup_db0 &>> /var/log/cron.log
 @reboot ${SCRIPTS_DIR}/clear_redis 1 &>> /var/log/cron.log
 @hourly ${SCRIPTS_DIR}/check_tpsl &>> /var/log/cron.log
@@ -51,6 +52,7 @@ STATIC_DIR=/data/scripts/static
 #00 * * * * ${SCRIPTS_DIR}/populate_pairs
 
 {{else if eq .base_env "test"}}
+@hourly ${SCRIPTS_DIR}/cleanup_db2 &>> /var/log/cron.log
 @weekly ${SCRIPTS_DIR}/cleanup_db0 &>> /var/log/cron.log
 @reboot ${SCRIPTS_DIR}/clear_redis 1 &>> /var/log/cron.log
 @hourly ${SCRIPTS_DIR}/check_tpsl &>> /var/log/cron.log
