@@ -490,6 +490,33 @@ SET character_set_client = utf8;
 SET character_set_client = @saved_cs_client;
 
 --
+-- Temporary table structure for view `profitable_by_name_direction`
+--
+
+DROP TABLE IF EXISTS `profitable_by_name_direction`;
+/*!50001 DROP VIEW IF EXISTS `profitable_by_name_direction`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `profitable_by_name_direction` AS SELECT
+ 1 AS `name`,
+  1 AS `direction`,
+  1 AS `total`,
+  1 AS `profit`,
+  1 AS `net_profit`,
+  1 AS `net_loss`,
+  1 AS `perc_profitable`,
+  1 AS `net_perc_profitable`,
+  1 AS `total_perc`,
+  1 AS `per_trade`,
+  1 AS `total_net_perc`,
+  1 AS `net_per_trade`,
+  1 AS `max(perc)`,
+  1 AS `min(perc)`,
+  1 AS `max(net_perc)`,
+  1 AS `min(net_perc)` */;
+SET character_set_client = @saved_cs_client;
+
+--
 -- Temporary table structure for view `profitable_hours`
 --
 
@@ -839,9 +866,9 @@ ALTER DATABASE `greencandle` CHARACTER SET utf8 COLLATE utf8_general_ci ;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8mb4 */;
-/*!50001 SET character_set_results     = utf8mb4 */;
-/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 SET character_set_client      = utf8mb3 */;
+/*!50001 SET character_set_results     = utf8mb3 */;
+/*!50001 SET collation_connection      = utf8mb3_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
 /*!50001 VIEW `profit_by_dayname_direction` AS select dayname(`profit`.`open_time`) AS `day_name`,sum(`profit`.`net_perc`) AS `net_perc`,`profit`.`direction` AS `direction`,sum(case when `profit`.`net_perc` > 0 then 1 else 0 end) / count(0) * 100 AS `net_perc_profitable` from `profit` group by dayname(`profit`.`open_time`),`profit`.`direction` order by field(`profit`.`day`,'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday') */;
@@ -1066,6 +1093,24 @@ ALTER DATABASE `greencandle` CHARACTER SET utf8 COLLATE utf8_general_ci ;
 /*!50001 SET collation_connection      = @saved_col_connection */;
 
 --
+-- Final view structure for view `profitable_by_name_direction`
+--
+
+/*!50001 DROP VIEW IF EXISTS `profitable_by_name_direction`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb3 */;
+/*!50001 SET character_set_results     = utf8mb3 */;
+/*!50001 SET collation_connection      = utf8mb3_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `profitable_by_name_direction` AS select `profit`.`name` AS `name`,`profit`.`direction` AS `direction`,count(0) AS `total`,sum(case when `profit`.`perc` > 0 then 1 else 0 end) AS `profit`,sum(case when `profit`.`net_perc` > 0 then 1 else 0 end) AS `net_profit`,sum(case when `profit`.`net_perc` < 0 then 1 else 0 end) AS `net_loss`,sum(case when `profit`.`perc` > 0 then 1 else 0 end) / count(0) * 100 AS `perc_profitable`,sum(case when `profit`.`net_perc` > 0 then 1 else 0 end) / count(0) * 100 AS `net_perc_profitable`,sum(`profit`.`perc`) AS `total_perc`,sum(`profit`.`perc`) / count(0) AS `per_trade`,sum(`profit`.`net_perc`) AS `total_net_perc`,sum(`profit`.`net_perc`) / count(0) AS `net_per_trade`,max(`profit`.`perc`) AS `max(perc)`,min(`profit`.`perc`) AS `min(perc)`,max(`profit`.`net_perc`) AS `max(net_perc)`,min(`profit`.`net_perc`) AS `min(net_perc)` from `profit` group by `profit`.`name`,`profit`.`direction` order by sum(`profit`.`perc`) desc */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
 -- Final view structure for view `profitable_hours`
 --
 
@@ -1092,7 +1137,7 @@ ALTER DATABASE `greencandle` CHARACTER SET utf8 COLLATE utf8_general_ci ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-09 10:04:26
+-- Dump completed on 2025-04-09 12:35:24
 -- MySQL dump 10.19  Distrib 10.3.39-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: mysql    Database: greencandle
@@ -1168,4 +1213,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-09 10:04:26
+-- Dump completed on 2025-04-09 12:35:24
