@@ -1,5 +1,4 @@
 {
-  "api_forward": "1h-2",
   "check_interval": "240",
   "interval": "1h",
   "name": "data-be-analyse-1h-short2",

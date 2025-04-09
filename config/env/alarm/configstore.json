@@ -91,11 +91,6 @@
       "is_binary": false,
       "is_secret": false
     },
-    "api_forward": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
     "api_token": {
       "value": "jO+Ecbd+uWvvOmSZ/qrLS4Wu0ixMk5FMz3a4lSrdf/a37bbJxCxXw/eMno1oEXcq",
       "is_binary": false,

@@ -226,3 +226,10 @@ def price2float(price: str) -> float:
 
     result = float(trimmed)
     return result
+def get_trailing_number(s):
+    """
+    get number at the end of a string
+    """
+    m = re.search(r'\d+$', s)
+    return int(m.group()) if m else None
+

@@ -1,5 +1,4 @@
 {
-  "api_forward": "30m-3",
   "check_interval": "120",
   "interval": "30m",
   "name": "data-be-analyse-30m-long3",

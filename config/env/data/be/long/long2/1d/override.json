@@ -1,5 +1,4 @@
 {
-  "api_forward": "1d-2",
   "check_interval": "5760",
   "interval": "1d",
   "name": "data-be-analyse-1d-long2",

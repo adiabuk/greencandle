@@ -91,11 +91,6 @@
       "is_binary": false,
       "is_secret": false
     },
-    "api_forward": {
-      "value": "test,local.amrox.loc:1084,bb-any-long-short",
-      "is_binary": false,
-      "is_secret": false
-    },
     "api_token": {
       "value": "cysqm6cQuAw78fJtqfcVrXVygREE0LGVTYl6ZQkMv/nxxPpG150gNdPGZDfsw442",
       "is_binary": false,

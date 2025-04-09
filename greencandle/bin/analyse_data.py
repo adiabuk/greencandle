@@ -23,7 +23,8 @@ from greencandle.lib.redis_conn import Redis
 from greencandle.lib.mysql import Mysql
 from greencandle.lib.logger import get_logger, exception_catcher
 from greencandle.lib.alerts import send_slack_message
-from greencandle.lib.common import get_tv_link, arg_decorator, convert_to_seconds, perc_diff
+from greencandle.lib.common import (get_tv_link, arg_decorator, convert_to_seconds, perc_diff,
+                                    get_trailing_number)
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.order import Trade
 from greencandle.lib.web import decorator_timer
@@ -31,6 +32,7 @@ from greencandle.lib.objects import AttributeDict
 
 config.create_config()
 INTERVAL = config.main.interval
+STRAT_NO = get_trailing_number(config.main.name)
 DIRECTION = config.main.trade_direction
 LOGGER = get_logger(__name__)
 PAIRS = config.main.pairs.split()
@@ -270,6 +272,7 @@ def analyse_pair(pair, reversal, expire, redis):
         if ROUTER_FORWARD:
             url = f"http://router:1080/{config.web.api_token}"
             forward_strategy = config.web.forward
+            forward_strategy = f'{INTERVAL}-{STRAT_NO}'
             payload = {"pair": pair,
                        "text": (f"forwarding {result.lower()} trade from "
                                 f"{match_strs}/{INTERVAL}/{DIRECTION}"),
