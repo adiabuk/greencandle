@@ -1,7 +1,7 @@
 # 9.2
 
 drop view if exists profit_by_dayname_diretion;
-drop table if exists profit_by_dayname_direction;
+drop view if exists profit_by_dayname_direction;
 create view profit_by_dayname_direction as select dayname(`profit`.`open_time`) AS `day_name`,sum(`profit`.`net_perc`) AS `net_perc`,`profit`.`direction` AS `direction`,sum(case when `profit`.`net_perc` > 0 then 1 else 0 end) / count(0) * 100 AS `net_perc_profitable` from `greencandle`.`profit` group by dayname(`profit`.`open_time`),`profit`.`direction` order by field(`profit`.`day`,'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday');
 
 drop view if exists profit_daily_breakdown_close;
