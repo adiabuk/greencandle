@@ -74,7 +74,11 @@ services:
       retries: 5
     volumes:
       - /data:/data
+      - /root/.bash_history:/root/.bash_history
+      - /root/.bashrc:/root/.bashrc
+      - /root/.ipython:/root/.ipython
       - /root/.aws:/root/.aws
+
 
   dev-base-redis:
     extra_hosts: *default-extra_hosts
