@@ -32,7 +32,7 @@ ORDER BY
 	cast(`profit`.`close_time` AS DATE) DESC,
 	sum(`profit`.`net_perc`) DESC;
 
-drop view if exists profit_daily_breakdown open;
+drop view if exists profit_daily_breakdown_open;
 create view profit_daily_breakdown_open as
 SELECT
 	dayname(`profit`.`open_time`) AS `dayname`,
