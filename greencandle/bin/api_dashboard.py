@@ -30,7 +30,7 @@ from greencandle.lib.common import (arg_decorator, divide_chunks, get_be_service
                                     perc_diff, get_tv_link, get_trade_link, format_usd, price2float)
 from greencandle.lib.objects import AttributeDict
 from greencandle.lib import config
-from greencandle.lib.web import PrefixMiddleware, push_prom_data, decorator_timer
+from greencandle.lib.web import PrefixMiddleware, push_prom_data, decorator_timer, retry_session
 from greencandle.lib.balance_common import get_quote
 from greencandle.lib.balance import Balance
 from greencandle.lib.flask_auth import load_user, login as loginx, logout as logoutx
@@ -174,7 +174,9 @@ def commands():
 def interal():
     """Load internal page"""
     page = "http://" + request.args.get('page')
-    resp = requests.get(page, timeout=20)
+    new_session = retry_session(retries=5, backoff_factor=2)
+    resp = new_session.request('GET', page, timeout=30)
+
     if page.endswith('png'):
         filename = os.path.split(page)[-1]
         return render_template('image.html', filename=filename)
@@ -484,7 +486,10 @@ def get_live():
     mt10 = 0
 
     dbase = Mysql()
-    stream_req = requests.get("http://stream/5m/all", timeout=20)
+    page = "http://stream/5m/all"
+    new_session = retry_session(retries=5, backoff_factor=2)
+    stream_req = new_session.request('GET', page, timeout=30)
+
     prices = stream_req.json()
 
     services = list_to_dict(get_be_services(config.main.base_env),
@@ -673,7 +678,11 @@ def get_total_values():
     dbase = Mysql()
     raw = dbase.get_open_trades()
     commission = float(dbase.get_complete_commission())
-    stream_req = requests.get('http://stream/5m/all', timeout=20)
+
+    page = "http://stream/5m/all"
+    new_session = retry_session(retries=5, backoff_factor=2)
+    stream_req = new_session.request('GET', page, timeout=30)
+
     prices = stream_req.json()
     names = []
     for _, _, pair, name, open_price, direction, quote_in in raw:
@@ -859,9 +868,11 @@ def get_data():
     dbase = Mysql()
     intervals = set(y[1] for y in dbase.get_open_trades())
     for interval in intervals:
-        DATA[f'tf_{interval}'] = \
-                AttributeDict(requests.get(f'http://www.data.amrox.loc/data/{interval}',
-                              timeout=20).json()['output'])
+        page = f"http://www.data.amrox.loc/data/{interval}"
+        new_session = retry_session(retries=5, backoff_factor=2)
+        DATA[f'tf_{interval}'] = AttributeDict(
+                new_session.request('GET', page, timeout=30).json()['output']
+                )
 
 @arg_decorator
 def main():
