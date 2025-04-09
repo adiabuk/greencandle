@@ -1,5 +1,12 @@
 # Releases
 
+# 9.2.2
+* rename api data proc in data env
+* close db connection to avoid log warnings
+* don't run check_env or db2 cleanup scripts in config env
+* update db schema
+* DB view - profit by direction/hour views for open and close, with direction/name/count
+
 # 9.2.1
 * add missing test containers
 * volumes for dev env manual container
