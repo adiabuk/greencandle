@@ -1,6 +1,6 @@
 # 9.2
 
-drop view if exists profit_daily_breakdown close;
+drop view if exists profit_daily_breakdown_close;
 create view profit_daily_breakdown_close as
 SELECT
 	dayname(`profit`.`close_time`) AS `dayname`,
