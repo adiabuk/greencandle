@@ -117,5 +117,6 @@ FROM
 GROUP BY
 	`profit`.`name`,
 	`profit`.`direction`
+ORDER BY sum(`profit`.`perc`) desc
 ;
 
