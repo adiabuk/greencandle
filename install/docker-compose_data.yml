@@ -932,6 +932,8 @@ services:
       - DB=true
       - CHECK_REDIS_INTERVAL=1d
       - CHECK_REDIS_PAIR=5
+      - ROUTER_FORWARD=true
+      - STORE_IN_DB=True
     healthcheck:
       test: find /var/local/lock -mmin -30 -name data-be-analyse-5m-short6 2>&1  | grep . || exit 1
       start_period: 1h
@@ -972,6 +974,8 @@ services:
       - DB=true
       - CHECK_REDIS_INTERVAL=1d
       - CHECK_REDIS_PAIR=5
+      - ROUTER_FORWARD=true
+      - STORE_IN_DB=True
     healthcheck:
       test: find /var/local/lock -mmin -3 -name data-be-analyse-5m-long6 2>&1  | grep . || exit 1
       start_period: 1h
