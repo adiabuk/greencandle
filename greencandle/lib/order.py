@@ -124,7 +124,7 @@ class Trade():
                     continue
 
             if (current_trades and [trade for trade in current_trades if item[0] in trade]):
-                self.logger.warning("we already have a trade of %s %s, skipping...",
+                self.logger.info("we already have a trade of %s %s, skipping...",
                     self.config.main.trade_direction, item[0])
             elif not manual and (item[0] not in self.config.main.pairs and not self.test_data):
                 self.logger.critical("pair %s not in main_pairs, skipping...", item[0])
