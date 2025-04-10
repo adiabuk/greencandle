@@ -760,6 +760,7 @@ class Redis():
             try:
                 dbase = Mysql(interval=config.main.interval)
                 open_price = dbase.get_trade_value(pair)[0][0]
+                del  dbase
             except IndexError:
                 open_price = None
 
