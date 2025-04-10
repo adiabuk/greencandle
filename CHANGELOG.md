@@ -1,5 +1,11 @@
 # Releases
 
+# 9.2.3
+* re-enable router forwards to test env
+* enable API forwards for OPEN/CLOSE rsi/stoch strategy
+* downgrade log severity when trade already open
+* missing config dirs for test env
+
 # 9.2.2
 * rename api data proc in data env
 * close db connection to avoid log warnings
