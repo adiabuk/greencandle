@@ -361,7 +361,7 @@ services:
       - test-be-api-any-1h-cross-short:any-1h-short
       - test-be-api-any-1d-cross-long:any-1d-long
       - test-be-api-any-1d-cross-short:any-1d-short
-      - test-be-manual:api-loan
+      - test-base-redis:api-loan
     depends_on:
       - test-base-mysql
       - test-base-redis
@@ -840,4 +840,3 @@ services:
       - /var/run:/var/run
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
-

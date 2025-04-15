@@ -367,7 +367,7 @@ services:
       - stag-be-api-any-15m-cross-short:any-15m-short
       - stag-be-api-any2-1h-cross-long:any2-1h-long
       - stag-be-api-any2-1h-cross-short:any2-1h-short
-      - stag-be-manual:api-loan
+      - stag-base-redis:api-loan
     depends_on:
       - stag-base-mysql
       - stag-base-redis
