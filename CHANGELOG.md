@@ -1,5 +1,14 @@
 # Releases
 
+# 9.3
+* set default open rule to False
+* no indicators by default for trade envs
+* fix dep cycle in trading envs
+* add sentiment rules for test env
+* check sentiment check in trading envs before opening trades
+* cleanup config rules for trading envs
+* another dbase connection to close once done
+
 # 9.2.3
 * re-enable router forwards to test env
 * enable API forwards for OPEN/CLOSE rsi/stoch strategy
