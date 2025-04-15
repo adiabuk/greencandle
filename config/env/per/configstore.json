@@ -287,7 +287,7 @@
       "is_secret": false
     },
     "open_rule1": {
-      "value": "False",
+      "value": "True",
       "is_binary": false,
       "is_secret": false
     },
