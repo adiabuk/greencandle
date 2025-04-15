@@ -85,7 +85,7 @@ def add_to_queue(req, test=False):
         if sentiment.get_results():
             LOGGER.info("Sentiment matches for %s, proceeding...", pair)
         else:
-            LOGGER.info("No matching sentiment for %s, stopping....", pair)
+            LOGGER.info("No matching sentiment for %s, skipping....", pair)
             return
 
         if 'get_trend' in os.environ:
