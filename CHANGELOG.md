@@ -1,5 +1,11 @@
 # Releases
 
+# 9.3.1
+* add missing 15m router assocs and fix typo in name
+* open_rule1 is always true when sentiment checking not applied
+* use consistent wording in logs
+* forward 5m trades to test env
+
 # 9.3
 * set default open rule to False
 * no indicators by default for trade envs
