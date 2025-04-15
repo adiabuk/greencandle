@@ -17,6 +17,7 @@ from greencandle.lib.order import Trade
 from greencandle.lib.logger import get_logger
 from greencandle.lib.common import get_trade_link, get_tv_link
 from greencandle.lib.alerts import send_slack_message
+from greencandle.lib.sentiment import Sentiment
 
 config.create_config()
 LOGGER = get_logger(__name__)
@@ -80,6 +81,13 @@ def add_to_queue(req, test=False):
             return
 
     if action_str == 'OPEN':
+        sentiment = Sentiment()
+        if sentiment.get_results():
+            LOGGER.info("Sentiment matches for %s, proceeding...", pair)
+        else:
+            LOGGER.info("No matching sentiment for %s, stopping....", pair)
+            return
+
         if 'get_trend' in os.environ:
             url = f"http://trend:6001/get_trend?pair={pair}"
             try:
