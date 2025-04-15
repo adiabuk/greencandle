@@ -42,7 +42,7 @@
 "any-5m-long-short": ["any-5m-short", "any-5m-long"],
 
 "any-15m-long": ["any-15m-long"],
-"any-15m-short": ["any-5m-short"],
+"any-15m-short": ["any-15m-short"],
 "any-15m-long-short": ["any-15m-short", "any-15m-long"],
 
 "any-1h-long": ["any-1h-long"],
