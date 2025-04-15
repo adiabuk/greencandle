@@ -25,7 +25,6 @@ class Sentiment(dict):
             method, name, interval = ind.split(';')
 
             results[f'{name}_{interval}'] = int(eval(f'self.{method}("{interval}")'))
-        print(results)
         self.res = AttributeDict(results)
 
     def get_tv(self, interval):
@@ -44,16 +43,14 @@ class Sentiment(dict):
         for seq in range(1, 6):
             try:
                 current_config = config.main[f'open_rule{seq}']
-                print(current_config)
             except (KeyError, TypeError):
                 self.logger.info("Unable to fetch rule %s", seq)
             if current_config:
                 try:
                     rules.append(eval(current_config))
-                    print(current_config)
                 except Exception:
                     self.logger.info("Unable to eval rule %s", seq)
-        print(rules)
+        self.logger.info("Matched Rules: %s",rules)
         return any(rules)
 
 sent = Sentiment()
