@@ -287,27 +287,27 @@
       "is_secret": false
     },
     "open_rule1": {
-      "value": "True",
+      "value": "False",
       "is_binary": false,
       "is_secret": false
     },
     "open_rule2": {
-      "value": "True",
+      "value": "False",
       "is_binary": false,
       "is_secret": false
     },
     "open_rule3": {
-      "value": "True",
+      "value": "False",
       "is_binary": false,
       "is_secret": false
     },
     "open_rule4": {
-      "value": "True",
+      "value": "False",
       "is_binary": false,
       "is_secret": false
     },
     "open_rule5": {
-      "value": "True",
+      "value": "False",
       "is_binary": false,
       "is_secret": false
     },
