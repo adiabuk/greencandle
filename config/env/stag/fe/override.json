@@ -1,6 +1,5 @@
 {
   "divisor": "3",
-  "indicators": "get_moving_averages;EMA;2 get_moving_averages;EMA;69 get_moving_averages;EMA;8 get_moving_averages;EMA;13 get_moving_averages;EMA;21 get_moving_averages;EMA;55 get_moving_averages;EMA;100 get_moving_averages;EMA;20 get_tsi;tsi;25 get_tsi;signal;25 get_pivot;pivot;1",
   "logging_level": "20",
   "name": "stag-api",
   "pairs": "None"

@@ -237,7 +237,7 @@
       "is_secret": false
     },
     "indicators": {
-      "value": "get_moving_averages;EMA;8 get_moving_averages;EMA;13 get_moving_averages;EMA;21 get_moving_averages;EMA;34 get_moving_averages;EMA;55 get_rsi;RSI;50 get_moving_averages;EMA;200 get_oscillators;STOCHF;14",
+      "value": "None",
       "is_binary": false,
       "is_secret": false
     },

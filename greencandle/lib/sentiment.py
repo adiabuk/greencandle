@@ -21,11 +21,14 @@ class Sentiment(dict):
         self.logger = get_logger(self.__class__.__name__)
         results = {}
         indicators = config.main.indicators.split()
-        for ind in indicators:
-            method, name, interval = ind.split(';')
+        if "None" in indicators:
+            self.res = AttributeDict()
+        else:
+            for ind in indicators:
+                method, name, interval = ind.split(';')
+                results[f'{name}_{interval}'] = int(eval(f'self.{method}("{interval}")'))
 
-            results[f'{name}_{interval}'] = int(eval(f'self.{method}("{interval}")'))
-        self.res = AttributeDict(results)
+            self.res = AttributeDict(results)
 
     def get_tv(self, interval):
         """
@@ -52,6 +55,3 @@ class Sentiment(dict):
                     self.logger.info("Unable to eval rule %s", seq)
         self.logger.info("Matched Rules: %s",rules)
         return any(rules)
-
-sent = Sentiment()
-sent.get_results()
