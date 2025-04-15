@@ -1,6 +1,8 @@
 {
+  "indicators": "get_tv;TV;4h",
   "interval": "1h",
   "name": "test-be-api-any2-1h-cross",
+  "open_rule1": "res.TV_4h \u003c= 0",
   "slack_alerts": "test",
   "slack_balance": "test",
   "slack_notifications": "test",

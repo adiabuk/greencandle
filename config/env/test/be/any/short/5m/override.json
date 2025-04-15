@@ -1,7 +1,9 @@
 {
   "immediate_trailing_stop": "true",
+  "indicators": "get_tv;TV;5m",
   "interval": "5m",
   "name": "test-be-api-any-5m-cross",
+  "open_rule1": "res.TV_5m \u003c= 0",
   "perc_at_timeout": "5",
   "stop_loss_perc": "2",
   "take_profit_perc": "2",

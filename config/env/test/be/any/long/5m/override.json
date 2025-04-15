@@ -1,10 +1,12 @@
 {
   "immediate_trailing_stop": "true",
+  "indicators": "get_tv;TV;5m",
   "interval": "5m",
   "name": "test-be-api-any-5m-cross",
+  "open_rule1": "res.TV_5m \u003e= 0",
   "perc_at_timeout": "3",
-  "stop_loss_perc": "4",
   "slack_trades": "test",
+  "stop_loss_perc": "4",
   "take_profit_perc": "2",
   "time_in_trade": "6h",
   "trade_direction": "long",

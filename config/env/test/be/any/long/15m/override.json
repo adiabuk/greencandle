@@ -1,7 +1,9 @@
 {
   "immediate_trailing_stop": "true",
+  "indicators": "get_tv;TV;5m get_tv;TV;15m get_tv;TV;30m get_tv;TV;1h",
   "interval": "15m",
   "name": "test-be-api-any-15m-cross",
+  "open_rule1": "res.TV_5m \u003e= 0 and res.TV_15m \u003e=0 and res.TV_30m \u003e=0 and res.TV_1h \u003e= 0",
   "perc_at_timeout": "3",
   "stop_loss_perc": "6",
   "take_profit_perc": "5",
