@@ -1,11 +1,5 @@
 {
-  "close_rule1": "res[0].EMA_2 \u003c res[0].EMA_69",
-  "close_rule2": "res[0].low \u003c res[0].EMA_69",
-  "close_rule3": "res[0].low \u003c res[0].EMA_55",
   "indicators": "get_moving_averages;EMA;2 get_moving_averages;EMA;69 get_moving_averages;EMA;8 get_moving_averages;EMA;13 get_moving_averages;EMA;21 get_moving_averages;EMA;55 get_moving_averages;EMA;100",
   "name": "per-fe",
-  "open_rule1": "res[0].EMA_2 \u003e res[0].EMA_69 and res[1].EMA_2 \u003c res[1].EMA_69",
-  "open_rule2": "res[0].EMA_8 \u003e res[0].EMA_13 and res[0].EMA_13 \u003e res[0].EMA_21 and res[0].EMA_21 \u003e res[0].EMA_55 and close \u003e res[1].close",
-  "open_rule3": "res[0].EMA_8 \u003e res[0].EMA_13 and res[0].EMA_13 \u003e res[0].EMA_21 and res[0].EMA_21 \u003e res[0].EMA_55 and res[0].EMA_55 \u003e res[0].EMA_100",
   "pairs": "None"
 }
