@@ -4,12 +4,11 @@
 Check for enabled drain in given environment
 """
 import sys
-import requests
 from send_nsca3 import send_nsca
 from greencandle.lib import config
 from greencandle.lib.common import arg_decorator
 from greencandle.lib.logger import get_logger
-from greencandle.lib.web import count_struct
+from greencandle.lib.web import count_struct, retry_session
 
 @arg_decorator
 def main():
@@ -23,7 +22,8 @@ def main():
     logger = get_logger(__name__)
     config.create_config()
     env = config.main.base_env
-    a = requests.get(f'http://config.amrox.loc/drain/get_env?env={env}', timeout=20)
+    session = retry_session(retries=5, backoff_factor=2)
+    a = session.request('GET', f'http://config.amrox.loc/drain/get_env?env={env}', timeout=30)
     count = count_struct(a.json())
 
     if count > 3:
