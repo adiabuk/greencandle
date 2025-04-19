@@ -16,7 +16,7 @@ import pandas
 import numpy
 import pandas_ta as ta
 import talib
-
+from scipy.stats import linregress
 from greencandle.lib.common import make_float
 from greencandle.lib.binance_common import get_all_klines
 from greencandle.lib.logger import get_logger, exception_catcher
@@ -160,6 +160,19 @@ class Engine(dict):
 
         LOGGER.debug("done getting data")
         return self
+
+    @staticmethod
+    def get_slope(array):
+        """
+        given a list of values fetch and return the slope of the line
+        Input can be a list or an array
+        Output is a numpy array
+        """
+        y = numpy.array(array)
+        x = numpy.arange(len(y))
+        slope, intercept, r_value, p_value, std_err = linregress(x,y)
+        return slope
+
 
     @decorator_timer
     def send_ohlcs(self, pair, first_run, no_of_runs=999):
@@ -705,8 +718,8 @@ class Engine(dict):
             return
         scheme = {}
         try:
-
-            scheme["data"] = results[-1]
+            slope = self.get_slope(results[-6:])
+            scheme["data"] = results[-1], slope
             scheme["symbol"] = pair
             scheme["event"] = f"{func}_{timef}"
             scheme["open_time"] = open_time
