@@ -73,7 +73,7 @@ VERIFIED to be equal to tradingview
 get_moving_averages;EMA;8
 <function>;<MA><timeframe>
 Usage: res[0].EMA_8
-Redis output: EMA value, float
+Redis output: (EMA value, slope of EMA): tupple of floats
 
 <MA> can be MA|SMA|EMA|WMA
 
