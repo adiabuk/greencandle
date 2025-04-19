@@ -2,6 +2,6 @@
   "check_interval": "120",
   "interval": "30m",
   "name": "data-be-analyse-30m-long8",
-  "open_rule1": "res[0].low \u003c res[0].EMA_50 and perc_diff(res[0].bb_200[1], res[0].EMA_50) \u003e 2 and res[0].EMA_50 \u003e res[1].EMA_50 \u003e res[2].EMA_50",
+  "open_rule1": "res[0].low \u003c res[0].EMA_50[0] and perc_diff(res[0].bb_200[1], res[0].EMA_50[0]) \u003e 2 and res[0].EMA_50[0] \u003e res[1].EMA_50[0] \u003e res[2].EMA_50[0]",
   "time_between_trades": "1h"
 }
