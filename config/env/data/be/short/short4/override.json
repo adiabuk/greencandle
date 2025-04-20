@@ -1,4 +1,4 @@
 {
   "close_rule1": "res[0].RSI_7 \u003c 30",
-  "open_rule1": "(res[0].close \u003c res[0].EMA_150[0] or res[0].RSI_250 \u003c 50) and res[1].close \u003c res[1].EMA_150[0] and res[0].RSI_7 \u003e 70 and (res[0].STOCHRSI_14[0] \u003e 95 or res[1].STOCHRSI_14[0] \u003e 95) and res[0].numTrades \u003e 50 and agg.bb_size \u003e 1 and agg.empty_count \u003c 1"
+  "open_rule1": "res[0].close \u003c res[0].EMA_150[0] and res[1].close \u003c res[1].EMA_150[0] and res[0].RSI_7 \u003e 60 and res[0].STOCHRSI_14[0] \u003e 80 and res[0].numTrades \u003e 50 and agg.bb_size \u003e 1 and agg.empty_count \u003c 1"
 }
