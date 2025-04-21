@@ -2,9 +2,11 @@
 {
 
 "15m-7": ["stag:any-15m-long-short", "test:any-15m-long-short"],
-"1h-5": ["stag:any2-1h-long-short", "test:any2-1h-long-short"],
+"4h-5": ["stag:any2-4h-long-short"],
+"1h-5": ["stag:any2-1h-long-short"],
 "30m-5": ["stag:any2-30m-long-short"],
 
+"4h-2": ["test:any2-4h-long-short"],
 "1h-2": ["test:any2-1h-long-short"],
 "30m-2": ["test:any2-30m-long-short"],
 
@@ -57,6 +59,10 @@
 "any-1h-long": ["any-1h-long"],
 "any-1h-short": ["any-1h-short"],
 "any-1h-long-short": ["any-1h-short", "any-1h-long"],
+
+"any-4h-long": ["any-4h-long"],
+"any-4h-short": ["any-4h-short"],
+"any-4h-long-short": ["any-4h-short", "any-4h-long"],
 
 "any-1d-long": ["any-1d-long"],
 "any-1d-short": ["any-1d-short"],

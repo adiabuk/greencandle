@@ -1,4 +1,5 @@
 {
   "name": "stag-be-api-any2-4h-cross",
+  "interval": "4h",
   "take_profit_perc": "3.5"
 }
