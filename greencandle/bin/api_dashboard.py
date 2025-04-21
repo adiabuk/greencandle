@@ -536,14 +536,14 @@ def get_live():
         ha_up = ha > ha_last if direction == 'long' else ha < ha_last
         if direction == 'long':
             bb_sell = float(current_price) > DATA[f'tf_{interval}'][pair]['res'][0]['bb_30'][0]
-            ema_trend = float(current_price) > ema150
+            ema_trend = float(current_price) > ema150[0]
             rsi_sell = rsi7 > 70
             stoch_sell = stochrsi > 95
             long.append(float(net_perc))
 
         else:
             bb_sell = float(current_price) < DATA[f'tf_{interval}'][pair]['res'][0]['bb_30'][2]
-            ema_trend = float(current_price) < ema150
+            ema_trend = float(current_price) < ema150[0]
             rsi_sell = rsi7 < 30
             stoch_sell = stochrsi < 5
             short.append(float(net_perc))
