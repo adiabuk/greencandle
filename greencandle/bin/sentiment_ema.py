@@ -44,7 +44,7 @@ def main():
             x = json.loads(redis.get_item(f'{pair}:{interval}', item).decode())
 
 
-            if float(x['ohlc']['close']) > x['EMA_150']:
+            if float(x['ohlc']['close']) > x['EMA_150'][0]:
                 up.append(pair)
             else:
                 down.append(pair)
