@@ -1,0 +1,6 @@
+{
+  "check_interval": "240",
+  "interval": "30m",
+  "name": "data-be-analyse-30m-short4",
+  "time_between_trades": "5m"
+}
