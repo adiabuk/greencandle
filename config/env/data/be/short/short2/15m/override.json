@@ -2,5 +2,6 @@
   "check_interval": "60",
   "interval": "15m",
   "name": "data-be-analyse-15m-short2",
-  "time_between_trades": "15h"
+  "redis_expiry_seconds": "36000",
+  "time_between_trades": "4h"
 }

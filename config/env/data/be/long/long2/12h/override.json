@@ -1,6 +1,0 @@
-{
-  "check_interval": "2880",
-  "interval": "12h",
-  "name": "data-be-analyse-12h-long2",
-  "time_between_trades": "12d"
-}

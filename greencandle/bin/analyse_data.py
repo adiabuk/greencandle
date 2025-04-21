@@ -147,7 +147,8 @@ def get_match_name(matches):
         container_num = 1
 
     name_lookup = [['trend_200', 'golden_cross', 'big_change_outside'],
-                   ['multi_ind'],
+                   ['alt-STOCHRSI', 'alt-stoch-close2', 'alt-stoch-close3', 'alt-stoch-close4',
+                    'alt-stoch-close5'],
                    ['distance', 'bb', "bbperc_diff", "bbperc_extreme"],
                    ['low_rsi_in_trend_near_EMA', 'low_rsi_in_trend'],
                    ['STOCHRSI_flip', 'RSI_close-rule', 'broken_trend', 'multi_ind_close'],

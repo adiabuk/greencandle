@@ -2,5 +2,6 @@
   "check_interval": "240",
   "interval": "1h",
   "name": "data-be-analyse-1h-short2",
-  "time_between_trades": "5h"
+  "redis_expiry_seconds": "86400",
+  "time_between_trades": "3h"
 }
