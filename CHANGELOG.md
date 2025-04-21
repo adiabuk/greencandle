@@ -1,5 +1,15 @@
 # Releases
 
+# 9.3.2
+* more relaxation of rules
+* update indicator docs and scripts to reflect tuple output of EMA with slope
+* use EMA slope for entrypoint
+* simplify stage1 of RSI/STOCH rule
+* add slope to EMA indicator
+* remove delisted pairs
+* set max stoploss for 5m/15m strategies
+* use retry_sessions for config get request
+
 # 9.3.1
 * add missing 15m router assocs and fix typo in name
 * open_rule1 is always true when sentiment checking not applied
