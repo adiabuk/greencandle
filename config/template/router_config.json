@@ -62,6 +62,10 @@
 "any-1d-short": ["any-1d-short"],
 "any-1d-long-short": ["any-1d-short", "any-1d-long"],
 
+"any2-30m-long": ["any2-30m-long"],
+"any2-30m-short": ["any2-30m-short"],
+"any2-30m-long-short": ["any2-30m-short", "any2-30m-long"],
+
 "any2-1h-long": ["any2-1h-long"],
 "any2-1h-short": ["any2-1h-short"],
 "any2-1h-long-short": ["any2-1h-short", "any2-1h-long"],
