@@ -2,6 +2,7 @@
   "indicators": "get_tv;TV;4h",
   "interval": "1h",
   "name": "test-be-api-any2-1h-cross",
+  "perc_at_timeout": "4",
   "open_rule1": "res.TV_4h \u003c= 0",
   "slack_alerts": "test",
   "slack_balance": "test",

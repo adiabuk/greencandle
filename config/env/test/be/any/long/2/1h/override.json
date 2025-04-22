@@ -1,8 +1,9 @@
 {
   "indicators": "None",
   "interval": "1h",
+  "perc_at_timeout": "4",
   "name": "test-be-api-any2-1h-cross",
-  "open_rule1": "True",
+  "open_rule1": "res.TV_4h \u003e= 0",
   "stop_loss_perc": "5",
   "take_profit_perc": "9",
   "trade_direction": "long"
