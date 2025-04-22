@@ -1857,7 +1857,6 @@ services:
       - data-be-get_1h
     environment:
       - CONFIG_ENV=data/be/short/short4/1h
-      - REDIS_FORWARD=8
       - DB=true
     healthcheck:
       test: find /var/local/lock -mmin -3 -name data-be-analyse-1h-short4 2>&1  | grep . || exit 1
@@ -1897,7 +1896,6 @@ services:
     environment:
       - CONFIG_ENV=data/be/long/long4/1h
       - DB=true
-      - REDIS_FORWARD=8
     healthcheck:
       test: find /var/local/lock -mmin -3 -name data-be-analyse-1h-long4 2>&1  | grep . || exit 1
       start_period: 1h
@@ -1936,7 +1934,6 @@ services:
     environment:
       - CONFIG_ENV=data/be/short/short5/1h
       - DB=true
-      - CHECK_REDIS_PAIR=8
       - ROUTER_FORWARD=true
       - STORE_IN_DB=True
     healthcheck:
@@ -1977,7 +1974,6 @@ services:
     environment:
       - CONFIG_ENV=data/be/long/long5/1h
       - DB=true
-      - CHECK_REDIS_PAIR=8
       - ROUTER_FORWARD=true
       - STORE_IN_DB=True
     healthcheck:
@@ -2017,7 +2013,6 @@ services:
       - data-be-get_30m
     environment:
       - CONFIG_ENV=data/be/short/short4/30m
-      - REDIS_FORWARD=8
       - DB=true
     healthcheck:
       test: find /var/local/lock -mmin -3 -name data-be-analyse-30m-short4 2>&1  | grep . || exit 1
@@ -2057,7 +2052,6 @@ services:
     environment:
       - CONFIG_ENV=data/be/long/long4/30m
       - DB=true
-      - REDIS_FORWARD=8
     healthcheck:
       test: find /var/local/lock -mmin -3 -name data-be-analyse-30m-long4 2>&1  | grep . || exit 1
       start_period: 30m
@@ -2096,7 +2090,6 @@ services:
     environment:
       - CONFIG_ENV=data/be/short/short5/30m
       - DB=true
-      - CHECK_REDIS_PAIR=8
       - ROUTER_FORWARD=true
       - STORE_IN_DB=True
     healthcheck:
@@ -2137,7 +2130,6 @@ services:
     environment:
       - CONFIG_ENV=data/be/long/long5/30m
       - DB=true
-      - CHECK_REDIS_PAIR=8
       - ROUTER_FORWARD=true
       - STORE_IN_DB=True
     healthcheck:
@@ -2338,7 +2330,6 @@ services:
     environment:
       - CONFIG_ENV=data/be/short/short5/4h
       - DB=true
-      - CHECK_REDIS_PAIR=8
       - ROUTER_FORWARD=true
       - STORE_IN_DB=True
     healthcheck:
@@ -2379,7 +2370,6 @@ services:
     environment:
       - CONFIG_ENV=data/be/long/long5/4h
       - DB=true
-      - CHECK_REDIS_PAIR=8
       - ROUTER_FORWARD=true
       - STORE_IN_DB=True
     healthcheck:
