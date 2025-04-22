@@ -182,7 +182,7 @@
       "is_secret": false
     },
     "drain_range": {
-      "value": "00:30-08:00",
+      "value": "00:00 - 00:00",
       "is_binary": false,
       "is_secret": false
     },
@@ -262,7 +262,7 @@
       "is_secret": false
     },
     "max_trades": {
-      "value": "1",
+      "value": "100",
       "is_binary": false,
       "is_secret": false
     },
@@ -387,7 +387,7 @@
       "is_secret": false
     },
     "time_between_trades": {
-      "value": "1h",
+      "value": "3h",
       "is_binary": false,
       "is_secret": false
     },
@@ -407,7 +407,7 @@
       "is_secret": false
     },
     "trade_type": {
-      "value": "spot",
+      "value": "margin",
       "is_binary": false,
       "is_secret": false
     },

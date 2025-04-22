@@ -435,7 +435,7 @@ services:
         syslog-facility: local6
     environment:
       - intermittent="true"
-      - CONFIG_ENV=per/be/any/5m/cross-long
+      - CONFIG_ENV=per/be/any/long/5m
       - DB=true
     ports:
       - 20000
@@ -473,7 +473,7 @@ services:
         syslog-facility: local6
     environment:
       - intermittent="true"
-      - CONFIG_ENV=per/be/any/5m/cross-short
+      - CONFIG_ENV=per/be/any/short/5m
       - DB=true
     ports:
       - 20000
@@ -511,7 +511,7 @@ services:
         syslog-facility: local6
     environment:
       - intermittent="true"
-      - CONFIG_ENV=per/be/any/1h/cross-long
+      - CONFIG_ENV=per/be/any/long/1h
       - DB=true
     ports:
       - 20000
@@ -549,7 +549,7 @@ services:
         syslog-facility: local6
     environment:
       - intermittent="true"
-      - CONFIG_ENV=per/be/any/1h/cross-short
+      - CONFIG_ENV=per/be/any/short/1h
       - DB=true
     ports:
       - 20000
@@ -587,7 +587,7 @@ services:
         syslog-facility: local6
     environment:
       - intermittent="true"
-      - CONFIG_ENV=per/be/any/1d/cross-long
+      - CONFIG_ENV=per/be/any/long/1d
       - DB=true
     ports:
       - 20000
@@ -625,7 +625,7 @@ services:
         syslog-facility: local6
     environment:
       - intermittent="true"
-      - CONFIG_ENV=per/be/any/1d/cross-short
+      - CONFIG_ENV=per/be/any/short/1d
       - DB=true
     ports:
       - 20000
@@ -663,7 +663,7 @@ services:
         syslog-facility: local6
     environment:
       - intermittent="true"
-      - CONFIG_ENV=per/be/any2/1h/cross-long
+      - CONFIG_ENV=per/be/any2/long/1h
       - DB=true
     ports:
       - 20000
@@ -701,7 +701,7 @@ services:
         syslog-facility: local6
     environment:
       - intermittent="true"
-      - CONFIG_ENV=per/be/any2/1h/cross-short
+      - CONFIG_ENV=per/be/any2/short/1h
       - DB=true
     ports:
       - 20000

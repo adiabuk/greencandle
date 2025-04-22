@@ -1,0 +1,12 @@
+{
+  "name": "per-be-api-any2-5m-cross",
+  "interval": "5m",
+  "take_profit_perc": "5",
+  "stop_loss_perc": "2",
+  "trailing_start": "2",
+  "trailing_stop_loss_perc": "1",
+  "immediate_trailing_stop": "true",
+  "immediate_take_profit": "true",
+  "perc_at_timeout": "2",
+  "time_in_trade": "5h"
+}

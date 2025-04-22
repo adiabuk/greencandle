@@ -1,3 +1,4 @@
 {
-  "balance_only": "True"
+  "pairs": "any",
+  "take_profit_perc": "1.2"
 }
