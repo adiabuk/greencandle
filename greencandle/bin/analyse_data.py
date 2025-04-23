@@ -197,6 +197,7 @@ def analyse_pair(pair, reversal, expire, redis):
     LOGGER.debug("analysis result for %s is %s", pair, str(output))
 
     if result in ('OPEN', 'CLOSE'):
+        LOGGER.info("analysis result for %s is %s", pair, str(output))
         LOGGER.debug("trades to %s for pair %s", result.lower(), pair)
         now = datetime.now()
 
