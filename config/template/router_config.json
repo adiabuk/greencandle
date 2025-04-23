@@ -63,6 +63,10 @@
 "any-4h-short": ["any-4h-short"],
 "any-4h-long-short": ["any-4h-short", "any-4h-long"],
 
+"any2-4h-long": ["any2-4h-long"],
+"any2-4h-short": ["any2-4h-short"],
+"any2-4h-long-short": ["any2-4h-short", "any2-4h-long"],
+
 "any-1d-long": ["any-1d-long"],
 "any-1d-short": ["any-1d-short"],
 "any-1d-long-short": ["any-1d-short", "any-1d-long"],
