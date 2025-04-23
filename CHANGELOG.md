@@ -1,5 +1,25 @@
 # Releases
 
+# 9.3.3
+* silence mm notifs for 30m data
+* log analysis result if there is a trade action
+* open rule should be close
+* missing 4h & 30m any2 routes & containers
+* remove old data containers
+* re-instate test env comparisions and cleanup
+* use stag config for per env
+* simpler ema xover rules
+* close if price crosses back over EMA
+* increase timeoout perc for 1h stag
+* don't use 2-part rule for alternate rsi/stoch strategy
+* more memory for data redis
+* add 4h trial for new and old strategies, fwd to stag&test
+* add ATR check to alternate strategy
+* add missing 30m routes
+* remove some filters from test env
+* alternate rsi/stoch strategy,forward to test env
+* add 8 period EMA to data env
+
 # 9.3.2
 * more relaxation of rules
 * update indicator docs and scripts to reflect tuple output of EMA with slope
