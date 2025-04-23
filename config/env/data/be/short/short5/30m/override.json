@@ -3,5 +3,6 @@
   "interval": "30m",
   "name": "data-be-analyse-30m-short5",
   "redis_expiry_seconds": "14400",
+  "slack_notifications": "",
   "time_between_trades": "4h"
 }
