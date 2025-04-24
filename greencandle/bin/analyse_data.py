@@ -279,6 +279,7 @@ def analyse_pair(pair, reversal, expire, redis):
                                 f"{match_strs}/{INTERVAL}/{DIRECTION}"),
                        "tp": eval(config.main.take_profit_perc),
                        "sl": eval(config.main.stop_loss_perc),
+                       "interval": config.main.interval,
                        "action": str(action),
                        "env": config.main.name,
                        "price": current_price,
