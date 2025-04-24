@@ -255,11 +255,13 @@ def extras():
     redis = Redis(db=12)  # current_rules
     redis7 = Redis(db=7) # saved_rules
     redis11 = Redis(db=11) # triggered_rules
+    redis14 = Redis(db=14) # queued_rules
     data = defaultdict(list)
     rules = []
     keys = redis.conn.keys()
     keys7 = redis7.conn.keys()
     keys11 = redis11.conn.keys()
+    keys14 = redis14.conn.keys()
     time_format = "%Y-%m-%d %H:%M:%S"
     with open('/etc/router_config.json', 'r', encoding="utf-8") as json_file:
         router_config = json.load(json_file)
@@ -289,6 +291,25 @@ def extras():
         add_time = datetime.fromtimestamp(int(key)).strftime(time_format)
         current.update({'add_time': add_time})
         data['current'].append(current)
+
+    di = {"long": '1', "short": "-1", "close": "0"}
+    di_rev = {v:k for k,v in di.items()}
+
+    for key in keys14:
+        queued = AttributeDict(redis14.conn.json().get(key))
+        delete_button = (f'<form method=post action=/dash/xredis?key={key.decode()}&db=13><input '
+                          'type=submit name=save value=delete></form>')
+
+        readd_button = (f'<button onclick="javascript:populate(\'{queued.pair}\', \'{queued.interval}\', '
+                        f'\'{di_rev[str(queued.action)]}\', \'100\', \'{round(queued.tp,2)}\', '
+                        f'\'{round(queued.sl,2)}\', \'True\', \' \', '
+                        f'\'test\')">propulate</button>')
+        queued.update({'re_add': readd_button})
+        queued.update({'delete': delete_button})
+        add_time = datetime.fromtimestamp(int(key)).strftime(time_format)
+        queued.update({'add_time': add_time})
+        data['queued'].append(queued)
+
 
     for key in keys11:
         processed = AttributeDict(json.loads(redis11.conn.get(key).decode()))
