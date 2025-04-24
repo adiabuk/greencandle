@@ -288,6 +288,39 @@
                                                   </tbody>
                                                 </table>
                                               {% endif %}
+                                          {% if data['queued'] %}
+                                                <h2>
+                                                  Queued rules
+                                                </h2>
+
+                                                <table
+                                                  class="display table nowrap responsive"
+                                                  id="current"
+                                                  style="width: 100%"
+                                                >
+                                                  <thead>
+                                                    <tr>
+                                                      {% for header in data['queued'][0].keys() %}
+                                                        <th>
+                                                          {{ header }}
+                                                        </th>
+                                                      {% endfor %}
+                                                    </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                    {% for row in data['queued'] %}
+                                                      <tr>
+                                                        {% for item in row.items() %}
+                                                          <td>
+                                                            {{ item[-1] |safe }}
+                                                          </td>
+                                                        {% endfor %}
+                                                      </tr>
+                                                    {% endfor %}
+                                                  </tbody>
+                                                </table>
+                                              {% endif %}
+
                                               {% if data['processed'] %}
                                                 <h2/>
                                                 Processed rules
