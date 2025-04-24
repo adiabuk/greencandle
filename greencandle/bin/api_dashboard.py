@@ -731,11 +731,15 @@ def refresh_data():
     Route to manually call functions to refresh all data
     in the background and return nothing
     """
-    get_queue()
-    get_balance()
-    get_live()
-    get_data()
-    get_additional_details()
+    if config.main.base_env.strip() != 'data':
+        get_balance()
+        get_live()
+        get_data()
+        get_additional_details()
+    else:
+        get_queue()
+        get_agg()
+        get_doublersi()
     return Response(status=200)
 
 @APP.route('/values')
