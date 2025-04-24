@@ -299,15 +299,20 @@ def extras():
         queued = AttributeDict(redis14.conn.json().get(key))
         delete_button = (f'<form method=post action=/dash/xredis?key={key.decode()}&db=13><input '
                           'type=submit name=save value=delete></form>')
-
-        readd_button = (f'<button onclick="javascript:populate(\'{queued.pair}\', \'{queued.interval}\', '
-                        f'\'{di_rev[str(queued.action)]}\', \'100\', \'{round(queued.tp,2)}\', '
-                        f'\'{round(queued.sl,2)}\', \'True\', \' \', '
+        queued['tp'] = round(queued.tp, 2)
+        queued['sl'] = round(queued.sl, 2)
+        queued.pop('host', '')
+        queued.pop('edited', '')
+        queued['action'] = di_rev[str(queued.action)]
+        readd_button = (f'<button onclick="javascript:populate(\'{queued.pair}\', '
+                        f'\'{queued.interval}\', \'{queued.action}\', \'100\', '
+                        f'\'{queued.tp}\', \'{queued.sl}\', \'True\', \' \', '
                         f'\'test\')">propulate</button>')
         queued.update({'re_add': readd_button})
         queued.update({'delete': delete_button})
         add_time = datetime.fromtimestamp(int(key)).strftime(time_format)
         queued.update({'add_time': add_time})
+        queued['pair'] = get_tv_link(queued.pair.upper(), queued.interval, anchor=True)
         data['queued'].append(queued)
 
 
