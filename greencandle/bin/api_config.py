@@ -62,9 +62,12 @@ def add_to_queue():
     Add trade to queue
     """
     payload = AttributeDict(request.json)
+    LOGGER.info("Adding trade to queue: %s", str(payload))
     redis = Redis(db=1)
     key = int(time.time())
     redis.conn.json().set(key, Path.root_path(), payload)
+    return Response(status=200)
+
 
 @APP.route('/queue/get_all', methods=["GET"])
 def get_all_queued():
