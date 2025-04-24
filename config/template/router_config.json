@@ -13,23 +13,30 @@
 "multi": ["stag:any-1h-long-short", "test:any-1h-long-short"],
 
 "extra_stag-any-5m": ["stag:any-5m-long-short"],
+"extra_stag-any-15m": ["stag:any-15m-long-short"],
+"extra_stag-any-30m": ["stag:any-30m-long-short"],
 "extra_stag-any-1h": ["stag:any-1h-long-short"],
 "extra_stag-any2-1h": ["stag:any2-1h-long-short"],
 
 "extra_test-any-5m": ["test:any-5m-long-short"],
 "extra_test-any-15m": ["test:any-15m-long-short"],
+"extra_test-any-30m": ["test:any-30m-long-short"],
 "extra_test-any-1h": ["test:any-1h-long-short"],
 "extra_test-any2-1h": ["test:any2-1h-long-short"],
 
 "extra_prod-any-5m": ["prod:any-5m-long-short"],
+"extra_prod-any-15m": ["prod:any-15m-long-short"],
+"extra_prod-any-30m": ["prod:any-30m-long-short"],
 "extra_prod-any-1h": ["prod:any-1h-long-short"],
 "extra_prod-any-1d": ["prod:any-1d-long-short"],
 "extra_prod-any2-1h": ["prod:any2-1h-long-short"],
 
 "extra_per-any-5m": ["per:any-5m-long-short"],
+"extra_per-any-15m": ["per:any-15m-long-short"],
+"extra_per-any-30m": ["per:any-30m-long-short"],
 "extra_per-any-1h": ["per:any-1h-long-short"],
-"extra_per-any-1d": ["per:any-1d-long-short"],
 "extra_per-any2-1h": ["per:any2-1h-long-short"],
+"extra_per-any-1d": ["per:any-1d-long-short"],
 
 "extra_alert": ["alert"],
 
