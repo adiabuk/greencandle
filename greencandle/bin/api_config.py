@@ -77,8 +77,8 @@ def get_all_queued():
     queued = {}
     redis = Redis(db=1)
     keys = redis.conn.keys()
-    for key in keys():
-        queued[key] = redis.conn.json().get(key)
+    for key in keys:
+        queued[key.decode()] = redis.conn.json().get(key.decode())
     return queued
 
 
