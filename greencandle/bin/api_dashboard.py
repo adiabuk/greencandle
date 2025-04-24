@@ -27,7 +27,8 @@ from greencandle.lib.mysql import Mysql
 from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.binance_accounts import base2quote, get_cross_margin_level
 from greencandle.lib.common import (arg_decorator, divide_chunks, get_be_services, list_to_dict,
-                                    perc_diff, get_tv_link, get_trade_link, format_usd, price2float)
+                                    perc_diff, get_tv_link, get_trade_link, format_usd, price2float,
+                                    epoch2date)
 from greencandle.lib.objects import AttributeDict
 from greencandle.lib import config
 from greencandle.lib.web import PrefixMiddleware, push_prom_data, decorator_timer, retry_session
@@ -52,6 +53,7 @@ LOGIN = APP.route("/logout", methods=["GET", "POST"])(logoutx)
 VALUES = defaultdict(dict)
 BALANCE = []
 LIVE = []
+QUEUE = []
 STATUS_DATA = []
 DOUBLERSI={}
 AGG_DATA = []
@@ -469,6 +471,21 @@ def get_bool_colour(value):
     colour = 'green' if value else 'red'
     return f'<p style="font-weight:bold;color:{colour}">{value}</p>'
 
+def get_queue():
+    """
+    Get queue data from API
+    """
+    global QUEUE
+    queue_data = []
+    text = requests.get("http://config.amrox.loc/queue/get_all", timeout=10).text
+    js = json.loads(text)
+    for date, item in js.items():
+        item["date"] = epoch2date(date)
+        item["pair"] = get_tv_link(item["pair"], item["interval"], anchor=True)
+        queue_data.append(item)
+    QUEUE = queue_data
+
+        #all_data.append({"pair": get_tv_link(pair, interval, anchor=True),
 
 @decorator_timer
 def get_live():
@@ -643,6 +660,7 @@ def live():
         files['open_trades'] =  (LIVE, 5)
         files['open_trade_status'] =  (STATUS_DATA, 5)
         files['balance'] = (BALANCE, 1)
+        files['queue'] = (QUEUE,1)
 
     if request.method == 'GET':
         return render_template('data.html', files=files)
@@ -713,6 +731,7 @@ def refresh_data():
     Route to manually call functions to refresh all data
     in the background and return nothing
     """
+    get_queue()
     get_balance()
     get_live()
     get_data()
