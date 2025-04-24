@@ -169,7 +169,7 @@ def epoch2date(epoch, use_spaces=True, formatted=True):
     Convert epoch to human readable formatted string
     """
     format_str = '%Y-%m-%d %H:%M:%S' if use_spaces else '%Y-%m-%d_%H-%M-%S'
-    time_stamp = datetime.datetime.fromtimestamp(epoch)
+    time_stamp = datetime.datetime.fromtimestamp(int(epoch))
     return time_stamp.strftime(format_str) if formatted else time_stamp
 
 def get_tv_link(pair, interval=None, anchor=False):
