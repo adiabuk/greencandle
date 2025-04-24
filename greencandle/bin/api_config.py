@@ -66,7 +66,7 @@ def add_to_queue():
     key = int(time.time())
     redis.conn.json().set(key, Path.root_path(), payload)
 
-APP.route('/queue/get_slack', methods=["GET"])
+@APP.route('/queue/get_all', methods=["GET"])
 def get_all_queued():
     """
     Fetch all trades in the queue
