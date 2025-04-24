@@ -2874,6 +2874,7 @@ services:
     environment:
       - CONFIG_ENV=data/be/long/long7/4h
       - DB=True
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-4h-long7 2>&1  | grep . || exit 1
       start_period: 1h
@@ -2912,6 +2913,7 @@ services:
     environment:
       - CONFIG_ENV=data/be/short/short7/4h
       - DB=True
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-4h-short7 2>&1  | grep . || exit 1
       start_period: 1h
@@ -2950,6 +2952,7 @@ services:
     environment:
       - CONFIG_ENV=data/be/long/long7/30m
       - DB=true
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-30m-long7 2>&1  | grep . || exit 1
       start_period: 1h
@@ -2988,6 +2991,7 @@ services:
     environment:
       - CONFIG_ENV=data/be/long/long7/1h
       - DB=true
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-1h-long7 2>&1  | grep . || exit 1
       start_period: 1h
@@ -3103,6 +3107,7 @@ services:
     environment:
       - CONFIG_ENV=data/be/short/short7/30m
       - DB=true
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-30m-short7 2>&1  | grep . || exit 1
       start_period: 1h
@@ -3141,6 +3146,7 @@ services:
     environment:
       - CONFIG_ENV=data/be/short/short7/1h
       - DB=true
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-1h-short7 2>&1  | grep . || exit 1
       start_period: 1h
