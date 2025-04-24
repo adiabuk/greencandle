@@ -296,19 +296,19 @@ def extras():
     di_rev = {v:k for k,v in di.items()}
 
     for key in keys14:
-        queued = AttributeDict(redis14.conn.json().get(key))
-        delete_button = (f'<form method=post action=/dash/xredis?key={key.decode()}&db=13><input '
+        keys_to_keep = ['pair', 'text', 'tp', 'sl', 'action', 'env', 'interval', 'strategy',]
+        queued = AttributeDict({k: v for k, v in redis14.conn.json().get(key).items()
+                                if k in keys_to_keep})
+        delete_button = (f'<form method=post action=/dash/xredis?key={key.decode()}&db=14><input '
                           'type=submit name=save value=delete></form>')
         queued['tp'] = round(queued.tp, 2)
         queued['sl'] = round(queued.sl, 2)
-        queued.pop('host', '')
-        queued.pop('edited', '')
         queued['action'] = di_rev[str(queued.action)]
         readd_button = (f'<button onclick="javascript:populate(\'{queued.pair}\', '
                         f'\'{queued.interval}\', \'{queued.action}\', \'100\', '
                         f'\'{queued.tp}\', \'{queued.sl}\', \'True\', \' \', '
                         f'\'test\')">propulate</button>')
-        queued.update({'re_add': readd_button})
+        queued.update({'populate': readd_button})
         queued.update({'delete': delete_button})
         add_time = datetime.fromtimestamp(int(key)).strftime(time_format)
         queued.update({'add_time': add_time})
