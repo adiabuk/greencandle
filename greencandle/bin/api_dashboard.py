@@ -301,6 +301,7 @@ def extras():
                                 if k in keys_to_keep})
         delete_button = (f'<form method=post action=/dash/xredis?key={key.decode()}&db=14><input '
                           'type=submit name=save value=delete></form>')
+        queued['pair'] = queued.pair.upper().strip()
         queued['tp'] = round(queued.tp, 2)
         queued['sl'] = round(queued.sl, 2)
         queued['action'] = di_rev[str(queued.action)]
@@ -314,7 +315,6 @@ def extras():
         queued.update({'add_time': add_time})
         queued['pair'] = get_tv_link(queued.pair.upper(), queued.interval, anchor=True)
         data['queued'].append(queued)
-
 
     for key in keys11:
         processed = AttributeDict(json.loads(redis11.conn.get(key).decode()))
