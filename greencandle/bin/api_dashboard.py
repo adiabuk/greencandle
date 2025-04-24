@@ -479,9 +479,15 @@ def get_queue():
     queue_data = []
     text = requests.get("http://config.amrox.loc/queue/get_all", timeout=10).text
     js = json.loads(text)
+
     for date, item in js.items():
+        item["epoch"] = date
         item["date"] = epoch2date(date)
         item["pair"] = get_tv_link(item["pair"], item["interval"], anchor=True)
+        item["delete"] = '<button> </button>'
+        item["forward"] = ('<form>  <label for="your_name">Name:</label><input type="text" '
+                       'id="your_name" name="your_name" placeholder="Enter your name">  '
+                       '<input type="submit" value="Submit"></form>')
         queue_data.append(item)
     QUEUE = queue_data
 
@@ -656,11 +662,11 @@ def live():
     if config.main.base_env == 'data':
         files['aggregate'] = (AGG_DATA, 1)
         files['double_rsi'] = (get_doublersi_list(), 4)
+        files['queue'] = (QUEUE,1)
     else:
         files['open_trades'] =  (LIVE, 5)
         files['open_trade_status'] =  (STATUS_DATA, 5)
         files['balance'] = (BALANCE, 1)
-        files['queue'] = (QUEUE,1)
 
     if request.method == 'GET':
         return render_template('data.html', files=files)

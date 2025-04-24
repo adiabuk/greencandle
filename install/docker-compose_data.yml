@@ -618,6 +618,7 @@ services:
     mem_limit: 6G
     pull_policy: always
     restart: unless-stopped
+    entrypoint: /usr/local/bin/docker-entrypoint.sh redis-server --loadmodule /srv/redis/rejson.so --save "30 1 300 100 60 10000"
     ports:
       - 6382:6379
     links:
