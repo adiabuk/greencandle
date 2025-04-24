@@ -3,7 +3,6 @@
 """
 Flask module for getting fetching and setting drain status
 """
-import time
 from datetime import datetime
 from flask import Flask, request, Response
 from str2bool import str2bool
@@ -54,33 +53,6 @@ def set_struct(env, struct):
     """
     redis = Redis()
     redis.conn.json().set(env, Path.root_path(), struct)
-
-
-@APP.route('/queue/add', methods=["POST"])
-def add_to_queue():
-    """
-    Add trade to queue
-    """
-    payload = AttributeDict(request.json)
-    LOGGER.info("Adding trade to queue: %s", str(payload))
-    redis = Redis(db=1)
-    key = int(time.time())
-    redis.conn.json().set(key, Path.root_path(), payload)
-    return Response(status=200)
-
-
-@APP.route('/queue/get_all', methods=["GET"])
-def get_all_queued():
-    """
-    Fetch all trades in the queue
-    """
-    queued = {}
-    redis = Redis(db=1)
-    keys = redis.conn.keys()
-    for key in keys:
-        queued[key.decode()] = redis.conn.json().get(key.decode())
-    return queued
-
 
 APP.route('/drain/get_slack', methods=["GET"])
 def get_slack_drain():

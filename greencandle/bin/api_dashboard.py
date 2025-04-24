@@ -53,7 +53,6 @@ LOGIN = APP.route("/logout", methods=["GET", "POST"])(logoutx)
 VALUES = defaultdict(dict)
 BALANCE = []
 LIVE = []
-QUEUE = []
 STATUS_DATA = []
 DOUBLERSI={}
 AGG_DATA = []
@@ -497,28 +496,6 @@ def get_bool_colour(value):
     colour = 'green' if value else 'red'
     return f'<p style="font-weight:bold;color:{colour}">{value}</p>'
 
-def get_queue():
-    """
-    Get queue data from API
-    """
-    global QUEUE
-    queue_data = []
-    text = requests.get("http://config.amrox.loc/queue/get_all", timeout=10).text
-    js = json.loads(text)
-
-    for date, item in js.items():
-        item["epoch"] = date
-        item["date"] = epoch2date(date)
-        item["pair"] = get_tv_link(item["pair"], item["interval"], anchor=True)
-        item["delete"] = '<button> </button>'
-        item["forward"] = ('<form>  <label for="your_name">Name:</label><input type="text" '
-                       'id="your_name" name="your_name" placeholder="Enter your name">  '
-                       '<input type="submit" value="Submit"></form>')
-        queue_data.append(item)
-    QUEUE = queue_data
-
-        #all_data.append({"pair": get_tv_link(pair, interval, anchor=True),
-
 @decorator_timer
 def get_live():
     """
@@ -688,7 +665,6 @@ def live():
     if config.main.base_env == 'data':
         files['aggregate'] = (AGG_DATA, 1)
         files['double_rsi'] = (get_doublersi_list(), 4)
-        files['queue'] = (QUEUE,1)
     else:
         files['open_trades'] =  (LIVE, 5)
         files['open_trade_status'] =  (STATUS_DATA, 5)
@@ -769,7 +745,6 @@ def refresh_data():
         get_data()
         get_additional_details()
     else:
-        get_queue()
         get_agg()
         get_doublersi()
     return Response(status=200)
