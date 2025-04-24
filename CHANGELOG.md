@@ -1,5 +1,11 @@
 # Releases
 
+# 9.4
+* Allow forwarding of trades to queue to authorise forwarding to env
+* add rejson module to data redis
+* ensure epoch is an int before converting it to a date
+* use string, not bytes object for key
+
 # 9.3.3
 * silence mm notifs for 30m data
 * log analysis result if there is a trade action
