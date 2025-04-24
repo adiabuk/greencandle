@@ -4,7 +4,7 @@
 """
 API routing module
 """
-
+import time
 import sys
 import os
 import json
@@ -13,10 +13,12 @@ import logging
 import requests
 from flask import Flask, request, Response
 from setproctitle import setproctitle
+from redis.commands.json.path import Path as json_path
 from greencandle.lib.common import arg_decorator
 from greencandle.lib import config
 from greencandle.lib.logger import get_logger
 from greencandle.lib.mysql import Mysql
+from greencandle.lib.redis_conn import Redis
 
 config.create_config()
 TEST = bool(len(sys.argv) > 1 and sys.argv[1] == '--test')
@@ -121,6 +123,10 @@ def respond():
 
         elif 'env' not in payload or payload['env'] == env:
             send_trade(payload, container)
+        elif 'queue' in container:
+            redis = Redis(db=14)
+            redis.conn.json().set(int(time.time()), json_path.root_path(), payload)
+            del redis
         else:
             payload['host'] = 'eaglenest.amrox.loc'
             forward(payload)
