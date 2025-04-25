@@ -1,5 +1,12 @@
 # Releases
 
+# 9.4.1
+* add missing 4h config for test env and add extras route
+* close script block
+* cleanup rules for queue
+* add 15m and 30m extra rule routes to all envs
+* sort list of queued trades by date
+
 # 9.4
 * Allow forwarding of trades to queue to authorise forwarding to env
 * add rejson module to data redis
