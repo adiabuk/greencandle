@@ -1,4 +1,4 @@
-/*M!999999\- enable the sandbox mode */ 
+/*M!999999\- enable the sandbox mode */
 -- MariaDB dump 10.19  Distrib 10.11.11-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: 127.1    Database: greencandle
@@ -1177,7 +1177,7 @@ ALTER DATABASE `greencandle` CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci ;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2025-04-09 21:45:39
-/*M!999999\- enable the sandbox mode */ 
+/*M!999999\- enable the sandbox mode */
 -- MariaDB dump 10.19  Distrib 10.11.11-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: 127.1    Database: greencandle
@@ -1221,7 +1221,8 @@ INSERT INTO `variables` VALUES
 ('start_time','01:30'),
 ('end_time','08:30'),
 ('max_trade_usd','5500'),
-('filter','%%');
+('filter','%%'),
+('max_trades','1000');
 /*!40000 ALTER TABLE `variables` ENABLE KEYS */;
 UNLOCK TABLES;
 
