@@ -504,6 +504,82 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
+  per-be-api-any-30m-cross-long:
+    container_name: per-be-api-any-30m-cross-long
+    hostname: per-be-api-any-30m-cross-long
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600M
+    pull_policy: always
+    restart: unless-stopped
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
+    logging:
+      driver: syslog
+      options:
+        tag: "{{.Name}}"
+        syslog-facility: local6
+    environment:
+      - intermittent="true"
+      - CONFIG_ENV=per/be/any/long/30m
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any-30m-cross-short:
+    container_name: per-be-api-any-30m-cross-short
+    hostname: per-be-api-any-30m-cross-short
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600M
+    pull_policy: always
+    restart: unless-stopped
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
+    logging:
+      driver: syslog
+      options:
+        tag: "{{.Name}}"
+        syslog-facility: local6
+    environment:
+      - intermittent="true"
+      - CONFIG_ENV=per/be/any/short/30m
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
   per-be-api-any2-30m-cross-long:
     container_name: per-be-api-any2-30m-cross-long
     hostname: per-be-api-any2-30m-cross-long
