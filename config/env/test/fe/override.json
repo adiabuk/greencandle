@@ -1,7 +1,6 @@
 {
   "divisor": "3",
   "indicators": "None",
-  "max_trades": "1000",
   "name": "test-api",
   "pairs": "None"
 }

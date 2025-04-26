@@ -261,11 +261,6 @@
       "is_binary": false,
       "is_secret": false
     },
-    "max_trades": {
-      "value": "100",
-      "is_binary": false,
-      "is_secret": false
-    },
     "name": {
       "value": "per",
       "is_binary": false,

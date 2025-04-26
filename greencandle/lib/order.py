@@ -95,8 +95,10 @@ class Trade():
         """
 
         dbase = Mysql(test=self.test_data, interval=self.interval)
-        current_trades = dbase.get_trades(direction=self.config.main.trade_direction)
-        avail_slots = int(self.config.main.max_trades) - len(current_trades)
+        current_trades = dbase.fetch_sql_data("select count(*) from trades where close_price is "
+                                              "NULL;", header=None)[0][0]
+        max_trades = dbase.get_var_value('max_trades')
+        avail_slots = int(max_trades) - int(current_trades)
         self.logger.info("%s open slots available", avail_slots)
         table = dbase.fetch_sql_data('show tables like "tmp_pairs"', header=False)
         tmp_pairs = dbase.fetch_sql_data('select pair from tmp_pairs', header=False) \

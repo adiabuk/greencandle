@@ -261,11 +261,6 @@
       "is_binary": false,
       "is_secret": false
     },
-    "max_trades": {
-      "value": "10",
-      "is_binary": false,
-      "is_secret": false
-    },
     "name": {
       "value": "alarm",
       "is_binary": false,

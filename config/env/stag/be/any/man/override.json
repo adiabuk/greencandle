@@ -4,7 +4,6 @@
   "immediate_take_profit": "true",
   "immediate_trailing_stop": "true",
   "interval": "1m",
-  "max_trades": "60",
   "name": "stag-be-api-any-man-cross",
   "pairs": "any",
   "perc_at_timeout": "5",

@@ -260,11 +260,6 @@
       "is_binary": false,
       "is_secret": false
     },
-    "max_trades": {
-      "value": "",
-      "is_binary": false,
-      "is_secret": false
-    },
     "name": {
       "value": "",
       "is_binary": false,

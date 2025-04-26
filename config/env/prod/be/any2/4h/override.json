@@ -5,7 +5,6 @@
   "immediate_take_profit": "false",
   "immediate_trailing_stop": "true",
   "interval": "4h",
-  "max_trades": "10",
   "pairs": "any",
   "take_profit_perc": "5",
   "time_in_trade": "12h",
