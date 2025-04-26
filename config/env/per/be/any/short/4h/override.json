@@ -1,6 +1,10 @@
 {
+  "drain_take_profit_perc": "1",
+  "immediate_stop": "false",
+  "immediate_take_profit": "false",
+  "interval": "4h",
   "name": "per-be-api-any-4h-cross",
-  "take_profit_perc": "5",
   "stop_loss_perc": "2.5",
-  "interval": "4h"
+  "take_profit_perc": "5",
+  "time_in_trade": "52w"
 }

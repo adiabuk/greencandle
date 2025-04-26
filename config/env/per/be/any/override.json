@@ -1,5 +1,10 @@
 {
+  "drain_take_profit_perc": "0.25",
+  "immediate_stop": "true",
+  "immediate_take_profit": "true",
   "pairs": "any",
-  "take_profit_perc": "4",
-  "stop_loss_perc": "2"
+  "stop_loss_perc": "5",
+  "take_profit_perc": "9",
+  "time_between_trades": "1h",
+  "time_in_trade": "4h"
 }
