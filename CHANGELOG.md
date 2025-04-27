@@ -1,5 +1,9 @@
 # Releases
 
+# 9.4.4
+* BUGFIX: missing indicators in config
+* IMPROVEMENTS: wait for stochrsi to trend in direction
+
 # 9.4.3
 * BUGFIX: fix json syntax
 * BUGFIX: need total_trade_count as well as trades in current scope
