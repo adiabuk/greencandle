@@ -1,5 +1,16 @@
 # Releases
 
+# 9.4.2
+* send multi strategy to queue, not test env
+* fix filters for test env
+* remove rogue test containers
+* ignore dup fields when adding new var entry into db
+* filter rule for test env 4h
+* remove max_trades from config and use value in db table
+* more missing per containers
+* tweak per env settings
+* add missing containers in per/test envs
+
 # 9.4.1
 * add missing 4h config for test env and add extras route
 * close script block
