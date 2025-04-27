@@ -1,4 +1,5 @@
 {
+  "True": "",
   "interval": "1d",
   "name": "test-be-api-any-1d-cross",
   "stop_loss_perc": "5",

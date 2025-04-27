@@ -4,6 +4,7 @@
   "name": "test-be-api-any2-30m-cross",
   "open_rule1": "True",
   "perc_at_timeout": "5",
+  "open_rule1": "res.TV_4h \u003c= 0",
   "stop_loss_perc": "4",
   "take_profit_perc": "8",
   "time_in_trade": "10h",
