@@ -1,5 +1,11 @@
 # Releases
 
+# 9.4.3
+* BUGFIX: fix json syntax
+* BUGFIX: need total_trade_count as well as trades in current scope
+* BUGFIX: fix invalid config
+* IMPROVEMENTS: retry get request when analysing data
+
 # 9.4.2
 * send multi strategy to queue, not test env
 * fix filters for test env
