@@ -1,6 +1,6 @@
 {
   "logging_output": "stdout",
-  "name": "prod-be-api-loan",
+  "name": "per-be-api-loan",
   "slack_active": "true",
   "logging_level": "20"
 }

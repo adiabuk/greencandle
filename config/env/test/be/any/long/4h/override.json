@@ -1,5 +1,5 @@
 {
-  "True": "",
+  "open_rule1": "True",
   "indicators": "None",
   "interval": "4h",
   "name": "test-be-api-any-4h-cross",
