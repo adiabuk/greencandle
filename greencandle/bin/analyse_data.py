@@ -27,7 +27,7 @@ from greencandle.lib.common import (get_tv_link, arg_decorator, convert_to_secon
                                     get_trailing_number)
 from greencandle.lib.auth import binance_auth
 from greencandle.lib.order import Trade
-from greencandle.lib.web import decorator_timer
+from greencandle.lib.web import decorator_timer, retry_session
 from greencandle.lib.objects import AttributeDict
 
 config.create_config()
@@ -122,7 +122,9 @@ def analyse_loop():
     else:
         # not being fetched from redis db
         pairs = [(pair, 'normal', 999999) for pair in PAIRS]
-    DATA = requests.get(f'http://www.data.amrox.loc/data/{INTERVAL}', timeout=20).json()['output']
+    session = retry_session(retries=5, backoff_factor=2)
+    DATA = session.request('GET', f'http://www.data.amrox.loc/data/{INTERVAL}',
+                           timeout=20).json()['output']
     with ThreadPoolExecutor(max_workers=50) as pool:
         for pair, reversal, expire in pairs:
             pool.submit(analyse_pair, pair, reversal, expire, redis)
@@ -150,7 +152,7 @@ def get_match_name(matches):
                    ['old_stoch'],
                    ['distance', 'bb', "bbperc_diff", "bbperc_extreme"],
                    ['low_rsi_in_trend_near_EMA', 'low_rsi_in_trend'],
-                   ['STOCHRSI_flip', 'RSI_close-rule', 'broken_trend', 'multi_ind_close', 're-xover'],
+                   ['STOCHRSI_flip','RSI_close-rule','broken_trend','multi_ind_close','re-xover'],
                    ['rsi_stoch'],
                    ['ema_xover'],
                    ['empty8'],
