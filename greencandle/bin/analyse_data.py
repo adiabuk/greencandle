@@ -148,7 +148,7 @@ def get_match_name(matches):
     except ValueError:
         container_num = 1
 
-    name_lookup = [['trend_200', 'golden_cross', 'big_change_outside'],
+    name_lookup = [['trend_200', 'golden_cross', 'new_golden'],
                    ['old_stoch'],
                    ['distance', 'bb', "bbperc_diff", "bbperc_extreme"],
                    ['low_rsi_in_trend_near_EMA', 'low_rsi_in_trend'],

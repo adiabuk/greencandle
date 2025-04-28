@@ -1,4 +1,5 @@
 {
   "open_rule1": "res[0].EMA_50[0] \u003e res[0].bb_200[1] and res[0].low \u003c res[0].bb_200[1] and res[0].ATRp_30 \u003e res[1].ATRp_30 \u003e res[2].ATRp_30",
   "open_rule2": "res[1].EMA_50[0] \u003c res[1].EMA_200[0] and res[0].EMA_50[0] \u003e res[0].EMA_200[0]"
+  "open_rule3": "res[1].EMA_50[0] \u003c res[1].EMA_150[0] and res[0].EMA_50[0] \u003e res[0].EMA_150[0]"
 }
