@@ -1245,6 +1245,7 @@ services:
     environment:
       - CONFIG_ENV=data/be/long/long1/4h
       - DB=True
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-4h-long1 2>&1  | grep . || exit 1
       start_period: 1h
@@ -1283,6 +1284,7 @@ services:
     environment:
       - CONFIG_ENV=data/be/short/short1/4h
       - DB=True
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-4h-short1 2>&1  | grep . || exit 1
       start_period: 1h
@@ -1322,6 +1324,7 @@ services:
       - CONFIG_ENV=data/be/long/long1/30m
       - DB=true
       - REDIS_FORWARD=9
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-30m-long1 2>&1  | grep . || exit 1
       start_period: 1h
@@ -1361,6 +1364,7 @@ services:
       - CONFIG_ENV=data/be/long/long1/1h
       - DB=true
       - REDIS_FORWARD=9
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-1h-long1 2>&1  | grep . || exit 1
       start_period: 1h
@@ -1558,6 +1562,7 @@ services:
       - CONFIG_ENV=data/be/short/short1/30m
       - DB=true
       - REDIS_FORWARD=9
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-30m-short1 2>&1  | grep . || exit 1
       start_period: 1h
@@ -1597,6 +1602,7 @@ services:
       - CONFIG_ENV=data/be/short/short1/1h
       - DB=true
       - REDIS_FORWARD=9
+      - ROUTER_FORWARD=true
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-1h-short1 2>&1  | grep . || exit 1
       start_period: 1h
