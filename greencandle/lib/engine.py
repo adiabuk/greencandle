@@ -693,8 +693,9 @@ class Engine(dict):
         scheme = {}
         func, timef = localconfig  # split tuple
         window = 30  # Example window
-        recent_high = self.dataframes[pair]['high'].tail(timef).max()
-        recent_low = self.dataframes[pair]['low'].tail(timef).min()
+        recent_high = self.dataframes[pair].high.tail(float(timef)).max()
+        recent_low = self.dataframes[pair].low.tail(float(timef)).min()
+
         try:
             scheme["data"] = recent_high, recent_low
             scheme["symbol"] = pair
@@ -708,7 +709,6 @@ class Engine(dict):
             return
 
         LOGGER.debug("done getting recent high/low for %s - %s", pair, scheme['open_time'])
-
 
     @get_exceptions
     def get_moving_averages(self, pair, index=None, localconfig=None):
