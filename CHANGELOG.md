@@ -1,5 +1,17 @@
 # Releases
 
+# 9.5
+* IMPROVEMENTS: improve metric logging with name
+* IMPROVEMENTS: set index, for non-initial loop
+* FEATURE: fetch recent high/low as indicator
+* BUGFIX: add missing strategy
+* STRATEGY: trial 1d timeframe with stochrsi strategy
+* STRATEGY: confirmation rule for stoch/rsi rule
+* REVERT: "wait for stochrsi to trend in direction"
+* STRATEGY: enable router forwarding for golden/death cross
+* BUGFIX: typo in in json syntax
+* FEATURE: send new tweaked golden/death cross to queue
+
 # 9.4.4
 * BUGFIX: missing indicators in config
 * IMPROVEMENTS: wait for stochrsi to trend in direction
