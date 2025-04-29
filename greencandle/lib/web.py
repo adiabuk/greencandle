@@ -92,7 +92,7 @@ def push_prom_data(metric_name, value, job_name=None):
     try:
         requests.post(url, headers=headers, data=data, timeout=20)
     except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError):
-        print("Unable to push metric")
+        print(f"Unable to push metric {metric}")
 
 def count_struct(struct):
     """
