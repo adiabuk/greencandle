@@ -21,6 +21,12 @@ Usage:
 res[0].HA_open > res[0].HA_close # red candle
 res[0].HA_open < res[0].HA_close # green candle
 
+## Recent High / Recent Low
+VERIFIED to be working
+Usage: get_recent_highlow;HL;<candles>
+eg: get_recent_highlow;HL;30
+Redis output: (recent_high, recent_low)
+
 ## MACD
 VERIFIED to be equal to tradingview
 Usage: get_macd;MACD;<fast_length>,<slow_lengeth>,<signal_smoothing>
