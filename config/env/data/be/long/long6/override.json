@@ -1,4 +1,4 @@
 {
   "close_rule1": "res[0].RSI_7 \u003e 80",
-  "open_rule1": "res[0].RSI_7 \u003c 30 and res[0].STOCHRSI_14[0] \u003e 20 and res[0].STOCHRSI_14[0] \u003e res[0].STOCHRSI_14[1] and res[0].numTrades \u003e 50 and agg.bb_size \u003e 1 and agg.empty_count \u003c 1"
+  "open_rule1": "res[0].STOCHRSI_14[0] \u003e res[0].STOCHRSI_14[1] and res[0].close \u003e res[0].EMA_150[0]"
 }
