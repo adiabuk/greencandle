@@ -1,0 +1,7 @@
+{
+  "check_interval": "480",
+  "interval": "1d",
+  "name": "data-be-analyse-1d-long5",
+  "redis_expiry_seconds": "244000",
+  "time_between_trades": "8h"
+}
