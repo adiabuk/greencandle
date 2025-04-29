@@ -686,6 +686,31 @@ class Engine(dict):
         LOGGER.debug("done getting ma for %s - %s", pair, scheme['open_time'])
 
     @get_exceptions
+    def get_recent_highlow(self, pair, index=None, localconfig=None):
+        """
+        Get recent high and low in past x candles
+        """
+        scheme = {}
+        func, timef = localconfig  # split tuple
+        window = 30  # Example window
+        recent_high = self.dataframes[pair]['High'].tail(timef).max()
+        recent_low = self.dataframes[pair]['Low'].tail(timef).min()
+        try:
+            scheme["data"] = recent_high, recent_low
+            scheme["symbol"] = pair
+            scheme["event"] = f"{func}_{timef}"
+            scheme["open_time"] = str(self.dataframes[pair].iloc[index]["openTime"])
+
+            self.schemes.append(scheme)
+
+        except KeyError as exc:
+            LOGGER.warning("key failure getching recent high/low: %s", str(exc))
+            return
+
+        LOGGER.debug("done getting recent high/low for %s - %s", pair, scheme['open_time'])
+
+
+    @get_exceptions
     def get_moving_averages(self, pair, index=None, localconfig=None):
         """
         Apply moving averages to klines and get BUY/SELL triggers
