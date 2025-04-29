@@ -693,8 +693,8 @@ class Engine(dict):
         scheme = {}
         func, timef = localconfig  # split tuple
         window = 30  # Example window
-        recent_high = self.dataframes[pair].high.tail(float(timef)).max()
-        recent_low = self.dataframes[pair].low.tail(float(timef)).min()
+        recent_high = self.dataframes[pair].high.tail(int(timef)).max()
+        recent_low = self.dataframes[pair].low.tail(int(timef)).min()
 
         try:
             scheme["data"] = recent_high, recent_low
