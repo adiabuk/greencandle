@@ -27,6 +27,12 @@ Usage: get_recent_highlow;HL;<candles>
 eg: get_recent_highlow;HL;30
 Redis output: (recent_high, recent_low)
 
+## SMI - Stochastic Momentum Index
+VERIFIED to be equal to tradingview
+Usage get_smi;SMI;<%k Length>, <%D Length>, <EMA Length>
+eg: get_smi;SMI;10,3,3
+Redis output (SMI, EMA)
+
 ## MACD
 VERIFIED to be equal to tradingview
 Usage: get_macd;MACD;<fast_length>,<slow_lengeth>,<signal_smoothing>
