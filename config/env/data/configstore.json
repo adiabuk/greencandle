@@ -236,7 +236,7 @@
       "is_secret": false
     },
     "indicators": {
-      "value": "get_recent_highlow;HL;30 get_ha;HA;0 get_atr;ATR;14 get_bb_perc;bbperc;200,1 get_stochrsi;STOCHRSI;14,14,3 get_bb;bb;200,4 get_rsi;RSI;14 get_macd;MACD;19,26,9 get_moving_averages;EMA;8 get_moving_averages;EMA;50 get_moving_averages;EMA;200 get_bb;bb;30,2 get_rsi;RSI;7 get_cci;CCI;100 get_moving_averages;EMA;150 get_atr_perc;ATRp;30,90 get_rsi;RSI;250",
+      "value": "get_recent_highlow;HL;30 get_ha;HA;0 get_atr;ATR;14 get_bb_perc;bbperc;200,1 get_stochrsi;STOCHRSI;14,14,3 get_bb;bb;200,4 get_rsi;RSI;14 get_macd;MACD;19,26,9 get_moving_averages;EMA;8 get_moving_averages;EMA;50 get_moving_averages;EMA;200 get_bb;bb;30,2 get_rsi;RSI;7 get_cci;CCI;100 get_moving_averages;EMA;150 get_atr_perc;ATRp;30,90 get_rsi;RSI;250 get_smi;SMI;10,3,3",
       "is_binary": false,
       "is_secret": false
     },

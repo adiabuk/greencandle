@@ -693,28 +693,26 @@ class Engine(dict):
         def ema_ema(source, length):
             ema1 = source.ewm(span=length, adjust=False).mean()
             return ema1.ewm(span=length, adjust=False).mean()
+
         scheme = {}
         if index is None:
             index = -1
         func, timef = localconfig  # split tuple
         length_k, length_d, length_ema = timef.split(',')
-        #short_term, long_term, signal_period = timef.split(',')
 
-
-        highest_high = self.dataframes[pair].high.rolling(length_k).max()
-        lowest_low = self.dataframes[pair].low.rolling(length_k).min()
+        highest_high = self.dataframes[pair].high.rolling(int(length_k)).max()
+        lowest_low = self.dataframes[pair].low.rolling(int(length_k)).min()
         highest_lowest_range = highest_high - lowest_low
         relative_range = self.dataframes[pair].close - (highest_high + lowest_low) / 2
 
-        smi = 200 * (ema_ema(relative_range, length_d) / ema_ema(highest_lowest_range, length_d))
-        smi_ema = smi.ewm(span=length_ema, adjust=False).mean()
+        smi = 200 * (ema_ema(relative_range, length_d) / ema_ema(highest_lowest_range,
+                                                                 int(length_d)))
+        smi_ema = smi.ewm(span=int(length_ema), adjust=False).mean()
 
         smi_df = pandas.DataFrame({
             'SMI': smi,
             'SMI_EMA': smi_ema
         })
-
-        result = tuple(smi_df.iloc[-1])
 
         try:
             scheme["data"] = tuple(smi_df.iloc[index])
