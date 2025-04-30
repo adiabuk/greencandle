@@ -1,5 +1,8 @@
 # Releases
 
+# 9.5.1
+* Add tested SMI indicator
+
 # 9.5
 * IMPROVEMENTS: improve metric logging with name
 * IMPROVEMENTS: set index, for non-initial loop
