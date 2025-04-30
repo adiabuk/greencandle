@@ -703,9 +703,9 @@ class Engine(dict):
         highest_high = self.dataframes[pair].high.rolling(int(length_k)).max()
         lowest_low = self.dataframes[pair].low.rolling(int(length_k)).min()
         highest_lowest_range = highest_high - lowest_low
-        relative_range = self.dataframes[pair].close - (highest_high + lowest_low) / 2
+        relative_range = self.dataframes[pair].close.astype(float) - (highest_high + lowest_low) / 2
 
-        smi = 200 * (ema_ema(relative_range, length_d) / ema_ema(highest_lowest_range,
+        smi = 200 * (ema_ema(relative_range, int(length_d)) / ema_ema(highest_lowest_range,
                                                                  int(length_d)))
         smi_ema = smi.ewm(span=int(length_ema), adjust=False).mean()
 
