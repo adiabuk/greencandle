@@ -1,4 +1,4 @@
 {
   "close_rule1": "res[0].RSI_7 \u003e 80",
-  "open_rule1": " res[0].SMI_10[0] \u003e res[0].SMI_10[1] and res[0].HA_open \u003c res[0].HA_close "
+  "open_rule1": "res[0].SMI_10[0] \u003e res[0].SMI_10[1] and res[0].SMI_10[0] \u003e -40 and res[0].HA_open \u003c res[0].HA_close"
 }
