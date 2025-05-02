@@ -931,7 +931,6 @@ services:
     environment:
       - CONFIG_ENV=data/be/short/short6/30m
       - DB=true
-      - CHECK_REDIS_INTERVAL=1d
       - CHECK_REDIS_PAIR=5
       - ROUTER_FORWARD=true
       - STORE_IN_DB=True
@@ -973,7 +972,6 @@ services:
     environment:
       - CONFIG_ENV=data/be/long/long6/30m
       - DB=true
-      - CHECK_REDIS_INTERVAL=1d
       - CHECK_REDIS_PAIR=5
       - ROUTER_FORWARD=true
       - STORE_IN_DB=True
@@ -989,7 +987,6 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/:/var/run
-
 
   data-be-analyse-1h-short6:
     container_name: data-be-analyse-1h-short6
@@ -1016,7 +1013,6 @@ services:
     environment:
       - CONFIG_ENV=data/be/short/short6/1h
       - DB=true
-      - CHECK_REDIS_INTERVAL=1d
       - CHECK_REDIS_PAIR=5
       - ROUTER_FORWARD=true
       - STORE_IN_DB=True
@@ -1058,7 +1054,6 @@ services:
     environment:
       - CONFIG_ENV=data/be/long/long6/1h
       - DB=true
-      - CHECK_REDIS_INTERVAL=1d
       - CHECK_REDIS_PAIR=5
       - ROUTER_FORWARD=true
       - STORE_IN_DB=True
@@ -1074,7 +1069,6 @@ services:
       - /root/.aws:/root/.aws
       - /dev/log:/dev/log
       - /var/run/:/var/run
-
 
   data-be-analyse-4h-short6:
     container_name: data-be-analyse-4h-short6
@@ -1101,7 +1095,6 @@ services:
     environment:
       - CONFIG_ENV=data/be/short/short6/4h
       - DB=true
-      - CHECK_REDIS_INTERVAL=1d
       - CHECK_REDIS_PAIR=5
       - ROUTER_FORWARD=true
       - STORE_IN_DB=True
@@ -1143,7 +1136,6 @@ services:
     environment:
       - CONFIG_ENV=data/be/long/long6/4h
       - DB=true
-      - CHECK_REDIS_INTERVAL=1d
       - CHECK_REDIS_PAIR=5
       - ROUTER_FORWARD=true
       - STORE_IN_DB=True
