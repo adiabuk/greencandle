@@ -153,7 +153,7 @@ def get_match_name(matches):
                    ['distance', 'bb', "bbperc_diff", "bbperc_extreme"],
                    ['low_rsi_in_trend_near_EMA', 'low_rsi_in_trend'],
                    ['STOCHRSI_flip','RSI_close-rule','broken_trend','multi_ind_close','re-xover'],
-                   ['stoch_confirm'],
+                   ['smi_confirm'],
                    ['ema_xover'],
                    ['empty8'],
                    ['empty9'],

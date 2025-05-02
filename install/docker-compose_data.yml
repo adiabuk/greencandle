@@ -906,6 +906,176 @@ services:
       - /dev/log:/dev/log
       - /var/run/:/var/run
 
+  data-be-analyse-30m-short6:
+    container_name: data-be-analyse-30m-short6
+    hostname: data-be-analyse-30m-short6
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2G
+    pull_policy: always
+    restart: unless-stopped
+    entrypoint: /docker-entrypoint.sh "analyse_data"
+    logging:
+      driver: syslog
+      options:
+        tag: "{{.Name}}"
+        syslog-facility: local3
+    links:
+      - data-be-api-router:router
+      - data-be-api-data_30m:data
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_30m
+    environment:
+      - CONFIG_ENV=data/be/short/short6/30m
+      - DB=true
+      - CHECK_REDIS_INTERVAL=1d
+      - CHECK_REDIS_PAIR=5
+      - ROUTER_FORWARD=true
+      - STORE_IN_DB=True
+    healthcheck:
+      test: find /var/local/lock -mmin -30 -name data-be-analyse-30m-short6 2>&1  | grep . || exit 1
+      start_period: 1h
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /var/local:/var/local
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-analyse-30m-long6:
+    container_name: data-be-analyse-30m-long6
+    hostname: data-be-analyse-30m-long6
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2G
+    pull_policy: always
+    restart: unless-stopped
+    entrypoint: /docker-entrypoint.sh "analyse_data"
+    logging:
+      driver: syslog
+      options:
+        tag: "{{.Name}}"
+        syslog-facility: local3
+    links:
+      - data-be-api-router:router
+      - data-be-api-data_30m:data
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_30m
+    environment:
+      - CONFIG_ENV=data/be/long/long6/30m
+      - DB=true
+      - CHECK_REDIS_INTERVAL=1d
+      - CHECK_REDIS_PAIR=5
+      - ROUTER_FORWARD=true
+      - STORE_IN_DB=True
+    healthcheck:
+      test: find /var/local/lock -mmin -3 -name data-be-analyse-30m-long6 2>&1  | grep . || exit 1
+      start_period: 1h
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /var/local:/var/local
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+
+  data-be-analyse-1h-short6:
+    container_name: data-be-analyse-1h-short6
+    hostname: data-be-analyse-1h-short6
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2G
+    pull_policy: always
+    restart: unless-stopped
+    entrypoint: /docker-entrypoint.sh "analyse_data"
+    logging:
+      driver: syslog
+      options:
+        tag: "{{.Name}}"
+        syslog-facility: local3
+    links:
+      - data-be-api-router:router
+      - data-be-api-data_1h:data
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_1h
+    environment:
+      - CONFIG_ENV=data/be/short/short6/1h
+      - DB=true
+      - CHECK_REDIS_INTERVAL=1d
+      - CHECK_REDIS_PAIR=5
+      - ROUTER_FORWARD=true
+      - STORE_IN_DB=True
+    healthcheck:
+      test: find /var/local/lock -mmin -30 -name data-be-analyse-1h-short6 2>&1  | grep . || exit 1
+      start_period: 1h
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /var/local:/var/local
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+  data-be-analyse-1h-long6:
+    container_name: data-be-analyse-1h-long6
+    hostname: data-be-analyse-1h-long6
+    image: amrox/greencandle:${TAG}
+    mem_limit: 2G
+    pull_policy: always
+    restart: unless-stopped
+    entrypoint: /docker-entrypoint.sh "analyse_data"
+    logging:
+      driver: syslog
+      options:
+        tag: "{{.Name}}"
+        syslog-facility: local3
+    links:
+      - data-be-api-router:router
+      - data-be-api-data_1h:data
+      - data-base-mysql:mysql
+      - data-base-redis:redis
+    depends_on:
+      - data-base-mysql
+      - data-base-redis
+      - data-be-get_1h
+    environment:
+      - CONFIG_ENV=data/be/long/long6/1h
+      - DB=true
+      - CHECK_REDIS_INTERVAL=1d
+      - CHECK_REDIS_PAIR=5
+      - ROUTER_FORWARD=true
+      - STORE_IN_DB=True
+    healthcheck:
+      test: find /var/local/lock -mmin -3 -name data-be-analyse-1h-long6 2>&1  | grep . || exit 1
+      start_period: 1h
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /var/local:/var/local
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run/:/var/run
+
+
   data-be-analyse-4h-short6:
     container_name: data-be-analyse-4h-short6
     hostname: data-be-analyse-4h-short6
@@ -2025,6 +2195,7 @@ services:
       - DB=true
       - ROUTER_FORWARD=true
       - STORE_IN_DB=True
+      - REDIS_FORWARD=5
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-1h-short5  2>&1  | grep . || exit 1
       start_period: 1h
@@ -2144,6 +2315,7 @@ services:
       - CONFIG_ENV=data/be/long/long5/1h
       - DB=true
       - ROUTER_FORWARD=true
+      - REDIS_FORWARD=5
       - STORE_IN_DB=True
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-1h-long5  2>&1  | grep . || exit 1
@@ -2261,6 +2433,7 @@ services:
       - DB=true
       - ROUTER_FORWARD=true
       - STORE_IN_DB=True
+      - REDIS_FORWARD=5
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-30m-short5  2>&1  | grep . || exit 1
       start_period: 30m
@@ -2301,6 +2474,7 @@ services:
       - DB=true
       - ROUTER_FORWARD=true
       - STORE_IN_DB=True
+      - REDIS_FORWARD=5
     healthcheck:
       test: find /var/local/lock -mmin -10 -name data-be-analyse-30m-long5  2>&1  | grep . || exit 1
       start_period: 30m
