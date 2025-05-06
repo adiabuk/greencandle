@@ -1,12 +1,13 @@
 {
-  "name": "per-be-api-any2-30m-cross",
-  "interval": "30m",
-  "take_profit_perc": "5",
-  "stop_loss_perc": "2",
-  "trailing_start": "2",
-  "trailing_stop_loss_perc": "1",
-  "immediate_trailing_stop": "true",
   "immediate_take_profit": "true",
+  "immediate_trailing_stop": "true",
+  "interval": "30m",
+  "name": "per-be-api-any2-30m-cross",
+  "open_rule1": "res.TV_4h \u003c= 0",
   "perc_at_timeout": "2",
-  "time_in_trade": "5h"
+  "stop_loss_perc": "2",
+  "take_profit_perc": "5",
+  "time_in_trade": "5h",
+  "trailing_start": "2",
+  "trailing_stop_loss_perc": "1"
 }

@@ -1,6 +1,7 @@
 {
   "name": "prod-be-api-any2-1h-cross",
-  "trade_isolated": "false",
+  "open_rule1": "res.TV_4h \u003e= 0",
   "trade_direction": "long",
+  "trade_isolated": "false",
   "trade_type": "margin"
 }
