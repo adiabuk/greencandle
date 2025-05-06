@@ -1,5 +1,18 @@
 # Releases
 
+# 5.9.2
+* FEATURE: add 1d sentiment check for test env 4h
+* BUGFIX: catch exception when unable to fetch data
+* FEATURE: reduce timeout in test env 1h
+* FEATURE: use sentiment to eval if we are against trend
+* FEATURE: reduce timeout in test env
+* CONFIG: remove delisted pairs
+* STRATEGY: : fixes in 2nd stage confirmation containers
+* STRATEGY: check SMI moving outside of buy zone
+* STRATEGY: use SMI for confirmation
+* FEATURE: sorting for extras UI table columns
+* STRATEGY: remove EMA_8 check in open rule
+
 # 9.5.1
 * Add tested SMI indicator
 
