@@ -4,10 +4,10 @@
   "interval": "30m",
   "name": "test-be-api-any2-30m-cross",
   "open_rule1": "res.TV_4h \u003c= 0",
-  "perc_at_timeout": "5",
+  "perc_at_timeout": "2",
   "stop_loss_perc": "4",
   "take_profit_perc": "8",
-  "time_in_trade": "10h",
+  "time_in_trade": "5h",
   "trade_direction": "short",
   "trailing_start": "5.5",
   "trailing_stop_loss_perc": "1"
