@@ -196,13 +196,16 @@ def get_dataframes(pairs, interval=None, no_of_klines=None, max_workers=30):
 
     dataframe = {}
     for pair in pairs:
-        futures.append(pool.submit(get_non_empty, pair=pair, interval=interval,
-                                   no_of_klines=int(no_of_klines)))
+        futures.append((pool.submit(get_non_empty, pair=pair, interval=interval,
+                                   no_of_klines=int(no_of_klines))), pair)
 
     pool.shutdown(wait=False)
-    for item in futures:
-        pair, dframe = item.result()
-        dataframe[pair] = dframe
+    for item, pair in futures:
+        try:
+            pair, dframe = item.result()
+            dataframe[pair] = dframe
+        except TypeError:
+            LOGGER.critical("Unable to fetch data for pair %s %s", pair, interval)
 
     return dataframe
 
