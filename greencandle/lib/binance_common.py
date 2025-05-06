@@ -196,8 +196,9 @@ def get_dataframes(pairs, interval=None, no_of_klines=None, max_workers=30):
 
     dataframe = {}
     for pair in pairs:
-        futures.append((pool.submit(get_non_empty, pair=pair, interval=interval,
-                                   no_of_klines=int(no_of_klines))), pair)
+        future = pool.submit(get_non_empty, pair=pair, interval=interval,
+                             no_of_klines=int(no_of_klines))
+        futures.append((future, pair))
 
     pool.shutdown(wait=False)
     for item, pair in futures:
