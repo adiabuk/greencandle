@@ -3,12 +3,13 @@
   "interval": "1h",
   "name": "test-be-api-any2-1h-cross",
   "open_rule1": "res.TV_4h \u003c= 0",
-  "perc_at_timeout": "4",
+  "perc_at_timeout": "3",
   "slack_alerts": "test",
   "slack_balance": "test",
   "slack_notifications": "test",
   "slack_trades": "test",
   "stop_loss_perc": "5",
   "take_profit_perc": "9",
+  "time_in_trade": "3h",
   "trade_direction": "short"
 }
