@@ -7,9 +7,9 @@
 "1h-5": ["stag:any2-1h-long-short"],
 "30m-5": ["stag:any2-30m-long-short"],
 
-"30m-6": ["test:any2-30m-long-short per:any2-30m-long-short"],
-"1h-6": ["test:any2-1h-long-short per:any2-1h-long-short"],
-"4h-6": ["test:any2-4h-long-short prod:any2-4h-long-short"],
+"30m-6": ["test:any2-30m-long-short, per:any2-30m-long-short"],
+"1h-6": ["test:any2-1h-long-short, per:any2-1h-long-short"],
+"4h-6": ["test:any2-4h-long-short, prod:any2-4h-long-short"],
 
 "1h-1": ["queue"],
 "4h-1": ["queue"],
