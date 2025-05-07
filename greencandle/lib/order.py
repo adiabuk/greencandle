@@ -844,13 +844,13 @@ class Trade():
                             symbol=pair, quantity=repay,
                             isolated=str2bool(self.config.main.isolated),
                             asset=base)
+                        self.logger.info("TRADE: repaid: %s %s for pair short %s result: %s",
+                                         repay, base, pair, repay_result)
                     except BinanceException as binex:
                         self.logger.error(f"TRADE: repay error-close {pair}: {str(binex)}")
                         self.logger.critical("Params: %s, %s, %s %s", pair, borrowed,
                                           self.config.main.isolated, base)
 
-                    self.logger.info("TRADE: repaid: %s %s for pair short %s result: %s",
-                                     repay, base, pair, repay_result)
                 else:
                     self.logger.info("No borrowed funds to repay for short %s", pair)
 
@@ -1150,13 +1150,13 @@ class Trade():
                             symbol=pair, quantity=repay,
                             isolated=str2bool(self.config.main.isolated),
                             asset=quote)
+                        self.logger.info("TRADE: repaid: %s %s for pair %s result: %s",
+                                         repay, quote, pair, repay_result)
                     except BinanceException as binex:
                         self.logger.error(f"TRADE: repay error-close {pair}: {str(binex)}")
                         self.logger.critical("Params: %s, %s, %s %s", pair, borrowed,
                                           self.config.main.isolated, quote)
 
-                    self.logger.info("TRADE: repaid: %s %s for pair %s result: %s",
-                                     repay, quote, pair, repay_result)
                 else:
                     self.logger.info("No borrowed funds to repay for %s", pair)
 
