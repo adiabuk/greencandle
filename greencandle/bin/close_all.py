@@ -41,14 +41,13 @@ def main():
         perc = -perc if direction== 'short' else perc
 
         if float(perc) > float(args.threshold):
-            short_name = get_short_name(name, env, direction)
             print(f"Closing {pair} {name} {direction} from {open_time} @ {perc}%")
             payload = {"pair": pair,
                        "text": "closing trade from close_all script",
                        "action": "close",
                        "host": env,
                        "env": env,
-                       "strategy": short_name}
+                       "strategy": 'close_all'}
 
             requests.post(url, json.dumps(payload), timeout=20,
                           headers={'Content-Type': 'application/json'})
