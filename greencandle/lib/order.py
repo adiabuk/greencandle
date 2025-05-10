@@ -831,7 +831,7 @@ class Trade():
                                                                 self.config.main.isolated))
 
                 except BinanceException as binex:
-                    self.logger.error(f"Trade error-close {pair}: {str(binex)}")
+                    self.logger.error("Trade error-close %s: %s", pair, str(binex))
                     return False
                 self.logger.info("TRADE: %s close margin short result: %s", pair, trade_result)
 
@@ -856,7 +856,7 @@ class Trade():
                         self.logger.info("TRADE: repaid: %s %s for pair short %s result: %s",
                                          repay, base, pair, repay_result)
                     except BinanceException as binex:
-                        self.logger.error(f"TRADE: repay error-close {pair}: {str(binex)}")
+                        self.logger.error("TRADE: repay error-close %s: %s", pair, str(binex))
                         self.logger.critical("Params: %s, %s, %s %s", pair, borrowed,
                                           self.config.main.isolated, base)
 
@@ -898,7 +898,7 @@ class Trade():
                                           event=event, action='CLOSE', usd_profit=profit,
                                           quote=quote_out, open_time=open_time, id=result)
             else:
-                self.logger.error(f"TRADE: close short Failed {name}:{pair}")
+                self.logger.error("TRADE: close short Failed %s %s", name, pair)
 
         del dbase
         return "closed"
@@ -1053,7 +1053,7 @@ class Trade():
                         order_type=self.client.market, test=self.test_trade)
 
                 except BinanceException as binex:
-                    self.logger.error(f"TRADE: Long Trade error-close {pair}: {str(binex)}")
+                    self.logger.error("TRADE: Long Trade error-close %s: %s", pair, str(binex))
                     return False
 
                 self.logger.info("%s close spot long result: %s", pair, trade_result)
@@ -1136,7 +1136,8 @@ class Trade():
                                                             isolated=str2bool(
                                                                 self.config.main.isolated))
                 except BinanceException as binex:
-                    self.logger.error(f"TRADE: margin long Trade error-close pair: {str(binex)}")
+                    self.logger.error("TRADE: margin long Trade error-close %s: %s", pair,
+                                      str(binex))
                     return False
 
                 self.logger.info("%s close margin long result: %s", pair, trade_result)
@@ -1162,7 +1163,7 @@ class Trade():
                         self.logger.info("TRADE: repaid: %s %s for pair %s result: %s",
                                          repay, quote, pair, repay_result)
                     except BinanceException as binex:
-                        self.logger.error(f"TRADE: repay error-close {pair}: {str(binex)}")
+                        self.logger.error("TRADE: repay error-close %s: %s", pair, str(binex))
                         self.logger.critical("Params: %s, %s, %s %s", pair, borrowed,
                                           self.config.main.isolated, quote)
 
@@ -1202,7 +1203,7 @@ class Trade():
                                           event=event, action='CLOSE', usd_profit=profit,
                                           quote=quote_out, open_time=open_time, id=result)
             else:
-                self.logger.error(f"TRADE: close margin long failed {name}: {pair}")
+                self.logger.error("TRADE: close margin long failed %s: %s", name, pair)
                 return False
 
         del dbase
