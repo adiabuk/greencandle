@@ -897,8 +897,9 @@ class Trade():
                                           fill_price=current_price, interval=self.interval,
                                           event=event, action='CLOSE', usd_profit=profit,
                                           quote=quote_out, open_time=open_time, id=result)
+                self.logger.info("TRADE: close margin short succeeded failed %s: %s", name, pair)
             else:
-                self.logger.error("TRADE: close short Failed %s %s", name, pair)
+                self.logger.error("TRADE: close margin short failed %s: %s", name, pair)
 
         del dbase
         return "closed"
@@ -1202,6 +1203,7 @@ class Trade():
                                           fill_price=fill_price, interval=self.interval,
                                           event=event, action='CLOSE', usd_profit=profit,
                                           quote=quote_out, open_time=open_time, id=result)
+                self.logger.info("TRADE: close margin long succeeded failed %s: %s", name, pair)
             else:
                 self.logger.error("TRADE: close margin long failed %s: %s", name, pair)
                 return False
