@@ -4,6 +4,7 @@ Buy/Sell orders
 """
 
 from collections import defaultdict
+import os
 import time
 from pathlib import Path
 from send_nsca3 import send_nsca
@@ -292,43 +293,51 @@ class Trade():
         symbol = get_quote(pair) if self.config.main.trade_direction == 'long' else get_base(pair)
         test_balances = self.get_test_balance(dbase, account=account)[account]
         final = 0
-        if self.test_data or self.test_trade:
-            if self.config.main.trade_direction == 'short' and symbol not in test_balances:
-                usd = test_balances['USDT']['count']
-                final = quote2base(usd, symbol +'USDT')
-            else:
-                final = test_balances[symbol]['count']
 
-        elif account == 'binance':
-            try:
-                final = float(get_binance_spot()[account][symbol]['count'])
-            except KeyError:
-                pass
+        if 'BALANCE_HOLD' in os.environ:
+            self.logger.info("Not using balance due to BALANCE_HOLD for pair %s", pair)
+            return_symbol = 0
+            return_usd = 0
 
-        elif account == 'margin' and str2bool(self.config.main.isolated):
-            try:
-                final = float(self.client.isolated_free()[pair][symbol])
-            except KeyError:
-                pass
+        else:
+            if self.test_data or self.test_trade:
+                if self.config.main.trade_direction == 'short' and symbol not in test_balances:
+                    usd = test_balances['USDT']['count']
+                    final = quote2base(usd, symbol +'USDT')
+                else:
+                    final = test_balances[symbol]['count']
 
-        elif account == 'margin' and not str2bool(self.config.main.isolated):
-            try:
-                final = float(self.client.cross_free()[symbol]['net'])
-            except KeyError:
-                pass
+            elif account == 'binance':
+                try:
+                    final = float(get_binance_spot()[account][symbol]['count'])
+                except KeyError:
+                    pass
 
-        # Use 99% of amount determined by divisor
-        return_symbol = sub_perc(1, final / float(self.config.main.divisor)) if final else 0
-        return_usd = return_symbol if 'USD' in symbol else base2quote(return_symbol, symbol+'USDT')
+            elif account == 'margin' and str2bool(self.config.main.isolated):
+                try:
+                    final = float(self.client.isolated_free()[pair][symbol])
+                except KeyError:
+                    pass
 
-        # Don't use up all remaining balance for long trades
-        # or when a large balance for given symbol is available
-        if total_max and return_symbol and 'USD' in symbol:
-            return_symbol = min(total_max, return_symbol)
-            return_usd = min(total_max, return_usd)
-        elif total_max and return_symbol and 'USD' not in symbol:
-            return_symbol = min(quote2base(total_max, symbol+'USDT'), return_symbol)
-            return_usd = base2quote(return_symbol, symbol+'USDT')
+            elif account == 'margin' and not str2bool(self.config.main.isolated):
+                try:
+                    final = float(self.client.cross_free()[symbol]['net'])
+                except KeyError:
+                    pass
+
+            # Use 99% of amount determined by divisor
+            return_symbol = sub_perc(1, final / float(self.config.main.divisor)) if final else 0
+            return_usd = return_symbol if 'USD' in symbol else base2quote(return_symbol,
+                                                                          symbol+'USDT')
+
+            # Don't use up all remaining balance for long trades
+            # or when a large balance for given symbol is available
+            if total_max and return_symbol and 'USD' in symbol:
+                return_symbol = min(total_max, return_symbol)
+                return_usd = min(total_max, return_usd)
+            elif total_max and return_symbol and 'USD' not in symbol:
+                return_symbol = min(quote2base(total_max, symbol+'USDT'), return_symbol)
+                return_usd = base2quote(return_symbol, symbol+'USDT')
 
         return_dict = {"symbol": return_symbol,
                        "symbol_name": symbol,
