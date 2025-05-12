@@ -1,6 +1,6 @@
 # Releases
 
-# 5.9.3
+# 9.5.3
 * CLEANUP: remove lower timeframe analysis
 * BUGFIX: show usd balance in dashboard
 * BUGFIX: fix log msg
@@ -10,7 +10,7 @@
 * BUGFIX: variable is uninitialised if we have caught exception
 * CONFIG: set config for per/prod envs
 
-# 5.9.2
+# 9.5.2
 * FEATURE: add 1d sentiment check for test env 4h
 * BUGFIX: catch exception when unable to fetch data
 * FEATURE: reduce timeout in test env 1h
