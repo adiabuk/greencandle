@@ -1,5 +1,15 @@
 # Releases
 
+# 5.9.3
+* CLEANUP: remove lower timeframe analysis
+* BUGFIX: show usd balance in dashboard
+* BUGFIX: fix log msg
+* FEATURE: log when trade closed failed or succeeded
+* BUGFIX: remove f-strings from logger statements
+* FEATURE: var to hold balance and use only loan
+* BUGFIX: variable is uninitialised if we have caught exception
+* CONFIG: set config for per/prod envs
+
 # 5.9.2
 * FEATURE: add 1d sentiment check for test env 4h
 * BUGFIX: catch exception when unable to fetch data
