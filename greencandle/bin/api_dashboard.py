@@ -833,7 +833,7 @@ def get_balance():
                             'val': ''})
         all_results.append({'key': 'risk', 'usd': 0,
                             'val': risk})
-        all_results.append({'key': 'current_balance', 'usd': current_balance_btc,
+        all_results.append({'key': 'current_balance', 'usd': current_balance_usd,
                             'val': current_balance_btc})
         total_debts_usd = 0
         for key, val in debts.items():
