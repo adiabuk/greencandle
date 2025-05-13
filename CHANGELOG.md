@@ -1,5 +1,10 @@
 # Releases
 
+# 9.5.4
+* STRATEGY: set 6hr redis trade expiry for 30m
+* STRATEGY: ensure SMI was overbought/oversold before xover
+* DOCS: fix versions in changelog
+
 # 9.5.3
 * CLEANUP: remove lower timeframe analysis
 * BUGFIX: show usd balance in dashboard
