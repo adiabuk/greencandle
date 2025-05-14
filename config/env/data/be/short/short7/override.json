@@ -1,3 +1,3 @@
 {
-  "open_rule1": "res[0].close \u003c res[0].EMA_150[0] and res[1].close \u003e res[1].EMA_150[0]"
+  "open_rule1": "res[1].close \u003c res[1].EMA_150[0] and res[2].close \u003e res[2].EMA_150[0]"
 }
