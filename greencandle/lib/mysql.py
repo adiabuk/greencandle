@@ -57,7 +57,7 @@ class Mysql():
         self.logger.debug("Running Mysql command: %s", command)
         try:
             cur.execute(command)
-        except MySQLdb.ProgrammingError:
+        except (MySQLdb.DataError, MySQLdb.ProgrammingError):
             self.logger.critical("Error running SQL command %s", command)
             return
 
