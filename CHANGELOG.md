@@ -1,5 +1,11 @@
 # Releases
 
+# 9.5.5
+* STRATEGY: switch strategies for per env
+* REVERT: "ensure SMI was overbought/oversold before xover", use drain for filter instead
+* DEBUG: catch additional mysql error
+* STRATEGY: wait for candle close when dertermining EMA xover
+
 # 9.5.4
 * STRATEGY: set 6hr redis trade expiry for 30m
 * STRATEGY: ensure SMI was overbought/oversold before xover
