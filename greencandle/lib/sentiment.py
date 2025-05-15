@@ -34,7 +34,7 @@ class Sentiment(dict):
         """
         Get tv value from prometheus for given interval
         """
-        result = get_prom_value(f'tv_all_value_{interval}')
+        result = get_prom_value(f'last_over_time(tv_all_value_{interval}[10m])')
         return result
 
     def get_results(self):
