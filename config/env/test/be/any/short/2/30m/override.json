@@ -1,9 +1,9 @@
 {
   "immediate_trailing_stop": "true",
-  "indicators": "get_tv;TV;4h",
+  "indicators": "get_ema;EMA;30m get_ema_EMA;15m",
   "interval": "30m",
   "name": "test-be-api-any2-30m-cross",
-  "open_rule1": "res.TV_4h \u003c= 0",
+  "open_rule1": "res.EMA_30m \u003e= 70 and res.EMA_15m \u003e= 70",
   "perc_at_timeout": "2",
   "stop_loss_perc": "4",
   "take_profit_perc": "8",

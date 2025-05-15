@@ -37,6 +37,13 @@ class Sentiment(dict):
         result = get_prom_value(f'last_over_time(tv_all_value_{interval}[10m])')
         return result
 
+    def get_ema(self, interval):
+        """
+        Get EMA Sentiment from prometheus - minimum value over last 5 hrs
+        """
+        query_str = 'up' if config.main.trade_direction == 'long' else 'down'
+        result = get_prom_value(f'min_over_time(EMA_150_{query_str}_{interval}[5h])')
+
     def get_results(self):
         """
         Evaluate results for given config, using prefetched values
