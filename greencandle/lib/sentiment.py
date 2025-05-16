@@ -26,7 +26,7 @@ class Sentiment(dict):
         else:
             for ind in indicators:
                 method, name, interval = ind.split(';')
-                results[f'{name}_{interval}'] = int(eval(f'self.{method}("{interval}")'))
+                results[f'{name}_{interval}'] = float(eval(f'self.{method}("{interval}")'))
 
             self.res = AttributeDict(results)
 
@@ -43,6 +43,7 @@ class Sentiment(dict):
         """
         query_str = 'up' if config.main.trade_direction == 'long' else 'down'
         result = get_prom_value(f'min_over_time(EMA_150_{query_str}_{interval}[5h])')
+        return result
 
     def get_results(self):
         """
