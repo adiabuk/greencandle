@@ -1,5 +1,5 @@
 {
-  "check_interval": "120",
+  "check_interval": "300",
   "interval": "30m",
   "name": "data-be-analyse-30m-short5",
   "redis_expiry_seconds": "14400",
