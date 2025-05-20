@@ -1,5 +1,13 @@
 # Releases
 
+# 9.5.6
+* STRATEGY: run 1h/30m data checks every 5mins
+* BUGFIX: avoid out of range db errors when reopening data trades
+* BUGFIX: syntax fixes for EMA sentiment
+* STRATEGY: test EMA sentiment check in test env
+* STRATEGY: increase lookback period for prom value
+* BUGFIX: ensure db schema is compatible with client version in container
+
 # 9.5.5
 * STRATEGY: switch strategies for per env
 * REVERT: "ensure SMI was overbought/oversold before xover", use drain for filter instead
