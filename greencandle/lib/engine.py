@@ -738,8 +738,8 @@ class Engine(dict):
         if index is None:
             index = -1
 
-        recent_high = self.dataframes[pair].high.tail(int(timef)).max()
-        recent_low = self.dataframes[pair].low.tail(int(timef)).min()
+        recent_high = self.dataframes[pair].high.astype(float).tail(int(timef)).max()
+        recent_low = self.dataframes[pair].low.astype(float).tail(int(timef)).min()
 
         try:
             scheme["data"] = recent_high, recent_low
