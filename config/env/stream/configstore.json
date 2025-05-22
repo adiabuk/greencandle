@@ -215,6 +215,11 @@
       "is_binary": false,
       "is_secret": false
     },
+    "flip_rule": {
+      "value": "false",
+      "is_binary": false,
+      "is_secret": false
+    },
     "good_pairs": {
       "value": "",
       "is_binary": false,
