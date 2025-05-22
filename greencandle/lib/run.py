@@ -75,6 +75,8 @@ def perform_data(pair, interval, data_dir, indicators):
         end = beg + CHUNK_SIZE
         LOGGER.debug("chunk: %s, %s", beg, end)
         dataframe = dframe.copy()[beg: end]
+        dataframe[['open', 'high', 'low', 'close']] = \
+                dataframe[['open', 'high', 'low', 'close']].astype(float)
 
         current_otime = int(dataframe.iloc[-1].openTime)/1000
         current_time = time.strftime("%Y-%m-%d %H:%M:%S",
