@@ -194,7 +194,7 @@ def analyse_pair(pair, reversal, expire, redis):
     sent = DATA[pair]['sent']
     output = redis.get_rule_action(pair=pair, interval=INTERVAL, res=res, agg=agg, sent=sent,
                                    items=items )
-    result, _, current_time, current_price, match = output
+    result, flip, current_time, current_price, match = output
     event = reversal
     LOGGER.debug("analysis result for %s is %s", pair, str(output))
 
@@ -273,6 +273,20 @@ def analyse_pair(pair, reversal, expire, redis):
             del redis4
             LOGGER.info("trade opening %s:%s:%s - removing from redis db:%s", pair, reversal,
                         expire, CHECK_REDIS_PAIR)
+
+        directions = {'short':-1, 'long':1}
+        if flip:
+            del directions[DIRECTION]
+            new_direction = list(directions.keys())[0]
+            new_action = list(directions.values())[0]
+            reversal = 'reversal'
+            LOGGER.info("Flipping direction from %s to %s for pair %s", DIRECTION,
+                        new_direction, pair)
+        else:
+            new_direction = DIRECTION
+            new_action = directions[DIRECTION]
+            reversal = 'normal'
+
         if ROUTER_FORWARD:
             url = f"http://router:1080/{config.web.api_token}"
             forward_strategy = f'{INTERVAL}-{STRAT_NO}'
@@ -282,7 +296,7 @@ def analyse_pair(pair, reversal, expire, redis):
                        "tp": eval(config.main.take_profit_perc),
                        "sl": eval(config.main.stop_loss_perc),
                        "interval": config.main.interval,
-                       "action": str(action),
+                       "action": str(new_action),
                        "env": config.main.name,
                        "price": current_price,
                        "strategy": forward_strategy}
@@ -291,11 +305,11 @@ def analyse_pair(pair, reversal, expire, redis):
                 requests.post(url, json.dumps(payload), timeout=20,
                               headers={'Content-Type': 'application/json'})
                 LOGGER.info("forwarding %s %s/%s trade to: %s match:%s",
-                            pair, INTERVAL, DIRECTION, forward_strategy, match_strs)
+                            pair, INTERVAL, new_direction, forward_strategy, match_strs)
 
             except requests.exceptions.RequestException:
                 LOGGER.warning("Unable to forward trade %s %s/%s trade to: %s match:%s",
-                                pair, INTERVAL, DIRECTION, forward_strategy, match_strs)
+                                pair, INTERVAL, new_direction, forward_strategy, match_strs)
 
         if result == 'OPEN' and REDIS_FORWARD:
             for forward_db in REDIS_FORWARD:
@@ -304,16 +318,16 @@ def analyse_pair(pair, reversal, expire, redis):
                 LOGGER.info("new forward trade adding %s to %s:%s set db %s",
                             pair, INTERVAL, DIRECTION, forward_db)
                 redis_pairs = [x.decode().split(':') for x
-                               in redis4.conn.smembers(f'{INTERVAL}:{DIRECTION}')]
+                               in redis4.conn.smembers(f'{INTERVAL}:{new_direction}')]
 
                 # check pair doesn't already exist
-                if not [el for el in redis_pairs if el[0] == pair and el[1] == 'normal']:
+                if not [el for el in redis_pairs if el[0] == pair and el[1] == reversal]:
                     now = int(time.time())
-                    redis4.conn.sadd(f'{INTERVAL}:{DIRECTION}', f'{pair}:normal:{now}')
+                    redis4.conn.sadd(f'{INTERVAL}:{new_direction}', f'{pair}:{reversal}:{now}')
                 del redis4
 
         LOGGER.info("trade alert: %s %s %s %s %s (%s)",result, pair, match_strs, INTERVAL,
-                    DIRECTION, supported.strip())
+                    new_direction, supported.strip())
 
 @arg_decorator
 def main():
