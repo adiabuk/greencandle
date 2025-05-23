@@ -193,9 +193,10 @@ def analyse_pair(pair, reversal, expire, redis):
     agg = AttributeDict(DATA[pair]['agg'])
     sent = DATA[pair]['sent']
     output = redis.get_rule_action(pair=pair, interval=INTERVAL, res=res, agg=agg, sent=sent,
-                                   items=items )
-    result, flip, current_time, current_price, match = output
+                                   items=items, check_reversal=True)
+    result, _, current_time, current_price, match = output
     event = reversal
+    flip = match['reversal']
     LOGGER.debug("analysis result for %s is %s", pair, str(output))
 
     if result in ('OPEN', 'CLOSE'):
