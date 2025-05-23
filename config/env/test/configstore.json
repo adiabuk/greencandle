@@ -337,7 +337,7 @@
       "is_secret": false
     },
     "reversal_rule": {
-      "value": "",
+      "value": "false",
       "is_binary": false,
       "is_secret": false
     },
