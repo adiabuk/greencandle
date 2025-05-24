@@ -42,7 +42,7 @@ class Sentiment(dict):
         Get EMA Sentiment from prometheus - minimum value over last 5 hrs
         """
         query_str = 'up' if config.main.trade_direction == 'long' else 'down'
-        result = get_prom_value(f'min_over_time(EMA_150_{query_str}_{interval}[5h])')
+        result = get_prom_value(f'min_over_time(EMA_150_{query_str}_{interval}[1h])')
         return result
 
     def get_results(self):
