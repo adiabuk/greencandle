@@ -567,7 +567,7 @@ def get_live():
             long.append(float(net_perc))
 
             high_low = DATA[f'tf_{interval}'][pair]['res'][0]['HL_30'][0] > \
-            DATA[f'tf_{interval}'][pair]['res'][0].HL_60[0] and \
+            DATA[f'tf_{interval}'][pair]['res'][0]['HL_60'][0] and \
             DATA[f'tf_{interval}'][pair]['res'][0]['HL_30'][1] > \
             DATA[f'tf_{interval}'][pair]['res'][0]['HL_60'][1]
 
