@@ -361,7 +361,9 @@ services:
       - per-base-mysql:mysql
       - per-base-redis:redis
       - per-be-api-any-5m-cross-long:any-5m-long
-      - per-be-api-any-5m-cross-short:any-5m-short
+      - per-be-api-any-5m-cross-long:any-5m-long
+      - per-be-api-any-15m-cross-short:any-15m-short
+      - per-be-api-any-15m-cross-short:any-15m-short
       - per-be-api-any-30m-cross-long:any-30m-long
       - per-be-api-any-30m-cross-short:any-30m-short
       - per-be-api-any2-30m-cross-long:any2-30m-long
@@ -1031,6 +1033,83 @@ services:
       - CONFIG_ENV=per/be/any2/short/1h
       - DB=true
       - BALANCE_HOLD="true"
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any-15m-cross-long:
+    container_name: per-be-api-any-15m-cross-long
+    hostname: per-be-api-any-15m-cross-long
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600M
+    pull_policy: always
+    restart: unless-stopped
+    entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
+    logging:
+      driver: syslog
+      options:
+        tag: "{{.Name}}"
+        syslog-facility: local5
+    environment:
+      - CONFIG_ENV=per/be/any/long/15m
+      - intermittent="true"
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - per-base-mysql:mysql
+      - per-base-redis:redis
+    depends_on:
+      - per-base-mysql
+      - per-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  per-be-api-any-15m-cross-short:
+    container_name: per-be-api-any-15m-cross-short
+    hostname: per-be-api-any-15m-cross-short
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600M
+    pull_policy: always
+    restart: unless-stopped
+    entrypoint: /docker-entrypoint.sh "backend_api --test api & backend_api --test queue"
+    logging:
+      driver: syslog
+      options:
+        tag: "{{.Name}}"
+        syslog-facility: local5
+    environment:
+      - CONFIG_ENV=per/be/any/short/15m
+      - intermittent="true"
+      - DB=true
+      - no_proxy=router
     ports:
       - 20000
     links:
