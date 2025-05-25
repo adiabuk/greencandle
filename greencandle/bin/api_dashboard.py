@@ -27,8 +27,7 @@ from greencandle.lib.mysql import Mysql
 from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.binance_accounts import base2quote, get_cross_margin_level
 from greencandle.lib.common import (arg_decorator, divide_chunks, get_be_services, list_to_dict,
-                                    perc_diff, get_tv_link, get_trade_link, format_usd, price2float,
-                                    epoch2date)
+                                    perc_diff, get_tv_link, get_trade_link, format_usd, price2float)
 from greencandle.lib.objects import AttributeDict
 from greencandle.lib import config
 from greencandle.lib.web import PrefixMiddleware, push_prom_data, decorator_timer, retry_session
@@ -598,7 +597,7 @@ def get_live():
                             "xnet_perc": f'{round(net_perc,4)}',
                             "tv_trend": tv_trend,
                             "ema_trend": get_bool_colour(ema_trend),
-                            "high_low": get_bool_color(high_low),
+                            "high_low": get_bool_colour(high_low),
                             "rsi_sell": get_bool_colour(rsi_sell),
                             "bb_sell": get_bool_colour(bb_sell),
                             "stoch_sell": get_bool_colour(stoch_sell),
