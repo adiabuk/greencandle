@@ -1,9 +1,5 @@
 {
   "name": "test-be-api-any2-cross",
-  "slack_alerts": "test2",
-  "slack_balance": "test2",
-  "slack_notifications": "test2",
-  "slack_trades": "test2",
   "stop_loss_perc": "1",
   "perc_at_timeout": "0.3",
   "take_profit_perc": "2",

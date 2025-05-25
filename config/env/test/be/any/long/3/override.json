@@ -1,8 +1,4 @@
 {
   "name": "test-be-api-any3-cross",
-  "slack_alerts": "test2",
-  "slack_balance": "test2",
-  "slack_notifications": "test2",
-  "slack_trades": "test2",
   "trade_direction": "long"
 }

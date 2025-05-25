@@ -1,5 +1,4 @@
 {
   "logging_output": "stdout",
-  "name": "test-manual",
-  "slack_active": "false"
+  "name": "test-manual"
 }
