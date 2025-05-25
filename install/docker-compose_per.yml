@@ -361,8 +361,8 @@ services:
       - per-base-mysql:mysql
       - per-base-redis:redis
       - per-be-api-any-5m-cross-long:any-5m-long
-      - per-be-api-any-5m-cross-long:any-5m-long
-      - per-be-api-any-15m-cross-short:any-15m-short
+      - per-be-api-any-5m-cross-short:any-5m-short
+      - per-be-api-any-15m-cross-long:any-15m-long
       - per-be-api-any-15m-cross-short:any-15m-short
       - per-be-api-any-30m-cross-long:any-30m-long
       - per-be-api-any-30m-cross-short:any-30m-short
