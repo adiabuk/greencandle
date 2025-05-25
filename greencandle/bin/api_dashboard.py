@@ -567,12 +567,21 @@ def get_live():
             stoch_sell = stochrsi > 95
             long.append(float(net_perc))
 
+            high_low = DATA[f'tf_{interval}'][pair]['res'][0]['HL_30'][0] > \
+            DATA[f'tf_{interval}'][pair]['res'][0].HL_60[0] and \
+            DATA[f'tf_{interval}'][pair]['res'][0]['HL_30'][1] > \
+            DATA[f'tf_{interval}'][pair]['res'][0]['HL_60'][1]
+
         else:
             bb_sell = float(current_price) < DATA[f'tf_{interval}'][pair]['res'][0]['bb_30'][2]
             ema_trend = float(current_price) < ema150[0]
             rsi_sell = rsi7 < 30
             stoch_sell = stochrsi < 5
             short.append(float(net_perc))
+            high_low = DATA[f'tf_{interval}'][pair]['res'][0]['HL_30'][0] < \
+            DATA[f'tf_{interval}'][pair]['res'][0].HL_60[0] and \
+            DATA[f'tf_{interval}'][pair]['res'][0]['HL_30'][1] < \
+            DATA[f'tf_{interval}'][pair]['res'][0]['HL_60'][1]
 
         time_in_trade = str(datetime.now().replace(microsecond=0) -
                             datetime.strptime(str(open_time), '%Y-%m-%d %H:%M:%S'))
@@ -589,6 +598,7 @@ def get_live():
                             "xnet_perc": f'{round(net_perc,4)}',
                             "tv_trend": tv_trend,
                             "ema_trend": get_bool_colour(ema_trend),
+                            "high_low": get_bool_color(high_low),
                             "rsi_sell": get_bool_colour(rsi_sell),
                             "bb_sell": get_bool_colour(bb_sell),
                             "stoch_sell": get_bool_colour(stoch_sell),
