@@ -4,6 +4,5 @@
   "name": "data-be-analyse-5m-long6",
   "redis_expiry_seconds": "7200",
   "slack_alerts": "",
-  "stop_loss_perc": "max(abs(perc_diff(res[0].close,(res[0].close+(3*res[0].ATR_14[0])))),5",
   "time_between_trades": "4h"
 }

@@ -294,8 +294,10 @@ def analyse_pair(pair, reversal, expire, redis):
             payload = {"pair": pair,
                        "text": (f"forwarding {result.lower()} trade from "
                                 f"{match_strs}/{INTERVAL}/{DIRECTION}"),
-                       "tp": eval(config.main.take_profit_perc),
-                       "sl": eval(config.main.stop_loss_perc),
+                       "sl": eval(config.main.stop_loss_perc) if new_direction=='short' else \
+                               eval(config.main.take_profit_perc),
+                       "tp": 2*eval(config.main.stop_loss_perc) if new_direction=='short' else \
+                               2*eval(config.main.take_profit_perc),
                        "interval": config.main.interval,
                        "action": str(new_action),
                        "env": config.main.name,

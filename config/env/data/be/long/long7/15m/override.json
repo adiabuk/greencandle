@@ -3,6 +3,5 @@
   "interval": "15m",
   "name": "data-be-analyse-15m-long7",
   "slack_notifications": "data",
-  "stop_loss_perc": "max(abs(perc_diff(res[0].close,(res[0].close+(3*res[0].ATR_14[0])))),5",
   "time_between_trades": "1h"
 }

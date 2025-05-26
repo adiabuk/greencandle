@@ -1,6 +1,4 @@
 {
   "divisor": "3",
-  "name": "data-cron",
-  "stop_loss_perc": "abs(perc_diff(res[0].close,(res[0].close+(1.5*res[0].ATR_14[0]))))",
-  "take_profit_perc": "abs(perc_diff(res[0].close,(res[0].close+(3*res[0].ATR_14[0]))))"
+  "name": "data-cron"
 }
