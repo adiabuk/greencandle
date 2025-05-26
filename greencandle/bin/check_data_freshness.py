@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-member,broad-exception-caught,import-error
+#pylint: disable=no-member,broad-except,import-error
 """
 check freshness of redis data
 """

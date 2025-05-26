@@ -31,9 +31,9 @@ def main():
 
 
     dbase = Mysql()
-    x = dbase.fetch_sql_data(f"select * from trades where id={old_id}")
+    trades = dbase.fetch_sql_data(f"select * from trades where id={old_id}")
 
-    data = dict(zip(x[0], x[1]))
+    data = dict(zip(trades[0], trades[1]))
     diff = perc_diff(data['quote_in'], new_quote_in)
     # first = old name + reduced amount
     # second = new_name + leftover amount

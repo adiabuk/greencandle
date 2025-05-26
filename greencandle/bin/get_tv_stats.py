@@ -31,15 +31,15 @@ def main():
     interval = sys.argv[1] if len(sys.argv) > 1 else '1h'
     pairs = ['binance:' + s for s in config.main.pairs.split()]
     analysis = get_multiple_analysis(screener="crypto", interval=interval, symbols=pairs)
-    for v in analysis.values():
-        if v is None:
+    for value in analysis.values():
+        if value is None:
             continue
-        stats[v.summary['RECOMMENDATION']] +=1
+        stats[value.summary['RECOMMENDATION']] +=1
 
-        redis.conn.rpush(f"{v.symbol}:{interval}", v.summary['RECOMMENDATION'])
-        filename = f'/data/tv_sentiment/{v.symbol}_{interval}_summary_{dt_stamp}.json'
-        with open(filename, 'w', encoding="utf-8") as f:
-            json.dump(v.summary, f)
+        redis.conn.rpush(f"{value.symbol}:{interval}", value.summary['RECOMMENDATION'])
+        filename = f'/data/tv_sentiment/{value.symbol}_{interval}_summary_{dt_stamp}.json'
+        with open(filename, 'w', encoding="utf-8") as filehandle:
+            json.dump(value.summary, filehandle)
 
     most = max(stats, key=stats.get)
     most_value = assocs[most]

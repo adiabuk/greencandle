@@ -11,7 +11,6 @@ from datetime import datetime
 import requests
 from send_nsca3 import send_nsca
 from greencandle.lib import config
-from greencandle.lib.common import perc_diff
 from greencandle.lib.redis_conn import Redis, get_float
 from greencandle.lib.common import arg_decorator
 from greencandle.lib.objects import AttributeDict
@@ -47,7 +46,7 @@ def check_rules():
         items.append(list(json.loads(redis12.conn.get(key).decode()).values()) + [key.decode()])
 
     items = [[item.strip() for item in rule] for rule in items]
-    for pair, interval, action, usd, tp, sl, rule, rule2, forward_to, key in items:
+    for pair, interval, action, usd, take, stop, rule, rule2, forward_to, key in items:
 
         if pair.upper() not in config.main.pairs.split():
             msg = f'Unknown pair: {pair}'
@@ -96,9 +95,6 @@ def check_rules():
             current_minute = datetime.now().minute
             current_hour = datetime.now().hour
 
-        def distance_to(num):
-            return abs(perc_diff(num, res[0].close))
-
         ###
         try:
             evalled = eval(rule)
@@ -119,8 +115,8 @@ def check_rules():
                        "env": config.main.name,
                        "price": -1,
                        "usd": usd,
-                       "tp": eval(tp) if tp else tp,
-                       "sl": eval(sl) if sl else sl,
+                       "tp": eval(take) if take else take,
+                       "sl": eval(stop) if stop else stop,
                        "strategy": forward_to}
 
             try:
@@ -131,7 +127,8 @@ def check_rules():
                             pair, interval, forward_to, rule)
 
                 data = {"pair":pair, "interval": interval, "action": action, "usd": usd,
-                        "tp": tp, "sl": sl, "rule": rule, "rule2": rule2, "forward_to": forward_to}
+                        "tp": take, "sl": stop, "rule": rule, "rule2": rule2,
+                        "forward_to": forward_to}
 
                 redis11.conn.set(f"{str(int(time.time()))}", json.dumps(data))
                 redis12.conn.delete(key)

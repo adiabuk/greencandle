@@ -23,8 +23,8 @@ def main():
     config.create_config()
     env = config.main.base_env
     session = retry_session(retries=5, backoff_factor=2)
-    a = session.request('GET', f'http://config.amrox.loc/drain/get_env?env={env}', timeout=30)
-    count = count_struct(a.json())
+    request = session.request('GET', f'http://config.amrox.loc/drain/get_env?env={env}', timeout=30)
+    count = count_struct(request.json())
 
     if count > 3:
         status = 2

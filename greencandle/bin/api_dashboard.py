@@ -73,22 +73,22 @@ def get_doublersi():
     now = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     for pair in config.main.pairs.split():
         try:
-            item = redis.get_intervals(pair, '1d')[-1]
-            x = json.loads(redis.get_item(f'{pair}:1d', item).decode())
+            tf_1d = redis.get_intervals(pair, '1d')[-1]
+            item_1d = json.loads(redis.get_item(f'{pair}:1d', tf_1d).decode())
 
-            item2 = redis.get_intervals(pair, '1h')[-1]
-            x2 = json.loads(redis.get_item(f'{pair}:1h', item2).decode())
+            tf_1h = redis.get_intervals(pair, '1h')[-1]
+            item_1h = json.loads(redis.get_item(f'{pair}:1h', tf_1h).decode())
 
-            if x['RSI_7'] > 60 and x2['RSI_7'] < 40 :
+            if item_1d['RSI_7'] > 60 and item_1h['RSI_7'] < 40 :
                 direction='long'
 
-            elif x['RSI_7'] < 40 and x2['RSI_7'] > 60:
+            elif item_1d['RSI_7'] < 40 and item_1h['RSI_7'] > 60:
                 direction='short'
             else:
                 continue
 
-            DOUBLERSI[pair] = {'day': x['RSI_7'],
-                             'hour': x2['RSI_7'],
+            DOUBLERSI[pair] = {'day': item_1d['RSI_7'],
+                             'hour': item_1h['RSI_7'],
                              'time': now,
                              'direction': direction}
         except Exception as e:
@@ -290,13 +290,13 @@ def extras():
         current.update({'add_time': add_time})
         data['current'].append(current)
 
-    di = {"long": '1', "short": "-1", "close": "0"}
-    di_rev = {v:k for k,v in di.items()}
+    directions = {"long": '1', "short": "-1", "close": "0"}
+    di_rev = {dival:dikey for dikey,dival in directions.items()}
 
     for key in keys14:
         keys_to_keep = ['pair', 'text', 'tp', 'sl', 'action', 'env', 'interval', 'strategy',]
-        queued = AttributeDict({k: v for k, v in redis14.conn.json().get(key).items()
-                                if k in keys_to_keep})
+        queued = AttributeDict({qkey: qvalue for qkey, qvalue in
+                                redis14.conn.json().get(key).items() if qkey in keys_to_keep})
         delete_button = (f'<form method=post action=/dash/xredis?key={key.decode()}&db=14><input '
                           'type=submit name=save value=delete></form>')
         queued['pair'] = queued.pair.upper().strip()
@@ -553,12 +553,12 @@ def get_live():
         rsi7 = DATA[f'tf_{interval}'][pair]['res'][0]['RSI_7']
         rsi7_last = DATA[f'tf_{interval}'][pair]['res'][1]['RSI_7']
         ema150 = DATA[f'tf_{interval}'][pair]['res'][0]['EMA_150']
-        ha = DATA[f'tf_{interval}'][pair]['res'][0]['HA_close']
-        ha_last = DATA[f'tf_{interval}'][pair]['res'][1]['HA_close']
+        heiken = DATA[f'tf_{interval}'][pair]['res'][0]['HA_close']
+        heiken_last = DATA[f'tf_{interval}'][pair]['res'][1]['HA_close']
 
         rsi_up = rsi7 > rsi7_last if direction == 'long' else rsi7 < rsi7_last
         stoch_up = stochrsi > stochrsi_last if direction == 'long' else stochrsi < stochrsi_last
-        ha_up = ha > ha_last if direction == 'long' else ha < ha_last
+        ha_up = heiken > heiken_last if direction == 'long' else heiken < heiken_last
         if direction == 'long':
             bb_sell = float(current_price) > DATA[f'tf_{interval}'][pair]['res'][0]['bb_30'][0]
             ema_trend = float(current_price) > ema150[0]
