@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint:disable=no-member
+#pylint:disable=no-member,no-name-in-module
 #PYTHON_ARGCOMPLETE_OK
 """
 Run module with test data
@@ -8,9 +8,8 @@ Run module with test data
 import argparse
 import argcomplete
 from setproctitle import setproctitle
-
 from greencandle.lib import config
-from greencandle.lib.logger import get_logger, exception_catcher
+from greencandle.lib.logger import get_logger
 from greencandle.lib.run import serial_test, parallel_test
 
 config.create_config()

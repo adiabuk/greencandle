@@ -53,8 +53,8 @@ def main():
                  f'tv_buy_{interval}': stats.BUY,
                  f'tv_sell_{interval}': stats.SELL,
                  f'tv_neutral_{interval}': stats.NEUTRAL}
-    for k, v in prom_data.items():
-        push_prom_data(k, v)
+    for promkey, promval in prom_data.items():
+        push_prom_data(promkey, promval)
     push_prom_data(f'tv_all_value_{interval}', most_value)
 
 if __name__ == '__main__':

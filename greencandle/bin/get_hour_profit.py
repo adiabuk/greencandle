@@ -52,8 +52,9 @@ def main():
                  f'closed_net_avg_day_{env}': todays_avg,
                  f'closed_net_profit_hour_{env}': usd_profit,
                  f'closed_net_profit_day_{env}': todays_usd}
-    for k, v in prom_data.items():
-        push_prom_data(k, v)
+    for promkey, promval in prom_data.items():
+        push_prom_data(promkey, promval)
+
 
 if __name__ == "__main__":
     main()

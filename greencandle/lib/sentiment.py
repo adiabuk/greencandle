@@ -1,4 +1,4 @@
-#pylint: disable=no-member,unused-variable,broad-exception-caught,eval-used
+#pylint: disable=no-member,unused-variable,broad-except,eval-used
 """
 Mudule to evaluate sentiment for config in given context
 To be used in trading environments only
@@ -30,14 +30,16 @@ class Sentiment(dict):
 
             self.res = AttributeDict(results)
 
-    def get_tv(self, interval):
+    @staticmethod
+    def get_tv(interval):
         """
         Get tv value from prometheus for given interval
         """
         result = get_prom_value(f'last_over_time(tv_all_value_{interval}[10m])')
         return result
 
-    def get_ema(self, interval):
+    @staticmethod
+    def get_ema(interval):
         """
         Get EMA Sentiment from prometheus - minimum value over last 5 hrs
         """

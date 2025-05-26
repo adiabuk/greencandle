@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-member,broad-exception-caught
+#pylint: disable=no-member,broad-except
 """
 Get number of pairs above and below EMA_150
 """
@@ -35,33 +35,33 @@ def main():
     config.create_config()
     redis = Redis()
 
-    up = []
-    down = []
+    up_list = []
+    down_list = []
     interval = sys.argv[1] if len(sys.argv) > 1 else '1h'
     for pair in config.main.pairs.split():
         try:
-            item = redis.get_intervals(pair, interval)[-1]
-            x = json.loads(redis.get_item(f'{pair}:{interval}', item).decode())
+            tf_interval = redis.get_intervals(pair, interval)[-1]
+            item = json.loads(redis.get_item(f'{pair}:{interval}', tf_interval).decode())
 
 
-            if float(x['ohlc']['close']) > x['EMA_150'][0]:
-                up.append(pair)
+            if float(item['ohlc']['close']) > item['EMA_150'][0]:
+                up_list.append(pair)
             else:
-                down.append(pair)
+                down_list.append(pair)
 
-        except Exception as e:
-            logger.info("bad %s %s",str(e), pair)
+        except Exception as excp:
+            logger.info("bad %s %s",str(excp), pair)
 
     dt_stamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     filename = f'/data/ema_stats/ema_{interval}_{dt_stamp}.json'
-    max_direction = get_max(up, down)
-    up_perc=round(len(up)/len(config.main.pairs.split())*100,2)
-    down_perc=round(len(down)/len(config.main.pairs.split())*100,2)
+    max_direction = get_max(up_list, down_list)
+    up_perc=round(len(up_list)/len(config.main.pairs.split())*100,2)
+    down_perc=round(len(down_list)/len(config.main.pairs.split())*100,2)
     data = {'max': max_direction, 'up_perc': up_perc, 'down_perc': down_perc,
-            'date': dt_stamp, 'up_list': up, 'down_list': down}
+            'date': dt_stamp, 'up': up_list, 'down': down_list}
 
-    with open(filename, 'w', encoding='utf-8') as f:
-        json.dump(data, f)
+    with open(filename, 'w', encoding='utf-8') as filehandle:
+        json.dump(data, filehandle)
 
     details = f"up_perc: {up_perc}%, down_perc: {down_perc}%"
 

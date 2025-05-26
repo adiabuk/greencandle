@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint:disable=no-member,consider-using-with,too-many-locals,global-statement,too-few-public-methods,assigning-non-slot,no-name-in-module,broad-exception-caught,expression-not-assigned
+#pylint:disable=no-member,consider-using-with,too-many-locals,global-statement,too-few-public-methods,assigning-non-slot,no-name-in-module,broad-except,expression-not-assigned
 
 """
 Flask module for manipulating API trades and displaying relevent graphs
@@ -91,8 +91,8 @@ def get_doublersi():
                              'hour': item_1h['RSI_7'],
                              'time': now,
                              'direction': direction}
-        except Exception as e:
-            print("bad %s",e, pair)
+        except Exception as excp:
+            print("bad %s",excp, pair)
 
     sort = sorted(DOUBLERSI,key=lambda x:DOUBLERSI[x]['time'])
     for key in sort:
@@ -891,8 +891,8 @@ def get_balance():
                  f'total_debts_usd_{env}': total_debts_usd,
                  f'current_balance_usd_{env}': price2float(current_balance_usd),
                  f'current_balance_btc_{env}': price2float(current_balance_btc)}
-    for k, v in prom_data.items():
-        push_prom_data(k,v)
+    for promkey, promval in prom_data.items():
+        push_prom_data(promkey, promval)
     send_nsca(status=status, host_name="eaglenest",
               service_name=f"{env}_open_net_perc",
               text_output=text, remote_host="nagios.amrox.loc")
