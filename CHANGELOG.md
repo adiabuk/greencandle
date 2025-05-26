@@ -1,5 +1,21 @@
 # Releases
 
+# 9.6
+* STRATEGY: use low for long stop loss and high for short
+* STRATEGY: set tpsl to be based on previous highs/lows
+* BUGFIX: don't fail assocs tests on api-loan container
+* CONFIG: fix assocs in prod and per env
+* CONFIG: remove delisted pairs
+* CONFIG: split mm channels for test env
+* CLEANUP: fix lint and allow tests to pass
+* FEATURE: add high_low trade status dash
+* STRATEGY: only check EMA Sentiment over last hour
+* STRATEGY: EMA sentiment for 1h test env
+* STRATEGY:tweak confirmation rule
+* FEATURE: default false reversal rule
+* BUGFIX: ensure we are using floats to find recent high/low
+* FEATURE: add second high/low indicator and rule
+
 # 9.5.6
 * STRATEGY: run 1h/30m data checks every 5mins
 * BUGFIX: avoid out of range db errors when reopening data trades
