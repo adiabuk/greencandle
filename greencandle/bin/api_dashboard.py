@@ -566,9 +566,9 @@ def get_live():
             stoch_sell = stochrsi > 95
             long.append(float(net_perc))
 
-            high_low = DATA[f'tf_{interval}'][pair]['res'][0]['HL_30'][0] > \
+            high_low = DATA[f'tf_{interval}'][pair]['res'][0]['HL_30'][0] >= \
             DATA[f'tf_{interval}'][pair]['res'][0]['HL_60'][0] and \
-            DATA[f'tf_{interval}'][pair]['res'][0]['HL_30'][1] > \
+            DATA[f'tf_{interval}'][pair]['res'][0]['HL_30'][1] >= \
             DATA[f'tf_{interval}'][pair]['res'][0]['HL_60'][1]
 
         else:
@@ -577,9 +577,9 @@ def get_live():
             rsi_sell = rsi7 < 30
             stoch_sell = stochrsi < 5
             short.append(float(net_perc))
-            high_low = DATA[f'tf_{interval}'][pair]['res'][0]['HL_30'][0] < \
+            high_low = DATA[f'tf_{interval}'][pair]['res'][0]['HL_30'][0] <= \
             DATA[f'tf_{interval}'][pair]['res'][0]['HL_60'][0] and \
-            DATA[f'tf_{interval}'][pair]['res'][0]['HL_30'][1] < \
+            DATA[f'tf_{interval}'][pair]['res'][0]['HL_30'][1] <= \
             DATA[f'tf_{interval}'][pair]['res'][0]['HL_60'][1]
 
         time_in_trade = str(datetime.now().replace(microsecond=0) -
