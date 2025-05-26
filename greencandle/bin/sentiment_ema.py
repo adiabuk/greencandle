@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-member,broad-except
+#pylint: disable=no-member,broad-except,too-many-locals,invalid-name
 """
 Get number of pairs above and below EMA_150
 """
