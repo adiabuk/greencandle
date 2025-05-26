@@ -362,6 +362,8 @@ services:
       - prod-be-api-any-15m-cross-short:any-15m-short
       - prod-be-api-any-30m-cross-long:any-30m-long
       - prod-be-api-any-30m-cross-short:any-30m-short
+      - prod-be-api-any2-30m-cross-long:any2-30m-long
+      - prod-be-api-any2-30m-cross-short:any2-30m-short
       - prod-be-api-any-1h-cross-long:any-1h-long
       - prod-be-api-any-1h-cross-short:any-1h-short
       - prod-be-api-any2-1h-cross-long:any2-1h-long
@@ -647,6 +649,81 @@ services:
       - /var/local:/var/local
       - /root/.bash_history:/root/.bash_history
 
+  prod-be-api-any2-30m-cross-long:
+    container_name: prod-be-api-any2-30m-cross-long
+    hostname: prod-be-api-any2-30m-cross-long
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600M
+    pull_policy: always
+    restart: unless-stopped
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
+    logging:
+      driver: syslog
+      options:
+        tag: "{{.Name}}"
+        syslog-facility: local4
+    environment:
+      - intermittent="true"
+      - CONFIG_ENV=prod/be/any2/30m/cross-long
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - prod-base-mysql:mysql
+      - prod-base-redis:redis
+    depends_on:
+      - prod-base-mysql
+      - prod-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
+
+  prod-be-api-any2-30m-cross-short:
+    container_name: prod-be-api-any2-30m-cross-short
+    hostname: prod-be-api-any2-30m-cross-short
+    image: amrox/greencandle:${TAG}
+    mem_limit: 600M
+    pull_policy: always
+    restart: unless-stopped
+    entrypoint: /docker-entrypoint.sh "backend_api api & backend_api queue"
+    logging:
+      driver: syslog
+      options:
+        tag: "{{.Name}}"
+        syslog-facility: local4
+    environment:
+      - intermittent="true"
+      - CONFIG_ENV=prod/be/any2/30m/cross-short
+      - DB=true
+    ports:
+      - 20000
+    links:
+      - prod-base-mysql:mysql
+      - prod-base-redis:redis
+    depends_on:
+      - prod-base-mysql
+      - prod-base-redis
+    healthcheck:
+      test: api_healthcheck.sh || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+      interval: 5m
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /data:/data
+      - /root/.aws:/root/.aws
+      - /dev/log:/dev/log
+      - /var/run:/var/run
+      - /var/local:/var/local
+      - /root/.bash_history:/root/.bash_history
   prod-be-api-any-1h-cross-long:
     container_name: prod-be-api-any-1h-cross-long
     hostname: prod-be-api-any-1h-cross-long
