@@ -366,10 +366,10 @@ services:
       - prod-be-api-any-1h-cross-short:any-1h-short
       - prod-be-api-any2-1h-cross-long:any2-1h-long
       - prod-be-api-any2-1h-cross-short:any2-1h-short
-      - prod-be-api-any-4h-cross-long:any-1h-long
-      - prod-be-api-any-4h-cross-short:any-1h-short
-      - prod-be-api-any2-4h-cross-long:any2-1h-long
-      - prod-be-api-any2-4h-cross-short:any2-1h-short
+      - prod-be-api-any-4h-cross-long:any-4h-long
+      - prod-be-api-any-4h-cross-short:any-4h-short
+      - prod-be-api-any2-4h-cross-long:any2-4h-long
+      - prod-be-api-any2-4h-cross-short:any2-4h-short
       - prod-be-api-any-1d-cross-long:any-1d-long
       - prod-be-api-any-1d-cross-short:any-1d-short
     depends_on:
