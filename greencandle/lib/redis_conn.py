@@ -1,4 +1,4 @@
-#pylint: disable=no-member,unused-variable,broad-exception-caught,unsubscriptable-object,eval-used
+#pylint: disable=no-member,unused-variable,broad-except,unsubscriptable-object,eval-used
 """
 Store and retrieve items from redis
 """
@@ -7,8 +7,6 @@ import json
 import time
 import zlib
 import pickle
-#xpylint: disable=eval-used,no-member,too-many-locals,too-many-branches,too-many-statements
-#xpylint: disable=broad-except,too-many-arguments,invalid-name,unused-variable
 from datetime import datetime, timedelta
 import redis
 from str2bool import str2bool
@@ -687,7 +685,8 @@ class Redis():
 
         return res, items
 
-    def get_sentiment(self, pair, interval):
+    @staticmethod
+    def get_sentiment(pair, interval):
         """
         get sentiment from redis
         """
@@ -700,7 +699,8 @@ class Redis():
 
         return sent
 
-    def get_agg_data(self, pair, interval):
+    @staticmethod
+    def get_agg_data(pair, interval):
         """
         fetch latest agg data and make available as AttributeDict
         """

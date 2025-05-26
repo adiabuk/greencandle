@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-member,eval-used,unused-import,global-statement
+#pylint: disable=no-member,eval-used,unused-import,global-statement,no-name-in-module
 
 """
 Analyze available data from redis
