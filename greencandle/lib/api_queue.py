@@ -108,7 +108,7 @@ def add_to_queue(req, test=False):
                 return
 
         result = trade.open_trade(item, stop=stop_loss)
-        if result == "opened" or test:
+        if result == "opened":
             redis.update_on_entry(item[0][0], 'take_profit_perc', take_profit)
             redis.update_on_entry(item[0][0], 'stop_loss_perc', stop_loss)
 
