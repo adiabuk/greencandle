@@ -155,7 +155,7 @@ def get_match_name(matches):
                    ['STOCHRSI_flip','RSI_close-rule','broken_trend','multi_ind_close','re-xover'],
                    ['smi_confirm'],
                    ['ema_xover'],
-                   ['empty8'],
+                   ['rsi_cross_multi_reversal'],
                    ['empty9'],
                    ['empty10'],
                    ['empty11'],
@@ -288,7 +288,7 @@ def analyse_pair(pair, reversal, expire, redis):
             new_action = directions[DIRECTION]
             reversal = 'normal'
 
-        if ROUTER_FORWARD:
+        if ROUTER_FORWARD and not flip:
             url = f"http://router:1080/{config.web.api_token}"
             forward_strategy = f'{INTERVAL}-{STRAT_NO}'
             payload = {"pair": pair,
@@ -314,7 +314,7 @@ def analyse_pair(pair, reversal, expire, redis):
                 LOGGER.warning("Unable to forward trade %s %s/%s trade to: %s match:%s",
                                 pair, INTERVAL, new_direction, forward_strategy, match_strs)
 
-        if result == 'OPEN' and REDIS_FORWARD:
+        if result == 'OPEN' and REDIS_FORWARD and flip:
             for forward_db in REDIS_FORWARD:
                 redis4 = Redis(db=forward_db)
                 # add to redis set

@@ -1,7 +1,7 @@
 {
   "check_interval": "300",
   "interval": "1h",
-  "name": "data-be-analyse-1h-long8",
+  "name": "data-be-analyse-1h-short8",
   "redis_expiry_seconds": "40000",
   "time_between_trades": "3h"
 }
