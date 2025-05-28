@@ -27,7 +27,8 @@ from greencandle.lib.mysql import Mysql
 from greencandle.lib.alerts import send_slack_message
 from greencandle.lib.binance_accounts import base2quote, get_cross_margin_level
 from greencandle.lib.common import (arg_decorator, divide_chunks, get_be_services, list_to_dict,
-                                    perc_diff, get_tv_link, get_trade_link, format_usd, price2float)
+                                    perc_diff, get_tv_link, get_trade_link, format_usd, price2float,
+                                    get_short_name)
 from greencandle.lib.objects import AttributeDict
 from greencandle.lib import config
 from greencandle.lib.web import PrefixMiddleware, push_prom_data, decorator_timer, retry_session
@@ -524,6 +525,7 @@ def get_live():
     net_profitable = 0
     long = []
     short = []
+    profit_name_direction = defaultdict(float)
     for open_time, interval, pair, name, open_price, direction, quote_in in raw:
         current_quote = get_quote(pair)
         current_price = prices['recent'][pair]['close']
@@ -559,6 +561,7 @@ def get_live():
         rsi_up = rsi7 > rsi7_last if direction == 'long' else rsi7 < rsi7_last
         stoch_up = stochrsi > stochrsi_last if direction == 'long' else stochrsi < stochrsi_last
         ha_up = heiken > heiken_last if direction == 'long' else heiken < heiken_last
+        profit_name_direction[name, direction] += float(net_perc)
         if direction == 'long':
             bb_sell = float(current_price) > DATA[f'tf_{interval}'][pair]['res'][0]['bb_30'][0]
             ema_trend = float(current_price) > ema150[0]
@@ -657,7 +660,9 @@ def get_live():
     push_prom_data(f'open_num_short_trades_{env}', len(short))
     push_prom_data(f'open_net_perc_long_trades_{env}', sum(long))
     push_prom_data(f'open_net_perc_short_trades_{env}', sum(short))
-
+    for key, val in profit_name_direction.items():
+        name = f'open_net_perc_{get_short_name(key[0], env, key[1])}_{env}'
+        push_prom_data(name, val)
     send_nsca(status=status, host_name="eaglenest",
               service_name=f"{env}_open_profitable",
               text_output=text, remote_host="nagios.amrox.loc")
