@@ -523,8 +523,8 @@ def get_live():
     raw = dbase.get_open_trades()
     commission = float(dbase.get_complete_commission())
     net_profitable = 0
-    long = []
-    short = []
+    long = 0
+    short = 0
     profit_name_direction = defaultdict(float)
     for open_time, interval, pair, name, open_price, direction, quote_in in raw:
         current_quote = get_quote(pair)
@@ -567,7 +567,7 @@ def get_live():
             ema_trend = float(current_price) > ema150[0]
             rsi_sell = rsi7 > 70
             stoch_sell = stochrsi > 95
-            long.append(float(net_perc))
+            long += 1
 
             high_low = DATA[f'tf_{interval}'][pair]['res'][0]['HL_30'][0] >= \
             DATA[f'tf_{interval}'][pair]['res'][0]['HL_60'][0] and \
@@ -584,6 +584,7 @@ def get_live():
             DATA[f'tf_{interval}'][pair]['res'][0]['HL_60'][0] and \
             DATA[f'tf_{interval}'][pair]['res'][0]['HL_30'][1] <= \
             DATA[f'tf_{interval}'][pair]['res'][0]['HL_60'][1]
+            short += 1
 
         time_in_trade = str(datetime.now().replace(microsecond=0) -
                             datetime.strptime(str(open_time), '%Y-%m-%d %H:%M:%S'))
@@ -656,13 +657,13 @@ def get_live():
 
     push_prom_data(f'open_profitable_{env}', net_perc_profitable)
     push_prom_data(f'num_open_trades_{env}', len(raw))
-    push_prom_data(f'open_num_long_trades_{env}', len(long))
-    push_prom_data(f'open_num_short_trades_{env}', len(short))
-    push_prom_data(f'open_net_perc_long_trades_{env}', sum(long))
-    push_prom_data(f'open_net_perc_short_trades_{env}', sum(short))
+    push_prom_data(f'open_num_long_trades_{env}', long)
+    push_prom_data(f'open_num_short_trades_{env}', short)
+
     for key, val in profit_name_direction.items():
         name = f'open_net_perc_{get_short_name(key[0], env, key[1])}_{env}'
         push_prom_data(name, val)
+
     send_nsca(status=status, host_name="eaglenest",
               service_name=f"{env}_open_profitable",
               text_output=text, remote_host="nagios.amrox.loc")
