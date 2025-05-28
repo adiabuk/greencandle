@@ -1,5 +1,14 @@
 # Releases
 
+# 9.6.1
+* STRATEGY: forward trades to per env
+* CLEANUP: remove unused module
+* CLEANUP: dedupe data exported to prom
+* FEATURE: push profit by name/direction to prometheus
+* STRATEGY: use 2nd stage for direction reversals
+* BUGFIX: ensure we don't overwrite tpsl in test envs
+* FEATURE: allow filtering for direction in close_all script dashboard
+
 # 9.6
 * STRATEGY: use low for long stop loss and high for short
 * STRATEGY: set tpsl to be based on previous highs/lows
