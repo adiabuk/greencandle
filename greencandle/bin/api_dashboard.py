@@ -579,7 +579,6 @@ def get_live():
             ema_trend = float(current_price) < ema150[0]
             rsi_sell = rsi7 < 30
             stoch_sell = stochrsi < 5
-            short.append(float(net_perc))
             high_low = DATA[f'tf_{interval}'][pair]['res'][0]['HL_30'][0] <= \
             DATA[f'tf_{interval}'][pair]['res'][0]['HL_60'][0] and \
             DATA[f'tf_{interval}'][pair]['res'][0]['HL_30'][1] <= \
