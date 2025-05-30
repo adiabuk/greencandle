@@ -90,6 +90,14 @@ STATIC_DIR=/data/scripts/static
 */15 * * * * ${SCRIPTS_DIR}/sentiment_ema 4h &>> /var/log/cron.log
 */15 * * * * ${SCRIPTS_DIR}/sentiment_ema 1d &>> /var/log/cron.log
 
+*/5 * * * * ${STATIC_DIR}/all_high_low.py 5m &>> /var/log/cron.log
+*/5 * * * * ${STATIC_DIR}/all_high_low.py 15m &>> /var/log/cron.log
+*/5 * * * * ${STATIC_DIR}/all_high_low.py 30m &>> /var/log/cron.log
+*/15 * * * * ${STATIC_DIR}/all_high_low.py 1h &>> /var/log/cron.log
+*/15 * * * * ${STATIC_DIR}/all_high_low.py 4h &>> /var/log/cron.log
+*/15 * * * * ${STATIC_DIR}/all_high_low.py 12h &>> /var/log/cron.log
+*/15 * * * * ${STATIC_DIR}/all_high_low.py 1d &>> /var/log/cron.log
+
 @hourly ${STATIC_DIR}/rsi_cross.py &>> /var/log/cron.log
 
 
