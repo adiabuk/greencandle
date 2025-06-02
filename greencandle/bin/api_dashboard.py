@@ -665,7 +665,7 @@ def get_live():
         status = 0 if int(val) < 100 else 2
         output = "OK" if int(val) < 100 else "time to TP"
         send_nsca(status=status, host_name="eaglenest", service_name=name, text_output=output,
-                  remote_host="nagios.amrox.loc)
+                  remote_host="nagios.amrox.loc")
 
 
     send_nsca(status=status, host_name="eaglenest",
