@@ -662,11 +662,6 @@ def get_live():
     for key, val in profit_name_direction.items():
         name = f'open_net_perc_{get_short_name(key[0], env, key[1])}_{env}'
         push_prom_data(name, val)
-        status = 0 if int(val) < 100 else 2
-        output = "OK" if int(val) < 100 else "time to TP"
-        send_nsca(status=status, host_name="eaglenest", service_name=name, text_output=output,
-                  remote_host="nagios.amrox.loc)
-
 
     send_nsca(status=status, host_name="eaglenest",
               service_name=f"{env}_open_profitable",
