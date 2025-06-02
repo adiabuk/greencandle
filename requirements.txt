@@ -53,3 +53,4 @@ tradingview-ta==3.3.0
 prometheus-client==0.21.1
 pg8000==1.31.2
 requests-cache==1.2.1
+cattrs==24.1.3
