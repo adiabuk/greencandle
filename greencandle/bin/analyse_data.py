@@ -99,7 +99,8 @@ def analyse_loop():
 
         for pair, reversal, expire in redis_pairs:
             if int(config.redis.redis_expiry_seconds) > 0 and \
-                    int(time.time()) > (int(config.redis.redis_expiry_seconds)  + int(expire)):
+                    int(time.time()) > (int(config.redis.redis_expiry_seconds)  +
+                                        int(float(expire))):
                 LOGGER.info("trade expired %s:%s:%s - removing from redis db:%s", pair, reversal,
                             expire, CHECK_REDIS_PAIR)
                 redis4.conn.srem(f'{INTERVAL}:{DIRECTION}', f'{pair}:{reversal}:{expire}')
