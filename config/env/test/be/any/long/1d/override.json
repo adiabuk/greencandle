@@ -1,7 +1,6 @@
 {
   "interval": "1d",
   "name": "test-be-api-any-1d-cross",
-  "open_rule1": "True",
   "stop_loss_perc": "5",
   "take_profit_perc": "10",
   "trade_direction": "long"

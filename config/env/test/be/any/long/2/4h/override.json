@@ -1,9 +1,7 @@
 {
   "immediate_trailing_stop": "true",
-  "indicators": "get_tv;TV;4h get_tv;TV;1d",
   "interval": "4h",
   "name": "test-be-api-any2-4h-cross",
-  "open_rule1": "res.TV_4h \u003e= 0 and res.TV_1d \u003e= 0",
   "perc_at_timeout": "5",
   "stop_loss_perc": "6",
   "take_profit_perc": "10",

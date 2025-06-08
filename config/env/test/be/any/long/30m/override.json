@@ -2,7 +2,6 @@
   "immediate_trailing_stop": "true",
   "interval": "30m",
   "name": "test-be-api-any-30m-cross",
-  "open_rule1": "True",
   "perc_at_timeout": "3",
   "stop_loss_perc": "10",
   "take_profit_perc": "10",

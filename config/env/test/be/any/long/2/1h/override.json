@@ -1,8 +1,6 @@
 {
-  "indicators": "get_ema;EMA;30m get_ema;EMA;15m get_ema;EMA;1h",
   "interval": "1h",
   "name": "test-be-api-any2-1h-cross",
-  "open_rule1": "res.EMA_30m \u003e= 70 and res.EMA_15m \u003e= 70 and res.EMA_1h \u003e= 70",
   "perc_at_timeout": "3",
   "stop_loss_perc": "5",
   "take_profit_perc": "9",

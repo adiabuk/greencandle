@@ -1,9 +1,6 @@
 {
-  "open_rule1": "True",
-  "indicators": "None",
   "interval": "4h",
   "name": "test-be-api-any-4h-cross",
-  "open_rule1": "True",
   "stop_loss_perc": "5",
   "take_profit_perc": "5",
   "trade_direction": "long"

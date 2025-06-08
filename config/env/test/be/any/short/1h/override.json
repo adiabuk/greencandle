@@ -1,8 +1,6 @@
 {
-  "indicators": "get_tv;TV;4h",
   "interval": "1h",
   "name": "test-be-api-any-1h-cross",
-  "open_rule1": "True",
   "stop_loss_perc": "5",
   "take_profit_perc": "5",
   "trade_direction": "short"
