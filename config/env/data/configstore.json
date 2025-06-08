@@ -371,7 +371,7 @@
       "is_secret": true
     },
     "stop_loss_perc": {
-      "value": "abs(perc_diff(res[0].HL_60[1], res[0].close))",
+      "value": "max(abs(perc_diff(res[0].HL_60[1], res[0].close)), 10)",
       "is_binary": false,
       "is_secret": false
     },
