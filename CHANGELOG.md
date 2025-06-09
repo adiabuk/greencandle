@@ -1,5 +1,18 @@
 # Releases
 
+# 9.7
+* STRATEGY: use 30m HL for trend checker and stag env confirmation rules
+* FEATURE: get high/low as sentiment direction
+* CONFIG: remove sentiment checks in test env
+* CONFIG: forward the same strategies to stag/test/per any2
+* STRATEGY: set max of 10% SL from all data trades
+* CONFIG: tweak docker healthchecks for data env
+* GUGFIX: ensure we can turn string into int (via float)
+* BUGFIX: don't use latest version of cattrs pip
+* FEATURE: get highs/lows for last 15 candles
+* FEATURE: collect higher highs/lower lows stats
+* FEATURE: re-order fields on status UI page
+
 # 9.6.1
 * STRATEGY: forward trades to per env
 * CLEANUP: remove unused module
