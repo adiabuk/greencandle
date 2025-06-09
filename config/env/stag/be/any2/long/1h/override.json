@@ -1,6 +1,8 @@
 {
+  "indicators": "get_hl_dir;HL;30m",
   "interval": "1h",
   "name": "stag-be-api-any2-1h-cross",
+  "open_rule1": "res.HL_30m \u003e 0",
   "perc_at_timeout": "3",
   "stop_loss_perc": "2.5",
   "take_profit_perc": "5",
