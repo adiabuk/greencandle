@@ -26,9 +26,8 @@ def main():
     short_count = 0
 
     sentiment = Sentiment()
-    result = int(sentiment.get_tv('4h'))
+    result = int(sentiment.get_hl_dir('30m'))
     for interval in ('15m', '1h', '30m', '4h'):
-
 
         if result > 0:
             count = len(dbase.get_open_trades(name_filter=interval, direction_filter='short'))
@@ -57,7 +56,6 @@ def main():
     logger.info('%s  trades exist against short trend', long_count)
     logger.info('%s trades exist against long trend', short_count)
     sys.exit(status)
-
 
 if __name__ == "__main__":
     main()
