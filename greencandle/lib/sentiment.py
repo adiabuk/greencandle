@@ -47,6 +47,21 @@ class Sentiment(dict):
         result = get_prom_value(f'min_over_time(EMA_150_{query_str}_{interval}[1h])')
         return result
 
+    @staticmethod
+    def get_hl_dir(interval):
+        """
+        Get HL direction from prometheus aggregate
+
+        """
+        try:
+            up = int(get_prom_value(f'data_HL_up_{interval}'))
+            down = int(get_prom_value(f'data_HL_down_{interval}'))
+        except (ValueError, KeyError):
+            return "unknown"
+
+        return "up" if up > down else "down"
+
+
     def get_results(self):
         """
         Evaluate results for given config, using prefetched values
