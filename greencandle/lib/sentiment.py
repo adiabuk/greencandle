@@ -54,12 +54,12 @@ class Sentiment(dict):
 
         """
         try:
-            up = int(get_prom_value(f'data_HL_up_{interval}'))
-            down = int(get_prom_value(f'data_HL_down_{interval}'))
+            up_val = int(get_prom_value(f'data_HL_up_{interval}'))
+            down_val = int(get_prom_value(f'data_HL_down_{interval}'))
         except (ValueError, KeyError):
             return 0
 
-        return 1 if up > down else -1
+        return 1 if up_val > down_val else -1
 
     def get_results(self):
         """
