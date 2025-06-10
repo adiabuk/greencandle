@@ -1,5 +1,15 @@
 # Releases
 
+# 9.7.1
+* CONFIG: add HL sentiment rules for per env
+* CLEANUP: move high/low collector cron to scripts dir
+* BUGFIX: catch reversal rule error
+* BUGFIX: fix printing of docstring with help arg
+* BUGFIX: increase verbosity of analyser end of loop log
+* CLEANUP: fix lint
+* CONFIG: add missing sentiment indicators for stag incoming trades
+* CONFIG: match multi-interval strategy in router config
+
 # 9.7
 * STRATEGY: use 30m HL for trend checker and stag env confirmation rules
 * FEATURE: get high/low as sentiment direction
