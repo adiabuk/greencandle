@@ -130,7 +130,7 @@ def analyse_loop():
         for pair, reversal, expire in pairs:
             pool.submit(analyse_pair, pair, reversal, expire, redis)
     pool.shutdown(wait=True)
-    LOGGER.debug("end of current loop")
+    LOGGER.info("end of current loop")
     Path(f'/var/local/lock/{config.main.name}').touch()
     gc.collect()
     del redis
