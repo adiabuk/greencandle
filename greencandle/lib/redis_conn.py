@@ -766,8 +766,12 @@ class Redis():
 
         winning_open = self.get_rules(rules, 'open')
         winning_close = self.get_rules(rules, 'close')
-
-        reversal = eval(config.main.reversal_rule) if check_reversal else False
+        try:
+            reversal = eval(config.main.reversal_rule) if check_reversal else False
+        except TypeError:
+            self.logger.warning("Unable to eval reversal rule for pair %s: rule: %s ",
+                                pair, config.main.reversal_rule)
+            reversal = False
 
         if any(rules['open']) and not open_price:
             result = 'OPEN'
