@@ -1,7 +1,7 @@
 {
   "interval": "1h",
   "name": "per-be-api-any2-1h-cross",
-  "open_rule1": "res.TV_4h \u003c= 0",
+  "open_rule1": "res.HL_30m \u003c 0",
   "perc_at_timeout": "3",
   "stop_loss_perc": "2.5",
   "take_profit_perc": "5",

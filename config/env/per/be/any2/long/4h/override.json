@@ -1,6 +1,5 @@
 {
   "interval": "4h",
   "name": "per-be-api-any2-4h-cross",
-  "open_rule1": "res.TV_4h \u003e= 0 and res.TV_1d \u003e=0",
   "take_profit_perc": "3.5"
 }

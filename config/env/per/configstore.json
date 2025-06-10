@@ -237,7 +237,7 @@
       "is_secret": false
     },
     "indicators": {
-      "value": "get_tv;TV;4h get_tv;TV;1d",
+      "value": "get_hl_dir;HL;30m",
       "is_binary": false,
       "is_secret": false
     },

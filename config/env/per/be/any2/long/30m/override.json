@@ -3,7 +3,7 @@
   "immediate_trailing_stop": "true",
   "interval": "30m",
   "name": "per-be-api-any2-30m-cross",
-  "open_rule1": "res.TV_4h \u003e= 0",
+  "open_rule1": "res.HL_30m \u003e 0",
   "perc_at_timeout": "2",
   "stop_loss_perc": "2",
   "take_profit_perc": "5",
