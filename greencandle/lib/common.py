@@ -87,7 +87,8 @@ def arg_decorator(func):
     """
     def inner(*args, **kwargs):
         if len(sys.argv) > 1 and sys.argv[1] == '--help':
-            print(__doc__)
+            module = sys.modules[func.__module__]
+            print(module.__doc__)
             sys.exit(0)
         return func(*args, **kwargs)
     return inner
