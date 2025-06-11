@@ -151,13 +151,6 @@ class Binance():
         data = self.signed_request("GET", "/sapi/v1/margin/allPairs", {})
         return [key['base'] + key['quote'] for key in data]
 
-    def get_isolated_margin_pairs(self):
-        """
-        Get list of pairs that support isolated margin trading
-        """
-        data = self.signed_request("GET", "/sapi/v1/margin/isolated/allPairs", {})
-        return [x['symbol'] for x in data]
-
     def exchange_info(self):
         """get exchange_info for all sumbols"""
         data = self.request("GET", "/api/v3/exchangeInfo", {})
@@ -312,7 +305,7 @@ class Binance():
         data = self.signed_request("POST", path, params)
         return data
 
-    def order_status(self, symbol, **kwargs):
+    def order_status(self, symbol, margin=False, **kwargs):
         """Check an order's status.
 
         Args:
@@ -323,8 +316,10 @@ class Binance():
 
         """
         params = {"symbol": symbol}
+        endpoint = '/sapi/v1/margin/allOrders' if margin else '/api/v3/order'
+
         params.update(kwargs)
-        data = self.signed_request("GET", "/api/v3/order", params)
+        data = self.signed_request("GET", endpoint, params)
         return data
 
     def cancel(self, symbol, **kwargs):
