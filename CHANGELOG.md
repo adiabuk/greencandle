@@ -1,5 +1,10 @@
 # Releases
 
+# 9.7.2
+* BUGFIX: re-add wrongly removed binance method
+* CONFIG: remove delisted pair
+* STRATEGY: get historic order details from binance
+
 # 9.7.1
 * CONFIG: add HL sentiment rules for per env
 * CLEANUP: move high/low collector cron to scripts dir
