@@ -99,6 +99,6 @@ STATIC_DIR=/data/scripts/static
 */15 * * * * ${SCRIPTS_DIR}/all_high_low 1d &>> /var/log/cron.log
 
 @hourly ${STATIC_DIR}/rsi_cross.py &>> /var/log/cron.log
-
+*/5 * * * * ${STATIC_DIR}/sort_hl_metric.py &>> /var/log/cron.log
 
 {{end}}
