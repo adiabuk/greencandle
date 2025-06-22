@@ -15,6 +15,7 @@ from setproctitle import setproctitle
 from greencandle.lib import config
 from greencandle.lib.run import ProdRunner
 from greencandle.lib.redis_conn import Redis
+from greencandle.lib.mysql import Mysql
 from greencandle.lib.common import arg_decorator
 from greencandle.lib.logger import get_logger
 from greencandle.lib.api_queue import add_to_queue
@@ -53,6 +54,27 @@ def healthcheck():
     Return 200
     """
     return Response(status=200)
+
+@APP.route('/close_all', methods=['POST'])
+def close_all():
+    """
+    Close all trades
+    """
+    req = request.json
+    print(req)
+    dbase = Mysql()
+    open_trades = dbase.get_open_trades(name_filter=req['interval'],
+                                        direction_filter=req['direction'],
+                                        header=False)
+    redis = Redis(db=1)
+    name = f"{config.main.name}-{config.main.trade_direction}"
+    for trade in open_trades:
+        _, interval, pair, name, _, _, _ = trade
+        payload = {'pair': pair, 'text': 'closing from close_all api call', 'interval': interval,
+                   'action': 0, 'env': config.main.base_env, 'price': 'none', 'strategy':
+                   req.strategy, 'host': req.host, 'edited': 'no'}
+        queue = Queue(connection=redis.conn, name=name)
+        queue.enqueue(add_to_queue, payload, TEST, result_ttl=60)
 
 @decorator_timer
 def intermittent_check():
