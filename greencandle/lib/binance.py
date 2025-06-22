@@ -151,6 +151,13 @@ class Binance():
         data = self.signed_request("GET", "/sapi/v1/margin/allPairs", {})
         return [key['base'] + key['quote'] for key in data]
 
+    def get_isolated_margin_pairs(self):
+        """
+        Get list of pairs that support isolated margin trading
+        """
+        data = self.signed_request("GET", "/sapi/v1/margin/isolated/allPairs", {})
+        return [x['symbol'] for x in data]
+
     def exchange_info(self):
         """get exchange_info for all sumbols"""
         data = self.request("GET", "/api/v3/exchangeInfo", {})
