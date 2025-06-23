@@ -68,7 +68,7 @@ def close_all():
     open_trades = dbase.get_open_trades(name_filter=req['interval'],
                                         direction_filter=req['direction'],
                                         header=False)
-    LOGGER.info("Close all request received: %s", str(req))
+    LOGGER.info("Close all request received: %s, %s trades to close", str(req), len(open_trades))
     for trade in open_trades:
         _, interval, pair, name, _, _, _ = trade
         payload = {'pair': pair, 'text': 'closing from close_all api call', 'interval': interval,
