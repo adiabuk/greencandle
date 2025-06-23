@@ -61,14 +61,13 @@ def close_all():
     Close all trades
     """
     req = request.json
-    print(req)
     dbase = Mysql()
+    redis = Redis(db=1)
+    name = f"{config.main.name}-{config.main.trade_direction}"
     queue = Queue(connection=redis.conn, name=name)
     open_trades = dbase.get_open_trades(name_filter=req['interval'],
                                         direction_filter=req['direction'],
                                         header=False)
-    redis = Redis(db=1)
-    name = f"{config.main.name}-{config.main.trade_direction}"
     LOGGER.info("Close all request received: %s", str(req))
     for trade in open_trades:
         _, interval, pair, name, _, _, _ = trade
