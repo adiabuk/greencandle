@@ -63,6 +63,7 @@ def close_all():
     req = request.json
     print(req)
     dbase = Mysql()
+    queue = Queue(connection=redis.conn, name=name)
     open_trades = dbase.get_open_trades(name_filter=req['interval'],
                                         direction_filter=req['direction'],
                                         header=False)
@@ -71,13 +72,10 @@ def close_all():
     LOGGER.info("Close all request received: %s", str(req))
     for trade in open_trades:
         _, interval, pair, name, _, _, _ = trade
-        LOGGER.debug("Closing trade %s from close_all api", pair)
         payload = {'pair': pair, 'text': 'closing from close_all api call', 'interval': interval,
                    'action': 0, 'env': config.main.base_env, 'price': 'none', 'strategy':
                    req['strategy'], 'edited': 'no'}
-        queue = Queue(connection=redis.conn, name=name)
         queue.enqueue(add_to_queue, payload, TEST, result_ttl=60)
-        LOGGER.debug("Closed trade %s from close_all api", pair)
     return Response(status=200)
 
 @decorator_timer
