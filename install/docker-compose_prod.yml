@@ -509,7 +509,7 @@ services:
         tag: "{{.Name}}"
         syslog-facility: local5
     environment:
-      - CONFIG_ENV=prod/be/any/long/15m
+      - CONFIG_ENV=prod/be/any/15m/cross-long
       - intermittent="true"
       - DB=true
     ports:
@@ -547,7 +547,7 @@ services:
         tag: "{{.Name}}"
         syslog-facility: local5
     environment:
-      - CONFIG_ENV=prod/be/any/short/15m
+      - CONFIG_ENV=prod/be/any/15m/cross-short
       - intermittent="true"
       - DB=true
       - no_proxy=router
@@ -586,7 +586,7 @@ services:
         tag: "{{.Name}}"
         syslog-facility: local5
     environment:
-      - CONFIG_ENV=prod/be/any/long/30m
+      - CONFIG_ENV=prod/be/any/30m/cross-long
       - intermittent="true"
       - DB=true
     ports:
@@ -624,7 +624,7 @@ services:
         tag: "{{.Name}}"
         syslog-facility: local5
     environment:
-      - CONFIG_ENV=prod/be/any/short/30m
+      - CONFIG_ENV=prod/be/any/30m/cross-short
       - intermittent="true"
       - DB=true
       - no_proxy=router

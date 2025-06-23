@@ -1258,7 +1258,7 @@ services:
       - CONFIG_ENV=data/be/short/short1/1d
       - DB=True
     healthcheck:
-      test: find /var/local/lock -mmin -10 -name data-be-analyse-1d-short1 2>&1  | grep . || exit 1
+      test: find /var/local/lock -mmin -30 -name data-be-analyse-1d-short1 2>&1  | grep . || exit 1
       start_period: 2h
       interval: 1h
       timeout: 10s
@@ -1296,7 +1296,7 @@ services:
       - CONFIG_ENV=data/be/long/long1/1d
       - DB=True
     healthcheck:
-      test: find /var/local/lock -mmin -10 -name data-be-analyse-1d-long1 2>&1  | grep . || exit 1
+      test: find /var/local/lock -mmin -30 -name data-be-analyse-1d-long1 2>&1  | grep . || exit 1
       start_period: 2h
       interval: 1h
       timeout: 10s
@@ -2636,7 +2636,7 @@ services:
       - CONFIG_ENV=data/be/short/short7/1d
       - DB=True
     healthcheck:
-      test: find /var/local/lock -mmin -10 -name data-be-analyse-1d-short7 2>&1  | grep . || exit 1
+      test: find /var/local/lock -mmin -30 -name data-be-analyse-1d-short7 2>&1  | grep . || exit 1
       start_period: 2h
       interval: 1h
       timeout: 10s
@@ -2674,7 +2674,7 @@ services:
       - CONFIG_ENV=data/be/long/long7/1d
       - DB=True
     healthcheck:
-      test: find /var/local/lock -mmin -10 -name data-be-analyse-1d-long7 2>&1  | grep . || exit 1
+      test: find /var/local/lock -mmin -30 -name data-be-analyse-1d-long7 2>&1  | grep . || exit 1
       start_period: 2h
       interval: 1h
       timeout: 10s

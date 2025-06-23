@@ -1,0 +1,12 @@
+{
+  "drain_range": "00:00 - 00:00",
+  "immediate_stop": "false",
+  "immediate_take_profit": "false",
+  "immediate_trailing_stop": "true",
+  "interval": "15m",
+  "pairs": "any",
+  "stop_loss_perc": "4",
+  "take_profit_perc": "2",
+  "trailing_start": "8",
+  "trailing_stop_loss_perc": "2"
+}
