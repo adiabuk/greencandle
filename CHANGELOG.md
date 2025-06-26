@@ -1,5 +1,14 @@
 # Releases
 
+# 9.7.3
+* FEATURE: reverse trend checker for stag env
+* BUGFIX: fix logging module name for cron scripts
+* FEATURE: allow closing all trades through router apis/cron
+* BUGFIX: healthcheck threshold based on service config check_interval
+* CONFIG: remove non-performing pair
+* CONFIG: missing prod config
+* FEATURE: add HL sort script to data cron
+
 # 9.7.2
 * BUGFIX: re-add wrongly removed binance method
 * CONFIG: remove delisted pair
