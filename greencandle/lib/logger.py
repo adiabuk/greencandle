@@ -3,7 +3,7 @@
 """
 Generic logging class for greencandle modules
 """
-
+import sys
 import logging
 import traceback
 from copy import copy
@@ -87,7 +87,8 @@ def get_logger(module_name=None):
         formatter = OneLineFormatter('[%(levelname)s] %(app_name)s %(message)s')
         handler.setFormatter(formatter)
     else:
-        name = module_name.split('.')[-1]
+        name = sys.argv[0].split('/')[-1] if '__main__' in module_name else \
+                module_name.split('.')[-1]
         handler = NotifyOnCriticalStream()
         formatter = CustomFormatter("%(asctime)s %(levelname)s %(name)s %(message)s",
                                       "%Y-%m-%d %H:%M:%S")
