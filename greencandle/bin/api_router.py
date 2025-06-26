@@ -50,12 +50,13 @@ def forward(payload):
     Forward request to another environment
     """
     env = payload['env']
+    host = payload['host'] if 'host' in payload else f'www.{env}.amrox.loc'
     payload['strategy'] = 'alert' if env == 'alarm' else payload['strategy']
     command = f"configstore package get --basedir /srv/greencandle/config {env} api_token"
     LOGGER.info("forwarding request to %s - %s ",env, str(payload))
     token = os.popen(command).read().split()[0]
     payload['edited'] = "yes"
-    url = f"https://{payload['host']}/{token}"
+    url = f"https://{host}/{token}"
     try:
         requests.post(url, json=payload, timeout=20, verify=False)
     except requests.exceptions.RequestException:
@@ -68,13 +69,15 @@ def respond():
     Default route to trade
     """
     payload = request.json
+    if payload['strategy'] == 'close_all' and payload['env'] != config.main.base_env:
+        forward(payload)
+        return Response(status=200)
     with open('/etc/router_config.json', 'r') as json_file:
         router_config = json.load(json_file)
     if payload['strategy'] == 'close_all':
-        name = f"any2-{item}-{payload['direction']}"
+        name = f"any2-{payload['interval']}-{payload['direction']}"
         send_trade(payload, name, subd='/close_all')
         return Response(status=200)
-
     if 'pair' in payload and payload['pair'] == 'No pair':
         LOGGER.debug("request received: %s", payload)
     else:
@@ -92,6 +95,7 @@ def respond():
         LOGGER.critical("Invalid action detected in payload %s", str(payload))
         return Response(status=500)
 
+
     if payload["strategy"] == "route":
         Path(f'/var/run/router-{config.main.base_env}').touch()
         return Response(status=200)
@@ -104,7 +108,6 @@ def respond():
             # so we don't create an infinate API loop
             payload['strategy'] = 'alert'
             payload['env'] = 'alarm'
-            payload['host'] = 'eaglenest.amrox.loc'
 
             # add environment name to text
 
@@ -117,7 +120,6 @@ def respond():
             new_env, new_strategy = container.split(':')
             payload['env'] = new_env
             payload['strategy'] = new_strategy
-            payload['host'] = 'eaglenest.amrox.loc'
             route_drain = Path(f'/var/local/drain/drain_{new_env}_{new_strategy}').is_file()
             if route_drain:
                 LOGGER.warning('skipping forwarding to %s:%s due to drain', new_env, new_strategy)
@@ -131,7 +133,6 @@ def respond():
             redis.conn.json().set(int(time.time()), json_path.root_path(), payload)
             del redis
         else:
-            payload['host'] = 'eaglenest.amrox.loc'
             forward(payload)
 
     mysql = Mysql()
