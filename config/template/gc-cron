@@ -100,5 +100,6 @@ STATIC_DIR=/data/scripts/static
 
 @hourly ${STATIC_DIR}/rsi_cross.py &>> /var/log/cron.log
 */5 * * * * ${STATIC_DIR}/sort_hl_metric.py &>> /var/log/cron.log
+*/5 * * * * ${STATIC_DIR}/check_trend_end stag &>> /var/log/cron.log
 
 {{end}}
