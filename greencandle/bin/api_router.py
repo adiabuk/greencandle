@@ -71,11 +71,10 @@ def respond():
     with open('/etc/router_config.json', 'r') as json_file:
         router_config = json.load(json_file)
     if payload['strategy'] == 'close_all':
-        to_close = ['1h', '30m']
-        for item in to_close:
-            payload['interval'] = item
-            name = f"any2-{item}-{payload['direction']}"
-            send_trade(payload, name, subd='/close_all')
+        name = f"any2-{item}-{payload['direction']}"
+        send_trade(payload, name, subd='/close_all')
+        return Response(status=200)
+
     if 'pair' in payload and payload['pair'] == 'No pair':
         LOGGER.debug("request received: %s", payload)
     else:
@@ -92,7 +91,6 @@ def respond():
                                                                      'open', 'close']):
         LOGGER.critical("Invalid action detected in payload %s", str(payload))
         return Response(status=500)
-
 
     if payload["strategy"] == "route":
         Path(f'/var/run/router-{config.main.base_env}').touch()
