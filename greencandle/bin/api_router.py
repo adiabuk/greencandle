@@ -14,7 +14,7 @@ import requests
 from flask import Flask, request, Response
 from setproctitle import setproctitle
 from redis.commands.json.path import Path as json_path
-from greencandle.lib.common import arg_decorator, get_short_name
+from greencandle.lib.common import arg_decorator
 from greencandle.lib import config
 from greencandle.lib.logger import get_logger
 from greencandle.lib.mysql import Mysql
@@ -72,7 +72,7 @@ def respond():
     if payload['strategy'] == 'close_all' and payload['env'] != config.main.base_env:
         forward(payload)
         return Response(status=200)
-    with open('/etc/router_config.json', 'r') as json_file:
+    with open('/etc/router_config.json', 'r', encoding='utf-8') as json_file:
         router_config = json.load(json_file)
     if payload['strategy'] == 'close_all':
         name = f"any2-{payload['interval']}-{payload['direction']}"
@@ -94,7 +94,6 @@ def respond():
                                                                      'open', 'close']):
         LOGGER.critical("Invalid action detected in payload %s", str(payload))
         return Response(status=500)
-
 
     if payload["strategy"] == "route":
         Path(f'/var/run/router-{config.main.base_env}').touch()
