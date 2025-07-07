@@ -37,9 +37,6 @@ def main():
         stats[value.summary['RECOMMENDATION']] +=1
 
         redis.conn.rpush(f"{value.symbol}:{interval}", value.summary['RECOMMENDATION'])
-        filename = f'/data/tv_sentiment/{value.symbol}_{interval}_summary_{dt_stamp}.json'
-        with open(filename, 'w', encoding="utf-8") as filehandle:
-            json.dump(value.summary, filehandle)
 
     most = max(stats, key=stats.get)
     most_value = assocs[most]
