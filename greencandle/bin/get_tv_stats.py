@@ -4,7 +4,6 @@
 check tv sentiment
 """
 import sys
-import json
 from datetime import datetime
 from tradingview_ta import get_multiple_analysis
 from greencandle.lib.redis_conn import Redis
@@ -24,7 +23,6 @@ def main():
 
     logger = get_logger(__name__)
     redis = Redis(db=15)
-    dt_stamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     assocs = {'STRONG_BUY': 2, 'BUY': 1, 'NEUTRAL':0, 'SELL': -1, 'STRONG_SELL': -2}
     stats = AttributeDict({x: 0 for x in assocs})  # set counter to 0
     config.create_config()
