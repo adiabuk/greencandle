@@ -442,9 +442,9 @@ class Mysql():
         # get assets from pairs, base if short, quote if long
         for pair, direction in open_trades:
             if direction == 'short':
-                open_set.add(get_base(pair))
-            else:
                 open_set.add(get_quote(pair))
+            else:
+                open_set.add(get_base(pair))
         return open_set
 
     @get_exceptions
