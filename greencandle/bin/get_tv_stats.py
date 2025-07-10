@@ -4,7 +4,6 @@
 check tv sentiment
 """
 import sys
-from datetime import datetime
 from tradingview_ta import get_multiple_analysis
 from greencandle.lib.redis_conn import Redis
 from greencandle.lib.common import arg_decorator
