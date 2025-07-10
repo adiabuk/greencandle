@@ -1,5 +1,11 @@
 # Releases
 
+# 9.7.4
+* CLEANUP: don't write tv_sentiment to file
+* CLEANUP: fix lint
+* CLEANUP: remove delisted pairs
+* STRATEGY: only forward 4h to test env
+
 # 9.7.3
 * FEATURE: reverse trend checker for stag env
 * BUGFIX: fix logging module name for cron scripts
