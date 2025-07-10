@@ -44,7 +44,7 @@ def main():
             short_name = get_short_name(name, env, direction)
             print(f"Closing {pair} {name} {direction} from {open_time} @ {perc}%")
             payload = {"pair": pair,
-                       "text": "closing trade from close_all script",
+                       "text": "manual close from close_all script",
                        "action": "close",
                        "host": env,
                        "env": env,
