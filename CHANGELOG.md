@@ -1,5 +1,11 @@
 # Releases
 
+# 9.7.5
+* BUGFIX: ensure we are not converting open trades to dust
+* FEATURE: add "manual" to close_all text to differentiate between close methods
+* CLEANUP: lint fix
+* STRATGY: check trend end for per env
+
 # 9.7.4
 * CLEANUP: don't write tv_sentiment to file
 * CLEANUP: fix lint
