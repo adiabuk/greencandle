@@ -315,9 +315,9 @@ class Mysql():
               a single list of pairs that we currently hold with the open time
         """
         cur = self.dbase.cursor()
-        command = (f'select pair, open_time, open_price from trades where close_price is NULL and '
-                   f'`interval`="{self.interval}" and name in ("{config.main.name}","api") and '
-                   f'direction like "%{direction}%"')
+        command = (f"select pair, open_time, open_price from trades where close_price is NULL and "
+                   f"`interval`='{self.interval}' and name in ('{config.main.name}','api') and "
+                   f"direction like '%{direction}%'")
 
         self.__execute(cur, command)
         return cur.fetchall()
@@ -371,9 +371,9 @@ class Mysql():
         Get today's profit perc so far
         Returns float
         """
-        command = ('select sum(usd_profit), sum(usd_net_profit), avg(perc), '
-                   'avg(net_perc), sum(perc), sum(net_perc), count(*) '
-                   'from profit where date(close_time) = date(NOW())')
+        command = ("select sum(usd_profit), sum(usd_net_profit), avg(perc), "
+                   "avg(net_perc), sum(perc), sum(net_perc), count(*) "
+                   "from profit where date(close_time) = date(NOW())")
         row = self.fetch_sql_data(command, header=False)
         return row[0] if row else [None] * 7
 
@@ -382,8 +382,8 @@ class Mysql():
         Check if a trade exists for given pair, name, and direction
         """
 
-        query = (f'select * from trades where pair="{pair}" and name="{name}" and '
-                 f'direction="{direction}" and close_price is null')
+        query = (f"select * from trades where pair='{pair}' and name='{name}' and "
+                 f"direction='{direction}' and close_price is null"
         result = self.fetch_sql_data(query, header=False)
         return bool(result)
 
@@ -396,15 +396,15 @@ class Mysql():
         date = date if date else hour_ago.strftime("%Y-%m-%d")
         hour = hour if hour else hour_ago.strftime("%H")
 
-        command = (f'select COALESCE(total_perc,0) total_perc, '
-                   f'COALESCE(total_net_perc,0) total_net_perc, '
-                   f'COALESCE(avg_perc,0) avg_perc, '
-                   f'COALESCE(avg_net_perc,0) avg_net_perc, '
-                   f'COALESCE(usd_profit,0) usd_profit, '
-                   f'COALESCE(usd_net_profit,0) usd_net_profit, '
-                   f'COALESCE(num_trades,0) num_trades '
-                   f'from profit_hourly where '
-                   f'date="{date}" and hour="{hour}"')
+        command = (f"select COALESCE(total_perc,0) total_perc, "
+                   f"COALESCE(total_net_perc,0) total_net_perc, "
+                   f"COALESCE(avg_perc,0) avg_perc, "
+                   f"COALESCE(avg_net_perc,0) avg_net_perc, "
+                   f"COALESCE(usd_profit,0) usd_profit, "
+                   f"COALESCE(usd_net_profit,0) usd_net_profit, "
+                   f"COALESCE(num_trades,0) num_trades "
+                   f"from profit_hourly where "
+                   f"date='{date}' and hour='{hour}'")
         result = self.fetch_sql_data(command, header=False)
         output = [float(item) for item in result[0]] if result else [None] * 7
         output.append(hour)
@@ -418,9 +418,9 @@ class Mysql():
         """
         Get amount borrowed in current scope
         """
-        command = (f'select pair, borrowed, direction from trades '
-                   f'where pair like "%{pair}%" and name like "%{account}%" '
-                   f'and close_price is NULL')
+        command = (f"select pair, borrowed, direction from trades "
+                   f"where pair like '%{pair}%' and name like '%{account}%' "
+                   f"and close_price is NULL")
 
         cur = self.dbase.cursor()
         self.__execute(cur, command)
@@ -471,10 +471,10 @@ class Mysql():
         for exchange, values in balances.items():
             for coin, data in values.items():
                 try:
-                    command = (f'insert into balance (gbp, btc, usd, count, coin, exchange_id) '
-                               f'values ("{data["GBP"]}", "{data["BTC"]}", "{data["USD"]}", '
-                               f'"{data["count"]}", "{coin}", (select id from '
-                               f'exchange where name="{exchange}"))')
+                    command = (f"""insert into balance (gbp, btc, usd, count, coin, exchange_id) """
+                               f"""values ('{data["GBP"]}', '{data["BTC"]}', '{data["USD"]}', """
+                               f"""'{data["count"]}', '{coin}', (select id from """
+                               f"""exchange where name='{exchange}'))""")
                 except KeyError:
                     self.logger.debug(" ".join(["Unable to find coin:", coin,
                                                exchange, "KEYERROR"]))
