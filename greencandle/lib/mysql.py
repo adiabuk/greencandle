@@ -126,6 +126,7 @@ class Mysql():
               tuple result
         """
 
+        self.logger.info("Running query %s", query)
         cur = self.dbase.cursor()
         self.__execute(cur, query)
         output = list(cur.fetchall())
