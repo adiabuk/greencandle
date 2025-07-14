@@ -383,7 +383,7 @@ class Mysql():
         """
 
         query = (f"select * from trades where pair='{pair}' and name='{name}' and "
-                 f"direction='{direction}' and close_price is null"
+                 f"direction='{direction}' and close_price is null")
         result = self.fetch_sql_data(query, header=False)
         return bool(result)
 
