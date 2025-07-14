@@ -17,7 +17,7 @@ class Mysql():
     """
     get_exceptions = exception_catcher((Exception))
 
-    def __init__(self, test=False, interval="15m", host=None, port=3306):
+    def __init__(self, test=False, interval="15m", host=None, port=17176):
         self.creds = AttributeDict()
         self.port = port
         self.creds.host = host if host else config.database.db_host

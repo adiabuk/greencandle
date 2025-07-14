@@ -157,19 +157,19 @@
       "is_secret": false
     },
     "db_host": {
-      "value": "mysql",
+      "value": "wekzv6I9ibkmjjWd/Lz0wC9gSKH56/V9ZPZTbkpc+8P0UQQdPf23In3VNa4/LEWHSEfn68boElpo86f3ylE1Ig==",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "db_password": {
-      "value": "password",
+      "value": "gmsf3rE6g2XkbeKjQdX5F1/8wbImVJMruZQq2KO7FmEmjmbVqMwQIJfmyKvfAwRW",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "db_user": {
-      "value": "root",
+      "value": "8Fq7v1GFWt/ga6FNHoj2I4mnYooHNK2BuawbLw==",
       "is_binary": false,
-      "is_secret": false
+      "is_secret": true
     },
     "divisor": {
       "value": "3",
