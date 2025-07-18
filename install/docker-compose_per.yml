@@ -447,7 +447,6 @@ services:
       - intermittent="true"
       - CONFIG_ENV=per/be/any/long/5m
       - DB=true
-      - BALANCE_HOLD="true"
     ports:
       - 20000
     links:
@@ -525,7 +524,6 @@ services:
       - intermittent="true"
       - CONFIG_ENV=per/be/any/long/30m
       - DB=true
-      - BALANCE_HOLD="true"
     ports:
       - 20000
     links:
@@ -603,7 +601,6 @@ services:
       - intermittent="true"
       - CONFIG_ENV=per/be/any2/long/30m
       - DB=true
-      - BALANCE_HOLD="true"
     ports:
       - 20000
     links:
@@ -681,7 +678,6 @@ services:
       - intermittent="true"
       - CONFIG_ENV=per/be/any/long/1h
       - DB=true
-      - BALANCE_HOLD="true"
     ports:
       - 20000
     links:
@@ -759,7 +755,6 @@ services:
       - intermittent="true"
       - CONFIG_ENV=per/be/any/long/4h
       - DB=true
-      - BALANCE_HOLD="true"
     ports:
       - 20000
     links:
@@ -837,7 +832,6 @@ services:
       - intermittent="true"
       - CONFIG_ENV=per/be/any2/long/4h
       - DB=true
-      - BALANCE_HOLD="true"
     ports:
       - 20000
     links:
@@ -915,7 +909,6 @@ services:
       - intermittent="true"
       - CONFIG_ENV=per/be/any/long/1d
       - DB=true
-      - BALANCE_HOLD="true"
     ports:
       - 20000
     links:
@@ -993,7 +986,6 @@ services:
       - intermittent="true"
       - CONFIG_ENV=per/be/any2/long/1h
       - DB=true
-      - BALANCE_HOLD="true"
     ports:
       - 20000
     links:
