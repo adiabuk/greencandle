@@ -26,21 +26,21 @@ def main():
         msg = "UNKNOWN"
         value = "unknown"
 
-    if value >= 1.7:
+    if value >= 1.25:
         status = 0
         msg = "OK"
-    elif value < 1.7:
-        status = 1
-        msg = "WARNING"
-    elif value < 1.5:
+    elif value <= 1.16:
         status = 2
         msg = "CRITICAL"
+    elif value > 1.16:
+        status = 1
+        msg = "WARNING"
     else:
         status = 3
         msg = "UNKNOWN"
 
     send_nsca(status=status, host_name='eaglenest', service_name=f'{env}-cross_margin_risk',
-              text_output=f'{msg} risk value is {round(value, 2)};|risk={round(value, 2)}',
+              text_output=f'{msg} risk is {round(value, 2)};|risk={round(value, 2)};1.25;1.16',
               remote_host='nagios.amrox.loc')
 
     logger.info("Current risk value is %s", value)
