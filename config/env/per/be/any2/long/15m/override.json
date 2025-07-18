@@ -7,6 +7,6 @@
   "trailing_stop_loss_perc": "1",
   "immediate_trailing_stop": "true",
   "immediate_take_profit": "true",
-  "perc_at_timeout": "2",
+  "perc_at_timeout": "3",
   "time_in_trade": "5h"
 }
