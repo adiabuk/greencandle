@@ -5,7 +5,6 @@ Get number of pairs above and below EMA_150
 """
 import sys
 import json
-from datetime import datetime
 import numpy as np
 from greencandle.lib import config
 from greencandle.lib.redis_conn import Redis
@@ -52,16 +51,9 @@ def main():
         except Exception as excp:
             logger.info("bad %s %s",str(excp), pair)
 
-    dt_stamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    filename = f'/data/ema_stats/ema_{interval}_{dt_stamp}.json'
     max_direction = get_max(up_list, down_list)
     up_perc=round(len(up_list)/len(config.main.pairs.split())*100,2)
     down_perc=round(len(down_list)/len(config.main.pairs.split())*100,2)
-    data = {'max': max_direction, 'up_perc': up_perc, 'down_perc': down_perc,
-            'date': dt_stamp, 'up': up_list, 'down': down_list}
-
-    with open(filename, 'w', encoding='utf-8') as filehandle:
-        json.dump(data, filehandle)
 
     details = f"up_perc: {up_perc}%, down_perc: {down_perc}%"
 
