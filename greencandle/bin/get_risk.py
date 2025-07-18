@@ -40,9 +40,8 @@ def main():
         msg = "UNKNOWN"
 
     send_nsca(status=status, host_name='eaglenest', service_name=f'{env}-cross_margin_risk',
-              text_output=f'{msg} risk is {round(value, 2)};|risk={round(value, 2)};1.25;1.16',
+              text_output=f'{msg} risk value is {round(value, 2)};|risk={round(value, 2)}',
               remote_host='nagios.amrox.loc')
-
     logger.info("Current risk value is %s", value)
 
 if __name__ == '__main__':
