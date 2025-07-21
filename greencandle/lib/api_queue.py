@@ -17,6 +17,7 @@ from greencandle.lib.order import Trade
 from greencandle.lib.logger import get_logger
 from greencandle.lib.common import get_trade_link, get_tv_link
 from greencandle.lib.alerts import send_slack_message
+from greencandle.lib.web import retry_session
 from greencandle.lib.sentiment import Sentiment
 
 config.create_config()
@@ -66,10 +67,12 @@ def add_to_queue(req, test=False):
     redis = Redis(db=2)
     dbase = Mysql(interval=config.main.interval)
     try:
-        stream_req = requests.get(f'http://stream/{config.main.interval}/recent?pair={pair}',
-                                  timeout=20)
-        current_candle = pandas.Series(stream_req.json())
-    except requests.exceptions.RequestException:
+
+        url = f'http://stream/{config.main.interval}/recent?pair={pair}'
+        session = retry_session(retries=5, backoff_factor=2)
+        req = session.request('GET', url, timeout=30)
+        current_candle = pandas.Series(req.json())
+    except ConnectionError:
         LOGGER.critical("Unable to get candle for %s from stream, trying conventional method", pair)
         try:
             interval = "1m" if config.main.interval.endswith("s") else config.main.interval
