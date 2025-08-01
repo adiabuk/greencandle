@@ -436,15 +436,14 @@ class Mysql():
         base asset if short, quote asset if long
         """
         open_set = set()
-        open_trades = self.fetch_sql_data('select pair, direction from trades where '
+        open_trades = self.fetch_sql_data('select pair from trades where '
                                           'close_price is null', header=False)
+        pairs = [sub for item in open_trades for sub in item] # flatten list
         # get unique set of pairs with open trades
-        # get assets from pairs, base if short, quote if long
-        for pair, direction in open_trades:
-            if direction == 'short':
-                open_set.add(get_quote(pair))
-            else:
-                open_set.add(get_base(pair))
+        # get both quote and base symbols
+        for pair in pairs:
+            open_set.add(get_quote(pair))
+            open_set.add(get_base(pair))
         return open_set
 
     @get_exceptions
