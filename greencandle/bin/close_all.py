@@ -7,7 +7,7 @@ import argparse
 import argcomplete
 import requests
 from greencandle.lib.mysql import Mysql
-from greencandle.lib.common import get_short_name, perc_diff
+from greencandle.lib.common import perc_diff
 from greencandle.lib import config
 
 def main():
@@ -35,20 +35,21 @@ def main():
     prices = stream_req.json()
 
     for trade in open_trades:
-        open_time, _, pair, name, open_price, direction, _ = trade
+        open_time, interval, pair, name, open_price, direction, _ = trade
         current_price = prices['recent'][pair]['close']
         perc = perc_diff(open_price, current_price)
         perc = -perc if direction== 'short' else perc
 
         if float(perc) > float(args.threshold):
-            short_name = get_short_name(name, env, direction)
             print(f"Closing {pair} {name} {direction} from {open_time} @ {perc}%")
             payload = {"pair": pair,
                        "text": "manual close from close_all script",
                        "action": "close",
                        "host": env,
                        "env": env,
-                       "strategy": short_name}
+                       "interval": interval,
+                       "direction": direction,
+                       "strategy": "close_all"}
 
             requests.post(url, json.dumps(payload), timeout=20,
                           headers={'Content-Type': 'application/json'})
