@@ -1,5 +1,18 @@
 # Releases
 
+# 9.7.6
+* STRATEGY: increase default close_all threshold
+* BUGFIX: look for manual string in text field of request
+* BUGFIX: add interval/direction to payload in close_all script
+* BUGFIX: get both quote and base assets for all open trades
+* CLEANUP: remove non trading pair
+* BUGFIX: use retry_session when getting stream details
+* BUGFIX: revert nsca perf data changes
+* CLEANUP: don't write ema stats to disk
+* CLEANUP: decrease warn/crit levels for risk
+* STRATEGY: increase perc at timeout for per env
+* STRATEGY: balance hold for short trades only
+
 # 9.7.5
 * BUGFIX: ensure we are not converting open trades to dust
 * FEATURE: add "manual" to close_all text to differentiate between close methods
