@@ -19,7 +19,7 @@ def main():
     parser = argparse.ArgumentParser("Close trades in scope")
     parser.add_argument("-f", "--name_filter", required=False, default="")
     parser.add_argument("-d", "--direction_filter", required=False, default="")
-    parser.add_argument("-t", "--threshold", required=False, default=0.3)
+    parser.add_argument("-t", "--threshold", required=False, default=0.6)
     parser.add_argument("-p", "--pair_filter", required=False, default="")
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
