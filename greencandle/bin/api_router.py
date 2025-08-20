@@ -14,7 +14,7 @@ import requests
 from flask import Flask, request, Response
 from setproctitle import setproctitle
 from redis.commands.json.path import Path as json_path
-from greencandle.lib.common import arg_decorator
+from greencandle.lib.common import arg_decorator, get_short_name
 from greencandle.lib import config
 from greencandle.lib.logger import get_logger
 from greencandle.lib.mysql import Mysql
@@ -75,7 +75,7 @@ def respond():
     with open('/etc/router_config.json', 'r', encoding='utf-8') as json_file:
         router_config = json.load(json_file)
     if payload['strategy'] == 'close_all':
-        name = f"any2-{payload['interval']}-{payload['direction']}"
+        name = get_short_name(payload['name'], payload['env'], payload['direction'])
         send_trade(payload, name, subd='/close_all')
         return Response(status=200)
     if 'pair' in payload and payload['pair'] == 'No pair':
