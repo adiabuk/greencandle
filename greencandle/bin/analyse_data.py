@@ -150,7 +150,7 @@ def get_match_name(matches):
         container_num = 1
 
     name_lookup = [['trend_200', 'golden_cross', 'new_golden'],
-                   ['old_stoch'],
+                   ['RSI_rev', 'wrong_side_EMA'],
                    ['distance', 'bb', "bbperc_diff", "bbperc_extreme"],
                    ['low_rsi_in_trend_near_EMA', 'low_rsi_in_trend'],
                    ['STOCHRSI_flip','RSI_close-rule','broken_trend','multi_ind_close','re-xover'],
