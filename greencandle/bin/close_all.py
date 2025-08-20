@@ -45,7 +45,7 @@ def main():
             payload = {"pair": pair,
                        "text": "manual close from close_all script",
                        "action": "close",
-                       "name": "name",
+                       "name": name,
                        "host": env,
                        "env": env,
                        "interval": interval,
