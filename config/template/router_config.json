@@ -4,7 +4,7 @@
 "4h-2":  [                             "test:any2-4h-long-short"],
 "1h-2":  ["stag:any2-1h-long-short",   "test:any2-1h-long-short", "per:any2-1h-long-short"],
 "1d-2": [],
-"30m-2": ["stag:any2-30m-long-short",  "test:any2-1h-long-short", "per:any2-30m-long-short"],
+"30m-2": ["stag:any2-30m-long-short",  "test:any2-30m-long-short", "per:any2-30m-long-short"],
 "multi": ["stag:any-1h-long-short",    "test:any-1h-long-short", "per:any-1h-long-short"],
 
 "1h-8":  ["test:any-1h-long-short"],
