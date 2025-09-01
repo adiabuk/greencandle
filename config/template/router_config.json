@@ -15,7 +15,6 @@
 "30m-7": ["queue"],
 "4h-7":  ["queue"],
 "1h-7":  ["queue"],
-"1h-2":  ["queue"],
 
 "extra_stag-any-5m": ["stag:any-5m-long-short"],
 "extra_stag-any-15m": ["stag:any-15m-long-short"],
