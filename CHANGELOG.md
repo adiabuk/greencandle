@@ -1,5 +1,18 @@
 # Releases
 
+# 9.7.7
+* BUGFIX: remove dupe router keys
+* BUGFIX: fix test env 30m routing
+* BUGFIX: add missing forwarding strategy
+* STRATEGY: remove under-performing pairs
+* STRATEGY: tweak RSI confirmation rule
+* CLEANUP: remove delisted pairs
+* STRATEGY: increase 30m expiry time
+* BUGFIX: allow non-flipped trades to be forwarded
+* BUGFIX: fix var typo
+* BUGFIX: use correct short name when closing all trades
+* STRATEGY: add confirmation containers and forward rules
+
 # 9.7.6
 * STRATEGY: increase default close_all threshold
 * BUGFIX: look for manual string in text field of request
