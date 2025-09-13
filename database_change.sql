@@ -66,3 +66,8 @@ create view profit_hourly_direction_close as select cast(`profit`.`close_time` a
 
 drop view if exists profitable_all;
 
+
+ALTER TABLE `trades` ADD INDEX IF NOT EXISTS `name_idx` (`name`);
+ALTER TABLE `trades` ADD INDEX IF NOT EXISTS `pair_idx` (`pair`);
+ALTER TABLE `trades` ADD INDEX IF NOT EXISTS `direction_idx` (`direction`);
+ALTER TABLE `trades` ADD INDEX IF NOT EXISTS `close_price_idx` (`close_price`);
