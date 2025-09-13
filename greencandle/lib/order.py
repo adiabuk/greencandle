@@ -445,7 +445,10 @@ class Trade():
 
         max_from_db = max_usd if max_usd else dbase.get_var_value('max_trade_usd')
         total_max = int(max_from_db) if max_from_db else int(self.config.main.max_trade_usd)
+        total_max =  int(self.config.main.short_multiplier) * total_max if \
+                self.config.main.trade_direction == 'short' else  total_max
         balance_to_use = self.get_balance_to_use(dbase, account, pair, total_max)
+
         # set default loan to use as 0, may be overwritten if non-spot and not enough balance to
         # cover max, where loan is available
         loan_to_use = {'symbol': 0, 'usd': 0, 'symbol_name': balance_to_use['symbol_name']}
