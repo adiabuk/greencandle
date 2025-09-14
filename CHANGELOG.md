@@ -1,11 +1,14 @@
 # Releases
 
+# 9.8.1
+* CLEANUP: remove unused data containers
+* STRATEGY: don't check end of trend for per env
+
 # 9.8
 * CLEANUP: update db schema
 * CLEANUP: add trade table indexes for db efficiency
 * CLEANUP: standardise db views and remove obsolete
 * FEATURE: add trade value multiplier config for short trades
-
 
 # 9.7.7
 * BUGFIX: remove dupe router keys
