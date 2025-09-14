@@ -57,6 +57,8 @@ create view profit_weekly_open as select concat(year(`profit`.`open_time`),'/',w
 create view profit_weekly_close as select concat(year(`profit`.`close_time`),'/',week(`profit`.`close_time`)) AS `week_no`,`FIRST_DAY_OF_WEEK`(cast(`profit`.`close_time` as date)) AS `week_commencing`,count(0) AS `count`,sum(`profit`.`usd_profit`) AS `usd_profit`,sum(`profit`.`usd_net_profit`) AS `usd_net_profit`,sum(`profit`.`perc`) AS `perc`,sum(`profit`.`net_perc`) AS `net_perc` from `greencandle`.`profit` where week(`profit`.`close_time`) is not null group by concat(year(`profit`.`close_time`),'/',week(`profit`.`close_time`)) order by year(`profit`.`close_time`) desc,week(`profit`.`close_time`) desc;
 
 drop view if exists profit_hourly;
+drop view if exists profit_hourly_open;
+drop view if exists profit_hourly_close;
 drop view if exists profit_by_direction_hour_close;
 drop view if exists profit_by_direction_hour_open;
 drop view if exists profit_hourly_direction_open;
@@ -65,6 +67,10 @@ drop view if exists profit_hourly_direction_close;
 create view profit_hourly_direction_open as select cast(`profit`.`open_time` as date) AS `day`,hour(`profit`.`open_time`) AS `hour`,sum(`profit`.`net_perc`) AS `net_perc`,count(0) AS `count`,`profit`.`name` AS `name`,`profit`.`direction` AS `direction`,sum(case when `profit`.`net_perc` > 0 then 1 else 0 end) / count(0) * 100 AS `net_perc_profitable`,sum(`profit`.`net_perc`) / count(0) AS `avg_net_perc`,max(`profit`.`net_perc`) AS `max_net_perc`,min(`profit`.`net_perc`) AS `min_net_perc` from `greencandle`.`profit` group by cast(`profit`.`open_time` as date),`profit`.`direction`,`profit`.`name`,hour(`profit`.`open_time`) order by cast(`profit`.`open_time` as date) desc;
 
 create view profit_hourly_direction_close as select cast(`profit`.`close_time` as date) AS `day`,hour(`profit`.`close_time`) AS `hour`,sum(`profit`.`net_perc`) AS `net_perc`,count(0) AS `count`,`profit`.`name` AS `name`,`profit`.`direction` AS `direction`,sum(case when `profit`.`net_perc` > 0 then 1 else 0 end) / count(0) * 100 AS `net_perc_profitable`,sum(`profit`.`net_perc`) / count(0) AS `avg_net_perc`,max(`profit`.`net_perc`) AS `max_net_perc`,min(`profit`.`net_perc`) AS `min_net_perc` from `greencandle`.`profit` group by cast(`profit`.`close_time` as date),`profit`.`direction`,`profit`.`name`,hour(`profit`.`close_time`) order by cast(`profit`.`close_time` as date) desc;
+
+create view profit_hourly_close as select date_format(`profit`.`close_time`,'%Y-%m-%d') AS `date`,dayname(`profit`.`close_time`) AS `day`,date_format(`profit`.`close_time`,'%H') AS `hour`,sum(`profit`.`perc`) AS `total_perc`,sum(`profit`.`net_perc`) AS `total_net_perc`,avg(`profit`.`perc`) AS `avg_perc`,avg(`profit`.`net_perc`) AS `avg_net_perc`,sum(`profit`.`usd_profit`) AS `usd_profit`,sum(`profit`.`usd_net_profit`) AS `usd_net_profit`,count(0) AS `num_trades` from `greencandle`.`profit` where year(`profit`.`close_time`) <> 0 group by hour(`profit`.`close_time`),dayofmonth(`profit`.`close_time`),month(`profit`.`close_time`),year(`profit`.`close_time`) order by `profit`.`close_time` desc;
+
+create view profit_hourly_open as select date_format(`profit`.`open_time`,'%Y-%m-%d') AS `date`,dayname(`profit`.`open_time`) AS `day`,date_format(`profit`.`open_time`,'%H') AS `hour`,sum(`profit`.`perc`) AS `total_perc`,sum(`profit`.`net_perc`) AS `total_net_perc`,avg(`profit`.`perc`) AS `avg_perc`,avg(`profit`.`net_perc`) AS `avg_net_perc`,sum(`profit`.`usd_profit`) AS `usd_profit`,sum(`profit`.`usd_net_profit`) AS `usd_net_profit`,count(0) AS `num_trades` from `greencandle`.`profit` where year(`profit`.`open_time`) <> 0 group by hour(`profit`.`open_time`),dayofmonth(`profit`.`open_time`),month(`profit`.`open_time`),year(`profit`.`open_time`) order by `profit`.`open_time` desc
 
 drop view if exists profitable_all;
 
