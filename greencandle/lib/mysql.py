@@ -403,7 +403,7 @@ class Mysql():
                    f'COALESCE(usd_profit,0) usd_profit, '
                    f'COALESCE(usd_net_profit,0) usd_net_profit, '
                    f'COALESCE(num_trades,0) num_trades '
-                   f'from profit_hourly where '
+                   f'from profit_hourly_close where '
                    f'date="{date}" and hour="{hour}"')
         result = self.fetch_sql_data(command, header=False)
         output = [float(item) for item in result[0]] if result else [None] * 7
