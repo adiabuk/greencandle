@@ -73,7 +73,8 @@ create view profit_hourly_close as select date_format(`profit`.`close_time`,'%Y-
 create view profit_hourly_open as select date_format(`profit`.`open_time`,'%Y-%m-%d') AS `date`,dayname(`profit`.`open_time`) AS `day`,date_format(`profit`.`open_time`,'%H') AS `hour`,sum(`profit`.`perc`) AS `total_perc`,sum(`profit`.`net_perc`) AS `total_net_perc`,avg(`profit`.`perc`) AS `avg_perc`,avg(`profit`.`net_perc`) AS `avg_net_perc`,sum(`profit`.`usd_profit`) AS `usd_profit`,sum(`profit`.`usd_net_profit`) AS `usd_net_profit`,count(0) AS `num_trades` from `greencandle`.`profit` where year(`profit`.`open_time`) <> 0 group by hour(`profit`.`open_time`),dayofmonth(`profit`.`open_time`),month(`profit`.`open_time`),year(`profit`.`open_time`) order by `profit`.`open_time` desc;
 
 drop view if exists profitable_all;
-
+drop view if exists profitable_hours;
+create view profitable_hours as select `profit_hourly_close`.`hour` AS `hour`,sum(`profit_hourly_close`.`total_perc`) AS `hour_perc`,sum(`profit_hourly_close`.`total_net_perc`) AS `net_hour_perc`,count(0) AS `total_count`,sum(case when `profit_hourly_close`.`total_perc` > 0 then 1 else 0 end) AS `num_profit`,sum(case when `profit_hourly_close`.`total_net_perc` > 0 then 1 else 0 end) AS `net_num_profit`,sum(case when `profit_hourly_close`.`total_perc` < 0 then 1 else 0 end) AS `num_loss`,sum(case when `profit_hourly_close`.`total_net_perc` < 0 then 1 else 0 end) AS `net_num_loss` from `greencandle`.`profit_hourly_close` group by `profit_hourly_close`.`hour`;
 
 ALTER TABLE `trades` ADD INDEX IF NOT EXISTS `name_idx` (`name`);
 ALTER TABLE `trades` ADD INDEX IF NOT EXISTS `pair_idx` (`pair`);
