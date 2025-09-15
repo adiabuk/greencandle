@@ -32,19 +32,17 @@ def main():
     todays_usd, todays_net_usd, todays_avg, todays_net_avg, todays_total, todays_net_total, \
     num_day = mysql.get_todays_profit()
 
-    if total_perc and todays_total:
-        message = (f"Profit for Hour {hour}\n"
-                   f"Total perc: {total_perc:.2f}% ({total_net_perc:.2f}%) ~{num_hour} trades\n"
-                   f"Average perc: {avg_perc:.2f}% ({avg_net_perc:.2f}%)\n"
-                   f"USD profit: {format_usd(usd_profit)} ({format_usd(usd_net_profit)})\n"
-                   f"Today's avg profit: {todays_avg:.2f}% ({todays_net_avg:.2f}%)\n"
-                   f"Today's USD profit: {format_usd(todays_usd)} ({format_usd(todays_net_usd)})\n"
-                   f"Today's total profit: {todays_total:.2f}% ({todays_net_total:.2f}%) "
-                   f"~{num_day} trades\n")
+    #if total_perc and todays_total:
+    message = (f"Profit for Hour {hour}\n"
+               f"Total perc: {total_perc:.2f}% ({total_net_perc:.2f}%) ~{num_hour} trades\n"
+               f"Average perc: {avg_perc:.2f}% ({avg_net_perc:.2f}%)\n"
+               f"USD profit: {format_usd(usd_profit)} ({format_usd(usd_net_profit)})\n"
+               f"Today's avg profit: {todays_avg:.2f}% ({todays_net_avg:.2f}%)\n"
+               f"Today's USD profit: {format_usd(todays_usd)} ({format_usd(todays_net_usd)})\n"
+               f"Today's total profit: {todays_total:.2f}% ({todays_net_total:.2f}%) "
+               f"~{num_day} trades\n")
 
-        now = datetime.now()
-        if 0 < now.minute < 10:
-            send_slack_message('balance', message, name=sys.argv[0].rsplit('/', maxsplit=1)[-1])
+    send_slack_message('balance', message, name=sys.argv[0].rsplit('/', maxsplit=1)[-1])
 
     prom_data = {f'closed_profit_perc_hour_{env}': total_net_perc,
                  f'closed_profit_perc_day_{env}': todays_net_total,
@@ -54,7 +52,6 @@ def main():
                  f'closed_net_profit_day_{env}': todays_usd}
     for promkey, promval in prom_data.items():
         push_prom_data(promkey, promval)
-
 
 if __name__ == "__main__":
     main()

@@ -371,11 +371,13 @@ class Mysql():
         Get today's profit perc so far
         Returns float
         """
-        command = ('select sum(usd_profit), sum(usd_net_profit), avg(perc), '
-                   'avg(net_perc), sum(perc), sum(net_perc), count(*) '
+        command = ('select COALESCE(sum(usd_profit),0), COALESCE(sum(usd_net_profit),0), '
+                   'COALESCE(avg(perc),0), COALESCE(avg(net_perc),0), COALESCE(sum(perc),0), '
+                   'COALESCE(sum(net_perc),0), COALESCE(count(*),0) '
                    'from profit where date(close_time) = date(NOW())')
         row = self.fetch_sql_data(command, header=False)
-        return row[0] if row else [None] * 7
+        result = row[0] if row and row[0] is not None else [0] * 7
+        return result
 
     def trade_in_context(self, pair, name, direction):
         """
@@ -406,7 +408,7 @@ class Mysql():
                    f'from profit_hourly_close where '
                    f'date="{date}" and hour="{hour}"')
         result = self.fetch_sql_data(command, header=False)
-        output = [float(item) for item in result[0]] if result else [None] * 7
+        output = [float(item) for item in result[0]] if result else [0] * 7
         output.append(hour)
         # returns total_perc, total_net_perc, avg_perc, avg_net_perc, usd_profit, usd_net_profit,
         # num_hour, count
