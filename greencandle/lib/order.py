@@ -585,27 +585,18 @@ class Trade():
 
             commission_usd = self.__get_commission(trade_result)
 
-            if self.test_data or self.test_trade or \
-                    (not self.test_trade and 'transactTime' in trade_result):
+            dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
+                               quote_amount=quote_to_use, base_amount=amt_str,
+                               borrowed=tot_borrowed, borrowed_usd=tot_borrowed_usd,
+                               divisor=self.config.main.divisor,
+                               direction=self.config.main.trade_direction,
+                               symbol_name=quote, commission=str(commission_usd),
+                               order_id=order_id, comment=event)
 
-                try:
-                    amt_str = sub_perc(dbase.get_complete_commission()/2, amt_str)
-                except (KeyError, TypeError):  # Empty dict, or no commission for base
-                    pass
-
-
-                dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
-                                   quote_amount=quote_to_use, base_amount=amt_str,
-                                   borrowed=tot_borrowed, borrowed_usd=tot_borrowed_usd,
-                                   divisor=self.config.main.divisor,
-                                   direction=self.config.main.trade_direction,
-                                   symbol_name=quote, commission=str(commission_usd),
-                                   order_id=order_id, comment=event)
-
-                self.__send_notifications(pair=pair, open_time=current_time,
-                                          fill_price=fill_price, interval=self.interval,
-                                          event=event, action='OPEN', usd_profit='N/A',
-                                          quote=quote_to_use, close_time='N/A')
+            self.__send_notifications(pair=pair, open_time=current_time,
+                                      fill_price=fill_price, interval=self.interval,
+                                      event=event, action='OPEN', usd_profit='N/A',
+                                      quote=quote_to_use, close_time='N/A')
 
         del dbase
         return "opened"
@@ -686,30 +677,18 @@ class Trade():
                 trade_result = {}
 
             commission_usd = self.__get_commission(trade_result)
+            amt_str = amount
 
-            if self.test_data or self.test_trade or \
-                    (not self.test_trade and 'transactTime' in trade_result):
-                # only insert into db, if:
-                # 1. we are using test_data
-                # 2. we performed a test trade which was successful - (empty dict)
-                # 3. we proformed a real trade which was successful - (transactTime in dict)
-                amt_str = amount
-
-                try:
-                    amt_str = sub_perc(dbase.get_complete_commission()/2, amt_str)
-                except (KeyError, TypeError):  # Empty dict, or no commission for base
-                    pass
-
-                db_result = dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
-                                               quote_amount=quote_amount, base_amount=amount,
-                                               direction=self.config.main.trade_direction,
-                                               symbol_name=quote, commission=str(commission_usd),
-                                               order_id=order_id, comment=event)
-                if db_result:
-                    self.__send_notifications(pair=pair, open_time=current_time,
-                                              fill_price=fill_price, interval=self.interval,
-                                              event=event, action='OPEN', usd_profit='N/A',
-                                              quote=quote_amount, close_time='N/A')
+            db_result = dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
+                                           quote_amount=quote_amount, base_amount=amount,
+                                           direction=self.config.main.trade_direction,
+                                           symbol_name=quote, commission=str(commission_usd),
+                                           order_id=order_id, comment=event)
+            if db_result:
+                self.__send_notifications(pair=pair, open_time=current_time,
+                                          fill_price=fill_price, interval=self.interval,
+                                          event=event, action='OPEN', usd_profit='N/A',
+                                          quote=quote_amount, close_time='N/A')
 
         del dbase
         return "opened"
@@ -997,27 +976,19 @@ class Trade():
 
             commission_usd = self.__get_commission(trade_result)
 
-            if self.test_data or self.test_trade or \
-                    (not self.test_trade and 'transactTime' in trade_result):
+            dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
+                               quote_amount=total_quote_amount,
+                               base_amount=amt_str, borrowed=tot_borrowed,
+                               borrowed_usd=tot_borrowed_usd,
+                               divisor=self.config.main.divisor,
+                               direction=self.config.main.trade_direction,
+                               symbol_name=get_quote(pair), commission=str(commission_usd),
+                               order_id=order_id, comment=event)
 
-                try:
-                    amt_str = sub_perc(dbase.get_complete_commission()/2, amt_str)
-                except (KeyError, TypeError):  # Empty dict, or no commission for base
-                    pass
-
-                dbase.insert_trade(pair=pair, price=fill_price, date=current_time,
-                                   quote_amount=total_quote_amount,
-                                   base_amount=amt_str, borrowed=tot_borrowed,
-                                   borrowed_usd=tot_borrowed_usd,
-                                   divisor=self.config.main.divisor,
-                                   direction=self.config.main.trade_direction,
-                                   symbol_name=get_quote(pair), commission=str(commission_usd),
-                                   order_id=order_id, comment=event)
-
-                self.__send_notifications(pair=pair, open_time=current_time,
-                                          fill_price=current_price, interval=self.interval,
-                                          event=event, action='OPEN', usd_profit='N/A',
-                                          quote=total_quote_amount, close_time='N/A')
+            self.__send_notifications(pair=pair, open_time=current_time,
+                                      fill_price=current_price, interval=self.interval,
+                                      event=event, action='OPEN', usd_profit='N/A',
+                                      quote=total_quote_amount, close_time='N/A')
         del dbase
         return "opened"
 
