@@ -1,5 +1,16 @@
 # Releases
 
+# 9.8.2
+* FEATURE: test trade closures more often
+* FEATURTE: more descriptive msg when unable to find balance
+* FEATRUE: allow trade close drain to be overridden
+* CLEANUP: fix lint
+* CLEANUP: remove delisted pairs
+* FEATURE: post hourly balance even if no trades
+* BUGFIX: don't dubtract commission from base amt
+* FEATURE: add more details to critical log entry
+* FEATURE: increase verbosity of sentiment mismatch log
+
 # 9.8.1
 * CLEANUP: remove unused data containers
 * STRATEGY: don't check end of trend for per env
