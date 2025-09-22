@@ -21,7 +21,7 @@ STATIC_DIR=/data/scripts/static
 */3 * * * * ${SCRIPTS_DIR}/get_risk &>> /var/log/cron.log
 32 * * * * ${SCRIPTS_DIR}/write_balance &>> /var/log/cron.log
 #33 * * * * ${SCRIPTS_DIR}/get_quote_balance &>> /var/log/cron.log
-05 * * * * sleep 120; ${SCRIPTS_DIR}/test_close &>> /var/log/cron.log
+05,35 * * * * sleep 120; ${SCRIPTS_DIR}/test_close &>> /var/log/cron.log
 0 * * * * ${SCRIPTS_DIR}/send_docker_alerts
 */30 * * * * ${SCRIPTS_DIR}/get_anomalous &>> /var/log/cron.log
 21 00 * * * ${SCRIPTS_DIR}/balance_graph &>> /var/log/cron.log
