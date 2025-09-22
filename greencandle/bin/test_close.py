@@ -90,7 +90,7 @@ def main():
 
         except KeyError as key_err:
             result2 = True
-            reason = f"Unable to get balance: {str(key_err)}"
+            reason = f"Unable to find balance: {str(key_err)} for {direction}"
         if result or result2 or result3:
             count += 1
             pairs.append(f"{pair} ({name}): {reason}")
