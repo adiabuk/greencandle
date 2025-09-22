@@ -204,7 +204,7 @@ class Trade():
             return False
         if get_drain(env=self.config.main.base_env,
                      interval=self.config.main.interval,
-                     direction='close'):
+                     direction='close') and items_list[0][3] not in ('manual', self.config.main.name):
 
             self.logger.info("strategy is in close drain for pair %s, skipping...", items_list)
             return False
