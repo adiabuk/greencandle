@@ -382,7 +382,7 @@ def send_trade(pair, strategy, trade_action, take=None, stop=None, usd=None):
     Create OPEN/CLOSE post request and send to API router
     """
     payload = {"pair": pair,
-               "text": f"Manual {trade_action} action from API",
+               "text": f"manual {trade_action} action from API",
                "action": trade_action,
                "strategy": strategy,
                "manual": True,
