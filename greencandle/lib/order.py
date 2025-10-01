@@ -117,7 +117,6 @@ class Trade():
             return []
 
         for item in items_list:
-
             if not self.test_trade:
 
                 account = 'margin' if 'margin' in self.config.main.trade_type else 'binance'
@@ -204,7 +203,7 @@ class Trade():
             return False
         if get_drain(env=self.config.main.base_env,
                      interval=self.config.main.interval,
-                     direction='close') and items_list[0][3] not in ('manual', self.config.main.name):
+                     direction='close') and 'manual' not in items_list[0][3]:
 
             self.logger.info("strategy is in close drain for pair %s, skipping...", items_list)
             return False
