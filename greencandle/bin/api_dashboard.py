@@ -364,7 +364,7 @@ def action():
                   }
 
     pair = request.args.get('pair')
-    strategy = request.args.get('strategy') + '-manual'
+    strategy = request.args.get('strategy')
     trade_action = int_action[request.args.get('action')]
     close = request.args.get('close')
     take = request.args.get('tp') if 'tp' in request.args else None
