@@ -1,5 +1,7 @@
 # Releases
 
+* BUGFIX: fix closing of trades manually when close drain exists
+
 # 9.8.2
 * FEATURE: test trade closures more often
 * FEATURTE: more descriptive msg when unable to find balance
