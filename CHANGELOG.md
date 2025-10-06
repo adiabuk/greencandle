@@ -1,5 +1,7 @@
 # Releases
 
+# 9.8.4
+* BUGFIX: Typo when determining manual trades
 * BUGFIX: fix closing of trades manually when close drain exists
 
 # 9.8.2
