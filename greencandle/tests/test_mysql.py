@@ -28,8 +28,8 @@ class TestMysql(OrderedTest):
 
         LOGGER.info("Setting up environment")
         for container in ['mysql-unit', 'redis-unit']:
-            command = ("TAG={} docker-compose -f install/docker-compose_unit.yml up -d {}".format(
-                get_tag, container))
+            command = (f"TAG={get_tag} docker-compose -f install/docker-compose_unit.yml "
+                       f"up -d {container}")
         time.sleep(6)
         self.dbase = Mysql(test=True)
         self.dbase.delete_data()
@@ -89,8 +89,8 @@ class TestMysql(OrderedTest):
         #self.assertIsInstance(float(rates[1]), float)
         today = self.dbase.get_todays_profit()
         self.assertIs(len(today), 7)
-        self.assertIs(today[0], None)
-        self.assertIs(today[1], None)
+        self.assertEqual(today[0], 0)
+        self.assertEqual(today[1], 0)
         self.dbase.get_open_trades()   # No exception
         date1 = (datetime.datetime.now() - datetime.timedelta(minutes=15,
                                                               hours=1)).strftime("%Y-%m-%d "
