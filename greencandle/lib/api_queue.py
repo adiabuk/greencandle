@@ -50,7 +50,7 @@ def add_to_queue(req, test=False):
         send_slack_message("alerts", message)
         return
 
-    title = config.main.name + "-manual" if "manual" in req['text'] or (manual in req and req['manual']) else config.main.name
+    title = config.main.name + "-manual" if "manual" in req['text'] or ('manual' in req and req['manual']) else config.main.name
     item = [(pair, current_time, current_price, title, action, usd)]
     interval = config.main.interval
     trade = Trade(interval=interval, test_data=False, test_trade=test, config=config)
