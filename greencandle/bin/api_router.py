@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#pylint: disable=no-member,broad-except,no-name-in-module
+#pylint: disable=no-member,broad-except,no-name-in-module,too-many-statements,too-many-branches
 
 """
 API routing module
@@ -78,6 +78,7 @@ def respond():
         name = get_short_name(payload['name'], payload['env'], payload['direction'])
         send_trade(payload, name, subd='/close_all')
         return Response(status=200)
+
     if 'pair' in payload and payload['pair'] == 'No pair':
         LOGGER.debug("request received: %s", payload)
     else:
@@ -109,7 +110,6 @@ def respond():
             payload['env'] = 'alarm'
 
             # add environment name to text
-
             if 'environment' not in payload['text']:
                 payload['text'] += f'. {env} environment'
 

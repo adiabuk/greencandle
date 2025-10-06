@@ -37,7 +37,6 @@ def get_binance_info():
     """
     get exchange info from binance
     """
-    global EXCHANGE_INFO
     client = Binance()
     info = client.exchange_info()
     for key, value in info.items():
